@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ApartmentAssetAdapter extends Model
+{
+    use SoftDeletes;
+    protected $table = 'apartment_asset_adapter';
+    protected $casts = [
+        'id' => 'integer',
+        'percent' => 'integer',
+    ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+    protected $fillable = [
+        'apartment_asset_id',
+        'asset_general_id',
+        'percent',
+    ];
+}

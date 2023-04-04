@@ -1,0 +1,39 @@
+id,name,email,password,phone,created_at,role,last_login,birthday,image,group_id,branch_id,is_deleted,active,role_id,appraisers_number,mailing_address
+266,Dev,sadmin@email.com,$2y$10$QBmPqzMBxRgev/u77hoy4.LSBMHmlMNNDp2mDS6zAcmJtuXZU7hZm,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,
+267,khoa,khoa@email.com,$2y$10$XwLe54DiljgpFvwB6LFQLOWPsi.dwQThEgKkvxudGKqG.gOBYqKpS,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,
+270,"Nguyễn Văn Minh",minhnv@thamdinhgiadongnai.vn,$2y$10$mqktLa.IxO5tSwG1KDLr2uhvK1TqQMkboRwwZPGniY3xiN6xthueC,0946877166,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,xxxxxx123,minhnv@thamdinhgiadongnai.vn
+271,"Hồ Hữu Châu",chauhh@thamdinhgiadongnai.vn,$2y$10$oUUUeH1zQRN8Z4nne9K/aewm6wUIP4Ni59BcBAhzwlRNIcUKXMcMa,0943880089,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,I05005,chauhh@thamdinhgiadongnai.vn
+272,"Trần Manh Hà",hatm@thamdinhgiadongnai.vn,$2y$10$yhYuBmgbmtziLMBU/w09YO4QoGyOQmm063RfYV0.U9wtHdICScVgO,0909555543,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,IX14.1101,hatm@thamdinhgiadongnai.vn
+273,"Lê Công Cường",cuonglc@thamdinhgiadongnai.vn,$2y$10$0wsyyn2dS6nKh02UzyAGYOnMBEEjBSo2euUxcPWJzttyVFN/BtGx6,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,XI16.1463,cuongcl@thamdinhgiadongnai.vn
+274,"Lê Thị Bích Hải",hailtb@thamdinhgiadongnai.vn,$2y$10$5Rp7A8ThQJVicpY.SGzSdeS/xI9IZZpm5NCvoNG6vWi5HCK2YcLSa,0916291644,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,VIII13.766,hailtb@thamdinhgiadongnai.vn
+275,"Trần Hồng Thoại",thoaith@thamdinhgiadongnai.vn,$2y$10$cSMUyuxuCYFNA01N3xMJ/eSAgaZImX4wbEpj9W22keao4d7ntPIzO,0933697918,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,X15.1414,thoaith@thamdinhgiadongnai.vn
+300,"Mai Đức Công",maiduccong2015@gmail.com,$2y$10$HJ/Kw0sxdAuCnib7ju3f6u1tvLMeaqBNcccDlyJILuIF8U2OS.HI6,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,maiduccong2015@gmail.com
+277,"Sầm Hưng Tánh",tanhsh@thamdinhgiadongnai.vn,$2y$10$GCgmkkHb79Am.91KcH/2AuuTaPlq6Dt2snTjPEjj4z3zQv1TAbFK.,0888447766,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,tanhsh@thamdinhgiadongnai.vn
+278,thới,thoi@email.com,$2y$10$ye1j/Z/9CDBbnMwa2tkcYe9mve1ReFSCBwZgoX0qkm55/jcdWXC5.,,NULL,NULL,NULL,NULL,NULL,6,6,0,1,2,,
+279,"Vũ Xuân Quang",quangvx@thamdinhgiadongnai.vn,$2y$10$IdLTiZ1oY93wyTd3spgH7evHaoixUPqStuScIqpOVgSbDh7y.wGMa,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,quangvx@thamdinhgiadongnai.vn
+280,"Hồ Anh Tuấn",tuanha@thamdinhgiadongnai.vn,$2y$10$Hobtyktx1amb3ArVCl5tpur9kgWMd6f2GW8X387FLT2d8Qs5Vwb2C,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,tuanha@thamdinhgiadongnai.vn
+281,"Trần Văn Luân ",luantv@thamdinhgiadongnai.vn,$2y$10$4A5Fb.a0DZOIaZ4owdt5GepU3xcWPPyEToeneynTE71sMSAO0lC8i,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,luantv@thamdinhgiadongnai.vn
+282,"Lê Thị Phương",phuonglt@thamdinhgiadongnai.vn,$2y$10$900qYCM7BAbQWoThSGFLd.SjuSkADtiSJDWYEYGfEfivTvoYwNsuO,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,phuonglt@thamdinhgiadongnai.vn
+283,"Lê Quang Lộc",loclq@thamdinhgiadongnai.vn,$2y$10$M7t2dMU5QJ83lLyuIhwtj.gkyTagDx76i3XZjdAx069d9Gq1mYWD2,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,loclq@thamdinhgiadongnai.vn
+284,"Chiếng Thị Thanh Tuyền",tuyenctt@thamdinhgiadongnai.vn,$2y$10$X6sMsiNSKZv3vGbD7N2eq.e4aXPISrU4QZB2YBTCzTnT32NMn7A.K,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,tuyenctt@thamdinhgiadongnai.vn
+285,"Trần Văn Nhân",nhantv@thamdinhgiadongnai.vn,$2y$10$jXe5HXcHcfMkVf82plsvj.7myJk1AkbBaWj0XNh9YCidWXQfc5UtC,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,nhantv@thamdinhgiadongnai.vn
+286,"Võ Lương Bình",binhvl@thamdinhgiadongnai.vn,$2y$10$d1IdS4QjJkkewf6cGiVOjeRmrqdFnYI35SiM2WKLOVMlYtMpr62DS,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,binhvl@thamdinhgiadongnai.vn
+287,"Hồ Thị Thùy Linh",linhhtt@thamdinhgiadongnai.vn,$2y$10$4j9VUQPxeWUtCMw65BNezeZjt0.W5A5FBsmkj34zbBqRcugE3cB9e,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,linhhtt@thamdinhgiadongnai.vn
+288,"Trần Đức Dũng",dungtd@thamdinhgiadongnai.vn,$2y$10$YVqOwcBig2Z.y.je6AnLwOB.V3A4ORkRiYKPZ5Bf33D34PAeA2Sye,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,dungtd@thamdinhgiadongnai.vn
+289,"Lương Xuân Phát",phatlx@thamdinhgiadongnai.vn,$2y$10$fMuKemfleT38TI2hi5sIAOWOgqF77uSdMbdFfEFU62ZdFrI5K1KnS,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,phatlx@thamdinhgiadongnai.vn
+290,"Nguyễn Thị Lam",lamnt@thamdinhgiadongnai.vn,$2y$10$5YxyYiFCK3n.3EG2IeuumOzdyTvQoQR388rkL2IIInisKcvabCQ4K,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,lamnt@thamdinhgiadongnai.vn
+291,"Nguyễn Khoa",khoan@thamdinhgiadongnai.vn,$2y$10$TdmVeQjUMhgAIEBJ7mXj/.aFYl5KYgG6sMuyG4P8xHRnfq4vcKKs.,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,khoan@thamdinhgiadongnai.vn
+292,"Nguyễn Thị Bé Hương",huongntb@thamdinhgiadongnai.vn,$2y$10$m8aD9FgsnLr5fjaj3OiccO0dlHXhFryI3W3oUBIG9eSYvgxpMMONa,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,huongntb@thamdinhgiadongnai.vn
+293,"Nguyễn Thanh Hùng",hungnt@thamdinhgiadongnai.vn,$2y$10$fWaL2yPcsI7xhMPiR/2pfeLukvXOOk4WCxeHtMOBFLYUxg9PrUyKW,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,hungnt@thamdinhgiadongnai.vn
+294,"Đào Thùy Mỹ Hạnh",hanhdtm@thamdinhgiadongnai.vn,$2y$10$cL9xalUBa1S3tE6hrTOtquSd4jL9rm.6JS7ezkgx2.etmT52ih9lG,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,hanhdtm@thamdinhgiadongnai.vn
+295,"Hoàng Xuân Diệu",dieuhx@thamdinhgiadongnai.vn,$2y$10$vDsv5bEI9UyqWvrmnXSf6O/NadyqjKbrZjWkG1MJ2JufSiao7kU32,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,dieuhx@thamdinhgiadongnai.vn
+296,"Võ Công Ty",tyvc@thamdinhgiadongnai.vn,$2y$10$ypSVb1mpaYtRTm0/su.UFe.CwsazSE1Zmw/VT6FivB8402IPHjp4u,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,tyvc@thamdinhgiadongnai.vn
+297,"Bùi Văn Phát",phatbv@thamdinhgiadongnai.vn,$2y$10$KqF3MdQ0LPfuCSkdOlqauegEu9MQZErvprEreA4.1.EuKBo1tYNjG,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,phatbv@thamdinhgiadongnai.vn
+298,"Trần Ngọc Kiên",kientn@thamdinhgiadongnai.vn,$2y$10$gVKVMQHViDQ7G8wPdY5sPupCsnXDXTbG2ukFan2Ox7KqlJ4Bm2U9a,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,kientn@thamdinhgiadongnai.vn
+299,Châu,admin@donava.vn,$2y$10$qM37YIMu2eWMV8XZZuyaXusMveQIK.CbdmVAl4RyBnv9gDj73JuE.,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,
+301,"Ngô Hoài Lan Anh",anhnhl@thamdinhgiadongnai.vn,$2y$10$euMoBxOmr9R/7RL8e/MO2eMRrdsOkIPxLmRjxb7.5XrsLYsCKBqwK,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,anhnhl@thamdinhgiadongnai.vn
+302,"Trương Văn Cử",cutv@thamdinhgiadongnai.vn,$2y$10$NePWROgpSykiMFv9IhIWpOL4ckpw3ZioLXqb3IU8GUYxg8xCqY5US,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,cutv@thamdinhgiadongnai.vn
+303,"Nguyễn Chí Cường",cuongnc@thamdinhgiadongnai.vn,$2y$10$nrsIyHj0QRMt6M5HvwK1GOHqwE9UdUbfZrCXKGtxMQqJwA21M0vnu,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,cuongnc@thamdinhgiadongnai.vn
+304,"Võ Nhật Duy",duyvn@thamdinhgiadongnai.vn,$2y$10$bLY92DDiGUmGTeclV9wmze9unYhg6vHtT/htE8Jo9kY3sf87lVB2K,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,duyvn@thamdinhgiadongnai.vn
+305,"Ngô Ngọc Hải",ngongochaiksxd@gmail.com,$2y$10$g0FNID3HzmqpZ5qitN27QeMxfnRV9K6phYJTeKopQ3uyGsWbtByM6,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,ngongochaiksxd@gmail.com
+306,"Đào Đình Thiện",daodinhthien.531997@gmail.com,$2y$10$oBqSyclr3b4CbpGjhC8vP.YSfEedLjf9ARYN/vznxaJZCZV7cUdZm,,NULL,NULL,NULL,NULL,NULL,1,6,0,1,1,,daodinhthien.531997@gmail.com
