@@ -1,0 +1,118 @@
+[
+  {
+    "type": "EyeCatch",
+    "order": "1",
+    "data": [
+      {
+        "id": "1faeef58-c57f-4094-9f09-f80182d6a5d3",
+        "app_setting_id": "0b5904b6-b89e-37f0-8453-7e8e42c2df82",
+        "object_key": "f1ecd41b-3d4c-40c4-bbcb-c37013a0beb6",
+        "object_key_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+        "display_order": 2
+      }
+    ]
+  },
+  {
+    "type": "Section",
+    "order": "2",
+    "data": [
+      {
+        "type": "Content",
+        "data": {
+          "content_title": "content",
+          "content_limit": 3,
+          "content_column": 2,
+          "contents": [
+            {
+              "key": "06016ea2-cfa7-3f0b-9d02-01111bb4cdd8",
+              "label": "株式会社 加納",
+              "content_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg"
+            },
+            {
+              "key": "0f361335-443b-34de-89bd-270361af9c5d",
+              "label": "株式会社 藤本",
+              "content_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg"
+            },
+            {
+              "key": "1698bbad-6b48-324f-8ef8-5295d34d1a40",
+              "label": "株式会社 山本",
+              "content_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg"
+            }
+          ]
+        },
+        "position": 0
+      },
+      {
+        "type": "Movie",
+        "data": {
+          "video_title": "video",
+          "video_type": 1,
+          "thumbnail_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg"
+        },
+        "position": 2
+      },
+      {
+        "type": "Member",
+        "data": {
+          "member": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+          "background": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg"
+        },
+        "position": 3
+      },
+      {
+        "type": "News",
+        "data": {
+          "news_limit": 1
+        },
+        "position": 1
+      }
+    ]
+  },
+  {
+    "type": "Footer",
+    "order": "3",
+    "position": "bottom",
+    "data": [
+      {
+        "id": "b49f3c0d-308c-4d86-a3ad-1d24ec029dcf",
+        "app_footer_category_id": "102cb0ce-2f5d-30f8-8e74-3b91bb42157d",
+        "footer_name": "menu 1",
+        "icon": "f1ecd41b-3d4c-40c4-bbcb-c37013a0beb6",
+        "icon_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+        "display_order": 1
+      },
+      {
+        "id": "cb179000-dad8-4ae1-b489-aaf3adb7b4f9",
+        "app_footer_category_id": "18ffff85-8019-3698-9f0e-79e07d5624af",
+        "footer_name": "menu 2",
+        "icon": "f1ecd41b-3d4c-40c4-bbcb-c37013a0beb6",
+        "icon_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+        "display_order": 2
+      },
+      {
+        "id": "cb179000-dad8-4ae1-b489-aaf3adb7b4f9",
+        "app_footer_category_id": "18ffff85-8019-3698-9f0e-79e07d5624af",
+        "footer_name": "menu 3",
+        "icon": "f1ecd41b-3d4c-40c4-bbcb-c37013a0beb6",
+        "icon_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+        "display_order": 3
+      },
+      {
+        "id": "cb179000-dad8-4ae1-b489-aaf3adb7b4f9",
+        "app_footer_category_id": "18ffff85-8019-3698-9f0e-79e07d5624af",
+        "footer_name": "menu 4",
+        "icon": "f1ecd41b-3d4c-40c4-bbcb-c37013a0beb6",
+        "icon_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+        "display_order": 4
+      },
+      {
+        "id": "cb179000-dad8-4ae1-b489-aaf3adb7b4f9",
+        "app_footer_category_id": "18ffff85-8019-3698-9f0e-79e07d5624af",
+        "footer_name": "menu 5",
+        "icon": "f1ecd41b-3d4c-40c4-bbcb-c37013a0beb6",
+        "icon_url": "https://dev-applican-template.azureedge.net/uploads/app-setting/logo/6bc5504e-813c-4c85-9eda-42631bda5bf6.jpg",
+        "display_order": 5
+      }
+    ]
+  }
+]

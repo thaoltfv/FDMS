@@ -1,0 +1,15 @@
+{
+    "name": "Fastvalue - Nền tảng thẩm định 4.0",
+    "short_name": "Fastvalue",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "Fastvalue - Nền tảng thẩm định 4.0",
+    "icons": [{
+        "src": "./ic_expertise.svg",
+        "sizes": "48x48 72x72 96x96 128x128 256x256 192x192 512x512",
+        "type": "image/svg+xml",
+        "purpose": "any"
+    }]
+}
+  

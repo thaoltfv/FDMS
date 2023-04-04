@@ -1,0 +1,37 @@
+image: node:14
+
+stages:
+  - deploy
+
+cache:
+  key:
+    files:
+      - package.json
+  paths:
+    - node_modules/
+
+deploy_staging:
+  stage: deploy
+  script:
+    - npm install
+    - npm run build:production
+    - npm install firebase-tools
+    - npx firebase deploy --only hosting:donava-314804
+  environment:
+    name: test
+    url: https://donava-314804.web.app
+  only:
+    - test
+
+deploy_prod:
+  stage: deploy
+  script:
+    - npm install
+    - npm run build:production
+    - npm install firebase-tools
+    - npx firebase deploy --only hosting:dinhgia-online
+  environment:
+    name: prod
+    url: https://app.dinhgia.online
+  only:
+    - master

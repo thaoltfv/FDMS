@@ -1,0 +1,1114 @@
+<template>
+ <div style="overflow-x: auto">
+   <div class="container-fluid mt-3 kanban_board">
+    <div class="d-flex scroll_board" id="infinite-list">
+      <div class="col p-2 container_kanban mr-3" :class="`border-${config.css.color}`" v-for="config in principleConfig" :key="config.id">
+        <div class="p-2 mt-3 ml-2 mb-2 d-flex justify-content-between">
+          <h3 class="mr-3 title" :class="`text-${config.css.color}`" >{{config.description}}</h3>
+          <div class="quatity text-white" :class="`bg-${config.css.color}`">{{subStatusDataTmp[config.id] ? subStatusDataTmp[config.id].length : 0}}</div>
+        </div>
+        <draggable
+			:id="config.id"
+			:key="key_dragg"
+			:animation="500"
+			:group="{ name: config.id, put: config.put_draggable }"
+			:list="subStatusData[config.id]"
+			:move="checkMove"
+			@remove="changedDraggable"
+			ghost-class="ghost"
+			class="list-group kanban-column"
+          >
+          <b-card :class="{'border_expired':checkDateExpired(element), ['border-' + config.css.color]: true}" class="card_container mb-3" v-for="element in subStatusData[config.id]" :key="element.id">
+            <div class="col-12 d-flex mb-2 justify-content-between">
+              <span @click="handleDetailCertificate(element.id)" class="content_id" :class="`bg-${config.css.color}-15 text-${config.css.color}`">{{element.slug}}</span>
+              <img v-if="checkDateExpired(element)" class="mr-2 icon_expired" src="@/assets/icons/ic_expire_calender.svg" alt="ic_expire_calender"/>
+            </div>
+            <div class="property-content mb-2 d-flex color_content">
+              <div class="label_container d-flex">
+                <img style="min-width:15px" width="15px" height="21px" class="mr-2" src="@/assets/icons/ic_user_2.svg" alt="user"/>
+                <div class="d-flex">
+                <span style="font-weight: 500"><strong class="d-none d_inline mr-1">Khách hàng:</strong>{{element.petitioner_name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="property-content mb-2 d-flex color_content">
+              <img class="mr-2" src="@/assets/icons/ic_price.svg" alt="user"/>
+              <div class="label_container d-flex">
+                <strong class="d-none d_inline mr-1">Tổng giá trị:</strong><span style="font-weight: 500">{{element.total_price ? `${formatPrice(element.total_price)}` : '-'}}</span>
+              </div>
+            </div>
+            <div class="property-content mb-2 d-flex color_content">
+              <img class="mr-2" src="@/assets/icons/ic_clock.svg" alt="user"/>
+              <div class="label_container d-flex">
+                <strong class="d-none d_inline mr-1">Thời hạn:</strong><span style="font-weight: 500">{{getExpireDate(element)}}</span>
+              </div>
+            </div>
+            <div class="property-content d-flex justify-content-between mb-0">
+              <div class="label_container d-flex">
+                <img width="15px" class="mr-2" src="@/assets/icons/ic_taglink.svg" alt="user"/><span style="color:#8B94A3">{{element.document_count}}</span>
+              </div>
+              <img class="img_user" :src="element.image ? element.image : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'">
+            </div>
+          </b-card>
+        </draggable>
+      </div>
+    </div>
+    <ModalDetailCertificate
+		v-if="showDetailPopUp"
+		:idData="idData"
+		:edit="edit"
+		:add="add"
+		:user_id="user_id"
+		:appraiser_number="appraiser_number"
+		:jsonConfig="jsonConfig"
+		:profile="profile"
+		:data="detailData"
+		@cancel="showDetailPopUp = false"
+		@action="handleUpdateStatus"
+		@handleFooterAccept="handleFooterAccept"
+    />
+    <ModalAppraisal
+      :key="key_render_appraisal"
+      v-if="showAppraisalDialog"
+      :data="elementDragger"
+      :idData="idDragger"
+      :status="status"
+      requiredAppraiserPerform="required"
+      :requiredAppraiser="null"
+      @cancel="handleCancelAppraisal"
+      @updateAppraisal="updateAppraisal"
+    />
+    <ModalAppraisal
+      :key="key_render_appraisal"
+      v-if="showVerifyCertificate"
+      :data="elementDragger"
+      :idData="idDragger"
+      :status="status"
+      requiredAppraiserPerform="required"
+      requiredAppraiser="required"
+      @cancel="handleCancelVerify"
+      @updateAppraisal="handleChangeVerify"
+    />
+     <ModalSendVerify
+      v-if="showAcceptCertificate"
+      notification="Bạn có muốn muốn duyệt hồ sơ này"
+      @action="handleChangeAccept"
+      @cancel="handleCancelAccept"
+    />
+    <!-- <ModalSendVerify
+      v-if="isMoved"
+      :notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+      @action="handleChangeAccept2"
+      @cancel="handleCancelAccept2"
+    /> -->
+	<ModalNotificationCertificateNote
+      v-if="isMoved"
+      :notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+      @action="handleChangeAccept2"
+      @cancel="handleCancelAccept2"
+    />
+	<ModalNotificationCertificateNote
+		v-if="isHandleAction"
+		@cancel="isHandleAction = false"
+		:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+		@action="handleChangeAccept2"
+		/>
+   </div>
+ </div>
+</template>
+
+<script>
+import { FormWizard, TabContent } from 'vue-form-wizard'
+import ModalAppraisal from './component/modals/ModalAppraisal'
+import { UserIcon, DollarSignIcon, HomeIcon, ClockIcon } from 'vue-feather-icons'
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
+import draggable from 'vuedraggable'
+import JsonExcel from 'vue-json-excel'
+import Vue from 'vue'
+import ModalDetailCertificate from './component/modals/ModalDetailCertificate'
+import ModalSendVerify from '@/components/Modal/ModalSendVerify'
+import CertificationBrief from '@/models/CertificationBrief'
+import moment from 'moment'
+import KanboardStatus from './component/KanboardStatus.vue'
+import ModalNotificationCertificate from '@/components/Modal/ModalNotificationCertificate'
+import ModalNotificationCertificateNote from '@/components/Modal/ModalNotificationCertificateNote'
+const jsonConfig = require('../../../config/workflow.json')
+
+Vue.component('downloadExcel', JsonExcel)
+export default {
+	name: 'Index',
+	props: ['search_kanban'],
+	data () {
+		return {
+			theme: {
+				navItem: '#000000',
+				navActiveItem: '#FAA831',
+				slider: '#FAA831',
+				arrow: '#000000'
+			},
+			now: new Date(),
+			total_amount: '',
+			width: '',
+			currency: '',
+			listTest: [
+				{
+					name: 'test',
+					id: 1
+				}
+			],
+			idUpdate: '',
+			idData: '',
+			key_render_appraisal: 321000,
+			render_lock: 1234,
+			render_open: 5678,
+			listCertificate: [],
+			listCertificateDraft: [],
+			listCertificateOpen: [],
+			listCertificateLock: [],
+			listCertificatesClose: [],
+			listCertificatesCanceled: [],
+
+			listCertificateTemp: [],
+			listCertificateDraftTemp: [],
+			listCertificateOpenTemp: [],
+			listCertificateLockTemp: [],
+			listCertificatesCloseTemp: [],
+			listCertificatesCanceledTemp: [],
+			filter: {},
+			status: '',
+			activeStatus: false,
+			showAppraisalDialog: false,
+			showModalSearch: false,
+			view: false,
+			add: false,
+			edit: false,
+			deleted: false,
+			accept: false,
+			showDetailPopUp: false,
+			showVerifyCertificate: false,
+			showAcceptCertificate: false,
+			idDraft: '',
+			elementDragger: '',
+			position_profile: '',
+			appraise_number: '',
+			checkRole: false,
+			profile: {},
+			user_id: '',
+			countData: 0,
+			isAccept: false,
+			jsonConfig: jsonConfig,
+			principleConfig: [],
+			subStatusData: {},
+			subStatusDataTmp: {},
+			next_status: '',
+			next_sub_status: '',
+			confirm_message: '',
+			isMoved: false,
+			config: {},
+			subStatusDataReturn: [],
+			key_dragg: 1,
+			detailData: [],
+			isHandleAction: false,
+			isCheckPrice: false,
+			isCheckLegal: false,
+			isCheckVersion: false,
+			changeStatusRequire: {}
+		}
+	},
+	components: {
+		draggable,
+		BCard,
+		FormWizard,
+		TabContent,
+		BRow,
+		BCol,
+		BFormGroup,
+		BFormInput,
+		UserIcon,
+		DollarSignIcon,
+		HomeIcon,
+		ClockIcon,
+		ModalDetailCertificate,
+		ModalSendVerify,
+		ModalAppraisal,
+		KanboardStatus,
+		ModalNotificationCertificate,
+		ModalNotificationCertificateNote
+	},
+	created () {
+		// fix_permission
+		this.profile = this.$store.getters.profile
+		const profile = this.$store.getters.profile
+		if (profile.data.user) {
+			this.position_profile = profile.data.user.appraiser.appraise_position.acronym
+			this.appraiser_number = profile.data.user.appraiser.appraiser_number
+		}
+		this.user_id = profile.data.user.id
+		const permission = this.$store.getters.currentPermissions
+		permission.forEach((value) => {
+			if (value === 'VIEW_CERTIFICATE_BRIEF') {
+				this.view = true
+			}
+			if (value === 'ADD_CERTIFICATE_BRIEF') {
+				this.add = true
+			}
+			if (value === 'EDIT_CERTIFICATE_BRIEF') {
+				this.edit = true
+			}
+			if (value === 'DELETE_CERTIFICATE_BRIEF') {
+				this.deleted = true
+			}
+			if (value === 'ACCEPT_CERTIFICATE_BRIEF') {
+				this.accept = true
+			}
+		})
+	},
+	computed: {
+		updateDate () {
+			return dateUpdate => {
+				return moment(dateUpdate).fromNow()
+			}
+		}
+	},
+
+	methods: {
+		getExpireDate (element) {
+			let strExpire = ''
+			switch (element.status) {
+			case 1:
+			case 2:
+			case 3:
+				strExpire = element.status_expired_at ? this.updateDate(element.status_expired_at, new Date()) : 'Đã hết hạn'
+				break
+			case 4:
+				strExpire = 'Đã hoàn thành'
+				break
+			default:
+				strExpire = 'Đã hủy'
+			}
+			return strExpire
+		},
+		checkDateExpired (element) {
+			let check = false
+			switch (element.status) {
+			case 1:
+			case 2:
+			case 3:
+				if (element.status_expired_at) {
+					if (this.updateDate(element.status_expired_at, this.now).includes('Đã hết hạn')) {
+						check = true
+					}
+				} else {
+					check = true
+				}
+				break
+			}
+			return check
+		},
+		formatPrice (value) {
+			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
+			if (num.length > 3 && num.length <= 6) {
+				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
+			} else if (num.length > 6 && num.length <= 9) {
+				return parseFloat(num / 1000000).toFixed(1).replace('.', ',') + ' Triệu'
+			} else if (num.length > 9) {
+				return parseFloat(num / 1000000000).toFixed(1).replace('.', ',') + ' Tỷ'
+			} else if (num < 900) {
+				return num + ' đ' // if value < 1000, nothing to do
+			}
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		},
+		handleMoveDraft (event) {
+			if (event.draggedContext.element.appraiser_sale && (this.user_id === event.draggedContext.element.appraiser_sale.user_id || event.draggedContext.element.created_by === this.profile.data.user.id)) {
+				this.idDragger = event.draggedContext.element.id
+				this.elementDragger = event.draggedContext.element
+			} else return false
+		},
+		checkMove (evt) {
+			let draggerElement = evt.draggedContext.element
+			let configId = parseInt(evt.from.id)
+			let config = this.principleConfig.find(i => i.id === configId)
+			let user = this.profile.data.user
+			let check = false
+			if (evt.from.id !== evt.to.id) {
+				if (config && config.put_require.length > 0) {
+					config.put_require.forEach(i => {
+						if ((i === 'created_by' && draggerElement[i] === user.id) || (i !== 'created_by' && draggerElement[i] === user.appraiser.id)) {
+							check = true
+						}
+					})
+				}
+			}
+			this.elementDragger = draggerElement
+			this.idDragger = draggerElement.id
+			this.config = config
+			return check
+		},
+		changedDraggable (evt) {
+			let targetId = parseInt(evt.to.id)
+			let check = false
+			let targetConfig = this.principleConfig.find(i => i.id === targetId)
+			let draggableDescription = this.config.target_description.find(i => i.id === targetId)
+			let message = draggableDescription ? draggableDescription.description : ''
+			check = this.checkRequired(targetConfig.require, this.elementDragger)
+			if (check) {
+				this.isMoved = check
+				this.next_status = targetConfig.status
+				this.next_sub_status = targetConfig.sub_status
+				this.confirm_message = message
+			} else {
+				this.returnData()
+				this.key_dragg++
+			}
+		},
+		openMessage (message, type = 'error', position = 'top-right', duration = 3000) {
+			this.$toast.open({
+				message: message,
+				type: type,
+				position: position,
+				duration: duration
+			})
+		},
+		checkRequired (require, data) {
+			let check = true
+			if (require) {
+				this.changeStatusRequire = require
+				this.isCheckPrice = require.check_price ? require.check_price : false
+				this.isCheckLegal = require.check_legal ? require.check_legal : false
+				this.isCheckVersion = require.check_version ? require.check_version : false
+				if (require.appraiser) {
+					check = this.checkAppraiser(data)
+					if (!check) {
+						this.openMessage('Chưa có thông tin tổ thẩm định')
+					}
+				}
+				if (check && require.appraise_item_list) {
+					check = this.checkItemList(data)
+					if (!check) {
+						this.openMessage('Chưa có chi tiết tài sản thẩm định')
+					}
+				}
+			}
+			return check
+		},
+		checkAppraiser (data) {
+			if (data.appraiser_perform_id && data.appraiser_id) { return true } else { return false }
+		},
+		checkItemList (draggerElement) {
+			if (draggerElement.personal_properties.length > 0 || draggerElement.real_estate.length > 0) { return true } else { return false }
+		},
+		async handleRemoveStatusDraft (event, element) {
+			this.status = 2
+			this.showAppraisalDialog = true
+		},
+		async updateAppraisal (data, id, status_expired_at) {
+			this.isAccept = true
+			this.listCertificateTemp.forEach(item => {
+				if (item.id === id) {
+					item.status = 2
+				}
+			})
+			// await this.updateDataWorkFlow()
+		},
+		handleCancelAppraisal () {
+			this.showAppraisalDialog = false
+			if (!this.isAccept) {
+				this.listCertificateDraft = this.listCertificateTemp.filter(item => item.status === 1)
+				this.listCertificateOpen = this.listCertificateTemp.filter(item => item.status === 2)
+			}
+			this.isAccept = false
+		},
+		handleMoveOpen (event) {
+			if (this.user_id === event.draggedContext.element.appraiser_perform.user_id) {
+				this.idDragger = event.draggedContext.element.id
+				this.elementDragger = event.draggedContext.element
+			} else return false
+		},
+		// send accept
+		handleRemoveStatusOpen (event) {
+			this.status = 3
+			this.showVerifyCertificate = true
+		},
+		async handleChangeVerify (data, id, status_expired_at) {
+			this.isAccept = true
+			this.listCertificateTemp.forEach(item => {
+				if (item.id === id) {
+					item.status = 3
+				}
+			})
+			// await this.updateDataWorkFlow()
+		},
+		handleCancelVerify () {
+			this.showVerifyCertificate = false
+			if (!this.isAccept) {
+				this.listCertificateOpen = this.listCertificateTemp.filter(item => item.status === 2)
+				this.listCertificateLock = this.listCertificateTemp.filter(item => item.status === 3)
+				this.idUpdate = ''
+			}
+			this.isAccept = false
+		},
+		// accpet the request
+		handleMoveVerify (event) {
+			if (this.appraiser_number) {
+				this.idDragger = event.draggedContext.element.id
+				this.elementDragger = event.draggedContext.element
+			} else return false
+		},
+		handleRemoveStatusVerify () {
+			this.showAcceptCertificate = true
+		},
+		async handleChangeAccept () {
+			let dataSend = {
+				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
+				appraiser_id: this.elementDragger.appraiser_id,
+				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
+				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
+				status: 4
+			}
+			// change status 3 --> 4
+			const res = await CertificationBrief.updateStatusCertificate(this.idDragger, dataSend)
+			if (res.data) {
+				await this.$toast.open({
+					message: 'Xác nhận hồ sơ thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.listCertificateTemp.forEach(item => {
+					if (item.id === this.idDragger) {
+						item.status = 4
+					}
+				})
+			} else {
+				await this.$toast.open({
+					message: `${res.error.message}`,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.handleCancelAccept()
+			}
+			this.showAcceptCertificate = await false
+		},
+		async handleChangeAccept2 (note) {
+			let dataSend = {
+				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
+				appraiser_id: this.elementDragger.appraiser_id,
+				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
+				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
+				status: this.next_status,
+				sub_status: this.next_sub_status,
+				check_price: this.isCheckPrice,
+				check_legal: this.isCheckLegal,
+				check_version: this.isCheckVersion,
+				required: this.changeStatusRequire,
+				status_expired_at: this.getExpireStatusDate(),
+				status_note: note,
+				status_description: this.message,
+				status_config: this.jsonConfig.principle
+			}
+			const res = await CertificationBrief.updateStatusCertificate(this.idDragger, dataSend)
+			if (res.data) {
+				let returnData = this.subStatusDataReturn.find(i => i.id === this.idDragger)
+				if (returnData) {
+					returnData.status = this.next_status
+					returnData.sub_status = this.next_sub_status
+					returnData.status_expired_at = res.data.status_expired_at
+					returnData.updated_at = res.data.updated_at
+				}
+				this.returnData()
+				await this.$toast.open({
+					message: this.confirm_message + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+			} else {
+				await this.$toast.open({
+					message: `${res.error.message}`,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.handleCancelAccept2()
+			}
+			this.isMoved = false
+			this.showDetailPopUp = false
+			this.isHandleAction = false
+		},
+		async handleUpdateStatus (id, data, message) {
+			const res = await CertificationBrief.updateStatusCertificate(id, data)
+			if (res.data) {
+				let returnData = this.subStatusDataReturn.find(i => i.id === id)
+				if (returnData) {
+					returnData.status = data.status
+					returnData.sub_status = data.sub_status
+				}
+				this.returnData()
+				await this.$toast.open({
+					message: message + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+			} else {
+				await this.$toast.open({
+					message: `${res.error.message}`,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.showDetailPopUp = false
+			}
+			this.showDetailPopUp = false
+		},
+		getExpireStatusDate () {
+			let dateConvert = new Date()
+			let minutes = this.config.process_time ? this.config.process_time : 1440
+			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000)
+			let status_expired_at = moment(dateConverted).format('DD-MM-YYYY HH:mm')
+			return status_expired_at
+		},
+		handleCancelAccept () {
+			this.showAcceptCertificate = false
+			this.listCertificateLock = this.listCertificateTemp.filter(item => item.status === 3)
+			this.listCertificatesClose = this.listCertificateTemp.filter(item => item.status === 4)
+		},
+		handleCancelAccept2 () {
+			this.isMoved = false
+			this.isHandleAction = false
+			this.showDetailPopUp = false
+			this.returnData()
+		},
+		returnData () {
+			this.principleConfig.forEach(item => {
+				this.subStatusData[item.id] = this.subStatusDataReturn.filter(i => i.status === item.status && i.sub_status === item.sub_status)
+				this.subStatusDataTmp[item.id] = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
+			})
+			// this.key_dragg ++
+		},
+		checkMoveVerify () {
+			return true
+		},
+		handleDetailCertificate (id) {
+			this.idData = id
+			this.getDetailCertificate(id)
+		},
+		capitalizeFirstLetter (string) {
+			return string.charAt(0).toUpperCase() + string.slice(1)
+		},
+		timeSince (date, now) {
+			var minutes = Math.floor((now - new Date(date)) / 60000)
+			var interval = minutes / 525600
+			if (minutes > 0) {
+				if (interval > 1) {
+					return Math.floor(interval) + ' năm trước'
+				}
+				interval = minutes / 2592000
+				if (interval > 1) {
+					return Math.floor(interval) + ' Tháng trước'
+				}
+				interval = minutes / 86400
+				if (interval > 1) {
+					return Math.floor(interval) + ' Ngày trước'
+				}
+				interval = minutes / 3600
+				if (interval > 1) {
+					return Math.floor(interval) + ' giờ trước'
+				}
+				interval = minutes / 60
+				if (interval > 1) {
+					return Math.floor(interval) + ' phút trước'
+				}
+				return Math.floor(minutes) + ' giây trước'
+			} else {
+				interval = Math.abs(interval)
+				if (interval > 1) {
+					return 'Còn lại ' + Math.floor(interval) + ' năm'
+				}
+				interval = Math.abs(minutes / 2592000)
+				if (interval > 1) {
+					return 'Còn lại ' + Math.floor(interval) + ' Tháng'
+				}
+				interval = Math.abs(minutes / 86400)
+				if (interval > 1) {
+					return 'Còn lại ' + Math.floor(interval) + ' Ngày'
+				}
+				interval = Math.abs(minutes / 3600)
+				if (interval > 1) {
+					return 'Còn lại ' + Math.floor(interval) + ' giờ'
+				}
+				interval = Math.abs(minutes / 60)
+				if (interval > 1) {
+					return 'Còn lại ' + Math.floor(interval) + ' phút'
+				}
+				return 'Còn lại ' + Math.floor(minutes) + ' giây'
+			}
+		},
+		format (value) {
+			let num = (value / 1).toFixed(0).replace(',', '.')
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		},
+		async getProfiles () {
+			const profile = this.$store.getters.profile
+			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
+				this.activeStatus = true
+			}
+		},
+		async handleUpdateListKanBan (id, status) {
+			this.showDetailPopUp = false
+			// await this.updateDataWorkFlow()
+			this.listCertificateTemp.forEach(item => {
+				if (item.id === id) {
+					item.status = status
+				}
+			})
+			this.listCertificateDraft = this.listCertificateTemp.filter(item => item.status === 1)
+			this.listCertificateOpen = this.listCertificateTemp.filter(item => item.status === 2)
+			this.listCertificateOpen = this.listCertificateTemp.filter(item => item.status === 2)
+			this.listCertificateLock = this.listCertificateTemp.filter(item => item.status === 3)
+		},
+		async updateDataWorkFlow (search) {
+			this.isLoading = true
+			try {
+				const resp = await CertificationBrief.getListKanbanCertificate(search)
+				if (resp.data) {
+					this.listCertificate = resp.data.HSTD
+					this.listCertificateDraftTemp = resp.data.HSTD.filter(item => item.status === 1)
+					this.listCertificateOpenTemp = resp.data.HSTD.filter(item => item.status === 2)
+					this.listCertificateLockTemp = resp.data.HSTD.filter(item => item.status === 3)
+					this.listCertificatesCloseTemp = resp.data.HSTD.filter(item => item.status === 4)
+					this.listCertificatesCanceledTemp = resp.data.HSTD.filter(item => item.status === 5)
+					this.listCertificateDraft = []
+					this.listCertificateOpen = []
+					this.listCertificateLock = []
+					this.listCertificatesClose = []
+					this.listCertificatesCanceled = []
+					this.listCertificateTemp = []
+					let count = this.countData = 0
+					for (var i = count, j = count; i < j + 10; i++) {
+						this.listCertificateDraftTemp[i] && this.countData < this.listCertificateDraftTemp.length && this.listCertificateDraft.push(this.listCertificateDraftTemp[i]) && this.listCertificateTemp.push(this.listCertificateDraftTemp[i])
+						this.listCertificateOpenTemp[i] && this.countData < this.listCertificateOpenTemp.length && this.listCertificateOpen.push(this.listCertificateOpenTemp[i]) && this.listCertificateTemp.push(this.listCertificateOpenTemp[i])
+						this.listCertificateLockTemp[i] && this.countData < this.listCertificateLockTemp.length && this.listCertificateLock.push(this.listCertificateLockTemp[i]) && this.listCertificateTemp.push(this.listCertificateLockTemp[i])
+						this.listCertificatesCloseTemp[i] && this.countData < this.listCertificatesCloseTemp.length && this.listCertificatesClose.push(this.listCertificatesCloseTemp[i]) && this.listCertificateTemp.push(this.listCertificatesCloseTemp[i])
+						this.listCertificatesCanceledTemp[i] && this.countData < this.listCertificatesCanceledTemp.length && this.listCertificatesCanceled.push(this.listCertificatesCanceledTemp[i]) && this.listCertificateTemp.push(this.listCertificatesCanceledTemp[i])
+						this.countData++
+					}
+				}
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
+		async getDataWorkFlow (search = '') {
+			this.isLoading = true
+			try {
+				const resp = await CertificationBrief.getListKanbanCertificate(search)
+				if (resp.data) {
+					this.listCertificate = resp.data.HSTD
+					this.listCertificateDraftTemp = resp.data.HSTD.filter(item => item.status === 1)
+					this.listCertificateOpenTemp = resp.data.HSTD.filter(item => item.status === 2)
+					this.listCertificateLockTemp = resp.data.HSTD.filter(item => item.status === 3)
+					this.listCertificatesCloseTemp = resp.data.HSTD.filter(item => item.status === 4)
+					this.listCertificatesCanceledTemp = resp.data.HSTD.filter(item => item.status === 5)
+					this.listCertificateDraft = []
+					this.listCertificateOpen = []
+					this.listCertificateLock = []
+					this.listCertificatesClose = []
+					this.listCertificatesCanceled = []
+					this.listCertificateTemp = []
+					let count = this.countData
+					for (var i = count, j = count; i < j + 10; i++) {
+						this.listCertificateDraftTemp[i] && this.countData < this.listCertificateDraftTemp.length && this.listCertificateDraft.push(this.listCertificateDraftTemp[i]) && this.listCertificateTemp.push(this.listCertificateDraftTemp[i])
+						this.listCertificateOpenTemp[i] && this.countData < this.listCertificateOpenTemp.length && this.listCertificateOpen.push(this.listCertificateOpenTemp[i]) && this.listCertificateTemp.push(this.listCertificateOpenTemp[i])
+						this.listCertificateLockTemp[i] && this.countData < this.listCertificateLockTemp.length && this.listCertificateLock.push(this.listCertificateLockTemp[i]) && this.listCertificateTemp.push(this.listCertificateLockTemp[i])
+						this.listCertificatesCloseTemp[i] && this.countData < this.listCertificatesCloseTemp.length && this.listCertificatesClose.push(this.listCertificatesCloseTemp[i]) && this.listCertificateTemp.push(this.listCertificatesCloseTemp[i])
+						this.listCertificatesCanceledTemp[i] && this.countData < this.listCertificatesCanceledTemp.length && this.listCertificatesCanceled.push(this.listCertificatesCanceledTemp[i]) && this.listCertificateTemp.push(this.listCertificatesCanceledTemp[i])
+						this.countData++
+					}
+				}
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
+		async getDataWorkFlow2 (search = '') {
+			this.isLoading = true
+			try {
+				const resp = await CertificationBrief.getListKanbanCertificate(search)
+				if (resp.data) {
+					this.listCertificate = resp.data.HSTD
+					if (this.principleConfig.length > 0) {
+						let dataTmp = []
+						this.principleConfig.forEach(item => {
+							dataTmp = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
+							this.subStatusDataTmp[item.id] = dataTmp
+						})
+						this.pushSubStatusData()
+					}
+				}
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
+		handleChange (value) {
+			this.total_amount = value
+		},
+		handleChangeWidth (value) {
+			if (isNaN(value)) {
+				this.width = ''
+			} else this.width = value
+		},
+		handleChangeCurrency (value) {
+			this.currency = value
+		},
+		loadMore () {
+			setTimeout(e => {
+				let count = this.countData
+				for (var i = count, j = count; i < j + 10; i++) {
+					this.listCertificateDraftTemp[i] && this.countData < this.listCertificateDraftTemp.length && this.listCertificateDraft.push(this.listCertificateDraftTemp[i]) && this.listCertificateTemp.push(this.listCertificateDraftTemp[i])
+					this.listCertificateOpenTemp[i] && this.countData < this.listCertificateOpenTemp.length && this.listCertificateOpen.push(this.listCertificateOpenTemp[i]) && this.listCertificateTemp.push(this.listCertificateOpenTemp[i])
+					this.listCertificateLockTemp[i] && this.countData < this.listCertificateLockTemp.length && this.listCertificateLock.push(this.listCertificateLockTemp[i]) && this.listCertificateTemp.push(this.listCertificateLockTemp[i])
+					this.listCertificatesCloseTemp[i] && this.countData < this.listCertificatesCloseTemp.length && this.listCertificatesClose.push(this.listCertificatesCloseTemp[i]) && this.listCertificateTemp.push(this.listCertificatesCloseTemp[i])
+					this.listCertificatesCanceledTemp[i] && this.countData < this.listCertificatesCanceledTemp.length && this.listCertificatesCanceled.push(this.listCertificatesCanceledTemp[i]) && this.listCertificateTemp.push(this.listCertificatesCanceledTemp[i])
+					this.countData++
+				}
+			}, 200)
+		},
+		loadMore2 () {
+			setTimeout(e => {	this.pushSubStatusData() }, 200)
+		},
+		pushSubStatusData () {
+			let count = this.countData ? this.countData : 0
+			let tmp = this.subStatusDataTmp
+			let config = this.principleConfig
+			let data = []
+			let dataReturn = this.subStatusDataReturn
+			config.forEach(item => {
+				data = this.subStatusData[item.id] ? this.subStatusData[item.id] : []
+				if (tmp[item.id] && tmp[item.id].length > count) {
+					for (var i = count; i < count + 10; i++) {
+						tmp[item.id][i] && data.push(tmp[item.id][i]) && dataReturn.push(tmp[item.id][i])
+					}
+				}
+				// data.sort(function (a, b) {
+				// if (a.updated_at > b.updated_at) { return a }
+				// })
+				this.subStatusData[item.id] = data
+			})
+
+			this.key_dragg++
+			this.countData += 10
+		},
+		getConfigByStatus (status, sub_status) {
+			return this.principleConfig.filter(item => item.status === status && item.sub_status === sub_status && item.isActive === 1)
+		},
+		async getDetailCertificate (id) {
+			const res = await CertificationBrief.getDetailCertificateBrief(id)
+			if (res.data) {
+				this.detailData = await res.data
+				this.showDetailPopUp = true
+				this.idDragger = id
+			} else {
+				await this.$toast.open({
+					message: 'Lấy dữ liệu thất bại',
+					type: 'error',
+					position: 'top-right'
+				})
+			}
+		},
+		handleFooterAccept (target) {
+			let check = true
+			let config = this.principleConfig.find(i => i.id === target.id)
+			this.elementDragger = this.detailData
+			if (config) {
+				this.config = config
+				check = this.checkRequired(config.require, this.detailData)
+			}
+			// console.log(check)
+			if (check) {
+				this.next_status = config.status
+				this.next_sub_status = config.sub_status
+				this.confirm_message = target.description
+				this.isHandleAction = true
+			}
+		},
+		handleFooterReject (status, subStatus, text) {
+			this.next_status = status
+			this.next_sub_status = subStatus
+			this.confirm_message = text
+			this.isHandleAction = true
+		},
+		changeHeight () {
+			let maxHeight = 0
+			this.principleConfig.forEach(i => {
+				let ElementHeight = document.getElementById(i.id).offsetHeight
+				if (maxHeight < ElementHeight) { maxHeight = ElementHeight }
+			})
+			this.principleConfig.forEach(i => {
+				document.getElementById(i.id).style.height = maxHeight + 'px'
+			})
+		}
+	},
+	updated () {
+		this.changeHeight()
+	},
+	mounted () {
+		if (this.jsonConfig && this.jsonConfig.principle) {
+			this.principleConfig = this.jsonConfig.principle.filter(i => i.isActive === 1)
+		}
+		const listElm = document.querySelector('#infinite-list')
+		listElm.addEventListener('scroll', e => {
+			if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight - 5) {
+				// this.loadMore()
+				this.loadMore2()
+			}
+		})
+	},
+	beforeMount () {
+		if (this.search_kanban) {
+			this.getDataWorkFlow2(this.search_kanban.search)
+		} else this.getDataWorkFlow2()
+		this.getProfiles()
+	}
+}
+</script>
+
+<style scoped lang="scss">
+  .scroll_board {
+    // transform:rotateX(180deg);
+    // -ms-transform:rotateX(180deg); /* IE 9 */
+    // -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+    scroll-snap-align: start;
+    overflow: auto;
+	overflow-y: auto;
+	overflow-x: auto;
+    margin-bottom: 1px;
+    max-height: 71vh !important;
+    @media (max-height: 800px) and (min-height: 660px) { // M-MD Screen
+      max-height: 75vh !important;
+    }
+    @media (max-height: 970px) and (min-height: 800px) { // FD Screen
+      max-height: 78vh !important;
+    }
+    @media (min-height: 970px) {  // >2k Screen
+      max-height: 85vh !important;
+    }
+  }
+  .name_card {
+    text-align: left;
+    width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .badge {
+    border-radius: 10px;
+    display: inline-block;
+    text-transform: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 85%;
+    color: #FFF;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .badgeSuccess {
+    background-color: rgba(40,199,111,.12);
+    color: #28C76F!important;
+  }
+  .badgeWarning {
+    background-color: rgba(255,159,67,.12);
+    color: #FF9F43!important;
+  }
+  .badgeDanger {
+        background-color: rgba(234,84,85,.12);
+    color: #EA5455!important;
+  }
+  .badgeInfo {
+    background-color: rgba(0,207,232,.12);
+    color: #00CFE8!important;
+  }
+  .badgePrimary {
+    background-color: rgba(115,103,240,.12);
+    color: #7367F0!important;
+  }
+  .content_id {
+    border-radius: 5px;
+    padding: 0px 3px;
+    font-weight: 500;
+    cursor: pointer;
+    &_primary {
+      color: #007EC6;
+      background-color: #E3F5FF;
+    }
+    &_secondary {
+      color: #FFFFFF;
+      background-color: #8B94A3;
+    }
+    &_warning {
+      color: #FF963D;
+      background-color: #FFF1E6;
+    }
+    &_danger {
+      color: #FF5E7B;
+      background-color: #FFEBEF;
+    }
+    &_success {
+      color: #FFFFFF;
+      background-color: #26BF7F;
+    }
+  }
+  .img_user {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+  }
+  .appraise-container {
+    padding: 0 1.25rem;
+  }
+  .kanban-column {
+    min-height: 300px;
+  }
+  .height_icon {
+    height: 1.3rem;
+  }
+  .card-body {
+    padding: 0.75rem 0.75rem !important;
+  }
+  .card_container {
+    border-radius: 5px;
+    &_primary {
+      border: 1px solid #B5E5FF
+    }
+    &_secondary {
+      border: 1px solid #8B94A3
+    }
+    &_warning {
+      border: 1px solid #FFD1AD
+    }
+    &_danger {
+      border: 1px solid #FFC8D3
+    }
+    &_success {
+      border: 1px solid #26BF7F;
+      background-color: #EAFFF6;
+    }
+  }
+  .container_kanban {
+	height: fit-content;
+    background-color: #F6F7FB;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+    border-top: 4px solid;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    min-width: 17rem;
+  }
+  // border
+  .border {
+    &_primary {
+      color:#72CDFF
+    }
+    &_secondary {
+      color:#9EA6B4
+    }
+    &_danger {
+      color:#FF7E9B
+    }
+    &_warning {
+      color:#FFB880
+    }
+    &_success {
+      color:#3DDC99
+    }
+  }
+  // title
+  .title {
+    font-weight: 600;
+    &_primary{
+      color:#00507C;
+    }
+    &_secondary{
+      color:#9EA6B4;
+    }
+    &_warning {
+      color:#FFB880;
+    }
+    &_danger {
+      color:#FF5E7B;
+    }
+    &_success {
+      color:#3DDC99;
+    }
+  }
+  //quatity
+  .quatity {
+    min-width: 32px;
+    height: 22px;
+    padding: 0px 5px;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    &_primary{
+      background-color: #007EC6;
+    }
+    &_warning{
+      background-color: #FF963D;
+    }
+     &_danger{
+      background-color: #FF5E7B;
+    }
+    &_success{
+      background-color: #26bf7f;
+    }
+    &_secondary{
+      background-color: #8B94A3;
+    }
+  }
+
+  .title_kanban {
+    font-weight: 600;
+  }
+  .title_group {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .kanban_board {
+    font-size: 0.875rem !important;
+    min-width: 1200px;
+  }
+  .d_inline {
+    @media (min-width: 1500px) {
+      display: inline !important;
+      min-width: 4.7rem;
+    }
+  }
+  .label_container {
+    @media (min-width: 1500px) {
+      min-width: 120px
+    }
+  }
+  .icon_expired {
+     margin-inline-end: 1rem;
+     width: 1rem;
+     justify-content: end;
+  }
+  .container_card_success {
+    background: white;
+    margin-bottom: 1rem;
+    .card {
+      margin-bottom: unset !important;
+    }
+  }
+  .border_expired {
+    border-color: red !important
+  }
+
+</style>

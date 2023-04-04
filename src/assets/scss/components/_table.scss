@@ -1,0 +1,265 @@
+@media #{$info-ipad} {
+  .ant-table table {
+    //overflow-x: auto;
+    display: block;
+  }
+}
+.ant-table table {
+  border-radius: 5px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  @media (max-width: 1610px) {
+    //overflow-x: auto;
+    //display: block;
+  }
+    font-size: 1rem !important;
+}
+.ant-table-body {
+  overflow-x: auto !important;
+}
+.ant-table-footer {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+.ant-table-wrapper {
+  .ant-spin-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    .ant-table-pagination {
+      text-align: center;
+      width: 100%;
+      margin: 40px 0 10px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      .ant-pagination-options {
+        float: left;
+        margin-left: 0;
+      }
+
+      .ant-pagination-item {
+        //border-radius: inherit;
+        margin-right: 0;
+        border: none;
+        border-radius: 10px;
+
+        &-active {
+          background: #222222;
+          border: 1px solid #cccccc;
+          border-radius: 10px;
+
+          a {
+            color: #ffffff;
+          }
+          &:hover,
+          &:focus {
+            a {
+              color: #ffffff !important;
+            }
+          }
+        }
+
+        &:hover,
+        &:focus {
+          a {
+            color: #000000;
+          }
+        }
+      }
+
+      .ant-pagination-next {
+        margin-left: 8px;
+      }
+    }
+
+    .ant-table {
+      border-radius: 5px !important;
+      background: #ffffff;
+
+      .btn-list {
+        &.justify-content-end {
+          min-width: 120px;
+          margin-left: auto;
+        }
+      }
+
+      .ant-table-thead > tr > th,
+      .ant-table-tbody > tr > td {
+        min-width: auto;
+      }
+
+      .ant-table-thead > tr > th {
+        text-align: center;
+        background: rgba(243, 242, 247, 1);
+        color: #000000;
+        font-weight: bold;
+        padding: 20px 15px;
+        //padding: 18px;
+        font-size: 1.125rem;
+        border: none;
+        &:last-child {
+          padding: 20px 27px 20px 15px;
+        }
+      }
+      .ant-table-tbody > tr > td {
+        color: rgba(85, 85, 85, 1);
+
+        .action {
+          img {
+            display: flex;
+            align-items: center;
+            width: auto;
+            max-height: 30px;
+            margin: auto;
+          }
+        }
+      }
+
+      & + .ant-table-pagination {
+        .ant-pagination-options {
+          display: none;
+        }
+      }
+    }
+
+    .ant-table-bordered {
+      .ant-table-thead > tr > th {
+      }
+      .ant-table-row.ant-table-row-level-0 {
+        &:nth-child(even) {
+          background: rgba(194, 201, 209, 0.2);
+        }
+        &:last-child {
+          border-bottom: none !important;
+        }
+      }
+      .ant-table-tbody > tr > td {
+        border-right: none;
+        color: #333333;
+        word-break: break-word;
+        border-bottom: 1px solid #c5c5c5 !important;
+
+        @media (max-height: 660px) {
+          padding: 12px 8px;
+        }
+        @media (max-height: 800px) and (min-height: 660px) {
+          padding: 12px 8px;
+        }
+
+        @media (max-height: 970px) and (min-height: 800px) {
+          padding: 15px;
+        }
+
+        &:last-child {
+          padding-right: 27px;
+        }
+      }
+    }
+  }
+}
+.ant-table-wrapper .ant-spin-container .ant-table-bordered .ant-table-tbody > tr > td {
+  white-space: nowrap;
+  text-transform: lowercase;
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}
+.ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  background: transparent !important;
+}
+
+.ant-table-bordered .ant-table-header > table,
+.ant-table-bordered .ant-table-body > table,
+.ant-table-bordered .ant-table-fixed-left table,
+.ant-table-bordered .ant-table-fixed-right table {
+  border: none !important;
+}
+.ant-pagination {
+  font-size: 1rem !important;
+}
+.ant-pagination-disabled a,
+.ant-pagination-disabled:hover a,
+.ant-pagination-disabled:focus a,
+.ant-pagination-disabled .ant-pagination-item-link,
+.ant-pagination-disabled:hover .ant-pagination-item-link,
+.ant-pagination-disabled:focus .ant-pagination-item-link {
+  border: none !important;
+  color: rgb(154, 154, 154) !important;
+}
+.ant-pagination-prev,
+.ant-pagination-next,
+.ant-pagination-jump-prev,
+.ant-pagination-jump-next {
+}
+.ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination-next .ant-pagination-item-link {
+  color: #000000;
+  border: none !important;
+  border-radius: 10px !important;
+}
+.ant-pagination-prev:focus .ant-pagination-item-link,
+.ant-pagination-next:focus .ant-pagination-item-link,
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+  color: #0b0d10 !important;
+}
+.ant-table-thead > tr > th .ant-table-column-sorter .ant-table-column-sorter-inner .ant-table-column-sorter-up.on,
+.ant-table-thead > tr > th .ant-table-column-sorter .ant-table-column-sorter-inner .ant-table-column-sorter-down.on {
+  color: #faa831 !important;
+}
+.table-property {
+  &.ant-table-wrapper .ant-spin-container .ant-table-bordered .ant-table-tbody > tr > td {
+    white-space: nowrap;
+    text-transform: lowercase;
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+.ant-table-thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.ant-table-body {
+  position: relative;
+  max-height: 62vh !important;
+
+  @media (max-height: 660px){
+    max-height: 66vh !important;
+  }
+  @media (max-height: 800px) and (min-height: 660px) {
+    max-height: 69vh !important;
+  }
+  @media (max-height: 970px) and (min-height: 800px) {
+    max-height: 74vh !important;
+  }
+  overflow: auto !important;
+}
+.coordinates {
+  .ant-input {
+    padding-right: 25px !important;
+    text-overflow: ellipsis;
+  }
+}
+.table {
+  &__user {
+    &.ant-table-wrapper .ant-spin-container .ant-table-bordered .ant-table-tbody > tr > td {
+      text-transform: none;
+    }
+  }
+}
+.mh-0 {
+  .ant-table-body {
+    min-height: 0vh !important;
+  }
+}
+.ant-table-empty {
+  .ant-table-body {
+    min-height: 0vh !important;
+  }
+}

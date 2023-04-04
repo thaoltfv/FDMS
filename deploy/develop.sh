@@ -1,0 +1,1 @@
+npx shipit develop deploy

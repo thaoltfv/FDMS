@@ -1,0 +1,5 @@
+.vue-tabs .nav-tabs>li.active>a,
+.vue-tabs .nav-tabs>li.active>a:hover,
+.vue-tabs .nav-tabs>li.active>a:focus {
+    background-color: #555555;
+}

@@ -1,0 +1,456 @@
+{
+    "principle": [
+        {
+            "id": 1,
+            "key": 1,
+            "description": "Tiếp nhận yêu cầu",
+            "slug": "tiep_nhan_yc",
+            "group": "new",
+            "group_name": "Mới",
+            "status": 1,
+            "sub_status": 1,
+            "isCancel": true,
+            "isActive": 1,
+            "target": [
+                0,
+                2
+            ],
+            "target_name": [
+                "",
+                "Gửi phân hồ sơ"
+            ],
+            "edit": {
+                "form": true,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": false,
+                "appraise_item_list": false,
+                "check_price": false
+            },
+            "print": false,
+            "css": {
+                "color": "info"
+            },
+            "put_draggable": [
+                2
+            ],
+            "put_require": [
+                "appraiser_sale_id",
+                "created_by"
+            ],
+            "process_time": 1440,
+            "check_version": false
+        },
+        {
+            "id": 2,
+            "key": 2,
+            "description": "Phân hồ sơ",
+            "slug": "phan_bo_hs",
+            "group": "new",
+            "group_name": "Mới",
+            "status": 1,
+            "sub_status": 2,
+            "isCancel": true,
+            "isActive": 1,
+            "target": [
+                1,
+                3
+            ],
+            "target_name": [
+                "Từ chối",
+                "Gửi định giá sơ bộ"
+            ],
+            "edit": {
+                "form": true,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": false,
+                "check_price": false
+            },
+            "print": false,
+            "css": {
+                "color": "info"
+            },
+            "put_draggable": [
+                1,
+                3
+            ],
+            "put_require": [
+                "appraiser_sale_id",
+                "created_by"
+            ],
+            "process_time": 1440,
+            "check_version": false
+        },
+        {
+            "id": 3,
+            "key": 3,
+            "description": "Định giá sơ bộ",
+            "slug": "dinh_gia_so_bo",
+            "group": "appraise",
+            "group_name": "Đang thẩm định",
+            "status": 2,
+            "sub_status": 1,
+            "isCancel": true,
+            "isActive": 1,
+            "target": [
+                2,
+                4
+            ],
+            "target_name": [
+                "Từ chối",
+                "Gửi duyệt giá sơ bộ"
+            ],
+            "edit": {
+                "form": false,
+                "info": true,
+                "appraiser": true,
+                "appraise_item_list": true,
+                "other_document": true,
+                "asset": true
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": false
+            },
+            "print": true,
+            "css": {
+                "color": "primary"
+            },
+            "put_draggable": [
+                2,
+                4
+            ],
+            "put_require": [
+                "appraiser_perform_id"
+            ],
+            "process_time": 1440,
+            "check_version": true
+        },
+        {
+            "id": 4,
+            "key": 4,
+            "description": "Duyệt giá sơ bộ",
+            "slug": "duyet_gia_so_bo",
+            "group": "appraise",
+            "group_name": "Đang thẩm định",
+            "status": 2,
+            "sub_status": 2,
+            "isCancel": true,
+            "isActive": 1,
+            "target": [
+                3,
+                5
+            ],
+            "target_name": [
+                "Từ chối",
+                "Gửi thẩm định"
+            ],
+            "edit": {
+                "form": false,
+                "info": true,
+                "appraiser": false,
+                "appraise_item_list": true,
+                "other_document": true,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": false
+            },
+            "print": true,
+            "css": {
+                "color": "primary"
+            },
+            "put_draggable": [
+                3,
+                5
+            ],
+            "put_require": [
+                "appraiser_perform_id"
+            ],
+            "process_time": 1440,
+            "check_version": true
+        },
+        {
+            "id": 5,
+            "key": 5,
+            "description": "Thẩm định",
+            "slug": "tham_dinh",
+            "group": "appraise",
+            "group_name": "Đang thẩm định",
+            "status": 2,
+            "sub_status": 3,
+            "isCancel": false,
+            "isActive": 1,
+            "target": [
+                4,
+                6
+            ],
+            "target_name": [
+                "Từ chối",
+                "Gửi thẩm định viên"
+            ],
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": true,
+                "other_document": false,
+                "asset": true
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true
+            },
+            "print": true,
+            "css": {
+                "color": "primary"
+            },
+            "put_draggable": [
+                4,
+                6
+            ],
+            "put_require": [
+                "appraiser_perform_id"
+            ],
+            "process_time": 1440,
+            "check_version": true
+        },
+        {
+            "id": 6,
+            "key": 6,
+            "description": "Thẩm định viên",
+            "slug": "tham_dinh_vien",
+            "group": "approve",
+            "group_name": "Đang duyệt",
+            "status": 3,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "target": [
+                5,
+                7
+            ],
+            "target_name": [
+                "Từ chối",
+                "Gửi ban giám đốc"
+            ],
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true,
+                "asset": false
+            },
+            "print": true,
+            "css": {
+                "color": "warning"
+            },
+            "put_draggable": [
+                5,
+                7
+            ],
+            "put_require": [
+                "appraiser_id",
+                "appraiser_manager_id",
+                "appraiser_confirm_id"
+            ],
+            "process_time": 1440,
+            "check_version": true
+        },
+        {
+            "id": 7,
+            "key": 7,
+            "description": "Ban giám đốc",
+            "slug": "ban_giam_doc",
+            "group": "approve",
+            "group_name": "Đang duyệt",
+            "status": 3,
+            "sub_status": 2,
+            "isCancel": false,
+            "isActive": 1,
+            "target": [
+                6,
+                8
+            ],
+            "target_name": [
+                "Từ chối",
+                "Hoàn thành"
+            ],
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true
+            },
+            "print": true,
+            "css": {
+                "color": "warning"
+            },
+            "put_draggable": [
+                6
+            ],
+            "put_require": [
+                "appraiser_id",
+                "appraiser_manager_id",
+                "appraiser_confirm_id"
+            ],
+            "process_time": 1440,
+            "check_version": false
+        },
+        {
+            "id": 8,
+            "key": 8,
+            "description": "Hoàn thành",
+            "slug": "hoan_thanh",
+            "group": "finish",
+            "group_name": "Hoàn thành",
+            "status": 4,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "target": [
+                0,
+                0
+            ],
+            "target_name": [
+                "",
+                ""
+            ],
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": false
+            },
+            "print": true,
+            "css": {
+                "color": "success"
+            },
+            "put_draggable": [
+                7
+            ],
+            "put_require": [],
+            "process_time": 1440,
+            "check_version": false
+        },
+        {
+            "id": 9,
+            "key": 9,
+            "description": "Hủy",
+            "slug": "huy",
+            "group": "cancel",
+            "group_name": "Hủy",
+            "status": 5,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "target": [
+                0,
+                0
+            ],
+            "target_name": [
+                "",
+                ""
+            ],
+            "edit": {
+                "form": true,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": false,
+                "check_price": false
+            },
+            "print": false,
+            "css": {
+                "color": "secondary"
+            },
+            "put_draggable": [
+                0
+            ],
+            "put_require": [],
+            "process_time": 1440,
+            "check_version": false
+        }
+    ],
+    "principle_group": [
+        {
+            "id": 1,
+            "group": "new",
+            "group_name": "Mới",
+            "css": "info"
+        },
+        {
+            "id": 2,
+            "group": "appraise",
+            "group_name": "Đang thẩm định",
+            "css": "primary"
+        },
+        {
+            "id": 3,
+            "group": "approve",
+            "group_name": "Đang duyệt",
+            "css": "warning"
+        },
+        {
+            "id": 4,
+            "group": "finish",
+            "group_name": "Hoàn thành",
+            "css": "success"
+        },
+        {
+            "id": 5,
+            "group": "cancel",
+            "group_name": "Hủy",
+            "css": "secondary"
+        }
+    ],
+    "appraiser": {
+        "created_by": "Người tạo",
+        "appraiser_sale_id": "Nhân viên kinh doanh",
+        "appraiser_perform_id": "Chuyên viên thẩm định",
+        "appraiser_confirm_id": "Ký thay GĐ",
+        "appraiser_id": "Thẩm định viên",
+        "appraiser_manager_id": "Giám đốc"
+    }
+}

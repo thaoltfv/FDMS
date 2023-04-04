@@ -1,0 +1,70 @@
+{
+  "hosting": [
+    {
+      "site": "dinhgia-online",
+      "public": "dist",
+      "appAssociation": "AUTO",
+      "trailingSlash": false,
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "/src/**",
+        "/static/**",
+        "/deploy/**",
+        "/config/**",
+        "/build/**"
+      ],
+      "rewrites": [
+        {
+          "source": "!**/*.@(js|css|jpg|png|woff|woff2|ttf|eot|svg|map)",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(js|css|jpg|png|woff|woff2|ttf|eot|svg|map)",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "donava-314804",
+      "public": "dist",
+      "appAssociation": "AUTO",
+      "trailingSlash": false,
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "/src/**",
+        "/static/**",
+        "/deploy/**",
+        "/config/**",
+        "/build/**"
+      ],
+      "rewrites": [
+        {
+          "source": "!**/*.@(js|css|jpg|png|woff|woff2|ttf|eot|svg|map)",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(js|css|jpg|png|woff|woff2|ttf|eot|svg|map)",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

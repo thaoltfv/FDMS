@@ -1,0 +1,20 @@
+diff --git a/node_modules/vue-material-tabs/dist/vue-material-tabs.esm.js b/node_modules/vue-material-tabs/dist/vue-material-tabs.esm.js
+index b775517..dd80979 100644
+--- a/node_modules/vue-material-tabs/dist/vue-material-tabs.esm.js
++++ b/node_modules/vue-material-tabs/dist/vue-material-tabs.esm.js
+@@ -491,13 +491,13 @@ var script$2 = {
+       const navItemsRectsCollection = (_this$$refs$navItems = this.$refs.navItems) === null || _this$$refs$navItems === void 0 ? void 0 : (_this$$refs$navItems$ = _this$$refs$navItems.getClientRects()) === null || _this$$refs$navItems$ === void 0 ? void 0 : _this$$refs$navItems$[0];
+       const navActiveItemRectsCollection = (_this$$refs$model$ = this.$refs[model][0]) === null || _this$$refs$model$ === void 0 ? void 0 : (_this$$refs$model$$ge = _this$$refs$model$.getClientRects()) === null || _this$$refs$model$$ge === void 0 ? void 0 : _this$$refs$model$$ge[0];
+ 
+-      if (this.sliderElement) {
++      if (this.sliderElement && navActiveItemRectsCollection && navItemsRectsCollection) {
+         var _this$sliderElement;
+ 
+         Object.assign((_this$sliderElement = this.sliderElement) === null || _this$sliderElement === void 0 ? void 0 : _this$sliderElement.style, {
+           portrait: {
+             height: navActiveItemRectsCollection.height + "px",
+-            top: navActiveItemRectsCollection.top - navItemsRectsCollection.top + "px",
++            top: navActiveItemRectsCollection.top  - navItemsRectsCollection.top + "px",
+             width: "",
+             left: ""
+           },

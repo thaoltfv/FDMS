@@ -1,0 +1,30 @@
+import Model from './Model.js'
+
+export default class User extends Model {
+	buildUrl (request) {
+		const { params } = request
+		return ['user', ...params]
+	}
+
+	static async deleteUser (id) {
+		return (new this()).request({ method: 'DELETE', url: `user/${id}`, isStatic: true })
+	}
+	static async resetUser (email) {
+		const data = {email: email}
+		return (new this()).request({ method: 'POST', url: `users/reset-password`, data, isStatic: true })
+	}
+	static async changePassword (password) {
+		const data = {new_password: password.new_password, confirm_new_password: password.confirm_new_password}
+		return (new this()).request({ method: 'POST', url: `users/change-password`, data, isStatic: true })
+	}
+	static async getRoles () {
+		return (new this()).request({method: 'GET', url: `role`, isStatic: true})
+	}
+
+	static async getBranches () {
+		return (new this()).request({method: 'GET', url: `branches`, isStatic: true})
+	}
+	static async updateUser (id, data) {
+		return (new this()).request({ method: 'PUT', url: `user/${id}`, data, isStatic: true })
+	}
+}

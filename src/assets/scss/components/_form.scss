@@ -1,0 +1,67 @@
+.ant-select.is-invalid.has-error,
+.ant-calendar-picker.is-invalid {
+  .ant-calendar-picker-input.ant-input,
+  .ant-select-selection.ant-select-selection--single,
+  .ant-select-ope.ant-select {
+    border-color: #cd201f;
+    color: #cd201f;
+    box-shadow: none;
+
+    .ant-select-arrow {
+      display: none;
+    }
+
+    &:focus, &:active, &:hover {
+      box-shadow: none;
+    }
+  }
+
+  .anticon {
+    display: none;
+  }
+}
+
+.editor {
+  .ql-container {
+    height: 300px;
+  }
+}
+
+.form-control-plaintext {
+  .form-control.ant-calendar-picker,
+  .form-control.ant-select {
+    .ant-input,
+    .ant-select-selection--single {
+      border: none
+    }
+  }
+}
+.quill-editor.editor {
+  .ql-container.ql-snow {
+    padding: 0;
+  }
+
+  &.is-invalid {
+    .ql-toolbar.ql-snow {
+      border-color: #cd201f;
+    }
+
+    .ql-container.ql-snow {
+      border-color: #cd201f;
+    }
+  }
+}
+
+.ant-calendar-picker-icon {
+  width: 12px!important;
+  height: 12px!important;
+}
+
+.ant-calendar-picker {
+  min-width:  100% !important;
+}
+.lable-none{
+  .form-label{
+    display: none !important;
+  }
+}

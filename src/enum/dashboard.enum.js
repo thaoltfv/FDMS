@@ -1,0 +1,105 @@
+export const DashBoard = [{
+	id: 1,
+	name: 'Hồ sơ cần xử lý',
+	slug: 'backlog_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 2,
+	name: 'Tiến độ xử lý',
+	slug: 'process_progress_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 3,
+	name: 'Hồ sơ hoàn thành theo quý',
+	slug: 'finish_byquarter_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 5,
+	name: 'Hồ sơ hoàn thành theo tháng',
+	slug: 'finish_bymonth_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 7,
+	name: 'Doanh thu',
+	slug: 'branch_revenue_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 8,
+	name: 'Công nợ',
+	slug: 'branch_debt_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 13,
+	name: 'Báo cáo hồ sơ thẩm định',
+	slug: 'certification_brief_report',
+	class: 'col-12',
+	disable: false,
+	visible: true
+},
+{
+	id: 9,
+	name: 'Tài sản so sánh của các tỉnh',
+	slug: 'compare_asset_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 10,
+	name: 'Tài sản thẩm định',
+	slug: 'appraise_asset_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 4,
+	name: 'Hồ sơ hủy theo quý',
+	slug: 'cancel_byquarter_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 6,
+	name: 'Hồ sơ hủy theo tháng',
+	slug: 'cancel_bymonth_report',
+	class: 'col-12 col-lg-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 11,
+	name: 'Trạng thái hồ sơ thẩm định',
+	slug: 'status_report',
+	class: 'col-12 col-md-6',
+	disable: false,
+	visible: true
+},
+{
+	id: 12,
+	name: 'Tiến độ thẩm định',
+	slug: 'process_appraiser_report',
+	class: 'col-12 col-md-6',
+	disable: false,
+	visible: true
+}
+]

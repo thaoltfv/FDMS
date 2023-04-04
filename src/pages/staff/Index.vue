@@ -1,0 +1,433 @@
+<template>
+  <div class="container-fluid">
+    <div class="loading" :class="{'loading__true': isSubmit}">
+      <a-spin />
+    </div>
+    <div class="pannel">
+      <div class="pannel__content d-md-flex d-block justify-content-end align-items-center">
+        <Search @filter-changed="onFilterChange($event)" class="search-box"/>
+        <div class="container__input" v-if="add">
+          <button type="button" class="btn btn-create btn-white text-nowrap"><img
+            src="../../assets/icons/ic_export.svg" alt="excel" style="margin-right: 8px"/> Tải lên </button>
+          <input class="input__excel" type="file" accept=".xls, .xlsx" @change="onExcelChange($event)">
+        </div>
+        <router-link :to="{name: 'staff.create'}" class="btn btn-create btn-white text-nowrap index-screen-button mt-md-0 mt-2 m-0 px-3" tag="button" v-if="add"><img
+          src="../../assets/icons/ic_add.svg" style="margin-right: 8px" alt="icon add">
+          Tạo nhân viên
+        </router-link>
+      </div>
+    </div>
+    <a-table bordered
+             :columns="columns"
+             :data-source="list"
+             :loading="isLoading"
+             :rowKey="record => record.id"
+             :pagination="{
+               ...pagination,
+             }"
+             @change="onPageChange"
+             class="table__user table__import"
+    >
+      <!--Custom type table-->
+      <template slot="action"
+                slot-scope="action_edit , action">
+        <div class="d-flex justify-content-end">
+          <a-tooltip placement="bottom"
+                     :title="$t('tooltip_edit')" v-if="edit" class="mr-2">
+            <a @click.prevent="handleEdit(action_edit.id)"
+               href="#"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/images/icon-edit.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip>
+          <a-tooltip placement="bottom"
+                     :title="$t('tooltip_delete')" v-if="deleted" class="mr-2">
+            <a href="#"
+               @click.prevent="handleOpenModal(action.id)"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/images/icon-delete.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip>
+          <a-tooltip placement="bottom"
+                     :title="$t('tooltip_reset')" v-if="edit" >
+            <a href="#"
+               @click.prevent="handleOpenModalReset(action.email)"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/icons/ic_reset.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip>
+        </div>
+      </template>
+    </a-table>
+    <ModalDelete v-if="openModal"
+                 @cancel="openModal = false"
+                 @action="handleDelete"/>
+    <ModalReset v-if="openModalReset"
+                @cancel="openModalReset = false"
+                @action="handleReset"
+    />
+  </div>
+</template>
+
+<script>
+import Search from './Search'
+import User from '@/models/User'
+import { convertPagination } from '@/utils/filters'
+import {replace} from 'lodash-es'
+import ModalDelete from '@/components/Modal/ModalDelete'
+import ModalReset from '@/components/Modal/ModalReset'
+import InputCategory from '@/components/Form/InputCategory'
+import File from '@/models/File'
+export default {
+	name: 'index',
+	components: {
+		ModalDelete,
+		ModalReset,
+		InputCategory,
+		Search
+	},
+	data () {
+		return {
+			openModalReset: false,
+			isSubmit: false,
+			excel: '',
+			isLoading: false,
+			provinces: [],
+			list: [],
+			filter: {},
+			pagination: {},
+			perPage: '',
+			openModal: false,
+			form: {
+				id: ''
+			},
+			add: false,
+			deleted: false,
+			edit: false,
+			email: ''
+		}
+	},
+	created () {
+		this.list = this.$route.query['list']
+		this.pagination = this.$route.meta['pagination']
+		const permission = this.$store.getters.currentPermissions
+		permission.forEach(value => {
+			if (value === 'ADD_USER') {
+				this.add = true
+			}
+			if (value === 'EDIT_USER') {
+				this.edit = true
+			}
+			if (value === 'DELETE_USER') {
+				this.deleted = true
+			}
+		})
+	},
+	computed: {
+		columns () {
+			return [
+				{
+					title: 'Họ tên',
+					align: 'left',
+					dataIndex: 'name'
+				},
+				{
+					title: 'Số điện thoại',
+					align: 'left',
+					dataIndex: 'phone'
+				},
+				{
+					title: 'Địa chỉ',
+					align: 'left',
+					dataIndex: 'address',
+					width: '50%'
+				},
+				{
+					title: 'Quyền hạn',
+					align: 'left',
+					dataIndex: 'roles[0].role_name',
+					width: '50%'
+				},
+				{
+					title: 'Chi nhánh',
+					align: 'left',
+					dataIndex: 'branch.name'
+				},
+				{
+					title: 'Thao tác',
+					scopedSlots: {customRender: 'action'},
+					align: 'right',
+					width: '100px'
+				}
+			]
+		}
+	},
+	methods: {
+
+		async onExcelChange (e) {
+			let files = e.target.files || e.dataTransfer.files
+			if (!files.length) {
+				return
+			}
+			this.file = e.target.files[0]
+			// this.createExcel()
+			await this.uploadExcel()
+		},
+		uploadExcel () {
+			this.isLoading = true
+			const formData = new FormData()
+			formData.append('import_file', this.file)
+			return File.uploadExcel({data: formData}).then(response => {
+				if (response && response.data && response.data.data) {
+					this.isLoading = false
+					this.getStaffs()
+					this.$toast.open({
+						message: 'Cập nhật thành công',
+						type: 'success',
+						position: 'top-right'
+					})
+				} else if (response.data.error) {
+					this.isLoading = false
+					this.$toast.open({
+						message: response.data.error.message,
+						type: 'error',
+						position: 'top-right',
+						duration: 5000
+					})
+				}
+			})
+		},
+		async onFilterChange ($event) {
+			const params = {
+				page: 1,
+				limit: this.limit || 20
+			}
+
+			this.filter = {...$event}
+			await this.getStaffs(params)
+		},
+		async onPageChange (pagination, filters, sorter) {
+			this.perPage = pagination.pageSize
+			const sortBy = `sortBy[${sorter.field}]`
+			const sortDesc = replace(sorter.order, 'end', '')
+
+			const params = {
+				page: pagination.current,
+				per_page: pagination.pageSize,
+				[sortBy]: sortDesc
+			}
+			await this.getStaffs(params)
+		},
+
+		async handleEdit (id) {
+			this.$router.push({
+				name: 'staff.edit',
+				query: {
+					id: id
+				}
+			}).catch(_ => {})
+		},
+		async handleDelete () {
+			await User.deleteUser(this.id)
+			await this.getStaffs()
+			this.$toast.open({
+				message: 'Xóa nhân viên thành công',
+				type: 'success',
+				position: 'top-right'
+			})
+		},
+		async handleReset () {
+			await User.resetUser(this.email)
+			await this.getStaffs()
+			this.$toast.open({
+				message: 'Cập nhật mật khẩu thành công',
+				type: 'success',
+				position: 'top-right'
+			})
+		},
+		async getStaffs (params = {}) {
+			this.isLoading = true
+			const filter = {}
+
+			for (let property in this.filter) {
+				filter[`${property}`] = this.filter[property]
+			}
+
+			try {
+				const resp = await User.paginate({
+					query: {
+						page: 1,
+						limit: 20,
+						...params,
+						...filter
+					}
+				})
+
+				this.list = [...resp.data.data]
+				this.pagination = convertPagination(resp.data)
+				this.isLoading = false
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
+
+		async searchStaff () {
+			this.loading = true
+		},
+
+		handleOpenModal (id) {
+			this.openModal = true
+			this.id = id
+		},
+		handleOpenModalReset (email) {
+			this.openModalReset = true
+			this.email = email
+		}
+	},
+	beforeMount () {
+		this.filter['staff_id'] = 45
+		this.getStaffs()
+	},
+	async handleDelete () {
+		try {
+			await User.deleteUser(this.id)
+		} catch (err) {
+			await this.onError(this.$t('message_error'), this.$t('delete_message_error'))
+		}
+	}
+}
+</script>
+<style scoped lang="scss">
+.pannel{
+  background: #FFFFFF;
+  //box-shadow: 1px 2px 0 #e5eaee;
+  border-radius: 5px;
+  //padding: 25px;
+  margin-bottom: 47px;
+  &__table{
+    padding: 25px 0;
+    border-radius: 5px;
+  }
+  &__input{
+    p{
+      color: #5a5386;
+      font-weight: 600;
+    }
+  }
+}
+.form-control{
+  margin-right: 5px;
+  width: auto;
+  color: #555555;
+  border-radius: 5px;
+
+  @media (max-width: 1023px) {
+    width: 100%;
+  }
+  &:focus{
+    border-color: #CCCCCC;
+    box-shadow: none;
+  }
+}
+.table{
+  thead{
+    th{
+      padding: .5rem  40px;
+      background: transparent;
+      color: #000000;
+      font-weight: 700;
+
+      border-bottom: 2px solid rgba(110,117,130,0.2);
+      @media (max-width: 1023px) {
+        padding: .5rem ;
+      }
+    }
+  }
+  tbody{
+    tr{
+      &:nth-child(odd){
+        background: #FFFFFF;
+      }
+    }
+    td{
+      padding: .5rem  40px;
+      color: #000000;
+      vertical-align: middle !important;
+
+      font-weight: 700;
+      @media (max-width: 1023px) {
+        padding: .5rem ;
+      }
+      &:first-child{
+        width: 100%;
+      }
+    }
+  }
+  &__action{
+    padding-right: 20px;
+  }
+}
+.btn{
+  &-create{
+    //margin-top: 10px;
+    @media (max-width: 1023px) {
+      //width: 100%;
+    }
+  }
+}
+.icon-action{
+  width: 18px !important;
+  height: auto;
+}
+.container{
+  &__input {
+    position: relative;
+    height: 35px;
+    cursor: pointer;
+    margin-right: 15px;
+    @media (max-width: 767px) {
+      margin-right: 0;
+    }
+    .btn-white {
+      margin-right: 0;
+    }
+    .input {
+      &__excel{
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        opacity: 0;
+        height: 35px;
+      }
+    }
+  }
+}
+.loading{
+  display: none;
+  &__true{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.62);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.btn-loading{
+      &:after{
+        width: 2rem !important;
+        height: 2rem !important;
+      }
+    }
+  }
+}
+</style>

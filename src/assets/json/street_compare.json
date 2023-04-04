@@ -1,0 +1,44 @@
+{
+   "data": [
+     {
+       "district": "thành phố Biên Hòa",
+       "street": "Đuờng 30 Tháng 4",
+       "street_compare": "Đường 30 Tháng 4"
+     },
+     {
+       "district": "thành phố Biên Hòa",
+       "street": "Ba Mươi Tháng Tư",
+       "street_compare": "Đường 30 Tháng 4"
+     },
+     {
+       "district": "thành phố Biên Hòa",
+       "street": "Đường 30/4",
+       "street_compare": "Đường 30 Tháng 4"
+     },
+     {
+       "district": "thành phố Biên Hòa",
+       "street": "Quốc lộ 1A",
+       "street_compare": "Quốc lộ 1"
+     },
+     {
+       "district": "thành phố Biên Hòa",
+       "street": "Nguyễn Tường Tộ",
+       "street_compare": "Nguyễn Trường Tộ "
+     },
+     {
+       "district": "Thuận An",
+       "street": "Đường tỉnh 743",
+       "street_compare": "ĐT-743"
+     },
+     {
+       "district": "Thành phố Long Khánh",
+       "street": "Cách Mạng Tháng Tám",
+       "street_compare": "Đường Cách Mạng Tháng 8"
+     },
+     {
+       "district": "Thị xã Long Khánh",
+       "street": "Cách Mạng Tháng Tám",
+       "street_compare": "Đường Cách Mạng Tháng 8"
+     }
+  ]
+}
