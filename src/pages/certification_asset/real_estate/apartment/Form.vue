@@ -517,7 +517,8 @@ export default {
 				}
 			}
 			if (this.step_active < 3 || (this.step_active === 3 && this.form.step_4.assets_general.length === 0)) {
-				this.isAutomation = true
+				// Remove the automated selection of comparison asset.
+				// this.isAutomation = true
 			}
 			// if (this.$route.meta['step7']) { this.form.step_7 = Object.assign(this.form.step_7, { ...this.$route.meta['step7'] }) }
 			// if (this.form.step_7.construction_company && this.form.step_7.construction_company.length > 0) {
@@ -640,7 +641,8 @@ export default {
 				this.handleSubmitStep_4(this.form.step_4, this.idData)
 			}
 			if (step < 4) {
-				this.isAutomation = true
+				// Remove the automated selection of comparison asset.
+				// this.isAutomation = true
 			}
 
 			this.step_active = step
@@ -771,11 +773,16 @@ export default {
 			const isValid = await this.$refs.step_2.validate()
 			if (isValid) {
 				if (this.form.step_2.law.length === 0) {
-					this.$toast.open({
-						message: 'Vui lòng thêm pháp lý cho tài sản',
-						type: 'error',
-						position: 'top-right'
-					})
+					// this.$toast.open({
+					// 	message: 'Vui lòng thêm pháp lý cho tài sản ABAS',
+					// 	type: 'error',
+					// 	position: 'top-right'
+					// })
+					await this.findAppraisalFacility()
+					await this.findAppraisalPrinciples()
+					await this.findApproach()
+					await this.findMethodsUsed()
+					await this.$refs.wizard.nextTab()
 				} else {
 					this.confirmSavePreviousStep(2)
 				}
@@ -803,10 +810,10 @@ export default {
 					this.form.step_3.value_base_and_approach = res.data.value_base_and_approach
 				}
 				if (!res.data.value_base_and_approach) {
-					this.findAppraisalFacility()
-					this.findAppraisalPrinciples()
-					this.findApproach()
-					this.findMethodsUsed()
+					await this.findAppraisalFacility()
+					await this.findAppraisalPrinciples()
+					await this.findApproach()
+					await this.findMethodsUsed()
 				} else if (res.data.appraisal_methods) {
 					this.form.step_3.appraisal_methods = res.data.appraisal_methods
 				}

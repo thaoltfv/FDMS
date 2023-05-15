@@ -1334,6 +1334,10 @@ export default {
 					// 	type: 'error',
 					// 	position: 'top-right'
 					// })
+					await this.findAppraisalFacility()
+					await this.findAppraisalPrinciples()
+					await this.findApproach()
+					await this.findMethodsUsed()
 					await this.$refs.wizard.nextTab()
 				} else {
 					this.confirmSavePreviousStep(4)
