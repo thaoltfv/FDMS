@@ -55,4 +55,6 @@ interface CompareAssetGeneralRepository extends BaseRepository
     public function autoApartmentAsset($objects);
 
     public function findPaging2();
+
+    public function exportAsset();
 }

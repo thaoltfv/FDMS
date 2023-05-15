@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Elasticquent\ElasticquentTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

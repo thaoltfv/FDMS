@@ -162,6 +162,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/asset-generals/version/{id}', [CompareAssetGeneralController::class, 'findVersionById']);
 
+    Route::get('/asset-generals/asset-export', [CompareAssetGeneralController::class, 'assetExport']);
+
     Route::apiResource('apartment', ApartmentController::class);
 
     Route::get('/apartments', [ApartmentController::class, 'findAll']);

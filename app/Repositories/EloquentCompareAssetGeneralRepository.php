@@ -4651,4 +4651,71 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
 
     }
 
+    public function exportAsset()
+    {
+        $assetTypeId = request()->get('asset_type_id');
+        $createdBy = request()->get('created_by');
+        // $coordinates = request()->get('coordinates');
+        // $provinceId = request()->get('province_id');
+        // $districtId = request()->get('district_id');
+        // $wardId = request()->get('ward_id');
+        // $streetId = request()->get('street_id');
+        // $sourceId = request()->get('source_id');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        // $contactPerson = request()->get('contact_person');
+        // $contactPhone = request()->get('contact_phone');
+        // $totalAreaFrom = request()->get('total_area_from');
+        // $totalAreaTo = request()->get('total_area_to');
+        // $constructionAreaFrom = request()->get('total_construction_area_from');
+        // $constructionAreaTo = request()->get('total_construction_area_to');
+        // $amountFrom = request()->get('total_amount_from');
+        // $amountTo = request()->get('total_amount_to');
+        // $avgPriceFrom = request()->get('average_land_unit_price_from');
+        // $avgPriceTo = request()->get('average_land_unit_price_to');
+        // $docNo = request()->get('doc_no');
+        // $landNo = request()->get('land_no');
+        $where = [
+            'migrate_status' => 'TSS',
+            'status' => 1,
+        ];
+        $select = [
+            'id',
+            DB::raw("to_date(public_date, 'dd/MM/yyyy') as public_date"),
+            'full_address',
+            'total_area',
+            'total_construction_area',
+            'total_amount',
+            'status',
+            'average_land_unit_price',
+            'created_at',
+            'created_by',
+            'asset_type_id',
+            'transaction_type_id',
+        ];
+        $with = [
+            'assetType:id,description',
+            'transactionType:id,description',
+            'createdBy:id,name',
+        ];
+        $result = $this->model->query()->with($with)->where($where)->select($select);
+        if (!empty($assetTypeId)) {
+            $result->whereHas('assetType', function ($has) use ($assetTypeId) {
+                $has->where('id', $assetTypeId);
+            });
+        }
+        if (!empty($createdBy)) {
+            $result->WhereHas('createdBy', function ($has) use ($createdBy) {
+                $has->where('name', 'ilike' , '%' . $createdBy . '%');
+            });
+        }
+        if (!empty($fromDate) && $fromDate != 'Invalid date') {
+            $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
+        }
+        if (!empty($toDate) && $toDate != 'Invalid date') {
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy')");
+        }
+        return $result->get()->append('area_total');
+    }
+
 }
