@@ -276,29 +276,7 @@ export default {
 		async export30daysBefore () {
 			this.form.fromDate = await moment(new Date(new Date().setDate(new Date().getDate() - 30))).format('DD/MM/YYYY')
 			this.form.toDate = await moment(new Date()).format('DD/MM/YYYY')
-			const res = await CertificateAsset.exportDataCertificationAsset(this.form)
-			if (res.data) {
-				const fileLink = document.createElement('a')
-				fileLink.href = res.data.url
-				fileLink.setAttribute('download', res.data.file_name)
-				document.body.appendChild(fileLink)
-				fileLink.click()
-				fileLink.remove()
-				window.URL.revokeObjectURL(fileLink)
-				this.$toast.open({
-					message: 'Xuất dữ liệu thành công',
-					type: 'success',
-					duration: 3000,
-					position: 'top-right'
-				})
-			} else if (res.error) {
-				this.$toast.open({
-					message: res.error.message,
-					type: 'error',
-					duration: 3000,
-					position: 'top-right'
-				})
-			}
+			this.exportData()
 		},
 		async exportMonthBefore () {
 			let date = new Date()
@@ -307,29 +285,7 @@ export default {
 			let to_date = new Date(datePrevious)
 			this.form.fromDate = await moment(from_date).format('DD/MM/YYYY')
 			this.form.toDate = await moment(to_date).format('DD/MM/YYYY')
-			const res = await CertificateAsset.exportDataCertificationAsset(this.form)
-			if (res.data) {
-				const fileLink = document.createElement('a')
-				fileLink.href = res.data.url
-				fileLink.setAttribute('download', res.data.file_name)
-				document.body.appendChild(fileLink)
-				fileLink.click()
-				fileLink.remove()
-				window.URL.revokeObjectURL(fileLink)
-				this.$toast.open({
-					message: 'Xuất dữ liệu thành công',
-					type: 'success',
-					duration: 3000,
-					position: 'top-right'
-				})
-			} else if (res.error) {
-				this.$toast.open({
-					message: res.error.message,
-					type: 'error',
-					duration: 3000,
-					position: 'top-right'
-				})
-			}
+			this.exportData()
 		},
 		async exportQuarter () {
 			let quarterAdjustment = (moment().month() % 3) + 1
@@ -337,6 +293,9 @@ export default {
 			let lastQuarterStartDate = lastQuarterEndDate.clone().subtract({ months: 2 }).startOf('month')
 			this.form.fromDate = await moment(lastQuarterStartDate).format('DD/MM/YYYY')
 			this.form.toDate = await moment(lastQuarterEndDate).format('DD/MM/YYYY')
+			this.exportData()
+		},
+		async exportData() {
 			const res = await CertificateAsset.exportDataCertificationAsset(this.form)
 			if (res.data) {
 				const fileLink = document.createElement('a')

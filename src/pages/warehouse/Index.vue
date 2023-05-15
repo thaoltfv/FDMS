@@ -19,24 +19,17 @@
 					<button class="btn btn-white text-nowrap index-screen-button ml-2" @click="openSelectType" v-if="add">
 						<img src="@/assets/icons/ic_add.svg" style="margin-right: 8px" alt="search">Tạo mới
 					</button>
-					<!-- <b-dropdown class="ml-2 dropdown_btn d-none d-lg-inline-flex" no-caret>
+          <b-dropdown class="ml-2 dropdown_btn d-none d-lg-inline-flex" no-caret>
             <template #button-content>
 							<div class="container_image">
 								<img src="@/assets/icons/ic_more.svg" alt="">
 							</div>
             </template>
-						<b-dropdown-item v-if="exportFile">
-							<download-excel
-								:data="selectedRowKeys"
-								:fields="json_fields"
-								:class="selectedRowKeys.length === 0 ? 'disabled' : ''"
-								worksheet="document"
-								name="Donava.xls"
-							>
-							<img src="@/assets/icons/ic_export.svg" style="margin-right: 8px" alt="search"> Xuất file excel
-							</download-excel>
-						</b-dropdown-item>
-          </b-dropdown> -->
+            <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportMonthBefore">Xuất dữ liệu tháng trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportAdjust">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
+          </b-dropdown>
           <!-- <download-excel
 						:data="selectedRowKeys"
 						:fields="json_fields"
@@ -226,6 +219,10 @@
 			v-if="open_select_type"
 			@cancel="open_select_type = false"
 		/>
+		<ModalExportAdjust
+			v-if="showAdjustModal"
+			@cancel="showAdjustModal = false"
+		/>
   </div>
 </template>
 <script>
@@ -241,6 +238,7 @@ import Vue from 'vue'
 import {STATUS} from '@/enum/status.enum'
 import ModalPrint from '@/components/Modal/ModalPrint'
 import {BDropdown, BDropdownItem, BTooltip} from 'bootstrap-vue'
+import ModalExportAdjust from './modals/ModalExportAdjust'
 import ModalNotification from '@/components/Modal/ModalNotification'
 import ModalNotificationCustomer from '@/components/Modal/ModalNotificationCustomer'
 import ModalNotificationProperty from '@/components/Modal/ModalNotificationProperty'
@@ -266,6 +264,7 @@ export default {
 		ModalNotificationCustomer,
 		ModalNotificationProperty,
 		ModalSelectTypeAsset,
+		ModalExportAdjust,
 		LTooltip
 	},
 	data () {
@@ -282,21 +281,6 @@ export default {
 			cancelSearch: false,
 			modalNotification: false,
 			isSubmit: false,
-			json_fields: {
-				'Mã số': 'id',
-				'Địa chỉ': 'full_address',
-				'Tổng diện tích đất (m2)': 'total_area',
-				'Tổng diện tích xây dựng (m2)': 'total_construction_area',
-				'Tổng giá trị (VND)': 'total_amount',
-				'Trạng thái': {
-					callback: (value) => {
-						return `${value.status === 1 ? 'Đang kích hoạt' : value.status === 2 ? 'Đang vô hiệu hóa' : 'Bản nháp'}`
-					}
-				},
-				'Loại giao dịch': 'transaction_type_description',
-				'Người tạo': 'created_by',
-				'Thời điểm đăng': 'public_date'
-			},
 			json_meta: [
 				[
 					{
@@ -317,6 +301,7 @@ export default {
 			activeStatus: false,
 			showModalSearch: false,
 			showModalImage: false,
+			showAdjustModal: false,
 			selectedRowKeys: [],
 			isLoading: false,
 			provinces: [],
@@ -326,7 +311,9 @@ export default {
 			perPage: '',
 			openModal: false,
 			form: {
-				id: ''
+				createdBy: [],
+				fromDate: '',
+				toDate: ''
 			},
 			picList: {
 				images: [],
@@ -752,6 +739,56 @@ export default {
 				this.isSubmit = false
 				throw err
 			}
+		},
+		async export30daysBefore () {
+			this.form.fromDate = await moment(new Date(new Date().setDate(new Date().getDate() - 30))).format('DD/MM/YYYY')
+			this.form.toDate = await moment(new Date()).format('DD/MM/YYYY')
+			this.exportData()
+		},
+		async exportMonthBefore () {
+			let date = new Date()
+			let datePrevious = new Date(date.setDate(0))
+			let from_date = new Date(new Date(datePrevious).setDate(1))
+			let to_date = new Date(datePrevious)
+			this.form.fromDate = await moment(from_date).format('DD/MM/YYYY')
+			this.form.toDate = await moment(to_date).format('DD/MM/YYYY')
+			this.exportData()
+		},
+		async exportQuarter () {
+			let quarterAdjustment = (moment().month() % 3) + 1
+			let lastQuarterEndDate = moment().subtract({ months: quarterAdjustment }).endOf('month')
+			let lastQuarterStartDate = lastQuarterEndDate.clone().subtract({ months: 2 }).startOf('month')
+			this.form.fromDate = await moment(lastQuarterStartDate).format('DD/MM/YYYY')
+			this.form.toDate = await moment(lastQuarterEndDate).format('DD/MM/YYYY')
+			this.exportData()
+		},
+		async exportData() {
+			const res = await WareHouse.exportDataComparisionAsset(this.form)
+			if (res.data) {
+				const fileLink = document.createElement('a')
+				fileLink.href = res.data.url
+				fileLink.setAttribute('download', res.data.file_name)
+				document.body.appendChild(fileLink)
+				fileLink.click()
+				fileLink.remove()
+				window.URL.revokeObjectURL(fileLink)
+				this.$toast.open({
+					message: 'Xuất dữ liệu thành công',
+					type: 'success',
+					duration: 3000,
+					position: 'top-right'
+				})
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: 'error',
+					duration: 3000,
+					position: 'top-right'
+				})
+			}
+		},
+		exportAdjust () {
+			this.showAdjustModal = true
 		},
 		async handleDetail (id, property) {
 			// let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});

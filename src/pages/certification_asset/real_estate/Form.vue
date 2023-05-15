@@ -643,7 +643,7 @@ export default {
 			if (this.$route.meta['step']) {
 				let bindDataStep = this.$route.meta['step']
 
-				if(bindDataStep.certificate) { this.isCancelEnable = false }
+				if (bindDataStep.certificate) { this.isCancelEnable = false }
 				// step 1
 				if (bindDataStep.economic_infomation) { this.form.step_1.economic_infomation = bindDataStep.economic_infomation }
 				if (bindDataStep.general_infomation) { this.form.step_1.general_infomation = bindDataStep.general_infomation }
