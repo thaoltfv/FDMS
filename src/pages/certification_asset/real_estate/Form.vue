@@ -715,7 +715,8 @@ export default {
 				await this.$refs.wizard.changeTab(0, this.$route.params.step)
 			}
 			if (this.step_active < 5) {
-				this.isAutomation = true
+				// Remove the automated selection of comparison asset.
+				// this.isAutomation = true
 			}
 		} else if ('id' in this.$route.params && this.$route.name === 'certification_asset.create') {
 			if (this.$route.meta['step']) {
