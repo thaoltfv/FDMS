@@ -638,7 +638,7 @@ export default {
 						type: 'success',
 						position: 'top-right'
 					})
-				} else if (res.error){
+				} else if (res.error) {
 					this.$toast.open({
 						message: res.error.message,
 						type: 'error',
@@ -662,7 +662,7 @@ export default {
 						type: 'success',
 						position: 'top-right'
 					})
-				} else if (res.error){
+				} else if (res.error) {
 					this.$toast.open({
 						message: res.error.message,
 						type: 'error',
@@ -717,7 +717,7 @@ export default {
 		getStreetByDistrictId (id) {
 			let streets = this.districts.filter(item => item.id === id)
 			this.streets = streets[0].streets
-		},
+		}
 	},
 	beforeMount () {
 

@@ -652,7 +652,7 @@ export default {
 				this.certificate = bindDataStep.certificate
 				this.real_estate = bindDataStep.real_estate
 				this.status = bindDataStep.status
-				if(bindDataStep.certificate) { this.isCancelEnable = false }
+				if (bindDataStep.certificate) { this.isCancelEnable = false }
 				// step 1
 				if (bindDataStep.pic) { this.form.step_1.pic = bindDataStep.pic }
 				if (bindDataStep.apartment_asset_properties) { this.form.step_1.apartment_asset_properties = bindDataStep.apartment_asset_properties }

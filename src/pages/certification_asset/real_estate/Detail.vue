@@ -806,7 +806,7 @@ export default {
 				this.max_version = bindDataStep.max_version
 				this.createdBy = bindDataStep.created_by
 				this.real_estate = bindDataStep.real_estate
-				if(bindDataStep.certificate) { this.isCancelEnable = false }
+				if (bindDataStep.certificate) { this.isCancelEnable = false }
 
 				// step 1
 				if (bindDataStep.economic_infomation) { this.form.step_1.economic_infomation = bindDataStep.economic_infomation }

@@ -474,7 +474,7 @@ export default {
 			this.isEdit = true
 			if (this.$route.meta['step']) {
 				let bindDataStep = this.$route.meta['step']
-				if(bindDataStep.certificate) { this.isCancelEnable = false }
+				if (bindDataStep.certificate) { this.isCancelEnable = false }
 				// step 1
 				if (bindDataStep.apartment_asset_properties) { this.form.step_1.apartment_asset_properties = bindDataStep.apartment_asset_properties }
 				if (bindDataStep.appraise_asset) { this.form.step_1.appraise_asset = bindDataStep.appraise_asset }
