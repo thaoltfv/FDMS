@@ -79,17 +79,17 @@
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Chất lượng còn lại</p>
-                <p class="content-name">{{tangible.remaining_quality}}%</p>
+                <p class="content-name">{{ formatNumber(tangible.remaining_quality) }}%</p>
               </div>
               <div class="content-detail">
                 <p class="content-title">Diện tích xây dựng</p>
-                <p class="content-name">{{tangible.total_construction_area}}m<sup>2</sup></p>
+                <p class="content-name">{{ formatNumber(tangible.total_construction_area) }}m<sup>2</sup></p>
               </div>
             </div>
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Diện tích sàn</p>
-                <p class="content-name">{{tangible.total_construction_base}}m<sup>2</sup></p>
+                <p class="content-name">{{ formatNumber(tangible.total_construction_base)}}m<sup>2</sup></p>
               </div>
               <div class="content-detail">
                 <p class="content-title">Thửa đất xây dựng</p>
@@ -99,11 +99,11 @@
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Đơn giá xây dựng</p>
-                <p class="content-name">{{format(tangible.unit_price_m2)}}đ</p>
+                <p class="content-name">{{ formatCurrency(tangible.unit_price_m2) }}đ</p>
               </div>
               <div class="content-detail">
                 <p class="content-title">Giá trị ước tính</p>
-                <p class="content-name">{{format(tangible.estimation_value)}}đ</p>
+                <p class="content-name">{{ formatCurrency(tangible.estimation_value) }}đ</p>
               </div>
             </div>
             <div class="card-table">
@@ -194,9 +194,24 @@ export default {
 	computed: {
 	},
 	methods: {
-		format (value) {
-			let num = (value / 1).toFixed(0).replace('.', ',')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+		formatCurrency (value) {
+			if (value) {
+				let num = (value / 1).toFixed(0).replace('.', ',')
+				return num.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return value
+		},
+		formatNumber (num) {
+			// convert number to dot formatNumber
+			if (num) {
+				let formatedNum = num.toString().replace('.', ',')
+				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return num
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)

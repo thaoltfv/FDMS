@@ -56,6 +56,9 @@
               <button class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep1" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
         </ValidationObserver>
@@ -87,6 +90,9 @@
               <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
        </ValidationObserver>
@@ -123,6 +129,9 @@
                <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep3" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
         </ValidationObserver>
@@ -154,6 +163,9 @@
               <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep4" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
         </ValidationObserver>
@@ -174,6 +186,12 @@
       :notification="'Bạn có muốn nhân bản tài sản thẩm định không'"
       @action="actionDuplicate"
     />
+		<ModalNotificationAppraisal
+			v-if="openCancelAppraisal"
+			@cancel="openCancelAppraisal = false"
+			v-bind:notification="message"
+			@action="handleActionCancelAppraise"
+		/>
   </div>
 </template>
 
@@ -198,8 +216,6 @@ import Certificate from '@/models/Certificate'
 import { COMPARISON_APARTMENT } from '@/enum/comparison-factor-apartment.enum'
 import AppraiseData from '@/models/AppraiseData'
 import CertificateAsset from '@/models/CertificateAsset'
-import store from '@/store'
-import * as types from '@/store/mutation-types'
 export default {
 	name: 'Index',
 	components: {
@@ -224,7 +240,8 @@ export default {
 			isSave: false,
 			openNotification: false,
 			isSubmit: false,
-			openModalCancel: false,
+			isCancelEnable: true,
+			openCancelAppraisal: false,
 			showConfirmEdit: false,
 			showConfirmDuplicate: false,
 			step_edit: '',
@@ -457,6 +474,7 @@ export default {
 			this.isEdit = true
 			if (this.$route.meta['step']) {
 				let bindDataStep = this.$route.meta['step']
+				if(bindDataStep.certificate) { this.isCancelEnable = false }
 				// step 1
 				if (bindDataStep.apartment_asset_properties) { this.form.step_1.apartment_asset_properties = bindDataStep.apartment_asset_properties }
 				if (bindDataStep.appraise_asset) { this.form.step_1.appraise_asset = bindDataStep.appraise_asset }
@@ -1069,8 +1087,8 @@ export default {
 		},
 		async getProfiles () {
 			const profile = this.$store.getters.profile
-			this.form.created_by = profile.data.user.id
 			this.current_create_by = profile.data.user.id
+			this.checkRole = (profile.data.user.id === this.form.created_by) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
 		},
 
 		async handleCancel () {
@@ -1519,6 +1537,33 @@ export default {
 			// if (floorId) {
 			// 	this.getApartments(floorId)
 			// }
+		},
+		handleCancelProperty () {
+			this.openCancelAppraisal = true
+			this.message = 'Bạn có muốn hủy tài sản thẩm định này không ?'
+		},
+
+		// function hủy tài sản
+		async handleActionCancelAppraise () {
+			let status = 5
+			const res = await AppraiseData.updateStatusRealestate(this.idData, status)
+			if (res.data && res.data.status === 5) {
+				await this.$toast.open({
+					message: 'Hủy tài sản' + this.idData + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.openNotification = await false
+				await this.$router.push({name: 'certification_asset.index'}).catch(_ => {})
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+			}
 		},
 		changeAparment (event) {
 			this.form.apartment_id = event

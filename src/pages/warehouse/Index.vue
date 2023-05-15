@@ -19,25 +19,24 @@
 					<button class="btn btn-white text-nowrap index-screen-button ml-2" @click="openSelectType" v-if="add">
 						<img src="@/assets/icons/ic_add.svg" style="margin-right: 8px" alt="search">Tạo mới
 					</button>
-					<b-dropdown class="ml-2 dropdown_btn d-none d-lg-inline-flex" no-caret>
+					<!-- <b-dropdown class="ml-2 dropdown_btn d-none d-lg-inline-flex" no-caret>
             <template #button-content>
 							<div class="container_image">
 								<img src="@/assets/icons/ic_more.svg" alt="">
 							</div>
             </template>
-            <b-dropdown-item>
+						<b-dropdown-item v-if="exportFile">
 							<download-excel
 								:data="selectedRowKeys"
 								:fields="json_fields"
 								:class="selectedRowKeys.length === 0 ? 'disabled' : ''"
 								worksheet="document"
 								name="Donava.xls"
-								v-if="exportFile"
 							>
-						<img src="@/assets/icons/ic_export.svg" style="margin-right: 8px" alt="search"> Xuất file excel
-          </download-excel>
+							<img src="@/assets/icons/ic_export.svg" style="margin-right: 8px" alt="search"> Xuất file excel
+							</download-excel>
 						</b-dropdown-item>
-          </b-dropdown>
+          </b-dropdown> -->
           <!-- <download-excel
 						:data="selectedRowKeys"
 						:fields="json_fields"
@@ -160,10 +159,10 @@
             {{ status === 1 ? 'Đang kích hoạt' : status === 2 ? 'Đang vô hiệu hóa' : 'Bản nháp' }}</p>
         </template>
         <template slot="area_total" slot-scope="area_total">
-          <p class="total_rea mb-0">{{ formatArea(area_total) }} m<sup>2</sup></p>
+          <p class="total_rea mb-0">{{ formatNumber(area_total) }} m<sup>2</sup></p>
         </template>
         <template slot="total_construction_area" slot-scope="total_construction_area">
-          <p class="total_construction_area mb-0">{{ formatArea(total_construction_area) }} m<sup>2</sup></p>
+          <p class="total_construction_area mb-0">{{ formatNumber(total_construction_area) }} m<sup>2</sup></p>
         </template>
         <template slot="total_amount" slot-scope="total_amount">
           <p class="total_amount mb-0">{{ formatPrice(total_amount) }}</p>
@@ -635,19 +634,23 @@ export default {
 		formatPrice (value) {
 			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
 			if (num.length > 3 && num.length <= 6) {
-				return parseFloat(num / 1000).toFixed(1) + ' Nghìn'
+				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
 			} else if (num.length > 6 && num.length <= 9) {
-				return parseFloat(num / 1000000).toFixed(1) + ' Triệu'
+				return parseFloat(num / 1000000).toFixed(1).replace('.', ',') + ' Triệu'
 			} else if (num.length > 9) {
-				return parseFloat(num / 1000000000).toFixed(1) + ' Tỷ'
+				return parseFloat(num / 1000000000).toFixed(1).replace('.', ',') + ' Tỷ'
 			} else if (num < 900) {
 				return num + ' đ' // if value < 1000, nothing to do
 			}
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 		},
-		formatArea (value) {
-			let num = (value / 1).toFixed(0).replace(',', '.')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		formatNumber (value) {
+			if (value) {
+				let formatedNum = parseFloat(value).toString().replace('.', ',')
+				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
 		},
 		handleSearch () {
 			this.showModalSearch = true

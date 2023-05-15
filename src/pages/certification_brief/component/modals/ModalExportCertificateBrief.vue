@@ -20,47 +20,49 @@
               class="col-12 col-md-12 col-lg-12 form-group-container marginTop"
               vid="search"
               format-date="DD/MM/YYYY"
+							:startDateValue="form.fromDate"
+							:endDateValue="form.toDate"
               @startDate="form.fromDate = $event"
               @endDate="form.toDate = $event"
               label="Từ ngày - đến ngày"
             />
-            <InputCategoryMulti
+            <!-- <InputCategoryMulti
               v-model="form.createdBy"
               vid="info"
               label="Người tạo"
               :maxTagCount="1"
               class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
               :options="optionCreateBy"
-            />
+            /> -->
             <InputCategoryMulti
               v-model="form.status"
               vid="info"
               label="Trạng thái"
               :maxTagCount="1"
-              class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
+              class="col-12 form-group-container marginTop"
               :options="optionStatus"
             />
-            <InputCategory
+            <!-- <InputCategory
                 v-model="form.appraiser_perform_id"
                 vid="appraiser_perform_id"
                 label="Chuyên viên thực hiện"
-                class="col-12 col-md-4 col-lg-4 form-group-container marginTop"
+                class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
                 :options="optionsPeformance"
             />
             <InputCategory
                 v-model="form.appraiser_id"
                 vid="appraiser_id"
                 label="Thẩm định viên"
-                class="col-12 col-md-4 col-lg-4 form-group-container marginTop"
+                class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
                 :options="optionsAppraiser"
-            />
-            <InputCategory
+            /> -->
+            <!-- <InputCategory
                 v-model="form.customer_id"
                 vid="customer_id"
                 class="col-12 col-md-4 col-lg-4 form-group-container marginTop"
                 label="Đối tác"
                 :options="optionsCustomer"
-                />
+                /> -->
             <!-- <div class="col-12 mt-4">
               <label class="form-label font-weight-bold">Trạng thái</label>
                 <button-checkbox :options="statusOptions" :value="form.status" @change="onChangeStatus" />
@@ -177,7 +179,7 @@ export default {
 			await this.$emit('cancel')
 		},
 		async handleExportData (data) {
-			const res = await CertificationBrief.exportDataCertificationBrief(data)
+			const res = await CertificationBrief.exportDataCertificationBriefCustomize(data)
 			if (res.data) {
 				const fileLink = document.createElement('a')
 				fileLink.href = res.data.url
@@ -263,10 +265,12 @@ export default {
 		}
 	},
 	beforeMount () {
+		this.form.fromDate = moment().subtract(3, 'months').format('DD/MM/YYYY')
+		this.form.toDate = moment().format('DD/MM/YYYY')
 		this.getProfiles()
 		this.getUser()
 		this.getAppraisers()
-		this.getCustomer()
+		// this.getCustomer()
 	}
 }
 </script>

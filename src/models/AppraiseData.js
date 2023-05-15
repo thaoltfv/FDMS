@@ -33,6 +33,11 @@ export default class AppraiseData extends Model {
 		// const data1 = { status }
 		return (new this()).request({ method: 'POST', url: `appraise/status/${id}`, data, isStatic: true })
 	}
+	static async updateStatusRealestate (id, status) {
+		const data = { status: status }
+		// const data1 = { status }
+		return (new this()).request({ method: 'POST', url: `real_estate/status/${id}`, data, isStatic: true })
+	}
 	static async postDataComparison (data, dataConstruction, total_desicion_average) {
 		const comparison_tangible_factor = { comparison_tangible_factor: data, construction_company: dataConstruction, total_desicion_average }
 		return (new this()).request({ method: 'POST', url: `appraises/tangible-comparison`, data: comparison_tangible_factor, isStatic: true })

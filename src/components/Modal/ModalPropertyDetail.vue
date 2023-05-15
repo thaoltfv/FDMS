@@ -32,11 +32,11 @@
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Chiều rộng mặt tiền:</p>
-                <p class="content-name">{{ property.front_side_width }}m</p>
+                <p class="content-name">{{ formatNumber(property.front_side_width) }}m</p>
               </div>
               <div class="content-detail">
                 <p class="content-title">Chiều dài</p>
-                <p class="content-name">{{property.insight_width}}m</p>
+                <p class="content-name">{{ formatNumber(property.insight_width) }}m</p>
               </div>
             </div>
             <div class="d-grid">
@@ -65,7 +65,7 @@
                       <th>Diện tích</th>
                       <th>Vị trí đất</th>
                       <th>Đơn giá đất theo QĐ của UBND</th>
-                      <th>Hệ số K</th>
+                      <!-- <th>Hệ số K</th> -->
                     </tr>
                     </thead>
                     <tbody>
@@ -76,7 +76,7 @@
                         </div>
                       </td>
                       <td>
-                        {{propertyDetail.total_area}}m<sup>2</sup>
+                        {{ formatNumber(propertyDetail.total_area) }}m<sup>2</sup>
                       </td>
                       <td>
                         <div v-if="propertyDetail.position_type !== null">
@@ -84,11 +84,11 @@
                         </div>
                       </td>
                       <td>
-                        {{format(propertyDetail.circular_unit_price)}}đ
+                        {{ formatCurrency(propertyDetail.circular_unit_price) }}đ
                       </td>
-                      <td>
+                      <!-- <td>
                         {{ propertyDetail.k_rate }}
-                      </td>
+                      </td> -->
                     </tr>
                     </tbody>
                   </table>
@@ -98,7 +98,7 @@
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Tổng diện tích:</p>
-                <p class="content-name">{{property.asset_general_land_sum_area}}m<sup>2</sup></p>
+                <p class="content-name">{{ formatNumber(property.asset_general_land_sum_area) }}m<sup>2</sup></p>
               </div>
             </div>
             <p class="title mb-3">Đặc điểm chi tiết</p>
@@ -136,7 +136,7 @@
               </div>
               <div class="content-detail" v-if="property.main_road_length !== '' && property.main_road_length !== undefined && property.main_road_length !== null">
                 <p class="content-title">Bề rộng đường</p>
-                <p class="content-name">{{ property.main_road_length }}m</p>
+                <p class="content-name">{{ formatNumber(property.main_road_length) }}m</p>
               </div>
             </div>
             <div class="card-table" v-if="property.front_side === 0">
@@ -172,7 +172,7 @@
                         </div>
                       </td>
                       <td>
-                        {{format(alley.main_road_length)}} m
+                        {{ formatNumber(alley.main_road_length) }} m
                       </td>
                       <td>
                         <InputSwitch
@@ -322,17 +322,24 @@ export default {
 	computed: {
 	},
 	methods: {
-		format (value) {
-			let num = (value / 1).toFixed(0).replace('.', ',')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+		formatCurrency (value) {
+			if (value) {
+				let num = (value / 1).toFixed(0).replace('.', ',')
+				return num.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return value
 		},
-		formatFloat (value) {
-			let num = (value / 1).toFixed(2).replace('.', ',')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-		},
-		formatArea (value) {
-			let num = (value / 1).toString().replace('.', ',')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+		formatNumber (num) {
+			// convert number to dot formatNumber
+			if (num) {
+				let formatedNum = num.toString().replace('.', ',')
+				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return num
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)

@@ -192,7 +192,7 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="form.general_asset.length > 0 && this.isViewDocument === true && printConfig" class="col-12">
+		<div v-if="form.general_asset.length > 0 && printConfig" class="col-12">
 			<div class="d-flex flex-column flex-lg-row justify-content-around align-items-center">
 				<div class="card w-100 mr-lg-2">
 					<div class="card-title text-center">
@@ -202,11 +202,11 @@
 						<div class="column">
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
-									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
-										<div class="title_input_content title_input_download cursor_pointer"  @click="downloadCertificate(idData)">Chứng thư thẩm định</div>
+									<div class="d-flex align-items-center col" :class="{img_filter:!isViewAutomationDocument}">
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadCertificate(idData)" />
+										<div class="title_input_content title_input_download" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadCertificate(idData)">{{ filterDocumentName[0] || 'Chứng thư thẩm định' }}</div>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div v-if="isViewAutomationDocument" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div @click="viewCertificate(idData)">
 											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
 										</div>
@@ -218,11 +218,11 @@
 							</div>
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
-									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
-										<div class="title_input_content title_input_download cursor_pointer" @click="downloadReportCertificate(idData)">Báo cáo thẩm định</div>
+									<div class="d-flex align-items-center col" :class="{img_filter:!isViewAutomationDocument}">
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadReportCertificate(idData)" />
+										<div class="title_input_content title_input_download" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadReportCertificate(idData)">{{ filterDocumentName[1] || "Báo cáo thẩm định" }}</div>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div v-if="isViewAutomationDocument" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div @click="viewReportCertificate(idData)">
 											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
 										</div>
@@ -234,47 +234,31 @@
 							</div>
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
-									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
-										<div class="title_input_content title_input_download cursor_pointer" @click="downloadAdjustLandAppendix(idData)">Bảng điều chỉnh QSDĐ</div>
+									<div class="d-flex align-items-center col" :class="{img_filter:!isViewAutomationDocument}">
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAppendix1(idData)" />
+										<div class="title_input_content title_input_download" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAppendix1(idData)">{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}</div>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
-										<div @click="viewAdjustLandAppendix(idData)">
+									<div v-if="isViewAutomationDocument" class="d-flex align-items-center justify-content-end col-1 pr-3">
+										<div @click="viewAppendix1(idData)">
 											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
 										</div>
-										<!-- <div style="margin-left:10px" @click="downloadAdjustLandAppendix(idData)">
+										<!-- <div style="margin-left:10px" @click="downloadAppendix1(idData)">
 											<img src="@/assets/icons/ic_download_2.svg" alt="download_2" class="img_document_action">
 										</div> -->
 									</div>
 								</div>
 							</div>
-							<div style="padding: 2px 15px;" class="w-100"  v-if="!isApartment && isCheckConstruction">
+							<div style="padding: 2px 15px;" class="w-100"  v-if="!isApartment && isCheckConstruction || !isCheckRealEstate">
 								<div class="row input_download_certificate">
-									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
-										<div class="title_input_content title_input_download cursor_pointer" @click="downloadAdjustContructionAppendix(idData)">Bảng điều chỉnh CTXD</div>
+									<div class="d-flex align-items-center col" :class="{img_filter:!isViewAutomationDocument}">
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAppendix2(idData)" />
+										<div class="title_input_content title_input_download" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAppendix2(idData)">{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}</div>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
-										<div @click="viewAdjustContructionAppendix(idData)">
+									<div v-if="isViewAutomationDocument" class="d-flex align-items-center justify-content-end col-1 pr-3">
+										<div @click="viewAppendix2(idData)">
 											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
 										</div>
-										<!-- <div style="margin-left:10px" @click="downloadAdjustContructionAppendix(idData)">
-											<img src="@/assets/icons/ic_download_2.svg" alt="download_2" class="img_document_action">
-										</div> -->
-									</div>
-								</div>
-							</div>
-							<div style="padding: 2px 15px;" class="w-100">
-								<div class="row input_download_certificate">
-									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
-										<div class="title_input_content title_input_download cursor_pointer" @click="downloadPictureDescribeAppendix(idData)">Hình ảnh hiện trạng</div>
-									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
-										<div @click="viewPictureDescribeAppendix(idData)">
-											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
-										</div>
-										<!-- <div style="margin-left:10px" @click="downloadPictureDescribeAppendix(idData)">
+										<!-- <div style="margin-left:10px" @click="downloadAppendix2(idData)">
 											<img src="@/assets/icons/ic_download_2.svg" alt="download_2" class="img_document_action">
 										</div> -->
 									</div>
@@ -282,11 +266,27 @@
 							</div>
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
-									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
-										<div class="title_input_content title_input_download cursor_pointer" @click="downloadAssetDocument(idData)">Phiếu thu thập TSSS</div>
+									<div class="d-flex align-items-center col" :class="{img_filter:!isViewAutomationDocument}">
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAppendix3(idData)" />
+										<div class="title_input_content title_input_download" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAppendix3(idData)">{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}</div>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div v-if="isViewAutomationDocument" class="d-flex align-items-center justify-content-end col-1 pr-3">
+										<div @click="viewAppendix3(idData)">
+											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
+										</div>
+										<!-- <div style="margin-left:10px" @click="downloadAppendix3(idData)">
+											<img src="@/assets/icons/ic_download_2.svg" alt="download_2" class="img_document_action">
+										</div> -->
+									</div>
+								</div>
+							</div>
+							<div style="padding: 2px 15px;" class="w-100" v-if="isCheckRealEstate">
+								<div class="row input_download_certificate">
+									<div class="d-flex align-items-center col" :class="{img_filter:!isViewAutomationDocument}">
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAssetDocument(idData)" />
+										<div class="title_input_content title_input_download" :class="{cursor_pointer:isViewAutomationDocument}" @click="isViewAutomationDocument && downloadAssetDocument(idData)">{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}</div>
+									</div>
+									<div v-if="isViewAutomationDocument" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div @click="viewAssetDocument(idData)">
 											<img src="@/assets/icons/ic_search_3.svg" alt="search" class="img_document_action">
 										</div>
@@ -299,7 +299,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card w-100 ml-lg-2">
+				<div class="card w-100">
 					<div class="card-title text-center">
 						<h3 class="title title_input_content">Tài liệu chính thức</h3>
 					</div>
@@ -308,16 +308,15 @@
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" v-if="isCertificateReport"/>
-										<img class="img_input_download img_filter" src="@/assets/icons/ic_document.svg" alt="document" v-else/>
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{img_filter: !isCertificateReport}"/>
 										<div class="title_input_content title_input_download cursor_pointer" v-if="isCertificateReport" @click="downloadDocumentFile('certificate_report')">{{certificatReportName}}</div>
 
-										<div class="title_input_content title_color" v-else>Chứng thư thẩm định</div>
+										<div class="title_input_content title_color" v-else>{{ filterDocumentName[0] }}</div>
 									</div>
 									<div v-if="isCertificateReport && (form.status === 1 || form.status === 2 || form.status === 3)" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<font-awesome-icon @click="deletedDocumentFile('certificate_report')" :style="{ color: 'lightgray', position: 'absolute', height: '1.5rem', width: '1.5rem'}" class="cursor_pointer" icon="trash-alt" size="1x"/>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div class="d-flex align-items-center">
 											<font-awesome-icon :style="{ color: '#2682bfad', position: 'absolute', height: '2rem', width: '2rem'}" icon="cloud-upload-alt" size="2x"/>
 											<input class="btn-upload-mini"  @click="checkFileUpload('certificate_report')"/>
@@ -329,16 +328,15 @@
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" v-if="isAppraisalReport"/>
-										<img class="img_input_download img_filter" src="@/assets/icons/ic_document.svg" alt="document" v-else/>
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"  :class="{img_filter: !isAppraisalReport}"/>
 										<div class="title_input_content title_input_download cursor_pointer" v-if="isAppraisalReport"  @click="downloadDocumentFile('appraisal_report')">{{appraisalReportName}}</div>
-										<div class="title_input_content title_color" v-else>Báo cáo thẩm định</div>
+										<div class="title_input_content title_color" v-else>{{ filterDocumentName[1] || "Báo cáo thẩm định" }}</div>
 
 									</div>
 									<div v-if="isAppraisalReport && (form.status === 1 || form.status === 2 || form.status === 3)" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<font-awesome-icon @click="deletedDocumentFile('appraisal_report')" :style="{ color: 'lightgray', position: 'absolute', height: '1.5rem', width: '1.5rem'}" class="cursor_pointer" icon="trash-alt" size="1x"/>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div class="d-flex align-items-center">
 											<font-awesome-icon :style="{ color: '#2682bfad', position: 'absolute', height: '2rem', width: '2rem' }" icon="cloud-upload-alt" size="2x"/>
 											<input class="btn-upload-mini"  @click="checkFileUpload('appraisal_report')"/>
@@ -350,15 +348,14 @@
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" v-if="isAppendix1Report"/>
-										<img class="img_input_download img_filter" src="@/assets/icons/ic_document.svg" alt="document" v-else/>
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{img_filter: !isAppendix1Report}"/>
 										<div class="title_input_content title_input_download cursor_pointer" v-if="isAppendix1Report" @click="downloadDocumentFile('appendix1_report')">{{appendix1ReportName}}</div>
-										<div class="title_input_content title_color" v-else>Bảng điều chỉnh QSDĐ</div>
+										<div class="title_input_content title_color" v-else>{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}</div>
 									</div>
 									<div v-if="isAppendix1Report && (form.status === 1 || form.status === 2 || form.status === 3)" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<font-awesome-icon @click="deletedDocumentFile('appendix1_report')" :style="{ color: 'lightgray', position: 'absolute', height: '1.5rem', width: '1.5rem'}" class="cursor_pointer" icon="trash-alt" size="1x"/>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div class="d-flex align-items-center">
 											<font-awesome-icon :style="{ color: '#2682bfad', position: 'absolute', height: '2rem', width: '2rem' }" icon="cloud-upload-alt" size="2x"/>
 											<input class="btn-upload-mini"  @click="checkFileUpload('appendix1_report')"/>
@@ -367,18 +364,17 @@
 									</div>
 								</div>
 							</div>
-							<div style="padding: 2px 15px;" class="w-100" v-if="!isApartment && isCheckConstruction">
+							<div style="padding: 2px 15px;" class="w-100" v-if="!isApartment && isCheckConstruction || !isCheckRealEstate">
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" v-if="isAppendix2Report"/>
-										<img class="img_input_download img_filter" src="@/assets/icons/ic_document.svg" alt="document" v-else/>
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{img_filter: !isAppendix2Report}"/>
 										<div class="title_input_content title_input_download cursor_pointer" v-if="isAppendix2Report" @click="downloadDocumentFile('appendix2_report')">{{appendix2ReportName}}</div>
-										<div class="title_input_content title_color" v-else>Bảng điều chỉnh CTXD</div>
+										<div class="title_input_content title_color" v-else>{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}</div>
 									</div>
 									<div v-if="isAppendix2Report && (form.status === 1 || form.status === 2 || form.status === 3)" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<font-awesome-icon @click="deletedDocumentFile('appendix2_report')" :style="{ color: 'lightgray', position: 'absolute', height: '1.5rem', width: '1.5rem'}" class="cursor_pointer" icon="trash-alt" size="1x"/>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div class="d-flex align-items-center">
 											<font-awesome-icon :style="{ color: '#2682bfad', position: 'absolute', height: '2rem', width: '2rem' }" icon="cloud-upload-alt" size="2x"/>
 											<input class="btn-upload-mini"  @click="checkFileUpload('appendix2_report')"/>
@@ -390,15 +386,14 @@
 							<div style="padding: 2px 15px;" class="w-100">
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" v-if="isAppendix3Report"/>
-										<img class="img_input_download img_filter" src="@/assets/icons/ic_document.svg" alt="document" v-else/>
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{img_filter: !isAppendix3Report}"/>
 										<div class="title_input_content title_input_download cursor_pointer" v-if="isAppendix3Report" @click="downloadDocumentFile('appendix3_report')">{{appendix3ReportName}}</div>
-										<div class="title_input_content title_color" v-else>Hình ảnh hiện trạng</div>
+										<div class="title_input_content title_color" v-else>{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}</div>
 									</div>
 									<div v-if="isAppendix3Report && (form.status === 1 || form.status === 2 || form.status === 3)" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<font-awesome-icon @click="deletedDocumentFile('appendix3_report')" :style="{ color: 'lightgray', position: 'absolute', height: '1.5rem', width: '1.5rem'}" class="cursor_pointer" icon="trash-alt" size="1x"/>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div class="d-flex align-items-center">
 											<font-awesome-icon :style="{ color: '#2682bfad', position: 'absolute', height: '2rem', width: '2rem' }" icon="cloud-upload-alt" size="2x"/>
 											<input class="btn-upload-mini"  @click="checkFileUpload('appendix3_report')"/>
@@ -407,18 +402,17 @@
 									</div>
 								</div>
 							</div>
-							<div style="padding: 2px 15px;" class="w-100">
+							<div style="padding: 2px 15px;" class="w-100" v-if="isCheckRealEstate">
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
-										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" v-if="isComparisionAssetReport"/>
-										<img class="img_input_download img_filter" src="@/assets/icons/ic_document.svg" alt="document" v-else/>
+										<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document" :class="{img_filter: !isComparisionAssetReport}"/>
 										<div class="title_input_content title_input_download cursor_pointer" v-if="isComparisionAssetReport" @click="downloadDocumentFile('comparision_asset_report')">{{comparisionAssetReportName}}</div>
-										<div class="title_input_content title_color" v-else>Phiếu thu thập TSSS</div>
+										<div class="title_input_content title_color" v-else>{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}</div>
 									</div>
 									<div v-if="isComparisionAssetReport && (form.status === 1 || form.status === 2 || form.status === 3)" class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<font-awesome-icon @click="deletedDocumentFile('comparision_asset_report')" :style="{ color: 'lightgray', position: 'absolute', height: '1.5rem', width: '1.5rem'}" class="cursor_pointer" icon="trash-alt" size="1x"/>
 									</div>
-									<div v-if="exportAction" class="d-flex align-items-center justify-content-end col-1 pr-3">
+									<div class="d-flex align-items-center justify-content-end col-1 pr-3">
 										<div class="d-flex align-items-center">
 											<font-awesome-icon :style="{ color: '#2682bfad', position: 'absolute', height: '2rem', width: '2rem' }" icon="cloud-upload-alt" size="2x"/>
 											<input class="btn-upload-mini"  @click="checkFileUpload('comparision_asset_report')"/>
@@ -442,7 +436,7 @@
 				</div>
 				<div class="card-body card-info">
 					<div class="row">
-						<div v-if="exportAction" class="col-12 mt-3">
+						<div class="col-12 mt-3">
 							<div class="input_upload_file d-flex justify-content-center align-items-center">
 									<font-awesome-icon :style="{ color: 'orange', position: 'absolute' }" icon="cloud-upload-alt" size="5x"/>
 									<input class="btn-upload" type="file" ref="file" id="image_property" multiple accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf" @change="onImageChange($event)" />
@@ -789,7 +783,7 @@ export default {
 			historyList: [],
 			isCheckRealEstate: true,
 			isCheckConstruction: false,
-			isViewDocument: true,
+			isViewAutomationDocument: true,
 			jsonConfig: jsonConfig,
 			targetStatus: '',
 			targetSubStatus: '',
@@ -811,7 +805,15 @@ export default {
 			isReUpload: false,
 			reUploadMessage: '',
 			reportType: '',
-			deleteUploadDocument: false
+			deleteUploadDocument: false,
+			documentName: [
+				'Chứng thư thẩm định',
+				'Báo cáo thẩm định',
+				'Bảng điều chỉnh QSDĐ',
+				'Bảng điều chỉnh CTXD',
+				'Hình ảnh hiện trạng',
+				'Phiếu thu thập TSSS'
+			]
 		}
 	},
 	beforeRouteEnter: async (to, from, next) => {
@@ -923,6 +925,9 @@ export default {
 				// }
 			]
 			return dataColumn.filter(item => item.hiddenItem === false)
+		},
+		filterDocumentName () {
+			return this.documentName
 		},
 		isCertificateReport () {
 			let report = this.getReport('certificate_report')
@@ -1751,7 +1756,7 @@ export default {
 				})
 			}
 		},
-		async viewAdjustLandAppendix () {
+		async viewAppendix1 () {
 			await Certificate.getPrint(this.idData).then((resp) => {
 				const file = resp.data
 				if (file) {
@@ -1761,7 +1766,7 @@ export default {
 			this.title = 'Tài liệu bảng điều chỉnh QSDĐ'
 			this.isShowPrint = true
 		},
-		async downloadAdjustLandAppendix () {
+		async downloadAppendix1 () {
 			await Certificate.getPrint(this.idData).then((resp) => {
 				const file = resp.data
 				if (file) {
@@ -1783,7 +1788,7 @@ export default {
 			}
 			)
 		},
-		async viewAdjustContructionAppendix () {
+		async viewAppendix2 () {
 			await Certificate.getPrintAppendix(this.idData).then((resp) => {
 				const file = resp.data
 				if (file) {
@@ -1794,7 +1799,7 @@ export default {
 			this.title = 'Tài liệu bảng điều chỉnh CTXD'
 			this.isShowPrint = true
 		},
-		async downloadAdjustContructionAppendix () {
+		async downloadAppendix2 () {
 			await Certificate.getPrintAppendix(this.idData).then((resp) => {
 				const file = resp.data
 				if (file) {
@@ -1816,7 +1821,7 @@ export default {
 			}
 			)
 		},
-		async viewPictureDescribeAppendix () {
+		async viewAppendix3 () {
 			await Certificate.getPrintImage(this.idData).then((resp) => {
 				const file = resp.data
 				if (file) {
@@ -1834,7 +1839,7 @@ export default {
 			this.title = 'Tài liệu hình ảnh hiện trạng'
 			this.isShowPrint = true
 		},
-		async downloadPictureDescribeAppendix () {
+		async downloadAppendix3 () {
 			await Certificate.getPrintImage(this.idData).then((resp) => {
 				const file = resp.data
 				if (file) {
@@ -1940,17 +1945,17 @@ export default {
 			this.isShowAppraiseListVersion = true
 		},
 		setDocumentViewStatus () {
-			let isView = true
-			let isCheck = true
+			let isExportAutomatic = true
+			let isCheckRealEstate = true
 			let isCheckConstruction = false
 			let isApartment = false
 			if (this.form.document_type && this.form.document_type.length > 0) {
 				if (this.form.document_type.filter(function (item) { return item !== 'DCN' && item !== 'DT' && item !== 'CC' }).length > 0) {
-					isCheck = false
-					isView = false
+					isCheckRealEstate = false
+					isExportAutomatic = false
 				}
 				if (this.form.document_type.find(i => i === 'CC') && (this.form.document_type.find(i => i === 'DCN') || this.form.document_type.find(i => i === 'DT'))) {
-					isView = false
+					isExportAutomatic = false
 				}
 				if (this.form.document_type.length === 1 && this.form.document_type.find(i => i === 'CC')) {
 					isApartment = true
@@ -1959,12 +1964,31 @@ export default {
 					isCheckConstruction = true
 				}
 			} else {
-				isCheck = false
-				isView = false
+				isCheckRealEstate = false
+				isExportAutomatic = false
 			}
-			this.isCheckRealEstate = isCheck
+			if (isCheckRealEstate) {
+				this.documentName = [
+					'Chứng thư thẩm định',
+					'Báo cáo thẩm định',
+					'Bảng điều chỉnh QSDĐ',
+					'Bảng điều chỉnh CTXD',
+					'Hình ảnh hiện trạng',
+					'Phiếu thu thập TSSS'
+				]
+			} else {
+				this.documentName = [
+					'Chứng thư thẩm định',
+					'Báo cáo thẩm định',
+					'Phụ lục kèm theo',
+					'Phụ lục kèm theo',
+					'Phụ lục kèm theo',
+					'Phiếu thu thập TSSS'
+				]
+			}
+			this.isCheckRealEstate = isCheckRealEstate
 			this.isCheckConstruction = isCheckConstruction
-			this.isViewDocument = isView
+			this.isViewAutomationDocument = isExportAutomatic
 			this.isApartment = isApartment
 		},
 		downloadDocumentFile (type) {

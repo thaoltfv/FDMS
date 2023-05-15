@@ -99,7 +99,8 @@ export default {
 					customer: {
 						name: '',
 						address: '',
-						phone: ''
+						phone: '',
+						full_info: ''
 					},
 					status: 1,
 					sub_status: 1
@@ -158,7 +159,8 @@ export default {
 				this.form.step_1.customer = {
 					name: '',
 					address: '',
-					phone: ''
+					phone: '',
+					full_info: ''
 				}
 			}
 			this.idData = this.form.step_1.id

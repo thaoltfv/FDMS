@@ -78,27 +78,21 @@
 													<div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0">
 															<div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
 																	<div class="col-12 col-lg-6 item_land input-contain">
-																			<InputNumberNoneFormat
+																			<InputText
 																					v-model="itemLand.doc_no"
 																					vid="doc_num"
 																					label="Số tờ"
-																					:max="999999999"
 																					class="form-group-container"
-																					:min="-1"
-																					:disabled="true"
-																					@change="changeDocNo($event, index)"
+																					:disabledInput="true"
 																			/>
 																	</div>
 																	<div class="col-12 col-lg-6 col item_land input-contain">
-																			<InputNumberNoneFormat
+																			<InputText
 																					v-model="itemLand.land_no"
 																					vid="plot_num"
 																					label="Số thửa"
-																					:max="999999999"
 																					class="form-group-container"
-																					:min="-1"
-																					:disabled="true"
-																					@change="changeLandNo($event, index)"
+																					:disabledInput="true"
 																			/>
 																	</div>
 															</div>
@@ -196,22 +190,6 @@ export default {
 			this.setContentRows()
 		},
 		changeLegal () {
-			this.getContent()
-		},
-		changeDocNo (event, index) {
-			if (event || event === 0) {
-				this.form.land_details[index].doc_no = parseInt(event)
-			} else {
-				this.form.land_details[index].doc_no = ''
-			}
-			this.getContent()
-		},
-		changeLandNo (event, index) {
-			if (event || event === 0) {
-				this.form.land_details[index].land_no = parseInt(event)
-			} else {
-				this.form.land_details[index].land_no = ''
-			}
 			this.getContent()
 		},
 		async getContent () {

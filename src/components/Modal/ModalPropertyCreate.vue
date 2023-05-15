@@ -60,33 +60,31 @@
                   rules="required"
                   class="coordinates"
                 />
-                <img class="img-locate" src="../../assets/icons/ic_locate.svg" alt="locate" @click.prevent="handleOpenModalMap()">
+								<div class="img-locate">
+									<img src="@/assets/icons/ic_edit_2.svg" alt="locate" @click.prevent="handleOpenModalMap()">
+								</div>
               </div>
               <div class="col-12 col-lg-6 input-contain">
-                <InputNumberFormat
-                  v-model="form.front_side_width"
-                  vid="front_side_width"
-                  label="Chiều rộng mặt tiền (m)"
-                  :max="99999"
-                  rules="required"
+								<InputLengthArea
+									v-model="form.front_side_width"
+									vid="front_side_width"
+									label="Chiều rộng mặt tiền"
                   @change="frontSizeWidth($event)"
-                  :formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                  class=""
-                />
+									:decimal="2"
+									rules="required"
+								/>
                 <span class="text-error" v-if="form.front_side_width !== '' && form.front_side_width !== undefined && form.front_side_width !== null && form.front_side_width <= 0">Vui lòng nhập chiều rộng mặt tiền thích hợp</span>
                 <span class="text-error" v-if="checkValueLongWidth">Chiều rộng mặt tiền đang lớn hơn chiều dài.Xin lưu ý về vấn đề này</span>
               </div>
               <div class="col-12 col-lg-6 input-contain">
-                <InputNumberFormat
-                  v-model="form.insight_width"
+								<InputLengthArea
+									v-model="form.insight_width"
                   vid="insight_width"
-                  label="Chiều dài (m)"
-                  :max="99999"
-                  rules="required"
+                  label="Chiều dài"
                   @change="insightWidth($event)"
-                  :formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                  class=""
-                />
+									:decimal="2"
+									rules="required"
+								/>
                 <span class="text-error" v-if="form.insight_width !== '' && form.insight_width !== undefined && form.insight_width !== null && form.insight_width <= 0">Vui lòng nhập chiều dài tiền thích hợp</span>
                 <span class="text-error" v-if="checkValueLongWidth">Chiều rộng mặt tiền đang lớn hơn chiều dài.Xin lưu ý về vấn đề này</span>
               </div>
@@ -125,10 +123,10 @@
                       <thead>
                       <tr>
                         <th>Mục đích sử dụng</th>
-                        <th>Diện tích (m²)</th>
+                        <th>Diện tích</th>
                         <th>Vị trí đất </th>
-                        <th>Đơn giá theo QĐ của UBND (VND)</th>
-                        <th>Hệ số K</th>
+                        <th>Đơn giá theo QĐ của UBND</th>
+                        <!-- <th>Hệ số K</th> -->
                         <th v-if="form.property_detail.length > 1"></th>
                       </tr>
                       </thead>
@@ -146,16 +144,16 @@
                           />
                         </td>
                         <td>
-                          <InputNumberFormat
+													<InputArea
                             v-model="property_detail.total_area"
                             :vid="'area' + index "
-                            label="Diện tích"
+                            :disabled="property_detail.land_type_purpose === ''"
+                            nonLabel="Diện tích"
+														:decimal="2"
+														rules="required"
                             @change="totalArea($event, index)"
-                            :max="99999999"
-                            rules="required"
-                            :disabled-input="property_detail.land_type_purpose === ''"
                             class="contain-input contain-input__number contain-input__scale contain-input__scale-two"
-                          />
+													/>
                         </td>
                         <td>
                           <InputCategory
@@ -170,19 +168,17 @@
                           />
                         </td>
                         <td>
-                          <InputNumberFormat
+													<InputCurrency
                             v-model="property_detail.circular_unit_price"
                             :vid="'circular_unit_price' + index"
-                            label="Đơn giá"
-                            :max="99999999999999"
-                            rules="required"
-                            :disabled-input="property_detail.land_type_purpose === ''"
-                            :formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                            @change="totalUnitPrice($event, index)"
+														nonLabel="Đơn giá"
+														rules="required"
+                            :disabled="property_detail.land_type_purpose === ''"
                             class="contain-input contain-input__number contain-input__scale contain-input__scale-five d-block"
-                          />
+                            @change="totalUnitPrice($event, index)"
+													/>
                         </td>
-                        <td>
+                        <!-- <td>
                           <InputNumberFormat
                             v-model="property_detail.k_rate"
                             :vid="'k_rate' + index"
@@ -194,18 +190,7 @@
                             @change="changeKRate($event, index)"
                             class="contain-input mr-0 justify-content-center contain-input__number contain-input__scale contain-input__scale-six"
                           />
-                          <!-- <InputText
-                            v-model="property_detail.k_rate"
-                            :vid="'k_rate' + index"
-                            label="Hệ số K"
-                            type="number"
-                            :max-length="3"
-                            :min="0"
-                            :disabled-input="property_detail.land_type_purpose === ''"
-                            :max="100"
-                            class="contain-input contain-input__number contain-input__scale contain-input__scale-six"
-                          /> -->
-                        </td>
+                        </td> -->
                         <td v-if="form.property_detail.length > 1">
                           <div class="btn-delete" @click="removeRowPropertyDetail(index, form.property_detail)">
                             <img src="../../assets/icons/ic_delete.svg" alt="delete">
@@ -227,7 +212,7 @@
             <div class="row justify-content-between">
               <div class="col-12 col-lg-6 input-contain">
                 <label class="name font-weight-bold">Tổng diện tích (m<sup>2</sup>)</label>
-                <div class="form-control disabled"><p class="mb-0">{{form.asset_general_land_sum_area}}</p></div>
+                <div class="form-control disabled"><p class="mb-0">{{this.formatArea(form.asset_general_land_sum_area)}}</p></div>
               </div>
             </div>
           </div>
@@ -276,15 +261,15 @@
                 />
               </div>
               <div class="col-12 col-lg-6 input-contain">
-                <InputNumberFormat
+								<InputLengthArea
                   v-model="form.main_road_length"
                   vid="main_road_length"
-                  label="Bề rộng đường (m)"
-                  :max="999"
-                  :formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                  label="Bề rộng đường"
+                  :max="100"
                   @change="mainRoadLength($event)"
-                  class=""
-                />
+									:decimal="2"
+									rules="required"
+								/>
               </div>
               <div class="col-12 col-lg-6 input-contain">
               </div>
@@ -303,7 +288,7 @@
                       <tr>
                         <th>Số lần rẽ/quẹo</th>
                         <th>Chất liệu đường </th>
-                        <th>Mặt đường (m)</th>
+                        <th>Mặt đường</th>
                         <th>Đấu nối đường chính</th>
                         <th>Gần trục đường chính</th>
                         <th v-if="form.property_detail.length > 1"></th>
@@ -332,15 +317,16 @@
                           />
                         </td>
                         <td>
-                          <InputNumberFormat
+													<InputLengthArea
                             v-model="turning.main_road_length"
                             vid="main_road_length"
                             label="Mặt đường"
-                            :max="999999"
+														:max="100"
                             @change="roadMain($event, index)"
-                            :formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+														:decimal="2"
+														rules="required"
                             class="contain-input contain-input__scale contain-input__alley"
-                          />
+													/>
                         </td>
                         <td>
                           <div class="d-flex justify-content-center">
@@ -515,11 +501,14 @@
 </template>
 
 <script>
+import InputCurrency from '@/components/Form/InputCurrency'
 import InputText from '@/components/Form/InputText'
 import InputCategory from '@/components/Form/InputCategory'
 import InputSwitch from '@/components/Form/InputSwitch'
 import FileUpload from '@/components/file/FileUpload'
 import InputNumberFormat from '@/components/Form/InputNumber'
+import InputLengthArea from '@/components/Form/InputLengthArea'
+import InputArea from '@/components/Form/InputArea'
 import ModalDeleteIndex from '@/components/Modal/ModalDeleteIndex'
 import WareHouse from '@/models/WareHouse'
 import File from '@/models/File'
@@ -636,7 +625,10 @@ export default {
 	components: {
 		FileUpload,
 		InputCategory,
+		InputCurrency,
 		InputNumberFormat,
+		InputLengthArea,
+		InputArea,
 		InputText,
 		InputSwitch,
 		ModalMap,
@@ -849,7 +841,7 @@ export default {
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 		},
 		formatArea (value) {
-			let num = (value / 1).toString().replace(',', '.')
+			let num = (value / 1).toString().replace('.', ',')
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 		},
 

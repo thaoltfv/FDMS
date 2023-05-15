@@ -13,7 +13,7 @@
             <img class="img" src="../../../assets/icons/ic_search.svg" alt="search">
           </button>
         </div>
-        <button style="height: 2.295rem;" class="btn btn-white btn-search text-nowrap index-screen-button"> <img src="../../../assets/icons/ic_search.svg" style="margin-right: 8px" alt="search">Tìm kiếm</button>
+        <!-- <button style="height: 2.295rem;" class="btn btn-white btn-search text-nowrap index-screen-button"> <img src="../../../assets/icons/ic_search.svg" style="margin-right: 8px" alt="search">Tìm kiếm</button> -->
       </div>
     </form>
 </template>

@@ -140,7 +140,7 @@ export default {
 	methods: {
 		debounceInput: debounce(function (e) {
 			this.onChange(e)
-		}, 500),
+		}, 400),
 		onChange (event) {
 			if (event.target.value) {
 				if (event.target.value.match(/^[+-]?(\d)+(\.\d+)*?$|^[+-]?(\d)+(,\d+)*?$|^(\d)+(\s\d+)*?$/g)) {

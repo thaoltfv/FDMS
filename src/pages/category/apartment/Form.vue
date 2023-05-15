@@ -80,22 +80,24 @@
 
             <InputNumberNoneFormat
               v-model="form.total_blocks"
+							:key="key_render_1"
               :vid="'total_blocks'"
               class="mb-3 col-12 col-lg-4"
               label="Tổng số block"
               :max="99999999999999"
               :min="0"
-              rules="required"
+							:decimal="0"
               @change="changeTotalBlock($event)"
             />
             <InputNumberNoneFormat
               v-model="form.total_apartments"
+							:key="key_render_2"
               :vid="'total_apartments'"
               class="mb-3 col-12 col-lg-4"
               label="Tổng số căn hộ"
               :max="99999999999999"
               :min="0"
-              rules="required"
+							:decimal="0"
               @change="changeTotalApartment($event)"
             />
 
@@ -121,6 +123,7 @@
                 :loading="isLoading"
                 class="table__import"
 								:customRow="customRowBlock"
+								:rowClassName="(record, index) => index === indexBlock ? 'table-row-selected':''"
                 :rowKey="(record, index) => index"
                 :pagination="false"
               >
@@ -182,6 +185,7 @@
                 :data-source="floors"
                 :loading="isLoading" class="table__import"
                 :rowKey="(record, index) => index"
+								:rowClassName="(record, index) => index === indexFloor ? 'table-row-selected':''"
                 :customRow="customRowFloor"
 								:pagination="false"
               >
@@ -298,6 +302,8 @@ export default {
 				lng: '',
 				lat: ''
 			},
+			key_render_1: 1,
+			key_render_2: 1,
 			idData: '',
 			full_address: '',
 			openModalMap: false,
@@ -361,17 +367,24 @@ export default {
 		}
 	},
 	async created () {
-		this.provinces = this.$store.getters.provinces
-		if (this.provinces && this.provinces.length === 0) {
-			const resp = await WareHouse.getProvinceAll()
-			this.provinces = [...resp.data]
-			store.commit(types.SET_PROVINCE, [...resp.data])
-		}
+		// this.provinces = this.$store.getters.provinces
+		// if (this.provinces && this.provinces.length === 0) {
+		// 	const resp = await WareHouse.getProvinceAll()
+		// 	this.provinces = [...resp.data]
+		// 	store.commit(types.SET_PROVINCE, [...resp.data])
+		// }
+
+		await WareHouse.getProvince()
+			.then((resp) => {
+				this.provinces = resp.data
+			})
+
 		if ('id' in this.$route.query && this.$route.name === 'apartment.edit') {
 			this.form = Object.assign(this.form, { ...this.$route.meta['detail'] })
 			this.idData = this.$route.meta['detail'].id
 			this.getProvinces()
-		} else {
+			this.key_render_1 += 1
+			this.key_render_2 += 1
 		}
 	},
 	methods: {
@@ -625,6 +638,13 @@ export default {
 						type: 'success',
 						position: 'top-right'
 					})
+				} else if (res.error){
+					this.$toast.open({
+						message: res.error.message,
+						type: 'error',
+						position: 'top-right'
+					})
+					this.isSubmit = false
 				}
 			} catch (err) {
 				this.isSubmit = false
@@ -642,6 +662,13 @@ export default {
 						type: 'success',
 						position: 'top-right'
 					})
+				} else if (res.error){
+					this.$toast.open({
+						message: res.error.message,
+						type: 'error',
+						position: 'top-right'
+					})
+					this.isSubmit = false
 				}
 			} catch (err) {
 				this.isSubmit = false
@@ -669,37 +696,28 @@ export default {
 			}
 		},
 
-		getDistrictsByProvinceId (id) {
-			try {
-				let provinces = this.provinces.filter(item => item.id === id)
-				this.districts = provinces[0].districts
-				if (this.form.district_id) {
-					this.getWardsByDistrictId(this.form.district_id)
-					this.getStreetByDistrictId(this.form.district_id)
-				}
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
+		async getDistrictsByProvinceId (id) {
+			await WareHouse.getDistrictsByProvinceId(id)
+				.then((resp) => {
+					this.districts = resp.data
+					if (this.form.district_id) {
+						this.getWardsByDistrictId(this.form.district_id)
+						this.getStreetByDistrictId(this.form.district_id)
+					}
+				})
+				.catch((err) => {
+					this.isSubmit = false
+					throw err
+				})
 		},
-		async getWardsByDistrictId (id) {
-			try {
-				let wards = this.districts.filter(item => item.id === id)
-				this.wards = wards[0].wards
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
+		getWardsByDistrictId (id) {
+			let wards = this.districts.filter(item => item.id === id)
+			this.wards = wards[0].wards
 		},
-		async getStreetByDistrictId (id) {
-			try {
-				let streets = this.districts.filter(item => item.id === id)
-				this.streets = streets[0].streets
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
-		}
+		getStreetByDistrictId (id) {
+			let streets = this.districts.filter(item => item.id === id)
+			this.streets = streets[0].streets
+		},
 	},
 	beforeMount () {
 
@@ -904,25 +922,24 @@ export default {
 }
 /deep/ .ant-table-column-title {
     color: #00507C;
-    // font-family: 'SVN-Gilroy';
-    // font-weight: 600;
-    //
-    // line-height: 20px;
   }
-	/deep/ .ant-table-body{
-		height: 500px;
-	}
-	/deep/ .ant-table-row {
-        &:nth-child(even) {
-          background: none !important;
-        }
-      }
-	/deep/ .ant-table-row:active {
-        background: #faa831bd !important;
-				&:nth-child(even) {
-        background: #faa831bd !important;
-    }
-}
+/deep/ .ant-table-row {
+			&:nth-child(even) {
+				background: none !important;
+			}
+		}
+/deep/ .ant-table-row:active {
+			background: #ffe1b7 !important;
+			&:nth-child(even) {
+			background: #ffe1b7 !important;
+			}
+		}
+/deep/ .table-row-selected {
+			background: #ffe1b7 !important;
+			&:nth-child(even) {
+			background: #ffe1b7 !important;
+			}
+		}
 .btn-delete {
   cursor: pointer;
   display: flex;

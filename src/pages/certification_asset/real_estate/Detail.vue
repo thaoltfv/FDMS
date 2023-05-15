@@ -1,20 +1,20 @@
 <template>
-  <div class="container-fluid">
-    <div class="certification-asset">
-      <form-wizard
-        ref="wizard"
-        color="#99D161"
-        :title="`TSTD${idData ? `_${idData}` : '' }`"
-        :subtitle="status_text"
-        layout="vertical"
-        finish-button-text="Hoàn Thành"
-        back-button-text="Thoát"
-        next-button-text="Lưu"
-        :startIndex="step_active"
-        @on-change="handleChange"
-        class="vertical-steps steps-transparent"
-        :class="{ step7: isStep7Active }"
-      >
+	<div class="container-fluid">
+		<div class="certification-asset">
+			<form-wizard
+				ref="wizard"
+				color="#99D161"
+				:title="`TSTD${idData ? `_${idData}` : '' }`"
+				:subtitle="status_text"
+				layout="vertical"
+				finish-button-text="Hoàn Thành"
+				back-button-text="Thoát"
+				next-button-text="Lưu"
+				:startIndex="step_active"
+				@on-change="handleChange"
+				class="vertical-steps steps-transparent"
+				:class="{ step7: isStep7Active }"
+			>
 		<div>
 			<button class="btn btn-orange btn-print btn-extra" @click="handlePrint">
 				<!-- <font-awesome-icon icon="print" /> -->
@@ -48,7 +48,7 @@
 					width="600"
 					placement="right"
 					:visible="visibleAdditionalDrawer"
-      				:closable="false"
+							:closable="false"
 					@close="onAdditionalDrawerClose"
 					>
 					<div class="card">
@@ -124,243 +124,261 @@
 			</div>
 		</div>
 
-        <tab-content title="Thông tin chung" icon="">
-          <ValidationObserver
-            tag="div"
-            ref="step_1"
-          >
-            <Step1
-              :data="form.step_1"
-              :key="key_step_1"
-              :propertyTypes="propertyTypes"
-              :businesses="businesses"
-              :conditions="conditions"
-              :socialSecurities="socialSecurities"
-              :fengshuies="fengshuies"
-              :zones="zones"
-              :provinces="provinces"
-              :districts="districts"
-              :wards="wards"
-              :streets="streets"
-              :distances="distances"
-              :materials="materials"
-              :full_address="full_address"
-              :full_address_street="full_address_street"
-              :imageDescriptions="imageDescriptions"
-              :addressName="addressName"
-              @getDistrict="changeProvince"
-              @getWardStreet="changeDistrict"
-              @getWard="changeWard"
-              @changeStreet="changeStreet"
-              @changeDistance="changeDistance"
-              @getAssetType="changeAssetType"
-              @addTurning="addTurning"
-              @deleteTurning="deleteTurning"
-              @changeRoadDistance="changeRoadDistance"
-              @changeRoadAlley="changeRoadAlley"
-              @uploadImage="uploadImage"
-              @changeDescriptionFrontSide="changeDescriptionFrontSide"
-            />
-            <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-              <div class="d-lg-flex d-block button-contain">
-                <button  @click="onCancel" class="btn btn-white text-nowrap" >
-                  <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-                </button>
-                <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
-                    <img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
-                </button>
-                <button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(0)" type="submit">
-                  <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
-                </button>
-              </div>
-            </div>
-          </ValidationObserver>
-        </tab-content>
+				<tab-content title="Thông tin chung" icon="">
+					<ValidationObserver
+						tag="div"
+						ref="step_1"
+					>
+						<Step1
+							:data="form.step_1"
+							:key="key_step_1"
+							:propertyTypes="propertyTypes"
+							:businesses="businesses"
+							:conditions="conditions"
+							:socialSecurities="socialSecurities"
+							:fengshuies="fengshuies"
+							:zones="zones"
+							:provinces="provinces"
+							:districts="districts"
+							:wards="wards"
+							:streets="streets"
+							:distances="distances"
+							:materials="materials"
+							:full_address="full_address"
+							:full_address_street="full_address_street"
+							:imageDescriptions="imageDescriptions"
+							:addressName="addressName"
+							@getDistrict="changeProvince"
+							@getWardStreet="changeDistrict"
+							@getWard="changeWard"
+							@changeStreet="changeStreet"
+							@changeDistance="changeDistance"
+							@getAssetType="changeAssetType"
+							@addTurning="addTurning"
+							@deleteTurning="deleteTurning"
+							@changeRoadDistance="changeRoadDistance"
+							@changeRoadAlley="changeRoadAlley"
+							@uploadImage="uploadImage"
+							@changeDescriptionFrontSide="changeDescriptionFrontSide"
+						/>
+						<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+							<div class="d-lg-flex d-block button-contain">
+								<button  @click="onCancel" class="btn btn-white text-nowrap" >
+									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+								</button>
+								<button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+										<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
+								</button>
+								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(0)" type="submit">
+									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
+							</div>
+						</div>
+					</ValidationObserver>
+				</tab-content>
 
-        <tab-content title="Quyền sử dụng đất" icon="">
-          <ValidationObserver
-            tag="form"
-            ref="step_2"
-          >
-          <Step2
-            :key="key_step_2"
-            :data="form.step_2"
-            :coordinates="form.step_1.general_infomation.coordinates"
-            :topographic="topographic"
-            :landShapes="landShapes"
-            :points="points"
-            :type_purposes="type_purposes"
-            :propertyTypes="propertyTypes"
-            @deleteMainArea="deleteMainArea"
-            @addMainArea="addMainArea"
-            @deletePlanningArea="deletePlanningArea"
-            @addPlanningArea="addPlanningArea"
-            @changeLandTypePurpose="changeLandTypePurpose"
-            @changeUnitPrice="changeUnitPrice"
-            @handleChangeMainArea="handleChangeMainArea"
-            @handleChangePlanningArea="handleChangePlanningArea"
-            @changeStatusPlanning="changeStatusPlanning"
-            @changeLandPlanningPurpose="changeLandPlanningPurpose"
-          />
-            <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-              <div class="d-lg-flex d-block button-contain">
-                <button  @click="onCancel" class="btn btn-white text-nowrap" >
-                  <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-                </button>
-                <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
-                    <img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
-                  </button>
-                <button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(1)" type="submit">
-                  <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
-                </button>
-              </div>
-            </div>
-        </ValidationObserver>
+				<tab-content title="Quyền sử dụng đất" icon="">
+					<ValidationObserver
+						tag="form"
+						ref="step_2"
+					>
+					<Step2
+						:key="key_step_2"
+						:data="form.step_2"
+						:coordinates="form.step_1.general_infomation.coordinates"
+						:topographic="topographic"
+						:landShapes="landShapes"
+						:points="points"
+						:type_purposes="type_purposes"
+						:propertyTypes="propertyTypes"
+						@deleteMainArea="deleteMainArea"
+						@addMainArea="addMainArea"
+						@deletePlanningArea="deletePlanningArea"
+						@addPlanningArea="addPlanningArea"
+						@changeLandTypePurpose="changeLandTypePurpose"
+						@changeUnitPrice="changeUnitPrice"
+						@handleChangeMainArea="handleChangeMainArea"
+						@handleChangePlanningArea="handleChangePlanningArea"
+						@changeStatusPlanning="changeStatusPlanning"
+						@changeLandPlanningPurpose="changeLandPlanningPurpose"
+					/>
+						<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+							<div class="d-lg-flex d-block button-contain">
+								<button  @click="onCancel" class="btn btn-white text-nowrap" >
+									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+								</button>
+								<button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+										<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
+									</button>
+								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(1)" type="submit">
+									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
+							</div>
+						</div>
+				</ValidationObserver>
 
-        </tab-content>
+				</tab-content>
 
-        <tab-content title="Công trình xây dựng" icon="">
-          <ValidationObserver
-            tag="div"
-            ref="step_3"
+				<tab-content title="Công trình xây dựng" icon="">
+					<ValidationObserver
+						tag="div"
+						ref="step_3"
 						class="height_form_wizard"
-          >
-            <Step3
-              :data="form.step_3"
-              :key="key_step_3"
-              :housingTypes="housingTypes"
-              :buildingCategories="buildingCategories"
-              :buildingStructure="buildingStructure"
-              :buildingRates="buildingRates"
-              :buildingAperture="buildingAperture"
-              :buildingFactoryType="buildingFactoryType"
-              :isHaveContruction="isHaveContruction"
-              :buildingCrane="buildingCrane"
-              @changeBuildingType="changeBuildingType"
-              @changeCategoryBuilding="changeCategoryBuilding"
-              @changeAperture="changeAperture"
-              @changeCrane="changeCrane"
-              @changeRate="changeRate"
-              @changeFactionType="changeFactionType"
-              @changeStructure="changeStructure"
-              @changeUsingYear="changeUsingYear"
-              @changeDuration="changeDuration"
-            />
-            <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-              <div class="d-lg-flex d-block button-contain">
-                <button  @click="onCancel" class="btn btn-white text-nowrap" >
-                  <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-                </button>
-                <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
-                    <img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
-                </button>
-                <button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(2)" type="submit">
-                  <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
-                </button>
-              </div>
-            </div>
-          </ValidationObserver>
-        </tab-content>
+					>
+						<Step3
+							:data="form.step_3"
+							:key="key_step_3"
+							:housingTypes="housingTypes"
+							:buildingCategories="buildingCategories"
+							:buildingStructure="buildingStructure"
+							:buildingRates="buildingRates"
+							:buildingAperture="buildingAperture"
+							:buildingFactoryType="buildingFactoryType"
+							:isHaveContruction="isHaveContruction"
+							:buildingCrane="buildingCrane"
+							@changeBuildingType="changeBuildingType"
+							@changeCategoryBuilding="changeCategoryBuilding"
+							@changeAperture="changeAperture"
+							@changeCrane="changeCrane"
+							@changeRate="changeRate"
+							@changeFactionType="changeFactionType"
+							@changeStructure="changeStructure"
+							@changeUsingYear="changeUsingYear"
+							@changeDuration="changeDuration"
+						/>
+						<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+							<div class="d-lg-flex d-block button-contain">
+								<button  @click="onCancel" class="btn btn-white text-nowrap" >
+									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+								</button>
+								<button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+										<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
+								</button>
+								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(2)" type="submit">
+									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
+							</div>
+						</div>
+					</ValidationObserver>
+				</tab-content>
 
-        <tab-content title="Pháp lý tài sản" icon="" >
-          <ValidationObserver
-            tag="div"
-            ref="step_4"
+				<tab-content title="Pháp lý tài sản" icon="" >
+					<ValidationObserver
+						tag="div"
+						ref="step_4"
 			class="height_form_wizard"
-          >
-            <Step4
-              :data="form.step_4"
-              :key="key_step_4"
-              :juridicals="juridicals"
-              :provinceName="provinceName"
-              :full_address="full_address"
-              @addLegal="addLegal"
-              @deleteLegal="deleteLegal"
-              @editLegal="editLegal"
-            />
-            <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-              <div class="d-lg-flex d-block button-contain">
-                <button  @click="onCancel" class="btn btn-white text-nowrap" >
-                  <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-                </button>
-                <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
-                    <img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
-                </button>
-                <button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(3)" type="submit">
-                  <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
-                </button>
-              </div>
-            </div>
-          </ValidationObserver>
-        </tab-content>
+					>
+						<Step4
+							:data="form.step_4"
+							:key="key_step_4"
+							:juridicals="juridicals"
+							:provinceName="provinceName"
+							:full_address="full_address"
+							@addLegal="addLegal"
+							@deleteLegal="deleteLegal"
+							@editLegal="editLegal"
+						/>
+						<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+							<div class="d-lg-flex d-block button-contain">
+								<button  @click="onCancel" class="btn btn-white text-nowrap" >
+									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+								</button>
+								<button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+										<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
+								</button>
+								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(3)" type="submit">
+									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
+							</div>
+						</div>
+					</ValidationObserver>
+				</tab-content>
 
-        <tab-content title="Cơ sở thẩm định" icon="">
-          <ValidationObserver
-            tag="div"
-            ref="step_5"
-          >
-          <Step5
-            :data="form.step_5"
-            :key="key_step_5"
-            :appraisalFacility="appraisalFacility"
-            :approach="approach"
-            :methodsUsed="methodsUsed"
-            :appraisalPrinciples="appraisalPrinciples"
-            :unifyIndicativePrice="unifyIndicativePrice"
-            :compositeLandRemaning="compositeLandRemaning"
-            :planningViolationPrice="planningViolationPrice"
-            @changeLandRemaing="changeLandRemaing"
-            @changeViolationPrice="changeViolationPrice"
-            @changePercentRemain="changePercentRemain"
-            @changePercentVio="changePercentVio"
-          />
-          <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-            <div class="d-lg-flex d-block button-contain">
-              <button  @click="onCancel" class="btn btn-white text-nowrap" >
-                <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-              </button>
-              <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
-                <img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
-              </button>
-              <button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(4)" type="submit">
-                <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
-              </button>
-            </div>
-          </div>
-          </ValidationObserver>
-        </tab-content>
+				<tab-content title="Cơ sở thẩm định" icon="">
+					<ValidationObserver
+						tag="div"
+						ref="step_5"
+					>
+					<Step5
+						:data="form.step_5"
+						:key="key_step_5"
+						:appraisalFacility="appraisalFacility"
+						:approach="approach"
+						:methodsUsed="methodsUsed"
+						:appraisalPrinciples="appraisalPrinciples"
+						:unifyIndicativePrice="unifyIndicativePrice"
+						:compositeLandRemaning="compositeLandRemaning"
+						:planningViolationPrice="planningViolationPrice"
+						@changeLandRemaing="changeLandRemaing"
+						@changeViolationPrice="changeViolationPrice"
+						@changePercentRemain="changePercentRemain"
+						@changePercentVio="changePercentVio"
+					/>
+					<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+						<div class="d-lg-flex d-block button-contain">
+							<button  @click="onCancel" class="btn btn-white text-nowrap" >
+								<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+							</button>
+							<button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+								<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
+							</button>
+							<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(4)" type="submit">
+								<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+							</button>
+							<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
+						</div>
+					</div>
+					</ValidationObserver>
+				</tab-content>
 
-        <tab-content title="Tài sản so sánh" icon="">
-          <ValidationObserver
-            tag="div"
-            ref="step_6"
-          >
-          <Step6
-            :data="form.step_6"
-            :key="key_step_6"
-            :step_active="step_active"
-            :comparison="comparison"
-            :propertyTypes="propertyTypes"
-            :type_purposes="type_purposes"
-            :frontSide="form.step_1.traffic_infomation.front_side"
-            :coordinates="form.step_1.general_infomation.coordinates"
-            @choosingAsset="choosingAsset"
-            @saveImageMap="saveImageMap"
-          />
-          <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-            <div class="d-lg-flex d-block button-contain">
-              <button  @click="onCancel" class="btn btn-white text-nowrap" >
-                <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-              </button>
-              <button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(5)" type="submit">
-                <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
-              </button>
-            </div>
-          </div>
-          </ValidationObserver>
-        </tab-content>
+				<tab-content title="Tài sản so sánh" icon="">
+					<ValidationObserver
+						tag="div"
+						ref="step_6"
+					>
+					<Step6
+						:data="form.step_6"
+						:key="key_step_6"
+						:step_active="step_active"
+						:comparison="comparison"
+						:propertyTypes="propertyTypes"
+						:type_purposes="type_purposes"
+						:frontSide="form.step_1.traffic_infomation.front_side"
+						:coordinates="form.step_1.general_infomation.coordinates"
+						@choosingAsset="choosingAsset"
+						@saveImageMap="saveImageMap"
+					/>
+					<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+						<div class="d-lg-flex d-block button-contain">
+							<button  @click="onCancel" class="btn btn-white text-nowrap" >
+								<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+							</button>
+							<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(5)" type="submit">
+								<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+							</button>
+							<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
+						</div>
+					</div>
+					</ValidationObserver>
+				</tab-content>
 
-        <tab-content title="Giá trị tài sản" icon="">
+				<tab-content title="Giá trị tài sản" icon="">
 			<div class="height_form_wizard">
 				<Step7
 					:data="form.step_7"
@@ -386,17 +404,23 @@
 					@updateDataStep7="updateDataStep7"
 				/>
 			</div>
-        </tab-content>
+				</tab-content>
 
-      </form-wizard>
+			</form-wizard>
 
-    </div>
+		</div>
 	<ModalPrintEstimateAssets
 		v-if="openPrint"
 		@cancel="openPrint = false"
 		:data="reportData"
-    />
-  </div>
+		/>
+  <ModalNotificationAppraisal
+    v-if="openCancelAppraisal"
+    @cancel="openCancelAppraisal = false"
+    v-bind:notification="message"
+    @action="handleActionCancelAppraise"
+  />
+	</div>
 </template>
 
 <script>
@@ -420,13 +444,12 @@ import Step7 from './componentDetail/Step7'
 import WareHouse from '@/models/WareHouse'
 import Certificate from '@/models/Certificate'
 import { COMPARISON } from '@/enum/comparison-factor.enum'
-import { Timeline, Drawer, message } from 'ant-design-vue'
+import { Timeline, Drawer } from 'ant-design-vue'
 import AppraiseData from '@/models/AppraiseData'
 import CertificateAsset from '@/models/CertificateAsset'
 import moment from 'moment'
-import store from '@/store'
-import * as types from '@/store/mutation-types'
 import ModalPrintEstimateAssets from '@/components/Modal/ModalPrintEstimateAsset'
+import ModalNotificationAppraisal from '@/components/Modal/ModalNotificationAppraisal'
 const jsonConfig = require('../../../../config/workflow.json')
 
 export default {
@@ -450,7 +473,8 @@ export default {
 		Step5,
 		Step6,
 		Step7,
-		ModalPrintEstimateAssets
+		ModalPrintEstimateAssets,
+		ModalNotificationAppraisal
 	},
 	data () {
 		return {
@@ -459,6 +483,8 @@ export default {
 			openNotification: false,
 			isSubmit: false,
 			openModalCancel: false,
+			isCancelEnable: true,
+			openCancelAppraisal: false,
 			showDetailPlanning: true,
 			message: '',
 			visibleHistoryDrawer: false,
@@ -742,7 +768,7 @@ export default {
 					return next('/'.resp.error.statusCode)
 				}
 			}
-		}).catch((err) => {
+		}).catch(() => {
 			return next('/403')
 		})
 	},
@@ -780,6 +806,8 @@ export default {
 				this.max_version = bindDataStep.max_version
 				this.createdBy = bindDataStep.created_by
 				this.real_estate = bindDataStep.real_estate
+				if(bindDataStep.certificate) { this.isCancelEnable = false }
+
 				// step 1
 				if (bindDataStep.economic_infomation) { this.form.step_1.economic_infomation = bindDataStep.economic_infomation }
 				if (bindDataStep.general_infomation) { this.form.step_1.general_infomation = bindDataStep.general_infomation }
@@ -1457,11 +1485,31 @@ export default {
 			}
 		},
 
-		async handleCancel () {
-			if (this.$route.name === 'certificate.create') {
-				return this.$router.push({ name: 'certificate.index' })
-			} else if (this.$route.name === 'certificate.edit') {
-				this.$router.go(-1)
+		handleCancelProperty () {
+			this.openCancelAppraisal = true
+			this.message = 'Bạn có muốn hủy tài sản thẩm định này không ?'
+		},
+
+		// function hủy tài sản
+		async handleActionCancelAppraise () {
+			let status = 5
+			const res = await AppraiseData.updateStatusRealestate(this.idData, status)
+			if (res.data && res.data.status === 5) {
+				await this.$toast.open({
+					message: 'Hủy tài sản' + this.idData + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.openNotification = await false
+				await this.$router.push({name: 'certification_asset.index'}).catch(_ => {})
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
 			}
 		},
 		getProvinces (isBindData) {
@@ -1497,8 +1545,8 @@ export default {
 			try {
 				if (
 					this.form.step_1.general_infomation.street_id !== '' &&
-          this.form.step_1.general_infomation.street_id !== undefined &&
-          this.form.step_1.general_infomation.street_id !== null
+					this.form.step_1.general_infomation.street_id !== undefined &&
+					this.form.step_1.general_infomation.street_id !== null
 				) {
 					this.getDistanceByStreetId(this.form.step_1.general_infomation.street_id)
 				}
@@ -1522,9 +1570,9 @@ export default {
 			this.distances = []
 			if (
 				this.form.step_1.general_infomation.province_id !== 0 &&
-        this.form.step_1.general_infomation.province_id !== '' &&
-        this.form.step_1.general_infomation.province_id !== undefined &&
-        this.form.step_1.general_infomation.province_id !== null
+				this.form.step_1.general_infomation.province_id !== '' &&
+				this.form.step_1.general_infomation.province_id !== undefined &&
+				this.form.step_1.general_infomation.province_id !== null
 			) {
 				await this.getDistrictsByProvinceId(id)
 			}
@@ -1553,9 +1601,9 @@ export default {
 			this.form.step_1.general_infomation.distance_id = ''
 			if (
 				this.form.step_1.general_infomation.district_id !== 0 &&
-        this.form.step_1.general_infomation.district_id !== '' &&
-        this.form.step_1.general_infomation.district_id !== undefined &&
-        this.form.step_1.general_infomation.district_id !== null
+				this.form.step_1.general_infomation.district_id !== '' &&
+				this.form.step_1.general_infomation.district_id !== undefined &&
+				this.form.step_1.general_infomation.district_id !== null
 			) {
 				this.getWardsByDistrictId(id)
 				this.getStreetByDistrictId(id)
@@ -1575,8 +1623,8 @@ export default {
 			}
 			if (
 				this.districtName &&
-        (this.districtName.toLowerCase() === 'thành phố biên hòa' ||
-          this.districtName.toLowerCase() === 'thành phố long khánh')
+				(this.districtName.toLowerCase() === 'thành phố biên hòa' ||
+					this.districtName.toLowerCase() === 'thành phố long khánh')
 			) {
 				this.radius = 1
 				this.distance = 1000
@@ -1607,9 +1655,9 @@ export default {
 			this.form.step_1.general_infomation.distance_id = ''
 			if (
 				this.form.step_1.general_infomation.street_id !== 0 &&
-        this.form.step_1.general_infomation.street_id !== '' &&
-        this.form.step_1.general_infomation.street_id !== undefined &&
-        this.form.step_1.general_infomation.street_id !== null
+				this.form.step_1.general_infomation.street_id !== '' &&
+				this.form.step_1.general_infomation.street_id !== undefined &&
+				this.form.step_1.general_infomation.street_id !== null
 			) {
 				await this.getDistanceByStreetId(id)
 			}
@@ -1820,9 +1868,9 @@ export default {
 			this.compare_assets = data
 			this.form.properties = dataProperty
 		},
-		handleCancelProperty (dataProperty) {
-			this.form.properties = dataProperty
-		},
+		// handleCancelProperty (dataProperty) {
+		// 	this.form.properties = dataProperty
+		// },
 		async getAsset () {
 			let unrecognized = []
 			// set image default
@@ -1867,7 +1915,7 @@ export default {
 					if (res.data && res.data.assets.length === 0) {
 						this.$toast.open({
 							message:
-                'Hiện không có TSSS nào thỏa điều kiện quét. Vui lòng chọn thủ công bằng nút Chỉnh Sửa.',
+								'Hiện không có TSSS nào thỏa điều kiện quét. Vui lòng chọn thủ công bằng nút Chỉnh Sửa.',
 							type: 'error',
 							position: 'top-right'
 						})
@@ -2024,14 +2072,14 @@ export default {
 <style scoped lang="scss">
 
 .certification-asset {
-  @media (max-width: 449px){
+	@media (max-width: 449px){
 		margin-bottom: 100px;
 	}
-  .step7 {
-    /deep/ .wizard-tab-content {
-      padding: 5px 5px 40px 0px !important;
-    }
-  }
+	.step7 {
+		/deep/ .wizard-tab-content {
+			padding: 5px 5px 40px 0px !important;
+		}
+	}
 }
 .height_form_wizard {
 	@media (max-height: 660px) {
@@ -2086,67 +2134,67 @@ export default {
 	border-left: 2px solid #26bf5fad;
 }
 .card {
-  border-radius: 5px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-  background: #FFFFFF;
-  margin-bottom: 1rem;
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	background: #FFFFFF;
+	margin-bottom: 1rem;
 
-  &-footer {
-    padding: 15px 24px;
-  }
+	&-footer {
+		padding: 15px 24px;
+	}
 
-  &-title {
-    padding: 15px;
-    margin-bottom: 0;
-    color: #E8E8E8;
-    border-bottom: 2px solid;
-    &__img {
-      padding: 8px 20px;
-    }
-    h3 {
-      color: #007EC6;
-    }
-    @media (max-width: 768px) {
-      padding: 12px;
-    }
+	&-title {
+		padding: 15px;
+		margin-bottom: 0;
+		color: #E8E8E8;
+		border-bottom: 2px solid;
+		&__img {
+			padding: 8px 20px;
+		}
+		h3 {
+			color: #007EC6;
+		}
+		@media (max-width: 768px) {
+			padding: 12px;
+		}
 
-    .title {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 0;
-    }
-  }
+		.title {
+			font-size: 1.125rem;
+			font-weight: 600;
+			margin-bottom: 0;
+		}
+	}
 
-  &-body {
+	&-body {
 
-    @media (max-width: 787px) {
-      padding: 15px;
-    }
-  }
+		@media (max-width: 787px) {
+			padding: 15px;
+		}
+	}
 
-  &-sub_header_title {
-    padding: 15px 24px;
-  }
+	&-sub_header_title {
+		padding: 15px 24px;
+	}
 
-  &-info {
-    .title {
-      font-size: 1.125rem;
-      font-weight: 700;
-      margin-top: 28px;
+	&-info {
+		.title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			margin-top: 28px;
 
-      &-highlight {
-        background: rgba(252, 194, 114, 0.53);
-        text-align: center;
-        padding: 10px 0;
-        border-radius: 2px;
-      }
-    }
-  }
+			&-highlight {
+				background: rgba(252, 194, 114, 0.53);
+				text-align: center;
+				padding: 10px 0;
+				border-radius: 2px;
+			}
+		}
+	}
 
-  &-land {
-    position: relative;
-    padding: 0;
-  }
+	&-land {
+		position: relative;
+		padding: 0;
+	}
 }
 
 </style>

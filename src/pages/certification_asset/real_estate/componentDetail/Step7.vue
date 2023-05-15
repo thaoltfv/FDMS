@@ -80,28 +80,28 @@
 						<tr>
 						<td style="padding: unset" :rowspan="3 + appropriate_zoning_land.length + violation_zoning_land.length">6</td>
 						<td>Tổng diện tích (m<sup>2</sup>)</td>
-						<td>{{appraises.properties && appraises.properties.length > 0 ? formatNumber(parseFloat(appraises.properties[0].appraise_land_sum_area).toFixed(2)) : "-"}}</td>
+						<td>{{appraises.properties && appraises.properties.length > 0 ? formatNumber(appraises.properties[0].appraise_land_sum_area) : "-"}}</td>
 						<td v-for="(asset, index) in appraises.asset_general" :key="'assetType' + index">
 							<div v-for="(property, indexProperty) in appraises.propertyChoosing.filter(i => i.asset_general_id === asset.id)" :key="'propertyArea' + indexProperty">
-							{{formatNumber(parseFloat(property.asset_general_land_sum_area).toFixed(2))}}
+							{{formatNumber(property.asset_general_land_sum_area)}}
 							</div>
 						</td>
 						</tr>
 						<tr >
 						<td>Đất phù hợp quy hoạch (m<sup>2</sup>)</td>
-						<td>{{formatNumber(parseFloat(total_appraise_area).toFixed(2))}}</td>
+						<td>{{formatNumber(total_appraise_area)}}</td>
 						<td v-for="(asset, indexAppropriateArea) in appraises.asset_general" :key="'viola' + indexAppropriateArea">
-							<span :style="arrayTotalAppropriateArea[asset.id] <= 0 ? {color:'red'} : {}">{{formatNumber(parseFloat(arrayTotalAppropriateArea[asset.id]).toFixed(2))}}</span>
+							<span :style="arrayTotalAppropriateArea[asset.id] <= 0 ? {color:'red'} : {}">{{formatNumber(arrayTotalAppropriateArea[asset.id])}}</span>
 						</td>
 						</tr>
 						<tr v-for="(area, index) in appropriate_zoning_land" :key="'area-price' + index">
 						<td>{{area.name_purpose_land}}</td>
-						<td>{{formatNumber(parseFloat(area.appropriate_appraise_land).toFixed(2))}}</td>
+						<td>{{formatNumber(area.appropriate_appraise_land)}}</td>
 						<td v-for="(asset, index_area) in appraises.asset_general" :key="'area-land' + index_area">
 							<div v-if="!checkDataPriceUBND(asset, area.asset_general_land)">
 							<div v-for="(area_data, index_asset_land) in area.asset_general_land" :key="'areatype' + index_asset_land" >
 								<div :style="area_data.total_area < 0 ? {color:'red'} : {}" v-if="area_data.asset_general_id === asset.id">
-								{{formatNumber(validateArea(area_data.total_area))}}
+								{{formatNumber(area_data.total_area)}}
 								</div>
 							</div>
 							</div>
@@ -110,14 +110,14 @@
 						</tr>
 						<tr>
 						<td>Đất vi phạm quy hoạch (m<sup>2</sup>)</td>
-						<td>{{formatNumber(parseFloat(total_vio_appraise_area).toFixed(2))}}</td>
+						<td>{{formatNumber(total_vio_appraise_area)}}</td>
 						<td v-for="(asset, indexVio) in appraises.asset_general" :key="'viola' + indexVio">
-							{{formatNumber(parseFloat(arrayTotalViolationArea[asset.id]).toFixed(2))}}
+							{{formatNumber(arrayTotalViolationArea[asset.id])}}
 						</td>
 						</tr>
 						<tr v-for="(violation_area, indexVioArea) in violation_zoning_land" :key="'area-violation-price' + indexVioArea">
 						<td>{{violation_area.name_purpose_land}}</td>
-						<td>{{formatNumber(parseFloat(violation_area.violation_appraise_land).toFixed(2))}}</td>
+						<td>{{formatNumber(violation_area.violation_appraise_land)}}</td>
 						<td v-for="(asset, index_area) in appraises.asset_general" :key="'area-violation-land' + index_area">
 							<div v-if="!checkDataPriceUBND(asset, violation_area.asset_general_land)">
 							<div v-for="(area_data, index_violation_land) in violation_area.asset_general_land" :key="'areaViotype' + index_violation_land" >
@@ -173,11 +173,11 @@
 						<td>Chiều rộng</td>
 						<td>
 						<!-- <div :key="'widthStreet'">{{`${appraises.comparison_factor[0].comparison_factor.find(i => i.type === 'chieu_rong_mat_tien').appraise_title}m`}}</div> -->
-						<div :key="'widthStreet'">{{`${getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'chieu_rong_mat_tien', false)}m`}}</div>
+						<div :key="'widthStreet'">{{formatNumber(`${getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'chieu_rong_mat_tien', false)}`)}}m</div>
 						</td>
 						<td v-for="(asset, index) in appraises.comparison_factor" :key="'assetWidthStreet' + index">
 							<!-- <span :key="'chieu_rong_mat_tien' + asset.id">{{`${asset.comparison_factor.find(i => i.type === 'chieu_rong_mat_tien').asset_title}m`}}</span> -->
-							<span :key="'chieu_rong_mat_tien' + asset.id">{{`${getComparisonTitleByType(asset.comparison_factor, 'chieu_rong_mat_tien', true)}m`}}</span>
+							<span :key="'chieu_rong_mat_tien' + asset.id">{{formatNumber(`${getComparisonTitleByType(asset.comparison_factor, 'chieu_rong_mat_tien', true)}`)}}m</span>
 						</td>
 						</tr>
 						<tr>
@@ -185,11 +185,11 @@
 						<td>Chiều dài</td>
 						<td>
 							<!-- <div v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'chieu_sau_khu_dat'" :key="'widthLongLand' + index">{{`${comparison_factor.appraise_title}m`}}</div> -->
-							<div :key="'widthLongLand'">{{`${getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'chieu_sau_khu_dat', false)}m`}}</div>
+							<div :key="'widthLongLand'">{{formatNumber(`${getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'chieu_sau_khu_dat', false)}`)}}m</div>
 						</td>
 						<td v-for="(asset, index) in appraises.comparison_factor" :key="'assetLongLand' + index">
 							<!-- <span v-for="(comparison_factor, index) in asset.comparison_factor" v-if="comparison_factor.type === 'chieu_sau_khu_dat'" :key="'chieu_sau_khu_dat' + index">{{`${comparison_factor.asset_title}m`}}</span> -->
-							<span :key="'chieu_sau_khu_dat' + asset.id">{{`${getComparisonTitleByType(asset.comparison_factor, 'chieu_sau_khu_dat', true)}m`}}</span>
+							<span :key="'chieu_sau_khu_dat' + asset.id">{{formatNumber(`${getComparisonTitleByType(asset.comparison_factor, 'chieu_sau_khu_dat', true)}`)}}m</span>
 						</td>
 						</tr>
 						<tr>
@@ -219,22 +219,22 @@
 						<tr>
 						<td>DTSXD</td>
 						<td>
-							<div v-if="appraises.tangible_assets && appraises.tangible_assets.length > 0">{{appraises.tangible_assets[0].total_construction_base}}m<sup>2</sup></div>
+							<div v-if="appraises.tangible_assets && appraises.tangible_assets.length > 0">{{ formatNumber(appraises.tangible_assets[0].total_construction_base) }}m<sup>2</sup></div>
 							<div v-else>-</div>
 						</td>
 						<td v-for="(asset, index) in appraises.asset_general" :key="'assetType' + index">
-							<div v-if="asset.tangible_assets && asset.tangible_assets.length > 0">{{ asset.tangible_assets[0].total_construction_base}}m<sup>2</sup></div>
+							<div v-if="asset.tangible_assets && asset.tangible_assets.length > 0">{{ formatNumber(asset.tangible_assets[0].total_construction_base) }}m<sup>2</sup></div>
 							<div v-else>-</div>
 						</td>
 						</tr>
 						<tr>
 						<td>Tỷ lệ CLCL</td>
 						<td>
-							<div v-if="appraises.tangible_assets && appraises.tangible_assets.length > 0">{{appraises.tangible_assets[0].remaining_quality}}%</div>
+							<div v-if="appraises.tangible_assets && appraises.tangible_assets.length > 0">{{formatNumber(appraises.tangible_assets[0].remaining_quality)}}%</div>
 							<div v-else>-</div>
 						</td>
 						<td v-for="(asset, index) in appraises.asset_general" :key="'assetType' + index">
-							<div v-if="asset.tangible_assets && asset.tangible_assets.length > 0">{{ asset.tangible_assets[0].remaining_quality}}%</div>
+							<div v-if="asset.tangible_assets && asset.tangible_assets.length > 0">{{ formatNumber(asset.tangible_assets[0].remaining_quality)}}%</div>
 							<div v-else>-</div>
 						</td>
 						</tr>
@@ -1164,7 +1164,7 @@
                         </tr>
                         <tr >
                         <td>6</td>
-                        <td colspan="2">Tổng số lần điều đỉnh (lần)</td>
+                        <td colspan="2">Tổng số lần điều chỉnh (lần)</td>
                         <td>{{formatNumber(parseFloat(comparisonFactorChange1).toFixed(0))}}</td>
                         <td>{{formatNumber(parseFloat(comparisonFactorChange2).toFixed(0))}}</td>
                         <td>{{formatNumber(parseFloat(comparisonFactorChange3).toFixed(0))}}</td>
@@ -1480,7 +1480,6 @@ import Vue from 'vue'
 import Icon from 'buefy'
 import ModalPrintEstimateAssets from '@/components/Modal/ModalPrintEstimateAsset'
 import { toLower } from 'lodash-es'
-import WareHouse from '@/models/WareHouse'
 
 Vue.use(Icon)
 
@@ -2061,12 +2060,6 @@ export default {
 			})
 			return empty
 		},
-		validateArea (areaValue) {
-			if (areaValue < 0) {
-				this.checkValidArea = true
-			}
-			return parseFloat(areaValue).toFixed(2)
-		},
 		getData () {
 			// set giá trị default làm tròn đất cơ sở
 			if (+this.form.round_total || +this.form.round_total === 0) {
@@ -2199,7 +2192,7 @@ export default {
 							if (getDataUnitPrice && getDataUnitPrice.length > 0) {
 								this.asset_appropriate_area_arr.push({
 									asset_general_id: property_asset.asset_general_id,
-									total_area: property_asset_detail.total_area - +getDataUnitPrice[0].violation_asset_area,
+									total_area: parseFloat((property_asset_detail.total_area - +getDataUnitPrice[0].violation_asset_area).toFixed(2)),
 									name_purpose_land_asset: property_asset_detail.land_type_purpose_data.acronym
 								})
 							}
@@ -2212,7 +2205,7 @@ export default {
 					// lay dien tich phu hop quy hoach (TSTD)
 					this.appropriate_zoning_land.push({
 						name_purpose_land: property_appraise.land_type_purpose.acronym,
-						appropriate_appraise_land: +property_appraise.total_area - +property_appraise.planning_area,
+						appropriate_appraise_land: Number((+property_appraise.total_area - +property_appraise.planning_area).toFixed(2)),
 						asset_general_land: []
 					})
 					// lay dien tich vi pham quy hoach (TSTD)
@@ -2221,7 +2214,7 @@ export default {
 						violation_appraise_land: +property_appraise.planning_area,
 						asset_general_land: []
 					})
-					this.total_appraise_area += +property_appraise.total_area - +property_appraise.planning_area
+					this.total_appraise_area += Number((+property_appraise.total_area - +property_appraise.planning_area).toFixed(2))
 					this.total_vio_appraise_area += +property_appraise.planning_area
 				})
 			}
@@ -3509,13 +3502,13 @@ export default {
 				asset.properties.forEach(property_asset => {
 					let appraiseHasAsset = this.form.appraise_has_assets.filter(item => item.asset_property_detail_id === property_asset.id)
 					if (appraiseHasAsset && appraiseHasAsset.length > 0) {
-						this.arrayTotalAppropriateArea[asset.id] = property_asset.asset_general_land_sum_area - this.arrayTotalViolationArea[asset.id]
+						this.arrayTotalAppropriateArea[asset.id] = parseFloat((property_asset.asset_general_land_sum_area - this.arrayTotalViolationArea[asset.id]).toFixed(2))
 						property_asset.property_detail.forEach(property_asset_detail => {
 							let getDataUnitPrice = this.form.asset_unit_area.filter(itemVioLand => itemVioLand.asset_general_id === property_asset.asset_general_id && itemVioLand.land_type_id === property_asset_detail.land_type_purpose)
 							if (getDataUnitPrice && getDataUnitPrice.length > 0) {
 								this.asset_appropriate_area_arr.push({
 									asset_general_id: property_asset.asset_general_id,
-									total_area: property_asset_detail.total_area - +getDataUnitPrice[0].violation_asset_area,
+									total_area: parseFloat((property_asset_detail.total_area - +getDataUnitPrice[0].violation_asset_area).toFixed(2)),
 									name_purpose_land_asset: property_asset_detail.land_type_purpose_data.acronym
 								})
 							}
@@ -3621,6 +3614,11 @@ export default {
 			this.comparisonFactorChange3 = 0
 
 			// YTSS
+			// These field must be set = 0 before check
+			// Incase factor has been removed manualy it will not be updated if put these inside condition block
+			this.pricePl1 = 0
+			this.pricePl2 = 0
+			this.pricePl3 = 0
 			if ((typeof comparisonFactor1['phap_ly'] !== 'undefined') && comparisonFactor1['phap_ly'].status === 1) {
 				let percentPl1 = +comparisonFactor1['phap_ly'].adjust_percent || 0
 				let percentPl2 = +comparisonFactor2['phap_ly'].adjust_percent || 0
@@ -4071,19 +4069,19 @@ export default {
 			})
 
 			// tổng giá trị điều chỉnh gộp
-			this.tldcg1 = Math.abs(this.priceHdd1) + Math.abs(this.priceKcd1) + Math.abs(this.priceKd1) + Math.abs(this.priceDkht1) + Math.abs(this.pricePt1) + Math.abs(this.priceDktt1) + Math.abs(this.priceQm1) + Math.abs(this.priceCrmt1) + Math.abs(this.priceCskd1) + Math.abs(this.priceDrd1) + Math.abs(mgcd_price_other_abs[0])
-			this.tldcg2 = Math.abs(this.priceHdd2) + Math.abs(this.priceKcd2) + Math.abs(this.priceKd2) + Math.abs(this.priceDkht2) + Math.abs(this.pricePt2) + Math.abs(this.priceDktt2) + Math.abs(this.priceQm2) + Math.abs(this.priceCrmt2) + Math.abs(this.priceCskd2) + Math.abs(this.priceDrd2) + Math.abs(mgcd_price_other_abs[1])
-			this.tldcg3 = Math.abs(this.priceHdd3) + Math.abs(this.priceKcd3) + Math.abs(this.priceKd3) + Math.abs(this.priceDkht3) + Math.abs(this.pricePt3) + Math.abs(this.priceDktt3) + Math.abs(this.priceQm3) + Math.abs(this.priceCrmt3) + Math.abs(this.priceCskd3) + Math.abs(this.priceDrd3) + Math.abs(mgcd_price_other_abs[2])
+			this.tldcg1 = Math.abs(this.pricePl1) + Math.abs(this.priceHdd1) + Math.abs(this.priceKcd1) + Math.abs(this.priceKd1) + Math.abs(this.priceDkht1) + Math.abs(this.pricePt1) + Math.abs(this.priceDktt1) + Math.abs(this.priceQm1) + Math.abs(this.priceCrmt1) + Math.abs(this.priceCskd1) + Math.abs(this.priceDrd1) + Math.abs(mgcd_price_other_abs[0])
+			this.tldcg2 = Math.abs(this.pricePl2) + Math.abs(this.priceHdd2) + Math.abs(this.priceKcd2) + Math.abs(this.priceKd2) + Math.abs(this.priceDkht2) + Math.abs(this.pricePt2) + Math.abs(this.priceDktt2) + Math.abs(this.priceQm2) + Math.abs(this.priceCrmt2) + Math.abs(this.priceCskd2) + Math.abs(this.priceDrd2) + Math.abs(mgcd_price_other_abs[1])
+			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.priceHdd3) + Math.abs(this.priceKcd3) + Math.abs(this.priceKd3) + Math.abs(this.priceDkht3) + Math.abs(this.pricePt3) + Math.abs(this.priceDktt3) + Math.abs(this.priceQm3) + Math.abs(this.priceCrmt3) + Math.abs(this.priceCskd3) + Math.abs(this.priceDrd3) + Math.abs(mgcd_price_other_abs[2])
 
 			// tổng giá trị điều chỉnh thuần
-			this.tldc1 = this.priceHdd1 + this.priceKcd1 + this.priceKd1 + this.priceDkht1 + this.pricePt1 + this.priceDktt1 + this.priceQm1 + this.priceCrmt1 + this.priceCskd1 + this.priceDrd1 + this.priceGt1 + this.priceAnmts1 + this.priceQh1 + mgcd_price_other[0]
-			this.tldc2 = this.priceHdd2 + this.priceKcd2 + this.priceKd2 + this.priceDkht2 + this.pricePt2 + this.priceDktt2 + this.priceQm2 + this.priceCrmt2 + this.priceCskd2 + this.priceDrd2 + this.priceGt2 + this.priceAnmts2 + this.priceQh2 + mgcd_price_other[1]
-			this.tldc3 = this.priceHdd3 + this.priceKcd3 + this.priceKd3 + this.priceDkht3 + this.pricePt3 + this.priceDktt3 + this.priceQm3 + this.priceCrmt3 + this.priceCskd3 + this.priceDrd3 + this.priceGt3 + this.priceAnmts3 + this.priceQh3 + mgcd_price_other[2]
+			this.tldc1 = this.pricePl1 + this.priceHdd1 + this.priceKcd1 + this.priceKd1 + this.priceDkht1 + this.pricePt1 + this.priceDktt1 + this.priceQm1 + this.priceCrmt1 + this.priceCskd1 + this.priceDrd1 + this.priceGt1 + this.priceAnmts1 + this.priceQh1 + mgcd_price_other[0]
+			this.tldc2 = this.pricePl2 + this.priceHdd2 + this.priceKcd2 + this.priceKd2 + this.priceDkht2 + this.pricePt2 + this.priceDktt2 + this.priceQm2 + this.priceCrmt2 + this.priceCskd2 + this.priceDrd2 + this.priceGt2 + this.priceAnmts2 + this.priceQh2 + mgcd_price_other[1]
+			this.tldc3 = this.pricePl3 + this.priceHdd3 + this.priceKcd3 + this.priceKd3 + this.priceDkht3 + this.pricePt3 + this.priceDktt3 + this.priceQm3 + this.priceCrmt3 + this.priceCskd3 + this.priceDrd3 + this.priceGt3 + this.priceAnmts3 + this.priceQh3 + mgcd_price_other[2]
 
 			// tính mức giá chỉ dẫn của TSSS
-			this.mgcd1 = this.totalPricePL1 + this.tldc1
-			this.mgcd2 = this.totalPricePL2 + this.tldc2
-			this.mgcd3 = this.totalPricePL3 + this.tldc3
+			this.mgcd1 = this.dgd1 + this.tldc1
+			this.mgcd2 = this.dgd2 + this.tldc2
+			this.mgcd3 = this.dgd3 + this.tldc3
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true

@@ -14,8 +14,8 @@ export const navigations = [
 	},
 	{ id: 'home', type: 'item', icon: 'nav_bdg', title: 'Bản đồ giá', routeName: 'home', exact: true, customImage: true },
 	{ id: 'warehouse', type: 'item', icon: 'nav_kg', title: 'Kho giá', routeName: 'warehouse.index', customImage: true },
-	{ id: 'price_estimate', type: 'item', icon: 'nav_utg', title: 'Ước tính giá', routeName: 'price_estimate.index', customImage: true, denied: ['trial', 'nova']},
-	{ id: 'log', type: 'item', icon: 'nav_lsut', title: 'Lịch sử ước tính', routeName: 'log.index', customImage: true, denied: ['trial', 'nova'] },
+	{ id: 'price_estimate', type: 'item', icon: 'nav_utg', title: 'Ước tính giá', routeName: 'price_estimate.index', customImage: true, denied: ['nova']},
+	{ id: 'log', type: 'item', icon: 'nav_lsut', title: 'Lịch sử ước tính', routeName: 'log.index', customImage: true, denied: ['nova'] },
 	// { id: 'certificate', type: 'item', icon: 'certificate', title: 'Tài sản thẩm định Ver.1', routeName: 'certificate.index' },
 	// { id: 'appraisal', type: 'item', icon: 'file-signature', title: 'Hồ sơ thẩm định Ver.1', routeName: 'appraisal.index' },
 	{

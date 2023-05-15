@@ -268,7 +268,7 @@ export default {
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 			max-width: 1300px;
 			width: 100%;
-			max-height: 90vh;
+			height: 70vh;
 			margin-bottom: 0;
 			padding: 20px 30px;
 			@media (max-width: 768px) {
@@ -324,7 +324,6 @@ export default {
 			overflow-x: hidden;
 			margin-top: 20px;
 			margin-bottom: 20px;
-			height: 40vh;
 			&::-webkit-scrollbar{
 				width: 2px;
 			}

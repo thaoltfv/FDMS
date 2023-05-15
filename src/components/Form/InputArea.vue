@@ -20,9 +20,10 @@
         class="input_area ant-input color_content"
         :class="{'inputError':errors[0] || errorMessage, 'input_center': text_center}"
         type="text"
-        v-model="valueArea"
+        v-model="valueMutator"
         :disabled="disabled"
         @input="debounceInput"
+				@change="onChange"
       />
       <span v-if="sufix" class="suffix color_content">m<sup>2</sup></span>
       <!--Message Error-->
@@ -37,13 +38,13 @@ export default {
 	name: 'InputArea',
 	data () {
 		return {
-			valueArea: this.value || this.value === 0 ? this.formatNumber(this.value) : '',
+			valueMutator: this.value || this.value === 0 ? this.formatNumber(this.value) : '',
 			errorMessage: ''
 		}
 	},
 	model: {
 		prop: 'value',
-		event: 'input'
+		event: 'change'
 	},
 	components: {
 
@@ -135,7 +136,7 @@ export default {
 	methods: {
 		debounceInput: debounce(function (e) {
 			this.onChange(e)
-		}, 500),
+		}, 400),
 		async onChange (event) {
 			if (event.target.value) {
 				if (event.target.value.match(/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g)) {
@@ -146,7 +147,7 @@ export default {
 						this.$emit('change', formatNumberDecimal)
 						let convertedValue = formatNumberDecimal.toString().replace('.', ',')
 						// change value number to dot format
-						this.valueArea = this.formatNumber(convertedValue)
+						this.valueMutator = this.formatNumber(convertedValue)
 						this.errorMessage = ''
 					}
 				} else {
@@ -158,16 +159,18 @@ export default {
 			}
 		},
 		supportClientAction (value) {
-			// Remove first character is zero
-			// let formatValue = value.replace(/^0*/g, '')
 			let formatValue = value
+			// Remove first character is zero
+			if (value.match(/(^0+)([\d])/g)) {
+				formatValue = value.replace(/(^0+)([\d])/g, '$2')
+			}
 			// Remove dot group when copy from another place
 			if (value.match(/^\d+(\.\d+)*(,\d+)?$/g)) {
 				if (value.match(/(,+)/g)) {
 					formatValue = formatValue.replace(/(\.+)/g, '')
 					formatValue = formatValue.replace(/(,+)/g, '.')
-				} else {
-					formatValue = formatValue.replace(/(\.+)/g, '')
+				} else if (value.match(/(\.)(\d{3})/g)) {
+					formatValue = formatValue.replace(/(\.)(\d{3})/g, '$2')
 				}
 				return formatValue
 			} else {
@@ -188,7 +191,8 @@ export default {
 		},
 		formatNumber (num) {
 			// convert number to dot format
-			return num.toString().replace(/^[+-]?\d+/, function (int) {
+			let formatedNum = num.toString().replace('.', ',')
+			return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
 				return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
 			})
 		}

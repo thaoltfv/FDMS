@@ -62,6 +62,9 @@
               <button class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep1" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
         </ValidationObserver>
@@ -103,6 +106,9 @@
               <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
        </ValidationObserver>
@@ -139,6 +145,9 @@
                <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep3" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
         </ValidationObserver>
@@ -168,6 +177,9 @@
               <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep4" type="submit">
                 <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
               </button>
+							<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
             </div>
           </div>
         </ValidationObserver>
@@ -202,6 +214,9 @@
             <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep5" type="submit">
               <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
             </button>
+						<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+							<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+						</button>
           </div>
         </div>
         </ValidationObserver>
@@ -234,6 +249,9 @@
             <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep6" type="submit">
               <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
             </button>
+						<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+							<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+						</button>
           </div>
         </div>
         </ValidationObserver>
@@ -267,6 +285,12 @@
       v-bind:notification="messageConfirm"
       @action="confirmEditStep"
     />
+		<ModalNotificationAppraisal
+			v-if="openCancelAppraisal"
+			@cancel="openCancelAppraisal = false"
+			v-bind:notification="message"
+			@action="handleActionCancelAppraise"
+		/>
 	<ModalNotificationAppraisal
       v-if="showConfirmDuplicate"
       @cancel="showConfirmDuplicate = false"
@@ -325,11 +349,13 @@ export default {
 		return {
 			isAutomation: false,
 			isEdit: false,
+			isCancelEnable: true,
 			idData: null,
 			isSave: false,
 			openNotification: false,
 			isSubmit: false,
 			openModalCancel: false,
+			openCancelAppraisal: false,
 			showConfirmEdit: false,
 			showConfirmDuplicate: false,
 			step_edit: '',
@@ -616,6 +642,8 @@ export default {
 			this.isEdit = true
 			if (this.$route.meta['step']) {
 				let bindDataStep = this.$route.meta['step']
+
+				if(bindDataStep.certificate) { this.isCancelEnable = false }
 				// step 1
 				if (bindDataStep.economic_infomation) { this.form.step_1.economic_infomation = bindDataStep.economic_infomation }
 				if (bindDataStep.general_infomation) { this.form.step_1.general_infomation = bindDataStep.general_infomation }
@@ -1988,9 +2016,7 @@ export default {
 			this.compare_assets = data
 			this.form.properties = dataProperty
 		},
-		handleCancelProperty (dataProperty) {
-			this.form.properties = dataProperty
-		},
+
 		async getAsset () {
 			let unrecognized = []
 			// set image default
@@ -2110,6 +2136,34 @@ export default {
 		},
 		validateArea (errorCustom) {
 			this.step2AreaValidate = errorCustom
+		},
+
+		handleCancelProperty () {
+			this.openCancelAppraisal = true
+			this.message = 'Bạn có muốn hủy tài sản thẩm định này không ?'
+		},
+
+		// function hủy tài sản
+		async handleActionCancelAppraise () {
+			let status = 5
+			const res = await AppraiseData.updateStatusRealestate(this.idData, status)
+			if (res.data && res.data.status === 5) {
+				await this.$toast.open({
+					message: 'Hủy tài sản' + this.idData + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.openNotification = await false
+				await this.$router.push({name: 'certification_asset.index'}).catch(_ => {})
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+			}
 		},
 		checkDuplicateLandType (errorCustom) {
 			if (this.step2DuplicateLandType === '') { this.step2DuplicateLandType = errorCustom }

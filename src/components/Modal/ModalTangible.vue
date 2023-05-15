@@ -134,36 +134,39 @@
                 </div>
                 <div class="w-100"/>
                 <div class="col-12 col-lg-6 input-contain">
-                  <InputNumberFormat
+                  <InputPercent
                     v-model="form.remaining_quality"
                     vid="remaining_quality"
-                    label="Chất lượng còn lại (%)"
+										:key="keyRender"
+                    label="Chất lượng còn lại"
                     :max="100"
                     :min="0"
+										:decimal="2"
                     rules="required"
                     @change="remainingQuality($event)"
                   />
                 </div>
                 <div class="col-12 col-lg-6 input-contain">
-                  <InputNumberFormat
+									<InputArea
                     v-model="form.total_construction_area"
                     vid="total_construction_area"
-                    label="Diện tích xây dựng (m²)"
-                    :max="99999999"
-                    :min="0"
+										:key="keyRender"
+                    label="Diện tích xây dựng"
+										:decimal="2"
+										rules="required"
                     @change="changeArea($event)"
-                  />
+									/>
                 </div>
                 <div class="col-12 col-lg-6 input-contain">
-                  <InputNumberFormat
+									<InputArea
                     v-model="form.total_construction_base"
                     vid="total_construction_base"
-                    label="Diện tích sàn (m²)"
-                    :max="99999999"
-                    :min="0"
-                    rules="required"
+										:key="keyRender"
+                    label="Diện tích sàn"
+										:decimal="2"
+										rules="required"
                     @change="totalConstructionBase($event)"
-                  />
+									/>
                 </div>
                 <div class="col-12 col-lg-6 input-contain">
                   <InputCategory
@@ -173,22 +176,21 @@
                     :options="optionsBuild"
                   />
                 </div>
-                  <div class="col-12 col-lg-6 input-contain">
-                    <InputNumberFormat
-                      v-model="form.unit_price_m2"
-                      vid="unit_price_m2"
-                      label="Đơn giá xây dựng (VND)"
-                      :formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                      :max="99999999"
-                      :min="0"
-                      @change="changeUnitPriceM2($event)"
-                    />
-                  </div>
+								<div class="col-12 col-lg-6 input-contain">
+									<InputCurrency
+										v-model="form.unit_price_m2"
+										vid="unit_price_m2"
+										:key="keyRender"
+										label="Đơn giá xây dựng"
+										rules="required"
+										@change="changeUnitPriceM2($event)"
+									/>
+								</div>
                   <!-- :disabled-input="building !== 'CÔNG TRÌNH KHÁC'" -->
 <!--                  <div class="form-control disabled"><p class="mb-0">{{formatNumber(form.unit_price_m2)}}</p></div>-->
                 <div class="col-12 col-lg-6 input-contain">
                   <label class="name font-weight-bold">Giá trị ước tính (VND)</label>
-                  <div class="form-control input-disabled disabled"><p class="mb-0">{{formatNumber(form.estimation_value)}}</p></div>
+                  <div class="d-flex justify-content-end form-control input-disabled disabled"><p class="mb-0">{{formatNumber(form.estimation_value)}}</p><p class="mb-0 ml-2">đ</p></div>
                 </div>
               </div>
             </div>
@@ -230,8 +232,11 @@
 </template>
 
 <script>
+import InputPercent from '@/components/Form/InputPercent'
+import InputCurrency from '@/components/Form/InputCurrency'
+import InputArea from '@/components/Form/InputArea'
+import InputLengthArea from '@/components/Form/InputLengthArea'
 import InputCategory from '@/components/Form/InputCategory'
-import InputSwitch from '@/components/Form/InputSwitch'
 import InputText from '@/components/Form/InputText'
 import FileUpload from '@/components/file/FileUpload'
 import InputNumberFormat from '@/components/Form/InputNumber'
@@ -243,6 +248,7 @@ export default {
 	props: ['info', 'img_link', 'compare_properties', 'tangible', 'tangible_index'],
 	data () {
 		return {
+			keyRender: 0,
 			built_years: [],
 			building: '',
 			isSubmit: false,
@@ -295,10 +301,13 @@ export default {
 	},
 	components: {
 		FileUpload,
+		InputCurrency,
+		InputPercent,
+		InputArea,
+		InputLengthArea,
 		InputCategory,
 		InputText,
-		InputNumberFormat,
-		InputSwitch
+		InputNumberFormat
 	},
 	computed: {
 		optionsHousingType () {
@@ -368,6 +377,7 @@ export default {
 	mounted () {
 		this.getTangible()
 		this.handleBuiltYear()
+		this.keyRender += 1
 	},
 	methods: {
 		handleBuiltYear () {
@@ -482,8 +492,9 @@ export default {
 			this.form.total_construction_area = event
 		},
 		formatNumber (value) {
-			let num = (value / 1).toFixed(0).replace('.', ',')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+			if (value !== '') {
+				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+			} else return value
 		},
 		onImageChange (e) {
 			let files = e.target.files || e.dataTransfer.files
@@ -622,6 +633,7 @@ export default {
 				this.form.unit_price_m2 = 0
 			}
 			this.form.estimation_value = this.form.total_construction_base * this.form.unit_price_m2 * (this.form.remaining_quality / 100)
+			this.keyRender += 1
 		},
 		async getDictionary () {
 			try {
@@ -648,11 +660,13 @@ export default {
 		}
 	},
 	async beforeMount () {
+		this.isSubmit = true
 		await this.getDictionary()
 		await this.getCrane()
 		if (this.$route.name === 'warehouse.edit' || (this.tangible !== '' && this.tangible !== null && this.tangible !== undefined)) {
 			this.buildingCategories()
 		}
+		this.isSubmit = false
 	}
 }
 </script>

@@ -344,6 +344,7 @@
       :bothSide="bothSide"
       :transaction="transaction"
       :assetType="assetType"
+			:year="yearRange"
       @cancel="isFilterMap = false"
       @action="handleActionFilterMap"
     />
@@ -374,7 +375,7 @@ import ModalSelectTypeAsset from './modals/ModalSelectTypeAsset.vue'
 
 Vue.use(Icon)
 export default {
-	name: 'Step4',
+	name: 'Step6',
 	props: ['data', 'comparison', 'frontSide', 'coordinates', 'propertyTypes', 'type_purposes', 'step_active', 'distance_max', 'asset_type_id'],
 	components: {
 		LMap,
@@ -433,6 +434,7 @@ export default {
 			listAssetGeneral: [],
 			assetHasChoose: [],
 			bothSide: false,
+			yearRange: moment().subtract(1, 'year').format('YYYY-MM-DD'),
 			assetType: [38, 37],
 			assetDetails: '',
 			transaction: [51, 52],
@@ -518,7 +520,8 @@ export default {
 			const bothSide = this.bothSide
 			const transaction = '[' + this.transaction + ']'
 			const assetType = '[' + this.assetType + ']'
-			const getAllAsset = await CertificateAsset.getSearchAllAsset(distance, location, frontSide, transaction, assetType, bothSide)
+			const yearRange = this.yearRange
+			const getAllAsset = await CertificateAsset.getSearchAllAsset(distance, location, frontSide, transaction, assetType, bothSide, yearRange)
 			this.listAssetGeneral = [...getAllAsset.data]
 			let checkAsset = []
 			this.listAssetGeneral.forEach(item => {
@@ -571,6 +574,7 @@ export default {
 			this.frontSide = dataFilter.frontSide
 			this.transaction = dataFilter.transaction
 			this.assetType = dataFilter.assetType
+			this.yearRange = dataFilter.year
 			this.bothSide = dataFilter.bothSide
 			const distance = parseFloat(dataFilter.radius / 1000).toFixed(2)
 			this.distance_max = distance
@@ -579,7 +583,8 @@ export default {
 			const bothSide = dataFilter.bothSide
 			const transaction = '[' + dataFilter.transaction + ']'
 			const assetType = '[' + dataFilter.assetType + ']'
-			const getAllAsset = await CertificateAsset.getSearchAllAsset(distance, location, frontSide, transaction, assetType, bothSide)
+			const yearRange = this.yearRange
+			const getAllAsset = await CertificateAsset.getSearchAllAsset(distance, location, frontSide, transaction, assetType, bothSide, yearRange)
 			this.listAssetGeneral = [...getAllAsset.data]
 			this.listAssetGeneral.forEach(item => {
 				item['center'] = [parseFloat(item.coordinates.split(',')[0]), parseFloat(item.coordinates.split(',')[1])]

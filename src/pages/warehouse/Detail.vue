@@ -54,7 +54,7 @@
             </div>
             <div class="content-detail" v-if="this.form.transaction_type !== null">
               <p class="content-title">Giá (VND):</p>
-              <p class="content-name">{{format(this.form.total_amount)}}đ</p>
+              <p class="content-name">{{formatCurrency(this.form.total_amount)}}đ</p>
             </div>
           </div>
           <div class="d-grid">
@@ -204,7 +204,7 @@
           <div class="d-grid">
             <div class="content-detail">
               <p class="content-title">Diện tích (m<sup>2</sup>):</p>
-              <p class="content-name">{{this.form.room_details[0].area}}m<sup>2</sup></p>
+              <p class="content-name">{{ formatNumber(this.form.room_details[0].area)}}</p>
             </div>
             <div class="content-detail">
               <p class="content-title">Số phòng ngủ:</p>
@@ -284,12 +284,12 @@
                   {{property.coordinates}}
                 </td>
                 <td>
-                  {{property.front_side_width}}m
+                  {{formatNumber(property.front_side_width)}}m
                 </td>
-                <td>{{property.insight_width}}m</td>
+                <td>{{formatNumber(property.insight_width)}}m</td>
                 <td style="white-space: nowrap" >
                   <div>
-                    {{property.asset_general_land_sum_area}}
+                    {{formatNumber(property.asset_general_land_sum_area)}}
                   </div>
                 </td>
                 <td>
@@ -337,10 +337,10 @@
               <td style="white-space: nowrap">
                 {{tangible_asset.building_category !== undefined && tangible_asset.building_category !== null ? tangible_asset.building_category.description : ''}}
               </td>
-              <td>{{tangible_asset.remaining_quality}}</td>
-              <td>{{tangible_asset.total_construction_base}}m<sup>2</sup></td>
+              <td>{{ formatNumber(tangible_asset.remaining_quality) }}%</td>
+              <td>{{ formatNumber(tangible_asset.total_construction_base) }}m<sup>2</sup></td>
               <td>
-                {{format(tangible_asset.estimation_value)}}đ
+                {{ formatCurrency(tangible_asset.estimation_value) }}đ
               </td>
               <td>
                 <div class="d-flex justify-content-center">
@@ -385,7 +385,7 @@
                   {{other_asset.other_asset !== undefined && other_asset.other_asset !== null ? other_asset.other_asset : ''}}
               </td>
               <td>
-                {{format(other_asset.total_amount)}}đ
+                {{formatCurrency(other_asset.total_amount)}}đ
               </td>
               <td>
                 <div class="img-contain img-contain__table" v-for="images in other_asset.pic" :key="images.id" @click="openModalImage(images)">
@@ -427,80 +427,82 @@
           <div class="d-grid">
             <div class="content-detail">
               <p class="content-title">Tổng giá trị (VND):</p>
-              <p class="content-name">{{ format(this.form.total_amount)}}đ</p>
+              <p class="content-name">{{ formatCurrency(this.form.total_amount)}}đ</p>
             </div>
             <div class="content-detail" v-if="this.form.asset_type_id === 39">
               <p class="content-title">Diện tích (m<sup>2</sup>):</p>
-              <p class="content-name">{{this.form.room_details[0].area}}m<sup>2</sup></p>
+              <p class="content-name">{{ formatNumber(this.form.room_details[0].area) }}m<sup>2</sup></p>
             </div>
           </div>
           <div class="d-grid">
             <div class="content-detail">
               <p class="content-title">Tổng giá trị {{this.form.asset_type_id === 39? 'căn hộ' : 'tài sản'}} sau điều chỉnh (VND):</p>
-              <p class="content-name">{{ format(this.form.total_estimate_amount)}}đ </p>
+              <p class="content-name">{{ formatCurrency(this.form.total_estimate_amount)}}đ </p>
             </div>
             <div class="content-detail">
               <p class="content-title">Tỉ lệ điều chỉnh (%): </p>
-              <p class="content-name">{{ format(this.form.adjust_percent)}}% </p>
+              <p class="content-name">{{ formatCurrency(this.form.adjust_percent)}}% </p>
             </div>
             <div class="content-detail">
               <p class="content-title">Giá trị giảm/tăng (VND): </p>
-              <p class="content-name">{{ format(this.form.adjust_amount)}}đ </p>
+              <p class="content-name">{{ formatCurrency(this.form.adjust_amount)}}đ </p>
             </div>
           </div>
           <div class="d-grid" v-if="this.form.asset_type_id === 39">
             <div class="content-detail">
               <p class="content-title">Đơn giá bình quân căn hộ (đ/m<sup>2</sup>):</p>
-              <p class="content-name">{{ format(this.form.room_details[0].unit_price)}}đ</p>
+              <p class="content-name">{{ formatCurrency(this.form.room_details[0].unit_price)}}đ</p>
             </div>
           </div>
           <div class="d-grid" v-if="this.form.asset_type_id !== 39">
             <div class="content-detail">
               <p class="content-title">Giá trị đất thuần còn lại (VND): </p>
-              <p class="content-name">{{ format(this.form.total_raw_amount)}}đ </p>
+              <p class="content-name">{{ formatCurrency(this.form.total_raw_amount)}}đ </p>
             </div>
             <div class="content-detail">
               <p class="content-title">Tổng giá trị công trình xây dựng (VND):</p>
-              <p class="content-name">{{format(this.form.total_construction_amount)}}đ</p>
+              <p class="content-name">{{formatCurrency(this.form.total_construction_amount)}}đ</p>
             </div>
             <div class="content-detail">
               <p class="content-title">Tổng giá trị tài sản khác (VND):</p>
-              <p class="content-name">{{format(this.form.total_order_amount)}}đ</p>
+              <p class="content-name">{{formatCurrency(this.form.total_order_amount)}}đ</p>
             </div>
           </div>
           <hr>
           <div v-if="this.form.asset_type_id !== 39">
-            <div>
-              <h3 class="title">Chi phí chuyển đổi mục đích sử dụng đất</h3>
-            </div>
-            <div class="d-grid">
-              <div class="content-detail">
-                <p class="content-title">Tổng chi phí chuyển mục đích sử dụng đất (VND):</p>
-                <p class="content-name">{{format(this.form.convert_fee_total)}}đ</p>
-              </div>
-            </div>
-            <h3 class="title mb-2" v-if="this.form.convert_fee_total > 0">Trong đó:</h3>
-            <div class="d-grid">
-              <div v-for="property in form.properties" :key="property.id">
-                <div class="content-detail" v-for="property_detail in property.property_detail" :key="property_detail.id" v-if="property_detail.convert_fee > 0">
-                  <p class="content-title" v-if="property_detail.land_type_purpose_data !== null">Chi phí chuyển mục đích sử dụng từ {{ property_detail.land_type_purpose_data.description }} sang {{form.max_value_description}} (VND)</p>
-                  <p class="content-name">{{format(property_detail.convert_fee)}}đ</p>
-                </div>
-              </div>
-            </div>
-            <hr>
+						<div v-if="this.form.convert_fee_total > 0">
+							<div>
+								<h3 class="title">Chi phí chuyển đổi mục đích sử dụng đất</h3>
+							</div>
+							<div class="d-grid">
+								<div class="content-detail">
+									<p class="content-title">Tổng chi phí chuyển mục đích sử dụng đất (VND):</p>
+									<p class="content-name">{{formatCurrency(this.form.convert_fee_total)}}đ</p>
+								</div>
+							</div>
+							<h3 class="title mb-2" v-if="this.form.convert_fee_total > 0">Trong đó:</h3>
+							<div class="d-grid">
+								<div v-for="property in form.properties" :key="property.id">
+									<div class="content-detail" v-for="property_detail in property.property_detail" :key="property_detail.id" v-if="property_detail.convert_fee > 0">
+										<p class="content-title" v-if="property_detail.land_type_purpose_data !== null">Chi phí chuyển mục đích sử dụng từ {{ property_detail.land_type_purpose_data.description }} sang {{form.max_value_description}} (VND)</p>
+										<p class="content-name">{{formatCurrency(property_detail.convert_fee)}}đ</p>
+									</div>
+								</div>
+							</div>
+							<hr>
+						</div>
             <h3 class="title">Giá Trị QSDĐ và đơn giá đất chi tiết</h3>
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Giá trị QSDĐ ước tính (VND):</p>
-                <p class="content-name">{{format(this.form.total_land_unit_price)}}đ</p>
+                <p class="content-name">{{formatCurrency(this.form.total_land_unit_price)}}đ</p>
               </div>
             </div>
             <h3 class="title mb-2">Trong đó:</h3>
             <div class="d-grid">
               <div class="content-detail" v-for="property_detail in sortedArray" :key="property_detail.id">
                 <p class="content-title" >Đơn giá đất {{ property_detail.land_type_purpose_data !== undefined && property_detail.land_type_purpose_data !== null ? property_detail.land_type_purpose_data.description : ''}} (VND)</p>
-                <p class="content-name">{{format(property_detail.price_land)}}đ</p>
+                <p class="content-name">{{formatCurrency(property_detail.price_land)}}đ</p>
               </div>
             </div>
           </div>
@@ -768,9 +770,24 @@ export default {
 		formatDate (value) {
 			return moment(String(value)).format('DD/MM/YYYY')
 		},
-		format (value) {
-			let num = (value / 1).toFixed(0).replace(',', '.')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		formatCurrency (value) {
+			if (value) {
+				let num = (value / 1).toFixed(0).replace('.', ',')
+				return num.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return value
+		},
+		formatNumber (num) {
+			// convert number to dot formatNumber
+			if (num) {
+				let formatedNum = num.toString().replace('.', ',')
+				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return num
 		},
 		openModalImage (data) {
 			this.openImage = true

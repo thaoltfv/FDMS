@@ -32,7 +32,7 @@
           <img class="img" src="../../../assets/icons/ic_search.svg" alt="search">
         </button>
       </div>
-      <button style="height: 2.295rem;" class="btn btn-white btn-search text-nowrap index-screen-button"> <img src="../../../assets/icons/ic_search.svg" style="margin-right: 8px" alt="search">Tìm kiếm</button>
+      <!-- <button style="height: 2.295rem;" class="btn btn-white btn-search text-nowrap index-screen-button"> <img src="../../../assets/icons/ic_search.svg" style="margin-right: 8px" alt="search">Tìm kiếm</button> -->
     </div>
   </form>
 </template>
@@ -94,8 +94,6 @@ export default {
 			try {
 				const resp = await District.getProvince()
 				this.provinces = [...resp.data]
-				this.filter.province_id = 45
-				await this.getDistrictsByProvinceId(this.filter.province_id)
 			} catch (err) {
 				this.isSubmit = false
 				throw err
@@ -217,8 +215,8 @@ export default {
     }
   }
 }
-.btn-img {
-  right: 5px;
-  top: 45px;
-}
+// .btn-img {
+//   right: 5px;
+//   top: 45px;
+// }
 </style>

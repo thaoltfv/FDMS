@@ -21,8 +21,9 @@
         :class="{'inputError': errors[0] || errorMessage, 'input_center': text_center}"
         type="text"
         :disabled="disabled"
-        v-model="valueCurrency"
+        v-model="valueMutator"
         @input="debounceInput"
+				@change="onChange"
       />
       <span v-if="sufix" class="suffix color_content">đ</span>
       <!--Message Error-->
@@ -35,10 +36,10 @@
 import { debounce } from 'lodash-es'
 
 export default {
-	name: 'InputArea',
+	name: 'InputCurrency',
 	data () {
 		return {
-			valueCurrency: this.value ? this.formatNumber(this.value) : this.defaultValue,
+			valueMutator: this.value || this.value === 0 ? this.formatNumber(this.value) : 0,
 			errorMessage: ''
 		}
 	},
@@ -120,17 +121,16 @@ export default {
 		},
 		defaultValue: {
 			type: [String, Number],
-			default: ''
+			default: '0'
 		},
 		formatter: {
 			type: Function
 		}
 	},
-
 	methods: {
 		debounceInput: debounce(function (e) {
 			this.onChange(e)
-		}, 500),
+		}, 400),
 		onChange (event) {
 			if (event.target.value) {
 				// if (event.target.value.match(/^(\d)+(\.\d+)*?$/g)) {
@@ -139,7 +139,7 @@ export default {
 					let formatValue = this.supportClientAction(valueChecked)
 					if (this.validateInput(formatValue)) {
 						this.$emit('change', +formatValue)
-						this.valueCurrency = formatValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+						this.valueMutator = formatValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 						this.errorMessage = ''
 					}
 				} else {
@@ -151,9 +151,11 @@ export default {
 			}
 		},
 		supportClientAction (value) {
-			// Remove first character is zero
-			// let formatValue = value.replace(/^0*/g, '')
 			let formatValue = value
+			// Remove first character is zero
+			if (value.match(/(^0+)([\d])/g)) {
+				formatValue = value.replace(/(^0+)([\d])/g, '$2')
+			}
 			if (value.includes(' ')) {
 				formatValue = value.replace(/\s*/g, '')
 			} else if (value.includes('.')) {
