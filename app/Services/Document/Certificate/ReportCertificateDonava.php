@@ -5,22 +5,17 @@ use App\Services\CommonService;
 
 class ReportCertificateDonava extends ReportCertificate
 {
-    protected $styleNationalSection = [
-        'footerHeight' => 300,
-        'marginTop' => 1080,
-        'marginBottom' => 600,
-        'marginRight' => 700,
-        'marginLeft' => 900,
-        'breakType' => 'continuous'
-    ];
-    protected $styleSection = [
-        'footerHeight' => 300,
-        'marginTop' => 1151,
-        'marginBottom' => 1151,
-        'marginRight' => 1151,
-        'marginLeft' => 1729,
-        'breakType' => 'continuous'
-    ];
+
+    protected $marginTopNational = 1080;
+    protected $marginBottomNational = 600;
+    protected $marginRightNational = 700;
+    protected $marginLeftNational = 900;
+
+    protected $marginTopContent = 1151;
+    protected $marginBottomContent = 1151;
+    protected $marginRightContent = 1151;
+    protected $marginLeftContent = 1729;
+
     protected function content1($section, $certificate)
     {
         $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0 , [], 'bullets', $this->indentFistLine);

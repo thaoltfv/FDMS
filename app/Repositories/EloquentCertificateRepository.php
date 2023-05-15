@@ -154,16 +154,13 @@ use App\Models\VerhicleCertificateBrief;
 use App\Models\VerhicleCertificateBriefLaw;
 use App\Models\VerhicleCertificateBriefLawInfo;
 use App\Models\VerhicleCertificateBriefPrice;
+use App\Models\Views\ViewSelectedCertificateAsset;
 use App\Notifications\ActivityLog;
 use App\Repositories\EloquentBuildingPriceRepository;
 use App\Services\AppraiseVersionService;
 use App\Services\CommonService;
 use Carbon\Carbon;
-use Eloquent;
 use Illuminate\Support\Arr;
-use Notification;
-use PHP_CodeSniffer\Standards\Squiz\Sniffs\ControlStructures\ForEachLoopDeclarationSniff;
-use phpDocumentor\Reflection\Types\Boolean;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -2476,8 +2473,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     break;
                 case '!':
                     $result = $result->where(function ($q) use ($filterData) {
-                        $q->where('certificate_num', 'ILIKE', '%' . $filterData . '%')
-                            ->orWhere('document_num', 'ILIKE', '%' . $filterData . '%');
+                        $q->where('certificate_num', $filterData)
+                            ->orWhere('document_num', $filterData);
                     });
                     break;
                 case '@':
@@ -2746,8 +2743,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     break;
                 case '!':
                     $result = $result->where(function ($q) use ($filterData) {
-                        $q->where('certificate_num', 'ILIKE', '%' . $filterData . '%')
-                            ->orWhere('document_num', 'ILIKE', '%' . $filterData . '%');
+                        $q->where('certificate_num', $filterData)
+                            ->orWhere('document_num', $filterData);
                     });
                     break;
                 case '@':
@@ -5109,7 +5106,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         then 'Hoàn thành'
                     else 'Huỷ'
                 end as status_text"),
-            // Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
         ];
         $with = [
@@ -5151,6 +5147,52 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
         $result = $result->get();
 
+        return $result;
+    }
+
+    public function exportSelectedCertificateAssets()
+    {
+        $status = request()->get('status');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+
+        $isExportLandDetail = request()->get('land_detail') ?? true;
+        $isExportLandZoningDetail = request()->get('land_detail_zoning') ?? true;
+        $isExportTangibleDetail = request()->get('tangible_detail') ?? true;
+        $with = [
+            // 'firstTangible',
+            // 'propertyDetail',
+            'firstTangible:id,appraise_id,building_type_id,total_construction_base,remaining_quality,total_desicion_average',
+            'propertyDetail:id,appraise_property_id,land_type_purpose_id,position_type_id,total_area,planning_area,is_zoning',
+        ];
+        $query = ViewSelectedCertificateAsset::query();
+
+        if (isset($status)){
+            $status = explode(',', $status);
+            $query=$query->whereIn('status',$status);
+        }
+
+        if (isset($fromDate)){
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
+            $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
+        }
+
+        if (isset($toDate)){
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
+            $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
+        }
+        // $result = $query->with($with)->limit(5)->get();
+        $result = $query->with($with)->get();
+        if ($isExportLandDetail) {
+            $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
+        }
+        if ($isExportLandZoningDetail) {
+            $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST));
+        }
+        if ($isExportTangibleDetail) {
+            $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
+        }
+        // dd($result->toArray());
         return $result;
     }
 

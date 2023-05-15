@@ -640,11 +640,9 @@ class Appraise extends Model
             ];
         $result = Appraise::with($with)
         ->select($select)
-        ->where(['id'=>$this->id])
+        ->where('id', $this->id)
         ->whereNotNull('appraise_approach_id')
-        ->get()
         ->first();
-
         // add default value
         if(! isset($result)){
             $result = Appraise::where('id', '=', $this->id)->get('id')->first();
@@ -669,18 +667,18 @@ class Appraise extends Model
                 ->select($select)
                 ->where(['appraise_id'=>$this->id])
                 ->where('slug',['thong_nhat_muc_gia_chi_dan'])
-                ->get()->first();
+                ->first();
 
             $result2 = AppraiseAppraisalMethods::with($with)
                 ->select($select)
                 ->where(['appraise_id'=>$this->id])
                 ->where('slug',['tinh_gia_dat_hon_hop_con_lai'])
-                ->get()->first();
+                ->first();
             $result3 = AppraiseAppraisalMethods::with($with)
                 ->select($select)
                 ->where(['appraise_id'=>$this->id])
                 ->where('slug',['tinh_gia_dat_vi_pham_quy_hoach'])
-                ->get()->first();
+                ->first();
 
             $result = array_merge(['thong_nhat_muc_gia_chi_dan' => $result1],
                             ['tinh_gia_dat_hon_hop_con_lai' => $result2],
@@ -807,8 +805,10 @@ class Appraise extends Model
         return floatval($this->properties()->sum('appraise_land_sum_area')) ;
     }
 
-    public function getAppraiseApproachIdAttribute()
+    public function getAppraiseApproachIdAttribute($value)
     {
+        if( isset($value))
+            return $value;
         $select = ['id'];
         $where = [
             'is_defaults' => true,
@@ -817,8 +817,10 @@ class Appraise extends Model
 		$item = AppraiseOtherInformation::where($where)->select($select)->first();
 		return $item->id;
     }
-    public function getAppraisePrincipleIdAttribute()
+    public function getAppraisePrincipleIdAttribute($value)
     {
+        if( isset($value))
+            return $value;
         $select = ['id'];
         $where = [
             'is_defaults' => true,
@@ -827,8 +829,10 @@ class Appraise extends Model
 		$item = AppraiseOtherInformation::where($where)->select($select)->first();
 		return $item->id;
     }
-    public function getAppraiseMethodUsedIdAttribute()
+    public function getAppraiseMethodUsedIdAttribute($value)
     {
+        if( isset($value))
+            return $value;
         $select = ['id'];
         $where = [
             'is_defaults' => true,
@@ -837,8 +841,10 @@ class Appraise extends Model
 		$item = AppraiseOtherInformation::where($where)->select($select)->first();
 		return $item->id;
     }
-    public function getAppraiseBasisPropertyIdAttribute()
+    public function getAppraiseBasisPropertyIdAttribute($value)
     {
+        if( isset($value))
+            return $value;
         $select = ['id'];
         $where = [
             'is_defaults' => true,

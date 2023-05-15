@@ -49,6 +49,8 @@ class AssetReport
         $tableBasicStyle = array(
             'borderSize' => 'none',
             'cellMargin'  => Converter::inchToTwip(0),
+            'width' => 100 * 50,
+            'unit' => 'pct',
         );
 
         $cantSplit = ['cantSplit' => true];
@@ -77,6 +79,7 @@ class AssetReport
         }
 
         $currentAsset = 1;
+        $objects = $objects->reverse();
         foreach ($objects as $object) {
             if ($currentAsset > 1) {
                 $section->addPageBreak();
@@ -89,14 +92,14 @@ class AssetReport
             $currentAsset += 1;
             $count = 0;
             $coordinates = explode(',', $object->coordinates);
-            $table = $section->addTable('headerTable');
+            $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
 
-            $table->addCell(Converter::inchToTwip(3.6))->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
+            $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
-                $table->addCell(Converter::inchToTwip(3.8))->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
+                $table->addCell(5000)->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
             } else {
-                $table->addCell(Converter::inchToTwip(3.8))->addText('Phiếu số: TSS_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
+                $table->addCell(5000)->addText('Phiếu số: TSS_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
 
             }
             $section->addText('PHIẾU THU THẬP THÔNG TIN VỀ TÀI SẢN SO SÁNH ', ['bold' => true, 'size' => 13], ['align' => JcTable::CENTER]);
@@ -132,7 +135,7 @@ class AssetReport
 
             $textRun = $section->addTextRun();
             $textRun->addText("- Ghi chú: ");
-            $textRun->addText(isset($object->note) ? $this->mb_ucfirst(mb_strtolower($object->note)) : 'Không có.', ['bold' => true]);
+            $textRun->addText(isset($object->note) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($object->note))) : 'Không có.', ['bold' => true]);
 
 
             $table = $section->addTable('docTable');
@@ -484,24 +487,25 @@ class AssetReport
                 $textRun->addText('Không có');
             }
             $section->addTextBreak(1);
+            $cellWidth = 5000;
             $table3 = $section->addTable($tableBasicStyle);
             $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
-            $table3->addCell(Converter::inchToTwip(4))->addText("", null, ['keepNext' => true]);
-            $cell2 = $table3->addCell(Converter::inchToTwip(4));
+            $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);
+            $cell2 = $table3->addCell($cellWidth);
             $cell2->addText('Ngày ' . date('d') . ' tháng ' . date('m') . ' năm ' . date('Y'), ['italic' => true], ['align' => 'center', 'keepNext' => true]);
             $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
-            $cell3 = $table3->addCell(Converter::inchToTwip(4));
+            $cell3 = $table3->addCell($cellWidth);
             $cell3->addText("Chuyên viên thẩm định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-            $cell4 = $table3->addCell(Converter::inchToTwip(4));
+            $cell4 = $table3->addCell($cellWidth);
             $cell4->addText("Thẩm định viên", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
             if (!empty($certificate)) {
                 $table3->addRow(Converter::inchToTwip(1.5), $cantSplit);
-                $table3->addCell(Converter::inchToTwip(4))->addText("", null, ['keepNext' => true]);
-                $table3->addCell(Converter::inchToTwip(4))->addText("", null, ['keepNext' => true]);;
+                $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);
+                $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);;
                 $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
-                $cell5 = $table3->addCell(Converter::inchToTwip(4));
+                $cell5 = $table3->addCell($cellWidth);
                 $cell5->addText($certificate->appraiserPerform->name ?? '', ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-                $cell6 = $table3->addCell(Converter::inchToTwip(4));
+                $cell6 = $table3->addCell($cellWidth);
                 $cell6->addText($certificate->appraiser->name ?? '', ['bold' => true], ['align' => 'center', 'keepNext' => true]);
             }
         }
@@ -535,7 +539,7 @@ class AssetReport
         if ($format =='docx'){
             $data['url'] = Storage::disk('public')->url($path . $fileName .'.docx');
         }else{
-            shell_exec('libreoffice --headless --convert-to '. $format . ' ' . storage_path('app/public/'. $path. $fileName .'.docx'));
+            shell_exec('libreoffice --headless --convert-to '. $format . ' ' . storage_path('app/public/'. $path. $fileName .'.docx') . ' --outdir ' . storage_path('app/public/'. $path));
 
             $data['url'] = Storage::disk('public')->url($path . $fileName .'.' . $format);
         }

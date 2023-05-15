@@ -407,6 +407,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('certification_brief/certificate-update-appraisers/{id}', [CertificateBriefController::class, 'updateAppraisersTeam']);
     Route::get('certification_brief/comparison-appraise', [CertificateBriefController::class, 'getComparisonAppraise']);
     Route::get('certification_brief/brief-export', [CertificateBriefController::class, 'exportCertificateBriefs']);
+    Route::get('certification_brief/brief-customize-export', [CertificateBriefController::class, 'exportCustomizeCertificateBriefs']);
 
     Route::post('certificate/sale-document/upload/{id}', [CertificateController::class, 'saleDocumentUpload']);
     Route::get('/DistrictAll', [DistrictController::class, 'findAllByProvince']);
@@ -525,6 +526,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certification_brief/asset-version', [CertificateBriefController::class, 'getVersionAppraises']);
     Route::get('certification_brief/get-status/{id}', [CertificateBriefController::class, 'getCertificateStatus']);
 
+    Route::post('real_estate/status/{id}', [RealEstateController::class, 'updateStatus']);
     Route::post('real_estate/additional-data/{id}', [RealEstateController::class, 'updateAditionalData']);
     Route::get('real_estate/printPL1/{id}', [RealEstateController::class, 'printPL1']);
     Route::get('real_estate/printPL2/{id}', [RealEstateController::class, 'printPL2']);

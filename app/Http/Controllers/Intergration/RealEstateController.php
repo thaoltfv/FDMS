@@ -197,4 +197,21 @@ class RealEstateController extends Controller
             return $this->respondWithErrorData( $data);
         }
     }
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $result = $this->realEstateRep->updateStatus($request->toArray(), $id);
+            if(is_string($result)) {
+                $data = ['message' => $result];
+                return $this->respondWithErrorData($data);
+            } else {
+                return $this->respondWithCustomData($result);
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }

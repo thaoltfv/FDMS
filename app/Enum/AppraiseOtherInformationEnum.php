@@ -148,7 +148,7 @@ class AppraiseOtherInformationEnum
 				"id" => 403,
 				"name" => "Theo bình quân",
 				"slug" => "trung-binh-cong",
-				"description" => "Trung bình cộnng",
+				"description" => "Trung bình cộng",
 				"type" => "XAC_DINH_CHAT_LUONG_CON_LAI",
 				"created_at" => "2022-12-20T10:22:46.000000Z",
 				"updated_at" => "2022-12-20T15:27:53.000000Z",
@@ -169,7 +169,6 @@ class AppraiseOtherInformationEnum
 				"deleted_at" => null,
 				"is_defaults" => true,
                 "acronym" => array("BDS"),
-				
             ],
 			[
 				"id" => 502,

@@ -1103,22 +1103,44 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     ]
                 ];
             }
+            // if (!empty($year)) {
+            //     $array['bool']['must'][] = [
+            //         'range' => [
+            //             'public_date' => [
+            //                 'gte' => '01-01-' . $year,
+            //                 'lte' => '31-12-' . $year,
+            //                 'format' => 'dd-MM-yyyy||yyyy',
+            //             ]
+            //         ]
+            //     ];
+            // } else {
+            //     $array['bool']['must'][] = [
+            //         'range' => [
+            //             'public_date' => [
+            //                 'gte' => now()->addMonths(-24)->format('d-m-Y'),
+            //                 'lte' => now()->format('d-m-Y'),
+            //                 'format' => 'dd-MM-yyyy||yyyy',
+            //             ]
+            //         ]
+            //     ];
+            // }
+
             if (!empty($year)) {
+                $year = Carbon::parse($year)->format('d-m-Y');
                 $array['bool']['must'][] = [
                     'range' => [
                         'public_date' => [
-                            'gte' => '01-01-' . $year,
-                            'lte' => '31-12-' . $year,
+                            'gte' => $year,
                             'format' => 'dd-MM-yyyy||yyyy',
                         ]
                     ]
                 ];
             } else {
+                $year = now()->year;
                 $array['bool']['must'][] = [
                     'range' => [
                         'public_date' => [
-                            'gte' => now()->addMonths(-24)->format('d-m-Y'),
-                            'lte' => now()->format('d-m-Y'),
+                            'gte' => now()->addMonths(-12)->format('d-m-Y'),
                             'format' => 'dd-MM-yyyy||yyyy',
                         ]
                     ]
@@ -1168,13 +1190,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             }
 
             //remove TSC
-            if (empty($year)) {
-                $array['bool']['must_not'][] = [
-                    'match' => [
-                        'migrate_status' => "TSC"
-                    ]
-                ];
-            }
+            $array['bool']['must_not'][] = [
+                'match' => [
+                    'migrate_status' => "TSC"
+                ]
+            ];
 
             if (!empty($sort)) {
                 if ($sort == TRANSACTION_TYPE_SORT) {

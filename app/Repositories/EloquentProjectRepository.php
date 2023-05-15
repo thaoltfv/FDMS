@@ -88,6 +88,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 $blockObjs = $objects['block'];
                 // unset($objects['block']);
                 $objects['status'] = true;
+                $objects['rank'] = explode(',', $objects['rank']);
                 $project = new Project($objects);
                 $dataProj = $this->model->query()->create($project->attributesToArray());
                 if (isset($blockObjs)) {
@@ -96,21 +97,26 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                         $block['status'] = true;
                         $blockAtt = new Block($block);
                         $dataBlock = Block::query()->create($blockAtt->attributesToArray());
-                        if (isset($block['floor'])) {
+                        if (isset($block['floor']) && count($block['floor']) > 0) {
                             foreach ($block['floor'] as $floor) {
                                 $floor['block_id'] = $dataBlock->id;
                                 $floor['status'] = true;
                                 $floorAtt = new Floor($floor);
-                                $dataFloor = Floor::query()->create($floorAtt->attributesToArray());
-                                if (isset($floor['apartment'])) {
-                                    foreach ($floor['apartment'] as $apartment) {
-                                        $apartment['floor_id'] = $dataFloor->id;
-                                        $apartment['status'] = true;
-                                        $apartmentAtt = new Apartment($apartment);
-                                        Apartment::query()->create($apartmentAtt->attributesToArray());
-                                    }
-                                }
+                                Floor::query()->create($floorAtt->attributesToArray());
                             }
+                        } else {
+                            $startFloor = intval($block['first_floor']);
+                            $endFloor = intval($block['last_floor']);
+
+                            $floorData = [];
+                            for ($i=$startFloor; $i<=$endFloor; $i++) {
+                                $floorData[] = [
+                                    'block_id' => $dataBlock->id,
+                                    'status' => true,
+                                    'name' => $i
+                                ];
+                            }
+                            Floor::insert($floorData);
                         }
                     }
                 }
@@ -165,8 +171,9 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 $result = [];
                 DB::beginTransaction();
                 $blockObjs = $objects['block'];
+                $objects['rank'] = explode(',', $objects['rank']);
                 $projectAtt = new Project($objects);
-                $this->model->query()->where('id', $id)->update($projectAtt->attributesToArray());
+                $this->model->find($id)->update($projectAtt->attributesToArray());
                 if (isset($blockObjs)) {
                     foreach ($blockObjs as $block) {
                         $block['project_id'] = $id;
@@ -177,7 +184,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                             $blockCheck = ['project_id' => $id, 'name' => $blockAtt->name];
 
                         $dataBlock = Block::query()->updateOrCreate($blockCheck, $blockAtt->attributesToArray());
-                        if (isset($block['floor'])) {
+                        if (isset($block['floor']) && count($block['floor']) > 0) {
                             foreach ($block['floor'] as $floor) {
                                 $floor['block_id'] = $floor['block_id']??$dataBlock->id;
                                 $floorAtt = new Floor($floor);
@@ -186,20 +193,21 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                                 else
                                     $floorCheck = ['block_id' => $id, 'name' => $floorAtt->name];
 
-                                $dataFloor = Floor::query()->updateOrCreate($floorCheck, $floorAtt->attributesToArray());
-                                if (isset($floor['apartment'])) {
-                                    foreach ($floor['apartment'] as $apartment) {
-                                        $apartment['floor_id'] = $apartment['floor_id']??$dataFloor->id;
-                                        $apartmentAtt = new Apartment($apartment);
-                                        if(isset($apartment['id']))
-                                            $apartmentCheck = ['id' => $apartment['id']];
-                                        else
-                                            $apartmentCheck = ['floor_id' => $id, 'name' => $apartmentAtt->name];
-
-                                        Apartment::query()->updateOrCreate($apartmentCheck, $apartmentAtt->attributesToArray());
-                                    }
-                                }
+                                Floor::query()->updateOrCreate($floorCheck, $floorAtt->attributesToArray());
                             }
+                        }  else {
+                            $startFloor = intval($block['first_floor']);
+                            $endFloor = intval($block['last_floor']);
+
+                            $floorData = [];
+                            for ($i=$startFloor; $i<=$endFloor; $i++) {
+                                $floorData[] = [
+                                    'block_id' => $dataBlock->id,
+                                    'status' => true,
+                                    'name' => $i
+                                ];
+                            }
+                            Floor::insert($floorData);
                         }
                     }
                 }

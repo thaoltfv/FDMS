@@ -180,4 +180,55 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             return $data;
         }
     }
+
+    public function updateStatus(array $request, $id)
+    {
+        $dataUpdate = [];
+        if (isset($request['status'])) {
+            $dataUpdate = [
+                'status' => $request['status'] ?: '',
+            ];
+        } else {
+            return ['message' => "Vui lòng nhập thông tin trạng thái"];
+        }
+        try{
+            $realEstate = $this->model->find($id);
+            if ($realEstate && $realEstate->appraises) {
+                if ($realEstate->update($dataUpdate) && $realEstate->appraises->update($dataUpdate)) {
+                    $this->CreateActivityLog($realEstate->appraises, $dataUpdate, 'update_status', 'cập nhật trạng thái ' . mb_strtolower($realEstate->appraises->status_text));
+                    return $dataUpdate;
+                } else {
+                    return ['message' => ErrorMessage::SYSTEM_ERROR];
+                }
+            }
+            if ($realEstate && $realEstate->apartment) {
+                if ($realEstate->update($dataUpdate) && $realEstate->apartment->update($dataUpdate)) {
+                    $this->CreateActivityLog($realEstate->apartment, $dataUpdate, 'update_status', 'cập nhật trạng thái ' . mb_strtolower($realEstate->apartment->status_text));
+                    return $dataUpdate;
+                } else {
+                    return ['message' => ErrorMessage::SYSTEM_ERROR];
+                }
+            }
+        } catch(Exception $e){
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $e->getMessage()];
+            return $data;
+        }
+    }
+
+    public function CreateActivityLog($model, $request, $activity, $log, $note = '')
+    {
+        // if (is_object($model)) {
+            // $loga = $this->CustomizeLogMessage($model, $activity, $log);
+
+            // dd ($loga);
+            activity($activity)
+                ->by(CommonService::getUser())
+                ->on($model)
+                ->withProperties([
+                    'data' => [$request],
+                    'note' => $note
+                ])
+                ->log($log);
+        // }
+    }
 }

@@ -9,6 +9,7 @@ use Box\Spout\Writer\Common\Creator\Style\BorderBuilder;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use File;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -21,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 class ExportCertificateBriefs
 {
     use ResponseTrait;
-    public function exportAsset($data){
+    public function exportBrieft($data){
         // $data = CommonService::exportCertificateAssets();
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
         $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
@@ -173,29 +174,112 @@ class ExportCertificateBriefs
         return $data;
     }
 
-    public function exportBrieft($datas){
-        // $spread = new PhpSpreadsheet();
-        $data = array($datas);
-        // dd(json_encode(json_decode($datas,true)) );
-        $spreadsheet = new Spreadsheet();
-        $spreadsheet->setActiveSheetIndex(0)
-            ;
+    public function exportCustomizeBrieft($data, $selectedHeader = []) {
+        $selectedHeader = [
+            'basic_info',
+            'land_detail',
+            'land_detail_zoning',
+            'tangible_detail',
+        ];
+        $customizeHeader = [];
 
-        $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'comparison_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
-        if(!Storage::has($path)){
-            Storage::makeDirectory($path);
+        // Mapping basic header
+        // $mappingHeader = array_intersect_key($customizeHeader, array_flip($customizeHeader));
+
+        if (in_array('basic_info', $selectedHeader)) {
+            $customizeHeader = ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_COLUMN_LIST;
         }
-        $objWriter = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
-        $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
-        $fileName = 'HSTĐ' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        if (in_array('land_detail', $selectedHeader)) {
+            // Find the index of 'land_price' key in $customizeHeader array
+            $insertIndex = array_search('land_price', array_keys($customizeHeader));
 
-        $objWriter->save(storage_path('app/public/'. $path. '/'. $fileName ));
+            // Split $customizeHeader array into two parts at the found index
+            $part1 = array_slice($customizeHeader, 0, $insertIndex);
+            $part2 = array_slice($customizeHeader, $insertIndex);
+
+            // Merge the three arrays into a new array with $newColumns in the middle
+            $customizeHeader = array_merge($part1, ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST, $part2);
+        }
+        // Insert all items in ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST array without remove key into before key 'land_price' of $customizeHeader array
+
+        if (in_array('land_detail_zoning', $selectedHeader)) {
+            // Find the index of 'land_price' key in $customizeHeader array
+            $insertIndex = array_search('land_price', array_keys($customizeHeader));
+
+            // Split $customizeHeader array into two parts at the found index
+            $part1 = array_slice($customizeHeader, 0, $insertIndex);
+            $part2 = array_slice($customizeHeader, $insertIndex);
+
+            // Merge the three arrays into a new array with $newColumns in the middle
+            $customizeHeader = array_merge($part1, ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST, $part2);
+        }
+        if (in_array('tangible_detail', $selectedHeader)) {
+            // Find the index of 'land_price' key in $customizeHeader array
+            $insertIndex = array_search('tangible_price', array_keys($customizeHeader));
+
+            // Split $customizeHeader array into two parts at the found index
+            $part1 = array_slice($customizeHeader, 0, $insertIndex);
+            $part2 = array_slice($customizeHeader, $insertIndex);
+
+            // Merge the three arrays into a new array with $newColumns in the middle
+            $customizeHeader = array_merge($part1, ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST, $part2);
+        }
+
+        $mappingHeader = $customizeHeader;
+
+        // Processing data: rename key and append missing value for land, construction, others
+        $reducedData = $data->map(function ($item) use ($mappingHeader) {
+
+            // Check if 'land_detail' existed in $selectedHeader array
+            if (in_array('land_detail', $mappingHeader)) {
+                // Check if 'land_detail_zoning' existed in $selectedHeader array
+                if (in_array('land_detail_zoning', $mappingHeader)) {
+                }
+            }
+            // Rename the key
+            $reduceItem = [];
+            foreach ($mappingHeader as $key => $value) {
+                $reduceItem[$value] = $item[$key] ?? '';
+            }
+            unset($item);
+            return $reduceItem;
+        });
+
+        // Generate excel
+        $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+        $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        if(!File::exists(storage_path('app/public/'. $path))){
+            File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+        }
+        $downloadDate = $now->format('dmY');
+        $downloadTime = $now->format('Hi');
+        $fileName = 'HSTĐ' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $border = (new BorderBuilder())
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->setBorderRight(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->setBorderTop(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
+
+        $header_style = (new StyleBuilder())
+                            ->setFontName('Times New Roman')
+                            ->setFontBold()
+                            ->setBorder($border)
+                            ->build();
+
+        $rows_style = (new StyleBuilder())
+                        ->setFontName('Times New Roman')
+                        ->setFontSize(11)
+                        ->setBorder($border)
+                        ->build();
+        (new FastExcel($reducedData))
+            ->headerStyle($header_style)
+            ->rowsStyle($rows_style)
+            ->export(storage_path('app/public/'. $path. '/'. $fileName ));
+
         $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName);
+        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName );
         $data['file_name'] = $fileName;
         return $data;
-
     }
 }

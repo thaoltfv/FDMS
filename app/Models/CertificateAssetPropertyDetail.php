@@ -37,7 +37,7 @@ class CertificateAssetPropertyDetail extends Model
 
     public function landTypePurpose(): BelongsTo
     {
-        return $this->belongsTo(Dictionary::class,'land_type_purpose_id','id');
+        return $this->belongsTo(Dictionary::class,'land_type_purpose_id','id')->limit(1);
     }
 
     public function positionType(): BelongsTo

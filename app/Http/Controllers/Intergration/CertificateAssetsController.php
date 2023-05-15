@@ -28,6 +28,7 @@ class CertificateAssetsController extends Controller
     private array $permissionView =['VIEW_CERTIFICATE_ASSET'];
     private array $permissionAdd =['ADD_CERTIFICATE_ASSET'];
     private array $permissionEdit =['EDIT_CERTIFICATE_ASSET'];
+    private array $permissionExport =['EXPORT_CERTIFICATE_ASSET'];
 
     #region Contruct
     public function __construct(AppraiseRepository $appraiseRepository,
@@ -211,7 +212,6 @@ class CertificateAssetsController extends Controller
         $rules = [
                 'construction'=>'required|array',
                 'construction.*.building_type_id' => 'required|integer',
-                'construction.*.duration' => 'required|integer',
                 'construction.*.total_construction_area' => 'required|numeric|min:0',
                 'construction.*total_construction_base' => 'required|numeric|min:0',
                 'construction.*.remaining_quality' => 'required|numeric|min:0',
@@ -263,8 +263,8 @@ class CertificateAssetsController extends Controller
                 'law.*.certifying_agency' => 'required|string',
                 'law.*.content' => 'required|string',
                 'law.*.land_details' => 'nullable|required_unless:law.*.appraise_law_id,0|array',
-                'law.*.land_details.*.doc_no' => 'nullable|required_unless:law.*.appraise_law_id,0|integer',
-                'law.*.land_details.*.land_no' => 'nullable|required_unless:law.*.appraise_law_id,0|integer',
+                'law.*.land_details.*.doc_no' => 'nullable|required_unless:law.*.appraise_law_id,0',
+                'law.*.land_details.*.land_no' => 'nullable|required_unless:law.*.appraise_law_id,0',
                 ];
 
         $customAttributes = [
@@ -745,8 +745,8 @@ class CertificateAssetsController extends Controller
     #region Service
     public function exportCertificateAssets(Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionView)){
-            return $this->respondWithErrorData( ['message' => ErrorMessage::APPRAISE_CHECK_VIEW ,'exception' =>''], 403);
+        if(! CommonService::checkUserPermission($this->permissionExport)){
+            return $this->respondWithErrorData( ['message' => ErrorMessage::APPRAISE_CHECK_EXPORT ,'exception' =>''], 403);
         }
         $result = $this->appraiseRepository->exportCertificateAssets();
         if(isset($result['message']) && isset($result['exception']))

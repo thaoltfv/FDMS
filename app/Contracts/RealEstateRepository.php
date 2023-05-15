@@ -8,4 +8,6 @@ interface RealEstateRepository extends BaseRepository
     public function getReportData($id);
     public function getDataForShinhan($id);
     public function updateRealEstateAditionalData(array $realEstate, $id);
+    public function updateStatus(array $realEstate, $id);
+
 }

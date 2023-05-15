@@ -126,14 +126,14 @@ class CommonService
 	public static function roundViolationCompositeAssetPrice($asset, $number)
 	{
 		if (isset($asset->round_violation_composite) && ($asset->round_violation_composite <= 7 && $asset->round_violation_composite >= -7)) {
-            return self::roundPrice($number, $asset->round_violation_facility);
+            return self::roundPrice($number, $asset->round_violation_composite);
         }
 	}
 
 	public static function roundTotalAssetsPrice($asset, $number)
 	{
 		if (isset($asset->round_appraise_total) && ($asset->round_appraise_total <= 7 && $asset->round_appraise_total >= -7)) {
-            return self::roundPrice($number, $asset->round_violation_facility);
+            return self::roundPrice($number, $asset->round_appraise_total);
         }
 	}
 
@@ -392,7 +392,7 @@ class CommonService
 			$unitPrice = $tangibleAsset->total_desicion_average;
 		else
 			$unitPrice =  self::getTangibleAssetPriceV2($tangibleAsset);
-	return $unitPrice;
+	    return $unitPrice;
 	}
 	public static function getTangibleAssetPriceTotal($appraise) //tổng đơn giá nhà
 	{

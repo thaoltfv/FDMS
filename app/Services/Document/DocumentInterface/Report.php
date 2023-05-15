@@ -6,7 +6,6 @@ use App\Services\CommonService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpWord\Element\Header;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
@@ -18,13 +17,27 @@ class Report implements ReportInterface
     #region Style
     use ResponseTrait;
     //Format region
+    protected $marginTopNational = 1080;
+    protected $marginBottomNational = 600;
+    protected $marginRightNational = 800;
+    protected $marginLeftNational = 900;
+
+    protected $marginTopContent = 600;
+    protected $marginBottomContent = 600;
+    protected $marginRightContent = 1000;
+    protected $marginLeftContent = 1000;
+
     protected $tableBasicStyle = [
         'borderSize' => 'none',
         'cellMargin' => 0,
+        'width' => 100 * 50,
+        'unit' => 'pct',
     ];
     protected $styleTable = [
         'borderSize' => 1,
         'align' => JcTable::START,
+        'width' => 100 * 50,
+        'unit' => 'pct',
     ];
     protected $styleAlignStart = [
         'align' => JcTable::START
@@ -52,30 +65,8 @@ class Report implements ReportInterface
             'rule' => 'single',
         ],
     ];
-    protected $styleNationalSection = [
-        'footerHeight' => 300,
-        'marginTop' => 1080,
-        'marginBottom' => 600,
-        'marginRight' => 800,
-        'marginLeft' => 900,
-        'breakType' => 'continuous'
-    ];
-    // protected $styleSection = [
-    //     'footerHeight' => 300,
-    //     'marginTop' => 1151,
-    //     'marginBottom' => 1151,
-    //     'marginRight' => 1151,
-    //     'marginLeft' => 1729,
-    //     'breakType' => 'continuous'
-    // ];
-    protected $styleSection = [
-        'footerHeight' => 300,
-        'marginTop' => 600,
-        'marginBottom' => 600,
-        'marginRight' => 1000,
-        'marginLeft' => 1000,
-        'breakType' => 'continuous'
-    ];
+    protected $styleNationalSection = [];
+    protected $styleSection = [];
     protected $styleBold = ['bold' => true];
     protected $cellHCentered = array('align' => 'center');
     protected $cellVCentered = array('valign' => 'center');
@@ -86,7 +77,9 @@ class Report implements ReportInterface
     protected $cantSplit = ['cantSplit' => true];
     protected $indentFistLine = ['indentation' => ['firstLine' => 360]];
     protected $styleTableImage = [
-        'align' => JcTable::CENTER
+        'align' => JcTable::CENTER,
+        'width' => 100 * 50,
+        'unit' => 'pct',
     ];
     //Document property
     protected $acronym = '';
@@ -248,26 +241,42 @@ class Report implements ReportInterface
             $cell13 = $table1->addCell(Converter::inchToTwip(4), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
             $cell13->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], $this->styleAlignCenter);
-            $this->printFooter($section, $data);
+            $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
+            $indentRight = $this->marginRightContent - $this->marginRightNational;
+            $this->printFooter($section, $data, $indentLeft, $indentRight);
         }
     }
     public function printContent(Section $section, $data)
     {
 
     }
-    public function printFooter(Section $section, $data)
+    public function printFooter(Section $section, $data, $indentLeft = 0, $indentRight = 0)
     {
         $footer = $section->addFooter();
         $strFooter = $this->getFooterString($data);
         $table = $footer->addTable();
         $table->addRow();
-        $cell = $table->addCell(4500);
-        $textrun = $cell->addTextRun();
-        $textrun->addText($strFooter, array('size' => 8), array('align' => 'left'));
-        $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right'));
+        $table->addCell(4500)->addText($strFooter, array('size' => 8), array('align' => 'left', 'indentation' => array('left' => $indentLeft)));
+        $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right',  'indentation' => array('right' => $indentRight)));
     }
     public function setFormat(PhpWord $phpWord)
     {
+        $this->styleNationalSection = [
+            'footerHeight' => 300,
+            'marginTop' => $this->marginTopNational,
+            'marginBottom' => $this->marginBottomNational,
+            'marginRight' => $this->marginRightNational,
+            'marginLeft' => $this->marginLeftNational,
+            'breakType' => 'continuous'
+        ];
+        $this->styleSection = [
+            'footerHeight' => 300,
+            'marginTop' => $this->marginTopContent,
+            'marginBottom' => $this->marginBottomContent,
+            'marginRight' => $this->marginRightContent,
+            'marginLeft' => $this->marginLeftContent,
+            'breakType' => 'continuous'
+        ];
         $phpWord->addNumberingStyle(
             'headingNumbering',
             array(
@@ -356,7 +365,7 @@ class Report implements ReportInterface
     public function getReportPath()
     {
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'comparison_brief/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
         return $path;
     }
     public function getFooterString($data)

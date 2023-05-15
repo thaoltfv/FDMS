@@ -189,8 +189,8 @@ class CertificateAssetController extends Controller
     public function printPL1($id): JsonResponse
     {
         try {
-            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-            $documentType = $certificate->document_type;
+            // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            // $documentType = $certificate->document_type;
             // if (!empty($documentType) && (in_array('DCN', $documentType) || in_array('DT', $documentType)) ) {
             //     $format = 'docx';
             //     $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
@@ -214,10 +214,10 @@ class CertificateAssetController extends Controller
             //         $appraises = $this->certificateAssetRepository->findByIds(json_encode($ids));
             //     }
             //     $result = $this->respondWithCustomData((new PhuLuc1())->generateDocx($certificate, $company, $appraises, $format));
-    
+
             // } else {
-                
-                $service = 'App\\Services\\Document\\Appendix1\\ReportAppendix1'. $this->envDocument; 
+                $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+                $service = 'App\\Services\\Document\\Appendix1\\ReportAppendix1'. $this->envDocument;
                 $format = '.docx';
                 $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
                 $report = new $service;
@@ -262,9 +262,9 @@ class CertificateAssetController extends Controller
             // $result = $this->respondWithCustomData((new PhuLuc2())->generateDocx($certificate, $company, $appraises, $format, $this->buildingPriceRepository));
             // $edited = $this->certificateRepository->findById($id)->first();
             // activity-log download bảng điều chỉnh CTXD
-            
+
             $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-            $service = 'App\\Services\\Document\\Appendix2\\ReportAppendix2'. $this->envDocument; 
+            $service = 'App\\Services\\Document\\Appendix2\\ReportAppendix2'. $this->envDocument;
             $format = '.docx';
             $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
             $report = new $service;
@@ -284,7 +284,7 @@ class CertificateAssetController extends Controller
     public function printPhuLucHinhAnh($id): JsonResponse
     {
         try {
-            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
             // $documentType = $certificate->document_type;
             // if (!empty($documentType) && (in_array('DCN', $documentType) || in_array('DT', $documentType)) ) {
             //     $format = 'docx';
@@ -316,7 +316,7 @@ class CertificateAssetController extends Controller
                 $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
                 $report = new $service;
                 $documentConfig = DocumentDictionary::query()->get();
-                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));    
+                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
             // }
             // activity-log download hình ảnh hiện trạng
             $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống hình ảnh hiện trạng');
@@ -331,8 +331,8 @@ class CertificateAssetController extends Controller
     public function printChungThu(Request $request, $id): JsonResponse
     {
         try {
-            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-            $documentType = $certificate->document_type;
+            // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            // $documentType = $certificate->document_type;
             // if (!empty($documentType) && (in_array('DCN', $documentType) || in_array('DT', $documentType)) ) {
 
             //     $format = 'docx';
@@ -356,7 +356,7 @@ class CertificateAssetController extends Controller
                 $format = '.docx';
                 $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
                 $documentConfig = DocumentDictionary::query()->get();
-                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));    
+                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
             // }
             // activity-log download chứng thư thẩm định
             $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống chứng thư thẩm định');
@@ -372,8 +372,8 @@ class CertificateAssetController extends Controller
     public function printBaoCao(Request $request, $id): JsonResponse
     {
         try {
-            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-            $documentType = $certificate->document_type;
+            // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            // $documentType = $certificate->document_type;
             // if (!empty($documentType) && (in_array('DCN', $documentType) || in_array('DT', $documentType)) ) {
             //     $format = 'docx';
             //     $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();

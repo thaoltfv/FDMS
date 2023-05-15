@@ -30,6 +30,7 @@ class CertificateAssetLaw extends Model
         'certifying_agency',
         'start_date',
         'origin_of_use',
+        'duration',
         'doc_no',
         'land_no',
         'content',

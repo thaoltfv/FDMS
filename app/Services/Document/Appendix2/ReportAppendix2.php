@@ -90,13 +90,14 @@ class ReportAppendix2 extends Report
         // $textRun->addText(', ' . ($appraise->district ? $appraise->district->name : ''), ['size' => 13, 'bold' => false]);
         // $textRun->addText(', ' . ($appraise->province ? $appraise->province->name : ''), ['size' => 13, 'bold' => false]);
 
-        $this->printOriginalPriceDescription($section);
-        $this->printBuildingComapanyInfo($section, $tangibleAssets);
         $dgxdSlug = 'dg-uoc-tinh';
         $appraiseDgxd = $appraise->appraisal_dgxd;
         if (!empty($appraiseDgxd)) {
             $dgxdSlug = $appraiseDgxd->slug_value;
         }
+
+        $this->printOriginalPriceDescription($section, $dgxdSlug);
+        $this->printBuildingComapanyInfo($section, $tangibleAssets, $dgxdSlug);
         $this->printBuildingPriceChoosed($section, $dgxdSlug);
         $this->printRemainQualityDescription($section);
         $remainQualitySlug = 'trung-binh-cong';
@@ -129,22 +130,21 @@ class ReportAppendix2 extends Report
             $this->printContentByRealEstate($section, $realEstates, 0);
         }
     }
-    protected function printOriginalPriceDescription($section)
+    protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
         $section->addText('❖ Về nguyên giá của nhà cửa, vật kiến trúc:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('- Giá trị công trình xây dựng ' . $this->acronym . ' căn cứ vào đặc điểm kết cấu, kiến trúc, khẩu độ, chiều cao, công năng sử dụng, vật liệu sử dụng…. trên cơ sở những thông tin, tài liệu thu thập và phương pháp thẩm định giá được lựa chọn tại phần 3, mục VIII của Báo cáo này, mức giá ước tính như sau:');
     }
-    protected function printBuildingComapanyInfo($section, $tangibleAssets)
+    protected function printBuildingComapanyInfo($section, $tangibleAssets, $dgxdSlug)
     {
         $section->addText('BẢNG TỔNG HỢP THÔNG TIN TSTĐG VÀ TSSS', null, ['align' => 'center']);
         $section->addText('Đvt: đ/' . $this->m2, ['italic' => true], ['align' => 'right', 'keepNext' => true]);
         $table = $section->addTable($this->styleTable);
-        $this->printBuildingPriceTitle($table, $tangibleAssets);
-        $this->printBuildingPriceDetail($table, $tangibleAssets);
+        $this->printBuildingPriceDetail($table, $tangibleAssets, $dgxdSlug);
     }
 
-    protected function printBuildingPriceTitle($table, $tangibleAssets)
+    protected function printBuildingPriceDetail($table, $tangibleAssets, $dgxdSlug)
     {
         $constructionCompany = $tangibleAssets[0]->constructionCompany;
         $com1 = count($constructionCompany) && $constructionCompany[0] ? $constructionCompany[0]->name : '';
@@ -158,10 +158,6 @@ class ReportAppendix2 extends Report
         $table->addCell(1500, $this->cellRowSpan)->addText($com3, ['bold' => true], $this->cellHCentered);
         $table->addCell(1500, $this->cellRowSpan)->addText('Đơn giá trung bình', ['bold' => true], $this->cellHCentered);
         $table->addCell(1500, $this->cellRowSpan)->addText('Đơn giá quyết định', ['bold' => true], $this->cellHCentered);
-    }
-
-    protected function printBuildingPriceDetail($table, $tangibleAssets)
-    {
         foreach ($tangibleAssets as $tangibleAsset) {
             $name = $tangibleAsset->tangible_name;
             $startUsingYear = $tangibleAsset->start_using_year;

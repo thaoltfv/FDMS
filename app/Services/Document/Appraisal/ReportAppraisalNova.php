@@ -98,7 +98,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Số địa chính', null, $this->styleAlignLeft);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-        ->addText(CommonService::mbUcfirst($strToThua) . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
+        ->addText($strToThua . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -188,7 +188,7 @@ class ReportAppraisalNova extends ReportAppraisal
             ->addText(htmlspecialchars($positionType), null, ['align' => 'left']);
     }
     //V
-    protected function getPrincipleOfValuationDescription($section)
+    protected function getPrincipleOfValuationDescription($certificatePrinciple, $section)
     {
         $section->addListItem('Tổ thẩm định giá vận dụng các nguyên tắc sử dụng tốt nhất và hiệu quả nhất, nguyên tắc dự kiến lợi ích trong tương lai, nguyên tắc tăng và giảm thu nhập, nguyên tắc cung cầu và cạnh tranh, nguyên tắc thay thế, nguyên tắc thay đổi, nguyên tắc phù hợp, nguyên tắc cân bằng.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Phân tích sử dụng tốt nhất và hiệu quả nhất của tài sản thẩm định: Căn cứ vào đặc điểm pháp lý, đặc điểm kinh tế kỹ thuật của tài sản. Khu vực được quy hoạch để ở, xung quanh các lô đất tương tự là đất trống, đất đã có công trình xây dựng nhà ở. Hiện trạng thửa đất cũng được sử dụng để xây dựng công trình xây dựng phù hợp với quy hoạch và được sử dụng để ở. Tổ thẩm định nhận thấy tài sản thẩm định đã được sử dụng tốt nhất và có hiệu quả nhất.', 0, null, 'bullets', $this->indentFistLine);
