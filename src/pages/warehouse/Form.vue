@@ -902,8 +902,8 @@ export default {
 				max_value_description: '',
 				convert_fee_total: 0,
 				created_by: '',
-				adjust_percent: '',
-				adjust_amount: '',
+				adjust_percent: 0,
+				adjust_amount: 0,
 				id_amount: '',
 				status: 1,
 				migrate_status: 'TSS',
@@ -2205,6 +2205,55 @@ export default {
 		},
 		changeAreaApartment (event) {
 			this.form.room_details[0].area = event
+			if (this.form.total_amount) {
+				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
+			} else {
+				this.form.total_estimate_amount = 0
+			}
+			if (this.form.room_details.length > 0 && this.form.room_details[0].area > 0) {
+				this.form.room_details[0].unit_price = parseFloat(this.form.total_estimate_amount / this.form.room_details[0].area).toFixed(0)
+				this.form.average_land_unit_price = parseFloat(this.form.total_estimate_amount / this.form.room_details[0].area).toFixed(0)
+			}
+			this.form.total_raw_amount = parseInt(this.form.total_estimate_amount) - parseInt(this.form.total_construction_amount) - parseInt(this.form.total_order_amount)
+			this.form.total_land_unit_price = this.form.total_raw_amount + this.form.convert_fee_total
+			const total = this.form.properties
+			let total_area = 0
+			let total_area_amount = 0
+			let land_use = []
+			let max_value = 0
+			let min_value = 9999999999999999
+			if (total && total.length > 0) {}
+			total.forEach(item => {
+				total_area_amount = total_area_amount + parseFloat(item.asset_general_value_sum_area)
+				total_area = total_area + parseFloat(item.asset_general_land_sum_area)
+				item.property_detail.forEach(property_detail => {
+					land_use.push(property_detail)
+				})
+			}
+			)
+			this.landUser = land_use
+			land_use.forEach(land => {
+				if (land.circular_unit_price > max_value) {
+					max_value = land.circular_unit_price
+				}
+				if (land.circular_unit_price < min_value) {
+					min_value = land.circular_unit_price
+				}
+			})
+			total.forEach(item => {
+				item.property_detail.forEach(property_detail => {
+					property_detail.convert_fee = parseInt((max_value - property_detail.circular_unit_price) * property_detail.total_area)
+					if ((this.form.total_land_unit_price / total_area) - (max_value - property_detail.circular_unit_price) > 0) {
+						property_detail.price_land = parseInt((this.form.total_land_unit_price / total_area) - (max_value - property_detail.circular_unit_price))
+					} else {
+						property_detail.price_land = 0
+					}
+				})
+			}
+			)
+			if (this.form.asset_type_id !== 39) {
+				this.sortArrayPropertyDetail()
+			}
 		},
 		changeBedroomNum (event) {
 			this.form.room_details[0].bedroom_num = event

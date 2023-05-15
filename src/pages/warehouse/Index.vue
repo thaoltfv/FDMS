@@ -16,10 +16,10 @@
           <!-- <router-link :to="{name: 'warehouse.create'}" class="btn btn-white text-nowrap index-screen-button" v-if="add"><img
             src="@/assets/icons/ic_add.svg" style="margin-right: 8px" alt="search">Tạo mới
           </router-link> -->
-					<button class="btn btn-white text-nowrap index-screen-button ml-2" @click="openSelectType" v-if="add">
+					<button class="btn mr-0 btn-white text-nowrap index-screen-button ml-2" @click="openSelectType" v-if="add">
 						<img src="@/assets/icons/ic_add.svg" style="margin-right: 8px" alt="search">Tạo mới
 					</button>
-          <b-dropdown class="ml-2 dropdown_btn d-none d-lg-inline-flex" no-caret>
+          <b-dropdown class="dropdown_btn d-none d-lg-inline-flex" no-caret>
             <template #button-content>
 							<div class="container_image">
 								<img src="@/assets/icons/ic_more.svg" alt="">
@@ -1041,5 +1041,9 @@ export default {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+.container_image {
+	width: 35px;
+	height: 30px;
 }
 </style>
