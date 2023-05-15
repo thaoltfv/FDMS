@@ -69,8 +69,8 @@
             </div> -->
         </div>
         </div>
-        <div class="d-flex justify-content-end mt-5">
-          <button class="btn btn-white btn-orange text-nowrap" @click.prevent="exportData(form)">Xuất dữ liệu</button>
+        <div class="d-flex justify-content-end my-3">
+          <button :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="exportData(form)">Xuất dữ liệu</button>
         </div>
         </div>
       </div>
@@ -109,6 +109,7 @@ export default {
 			col_4: 'col-12 col-md-4 col-lg-4',
 			col_12: 'col-12 col-md-12 col-lg-12',
 			users: [],
+			isSubmit: false,
 			employeePerformance: [],
 			appraisers: [],
 			customers: [],
@@ -179,6 +180,7 @@ export default {
 			await this.$emit('cancel')
 		},
 		async handleExportData (data) {
+			this.isSubmit = true
 			const res = await CertificationBrief.exportDataCertificationBriefCustomize(data)
 			if (res.data) {
 				const fileLink = document.createElement('a')
@@ -202,6 +204,7 @@ export default {
 					position: 'top-right'
 				})
 			}
+			this.isSubmit = false
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
@@ -542,4 +545,36 @@ export default {
   .header_title {
     border-bottom: 1px solid #E8E8E8;
   }
+	.btn_loading {
+    position: relative;
+    color: white !important;
+    text-shadow: none !important;
+    pointer-events: none;
+  }
+  .btn_loading:after {
+    content: '';
+    display: inline-block;
+    vertical-align: text-bottom;
+    border: 1px solid wheat;
+    border-right-color: transparent;
+    border-radius: 50%;
+    color: #ffffff;
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    left: calc(50% - .5rem);
+    top: calc(50% - .5rem);
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+  }
+/deep/ {
+  .form-group-container.disabled {
+    background-color: rgba(222, 230, 238, 0.3);
+
+    .ant-input {
+      background-color: rgba(222, 230, 238, 0.3) !important;
+    }
+  }
+}
+
   </style>
