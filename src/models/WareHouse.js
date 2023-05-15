@@ -175,4 +175,8 @@ export default class WareHouse extends Model {
 		}
 		return resp
 	}
+	static async exportDataComparisionAsset (data) {
+		const { fromDate, toDate, createdBy } = data
+		return (new this()).request({ method: 'GET', url: `asset-generals/asset-export?fromDate=${fromDate}&toDate=${toDate}&created_by=${createdBy}`, isStatic: true })
+	}
 }
