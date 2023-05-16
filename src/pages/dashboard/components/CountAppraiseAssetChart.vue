@@ -179,7 +179,7 @@ export default {
 				}
 			} else {
 				await this.$toast.open({
-					message: 'Hiện không có dữ liệu thống kê tài sản thẩm định',
+					message: 'Hiện tại, hệ thống không có dữ liệu thống kê về tài sản được thẩm định',
 					type: 'error',
 					position: 'top-right',
 					duration: 4000

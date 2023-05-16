@@ -118,6 +118,7 @@
 </template>
 
 <script>
+import { PERMISSIONS } from '@/enum/permissions.enum'
 import { FormWizard, TabContent } from 'vue-form-wizard'
 import ModalAppraisal from './component/modals/ModalAppraisal'
 import { UserIcon, DollarSignIcon, HomeIcon, ClockIcon } from 'vue-feather-icons'
@@ -189,6 +190,7 @@ export default {
 			edit: false,
 			deleted: false,
 			accept: false,
+			export: false,
 			showDetailPopUp: false,
 			showVerifyCertificate: false,
 			showAcceptCertificate: false,
@@ -251,20 +253,23 @@ export default {
 		this.user_id = profile.data.user.id
 		const permission = this.$store.getters.currentPermissions
 		permission.forEach((value) => {
-			if (value === 'VIEW_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.VIEW_CERTIFICATE_BRIEF) {
 				this.view = true
 			}
-			if (value === 'ADD_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.ADD_CERTIFICATE_BRIEF) {
 				this.add = true
 			}
-			if (value === 'EDIT_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.EDIT_CERTIFICATE_BRIEF) {
 				this.edit = true
 			}
-			if (value === 'DELETE_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.DELETE_CERTIFICATE_BRIEF) {
 				this.deleted = true
 			}
-			if (value === 'ACCEPT_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.ACCEPT_CERTIFICATE_BRIEF) {
 				this.accept = true
+			}
+			if (value === PERMISSIONS.EXPORT_CERTIFICATE_BRIEF) {
+				this.export = true
 			}
 		})
 	},

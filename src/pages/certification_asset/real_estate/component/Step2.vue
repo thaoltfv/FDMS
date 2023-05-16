@@ -66,7 +66,7 @@
             <div class="col-12 mt-2">
               <div class="row content_form color_content">
                 <div class="col-5 font-weight-bold">Mục đích sử dụng</div>
-                <div class="col-3 font-weight-bold text-center">Diện tích</div>
+                <div class="col-3 font-weight-bold text-center">Diện tích (m<sup>2</sup>)</div>
                 <div class="col-3 font-weight-bold">Phân mục đích</div>
               </div>
             </div>
@@ -161,7 +161,7 @@
             <div v-if="data.planning_area.length > 0" class="col-12 mt-2">
               <div class="row content_form color_content">
                 <div class="col-5 font-weight-bold">Mục đích sử dụng</div>
-                <div class="col-3 font-weight-bold text-center">Diện tích</div>
+                <div class="col-3 font-weight-bold text-center">Diện tích (m<sup>2</sup>)</div>
                 <div class="col-3 font-weight-bold">Loại quy hoạch</div>
               </div>
             </div>
@@ -380,7 +380,6 @@ import InputCategory from '@/components/Form/InputCategory'
 import InputText from '@/components/Form/InputText'
 import InputTextarea from '@/components/Form/InputTextarea'
 import InputSwitch from '@/components/Form/InputSwitch'
-import InputNumberFormat from '@/components/Form/InputNumber'
 import InputLengthArea from '@/components/Form/InputLengthArea'
 import ModalDeleteIndex from '@/components/Modal/ModalDeleteIndex'
 import ModalNotificationAppraisal from '@/components/Modal/ModalNotificationAppraisal'
@@ -400,7 +399,6 @@ export default {
 		InputText,
 		InputTextarea,
 		InputSwitch,
-		InputNumberFormat,
 		InputLengthArea,
 		InputArea,
 		InputDatePicker,

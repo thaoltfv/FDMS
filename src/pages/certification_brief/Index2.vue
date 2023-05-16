@@ -32,7 +32,7 @@
 							<router-link v-if="add" :to="{ name: 'certification_brief.create' }" class="btn text-nowrap index-screen-button ml-md-2">
 								<img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
 							</router-link>
-							<b-dropdown class="dropdown-container" no-caret>
+							<b-dropdown class="dropdown-container" no-caret v-if="this.export">
 								<template #button-content>
 									<div class="container_image">
 										<img src="@/assets/icons/ic_more.svg" alt="">
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { PERMISSIONS } from '@/enum/permissions.enum'
 import ButtonCheckbox from '@/components/Form/ButtonCheckbox'
 import ModalExportCertificateBrief from './component/modals/ModalExportCertificateBrief'
 import CertificateBrief from '@/models/CertificationBrief.js'
@@ -100,6 +101,7 @@ export default {
 			edit: false,
 			deleted: false,
 			accept: false,
+			export: false,
 			selectedStatus: [],
 			showFilter: false,
 			statusOptions: {
@@ -140,20 +142,23 @@ export default {
 		// fix_permission
 		const permission = this.$store.getters.currentPermissions
 		permission.forEach((value) => {
-			if (value === 'VIEW_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.VIEW_CERTIFICATE_BRIEF) {
 				this.view = true
 			}
-			if (value === 'ADD_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.ADD_CERTIFICATE_BRIEF) {
 				this.add = true
 			}
-			if (value === 'EDIT_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.EDIT_CERTIFICATE_BRIEF) {
 				this.edit = true
 			}
-			if (value === 'DELETE_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.DELETE_CERTIFICATE_BRIEF) {
 				this.deleted = true
 			}
-			if (value === 'ACCEPT_CERTIFICATE_BRIEF') {
+			if (value === PERMISSIONS.ACCEPT_CERTIFICATE_BRIEF) {
 				this.accept = true
+			}
+			if (value === PERMISSIONS.EXPORT_CERTIFICATE_BRIEF) {
+				this.export = true
 			}
 		})
 	},
@@ -223,14 +228,6 @@ export default {
 			this.getCertificateAll()
 		},
 		async export30daysBefore () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			this.form.fromDate = await moment(new Date(new Date().setDate(new Date().getDate() - 30))).format('DD/MM/YYYY')
 			this.form.toDate = await moment(new Date()).format('DD/MM/YYYY')
 			const res = await CertificateBrief.exportDataCertificationBrief(this.form)
@@ -258,14 +255,6 @@ export default {
 			}
 		},
 		async exportMonthBefore () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			let date = new Date()
 			let datePrevious = new Date(date.setDate(0))
 			let from_date = new Date(new Date(datePrevious).setDate(1))
@@ -297,14 +286,6 @@ export default {
 			}
 		},
 		async exportQuarter () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			let quarterAdjustment = (moment().month() % 3) + 1
 			let lastQuarterEndDate = moment().subtract({ months: quarterAdjustment }).endOf('month')
 			let lastQuarterStartDate = lastQuarterEndDate.clone().subtract({ months: 2 }).startOf('month')
@@ -335,14 +316,6 @@ export default {
 			}
 		},
 		exportAdjust () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			this.showAdjustModal = true
 		}
 	},

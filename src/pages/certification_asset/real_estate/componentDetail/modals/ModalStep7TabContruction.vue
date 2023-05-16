@@ -108,10 +108,10 @@
                       <tr v-for="(tangibleAsset, indexTangible) in form.tangible_assets" :key="`CL-${tangibleAsset.id}`">
                         <td>{{ tangibleAsset ? tangibleAsset.tangible_name : ""}}</td>
                         <td>{{ tangibleAsset ? tangibleAsset.start_using_year : ""}}</td>
-                        <td>{{ tangibleAsset ? tangibleAsset.remaining_quality : 0}}</td>
-                        <td>{{ total[indexTangible] ? total[indexTangible] : 0 }}</td>
-                        <td>{{remaining_quality_average[indexTangible]}}</td>
-                        <td>{{remaining_quality_choosing[indexTangible]}}</td>
+                        <td>{{ tangibleAsset ? tangibleAsset.remaining_quality : 0}}%</td>
+                        <td>{{ total[indexTangible] ? total[indexTangible] : 0 }}%</td>
+                        <td>{{ remaining_quality_average[indexTangible] }}%</td>
+                        <td>{{ remaining_quality_choosing[indexTangible] }}%</td>
                       </tr>
                     </tbody>
                   </table>
@@ -135,9 +135,9 @@
                     <tr v-for="(tangibleAsset) in form.tangible_assets" :key="`PP1-${tangibleAsset.id}`">
                       <td>{{ tangibleAsset ? tangibleAsset.tangible_name : ""}}</td>
                       <td>{{ tangibleAsset ? tangibleAsset.start_using_year : ""}}</td>
-                      <td>{{ tangibleAsset ? currentYear - tangibleAsset.start_using_year : ""}}</td>
+                      <td>{{ tangibleAsset && tangibleAsset.start_using_year ? currentYear - tangibleAsset.start_using_year : ""}}</td>
                       <td>{{ tangibleAsset ? tangibleAsset.duration : ""}}</td>
-                      <td>{{ tangibleAsset ? tangibleAsset.remaining_quality : ""}}</td>
+                      <td>{{ tangibleAsset ? tangibleAsset.remaining_quality : ""}}%</td>
                     </tr>
                   </tbody>
                 </table>
@@ -154,7 +154,7 @@
                       </tr>
                       <tr>
                         <th colspan="10">Phần kết cấu chính (%)</th>
-                        <th rowspan="2">CLCL (%)</th>
+                        <th rowspan="2">CLCL</th>
                       </tr>
                       <tr>
                         <th colspan="2">Móng, cột</th>
@@ -311,7 +311,7 @@
                             v-model="tangibleAsset.comparison_tangible_factor.h5"
                           />
                         </td>
-                        <td>{{ total[indexTangible] ? total[indexTangible] : 0 }}</td>
+                        <td>{{ total[indexTangible] ? total[indexTangible] : 0 }}%</td>
                       </tr>
                     </tbody>
                   </table>
@@ -334,7 +334,7 @@
                     <th>Tên tài sản</th>
                     <th class="clcl_width">ĐVT</th>
                     <th class="clcl_width">Số lượng</th>
-                    <th class="clcl_width">CLCL(%)</th>
+                    <th class="clcl_width">CLCL</th>
                     <th class="clcl_width">Đơn giá</th>
                     <th>Thành tiền</th>
                   </tr>
@@ -343,10 +343,10 @@
                     <tr v-for="(tangibleAsset, indexTangible) in form.tangible_assets" :key="`result-${tangibleAsset.id}`">
                       <td>{{ tangibleAsset ? tangibleAsset.tangible_name : ""}}</td>
                       <td>m<sup>2</sup></td>
-                      <td>{{ tangibleAsset ? tangibleAsset.total_construction_base : ""}}</td>
-                      <td>{{remaining_quality_choosing[indexTangible]}}</td>
-                      <td>{{remaining_building_price_choosing && remaining_building_price_choosing.length > 0 ? formatNumber(remaining_building_price_choosing[indexTangible]) : 0}} đ</td>
-                      <td>{{formatNumber(remaining_building_price[indexTangible])}} đ</td>
+                      <td>{{ tangibleAsset ? formatNumber(tangibleAsset.total_construction_base) : "" }}</td>
+                      <td>{{ remaining_quality_choosing[indexTangible] }}%</td>
+                      <td>{{ remaining_building_price_choosing && remaining_building_price_choosing.length > 0 ? formatNumber(remaining_building_price_choosing[indexTangible]) : 0 }} đ</td>
+                      <td>{{ formatNumber(remaining_building_price[indexTangible]) }} đ</td>
                     </tr>
                     <tr>
                       <td class="color_tr" colspan="5"><strong>TỔNG CỘNG</strong></td>

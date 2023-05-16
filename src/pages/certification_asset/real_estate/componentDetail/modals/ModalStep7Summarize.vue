@@ -366,7 +366,6 @@ export default {
     animation: spinner-border .75s linear infinite;
   }
 
-
 .card {
 	border-radius: 5px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);

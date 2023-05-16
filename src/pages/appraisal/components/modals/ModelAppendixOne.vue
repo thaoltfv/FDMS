@@ -770,7 +770,7 @@
 
                     <tr>
                       <td>6</td>
-                      <td colspan="2">Tổng số lần điều đỉnh (lần)</td>
+                      <td colspan="2">Tổng số lần điều chỉnh (lần)</td>
                       <td>{{format(comparisonFactorChange1)}}</td>
                       <td>{{format(comparisonFactorChange2)}}</td>
                       <td>{{format(comparisonFactorChange3)}}</td>

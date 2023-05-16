@@ -51,8 +51,22 @@ export default class CertificateBrief extends Model {
 		return (new this()).request({ method: 'GET', url: `certification_brief/comparison-appraise?ids=${data}`, isStatic: true })
 	}
 	static async exportDataCertificationBrief (data) {
+		// if (process.env.CLIENT_ENV === 'trial') {
+		// 	return {
+		// 		error: {message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử'}
+		// 	}
+		// }
 		const { fromDate, toDate, appraiser_perform_id, appraiser_id, customer_id, createdBy, status } = data
 		return (new this()).request({ method: 'GET', url: `certification_brief/brief-export?fromDate=${fromDate}&toDate=${toDate}&status=${status}&created_by=${createdBy}&appraiser_id=${appraiser_id}&appraiser_perform_id=${appraiser_perform_id}&customer_id=${customer_id}`, isStatic: true })
+	}
+	static async exportDataCertificationBriefCustomize (data) {
+		// if (process.env.CLIENT_ENV === 'trial') {
+		// 	return {
+		// 		error: {message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử'}
+		// 	}
+		// }
+		const { fromDate, toDate, appraiser_perform_id, appraiser_id, customer_id, createdBy, status } = data
+		return (new this()).request({ method: 'GET', url: `certification_brief/brief-customize-export?fromDate=${fromDate}&toDate=${toDate}&status=${status}&created_by=${createdBy}&appraiser_id=${appraiser_id}&appraiser_perform_id=${appraiser_perform_id}&customer_id=${customer_id}`, isStatic: true })
 	}
 	static async getHistoryTimeline (id) {
 		return (new this()).request({ method: 'GET', url: `activity/get-certificate/${id}`, isStatic: true })

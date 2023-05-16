@@ -237,7 +237,7 @@ export const routes = [
 			beforeEnter: ResolveGuard([AuthGuard]),
 			meta: {
 				title: 'Bản đồ',
-				permissions: [PERMISSIONS.VIEW_PRICE],
+				permissions: [PERMISSIONS.VIEW_MAP],
 				breadcrumbs: [
 					//   { title: 'Bất động sản' }
 				]
@@ -1084,7 +1084,7 @@ export const routes = [
 			beforeEnter: ResolveGuard([AuthGuard]),
 			meta: {
 				title: 'Tài sản thẩm định',
-				denied: ['trial'],
+				// denied: ['trial'],
 				// fix_permission
 				permissions: [PERMISSIONS.VIEW_CERTIFICATE_ASSET],
 				breadcrumbs: [

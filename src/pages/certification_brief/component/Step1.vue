@@ -166,7 +166,7 @@
               class="form-group-container"
               label="Tìm đối tác"
               @change="handleChangeCustomer"
-              @search="getCustomer"
+              @search="debounceSearchCustomer"
               :options="optionsCustomer"
             />
             <InputTextPrefixCustom
@@ -286,6 +286,8 @@
 @import '../../../../node_modules/leaflet/dist/leaflet.css';
 </style>
 <script>
+
+import { debounce } from 'lodash-es'
 import InputCategoryMulti from '@/components/Form/InputCategoryMulti'
 import InputPercent from '@/components/Form/InputPercent'
 import InputDatePicker from '@/components/Form/InputDatePicker'
@@ -403,8 +405,7 @@ export default {
 			return {
 				data: this.customers,
 				id: 'id',
-				key: 'name',
-				phone: 'phone'
+				key: 'full_info'
 			}
 		}
 	},
@@ -470,6 +471,13 @@ export default {
 				return current >= moment().endOf('day')
 			}
 		},
+
+		debounceSearchCustomer: debounce(function (e) {
+			if (e) {
+				this.getCustomer(e)
+			}
+		}, 400),
+
 		async getCustomer (search) {
 			const res = await CertificationBrief.getCustomer(search)
 			if (res.data) {

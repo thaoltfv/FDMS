@@ -620,7 +620,7 @@
 															</tr>
 															<tr >
 																<td>6</td>
-																<td colspan="2">Tổng số lần điều đỉnh (lần)</td>
+																<td colspan="2">Tổng số lần điều chỉnh (lần)</td>
 																<td>{{formatNumber(parseFloat(comparisonFactorChange1).toFixed(0))}}</td>
 																<td>{{formatNumber(parseFloat(comparisonFactorChange2).toFixed(0))}}</td>
 																<td>{{formatNumber(parseFloat(comparisonFactorChange3).toFixed(0))}}</td>
@@ -1403,14 +1403,14 @@ export default {
 			let asset_percent3 = (typeof asset.apartment_adapter[2] !== 'undefined') ? asset.apartment_adapter[2].percent : null
 
 			// tính Tổng giá trị tài sản ước tính
-			this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? parseFloat((asset_percent1 * asset1.total_amount) / 100).toFixed(0) : 0)
-			this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? parseFloat((asset_percent2 * asset2.total_amount) / 100).toFixed(0) : 0)
-			this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? parseFloat((asset_percent3 * asset3.total_amount) / 100).toFixed(0) : 0)
+			this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
+			this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
+			this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
 
 			// tính đơn giá chung cư
-			this.dgcc1 = asset1.room_details && asset1.room_details.length > 0 ? parseFloat(this.totalPriceEstimate1 / asset1.room_details[0].area).toFixed(0) : 0
-			this.dgcc2 = asset2.room_details && asset2.room_details.length > 0 ? parseFloat(this.totalPriceEstimate2 / asset2.room_details[0].area).toFixed(0) : 0
-			this.dgcc3 = asset3.room_details && asset3.room_details.length > 0 ? parseFloat(this.totalPriceEstimate3 / asset3.room_details[0].area).toFixed(0) : 0
+			this.dgcc1 = asset1.room_details && asset1.room_details.length > 0 ? this.totalPriceEstimate1 / asset1.room_details[0].area : 0
+			this.dgcc2 = asset2.room_details && asset2.room_details.length > 0 ? this.totalPriceEstimate2 / asset2.room_details[0].area : 0
+			this.dgcc3 = asset3.room_details && asset3.room_details.length > 0 ? this.totalPriceEstimate3 / asset3.room_details[0].area : 0
 
 			let comparisonFactor1 = []
 			let comparisonFactor2 = []
@@ -1436,6 +1436,11 @@ export default {
 			this.comparisonFactorChange3 = 0
 
 			// YTSS
+			// These field must be set = 0 before check
+			// Incase factor has been removed manualy it will not be updated if put these inside condition block
+			this.pricePl1 = 0
+			this.pricePl2 = 0
+			this.pricePl3 = 0
 			if ((typeof comparisonFactor1['phap_ly'] !== 'undefined') && comparisonFactor1['phap_ly'].status === 1) {
 				let percentPl1 = (typeof comparisonFactor1['phap_ly'].adjust_percent !== 'undefined') ? comparisonFactor1['phap_ly'].adjust_percent : 0
 				let percentPl2 = (typeof comparisonFactor2['phap_ly'].adjust_percent !== 'undefined') ? comparisonFactor2['phap_ly'].adjust_percent : 0
@@ -1668,19 +1673,19 @@ export default {
 			})
 
 			// tổng giá trị điều chỉnh gộp
-			this.tldcg1 = Math.abs(this.pricePn1) + Math.abs(this.priceLch1) + Math.abs(this.priceDt1) + Math.abs(this.priceSt1) + Math.abs(this.pricePWC1) + Math.abs(mgcd_price_other_abs[0])
-			this.tldcg2 = Math.abs(this.pricePn2) + Math.abs(this.priceLch2) + Math.abs(this.priceDt2) + Math.abs(this.priceSt2) + Math.abs(this.pricePWC2) + Math.abs(mgcd_price_other_abs[1])
-			this.tldcg3 = Math.abs(this.pricePn3) + Math.abs(this.priceLch3) + Math.abs(this.priceDt3) + Math.abs(this.priceSt3) + Math.abs(this.pricePWC3) + Math.abs(mgcd_price_other_abs[2])
+			this.tldcg1 = Math.abs(this.pricePl1) + Math.abs(this.pricePn1) + Math.abs(this.priceLch1) + Math.abs(this.priceDt1) + Math.abs(this.priceSt1) + Math.abs(this.pricePWC1) + Math.abs(mgcd_price_other_abs[0])
+			this.tldcg2 = Math.abs(this.pricePl2) + Math.abs(this.pricePn2) + Math.abs(this.priceLch2) + Math.abs(this.priceDt2) + Math.abs(this.priceSt2) + Math.abs(this.pricePWC2) + Math.abs(mgcd_price_other_abs[1])
+			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.pricePn3) + Math.abs(this.priceLch3) + Math.abs(this.priceDt3) + Math.abs(this.priceSt3) + Math.abs(this.pricePWC3) + Math.abs(mgcd_price_other_abs[2])
 
 			// tổng giá trị điều chỉnh thuần
-			this.tldc1 = this.pricePn1 + this.priceLch1 + this.priceDt1 + this.priceSt1 + this.pricePWC1 + mgcd_price_other[0]
-			this.tldc2 = this.pricePn2 + this.priceLch2 + this.priceDt2 + this.priceSt2 + this.pricePWC2 + mgcd_price_other[1]
-			this.tldc3 = this.pricePn3 + this.priceLch3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
+			this.tldc1 = this.pricePl1 + this.pricePn1 + this.priceLch1 + this.priceDt1 + this.priceSt1 + this.pricePWC1 + mgcd_price_other[0]
+			this.tldc2 = this.pricePl2 + this.pricePn2 + this.priceLch2 + this.priceDt2 + this.priceSt2 + this.pricePWC2 + mgcd_price_other[1]
+			this.tldc3 = this.pricePl3 + this.pricePn3 + this.priceLch3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
 
 			// tính mức giá chỉ dẫn của TSSS
-			this.mgcd1 = this.totalPricePL1 + this.tldc1
-			this.mgcd2 = this.totalPricePL2 + this.tldc2
-			this.mgcd3 = this.totalPricePL3 + this.tldc3
+			this.mgcd1 = this.dgcc1 + this.tldc1
+			this.mgcd2 = this.dgcc2 + this.tldc2
+			this.mgcd3 = this.dgcc3 + this.tldc3
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true

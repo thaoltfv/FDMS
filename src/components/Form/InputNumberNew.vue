@@ -32,7 +32,7 @@
 
 <script>
 export default {
-	name: 'InputArea',
+	name: 'InputNumberNew',
 	data () {
 		return {
 			valueNumber: this.value ? this.formatNumber(this.value) : '',
@@ -121,20 +121,23 @@ export default {
 
 	methods: {
 		async onChange (event) {
-			if (event.target.value.match(/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g)) {
-				let valueChecked = event.target.value.match(/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g)[0]
-				let formatValue = this.supportClientAction(valueChecked)
-				if (this.validateInput(formatValue)) {
-					let formatNumberDecimal = +parseFloat(formatValue).toFixed(this.decimal)
-					this.$emit('change', formatNumberDecimal)
-					let convertedValue = formatNumberDecimal.toString().replace('.', ',')
-					// change value number to dot format
-					this.valueNumber = this.formatNumber(convertedValue)
-					this.errorMessage = ''
+			if (event.target.value) {
+				if (event.target.value.match(/^[+-]?(\d)+(\.\d+)*?$|^[+-]?(\d)+(,\d+)*?$|^(\d)+(\s\d+)*?$/g)) {
+					let valueChecked = event.target.value.match(/^[+-]?(\d)+(\.\d+)*?$|^(\d)+(,\d+)*?$|^[+-]?(\d)+(\s\d+)*?$/g)[0]
+					let formatValue = this.supportClientAction(valueChecked)
+					if (this.validateInput(formatValue)) {
+						this.$emit('change', +formatValue)
+						if (formatValue.includes('+')) {
+							formatValue = formatValue.replace(/\+/g, '')
+						}
+						this.valueCurrency = formatValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+						this.errorMessage = ''
+					}
+				} else {
+					this.errorMessage = 'Vui lòng kiểm tra lại nhập không hợp lệ'
 				}
-			} else {
-				// this.rules = 'required'
-				this.errorMessage = 'Vui lòng kiểm tra lại nhập không hợp lệ'
+			} else if (!this.required || !this.rules) {
+				this.$emit('change', '')
 			}
 		},
 		supportClientAction (value) {

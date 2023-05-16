@@ -34,8 +34,8 @@ export default class CertificateAsset extends Model {
 		const data = { assets: arrayId }
 		return (new this()).request({ method: 'POST', url: `certification_asset/assets-version-by-id`, data: data, isStatic: true })
 	}
-	static async getSearchAllAsset (distance, location, front_side, transaction, assetType, bothSide) {
-		return (new this()).request({ method: 'GET', url: `certification_asset/assets-search?distance=${distance}&location=${location}&front_side=${front_side}&transaction_type=${transaction}&asset_type_ids=${assetType}&is_check_frontside=${bothSide}`, isStatic: true })
+	static async getSearchAllAsset (distance, location, front_side, transaction, assetType, bothSide, year) {
+		return (new this()).request({ method: 'GET', url: `certification_asset/assets-search?distance=${distance}&location=${location}&front_side=${front_side}&transaction_type=${transaction}&asset_type_ids=${assetType}&is_check_frontside=${bothSide}&year=${year}`, isStatic: true })
 	}
 	static async submitStep6 (data, id = '') {
 		return (new this()).request({ method: 'POST', url: `certification_asset/step6-assets-infomation/${id}`, data: data, isStatic: true })
@@ -57,6 +57,11 @@ export default class CertificateAsset extends Model {
 		return (new this()).request({ method: 'POST', url: `certification_asset/step7-tangible-comparison/${idData}`, data: data, isStatic: true })
 	}
 	static async exportDataCertificationAsset (data) {
+		// if (process.env.CLIENT_ENV === 'trial') {
+		// 	return {
+		// 		error: {message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử'}
+		// 	}
+		// }
 		const { fromDate, toDate, createdBy, status } = data
 		return (new this()).request({ method: 'GET', url: `certification_asset/appraise-export?fromDate=${fromDate}&toDate=${toDate}&status=${status}&created_by=${createdBy}`, isStatic: true })
 	}

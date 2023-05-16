@@ -93,7 +93,7 @@ import {LCircle,
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 Vue.use(Icon)
 export default {
-	name: 'Step4',
+	name: 'Step6',
 	props: ['data', 'comparison', 'frontSide', 'coordinates', 'propertyTypes', 'type_purposes', 'step_active'],
 	components: {
 		LMap,

@@ -211,7 +211,7 @@ export default {
 		}
 	},
 	beforeMount () {
-		this.filter['province_id'] = 45
+		// this.filter['province_id'] = 45
 		this.listDistrict()
 	}
 }

@@ -139,7 +139,6 @@
                       class="form-group-container"
                       vid="start_using_year"
                       label="Năm sử dụng"
-                      rules="required"
                       @change="changeUsingYear"
                       :options="optionYearBuild"
                   />
@@ -172,12 +171,10 @@
                   <InputNumberNew
                       class="form-group-container"
                       v-model="form.duration"
-                      vid="floor"
+                      vid="duration"
                       label="Niên hạn"
                       :max="999999"
-                      :min="0"
                       :decimal="0"
-                      rules="required"
                       @change="changeDuration($event)"
                   />
                 </div>
@@ -189,7 +186,6 @@
                       label="Chất lượng còn lại theo tuổi đời"
                       :max="100"
                       :decimal="0"
-                      :disabled="true"
                       rules="required"
                       class="form-group-container"
                   />
@@ -357,7 +353,7 @@ export default {
 			}
 		},
 		changeUsingYear (event) {
-			if (event) {
+			if (event && this.form.duration > 0) {
 				if (this.form.created_at) {
 					if ((+moment(this.form.created_at).format('YYYY') - this.form.start_using_year) > this.form.duration) {
 						this.form.remaining_quality = 0
@@ -371,8 +367,8 @@ export default {
 			this.render_key += 1
 		},
 		changeDuration (event) {
-			if (event) {
-				this.form.duration = parseFloat(event).toFixed(0)
+			if (event && this.form.start_using_year) {
+				this.form.duration = parseFloat(event)
 				if (this.form.created_at) {
 					if ((+moment(this.form.created_at).format('YYYY') - this.form.start_using_year) > this.form.duration) {
 						this.form.remaining_quality = 0

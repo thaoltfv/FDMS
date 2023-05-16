@@ -37,7 +37,7 @@
           </div>
         </ValidationProvider>
 
-        <span class="tilde mt-2">~</span>
+        <span class="tilde mt-2">-</span>
 
         <ValidationProvider tag="div"
                             class="w-100"
@@ -170,7 +170,7 @@ export default {
 
 		disabledEndDate (endValue) {
 			const startValue = this.startValue
-			let startValueTemp = new Date(new Date(startValue).setMonth(new Date(startValue).getMonth() + 3))
+			let startValueTemp = new Date(new Date(startValue).setMonth(new Date(startValue).getMonth() + 13))
 			if (!endValue || !startValue) {
 				return false
 			} else if (endValue && endValue.valueOf() > startValueTemp) {

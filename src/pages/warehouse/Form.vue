@@ -64,9 +64,7 @@
 								<InputText
 									v-model="form.contact_phone"
 									label="Số điện thoại"
-									type="number"
 									:max-length="11"
-									:min="0"
 									class="col-12 col-lg-4 form-group-container"
 								/>
 
@@ -273,7 +271,7 @@
 										<th>Tọa độ</th>
 										<th>Chiều rộng (m)</th>
 										<th>Chiều dài (m)</th>
-										<th>Diện tích</th>
+										<th>Diện tích (m<sup>2</sup>)</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -304,36 +302,19 @@
 												</div>
 											</td>
 											<td>
-												<InputNumberFormat
-													v-model="property.front_side_width"
-													vid="front_side_width"
-													label="Chiều rộng"
-													:max="99999999"
-													:min="0"
-													disabled-input
-													:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-													class="contain-input contain-input__info contain-input__property"
-												/>
+												<div class="d-flex align-items-center contain-total contain-total__table">
+													<div class="num"><p>{{ formatNumber(property.front_side_width) }}</p></div>
+												</div>
 											</td>
 											<td>
-												<InputNumberFormat
-													v-model="property.insight_width"
-													vid="insight_width"
-													label="Chiều dài"
-													:max="99999999"
-													:min="0"
-													disabled-input
-													:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-													class="contain-input contain-input__info contain-input__property"
-												/>
+												<div class="d-flex align-items-center contain-total contain-total__table">
+													<div class="num"><p>{{ formatNumber(property.insight_width) }}</p></div>
+												</div>
 											</td>
 											<td>
-												<InputText
-													v-model="property.asset_general_land_sum_area"
-													vid="land_shape_id"
-													class="contain-input contain-input__info contain-input__property"
-													:disabled-input="true"
-												/>
+												<div class="d-flex align-items-center contain-total contain-total__table">
+													<div class="num"><p>{{ formatNumber(property.asset_general_land_sum_area) }}</p></div>
+												</div>
 											</td>
 											<td>
 												<div class="btn-delete" @click="removeTableRow(index)">
@@ -367,7 +348,7 @@
 									<th>Mã số</th>
 									<th>Loại</th>
 									<th>Cấp nhà</th>
-									<th>Chất lượng còn lại (%)</th>
+									<th>Chất lượng còn lại</th>
 									<th>Diện tích sàn (m <sup>2</sup>)</th>
 									<th>Đơn giá xây dựng (VND)</th>
 									<th>Giá trị ước tính (VND)</th>
@@ -404,37 +385,19 @@
 											disabled
 											class="contain-input contain-input__info contain-input__property"
 											:options="optionsHousing"
-											@change="handleCategory(index)"
 										/>
 									</td>
 									<td>
-										<div class="d-flex align-items-center justify-content-center position-relative">
-											<InputNumberFormat
-												v-model="tangible.remaining_quality"
-												vid="remaining_quality"
-												label="Chất lượng còn lại"
-												:max="100"
-												:min="0"
-												disabled-input
-												rules="required"
-												@change="remainingQuality($event, index)"
-												class="contain-input contain-input__info contain-input__property contain-input__percent"
-											/>
-											<div class="percent">%</div>
-										</div>
-									</td>
-									<td>
-										<InputNumberFormat
-											v-model="tangible.total_construction_base"
-											vid="total_construction_base"
-											label="Diện tích sàn"
-											:max="99999999"
-											:min="0"
-											disabled-input
-											rules="required"
-											@change="totalConstructionBase($event,index)"
+										<InputPercent
+											v-model="tangible.remaining_quality"
+											disabled
 											class="contain-input contain-input__info contain-input__property"
 										/>
+									</td>
+									<td>
+										<div class="d-flex align-items-center contain-total contain-total__table">
+											<div class="num"><p>{{formatNumber(tangible.total_construction_base)}}</p></div>
+										</div>
 									</td>
 									<td>
 										<div class="d-flex align-items-center contain-total contain-total__table">
@@ -450,7 +413,7 @@
 										<div class="contain-file">
 											<form enctype="multipart/form-data" class="contain-file">
 												<div v-if="tangible.pic.length === 0">
-													Không có ảnh
+													Không
 												</div>
 												<!--                        <p v-if="tangible.image !== null">{{tangible.file}}</p>-->
 												<div class="img-contain img-contain__table" v-for="images in tangible.pic" :key="images.id">
@@ -502,6 +465,7 @@
 										<td>
 											<InputText
 												v-model="other.other_asset"
+												label="Loại tài sản"
 												:vid="'typePropertyOther' + index"
 												class="contain-input contain-input__info contain-input__property contain-input__order"
 												:max-length="200"
@@ -509,15 +473,12 @@
 											/>
 										</td>
 										<td>
-											<InputNumberFormat
+											<InputCurrency
 												v-model="other.total_amount"
 												:vid="'total_amount_other'+ index"
 												label="Giá trị"
-												:max="99999999999999"
-												:min="0"
 												rules="required"
 												@change="changeAmountOther($event, index)"
-												:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
 												class="contain-input contain-input__info contain-input__property contain-input__order"/>
 										</td>
 										<td>
@@ -588,36 +549,27 @@
 						<div class="container-fluid">
 							<div class="card-info">
 								<div  class="row justify-content-between">
-									<!-- <InputCurrency
-										v-model="form.total_amount"
-										vid="total_amount1"
-										label="Tổng giá trị (VND)"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
-										:disabled="true"
-									/> -->
 									<div class="col-12 col-md-4 col-lg-3 form-group-container">
 										<label class="color-black font-weight-bold">Tổng giá trị (VND)</label>
-										<div class="d-flex form-control disabled price_unit"><p class="mb-0">{{formatNumber(form.total_amount)}}</p><p class="mb-0 ml-2">đ</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_amount)}}</p></div>
 									</div>
 									<div v-if="this.form.asset_type_id === 39" class="col-12 col-md-4 col-lg-3 form-group-container">
 										<label class="color-black font-weight-bold">Diện tích (m²)</label>
-										<div class="d-flex form-control disabled price_unit"><p class="mb-0">{{form.room_details && form.room_details[0].area ? formatNumber( form.room_details[0].area): 0}}</p><p class="mb-0 ml-2">m<sup>2</sup></p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{form.room_details && form.room_details[0].area ? formatNumber( form.room_details[0].area): 0}}</p><p class="mb-0 ml-2">m<sup>2</sup></p></div>
 									</div>
 									<div class="col-12 col-md-4 col-lg-4 form-group-container"/>
 								</div>
 								<div class="row justify-content-between">
 									<div class="col-12 col-md-4 col-lg-3 form-group-container">
 										<label class="color-black font-weight-bold">Tổng giá trị {{this.form.asset_type_id === 39? 'căn hộ' : 'tài sản'}} sau điều chỉnh (VND)</label>
-										<div class="d-flex form-control disabled price_unit"><p class="mb-0">{{formatNumber(form.total_estimate_amount)}}</p><p class="mb-0 ml-2">đ</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_estimate_amount)}}</p></div>
 									</div>
 									<div class="col-12 col-md-4 col-lg-3">
-										<InputNumberFormat
+										<InputPercentNegative
 											v-model="form.adjust_percent"
 											vid="adjust_percent"
-											label="Tỉ lệ điều chỉnh (%)"
+											label="Tỉ lệ điều chỉnh"
 											rules="required"
-											:max="9999"
-											:min="-9999"
 											@change="changeAdjustPercent($event)"
 											class="form-group-container"
 										/>
@@ -625,63 +577,69 @@
 									</div>
 									<div class="col-12 col-md-4 col-lg-4 form-group-container">
 										<label class="color-black font-weight-bold">Giá trị giảm/tăng (VND)</label>
-										<div class="d-flex form-control disabled price_unit"><p class="mb-0">{{formatNumber(form.adjust_amount)}}</p><p class="mb-0 ml-2">đ</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.adjust_amount)}}</p></div>
 									</div>
 								</div>
 								<div class="row justify-content-between" v-if="this.form.asset_type_id === 39">
 									<div class="col-12 col-md-4 col-lg-3 form-group-container">
 										<label class="color-black font-weight-bold">Đơn giá bình quân căn hộ (đ/m<sup>2</sup>)</label>
-										<div class="d-flex form-control disabled price_unit"><p class="mb-0">{{formatNumber(this.form.room_details[0].unit_price)}}</p><p class="mb-0 ml-2">đ</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(this.form.room_details[0].unit_price)}}</p></div>
 									</div>
 								</div>
 								<div class="row justify-content-between" v-if="this.form.asset_type_id !== 39">
 									<div class="col-12 col-md-4 col-lg-3 form-group-container">
 										<label class="color-black font-weight-bold">Tổng giá trị đất thuần còn lại (VND)</label>
-										<div class="form-control disabled"><p class="mb-0">{{formatNumber(form.total_raw_amount)}}</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_raw_amount)}}</p></div>
 										<span class="text-error" v-if="form.total_raw_amount < 0">Tổng giá trị đất thuần còn lại không được nhỏ hơn 0</span>
 									</div>
 									<div class="col-12 col-md-4 col-lg-3 form-group-container">
 										<label class="color-black font-weight-bold">Tổng giá trị công trình xây dựng (VND)</label>
-										<div class="form-control disabled"><p class="mb-0">{{formatNumber(form.total_construction_amount)}}</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_construction_amount)}}</p></div>
 									</div>
 									<div class="col-12 col-md-4 col-lg-4 form-group-container">
 										<label class="color-black font-weight-bold">Tổng giá trị tài sản khác (VND)</label>
-										<div class="form-control disabled"><p class="mb-0">{{formatNumber(form.total_order_amount)}}</p></div>
+										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_order_amount)}}</p></div>
 									</div>
 								</div>
-								<hr>
 								<div v-if="this.form.asset_type_id !== 39">
-									<h4 class="title">Chi phí chuyển đổi mục đích sử dụng đất</h4>
-									<div class="row justify-content-between">
-										<div class="col-12 form-group-container">
-											<label class="color-black font-weight-bold">Tổng giá trị chuyển mục đích sử dụng đất (VND)</label>
-											<div class="form-control disabled"><p class="mb-0">{{formatNumber(form.convert_fee_total)}}</p></div>
+									<div v-if="this.form.convert_fee_total > 0">
+										<hr>
+										<h4 class="title">Chi phí chuyển đổi mục đích sử dụng đất</h4>
+										<div class="row justify-content-between">
+											<div class="col-12 form-group-container">
+												<label class="color-black font-weight-bold">Tổng giá trị chuyển mục đích sử dụng đất (VND)</label>
+												<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.convert_fee_total)}}</p></div>
+											</div>
+										</div>
+										<h3 class="title">Trong đó:</h3>
+										<div class="row justify-content-between" v-for="(property,index) in form.properties" v-bind:key="index">
+											<div class="col-12 col-md-6 form-group-container" v-for="property_detail in property.property_detail" :key="property_detail.id" v-if="property_detail.convert_fee > 0">
+												<label class="color-black font-weight-bold">Chi phí chuyển mục đích sử dụng từ {{ property_detail.land_type_purpose_data !== undefined && property_detail.land_type_purpose_data !== null ? property_detail.land_type_purpose_data.description : ''}} sang {{form.max_value_description}} (VND)</label>
+												<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(property_detail.convert_fee)}}</p></div>
+											</div>
 										</div>
 									</div>
-									<h3 class="title">Trong đó:</h3>
-									<div class="row justify-content-between" v-for="(property,index) in form.properties" v-bind:key="index">
-										<div class="col-12 col-md-6 form-group-container" v-for="property_detail in property.property_detail" :key="property_detail.id" v-if="property_detail.convert_fee > 0">
-											<label class="color-black font-weight-bold">Chi phí chuyển mục đích sử dụng từ {{ property_detail.land_type_purpose_data !== undefined && property_detail.land_type_purpose_data !== null ? property_detail.land_type_purpose_data.description : ''}} sang {{form.max_value_description}} (VND)</label>
-											<div class="form-control disabled"><p class="mb-0">{{formatNumber(property_detail.convert_fee)}}</p></div>
+									<div v-if="this.form.total_amount > 0">
+										<hr>
+										<h4 class="title">Giá trị QSDĐ và đơn giá đất chi tiết</h4>
+										<div class="row justify-content-between">
+											<div class="col-12 form-group-container">
+												<label class="color-black font-weight-bold">Giá trị QSDĐ ước tính (VND)</label>
+												<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_land_unit_price)}}</p></div>
+												<span class="text-error" v-if="form.total_land_unit_price && form.total_land_unit_price < 0">Giá trị QSDĐ ước tính không được nhỏ hơn 0</span>
+											</div>
+										</div>
+										<div v-if="sortedArray.length > 0">
+											<h3 class="title">Trong đó:</h3>
+											<ul class="row justify-content-between">
+												<li class="col-12 col-md-6 form-group-container"  v-for="purpose_use_land in sortedArray" :key="purpose_use_land.id" >
+													<label class="color-black font-weight-bold">Đơn giá đất {{purpose_use_land.land_type_purpose_data !== undefined && purpose_use_land.land_type_purpose_data !== null ? purpose_use_land.land_type_purpose_data.description : ''}} (VND)</label>
+													<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(purpose_use_land.price_land)}}</p></div>
+													<span class="text-error" v-if="purpose_use_land.price_land <= 0">Loại đất {{purpose_use_land.land_type_purpose_data !== undefined && purpose_use_land.land_type_purpose_data !== null ? purpose_use_land.land_type_purpose_data.description : ''}} hiện có đơn giá bằng 0. Vui lòng kiểm tra lại giá trị đầu vào.</span>
+												</li>
+											</ul>
 										</div>
 									</div>
-									<hr>
-									<h4 class="title">Giá trị QSDĐ và đơn giá đất chi tiết</h4>
-									<div class="row justify-content-between">
-										<div class="col-12 form-group-container">
-											<label class="color-black font-weight-bold">Giá trị QSDĐ ước tính (VND)</label>
-											<div class="form-control disabled"><p class="mb-0">{{formatNumber(form.total_land_unit_price)}}</p></div>
-											<span class="text-error" v-if="form.total_land_unit_price && form.total_land_unit_price < 0">Giá trị QSDĐ ước tính không được nhỏ hơn 0</span>
-										</div>
-									</div>
-									<h3 class="title">Trong đó:</h3>
-									<ul class="row justify-content-between">
-										<li class="col-12 col-md-6 form-group-container" v-if="sortedArray.length > 0" v-for="purpose_use_land in sortedArray" :key="purpose_use_land.id" >
-											<label class="color-black font-weight-bold">Đơn giá đất {{purpose_use_land.land_type_purpose_data !== undefined && purpose_use_land.land_type_purpose_data !== null ? purpose_use_land.land_type_purpose_data.description : ''}} (VND)</label>
-											<div class="form-control disabled"><p class="mb-0">{{formatNumber(purpose_use_land.price_land)}}</p></div>
-											<span class="text-error" v-if="purpose_use_land.price_land <= 0">Loại đất {{purpose_use_land.land_type_purpose_data !== undefined && purpose_use_land.land_type_purpose_data !== null ? purpose_use_land.land_type_purpose_data.description : ''}} hiện có đơn giá bằng 0. Vui lòng kiểm tra lại giá trị đầu vào.</span>
-										</li>
-									</ul>
 								</div>
 							</div>
 						</div>
@@ -781,6 +739,10 @@ import VueNumeric from 'vue-numeric'
 import InputText from '@/components/Form/InputText'
 import InputCategory from '@/components/Form/InputCategory'
 import InputNumberFormat from '@/components/Form/InputNumber'
+import InputAreaCustom from '@/components/Form/InputAreaCustom'
+import InputLengthArea from '@/components/Form/InputLengthArea'
+import InputPercent from '@/components/Form/InputPercent'
+import InputPercentNegative from '@/components/Form/InputPercentNegative'
 import InputSwitch from '@/components/Form/InputSwitch'
 import ModalPropertyCreate from '@/components/Modal/ModalPropertyCreate'
 import ModalCancel from '@/components/Modal/ModalCancel'
@@ -809,6 +771,10 @@ export default {
 		ModalMap,
 		InputText,
 		InputNumberFormat,
+		InputPercent,
+		InputPercentNegative,
+		InputLengthArea,
+		InputAreaCustom,
 		InputCategory,
 		InputSwitch,
 		ModalPropertyCreate,
@@ -936,8 +902,8 @@ export default {
 				max_value_description: '',
 				convert_fee_total: 0,
 				created_by: '',
-				adjust_percent: '',
-				adjust_amount: '',
+				adjust_percent: 0,
+				adjust_amount: 0,
 				id_amount: '',
 				status: 1,
 				migrate_status: 'TSS',
@@ -1185,6 +1151,15 @@ export default {
 			this.tangible = data
 			this.tangible_index = index
 		},
+		formatCurrency (value) {
+			if (value) {
+				let num = (value / 1).toFixed(0).replace('.', ',')
+				return num.toString().replace(/^[+-]?\d+/, function (int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
+				})
+			}
+			return value
+		},
 		formatNumber (num) {
 			// convert number to dot formatNumber
 			if (num) {
@@ -1193,6 +1168,7 @@ export default {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
 				})
 			}
+			return num
 		},
 		retype () {
 			this.$router.push({name: 'warehouse.create'})
@@ -2229,6 +2205,55 @@ export default {
 		},
 		changeAreaApartment (event) {
 			this.form.room_details[0].area = event
+			if (this.form.total_amount) {
+				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
+			} else {
+				this.form.total_estimate_amount = 0
+			}
+			if (this.form.room_details.length > 0 && this.form.room_details[0].area > 0) {
+				this.form.room_details[0].unit_price = parseFloat(this.form.total_estimate_amount / this.form.room_details[0].area).toFixed(0)
+				this.form.average_land_unit_price = parseFloat(this.form.total_estimate_amount / this.form.room_details[0].area).toFixed(0)
+			}
+			this.form.total_raw_amount = parseInt(this.form.total_estimate_amount) - parseInt(this.form.total_construction_amount) - parseInt(this.form.total_order_amount)
+			this.form.total_land_unit_price = this.form.total_raw_amount + this.form.convert_fee_total
+			const total = this.form.properties
+			let total_area = 0
+			let total_area_amount = 0
+			let land_use = []
+			let max_value = 0
+			let min_value = 9999999999999999
+			if (total && total.length > 0) {}
+			total.forEach(item => {
+				total_area_amount = total_area_amount + parseFloat(item.asset_general_value_sum_area)
+				total_area = total_area + parseFloat(item.asset_general_land_sum_area)
+				item.property_detail.forEach(property_detail => {
+					land_use.push(property_detail)
+				})
+			}
+			)
+			this.landUser = land_use
+			land_use.forEach(land => {
+				if (land.circular_unit_price > max_value) {
+					max_value = land.circular_unit_price
+				}
+				if (land.circular_unit_price < min_value) {
+					min_value = land.circular_unit_price
+				}
+			})
+			total.forEach(item => {
+				item.property_detail.forEach(property_detail => {
+					property_detail.convert_fee = parseInt((max_value - property_detail.circular_unit_price) * property_detail.total_area)
+					if ((this.form.total_land_unit_price / total_area) - (max_value - property_detail.circular_unit_price) > 0) {
+						property_detail.price_land = parseInt((this.form.total_land_unit_price / total_area) - (max_value - property_detail.circular_unit_price))
+					} else {
+						property_detail.price_land = 0
+					}
+				})
+			}
+			)
+			if (this.form.asset_type_id !== 39) {
+				this.sortArrayPropertyDetail()
+			}
 		},
 		changeBedroomNum (event) {
 			this.form.room_details[0].bedroom_num = event

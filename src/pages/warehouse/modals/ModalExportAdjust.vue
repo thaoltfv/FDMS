@@ -1,83 +1,49 @@
 <template>
-  <div>
-    <ValidationObserver tag="form"
-                      ref="observer"
-                      @submit.prevent="validateBeforeSubmit">
-    <div class="modal-detail d-flex justify-content-center align-items-center" >
-      <div class="card">
-        <div class="header_title d-flex justify-content-between">
-          <h2 class="title">Xuất dữ liệu tùy chỉnh</h2>
-          <div class="btn--contain ">
-            <div class="btn--cancel" @click="handleCancel">
-              <img src="@/assets/icons/ic_cancel-1.svg" alt="cancel">
+    <div>
+      <ValidationObserver tag="form"
+                          ref="observer"
+                          @submit.prevent="validateBeforeSubmit">
+        <div
+          class="modal-detail d-flex justify-content-center align-items-center"
+          @click.self="handleCancel">
+          <div class="card">
+            <div class="header_title d-flex justify-content-between">
+              <h2 class="title">Xuất dữ liệu tùy chỉnh</h2>
+              <div class="btn--contain ">
+                <div class="btn--cancel" @click="handleCancel">
+                  <img src="@/assets/icons/ic_cancel-1.svg" alt="cancel">
+                </div>
+              </div>
+            </div>
+            <div style="padding:0px 20px" class="content-detail">
+            <div class="input--search">
+              <div class="row">
+                <InputDatePickerRangeCondition
+                  class="col-12 col-md-12 col-lg-12 form-group-container marginTop"
+                  vid="search"
+                  format-date="DD/MM/YYYY"
+                  @startDate="form.fromDate = $event"
+                  @endDate="form.toDate = $event"
+                  label="Từ ngày - đến ngày"
+                />
+                <InputCategoryMulti
+                  v-model="form.createdBy"
+                  vid="info"
+                  label="Người tạo"
+                  :maxTagCount="1"
+                  class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
+                  :options="optionCreateBy"
+                />
+            </div>
+            </div>
+            <div class="d-flex justify-content-end mt-5">
+             <button class="btn btn-white btn-orange text-nowrap" @click.prevent="exportData(form)">Xuất dữ liệu</button>
+            </div>
             </div>
           </div>
         </div>
-      <div style="padding:0px 20px" class="content-detail">
-        <div class="input--search">
-          <div class="row">
-            <InputDatePickerRangeCondition
-              class="col-12 col-md-12 col-lg-12 form-group-container marginTop"
-              vid="search"
-              format-date="DD/MM/YYYY"
-							:startDateValue="form.fromDate"
-							:endDateValue="form.toDate"
-              @startDate="form.fromDate = $event"
-              @endDate="form.toDate = $event"
-              label="Từ ngày - đến ngày"
-            />
-            <!-- <InputCategoryMulti
-              v-model="form.createdBy"
-              vid="info"
-              label="Người tạo"
-              :maxTagCount="1"
-              class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
-              :options="optionCreateBy"
-            /> -->
-            <InputCategoryMulti
-              v-model="form.status"
-              vid="info"
-              label="Trạng thái"
-              :maxTagCount="1"
-              class="col-12 form-group-container marginTop"
-              :options="optionStatus"
-            />
-            <!-- <InputCategory
-                v-model="form.appraiser_perform_id"
-                vid="appraiser_perform_id"
-                label="Chuyên viên thực hiện"
-                class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
-                :options="optionsPeformance"
-            />
-            <InputCategory
-                v-model="form.appraiser_id"
-                vid="appraiser_id"
-                label="Thẩm định viên"
-                class="col-12 col-md-6 col-lg-6 form-group-container marginTop"
-                :options="optionsAppraiser"
-            /> -->
-            <!-- <InputCategory
-                v-model="form.customer_id"
-                vid="customer_id"
-                class="col-12 col-md-4 col-lg-4 form-group-container marginTop"
-                label="Đối tác"
-                :options="optionsCustomer"
-                /> -->
-            <!-- <div class="col-12 mt-4">
-              <label class="form-label font-weight-bold">Trạng thái</label>
-                <button-checkbox :options="statusOptions" :value="form.status" @change="onChangeStatus" />
-            </div> -->
-        </div>
-        </div>
-        <div class="d-flex justify-content-end my-3">
-          <button :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="exportData(form)">Xuất dữ liệu</button>
-        </div>
-        </div>
-      </div>
+      </ValidationObserver>
     </div>
-  </ValidationObserver>
-  </div>
-
 </template>
 
 <script>
@@ -86,11 +52,8 @@ import InputNumberFormat from '@/components/Form/InputNumber'
 import InputCategoryMulti from '@/components/Form/InputCategoryMulti'
 import InputDatePickerRangeCondition from '@/components/Form/InputDatePickerRangeCondition'
 import WareHouse from '@/models/WareHouse'
-import Certificate from '@/models/Certificate'
-import CertificationBrief from '@/models/CertificationBrief'
 import ButtonCheckbox from '@/components/Form/ButtonCheckbox'
 import InputDatePicker from '@/components/Form/InputDatePicker'
-import InputCategory from '@/components/Form/InputCategory'
 import moment from 'moment'
 export default {
 	name: 'ModalSearchAppraise',
@@ -100,31 +63,24 @@ export default {
 		InputDatePickerRangeCondition,
 		InputText,
 		ButtonCheckbox,
-		InputDatePicker,
-		InputCategory
+		InputDatePicker
 	},
-	props: ['statusOptions'],
 	data () {
 		return {
 			col_4: 'col-12 col-md-4 col-lg-4',
 			col_12: 'col-12 col-md-12 col-lg-12',
 			users: [],
-			isSubmit: false,
-			employeePerformance: [],
-			appraisers: [],
-			customers: [],
 			form: {
 				createdBy: [],
 				fromDate: '',
 				toDate: '',
-				status: [],
-				appraiser_perform_id: '',
-				appraiser_id: '',
-				customer_id: ''
+				status: []
 			}
 		}
 	},
 	created () {
+	},
+	mounted () {
 	},
 	computed: {
 		optionCreateBy () {
@@ -133,44 +89,9 @@ export default {
 				id: 'id',
 				key: 'name'
 			}
-		},
-		optionStatus () {
-			return {
-				data: this.statusOptions.data,
-				id: 'value',
-				key: 'label'
-			}
-		},
-		optionsAppraiser () {
-			return {
-				data: this.appraisers,
-				id: 'id',
-				key: 'name'
-			}
-		},
-		optionsPeformance () {
-			return {
-				data: this.employeePerformance,
-				id: 'id',
-				key: 'name'
-			}
-		},
-		optionsCustomer () {
-			return {
-				data: this.customers,
-				id: 'id',
-				key: 'name',
-				phone: 'phone'
-			}
 		}
 	},
 	methods: {
-		async getProfiles () {
-			const profile = this.$store.getters.profile
-			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
-				this.activeStatus = true
-			}
-		},
 		formatNumber (value) {
 			let num = (value / 1).toFixed(0).replace('.', ',')
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
@@ -180,8 +101,7 @@ export default {
 			await this.$emit('cancel')
 		},
 		async handleExportData (data) {
-			this.isSubmit = true
-			const res = await CertificationBrief.exportDataCertificationBriefCustomize(data)
+			const res = await WareHouse.exportDataComparisionAsset(data)
 			if (res.data) {
 				const fileLink = document.createElement('a')
 				fileLink.href = res.data.url
@@ -204,35 +124,12 @@ export default {
 					position: 'top-right'
 				})
 			}
-			this.isSubmit = false
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},
 		onChangeStatus (value) {
 			this.form.status = value
-		},
-		async getCustomer () {
-			const res = await CertificationBrief.getCustomer()
-			if (res.data) {
-				this.customers = res.data
-			}
-			this.render_price_fee += 1
-		},
-		async getAppraisers () {
-			const resp = await Certificate.getAppraisers()
-			let dataAppraise = await [...resp.data]
-			this.employeePerformance = await dataAppraise.filter(item => item.appraise_position.acronym === 'CHUYEN-VIEN-THAM-DINH')
-			// this.employeeBusiness = await dataAppraise.filter(item => item.appraise_position.acronym === 'CHUYEN-VIEN-KINH-DOANH')
-			// this.appraisersManager = await dataAppraise.filter(item => item.appraise_position.acronym === 'TONG-GIAM-DOC')
-			let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
-			this.appraisers = await appraiser
-			// if (this.form && this.form.step_1.appraiser_id) {
-			// 	const filterData = await appraiser.filter(item => item.id !== this.form.step_1.appraiser_id && item.id !== this.form.step_1.appraiser_manager_id)
-			// 	this.signAppraisers = await filterData
-			// } else {
-			// 	this.signAppraisers = await this.appraisers
-			// }
 		},
 		async validateBeforeSubmit () {
 			const isValid = await this.$refs.observer.validate()
@@ -268,12 +165,7 @@ export default {
 		}
 	},
 	beforeMount () {
-		this.form.fromDate = moment().subtract(3, 'months').format('DD/MM/YYYY')
-		this.form.toDate = moment().format('DD/MM/YYYY')
-		this.getProfiles()
 		this.getUser()
-		this.getAppraisers()
-		// this.getCustomer()
 	}
 }
 </script>
@@ -536,6 +428,10 @@ export default {
   .marginTop {
     margin-top: 10px;
   }
+  .content_status {
+    font-weight: 500;
+    margin-left: 1.5rem;
+  }
   .title {
     color: #007EC6;
     font-weight: 600;
@@ -545,36 +441,4 @@ export default {
   .header_title {
     border-bottom: 1px solid #E8E8E8;
   }
-	.btn_loading {
-    position: relative;
-    color: white !important;
-    text-shadow: none !important;
-    pointer-events: none;
-  }
-  .btn_loading:after {
-    content: '';
-    display: inline-block;
-    vertical-align: text-bottom;
-    border: 1px solid wheat;
-    border-right-color: transparent;
-    border-radius: 50%;
-    color: #ffffff;
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    left: calc(50% - .5rem);
-    top: calc(50% - .5rem);
-    -webkit-animation: spinner-border .75s linear infinite;
-    animation: spinner-border .75s linear infinite;
-  }
-/deep/ {
-  .form-group-container.disabled {
-    background-color: rgba(222, 230, 238, 0.3);
-
-    .ant-input {
-      background-color: rgba(222, 230, 238, 0.3) !important;
-    }
-  }
-}
-
   </style>

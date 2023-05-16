@@ -13,11 +13,11 @@
 					<button @click="openChooseTypeCreate" class="btn text-nowrap index-screen-button ml-md-2">
 						<img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
 					</button>
-          <b-dropdown class="dropdown-container" no-caret>
+          <b-dropdown class="dropdown-container" no-caret v-if="this.export">
             <template #button-content>
-				<div class="container_image">
-					<img src="@/assets/icons/ic_more.svg" alt="">
-				</div>
+							<div class="container_image">
+								<img src="@/assets/icons/ic_more.svg" alt="">
+							</div>
             </template>
             <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
             <b-dropdown-item @click.prevent="exportMonthBefore">Xuất dữ liệu tháng trước</b-dropdown-item>
@@ -36,11 +36,11 @@
 		/>
     </div>
     <div>
-        <ModalExportAdjust
+		<ModalExportAdjust
 			v-if="showAdjustModal"
 			@cancel="showAdjustModal = false"
 			:statusOptions="statusOptions"
-        />
+		/>
 		<ModalSelectTypeProperty
 			v-if="open_select_type"
 			@cancel="open_select_type = false"
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { PERMISSIONS } from '@/enum/permissions.enum'
 import AppraisePagingData from '@/models/AppraisePagingData'
 import ButtonCheckbox from '@/components/Form/ButtonCheckbox'
 import Search from '../personal_property/Search.vue'
@@ -58,12 +59,8 @@ import ModalExportAdjust from './modals/ModalExportAdjust'
 import { Tabs, TabItem } from 'vue-material-tabs'
 import { convertPagination } from '@/utils/filters'
 import CertificateAsset from '@/models/CertificateAsset'
-import WareHouse from '@/models/WareHouse'
-import Certificate from '@/models/Certificate'
 import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
 import moment from 'moment'
-import store from '@/store'
-import * as types from '@/store/mutation-types'
 import ModalSelectTypeProperty from './modals/ModalSelectTypeProperty'
 export default {
 	name: 'Index',
@@ -97,6 +94,7 @@ export default {
 			edit: false,
 			deleted: false,
 			accept: false,
+			export: false,
 			selectedStatus: [],
 			statusOptions: {
 				data: [
@@ -133,20 +131,23 @@ export default {
 		// fix_permission
 		const permission = this.$store.getters.currentPermissions
 		permission.forEach((value) => {
-			if (value === 'VIEW_CERTIFICATE_ASSET') {
+			if (value === PERMISSIONS.VIEW_CERTIFICATE_ASSET) {
 				this.view = true
 			}
-			if (value === 'ADD_CERTIFICATE_ASSET') {
+			if (value === PERMISSIONS.ADD_CERTIFICATE_ASSET) {
 				this.add = true
 			}
-			if (value === 'EDIT_CERTIFICATE_ASSET') {
+			if (value === PERMISSIONS.EDIT_CERTIFICATE_ASSET) {
 				this.edit = true
 			}
-			if (value === 'DELETE_CERTIFICATE_ASSET') {
+			if (value === PERMISSIONS.DELETE_CERTIFICATE_ASSET) {
 				this.deleted = true
 			}
-			if (value === 'ACCEPT_CERTIFICATE_ASSET') {
+			if (value === PERMISSIONS.ACCEPT_CERTIFICATE_ASSET) {
 				this.accept = true
+			}
+			if (value === PERMISSIONS.EXPORT_CERTIFICATE_ASSET) {
+				this.export = true
 			}
 		})
 	},
@@ -273,93 +274,28 @@ export default {
 			this.getDataAll()
 		},
 		async export30daysBefore () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			this.form.fromDate = await moment(new Date(new Date().setDate(new Date().getDate() - 30))).format('DD/MM/YYYY')
 			this.form.toDate = await moment(new Date()).format('DD/MM/YYYY')
-			const res = await CertificateAsset.exportDataCertificationAsset(this.form)
-			if (res.data) {
-				const fileLink = document.createElement('a')
-				fileLink.href = res.data.url
-				fileLink.setAttribute('download', res.data.file_name)
-				document.body.appendChild(fileLink)
-				fileLink.click()
-				fileLink.remove()
-				window.URL.revokeObjectURL(fileLink)
-				this.$toast.open({
-					message: 'Xuất dữ liệu thành công',
-					type: 'success',
-					duration: 3000,
-					position: 'top-right'
-				})
-			} else if (res.error) {
-				this.$toast.open({
-					message: res.error.message,
-					type: 'error',
-					duration: 3000,
-					position: 'top-right'
-				})
-			}
+			this.exportData()
 		},
 		async exportMonthBefore () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			let date = new Date()
 			let datePrevious = new Date(date.setDate(0))
 			let from_date = new Date(new Date(datePrevious).setDate(1))
 			let to_date = new Date(datePrevious)
 			this.form.fromDate = await moment(from_date).format('DD/MM/YYYY')
 			this.form.toDate = await moment(to_date).format('DD/MM/YYYY')
-			const res = await CertificateAsset.exportDataCertificationAsset(this.form)
-			if (res.data) {
-				const fileLink = document.createElement('a')
-				fileLink.href = res.data.url
-				fileLink.setAttribute('download', res.data.file_name)
-				document.body.appendChild(fileLink)
-				fileLink.click()
-				fileLink.remove()
-				window.URL.revokeObjectURL(fileLink)
-				this.$toast.open({
-					message: 'Xuất dữ liệu thành công',
-					type: 'success',
-					duration: 3000,
-					position: 'top-right'
-				})
-			} else if (res.error) {
-				this.$toast.open({
-					message: res.error.message,
-					type: 'error',
-					duration: 3000,
-					position: 'top-right'
-				})
-			}
+			this.exportData()
 		},
 		async exportQuarter () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			let quarterAdjustment = (moment().month() % 3) + 1
 			let lastQuarterEndDate = moment().subtract({ months: quarterAdjustment }).endOf('month')
 			let lastQuarterStartDate = lastQuarterEndDate.clone().subtract({ months: 2 }).startOf('month')
 			this.form.fromDate = await moment(lastQuarterStartDate).format('DD/MM/YYYY')
 			this.form.toDate = await moment(lastQuarterEndDate).format('DD/MM/YYYY')
+			this.exportData()
+		},
+		async exportData() {
 			const res = await CertificateAsset.exportDataCertificationAsset(this.form)
 			if (res.data) {
 				const fileLink = document.createElement('a')
@@ -385,14 +321,6 @@ export default {
 			}
 		},
 		exportAdjust () {
-			if (process.env.CLIENT_ENV === 'trial') {
-				return this.$toast.open({
-					message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-					type: 'error',
-					position: 'top-right',
-					duration: 3000
-				})
-			}
 			this.showAdjustModal = true
 		}
 	},

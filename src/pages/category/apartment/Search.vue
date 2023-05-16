@@ -162,8 +162,8 @@ export default {
     width: 50%;
   }
 }
-.btn-img {
-  right: 10px;
-  top: 1.2rem;
-}
+// .btn-img {
+//   right: 10px;
+//   top: 1.2rem;
+// }
 </style>

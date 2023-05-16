@@ -2,7 +2,6 @@
 require('./check-versions')()
 
 const env = process.env.NODE_ENV
-
 const ora = require('ora')
 const rm = require('rimraf')
 const path = require('path')
@@ -10,12 +9,12 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 
-if (process.env.NODE_ENV === '') {
+if (!process.env.NODE_ENV) {
 	console.log(chalk.red('Missing NODE_ENV...'))
 	process.exit(1)
 }
 
-if (process.env.CLIENT_ENV === '') {
+if (!process.env.CLIENT_ENV) {
 	console.log(chalk.red('Missing CLIENT_ENV...'))
 	process.exit(1)
 }

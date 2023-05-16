@@ -4,9 +4,9 @@
       <button class="navbar-toggler" data-target="#navbar-menu" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
-				<div class="d-flex w-100 navbar-brand align-items-center justify-content-center">
-					<img class="navbar-brand-image" :src="logo" alt="company logo">
-				</div>
+        <div class="d-flex w-100 navbar-brand align-items-center justify-content-center">
+          <img class="navbar-brand-image" :src="logo" alt="company logo">
+        </div>
 
       <div class="collapse navbar-collapse" id="navbar-menu">
         <ul class="navbar-nav">
@@ -16,24 +16,24 @@
                class="nav-item"
                :id = "item.id"
                :class="{'dropdown': item.dropdown}">
-						<svg width="11" height="6" viewBox="0 0 11 6" xmlns="http://www.w3.org/2000/svg" class="icon-dropdown">
-							<path d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z" fill="currentColor"/>
-						</svg>
+            <svg width="11" height="6" viewBox="0 0 11 6" xmlns="http://www.w3.org/2000/svg" class="icon-dropdown">
+              <path d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z" fill="currentColor"/>
+            </svg>
             <!--navigation normal-->
             <router-link
               v-if="hasPermission(item)"
               :exact="item.exact"
               :to="{name: item.routeName}"
               class="nav-link">
-							<div class="nav-contain-wrapper">
-								<div class="contain-icon">
-									<icon-base :name="item.icon" v-if="item.customImage" width="20px" height="20px" class="item-icon svg-inline--fa" />
-									<font-awesome-icon :icon="item.icon" class="item-icon" width="20px" height="20px" v-else />
-								</div>
-								<span class="nav-link-title">
-									{{ $t(`${ item.title }`) }}
-								</span>
-							</div>
+              <div class="nav-contain-wrapper">
+                <div class="contain-icon">
+                  <icon-base :name="item.icon" v-if="item.customImage" width="20px" height="20px" class="item-icon svg-inline--fa" />
+                  <font-awesome-icon :icon="item.icon" class="item-icon" width="20px" height="20px" v-else />
+                </div>
+                <span class="nav-link-title">
+                  {{ $t(`${ item.title }`) }}
+                </span>
+              </div>
             </router-link>
             <ul v-if="item.dropdown" class="dropdown-item">
               <li v-for="dropdown in item.dropdown" :key="dropdown.id" class="nav-link-title nav-dropdown">
@@ -46,19 +46,19 @@
               </li>
             </ul>
           </li>
-					<li id="user" @click="dropdownClick($event)" class="nav-item nav-user dropdown">
+          <li id="user" @click="dropdownClick($event)" class="nav-item nav-user dropdown">
             <svg width="11" height="6" viewBox="0 0 11 6" xmlns="http://www.w3.org/2000/svg" class="icon-dropdown">
-							<path d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z" fill="currentColor"/>
-						</svg>
+              <path d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z" fill="currentColor"/>
+            </svg>
             <!--navigation normal-->
             <div class="nav-link">
-							<div class="nav-contain-wrapper">
-								<div class="contain-icon" >
-									<font-awesome-icon icon="user-circle" class="item-icon"></font-awesome-icon>
-								</div>
-								<span class="name mb-0 d-flex flex-column nav-link-title">{{currentUser ? currentUser.name : ''}}<span class="mt-1">{{currentUser ? currentUser.roles[0].role_name : ''}}</span></span>
+              <div class="nav-contain-wrapper">
+                <div class="contain-icon" >
+                  <font-awesome-icon icon="user-circle" class="item-icon"></font-awesome-icon>
+                </div>
+                <span class="name mb-0 d-flex flex-column nav-link-title">{{currentUser ? currentUser.name : ''}}<span class="mt-1">{{currentUser ? currentUser.roles[0].role_name : ''}}</span></span>
               </div>
-						</div>
+            </div>
             <ul class="dropdown-item">
               <li class="nav-link-title nav-dropdown" >
                 <router-link :to="{name: 'profile.index'}" class="nav-link">
@@ -68,7 +68,7 @@
               <li class="nav-link-title nav-dropdown" @click="logout()"> <div class="nav-link">Đăng xuất</div> </li>
             </ul>
           </li>
-				</ul>
+        </ul>
       </div>
       <div class="toggle d-flex justify-content-end" :class="[toggleItem ? toggle_mini : '']">
         <div class="toggle-btn" @click="handleClick">
@@ -184,7 +184,7 @@ export default {
 		},
 		removeDropdown () {
 			for (const id of ['manage', 'category', 'user']) {
-    		const element = document.getElementById(id)
+				const element = document.getElementById(id)
 				if (element) element.classList.remove('isDropdown')
 			}
 		}
@@ -250,7 +250,7 @@ ul,li {
         right: 14px;
         transform: rotate(90deg);
         top: 18px;
-				color: rgba(53,64,82,.72);
+        color: rgba(53,64,82,.72);
       }
       .dropdown-item {
         .nav-link {
@@ -293,7 +293,7 @@ ul,li {
   }
 }
 .navbar-nav .nav-item.dropdown .nav-link.router-link-active {
-	color: rgba(53,64,82,0.72) !important;
+  color: rgba(53,64,82,0.72) !important;
   background: transparent;
   &:hover{
     color: #FAA831 !important;
@@ -341,7 +341,7 @@ ul,li {
     }
     &-image {
       width: 48px;
-			height: auto;
+      height: auto;
     }
   }
   .logo-text{
@@ -468,7 +468,7 @@ ul,li {
         .icon-dropdown {
           transition: .3s;
           transform: rotate(0deg);
-					color: #FAA831;
+          color: #FAA831;
         }
         .dropdown-item {
           display: block;
@@ -651,60 +651,60 @@ ul,li {
 }
 
 .navbar-nav .nav-item {
-	justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .sidebar-mini .navbar-nav .nav-link {
-	padding: 0.6rem;
-	.nav-link-title {
-		margin-left: 1rem;
-		margin-top: 0.5rem;
-		margin-bottom: 0.5rem;
-	}
+  padding: 0.6rem;
+  .nav-link-title {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 .sidebar-mini .navbar-nav .nav-item > .nav-link {
-	justify-content: center;
+  justify-content: center;
 }
 
 .sidebar-mini .navbar-nav .nav-item:hover > .nav-link.router-link-exact-active {
-	justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .navbar-nav .nav-item .nav-link .nav-contain-wrapper {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-mini .nav-item .nav-link .nav-contain-wrapper {
-	padding: 0.3rem;
+  padding: 0.3rem;
 }
 
 .sidebar-mini .nav-item:not(.dropdown) .nav-link:not(:hover).router-link-exact-active .nav-contain-wrapper {
-	padding: 0.6rem;
-	background: #FF963D;
-	box-shadow: 0px 1px 9px #C7CAD9;
-	border-radius: 10px;
+  padding: 0.6rem;
+  background: #FF963D;
+  box-shadow: 0px 1px 9px #C7CAD9;
+  border-radius: 10px;
 }
 
 .sidebar-mini .nav-item:not(.dropdown) .nav-link.router-link-exact-active .contain-icon {
-	color: #F6F7FB;
+  color: #F6F7FB;
 }
 
 .sidebar-mini .navbar-nav .nav-item.isDropdown .nav-link {
-	width: 100%;
+  width: 100%;
 }
 
 .sidebar-mini .nav-item .dropdown-item .nav-link,
 .sidebar-mini .navbar-nav .nav-item .nav-link:hover {
-	justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .sidebar-mini .navbar-nav .nav-item.isDropdown a.router-link-exact-active {
-	color: #0b0d10;
+  color: #0b0d10;
 }
 
 .sidebar-mini .contain-icon .item-icon {
-	margin-right: unset;
+  margin-right: unset;
 }
 </style>

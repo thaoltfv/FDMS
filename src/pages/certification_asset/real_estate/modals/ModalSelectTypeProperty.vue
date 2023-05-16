@@ -122,21 +122,7 @@ export default {
 			if (this.landHouse) {
 				return this.$router.push({ name: 'certification_asset.create' })
 			} else if (this.apartment) {
-				if (process.env.CLIENT_ENV === 'trial') {
-					return this.$toast.open({
-						message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-						type: 'error',
-						position: 'top-right',
-						duration: 3000
-					})
-				}
 				return this.$router.push({ name: 'certification_asset.apartment.create', query: { asset_type_id: 39 } })
-				// return this.$toast.open({
-				// 	message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử',
-				// 	type: 'error',
-				// 	position: 'top-right',
-				// 	duration: 5000
-				// })
 			}
 			// this.$emit('cancel', event)
 		}

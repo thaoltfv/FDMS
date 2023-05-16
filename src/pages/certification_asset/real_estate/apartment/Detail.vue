@@ -168,6 +168,9 @@
 								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(0)" type="submit">
 									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
 								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
 							</div>
 						</div>
 					</ValidationObserver>
@@ -200,6 +203,9 @@
 								</button>
 								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(1)" type="submit">
 									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
 								</button>
 							</div>
 						</div>
@@ -240,6 +246,9 @@
 								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(2)" type="submit">
 									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
 								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
 							</div>
 						</div>
 					</ValidationObserver>
@@ -271,6 +280,9 @@
 								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(3)" type="submit">
 									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
 								</button>
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
 							</div>
 						</div>
 					</ValidationObserver>
@@ -293,22 +305,28 @@
 				</tab-content>
 			</form-wizard>
 			<ModalNotificationAppraisal
+				v-if="openCancelAppraisal"
+				@cancel="openCancelAppraisal = false"
+				v-bind:notification="message"
+				@action="handleActionCancelAppraise"
+			/>
+			<ModalNotificationAppraisal
 				v-if="showConfirmEdit"
 				@cancel="showConfirmEdit = false"
 				v-bind:notification="messageConfirm"
 				@action="confirmEditStep"
 			/>
-		<ModalNotificationAppraisal
-				v-if="showConfirmDuplicate"
-				@cancel="showConfirmDuplicate = false"
-				:notification="'Bạn có muốn nhân bản tài sản thẩm định không'"
-				@action="actionDuplicate"
+			<ModalNotificationAppraisal
+					v-if="showConfirmDuplicate"
+					@cancel="showConfirmDuplicate = false"
+					:notification="'Bạn có muốn nhân bản tài sản thẩm định không'"
+					@action="actionDuplicate"
+				/>
+			<ModalPrintEstimateAssetApartment
+				v-if="openPrint"
+				@cancel="openPrint = false"
+				:data="reportData"
 			/>
-		<ModalPrintEstimateAssetApartment
-			v-if="openPrint"
-			@cancel="openPrint = false"
-			:data="reportData"
-		/>
 		</div>
 	</div>
 </template>
@@ -336,9 +354,7 @@ import Certificate from '@/models/Certificate'
 import { COMPARISON_APARTMENT } from '@/enum/comparison-factor-apartment.enum'
 import AppraiseData from '@/models/AppraiseData'
 import CertificateAsset from '@/models/CertificateAsset'
-import store from '@/store'
 import moment from 'moment'
-import * as types from '@/store/mutation-types'
 import { Timeline, Drawer } from 'ant-design-vue'
 import ModalPrintEstimateAssetApartment from '@/components/Modal/ModalPrintEstimateAssetApartment'
 const jsonConfig = require('../../../../../config/workflow.json')
@@ -373,7 +389,8 @@ export default {
 			isSave: false,
 			openNotification: false,
 			isSubmit: false,
-			openModalCancel: false,
+			isCancelEnable: true,
+			openCancelAppraisal: false,
 			showConfirmEdit: false,
 			showConfirmDuplicate: false,
 			showDetailPlanning: true,
@@ -634,8 +651,8 @@ export default {
 				this.max_version = bindDataStep.max_version
 				this.certificate = bindDataStep.certificate
 				this.real_estate = bindDataStep.real_estate
-				if (this.createdBy.id === this.current_create_by) { this.checkRole = true }
 				this.status = bindDataStep.status
+				if (bindDataStep.certificate) { this.isCancelEnable = false }
 				// step 1
 				if (bindDataStep.pic) { this.form.step_1.pic = bindDataStep.pic }
 				if (bindDataStep.apartment_asset_properties) { this.form.step_1.apartment_asset_properties = bindDataStep.apartment_asset_properties }
@@ -1247,8 +1264,8 @@ export default {
 		},
 		async getProfiles () {
 			const profile = this.$store.getters.profile
-			this.form.created_by = profile.data.user.id
 			this.current_create_by = profile.data.user.id
+			this.checkRole = (profile.data.user.id === this.form.created_by) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
 		},
 
 		async handleCancel () {
@@ -1760,6 +1777,33 @@ export default {
 		},
 		handlePrint () {
 			this.printEstimateAssetPrice()
+		},
+		handleCancelProperty () {
+			this.openCancelAppraisal = true
+			this.message = 'Bạn có muốn hủy tài sản thẩm định này không ?'
+		},
+
+		// function hủy tài sản
+		async handleActionCancelAppraise () {
+			let status = 5
+			const res = await AppraiseData.updateStatusRealestate(this.idData, status)
+			if (res.data && res.data.status === 5) {
+				await this.$toast.open({
+					message: 'Hủy tài sản' + this.idData + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.openNotification = await false
+				await this.$router.push({name: 'certification_asset.index'}).catch(_ => {})
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+			}
 		},
 		async printEstimateAssetPrice () {
 			let id = this.idData ? this.idData : ''

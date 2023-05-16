@@ -23,6 +23,7 @@
         :disabled="disabled"
         v-model="valueArea"
         @input="debounceInput"
+				@change="onChange"
       />
       <span class="suffix color_content">%</span>
       <!--Message Error-->
@@ -131,7 +132,7 @@ export default {
 	methods: {
 		debounceInput: debounce(function (e) {
 			this.onChange(e)
-		}, 500),
+		}, 400),
 		async onChange (event) {
 			if (event.target.value) {
 				if (event.target.value.match(/^[+-]?(\d)+(\.\d+)*(,\d+)?$|^[+-]?(\d)+(,\d+)*(\.\d+)?$/g)) {

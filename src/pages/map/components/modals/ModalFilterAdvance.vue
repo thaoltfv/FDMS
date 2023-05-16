@@ -308,8 +308,6 @@ export default {
 			}
 			return data
 		},
-		handleChangeYear (event) {
-		},
 		totalAreaFrom (event) {
 			if (event) {
 				this.form.total_area_from = event
