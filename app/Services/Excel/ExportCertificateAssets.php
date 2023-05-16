@@ -26,8 +26,6 @@ class ExportCertificateAssets
     public function exportAsset($data){
         // dd($data[0]->frontside);
         $fontName = 'Times New Roman';
-        $fromDate = request()->get('fromDate');
-        $toDate = request()->get('toDate');
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
         $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_assets/' . $now->format('Y') . '/' . $now->format('m') . '/';
         if(!File::exists(storage_path('app/public/'. $path))){
@@ -58,72 +56,72 @@ class ExportCertificateAssets
                 return [
                     'Mã TSTĐ' => 'TSTD_'. $data->id,
                     'Loại TSTĐ' =>CommonService::mbCaseTitle($data->assetType->description) ,
-                    'Vị trí' => ($data->properties[0]->properties == 0) ? 'Hẻm' :'Mặt tiền',
+                    'Tỉnh/Thành' =>$data->assetFull->province ? $data->assetFull->province->name : '',
+                    'Quận/Huyện' =>$data->assetFull->district ? $data->assetFull->district->name : '',
+                    'Phường/Xã' =>$data->assetFull->ward ? $data->assetFull->ward->name : '',
+                    'Đường' => $data->assetFull->street ? $data->assetFull->street->name : '',
+                    'Tọa độ' => $data->coordinates,
+                    'Vị trí' => ($data->frontside) ? 'Hẻm' :'Mặt tiền',
                     'Tên TSTĐ' => $data->appraise_asset,
-                    'Tổng DT đất' => $data->properties[0]->appraise_land_sum_area,
-                    'Tổng DT xây dựng' => $data->total_construction_area,
+                    'Địa chỉ' => $data->assetFull->full_address,
+                    'Tổng DT đất/căn hộ' => $data->total_area,
+                    'Tổng DT sàn' => $data->total_construction_base,
                     'Tổng giá trị (VNĐ)' => floatval($data->total_price) ,
+                    'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('d/m/Y')  ,
                     'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
-                    'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d')  ,
-                    'Trạng thái' =>  $data->status_text,
                 ];}
             );
-        // $writer = IOFactory::load(storage_path('app/public/'. $path. $fileName));
+
+        $this->formatColumn($path, $fileName);
+
+        $data = [];
+        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName );
+        $data['file_name'] = $fileName;
+        return $data;
+    }
+
+    private function formatColumn($path, $fileName)
+    {
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
         $reader= new Xlsx();
         $spreadSheet= new Spreadsheet();
         $spreadSheet= $reader->load(storage_path('app/public/'. $path. $fileName));
         $spreadSheet->setActiveSheetIndex(0);
         $activeSheet = $spreadSheet->getActiveSheet();
-        $headers = ValueDefault::CERTIFICATION_ASSET_COLUMN_LIST;
-        $alpha = ValueDefault::ALPHA;
-        $stt = 0;
+
+        $lastCol = 'A';
+        foreach ($activeSheet->getColumnIterator() as $column) {
+            $lastCol = $column->getColumnIndex();
+            $cellAddress = $lastCol . '1';
+            $cellValue = strval($activeSheet->getCell($cellAddress)->getValue());
+            if ($cellValue === "Đường") {
+                $activeSheet->getColumnDimension($lastCol)->setWidth(40);
+            } else if ($cellValue === "Tên TSTĐ") {
+                $activeSheet->getColumnDimension($lastCol)->setWidth(40);
+            } else if ($cellValue === "Tổng giá trị (VNĐ)") {
+                $activeSheet->getStyle($lastCol)->getNumberFormat()->setFormatCode('###,###');
+                $activeSheet->getColumnDimension($lastCol)->setAutoSize(true);
+            } else if ($cellValue === "Địa chỉ") {
+                $activeSheet->getColumnDimension($lastCol)->setWidth(40);
+            } else {
+                $activeSheet->getColumnDimension($lastCol)->setAutoSize(true);
+            }
+        }
+
         $title = 'Thống Kê Tài Sản Thẩm Định';
         $date = 'Từ ngày '. $fromDate .' đến ngày '. $toDate;
         $activeSheet->insertNewRowBefore(1,3);
-        $activeSheet->mergeCells('A2:J2');
+        $activeSheet->mergeCells('A2:' . $lastCol .'2');
         $activeSheet->setCellValue('A2', $title);
-        $activeSheet->getStyle('A2:J2')->getFont()->setBold(true)->setName($fontName)->setSize(16);
-        $activeSheet->getStyle('A2:j2')->getAlignment()->setHorizontal('center');
+        $activeSheet->getStyle('A2:' . $lastCol .'2')->getFont()->setBold(true)->setSize(16);
+        $activeSheet->getStyle('A2:' . $lastCol .'2')->getAlignment()->setHorizontal('center');
 
-        $activeSheet->mergeCells('A3:J3');
+        $activeSheet->mergeCells('A3:' . $lastCol .'3');
         $activeSheet->setCellValue('A3', $date);
-        $activeSheet->getStyle('A3:J3')->getFont()->setItalic(true)->setName($fontName);
-        $activeSheet->getStyle('A3:j3')->getAlignment()->setHorizontal('center');
-        $activeSheet->getStyle('A4:j4')->getAlignment()->setHorizontal('center')->setVertical('center');
-
-        $activeSheet->getColumnDimension('A')->setWidth(10.30);
-        $activeSheet->getColumnDimension('B')->setWidth(12.30);
-        $activeSheet->getColumnDimension('C')->setWidth(7.30);
-        $activeSheet->getColumnDimension('D')->setWidth(37.30);
-        $activeSheet->getColumnDimension('E')->setWidth(11.30);
-        $activeSheet->getColumnDimension('F')->setWidth(11.30);
-        $activeSheet->getColumnDimension('G')->setWidth(12.80);
-        $activeSheet->getColumnDimension('H')->setWidth(15.30);
-        $activeSheet->getColumnDimension('I')->setWidth(13.30);
-        $activeSheet->getColumnDimension('J')->setWidth(13.30);
-
-        $countData = count($data) + 4;
-        foreach($headers as $item){
-            $cellAddress = "$alpha[$stt]4:$alpha[$stt]$countData";
-            if(Str::contains($item, 'Tổng')){
-                if(Str::contains($item, 'Tổng giá trị')){
-                    $activeSheet->getStyle( $cellAddress)
-                        ->getNumberFormat()->setFormatCode('###,###');
-                }else{
-                    $activeSheet->getStyle( $cellAddress)
-                    ->getNumberFormat()->setFormatCode('###,##0.#0');
-                }
-            }
-            if(Str::contains($item, 'Ngày')){
-                $activeSheet->getStyle($cellAddress)
-                    ->getNumberFormat()->setFormatCode(StyleNumberFormat::FORMAT_DATE_DDMMYYYY);
-            }
-            if(Str::contains($item, 'Tên')){
-                $activeSheet->getStyle( $cellAddress)->getAlignment()->setWrapText(true);
-            }
-            // $activeSheet->getColumnDimension($alpha[$stt])->setAutoSize(true);
-            $stt++;
-        }
+        $activeSheet->getStyle('A3:' . $lastCol .'3')->getFont()->setItalic(true);
+        $activeSheet->getStyle('A3:' . $lastCol .'3')->getAlignment()->setHorizontal('center');
+        $activeSheet->getStyle('A4:' . $lastCol .'4')->getAlignment()->setHorizontal('center')->setVertical('center');
 
         $objWriter = IOFactory::createWriter($spreadSheet, 'Xlsx');
         $objWriter->save(storage_path('app/public/'. $path. '/'. $fileName ));
@@ -131,10 +129,5 @@ class ExportCertificateAssets
         //Cleanup
         $spreadSheet->disconnectWorksheets();
         unset($spreadSheet);
-
-        $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName );
-        $data['file_name'] = $fileName;
-        return $data;
     }
 }

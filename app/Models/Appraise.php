@@ -29,6 +29,9 @@ class Appraise extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+    protected $appends = [
+        'total_construction_base'
+    ];
     protected $fillable = [
         'status',
         'asset_type_id',
@@ -800,6 +803,9 @@ class Appraise extends Model
 
     public function getTotalConstructionAreaAttribute(){
         return floatval($this->tangibleAssets()->sum('total_construction_area')) ;
+    }
+    public function getTotalConstructionBaseAttribute(){
+        return floatval($this->tangibleAssets()->sum('total_construction_base')) ;
     }
     public function getAppraiseLandSumAreaAttribute(){
         return floatval($this->properties()->sum('appraise_land_sum_area')) ;

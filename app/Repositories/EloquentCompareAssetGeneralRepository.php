@@ -4686,17 +4686,28 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             'total_area',
             'total_construction_area',
             'total_amount',
-            'status',
             'average_land_unit_price',
             'created_at',
             'created_by',
             'asset_type_id',
             'transaction_type_id',
+            'coordinates',
+            'max_value_description',
+            'province_id',
+            'district_id',
+            'ward_id',
+            'street_id',
         ];
         $with = [
             'assetType:id,description',
             'transactionType:id,description',
+            'properties:id,asset_general_id,main_road_length,land_type_id',
+            'properties.landType:id,description',
             'createdBy:id,name',
+            'province:id,name',
+            'district:id,name',
+            'ward:id,name',
+            'street:id,name'
         ];
         $result = $this->model->query()->with($with)->where($where)->select($select);
         if (!empty($assetTypeId)) {
@@ -4715,6 +4726,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         if (!empty($toDate) && $toDate != 'Invalid date') {
             $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy')");
         }
+        // dd($result->limit(5)->get()->append('area_total')->toArray());
         return $result->get()->append('area_total');
     }
 

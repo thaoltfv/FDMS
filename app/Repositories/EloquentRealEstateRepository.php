@@ -6,6 +6,7 @@ use App\Contracts\RealEstateRepository;
 use App\Enum\ErrorMessage;
 use App\Enum\ValueDefault;
 use App\Services\CommonService;
+use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -230,5 +231,51 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
                 ])
                 ->log($log);
         // }
+    }
+
+    public function exportCertificateAssets()
+    {
+        $assetTypeId = request()->get('asset_type_id');
+        $createdBy = request()->get('created_by');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        $where = [];
+        $select = [
+            'id',
+            'appraise_asset',
+            'asset_type_id',
+            'front_side',
+            'total_area',
+            'total_price',
+            'created_at',
+            'created_by',
+            'asset_type_id',
+            'coordinates',
+        ];
+        $with = [
+            'assetFull',
+            'assetType:id,description',
+            'createdBy:id,name',
+        ];
+        $result = $this->model->query()->with($with)->where($where)->select($select);
+        if (!empty($assetTypeId)) {
+            $result->whereHas('assetType', function ($has) use ($assetTypeId) {
+                $has->where('id', $assetTypeId);
+            });
+        }
+        if (!empty($createdBy)) {
+            $result->WhereHas('createdBy', function ($has) use ($createdBy) {
+                $has->where('name', 'ilike' , '%' . $createdBy . '%');
+            });
+        }
+        if (!empty($fromDate) && $fromDate != 'Invalid date') {
+            $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
+        }
+        if (!empty($toDate) && $toDate != 'Invalid date') {
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy')");
+        }
+        // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
+        return $result->get()->append('total_construction_base');
+
     }
 }

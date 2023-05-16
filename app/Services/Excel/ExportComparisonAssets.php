@@ -54,8 +54,16 @@ class ExportComparisonAssets
                     'Mã TSSS' => 'TSSS_'. $data->id,
                     'Loại tài sản' => isset($data->assetType->description) ? CommonService::mbCaseTitle($data->assetType->description) : '' ,
                     'Loại giao dịch' => isset($data->transactionType->description) ? CommonService::mbCaseTitle($data->transactionType->description) : '',
+                    'Tỉnh/Thành' =>$data->province->name,
+                    'Quận/Huyện' =>$data->district->name,
+                    'Phường/Xã' =>$data->ward->name,
+                    'Đường' => $data->street->name,
+                    'Tọa độ' => $data->coordinates,
+                    'Vị trí' => ($data->properties[0]->main_road_length === 0) ? 'Hẻm' :'Mặt tiền',
+                    'Loại đất' => ($data->properties[0]->landType) ? CommonService::mbCaseTitle($data->properties[0]->landType->description) :'Không rõ',
                     'Địa chỉ' => $data->full_address,
-                    'Tổng DT đất' => $data->total_area,
+                    'Mục đích chính' => $data->max_value_description,
+                    'Tổng DT đất/căn hộ' => $data->total_area,
                     'Tổng DT xây dựng' => $data->total_construction_area,
                     'Tổng giá trị (VNĐ)' => floatval($data->total_amount) ,
                     'Ngày đăng tin' =>  \Carbon\Carbon::parse($data->public_date)->format('d/m/Y'),
@@ -85,8 +93,19 @@ class ExportComparisonAssets
         $lastCol = 'A';
 
         foreach ($activeSheet->getColumnIterator() as $column) {
-            $activeSheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
             $lastCol = $column->getColumnIndex();
+            $cellAddress = $lastCol . '1';
+            $cellValue = strval($activeSheet->getCell($cellAddress)->getValue());
+            if ($cellValue === "Đường") {
+                $activeSheet->getColumnDimension($lastCol)->setWidth(40);
+            } else if ($cellValue === "Tổng giá trị (VNĐ)") {
+                $activeSheet->getStyle($lastCol)->getNumberFormat()->setFormatCode('###,###');
+                $activeSheet->getColumnDimension($lastCol)->setAutoSize(true);
+            } else if ($cellValue === "Địa chỉ") {
+                $activeSheet->getColumnDimension($lastCol)->setWidth(40);
+            } else {
+                $activeSheet->getColumnDimension($lastCol)->setAutoSize(true);
+            }
         }
 
         $title = 'Thống Kê Tài Sản So Sánh';
