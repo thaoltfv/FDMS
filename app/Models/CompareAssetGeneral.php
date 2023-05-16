@@ -198,4 +198,19 @@ class CompareAssetGeneral extends Model
         }
         return $value;
     }
+
+    public function getFrontSideTextAttribute()
+    {
+        $value = 'Không biết';
+        if ($this->properties && count($this->properties) > 0)
+            $value = $this->properties->first()->front_side ? 'Mặt tiền' : 'Hẻm';
+        return $value;
+    }
+    public function getLandTypeTextAttribute()
+    {
+        $value = 'Không biết';
+        if ($this->properties && count($this->properties) > 0)
+            $value = $this->properties->first()->landType->description;
+        return $value;
+    }
 }
