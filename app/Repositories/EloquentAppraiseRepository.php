@@ -6700,12 +6700,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         if (isset($tangibleAssets) && ! empty($tangibleAssets)) {
             $clcl = 0;
             $stt = 0;
+			$appraisalMethod = AppraiseAppraisalMethods::query()->where('appraise_id', $id)->whereIn('slug', ['XAC_DINH_DON_GIA_XAY_DUNG', 'XAC_DINH_CHAT_LUONG_CON_LAI'])->get();
+            $priceMethod = $appraisalMethod->where('slug' , 'XAC_DINH_DON_GIA_XAY_DUNG')->first();
+            $priceMethod = $priceMethod->slug_value ?? '';
+            $remainMethod = $appraisalMethod->where('slug' , 'XAC_DINH_CHAT_LUONG_CON_LAI')->first();
+            $remainMethod = $remainMethod->slug_value ?? '';
             foreach ($tangibleAssets as $tangible) {
-                $company = $tangible->constructionCompany;
                 $tangibleName = $tangible->tangible_name;
-                $area = $tangible->total_construction_area;
-                $price = $company->avg('unit_price_m2');
-                $clcl = CommonService::getClclV2($tangible);
+                $area = $tangible->total_construction_base;
+                $price = CommonService::getSelectedTangibleAssetPrice($tangible, $priceMethod);
+                $clcl = CommonService::getSelectedRemain($tangible, $remainMethod);
                 $total =CommonService::roundPrice($area * $price * $clcl / 100, 0);
                 $tangibleData[$stt]['name'] = $tangibleName;
                 $tangibleData[$stt]['area'] = $area;

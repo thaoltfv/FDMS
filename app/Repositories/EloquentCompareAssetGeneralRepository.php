@@ -4724,7 +4724,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
         }
         if (!empty($toDate) && $toDate != 'Invalid date') {
-            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy')");
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
         }
         // dd($result->limit(5)->get()->append(['area_total', 'front_side_text', 'land_type_text'])->toArray());
         return $result->get()->append(['area_total', 'front_side_text', 'land_type_text']);

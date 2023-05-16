@@ -272,7 +272,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
         }
         if (!empty($toDate) && $toDate != 'Invalid date') {
-            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy')");
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
         }
         // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
         return $result->get()->append('total_construction_base');

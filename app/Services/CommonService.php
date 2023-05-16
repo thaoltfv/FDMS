@@ -408,6 +408,7 @@ class CommonService
 						$unitPrice = $tangibleAsset->total_desicion_average;
 					else
 						$unitPrice =  self::getTangibleAssetPriceV2($tangibleAsset);
+
 					if (!empty($appraisalCLCL) && $appraisalCLCL->slug_value == 'trung-binh-cong') {
 						$clcl =  self::getClclV2($tangibleAsset);
 					} elseif (!empty($appraisalCLCL) && $appraisalCLCL->slug_value == 'chuyen-gia') {
@@ -455,6 +456,28 @@ class CommonService
 		// return round((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3), -5, PHP_ROUND_HALF_DOWN);
 		return self::roundPrice((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3), -5);
 	}
+
+	public static function getSelectedTangibleAssetPrice($tangibleAsset, $method) //đơn giá nhà
+	{
+        $unitPrice = 0;
+        if ($method == 'dg-quyet-dinh')
+            $unitPrice = $tangibleAsset->total_desicion_average;
+        else
+            $unitPrice =  self::getTangibleAssetPriceV2($tangibleAsset);
+
+		return $unitPrice;
+	}
+    public static function getSelectedRemain($tangibleAsset, $method)
+    {
+        $clcl =  $tangibleAsset->remaining_quality ?? 0;
+        if ($method == 'trung-binh-cong') {
+            $clcl =  self::getClclV2($tangibleAsset);
+        } elseif ($method == 'chuyen-gia') {
+            $clcl =  self::getClcl2($tangibleAsset);
+        }
+        return $clcl;
+    }
+
 	public static function getClcl($appraise)
 	{
 		$comparisonTangibleFactor = $appraise->comparisonTangibleFactor[0] ?? null;
