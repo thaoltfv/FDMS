@@ -67,6 +67,20 @@ class RealEstate extends Model
         $appraises =  $this->hasOne(Appraise::class, 'real_estate_id','id')->select( $select);
         return $apartments->unionAll($appraises);
     }
+    public function assetFull():HasOne
+    {
+        $with = [
+            'createdBy:id,name',
+            'province:id,name',
+            'district:id,name',
+            'ward:id,name',
+            'street:id,name'
+        ];
+        $select = ['id','full_address','real_estate_id','province_id','district_id','ward_id','street_id'];
+        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id','id')->with($with)->select( $select);
+        $appraises =  $this->hasOne(Appraise::class, 'real_estate_id','id')->with($with)->select( $select);
+        return $apartments->unionAll($appraises);
+    }
     public function getLastVersionAttribute()
     {
         $apartment = $this->apartment;
@@ -83,5 +97,11 @@ class RealEstate extends Model
     public function certificate():BelongsTo
     {
         return $this->belongsTo(Certificate::class, 'certificate_id', 'id');
+    }
+    public function getTotalConstructionBaseAttribute()
+    {
+        if ($this->appraises)
+            return $this->appraises->total_construction_base;
+        return 0; // or some other default value
     }
 }

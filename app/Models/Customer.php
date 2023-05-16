@@ -36,4 +36,9 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerPic::class,'customer_id');
     }
+
+    public function getFullInfoAttribute()
+    {
+        return "{$this->name} {$this->phone} {$this->address}";
+    }
 }

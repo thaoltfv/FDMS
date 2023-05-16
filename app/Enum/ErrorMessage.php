@@ -24,7 +24,8 @@ class ErrorMessage
     public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa phiếu có trạng thái ';
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
     public const CERTIFICATE_CHECK_ADD = 'Bạn không có quyền tạo mới HSTD ';
-    public const CERTIFICATE_CHECK_VIEW = 'Bạn không có xem thông tin HSTD ';
+    public const CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTD ';
+    public const CERTIFICATE_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách HSTD ';
 
     public const APPRAISE_AUTOMATIC_ASSET = 'Xin lỗi! Khu vực hiện tại chưa đủ dữ liệu để so sánh. Vui lòng chọn TSSS trên bản đồ.';
     public const APPRAISE_NOTEXISTS = 'Không tồn tại tài sản thẩm định - TSTD ';
@@ -40,6 +41,7 @@ class ErrorMessage
     public const APPRAISE_CHECK_VIEW =  'Bạn không có quyền xem TSTD ';
     public const APPRAISE_CHECK_UPDATE =  'Bạn không có quyền chỉnh sửa TSTD ';
     public const APPRAISE_CHECK_ADD = 'Bạn không có quyền tạo mới TSTD ';
+    public const APPRAISE_CHECK_EXPORT = 'Bạn không có xuất danh sách TSTD ';
     public const COMPAREASSET_NOTEXISTS = 'Không tồn tại tài sản so sánh - TSSS ';
     public const LOG_ACTIVITY_NOT_FOUND = 'Không tìm thấy lịch sử được ghi lại';
 

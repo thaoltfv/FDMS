@@ -21,9 +21,43 @@ class MigrationTruncateTable extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'DELETE all appraise data';
+
+    protected $tableComparisonAssets = [
+        'compare_asset_general_pends',
+        'compare_asset_generals',
+        'compare_asset_versions',
+        'compare_foundation_assesses',
+        'compare_general_pics',
+        'compare_machine_pends',
+        'compare_other_assets',
+        'compare_other_pics',
+        'compare_pic_pends',
+        'compare_properties',
+        'compare_property_details',
+        'compare_property_doc',
+        'compare_property_pends',
+        'compare_property_pics',
+        'compare_property_turning_time',
+        'compare_tangible_asset_pends',
+        'compare_tangible_assets',
+        'compare_tangible_pics',
+    ];
 
     protected $tableCertificate = [
+        'certificate_apartment_adapters',
+        'certificate_apartment_appraisal_base',
+        'certificate_apartment_appraisal_methods',
+        'certificate_apartment_comparison_factors',
+        'certificate_apartment_has_assets',
+        'certificate_apartment_laws',
+        'certificate_apartment_other_assets',
+        'certificate_apartment_pics',
+        'certificate_apartment_prices',
+        'certificate_apartment_properties',
+        'certificate_apartment_versions',
+        'certificate_apartments',
+
         'certificate_approach',
         'certificate_asset_adapter',
         'certificate_asset_comparison_factor',
@@ -46,7 +80,12 @@ class MigrationTruncateTable extends Command
         'certificate_asset_versions',
         'certificate_asset_prices',
         'certificate_has_appraises',
+        'certificate_has_apartments',
+        'certificate_has_personal_properties',
+        'certificate_has_real_estates',
         'certificate_assets',
+        'certificate_personal_properties',
+        'certificate_real_estates',
         'certificate_basis_property',
         'certificate_comparison_factor',
         'certificate_construction_company',
@@ -66,6 +105,22 @@ class MigrationTruncateTable extends Command
     ];
 
     protected $tableAppraise = [
+        'real_estates',
+        'apartment_asset_adapter',
+        'apartment_asset_appraisal_base',
+        'apartment_asset_appraisal_methods',
+        'apartment_asset_comparison_factors',
+        'apartment_asset_has_assets',
+        'apartment_asset_laws',
+        'apartment_asset_other_assets',
+        'apartment_asset_pics',
+        'apartment_asset_prices',
+        'apartment_asset_properties',
+        'apartment_asset_versions',
+        'apartment_assets',
+        'apartment_specifications',
+        'apartments',
+
         'appraise_appraisal_methods',
         'appraise_law_details',
         'appraise_comparison_factor',
@@ -89,8 +144,49 @@ class MigrationTruncateTable extends Command
         'appraise_adapter',
         'appraises',
         'appraise_unit_area',
-        'construction_company'
+        'construction_company',
+
+        'personal_properties',
+        'machine_certificate_asset_law_infos',
+        'machine_certificate_asset_laws',
+        'machine_certificate_asset_prices',
+        'machine_certificate_assets',
+        'machine_certificate_brief_law_infos',
+        'machine_certificate_brief_laws',
+        'machine_certificate_brief_prices',
+        'machine_certificate_briefs',
+        'other_certificate_asset_law_infos',
+        'other_certificate_asset_laws',
+        'other_certificate_asset_prices',
+        'other_certificate_assets',
+        'other_certificate_brief_law_infos',
+        'other_certificate_brief_laws',
+        'other_certificate_brief_prices',
+        'other_certificate_briefs',
+        'technological_line_certificate_asset_law_infos',
+        'technological_line_certificate_asset_laws',
+        'technological_line_certificate_asset_prices',
+        'technological_line_certificate_assets',
+        'verhicle_certificate_asset_law_infos',
+        'verhicle_certificate_asset_laws',
+        'verhicle_certificate_asset_prices',
+        'verhicle_certificate_assets',
+        'verhicle_certificate_brief_law_infos',
+        'verhicle_certificate_brief_laws',
+        'verhicle_certificate_brief_prices',
+        'verhicle_certificate_briefs',
     ];
+
+    protected $tableUtilities = [
+        'activity_log',
+        'address_logs',
+        'customer_pics',
+        'customers',
+        'estimate_price_logs',
+        'migrate_status',
+        'migrate_status_details',
+    ];
+
     /**
      * Create a new command instance.
      *
@@ -101,47 +197,27 @@ class MigrationTruncateTable extends Command
         parent::__construct();
     }
 
-    private function truncateCertificate($tableCertificate){
+    private function truncateTables($tables, $name){
         DB::beginTransaction();
         try{
-            if(isset($tableCertificate)){
-                Log::info("Migration truncate Certificate Table is start!");
+            if(isset($tables)){
+                Log::info("Migration truncate " . $name . " Table is start!");
 
-                foreach($tableCertificate as $item){
+                foreach($tables as $item){
                     if (Schema::hasTable($item)) {
                         DB::table($item)->truncate();
                     }
                 }
                 DB::commit();
-                Log::info('Migration truncate Certificate Table is end!');
+                Log::info('Migration truncate ' . $name . ' Table is end!');
             }
         }catch(\Exception $e){
             DB::rollBack();
-            Log::error('Migration truncate Certificate Table is error with message  ' . $e);
+            Log::error('Migration truncate ' . $name . ' Table is error with message  ' . $e);
         }
 
     }
 
-    private function truncateAppraise($tableAppraise){
-        DB::beginTransaction();
-        try{
-            if(isset($tableAppraise)){
-                Log::info("Migration truncate Appraise Table is start!");
-
-                foreach($tableAppraise as $item){
-                    if (Schema::hasTable($item)) {
-                        DB::table($item)->truncate();
-                    }
-                }
-                DB::commit();
-                Log::info('Migration truncate Appraise Table is end!');
-            }
-        }catch(\Exception $e){
-            DB::rollBack();
-            Log::error('Migration truncate Appraise Table is error with message  ' . $e);
-        }
-
-    }
     /**
      * Execute the console command.
      *
@@ -149,7 +225,9 @@ class MigrationTruncateTable extends Command
      */
     public function handle()
     {
-        $this->truncateAppraise($this->tableAppraise);
-        $this->truncateCertificate($this->tableCertificate);
+        $this->truncateTables($this->tableUtilities, 'Utilities');
+        $this->truncateTables($this->tableComparisonAssets, 'Comparison Assets');
+        $this->truncateTables($this->tableAppraise, 'Appraise Assets');
+        $this->truncateTables($this->tableCertificate, 'Certificate Briefs');
     }
 }

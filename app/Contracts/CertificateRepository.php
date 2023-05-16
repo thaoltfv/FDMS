@@ -62,6 +62,8 @@ interface CertificateRepository extends BaseRepository
 
     public function exportCertificateBriefs();
 
+    public function exportSelectedCertificateAssets();
+
     public function updateCertificateV3(array $object , int $certificateId);
 
     public function updateCertificateVersion(int $certificateId, array $object);

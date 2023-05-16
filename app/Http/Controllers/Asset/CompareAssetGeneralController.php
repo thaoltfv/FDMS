@@ -18,15 +18,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Asset\CompareAssetGeneralRequest;
 use App\Models\Certificate;
 use App\Notifications\ActivityLog;
+use App\Services\CommonService;
 use App\Services\Document\AssetReport;
 use App\Services\EstimatePrice\EstimatePrice;
+use App\Services\Excel\ExportComparisonAssets;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Storage;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class CompareAssetGeneralController extends Controller
@@ -40,6 +40,11 @@ class CompareAssetGeneralController extends Controller
     private EstimatePriceRepository $estimatePriceRepository;
     public CertificateRepository $certificateRepository;
     private AppraiserCompanyRepository $appraiserCompanyRepository;
+
+    private array $permissionView =['VIEW_PRICE'];
+    private array $permissionAdd =['ADD_PRICE'];
+    private array $permissionEdit =['EDIT_PRICE'];
+    private array $permissionExport =['EXPORT_PRICE'];
 
 
     /**
@@ -409,6 +414,18 @@ class CompareAssetGeneralController extends Controller
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
         }
+    }
+
+    public function assetExport(Request $request)
+    {
+        if(! CommonService::checkUserPermission($this->permissionExport)){
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PERMISSION_ERROR ,'exception' =>''], 403);
+        }
+        $result = $this->compareAssetGeneralRepository->exportAsset();
+        // dd($result->toArray());
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData((new ExportComparisonAssets())->exportAsset($result));
     }
 
 }

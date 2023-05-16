@@ -39,6 +39,7 @@ use App\Models\AppraiseVersion;
 use App\Models\AppraiseUnitPrice;
 use App\Models\AppraiseUnitArea;
 use App\Models\BuildingPrice;
+use App\Models\CertificateAsset;
 use App\Models\CompareAssetGeneral;
 use App\Models\CompareProperty;
 use App\Models\Dictionary;
@@ -5488,6 +5489,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     ->with('certificate:id,status,sub_status')
                     ->first();
             }
+            // dd($result->appraiseMethodUsed);
             $result->append('asset_general');
             $asset = $result;
             // $asset->assetGeneral = $asset->asset_general;
@@ -5915,7 +5917,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     }
     private function getComparisonFactorList(int $appraiseId)
     {
-       $result = AppraiseComparisonFactor::where('appraise_id',$appraiseId)->get();
+       $result = AppraiseComparisonFactor::where('appraise_id',$appraiseId)->orderByDesc('asset_general_id')->orderBy('position')->get();
 
        return $result;
     }
@@ -6554,11 +6556,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         // if(! isset($date_from) || ! isset($date_to)){
         //     return ['message' => 'Vui lòng chọn ngày', 'exception' => ''];
         // }
-        $result = Appraise::query()
-            // ->whereBetween('created_at', [$date_from , $date_to])
+        $result = CertificateAsset::query()
             ->select('province_id', DB::raw('count(*) as total'))
             ->groupBy('province_id')
             ->with('province:id,name')
+            ->where('status', 4)
             ->get();
         return $result;
     }
@@ -6698,12 +6700,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         if (isset($tangibleAssets) && ! empty($tangibleAssets)) {
             $clcl = 0;
             $stt = 0;
+			$appraisalMethod = AppraiseAppraisalMethods::query()->where('appraise_id', $id)->whereIn('slug', ['XAC_DINH_DON_GIA_XAY_DUNG', 'XAC_DINH_CHAT_LUONG_CON_LAI'])->get();
+            $priceMethod = $appraisalMethod->where('slug' , 'XAC_DINH_DON_GIA_XAY_DUNG')->first();
+            $priceMethod = $priceMethod->slug_value ?? '';
+            $remainMethod = $appraisalMethod->where('slug' , 'XAC_DINH_CHAT_LUONG_CON_LAI')->first();
+            $remainMethod = $remainMethod->slug_value ?? '';
             foreach ($tangibleAssets as $tangible) {
-                $company = $tangible->constructionCompany;
                 $tangibleName = $tangible->tangible_name;
-                $area = $tangible->total_construction_area;
-                $price = $company->avg('unit_price_m2');
-                $clcl = CommonService::getClclV2($tangible);
+                $area = $tangible->total_construction_base;
+                $price = CommonService::getSelectedTangibleAssetPrice($tangible, $priceMethod);
+                $clcl = CommonService::getSelectedRemain($tangible, $remainMethod);
                 $total =CommonService::roundPrice($area * $price * $clcl / 100, 0);
                 $tangibleData[$stt]['name'] = $tangibleName;
                 $tangibleData[$stt]['area'] = $area;

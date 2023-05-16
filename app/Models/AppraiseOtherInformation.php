@@ -19,7 +19,6 @@ class AppraiseOtherInformation extends Model
         'id' => 'integer',
         'dictionary_acronym' => 'array',
         'status' => 'boolean',
-
     ];
 
     protected $fillable = [

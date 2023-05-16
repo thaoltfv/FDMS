@@ -14,6 +14,7 @@ use App\Models\RealEstate;
 use App\Notifications\ActivityLog;
 use App\Services\CommonService;
 use App\Services\Document\AssetReport;
+use App\Services\Excel\ExportCertificateAssets;
 use App\Services\Excel\ExportShinhanCertificateAsset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,11 @@ class RealEstateController extends Controller
     private CompareAssetGeneralRepository $compareAssetGeneralRepository;
 
     private string $envDocument = '';
+
+    private array $permissionView =['VIEW_CERTIFICATE_ASSET'];
+    private array $permissionAdd =['ADD_CERTIFICATE_ASSET'];
     private array $permissionEdit =['EDIT_CERTIFICATE_ASSET'];
+    private array $permissionExport =['EXPORT_CERTIFICATE_ASSET'];
     /**
      * RealEstateController constructor.
      */
@@ -196,5 +201,32 @@ class RealEstateController extends Controller
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
             return $this->respondWithErrorData( $data);
         }
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $result = $this->realEstateRep->updateStatus($request->toArray(), $id);
+            if(is_string($result)) {
+                $data = ['message' => $result];
+                return $this->respondWithErrorData($data);
+            } else {
+                return $this->respondWithCustomData($result);
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+    public function exportCertificateAssets(Request $request)
+    {
+        if(! CommonService::checkUserPermission($this->permissionExport)){
+            return $this->respondWithErrorData( ['message' => ErrorMessage::APPRAISE_CHECK_EXPORT ,'exception' =>''], 403);
+        }
+        $result = $this->realEstateRep->exportCertificateAssets();
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData((new ExportCertificateAssets())->exportAsset($result));
     }
 }

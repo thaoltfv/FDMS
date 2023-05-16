@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Elasticquent\ElasticquentTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -197,6 +196,21 @@ class CompareAssetGeneral extends Model
         if (!empty($roomDetail)) {
             $value = $roomDetail->area;
         }
+        return $value;
+    }
+
+    public function getFrontSideTextAttribute()
+    {
+        $value = 'Không biết';
+        if ($this->properties && count($this->properties) > 0)
+            $value = $this->properties->first()->front_side ? 'Mặt tiền' : 'Hẻm';
+        return $value;
+    }
+    public function getLandTypeTextAttribute()
+    {
+        $value = 'Không biết';
+        if ($this->properties && count($this->properties) > 0)
+            $value = $this->properties->first()->landType->description;
         return $value;
     }
 }

@@ -522,7 +522,7 @@ class ReportAppraisal extends Report
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Số địa chính');
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-        ->addText(CommonService::mbUcfirst($strToThua) . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
+        ->addText($strToThua . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -784,13 +784,13 @@ class ReportAppraisal extends Report
         $section->addListItem('Căn cứ vào mục đích, tính chất đặc điểm của tài sản thẩm định giá, ' . $this->acronym . ' chọn ' . $basicProperty . ' làm cơ sở thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem($basicPropertyDescription, 0, null, 'bullets', $this->indentFistLine);
         $section->addTitle('Nguyên tắc thẩm định giá:', 2);
-        foreach ($certificate->certificatePrinciple as $index => $item) {
+        $this->getPrincipleOfValuationDescription($certificate->certificatePrinciple, $section);
+    }
+    protected function getPrincipleOfValuationDescription($certificatePrinciple, $section)
+    {
+        foreach ($certificatePrinciple as $index => $item) {
             $section->addListItem($item->name, 0, null, 'bullets', $this->indentFistLine);
         }
-        $this->getPrincipleOfValuationDescription($section);
-    }
-    protected function getPrincipleOfValuationDescription($section)
-    {
         $section->addListItem('Các nguyên tắc khác (TĐGVN 04 Ban hành kèm theo thông tư số 158/2014/TT-BTC ngày 27/10/2014 của Bộ trưởng Bộ Tài Chính).', 0, null, 'bullets', $this->indentFistLine);
     }
     protected function getBasicProperties ()
@@ -840,6 +840,18 @@ class ReportAppraisal extends Report
     //VIII
     protected function step8(Section $section, $certificate)
     {
+        $appraiseApproaches = [];
+        $appraiseMethodUsed = [];
+        foreach ($this->realEstates as $realEstate) {
+            $appraise = $realEstate->appraises;
+            $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
+        }
+        foreach ($appraiseApproaches as $item) {
+            array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
+        }
+        $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+        $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
+
         $section->addTitle('CÁCH TIẾP CẬN VÀ PHƯƠNG PHÁP THẨM ĐỊNH GIÁ:', 1);
         $section->addTitle('Thông tin tổng quan về thị trường, các thông tin về thị trường giao dịch của tài sản thẩm định giá.', 2);
         $section->addListItem('Thông tin tổng quan về thị trường: Tại thời điểm thẩm định giá, thị trường bất động sản tại khu vực không có nhiều biến động.', 0, null, 'bullets', $this->indentFistLine);
@@ -850,9 +862,9 @@ class ReportAppraisal extends Report
             $certificatePrinciple .= ($index) ? ' và ' : '';
             $certificatePrinciple .= (isset($item->name)) ? $item->name : '';
         }
-        $section->addListItem('Tài sản thẩm định giá có đầy đủ giấy tờ pháp lý, phù hợp quy hoạch và sử dụng đúng mục đích công năng đem lại giá trị lớn nhất cho tài sản. Tài sản thẩm định đáp ứng với các yêu cầu theo ' . $certificatePrinciple . '.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Điều kiện, tính chất thông tin thị trường: Dữ liệu thị trường về các tài sản giao dịch có đặc điểm tương đồng với TSTĐG tương đối phổ biến và đầy đủ nên việc sử dụng phương pháp so sánh để xác định giá trị tài sản thẩm định giá là phù hợp và đáng tin cậy.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Ngoài ra nguồn dữ liệu và thông tin có thể sử dụng để xác định giá trị tài sản thẩm định giá theo phương pháp khác là rất hạn chế. Vì vậy, căn cứ mục đích thẩm định giá của tài sản ' . $this->acronym . ' sử dụng phương pháp so sánh là phù hợp.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Tài sản thẩm định giá có đầy đủ giấy tờ pháp lý, phù hợp quy hoạch và sử dụng đúng mục đích công năng đem lại giá trị lớn nhất cho tài sản. Tài sản thẩm định đáp ứng với các yêu cầu theo ' . mb_strtolower($certificatePrinciple) . '.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Điều kiện, tính chất thông tin thị trường: Dữ liệu thị trường về các tài sản giao dịch có đặc điểm tương đồng với TSTĐG tương đối phổ biến và đầy đủ nên việc sử dụng ' . $appraiseMethodUsedStr . ' để xác định giá trị tài sản thẩm định giá là phù hợp và đáng tin cậy.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Ngoài ra nguồn dữ liệu và thông tin có thể sử dụng để xác định giá trị tài sản thẩm định giá theo phương pháp khác là rất hạn chế. Vì vậy, căn cứ mục đích thẩm định giá của tài sản ' . $this->acronym . ' sử dụng ' . $appraiseMethodUsedStr . ' là phù hợp.', 0, null, 'bullets', $this->indentFistLine);
         $section->addTitle('Cách tiếp cận, phương pháp thẩm định giá áp dụng:', 2);
         if ($this->isApartment) {
             $this->step8sub3Apartment($section);
@@ -1013,10 +1025,8 @@ class ReportAppraisal extends Report
     }
     protected function step9Appraise (Section $section, $certificate)
     {
-        $totalEstimatePrice = [];
         foreach ($this->realEstates as $stt=> $realEstate) {
             $appraise = $realEstate->appraises;
-            $totalEstimatePrice[$stt] = 0;
             $sttLevel = 2;
             if ($this->isOnlyAsset) {
                 $sttLevel = 1;
@@ -1125,27 +1135,23 @@ class ReportAppraisal extends Report
                     $table->addCell(2500, $this->cellVCentered)->addText($item[3], null, ['align' => 'right', 'keepNext' => true]);
                     $isFirst++;
                 }
-                $totalEstimatePrice[$stt] += $propertyDetailTotal;
+
+                //Sumary table
+                // $totalAll = $propertyDetailTotal;
+                $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
+                $totalAllRound = $realEstate->total_price;
 
                 $table->addRow(400, $this->cantSplit);
+                $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalArea, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
 
-                if ($this->isOnlyAsset) {
-                    // $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
-                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
-                    $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalArea, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
-                    $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right', 'keepNext' => true]);
-                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                if (!$this->isOnlyAsset) {
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left']);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
                 } else {
-                    // $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
-                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
-                    $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalArea, 2, ',', '.'), ['bold' => true], ['align' => 'right']);
-                    $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right']);
-                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
-                }
-
-                if ($this->isOnlyAsset) {
-                    $totalAll = $propertyDetailTotal;
-                    $totalAllRound = CommonService::roundCertificatePrice($certificate, $totalAll);
                     $table->addRow(400, $this->cantSplit);
                     $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
                     $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
@@ -1248,7 +1254,6 @@ class ReportAppraisal extends Report
                     $table->addCell(2500, $this->cellVCentered)->addText($item[3], null, ['align' => 'right', 'keepNext' => true]);
                     $isFirst++;
                 }
-                $totalEstimatePrice[$stt] += $propertyDetailTotal;
 
                 $table->addRow(400, $this->cantSplit);
                 // $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
@@ -1258,7 +1263,6 @@ class ReportAppraisal extends Report
                 $table->addCell(1000, ['align' => 'right'])->addText('', ['bold' => true], ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1000, ['align' => 'right'])->addText(number_format($propertyDetailTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
 
-                $tangibleAssetTotal = 0;
                 if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
                     $section->addTitle('Nhà cửa, vật kiến trúc:', $sttLevel + 1);
                     $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
@@ -1287,7 +1291,6 @@ class ReportAppraisal extends Report
                         $unitPrice =  CommonService::getDgxdChoosed($tangibleAsset, $appraisalDgxd);
                         $clcl =  CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
                         $total = (round($tangibleAsset->total_construction_base * $clcl / 100 * $unitPrice));
-                        $tangibleAssetTotal += $total;
                         $table->addCell(1000, $this->cellVCentered)->addText(CommonService::mbUcfirst($building_type), null, ['align' => 'left']);
                         $table->addCell(1000, $this->cellVCentered)->addText($this->m2, null, $this->cellHCentered);
                         $table->addCell(1000, $this->cellVCentered)->addText(number_format($tangibleAsset->total_construction_base, 2, ',', '.'), null, ['align' => 'right']);
@@ -1303,13 +1306,11 @@ class ReportAppraisal extends Report
                     }
                     //get from database
                     $tangibleAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'tangible_asset_price');
-                    $totalEstimatePrice[$stt] += $tangibleAssetTotal;
                     $table->addRow(400, $this->cantSplit);
                     //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->cellHCentered);
                     $table->addCell(1000, array('align' => 'left', 'gridSpan' => 5))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
                     $table->addCell(1000, array('align' => 'right'))->addText(number_format($tangibleAssetTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
                 }
-                $otherAssetTotal = 0;
                 if (isset($appraise->otherAssets) && count($appraise->otherAssets)) {
                     $section->addTitle('Tài sản khác', $sttLevel + 1);
                     $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
@@ -1323,7 +1324,6 @@ class ReportAppraisal extends Report
 
                     foreach ($appraise->otherAssets as $index => $otherAsset) {
                         $table->addRow(400, $this->cantSplit);
-                        $otherAssetTotal += $otherAsset->total_price;
                         $table->addCell(1000, $this->cellVCentered)->addText($otherAsset->name, null, ['align' => 'left']);
                         $table->addCell(1000, $this->cellVCentered)->addText(strtolower($otherAsset->dvt), null, $this->cellHCentered);
                         $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->total, 2, ',', '.'), null, ['align' => 'right']);
@@ -1332,7 +1332,6 @@ class ReportAppraisal extends Report
                     }
                     //get from database
                     $otherAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'other_asset_price');
-                    $totalEstimatePrice[$stt] += $otherAssetTotal;
                     $table->addRow(400, $this->cantSplit);
                     //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->cellHCentered);
                     $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
@@ -1362,22 +1361,26 @@ class ReportAppraisal extends Report
                     $table->addCell(1000, $this->cellVCentered)->addText('Tài sản khác', null, ['align' => 'left', 'keepNext' => true]);
                     $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAssetTotal, 0, ',', '.'), null, ['align' => 'right']);
                 }
+
+                //Sumary table
+                // $totalAll = $propertyDetailTotal + $tangibleAssetTotal + $otherAssetTotal;
+                $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
+
+                $totalAllRound = $realEstate->total_price;
+
                 $table->addRow(400, $this->cantSplit);
-                //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->cellHCentered);
+                $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAll, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
 
+                $table->addRow(400, $this->cantSplit);
                 if ($this->isOnlyAsset) {
-                    $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
-                } else {
-                    $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
-                }
-                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotal + $tangibleAssetTotal + $otherAssetTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
-
-                if ($this->isOnlyAsset) {
-                    $totalAll = $propertyDetailTotal + $tangibleAssetTotal + $otherAssetTotal;
-                    $totalAllRound = CommonService::roundCertificatePrice($certificate, $totalAll);
-                    $table->addRow(400, $this->cantSplit);
                     $table->addCell(1000, $this->cellVCentered)->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
-                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+                } else {
+                    $table->addCell(1000, $this->cellVCentered)->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left']);
+                }
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+
+                if ($this->isOnlyAsset) {
                     $table->addRow(400, $this->cantSplit);
                     $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 2))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($totalAllRound) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center']);
                 }
@@ -1393,7 +1396,6 @@ class ReportAppraisal extends Report
             $table->addCell(4000, $this->cellVCentered)->addText('Giá trị thẩm định', ['bold' => true], $this->cellHCentered);
             $totalAll = 0;
             foreach ($this->realEstates as $stt => $realEstate) {
-                $appraise = $realEstate->appraises;
                 $table->addRow(400, $this->cantSplit);
                 //$table->addCell(1000, $this->cellVCentered)->addText($stt + 1, null, $this->);
                 if ($this->isOnlyAsset) {
@@ -1401,14 +1403,18 @@ class ReportAppraisal extends Report
                 } else {
                     $table->addCell(1000, array('align' => 'left'))->addText('Tài sản thẩm định giá ' . ($stt + 1), null, ['align' => 'left', 'keepNext' => true]);
                 }
-                $totalAll += $totalEstimatePrice[$stt];
-                $table->addCell(1000, array('align' => 'right'))->addText(number_format($totalEstimatePrice[$stt], 0, ',', '.'), null, array('align' => 'right', 'keepNext' => true));
+                $totalAll += $realEstate->total_price;
+                $table->addCell(1000, array('align' => 'right'))->addText(number_format($realEstate->total_price, 0, ',', '.'), null, array('align' => 'right', 'keepNext' => true));
             }
 
-            $totalAllRound = CommonService::roundCertificatePrice($certificate, $totalAll);
+            // Disable round total amount due to Front-End having a summary table which is showing the sum amount of multiple assets.
+            // If enabled, it will raise confusion for the client as they may not be able to understand the exact amount
+
+            // $totalAllRound = CommonService::roundCertificatePrice($certificate, $totalAll);
+
+            $totalAllRound = $totalAll;
 
             $table->addRow(400, $this->cantSplit);
-            //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->);
             $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
             $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAll, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
             $table->addRow(400, $this->cantSplit);

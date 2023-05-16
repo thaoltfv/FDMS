@@ -61,5 +61,68 @@ class ValueDefault
         'created_at' => 'Ngày tạo',
         'status' => 'Trạng thái',
     ];
+
+    public const CERTIFICATION_BRIEF_CUSTOMIZE_COLUMN_LIST = [
+        'certificate_id' => 'Mã HSTD',
+        'real_estate_id' => 'Mã TSTD',
+        'certificate_num' => 'Số chứng thư',
+        'certificate_date' => 'Ngày chứng thư',
+        'document_num' => 'Số hợp đồng',
+        'document_date' => 'Ngày hợp đồng',
+        'status_text' => 'Trạng thái hồ sơ',
+        'petitioner_name' => 'Tên khách hàng',
+        'petitioner_phone' => 'Số điện thoại',
+        'petitioner_address' => 'Địa chỉ',
+        'customer_name' => 'Tên đối tác',
+        'customer_address' => 'Địa chỉ đối tác',
+        'appraise_asset' => 'Tên Tài Sản',
+        'front_side' => 'Vị trí',
+        'full_address' => 'Địa chỉ BĐS Thẩm định giá',
+        'province' => 'Tỉnh/ Thành phố',
+        'district' => 'Quận/ Huyện',
+        'ward' => 'Phường/ Xã',
+        'street' => 'Đường/ phố',
+        'location_type' => 'Vị trí thửa đất',
+        'appraise_method_used' => 'Phương pháp thẩm định áp dụng',
+        'location_description' => 'Mô tả BĐS',
+        'purpose_detail' => 'Loại đất',
+        'land_price' => 'Giá trị QSD đất',
+        'tangible_price' => 'Giá trị CTXD',
+        'other_asset_price' => 'Giá trị tài sản khác',
+        'total_price' => 'Tổng giá trị định giá',
+        'service_fee' => 'Phí thẩm định giá',
+        'appraiser_sale_name' => 'Nhân viên kinh doanh',
+        'appraiser_perform_name' => 'Chuyên viên thẩm định',
+        'appraiser_name' => 'Thẩm định viên',
+        'branch_name' => 'Chi nhánh',
+    ];
+    public const CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST = [
+        'residential_area' => 'Diện tích đất ở (m2)',
+        'residential_unit_price' => 'Đơn giá đất ở (đồng/m2)',
+        'residential_price' => 'Giá trị đất ở (đồng)',
+        'agricultural_area' => 'Diện tích đất khác (m2)',
+        'agricultural_unit_price' => 'Đơn giá đất khác (đồng/m2)',
+        'agricultural_price' => 'Giá trị đất khác (đồng)',
+        'agricultural_area_2' => 'Diện tích đất khác 2 (m2)',
+        'agricultural_unit_price_2' => 'Đơn giá đất khác 2 (đồng/m2)',
+        'agricultural_price_2' => 'Giá trị đất khác 2 (đồng)',
+    ];
+    public const CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST = [
+    ];
+    public const CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST = [
+        'tangible_type' => 'Loại CTXD',
+        'tangible_area' => 'Diện tích sàn',
+        'tangible_unit_price' => 'Đơn giá XD',
+        'tangible_remain' => 'CLCL (%)',
+        'other_tangible_price' => 'Giá trị CTXD khác',
+    ];
+
+    public const STATUSES = [
+        1 => 'Mới',
+        2 => 'Đang thẩm định',
+        3 => 'Đang duyệt',
+        4 => 'Hoàn thành',
+        5 => 'Hủy',
+    ];
 }
 

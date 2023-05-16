@@ -26,6 +26,7 @@ class CertificateBriefController extends Controller
     private array $permissionView =['VIEW_CERTIFICATE_BRIEF'];
     private array $permissionAdd =['ADD_CERTIFICATE_BRIEF'];
     private array $permissionEdit =['EDIT_CERTIFICATE_BRIEF'];
+    private array $permissionExport =['EXPORT_CERTIFICATE_BRIEF'];
 
     #region Contruct
     public function __construct(
@@ -286,15 +287,28 @@ class CertificateBriefController extends Controller
 
     public function exportCertificateBriefs(Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+        if(! CommonService::checkUserPermission($this->permissionExport))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
 
         $result =  $this->certificateRepository->exportCertificateBriefs();
         if(isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData( $result);
             // return $this->respondWithCustomData($result);
 
-        return $this->respondWithCustomData((new ExportCertificateBriefs())->exportAsset($result));
+        return $this->respondWithCustomData((new ExportCertificateBriefs())->exportBrieft($result));
+    }
+
+    public function exportCustomizeCertificateBriefs(Request $request)
+    {
+        if(! CommonService::checkUserPermission($this->permissionExport))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
+
+        $result =  $this->certificateRepository->exportSelectedCertificateAssets();
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+            // return $this->respondWithCustomData($result);
+
+        return $this->respondWithCustomData((new ExportCertificateBriefs())->exportCustomizeBrieft($result));
     }
 
     public function updateCertificateVersion(Request $request, int $certificateId )

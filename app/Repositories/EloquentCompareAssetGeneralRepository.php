@@ -1103,22 +1103,44 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     ]
                 ];
             }
+            // if (!empty($year)) {
+            //     $array['bool']['must'][] = [
+            //         'range' => [
+            //             'public_date' => [
+            //                 'gte' => '01-01-' . $year,
+            //                 'lte' => '31-12-' . $year,
+            //                 'format' => 'dd-MM-yyyy||yyyy',
+            //             ]
+            //         ]
+            //     ];
+            // } else {
+            //     $array['bool']['must'][] = [
+            //         'range' => [
+            //             'public_date' => [
+            //                 'gte' => now()->addMonths(-24)->format('d-m-Y'),
+            //                 'lte' => now()->format('d-m-Y'),
+            //                 'format' => 'dd-MM-yyyy||yyyy',
+            //             ]
+            //         ]
+            //     ];
+            // }
+
             if (!empty($year)) {
+                $year = Carbon::parse($year)->format('d-m-Y');
                 $array['bool']['must'][] = [
                     'range' => [
                         'public_date' => [
-                            'gte' => '01-01-' . $year,
-                            'lte' => '31-12-' . $year,
+                            'gte' => $year,
                             'format' => 'dd-MM-yyyy||yyyy',
                         ]
                     ]
                 ];
             } else {
+                $year = now()->year;
                 $array['bool']['must'][] = [
                     'range' => [
                         'public_date' => [
-                            'gte' => now()->addMonths(-24)->format('d-m-Y'),
-                            'lte' => now()->format('d-m-Y'),
+                            'gte' => now()->addMonths(-12)->format('d-m-Y'),
                             'format' => 'dd-MM-yyyy||yyyy',
                         ]
                     ]
@@ -1168,13 +1190,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             }
 
             //remove TSC
-            if (empty($year)) {
-                $array['bool']['must_not'][] = [
-                    'match' => [
-                        'migrate_status' => "TSC"
-                    ]
-                ];
-            }
+            $array['bool']['must_not'][] = [
+                'match' => [
+                    'migrate_status' => "TSC"
+                ]
+            ];
 
             if (!empty($sort)) {
                 if ($sort == TRANSACTION_TYPE_SORT) {
@@ -4629,6 +4649,85 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
 
         return $result;
 
+    }
+
+    public function exportAsset()
+    {
+        $assetTypeId = request()->get('asset_type_id');
+        $createdBy = request()->get('created_by');
+        // $coordinates = request()->get('coordinates');
+        // $provinceId = request()->get('province_id');
+        // $districtId = request()->get('district_id');
+        // $wardId = request()->get('ward_id');
+        // $streetId = request()->get('street_id');
+        // $sourceId = request()->get('source_id');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        // $contactPerson = request()->get('contact_person');
+        // $contactPhone = request()->get('contact_phone');
+        // $totalAreaFrom = request()->get('total_area_from');
+        // $totalAreaTo = request()->get('total_area_to');
+        // $constructionAreaFrom = request()->get('total_construction_area_from');
+        // $constructionAreaTo = request()->get('total_construction_area_to');
+        // $amountFrom = request()->get('total_amount_from');
+        // $amountTo = request()->get('total_amount_to');
+        // $avgPriceFrom = request()->get('average_land_unit_price_from');
+        // $avgPriceTo = request()->get('average_land_unit_price_to');
+        // $docNo = request()->get('doc_no');
+        // $landNo = request()->get('land_no');
+        $where = [
+            'migrate_status' => 'TSS',
+            'status' => 1,
+        ];
+        $select = [
+            'id',
+            DB::raw("to_date(public_date, 'dd/MM/yyyy') as public_date"),
+            'full_address',
+            'total_area',
+            'total_construction_area',
+            'total_amount',
+            'average_land_unit_price',
+            'created_at',
+            'created_by',
+            'asset_type_id',
+            'transaction_type_id',
+            'coordinates',
+            'max_value_description',
+            'province_id',
+            'district_id',
+            'ward_id',
+            'street_id',
+        ];
+        $with = [
+            'assetType:id,description',
+            'transactionType:id,description',
+            'properties:id,asset_general_id,main_road_length,land_type_id',
+            'properties.landType:id,description',
+            'createdBy:id,name',
+            'province:id,name',
+            'district:id,name',
+            'ward:id,name',
+            'street:id,name'
+        ];
+        $result = $this->model->query()->with($with)->where($where)->select($select);
+        if (!empty($assetTypeId)) {
+            $result->whereHas('assetType', function ($has) use ($assetTypeId) {
+                $has->where('id', $assetTypeId);
+            });
+        }
+        if (!empty($createdBy)) {
+            $result->WhereHas('createdBy', function ($has) use ($createdBy) {
+                $has->where('name', 'ilike' , '%' . $createdBy . '%');
+            });
+        }
+        if (!empty($fromDate) && $fromDate != 'Invalid date') {
+            $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
+        }
+        if (!empty($toDate) && $toDate != 'Invalid date') {
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
+        }
+        // dd($result->limit(5)->get()->append(['area_total', 'front_side_text', 'land_type_text'])->toArray());
+        return $result->get()->append(['area_total', 'front_side_text', 'land_type_text']);
     }
 
 }

@@ -92,12 +92,13 @@ class EloquentCustomerRepository extends EloquentRepository implements CustomerR
             $query->orWhere('name', 'LIKE', "%" . $search . "%");
             $query->orWhere('address', 'LIKE', "%" . $search . "%");
             $query->orWhere('phone', 'LIKE', "%" . $search . "%");
-        }); 
-        
-        return $result
+        });
+        $results = $result
             ->where('status', '=', ValueDefault::ACTIVE_STATUS)
             ->orderByDesc($this->defaultSort)
             ->get();
+        $results->append('full_info');
+        return $results;
     }
 
     /**

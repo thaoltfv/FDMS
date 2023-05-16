@@ -162,6 +162,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/asset-generals/version/{id}', [CompareAssetGeneralController::class, 'findVersionById']);
 
+    Route::get('/asset-generals/asset-export', [CompareAssetGeneralController::class, 'assetExport']);
+
     Route::apiResource('apartment', ApartmentController::class);
 
     Route::get('/apartments', [ApartmentController::class, 'findAll']);
@@ -389,7 +391,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('certification_asset/step7-construction-company/{id}', [CertificateAssetsController::class, 'updateConstructionCompany']);
     Route::post('certification_asset/step7-round-appraise-total/{id}', [CertificateAssetsController::class, 'updateRoundAppraiseTotal']);
     Route::post('certification_asset/step7-tangible-comparison/{id}', [CertificateAssetsController::class, 'updateConstructionComparison']);
-    Route::get('certification_asset/appraise-export', [CertificateAssetsController::class, 'exportCertificateAssets']);
+    Route::get('certification_asset/appraise-export', [RealEstateController::class, 'exportCertificateAssets']);
 
     // Route::post('appraise-intergration/assets-version-by-id', [CertificateAssetsController::class, 'getAssetVersionById']);
 
@@ -407,6 +409,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('certification_brief/certificate-update-appraisers/{id}', [CertificateBriefController::class, 'updateAppraisersTeam']);
     Route::get('certification_brief/comparison-appraise', [CertificateBriefController::class, 'getComparisonAppraise']);
     Route::get('certification_brief/brief-export', [CertificateBriefController::class, 'exportCertificateBriefs']);
+    Route::get('certification_brief/brief-customize-export', [CertificateBriefController::class, 'exportCustomizeCertificateBriefs']);
 
     Route::post('certificate/sale-document/upload/{id}', [CertificateController::class, 'saleDocumentUpload']);
     Route::get('/DistrictAll', [DistrictController::class, 'findAllByProvince']);
@@ -525,6 +528,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certification_brief/asset-version', [CertificateBriefController::class, 'getVersionAppraises']);
     Route::get('certification_brief/get-status/{id}', [CertificateBriefController::class, 'getCertificateStatus']);
 
+    Route::post('real_estate/status/{id}', [RealEstateController::class, 'updateStatus']);
     Route::post('real_estate/additional-data/{id}', [RealEstateController::class, 'updateAditionalData']);
     Route::get('real_estate/printPL1/{id}', [RealEstateController::class, 'printPL1']);
     Route::get('real_estate/printPL2/{id}', [RealEstateController::class, 'printPL2']);
