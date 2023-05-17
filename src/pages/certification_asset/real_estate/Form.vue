@@ -816,7 +816,8 @@ export default {
 				this.handleSubmitStep_6(this.form.step_6, this.idData)
 			}
 			if (step < 6) {
-				this.isAutomation = true
+				// Remove the automated selection of comparison asset.
+				// this.isAutomation = true
 			}
 
 			this.step_active = step
