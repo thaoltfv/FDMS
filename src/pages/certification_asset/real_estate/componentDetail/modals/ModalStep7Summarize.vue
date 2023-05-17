@@ -312,7 +312,7 @@ export default {
 		},
 		test() {
 			console.log('Testing')
-			thiss.isSubmit = true
+			this.isSubmit = true
 		},
 		saveData () {
 			const round_appraise_total = this.round_appraise_total
