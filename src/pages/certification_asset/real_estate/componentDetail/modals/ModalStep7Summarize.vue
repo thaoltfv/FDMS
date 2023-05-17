@@ -119,6 +119,9 @@
 				<button v-if="editAsset" :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="saveData">
 					<img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
 				</button>
+				<button :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="test">
+					<img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Test
+				</button>
 			</div>
 		</div>
 	</div>
@@ -306,6 +309,10 @@ export default {
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
+		},
+		test() {
+			console.log('Testing')
+			thiss.isSubmit = true
 		},
 		saveData () {
 			const round_appraise_total = this.round_appraise_total
