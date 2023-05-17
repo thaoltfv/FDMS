@@ -159,8 +159,8 @@ export default class CertificateAsset extends Model {
 	static async getAutomationApartment (id = '') {
 		return (new this()).request({ method: 'GET', url: `apartment-asset/automatic-asset/${id}`, isStatic: true })
 	}
-	static async getAllAssetApartment (distance, location, transaction, assetType) {
-		return (new this()).request({ method: 'GET', url: `certification_asset/assets-search?distance=${distance}&location=${location}&transaction_type=${transaction}&asset_type_ids=${assetType}`, isStatic: true })
+	static async getAllAssetApartment (distance, location, transaction, assetType, year) {
+		return (new this()).request({ method: 'GET', url: `certification_asset/assets-search?distance=${distance}&location=${location}&transaction_type=${transaction}&asset_type_ids=${assetType}&year=${year}`, isStatic: true })
 	}
 	static async getDetailAssetApartment (arrayId = [], version = 0) {
 		const data = { assets: arrayId }

@@ -1282,13 +1282,6 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if (res.error) {
-				this.isSubmit = false
-				this.$toast.open({
-					message: `${res.error.message}`,
-					type: 'error',
-					position: 'top-right'
-				})
 			} else {
 				this.isSubmit = false
 				this.$toast.open({
