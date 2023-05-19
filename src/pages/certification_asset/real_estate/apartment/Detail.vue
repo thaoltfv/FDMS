@@ -619,7 +619,6 @@ export default {
 		return next()
 	},
 	async created () {
-		await this.getProfiles()
 		const permission = this.$store.getters.currentPermissions
 		await WareHouse.getProvince()
 			.then((resp) => {
@@ -647,6 +646,7 @@ export default {
 			this.isEdit = true
 			if (this.$route.meta['step']) {
 				let bindDataStep = this.$route.meta['step']
+				this.form.created_by = bindDataStep.created_by.id
 				this.createdBy = bindDataStep.created_by
 				this.max_version = bindDataStep.max_version
 				this.certificate = bindDataStep.certificate
@@ -756,6 +756,7 @@ export default {
 			this.key_step_4 += 1
 			this.key_step_5 += 1
 		}
+		this.getProfiles()
 		this.getProvinces()
 		// this.getProjects()
 	},
@@ -1264,8 +1265,9 @@ export default {
 		},
 		async getProfiles () {
 			const profile = this.$store.getters.profile
-			this.current_create_by = profile.data.user.id
-			this.checkRole = (profile.data.user.id === this.form.created_by) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
+			console.log(profile.data.user.id, 'profile.data.user.id')
+			console.log(this.createdBy.id, 'this.createdBy.id')
+			this.checkRole = (this.createdBy && profile.data.user.id === this.createdBy.id) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
 		},
 
 		async handleCancel () {
