@@ -10,6 +10,7 @@ use App\Models\Appraise;
 
 use App\Enum\EstimateAssetDefault;
 use App\Enum\ValueDefault;
+use App\Models\ApartmentAsset;
 use App\Models\AppraiseAdapter;
 use App\Models\AppraiseAppraisalMethods;
 use App\Models\AppraiseComparisonFactor;
@@ -22,6 +23,7 @@ use App\Models\Certificate;
 use App\Models\CertificateHasAppraise;
 use App\Models\CompareAssetGeneral;
 use App\Models\Dictionary;
+use App\Models\RealEstate;
 use App\Notifications\BroadcastNotification;
 use App\Repositories\EloquentCompareAssetGeneralRepository;
 use App\Repositories\EloquentUserRepository;
@@ -1314,244 +1316,257 @@ class CommonService
 		return self::roundPrice($priceUBND * $violetArea, 0);
 	}
 
-	public static function checkExistsAppraiseLaw(int $appraiseId)
+	public static function checkExistsAppraiseLaw(int $realEstateID)
 	{
 		$result = null;
-		if (Appraise::query()->whereDoesntHave('appraiseLaw')->where('id', $appraiseId)->exists()) {
-			$result = ['message' => 'TSTĐ_'. $appraiseId .' - chưa có thông tin pháp lý', 'exception' => ''];
-		}
+        $realEstate = RealEstate::find($realEstateID);
+        if ($realEstate->appraises && count($realEstate->appraises->appraiseLaw) > 0) {
+            return $result;
+        } else  if ($realEstate->apartment && count($realEstate->apartment->law) > 0) {
+            return $result;
+        }
+        $result = ['message' => 'TSTĐ_'. $realEstateID .' - chưa có thông tin pháp lý', 'exception' => ''];
 		return $result;
 	}
 
-	public static function checkValidAppraise(int $appraiseId)
+	public static function checkValidAppraise(int $realEstateID)
 	{
 		$result = null;
-		if (Appraise::where('id', $appraiseId)->exists()) {
-			// if (Appraise::query()->whereDoesntHave('appraiseLaw')->where('id', $appraiseId)->exists()) {
-			// 	$result['message'] = 'TSTĐ_' . $appraiseId . ': chưa có thông tin pháp lý';
-			// 	$result['exception'] = '';
-			// 	return $result;
-			// }
-			$price = self::checkAppraisePrice($appraiseId);
+        $realEstate = RealEstate::find($realEstateID);
+		if ($realEstate->appraises) {
+			$price = self::checkAppraisePrice($realEstate->appraises);
 
 			if (isset($price)) {
 				$message = $price;
 			}
-			$comparison = self::getComparisonAsset($appraiseId);
+			$comparison = self::checkAppraiseAdjust($realEstate->appraises->id);
 
 			if (isset($comparison)) {
-				if ($comparison['checkMaxAvg'] == true) {
-					$message[] = 'Mức độ chênh lệch với mức giá trung bình của các mức giá chỉ dẫn lớn hơn ' . ValueDefault::MAXIMUM_AVERAGE_RATE . '%';
-				}
 				if ($comparison['checkAdjustRate'] == true) {
 					$message[] = 'Mức độ chênh lệch với mức giá trung bình của các mức giá chỉ dẫn lớn hơn ' . ValueDefault::MAXIMUM_AVERAGE_RATE . '%';
 				}
-			}
-			if (!empty($message)) {
-				$result['message'] = 'TSTĐ_' . $appraiseId . ': ' . implode(', ', $message);
-				$result['exception'] = '';
-			}
-		}
-		return $result;
-	}
-	public static function checkAppraisePrice(int $appraiseId)
-	{
-		$message = [];
-		if (AppraisePrice::where('id', $appraiseId)->exists()) {
-			$appraisePrice = AppraisePrice::where('appraise_id', $appraiseId)->where('value', '<', 0)->get(['slug', 'value']);
-			if (isset($appraisePrice)) {
-				foreach ($appraisePrice as $price) {
-					if (strpos(strval($price->slug), 'price') !== false) {
-						if ($price->slug == 'layer_cutting_price') {
-							$message[] = 'Đơn giá sau cắt lớp nhỏ hơn 0';
-						} elseif ($price->slug == 'land_asset_price') {
-							$message[] = 'Tổng giá đất nhỏ hơn 0';
-						} elseif ($price->slug == 'other_asset_price') {
-							$message[] = 'Tổng giá trị tài sản khác nhỏ hơn 0';
-						} elseif ($price->slug == 'tangible_asset_price') {
-							$message[] = 'Tổng giá trị CTXD nhỏ hơn 0';
-						} elseif ($price->slug == 'total_asset_price') {
-							$message[] = 'Tổng giá trị tài sản nhỏ hơn 0';
-						} elseif (strpos(strval($price->slug), 'land_asset_purpose') !== false) {
-							$slug = explode('_', $price->slug);
-							if (strpos(strval($price->slug), 'violation') !== false)
-								$message[] = 'Đơn giá vi phạm quy hoạch của MĐSD ' . $slug[3] . ' nhỏ hơn 0';
-							else
-								$message[] = 'Đơn giá phù hợp quy hoạch của MĐSD ' . $slug[3] . ' nhỏ hơn 0';
-						} else
-							$message[] = $price->slug . ' nhỏ hơn 0';
-					}
+				if ($comparison['checkMaxAvg'] == true) {
+					$message[] = 'Mức độ chênh lệch của mức giá sau điều chỉnh với mức giá chỉ dẫn lớn hơn ' . ValueDefault::TOTAL_ADJUST_RATE . '%';
 				}
 			}
-		}
+			if (!empty($message)) {
+				$result['message'] = 'TSTĐ_' . $realEstateID . ': ' . implode(', ', $message);
+				$result['exception'] = '';
+			}
+		} else if ($realEstate->apartment) {
+			$price = self::checkApartmentPrice($realEstate->apartment);
+
+			if (isset($price)) {
+				$message = $price;
+			}
+
+			$comparison = self::checkApartmentAdjust($realEstate->apartment->id);
+
+			if (isset($comparison)) {
+				if ($comparison['checkAdjustRate'] == true) {
+					$message[] = 'Mức độ chênh lệch với mức giá trung bình của các mức giá chỉ dẫn lớn hơn ' . ValueDefault::MAXIMUM_AVERAGE_RATE . '%';
+				}
+				if ($comparison['checkMaxAvg'] == true) {
+					$message[] = 'Mức độ chênh lệch của mức giá sau điều chỉnh với mức giá chỉ dẫn lớn hơn ' . ValueDefault::TOTAL_ADJUST_RATE . '%';
+				}
+			}
+			if (!empty($message)) {
+				$result['message'] = 'TSTĐ_' . $realEstateID . ': ' . implode(', ', $message);
+				$result['exception'] = '';
+			}
+        }
+		return $result;
+	}
+    public static function checkApartmentPrice($apartment)
+    {
+		$message = [];
+        $appraisePrice = $apartment->price;
+        if (isset($appraisePrice)) {
+            foreach ($appraisePrice as $price) {
+                switch ($price->slug) {
+                    case 'apartment_asset_price':
+                        if (floatval($price->value) <= 0) $message[] = 'Đơn giá căn hộ phải lớn hơn 0';
+                        break;
+                    case 'apartment_area':
+                        if (floatval($price->value) <= 0) $message[] = 'Diện tích căn hộ phải lớn hơn 0';
+                        break;
+                    case 'apartment_total_price':
+                        if (floatval($price->value) <= 0) $message[] = 'Giá trị căn hộ phải lớn hơn 0';
+                        break;
+                    case 'total_price':
+                        if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị căn hộ phải lớn hơn 0';
+                        break;
+                    default:
+                        if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
+                        break;
+                }
+            }
+        }
+		return $message;
+    }
+	public static function checkAppraisePrice($appraise)
+	{
+		$message = [];
+        $appraisePrice = $appraise->assetPrice;
+        if (isset($appraisePrice)) {
+            foreach ($appraisePrice as $price) {
+
+                switch ($price->slug) {
+                    case 'layer_cutting_price':
+                        if (floatval($price->value) <= 0) $message[] = 'Đơn giá sau cắt lớp phải lớn hơn 0';
+                        break;
+                    case 'land_asset_price':
+                        if (floatval($price->value) <= 0) $message[] = 'Giá trị quyền sử dụng đất phải lớn hơn 0';
+                        break;
+                    case 'total_asset_price':
+                        if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị tài sản phải lớn hơn 0';
+                        break;
+                    default:
+                        if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
+                        break;
+                }
+            }
+        }
 		return $message;
 	}
 
-	public static function getComparisonAsset(int $appraiseId)
+	public static function checkAppraiseAdjust(int $appraiseId)
 	{
-		if (AppraiseHasAsset::where('appraise_id', $appraiseId)->exists()) {
-			$with = [
-				'appraiseHasAssets:appraise_id,asset_general_id,version',
-				'appraiseAdapter:appraise_id,asset_general_id,change_purpose_price,change_violate_price,percent',
-				'assetUnitArea',
-				'assetUnitPrice',
-				'comparisonFactor' => function ($q) {
-					$q->where('status', '=', 1);
-				},
-			];
-			$select = [
-				'id'
-			];
-			$appraise = Appraise::with($with)->where('id', $appraiseId)->select($select)->first();
-			$appraise->append([
-				'unify_indicative_price_slug',
-				'planning_violation_price_slug',
-				'composite_land_remaning_slug',
-			]);
-			$unify_indicative_price_slug =  $appraise->unify_indicative_price_slug;
-			$planning_violation_price_slug =  $appraise->planning_violation_price_slug;
-			$composite_land_remaning_slug =  $appraise->composite_land_remaning_slug;
-			$assets = $appraise->appraiseHasAssets;
-			$compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
-			$stt = 0;
-			$price1 = 0;
-			$price2 = 0;
-			$price3 = 0;
-			$sumPrice = 0;
-			$maxPrice = 0;
-			$minPrice = 0;
-			foreach ($assets as $asset) {
-				$asset_general_id = $asset->asset_general_id;
-				$data[$stt]['asset_general_id'] = $asset_general_id;
-				$asset_general = $compareAssetGeneralRepository->findVersionById_v2($asset_general_id, $asset->version);
+        $with = [
+            'appraiseHasAssets:appraise_id,asset_general_id,version',
+            'appraiseAdapter:appraise_id,asset_general_id,change_purpose_price,change_violate_price,percent',
+            'assetUnitArea',
+            'assetUnitPrice',
+            'comparisonFactor' => function ($q) {
+                $q->where('status', '=', 1)->where('adjust_percent', '<>', '0');
+            },
+        ];
+        $select = [
+            'id'
+        ];
+        $appraise = Appraise::with($with)->where('id', $appraiseId)->select($select)->first();
+        $appraise->checkMaxAvg = false;
+        $appraise->checkAdjustRate = false;
 
-				$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
-				$unitPrices =  $appraise->assetUnitPrice->where('asset_general_id', $asset_general_id);
-				$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
-				$comparisonFactor =  $appraise->comparisonFactor->where('asset_general_id', $asset_general_id);
-				$totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area']);
-				$violateArea = floatval(0);
-				$purposeArea = floatval(0);
-				$data[$stt]['total_area'] = $totalArea;
-				foreach ($asset_general['properties'][0]['property_detail'] as $detail) {
-					$data[$stt]['detail'][$detail['land_type_purpose']]['purpose_area'] = $detail['total_area'];
-					$data[$stt]['detail'][$detail['land_type_purpose']]['land_type'] = $detail['land_type_purpose_data']['acronym'];
-					$data[$stt]['detail'][$detail['land_type_purpose']]['land_type_description'] = $detail['land_type_purpose_data']['description'];
-				}
-				foreach ($unitAreas as $unitArea) {
-					$data[$stt]['detail'][$unitArea->land_type_id]['violate_area'] = $unitArea->violation_asset_area;
-					$data[$stt]['detail'][$unitArea->land_type_id]['purpose_area'] -= $unitArea->violation_asset_area;
+        $assets = $appraise->appraiseHasAssets;
+        $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
+        $sumPrice = 0;
+        foreach ($assets as $asset) {
+            $asset_general_id = $asset->asset_general_id;
+            $data[$asset_general_id]['asset_general_id'] = $asset_general_id;
+            $asset_general = $compareAssetGeneralRepository->findVersionById_v2($asset_general_id, $asset->version);
 
-					$violateArea += $unitArea->violation_asset_area;
-				}
-				foreach ($unitPrices as $unitPrice) {
-					$data[$stt]['detail'][$unitPrice->land_type_id]['price'] = $unitPrice->original_value;
-				}
-				$total_amount = $asset_general['total_amount'];
-				$percent = $adapter->percent??0;
-				$estimate_amount =  ($percent *  $asset_general['total_amount']) / 100;
-				$construction_amount = $asset_general['total_construction_amount'];
-				$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
-				$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
+            $adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
+            $unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
+            $comparisonFactor =  $appraise->comparisonFactor->where('asset_general_id', $asset_general_id);
+            $totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area']);
+            $violateArea = floatval(0);
+            $purposeArea = floatval(0);
+            $data[$asset_general_id]['total_area'] = $totalArea;
+            foreach ($unitAreas as $unitArea) {
 
-				$data[$stt]['total_amount'] = $total_amount;
-				$data[$stt]['percent'] = $percent;
-				$data[$stt]['estimate_amount'] = $estimate_amount;
-				$data[$stt]['total_construction_amount'] = $construction_amount;
-				$data[$stt]['change_violate_price'] = $violatePrice;
-				$data[$stt]['change_purpose_price'] = $purposePrice;
-				$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
-				$data[$stt]['calculate_price'] = $calculate_price;
-				$purposeArea = $totalArea - $violateArea;
-				$average_price = round($calculate_price / $purposeArea, 0);
-				$data[$stt]['purpose_area_total'] = $purposeArea;
-				$data[$stt]['average_price'] = $average_price;
+                $violateArea += $unitArea->violation_asset_area;
+            }
+            $total_amount = $asset_general['total_amount'];
+            $percent = $adapter->percent ?? 0;
+            $estimate_amount =  ($percent *  $total_amount) / 100;
+            $construction_amount = $asset_general['total_construction_amount'];
+            $violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
+            $purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
 
-				$legalRate = 0;
-				$diffRateTotal = floatval(0);
-				$countComparison = floatval(0);
-				foreach ($comparisonFactor as $factor) {
-					if ($factor->type == 'phap_ly') {
-						$countComparison++;
-						$legalRate = $factor->adjust_percent??0;
-					} else {
-						if ($factor->adjust_percent != 0) {
-							$countComparison++;
-							$diffRateTotal = $diffRateTotal + $factor->adjust_percent??0;
-						}
-					}
-				}
-				$legalAmount = round($average_price *  $legalRate / 100, 0);
-				$averate_price_legal = $average_price + $legalAmount;
-				$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
-				$indicative_amount = $averate_price_legal + $diffRateAmount;
+            $calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
+            $purposeArea = $totalArea - $violateArea;
+            $average_price = round($calculate_price / $purposeArea, 0);
 
-				$data[$stt]['legal_rate'] = $legalRate;
-				$data[$stt]['averate_price_legal'] = $averate_price_legal;
-				$data[$stt]['adjust_total_rate'] = $diffRateTotal;
-				$data[$stt]['adjust_total_amount'] = $diffRateAmount;
-				$data[$stt]['count_comparison'] = $countComparison;
+            $legalRate = 0;
+            $diffRateTotal = floatval(0);
+            foreach ($comparisonFactor as $factor) {
+                if ($factor->type == 'phap_ly') {
+                    $legalRate = $factor->adjust_percent ?? 0;
+                } else {
+                    if ($factor->adjust_percent != 0) {
+                        $diffRateTotal = $diffRateTotal + $factor->adjust_percent ?? 0;
+                    }
+                }
+            }
+            //Price after ajust by legal factor
+            $legalAmount = round($average_price *  $legalRate / 100, 0);
+            $averate_price_legal = $average_price + $legalAmount;
 
-				$data[$stt]['indicative_price'] = $indicative_amount;
-				$sumPrice += $indicative_amount;
+            //Price after ajust by other factor
+            $diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
+            $indicative_amount = $averate_price_legal + $diffRateAmount;
+            $data[$asset_general_id]['indicative_price'] = $indicative_amount;
 
-				switch ($stt) {
-					case 0:
-						$price1 = $indicative_amount;
-						$maxPrice = $indicative_amount;
-						$minPrice = $indicative_amount;
-						break;
-					case 1:
-						$price2 = $indicative_amount;
-						if ($maxPrice < $indicative_amount)
-							$maxPrice = $indicative_amount;
-						if ($minPrice > $indicative_amount)
-							$minPrice = $indicative_amount;
-						break;
-					default:
-						$price3 = $indicative_amount;
-						if ($maxPrice < $indicative_amount)
-							$maxPrice = $indicative_amount;
-						if ($minPrice > $indicative_amount)
-							$minPrice = $indicative_amount;
-						break;
-				}
-				$stt++;
-			}
-			$unify_indicative_price = 0;
-			switch ($unify_indicative_price_slug) {
-				case 'trung-binh':
-					$unify_indicative_price = round($sumPrice / 3, 0);
-					break;
-				case 'lon-nhat':
-					$unify_indicative_price = $maxPrice;
-					break;
-				default:
-					$unify_indicative_price = $minPrice;
-					break;
-			}
-			$stt = 0;
-			$checkMaxAvg = false;
-			$checkAdjustRate = false;
-            $avg_adjust_price = round($sumPrice / 3, 0);
-			foreach ($data as $item) {
-				$diff = round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0);
-				$data[$stt]['diff_average_rate'] = $diff;
+            if ($diffRateTotal + $legalRate > ValueDefault::TOTAL_ADJUST_RATE){
+                $appraise->checkMaxAvg = true;
+            }
 
-				if ($item['adjust_total_rate'] > ValueDefault::TOTAL_ADJUST_RATE)
-					$checkAdjustRate = true;
-				if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE)
-					$checkMaxAvg = true;
-				$stt++;
-			}
-			$appraise->checkMaxAvg = $checkMaxAvg;
-			$appraise->checkAdjustRate = $checkAdjustRate;
-			$appraise->unify_indicative_price = $unify_indicative_price;
-			$appraise->asset_general = $data;
+            $sumPrice += $indicative_amount;
+        }
 
-			$result = $appraise;
-		}
-		return $result;
+        $avg_adjust_price = round($sumPrice / 3, 0);
+        foreach ($data as $item) {
+            $diff = round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0);
+
+            if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
+                $appraise->checkAdjustRate = true;
+            }
+        }
+		return $appraise;
+	}
+
+	public static function checkApartmentAdjust(int $apartmentId)
+	{
+        $with = [
+            'apartmentHasAsset:apartment_asset_id,asset_general_id',
+            'apartmentAdapter:apartment_asset_id,asset_general_id,percent',
+            'comparisonFactor' => function ($q) {
+                $q->where('status', '=', 1)->where('adjust_percent', '<>', '0');
+            },
+        ];
+        $select = [
+            'id'
+        ];
+        $appraise = ApartmentAsset::with($with)->where('id', $apartmentId)->select($select)->first();
+        $appraise->append('assets_general');
+        $appraise->checkMaxAvg = false;
+        $appraise->checkAdjustRate = false;
+        $assets = $appraise->assets_general;
+        $adapters = $appraise->apartmentAdapter;
+        $comparisons = $appraise->comparisonFactor;
+        $sumPrice = 0;
+        foreach ($assets as $asset) {
+            $adapter = $adapters->where('asset_general_id', $asset->id)->first();
+            $comparison = $comparisons->where('asset_general_id', $asset->id);
+            $legal = $comparison->where('type','phap_ly')->first();
+            $notLegal = $comparison->whereNotIn('type',['phap_ly']);
+            $totalAmount = $asset->total_amount;
+            $percent = $adapter->percent;
+            $amount = $totalAmount * $percent/100;
+            $area = floatval($asset->room_details[0]['area'] ?? 0);
+            $unitPrice = $amount/$area;
+            $legalRate = $legal->adjust_percent ?? 0;
+            $legalUnitPrice = $unitPrice + $unitPrice * $legalRate/100;
+            $notLegalRate = $notLegal->sum('adjust_percent');
+            $price = $legalUnitPrice + $legalUnitPrice * $notLegalRate/100;
+            $sumPrice += $price;
+
+            $data[$asset->id]['indicative_price'] = $price;
+            if ($legalRate + $notLegalRate > ValueDefault::TOTAL_ADJUST_RATE){
+                $appraise->checkMaxAvg = true;
+            }
+        }
+        $avg_adjust_price = round($sumPrice / 3, 0);
+        foreach ($data as $item) {
+            $diff = round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0);
+
+            if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
+                Log::info($diff);
+                $appraise->checkAdjustRate = true;
+            }
+        }
+		return $appraise;
 	}
 
 	public static function getComparisonAppraise(array $ids)

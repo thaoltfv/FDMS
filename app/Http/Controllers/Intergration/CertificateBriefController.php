@@ -148,7 +148,6 @@ class CertificateBriefController extends Controller
             if(isset($result['message']) && isset($result['exception']))
                 return $this->respondWithErrorData( $result);
 
-
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error

@@ -288,7 +288,7 @@ class Appraise extends Model
 
     public function tangibleAssets(): HasMany
     {
-        return $this->hasMany(AppraiseTangibleAsset::class, 'appraise_id');
+        return $this->hasMany(AppraiseTangibleAsset::class, 'appraise_id')->orderBy('id');
     }
 
     public function otherAssets(): HasMany
@@ -796,6 +796,7 @@ class Appraise extends Model
             $result = AppraiseTangibleAsset::with($with)
                 ->select($select)
                 ->where(['appraise_id'=>$this->id])
+                ->orderBy('id')
                 ->get();
         }
         return  $result;
