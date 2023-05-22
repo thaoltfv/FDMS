@@ -7,7 +7,6 @@
       <div class="card">
         <div class="d-block d-sm-flex justify-content-between my-3">
           <div class="search-container w-100 d-flex">
-            <!-- <a-switch v-model="switchValue" @change="changeSwitchValue"/> -->
             <gmap-autocomplete
               :value="search_address"
               :placeholder="strPlaceHolder"
@@ -130,7 +129,6 @@ export default {
 			imageMap: true,
 			render_map: 3232102,
 			strPlaceHolder: 'Nhập địa điểm, vị trí hoặc tọa độ',
-			switchValue: true
 		}
 	},
 	async mounted () {
@@ -144,10 +142,6 @@ export default {
 		}
 	},
 	methods: {
-		changeSwitchValue (event) {
-			this.switchValue = event
-			if (event) { this.strPlaceHolder = 'Nhập location' } else { this.strPlaceHolder = 'Nhập địa điểm' }
-		},
 		changePlace (event) {
 			this.search_address = event.target.value
 		},

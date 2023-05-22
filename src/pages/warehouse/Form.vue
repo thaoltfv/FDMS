@@ -1981,13 +1981,22 @@ export default {
 				this.handleSubmit()
 			}
 		},
-		handleSubmit () {
-			this.isSubmit = true
+		async handleSubmit () {
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			let data = this.form
 			if (this.$route.name === 'warehouse.edit') {
-				this.updateDictionary(data)
+				await this.updateDictionary(data)
 			} else {
-				this.createDictionary(data)
+				await this.createDictionary(data)
 			}
 		},
 		async createDictionary (data) {
