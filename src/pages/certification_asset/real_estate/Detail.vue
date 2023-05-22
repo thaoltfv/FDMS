@@ -884,7 +884,7 @@ export default {
 		},
 		getProfiles () {
 			const profile = this.$store.getters.profile
-			this.checkRole = (profile.data.user.id === this.form.created_by) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
+			this.checkRole = (this.createdBy && profile.data.user.id === this.createdBy.id)  || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
 		},
 		showHistoryDrawer () {
 			this.visibleHistoryDrawer = true

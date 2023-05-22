@@ -21,7 +21,7 @@
                       >
                         <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
                         <l-control-zoom position="bottomright"></l-control-zoom>
-                        <l-control position="bottomright">
+                        <l-control position="bottomleft">
                           <button class="btn btn-orange mini_btn" type="button" id="filterButton" @click="handleRefeshMap">
                             <font-awesome-icon icon="sync" />
                           </button>
@@ -353,6 +353,7 @@
       :radius="circle.radius"
       :transaction="transaction"
       :assetType="assetType"
+			:year="yearRange"
       @cancel="isFilterMap = false"
       @action="handleActionFilterMap"
     />
@@ -437,6 +438,7 @@ export default {
 			listAssetGeneral: [],
 			assetHasChoose: [],
 			assetType: [39],
+			yearRange: moment().subtract(1, 'year').format('YYYY-MM-DD'),
 			assetDetails: '',
 			transaction: [51, 52],
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -567,11 +569,13 @@ export default {
 			this.circle.radius = dataFilter.radius
 			this.transaction = dataFilter.transaction
 			this.assetType = dataFilter.assetType
+			this.yearRange = dataFilter.year
 			const distance = parseFloat(dataFilter.radius / 1000).toFixed(2)
 			const location = this.circle.center
 			const transaction = '[' + dataFilter.transaction + ']'
 			const assetType = '[' + dataFilter.assetType + ']'
-			const getAllAsset = await CertificateAsset.getAllAssetApartment(distance, location, transaction, assetType)
+			const yearRange = this.yearRange
+			const getAllAsset = await CertificateAsset.getAllAssetApartment(distance, location, transaction, assetType, yearRange)
 			this.listAssetGeneral = [...getAllAsset.data]
 			this.listAssetGeneral.forEach(item => {
 				item['center'] = [parseFloat(item.coordinates.split(',')[0]), parseFloat(item.coordinates.split(',')[1])]

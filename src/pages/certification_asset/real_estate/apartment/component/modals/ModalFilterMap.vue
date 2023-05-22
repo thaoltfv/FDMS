@@ -4,17 +4,24 @@
     >
     <div class="card">
       <div class="card-body">
-        <p class="title color_content">
-         Nhập bán kính (km)
-        </p>
-        <InputNumberFormat
-          v-model="filter_map.radius"
-          label=""
-          :max="10"
-          :min="0"
-          @change="changeRadius($event)"
-          class=""
-        />
+				<div class="row">
+					<InputNumberFormat
+						v-model="filter_map.radius"
+						label="Nhập bán kính (km)"
+						:max="15"
+						:min="0"
+						@change="changeRadius($event)"
+						class="form-group-container col-12 col-lg-6"
+					/>
+					<InputCategory
+						v-model="filter_map.year"
+						vid="year"
+						label="Năm"
+						:options="optionsYears"
+						placeholder="Năm"
+						class="form-group-container col-12 col-lg-6"
+					/>
+				</div>
         <div class="property-filter form-group-container">
           <div class="row">
             <!-- <div class="col-4">
@@ -26,7 +33,7 @@
                 <p class="property_content">Tất cả</p>
               </div>
             </div> -->
-            <div class="col-4">
+            <div class="col-6">
               <div class="d-flex align-items-center">
                 <label class="input_checkbox">
                   <input class="cursor-pointer" type="checkbox" :value="51"  v-model="filter_map.transaction" @change="handleSold">
@@ -35,7 +42,7 @@
                 <p class="property_content color_content">Đã bán</p>
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-6">
               <div class="d-flex align-items-center">
                 <label class="input_checkbox">
                   <input class="cursor-pointer" type="checkbox" :value="52" v-model="filter_map.transaction" @change="handleForSale">
@@ -64,26 +71,49 @@
 <script>
 import InputText from '@/components/Form/InputText'
 import InputNumberFormat from '@/components/Form/InputNumber'
+import InputCategory from '@/components/Form/InputCategory'
 export default {
 	name: 'ModalFilterMap',
-	props: ['radius', 'transaction', 'assetType'],
+	props: ['radius', 'transaction', 'assetType', 'year'],
 	components: {
 		InputText,
+		InputCategory,
 		InputNumberFormat
 	},
 	mounted () {
 		this.filter_map.radius = parseFloat(this.radius / 1000).toFixed(1)
 		this.filter_map.transaction = this.transaction
 		this.filter_map.assetType = this.assetType
+		this.filter_map.year = this.year
 	},
 	data () {
 		return {
 			filter_map: {
 				radius: '',
 				transaction: [],
-				assetType: []
+				assetType: [],
+				year: ''
 			},
+			years: [
+				{
+					name: '1 năm trước',
+					id: moment().subtract(1, 'year').format('YYYY-MM-DD')
+				},
+				{
+					name: '2 năm trước',
+					id: moment().subtract(2, 'year').format('YYYY-MM-DD')
+				}
+			],
 			radius_input: ''
+		}
+	},
+	computed: {
+		optionsYears () {
+			return {
+				data: this.years,
+				id: 'id',
+				key: 'name'
+			}
 		}
 	},
 	methods: {
@@ -118,7 +148,7 @@ export default {
 <style lang="scss" scoped>
 .modal-delete {
   position: fixed;
-  z-index: 10002;
+  z-index: 300;
   left: 0;
   top: 0;
   width: 100%;
