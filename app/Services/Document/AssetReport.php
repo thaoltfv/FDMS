@@ -536,13 +536,10 @@ class AssetReport
             throw $e;
         }
         $data = [];
-        if ($format =='docx'){
-            $data['url'] = Storage::disk('public')->url($path . $fileName .'.docx');
-        }else{
-            shell_exec('libreoffice --headless --convert-to '. $format . ' ' . storage_path('app/public/'. $path. $fileName .'.docx') . ' --outdir ' . storage_path('app/public/'. $path));
-
-            $data['url'] = Storage::disk('public')->url($path . $fileName .'.' . $format);
+        if ($format =='pdf'){
+            shell_exec('export HOME=/tmp/ ; libreoffice --headless --convert-to '. $format . ' ' . storage_path('app/public/'. $path. $fileName .'.docx') . ' --outdir ' . storage_path('app/public/'. $path));
         }
+        $data['url'] = Storage::disk('public')->url($path . $fileName .'.' . $format);
         $data['file_name'] = $fileName;
         return $data;
     }
