@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dictionary\DictionaryRequest;
 use App\Models\AppraiserCompany;
 use App\Services\Firebase\FirebaseClient;
+use Cache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -59,7 +60,9 @@ class DictionaryController extends Controller
     public function findAll(): JsonResponse
     {
         try {
-            return $this->respondWithCustomData($this->dictionaryRepository->findAll());
+            return Cache::remember('DICTIONARIES_ALL', 86000, function() {
+                return $this->respondWithCustomData($this->dictionaryRepository->findAll());
+            });
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
@@ -90,7 +93,9 @@ class DictionaryController extends Controller
     public function findAllByType($type): JsonResponse
     {
         try {
-            return $this->respondWithCustomData($this->dictionaryRepository->findAllByType($type));
+            return Cache::remember('DICTIONARY_' . $type, 86000, function() use ($type) {
+                return $this->respondWithCustomData($this->dictionaryRepository->findAllByType($type));
+            });
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];

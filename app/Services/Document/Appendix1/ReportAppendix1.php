@@ -848,6 +848,8 @@ class ReportAppendix1 extends Report
     }
     protected function conclusionApartment($section, $asset)
     {
+        $priceRound = number_format($this->total['price_round'], 0, ',', '.');
+        $section->addText('     - Làm tròn: ' . $priceRound . 'đ/' . $this->m2);
     }
     protected function conclusion1($section)
     {
@@ -856,7 +858,6 @@ class ReportAppendix1 extends Report
         $namePP = $this->total['method_name'];
 
         $price = number_format($this->total['price'], 0, ',', '.');
-        $priceRound = number_format($this->total['price_round'], 0, ',', '.');
         $textRun = $section->addTextRun();
         $textRun->addText('❖ ', ['bold' => false]);
         $textRun->addText('Kết luận:', ['bold' => true]);
