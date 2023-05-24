@@ -23,12 +23,12 @@
                   <p class="content-name">{{property_doc.plot_num}}</p>
                 </div>
             </div>
-            <div class="d-grid">
+            <!-- <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Tọa độ:</p>
                 <p class="content-name">{{property.coordinates}}</p>
               </div>
-            </div>
+            </div> -->
             <div class="d-grid">
               <div class="content-detail">
                 <p class="content-title">Chiều rộng mặt tiền:</p>

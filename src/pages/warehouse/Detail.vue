@@ -101,18 +101,14 @@
                 </div>
           </div>
           <div class="d-grid" v-if="form.asset_type_id !== 39">
-                <div class="content-detail">
+                <!-- <div class="content-detail">
                   <p class="content-title">Thửa đất số:</p>
                   <p class="content-name">{{this.form.land_no !== '' && this.form.land_no !== undefined && this.form.land_no !== null ? this.form.land_no : 'Trống'}}</p>
                 </div>
                 <div class="content-detail">
                   <p class="content-title">Bản đồ số:</p>
                   <p class="content-name">{{this.form.doc_no !== '' && this.form.doc_no !== undefined && this.form.doc_no !== null ? this.form.doc_no : 'Trống'}}</p>
-                </div>
-                <div class="content-detail" >
-                  <p class="content-title">Địa hình:</p>
-                  <p class="content-name">{{form.topographic_data !== null && form.topographic_data !== undefined ? this.form.topographic_data.description : 'Chưa có địa hình'}}</p>
-                </div>
+                </div> -->
           </div>
           <div class="d-grid" v-if="form.asset_type_id === 39">
             <div class="content-detail">
@@ -134,10 +130,16 @@
               <p class="content-name">{{this.form.apartment_specification ? this.form.apartment_specification.apartment_name : ""}}</p>
             </div>
           </div>
-          <div class="content-detail">
-            <p class="content-title">Địa chỉ đầy đủ:</p>
-            <p class="content-name">{{this.form.full_address !== '' && this.form.full_address !== undefined && this.form.full_address !== null ? this.form.full_address : 'Không xác định'}}</p>
-          </div>
+					<div class="d-grid">
+						<div class="content-detail">
+							<p class="content-title">Địa chỉ đầy đủ:</p>
+							<p class="content-name">{{this.form.full_address !== '' && this.form.full_address !== undefined && this.form.full_address !== null ? this.form.full_address : 'Không xác định'}}</p>
+						</div>
+						<div class="content-detail"  v-if="form.asset_type_id !== 39">
+							<p class="content-title">Địa hình:</p>
+							<p class="content-name">{{form.topographic_data !== null && form.topographic_data !== undefined ? this.form.topographic_data.description : 'Chưa có địa hình'}}</p>
+						</div>
+					</div>
         </div>
       </div>
 
@@ -256,7 +258,6 @@
                 <th>Mã số</th>
                 <th>Số tờ</th>
                 <th>Số thửa</th>
-                <th>Tọa độ</th>
                 <th>Chiều rộng</th>
                 <th>Chiều dài</th>
                 <th>Diện tích</th>
@@ -279,9 +280,6 @@
                   <div>
                     {{property.compare_property_doc[0] !== undefined && property.compare_property_doc[0] !== null && property.compare_property_doc.length > 0 ? property.compare_property_doc[0].plot_num : 'Chưa có số thửa'}}
                   </div>
-                </td>
-                <td>
-                  {{property.coordinates}}
                 </td>
                 <td>
                   {{formatNumber(property.front_side_width)}}m

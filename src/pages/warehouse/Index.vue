@@ -116,11 +116,6 @@
               <template #button-content>
                 <img src="@/assets/icons/ic_more.svg" alt="">
               </template>
-              <b-dropdown-item @click.prevent="handleDetail(id)">
-                <div class="dropdown-item-container"><img
-                  src="@/assets/icons/ic_paper.svg" alt="">Xem chi tiết
-                </div>
-              </b-dropdown-item>
               <b-dropdown-item @click="onShowImages(id, property.full_address)">
                 <div class="dropdown-item-container"><img
                   src="@/assets/icons/ic_img.svg" alt="img">Xem hình ảnh

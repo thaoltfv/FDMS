@@ -52,18 +52,19 @@
 <!--            <button class="btn btn-orange btn-white btn-add ml-0 ml-lg-1 mb-4" type="button" @click="handleNum"><img-->
 <!--              src="../../assets/icons/ic_add-white.svg" alt="add"> Thêm</button>-->
             <div class="row justify-content-between">
-              <div class="col-12 input-contain position-relative">
+              <!-- <div class="col-12 input-contain position-relative">
+								<div class="img-locate">
+									<img src="@/assets/icons/ic_edit_2.svg" alt="locate" @click.prevent="handleOpenModalMap()">
+								</div>
+              </div> -->
                 <InputText
                   v-model="form.coordinates"
                   vid="coordinates"
                   label="Tọa độ"
                   rules="required"
                   class="coordinates"
+									hidden
                 />
-								<div class="img-locate">
-									<img src="@/assets/icons/ic_edit_2.svg" alt="locate" @click.prevent="handleOpenModalMap()">
-								</div>
-              </div>
               <div class="col-12 col-lg-6 input-contain">
 								<InputLengthArea
 									v-model="form.front_side_width"
