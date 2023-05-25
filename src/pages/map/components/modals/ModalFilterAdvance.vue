@@ -262,6 +262,7 @@ export default {
 		setPlace (place) {
 			if (place.geometry && place.geometry.location) {
 				this.form.coordinate = [place.geometry.location.lat(), place.geometry.location.lng()]
+				this.form.search_address = place.formatted_address
 			} else {
 				if (place.name) {
 					let location = place.name

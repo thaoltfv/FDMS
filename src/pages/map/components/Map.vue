@@ -510,7 +510,6 @@ export default {
 				await this.getAssetGenerals()
 				this.zoom = 15
 			}
-			console.log(center)
 			this.showModalFilter = false
 			store.commit(types.SET_MAP_FILTER, data)
 			localStorage.setItem('mapFilter', JSON.stringify(data))
