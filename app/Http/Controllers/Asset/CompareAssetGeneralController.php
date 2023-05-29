@@ -26,6 +26,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Storage;
 
 
@@ -176,9 +177,17 @@ class CompareAssetGeneralController extends Controller
 
             }
         }
+
+        $lock = Cache::lock('comparison_asset_create', 5);
         try {
             if ($this->getUserPermission(PermissionsDefault::ADD_PERMISSION . '_' . ScreensDefault::PRICE_SCREEN)) {
-                $result = $this->compareAssetGeneralRepository->createCompareAssetGeneral($request->toArray());
+                $result = [];
+                if ($lock->get()) {
+                    $result = $this->compareAssetGeneralRepository->createCompareAssetGeneral($request->toArray());
+                } else {
+                    $data = ['message' => 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.'];
+                    return $this->respondWithErrorData($data, 401);
+                }
                 if(isset($result['message']) && isset($result['exception']))
                     return $this->respondWithErrorData( $result);
                 return $this->respondWithCustomData($result);
@@ -191,7 +200,9 @@ class CompareAssetGeneralController extends Controller
             Log::error($exception);
             $data = ['message' => ErrorMessage::CREATE_ASSET_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
-        }
+        } finally {
+            $lock->release();
+         }
     }
 
     /**

@@ -442,7 +442,7 @@ class CommonService
 		$unitPrice3 = isset($constructionCompany3) ? $constructionCompany3->unit_price_m2 : 0;
 
 		// return round((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3), -5, PHP_ROUND_HALF_DOWN);
-		return self::roundPrice((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3), -5);
+		return self::roundPrice((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3));
 	}
 
 	public static function getTangibleAssetPriceV2($tangibleAsset) //đơn giá nhà
@@ -456,7 +456,7 @@ class CommonService
 		$unitPrice3 = isset($constructionCompany3) ? $constructionCompany3->unit_price_m2 : 0;
 
 		// return round((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3), -5, PHP_ROUND_HALF_DOWN);
-		return self::roundPrice((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3), -5);
+		return self::roundPrice((($unitPrice1 + $unitPrice2 + $unitPrice3) / 3));
 	}
 
 	public static function getSelectedTangibleAssetPrice($tangibleAsset, $method) //đơn giá nhà

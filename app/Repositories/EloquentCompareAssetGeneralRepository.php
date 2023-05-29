@@ -1877,10 +1877,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         ];
         if (empty($id)) {
             if ($this->model->query()->where($where)->exists()) {
-                $check = ['message' => 'Tọa độ ' . $coordinates . ' đã tồn tại. Vui lòng chọn tọa độ khác', 'exception' => ''];
+                $list = $this->model->query()->where($where)->get('id');
+                $ids = Arr::pluck($list, 'id');
+                $check = ['message' => 'Tọa độ ' . $coordinates . ' đã tồn tại ở TSSS ('. implode(', ', $ids) . '). Vui lòng chọn tọa độ khác.', 'exception' => ''];
             }
         } else {
-
             if ($this->model->query()->where($where)->whereKeyNot($id)->exists()) {
                 $list = $this->model->query()->where($where)->whereKeyNot($id)->get('id');
                 $ids = Arr::pluck($list, 'id');
