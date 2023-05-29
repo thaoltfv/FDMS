@@ -30,7 +30,10 @@
                   @change="checkPlace"
                   @keyup.enter="handleSearch"
                   class="input-text-coordinate"
-                  :options="{fields: ['geometry', 'address_components', 'formatted_address']}"
+                  :options="{
+										fields: ['geometry', 'address_components', 'formatted_address'],
+										componentRestrictions:{country: 'vn'}
+									}"
                 >
                 </gmap-autocomplete>
 

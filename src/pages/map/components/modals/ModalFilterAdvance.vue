@@ -38,7 +38,10 @@
 										@change="changePlace"
 										@keyup.enter="changePlace"
 										class="col-12 col-lg-8 input-map"
-										:options="{fields: ['geometry', 'address_components', 'formatted_address']}"
+										:options="{
+											fields: ['geometry', 'address_components', 'formatted_address'],
+											componentRestrictions:{country: 'vn'}
+										}"
 									/>
 								</div>
 								<InputCategory

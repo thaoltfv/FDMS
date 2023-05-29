@@ -14,7 +14,10 @@
               @change="changePlace"
               @keyup.enter="changePlace"
               class="input-map"
-              :options="{fields: ['geometry', 'address_components', 'formatted_address']}"
+              :options="{
+								fields: ['geometry', 'address_components', 'formatted_address'],
+								componentRestrictions:{country: 'vn'}
+							}"
             />
             <div class="icon-container" @click="handleSearch">
               <img src="@/assets/icons/ic_search.svg" alt="">

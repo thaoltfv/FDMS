@@ -17,6 +17,7 @@
               class="input-map"
               :options="{
                 fields: ['geometry', 'address_components', 'formatted_address'],
+								componentRestrictions:{country: 'vn'}
               }"
             >
             </gmap-autocomplete>

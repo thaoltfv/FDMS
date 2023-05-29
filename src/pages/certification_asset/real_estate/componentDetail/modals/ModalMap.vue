@@ -13,7 +13,10 @@
               placeholder="Nhập địa chỉ"
               @place_changed="setPlace"
               class="input-map"
-              :options="{fields: ['geometry', 'address_components', 'formatted_address']}"
+              :options="{
+								fields: ['geometry', 'address_components', 'formatted_address'],
+								componentRestrictions:{country: 'vn'}
+							}"
             >
             </gmap-autocomplete>
             <div class="icon-container" v-if="search_address !== '' && search_address !== undefined && search_address !== null" @click="handleDelete">
