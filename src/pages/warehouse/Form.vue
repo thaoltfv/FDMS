@@ -131,7 +131,7 @@
 										vid="province_id"
 										label="Tỉnh/Thành"
 										rules="required"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 										:options="optionsProvince"
 										@change="changeProvince($event)"
 									/>
@@ -140,7 +140,7 @@
 										vid="district_id"
 										label="Quận/Huyện"
 										rules="required"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 										:options="optionsDistrict"
 										@change="changeDistrict($event)"
 									/>
@@ -160,7 +160,7 @@
 										vid="street_id"
 										label="Đường"
 										rules="required"
-										class="col-12 col-md-6 col-lg-3 form-group-container"
+										class="col-12 col-md-6 col-lg-4 form-group-container"
 										:options="optionsStreet"
 										@change="changeStreet($event)"
 									/>
@@ -168,7 +168,7 @@
 										v-model="form.distance_id"
 										vid="distance_id"
 										label="Đoạn"
-										class="col-12 col-md-6 col-lg-3 form-group-container"
+										class="col-12 col-md-6 col-lg-4 form-group-container"
 										:options="optionsDistance"
 										@change="changeStreetDistance($event)"
 									/>
@@ -196,7 +196,7 @@
 										:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
 										@change="changeLandNo($event)"
 										:min="0"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 									/>
 									<InputNumberFormat
 										v-model="form.doc_no"
@@ -206,7 +206,7 @@
 										:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
 										@change="changeDocNo($event)"
 										:min="0"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 									/> -->
 								</div>
 								<ApartmentInfo
