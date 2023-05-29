@@ -155,9 +155,6 @@ export default {
 				coordinate:[],
 				year: moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
 			},
-			districts: [],
-			wards: [],
-			streets: [],
 			front_sides: [
 				{
 					name: 'Mặt tiền',
@@ -237,9 +234,8 @@ export default {
 		getCacheFilterData () {
 			let data = store.getters.mapFilter
 			if (isEmpty(data)) {
-				let local = localStorage.getItem('mapFilter')
-				if (!isEmpty(local)) {
-					data = JSON.parse(local)
+				data =  JSON.parse(localStorage.getItem('mapFilter'))
+				if (!isEmpty(data)) {
 					store.commit(types.SET_MAP_FILTER, data)
 				}
 			}
@@ -248,16 +244,21 @@ export default {
 		getDefaultLocation() {
 			let mapLocation = store.getters.mapLocation
 			if (isEmpty(mapLocation)) {
-				let local = localStorage.getItem('mapLocation')
-				if (!isEmpty(local)) {
+				let mapLocation = JSON.parse(localStorage.getItem('mapLocation'))
+				if (!isEmpty(mapLocation)) {
 					store.commit(types.SET_MAP_LOCATION, mapLocation)
-					localStorage.setItem('mapLocation', JSON.stringify(mapLocation))
 				}
 			}
 			return mapLocation
 		},
 		changePlace (event) {
+			let location = event.target.value
 			this.form.search_address = event.target.value
+			if (location.split(',') && location.split(',').length === 2 && parseFloat(location.split(',')[0]) && parseFloat(location.split(',')[1])) {
+				let lat = parseFloat(location.split(',')[0])
+				let lng = parseFloat(location.split(',')[1])
+				this.form.coordinate = [lat, lng]
+			}
 		},
 		setPlace (place) {
 			if (place.geometry && place.geometry.location) {

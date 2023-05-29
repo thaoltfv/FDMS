@@ -284,11 +284,8 @@ export default {
 			radius: '',
 			year: '',
 			address: {
-				province_id: 34,
-				district_id: 411,
-				ward_id: '',
-				street_id: '',
-				full_address: 'Quận Thủ Đức, Thành phố Hồ Chí Minh'
+				coordinate: '',
+				search_address: '',
 			},
 			showModalFilter: false,
 			open_radius: false,
@@ -361,18 +358,14 @@ export default {
 			this.circle.center = mapLocation
 			this.markerLatLng = mapLocation
 			this.center = mapLocation
-			this.address.full_address = ''
-			this.address.province_id = ''
-			this.address.district_id = ''
-			this.address.ward_id = ''
-			this.address.street_id = ''
+			this.address.search_address = ''
 			this.getAssetGenerals()
 		},
 		getDefaultLocation() {
 			let mapLocation = store.getters.mapLocation
 			if (isEmpty(mapLocation)) {
-				let local = localStorage.getItem('mapLocation')
-				if (!isEmpty(local)) {
+				mapLocation =  JSON.parse(localStorage.getItem('mapLocation'))
+				if (!isEmpty(mapLocation)) {
 					this.storeMapLocation(mapLocation)
 				}
 			}
@@ -499,9 +492,8 @@ export default {
 			this.total_amount_to = data.total_amount_to
 			this.property_type = data.property_type
 			this.year = data.year
-			// eslint-disable-next-line no-undef
 			let center = {}
-			if(this.address.coordinate) {
+			if(this.address.coordinate && this.address.coordinate.length == 2) {
 				center = this.address.coordinate
 				this.center = center
 				this.markerLatLng = center
@@ -576,10 +568,10 @@ export default {
 				this.transaction = ''
 			}
 			const year = this.year
-			const province = this.address.province_id
-			const district = this.address.district_id
-			const ward = this.address.ward_id
-			const street = this.address.street_id
+			const province = ''
+			const district = ''
+			const ward = ''
+			const street = ''
 			const total_area_from = this.total_area_from
 			const total_area_to = this.total_area_to
 			const total_amount_from = this.total_amount_from
@@ -753,25 +745,13 @@ export default {
 				this.getAssetGenerals()
 			})
 		},
-		async getProvinces () {
-			try {
-				const resp = await WareHouse.getProvince()
-				this.provinces = [...resp.data]
-				if (this.address.province_id === '') {
-					this.address.province_id = 34
-				}
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
-		}
 	},
 	beforeMount () {
 
 	},
 	created () {
 		this.year = moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
-		this.getProvinces()
+
 		this.Years()
 	}
 }
