@@ -225,6 +225,7 @@ class ReportAppendix1 extends Report
         $result = [];
         $totalAmount = floatval($item->total_amount);
         $buildingPrice = floatval($item->total_construction_amount);
+        $otherAssetPrice = floatval($item->total_order_amount);
         $purposePrice = 0;
         $violatePrice = 0;
         $adjustPercent = floatval($adapter->percent);
@@ -234,12 +235,13 @@ class ReportAppendix1 extends Report
         } else {
             $purposePrice = floatval($adapter->change_purpose_price);
             $violatePrice = floatval($adapter->change_violate_price);
-            $estimateAmount = $totalEstimateAmount - $buildingPrice +  $purposePrice - $violatePrice;
+            $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
         }
         $avgPrice = round($estimateAmount / $mainArea);
         $result = [
             'id' => $item->id,
             'building_price' => $buildingPrice,
+            'other_asset_price' => $otherAssetPrice,
             'total_amount' => $totalAmount,
             'percent' => $adjustPercent,
             'total_estimate_amount' => $totalEstimateAmount,
@@ -504,6 +506,7 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoAppraiseBuidingRemainRate('', 'Tỷ lệ CLCL', $asset);
         $data[] = $this->collectInfoAppraiseBuidingUnitPrice('', "Đơn giá xây dựng mới (đ/$this->m2)", $asset);
         $data[] = $this->collectInfoAppraiseBuidingPrice($stt++, 'Giá trị còn lại CTXD (đ)', $asset);
+        $data[] = $this->collectInfoAppraiseOtherAssetPrice($stt++, 'Tổng giá trị tài sản khác', $asset);
         $data[] = $this->collectInfoAppraisePropertyDescripion($stt++, 'Vị trí', $asset);
         $data[] = $this->collectInfoAppraisePropertyMaterial($stt++, 'Kết cấu đường', $asset);
         $data[] = $this->collectInfoAppraiseRoadWidth($stt++, 'Độ rộng đường (m)', $asset);
@@ -1535,7 +1538,6 @@ class ReportAppendix1 extends Report
     }
     protected function collectInfoAppraiseBuidingPrice($stt, $title, $asset)
     {
-
         $data = [
             $stt,
             $title,
@@ -1547,9 +1549,21 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
+    protected function collectInfoAppraiseOtherAssetPrice($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            $this->assetPrice['asset1']['other_asset_price'] ?  number_format($this->assetPrice['asset1']['other_asset_price'], 0, ',', '.') : '-',
+            $this->assetPrice['asset2']['other_asset_price'] ?  number_format($this->assetPrice['asset2']['other_asset_price'], 0, ',', '.') : '-',
+            $this->assetPrice['asset3']['other_asset_price'] ?  number_format($this->assetPrice['asset3']['other_asset_price'], 0, ',', '.') : '-',
+            true
+        ];
+        return $data;
+    }
     protected function collectInfoAppraisePropertyDescripion($stt, $title, $asset)
     {
-
         $data = [
             $stt,
             $title,

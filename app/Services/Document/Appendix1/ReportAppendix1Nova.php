@@ -64,6 +64,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoAppraiseBuidingRemainRate('', 'Tỷ lệ CLCL', $asset);
         $data[] = $this->collectInfoAppraiseBuidingUnitPrice('', "Đơn giá xây dựng mới (đ/$this->m2)", $asset);
         $data[] = $this->collectInfoAppraiseBuidingPrice($stt++, 'Giá trị còn lại CTXD (đ)', $asset);
+        $data[] = $this->collectInfoAppraiseOtherAssetPrice($stt++, 'Tổng giá trị tài sản khác', $asset);
         $data[] = $this->collectInfoAppraisePropertyDescripion($stt++, 'Vị trí', $asset);
         $data[] = $this->collectInfoAppraisePropertyMaterial($stt++, 'Kết cấu đường', $asset);
         $data[] = $this->collectInfoAppraiseRoadWidth($stt++, 'Độ rộng đường (m)', $asset);
