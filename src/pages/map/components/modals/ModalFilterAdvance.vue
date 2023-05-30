@@ -23,64 +23,37 @@
 								label="Năm"
 								:options="optionsYears"
 								placeholder="Năm"
-								@change="handleChangeYear"
 								class="label-none form-group-container col-12 col-lg-6"
 							/>
 						</div>
 							<div class="seperator  mt-3 col-12">
 								<h3><span>Vị Trí</span></h3>
 							</div>
-            <div class="ml-2 row">
-							<InputCategory
-								v-model="form.province_id"
-								vid="province_id"
-								label="Tỉnh/Thành"
-								type="date"
-								:options="optionsProvince"
-								placeholder="Tỉnh/Thành"
-								@change="changeProvince($event)"
-								class="label-none form-group-container col-12 col-lg-4"
-							/>
-							<InputCategory
-								v-model="form.district_id"
-								vid="district_id"
-								label="Quận/Huyện"
-								type="date"
-								:options="optionsDistrict"
-								@change="changeDistrict($event)"
-								placeholder="Quận/Huyện"
-								class="label-none form-group-container col-12 col-lg-4"
-							/>
-							<InputCategory
-								v-model="form.ward_id"
-								vid="ward_id"
-								label="Phường/Xã"
-								type="date"
-								:options="optionsWard"
-								placeholder="Phường/Xã"
-								@change="changeWard($event)"
-								class="label-none form-group-container col-12 col-lg-4"
-							/>
-							<InputCategory
-								v-model="form.street_id"
-								vid="street_id"
-								label="Đường"
-								type="date"
-								:options="optionsStreet"
-								placeholder="Đường"
-								@change="changeStreet"
-								class="label-none form-group-container col-12 col-lg-8"
-							/>
-							<InputCategory
-								v-model="form.front_side"
-								vid="front_side"
-								label="Mặt tiền"
-								:options="optionsFrontSide"
-								placeholder="Mặt tiền"
-								@change="changeFrontSide($event)"
-								class="label-none form-group-container col-12 col-lg-4"
-							/>
-						</div>
+							<div class="ml-2 row">
+								<div class="form-group-container col-12 col-lg-8">
+									<gmap-autocomplete
+										:value="form.search_address"
+										placeholder='Nhập địa điểm, vị trí hoặc tọa độ'
+										@place_changed="setPlace"
+										@change="changePlace"
+										@keyup.enter="changePlace"
+										class="col-12 col-lg-8 input-map"
+										:options="{
+											fields: ['geometry', 'address_components', 'formatted_address'],
+											componentRestrictions:{country: 'vn'}
+										}"
+									/>
+								</div>
+								<InputCategory
+									v-model="form.front_side"
+									vid="front_side"
+									label="Mặt tiền"
+									:options="optionsFrontSide"
+									placeholder="Mặt tiền"
+									@change="changeFrontSide($event)"
+									class="label-none form-group-container col-12 col-lg-4"
+								/>
+							</div>
 							<div class="seperator mt-3 col-12">
 								<h3><span>Khác</span></h3>
 							</div>
@@ -153,7 +126,6 @@
 
 <script>
 import InputText from '@/components/Form/InputText'
-import WareHouse from '@/models/WareHouse'
 import InputTextarea from '@/components/Form/InputTextarea'
 import InputDatePicker from '@/components/Form/InputDatePicker'
 import InputCategory from '@/components/Form/InputCategory'
@@ -164,8 +136,7 @@ import * as types from '@/store/mutation-types'
 import { isEmpty } from 'lodash-es'
 
 export default {
-	name: 'ModalStep2OtherLegal',
-	props: ['data', 'provinces'],
+	name: 'ModalFilterAss',
 	components: {
 		InputText,
 		InputTextarea,
@@ -177,22 +148,16 @@ export default {
 		return {
 			// form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
 			form: {
-				province_id: 34,
-				district_id: 411,
-				ward_id: '',
-				street_id: '',
 				total_area_from: '',
 				total_area_to: '',
 				total_amount_from: '',
 				total_amount_to: '',
 				front_side: '',
 				property_type: 0,
-				full_address: '',
+				search_address: '',
+				coordinate:[],
 				year: moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
 			},
-			districts: [],
-			wards: [],
-			streets: [],
 			front_sides: [
 				{
 					name: 'Mặt tiền',
@@ -260,53 +225,61 @@ export default {
 				key: 'name'
 			}
 		},
-		optionsProvince () {
-			return {
-				data: this.provinces,
-				id: 'id',
-				key: 'name'
-			}
-		},
-		optionsDistrict () {
-			return {
-				data: this.districts,
-				id: 'id',
-				key: 'name'
-			}
-		},
-		optionsWard () {
-			return {
-				data: this.wards,
-				id: 'id',
-				key: 'name'
-			}
-		},
-		optionsStreet () {
-			return {
-				data: this.streets,
-				id: 'id',
-				key: 'name'
-			}
-		}
 	},
 	async mounted () {
-		await this.getProvinces()
 		const data = await this.getCacheFilterData()
 		if (!isEmpty(data)) {
 			this.form = data
 		}
+		this.form.coordinate = this.getDefaultLocation()
 	},
 	methods: {
 		getCacheFilterData () {
 			let data = store.getters.mapFilter
 			if (isEmpty(data)) {
-				let local = localStorage.getItem('mapFilter')
-				if (!isEmpty(local)) {
-					data = JSON.parse(local)
+				data =  JSON.parse(localStorage.getItem('mapFilter'))
+				if (!isEmpty(data)) {
 					store.commit(types.SET_MAP_FILTER, data)
 				}
 			}
 			return data
+		},
+		getDefaultLocation() {
+			let mapLocation = store.getters.mapLocation
+			if (isEmpty(mapLocation)) {
+				let mapLocation = JSON.parse(localStorage.getItem('mapLocation'))
+				if (!isEmpty(mapLocation)) {
+					store.commit(types.SET_MAP_LOCATION, mapLocation)
+				}
+			}
+			return mapLocation
+		},
+		changePlace (event) {
+			let location = event.target.value
+			this.form.search_address = event.target.value
+			if (location.split(',') && location.split(',').length === 2 && parseFloat(location.split(',')[0]) && parseFloat(location.split(',')[1])) {
+				let lat = parseFloat(location.split(',')[0])
+				let lng = parseFloat(location.split(',')[1])
+				this.form.coordinate = [lat, lng]
+			}
+		},
+		setPlace (place) {
+			if (place.geometry && place.geometry.location) {
+				this.form.coordinate = [place.geometry.location.lat(), place.geometry.location.lng()]
+				this.form.search_address = place.formatted_address
+			} else {
+				if (place.name) {
+					let location = place.name
+					this.form.search_address = place.name
+					if (location.split(',') && location.split(',').length === 2 && parseFloat(location.split(',')[0]) && parseFloat(location.split(',')[1])) {
+						let lat = parseFloat(location.split(',')[0])
+						let lng = parseFloat(location.split(',')[1])
+						this.form.coordinate = [lat, lng]
+					}
+				} else {
+					this.form.coordinate = []
+				}
+			}
 		},
 		totalAreaFrom (event) {
 			if (event) {
@@ -333,163 +306,6 @@ export default {
 				this.form.front_side = event
 			} else this.form.front_side = ''
 		},
-		changeProvince (provinceId) {
-			this.districts = []
-			this.wards = []
-			this.streets = []
-			this.form.district_id = ''
-			this.form.ward_id = ''
-			this.form.street_id = ''
-			if (+provinceId) {
-				this.getDistrictsByProvinceId(+provinceId)
-			}
-			const data = this.form
-			let provinceName = ''
-			this.provinces.forEach(province => {
-				if (province.id === data.province_id) {
-					provinceName = province.name
-				}
-			})
-			this.form.full_address = provinceName
-		},
-		changeDistrict (districtId) {
-			this.wards = []
-			this.streets = []
-			this.form.ward_id = ''
-			this.form.street_id = ''
-			this.getWardsByDistrictId(+districtId)
-			this.getStreetByDistrictId(+districtId)
-			const data = this.form
-			let provinceName = ''
-			let districtName = ''
-			this.provinces.forEach(province => {
-				if (province.id === data.province_id) {
-					provinceName = province.name
-					this.districts.forEach(district => {
-						if (district.id === data.district_id) {
-							districtName = district.name
-						}
-					})
-				}
-			})
-			this.form.full_address = districtName + ',' + provinceName
-		},
-		changeWard () {
-			const data = this.form
-			let provinceName = ''
-			let districtName = ''
-			let wardName = ''
-			let streetName = ''
-			this.provinces.forEach(province => {
-				if (province.id === data.province_id) {
-					provinceName = province.name
-					this.districts.forEach(district => {
-						if (district.id === data.district_id) {
-							districtName = district.name
-							this.wards.forEach(ward => {
-								if (ward.id === data.ward_id) {
-									wardName = ward.name
-								}
-							})
-							this.streets.forEach(street => {
-								if (street.id === data.street_id) {
-									streetName = street.name
-								}
-							})
-						}
-					})
-				}
-			})
-			if (wardName === '') {
-				this.form.full_address = streetName + ', ' + districtName + ', ' + provinceName
-			} else if (streetName === '') {
-				this.form.full_address = wardName + ', ' + districtName + ', ' + provinceName
-			} else {
-				this.form.full_address = streetName + ', ' + wardName + ', ' + districtName + ', ' + provinceName
-			}
-		},
-		changeStreet () {
-			const data = this.form
-			let provinceName = ''
-			let districtName = ''
-			let wardName = ''
-			let streetName = ''
-			this.provinces.forEach(province => {
-				if (province.id === data.province_id) {
-					provinceName = province.name
-					const selectedDistrict = this.districts.find(district => district.id === data.district_id)
-
-					if (selectedDistrict) {
-						districtName = selectedDistrict.name
-
-						const selectedWard = selectedDistrict.wards.find(ward => ward.id === data.ward_id)
-						if (selectedWard) {
-							wardName = selectedWard.name
-						}
-
-						const selectedStreet = selectedDistrict.streets.find(street => street.id === data.street_id)
-						if (selectedStreet) {
-							streetName = selectedStreet.name
-						}
-					}
-				}
-			})
-			if (wardName === '') {
-				this.form.full_address = streetName + ', ' + districtName + ', ' + provinceName
-			} else if (streetName === '') {
-				this.form.full_address = wardName + ', ' + districtName + ', ' + provinceName
-			} else {
-				this.form.full_address = streetName + ', ' + wardName + ', ' + districtName + ', ' + provinceName
-			}
-		},
-		async getProvinces () {
-			await this.getDistrictsByProvinceId(this.form.province_id)
-		},
-
-		async getDistrictsByProvinceId (id) {
-			WareHouse.getDistrictsByProvinceId(id)
-				.then((resp) => {
-					this.districts = resp.data
-					const data = this.form
-					let provinceName = ''
-					let districtName = ''
-					const province = this.provinces.find(province => province.id === data.province_id)
-					const district = this.districts.find(district => district.id === data.district_id)
-
-					if (province) {
-						provinceName = province.name
-					}
-
-					if (district) {
-						districtName = district.name
-					}
-					this.form.full_address = districtName + ',' + provinceName
-					if (this.form.district_id) {
-						this.getWardsByDistrictId(this.form.district_id)
-						this.getStreetByDistrictId(this.form.district_id)
-					}
-				})
-				.catch((err) => {
-					this.isSubmit = false
-					throw err
-				})
-		},
-		async getWardsByDistrictId (id) {
-			try {
-				this.wards = (this.districts.find(item => item.id === id) || {}).wards || []
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
-		},
-		async getStreetByDistrictId (id) {
-			try {
-				this.streets = (this.districts.find(item => item.id === id) || {}).streets || []
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
-		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},
@@ -497,14 +313,6 @@ export default {
 			this.$emit('action', this.form)
 		}
 	},
-	watch: {
-		'form.province_id': {
-			deep: true,
-			handler (newValue) {
-				this.getProvinces()
-			}
-		}
-	}
 
 }
 </script>
@@ -634,5 +442,9 @@ margin-top: 10px;
 
 .seperator h3 span {
   padding-right: 0.5em;
+}
+
+.input-map {
+	margin-left: unset;
 }
 </style>

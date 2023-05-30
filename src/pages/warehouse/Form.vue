@@ -131,7 +131,7 @@
 										vid="province_id"
 										label="Tỉnh/Thành"
 										rules="required"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 										:options="optionsProvince"
 										@change="changeProvince($event)"
 									/>
@@ -140,7 +140,7 @@
 										vid="district_id"
 										label="Quận/Huyện"
 										rules="required"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 										:options="optionsDistrict"
 										@change="changeDistrict($event)"
 									/>
@@ -160,7 +160,7 @@
 										vid="street_id"
 										label="Đường"
 										rules="required"
-										class="col-12 col-md-6 col-lg-3 form-group-container"
+										class="col-12 col-md-6 col-lg-4 form-group-container"
 										:options="optionsStreet"
 										@change="changeStreet($event)"
 									/>
@@ -168,7 +168,7 @@
 										v-model="form.distance_id"
 										vid="distance_id"
 										label="Đoạn"
-										class="col-12 col-md-6 col-lg-3 form-group-container"
+										class="col-12 col-md-6 col-lg-4 form-group-container"
 										:options="optionsDistance"
 										@change="changeStreetDistance($event)"
 									/>
@@ -188,7 +188,7 @@
 									</div>
 								</div>
 								<div class="row justify-content-between" v-if="form.asset_type_id !== 39">
-									<InputNumberFormat
+									<!-- <InputNumberFormat
 										v-model="form.land_no"
 										vid="land_no"
 										label="Thửa đất số"
@@ -196,7 +196,7 @@
 										:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
 										@change="changeLandNo($event)"
 										:min="0"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
 									/>
 									<InputNumberFormat
 										v-model="form.doc_no"
@@ -206,16 +206,8 @@
 										:formatter="valueFormat => `${valueFormat}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
 										@change="changeDocNo($event)"
 										:min="0"
-										class="col-12 col-md-4 col-lg-3 form-group-container"
-									/>
-									<InputCategory
-										v-model="form.topographic"
-										vid="topographic_id"
-										label="Địa hình"
-										rules="required"
 										class="col-12 col-md-4 col-lg-4 form-group-container"
-										:options="optionsTopographic"
-									/>
+									/> -->
 								</div>
 								<ApartmentInfo
 									v-if="this.form.asset_type_id === 39"
@@ -227,7 +219,15 @@
 										vid="full_address"
 										:rules="this.form.asset_type_id !== 39 ? 'required' : ''"
 										label="Địa chỉ đầy đủ"
-										class="col-12 form-group-container"
+										class="col form-group-container"
+									/>
+									<InputCategory
+										v-model="form.topographic"
+										vid="topographic_id"
+										label="Địa hình"
+										rules="required"
+										class="col-12 col-md-4 col-lg-4 form-group-container"
+										:options="optionsTopographic"
 									/>
 								</div>
 							</div>
@@ -917,7 +917,7 @@ export default {
 				ward_id: '',
 				street_id: '',
 				distance_id: '',
-				topographic: '',
+				topographic: 93,
 				transaction_type_id: '',
 				land_no: '',
 				landType: '',
@@ -1946,19 +1946,19 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if ((this.checkTransactionType() === 'ĐẤT TRỐNG' || this.checkTransactionType() === 'ĐẤT CÓ NHÀ') && this.form.properties.length === 0) {
+			} else if ((this.form.asset_type_id === 37 || this.form.asset_type_id === 38) && this.form.properties.length === 0) {
 				this.$toast.open({
 					message: 'Vui lòng nhập thông tin thửa đất',
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if (this.checkTransactionType() === 'ĐẤT CÓ NHÀ' && this.form.tangible_assets.length === 0) {
+			} else if (this.form.asset_type_id === 38 && this.form.tangible_assets.length === 0) {
 				this.$toast.open({
 					message: 'Vui lòng nhập công trình xây dựng',
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if ((this.form.total_land_unit_price < 0 || this.form.total_raw_amount < 0) && (this.checkTransactionType() === 'ĐẤT TRỐNG' || this.checkTransactionType() === 'ĐẤT CÓ NHÀ')) {
+			} else if ((this.form.total_land_unit_price < 0 || this.form.total_raw_amount < 0) && (this.form.asset_type_id === 37 || this.form.asset_type_id === 38)) {
 				this.$toast.open({
 					message: 'Giá trị tài sản không được nhỏ hơn 0',
 					type: 'error',
@@ -1981,13 +1981,22 @@ export default {
 				this.handleSubmit()
 			}
 		},
-		handleSubmit () {
-			this.isSubmit = true
+		async handleSubmit () {
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			let data = this.form
 			if (this.$route.name === 'warehouse.edit') {
-				this.updateDictionary(data)
+				await this.updateDictionary(data)
 			} else {
-				this.createDictionary(data)
+				await this.createDictionary(data)
 			}
 		},
 		async createDictionary (data) {

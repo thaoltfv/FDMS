@@ -3,46 +3,7 @@
     <div class="loading" :class="{'loading__true': isSubmit}">
       <a-spin />
     </div>
-    <div class="filter">
-      <div class="row">
-        <!-- <button class="btn btn-orange" type="button" id="filterButton" @click="handleFilter">
-          <img src="@/assets/icons/ic_filter.svg" alt="filter" style="margin-right: 15px">
-          Lọc dữ liệu
-        </button>
-        <button class="btn btn-orange ml-0 ml-lg-3" type="button" @click="openPopUp($event)">
-          <img src="@/assets/icons/ic_radius.svg" alt="filter" style="margin-right: 15px">
-          Chọn bán kính
-        </button>
-        <button class="btn btn-orange ml-0 ml-lg-3" type="button" @click="geoLocate">
-          <img src="@/assets/icons/ic_locate_white.svg" alt="filter">
-        </button> -->
-      </div>
-    </div>
-
-    <!-- <div class="container-note">
-      <div class="mr-18 d-flex align-items-center">
-        <div class="note-color note-color__blue"/>
-        <p class="note-content">Đã bán</p>
-      </div>
-      <div class="mr-18 d-flex align-items-center">
-        <div class="note-color note-color__purple"/>
-        <p class="note-content">Rao bán</p>
-      </div>
-      <div class="mr-18 d-flex align-items-center">
-        <div class="note-color note-color__green"/>
-        <p class="note-content">Đã thẩm định</p>
-      </div>
-      <div class="mr-18 d-flex align-items-center">
-        <div class="note-color note-color__orange"/>
-        <p class="note-content">Đã cho thuê</p>
-      </div>
-      <div class="mr-18 d-flex align-items-center">
-        <div class="note-color note-color__green"/>
-        <p class="note-content">Rao cho thuê</p>
-      </div>
-    </div> -->
     <div class="d-flex all-map">
-      <label for="full_address_map" class="d-none"><input id="full_address_map" type="text" :value="address.full_address"></label>
       <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''">
         <div id="mapid" class="layer-map">
           <l-map ref="lmap"
@@ -210,7 +171,6 @@
       @action="handleRadius"
     />
     <ModalFilterAdvance
-      :provinces="provinces"
       v-if="showModalFilter"
       @action="handleFilterAsset"
       @cancel="showModalFilter = false"
@@ -324,11 +284,8 @@ export default {
 			radius: '',
 			year: '',
 			address: {
-				province_id: 34,
-				district_id: 411,
-				ward_id: '',
-				street_id: '',
-				full_address: 'Quận Thủ Đức, Thành phố Hồ Chí Minh'
+				coordinate: '',
+				search_address: '',
 			},
 			showModalFilter: false,
 			open_radius: false,
@@ -401,20 +358,15 @@ export default {
 			this.circle.center = mapLocation
 			this.markerLatLng = mapLocation
 			this.center = mapLocation
-			this.address.full_address = ''
-			this.address.province_id = ''
-			this.address.district_id = ''
-			this.address.ward_id = ''
-			this.address.street_id = ''
+			this.address.search_address = ''
 			this.getAssetGenerals()
 		},
-		getDefaultLocation () {
+		getDefaultLocation() {
 			let mapLocation = store.getters.mapLocation
 			if (isEmpty(mapLocation)) {
-				let local = localStorage.getItem('mapLocation')
-				if (!isEmpty(local)) {
-					mapLocation = JSON.parse(local)
-					store.commit(types.SET_MAP_LOCATION, mapLocation)
+				mapLocation =  JSON.parse(localStorage.getItem('mapLocation'))
+				if (!isEmpty(mapLocation)) {
+					this.storeMapLocation(mapLocation)
 				}
 			}
 			return mapLocation
@@ -427,26 +379,17 @@ export default {
 				this.getAssetGenerals()
 			}
 		},
-		async geocodeAddress (geocoder) {
-			if (geocoder) {
+		async geocodeAddress () {
 				let center = {}
-				const address = this.address.full_address ? this.address.full_address : document.getElementById('full_address_map').value
-				await geocoder.geocode({'address': address}, function (results, status) {
-					if (status === 'OK') {
-						const marker = {
-							position: results[0].geometry.location
-						}
-						center = [parseFloat(marker.position.lat()), parseFloat(marker.position.lng())]
-					} else {
-					}
-				})
-				this.center = center
-				this.markerLatLng = center
-				this.circle.center = center
-				this.storeMapLocation(center)
-				await this.getAssetGenerals()
-				this.zoom = 15
-			}
+				if(this.address.coordinate && count(this.addres.coordinate) === 2) {
+					center = this.addres.coordinate
+					this.center = center
+					this.markerLatLng = center
+					this.circle.center = center
+					this.storeMapLocation(center)
+					await this.getAssetGenerals()
+					this.zoom = 15
+				}
 		},
 		changeSwitchFrontSide (event) {
 			if (event.value === 'all') {
@@ -541,20 +484,24 @@ export default {
 			this.showModalFilter = true
 		},
 		async handleFilterAsset (data) {
-			this.address.province_id = data.province_id
-			this.address.district_id = data.district_id
-			this.address.ward_id = data.ward_id
-			this.address.street_id = data.street_id
-			this.address.full_address = data.full_address
+			this.address.coordinate = data.coordinate
+			this.address.search_address = data.search_address
 			this.total_area_from = data.total_area_from
 			this.total_area_to = data.total_area_to
 			this.total_amount_from = data.total_amount_from
 			this.total_amount_to = data.total_amount_to
 			this.property_type = data.property_type
 			this.year = data.year
-			// eslint-disable-next-line no-undef
-			const geocoder = new google.maps.Geocoder()
-			await this.geocodeAddress(geocoder)
+			let center = {}
+			if(this.address.coordinate && this.address.coordinate.length == 2) {
+				center = this.address.coordinate
+				this.center = center
+				this.markerLatLng = center
+				this.circle.center = center
+				this.storeMapLocation(center)
+				await this.getAssetGenerals()
+				this.zoom = 15
+			}
 			this.showModalFilter = false
 			store.commit(types.SET_MAP_FILTER, data)
 			localStorage.setItem('mapFilter', JSON.stringify(data))
@@ -621,10 +568,10 @@ export default {
 				this.transaction = ''
 			}
 			const year = this.year
-			const province = this.address.province_id
-			const district = this.address.district_id
-			const ward = this.address.ward_id
-			const street = this.address.street_id
+			const province = ''
+			const district = ''
+			const ward = ''
+			const street = ''
 			const total_area_from = this.total_area_from
 			const total_area_to = this.total_area_to
 			const total_amount_from = this.total_amount_from
@@ -798,26 +745,13 @@ export default {
 				this.getAssetGenerals()
 			})
 		},
-		async getProvinces () {
-			try {
-				const resp = await WareHouse.getProvince()
-				this.provinces = [...resp.data]
-				if (this.address.province_id === '') {
-					this.address.province_id = 34
-				}
-				await this.getDistrictsByProvinceId(this.address.province_id)
-			} catch (err) {
-				this.isSubmit = false
-				throw err
-			}
-		}
 	},
 	beforeMount () {
 
 	},
 	created () {
 		this.year = moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
-		this.getProvinces()
+
 		this.Years()
 	}
 }

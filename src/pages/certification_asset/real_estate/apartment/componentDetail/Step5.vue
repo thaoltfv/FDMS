@@ -1097,7 +1097,16 @@ export default {
 			this.handleSaveSummarization(payloadData)
 		},
 		async handleSaveSummarization (payloadData) {
-			this.isSubmit = true
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			const res = await CertificateAsset.submitApartmentStep5(payloadData, this.idData)
 			if (res.data) {
 				this.$toast.open({
@@ -1344,7 +1353,16 @@ export default {
 			this.handleSaveAdjustPlan(this.dataTab2)
 		},
 		async handleSaveAdjustPlan (payloadData) {
-			this.isSubmit = true
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			const res = await CertificateAsset.submitApartmentStep5(payloadData, this.idData)
 			if (res.data) {
 				this.$toast.open({

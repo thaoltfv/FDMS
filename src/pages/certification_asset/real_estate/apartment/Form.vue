@@ -678,7 +678,16 @@ export default {
 			this.isDuplicate = false
 		},
 		async handleSubmitStep_1 (dataStep1) {
-			this.isSubmit = true
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			let id = this.idData ? this.idData : ''
 			const res = await CertificateAsset.submitApartmentStep1(dataStep1, id)
 			if (res.data) {
@@ -795,7 +804,16 @@ export default {
 			}
 		},
 		async handleSubmitStep_2 (dataStep2) {
-			this.isSubmit = true
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			const res = await CertificateAsset.submitApartmentStep2(dataStep2, this.idData)
 			if (res.data) {
 				this.isSubmit = false
@@ -882,7 +900,16 @@ export default {
 			}
 		},
 		async handleSubmitStep_3 (dataStep3) {
-			this.isSubmit = true
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			const res = await CertificateAsset.submitApartmentStep3(dataStep3, this.idData)
 			if (res.data) {
 				this.isSubmit = false
@@ -977,7 +1004,16 @@ export default {
 			}
 		},
 		async handleSubmitStep_4 (dataStep4) {
-			this.isSubmit = true
+			if (this.isSubmit == true) {
+				this.$toast.open({
+					message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+					type: 'warning',
+					position: 'top-right'
+				})
+				return
+			} else {
+				this.isSubmit = true
+			}
 			const res = await CertificateAsset.submitApartmentStep4(dataStep4, this.idData)
 			if (res.data) {
 				this.$toast.open({
