@@ -210,7 +210,7 @@ class CertificateAsset extends Model
 
     public function tangibleAssets(): HasMany
     {
-        return $this->hasMany(CertificateAssetTangibleAsset::class, 'appraise_id');
+        return $this->hasMany(CertificateAssetTangibleAsset::class, 'appraise_id')->orderBy('id');
     }
 
     public function otherAssets(): HasMany
