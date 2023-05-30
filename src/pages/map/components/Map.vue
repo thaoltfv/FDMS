@@ -8,7 +8,7 @@
         <div id="mapid" class="layer-map">
           <l-map ref="lmap"
                  :zoom="zoom"
-                 :center="filter.coordinate"
+                 :center="center"
                  :options="{zoomControl: false}"
                  :maxZoom="20"
                  @update:zoom="zoomUpdated"
@@ -74,11 +74,11 @@
               <l-marker v-for="(apartment, index) in locationApartments" :key="index" :lat-lng="apartment.center" @click="handleMarker($event)" @mouseover="handleMarkerHover(apartment.id)">
                 <l-icon  class-name="someExtraClass">
 
-                  <div class="marker marker__blue" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 51"/>
-                  <div class="marker marker__purple" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 52"/>
-                  <!-- <div class="marker marker__orange" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 53"/>
-                  <div class="marker marker__green" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 54"/> -->
-                  <div class="marker marker__green" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 0"/>
+                  <div class="marker marker__blue" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 51"/>
+                  <div class="marker marker__purple" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 52"/>
+                  <!-- <div class="marker marker__orange" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 53"/>
+                  <div class="marker marker__green" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 54"/> -->
+                  <div class="marker marker__green" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 0"/>
                 </l-icon>
                 <l-popup class="sp-custom-popup" ref="popup">
                   <img class="popup-img" v-if="apartment.pic.length > 0" :src="apartment.pic[0].link" alt="img">
@@ -277,6 +277,7 @@ export default {
 			},
 			radius: '',
 			year: '',
+			center: [10.851987987311087, 106.74837598976731],
 			filter: {
 				coordinate: [10.851987987311087, 106.74837598976731],
 				search_address: '',
@@ -360,6 +361,7 @@ export default {
 		setLocation (mapLocation) {
 			this.circle.center = mapLocation
 			this.markerLatLng = mapLocation
+			this.center = mapLocation
 			this.filter.coordinate = mapLocation
 			this.filter.search_address = mapLocation
 			this.getAssetGenerals()
@@ -444,7 +446,6 @@ export default {
 		},
 		async handleFilterAsset (data) {
 			this.filter = data
-			let center = {}
 			if(!this.filter.coordinate || this.filter.coordinate.length < 2) {
 				const geocoder = new google.maps.Geocoder()
 				let keySearch = {
@@ -455,18 +456,17 @@ export default {
 						const marker = {
 							position: results[0].geometry.location
 						}
-						center = [parseFloat(marker.position.lat()), parseFloat(marker.position.lng())]
+						this.filter.coordinate = [parseFloat(marker.position.lat()), parseFloat(marker.position.lng())]
 					}
 				})
 			}
-			this.filter.coordinate = center
-			this.markerLatLng = center
-			this.circle.center = center
+			this.center = this.filter.coordinate
+			this.markerLatLng = this.filter.coordinate
+			this.circle.center = this.filter.coordinate
 			await this.getAssetGenerals()
 			this.zoom = 15
 			this.showModalFilter = false
-			console.log(this.filter)
-			this.storeMapLocation(center)
+			this.storeMapLocation(this.filter.coordinate)
 			this.storeMapFilter(this.filter)
 		},
 		async handleCenter (center, id) {
