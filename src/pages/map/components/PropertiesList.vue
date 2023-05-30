@@ -190,7 +190,7 @@ export default {
 				this.transaction_type.for_rent = false
 				this.transaction_type.is_appraise = false
 			}
-			// this.handleAction()
+			this.handleAction()
 		},
 		handleCheckAll () {
 			this.all_transaction = this.transaction_type.sold === true && this.transaction_type.rented_out === true && this.transaction_type.for_sale === true && this.transaction_type.for_rent === true && this.transaction_type.is_appraise === true

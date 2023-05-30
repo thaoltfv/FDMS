@@ -8,7 +8,7 @@
         <div id="mapid" class="layer-map">
           <l-map ref="lmap"
                  :zoom="zoom"
-                 :center="center"
+                 :center="filter.coordinate"
                  :options="{zoomControl: false}"
                  :maxZoom="20"
                  @update:zoom="zoomUpdated"
@@ -74,11 +74,11 @@
               <l-marker v-for="(apartment, index) in locationApartments" :key="index" :lat-lng="apartment.center" @click="handleMarker($event)" @mouseover="handleMarkerHover(apartment.id)">
                 <l-icon  class-name="someExtraClass">
 
-                  <div class="marker marker__blue" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 51"/>
-                  <div class="marker marker__purple" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 52"/>
-                  <!-- <div class="marker marker__orange" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 53"/>
-                  <div class="marker marker__green" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 54"/> -->
-                  <div class="marker marker__green" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 0"/>
+                  <div class="marker marker__blue" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 51"/>
+                  <div class="marker marker__purple" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 52"/>
+                  <!-- <div class="marker marker__orange" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 53"/>
+                  <div class="marker marker__green" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 54"/> -->
+                  <div class="marker marker__green" :class="apartment.center === circle.center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 0"/>
                 </l-icon>
                 <l-popup class="sp-custom-popup" ref="popup">
                   <img class="popup-img" v-if="apartment.pic.length > 0" :src="apartment.pic[0].link" alt="img">
@@ -257,16 +257,10 @@ export default {
 				}
 			},
 			hiddenList: false,
-			front_side: '',
 			transaction: '',
 			pic: [],
 			assetGeneralDetail: [],
-			provinces: [],
 			marker_id: '',
-			total_area_from: '',
-			total_area_to: '',
-			total_amount_from: '',
-			total_amount_to: '',
 			search_advanced: false,
 			transaction_type: {
 				sold: false,
@@ -283,9 +277,16 @@ export default {
 			},
 			radius: '',
 			year: '',
-			address: {
-				coordinate: '',
+			filter: {
+				coordinate: [10.851987987311087, 106.74837598976731],
 				search_address: '',
+				front_side: '',
+				total_area_from: '',
+				total_area_to: '',
+				total_amount_from: '',
+				total_amount_to: '',
+				property_type: '',
+				year: '',
 			},
 			showModalFilter: false,
 			open_radius: false,
@@ -301,7 +302,6 @@ export default {
 			show_component: '',
 			clusterOptions: {},
 			zoom: 15,
-			center: [10.851987987311087, 106.74837598976731],
 			markerLatLng: [10.851987987311087, 106.74837598976731],
 			circle: {
 				center: [10.851987987311087, 106.74837598976731],
@@ -320,7 +320,6 @@ export default {
 			bounds: null,
 			asset_events: new Vue(),
 			imageMap: true,
-			property_type: ''
 		}
 	},
 	methods: {
@@ -349,6 +348,10 @@ export default {
 			store.commit(types.SET_MAP_LOCATION, mapLocation)
 			localStorage.setItem('mapLocation', JSON.stringify(mapLocation))
 		},
+		storeMapFilter (mapFilter) {
+			store.commit(types.SET_MAP_FILTER, mapFilter)
+			localStorage.setItem('mapFilter', JSON.stringify(mapFilter))
+		},
 		choosePoint (event) {
 			const mapLocation = [event.latlng.lat, event.latlng.lng]
 			this.storeMapLocation(mapLocation)
@@ -357,9 +360,10 @@ export default {
 		setLocation (mapLocation) {
 			this.circle.center = mapLocation
 			this.markerLatLng = mapLocation
-			this.center = mapLocation
-			this.address.search_address = ''
+			this.filter.coordinate = mapLocation
+			this.filter.search_address = mapLocation
 			this.getAssetGenerals()
+			this.storeMapFilter(this.filter)
 		},
 		getDefaultLocation() {
 			let mapLocation = store.getters.mapLocation
@@ -377,27 +381,6 @@ export default {
 				this.setLocation(mapLocation)
 			} else {
 				this.getAssetGenerals()
-			}
-		},
-		async geocodeAddress () {
-				let center = {}
-				if(this.address.coordinate && count(this.addres.coordinate) === 2) {
-					center = this.addres.coordinate
-					this.center = center
-					this.markerLatLng = center
-					this.circle.center = center
-					this.storeMapLocation(center)
-					await this.getAssetGenerals()
-					this.zoom = 15
-				}
-		},
-		changeSwitchFrontSide (event) {
-			if (event.value === 'all') {
-				this.front_side = ''
-			} else if (event.value === 'yes') {
-				this.front_side = 1
-			} else if (event.value === 'no') {
-				this.front_side = 0
 			}
 		},
 		handleRadius (data) {
@@ -456,59 +439,37 @@ export default {
 			this.property = resp.data
 			this.isSubmit = false
 		},
-		handleTotalAreaFrom (event) {
-			this.total_area_from = event
-			if (this.total_area_from === undefined || this.total_area_from === null) {
-				this.total_area_from = ''
-			}
-		},
-		totalAreaTo (event) {
-			this.total_area_to = event
-			if (this.total_area_to === undefined || this.total_area_to === null) {
-				this.total_area_to = ''
-			}
-		},
-		totalAmountFrom (event) {
-			this.total_amount_from = event
-			if (this.total_amount_from === undefined || this.total_amount_from === null) {
-				this.total_amount_from = ''
-			}
-		},
-		totalAmountTo (event) {
-			this.total_amount_to = event
-			if (this.total_amount_to === undefined || this.total_amount_to === null) {
-				this.total_amount_to = ''
-			}
-		},
 		handleFilter () {
 			this.showModalFilter = true
 		},
 		async handleFilterAsset (data) {
-			this.address.coordinate = data.coordinate
-			this.address.search_address = data.search_address
-			this.total_area_from = data.total_area_from
-			this.total_area_to = data.total_area_to
-			this.total_amount_from = data.total_amount_from
-			this.total_amount_to = data.total_amount_to
-			this.property_type = data.property_type
-			this.year = data.year
+			this.filter = data
 			let center = {}
-			if(this.address.coordinate && this.address.coordinate.length == 2) {
-				center = this.address.coordinate
-				this.center = center
-				this.markerLatLng = center
-				this.circle.center = center
-				this.storeMapLocation(center)
-				await this.getAssetGenerals()
-				this.zoom = 15
+			if(!this.filter.coordinate || this.filter.coordinate.length < 2) {
+				const geocoder = new google.maps.Geocoder()
+				let keySearch = {
+					'address': this.filter.search_address
+				}
+				await geocoder.geocode(keySearch, function (results, status) {
+					if (status === 'OK') {
+						const marker = {
+							position: results[0].geometry.location
+						}
+						center = [parseFloat(marker.position.lat()), parseFloat(marker.position.lng())]
+					}
+				})
 			}
+			this.filter.coordinate = center
+			this.markerLatLng = center
+			this.circle.center = center
+			await this.getAssetGenerals()
+			this.zoom = 15
 			this.showModalFilter = false
-			store.commit(types.SET_MAP_FILTER, data)
-			localStorage.setItem('mapFilter', JSON.stringify(data))
+			console.log(this.filter)
+			this.storeMapLocation(center)
+			this.storeMapFilter(this.filter)
 		},
 		async handleCenter (center, id) {
-			// this.zoom = 18
-			// this.center = center
 			let locationChoosed = this.locationLand.filter(i => i.isChoosing === true || i.id === id)
 			if (locationChoosed && locationChoosed.length > 0) {
 				locationChoosed.forEach(location => {
@@ -527,15 +488,10 @@ export default {
 			}
 			this.marker_id = id
 		},
-		handleMarker (event) {
-			// this.center = [event.latlng.lat, event.latlng.lng]
-		},
 		handleMarkerHover (id) {
-			// window.location = '#' + id
 			this.marker_id = id
 		},
 		handleShowMarker (center, id) {
-			// this.center = center
 			this.marker_id = id
 		},
 		handleTransactionType (data) {
@@ -567,33 +523,27 @@ export default {
 			if (this.transaction === undefined || this.transaction === null) {
 				this.transaction = ''
 			}
-			const year = this.year
 			const province = ''
 			const district = ''
 			const ward = ''
 			const street = ''
-			const total_area_from = this.total_area_from
-			const total_area_to = this.total_area_to
-			const total_amount_from = this.total_amount_from
-			const total_amount_to = this.total_amount_to
+			const total_area_from = this.filter.total_area_from
+			const total_area_to = this.filter.total_area_to
+			const total_amount_from = this.filter.total_amount_from
+			const total_amount_to = this.filter.total_amount_to
+			const property_type = this.filter.property_type
+			const front_side = this.filter.front_side
+			const year = this.filter.year
 			const distance = parseFloat(this.circle.radius / 1000).toFixed(2)
 			const location = this.circle.center
 			const transaction = this.transaction
-			const front_side = this.front_side
 			const isAppraise = !!this.transaction_type.is_appraise
-			const property_type = this.property_type
 			const resp = await WareHouse.getSearchAll(year, province, district, ward, street, transaction, total_area_from, total_area_to, total_amount_from, total_amount_to, distance, location, front_side, isAppraise, property_type)
 			this.assetGenerals = [...resp.data]
 			await this.getLatLng()
 			this.isSubmit = false
 		},
-		handleSearchAdvanced () {
-			this.total_area_from = ''
-			this.total_area_to = ''
-			this.total_amount_from = ''
-			this.total_amount_to = ''
-			this.front_side = ''
-		},
+
 		handleShowImage (inputId) {
 			let picList = []
 			this.picList = {
@@ -669,7 +619,7 @@ export default {
 							pic: assetGeneral.pic,
 							contact_person: assetGeneral.contact_person,
 							contact_phone: assetGeneral.contact_phone,
-							full_address: assetGeneral.full_address,
+							full_filter: assetGeneral.full_address,
 							tangible_assets: assetGeneral.tangible_assets,
 							properties: assetGeneral.properties,
 							total_estimate_amount: assetGeneral.total_estimate_amount,
@@ -736,12 +686,8 @@ export default {
 		geoLocate () {
 			navigator.geolocation.getCurrentPosition(position => {
 				this.circle.center = [position.coords.latitude, position.coords.longitude]
-				this.center = [position.coords.latitude, position.coords.longitude]
+				this.filter.coordinate = [position.coords.latitude, position.coords.longitude]
 				this.markerLatLng = [position.coords.latitude, position.coords.longitude]
-				this.address.province_id = ''
-				this.address.district_id = ''
-				this.address.ward_id = ''
-				this.address.street_id = ''
 				this.getAssetGenerals()
 			})
 		},
@@ -750,7 +696,7 @@ export default {
 
 	},
 	created () {
-		this.year = moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
+		this.filter.year = moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
 
 		this.Years()
 	}
