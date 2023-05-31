@@ -455,7 +455,8 @@ class AssetReport
                         $table = $section->addTable('coordinatesTable');
                         $table->addRow(250);
                         $cell = $table->addCell(4000);
-                        $textRun->addText('- Loại tài sản khác: ');
+                        $textRun = $cell->addTextRun();
+                        $textRun->addText('- Tên tài sản: ');
                         $textRun->addText(isset($otherAssets->other_asset) ? $this->mb_ucfirst(mb_strtolower($otherAssets->other_asset)) : '', ['bold' => true]);
                         $cell = $table->addCell(5000);
                         $textRun = $cell->addTextRun();
