@@ -362,7 +362,10 @@
 						</tr>
 						<tr>
 						<td>24</td>
-						<td>Tổng giá trị tài sản ước tính</td>
+						<td id="total_price">Tổng giá trị tài sản ước tính</td>
+						<b-tooltip placement="rightbottom" target="total_price">
+								Tổng giá trị tài sản ước tính (24) = (22) x (23)
+						</b-tooltip>
 						<td>-</td>
 						<td>{{formatNumber(totalPriceEstimate1)}} đ</td>
 						<td>{{formatNumber(totalPriceEstimate2)}} đ</td>
@@ -391,7 +394,11 @@
 						</tr>
 						<tr>
 						<td>26</td>
-						<td>Chi phí chuyển mục đích sử dụng</td>
+						<td id="land_price_change">Chi phí chuyển mục đích sử dụng</td>
+						<b-tooltip placement="rightbottom" target="land_price_change">
+								 Giá trị dương (+) chuyển lên <br/>
+								 Giá trị âm (-) chuyển xuống
+						</b-tooltip>
 						<td>-</td>
 						<td v-for="(asset, index) in form.appraise_adapter" :key="'changePurposePrice' + index">
 							<InputNumberNegative
@@ -413,7 +420,7 @@
 						</td>
 						<td id="land_price_estimate">Giá trị QSDĐ {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} ước tính</td>
 						<b-tooltip placement="rightbottom" target="land_price_estimate">
-								Giá trị QSDĐ (27) = 24 - 12 - 13 - 25 + 26
+								Giá trị QSDĐ (27) = (24) - (12) - (13) - (25) + (26)
 						</b-tooltip>
 						<td>-</td>
 						<td>{{formatNumber(totalPrice1.toFixed(0))}} đ</td>
@@ -422,9 +429,10 @@
 						</tr>
 						<tr>
 						<td>28</td>
-						<td id="land_unit_price_estimate">Đ/giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} B.Quân.</td>
+						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} B.Quân.</td>
 						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
-								Đơn giá QSDĐ (28) = 27 / 6 (Diện tích PHQH theo MDSD)
+								Đơn giá QSDĐ (28) = (27) / (6) <br/>
+								Đơn giá của MDSD chính
 						</b-tooltip>
 						<td>-</td>
 						<td>{{formatNumber(parseFloat(dgd1).toFixed(0))}} đ</td>
