@@ -250,7 +250,7 @@ class AssetReport
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText($object->properties[0], ['bold' => true]);
+                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc[0]->plot_num, ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
