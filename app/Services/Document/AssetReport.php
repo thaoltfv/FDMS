@@ -246,11 +246,11 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText($object->compare_property_doc[0]->doc_num, ['bold' => true]);
+                $cellRun->addText($object->properties->compare_property_doc[0]->doc_num, ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText($object->compare_property_doc[0]->lot_num, ['bold' => true]);
+                $cellRun->addText($object->properties->compare_property_doc[0]->lot_num, ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
