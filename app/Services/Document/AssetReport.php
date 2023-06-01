@@ -95,7 +95,7 @@ class AssetReport
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
             $compare_property_doc = $object->properties;
-            var_dump($object->properties[0]);
+            var_dump($object->properties[0]['compare_property_doc']);
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
                 $table->addCell(5000)->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
