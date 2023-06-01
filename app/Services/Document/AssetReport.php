@@ -95,7 +95,7 @@ class AssetReport
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
             $arrayD = (array) $object->properties;
-            $compare_property_doc = array_values($arrayD)[0];
+            $compare_property_doc = array_values($arrayD)[0]->compare_property_doc[0];
 
             // print_r($arrayD);
             // var_dump(array_values($arrayD));
@@ -250,11 +250,11 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText($compare_property_doc, ['bold' => true]);
+                $cellRun->addText($compare_property_doc->doc_num, ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText($compare_property_doc, ['bold' => true]);
+                $cellRun->addText($compare_property_doc->plot_num, ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
