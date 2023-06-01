@@ -1265,8 +1265,6 @@ export default {
 		},
 		async getProfiles () {
 			const profile = this.$store.getters.profile
-			console.log(profile.data.user.id, 'profile.data.user.id')
-			console.log(this.createdBy.id, 'this.createdBy.id')
 			this.checkRole = (this.createdBy && profile.data.user.id === this.createdBy.id) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
 		},
 
