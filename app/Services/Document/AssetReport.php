@@ -94,6 +94,7 @@ class AssetReport
             $coordinates = explode(',', $object->coordinates);
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
+            $compare_property_doc = $object->properties[0];
 
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
@@ -246,11 +247,11 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText(json_encode($object->properties[0]->compare_property_doc[]), ['bold' => true]);
+                $cellRun->addText($compare_property_doc, ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText($object->properties[0]->property_detail, ['bold' => true]);
+                $cellRun->addText($compare_property_doc, ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
