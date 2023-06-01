@@ -94,12 +94,7 @@ class AssetReport
             $coordinates = explode(',', $object->coordinates);
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
-            $arrayD = (array) $object->properties;
-            $compare_property_doc = array_values($arrayD)[0];
-            $compare_property_doc = array_values($compare_property_doc)[0];
-            $compare_property_doc = $compare_property_doc['legal'];
-            // print_r($compare_property_doc);
-            var_dump(json_encode($compare_property_doc,true));
+            
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
                 $table->addCell(5000)->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
@@ -251,11 +246,11 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText($compare_property_doc->doc_num, ['bold' => true]);
+                $cellRun->addText($object->properties[0][0], ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText($compare_property_doc->plot_num, ['bold' => true]);
+                $cellRun->addText($object->properties[0][0], ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
