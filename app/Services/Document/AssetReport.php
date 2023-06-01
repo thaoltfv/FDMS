@@ -98,7 +98,7 @@ class AssetReport
             $compare_property_doc = array_values($arrayD)[0];
 
             // print_r($arrayD);
-            var_dump(json_decode(array_values($arrayD)[0]),true);
+            var_dump(json_encode(array_values($arrayD)[0]),true);
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
                 $table->addCell(5000)->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
