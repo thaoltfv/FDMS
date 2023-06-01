@@ -246,7 +246,7 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc, ['bold' => true]);
+                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc[0]->doc_num, ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
