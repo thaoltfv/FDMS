@@ -94,7 +94,7 @@ class AssetReport
             $coordinates = explode(',', $object->coordinates);
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
-            $compare_property_doc = json_encode($object->properties['compare_property_doc']);
+            $compare_property_doc = json_encode($object->properties[0]['property_detail']);
 
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
