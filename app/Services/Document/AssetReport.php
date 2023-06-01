@@ -94,7 +94,7 @@ class AssetReport
             $coordinates = explode(',', $object->coordinates);
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
-
+            
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
                 $table->addCell(5000)->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
@@ -246,11 +246,11 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText($object->doc_no, ['bold' => true]);
+                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc[0]->doc_num, ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText($object->land_no, ['bold' => true]);
+                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc[0]->plot_num, ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
