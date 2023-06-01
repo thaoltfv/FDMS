@@ -1387,22 +1387,24 @@ class CommonService
         $appraisePrice = $apartment->price;
         if (isset($appraisePrice)) {
             foreach ($appraisePrice as $price) {
-                switch ($price->slug) {
-                    case 'apartment_asset_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Đơn giá căn hộ phải lớn hơn 0';
-                        break;
-                    case 'apartment_area':
-                        if (floatval($price->value) <= 0) $message[] = 'Diện tích căn hộ phải lớn hơn 0';
-                        break;
-                    case 'apartment_total_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Giá trị căn hộ phải lớn hơn 0';
-                        break;
-                    case 'total_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị căn hộ phải lớn hơn 0';
-                        break;
-                    default:
-                        if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
-                        break;
+                if (strpos(strval($price->slug), 'price') !== false) {
+                    switch ($price->slug) {
+                        case 'apartment_asset_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Đơn giá căn hộ phải lớn hơn 0';
+                            break;
+                        case 'apartment_area':
+                            if (floatval($price->value) <= 0) $message[] = 'Diện tích căn hộ phải lớn hơn 0';
+                            break;
+                        case 'apartment_total_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Giá trị căn hộ phải lớn hơn 0';
+                            break;
+                        case 'total_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị căn hộ phải lớn hơn 0';
+                            break;
+                        default:
+                            if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
+                            break;
+                    }
                 }
             }
         }
@@ -1414,20 +1416,21 @@ class CommonService
         $appraisePrice = $appraise->assetPrice;
         if (isset($appraisePrice)) {
             foreach ($appraisePrice as $price) {
-
-                switch ($price->slug) {
-                    case 'layer_cutting_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Đơn giá sau cắt lớp phải lớn hơn 0';
-                        break;
-                    case 'land_asset_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Giá trị quyền sử dụng đất phải lớn hơn 0';
-                        break;
-                    case 'total_asset_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị tài sản phải lớn hơn 0';
-                        break;
-                    default:
-                        if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
-                        break;
+                if (strpos(strval($price->slug), 'price') !== false) {
+                    switch ($price->slug) {
+                        case 'layer_cutting_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Đơn giá sau cắt lớp phải lớn hơn 0';
+                            break;
+                        case 'land_asset_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Giá trị quyền sử dụng đất phải lớn hơn 0';
+                            break;
+                        case 'total_asset_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị tài sản phải lớn hơn 0';
+                            break;
+                        default:
+                            if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
+                            break;
+                    }
                 }
             }
         }
