@@ -189,13 +189,13 @@ export default {
 		const permission = this.$store.getters.currentPermissions
 		// fix_permission
 		permission.forEach((value) => {
-			if (value === 'ADD_ROLE') {
+			if (value === 'ADD_CATEGORY') {
 				this.add = true
 			}
-			if (value === 'EDIT_ROLE') {
+			if (value === 'EDIT_CATEGORY') {
 				this.edit = true
 			}
-			if (value === 'DELETE_ROLE') {
+			if (value === 'DELETE_CATEGORY') {
 				this.deleted = true
 			}
 		})
