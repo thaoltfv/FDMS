@@ -97,8 +97,8 @@ class AssetReport
             $arrayD = (array) $object->properties;
             $compare_property_doc = array_values($arrayD)[0];
             $compare_property_doc = array_values($compare_property_doc)[0];
-            $compare_property_doc = $compare_property_doc[29];
-            // print_r($arrayD);
+            $compare_property_doc = $compare_property_doc[0];
+            print_r($compare_property_doc);
             var_dump(json_encode($compare_property_doc,true));
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
