@@ -255,7 +255,17 @@
 						</td>
 						</tr>
 						<tr>
+						<tr>
 						<td>13</td>
+						<td>Tổng giá trị tài sản khác</td>
+						<td>-</td>
+						<td v-for="(asset, index) in appraises.asset_general" :key="'othersAmount' + index">
+							<div v-if="asset.total_order_amount">{{ formatNumber(asset.total_order_amount) }} </div>
+							<div v-else>-</div>
+						</td>
+						</tr>
+						<tr>
+						<td>14</td>
 						<td>Vị trí</td>
 						<td>{{ (typeof appraises.properties !== 'undefined') && appraises.properties.length > 0 ? appraises.properties[0].description : '' }}</td>
 						<td v-for="(asset, indexAsset) in appraises.asset_general" :key="'assetProperty' + indexAsset">
@@ -263,7 +273,7 @@
 						</td>
 						</tr>
 						<tr>
-						<td>14</td>
+						<td>15</td>
 						<td>Kết cấu giao thông</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'ket_cau_duong'" :key="'appraisalTraffic' + index">{{formatSentenceCase(comparison_factor.appraise_title)}}</td> -->
 						<td :key="'appraisalTraffic'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'ket_cau_duong', false))}}</td>
@@ -273,7 +283,7 @@
 						</td>
 						</tr>
 						<tr>
-						<td>15</td>
+						<td>16</td>
 						<td>Độ rộng đường</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'do_rong_duong'" :key="'appraisalStreet' + index">{{comparison_factor.appraise_title}}m</td> -->
 						<td :key="'appraisalStreet'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'do_rong_duong', false))}}</td>
@@ -283,7 +293,7 @@
 						</td>
 						</tr>
 						<tr>
-						<td>16</td>
+						<td>17</td>
 						<td>Cơ sở hạ tầng</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'dieu_kien_ha_tang'" :key="'appraisalBasis' + index">{{formatSentenceCase(comparison_factor.appraise_title)}}</td> -->
 						<td :key="'appraisalBasis'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'dieu_kien_ha_tang', false))}}</td>
@@ -293,7 +303,7 @@
 						</td>
 						</tr>
 						<tr>
-						<td>17</td>
+						<td>18</td>
 						<td>Lợi thế kinh doanh</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'kinh_doanh'" :key="'appraisalBussiness' + index">{{formatSentenceCase(comparison_factor.appraise_title)}}</td> -->
 						<td :key="'appraisalBussiness'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'kinh_doanh', false))}}</td>
@@ -303,7 +313,7 @@
 						</td>
 						</tr>
 						<tr>
-						<td>18</td>
+						<td>19</td>
 						<td>An ninh, môi trường sống</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'an_ninh_moi_truong_song'" :key="'appraisalSecurity' + index">{{formatSentenceCase(comparison_factor.appraise_title)}}</td> -->
 						<td :key="'appraisalSecurity'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'an_ninh_moi_truong_song', false))}}</td>
@@ -311,7 +321,7 @@
 						<td v-for="(asset, index) in appraises.comparison_factor" :key="'assetSecurity' + index"><span :key="'an_ninh_moi_truong_song' + asset.id">{{formatSentenceCase(getComparisonTitleByType(asset.comparison_factor, 'an_ninh_moi_truong_song', true))}}</span></td>
 						</tr>
 						<tr>
-						<td>19</td>
+						<td>20</td>
 						<td>Phong thủy</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'phong_thuy'" :key="'appraisalSecurity' + index">{{formatSentenceCase(comparison_factor.appraise_title)}}</td> -->
 						<td :key="'appraisalFengshui'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'phong_thuy', false))}}</td>
@@ -319,7 +329,7 @@
 						<td v-for="(asset, index) in appraises.comparison_factor" :key="'appraisalFengshui' + index"><span :key="'phong_thuy' + asset.id">{{formatSentenceCase(getComparisonTitleByType(asset.comparison_factor, 'phong_thuy', true))}}</span></td>
 						</tr>
 						<tr>
-						<td>20</td>
+						<td>21</td>
 						<td>Điều kiện thanh toán</td>
 						<!-- <td v-for="(comparison_factor, index) in appraises.comparison_factor[0].comparison_factor" v-if="comparison_factor.type === 'dieu_kien_thanh_toan'" :key="'appraisalPay' + index">{{formatSentenceCase(comparison_factor.appraise_title)}}</td> -->
 						<td :key="'appraisalPay'">{{formatSentenceCase(getComparisonTitleByType(appraises.comparison_factor[0].comparison_factor, 'dieu_kien_thanh_toan', false))}}</td>
@@ -327,13 +337,13 @@
 						<td v-for="(asset, index) in appraises.comparison_factor" :key="'appraisalPay' + index"><span :key="'dieu_kien_thanh_toan' + asset.id">{{formatSentenceCase(getComparisonTitleByType(asset.comparison_factor, 'dieu_kien_thanh_toan', true))}}</span></td>
 						</tr>
 						<tr>
-						<td>21</td>
+						<td>22</td>
 						<td>Giá rao bán</td>
 						<td>-</td>
 						<td v-for="(asset, index) in appraises.asset_general" :key="'totalAmount' + index">{{ formatNumber(asset.total_amount) }} đ</td>
 						</tr>
 						<tr>
-						<td>22</td>
+						<td>23</td>
 						<td>Tỷ lệ giá rao bán</td>
 						<td>-</td>
 						<td v-for="(asset, index) in form.appraise_adapter" :key="'adjustPercent' + index">
@@ -351,15 +361,18 @@
 						</td>
 						</tr>
 						<tr>
-						<td>23</td>
-						<td>Tổng giá trị tài sản ước tính</td>
+						<td>24</td>
+						<td id="total_price">Tổng giá trị tài sản ước tính</td>
+						<b-tooltip placement="rightbottom" target="total_price">
+								Tổng giá trị tài sản ước tính (24) = (22) x (23)
+						</b-tooltip>
 						<td>-</td>
 						<td>{{formatNumber(totalPriceEstimate1)}} đ</td>
 						<td>{{formatNumber(totalPriceEstimate2)}} đ</td>
 						<td>{{formatNumber(totalPriceEstimate3)}} đ</td>
 						</tr>
 						<tr>
-						<td>24</td>
+						<td>25</td>
 						<td>Giá trị phần diện tích vi phạm quy hoạch</td>
 						<td>-</td>
 						<td v-for="(asset, indexVioPrice) in form.appraise_adapter" :key="'changeViolationPrice' + indexVioPrice">
@@ -380,8 +393,12 @@
 						<td>{{totalPriceViolationArea3 ? formatNumber(totalPriceViolationArea3) : 0}} đ</td> -->
 						</tr>
 						<tr>
-						<td>25</td>
-						<td>Chi phí chuyển mục đích sử dụng</td>
+						<td>26</td>
+						<td id="land_price_change">Chi phí chuyển mục đích sử dụng</td>
+						<b-tooltip placement="rightbottom" target="land_price_change">
+								 Giá trị dương (+) chuyển lên <br/>
+								 Giá trị âm (-) chuyển xuống
+						</b-tooltip>
 						<td>-</td>
 						<td v-for="(asset, index) in form.appraise_adapter" :key="'changePurposePrice' + index">
 							<InputNumberNegative
@@ -398,16 +415,25 @@
 						</td>
 						</tr>
 						<tr>
-						<td>26</td>
-						<td>Giá trị QSDĐ {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} ước tính</td>
+						<td>
+							27
+						</td>
+						<td id="land_price_estimate">Giá trị QSDĐ {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} ước tính</td>
+						<b-tooltip placement="rightbottom" target="land_price_estimate">
+								Giá trị QSDĐ (27) = (24) - (12) - (13) - (25) + (26)
+						</b-tooltip>
 						<td>-</td>
-						<td>{{formatNumber(totalPrice1)}} đ</td>
-						<td>{{formatNumber(totalPrice2)}} đ</td>
-						<td>{{formatNumber(totalPrice3)}} đ</td>
+						<td>{{formatNumber(totalPrice1.toFixed(0))}} đ</td>
+						<td>{{formatNumber(totalPrice2.toFixed(0))}} đ</td>
+						<td>{{formatNumber(totalPrice3.toFixed(0))}} đ</td>
 						</tr>
 						<tr>
-						<td>27</td>
-						<td>Đ/giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} B.Quân.</td>
+						<td>28</td>
+						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} B.Quân.</td>
+						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
+								Đơn giá QSDĐ (28) = (27) / (6) <br/>
+								Đơn giá của MDSD chính
+						</b-tooltip>
 						<td>-</td>
 						<td>{{formatNumber(parseFloat(dgd1).toFixed(0))}} đ</td>
 						<td>{{formatNumber(parseFloat(dgd2).toFixed(0))}} đ</td>
@@ -1459,7 +1485,6 @@ import InputPercent from '@/components/Form/InputPercent'
 import InputPercentNegative from '@/components/Form/InputPercentNegative'
 import InputNumberNew from '@/components/Form/InputNumberNew'
 import InputCurrency from '@/components/Form/InputCurrency'
-import InputCategoryBoolean from '@/components/Form/InputCategoryBoolean'
 import InputArea from '@/components/Form/InputArea'
 import InputDatePicker from '@/components/Form/InputDatePicker'
 import InputCategory from '@/components/Form/InputCategory'
@@ -1479,7 +1504,8 @@ import { BAlert } from 'bootstrap-vue'
 import Vue from 'vue'
 import Icon from 'buefy'
 import ModalPrintEstimateAssets from '@/components/Modal/ModalPrintEstimateAsset'
-import { toLower } from 'lodash-es'
+import { floor, toLower } from 'lodash-es'
+import { BTooltip } from 'bootstrap-vue'
 
 Vue.use(Icon)
 
@@ -1498,7 +1524,6 @@ export default {
 		InputLengthArea,
 		InputArea,
 		InputDatePicker,
-		InputCategoryBoolean,
 		InputCurrency,
 		InputNumberNew,
 		InputPercent,
@@ -1511,6 +1536,7 @@ export default {
 		ModalStep7Summarize,
 		InputNumberFormat,
 		ModalNotificationAppraisal,
+		'b-tooltip': BTooltip,
 		ModalPrintEstimateAssets
 	},
 
@@ -2042,7 +2068,7 @@ export default {
 		},
 		remainingBuildingPrice (tangible_assets) {
 			if (tangible_assets && tangible_assets.unit_price_m2 && tangible_assets.remaining_quality && tangible_assets.total_construction_base) {
-				return this.formatNumber((tangible_assets.unit_price_m2 * tangible_assets.total_construction_base) * tangible_assets.remaining_quality / 100) + 'đ'
+				return this.formatNumber(floor((tangible_assets.unit_price_m2 * tangible_assets.total_construction_base) * tangible_assets.remaining_quality / 100)) + 'đ'
 			} else return '-'
 		},
 		changePercentSaleRating (event, index) {
@@ -3474,6 +3500,7 @@ export default {
 			this.dtsxd1 = (typeof asset1.tangible_assets[0] !== 'undefined') ? asset1.tangible_assets[0].total_construction_base : 0
 			this.dtsxd2 = (typeof asset2.tangible_assets[0] !== 'undefined') ? asset2.tangible_assets[0].total_construction_base : 0
 			this.dtsxd3 = (typeof asset3.tangible_assets[0] !== 'undefined') ? asset3.tangible_assets[0].total_construction_base : 0
+
 			// get properties of asset
 			asset.appraise_has_assets.forEach((appraiseHasAssets, index) => {
 				if (appraiseHasAssets.asset_general_id === asset1.id) {
@@ -3569,6 +3596,10 @@ export default {
 			this.clcl2 = (typeof asset2.tangible_assets[0] !== 'undefined') ? asset2.tangible_assets[0].remaining_quality : 0
 			this.clcl3 = (typeof asset3.tangible_assets[0] !== 'undefined') ? asset3.tangible_assets[0].remaining_quality : 0
 
+			let otherAmount1 = asset1.total_order_amount || 0
+			let otherAmount2 = asset2.total_order_amount || 0
+			let otherAmount3 = asset3.total_order_amount || 0
+
 			// get price facility
 			this.baseUnitPrice = 0 // unit price of commitee
 			this.baseAcronym = ''
@@ -3599,11 +3630,12 @@ export default {
 			this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
 			this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
 
-			// tính giá trị Quyền sử dụng đất của TSSS
-			// ------------------------------------------------------------------------- Tổng giá trị ước tính - Đơn giá vi phạm quy hoạch + Chi phí chuyển mục đích sử dụng - Đơn giá đơn vị xây dựng
-			this.totalPrice1 = ((typeof asset1.total_estimate_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0) - totalPriceViolationArea1 + +change_purpose_price1 - (this.dgxd1 * this.dtsxd1 * this.clcl1 / 100)
-			this.totalPrice2 = ((typeof asset2.total_estimate_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0) - totalPriceViolationArea2 + +change_purpose_price2 - (this.dgxd2 * this.dtsxd2 * this.clcl2 / 100)
-			this.totalPrice3 = ((typeof asset3.total_estimate_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0) - totalPriceViolationArea3 + +change_purpose_price3 - (this.dgxd3 * this.dtsxd3 * this.clcl3 / 100)
+			// Tính giá trị Quyền sử dụng đất của TSSS
+			// Tổng giá trị ước tính - Đơn giá vi phạm quy hoạch + Chi phí chuyển mục đích sử dụng - Đơn giá đơn vị xây dựng - Tổng giá trị tài sản khác
+			this.totalPrice1 = ((typeof asset1.total_estimate_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0) - totalPriceViolationArea1 + +change_purpose_price1 - floor(this.dgxd1 * this.dtsxd1 * this.clcl1 / 100) - +otherAmount1
+			this.totalPrice2 = ((typeof asset2.total_estimate_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0) - totalPriceViolationArea2 + +change_purpose_price2 - floor(this.dgxd2 * this.dtsxd2 * this.clcl2 / 100) - +otherAmount2
+			this.totalPrice3 = ((typeof asset3.total_estimate_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0) - totalPriceViolationArea3 + +change_purpose_price3 - floor(this.dgxd3 * this.dtsxd3 * this.clcl3 / 100) - +otherAmount3
+
 			// tính đơn giá dất của TSSS
 			this.dgd1 = (typeof this.detail1.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice1 / this.arrayTotalAppropriateArea[this.detail1.asset_general_id]) : 0
 			this.dgd2 = (typeof this.detail2.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice2 / this.arrayTotalAppropriateArea[this.detail2.asset_general_id]) : 0

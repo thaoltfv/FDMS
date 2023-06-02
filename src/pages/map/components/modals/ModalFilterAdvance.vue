@@ -261,13 +261,16 @@ export default {
 				let lat = parseFloat(location.split(',')[0])
 				let lng = parseFloat(location.split(',')[1])
 				this.form.coordinate = [lat, lng]
+			} else {
+				this.form.coordinate = []
 			}
 		},
-		setPlace (place) {
+		async setPlace (place) {
 			if (place.geometry && place.geometry.location) {
 				this.form.coordinate = [place.geometry.location.lat(), place.geometry.location.lng()]
 				this.form.search_address = place.formatted_address
 			} else {
+				this.form.coordinate = []
 				if (place.name) {
 					let location = place.name
 					this.form.search_address = place.name
@@ -276,8 +279,6 @@ export default {
 						let lng = parseFloat(location.split(',')[1])
 						this.form.coordinate = [lat, lng]
 					}
-				} else {
-					this.form.coordinate = []
 				}
 			}
 		},

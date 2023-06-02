@@ -16,9 +16,13 @@
 
         <div class="btn__group">
           <button
-            class="btn btn-white font-weight-normal font-weight-bold"
+            class="btn btn-white text-nowrap"
             @click.prevent="handleCancel"
           > Trở lại</button>
+          <button
+						class="btn btn-white btn-orange text-nowrap ml-3" @click.prevent="handleAction">
+            <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
+          </button>
         </div>
       </div>
     </div>
@@ -48,7 +52,6 @@ export default {
 		},
 		handleAction (event) {
 			this.$emit('action', this.other_description)
-			this.$emit('cancel', event)
 		}
 	}
 }

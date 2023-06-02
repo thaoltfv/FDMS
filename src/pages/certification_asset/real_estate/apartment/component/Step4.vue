@@ -521,7 +521,8 @@ export default {
 			const location = this.circle.center
 			const transaction = '[' + this.transaction + ']'
 			const assetType = '[' + this.assetType + ']'
-			const getAllAsset = await CertificateAsset.getAllAssetApartment(distance, location, transaction, assetType)
+			const yearRange = this.yearRange
+			const getAllAsset = await CertificateAsset.getAllAssetApartment(distance, location, transaction, assetType, yearRange)
 			this.listAssetGeneral = [...getAllAsset.data]
 			let checkAsset = []
 			this.listAssetGeneral.forEach(item => {

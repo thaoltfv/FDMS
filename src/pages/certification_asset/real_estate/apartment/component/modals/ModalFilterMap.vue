@@ -72,6 +72,7 @@
 import InputText from '@/components/Form/InputText'
 import InputNumberFormat from '@/components/Form/InputNumber'
 import InputCategory from '@/components/Form/InputCategory'
+import moment from 'moment'
 export default {
 	name: 'ModalFilterMap',
 	props: ['radius', 'transaction', 'assetType', 'year'],

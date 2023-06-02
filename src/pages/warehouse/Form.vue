@@ -433,7 +433,7 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="btn-property">
+						<div v-if="form.tangible_assets.length < 1" class="btn-property">
 							<button class="btn btn-white btn-orange btn-add" type="button" @click.prevent="handleTangible">
 								<img src="@/assets/icons/ic_add-white.svg" alt="add">
 								Thêm
