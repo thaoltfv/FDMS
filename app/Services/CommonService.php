@@ -753,6 +753,10 @@ class CommonService
 		$clcl2 = $asset2->tangibleAssets[0]->remaining_quality ?? 0;
 		$clcl3 = $asset3->tangibleAssets[0]->remaining_quality ?? 0;
 
+        $otherAssetPrice1 = $asset1->total_order_amount ?? 0;
+        $otherAssetPrice2 = $asset2->total_order_amount ?? 0;
+        $otherAssetPrice3 = $asset3->total_order_amount ?? 0;
+
 		$baseAcronym = '';
 		$baseUnitPrice = 0;
 		$baseAcronymId = '';
@@ -983,9 +987,9 @@ class CommonService
 		}
 
 
-		$totalPrice1 = ($asset1TotalEstimateAmount ?? 0) + $price1 - ($dtsxd1 * $dgxd1 * $clcl1 / 100) - $asset1TotalViolateAmount;
-		$totalPrice2 = ($asset2TotalEstimateAmount ?? 0) + $price2 - ($dtsxd2 * $dgxd2 * $clcl2 / 100) - $asset2TotalViolateAmount;
-		$totalPrice3 = ($asset3TotalEstimateAmount ?? 0) + $price3 - ($dtsxd3 * $dgxd3 * $clcl3 / 100) - $asset3TotalViolateAmount;
+		$totalPrice1 = ($asset1TotalEstimateAmount ?? 0) + $price1 - ($dtsxd1 * $dgxd1 * $clcl1 / 100) - $otherAssetPrice1 - $asset1TotalViolateAmount;
+		$totalPrice2 = ($asset2TotalEstimateAmount ?? 0) + $price2 - ($dtsxd2 * $dgxd2 * $clcl2 / 100) - $otherAssetPrice2 - $asset2TotalViolateAmount;
+		$totalPrice3 = ($asset3TotalEstimateAmount ?? 0) + $price3 - ($dtsxd3 * $dgxd3 * $clcl3 / 100) - $otherAssetPrice3 - $asset3TotalViolateAmount;
 		$dgd1 = (isset($assetNotViolateAreaTotal1) && $assetNotViolateAreaTotal1) ? ($totalPrice1 / $assetNotViolateAreaTotal1) : 0;
 		$dgd2 = (isset($assetNotViolateAreaTotal2) && $assetNotViolateAreaTotal2) ? ($totalPrice2 / $assetNotViolateAreaTotal2) : 0;
 		$dgd3 = (isset($assetNotViolateAreaTotal3) && $assetNotViolateAreaTotal3) ? ($totalPrice3 / $assetNotViolateAreaTotal3) : 0;
@@ -1383,22 +1387,24 @@ class CommonService
         $appraisePrice = $apartment->price;
         if (isset($appraisePrice)) {
             foreach ($appraisePrice as $price) {
-                switch ($price->slug) {
-                    case 'apartment_asset_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Đơn giá căn hộ phải lớn hơn 0';
-                        break;
-                    case 'apartment_area':
-                        if (floatval($price->value) <= 0) $message[] = 'Diện tích căn hộ phải lớn hơn 0';
-                        break;
-                    case 'apartment_total_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Giá trị căn hộ phải lớn hơn 0';
-                        break;
-                    case 'total_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị căn hộ phải lớn hơn 0';
-                        break;
-                    default:
-                        if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
-                        break;
+                if (strpos(strval($price->slug), 'price') !== false) {
+                    switch ($price->slug) {
+                        case 'apartment_asset_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Đơn giá căn hộ phải lớn hơn 0';
+                            break;
+                        case 'apartment_area':
+                            if (floatval($price->value) <= 0) $message[] = 'Diện tích căn hộ phải lớn hơn 0';
+                            break;
+                        case 'apartment_total_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Giá trị căn hộ phải lớn hơn 0';
+                            break;
+                        case 'total_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị căn hộ phải lớn hơn 0';
+                            break;
+                        default:
+                            if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
+                            break;
+                    }
                 }
             }
         }
@@ -1410,20 +1416,21 @@ class CommonService
         $appraisePrice = $appraise->assetPrice;
         if (isset($appraisePrice)) {
             foreach ($appraisePrice as $price) {
-
-                switch ($price->slug) {
-                    case 'layer_cutting_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Đơn giá sau cắt lớp phải lớn hơn 0';
-                        break;
-                    case 'land_asset_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Giá trị quyền sử dụng đất phải lớn hơn 0';
-                        break;
-                    case 'total_asset_price':
-                        if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị tài sản phải lớn hơn 0';
-                        break;
-                    default:
-                        if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
-                        break;
+                if (strpos(strval($price->slug), 'price') !== false) {
+                    switch ($price->slug) {
+                        case 'layer_cutting_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Đơn giá sau cắt lớp phải lớn hơn 0';
+                            break;
+                        case 'land_asset_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Giá trị quyền sử dụng đất phải lớn hơn 0';
+                            break;
+                        case 'total_asset_price':
+                            if (floatval($price->value) <= 0) $message[] = 'Tổng giá trị tài sản phải lớn hơn 0';
+                            break;
+                        default:
+                            if (floatval($price->value) < 0)  $message[] = $price->slug . ' nhỏ hơn 0';
+                            break;
+                    }
                 }
             }
         }

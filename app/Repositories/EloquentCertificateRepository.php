@@ -3096,12 +3096,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $val['status'] == $status && $val['sub_status'] == $subStatus;
                 }));
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
-                $baseStatus = 2;
-                $baseSubStatus = 1;
+
                 if (isset($status) && isset($subStatus)) {
                     switch($status)  {
-                        case 1:
-                            $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
+                        case 1: //Move to first step in workflow -> remove all asset in certificate
+                            // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
+                            $this->removeAssetInCertificate($id);
                             break;
                         default:
                             $this->updateAppraiseStatus($id, $status, $subStatus);
@@ -4358,18 +4358,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $chekcPrice = $objects['check_price'] ?? false;
             if (Certificate::where('id', $certificateId)->where('status', 2)->exists()) {
                 if (isset($objects['general_asset'])) {
-                    $oldCertificate = Certificate::where('id', $certificateId)->first();
                     $generalAsset = $objects['general_asset'];
-                    $oldPersonals = $oldCertificate->personalProperties;
-                    $realEstates = $oldCertificate->realEstate;
-                    $oldRealEstateApartment = $realEstates->where('assetType.acronym','CC');
-                    $oldRealEstateAppraise = $realEstates->whereIn('assetType.acronym', ['DCN', 'DT']);
-                    $oldPersonalIds = Arr::pluck($oldPersonals, 'personal_property_id');
-                    $oldRealEstateApartmentIds = Arr::pluck($oldRealEstateApartment, 'real_estate_id');
-                    $oldRealEstateAppraiseIds = Arr::pluck($oldRealEstateAppraise, 'real_estate_id');
-                    $personalDelete = [];
-                    $realEstateAppraiseDelete = [];
-                    $realEstateApartmentDelete = [];
                     if (count($generalAsset) > 0) {
                         $dictionary = Dictionary::query()->where(['type' => 'LOAI_TAI_SAN', 'status' => 1])->get();
                         $appraiseType = $dictionary->whereIn('acronym', ['DCN', 'DT']);
@@ -4382,7 +4371,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $apartmentTypeIds = Arr::pluck($apartmentType, 'id');
                         $personalTypeIds = Arr::pluck($personalType, 'id');
                         $personalIds = [];
-                        $realEstateIds = [];
                         $realEstateApartmentIds = [];
                         $realEstateAppraiseIds = [];
                         foreach ($generalAsset as $asset) {
@@ -4396,14 +4384,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                                 }
                                 $realEstateAppraiseIds[] = $assetId;
                             }elseif (array_search($assetTypeId, $apartmentTypeIds) !==false)  {
+                                if ($chekcPrice) {
+                                    $check = CommonService::checkValidAppraise($assetId);
+                                    if (isset($check))
+                                        return $check;
+                                }
                                 $realEstateApartmentIds[] = $assetId;
                             }elseif (array_search($assetTypeId, $personalTypeIds) !==false)  {
                                 $personalIds[] = $assetId;
                             }
                         }
-                        $personalDelete  = array_diff($oldPersonalIds, $personalIds);
-                        $realEstateAppraiseDelete  = array_diff($oldRealEstateAppraiseIds, $realEstateAppraiseIds);
-                        $realEstateApartmentDelete  = array_diff($oldRealEstateApartmentIds, $realEstateApartmentIds);
                         if (count($personalIds) > 0) {
                             $this->updateDetailPersonalProperty($certificateId, $oldPersonals??[], $personalIds);
                         }
@@ -4413,57 +4403,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         if (count($realEstateAppraiseIds) > 0) {
                             $this->updateDetailRealEstateAppraise($certificateId, $oldRealEstateAppraise??[], $realEstateAppraiseIds);
                         }
-                    } else {
-                        $personalDelete = $oldPersonalIds??[];
-                        $realEstateAppraiseDelete = $oldRealEstateAppraiseIds??[];
-                        $realEstateApartmentDelete = $oldRealEstateApartmentIds??[];
                     }
-                    if (count($personalDelete) > 0) {
-                        // $personalRepo = new EloquentPersonalPropertiesRepository(new PersonalProperty());
-                        foreach ($personalDelete as $personalId) {
-                            CertificateHasPersonalProperty::query()
-                                ->where('certificate_id',  $certificateId)
-                                ->whereHas('personalProperties', function ($has) use($personalId){
-                                    $has->where('personal_property_id', $personalId);
-                                })
-                                ->forceDelete();
-                            CertificatePersonalProperty::query()->where('personal_property_id', '=', $personalId)->forceDelete();
-                            // $personalRepo->updateStatus($personalId, 2);
-                            $this->updatePersonalPropertyCertificateId($personalId);
-                        }
-                    }
-                    if (count($realEstateApartmentDelete) > 0) {
-                        // $apartmentRepo = new EloquentApartmentAssetRepository(new ApartmentAsset());
-                        foreach ($realEstateApartmentDelete as $realEstateId) {
-                            CertificateHasRealEstate::query()
-                                ->where('certificate_id', '=', $certificateId)
-                                ->whereHas('realEstates', function ($has) use($realEstateId){
-                                    $has->where('real_estate_id', $realEstateId);
-                                }) ->forceDelete();
-                            CertificateRealEstate::query()->where('real_estate_id', '=', $realEstateId)->forceDelete();
-                            // $apartmentRepo->updateStatus($realEstateId, 2);
-                            $this->updateRealEstateCertificateId($realEstateId, null, false);
-                        }
-                    }
-                    if (count($realEstateAppraiseDelete) > 0) {
-                        // $appraiseRepo = new EloquentAppraiseRepository(new Appraise());
-                        foreach ($realEstateAppraiseDelete as $realEstateId) {
-                            CertificateHasRealEstate::query()
-                                ->where('certificate_id', '=', $certificateId)
-                                ->whereHas('realEstates', function ($has) use($realEstateId){
-                                    $has->where('real_estate_id', $realEstateId);
-                                }) ->forceDelete();
-                            CertificateRealEstate::query()->where('real_estate_id', '=', $realEstateId)->forceDelete();
-
-                            $certificateAsset = CertificateAsset::query()->where('real_estate_id', $realEstateId)->first();
-                            if (isset($certificateAsset))
-                                $this->saveConstructionCompany($certificateId, $certificateAsset->id, $certificateAsset->appraise_id, 1);
-                            // $appraiseRepo->updateRealEstateStatus($realEstateId, 2);
-                            $this->updateRealEstateCertificateId($realEstateId);
-                        }
-                    }
-                    CommonService::getCertificateAssetPriceTotal_v2($certificateId);
-                    $this->updateTotalPrie($certificateId);
+                    $this->removeAssetInCertificate($certificateId, $personalIds, $realEstateApartmentIds, $realEstateAppraiseIds);
                 }
                 $edited = Certificate::where('id', $certificateId)->first();
                 // activity-log cập nhật thông tin chi tiết
@@ -4480,6 +4421,67 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $result = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $ex->getMessage()];
         }
         return $result;
+    }
+    private function removeAssetInCertificate($certificateId, $personalKeep = [], $realEstateApartmentKeep = [], $realEstateAppraiseKeep = [])
+    {
+        $oldCertificate = Certificate::where('id', $certificateId)->first();
+        $oldPersonals = $oldCertificate->personalProperties;
+        $realEstates = $oldCertificate->realEstate;
+        $oldRealEstateApartment = $realEstates->where('assetType.acronym','CC');
+        $oldRealEstateAppraise = $realEstates->whereIn('assetType.acronym', ['DCN', 'DT']);
+        $oldPersonalIds = Arr::pluck($oldPersonals, 'personal_property_id');
+        $oldRealEstateApartmentIds = Arr::pluck($oldRealEstateApartment, 'real_estate_id');
+        $oldRealEstateAppraiseIds = Arr::pluck($oldRealEstateAppraise, 'real_estate_id');
+
+        $personalDelete  = array_diff($oldPersonalIds, $personalKeep);
+        $realEstateAppraiseDelete  = array_diff($oldRealEstateAppraiseIds, $realEstateAppraiseKeep);
+        $realEstateApartmentDelete  = array_diff($oldRealEstateApartmentIds, $realEstateApartmentKeep);
+
+        if (count($personalDelete) > 0) {
+            // $personalRepo = new EloquentPersonalPropertiesRepository(new PersonalProperty());
+            foreach ($personalDelete as $personalId) {
+                CertificateHasPersonalProperty::query()
+                    ->where('certificate_id',  $certificateId)
+                    ->whereHas('personalProperties', function ($has) use($personalId){
+                        $has->where('personal_property_id', $personalId);
+                    })
+                    ->forceDelete();
+                CertificatePersonalProperty::query()->where('personal_property_id', '=', $personalId)->forceDelete();
+                // $personalRepo->updateStatus($personalId, 2);
+                $this->updatePersonalPropertyCertificateId($personalId);
+            }
+        }
+        if (count($realEstateApartmentDelete) > 0) {
+            // $apartmentRepo = new EloquentApartmentAssetRepository(new ApartmentAsset());
+            foreach ($realEstateApartmentDelete as $realEstateId) {
+                CertificateHasRealEstate::query()
+                    ->where('certificate_id', '=', $certificateId)
+                    ->whereHas('realEstates', function ($has) use($realEstateId){
+                        $has->where('real_estate_id', $realEstateId);
+                    }) ->forceDelete();
+                CertificateRealEstate::query()->where('real_estate_id', '=', $realEstateId)->forceDelete();
+                // $apartmentRepo->updateStatus($realEstateId, 2);
+                $this->updateRealEstateCertificateId($realEstateId, null, false);
+            }
+        }
+        if (count($realEstateAppraiseDelete) > 0) {
+            // $appraiseRepo = new EloquentAppraiseRepository(new Appraise());
+            foreach ($realEstateAppraiseDelete as $realEstateId) {
+                CertificateHasRealEstate::query()
+                    ->where('certificate_id', '=', $certificateId)
+                    ->whereHas('realEstates', function ($has) use($realEstateId){
+                        $has->where('real_estate_id', $realEstateId);
+                    }) ->forceDelete();
+                CertificateRealEstate::query()->where('real_estate_id', '=', $realEstateId)->forceDelete();
+                // Remove construction infomation in certificate
+                $certificateAsset = CertificateAsset::query()->where('real_estate_id', $realEstateId)->first();
+                if (isset($certificateAsset))
+                    $this->saveConstructionCompany($certificateId, $certificateAsset->id, $certificateAsset->appraise_id, 1);
+                $this->updateRealEstateCertificateId($realEstateId);
+            }
+        }
+        CommonService::getCertificateAssetPriceTotal_v2($certificateId);
+        $this->updateTotalPrie($certificateId);
     }
     private function getCertificateAppraise(int $id)
     {
