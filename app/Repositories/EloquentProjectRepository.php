@@ -161,6 +161,12 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             ->where('id', $id)
             ->first($select);
     }
+
+    public function log_to_console($data) {
+        $output = json_encode($data);
+    
+        echo "<script>console.log('{$output}' );</script>";
+    }
     public function updateProject(int $id, array $objects)
     {
         $check = $this->beforeSave($id, 'Project');
@@ -171,6 +177,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 $result = [];
                 DB::beginTransaction();
                 $blockObjs = $objects['block'];
+                $this->log_to_console($objects);
                 $objects['rank'] = explode(',', $objects['rank']);
                 $projectAtt = new Project($objects);
                 $this->model->find($id)->update($projectAtt->attributesToArray());
