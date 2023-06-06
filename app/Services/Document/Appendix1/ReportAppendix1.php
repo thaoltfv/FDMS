@@ -439,6 +439,8 @@ class ReportAppendix1 extends Report
         $data = [];
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
+        $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
+        $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
@@ -473,6 +475,8 @@ class ReportAppendix1 extends Report
         $data = [];
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
+        $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
+        $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
@@ -1090,6 +1094,34 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
+
+    protected function collectInfoSourceBy($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            ($this->asset1->source && $this->asset1->source->description) ? CommonService::mbUcfirst($this->asset1->source->description) : '-',
+            ($this->asset2->source && $this->asset2->source->description) ? CommonService::mbUcfirst($this->asset2->source->description) : '-',
+            ($this->asset3->source && $this->asset3->source->description) ? CommonService::mbUcfirst($this->asset3->source->description) : '-',
+            false
+        ];
+        return $data;
+    }
+
+    protected function collectInfoSourceNote($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            $this->asset1->note ? CommonService::mbUcfirst($this->asset1->note) : '-',
+            $this->asset2->note ? CommonService::mbUcfirst($this->asset2->note) : '-',
+            $this->asset3->note ? CommonService::mbUcfirst($this->asset3->note) : '-',
+            false
+        ];
+        return $data;
+    }
     protected function collectInfoTransactionType($stt, $title, $asset)
     {
         $data = [
@@ -1106,10 +1138,10 @@ class ReportAppendix1 extends Report
     private function getTransactionTime($description, $publicDate)
     {
         $result = '-';
-        if ($description == 'ĐÃ BÁN') {
+        // if ($description == 'ĐÃ BÁN') {
             $date = date_create($publicDate);
             $result = 'Tháng ' . date_format($date, 'm/Y');
-        }
+        // }
         return $result;
     }
     protected function collectInfoTransactionTime($stt, $title, $asset)
