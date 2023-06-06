@@ -4238,8 +4238,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'properties.compare_property_turning_time.is_near_main_road',
                 'properties.compare_property_turning_time.material.description',
 
-                'properties.compare_property_doc.doc_num',
-                'properties.compare_property_doc.plot_num',
+                'properties.compare_property_doc',
 
                 'properties.property_detail.total_area',
                 'properties.property_detail.price_land',
