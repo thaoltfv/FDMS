@@ -335,6 +335,22 @@ class PhuLuc1
             $table->addCell($columnWidthSecond, $cellVCentered)->addText(($asset3->contact_person ?? '') . "\n" . ($asset3->contact_phone ?? ''), ['bold' => false, 'italic' => true], $cellHCentered);
 
             $table->addRow(400, $cantSplit);
+            $table->addCell(600, $cellRowContinue)->addText('', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthFirst, $cellVCentered)->addText('Hình thức thu thập', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText('-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset1) ? $asset1 : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset2) ? $asset2 : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset3) ? $asset3 : '-', ['bold' => false], $cellHCentered);
+
+            $table->addRow(400, $cantSplit);
+            $table->addCell(600, $cellRowContinue)->addText('', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthFirst, $cellVCentered)->addText('Ghi chú', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText('-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset1) ? $asset1 : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset2) ? $asset2 : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset3) ? $asset3 : '-', ['bold' => false], $cellHCentered);
+
+            $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellRowSpan)->addText($stt++, ['bold' => false], $cellHCentered);
             $table->addCell($columnWidthFirst, $cellVCentered)->addText('Loại giao dịch', ['bold' => false], $cellHCentered);
             $table->addCell($columnWidthSecond, $cellVCentered)->addText('-', ['bold' => false], $cellHCentered);
@@ -350,9 +366,10 @@ class PhuLuc1
             $table->addCell(600, $cellRowContinue)->addText('', ['bold' => false], $cellHCentered);
             $table->addCell($columnWidthFirst, $cellVCentered)->addText('Thời điểm giao dịch', ['bold' => false], $cellHCentered);
             $table->addCell($columnWidthSecond, $cellVCentered)->addText('-', ['bold' => false], $cellHCentered);
-            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset1->transactionType) && $asset1->transactionType->id === 51 ? 'Tháng ' . date_format($publicDate1, 'm/Y') : '-', ['bold' => false], $cellHCentered);
-            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset2->transactionType) && $asset2->transactionType->id === 51 ? 'Tháng ' . date_format($publicDate2, 'm/Y') : '-', ['bold' => false], $cellHCentered);
-            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset3->transactionType) && $asset3->transactionType->id === 51 ? 'Tháng ' . date_format($publicDate3, 'm/Y') : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset1->transactionType) ? 'Tháng ' . date_format($publicDate1, 'm/Y') : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset2->transactionType) ? 'Tháng ' . date_format($publicDate2, 'm/Y') : '-', ['bold' => false], $cellHCentered);
+            $table->addCell($columnWidthSecond, $cellVCentered)->addText(isset($asset3->transactionType) ? 'Tháng ' . date_format($publicDate3, 'm/Y') : '-', ['bold' => false], $cellHCentered);
+            
             $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellRowSpan)->addText($stt++, ['bold' => false], $cellHCentered);
             $table->addCell($columnWidthFirst, $cellVCentered)->addText('Tọa độ', ['bold' => false], $cellHCentered);
