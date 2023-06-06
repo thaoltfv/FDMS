@@ -177,7 +177,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 $result = [];
                 DB::beginTransaction();
                 $blockObjs = $objects['block'];
-                $this->log_to_console($objects);
+                // $this->log_to_console($objects);
                 $objects['rank'] = explode(',', $objects['rank']);
                 $projectAtt = new Project($objects);
                 $this->model->find($id)->update($projectAtt->attributesToArray());
