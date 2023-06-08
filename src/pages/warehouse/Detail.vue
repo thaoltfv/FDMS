@@ -626,7 +626,7 @@ export default {
 					]
 				}
 			},
-			checkRole: false,
+			checkRole: true,
 			output: null,
 			openImage: false,
 			openDetail: false,
