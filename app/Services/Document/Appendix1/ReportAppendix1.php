@@ -1127,9 +1127,9 @@ class ReportAppendix1 extends Report
             // ($this->asset1 && $this->asset1) ? json_encode($this->asset1) : '-',
             // ($this->asset2 && $this->asset2) ? json_encode($this->asset2) : '-',
             // ($this->asset3 && $this->asset3) ? json_encode($this->asset3) : '-',
-            'NỘI BỘ - NHÂN VIÊN THẨM ĐỊNH',
-            'NỘI BỘ - NHÂN VIÊN THẨM ĐỊNH',
-            'NỘI BỘ - NHÂN VIÊN THẨM ĐỊNH',
+            'Nội bộ - Nhân viên thẩm định',
+            'Nội bộ - Nhân viên thẩm định',
+            'Nội bộ - Nhân viên thẩm định',
             false
         ];
         return $data;
