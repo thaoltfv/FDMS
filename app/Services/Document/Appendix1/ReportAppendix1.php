@@ -440,35 +440,35 @@ class ReportAppendix1 extends Report
     {
         $data = [];
         $stt = 1;
-        $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
+        // $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceByApartment('', 'Hình thức thu thập', $asset);
-        $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
-        $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
-        $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
-        $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
-        $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
-        $data[] = $this->collectInfoRank($stt++, 'Loại căn hộ', $asset);
-        $data[] = $this->collectInfoAddress($stt++, 'Vị trí', $asset);
-        $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
-        $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
-        $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
-        $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
-        $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
-        $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
-        $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
-        $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
-        $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
+        // $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
+        // $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
+        // $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
+        // $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
+        // $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
+        // $data[] = $this->collectInfoRank($stt++, 'Loại căn hộ', $asset);
+        // $data[] = $this->collectInfoAddress($stt++, 'Vị trí', $asset);
+        // $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
+        // $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
+        // $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
+        // $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
+        // $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
+        // $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
+        // $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
+        // $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
+        // $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
         // yếu tố khác
-        $others = $this->collectInfoOtherFactor($asset);
-        foreach ($others as $other) {
-            $other[0] = $stt++;
-            $data[] = $other;
-        }
+        // $others = $this->collectInfoOtherFactor($asset);
+        // foreach ($others as $other) {
+        //     $other[0] = $stt++;
+        //     $data[] = $other;
+        // }
         // giá trị tài sản
-        $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
-        $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
-        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
-        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
+        // $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
+        // $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        // $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
+        // $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
 
         return $data;
     }
@@ -1118,9 +1118,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            ($this->asset1->source && $this->asset1) ? CommonService::mbUcfirst($this->asset1) : '-',
-            ($this->asset2->source && $this->asset2) ? CommonService::mbUcfirst($this->asset2) : '-',
-            ($this->asset3->source && $this->asset3) ? CommonService::mbUcfirst($this->asset3) : '-',
+            ($this->asset1 && $this->asset1) ? CommonService::mbUcfirst($this->asset1) : '-',
+            ($this->asset2 && $this->asset2) ? CommonService::mbUcfirst($this->asset2) : '-',
+            ($this->asset3 && $this->asset3) ? CommonService::mbUcfirst($this->asset3) : '-',
             false
         ];
         return $data;
