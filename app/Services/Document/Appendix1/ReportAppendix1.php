@@ -440,7 +440,7 @@ class ReportAppendix1 extends Report
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceByApartment('', 'Hình thức thu thập', $asset);
-        // $data[] = $this->collectInfoSourceNoteApartment('', 'Ghi chú', $asset);
+        $data[] = $this->collectInfoSourceNoteApartment('', 'Ghi chú', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
@@ -1154,9 +1154,12 @@ class ReportAppendix1 extends Report
             // $this->asset1->note ? CommonService::mbUcfirst($this->asset1->note) : '-',
             // $this->asset2->note ? CommonService::mbUcfirst($this->asset2->note) : '-',
             // $this->asset3->note ? CommonService::mbUcfirst($this->asset3->note) : '-',
-            $this->asset1 ? json_encode($this->asset1) : '-',
-            $this->asset2 ? json_encode($this->asset2) : '-',
-            $this->asset3 ? json_encode($this->asset3) : '-',
+            // $this->asset1 ? json_encode($this->asset1) : '-',
+            // $this->asset2 ? json_encode($this->asset2) : '-',
+            // $this->asset3 ? json_encode($this->asset3) : '-',
+            '-',
+            '-',
+            '-',
             false
         ];
         return $data;
