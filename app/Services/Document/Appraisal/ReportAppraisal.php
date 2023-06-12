@@ -842,9 +842,16 @@ class ReportAppraisal extends Report
     {
         $appraiseApproaches = [];
         $appraiseMethodUsed = [];
-        foreach ($this->realEstates as $realEstate) {
-            $appraise = $realEstate->appraises;
-            $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
+        if (!$this->isApartment) {
+            foreach ($this->realEstates as $realEstate) {
+                $appraise = $realEstate->appraises;
+                $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
+            }
+        } else {
+            foreach ($this->realEstates as $realEstate) {
+                $apartment = $realEstate->apartment;
+                $appraiseApproaches[$apartment->apartmentAppraisalBase->approach->id] = $apartment->apartmentAppraisalBase;
+            }
         }
         foreach ($appraiseApproaches as $item) {
             array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
