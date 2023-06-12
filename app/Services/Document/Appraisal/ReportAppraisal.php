@@ -847,17 +847,22 @@ class ReportAppraisal extends Report
                 $appraise = $realEstate->appraises;
                 $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
             }
+            foreach ($appraiseApproaches as $item) {
+                array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
+            }
+            $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+            $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
         } else {
             foreach ($this->realEstates as $realEstate) {
                 $apartment = $realEstate->apartment;
                 $appraiseApproaches[$apartment->apartmentAppraisalBase->approach->id] = $apartment->apartmentAppraisalBase;
             }
+            foreach ($appraiseApproaches as $item) {
+                array_push($appraiseMethodUsed, $item->methodUsed->name);
+            }
+            $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+            $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
         }
-        foreach ($appraiseApproaches as $item) {
-            array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
-        }
-        $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
-        $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
 
         $section->addTitle('CÁCH TIẾP CẬN VÀ PHƯƠNG PHÁP THẨM ĐỊNH GIÁ:', 1);
         $section->addTitle('Thông tin tổng quan về thị trường, các thông tin về thị trường giao dịch của tài sản thẩm định giá.', 2);
