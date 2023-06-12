@@ -439,7 +439,7 @@ class ReportAppendix1 extends Report
         $data = [];
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
-        $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
+        $data[] = $this->collectInfoSourceByApartment('', 'Hình thức thu thập', $asset);
         $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
@@ -475,7 +475,7 @@ class ReportAppendix1 extends Report
         $data = [];
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
-        // $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
+        $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
         $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
@@ -1104,6 +1104,20 @@ class ReportAppendix1 extends Report
             ($this->asset1->source && $this->asset1->source->description) ? CommonService::mbUcfirst($this->asset1->source->description) : '-',
             ($this->asset2->source && $this->asset2->source->description) ? CommonService::mbUcfirst($this->asset2->source->description) : '-',
             ($this->asset3->source && $this->asset3->source->description) ? CommonService::mbUcfirst($this->asset3->source->description) : '-',
+            false
+        ];
+        return $data;
+    }
+
+    protected function collectInfoSourceByApartment($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            ($this->asset1->source && $this->asset1) ? CommonService::mbUcfirst($this->asset1) : '-',
+            ($this->asset2->source && $this->asset2) ? CommonService::mbUcfirst($this->asset2) : '-',
+            ($this->asset3->source && $this->asset3) ? CommonService::mbUcfirst($this->asset3) : '-',
             false
         ];
         return $data;
