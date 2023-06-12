@@ -440,35 +440,35 @@ class ReportAppendix1 extends Report
     {
         $data = [];
         $stt = 1;
-        // $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
+        $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceByApartment('', 'Hình thức thu thập', $asset);
         // $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
         // $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         // $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
-        // $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
-        // $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
-        // $data[] = $this->collectInfoRank($stt++, 'Loại căn hộ', $asset);
-        // $data[] = $this->collectInfoAddress($stt++, 'Vị trí', $asset);
-        // $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
-        // $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
-        // $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
-        // $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
-        // $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
-        // $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
-        // $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
-        // $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
-        // $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
+        $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
+        $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
+        $data[] = $this->collectInfoRank($stt++, 'Loại căn hộ', $asset);
+        $data[] = $this->collectInfoAddress($stt++, 'Vị trí', $asset);
+        $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
+        $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
+        $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
+        $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
+        $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
+        $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
+        $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
+        $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
         // yếu tố khác
-        // $others = $this->collectInfoOtherFactor($asset);
-        // foreach ($others as $other) {
-        //     $other[0] = $stt++;
-        //     $data[] = $other;
-        // }
+        $others = $this->collectInfoOtherFactor($asset);
+        foreach ($others as $other) {
+            $other[0] = $stt++;
+            $data[] = $other;
+        }
         // giá trị tài sản
-        // $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
-        // $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
-        // $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
-        // $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
+        $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
+        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
 
         return $data;
     }
@@ -588,8 +588,8 @@ class ReportAppendix1 extends Report
             $type = $i->type;
             $iDesription = $i->description ?: 'TƯƠNG ĐỒNG';
             $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $i->apartment_title : $i->asset_title . ' so với ' . $i->apartment_title;
-            // $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
-            $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
+            $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+            // $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
             if ($type == 'dien_tich')
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->apartment_title, 2, ',', '.') . $this->m2 : number_format($i->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($i->apartment_title, 2, ',', '.') . $this->m2;
             else
@@ -613,8 +613,8 @@ class ReportAppendix1 extends Report
             if (!empty($i)) {
                 $iDesription = $i->description ?: 'TƯƠNG ĐỒNG';
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $i->appraise_title : $i->asset_title . ' so với ' . $i->appraise_title;
-                // $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
-                $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
+                $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                // $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
                 if ($type == 'quy_mo')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->appraise_title, 2, ',', '.') . $this->m2 : number_format($i->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($i->appraise_title, 2, ',', '.') . $this->m2;
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
@@ -631,8 +631,8 @@ class ReportAppendix1 extends Report
             foreach ($otherComparisonFactors as $other) {
                 $iDesription = $other->description ?: 'TƯƠNG ĐỒNG';
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $other->appraise_title : $other->asset_title . ' so với ' . $other->appraise_title;
-                // $description = $other->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
-                $description = $other->name . ' ' . $iDesription . ' TSTĐ ' . '(';
+                $description = $other->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                // $description = $other->name . ' ' . $iDesription . ' TSTĐ ' . '(';
                 if ($type == 'quy_mo')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($other->appraise_title, 2, ',', '.') . $this->m2 : number_format($other->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($other->appraise_title, 2, ',', '.') . $this->m2;
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
