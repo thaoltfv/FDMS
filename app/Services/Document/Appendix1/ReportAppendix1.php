@@ -588,7 +588,8 @@ class ReportAppendix1 extends Report
             $type = $i->type;
             $iDesription = $i->description ?: 'TƯƠNG ĐỒNG';
             $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $i->apartment_title : $i->asset_title . ' so với ' . $i->apartment_title;
-            $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+            // $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+            $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
             if ($type == 'dien_tich')
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->apartment_title, 2, ',', '.') . $this->m2 : number_format($i->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($i->apartment_title, 2, ',', '.') . $this->m2;
             else
