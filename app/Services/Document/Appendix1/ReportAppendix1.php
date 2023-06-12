@@ -613,7 +613,8 @@ class ReportAppendix1 extends Report
             if (!empty($i)) {
                 $iDesription = $i->description ?: 'TƯƠNG ĐỒNG';
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $i->appraise_title : $i->asset_title . ' so với ' . $i->appraise_title;
-                $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                // $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
                 if ($type == 'quy_mo')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->appraise_title, 2, ',', '.') . $this->m2 : number_format($i->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($i->appraise_title, 2, ',', '.') . $this->m2;
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
@@ -630,7 +631,8 @@ class ReportAppendix1 extends Report
             foreach ($otherComparisonFactors as $other) {
                 $iDesription = $other->description ?: 'TƯƠNG ĐỒNG';
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $other->appraise_title : $other->asset_title . ' so với ' . $other->appraise_title;
-                $description = $other->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                // $description = $other->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                $description = $other->name . ' ' . $iDesription . ' TSTĐ ' . '(';
                 if ($type == 'quy_mo')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($other->appraise_title, 2, ',', '.') . $this->m2 : number_format($other->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($other->appraise_title, 2, ',', '.') . $this->m2;
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
