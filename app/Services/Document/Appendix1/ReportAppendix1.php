@@ -457,11 +457,11 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
         $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
         // yếu tố khác
-        // $others = $this->collectInfoOtherFactor($asset);
-        // foreach ($others as $other) {
-        //     $other[0] = $stt++;
-        //     $data[] = $other;
-        // }
+        $others = $this->collectInfoOtherFactor($asset);
+        foreach ($others as $other) {
+            $other[0] = $stt++;
+            $data[] = $other;
+        }
         // giá trị tài sản
         $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
