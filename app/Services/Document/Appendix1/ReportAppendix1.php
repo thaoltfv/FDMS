@@ -442,9 +442,9 @@ class ReportAppendix1 extends Report
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceByApartment('', 'Hình thức thu thập', $asset);
-        // $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
-        // $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
-        // $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
+        $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
+        $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
+        $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
         $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
         $data[] = $this->collectInfoRank($stt++, 'Loại căn hộ', $asset);
@@ -1121,9 +1121,12 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            ($this->asset1 && $this->asset1) ? CommonService::mbUcfirst($this->asset1) : '-',
-            ($this->asset2 && $this->asset2) ? CommonService::mbUcfirst($this->asset2) : '-',
-            ($this->asset3 && $this->asset3) ? CommonService::mbUcfirst($this->asset3) : '-',
+            // ($this->asset1 && $this->asset1) ? CommonService::mbUcfirst($this->asset1) : '-',
+            // ($this->asset2 && $this->asset2) ? CommonService::mbUcfirst($this->asset2) : '-',
+            // ($this->asset3 && $this->asset3) ? CommonService::mbUcfirst($this->asset3) : '-',
+            ($this->asset1 && $this->asset1) ? $this->asset1 : '-',
+            ($this->asset2 && $this->asset2) ? $this->asset2 : '-',
+            ($this->asset3 && $this->asset3) ? $this->asset3 : '-',
             false
         ];
         return $data;
