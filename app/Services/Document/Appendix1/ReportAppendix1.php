@@ -475,7 +475,7 @@ class ReportAppendix1 extends Report
         $data = [];
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
-        $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
+        // $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
         $data[] = $this->collectInfoSourceNote('', 'Ghi chú', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
