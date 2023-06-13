@@ -1362,7 +1362,7 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->description) ? $asset->apartmentAssetProperties->description : '-',
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->description) ? str_replace("\n", '<w:br/>   ', $asset->apartmentAssetProperties->description) : '-',
             ($this->asset1->room_details[0] && $this->asset1->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', $this->asset1->room_details[0]->description) : '-',
             ($this->asset2->room_details[0] && $this->asset2->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', $this->asset2->room_details[0]->description) : '-',
             ($this->asset3->room_details[0] && $this->asset3->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', $this->asset3->room_details[0]->description) : '-',
