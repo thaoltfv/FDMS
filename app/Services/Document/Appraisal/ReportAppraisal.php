@@ -424,7 +424,7 @@ class ReportAppraisal extends Report
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Mô tả');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($apartment->apartmentAssetProperties->description?: '' );
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(str_replace("\n", '<w:br/>   ', $apartment->apartmentAssetProperties->description) ?: '' );
         //6
         $utiDescriptionArr = CommonService::getUtilitiesDescription($apartment->apartmentAssetProperties->utilities);
         $utiDescriptionStr = implode(', ', $utiDescriptionArr);
