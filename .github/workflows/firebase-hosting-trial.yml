@@ -19,10 +19,10 @@ jobs:
       - name: Download env config files
         id: get-config-files
         run: |
-          cd config
-          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Ftrial.env.js?alt=media&token=5e428ea2-752e-4642-bf2d-9eaf4cb75c6d&_gl=1*15szo9m*_ga*NTQ1Mzg2NDUwLjE2ODM5MjM2MTc.*_ga_CW55HF8NVT*MTY4NjAzMjI0OC4yNS4xLjE2ODYwMzM0MjQuMC4wLjA." -O trial.env.js
-          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fdashboard.json?alt=media&token=89bf517b-ad18-4758-82a3-65bed61cedc5&_gl=1*7w7o4i*_ga*NTQ1Mzg2NDUwLjE2ODM5MjM2MTc.*_ga_CW55HF8NVT*MTY4NjAzMjI0OC4yNS4xLjE2ODYwMzM1MjAuMC4wLjA." -O dashboard.json
-          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fworkflow.json?alt=media&token=1b06ff90-89d3-4e7e-9bcd-2221c2b9e97d&_gl=1*4d435n*_ga*NTQ1Mzg2NDUwLjE2ODM5MjM2MTc.*_ga_CW55HF8NVT*MTY4NjAzMjI0OC4yNS4xLjE2ODYwMzM0OTkuMC4wLjA." -O workflow.json
+          cd config 
+          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Ftrial.env.js?alt=media&token=5e428ea2-752e-4642-bf2d-9eaf4cb75c6d" -O trial.env.js
+          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fdashboard.json?alt=media&token=89bf517b-ad18-4758-82a3-65bed61cedc5" -O dashboard.json
+          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fworkflow.json?alt=media&token=1b06ff90-89d3-4e7e-9bcd-2221c2b9e97d" -O workflow.json
       - name: Install dependencies
         run: npm set unsafe-perm true & npm i
       - name: Build into dist
