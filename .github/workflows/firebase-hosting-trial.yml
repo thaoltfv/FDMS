@@ -20,7 +20,7 @@ jobs:
         id: get-config-files
         run: |
           cd config 
-          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Ftrial.env.js?alt=media&token=5e428ea2-752e-4642-bf2d-9eaf4cb75c6d" -O trial.env.js
+          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Ftrial.env.js?alt=media&token=f8de7143-fce2-4106-88fc-0b5e66c725a1" -O trial.env.js
           wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fdashboard.json?alt=media&token=89bf517b-ad18-4758-82a3-65bed61cedc5" -O dashboard.json
           wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fworkflow.json?alt=media&token=1b06ff90-89d3-4e7e-9bcd-2221c2b9e97d" -O workflow.json
       - name: Install dependencies
