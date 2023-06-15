@@ -1,9 +1,7 @@
 <template>
   <div class="login" v-if="layout === 'auth'">
 <!--      <ValidationObserver v-slot="{ handleSubmit }">-->
-        <section id="firebaseui-auth-container" style="position: absolute;
-    top: 0;
-    right: 300px;"/>
+        <section id="firebaseui-auth-container" />
 <!--      </ValidationObserver>-->
     </div>
 </template>
@@ -43,7 +41,14 @@ export default {
 					forceSameDevice: false
 				}
 			],
-			credentialHelper: firebaseui.auth.CredentialHelper.NONE
+			credentialHelper: firebaseui.auth.CredentialHelper.NONE,
+      // callbacks: {
+      //   uiShown: function() {
+      //     document.querySelector('.firebaseui-button').style.setProperty("background-color", "#00507c", "important");
+      //     document.querySelector('.firebaseui-button').style.setProperty("color", "#FFFFFF", "important");
+      //     document.querySelector('.firebaseui-button').innerHTML = 'TIẾP TỤC';
+      //   }
+      // }
 		}
 		const ui = new firebaseui.auth.AuthUI(firebase.auth())
 		ui.start('#firebaseui-auth-container', uiConfig)
@@ -64,10 +69,11 @@ export default {
 		font-weight: 700;
 	}
   .login {
-    // background: url("../assets/images/im_background.jpg") no-repeat top center #2d494d;
-    background: url("../assets/images/im_background.jpeg") no-repeat ;
-    background-size: contain;
-    height: 150vh;
+    background: url("../assets/images/im_background.jpg") no-repeat top center #2d494d;
+    // background: url("../assets/images/im_background.png") no-repeat ;
+    // background-size: contain;
+    background-size: cover;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;

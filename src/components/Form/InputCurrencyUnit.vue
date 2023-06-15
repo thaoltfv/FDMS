@@ -173,7 +173,8 @@ export default {
 				return false
 			}
 			if (value > this.max) {
-				this.errorMessage = `Đơn giá phải nhỏ ${this.formatNumber(this.max)} đ`
+				// this.errorMessage = `Đơn giá phải nhỏ ${this.formatNumber(this.max)} đ`
+				this.errorMessage = `Đơn giá phải nhỏ hơn 1 Tỷ !`
 				return false
 			}
 			return true
