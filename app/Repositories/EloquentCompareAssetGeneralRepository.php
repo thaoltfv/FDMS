@@ -4222,6 +4222,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'total_order_amount',
                 'total_raw_amount',
                 'topographic',
+                'created_at',
+                'created_by',
                 'transaction_type.type',
                 'transaction_type.description',
 
