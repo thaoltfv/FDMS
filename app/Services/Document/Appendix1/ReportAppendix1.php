@@ -1141,9 +1141,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            $this->asset1->note ? CommonService::mbUcfirst($this->asset1->note) : '-',
-            $this->asset2->note ? CommonService::mbUcfirst($this->asset2->note) : '-',
-            $this->asset3->note ? CommonService::mbUcfirst($this->asset3->note) : '-',
+            $this->asset1->note ? CommonService::mbUcfirst(htmlspecialchars($this->asset1->note)) : '-',
+            $this->asset2->note ? CommonService::mbUcfirst(htmlspecialchars($this->asset2->note)) : '-',
+            $this->asset3->note ? CommonService::mbUcfirst(htmlspecialchars($this->asset3->note)) : '-',
             false
         ];
         return $data;
