@@ -58,8 +58,8 @@
           </p>
         </template>
         <template slot="detail_appraise" slot-scope="detail_appraise">
-          <p :id="`content${detail_appraise.id}`" class="appraise_detail text-none"><pre class="pre_detail">{{ showDetailAppraise(detail_appraise) }}</pre></p>
-          <b-tooltip v-if="showDetailAppraise(detail_appraise)" class="text-none" :target="('content' + detail_appraise.id).toString()"><pre>{{ showDetailAppraise(detail_appraise) }}</pre></b-tooltip>
+          <p :id="`content${detail_appraise.id}`" class="appraise_detail text-none"><span v-html="showDetailAppraise(detail_appraise)"></span></p>
+          <!-- <b-tooltip v-if="showDetailAppraise(detail_appraise)" class="text-none" :target="('content' + detail_appraise.id).toString()"><pre>{{ showDetailAppraise(detail_appraise) }}</pre></b-tooltip> -->
         </template>
 
         <template slot="total_asset_price" slot-scope="{ total_price, appraise_purpose }">
@@ -249,27 +249,37 @@ export default {
 	methods: {
 		showDetailAppraise (data) {
 			let arconymText = ''
+			let arconymText1 = ''
+			let arconymText2 = ''
 			if (data.detail_list_id && data.detail_list_id.length > 0) {
 				data.detail_list_id.forEach((item, index) => {
 					if (index === 0) {
 						if (data.document_type && data.document_type[0] === 'KHAC') {
-							arconymText = `DS_${item}`
+							arconymText = `DS_${item}`;
+							arconymText2 = `DS_${item}`;
 						} else if (data.document_type && data.document_type[0] === 'DS') {
-							arconymText = `DS_${item}`
+							arconymText = `DS_${item}`;
+							arconymText2 = `DS_${item}`;
 						} else {
-							arconymText = `BDS_${item}`
+							arconymText = `BDS_${item}`;
+							arconymText2 = `BDS_${item}`;
 						}
 					} else {
 						if (data.document_type && data.document_type[0] === 'KHAC') {
-							arconymText += `\nDS_${item}`
+							arconymText += `\nDS_${item}`;
+							arconymText2 = `\nDS_${item}`;
 						} else if (data.document_type && data.document_type[0] === 'DS') {
-							arconymText += `\nDS_${item}`
+							arconymText += `\nDS_${item}`;
+							arconymText2 = `\nDS_${item}`;
 						} else {
-							arconymText += `\nBDS_${item}`
+							arconymText += `\nBDS_${item}`;
+							arconymText2 = `\nBDS_${item}`;
 						}
 					}
+					arconymText1 += `<a href="/certification_asset/real-estate/detail?id=${item}" target='_blank'>${arconymText2}</a><br/>`
 				})
-				return arconymText
+				
+				return arconymText1
 			} else return ''
 		},
 		async getProfiles () {

@@ -126,6 +126,16 @@
                             <div class="content_detail color_content">{{ formatNumberArea(assetDetails.total_amount) }} đ
                             </div>
                           </div>
+                          <div class="d-flex justify-content-between w-100 mt-1">
+                            <div class="name_title color_content">Ngày xác thực:</div>
+                            <div class="content_detail color_content">{{ formatDate(assetDetails.created_at) }}
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-between w-100 mt-1">
+                            <div class="name_title color_content">Nhân viên xác thực:</div>
+                            <div class="content_detail color_content">{{ assetDetails.created_by ? assetDetails.created_by.name : '-' }}
+                            </div>
+                          </div>
                         </div>
                         <div class="content_tab_detail">
                           <Tabs class="tab_details" :theme="theme" :navAuto="true">

@@ -276,11 +276,11 @@
                     />
                 </div>
                 <div class="col-4">
-                  <InputCurrency
+                  <InputCurrencyUnit
                     :id="`circular_unit_price${indexUBND}`"
                     v-model="item_UBND.circular_unit_price"
                     :vid="'circular_unit_price' + indexUBND"
-                    :max="99999999999999"
+                    :max="999999999"
                     nonLabel="Đơn giá"
                     rules="required"
                     :required="true"
@@ -374,6 +374,7 @@
 
 <script>
 import InputCurrency from '@/components/Form/InputCurrency'
+import InputCurrencyUnit from '@/components/Form/InputCurrencyUnit'
 import InputCategoryBoolean from '@/components/Form/InputCategoryBoolean'
 import InputArea from '@/components/Form/InputArea'
 import InputDatePicker from '@/components/Form/InputDatePicker'
@@ -408,6 +409,7 @@ export default {
 		TabItem,
 		InputCategoryBoolean,
 		InputCurrency,
+    InputCurrencyUnit,
 		ModalNotificationAppraisal,
 		LMap,
 		LControlZoom,

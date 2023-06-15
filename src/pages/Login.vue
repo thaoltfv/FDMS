@@ -1,7 +1,9 @@
 <template>
   <div class="login" v-if="layout === 'auth'">
 <!--      <ValidationObserver v-slot="{ handleSubmit }">-->
-        <section id="firebaseui-auth-container"/>
+        <section id="firebaseui-auth-container" style="position: absolute;
+    top: 0;
+    right: 300px;"/>
 <!--      </ValidationObserver>-->
     </div>
 </template>
@@ -62,9 +64,10 @@ export default {
 		font-weight: 700;
 	}
   .login {
-    background: url("../assets/images/im_background.jpg") no-repeat top center #2d494d;
-    background-size: cover;
-    height: 100vh;
+    // background: url("../assets/images/im_background.jpg") no-repeat top center #2d494d;
+    background: url("../assets/images/im_background.jpeg") no-repeat ;
+    background-size: contain;
+    height: 150vh;
     display: flex;
     justify-content: center;
     align-items: center;

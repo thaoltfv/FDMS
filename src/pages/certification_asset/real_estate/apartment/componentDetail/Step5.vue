@@ -16,7 +16,7 @@
 																<th>TT</th>
 																<th>Chỉ tiêu</th>
 																<th>TSTĐ</th>
-																<th v-for="(asset, index) in apartment.assets_general" :key="'header' + index" >{{ 'TSSS ' + asset.id }}</th>
+																<th v-for="(asset, index) in apartment.assets_general" :key="'header' + index" ><a :href="`/property/detail?id=${asset.id}`" target='_blank'>{{ 'TSSS ' + asset.id }}</a></th>
 															</tr>
 														</thead>
 														<tbody class="ant-table-tbody">
@@ -200,7 +200,7 @@
 																<th>TT</th>
 																<th>Yếu tố so sánh</th>
 																<th>TSTĐ</th>
-																<th v-for="(asset, index) in apartment.comparison_factor" :key="'headerElement' + index" >{{ 'TSSS ' + asset.id }}</th>
+																<th v-for="(asset, index) in apartment.comparison_factor" :key="'headerElement' + index" ><a :href="`/property/detail?id=${asset.id}`" target='_blank'>{{ 'TSSS ' + asset.id }}</a></th>
 															</tr>
 													</thead>
 													<tbody class="ant-table-tbody">

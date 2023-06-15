@@ -114,7 +114,8 @@
 					</div>
 					<div class="row d-flex">
 						<p class="mb-1">Mã HSTĐ :</p>
-						<p class="mb-1">{{certificate ? certificate.id : ''}}</p>
+						<a class="mb-1" :href="`/certification_brief/detail?id=${certificate.id}`" v-if="certificate" target='_blank'>{{certificate ? certificate.id : ''}}</a>
+						<p class="mb-1" v-else>{{certificate ? certificate.id : ''}}</p>
 					</div>
 					<div class="">
 						<p class="mb-1">Người được chỉnh sửa :</p>

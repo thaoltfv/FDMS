@@ -169,7 +169,7 @@
                           />
                         </td>
                         <td>
-													<InputCurrency
+													<InputCurrencyUnit
                             v-model="property_detail.circular_unit_price"
                             :vid="'circular_unit_price' + index"
 														nonLabel="Đơn giá"
@@ -503,6 +503,7 @@
 
 <script>
 import InputCurrency from '@/components/Form/InputCurrency'
+import InputCurrencyUnit from '@/components/Form/InputCurrencyUnit'
 import InputText from '@/components/Form/InputText'
 import InputCategory from '@/components/Form/InputCategory'
 import InputSwitch from '@/components/Form/InputSwitch'
@@ -634,7 +635,8 @@ export default {
 		InputSwitch,
 		ModalMap,
 		ModalDeleteIndex,
-		ToggleSwitch
+		ToggleSwitch,
+		InputCurrencyUnit
 	},
 	computed: {
 		optionsJuridical () {
