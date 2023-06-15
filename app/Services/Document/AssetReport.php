@@ -236,7 +236,7 @@ class AssetReport
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Mô tả: ');
-                    $textRun->addText((isset($roomDetail->description) ? $roomDetail->description : ''), ['bold' => true]);
+                    $textRun->addText((isset($roomDetail->description) ? str_replace("\n", '<w:br/>   ', $roomDetail->description) : ''), ['bold' => true]);
                 }
             } else {
                 $section->addText('1. Các thông tin về thửa đất ', ['bold' => true]);
