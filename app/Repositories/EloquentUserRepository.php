@@ -221,14 +221,22 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->first();
     }
 
-    public function deactiveUser($id)
+    /**
+     * @param $id
+     * @return int
+     */
+    public function deactiveUser($id): int
     {
         return $this->model->query()
             ->where('id', $id)
             ->update(['status' => 'deactive']);
     }
 
-    public function activeUser($id)
+    /**
+     * @param $id
+     * @return int
+     */
+    public function activeUser($id): int
     {
         return $this->model->query()
             ->where('id', $id)
