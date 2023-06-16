@@ -227,7 +227,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
      */
     public function deactiveUser($id): int
     {
-        return $this->model->query()
+        // if(Appraiser::where('user_id',$id)->exists())
+        //     Appraiser::where('user_id',$id)->delete();
+        
+            return $this->model->query()
             ->where('id', $id)
             ->update(['status' => 'deactive']);
     }
