@@ -16,7 +16,12 @@
 
       <div class="card-body">
         <p class="font-weight-bold" style="font-size: 18px">
-          Bạn có chắc muốn kích hoạt lại tài khoản của nhân viên {{name}} không ?
+          Bạn có chắc muốn kích hoạt lại tài khoản của nhân viên <br/><span style="font-size: 16px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #0062AF">{{name}}</span> không ?
         </p>
 
         <div class="btn__group">

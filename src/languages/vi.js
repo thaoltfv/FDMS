@@ -255,5 +255,5 @@ export default {
 	winning_notice_sending: 'Winning Notice Sending',
 	yes: 'Yes',
 	tooltip_active: 'Kích hoạt',
-	tooltip_deactive: 'Tạm ngưng',
+	tooltip_deactive: 'Vô hiệu hóa',
 }

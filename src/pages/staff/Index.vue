@@ -16,10 +16,36 @@
           Tạo nhân viên
         </router-link>
       </div>
+	  <div class="pannel__content d-md-flex d-block justify-content-start align-items-center">
+		<div style="margin-right: 20px;">
+			<span style="font-size: 20px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: green">Số lượng nhân viên: {{list_total.length}}</span>
+		</div>
+		<div style="margin-right: 20px;">
+			<span style="font-size: 20px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #0062AF">Đang kích hoạt: {{count_enable}}</span>
+		</div>
+		<div>
+			<span style="font-size: 20px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #6E7582">Vô hiệu hóa: {{count_disable}}</span>
+		</div>
+		</div>
     </div>
     <a-table bordered
              :columns="columns"
-             :data-source="list"
+             :data-source="list_total"
              :loading="isLoading"
              :rowKey="record => record.id"
              :pagination="{
@@ -79,6 +105,23 @@
           </a-tooltip>
         </div>
       </template>
+	  <template slot="status"
+                slot-scope="status">
+        <div class="d-flex justify-content-center">
+			<span v-if="status == 'active'" style="font-size: 14px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #0062AF"> Đang kích hoạt</span>
+			<span v-else style="font-size: 14px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #6E7582"> Vô hiệu hóa</span>
+		</div>
+	</template>
     </a-table>
     <ModalDelete v-if="openModal"
                  @cancel="openModal = false"
@@ -128,6 +171,7 @@ export default {
 			isLoading: false,
 			provinces: [],
 			list: [],
+			list_total1: [],
 			filter: {},
 			pagination: {},
 			perPage: '',
@@ -162,6 +206,9 @@ export default {
 		})
 	},
 	computed: {
+		list_total() {
+			return this.list_total1
+		},
 		columns () {
 			return [
 				{
@@ -194,7 +241,8 @@ export default {
 				{
 					title: 'Trạng thái',
 					align: 'left',
-					dataIndex: 'status'
+					dataIndex: 'status',
+					scopedSlots: {customRender: 'status'},
 				},
 				{
 					title: 'Thao tác',
@@ -203,7 +251,19 @@ export default {
 					width: '100px'
 				}
 			]
-		}
+		},
+		count_disable() {
+			let count = this.list_total1.filter(function (item) {
+				return item.status == 'deactive'
+			}).length
+			return count
+		},
+		count_enable() {
+			let count = this.list_total1.filter(function (item) {
+				return item.status == 'active'
+			}).length
+			return count
+		},
 	},
 	methods: {
 
@@ -283,7 +343,7 @@ export default {
 			await User.deActiveUser(this.id)
 			await this.getStaffs()
 			this.$toast.open({
-				message: 'Tạm ngưng tài khoản nhân viên thành công',
+				message: 'Vô hiệu hóa tài khoản nhân viên thành công',
 				type: 'success',
 				position: 'top-right'
 			})
@@ -331,6 +391,26 @@ export default {
 				this.isLoading = false
 			}
 		},
+		async getStaffsFull (params = {}) {
+			this.isLoading = true
+			const filter = {}
+
+			try {
+				const resp = await User.paginate({
+					query: {
+						page: 1,
+						limit: 2000000,
+						...params,
+						...filter
+					}
+				})
+
+				this.list_total1 = [...resp.data.data]
+				this.isLoading = false
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
 
 		async searchStaff () {
 			this.loading = true
@@ -358,6 +438,7 @@ export default {
 	beforeMount () {
 		this.filter['staff_id'] = 45
 		this.getStaffs()
+		this.getStaffsFull()
 	},
 	async handleDelete () {
 		try {

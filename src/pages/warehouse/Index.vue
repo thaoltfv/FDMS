@@ -167,6 +167,9 @@
         <template slot="public_date" slot-scope="public_date">
           <p class="public_date mb-0">{{ formatDate(public_date) }}</p>
         </template>
+		<template slot="updated_at" slot-scope="updated_at">
+          <p class="updated_at mb-0">{{ formatDate(updated_at) }}</p>
+        </template>
         <template slot="created_at" slot-scope="created_at">
           <p class="public_date mb-0">{{ formatDate(created_at) }}</p>
         </template>
@@ -395,6 +398,14 @@ export default {
 					align: 'center',
 					dataIndex: 'public_date',
 					scopedSlots: {customRender: 'public_date'},
+					sorter: true,
+					sortDirections: ['descend', 'ascend']
+				},
+				{
+					title: 'Ngày cập nhật',
+					align: 'center',
+					dataIndex: 'updated_at',
+					scopedSlots: {customRender: 'updated_at'},
 					sorter: true,
 					sortDirections: ['descend', 'ascend']
 				},
@@ -799,7 +810,7 @@ export default {
 	},
 	beforeRouteEnter: async (to, from, next) => {
 		// eslint-disable-next-line no-sequences,standard/computed-property-even-spacing
-		const category = await WareHouse.find(to.query['search', 'asset_type_id', 'created_at', 'created_by', 'coordinates', 'source_id', 'transaction_type_id', 'id', 'province_id', 'district_id', 'ward_id', 'street_id', 'land_no', 'doc_no', 'contact_person', 'contact_phone', 'contact_phone', 'public_date_from', 'public_date_to'])
+		const category = await WareHouse.find(to.query['search', 'asset_type_id', 'created_at', 'created_by', 'coordinates', 'source_id', 'transaction_type_id', 'id', 'province_id', 'district_id', 'ward_id', 'street_id', 'land_no', 'doc_no', 'contact_person', 'contact_phone', 'contact_phone', 'public_date_from', 'public_date_to', 'updated_at'])
 		to.meta['detail'] = category.data
 		return next()
 	},
