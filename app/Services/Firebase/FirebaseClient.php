@@ -145,6 +145,19 @@ class FirebaseClient
         }
     }
 
+    public function enableUser($email)
+    {
+        try {
+            $auth = $this->getFirebaseClient()->createAuth();
+            $user = $auth->getUserByEmail($email);
+            $uid = $user->uid;
+            $user = $auth->enableUser($uid);
+            return (array)$user;
+        } catch (AuthException | FirebaseException $exception) {
+            return $this->respondWithCustomData(['message' => $exception->getMessage()], 401);
+        }
+    }
+
     /**
      * @return JsonResponse
      * @throws AuthException

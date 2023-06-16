@@ -220,4 +220,29 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->where('token', '=',$token)
             ->first();
     }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function deactiveUser($id): int
+    {
+        // if(Appraiser::where('user_id',$id)->exists())
+        //     Appraiser::where('user_id',$id)->delete();
+        
+            return $this->model->query()
+            ->where('id', $id)
+            ->update(['status' => 'deactive']);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function activeUser($id): int
+    {
+        return $this->model->query()
+            ->where('id', $id)
+            ->update(['status' => 'active']);
+    }
 }

@@ -278,4 +278,48 @@ class UserController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+
+    /** 
+     * @param $id
+     * @return JsonResponse
+     */
+    public function deactiveUser($id): JsonResponse
+    {
+        try {
+            if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                $user = $this->userRepository->getUser($id);
+                $result = (new FirebaseClient())->disableUser($user->email);
+                return $this->respondWithCustomData($this->userRepository->deactiveUser($id));
+            } else {
+                $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                return $this->respondWithErrorData($data, 403);
+            }
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /** 
+     * @param $id
+     * @return JsonResponse
+     */
+    public function activeUser($id): JsonResponse
+    {
+        try {
+            if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                $user = $this->userRepository->getUser($id);
+                $result = (new FirebaseClient())->enableUser($user->email);
+                return $this->respondWithCustomData($this->userRepository->activeUser($id));
+            } else {
+                $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                return $this->respondWithErrorData($data, 403);
+            }
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }
