@@ -287,6 +287,8 @@ class UserController extends Controller
     {
         try {
             if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                $user = $this->userRepository->getUser($id);
+                $result = (new FirebaseClient())->disableUser($user->email);
                 return $this->respondWithCustomData($this->userRepository->deactiveUser($id));
             } else {
                 $data = ['message' => ErrorMessage::PERMISSION_ERROR];
@@ -307,6 +309,8 @@ class UserController extends Controller
     {
         try {
             if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                $user = $this->userRepository->getUser($id);
+                $result = (new FirebaseClient())->enableUser($user->email);
                 return $this->respondWithCustomData($this->userRepository->activeUser($id));
             } else {
                 $data = ['message' => ErrorMessage::PERMISSION_ERROR];
