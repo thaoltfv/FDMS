@@ -9,6 +9,14 @@ export default class User extends Model {
 	static async deleteUser (id) {
 		return (new this()).request({ method: 'DELETE', url: `user/${id}`, isStatic: true })
 	}
+	static async deActiveUser (id) {
+		const data = {id: id}
+		return (new this()).request({ method: 'POST', url: `users/deactive-user/${id}`, data, isStatic: true })
+	}
+	static async activeUser (id) {
+		const data = {id: id}
+		return (new this()).request({ method: 'POST', url: `users/active-user/${id}`, data, isStatic: true })
+	}
 	static async resetUser (email) {
 		const data = {email: email}
 		return (new this()).request({ method: 'POST', url: `users/reset-password`, data, isStatic: true })

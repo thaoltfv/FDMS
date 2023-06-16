@@ -41,12 +41,30 @@
                    alt="icon">
             </a>
           </a-tooltip>
-          <a-tooltip placement="bottom"
+          <!-- <a-tooltip placement="bottom"
                      :title="$t('tooltip_delete')" v-if="deleted" class="mr-2">
             <a href="#"
                @click.prevent="handleOpenModal(action.id)"
                class="text-decoration-none action">
               <img class="icon-action" src="../../assets/images/icon-delete.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip> -->
+		  <a-tooltip placement="bottom"
+                     :title="$t('tooltip_active')" v-if="active && action.status == 'deactive'" class="mr-2">
+            <a href="#"
+               @click.prevent="handleOpenModalActive(action)"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/images/lock-check-outline.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip>
+		  <a-tooltip placement="bottom"
+                     :title="$t('tooltip_deactive')" v-if="deactive && action.status == 'active'" class="mr-2">
+            <a href="#"
+               @click.prevent="handleOpenModalDeActive(action)"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/images/lock-alert-outline.svg"
                    alt="icon">
             </a>
           </a-tooltip>
@@ -65,6 +83,12 @@
     <ModalDelete v-if="openModal"
                  @cancel="openModal = false"
                  @action="handleDelete"/>
+	<ModalDeActive v-if="openModalDeActive" :name="choose_name"
+	@cancel="openModalDeActive = false"
+	@action="handleDeActive"/>
+	<ModalActive v-if="openModalActive" :name="choose_name"
+	@cancel="openModalActive = false"
+	@action="handleActive"/>
     <ModalReset v-if="openModalReset"
                 @cancel="openModalReset = false"
                 @action="handleReset"
@@ -78,6 +102,8 @@ import User from '@/models/User'
 import { convertPagination } from '@/utils/filters'
 import {replace} from 'lodash-es'
 import ModalDelete from '@/components/Modal/ModalDelete'
+import ModalDeActive from '@/components/Modal/ModalDeActive'
+import ModalActive from '@/components/Modal/ModalActive'
 import ModalReset from '@/components/Modal/ModalReset'
 import InputCategory from '@/components/Form/InputCategory'
 import File from '@/models/File'
@@ -85,12 +111,17 @@ export default {
 	name: 'index',
 	components: {
 		ModalDelete,
+		ModalDeActive,
+		ModalActive,
 		ModalReset,
 		InputCategory,
 		Search
 	},
 	data () {
 		return {
+			choose_name: '',
+			openModalActive: false,
+			openModalDeActive: false,
 			openModalReset: false,
 			isSubmit: false,
 			excel: '',
@@ -106,6 +137,8 @@ export default {
 			},
 			add: false,
 			deleted: false,
+			active: false,
+			deactive: false,
 			edit: false,
 			email: ''
 		}
@@ -123,6 +156,8 @@ export default {
 			}
 			if (value === 'DELETE_USER') {
 				this.deleted = true
+				this.active = true
+				this.deactive = true
 			}
 		})
 	},
@@ -155,6 +190,11 @@ export default {
 					title: 'Chi nhánh',
 					align: 'left',
 					dataIndex: 'branch.name'
+				},
+				{
+					title: 'Trạng thái',
+					align: 'left',
+					dataIndex: 'status'
 				},
 				{
 					title: 'Thao tác',
@@ -239,6 +279,24 @@ export default {
 				position: 'top-right'
 			})
 		},
+		async handleDeActive () {
+			await User.deActiveUser(this.id)
+			await this.getStaffs()
+			this.$toast.open({
+				message: 'Tạm ngưng tài khoản nhân viên thành công',
+				type: 'success',
+				position: 'top-right'
+			})
+		},
+		async handleActive () {
+			await User.activeUser(this.id)
+			await this.getStaffs()
+			this.$toast.open({
+				message: 'Kích hoạt lại tài khoản nhân viên thành công',
+				type: 'success',
+				position: 'top-right'
+			})
+		},
 		async handleReset () {
 			await User.resetUser(this.email)
 			await this.getStaffs()
@@ -281,6 +339,16 @@ export default {
 		handleOpenModal (id) {
 			this.openModal = true
 			this.id = id
+		},
+		handleOpenModalActive (action) {
+			this.openModalActive = true
+			this.id = action.id
+			this.choose_name = action.name
+		},
+		handleOpenModalDeActive (action) {
+			this.openModalDeActive = true
+			this.id = action.id
+			this.choose_name = action.name
 		},
 		handleOpenModalReset (email) {
 			this.openModalReset = true

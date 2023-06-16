@@ -188,6 +188,7 @@ export default {
 		}
 	},
 	created () {
+		console.log('dsadsađâs',this.$route.meta['detail'])
 		if ('id' in this.$route.query && this.$route.name === 'staff.edit') {
 			this.form = Object.assign(this.form, {
 				...this.$route.meta['detail']

@@ -253,5 +253,7 @@ export default {
 	winner_limitation: 'Winner Limitation',
 	winning_notice_message: 'Winning Notice Message',
 	winning_notice_sending: 'Winning Notice Sending',
-	yes: 'Yes'
+	yes: 'Yes',
+	tooltip_active: 'Kích hoạt',
+	tooltip_deactive: 'Tạm ngưng',
 }
