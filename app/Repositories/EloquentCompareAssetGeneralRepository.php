@@ -69,6 +69,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $coordinates = request()->get('coordinates');
             $createdBy = request()->get('created_by');
             $createdAt = request()->get('created_at');
+            $updatedAt = request()->get('updated_at');
             $assetTypeId = request()->get('asset_type_id');
             $assetTypeIds = request()->get('asset_type_ids');
             $inputSource = request()->get('input_source');
@@ -181,6 +182,13 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'match' => [
                         'created_at' => $createdAt
+                    ]
+                ];
+            }
+            if (!empty($updatedAt)) {
+                $array['bool']['must'][] = [
+                    'match' => [
+                        'updated_at' => $updatedAt
                     ]
                 ];
             }
@@ -432,6 +440,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $coordinates = request()->get('coordinates');
             $createdBy = request()->get('created_by');
             $createdAt = request()->get('created_at');
+            $updatedAt = request()->get('updated_at');
             $assetTypeId = request()->get('asset_type_id');
             $assetTypeIds = request()->get('asset_type_ids');
             $inputSource = request()->get('input_source');
@@ -541,6 +550,13 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'match' => [
                         'created_at' => $createdAt
+                    ]
+                ];
+            }
+            if (!empty($updatedAt)) {
+                $array['bool']['must'][] = [
+                    'match' => [
+                        'updated_at' => $updatedAt
                     ]
                 ];
             }
@@ -825,6 +841,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $coordinates = request()->get('coordinates');
             $createdBy = request()->get('created_by');
             $createdAt = request()->get('created_at');
+            $updatedAt = request()->get('updated_at');
             $assetTypeId = request()->get('asset_type_id');
             $assetTypeIds = request()->get('asset_type_ids');
             $inputSource = request()->get('input_source');
@@ -934,6 +951,13 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'match' => [
                         'created_at' => $createdAt
+                    ]
+                ];
+            }
+            if (!empty($updatedAt)) {
+                $array['bool']['must'][] = [
+                    'match' => [
+                        'updated_at' => $updatedAt
                     ]
                 ];
             }
@@ -1246,6 +1270,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $coordinates = request()->get('coordinates');
             $createdBy = request()->get('created_by');
             $createdAt = request()->get('created_at');
+            $updatedAt = request()->get('updated_at');
             $assetTypeId = request()->get('asset_type_id');
             $assetTypeIds = request()->get('asset_type_ids');
             $inputSource = request()->get('input_source');
@@ -1367,6 +1392,13 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'match' => [
                         'created_at' => $createdAt
+                    ]
+                ];
+            }
+            if (!empty($updateAt)) {
+                $array['bool']['must'][] = [
+                    'match' => [
+                        'updated_at' => $updateAt
                     ]
                 ];
             }
@@ -4223,6 +4255,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'total_raw_amount',
                 'topographic',
                 'created_at',
+                'updated_at',
                 'created_by',
                 'transaction_type.type',
                 'transaction_type.description',
@@ -4542,6 +4575,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             'status',
             'average_land_unit_price',
             'created_at',
+            'updated_at',
             'created_by',
             'asset_type_id',
             'transaction_type_id',
@@ -4693,6 +4727,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             'total_amount',
             'average_land_unit_price',
             'created_at',
+            'updated_at',
             'created_by',
             'asset_type_id',
             'transaction_type_id',
