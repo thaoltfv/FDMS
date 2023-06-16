@@ -220,4 +220,18 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->where('token', '=',$token)
             ->first();
     }
+
+    public function deactiveUser($id)
+    {
+        return $this->model->query()
+            ->where('id', $id)
+            ->update(['status' => 'deactive']);
+    }
+
+    public function activeUser($id)
+    {
+        return $this->model->query()
+            ->where('id', $id)
+            ->update(['status' => 'active']);
+    }
 }

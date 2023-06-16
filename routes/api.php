@@ -91,6 +91,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('users/change-password', [UserController::class, 'changeUserPassword']);
 
     Route::post('users/reset-password', [UserController::class, 'resetUserPassword']);
+    
+    // Route::post('users/deactive-user', [UserController::class, 'deactiveUser']);
+
+    // Route::post('users/active-user', [UserController::class, 'activeUser']);
 
     Route::apiResource('user', UserController::class);
 

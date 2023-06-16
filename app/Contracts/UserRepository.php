@@ -22,4 +22,8 @@ interface UserRepository extends BaseRepository
 
     public function deleteUser($id);
 
+    public function deactiveUser($id);
+
+    public function activeUser($id);
+
 }
