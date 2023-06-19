@@ -18,7 +18,7 @@ class ApartmentAssetComparisonFactor extends Model
     protected $casts =[
         'id' => 'integer',
         'position' => 'integer',
-        'adjust_percent' => 'integer',
+        // 'adjust_percent' => 'integer',
     ];
 
     protected $fillable = [
