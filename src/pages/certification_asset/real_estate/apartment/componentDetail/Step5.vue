@@ -547,15 +547,11 @@
 																			<td class="td_other_asset_title"></td>
 																			<td class="td_other_asset_title" v-for="(rate_asset, index) in data_appraise.other_factor_asset" :key="'yeutokhac4' +index">
 																				<div>
-																					<InputNumberNegative
+																					<InputPercentNegative
 																						:disabledInput="!isEditStatus"
-																						class="label-none input_number_center"
+																						class="label-none input_center"
 																						v-model="rate_asset.adjust_percent"
 																						vid="number_legal"
-																						label="Tỷ lệ"
-																						:min="-100"
-																						:sufix="true"
-																						:percent="true"
 																						:text_center="true"
 																						@change="changeOtherRate($event, rate_asset)"
 																					/>
