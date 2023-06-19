@@ -24,8 +24,8 @@ class ComparePropertyDoc extends Model
 
     protected $fillable = [
         'compare_property_id',
-        'doc_num',
-        'plot_num',
+        // 'doc_num',
+        // 'plot_num',
     ];
 
 }
