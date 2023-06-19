@@ -18,6 +18,8 @@ class ComparePropertyDoc extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'doc_num' => 'string',
+        'plot_num' => 'string',
     ];
 
     protected $fillable = [
