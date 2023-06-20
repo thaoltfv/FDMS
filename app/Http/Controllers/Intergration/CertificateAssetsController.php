@@ -366,7 +366,8 @@ class CertificateAssetsController extends Controller
                 $id = $req['id'];
                 $version =  isset($req['version']) ? $req['version'] : 1;
                 if(isset($id)){
-                    $result[$stt] = $this->compareAssetGeneralRepository->findVersionById_v2($id,$version);
+                    // $result[$stt] = $this->compareAssetGeneralRepository->findVersionById_v2($id,$version);
+                    $result[$stt] = $this->compareAssetGeneralRepository->findVersionById($id,$version);
                     if(isset($result[$stt]))
                         $result[$stt]['version'] =  $version;
                 }
