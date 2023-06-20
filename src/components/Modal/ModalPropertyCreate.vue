@@ -19,7 +19,7 @@
           <div class="property-detail position-relative">
             <div class="row justify-content-between align-items-end" v-for="(num,index) in this.form.compare_property_doc" :key="num.id">
               <div class="col-12 col-lg-6 input-contain">
-                <InputText
+                <!-- <InputText
                   v-model="num.doc_num"
                   vid="doc_num"
                   label="Số tờ"
@@ -28,16 +28,30 @@
                   :min="0"
                   class=""
                   @change="handleDocNum(index)"
+                /> -->
+				<InputText
+                  v-model="num.doc_num"
+                  vid="doc_num"
+                  label="Số tờ"
+                  class=""
+                  @change="handleDocNum(index)"
                 />
               </div>
               <div class="col-12 col-lg-6 input-contain position-relative">
-                <InputText
+                <!-- <InputText
                   v-model="num.plot_num"
                   vid="plot_num"
                   type="number"
                   label="Số thửa"
                   :max-length="8"
                   :min="0"
+                  class=""
+                  @change="handlePlotNum(index)"
+                /> -->
+				<InputText
+                  v-model="num.plot_num"
+                  vid="plot_num"
+                  label="Số thửa"
                   class=""
                   @change="handlePlotNum(index)"
                 />
