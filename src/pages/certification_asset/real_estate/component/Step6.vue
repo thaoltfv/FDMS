@@ -146,16 +146,28 @@
                                     {{ formatNumberArea(assetDetails.properties[0].front_side === 1 ? assetDetails.properties[0].front_side_width : assetDetails.properties[0].compare_property_turning_time[assetDetails.properties[0].compare_property_turning_time.length - 1].main_road_length) }} m
                                   </div>
                                 </div>
-                                <div class="d-flex justify-content-between w-100 mt-1">
+                                <div v-if="assetDetails.properties[0].compare_property_doc[0].doc_num" class="d-flex justify-content-between w-100 mt-1">
                                   <div class="name_title color_content">Số tờ:</div>
                                   <div class="content_detail color_content">
                                     {{ assetDetails.properties[0].compare_property_doc[0].doc_num ? assetDetails.properties[0].compare_property_doc[0].doc_num  : 'Không có' }}
                                   </div>
                                 </div>
-                                <div class="d-flex justify-content-between w-100 mt-1">
+                                <div v-else class="d-flex justify-content-between w-100 mt-1">
+                                  <div class="name_title color_content">Số tờ:</div>
+                                  <div class="content_detail color_content">
+                                    {{ assetDetails.doc_no ? assetDetails.doc_no : 'Không có' }}
+                                  </div>
+                                </div>
+                                <div v-if="assetDetails.properties[0].compare_property_doc[0].plot_num" class="d-flex justify-content-between w-100 mt-1">
                                   <div class="name_title color_content">Số thửa:</div>
                                   <div class="content_detail color_content">
                                     {{ assetDetails.properties[0].compare_property_doc[0].plot_num ? assetDetails.properties[0].compare_property_doc[0].plot_num : 'Không có' }}
+                                  </div>
+                                </div>
+                                <div v-else class="d-flex justify-content-between w-100 mt-1">
+                                  <div class="name_title color_content">Số thửa:</div>
+                                  <div class="content_detail color_content">
+                                    {{ assetDetails.land_no ? assetDetails.land_no : 'Không có' }}
                                   </div>
                                 </div>
                                 <div class="d-flex justify-content-between w-100 mt-1">
