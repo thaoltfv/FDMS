@@ -23,7 +23,7 @@
                 color: white;
                 padding: 5px;
                 border-radius: 5px;
-				background: green">Số lượng nhân viên: {{list_total.length}}</span>
+				background: green">Tổng cộng: {{list_total.length}}</span>
 		</div>
 		<div style="margin-right: 20px;">
 			<span style="font-size: 20px;
@@ -77,7 +77,7 @@
             </a>
           </a-tooltip> -->
 		  <a-tooltip placement="bottom"
-                     :title="$t('tooltip_active')" v-if="active && action.status == 'deactive'" class="mr-2">
+                     :title="$t('tooltip_active')" v-if="active && action.status_user == 'deactive'" class="mr-2">
             <a href="#"
                @click.prevent="handleOpenModalActive(action)"
                class="text-decoration-none action">
@@ -86,7 +86,7 @@
             </a>
           </a-tooltip>
 		  <a-tooltip placement="bottom"
-                     :title="$t('tooltip_deactive')" v-if="deactive && action.status == 'active'" class="mr-2">
+                     :title="$t('tooltip_deactive')" v-if="deactive && action.status_user == 'active'" class="mr-2">
             <a href="#"
                @click.prevent="handleOpenModalDeActive(action)"
                class="text-decoration-none action">
@@ -105,10 +105,10 @@
           </a-tooltip>
         </div>
       </template>
-	  <template slot="status"
-                slot-scope="status">
+	  <template slot="status_user"
+                slot-scope="status_user">
         <div class="d-flex justify-content-center">
-			<span v-if="status == 'active'" style="font-size: 14px;
+			<span v-if="status_user == 'active'" style="font-size: 14px;
                 font-weight: bold;
                 color: white;
                 padding: 5px;
@@ -241,8 +241,8 @@ export default {
 				{
 					title: 'Trạng thái',
 					align: 'left',
-					dataIndex: 'status',
-					scopedSlots: {customRender: 'status'},
+					dataIndex: 'status_user',
+					scopedSlots: {customRender: 'status_user'},
 				},
 				{
 					title: 'Thao tác',
@@ -254,13 +254,13 @@ export default {
 		},
 		count_disable() {
 			let count = this.list_total1.filter(function (item) {
-				return item.status == 'deactive'
+				return item.status_user == 'deactive'
 			}).length
 			return count
 		},
 		count_enable() {
 			let count = this.list_total1.filter(function (item) {
-				return item.status == 'active'
+				return item.status_user == 'active'
 			}).length
 			return count
 		},
