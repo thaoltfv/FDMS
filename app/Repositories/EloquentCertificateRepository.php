@@ -2584,7 +2584,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
         $select = [
-            'certificates.id', 'certificates.status', 'certificates.created_by', 'petitioner_name',
+            'certificates.id', 'status', 'certificates.created_by', 'petitioner_name',
             'certificates.updated_at', 'status_updated_at',
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
