@@ -232,7 +232,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         
             return $this->model->query()
             ->where('id', $id)
-            ->update(['status' => 'deactive']);
+            ->update(['status_user' => 'deactive']);
     }
 
     /**
@@ -243,6 +243,6 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
     {
         return $this->model->query()
             ->where('id', $id)
-            ->update(['status' => 'active']);
+            ->update(['status_user' => 'active']);
     }
 }
