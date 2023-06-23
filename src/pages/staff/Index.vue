@@ -45,7 +45,7 @@
     </div>
     <a-table bordered
              :columns="columns"
-             :data-source="list_total"
+             :data-source="list"
              :loading="isLoading"
              :rowKey="record => record.id"
              :pagination="{
