@@ -50,7 +50,7 @@
 							:max-length="11"
 							class="col-12 col-lg-6 input-content"
 						/>
-						<InputText
+						<!-- <InputText
 							v-model="form.password"
 							placeholder="Nhập password"
 							:rules="this.$route.name === 'staff.edit'? '' : 'required|max:200'"
@@ -60,7 +60,7 @@
 							autocomplete="off"
 							class="col-12 col-lg-6 input-content"
 							:class="this.$route.name === 'staff.edit' ? 'd-none' : ''"
-						/>
+						/> -->
 						<InputCategory
 							v-model="form.role_id"
 							vid="role"

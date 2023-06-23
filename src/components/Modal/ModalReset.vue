@@ -16,7 +16,12 @@
 
       <div class="card-body">
         <p class="font-weight-bold" style="font-size: 18px">
-          Bạn có chắc muốn cài lại mật khẩu mặc định không ?
+          Bạn có chắc muốn gửi email đặt lại mật khẩu cho nhân viên <br/><span style="font-size: 16px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #0062AF">{{name}}</span> không ?
         </p>
 
         <div class="btn__group">
@@ -37,7 +42,12 @@
 <script>
 export default {
 	name: 'ModalReset',
-
+  props: {
+		name: {
+			type: String,
+			default: ''
+		},
+  },
 	methods: {
 		handleCancel (event) {
 			this.$emit('cancel', event)

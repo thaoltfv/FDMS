@@ -17,9 +17,9 @@ export default class User extends Model {
 		const data = {id: id}
 		return (new this()).request({ method: 'POST', url: `users/active-user/${id}`, data, isStatic: true })
 	}
-	static async resetUser (email) {
-		const data = {email: email}
-		return (new this()).request({ method: 'POST', url: `users/reset-password`, data, isStatic: true })
+	static async resetUser (id) {
+		const data = {id: id}
+		return (new this()).request({ method: 'POST', url: `users/reset-password/${id}`, data, isStatic: true })
 	}
 	static async changePassword (password) {
 		const data = {new_password: password.new_password, confirm_new_password: password.confirm_new_password}

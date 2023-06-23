@@ -97,7 +97,7 @@
           <a-tooltip placement="bottom"
                      :title="$t('tooltip_reset')" v-if="edit" >
             <a href="#"
-               @click.prevent="handleOpenModalReset(action.email)"
+               @click.prevent="handleOpenModalReset(action)"
                class="text-decoration-none action">
               <img class="icon-action" src="../../assets/icons/ic_reset.svg"
                    alt="icon">
@@ -132,7 +132,7 @@
 	<ModalActive v-if="openModalActive" :name="choose_name"
 	@cancel="openModalActive = false"
 	@action="handleActive"/>
-    <ModalReset v-if="openModalReset"
+    <ModalReset v-if="openModalReset" :name="choose_name"
                 @cancel="openModalReset = false"
                 @action="handleReset"
     />
@@ -358,10 +358,10 @@ export default {
 			})
 		},
 		async handleReset () {
-			await User.resetUser(this.email)
+			await User.resetUser(this.id)
 			await this.getStaffs()
 			this.$toast.open({
-				message: 'Cập nhật mật khẩu thành công',
+				message: 'Đã gửi email đặt lại mật khẩu thành công',
 				type: 'success',
 				position: 'top-right'
 			})
@@ -430,9 +430,10 @@ export default {
 			this.id = action.id
 			this.choose_name = action.name
 		},
-		handleOpenModalReset (email) {
+		handleOpenModalReset (action) {
 			this.openModalReset = true
-			this.email = email
+			this.choose_name = action.name
+			this.id = action.id
 		}
 	},
 	beforeMount () {
