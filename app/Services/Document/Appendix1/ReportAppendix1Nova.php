@@ -84,9 +84,40 @@ class ReportAppendix1Nova extends ReportAppendix1
         return $data;
     }
 
-    protected function mapImage(Section $section, $pic)
+    protected function printContent1(Section $section, $datas)
     {
-        
+        foreach ($datas as $index => $asset) {
+
+            $this->processAssetData($asset);
+
+            if (($index + 1) > 1) {
+                $section->addPageBreak();
+            }
+            if ($this->isOnlyAsset) {
+                $textRun = $section->addTextRun();
+                $textRun->addText('     ' . ($index + 1) . '. Tài sản thẩm định: ', ['bold' => true, 'size' => 14]);
+            } else {
+                $textRun = $section->addTextRun('Heading2');
+                $textRun->addText('Tài sản thẩm định ' . ($index + 1) . ': ', ['bold' => true, 'size' => 14]);
+            }
+            // $textRun->addText($asset->appraise_asset ?? '', ['size' => 13, 'bold' => false]);
+            $assetName = $asset->appraise_asset;
+            $address = $asset->full_address;
+            $this->printAssetInfo($section, $assetName, $address);
+
+            $this->surveyDescription($section, $asset);
+            // $this->mapImage($section, $asset->pic);
+            $this->collectInfomation($section, $asset);
+            $this->collectDescription($section, $asset);
+            // // // phân tích, so sánh, điều chỉnh mức giá
+            $this->comparisonDescription($section, $asset);
+            // // //yếu tố khác biệt
+            $this->getDifferenceAsset($section, $asset);
+            // // //so sánh các yếu tố
+            $this->getAdjustComparisonFactor($section, $asset);
+            // //kết luận
+            $this->conclusion($section, $asset);
+        }
     }
 
 }
