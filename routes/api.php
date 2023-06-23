@@ -90,7 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('users/change-password', [UserController::class, 'changeUserPassword']);
 
-    Route::post('users/reset-password', [UserController::class, 'resetUserPasswordNew']);
+    Route::post('users/reset-password/{id}', [UserController::class, 'resetUserPasswordNew']);
     
     Route::post('users/deactive-user/{id}', [UserController::class, 'deactiveUser']);
 
