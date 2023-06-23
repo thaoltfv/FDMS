@@ -84,4 +84,9 @@ class ReportAppendix1Nova extends ReportAppendix1
         return $data;
     }
 
+    protected function mapImage(Section $section, $pic)
+    {
+        
+    }
+
 }
