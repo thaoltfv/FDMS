@@ -12,6 +12,15 @@
         vid="description"
         label="Tên chi tiết"
       />
+      <InputText v-if="form.type == 'LOAI_DAT_CHI_TIET'"
+        v-model="form.acronym"
+        placeholder="Nhập tên viết tắt"
+        rules="required|max:200"
+        :max-length="200"
+        class="mb-3"
+        vid="description"
+        label="Tên viết tắt"
+      />
       <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
         <div class="d-md-flex d-block button-contain ">
           <button class="btn btn-white" @click="onCancel" type="button">
