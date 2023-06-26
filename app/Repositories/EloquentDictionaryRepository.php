@@ -29,9 +29,9 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         if (empty($search)) {
             $search = '';
         }
-        if (!empty($status)) {
-            $searchStatus = [0, 1];
-        }
+        // if (!empty($status)) {
+        //     $searchStatus = [0, 1];
+        // }
         return QueryBuilder::for($this->model)
             ->where('type', $search)
             ->whereIn('status', $searchStatus)

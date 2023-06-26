@@ -245,4 +245,16 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->where('id', $id)
             ->update(['status_user' => 'active']);
     }
+
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function resetUserPasswordNew($id): int
+    {
+        return $this->model->query()
+            ->where('id', $id)
+            ->update(['is_reset_password' => 1]);
+    }
 }
