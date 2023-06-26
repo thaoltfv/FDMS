@@ -540,12 +540,12 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             'block.rank:id,description,acronym',
             'block.floor',
         ];
-        // return \Cache::remember('project_'.$districtId, 0, function() use($districtId, $with, $select) {
+        return \Cache::remember('project_'.$districtId, 3600, function() use($districtId, $with, $select) {
             return $this->model->query()
             ->with($with)
             ->where('status', true)
             ->where('district_id', $districtId)
             ->get($select);
-        // });
+        });
     }
 }

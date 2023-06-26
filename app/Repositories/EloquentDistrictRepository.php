@@ -131,7 +131,7 @@ class EloquentDistrictRepository extends EloquentRepository implements DistrictR
                 'wards:id,district_id,name',
                 'streets.distances:id,district_id,name,street_id'
         ];
-        return \Cache::remember('District'.$provinceId, 0, function() use($provinceId,$with,$select) {
+        return \Cache::remember('District'.$provinceId, 3600, function() use($provinceId,$with,$select) {
             return $this->model->query()
             ->with($with)
             ->where('province_id',$provinceId)
