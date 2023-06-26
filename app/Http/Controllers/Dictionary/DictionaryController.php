@@ -60,9 +60,9 @@ class DictionaryController extends Controller
     public function findAll(): JsonResponse
     {
         try {
-            return Cache::remember('DICTIONARIES_ALL', 86000, function() {
+            // return Cache::remember('DICTIONARIES_ALL', 86000, function() {
                 return $this->respondWithCustomData($this->dictionaryRepository->findAll());
-            });
+            // });
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
@@ -93,9 +93,9 @@ class DictionaryController extends Controller
     public function findAllByType($type): JsonResponse
     {
         try {
-            return Cache::remember('DICTIONARY_' . $type, 86000, function() use ($type) {
+            // return Cache::remember('DICTIONARY_' . $type, 86000, function() use ($type) {
                 return $this->respondWithCustomData($this->dictionaryRepository->findAllByType($type));
-            });
+            // });
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];

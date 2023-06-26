@@ -4672,9 +4672,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $result->where('land_no', $landNo);
         }
         $role = $user->roles->last();
-        if ($role->name === 'USER') {
-            $result = $result->where('created_by', $user->id);
-        }
+        // if ($role->name === 'USER') {
+        //     $result = $result->where('created_by', $user->id);
+        // }
         $result = $result->orderBy('updated_at', 'desc');
         $result = $result->orderBy('transaction_type_id', 'desc');
         $result = $result->forPage($page, $perPage)
