@@ -5427,6 +5427,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             if (!$result) {
                 $result = $this->model->query()
                     ->where('id', '=', $appraiseId)
+                    ->with('filter_year')
                     ->with('province')
                     ->with('district')
                     ->with('ward')
