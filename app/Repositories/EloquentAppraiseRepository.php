@@ -5427,7 +5427,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             if (!$result) {
                 $result = $this->model->query()
                     ->where('id', '=', $appraiseId)
-                    ->with('filter_year')
+                    // ->with('filter_year')
                     ->with('province')
                     ->with('district')
                     ->with('ward')
@@ -5511,6 +5511,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $result->append('price_other_asset');
             $result->append('price_total_asset');
             $result->append('total_desicion_average');
+            $result->append('filter_year');
 
             // if(isset($result->comparisonFactor) && count($result->comparisonFactor) > 0){
             //     foreach($result->comparisonFactor as $comparison){
