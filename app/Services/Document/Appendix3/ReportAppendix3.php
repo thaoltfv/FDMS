@@ -126,7 +126,7 @@ class ReportAppendix3 extends Report
             $section->addPageBreak();
         }
         $result = null;
-        if ($pic){
+        if ($pics){
             foreach ($pics as $value) {
                 if (isset($value->picType)) {
                     $result[$value->picType->description][] = $value;
