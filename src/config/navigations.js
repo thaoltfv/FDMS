@@ -43,7 +43,7 @@ export const navigations = [
 			{ id: 'ward', title: 'Quản lý Phường/Xã', routeName: 'ward.index', exact: true },
 			{ id: 'street', title: 'Quản lý Đường phố', routeName: 'street.index', exact: true },
 			{ id: 'apartment', title: 'Quản lý Chung cư', routeName: 'apartment.index', exact: true },
-			{ id: 'unit', title: 'Quản lý đơn giá UBND', routeName: 'unit_price.index', exact: true },
+			// { id: 'unit', title: 'Quản lý đơn giá UBND', routeName: 'unit_price.index', exact: true },
 			{ id: 'dictionary', title: 'Quản lý Chung', routeName: 'dictionary.index', exact: true }
 		],
 		customImage: true

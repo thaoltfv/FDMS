@@ -238,7 +238,9 @@
           :coordinates="form.step_1.general_infomation.coordinates"
 					:asset_type_id="form.step_1.general_infomation.asset_type_id"
           :distance_max="distance_max"
+		  :filter_year="filter_year"
           @choosingAsset="choosingAsset"
+		  @filter_change="filter_change"
           @saveImageMap="saveImageMap"
         />
         <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
@@ -379,6 +381,7 @@ export default {
 			isHaveContruction: false,
 			step_active: null,
 			distance_max: null,
+			filter_year: 1,
 			form: {
 				step_1: {
 					economic_infomation: {
@@ -496,7 +499,8 @@ export default {
 				step_6: {
 					comparison_factor: ['phap_ly'],
 					assets_general: [],
-					map_img: ''
+					map_img: '',
+					filter_year: 1
 				},
 				// step_7: {
 				// 	appraise_adapter: [],
@@ -667,6 +671,8 @@ export default {
 				if (bindDataStep.assets_general && bindDataStep.assets_general.length > 0) { this.form.step_6.assets_general = bindDataStep.assets_general }
 				if (bindDataStep.map_img) { this.form.step_6.map_img = bindDataStep.map_img }
 				if (bindDataStep.distance_max) { this.distance_max = bindDataStep.distance_max }
+				if (bindDataStep.filter_year) { this.filter_year = bindDataStep.filter_year }
+				// console.log('dấdasđá', this.form)
 				this.status_text = bindDataStep.status_text
 				this.form.status = bindDataStep.status
 				this.idData = await this.form.step_1.general_infomation.id
@@ -764,6 +770,8 @@ export default {
 					this.form.step_6.comparison_factor = await response.data.comparison_factor
 					this.form.step_6.map_img = ''
 					this.distance_max = response.data.distance_max
+					this.filter_year = response.data.filter_year
+					// console.log('đsdấdasđâsd', response.data)
 					if (response.data.assets.length === 0) {
 						this.$toast.open({
 							message: `${response.data.message}`,
@@ -1510,6 +1518,9 @@ export default {
 			this.form.step_6.assets_general = assets
 			this.form.step_6.map_img = ''
 		},
+		filter_change (payload){
+			this.form.step_6.filter_year = payload
+		},
 		saveImageMap (link) {
 			this.form.step_6.map_img = 'https://apod.nasa.gov/apod/image/1505/AuroraNorway_Richardsen_2330.jpg'
 		},
@@ -1578,6 +1589,7 @@ export default {
 					duration: 3000
 				})
 				this.distance_max = res.data.distance_max
+				this.filter_year = res.data.filter_year
 				this.$router.push({
 					name: 'certification_asset.detail',
 					query: { id: this.idData },

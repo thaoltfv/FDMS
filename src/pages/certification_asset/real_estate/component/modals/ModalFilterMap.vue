@@ -20,6 +20,7 @@
 							:options="optionsYears"
 							placeholder="Năm"
 							class="form-group-container col-12 col-lg-6"
+              @change="changeFilterYear($event)"
 						/>
 					</div>
 
@@ -138,6 +139,15 @@ export default {
 		changeRadius (event) {
 			this.filter_map.radius = parseFloat(event).toFixed(2)
 		},
+    changeFilterYear(event) {
+      if (event){
+        var now = moment(new Date()); //todays date
+        var end = moment(event); // another date
+        var duration = moment.duration(now.diff(end));
+        var year_change = parseInt(duration.asYears());
+        this.$emit('filter_year', year_change)
+      }   
+    },
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},

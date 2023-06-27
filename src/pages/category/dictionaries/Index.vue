@@ -21,7 +21,7 @@
              }"
               @change="onPageChange">
        <!--Custom type table-->
-       <template slot="action"
+       <!-- <template slot="action"
                  slot-scope="action_edit , action_delete">
          <div class="d-flex justify-content-end">
           <a-tooltip placement="bottom"
@@ -34,7 +34,7 @@
             </a>
           </a-tooltip>
          </div>
-       </template>
+       </template> -->
         <template slot="status" slot-scope="status">
           <p class="status" :class="status === 'inactive'? 'orange' : ''">
             {{ status === 0 ? 'Đang vô hiệu hóa' : status === 1 ? 'Đang hoạt động' : ''}}</p>

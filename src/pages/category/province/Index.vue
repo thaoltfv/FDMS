@@ -32,7 +32,7 @@
                   alt="icon">
            </a>
          </a-tooltip>
-         <a-tooltip placement="bottom"
+         <!-- <a-tooltip placement="bottom"
                     :title="$t('tooltip_delete')" v-if="deleted">
            <a href="#"
               @click.prevent="handleOpenModal(action_delete.id)"
@@ -40,7 +40,7 @@
              <img class="icon-action" src="../../../assets/images/icon-delete.svg"
                   alt="icon">
            </a>
-         </a-tooltip>
+         </a-tooltip> -->
        </div>
      </template>
      <template slot="created_at" slot-scope="created_at">

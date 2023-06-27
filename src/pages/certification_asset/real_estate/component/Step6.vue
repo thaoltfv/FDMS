@@ -186,6 +186,12 @@
                                     {{ assetDetails.properties[0].land_type.description }}
                                   </div>
                                 </div>
+                                <div class="d-flex justify-content-between w-100 mt-2">
+                                  <div class="name_title color_content">Mã MĐSD đất:</div>
+                                  <div class="content_detail color_content">
+                                    <span v-for="item in assetDetails.properties[0].property_detail" :key="item">[ {{ item.land_type_purpose_data.acronym }} ]</span>
+                                  </div>
+                                </div>
                                 <div class="d-flex justify-content-between w-100 mt-1">
                                   <div class="name_title color_content">Tổng diện tích:</div>
                                   <div class="content_detail color_content">
@@ -369,6 +375,7 @@
 			:year="yearRange"
       @cancel="isFilterMap = false"
       @action="handleActionFilterMap"
+      @filter_year="changeFilterYear"
     />
     <ModalSelectTypeAsset
       v-if="open_select_type"
@@ -398,7 +405,7 @@ import ModalSelectTypeAsset from './modals/ModalSelectTypeAsset.vue'
 Vue.use(Icon)
 export default {
 	name: 'Step6',
-	props: ['data', 'comparison', 'frontSide', 'coordinates', 'propertyTypes', 'type_purposes', 'step_active', 'distance_max', 'asset_type_id'],
+	props: ['data', 'comparison', 'frontSide', 'coordinates', 'propertyTypes', 'type_purposes', 'step_active', 'distance_max', 'asset_type_id', 'filter_year'],
 	components: {
 		LMap,
 		LControlZoom,
@@ -456,7 +463,7 @@ export default {
 			listAssetGeneral: [],
 			assetHasChoose: [],
 			bothSide: false,
-			yearRange: moment().subtract(1, 'year').format('YYYY-MM-DD'),
+			yearRange: moment().subtract(this.filter_year, 'year').format('YYYY-MM-DD'),
 			assetType: [38, 37],
 			assetDetails: '',
 			transaction: [51, 52],
@@ -496,6 +503,10 @@ export default {
 	beforeUpdate () {
 	},
 	methods: {
+    changeFilterYear(payload) {
+        console.log('year change', payload)
+        this.$emit('filter_year', payload)
+    },
 		openSelectType () {
 			this.open_select_type = true
 		},

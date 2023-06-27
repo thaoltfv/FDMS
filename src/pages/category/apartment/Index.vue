@@ -28,11 +28,11 @@
 								<img class="icon-action" src="@/assets/images/icon-edit.svg" alt="icon">
 							</a>
 					</a-tooltip>
-					<a-tooltip placement="bottom" :title="$t('tooltip_delete')" v-if="deleted">
+					<!-- <a-tooltip placement="bottom" :title="$t('tooltip_delete')" v-if="deleted">
 							<a href="#" @click.prevent="handleOpenModal(action_delete.id)" class="text-decoration-none action">
 								<img class="icon-action" src="@/assets/images/icon-delete.svg" alt="icon">
 							</a>
-					</a-tooltip>
+					</a-tooltip> -->
 					</div>
 			</template>
 			<template slot="name" slot-scope="name">
