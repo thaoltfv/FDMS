@@ -122,17 +122,17 @@ class ReportAppendix3 extends Report
     }
     protected function printData($section, $assetName, $address, $pics, $key)
     {
-        if (($key + 1) > 1) {
-            $section->addPageBreak();
-        }
-        $result = null;
-        if ($pics){
-            foreach ($pics as $value) {
-                if (isset($value->picType)) {
-                    $result[$value->picType->description][] = $value;
-                }
-            }
-        }
+        // if (($key + 1) > 1) {
+        //     $section->addPageBreak();
+        // }
+        // $result = null;
+        // if ($pics){
+        //     foreach ($pics as $value) {
+        //         if (isset($value->picType)) {
+        //             $result[$value->picType->description][] = $value;
+        //         }
+        //     }
+        // }
         
         // if ($this->isOnlyAsset) {
         //     $section->addTitle('Tài sản thẩm định:', 2);
