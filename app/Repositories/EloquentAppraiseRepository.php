@@ -4326,6 +4326,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $this->updateAppraiseStep($appraiseId, 6);
             $this->processAfterSave($appraiseId);
             DB::commit();
+            Appraise::where('id', $appraiseId)->update([
+                'filter_year' => $objects['filter_year'],
+            ]);
             $result = Appraise::where('id',$appraiseId)->get(['id','step','coordinates'])->first();
             $result->append('distance_max');
             return $result;
