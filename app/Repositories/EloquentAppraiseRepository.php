@@ -5511,7 +5511,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $result->append('price_other_asset');
             $result->append('price_total_asset');
             $result->append('total_desicion_average');
-            $result->append('filter_year');
+            // $result->append('filter_year');
 
             // if(isset($result->comparisonFactor) && count($result->comparisonFactor) > 0){
             //     foreach($result->comparisonFactor as $comparison){
