@@ -5640,7 +5640,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $check = $this->checkAuthorization($appraiseId);
         if (!empty($check))
             return $check;
-        $select = ['id','step','status','coordinates','created_by', 'sub_status', 'certificate_id', 'real_estate_id'];
+        $select = ['id','step','status','coordinates','created_by', 'sub_status', 'certificate_id', 'real_estate_id', 'filter_year'];
         $with = [
             'pic:id,appraise_id,link,type_id',
             'pic.picType:id,description',
