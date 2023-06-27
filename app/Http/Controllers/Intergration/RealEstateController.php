@@ -121,7 +121,6 @@ class RealEstateController extends Controller
             $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
             $report = new $service;
             $documentConfig = DocumentDictionary::query()->get();
-            // $result = 'test';
             $result = $report->generateDocx($company, $realEstates, $format, $documentConfig);
             $data = null;
             if (!empty($realEstates->realEstate->appraises))

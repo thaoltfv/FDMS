@@ -122,35 +122,32 @@ class ReportAppendix3 extends Report
     }
     protected function printData($section, $assetName, $address, $pics, $key)
     {
-        // if (($key + 1) > 1) {
-        //     $section->addPageBreak();
-        // }
-        // $result = null;
-        // if ($pics){
-        //     foreach ($pics as $value) {
-        //         if (isset($value->picType)) {
-        //             $result[$value->picType->description][] = $value;
-        //         }
-        //     }
-        // }
-        
-        // if ($this->isOnlyAsset) {
-        //     $section->addTitle('Tài sản thẩm định:', 2);
-        // } else {
-        //     $section->addTitle('Tài sản thẩm định ' . ($key + 1) . ':', 2);
-        // }
-        // $this->printAssetInfo($section, $assetName, $address);
+        if (($key + 1) > 1) {
+            $section->addPageBreak();
+        }
+        $result = null;
+        foreach ($pics as $value) {
+            if (isset($value->picType)) {
+                $result[$value->picType->description][] = $value;
+            }
+        }
+        if ($this->isOnlyAsset) {
+            $section->addTitle('Tài sản thẩm định:', 2);
+        } else {
+            $section->addTitle('Tài sản thẩm định ' . ($key + 1) . ':', 2);
+        }
+        $this->printAssetInfo($section, $assetName, $address);
 
-        // $picMap = $result['HÌNH BẢN ĐỒ'][0] ?? null;
+        $picMap = $result['HÌNH BẢN ĐỒ'][0] ?? null;
 
-        // $this->printMapImage($section, $picMap);
+        $this->printMapImage($section, $picMap);
 
-        // $picRoad = $result['ĐƯỜNG TIẾP GIÁP TÀI SẢN THẨM ĐỊNH GIÁ'] ?? null;
-        // $this->printRoadImage($section, $picRoad);
-        // $picOverall = $result['TỔNG THỂ TÀI SẢN THẨM ĐỊNH GIÁ'] ?? null;
-        // $this->printOverallImage($section, $picOverall);
-        // $picOverall = $result['HIỆN TRẠNG TÀI SẢN THẨM ĐỊNH GIÁ'] ?? null;
-        // $this->printCurrentStatusImage($section, $picOverall);
+        $picRoad = $result['ĐƯỜNG TIẾP GIÁP TÀI SẢN THẨM ĐỊNH GIÁ'] ?? null;
+        $this->printRoadImage($section, $picRoad);
+        $picOverall = $result['TỔNG THỂ TÀI SẢN THẨM ĐỊNH GIÁ'] ?? null;
+        $this->printOverallImage($section, $picOverall);
+        $picOverall = $result['HIỆN TRẠNG TÀI SẢN THẨM ĐỊNH GIÁ'] ?? null;
+        $this->printCurrentStatusImage($section, $picOverall);
     }
 
     protected function printAssetInfo($section, $name, $address)
