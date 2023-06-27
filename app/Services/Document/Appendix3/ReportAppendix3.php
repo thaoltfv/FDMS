@@ -126,11 +126,14 @@ class ReportAppendix3 extends Report
             $section->addPageBreak();
         }
         $result = null;
-        foreach ($pics as $value) {
-            if (isset($value->picType)) {
-                $result[$value->picType->description][] = $value;
+        if ($pic){
+            foreach ($pics as $value) {
+                if (isset($value->picType)) {
+                    $result[$value->picType->description][] = $value;
+                }
             }
         }
+        
         if ($this->isOnlyAsset) {
             $section->addTitle('Tài sản thẩm định:', 2);
         } else {
