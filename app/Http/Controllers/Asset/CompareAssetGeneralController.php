@@ -282,9 +282,9 @@ class CompareAssetGeneralController extends Controller
                     $note = "Các trường đã được thay đổi là: ";
                     for ($i=0; $i < count($log_note); $i++) { 
                         $e = $log_note[$i];
-                        $note+=$e;
+                        $note= $note.','.$e;
                     }
-                    $this->CreateActivityLog($edited, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh', $log_note);
+                    $this->CreateActivityLog($edited, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh', $note);
                     if(isset($result['message']) && isset($result['exception']))
                         return $this->respondWithErrorData( $result);
                     return $this->respondWithCustomData($result);
