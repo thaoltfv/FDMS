@@ -278,7 +278,13 @@ class CompareAssetGeneralController extends Controller
                     $data_log['updated_by'] = $user->name;
                     $data_log['updated_at'] = now();
                     $edited = CompareAssetGeneral::query()->where('id', $id)->first();
-                    $this->CreateActivityLog($edited, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
+                    $log_note = $objects['data_change'];
+                    $note = "Các trường đã được thay đổi là: ";
+                    for ($i=0; $i < count($log_note); $i++) { 
+                        $e = $log_note[$i];
+                        $note+=$e;
+                    }
+                    $this->CreateActivityLog($edited, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh',$note);
                     if(isset($result['message']) && isset($result['exception']))
                         return $this->respondWithErrorData( $result);
                     return $this->respondWithCustomData($result);
