@@ -4322,7 +4322,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $data = Appraise::where('id', $appraiseId)->first();
             # CẬP NHẬT THÔNG TIN VỀ TÀI SẢN SO SÁNH
             # activity-log
-            $this->CreateActivityLog($data, $data, 'updata_data', 'cập nhật dữ liệu tài sản so sánh');
+            $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật dữ liệu tài sản so sánh');
             $this->updateAppraiseStep($appraiseId, 6);
             $this->processAfterSave($appraiseId);
             DB::commit();

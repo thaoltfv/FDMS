@@ -273,6 +273,10 @@ class CompareAssetGeneralController extends Controller
                 if ($this->getUserPermission(PermissionsDefault::EDIT_PERMISSION . '_' . ScreensDefault::PRICE_SCREEN)) {
                     // return $this->respondWithCustomData($this->compareAssetGeneralRepository->updateCompareAssetGeneral($id, $request->toArray()));
                     $result = $this->compareAssetGeneralRepository->updateCompareAssetGeneral($id, $request->toArray());
+                    $user = CommonService::getUser();
+                    $data_log['updated_by'] = $user->name;
+                    $data_log['updated_at'] = now()->format('dd-mm-YYYY');
+                    $this->CreateActivityLog($data_log, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
                     if(isset($result['message']) && isset($result['exception']))
                         return $this->respondWithErrorData( $result);
                     return $this->respondWithCustomData($result);
