@@ -279,7 +279,7 @@ class CompareAssetGeneralController extends Controller
                     $data_log['updated_at'] = now();
                     $edited = CompareAssetGeneral::query()->where('id', $id)->first();
                     $log_note = $objects['data_change'];
-                    $note = "Các trường đã được thay đổi là: ";
+                    $note = "";
                     for ($i=0; $i < count($log_note); $i++) { 
                         $e = $log_note[$i];
                         $note= $note.$e.', ';

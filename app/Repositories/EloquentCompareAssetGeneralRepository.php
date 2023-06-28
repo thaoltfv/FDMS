@@ -2089,6 +2089,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 }
                 $rows = $this->findById($generalId);
                 $this->indexData($rows);
+                $user = CommonService::getUser();
+                $data_log['updated_by'] = $user->name;
+                $data_log['updated_at'] = now();
+                $edited = CompareAssetGeneral::query()->where('id', $generalId)->first();
+                $this->CreateActivityLog($edited, $data_log, 'taomoi_TSSS', 'Tạo mới tài sản so sánh');
                 return $generalId;
             } catch (Exception $exception) {
                 Log::error($exception);
