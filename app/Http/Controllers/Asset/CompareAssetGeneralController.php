@@ -276,7 +276,8 @@ class CompareAssetGeneralController extends Controller
                     $user = CommonService::getUser();
                     $data_log['updated_by'] = $user->name;
                     $data_log['updated_at'] = now()->format('dd-mm-YYYY');
-                    $this->CreateActivityLog($data_log, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
+                    $data = $this->compareAssetGeneralRepository->findById($id);
+                    $this->CreateActivityLog('App\Models\Appraise', $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
                     if(isset($result['message']) && isset($result['exception']))
                         return $this->respondWithErrorData( $result);
                     return $this->respondWithCustomData($result);

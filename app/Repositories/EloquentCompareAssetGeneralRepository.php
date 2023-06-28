@@ -2271,10 +2271,10 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 }
                 $rows = $this->findById($id);
                 $this->indexData($rows);
-                $user = CommonService::getUser();
-                $data_log['updated_by'] = $user->name;
-                $data_log['updated_at'] = now()->format('dd-mm-YYYY');
-                $this->CreateActivityLog($data_log, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
+                // $user = CommonService::getUser();
+                // $data_log['updated_by'] = $user->name;
+                // $data_log['updated_at'] = now()->format('dd-mm-YYYY');
+                // $this->CreateActivityLog($data_log, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
                 return $id;
             } catch (Exception $exception) {
                 throw $exception;
