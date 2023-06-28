@@ -568,7 +568,7 @@
 							<p><strong >{{ item.causer && item.causer.name ? item.causer.name : 'Không xác	định' }}</strong></p>
 							<p> {{ item.description }} </p>
 							<p> {{formatDateTime(item.updated_at)}} </p>
-              <p> {{ item.properties.note}} </p>
+              <p v-if="item.log_name == 'capnhat_TSSS'"> Các dữ liệu đã được thay đổi: <strong>{{ item.properties.note}}</strong> </p>
 						</a-timeline-item>
 					</a-timeline>
 				</a-drawer>
