@@ -17,6 +17,7 @@ use App\Enum\ValueDefault;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Asset\CompareAssetGeneralRequest;
 use App\Models\Certificate;
+use App\Models\CompareAssetGeneral;
 use App\Notifications\ActivityLog;
 use App\Services\CommonService;
 use App\Services\Document\AssetReport;
@@ -276,8 +277,8 @@ class CompareAssetGeneralController extends Controller
                     $user = CommonService::getUser();
                     $data_log['updated_by'] = $user->name;
                     $data_log['updated_at'] = now()->format('dd-mm-YYYY');
-                    $data = $this->compareAssetGeneralRepository->findById($id);
-                    $this->CreateActivityLog('App\Models\Appraise', $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
+                    $edited = CompareAssetGeneral::query()->where('id', $id)->first();
+                    $this->CreateActivityLog($edited, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
                     if(isset($result['message']) && isset($result['exception']))
                         return $this->respondWithErrorData( $result);
                     return $this->respondWithCustomData($result);
