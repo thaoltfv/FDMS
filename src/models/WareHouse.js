@@ -14,6 +14,9 @@ export default class WareHouse extends Model {
 		} else resp = JSON.parse(resp)
 		return resp
 	}
+	static async getHistoryTimeline (id) {
+		return (new this()).request({ method: 'GET', url: `activity/get-compare/${id}`, isStatic: true })
+	}
 	static async getDictionariesLand () {
 		return (new this()).request({ method: 'GET', url: `dictionary/LOAI_DAT_CHI_TIET`, isStatic: true })
 	}

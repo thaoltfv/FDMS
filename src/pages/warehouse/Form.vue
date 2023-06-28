@@ -38,6 +38,7 @@
 									rules="required"
 									class="col-12 col-lg-4 form-group-container"
 									:options="optionsTransactionType"
+									@change="change_data_log('Loại giao dịch')"
 								/>
 								<InputDatePicker
 									v-model="form.public_date"
@@ -46,6 +47,7 @@
 									label="Thời điểm giao dịch"
 									type="date"
 									class="col-12 col-lg-4 form-group-container"
+									@change="change_data_log('Thời điểm giao dịch')"
 								/>
 								<InputCategory
 									v-model="form.source_id"
@@ -54,18 +56,21 @@
 									label="Nguồn thông tin"
 									class="col-12 col-lg-4 form-group-container"
 									:options="optionsInfo"
+									@change="change_data_log('Nguồn thông tin')"
 								/>
 								<InputText
 									v-model="form.contact_person"
 									vid="contact"
 									label="Người liên hệ"
 									class="col-12 col-lg-4 form-group-container"
+									@change="change_data_log('Người liên hệ')"
 								/>
 								<InputText
 									v-model="form.contact_phone"
 									label="Số điện thoại"
 									:max-length="11"
 									class="col-12 col-lg-4 form-group-container"
+									@change="change_data_log('Số điện thoại')"
 								/>
 
 								<div v-if="form.asset_type_id && form.asset_type_id === 39" style="padding:unset; margin:unset" class="w-100 row">
@@ -102,6 +107,7 @@
 										:rules="'required'"
 										label="Địa chỉ"
 										class="col-12 form-group-container"
+										@change="change_data_log('Địa chỉ')"
 									/>
 								</div>
 								<InputCurrency
@@ -120,6 +126,7 @@
 									label="Loại pháp lý"
 									class="col-12 col-lg-4 form-group-container"
 									:options="optionsLegal"
+									@change="change_data_log('Loại pháp lý')"
 								/>
 							</div>
 							<div v-if="form.asset_type_id && form.asset_type_id !== 39" class="card-info">
@@ -180,6 +187,7 @@
 											label="Tọa độ"
 											class="coordinates"
 											:disabled-input="true"
+											@change="change_data_log('Tọa độ')"
 										/>
 										<!-- <div v-if="$route.name === 'warehouse.create'" class="img-locate"> -->
 										<div class="img-locate">
@@ -220,6 +228,7 @@
 										:rules="this.form.asset_type_id !== 39 ? 'required' : ''"
 										label="Địa chỉ đầy đủ"
 										class="col form-group-container"
+										@change="change_data_log('Địa chỉ đầy đủ')"
 									/>
 									<InputCategory
 										v-model="form.topographic"
@@ -228,6 +237,7 @@
 										rules="required"
 										class="col-12 col-md-4 col-lg-4 form-group-container"
 										:options="optionsTopographic"
+										@change="change_data_log('Địa hình')"
 									/>
 								</div>
 							</div>
@@ -375,6 +385,7 @@
 											rules="required"
 											class="contain-input contain-input__info contain-input__property"
 											:options="optionsHousingType"
+											@change="change_data_log('Loại CTXD')"
 										/>
 									</td>
 									<td>
@@ -385,6 +396,7 @@
 											disabled
 											class="contain-input contain-input__info contain-input__property"
 											:options="optionsHousing"
+											@change="change_data_log('Cấp nhà')"
 										/>
 									</td>
 									<td>
@@ -392,6 +404,7 @@
 											v-model="tangible.remaining_quality"
 											disabled
 											class="contain-input contain-input__info contain-input__property"
+											@change="change_data_log('chất lượng còn lại')"
 										/>
 									</td>
 									<td>
@@ -470,6 +483,7 @@
 												class="contain-input contain-input__info contain-input__property contain-input__order"
 												:max-length="200"
 												rules="required"
+												@change="change_data_log('Loại tài sản khác')"
 											/>
 										</td>
 										<td>
@@ -661,6 +675,7 @@
 									vid="note"
 									:rows="10"
 									class="col-12 form-group-container label-none"
+									@change="change_data_log('Ghi chú')"
 								/>
 							</div>
 						</div>
@@ -974,7 +989,8 @@ export default {
 				other_assets: [],
 				unit_prices: [],
 				pic: []
-			}
+			},
+			data_change: []
 		}
 	},
 	created () {
@@ -1127,6 +1143,14 @@ export default {
 		}
 	},
 	methods: {
+		change_data_log(value){
+			if (this.$route.name === 'warehouse.edit'){
+				if (!this.data_change.includes(value)){
+					this.data_change.push(value)
+				}	
+				console.log('các trường bị thay đổi', this.data_change)
+			}
+		},
 		getCenter (center) {
 			this.center = center
 		},
@@ -1135,6 +1159,7 @@ export default {
 			this.image_detail = data
 		},
 		openModalTangible (data, index) {
+			this.change_data_log('Công trình xây dựng')
 			document.getElementsByTagName('BODY')[0].style.overflow = 'hidden'
 			this.openTangible = true
 			this.isEditTangible = true
@@ -1374,8 +1399,10 @@ export default {
 				this.form.apartment_specification = {}
 				this.form.room_details = []
 			}
+			this.change_data_log('Loại tài sản')
 		},
 		async handleProperty (data, index) {
+			this.change_data_log('Thông tin thửa đất')
 			document.getElementsByTagName('BODY')[0].style.overflow = 'hidden'
 			this.isEditProperty = true
 			this.property = data
@@ -1419,6 +1446,7 @@ export default {
 			this.openModal = true
 		},
 		async handleOpenModalMap () {
+			this.change_data_log('Tọa độ')
 			this.openModalMap = true
 		},
 		handleTangible () {
@@ -1608,6 +1636,7 @@ export default {
 			}
 		},
 		changeProvince (provinceId) {
+			this.change_data_log('Tỉnh/Thành')
 			this.districts = []
 			this.wards = []
 			this.streets = []
@@ -1627,6 +1656,7 @@ export default {
 			this.form.full_address = provinceName
 		},
 		changeDistrict (districtId) {
+			this.change_data_log('Quận/Huyện')
 			this.wards = []
 			this.streets = []
 			this.form.ward_id = ''
@@ -1649,6 +1679,7 @@ export default {
 			this.form.full_address = districtName + ',' + provinceName
 		},
 		changeStreetDistance () {
+			this.change_data_log('Đoạn')
 			const data = this.form
 			let provinceName = ''
 			let districtName = ''
@@ -1684,6 +1715,7 @@ export default {
 			}
 		},
 		changeWardStreet () {
+			this.change_data_log('Phường/Xã')
 			const data = this.form
 			let provinceName = ''
 			let districtName = ''
@@ -1719,6 +1751,7 @@ export default {
 			}
 		},
 		changeStreet (streetId) {
+			this.change_data_log('Đường')
 			const data = this.form
 			this.form.distance_id = ''
 			let provinceName = ''
@@ -1884,6 +1917,7 @@ export default {
 			return totalAmount
 		},
 		changeAmountOther (event, index) {
+			this.change_data_log('Giá trị tài sản khác')
 			const property = this.form.properties
 			const type_purposes = this.type_purposes
 			let total_area = 0
@@ -1992,8 +2026,12 @@ export default {
 			} else {
 				this.isSubmit = true
 			}
+			
 			let data = this.form
+			
 			if (this.$route.name === 'warehouse.edit') {
+				data['data_change'] = this.data_change
+				console.log('form update', data)
 				await this.updateDictionary(data)
 			} else {
 				await this.createDictionary(data)
@@ -2156,6 +2194,7 @@ export default {
 		// 	}
 		// },
 		handleChangeProject (projectId) {
+			this.change_data_log('Tên chung cư')
 			this.blocks = []
 			this.floors = []
 			this.apartments = []
@@ -2191,6 +2230,7 @@ export default {
 			}
 		},
 		handleChangeBlock (blockId) {
+			this.change_data_log('Block (khu)')
 			this.floors = []
 			this.apartments = []
 			this.form.floor_id = ''
@@ -2202,6 +2242,7 @@ export default {
 			}
 		},
 		handleChangeFloor (floorId) {
+			this.change_data_log('Tầng')
 			// if (floorId) {
 			// 	this.getApartments(floorId)
 			// }
@@ -2531,6 +2572,7 @@ export default {
 			this.form.tangible_assets[index].estimation_value = this.form.tangible_assets[index].total_construction_base * this.form.tangible_assets[index].unit_price_m2 * (this.form.tangible_assets[index].remaining_quality / 100)
 		},
 		changeTotalAmount (event) {
+			this.change_data_log('Giá (VND)')
 			this.form.total_amount = event
 			this.form.adjust_amount = parseFloat(this.form.total_amount * (this.form.adjust_percent / 100)).toFixed(0)
 			if (this.form.total_amount) {

@@ -545,6 +545,34 @@
       v-bind:print_detail="printDetail"
       @cancel="openPrint = false"
     />
+    <div>
+      <button class="btn btn-orange btn-history btn-extra" @click="showHistoryDrawer" style="position: fixed;
+    top: 235px;
+    right: 0px;
+    z-index: 9999;">
+				<img src="@/assets/icons/ic_log_history.svg" alt="history">
+			</button>
+      <a-drawer
+				width="400"
+				title="Lịch sử hoạt động"
+				placement="right"
+				:visible="visibleHistoryDrawer"
+				@close="onHistoryDrawerClose"
+        style="z-index: 99999;"
+				>
+					<a-timeline>
+						<a-timeline-item  v-for="(item, index) in historyList" :key="index"  color="green">
+							<template #dot>
+								<img class="dot-image" :src="item.causer && item.causer.image ? item.causer.image : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'" style="width: 2em" />
+							</template>
+							<p><strong >{{ item.causer && item.causer.name ? item.causer.name : 'Không xác	định' }}</strong></p>
+							<p> {{ item.description }} </p>
+							<p> {{formatDateTime(item.updated_at)}} </p>
+              <p> {{ item.properties.note}} </p>
+						</a-timeline-item>
+					</a-timeline>
+				</a-drawer>
+    </div>
     <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
       <div class="d-md-flex d-block button-contain ">
         <button class="btn btn-white" @click="onCancel" type="button">
@@ -594,6 +622,8 @@ export default {
 	},
 	data () {
 		return {
+      visibleHistoryDrawer: false,
+      historyList: [],
 			version: '',
 			versions: [],
 			frontSideOptions: {
@@ -731,6 +761,30 @@ export default {
 		}
 	},
 	methods: {
+    formatDateTime (value) {
+			return moment(String(value)).format('HH:mm DD/MM/YYYY')
+		},
+    async getHistoryTimeline (id) {
+			const res = await WareHouse.getHistoryTimeline(id)
+			if (res.data) {
+				this.historyList = res.data
+        console.log('history_list', this.historyList)
+			} else if (res.error) {
+				return this.$toast.open({
+					message: res.error.message,
+					type: 'error',
+					position: 'top-right',
+					duration: 5000
+				})
+			}
+		},
+    onHistoryDrawerClose () {
+			this.visibleHistoryDrawer = false
+		},
+    showHistoryDrawer () {
+			this.visibleHistoryDrawer = true
+			this.getHistoryTimeline(this.form.id)
+		},
 		async getProfiles () {
 			const profile = this.$store.getters.profile
 			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
