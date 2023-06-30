@@ -54,7 +54,7 @@
             </div>
             <div class="row heigh_div w-100">
               <div class="title_details_assets col">Loại công trình</div>
-              <div v-for="asset in assetHasChoose" :key="asset.id" class="content_details_assets color_content col">{{asset.tangible_assets ? asset.tangible_assets[0].building_type.description : '-'}}</div>
+              <div v-for="asset in assetHasChoose" :key="asset.id" class="content_details_assets color_content col">{{asset.tangible_assets[0] && asset.tangible_assets[0].building_type ? asset.tangible_assets[0].building_type.description : '-'}}</div>
             </div>
             <div class="row heigh_div w-100 main_title header_title_detail">
               <div class="col">Giá trị BĐS</div>
