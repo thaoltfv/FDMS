@@ -311,18 +311,18 @@ export default {
 			let listItem = []
 			let item = []
 			let message = ''
-			if (documentType.length === 0) {
-				return 'Bạn chưa chọn loại thẩm định'
-			}
-			if (asset.length > 0) {
-				documentType.forEach(type => {
-					item = asset.filter(i => i.asset_type.acronym === type)
-					listItem = listItem.concat(item)
-				})
-				if (listItem.length < asset.length) {
-					return 'Không được thay đổi loại thẩm định khi đã chọn tài sản'
-				}
-			}
+			// if (documentType.length === 0) {
+			// 	return 'Bạn chưa chọn loại thẩm định'
+			// }
+			// if (asset.length > 0) {
+			// 	documentType.forEach(type => {
+			// 		item = asset.filter(i => i.asset_type.acronym === type)
+			// 		listItem = listItem.concat(item)
+			// 	})
+			// 	if (listItem.length < asset.length) {
+			// 		return 'Không được thay đổi loại thẩm định khi đã chọn tài sản'
+			// 	}
+			// }
 			return message
 		},
 		async handleAction () {
