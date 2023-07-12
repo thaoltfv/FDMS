@@ -196,7 +196,7 @@ export default {
 			createdAt: '',
 			zoom: 15,
 			caller: null,
-			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
 			bounds: null,
 			person: '',
 			doc_num: ''

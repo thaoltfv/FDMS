@@ -416,7 +416,7 @@ export default {
 				color: 'blue'
 			},
 			caller: null,
-			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
 			bounds: null,
 			asset_events: new Vue(),
 			asset_type_ids: [],
@@ -485,12 +485,12 @@ export default {
 			}, 501)
 		},
 		handleView () {
-			if (this.url === 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png') {
+			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
 				this.imageMap = false
 			} else {
-				this.url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
 				this.imageMap = true
 			}
 		},

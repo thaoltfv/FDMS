@@ -214,7 +214,7 @@ export default {
 			center: [10.964112, 106.856461],
 			zoom: 15,
 			caller: null,
-			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
 			bounds: null
 		}
 	},
