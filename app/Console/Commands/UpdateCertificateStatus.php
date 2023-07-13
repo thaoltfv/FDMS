@@ -56,8 +56,8 @@ class UpdateCertificateStatus extends Command
                 print_r('vô cái if'.$value['certificate_date']);
                     print_r('vô cái if'.$value['certificate_num']);
                     print_r('vô cái if'.strpos($value['certificate_num'], ','));
-                if ($value['certificate_date'] && $value['certificate_num'] && strpos($value['certificate_num'], ',') > 0) {
-                    
+                // if ($value['certificate_date'] && $value['certificate_num'] && strpos($value['certificate_num'], ',') > 0) {
+                    if ($value['certificate_date'] && $value['certificate_num']) {  
                     $year = date('Y' , strtotime($value['certificate_date']));
                     $value['certificate_num'] = str_replace(',', '/', $value['certificate_num']);
                     $certifications = Certificate::where('certificate_num', $value['certificate_num'])->whereYear('certificate_date', $year)->get();
