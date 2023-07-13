@@ -68,7 +68,7 @@ class UpdateCertificateStatus extends Command
                         $certificate->update([
                             'status' => 4,
                             'sub_status' => 1,
-                            'service_fee' => $value['service_fee'],
+                            // 'service_fee' => $value['service_fee'],
                             'customer_id' => $customer ? $customer->id : null,
                             'status_updated_at' => $value['certificate_date'],
                             'updated_at' => $value['certificate_date']
