@@ -17,6 +17,7 @@ use App\Enum\ValueDefault;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Asset\CompareAssetGeneralRequest;
 use App\Models\Certificate;
+use App\Models\CompareAssetGeneral;
 use App\Notifications\ActivityLog;
 use App\Services\CommonService;
 use App\Services\Document\AssetReport;
@@ -273,9 +274,25 @@ class CompareAssetGeneralController extends Controller
                 if ($this->getUserPermission(PermissionsDefault::EDIT_PERMISSION . '_' . ScreensDefault::PRICE_SCREEN)) {
                     // return $this->respondWithCustomData($this->compareAssetGeneralRepository->updateCompareAssetGeneral($id, $request->toArray()));
                     $result = $this->compareAssetGeneralRepository->updateCompareAssetGeneral($id, $request->toArray());
+                    
                     if(isset($result['message']) && isset($result['exception']))
+                    {
                         return $this->respondWithErrorData( $result);
-                    return $this->respondWithCustomData($result);
+                    } else {
+                        $user = CommonService::getUser();
+                        $data_log['updated_by'] = $user->name;
+                        $data_log['updated_at'] = now();
+                        $edited = CompareAssetGeneral::query()->where('id', $id)->first();
+                        $log_note = $objects['data_change'];
+                        $note = "";
+                        for ($i=0; $i < count($log_note); $i++) { 
+                            $e = $log_note[$i];
+                            $note= $note.$e.', ';
+                        }
+                        $note = substr_replace($note ,"",-2);
+                        $this->CreateActivityLog($edited, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh', $note);
+                        return $this->respondWithCustomData($result);
+                    }      
                 } else {
                     $data = ['message' => ErrorMessage::PERMISSION_ERROR];
                     return $this->respondWithErrorData($data, 403);
