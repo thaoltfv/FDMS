@@ -52,8 +52,10 @@ class UpdateCertificateStatus extends Command
             $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_update_done_quyII_2023.csv'));
             // Log::info("file csv: ".$sheets );
             $this->output->progressStart(count($sheets));
+            printf('alooooooooooooooooooooo');
             $sheets->map(function ($value) {
                 Log::info("Dòng dữ liệu: ".json_encode($value) );
+                printf('alooooooooooooooooooooo'.json_encode($value));
                 if ($value['certificate_date'] && $value['certificate_num'] && strpos($value['certificate_num'], ',') > 0) {
                     $year = date('Y' , strtotime($value['certificate_date']));
                     $value['certificate_num'] = str_replace(',', '/', $value['certificate_num']);
