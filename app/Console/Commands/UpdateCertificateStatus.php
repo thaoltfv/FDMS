@@ -47,16 +47,16 @@ class UpdateCertificateStatus extends Command
     {
         try {
             DB::beginTransaction();
-            Log::info("Bắt đầu update");
             // $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_base_status_01.01.22_31.03.23.csv'));
             $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_update_done_quyII_2023.csv'));
-            // Log::info("file csv: ".$sheets );
             $this->output->progressStart(count($sheets));
-            printf('alooooooooooooooooooooo');
+            print_r('Bắt đầu update');
             $sheets->map(function ($value) {
-                Log::info("Dòng dữ liệu: ".json_encode($value) );
-                printf('alooooooooooooooooooooo'.json_encode($value));
+                print_r('Dữ liệu dòng'.json_encode($value));
                 if ($value['certificate_date'] && $value['certificate_num'] && strpos($value['certificate_num'], ',') > 0) {
+                    print_r('vô cái if'.$value['certificate_date']);
+                    print_r('vô cái if'.$value['certificate_num']);
+                    print_r('vô cái if'.strpos($value['certificate_num'], ','));
                     $year = date('Y' , strtotime($value['certificate_date']));
                     $value['certificate_num'] = str_replace(',', '/', $value['certificate_num']);
                     $certifications = Certificate::where('certificate_num', $value['certificate_num'])->whereYear('certificate_date', $year)->get();
@@ -70,10 +70,10 @@ class UpdateCertificateStatus extends Command
                             'address' => $value['address']
                         ]);
                     }
-                    Log::info("list hồ sơ: ".json_encode($certifications) );
-                    Log::info("đối tác: ".json_encode($customer) );
+                    print_r('List hồ sơ'.json_encode($certifications));
+                    print_r('Đối tác'.json_encode($customer));
                     foreach ($certifications as $certificate) {
-                        Log::info(" hồ sơ: ".json_encode($certificate) );
+                        print_r('Dòng hồ sơ'.json_encode($certificate));
                         $certificate->update([
                             'status' => 4,
                             'sub_status' => 1,
