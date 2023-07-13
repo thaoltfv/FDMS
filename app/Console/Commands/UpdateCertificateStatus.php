@@ -47,13 +47,13 @@ class UpdateCertificateStatus extends Command
     {
         try {
             DB::beginTransaction();
-            Log::info("Bắt đầu update" );
+            Log::info("Bắt đầu update");
             // $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_base_status_01.01.22_31.03.23.csv'));
             $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_update_done_quyII_2023.csv'));
             // Log::info("file csv: ".$sheets );
             $this->output->progressStart(count($sheets));
             $sheets->map(function ($value) {
-                Log::info("Dòng dữ liệu: ".$value );
+                Log::info("Dòng dữ liệu: ".json_encode($value) );
                 if ($value['certificate_date'] && $value['certificate_num'] && strpos($value['certificate_num'], ',') > 0) {
                     $year = date('Y' , strtotime($value['certificate_date']));
                     $value['certificate_num'] = str_replace(',', '/', $value['certificate_num']);
@@ -68,10 +68,10 @@ class UpdateCertificateStatus extends Command
                             'address' => $value['address']
                         ]);
                     }
-                    Log::info("list hồ sơ: ".$certifications );
-                    Log::info("đối tác: ".$customer );
+                    Log::info("list hồ sơ: ".json_encode($certifications) );
+                    Log::info("đối tác: ".json_encode($customer) );
                     foreach ($certifications as $certificate) {
-                        Log::info(" hồ sơ: ".$certificate );
+                        Log::info(" hồ sơ: ".json_encode($certificate) );
                         $certificate->update([
                             'status' => 4,
                             'sub_status' => 1,
