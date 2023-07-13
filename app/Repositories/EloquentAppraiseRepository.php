@@ -4322,10 +4322,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $data = Appraise::where('id', $appraiseId)->first();
             # CẬP NHẬT THÔNG TIN VỀ TÀI SẢN SO SÁNH
             # activity-log
-            $this->CreateActivityLog($data, $data, 'updata_data', 'cập nhật dữ liệu tài sản so sánh');
+            $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật dữ liệu tài sản so sánh');
             $this->updateAppraiseStep($appraiseId, 6);
             $this->processAfterSave($appraiseId);
             DB::commit();
+            Appraise::where('id', $appraiseId)->update([
+                'filter_year' => $objects['filter_year'],
+            ]);
             $result = Appraise::where('id',$appraiseId)->get(['id','step','coordinates'])->first();
             $result->append('distance_max');
             return $result;
@@ -5427,6 +5430,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             if (!$result) {
                 $result = $this->model->query()
                     ->where('id', '=', $appraiseId)
+                    // ->with('filter_year')
                     ->with('province')
                     ->with('district')
                     ->with('ward')
@@ -5510,6 +5514,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $result->append('price_other_asset');
             $result->append('price_total_asset');
             $result->append('total_desicion_average');
+            // $result->append('filter_year');
 
             // if(isset($result->comparisonFactor) && count($result->comparisonFactor) > 0){
             //     foreach($result->comparisonFactor as $comparison){
@@ -5638,7 +5643,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $check = $this->checkAuthorization($appraiseId);
         if (!empty($check))
             return $check;
-        $select = ['id','step','status','coordinates','created_by', 'sub_status', 'certificate_id', 'real_estate_id'];
+        $select = ['id','step','status','coordinates','created_by', 'sub_status', 'certificate_id', 'real_estate_id', 'filter_year'];
         $with = [
             'pic:id,appraise_id,link,type_id',
             'pic.picType:id,description',
