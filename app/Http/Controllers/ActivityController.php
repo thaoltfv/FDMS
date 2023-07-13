@@ -115,21 +115,4 @@ class ActivityController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-
-    public function getCompareWithId($id)
-    {
-        try {
-            $dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataAppraise))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
-                return $this->respondWithErrorData($data);
-            }
-            return $this->respondWithCustomData($dataAppraise, 200);
-        } catch (Exception $exception) {
-            Log::error($exception);
-            $data = ['message' => $exception->getMessage(), 'exception' => $exception];
-            return $this->respondWithErrorData($data);
-        }
-    }
 }
