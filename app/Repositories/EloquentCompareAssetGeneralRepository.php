@@ -28,6 +28,7 @@ use App\Models\RoomDetail;
 use App\Models\RoomFurnitureDetail;
 use App\Models\UnitPrice;
 use App\Services\CommonService;
+use App\Notifications\ActivityLog;
 use Carbon\Carbon;
 use Elasticquent\ElasticquentResultCollection;
 use Elasticsearch\ClientBuilder;
@@ -47,6 +48,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
 {
     private string $defaultSort = 'created_at';
     private string $allowedSorts = 'updated_at';
+
+    use ActivityLog;
 
     /**
      * @return array|array[]
@@ -2086,6 +2089,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 }
                 $rows = $this->findById($generalId);
                 $this->indexData($rows);
+                $user = CommonService::getUser();
+                $data_log['updated_by'] = $user->name;
+                $data_log['updated_at'] = now();
+                $edited = CompareAssetGeneral::query()->where('id', $generalId)->first();
+                $this->CreateActivityLog($edited, $data_log, 'taomoi_TSSS', 'Tạo mới tài sản so sánh');
                 return $generalId;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -2268,6 +2276,10 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 }
                 $rows = $this->findById($id);
                 $this->indexData($rows);
+                // $user = CommonService::getUser();
+                // $data_log['updated_by'] = $user->name;
+                // $data_log['updated_at'] = now()->format('dd-mm-YYYY');
+                // $this->CreateActivityLog($data_log, $data_log, 'capnhat_TSSS', 'Cập nhật tài sản so sánh');
                 return $id;
             } catch (Exception $exception) {
                 throw $exception;

@@ -58,7 +58,8 @@ class Appraise extends Model
         'step',
         'sub_status',
         'certificate_id',
-        'full_address'
+        'full_address',
+        'filter_year'
     ];
     protected $guarded = [];
 
