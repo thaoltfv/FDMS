@@ -62,49 +62,55 @@ class UpdateCertificateStatus extends Command
                     $value['certificate_num'] = str_replace(',', '/', $value['certificate_num']);
                     $certifications = Certificate::where('certificate_num', $value['certificate_num'])->whereYear('certificate_date', $year)->get();
                     $customer = null;
-                    if ($value['customer']) {
-                        $customer = Customer::firstOrCreate([
-                            'name' => $value['customer'],
-                            'phone' => $value['phone']
-                        ], [
-                            'status' => 'active',
-                            'address' => $value['address']
-                        ]);
-                    }
+                    // if ($value['customer']) {
+                    //     $customer = Customer::firstOrCreate([
+                    //         'name' => $value['customer'],
+                    //         'phone' => $value['phone']
+                    //     ], [
+                    //         'status' => 'active',
+                    //         'address' => $value['address']
+                    //     ]);
+                    // }
                     print_r('List hồ sơ'.json_encode($certifications));
                     print_r('Đối tác'.json_encode($customer));
                     foreach ($certifications as $certificate) {
                         print_r('Dòng hồ sơ'.json_encode($certificate));
                         $certificate->update([
-                            'status' => 4,
-                            'sub_status' => 1,
+                            // 'status' => 4,
+                            'status' => 2,
+                            // 'sub_status' => 1,
+                            'sub_status' => 3,
                             // 'service_fee' => $value['service_fee'],
-                            'customer_id' => $customer ? $customer->id : null,
+                            // 'customer_id' => $customer ? $customer->id : null,
                             'status_updated_at' => $value['certificate_date'],
                             'updated_at' => $value['certificate_date']
                         ]);
                         foreach ($certificate->appraises as $appraise) {
                             $appraise->update([
-                                'status' => 4,
+                                // 'status' => 4,
+                                'status' => 2,
                                 'updated_at' => $value['certificate_date']
 
                             ]);
                         }
                         foreach ($certificate->realEstate as $realEstate) {
                             $realEstate->update([
-                                'status' => 4,
+                                // 'status' => 4,
+                                'status' => 2,
                                 'updated_at' => $value['certificate_date']
 
                             ]);
                         }
                         Appraise::where('certificate_id', $certificate->id)
                             ->update([
-                                'status' => 4,
+                                // 'status' => 4,
+                                'status' => 2,
                                 'updated_at' => DB::raw('updated_at')
                             ]);
                         RealEstate::where('certificate_id', $certificate->id)
                             ->update([
-                                'status' => 4,
+                                // 'status' => 4,
+                                'status' => 2,
                                 'updated_at' => DB::raw('updated_at')
                             ]);
                         $this->output->progressAdvance();
