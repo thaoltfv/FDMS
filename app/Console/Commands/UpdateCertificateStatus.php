@@ -82,14 +82,14 @@ class UpdateCertificateStatus extends Command
                             // 'sub_status' => 3,
                             // 'service_fee' => $value['service_fee'],
                             'customer_id' => $customer ? $customer->id : null,
-                            'status_updated_at' => $value['certificate_date'],
-                            'updated_at' => $value['certificate_date']
+                            'status_updated_at' => $value['document_date'],
+                            'updated_at' => $value['document_date']
                         ]);
                         foreach ($certificate->appraises as $appraise) {
                             $appraise->update([
                                 'status' => 4,
                                 // 'status' => 2,
-                                'updated_at' => $value['certificate_date']
+                                'updated_at' => $value['document_date']
 
                             ]);
                         }
@@ -97,7 +97,7 @@ class UpdateCertificateStatus extends Command
                             $realEstate->update([
                                 'status' => 4,
                                 // 'status' => 2,
-                                'updated_at' => $value['certificate_date']
+                                'updated_at' => $value['document_date']
 
                             ]);
                         }
