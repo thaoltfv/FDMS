@@ -1,4 +1,4 @@
-certificate_num;certificate_date;customer;phone;address;bank
+document_num;document_date;customer;phone;address;bank
 2470;2023/06/29 00:00:00;Chị Huệ;0938039998;HDB_CN Bình Phước_PGD Thác Mơ;HDB
 1951;2023/05/24 00:00:00;Anh Sơn;0908457836;VCB_CN Bắc Bình Dương_PGD Bàu Bàng;VCB
 2285;2023/06/15 00:00:00;Anh Thắng;0962931352;VCB_CN Nam Bình Dương_P.Quản lý nợ;VCB
