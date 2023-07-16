@@ -54,13 +54,14 @@
                             <img v-else-if="location.id === assetDetails.id || location.isChoosing"
                                  class="img-location-marker"
                                  src="@/assets/icons/ic_check_location.svg" alt=""/>
+                                 <!-- :src="require(`@/assets/icons/ic_pin_${marker_colors[location.transaction_type_id]}.svg`)" :alt="location.transaction_type_id"/> -->
                             <img v-if="location.id === assetDetails.id && location.isChoosing"
 																class="img-location-checked checking"
                                  src="@/assets/icons/ic_checked_location.svg" alt=""/>
                             <img v-else-if="location.isChoosing"
                                  class="img-location-checked"
                                  src="@/assets/icons/ic_checked_location.svg" alt=""/>
-                            <div class="marker marker__blue"
+                            <!-- <div class="marker marker__blue"
                                  :class="location.center === map.center ? 'marker__active' : ''"
                                  v-if="location.transaction_type_id === 51"/>
                             <div class="marker marker__orange"
@@ -71,7 +72,9 @@
                                  v-if="location.transaction_type_id === 52"/>
                             <div class="marker marker__green"
                                  :class="location.center === map.center ? 'marker__active' : ''"
-                                 v-if="location.transaction_type_id === 54"/>
+                                 v-if="location.transaction_type_id === 54"/> -->
+                                 <img v-if="!location.isChoosing && location.id !== assetDetails.id" :id="'img_'+location.id" class="img-location-marker1" :src="require(`@/assets/icons/ic_pin_${marker_colors[location.transaction_type_id]}.svg`)" :alt="location.transaction_type_id">
+					<div v-if="!location.isChoosing && location.id !== assetDetails.id" :id="'price_'+location.id" class="price-marker"> {{location.total_amount ? formatPrice(location.total_amount) : '-'}} </div>
                           </l-icon>
                         </l-marker>
                       </l-map>
@@ -429,6 +432,13 @@ export default {
 	computed: {},
 	data () {
 		return {
+      marker_colors: {
+				0: 'green',
+				51: 'blue',
+				52: 'purple',
+				53: 'orange',
+				54: 'green'
+			},
 			theme: {
 				navItem: '#000000',
 				navActiveItem: '#007EC6',
@@ -522,6 +532,19 @@ export default {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
 				})
 			}
+		},
+    formatPrice (value) {
+			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
+			if (num.length > 3 && num.length <= 6) {
+				return parseFloat(num / 1000).toFixed(0) + ' ng'
+			} else if (num.length > 6 && num.length <= 9) {
+				return parseFloat(num / 1000000).toFixed(0) + ' tr'
+			} else if (num.length > 9) {
+				return parseFloat(num / 1000000000).toFixed(1) + ' tỷ'
+			} else if (num < 900) {
+				return num + ' đ' // if value < 1000, nothing to do
+			}
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 		},
 		formatDate (value) {
 			return moment(String(value)).format('DD-MM-YYYY')
@@ -920,6 +943,15 @@ export default {
     }
   }
 }
+.img-location-marker1 {
+  width: 40px !important;
+  position: absolute;
+  bottom: 2px;
+  right: -15px;
+	&.checking {
+		animation: fade 1s infinite ease;
+	}
+}
 
 .img-dropdown {
   cursor: pointer;
@@ -1190,6 +1222,24 @@ export default {
     max-width: 50px;
     height: auto;
   }
+}
+
+.price-marker {
+  width: 38px;
+  height: 20px;
+	font-size: 10px;
+	font-weight: 500;
+	position: absolute;
+	padding: 2px 0;
+	top: -24px;
+	left: -12px;
+	z-index: -1;
+	color: var(--primary);
+	background: white;
+	text-align: center;
+	&.checking {
+		animation: fade 1s infinite ease;
+	}
 }
 
 .content_economy {
