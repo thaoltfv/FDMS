@@ -1244,6 +1244,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'version',
                 'coordinates',
                 'transaction_type_id',
+                'total_amount'
             ];
 
             $result = CompareAssetGeneral::searchByQuery($array, null, $sourceField, 10000, null, $sortBy);
