@@ -233,9 +233,7 @@ class CompareAssetGeneralController extends Controller
             $localfolder = public_path('firebase-temp-uploads') .'/';  
             $extension = $image->getClientOriginalExtension();  
             $file      = $name. '.' . $extension;  
-            $storage = (new Factory())
-                ->withDefaultStorageBucket('gs://fastvalue-trial.appspot.com')
-                ->createStorage();
+            $storage = app('firebase.storage');
             if ($image->move($localfolder, $file)) {  
                 $uploadedfile = fopen($localfolder.$file, 'r');  
                 $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
