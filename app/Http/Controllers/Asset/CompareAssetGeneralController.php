@@ -235,7 +235,7 @@ class CompareAssetGeneralController extends Controller
             $file      = $name. '.' . $extension;  
             $storage = (new Factory())
                 ->withDefaultStorageBucket('fastvalue-trial.appspot.com')
-                ->createStorage();
+                ->createStorage('fastvalue-trial.appspot.com');
             if ($image->move($localfolder, $file)) {  
                 $uploadedfile = fopen($localfolder.$file, 'r');  
                 $storage->getBucket()->upload($uploadedfile, ['name' => 'test.png']);  
