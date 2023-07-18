@@ -1955,8 +1955,8 @@ export default {
 				// let price = landPriceData ? landPriceData.value : 0
 				// let islayerCuttingPirce = islayerCuttingPirceData ? islayerCuttingPirceData.value : false
 				// let layerCuttingPirce = layerCuttingPirceData ? layerCuttingPirceData.value : 0
-
-				let round = roundData ? roundData.value : 0
+				console.log('round', roundData)
+				let round = roundData && roundData.value > 2 ? roundData.value : 3
 				let price = this.mgtb
 				let islayerCuttingPirce = this.layer_cutting_procedure
 				let layerCuttingPirce = this.layer_cutting_procedure_price
@@ -1986,7 +1986,7 @@ export default {
 					let landPriceData = this.form.asset_price.find(i => i.slug === slug_price)
 					let roundData = this.form.asset_price.find(i => i.slug === slug_round)
 					let price = landPriceData ? landPriceData.value : 0
-					let round = roundData ? roundData.value : 0
+					let round = roundData && roundData.value > 2 ? roundData.value : 3
 					data.push({
 						acronym: item.land_type_purpose.acronym,
 						area: item.main_area,
@@ -2011,7 +2011,7 @@ export default {
 					let landPriceData = this.form.asset_price.find(i => i.slug === slug_price)
 					let roundData = this.form.asset_price.find(i => i.slug === slug_round)
 					let price = landPriceData ? landPriceData.value : 0
-					let round = roundData ? roundData.value : 0
+					let round = roundData && roundData.value > 2 ? roundData.value : 3
 					data.push({
 						acronym: item.land_type_purpose.acronym,
 						area: item.planning_area,
