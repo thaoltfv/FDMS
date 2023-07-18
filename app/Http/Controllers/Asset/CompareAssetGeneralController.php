@@ -238,12 +238,12 @@ class CompareAssetGeneralController extends Controller
                 ->createStorage();
             if ($image->move($localfolder, $file)) {  
                 $uploadedfile = fopen($localfolder.$file, 'r');  
-                $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $name]);  
+                $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
                 //will remove from local laravel folder  
                 unlink($localfolder . $file);  
                 Session::flash('message', 'Succesfully Uploaded');
                 $expiresAt = new \DateTime('tomorrow');
-                $fileUrl = $storage->getBucket()->object($firebase_storage_path . $name)->signedUrl($expiresAt);
+                $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
             } 
             return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
