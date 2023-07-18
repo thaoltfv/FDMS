@@ -228,7 +228,7 @@ class CompareAssetGeneralController extends Controller
             // test firebase
 
             $image = $request->file('image');
-            $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+            $firebase_storage_path = 'images/comparison_assets/';
             $name = $firebase_storage_path . Uuid::uuid4()->toString();
             $localfolder = public_path('firebase-temp-uploads') .'/';  
             $extension = $image->getClientOriginalExtension();  
@@ -238,12 +238,12 @@ class CompareAssetGeneralController extends Controller
                 ->createStorage();
             if ($image->move($localfolder, $file)) {  
                 $uploadedfile = fopen($localfolder.$file, 'r');  
-                $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
+                $storage->getBucket()->upload($uploadedfile, ['name' => 'test.png']);  
                 //will remove from local laravel folder  
                 unlink($localfolder . $file);  
-                Session::flash('message', 'Succesfully Uploaded');
+                
                 $expiresAt = new \DateTime('tomorrow');
-                $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
+                $fileUrl = $storage->getBucket()->object('test.png')->signedUrl($expiresAt);
             } 
             return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
