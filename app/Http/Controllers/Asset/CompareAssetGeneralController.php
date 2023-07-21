@@ -219,30 +219,30 @@ class CompareAssetGeneralController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         try {
-            // $image = $request->file('image');
-            // $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            // $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
-            // Storage::put($name, file_get_contents($image));
-            // $fileUrl = Storage::url($name);
+            $image = $request->file('image');
+            $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+            $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+            Storage::put($name, file_get_contents($image));
+            $fileUrl = Storage::url($name);
 
             // test firebase
 
-            $image = $request->file('image');
-            $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            $name = $firebase_storage_path . Uuid::uuid4()->toString();
-            $localfolder = public_path('firebase-temp-uploads') .'/';  
-            $extension = $image->getClientOriginalExtension();  
-            $file      = $name. '.' . $extension;  
-            $storage = app('firebase.storage');
-            if ($image->move($localfolder, $file)) {  
-                $uploadedfile = fopen($localfolder.$file, 'r');  
-                $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
-                //will remove from local laravel folder  
-                unlink($localfolder . $file);  
-                Session::flash('message', 'Succesfully Uploaded');
-                $expiresAt = new \DateTime('tomorrow');
-                $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
-            } 
+            // $image = $request->file('image');
+            // $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+            // $name = $firebase_storage_path . Uuid::uuid4()->toString();
+            // $localfolder = public_path('firebase-temp-uploads') .'/';  
+            // $extension = $image->getClientOriginalExtension();  
+            // $file      = $name. '.' . $extension;  
+            // $storage = app('firebase.storage');
+            // if ($image->move($localfolder, $file)) {  
+            //     $uploadedfile = fopen($localfolder.$file, 'r');  
+            //     $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
+            //     //will remove from local laravel folder  
+            //     unlink($localfolder . $file);  
+            //     Session::flash('message', 'Succesfully Uploaded');
+            //     $expiresAt = new \DateTime('tomorrow');
+            //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
+            // } 
             return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
             Log::error($exception);
