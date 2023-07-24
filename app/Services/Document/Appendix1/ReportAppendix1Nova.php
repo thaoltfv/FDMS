@@ -130,14 +130,14 @@ class ReportAppendix1Nova extends ReportAppendix1
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right']);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), 1, ',', '.') . '%');
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), 2, ',', '.') . '%');
         } else {
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, $this->cellVCentered)->addText('', $this->styleBold, $this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), 1, ',', '.') . '%', null, $this->keepNext);
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), 2, ',', '.') . '%', null, $this->keepNext);
         }
     }
 
@@ -205,18 +205,83 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         if ($panType == '2-1') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 1, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 1, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 1, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 2, ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 2, ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 2, ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
         } elseif ($panType == '2-3') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
             $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, 1, ',', '.'), null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, 1, ',', '.'), null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, 1, ',', '.'), null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, 2, ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, 2, ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, 2, ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+        }
+    }
+
+    protected function getAssetComparison($comparisons, $avgPrice)
+    {
+        $legalPrice = 0;
+        $totalPriceAfter = $avgPrice;
+        $adjustTimes = 0;
+        $totalAdjustPrice = 0;
+        $totalAdjustPriceABS = 0;
+        $minPer = 0;
+        $maxPer = 0;
+        $stt = 0;
+        foreach ($this->factors as $type) {
+            $compare = $comparisons->where('type', $type)->first();
+            if (!empty($compare)) {
+                $percent = $compare->adjust_percent;
+                $adjustPrice = 0;
+                if ($compare->type == 'phap_ly') {
+                    $adjustPrice = round($avgPrice * $percent / 100);
+                    $legalPrice = $avgPrice + $adjustPrice;
+                    $minPer = abs($percent);
+                    $maxPer = abs($percent);
+                } else {
+                    $adjustPrice = round($legalPrice * $percent / 100);
+                    if (($percent != 0  && $minPer > abs($percent)) || $minPer === 0) $minPer = abs($percent);
+                    if ($maxPer < abs($percent)) $maxPer = abs($percent);
+                }
+                $totalPriceAfter += $adjustPrice;
+                $totalAdjustPrice += $adjustPrice;
+                $totalAdjustPriceABS += abs($adjustPrice);
+                if ($percent != 0)
+                    $adjustTimes++;
+                $compare->adjust_price = $adjustPrice;
+                $compare->total_price = $totalPriceAfter;
+                $compare->adjust_times = $adjustTimes;
+                $compare->min_max = number_format($minPer, 2, ',', '.') . '% - ' . number_format($maxPer, 2, ',', '.') . '%';
+                $compare->total_adjust_price = $totalAdjustPrice;
+                $compare->total_adjust_price_abs = $totalAdjustPriceABS;
+                $compare->stt = $stt;
+                $stt++;
+            }
+        }
+        $others = $comparisons->where('type', 'yeu_to_khac');
+        if (!empty($others) && count($others) > 0) {
+            foreach ($others as $other) {
+                $percent = $other->adjust_percent;
+                $adjustPrice = 0;
+                $adjustPrice = round($legalPrice * $percent / 100);
+                if (($percent != 0  && $minPer > abs($percent)) || $minPer === 0) $minPer = abs($percent);
+                if ($maxPer < abs($percent)) $maxPer = abs($percent);
+                $totalPriceAfter += $adjustPrice;
+                $totalAdjustPrice += $adjustPrice;
+                $totalAdjustPriceABS += abs($adjustPrice);
+                if ($percent != 0)
+                    $adjustTimes++;
+                $other->adjust_price = $adjustPrice;
+                $other->total_price = $totalPriceAfter;
+                $other->adjust_times = $adjustTimes;
+                $other->min_max = number_format($minPer, 2, ',', '.') . '% - ' . number_format($maxPer, 2, ',', '.') . '%';
+                $other->total_adjust_price = $totalAdjustPrice;
+                $other->total_adjust_price_abs = $totalAdjustPriceABS;
+                $other->stt = $stt;
+                $stt++;
+            }
         }
     }
 

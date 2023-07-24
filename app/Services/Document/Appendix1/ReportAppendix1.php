@@ -155,7 +155,7 @@ class ReportAppendix1 extends Report
         return $result;
     }
 
-    private function getAssetComparison($comparisons, $avgPrice)
+    protected function getAssetComparison($comparisons, $avgPrice)
     {
         $legalPrice = 0;
         $totalPriceAfter = $avgPrice;
