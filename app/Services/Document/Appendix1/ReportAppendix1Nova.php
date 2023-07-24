@@ -320,4 +320,10 @@ class ReportAppendix1Nova extends ReportAppendix1
         return $data;
     }
 
+    protected function getComparisonType($compare, $type)
+    {
+        $result = $compare->where('type', $type)->first();
+        return $result;
+    }
+
 }
