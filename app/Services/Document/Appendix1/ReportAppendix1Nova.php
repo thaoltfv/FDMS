@@ -147,9 +147,9 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell(600, $this->cellVCentered)->addText('1', ['bold' => false], $this->cellHCentered);
         $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sử dụng đất', $this->styleBold, $this->cellHCentered);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('-', $this->styleBold, $this->cellHCentered);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset1']['avg_price'], 0, ',', '.'), $this->styleBold, $this->cellHCentered);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset2']['avg_price'], 0, ',', '.'), $this->styleBold, $this->cellHCentered);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset3']['avg_price'], 0, ',', '.'), $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset1']['avg_price'], $this->countDecimals($this->assetPrice['asset1']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset2']['avg_price'], $this->countDecimals($this->assetPrice['asset2']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset3']['avg_price'], $this->countDecimals($this->assetPrice['asset3']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
         $compares = $this->comparisonFactor1;
         $alphas = range('A', 'Z');
         $rateTitle = 'Tỷ lệ điều chỉnh';
@@ -205,18 +205,18 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         if ($panType == '2-1') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 2, ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 2, ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 2, ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
         } elseif ($panType == '2-3') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
             $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, 2, ',', '.'). '%', null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, 2, ',', '.'). '%', null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, 2, ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, $this->countDecimals($col2), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, $this->countDecimals($col3), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, $this->countDecimals($col4), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
         }
     }
 
@@ -253,7 +253,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                 $compare->adjust_price = $adjustPrice;
                 $compare->total_price = $totalPriceAfter;
                 $compare->adjust_times = $adjustTimes;
-                $compare->min_max = number_format($minPer, 2, ',', '.') . '% - ' . number_format($maxPer, 2, ',', '.') . '%';
+                $compare->min_max = number_format($minPer, $this->countDecimals($minPer), ',', '.') . '% - ' . number_format($maxPer, $this->countDecimals($maxPer), ',', '.') . '%';
                 $compare->total_adjust_price = $totalAdjustPrice;
                 $compare->total_adjust_price_abs = $totalAdjustPriceABS;
                 $compare->stt = $stt;
@@ -276,7 +276,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                 $other->adjust_price = $adjustPrice;
                 $other->total_price = $totalPriceAfter;
                 $other->adjust_times = $adjustTimes;
-                $other->min_max = number_format($minPer, 2, ',', '.') . '% - ' . number_format($maxPer, 2, ',', '.') . '%';
+                $other->min_max = number_format($minPer, $this->countDecimals($minPer), ',', '.') . '% - ' . number_format($maxPer, $this->countDecimals($maxPer), ',', '.') . '%';
                 $other->total_adjust_price = $totalAdjustPrice;
                 $other->total_adjust_price_abs = $totalAdjustPriceABS;
                 $other->stt = $stt;
