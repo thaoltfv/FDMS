@@ -297,6 +297,10 @@ class ReportAppendix1Nova extends ReportAppendix1
 
     protected function collectInfoDistanceAppraise($stt, $title, $asset)
     {
+        $this->comparisonFactors = $asset->comparisonFactor->where('status', 1);
+        $this->comparisonFactor1 = $this->comparisonFactors->where('asset_general_id', $this->asset1->id);
+        $this->comparisonFactor2 = $this->comparisonFactors->where('asset_general_id', $this->asset2->id);
+        $this->comparisonFactor3 = $this->comparisonFactors->where('asset_general_id', $this->asset3->id);
         $compare1 = $this->getComparisonType($this->comparisonFactor1, 'khoang_cach');
         $compare2 = $this->getComparisonType($this->comparisonFactor2, 'khoang_cach');
         $compare3 = $this->getComparisonType($this->comparisonFactor3, 'khoang_cach');
@@ -304,7 +308,7 @@ class ReportAppendix1Nova extends ReportAppendix1
             $stt,
             $title,
             '-',
-            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') : '-',
+            $compare1,
             $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') : '-',
             $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') : '-',
             false
