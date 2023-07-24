@@ -301,7 +301,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $asset2 = $asset->assetGeneral[1];
         $asset3 = $asset->assetGeneral[2];
 
-        $comparisonFactors = $asset->comparisonFactor->where('status', 1);
+        $comparisonFactors = $asset->comparisonFactor;
         $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $asset1->id);
         $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $asset2->id);
         $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $asset3->id);
@@ -312,9 +312,9 @@ class ReportAppendix1Nova extends ReportAppendix1
             $stt,
             $title,
             '-',
-            $asset1,
-            $asset2,
-            $asset3,
+            $compare1,
+            $compare2,
+            $compare3,
             false
         ];
         return $data;
