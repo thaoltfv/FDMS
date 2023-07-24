@@ -5,6 +5,7 @@ namespace App\Services\Document\Appendix1;
 use App\Services\Document\Appendix1\ReportAppendix1;
 use Carbon\Carbon;
 use PhpOffice\PhpWord\Element\Section;
+use App\Services\CommonService;
 
 class ReportAppendix1Nova extends ReportAppendix1
 {
@@ -117,6 +118,25 @@ class ReportAppendix1Nova extends ReportAppendix1
             $this->getAdjustComparisonFactor($section, $asset);
             // //kết luận
             $this->conclusion($section, $asset);
+        }
+    }
+
+    private function getDifferenceAssetByType($table, $compare, $stt)
+    {
+        if ($stt === 3) {
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(600, $this->cellVCentered)->addText('', $this->styleBold, $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right']);
+            $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
+            $description = $compare->description ?: '';
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), 0, ',', '.') . '%');
+        } else {
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(600, $this->cellVCentered)->addText('', $this->styleBold, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
+            $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
+            $description = $compare->description ?: '';
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), 0, ',', '.') . '%', null, $this->keepNext);
         }
     }
 
