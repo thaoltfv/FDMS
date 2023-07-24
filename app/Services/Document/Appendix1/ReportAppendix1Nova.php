@@ -297,24 +297,22 @@ class ReportAppendix1Nova extends ReportAppendix1
 
     protected function collectInfoDistanceAppraise($stt, $title, $asset)
     {
-        $asset1 = $asset->assetGeneral[0];
-        $asset2 = $asset->assetGeneral[1];
-        $asset3 = $asset->assetGeneral[2];
-
+        //Filter with all status
         $comparisonFactors = $asset->comparisonFactor;
-        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $asset1->id);
-        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $asset2->id);
-        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $asset3->id);
-        $compare1 = $comparisonFactor1->where('type', 'khoang_cach')->first();
+        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
+        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
+        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
+        //Update new querry with non status to get ket_cau_duong
+        $compare1 = $this->getComparisonType($comparisonFactor1, 'khoang_cach');
         $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
         $compare3 = $this->getComparisonType($comparisonFactor3, 'khoang_cach');
         $data = [
-            $asset1,
+            $stt,
             $title,
-            $asset1->id,
-            $comparisonFactors,
-            $comparisonFactor1,
-            $compare1,
+            '-',
+            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') : '-',
+            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') : '-',
+            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') : '-',
             false
         ];
         return $data;
