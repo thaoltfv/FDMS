@@ -140,24 +140,82 @@ class ReportAppendix1Nova extends ReportAppendix1
         }
     }
 
-    protected function addCompareRowExt($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
+    protected function getAdjustComparisonFactorAppraise(Table $table, $asset)
+    {
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, $this->cellVCentered)->addText('1', ['bold' => false], $this->cellHCentered);
+        $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sử dụng đất', $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('-', $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset1']['avg_price'], 0, ',', '.'), $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset2']['avg_price'], 0, ',', '.'), $this->styleBold, $this->cellHCentered);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset3']['avg_price'], 0, ',', '.'), $this->styleBold, $this->cellHCentered);
+        $compares = $this->comparisonFactor1;
+        $alphas = range('A', 'Z');
+        $rateTitle = 'Tỷ lệ điều chỉnh';
+        $adjustTitle = 'Mức điều chỉnh';
+        $priceAfterAdjust = 'Giá sau điều chỉnh';
+        $stt = 0;
+        foreach ($this->factors as $type) {
+            $compare1 = $this->comparisonFactor1->where('type', $type)->first();
+            if (!empty($compare1)) {
+                $compare2 = $this->comparisonFactor2->where('type', $type)->first();
+                $compare3 = $this->comparisonFactor3->where('type', $type)->first();
+                $title = $compare1->name;
+                if ($this->isApartment) {
+                    if ($type == 'dien_tich')
+                        $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                    else
+                        $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                } else {
+                    if ($type == 'quy_mo')
+                        $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                    elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
+                        $this->addCompareRowLengh($table, $title . ' (m)', $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                    else
+                        $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                }
+                $this->addCompareRowExt1($table,  $rateTitle, '', '-', $compare1->adjust_percent, $compare2->adjust_percent, $compare3->adjust_percent, false, '%');
+                $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $compare1->adjust_price, $compare2->adjust_price, $compare3->adjust_price);
+                $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $compare1->total_price, $compare2->total_price, $compare3->total_price);
+                $stt++;
+            }
+        }
+        // other
+        $others = $this->comparisonFactor1->where('type', 'yeu_to_khac');
+        if (!empty($others) && count($others) > 0) {
+            foreach ($others as $other1) {
+                $position = $other1->position;
+                $title = $other1->name;
+                $other2 = $this->comparisonFactor2->where('type', 'yeu_to_khac')->where('position', $position)->first();
+                $other3 = $this->comparisonFactor3->where('type', 'yeu_to_khac')->where('position', $position)->first();
+                $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
+                $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
+                $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
+                $stt ++;
+            }
+        }
+
+        $this->getAppraisalMethod($table, $asset);
+    }
+    protected function addCompareRowExt1($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         if ($panType == '2-1') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col2 . $ext, ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col3 . $ext, ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col4 . $ext, ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
         } elseif ($panType == '2-3') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
             $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col2 . $ext, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col3 . $ext, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col4 . $ext, null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, 0, ',', '.'), null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, 0, ',', '.'), null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, 0, ',', '.'), null,$this->cellHCenteredKeepNext);
         }
     }
 
