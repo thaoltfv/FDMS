@@ -5,6 +5,7 @@ namespace App\Services\Document\Appendix1;
 use App\Services\Document\Appendix1\ReportAppendix1;
 use Carbon\Carbon;
 use PhpOffice\PhpWord\Element\Section;
+use PhpOffice\PhpWord\Element\Table;
 use App\Services\CommonService;
 
 class ReportAppendix1Nova extends ReportAppendix1
