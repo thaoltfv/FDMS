@@ -302,9 +302,9 @@ class ReportAppendix1Nova extends ReportAppendix1
         $this->asset3 = $asset->assetGeneral[2];
         //Filter with all status
         $comparisonFactors = $asset->comparisonFactor;
-        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
-        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
-        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
+        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1['id']);
+        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2['id']);
+        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3['id']);
         //Update new querry with non status to get ket_cau_duong
         $compare1 = $this->getComparisonType($comparisonFactor1, 'khoang_cach');
         $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
@@ -312,7 +312,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data = [
             $stt,
             $title,
-            $this->asset1,
+            $this->asset1['id'],
             $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') : '-',
             $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') : '-',
             $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') : '-',
