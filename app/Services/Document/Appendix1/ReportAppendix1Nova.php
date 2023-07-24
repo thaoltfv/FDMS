@@ -140,6 +140,25 @@ class ReportAppendix1Nova extends ReportAppendix1
         }
     }
 
-    
+    protected function addCompareRowExt($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
+    {
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
+        if ($panType == '2-1') {
+            $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col2 . $ext, ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col3 . $ext, ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col4 . $ext, ['bold' => $isBold], $this->cellHCentered);
+        } elseif ($panType == '2-3') {
+            $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
+            $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
+        } else {
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col2 . $ext, null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col3 . $ext, null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col4 . $ext, null,$this->cellHCenteredKeepNext);
+        }
+    }
 
 }
