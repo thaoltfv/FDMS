@@ -204,18 +204,18 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         if ($panType == '2-1') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 1, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 1, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 1, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
         } elseif ($panType == '2-3') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
             $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, 0, ',', '.'), null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, 0, ',', '.'), null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, 0, ',', '.'), null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, 1, ',', '.'), null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, 1, ',', '.'), null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, 1, ',', '.'), null,$this->cellHCenteredKeepNext);
         }
     }
 
