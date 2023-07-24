@@ -74,7 +74,7 @@ class ReportAppendix1 extends Report
         $section->addText($title, ['italic' => true, 'size' => 14], ['align' => 'center']);
     }
 
-    private function setProperties($data)
+    protected function setProperties($data)
     {
 
         $this->isOnlyAsset = (!is_countable($data->realEstate) || count($data->realEstate) == 1);
@@ -149,13 +149,13 @@ class ReportAppendix1 extends Report
         $this->getAssetComparison($this->comparisonFactor3, $this->assetPrice['asset3']['avg_price']);
     }
 
-    private function getComparisonType($compare, $type)
+    protected function getComparisonType($compare, $type)
     {
         $result = $compare->where('type', $type)->first();
         return $result;
     }
 
-    private function getAssetComparison($comparisons, $avgPrice)
+    protected function getAssetComparison($comparisons, $avgPrice)
     {
         $legalPrice = 0;
         $totalPriceAfter = $avgPrice;
@@ -220,7 +220,7 @@ class ReportAppendix1 extends Report
         }
     }
 
-    private function getAssetPriceData($item, $adapter, $mainArea)
+    protected function getAssetPriceData($item, $adapter, $mainArea)
     {
         $result = [];
         $totalAmount = floatval($item->total_amount);
@@ -253,7 +253,7 @@ class ReportAppendix1 extends Report
         return $result;
     }
 
-    private function getAssetLandType($item, $asset)
+    protected function getAssetLandType($item, $asset)
     {
         $result = [];
         $assetDetails = $asset->properties[0]->propertyDetail;
@@ -308,7 +308,7 @@ class ReportAppendix1 extends Report
         return $result;
     }
 
-    private function getApartmentAsset($detail)
+    protected function getApartmentAsset($detail)
     {
         $result = [];
         $result = [
@@ -316,7 +316,7 @@ class ReportAppendix1 extends Report
         ];
         return $result;
     }
-    private function getAllLandType($asset)
+    protected function getAllLandType($asset)
     {
         $assetDetails = $asset->properties[0]->propertyDetail;
         foreach ($assetDetails as $detail) {
@@ -1180,7 +1180,7 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
-    private function getTransactionTime($description, $publicDate)
+    protected function getTransactionTime($description, $publicDate)
     {
         $result = '-';
         // if ($description == 'ĐÃ BÁN') {
@@ -1259,7 +1259,7 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
-    private function getLandAddress($item)
+    protected function getLandAddress($item)
     {
         $landNo = isset($item->properties[0]->compare_property_doc[0]->plot_num) ? 'Thửa số: ' . $item->properties[0]->compare_property_doc[0]->plot_num . ', ' : '';
         $docNo = isset($item->properties[0]->compare_property_doc[0]->doc_num) ? 'tờ: ' . $item->properties[0]->compare_property_doc[0]->doc_num . ', ' : '';
@@ -1373,7 +1373,7 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
-    private function getUtiDescription($uti)
+    protected function getUtiDescription($uti)
     {
         $strUti = '';
         if (empty($uti))
@@ -1475,7 +1475,7 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
-    private function sumArea($land, $colName)
+    protected function sumArea($land, $colName)
     {
         $sum = array_sum(array_column($land, $colName));
         return $sum ?? 0;
@@ -1801,7 +1801,7 @@ class ReportAppendix1 extends Report
     {
         ////không có chữ ký
     }
-    private function addCompareRowPriceAjust($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
+    protected function addCompareRowPriceAjust($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1811,7 +1811,7 @@ class ReportAppendix1 extends Report
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 0, ',', '.'), ['bold' => $isBold], $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 0, ',', '.'), ['bold' => $isBold], $this->cellHCenteredKeepNext);
     }
-    private function addCompareRowPrice($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $panType = '1-1')
+    protected function addCompareRowPrice($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $panType = '1-1')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCentered);
@@ -1831,7 +1831,7 @@ class ReportAppendix1 extends Report
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
         }
     }
-    private function addCompareRowExt($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
+    protected function addCompareRowExt($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1851,7 +1851,7 @@ class ReportAppendix1 extends Report
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col4 . $ext, null,$this->cellHCenteredKeepNext);
         }
     }
-    private function addCompareRowDescription($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '')
+    protected function addCompareRowDescription($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1861,7 +1861,7 @@ class ReportAppendix1 extends Report
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col3) . $ext, null, $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col4) . $ext, null, $this->cellHCenteredKeepNext);
     }
-    private function addCompareRowLengh($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
+    protected function addCompareRowLengh($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1871,7 +1871,7 @@ class ReportAppendix1 extends Report
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 2, ',', '.') , null, $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 2, ',', '.') , null, $this->cellHCenteredKeepNext);
     }
-    private function setLandTypeData($id, $acronym, $isTransfer, $totalArea, $planinngArea, $mainArea, $price)
+    protected function setLandTypeData($id, $acronym, $isTransfer, $totalArea, $planinngArea, $mainArea, $price)
     {
         $data = [
             'id' => $id,
@@ -1884,7 +1884,7 @@ class ReportAppendix1 extends Report
         ];
         return $data;
     }
-    private function getAssetPriceByType($price, $type)
+    protected function getAssetPriceByType($price, $type)
     {
         $data = $price->where('slug', $type)->first();
         $result = $data ? $data->value : 0;
