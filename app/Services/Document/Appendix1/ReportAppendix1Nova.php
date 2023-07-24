@@ -39,6 +39,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
         $data[] = $this->collectInfoAddressAppraise($stt++, 'Vị trí thửa đất', $asset);
+        $data[] = $this->collectInfoDistanceAppraise('', 'Khoảng cách TSSS đến TSTĐ', $asset);
         $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
         $data[] = $this->collectInfoAreaAppraise($stt, "Tổng diện tích ($this->m2)", $asset);
         $data[] = $this->collectInfoAppraiseSumArea("$stt.1", "Phù hợp QH", 'main_area');
@@ -292,6 +293,23 @@ class ReportAppendix1Nova extends ReportAppendix1
         for ( $iDecimals = 0; $fNumber != round($fNumber, $iDecimals); $iDecimals++ );
 
         return $iDecimals;
+    }
+
+    protected function collectInfoDistanceAppraise($stt, $title, $asset)
+    {
+        $compare1 = $this->comparisonFactor1->where('type', 'khoang_cach')->first();
+        $compare2 = $this->comparisonFactor2->where('type', 'khoang_cach')->first();
+        $compare3 = $this->comparisonFactor3->where('type', 'khoang_cach')->first();
+        $data = [
+            $stt,
+            $title,
+            '-',
+            $compare1 ? $compare1->adjust_percent : 0,
+            $compare2 ? $compare2->adjust_percent : 0,
+            $compare3 ? $compare3->adjust_percent : 0,
+            false
+        ];
+        return $data;
     }
 
 }
