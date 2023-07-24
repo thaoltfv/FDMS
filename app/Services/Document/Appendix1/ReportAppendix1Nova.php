@@ -131,14 +131,14 @@ class ReportAppendix1Nova extends ReportAppendix1
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right']);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ chung cư' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%');
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%');
         } else {
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, $this->cellVCentered)->addText('', $this->styleBold, $this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ chung cư' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
         }
     }
 
@@ -304,7 +304,7 @@ class ReportAppendix1Nova extends ReportAppendix1
             $stt,
             $title,
             '-',
-            $compare1 ? $compare1->asset_title : 0,
+            $compare1 ,
             $compare2 ? $compare2->asset_title : 0,
             $compare3 ? $compare3->asset_title : 0,
             false
