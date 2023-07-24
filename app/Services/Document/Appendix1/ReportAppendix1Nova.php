@@ -311,7 +311,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data = [
             $stt,
             $title,
-            '-',
+            $asset1->id,
             $comparisonFactors,
             $comparisonFactor1,
             $compare1,
