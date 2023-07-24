@@ -29,6 +29,12 @@ use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Storage;
+use Kreait\Firebase\Auth as FirebaseAuth;
+use Kreait\Firebase\Auth\SignInResult\SignInResult;
+use Kreait\Firebase\Exception\FirebaseException;
+use Google\Cloud\Firestore\FirestoreClient;
+use Kreait\Firebase\Factory;
+use Session;
 
 
 class CompareAssetGeneralController extends Controller
@@ -110,6 +116,7 @@ class CompareAssetGeneralController extends Controller
             $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
             $comparisonAsset = $this->compareAssetGeneralRepository->findAllInElastic_v3();
             // $data = array_map(null,$certificateAssets,$comparisonAsset);
+            // $data =  array_merge ($certificateAssets, $comparisonAsset && !is_array($comparisonAsset) ? $comparisonAsset->toArray() : []);
             $data =  array_merge ($certificateAssets, $comparisonAsset ? $comparisonAsset->toArray() : []);
             return $this->respondWithCustomData($data);
         } catch (\Exception $exception) {
@@ -218,6 +225,25 @@ class CompareAssetGeneralController extends Controller
             $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             Storage::put($name, file_get_contents($image));
             $fileUrl = Storage::url($name);
+
+            // test firebase
+
+            // $image = $request->file('image');
+            // $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+            // $name = $firebase_storage_path . Uuid::uuid4()->toString();
+            // $localfolder = public_path('firebase-temp-uploads') .'/';  
+            // $extension = $image->getClientOriginalExtension();  
+            // $file      = $name. '.' . $extension;  
+            // $storage = app('firebase.storage');
+            // if ($image->move($localfolder, $file)) {  
+            //     $uploadedfile = fopen($localfolder.$file, 'r');  
+            //     $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
+            //     //will remove from local laravel folder  
+            //     unlink($localfolder . $file);  
+            //     Session::flash('message', 'Succesfully Uploaded');
+            //     $expiresAt = new \DateTime('tomorrow');
+            //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
+            // } 
             return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
             Log::error($exception);

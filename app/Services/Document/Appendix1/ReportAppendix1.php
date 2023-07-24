@@ -155,7 +155,7 @@ class ReportAppendix1 extends Report
         return $result;
     }
 
-    private function getAssetComparison($comparisons, $avgPrice)
+    protected function getAssetComparison($comparisons, $avgPrice)
     {
         $legalPrice = 0;
         $totalPriceAfter = $avgPrice;
@@ -682,7 +682,7 @@ class ReportAppendix1 extends Report
             }
         }
     }
-    private function getDifferenceAssetByType($table, $compare, $stt)
+    protected function getDifferenceAssetByType($table, $compare, $stt)
     {
         if ($stt === 3) {
             $table->addRow(400, $this->cantSplit);
@@ -1801,7 +1801,7 @@ class ReportAppendix1 extends Report
     {
         ////không có chữ ký
     }
-    private function addCompareRowPriceAjust($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
+    protected function addCompareRowPriceAjust($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1811,7 +1811,7 @@ class ReportAppendix1 extends Report
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 0, ',', '.'), ['bold' => $isBold], $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 0, ',', '.'), ['bold' => $isBold], $this->cellHCenteredKeepNext);
     }
-    private function addCompareRowPrice($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $panType = '1-1')
+    protected function addCompareRowPrice($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $panType = '1-1')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCentered);
@@ -1831,7 +1831,7 @@ class ReportAppendix1 extends Report
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 0, ',', '.'), ['bold' => $isBold], $this->cellHCentered);
         }
     }
-    private function addCompareRowExt($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
+    protected function addCompareRowExt($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '', $panType = '1-1')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1851,7 +1851,7 @@ class ReportAppendix1 extends Report
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col4 . $ext, null,$this->cellHCenteredKeepNext);
         }
     }
-    private function addCompareRowDescription($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '')
+    protected function addCompareRowDescription($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '')
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
@@ -1861,7 +1861,7 @@ class ReportAppendix1 extends Report
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col3) . $ext, null, $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col4) . $ext, null, $this->cellHCenteredKeepNext);
     }
-    private function addCompareRowLengh($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
+    protected function addCompareRowLengh($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
