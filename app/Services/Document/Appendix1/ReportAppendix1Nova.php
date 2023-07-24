@@ -312,7 +312,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data = [
             $stt,
             $title,
-            '-',
+            $this->asset1,
             $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') : '-',
             $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') : '-',
             $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') : '-',
