@@ -304,9 +304,9 @@ class ReportAppendix1Nova extends ReportAppendix1
             $stt,
             $title,
             '-',
-            $compare1 ? $compare1->adjust_percent : 0,
-            $compare2 ? $compare2->adjust_percent : 0,
-            $compare3 ? $compare3->adjust_percent : 0,
+            $compare1 ? $compare1->asset_title : 0,
+            $compare2 ? $compare2->asset_title : 0,
+            $compare3 ? $compare3->asset_title : 0,
             false
         ];
         return $data;
