@@ -305,16 +305,16 @@ class ReportAppendix1Nova extends ReportAppendix1
         $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $asset1->id);
         $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $asset2->id);
         $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $asset3->id);
-        $compare1 = $this->getComparisonType($comparisonFactor1, 'khoang_cach');
+        $compare1 = $comparisonFactor1->where('type', 'khoang_cach')->first();
         $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
         $compare3 = $this->getComparisonType($comparisonFactor3, 'khoang_cach');
         $data = [
             $stt,
             $title,
             '-',
+            $comparisonFactors,
+            $comparisonFactor1,
             $compare1,
-            $compare2,
-            $compare3,
             false
         ];
         return $data;
