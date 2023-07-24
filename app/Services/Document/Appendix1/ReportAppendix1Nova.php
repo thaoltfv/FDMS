@@ -138,7 +138,8 @@ class ReportAppendix1Nova extends ReportAppendix1
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
+            // $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . $compare->adjust_percent . '%', null, $this->keepNext);
         }
     }
 
