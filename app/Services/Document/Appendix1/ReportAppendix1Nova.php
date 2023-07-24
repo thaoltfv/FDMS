@@ -138,8 +138,7 @@ class ReportAppendix1Nova extends ReportAppendix1
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            // $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . $compare->adjust_percent . '%', null, $this->keepNext);
+            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
         }
     }
 
@@ -298,16 +297,22 @@ class ReportAppendix1Nova extends ReportAppendix1
 
     protected function collectInfoDistanceAppraise($stt, $title, $asset)
     {
-        $compare1 = $this->comparisonFactor1->where('type', 'khoang_cach')->first();
-        $compare2 = $this->comparisonFactor2->where('type', 'khoang_cach')->first();
-        $compare3 = $this->comparisonFactor3->where('type', 'khoang_cach')->first();
+        //Filter with all status
+        $comparisonFactors = $asset->comparisonFactor;
+        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
+        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
+        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
+        //Update new querry with non status to get ket_cau_duong
+        $compare1 = $this->getComparisonType($comparisonFactor1, 'khoang_cach');
+        $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
+        $compare3 = $this->getComparisonType($comparisonFactor3, 'khoang_cach');
         $data = [
             $stt,
             $title,
             '-',
-            $compare1 ,
-            $compare2 ? $compare2->asset_title : 0,
-            $compare3 ? $compare3->asset_title : 0,
+            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') : '-',
+            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') : '-',
+            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') : '-',
             false
         ];
         return $data;
