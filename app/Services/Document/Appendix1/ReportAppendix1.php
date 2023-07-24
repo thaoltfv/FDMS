@@ -682,7 +682,7 @@ class ReportAppendix1 extends Report
             }
         }
     }
-    private function getDifferenceAssetByType($table, $compare, $stt)
+    protected function getDifferenceAssetByType($table, $compare, $stt)
     {
         if ($stt === 3) {
             $table->addRow(400, $this->cantSplit);
