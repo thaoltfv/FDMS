@@ -297,15 +297,9 @@ class ReportAppendix1Nova extends ReportAppendix1
 
     protected function collectInfoDistanceAppraise($stt, $title, $asset)
     {
-        //Filter with all status
-        $comparisonFactors = $asset->comparisonFactor;
-        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
-        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
-        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
-        //Update new querry with non status to get ket_cau_duong
-        $compare1 = $this->getComparisonType($comparisonFactor1, 'khoang_cach');
-        $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
-        $compare3 = $this->getComparisonType($comparisonFactor3, 'khoang_cach');
+        $compare1 = $this->getComparisonType($this->comparisonFactor1, 'khoang_cach');
+        $compare2 = $this->getComparisonType($this->comparisonFactor2, 'khoang_cach');
+        $compare3 = $this->getComparisonType($this->comparisonFactor3, 'khoang_cach');
         $data = [
             $stt,
             $title,
