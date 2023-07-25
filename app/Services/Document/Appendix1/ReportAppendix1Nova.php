@@ -310,12 +310,12 @@ class ReportAppendix1Nova extends ReportAppendix1
         $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
         $compare3 = $this->getComparisonType($comparisonFactor3, 'khoang_cach');
         $data = [
+            $stt,
+            $title,
+            '-',
             json_encode($compare1),
-            json_encode($comparisonFactor1),
             json_encode($compare2),
-            json_encode($comparisonFactor2),
             json_encode($compare3),
-            json_encode($comparisonFactor3),
             false
         ];
         return $data;
