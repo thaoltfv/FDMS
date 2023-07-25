@@ -34,7 +34,7 @@ interface AppraiseRepository extends BaseRepository
 
     public function postGeneralInfomation(array $object , int $id = null);
 
-    public function updateDistance(array $object , int $id = null);
+    public function updateDistance(int $object , int $id = null);
 
     public function getLandInfomation(int $appraiseId);
 

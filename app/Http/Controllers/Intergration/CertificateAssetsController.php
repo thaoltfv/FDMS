@@ -791,7 +791,8 @@ class CertificateAssetsController extends Controller
     public function updateDistance(Request $request, int $id = null){
         
         //TODO Handle your data
-        $result = $this->appraiseRepository->updateDistance($request->toArray(), $id);
+        $distance = $request->distance;
+        $result = $this->appraiseRepository->updateDistance($distance, $id);
         if(isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData( $result);
         return $this->respondWithCustomData($result);

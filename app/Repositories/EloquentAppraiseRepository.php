@@ -6901,10 +6901,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $check;
     }
 
-    public function updateDistance(array $objects, int $id = null)
+    public function updateDistance(int $objects, int $id = null)
     {
         return AppraiseComparisonFactor::query()
                 ->where('id', $id)
-                ->update(['asset_title' => $objects[0]->distance]);
+                ->update(['asset_title' => $objects]);
             }
 }
