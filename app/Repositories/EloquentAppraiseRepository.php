@@ -4358,7 +4358,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "phong_thuy",
             "quy_hoach",
             "dieu_kien_thanh_toan",
-            "yeu_to_khac"
+            "yeu_to_khac",
+            "khoang_cach"
         ];
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
@@ -4575,10 +4576,38 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $type = 'dieu_kien_thanh_toan';
                 $name = 'Điều kiện thanh toán';
                 $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
+            }elseif($comparisonFactorTmp == 'khoang_cach'){
+                $appraiseValue = 0 ;
+                $assetValue = 0;
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
+                $dictionary = $dictionaries['khoang_cach'];
+                // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
+                $type = 'khoang_cach';
+                $name = 'Khoảng cách TSSS đến TSTĐ';
+                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
             }
         }
     }
 
+    private function comparisionDistance(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId , string $type , string $name){
+        $comparisonFactor = [
+            'appraise_id' => $appraiseId,
+            'asset_general_id' => $assetGeneralId,
+            'status' => $status,
+            'type' => $type,
+            'appraise_title' => $appraiseValue,
+            'asset_title' => $assetValue,
+            'description' => 'Không xác định',
+            'adjust_percent' => 0,
+            'name' => $name,
+        ];
+        $comparisonFactor = new AppraiseComparisonFactor($comparisonFactor);
+        $comparisonFactorId = QueryBuilder::for($comparisonFactor)
+            ->insertGetId($comparisonFactor->attributesToArray());
+    }
     private function comparisonNoDictionary(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId , string $type , string $name){
         $description = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
         $comparisonFactor = [
