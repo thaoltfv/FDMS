@@ -6905,6 +6905,6 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     {
         return AppraiseComparisonFactor::query()
                 ->where('id', $id)
-                ->update(['asset_title' => $objects->distance]);
+                ->update(['asset_title' => $objects[0]->distance]);
             }
 }
