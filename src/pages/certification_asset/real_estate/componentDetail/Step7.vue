@@ -66,10 +66,33 @@
 						</td>
 						</tr>
 						<tr>
-						<td>4</td>
+						<td rowspan="2">4</td>
 						<td>Địa chỉ thửa đất</td>
 						<td>{{appraises.full_address_appraise}}</td>
 						<td v-for="(asset, index) in appraises.asset_general" :key="'assetType' + index">{{ asset.full_address ? asset.full_address : "-"}}</td>
+						</tr>
+						<tr>
+						<td>Khoảng cách TSSS đến TSTĐ</td>
+						<td>-</td>
+						<td v-for="(asset, index) in appraises.asset_general" :key="'distance-land' + index">
+							<div v-for="(asset_com, index_com) in appraises.comparison_factor" :key="'distance-com' + index_com">
+								<div v-for="(asset_com_1, index_com_1) in asset_com.comparison_factor" :key="'distance-com1' + index_com_1">
+									<InputLengthArea1
+									v-if="asset.id == asset_com_1.asset_general_id && asset_com_1.type == 'khoang_cach'"
+									class="label-none input_center"
+									:disabled="!isEditStatus"
+									v-model="asset_com_1.asset_title"
+									vid="asset_distance"
+									label="asset-distance"
+									:text_center="true"
+									:max="999999999"
+									:min="-1"
+									:decimal="2"
+									@change="changeDistanceLand($event, asset_com_1, asset, index )"
+								/>	
+								</div>
+							</div>
+						</td>
 						</tr>
 						<tr>
 						<td>5</td>
@@ -1492,6 +1515,7 @@ import InputText from '@/components/Form/InputText'
 import InputNumberNegative from '@/components/Form/InputNumberNegative'
 import InputSwitch from '@/components/Form/InputSwitch'
 import InputLengthArea from '@/components/Form/InputLengthArea'
+import InputLengthArea1 from '@/components/Form/InputLengthArea1'
 import { Tabs, TabItem } from 'vue-material-tabs'
 import InputSwitchLayerCuting from '@/components/Form/InputSwitchLayerCuting'
 import ModalDelete from '@/components/Modal/ModalDelete'
@@ -1522,6 +1546,7 @@ export default {
 		InputNumberNegative,
 		InputSwitch,
 		InputLengthArea,
+		InputLengthArea1,
 		InputArea,
 		InputDatePicker,
 		InputCurrency,
@@ -2625,6 +2650,13 @@ export default {
 				await this.calculationChangePrice(this.form, indexPrice)
 			}
 			await this.calculation(this.form)
+			this.key_render_1 += 1
+		},
+		async changeDistanceLand (event, comparator) {
+			console.log('event', event)
+			console.log('comparator', comparator)
+			let data = {'distance': event}
+			const res = await CertificateAsset.updateDistance(data, comparator.id)
 			this.key_render_1 += 1
 		},
 		async changeViolationLand (event, dataItemLand, indexArea) {

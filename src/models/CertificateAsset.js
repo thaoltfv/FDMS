@@ -12,6 +12,9 @@ export default class CertificateAsset extends Model {
 	static async getDataAllStep (id = '') {
 		return (new this()).request({ method: 'GET', url: `certification_asset/appraise-all-step/${id}`, isStatic: true })
 	}
+	static async updateDistance (data, id = '') {
+		return (new this()).request({ method: 'POST', url: `certification_asset/update-distance/${id}`, data: data, isStatic: true })
+	}
 	static async submitStep1 (data, id = '') {
 		return (new this()).request({ method: 'POST', url: `certification_asset/step1-general-infomation/${id}`, data: data, isStatic: true })
 	}
