@@ -4605,11 +4605,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
                 }
-                $dictionary = $dictionaries['khoang_cach'];
+                // $dictionary = $dictionaries['khoang_cach'];
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'khoang_cach';
                 $name = 'Khoảng cách TSSS đến TSTĐ';
-                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
+                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }
         }
     }
