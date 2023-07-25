@@ -28,7 +28,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tổng hợp các nguồn thông tin, điều chỉnh các TSSS, mức giá chênh lệch với mức giá trung bình của các mức giá chỉ dẫn không quá ±15%.', ['bold' => false]);
         $textRun = $section->addTextRun();
-        $textRun->addText('     - Tổ thẩm định nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định sử dụng mức giá chỉ dẫn ' . $namePP . ' của 03 TSSS làm mức giá của tài sản thẩm định giá giả định.');
+        $textRun->addText('     - Tổ thẩm định nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định sử dụng mức giá chỉ dẫn ' . $namePP . ' của 03 TSSS làm mức giá của tài sản thẩm định giá.');
     }
     protected function collectInfomationAppraiseData($asset)
     {
