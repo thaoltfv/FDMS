@@ -1907,6 +1907,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "phong_thuy" => "Phong thủy",
             "quy_hoach" => "Quy hoạch/hiện trạng",
             "dieu_kien_thanh_toan" => "Điều kiện thanh toán",
+            "khoang_cach" => "Khoảng cách TSSS đến TSTĐ",
             //'yeu_to_khac' => 'Yếu tố khác',
         ];
 
@@ -1925,6 +1926,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "phong_thuy" => 0,
             "quy_hoach" => 0,
             "dieu_kien_thanh_toan" => 0,
+            "khoang_cach" => 0,
             //"yeu_to_khac" => 0
         ];
         $items = $this->model->query()
@@ -1997,7 +1999,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "quy_hoach",
             "dieu_kien_thanh_toan",
 
-            "yeu_to_khac"
+            "yeu_to_khac",
+            "khoang_cach"
         ];
 
         $object = $this->findById($id);
@@ -2046,6 +2049,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     break;
                 case "Điều kiện thanh toán":
                     $comparisonFactorInput[] = "dieu_kien_thanh_toan";
+                    break;
+                case "Khoảng cách TSSS đến TSTĐ":
+                    $comparisonFactorInput[] = "khoang cach";
                     break;
                 default:
                     $comparisonFactorInput[] = "yeu_to_khac";
@@ -2595,6 +2601,22 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'description' => CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'],
                         'adjust_percent' => 0,
                         'name' => 'Quy hoạch/hiện trạng',
+                    ];
+                    $comparisonFactor = new AppraiseComparisonFactor($comparisonFactor);
+                    $comparisonFactorId = QueryBuilder::for($comparisonFactor)
+                        ->insertGetId($comparisonFactor->attributesToArray());
+                } else if ($comparisonFactorTmp == 'khoang_cach') {
+                    continue;
+                    $comparisonFactor = [
+                        'appraise_id' => $appraiseId,
+                        'asset_general_id' => $appraiseHasAsset->asset_general_id,
+                        'status' => (in_array('khoang_cach', $comparisonFactorInput)),
+                        'type' => 'khoang_cach',
+                        'name' => 'Khoảng cách TSSS đến TSTĐ',
+                        'appraise_title' => 0,
+                        'asset_title' => 0,
+                        'description' => 'Không xác định',
+                        'adjust_percent' => 0,
                     ];
                     $comparisonFactor = new AppraiseComparisonFactor($comparisonFactor);
                     $comparisonFactorId = QueryBuilder::for($comparisonFactor)
