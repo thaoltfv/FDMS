@@ -22,8 +22,8 @@ class ReportAppendix3Donava extends ReportAppendix3
         $table->addCell(2200)->addImage($this->logoUrl, array(
             'height'        => 33,
             'wrappingStyle' => 'behind',
-            'alignment' => 'center',
-            'marginTop' => 2000,
+            'alignment' => 'left',
+            'wrapDistanceTop' => 200,
         )); 
         $c1 = $table->addCell();
         $c1->addText('PHỤ LỤC ẢNH TÀI SẢN THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], array('spaceAfter' => 0, 'spaceBefore' => 400));
