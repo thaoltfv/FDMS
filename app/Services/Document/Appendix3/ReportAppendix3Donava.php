@@ -43,7 +43,7 @@ class ReportAppendix3Donava extends ReportAppendix3
     {
         if (!empty($pic)) {
             $section->addImage($pic->link, array(
-                'height' => 236,
+                'height' => 300,
                 'align' => 'left',
                 'space' => [
                 'line' => 1000,
