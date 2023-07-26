@@ -52,7 +52,7 @@ class ReportAppendix3Donava extends ReportAppendix3
                 'line' => 1000,
                 'rule' => 'single',
             ],));
-            $section->addText('Sơ đồ vị trí.', null, ['align' => 'center','lineHeight' => 0.75]);
+            $section->addText('Sơ đồ vị trí.', null, ['align' => 'center','lineHeight' => 1]);
         }
     }
 
@@ -73,7 +73,7 @@ class ReportAppendix3Donava extends ReportAppendix3
             }
             $table->addRow();
             $cell = $table->addCell(10000, $this->cellColSpan);
-            $cell->addText('Đường tiếp giáp TSTĐG.', null, ['align' => 'center','lineHeight' => 0.75]);
+            $cell->addText('Đường tiếp giáp TSTĐG.', null, ['align' => 'center','lineHeight' => 1]);
         }
     }
     protected function printOverallImage($section, $pic)
@@ -93,7 +93,7 @@ class ReportAppendix3Donava extends ReportAppendix3
             }
             $table->addRow();
             $cell = $table->addCell(10000, $this->cellColSpan);
-            $cell->addText('Hiện trạng tổng thể TSTĐG.', null, ['align' => 'center','lineHeight' => 0.75]);
+            $cell->addText('Hiện trạng tổng thể TSTĐG.', null, ['align' => 'center','lineHeight' => 1]);
         }
     }
 
@@ -114,7 +114,7 @@ class ReportAppendix3Donava extends ReportAppendix3
             }
             $table->addRow();
             $cell = $table->addCell(10000, $this->cellColSpan);
-            $cell->addText('Hiện trạng chi tiết tài sản thẩm định.', null, ['align' => 'center','lineHeight' => 0.75]);
+            $cell->addText('Hiện trạng chi tiết tài sản thẩm định.', null, ['align' => 'center','lineHeight' => 1]);
         }
     }
 
