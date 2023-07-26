@@ -43,7 +43,7 @@ class ReportAppendix3Donava extends ReportAppendix3
     {
         if (!empty($pic)) {
             $section->addImage($pic->link, array(
-                'height' => 266,
+                'height' => 255,
                 'width' => 488,
                 'align' => 'left',
                 'space' => [
@@ -52,5 +52,13 @@ class ReportAppendix3Donava extends ReportAppendix3
             ],));
             $section->addText('Sơ đồ vị trí.', null, ['align' => 'center']);
         }
+    }
+
+    protected function getCustomerRequest($section, $certificate)
+    {
+        // $section->addTextBreak(1);
+        $textRun = $section->addTextRun();
+        $textRun->addText('Khách hàng yêu cầu TĐG: ', ['bold' => true, 'underLine' => true]);
+        $textRun->addText($certificate->petitioner_name ?? '', ['bold' => true]);
     }
 }
