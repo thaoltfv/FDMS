@@ -18,12 +18,12 @@ class ReportAppendix3Donava extends ReportAppendix3
         // $textrun = $section->addTextRun();
         $table = $section->addTable();
         $table->addRow();
-        $table->addCell(600)->addImage($this->logoUrl, array(
+        $table->addCell(3000)->addImage($this->logoUrl, array(
             'height'        => 33,
             'wrappingStyle' => 'behind',
             'wrapDistanceRight' => 300,
         )); 
-        $table->addCell(2000)->addText('PHỤ LỤC ẢNH TÀI SẢN THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
+        $table->addCell()->addText('PHỤ LỤC ẢNH TÀI SẢN THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
         // $section->addImage($this->logoUrl, array(
         //     'height'        => 33,
         //     'wrappingStyle' => 'inline',
