@@ -18,7 +18,7 @@ class ReportAppendix3Donava extends ReportAppendix3
         // $textrun = $section->addTextRun();
         $table = $section->addTable();
         $table->addRow();
-        $table->addCell(200)->addImage($this->logoUrl, array(
+        $table->addCell(600)->addImage($this->logoUrl, array(
             'height'        => 33,
             'wrappingStyle' => 'inline',
             'wrapDistanceRight' => 30,
