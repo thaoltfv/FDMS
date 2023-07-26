@@ -149,7 +149,7 @@ class ReportAppendix1 extends Report
         $this->getAssetComparison($this->comparisonFactor3, $this->assetPrice['asset3']['avg_price']);
     }
 
-    private function getComparisonType($compare, $type)
+    protected function getComparisonType($compare, $type)
     {
         $result = $compare->where('type', $type)->first();
         return $result;

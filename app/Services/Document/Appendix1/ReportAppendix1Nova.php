@@ -28,7 +28,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tổng hợp các nguồn thông tin, điều chỉnh các TSSS, mức giá chênh lệch với mức giá trung bình của các mức giá chỉ dẫn không quá ±15%.', ['bold' => false]);
         $textRun = $section->addTextRun();
-        $textRun->addText('     - Tổ thẩm định nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định sử dụng mức giá chỉ dẫn ' . $namePP . ' của 03 TSSS làm mức giá của tài sản thẩm định giá giả định.');
+        $textRun->addText('     - Tổ thẩm định nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định sử dụng mức giá chỉ dẫn ' . $namePP . ' của 03 TSSS làm mức giá của tài sản thẩm định giá.');
     }
     protected function collectInfomationAppraiseData($asset)
     {
@@ -297,16 +297,25 @@ class ReportAppendix1Nova extends ReportAppendix1
 
     protected function collectInfoDistanceAppraise($stt, $title, $asset)
     {
-        $compare1 = $this->comparisonFactor1->where('type', 'khoang_cach')->first();
-        $compare2 = $this->comparisonFactor2->where('type', 'khoang_cach')->first();
-        $compare3 = $this->comparisonFactor3->where('type', 'khoang_cach')->first();
+        $this->asset1 = $asset->assetGeneral[0];
+        $this->asset2 = $asset->assetGeneral[1];
+        $this->asset3 = $asset->assetGeneral[2];
+        //Filter with all status
+        $comparisonFactors = $asset->comparisonFactor;
+        $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
+        $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
+        $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
+        //Update new querry with non status to get ket_cau_duong
+        $compare1 = $this->getComparisonType($comparisonFactor1, 'khoang_cach');
+        $compare2 = $this->getComparisonType($comparisonFactor2, 'khoang_cach');
+        $compare3 = $this->getComparisonType($comparisonFactor3, 'khoang_cach');
         $data = [
             $stt,
             $title,
             '-',
-            $compare1 ? $compare1->asset_title : 0,
-            $compare2 ? $compare2->asset_title : 0,
-            $compare3 ? $compare3->asset_title : 0,
+            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.').' m'  : '-',
+            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.').' m'  : '-',
+            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.').' m'  : '-',
             false
         ];
         return $data;

@@ -787,4 +787,16 @@ class CertificateAssetsController extends Controller
     //     $result = AppraiseVersionService::getCertificateByRealEstateId($id);
     //     return $this->respondWithCustomData($result);
     // }
+
+    public function updateDistance(Request $request, int $id = null){
+        
+        //TODO Handle your data
+        $distance = $request->distance;
+        $result = $this->appraiseRepository->updateDistance($distance, $id);
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData($result);
+
+
+    }
 }
