@@ -68,7 +68,7 @@ class ReportAppendix3 extends Report
         $certificateDate = !empty($data->certificate_date) ? date("d/m/Y", strtotime($data->certificate_date)) : '      ';
         $section->addText('(Kèm theo báo cáo Thẩm định giá số ' .  $certificateNum . $this->documentNumberSuffix . ', ngày ' . $certificateDate . ')', ['italic' => true, 'size' => 12], ['align' => 'center']);
     }
-    private function setProperties($data)
+    protected function setProperties($data)
     {
         $this->isOnlyAsset = (!is_countable($data->realEstate) || count($data->realEstate) == 1);
         $this->realEstates = $data->realEstate;
