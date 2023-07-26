@@ -52,7 +52,7 @@ class ReportAppendix3Donava extends ReportAppendix3
                 'line' => 1000,
                 'rule' => 'single',
             ],));
-            $section->addText('Sơ đồ vị trí.', null, ['align' => 'center']);
+            $section->addText('Sơ đồ vị trí.', null, ['align' => 'center','lineHeight' => 0.5]);
         }
     }
 
