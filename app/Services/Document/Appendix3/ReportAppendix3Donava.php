@@ -52,7 +52,69 @@ class ReportAppendix3Donava extends ReportAppendix3
                 'line' => 1000,
                 'rule' => 'single',
             ],));
-            $section->addText('Sơ đồ vị trí.', null, ['align' => 'center','lineHeight' => 0.5]);
+            $section->addText('Sơ đồ vị trí.', null, ['align' => 'center','lineHeight' => 0.75]);
+        }
+    }
+
+    protected function printRoadImage($section, $pic)
+    {
+        if (!empty($pic)) {
+            $table = $section->addTable();
+            for ($i = 0; $i < count($pic); $i += 2) {
+                $table->addRow(800);
+                $cell = $table->addCell(5000);
+                if (isset($pic[$i]->link)) {
+                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft);
+                }
+                $cell = $table->addCell(5000);
+                if (isset($pic[$i + 1]->link)) {
+                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight);
+                }
+            }
+            $table->addRow();
+            $cell = $table->addCell(10000, $this->cellColSpan);
+            $cell->addText('Đường tiếp giáp TSTĐG.', null, ['align' => 'center','lineHeight' => 0.75]);
+        }
+    }
+    protected function printOverallImage($section, $pic)
+    {
+        if (!empty($pic)) {
+            $table = $section->addTable();
+            for ($i = 0; $i < count($pic); $i += 2) {
+                $table->addRow(800);
+                $cell = $table->addCell(5000);
+                if (isset($pic[$i]->link)) {
+                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft);
+                }
+                $cell = $table->addCell(5000);
+                if (isset($pic[$i + 1]->link)) {
+                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight);
+                }
+            }
+            $table->addRow();
+            $cell = $table->addCell(10000, $this->cellColSpan);
+            $cell->addText('Hiện trạng tổng thể TSTĐG.', null, ['align' => 'center','lineHeight' => 0.75]);
+        }
+    }
+
+    protected function printCurrentStatusImage($section, $pic)
+    {
+        if (!empty($pic)) {
+            $table = $section->addTable();
+            for ($i = 0; $i < count($pic); $i += 2) {
+                $table->addRow(800);
+                $cell = $table->addCell(5000);
+                if (isset($pic[$i]->link)) {
+                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft);
+                }
+                $cell = $table->addCell(5000);
+                if (isset($pic[$i + 1]->link)) {
+                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight);
+                }
+            }
+            $table->addRow();
+            $cell = $table->addCell(10000, $this->cellColSpan);
+            $cell->addText('Hiện trạng chi tiết tài sản thẩm định.', null, ['align' => 'center','lineHeight' => 0.75]);
         }
     }
 
