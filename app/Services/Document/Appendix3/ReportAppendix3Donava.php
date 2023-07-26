@@ -15,10 +15,12 @@ class ReportAppendix3Donava extends ReportAppendix3
     public function printTitle(Section $section, $data)
     {
         $this->setProperties($data);
-        $textrun = $section->addTextRun('pStyle');
+        $textrun = $section->addTextRun();
         $textrun->addImage($this->logoUrl, array(
             'height'        => 33,
-            'wrappingStyle' => 'behind'
+            'wrappingStyle' => 'inline',
+            'wrapDistanceRight' => 30,
+            'marginTop' => 1,
         ));
         $textrun->addText('PHỤ LỤC ẢNH TÀI SẢN THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
         $certificateNum = !empty($data->certificate_num) ? $data->certificate_num : '      ';
