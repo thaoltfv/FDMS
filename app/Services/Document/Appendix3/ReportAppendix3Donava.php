@@ -16,6 +16,7 @@ class ReportAppendix3Donava extends ReportAppendix3
     {
         $this->setProperties($data);
         // $textrun = $section->addTextRun();
+        $noSpace = array('spaceAfter' => 0);
         $table = $section->addTable();
         $table->addRow();
         $table->addCell(2000)->addImage($this->logoUrl, array(
@@ -23,7 +24,7 @@ class ReportAppendix3Donava extends ReportAppendix3
             'wrappingStyle' => 'behind',
             'wrapDistanceRight' => 300,
         )); 
-        $table->addCell()->addText('PHỤ LỤC ẢNH TÀI SẢN THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
+        $table->addCell()->addText('PHỤ LỤC ẢNH TÀI SẢN THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], $noSpace);
         // $section->addImage($this->logoUrl, array(
         //     'height'        => 33,
         //     'wrappingStyle' => 'inline',
@@ -36,6 +37,6 @@ class ReportAppendix3Donava extends ReportAppendix3
         // $section->addText('(Kèm theo báo cáo Thẩm định giá số ' .  $certificateNum . $this->documentNumberSuffix . ', ngày ' . $certificateDate . ')', ['italic' => true, 'size' => 12], ['align' => 'center']);
         $table->addRow();
         $table->addCell(1800);
-        $table->addCell()->addText('(Kèm theo báo cáo Thẩm định giá số ' .  $certificateNum . $this->documentNumberSuffix . ', ngày ' . $certificateDate . ')', ['italic' => true, 'size' => 12], ['align' => 'center']);
+        $table->addCell()->addText('(Kèm theo báo cáo Thẩm định giá số ' .  $certificateNum . $this->documentNumberSuffix . ', ngày ' . $certificateDate . ')', ['italic' => true, 'size' => 12], $noSpace);
     }
 }
