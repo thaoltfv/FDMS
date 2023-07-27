@@ -8,7 +8,7 @@ class ReportAppendix3Donava extends ReportAppendix3
 {
     protected $styleTableImageLeft1 = array(
         'width' => 233,
-        'height' => 150,
+        'height' => 145,
         'space' => [
             'line' => 1000,
         ],
@@ -17,7 +17,7 @@ class ReportAppendix3Donava extends ReportAppendix3
     );
     protected $styleTableImageRight1 = array(
         'width' => 233,
-        'height' => 150,
+        'height' => 145,
         'space' => [
             'line' => 1000,
         ],
@@ -63,7 +63,7 @@ class ReportAppendix3Donava extends ReportAppendix3
     {
         if (!empty($pic)) {
             $section->addImage($pic->link, array(
-                'height' => 244,
+                'height' => 236,
                 'width' => 488,
                 'align' => 'left',
                 'space' => [
