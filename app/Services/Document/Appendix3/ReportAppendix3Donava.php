@@ -6,6 +6,24 @@ use PhpOffice\PhpWord\Element\Section;
 
 class ReportAppendix3Donava extends ReportAppendix3
 {
+    protected $styleTableImageLeft1 = array(
+        'width' => 233,
+        'height' => 145,
+        'space' => [
+            'line' => 1000,
+        ],
+        'keepNext' => true,
+        'align' => 'left',
+    );
+    protected $styleTableImageRight1 = array(
+        'width' => 233,
+        'height' => 145,
+        'space' => [
+            'line' => 1000,
+        ],
+        'keepNext' => true,
+        'align' => 'right',
+    );
     protected function printAssetInfo($section, $name, $address)
     {
         $textRun = $section->addTextRun();
@@ -45,7 +63,7 @@ class ReportAppendix3Donava extends ReportAppendix3
     {
         if (!empty($pic)) {
             $section->addImage($pic->link, array(
-                'height' => 255,
+                'height' => 236,
                 'width' => 488,
                 'align' => 'left',
                 'space' => [
@@ -64,11 +82,11 @@ class ReportAppendix3Donava extends ReportAppendix3
                 $table->addRow(800);
                 $cell = $table->addCell(5000);
                 if (isset($pic[$i]->link)) {
-                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft);
+                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft1);
                 }
                 $cell = $table->addCell(5000);
                 if (isset($pic[$i + 1]->link)) {
-                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight);
+                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight1);
                 }
             }
             $table->addRow();
@@ -84,11 +102,11 @@ class ReportAppendix3Donava extends ReportAppendix3
                 $table->addRow(800);
                 $cell = $table->addCell(5000);
                 if (isset($pic[$i]->link)) {
-                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft);
+                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft1);
                 }
                 $cell = $table->addCell(5000);
                 if (isset($pic[$i + 1]->link)) {
-                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight);
+                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight1);
                 }
             }
             $table->addRow();
@@ -105,11 +123,11 @@ class ReportAppendix3Donava extends ReportAppendix3
                 $table->addRow(800);
                 $cell = $table->addCell(5000);
                 if (isset($pic[$i]->link)) {
-                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft);
+                    $cell->addImage($pic[$i]->link, $this->styleTableImageLeft1);
                 }
                 $cell = $table->addCell(5000);
                 if (isset($pic[$i + 1]->link)) {
-                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight);
+                    $cell->addImage($pic[$i + 1]->link, $this->styleTableImageRight1);
                 }
             }
             $table->addRow();
