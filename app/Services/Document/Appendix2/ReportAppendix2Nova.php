@@ -103,6 +103,9 @@ class ReportAppendix2Nova extends ReportAppendix2
         $textRun = $section->addTextRun();
         $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
         $section->addText('     Căn cứ Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn của công trình xây dựng được ước tính bằng phương pháp tổng cộng theo công thức:');
+    }
+
+    protected function printNew1($section){
         $table = $section->addTable();
         $table->addRow();
         $c0 = $table->addCell(2200);
@@ -119,10 +122,6 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c05->addText('+');
         $c06 = $table->addCell(2200);
         $c06->addText('Giá trị hao mòn ngoại biên',null,['align' => 'center']);
-        $this->printNew1($section);
-    }
-
-    protected function printNew1($section){
         $imgName = env('STORAGE_IMAGES','images') .'/'.'congthuc-PL2.png';
         $section->addText('     Tổ thẩm định nhận định:');
         $section->addText('     ❖    Tài sản thẩm định giá chịu hao mòn vật lý và có thể sử dụng phương pháp chuyên gia để ước tính giá trị hao mòn vật lý của tài sản');
@@ -130,7 +129,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $section->addText('     ❖    Tài sản thẩm định giá không chịu hao mòn ngoại biên.');
         $section->addText('     Căn cứ hướng dẫn tại Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn vật lý của công trình xây dựng được ước tính bằng phương pháp chuyên gia theo công thức:');
         $section->addImage(storage_path('app/public/'.$imgName), array(
-            'width' => 300,
+            'width' => 400,
             'align' => 'center',
             'space' => [
             'line' => 1000,
@@ -138,5 +137,68 @@ class ReportAppendix2Nova extends ReportAppendix2
         ],));
         $section->addText('     Tham khảo Công văn số 1326/BXD-QLN ngày 08/08/2011 của Bộ Xây dựng về việc Hướng dẫn kiểm kê, đánh giá lại giá trị tài sản cố định là nhà cửa, vật kiến trúc, tỷ trọng các kết cấu chính đối với công trình xây dựng tương tự tài sản thẩm định giá như sau:');
 
+    }
+
+    protected function printRemainQualityFunc2($section, $tangibleAssets)
+    {
+        $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
+        $this->printNew1($section);
+        $table = $section->addTable($this->styleTable);
+        $table->addRow(400, $this->rowHeader);
+        $table->addCell(1500, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(7500, ['gridSpan' => 10, 'valign' => 'center'])->addText('Phần kết cấu chính', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('CLCL (%)', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addRow();
+        $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Móng, cột', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Tường', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Nền, sàn', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Kết cấu mái', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Mái', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
+        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellVCentered)->addText('H= Σ ph / Σ p', null,  $this->cellHCenteredKeepNext);
+
+        $stt = 1;
+        $countTangible = count($tangibleAssets);
+        foreach ($tangibleAssets as $tangibleAsset) {
+            $p1 = $tangibleAsset->comparisonTangibleFactor->p1 ?? 0;
+            $h1 = $tangibleAsset->comparisonTangibleFactor->h1 ?? 0;
+            $p2 = $tangibleAsset->comparisonTangibleFactor->p2 ?? 0;
+            $h2 = $tangibleAsset->comparisonTangibleFactor->h2 ?? 0;
+            $p3 = $tangibleAsset->comparisonTangibleFactor->p3 ?? 0;
+            $h3 = $tangibleAsset->comparisonTangibleFactor->h3 ?? 0;
+            $d4 = $tangibleAsset->comparisonTangibleFactor->d4 ?? 0;
+            $h4 = $tangibleAsset->comparisonTangibleFactor->h4 ?? 0;
+            $p5 = $tangibleAsset->comparisonTangibleFactor->p5 ?? 0;
+            $h5 = $tangibleAsset->comparisonTangibleFactor->h5 ?? 0;
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(1500, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($p1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($h1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($p2 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($h2 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($p3 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($h3 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($d4 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($h4 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($p5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(750, $this->cellVCentered)->addText($h5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $clcl2 = ($p1 + $p2 + $p3 + $d4 + $p5) != 0 ? round(($p1 * $h1 + $p2 * $h2 + $p3 * $h3 + $d4 * $h4 + $p5 * $h5) / ($p1 + $p2 + $p3 + $d4 + $p5), 0) : 0;
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $this->total[$tangibleAsset->id]['clcl2'] = $clcl2;
+            $stt++;
+        }
     }
 }
