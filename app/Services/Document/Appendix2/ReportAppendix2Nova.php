@@ -123,14 +123,13 @@ class ReportAppendix2Nova extends ReportAppendix2
     }
 
     protected function printNew1($section){
-        $path = env('STORAGE_IMAGES') .'/';
-        $name = $path . 'congthuc-PL2.png';
+        $imgName = env('STORAGE_IMAGES','images') .'/'.'congthuc-PL2.png';
         $section->addText('     Tổ thẩm định nhận định:');
         $section->addText('     ❖    Tài sản thẩm định giá chịu hao mòn vật lý và có thể sử dụng phương pháp chuyên gia để ước tính giá trị hao mòn vật lý của tài sản');
         $section->addText('     ❖    Tổ thẩm định giá ước tính giá trị của tài sản thẩm định giá bằng phương pháp chi phí thay thế, do đó, hao mòn chức năng của tài sản được xác định bằng 0. ');
         $section->addText('     ❖    Tài sản thẩm định giá không chịu hao mòn ngoại biên.');
         $section->addText('     Căn cứ hướng dẫn tại Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn vật lý của công trình xây dựng được ước tính bằng phương pháp chuyên gia theo công thức:');
-        $section->addImage($name, array(
+        $section->addImage(storage_path('app/public/'.$imgName), array(
             'width' => 300,
             'align' => 'center',
             'space' => [
