@@ -119,6 +119,10 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c05->addText('+');
         $c06 = $table->addCell(2200);
         $c06->addText('Giá trị hao mòn ngoại biên',null,['align' => 'center']);
+        $this->printNew1($section);
+    }
+
+    protected function printNew1($section){
         $section->addText('     Tổ thẩm định nhận định:');
         $section->addText('     ❖    Tài sản thẩm định giá chịu hao mòn vật lý và có thể sử dụng phương pháp chuyên gia để ước tính giá trị hao mòn vật lý của tài sản');
         $section->addText('     ❖    Tổ thẩm định giá ước tính giá trị của tài sản thẩm định giá bằng phương pháp chi phí thay thế, do đó, hao mòn chức năng của tài sản được xác định bằng 0. ');
