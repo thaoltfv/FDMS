@@ -102,7 +102,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $section->addText('❖ Chất lượng còn lại công trình xây dựng: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
-        $section->addText('    Căn cứ Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn của công trình xây dựng được ước tính bằng phương pháp tổng cộng theo công thức:');
+        $section->addText('     Căn cứ Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn của công trình xây dựng được ước tính bằng phương pháp tổng cộng theo công thức:');
         $table = $section->addTable();
         $table->addRow();
         $c0 = $table->addCell(2200);
@@ -110,14 +110,28 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c01 = $table->addCell(200);
         $c01->addText('=',null,['align' => 'center']);
         $c02 = $table->addCell(2200);
-        $c02->addText('    Giá trị hao mòn vật lý',null,['align' => 'center']);
+        $c02->addText('Giá trị hao mòn vật lý',null,['align' => 'center']);
         $c03 = $table->addCell(200);
         $c03->addText('+',null,['align' => 'center']);
         $c04 = $table->addCell(2200);
-        $c04->addText('    Giá trị hao mòn chức năng',null,['align' => 'center']);
+        $c04->addText('Giá trị hao mòn chức năng',null,['align' => 'center']);
         $c05 = $table->addCell(200);
         $c05->addText('+');
         $c06 = $table->addCell(2200);
-        $c06->addText('    Giá trị hao mòn ngoại biên',null,['align' => 'center']);
+        $c06->addText('Giá trị hao mòn ngoại biên',null,['align' => 'center']);
+        $section->addText('     Tổ thẩm định nhận định:');
+        $section->addText('     ❖    Tài sản thẩm định giá chịu hao mòn vật lý và có thể sử dụng phương pháp chuyên gia để ước tính giá trị hao mòn vật lý của tài sản');
+        $section->addText('     ❖    Tổ thẩm định giá ước tính giá trị của tài sản thẩm định giá bằng phương pháp chi phí thay thế, do đó, hao mòn chức năng của tài sản được xác định bằng 0. ');
+        $section->addText('     ❖    Tài sản thẩm định giá không chịu hao mòn ngoại biên.');
+        $section->addText('     Căn cứ hướng dẫn tại Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn vật lý của công trình xây dựng được ước tính bằng phương pháp chuyên gia theo công thức:');
+        $section->addImage('~/public/uploads/img/congthuc-PL2.png', array(
+            'width' => 300,
+            'align' => 'center',
+            'space' => [
+            'line' => 1000,
+            'rule' => 'single',
+        ],));
+        $section->addText('     Tham khảo Công văn số 1326/BXD-QLN ngày 08/08/2011 của Bộ Xây dựng về việc Hướng dẫn kiểm kê, đánh giá lại giá trị tài sản cố định là nhà cửa, vật kiến trúc, tỷ trọng các kết cấu chính đối với công trình xây dựng tương tự tài sản thẩm định giá như sau:');
+
     }
 }
