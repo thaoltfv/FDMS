@@ -10,6 +10,13 @@ use PhpOffice\PhpWord\SimpleType\JcTable;
 
 class ReportAppendix2Nova extends ReportAppendix2
 {
+    public function printTitle(Section $section, $data)
+    {
+        $this->setProperties($data);
+        $section->addImage($this->logoUrl, $this->styleImageLogo);
+        $section->addText('PHỤ LỤC 2 KÈM THEO BÁO CÁO THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
+        $section->addText('CÔNG TRÌNH XÂY DỰNG', ['italic' => true, 'size' => 14], ['align' => 'center']);
+    }
     protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
         $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
@@ -95,5 +102,22 @@ class ReportAppendix2Nova extends ReportAppendix2
         $section->addText('❖ Chất lượng còn lại công trình xây dựng: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
+        $textRun->addText('Căn cứ Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn của công trình xây dựng được ước tính bằng phương pháp tổng cộng theo công thức:');
+        $table = $section->addTable();
+        $table->addRow();
+        $c0 = $table->addCell(2200);
+        $c0->addText('Tổng giá trị hao mòn');
+        $c01 = $table->addCell(200);
+        $c01->addText('=');
+        $c02 = $table->addCell(2200);
+        $c02->addText('Giá trị hao mòn vật lý');
+        $c03 = $table->addCell(200);
+        $c03->addText('+');
+        $c04 = $table->addCell(2200);
+        $c04->addText('Giá trị hao mòn chức năng');
+        $c05 = $table->addCell(200);
+        $c05->addText('+');
+        $c06 = $table->addCell(2200);
+        $c06->addText('Giá trị hao mòn ngoại biên');
     }
 }
