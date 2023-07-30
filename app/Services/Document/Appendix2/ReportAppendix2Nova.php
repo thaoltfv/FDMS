@@ -165,6 +165,9 @@ class ReportAppendix2Nova extends ReportAppendix2
             $table1->addCell(1500, $this->cellVCentered)->addText($p5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $stt++;
         }
+
+        $section->addText('     Căn cứ thực trạng công trình xây dựng để xác định tỷ lệ chất lượng còn lại của các kết cấu chính của nhà theo TCXDVN 373:2006 “chỉ dẫn đánh giá mức độ nguy hiểm của kết cấu nhà” và Thông tư 13/LB-TT ngày 18/08/1994 về: Hướng dẫn phương pháp xác định “giá trị còn lại các kết cấu chính” như sau:');
+
     }
 
     protected function printRemainQualityFunc2($section, $tangibleAssets)
