@@ -138,7 +138,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $section->addText('     Tham khảo Công văn số 1326/BXD-QLN ngày 08/08/2011 của Bộ Xây dựng về việc Hướng dẫn kiểm kê, đánh giá lại giá trị tài sản cố định là nhà cửa, vật kiến trúc, tỷ trọng các kết cấu chính đối với công trình xây dựng tương tự tài sản thẩm định giá như sau:');
         $table1 = $section->addTable($this->styleTable);
         $table1->addRow(400, $this->rowHeader);
-        $table1->addCell(1500, $this->cellRowSpan)->addText('Loại nhà', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addCell(3000, $this->cellRowSpan)->addText('Loại nhà', ['bold' => true], $this->cellHCenteredKeepNext);
         $table1->addCell(7500, ['gridSpan' => 5, 'valign' => 'center'])->addText('Tỷ lệ giá trị các kết cấu chính (%)', ['bold' => true], $this->cellHCenteredKeepNext);
         $table1->addRow();
         $table1->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
@@ -157,7 +157,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             $d4 = $tangibleAsset->comparisonTangibleFactor->d4 ?? 0;
             $p5 = $tangibleAsset->comparisonTangibleFactor->p5 ?? 0;
             $table1->addRow(400, $this->cantSplit);
-            $table1->addCell(1500, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table1->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table1->addCell(1500, $this->cellVCentered)->addText($p1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table1->addCell(1500, $this->cellVCentered)->addText($p2 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table1->addCell(1500, $this->cellVCentered)->addText($p3 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
