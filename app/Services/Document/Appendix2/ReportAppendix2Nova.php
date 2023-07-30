@@ -104,7 +104,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
     }
 
-    protected function printNew1($section){
+    protected function printNew1($section, $tangibleAssets){
         $section->addText('     Căn cứ Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn của công trình xây dựng được ước tính bằng phương pháp tổng cộng theo công thức:');
         $table = $section->addTable();
         $table->addRow();
@@ -136,13 +136,41 @@ class ReportAppendix2Nova extends ReportAppendix2
             'rule' => 'single',
         ],));
         $section->addText('     Tham khảo Công văn số 1326/BXD-QLN ngày 08/08/2011 của Bộ Xây dựng về việc Hướng dẫn kiểm kê, đánh giá lại giá trị tài sản cố định là nhà cửa, vật kiến trúc, tỷ trọng các kết cấu chính đối với công trình xây dựng tương tự tài sản thẩm định giá như sau:');
+        $table1 = $section->addTable($this->styleTable);
+        $table1->addRow(400, $this->rowHeader);
+        $table1->addCell(1500, $this->cellRowSpan)->addText('Loại nhà', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addCell(7500, ['gridSpan' => 5, 'valign' => 'center'])->addText('Tỷ lệ giá trị các kết cấu chính (%)', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addRow();
+        $table1->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
+        $table1->addCell(1500, ['valign' => 'center'])->addText('Móng, khung cột', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addCell(1500, ['valign' => 'center'])->addText('Tường', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addCell(1500, ['valign' => 'center'])->addText('Nền, sàn', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addCell(1500, ['valign' => 'center'])->addText('Kết cấu đỡ mái', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table1->addCell(1500, ['valign' => 'center'])->addText('Mái', ['bold' => true], $this->cellHCenteredKeepNext);
 
+        $stt = 1;
+        $countTangible = count($tangibleAssets);
+        foreach ($tangibleAssets as $tangibleAsset) {
+            $p1 = $tangibleAsset->comparisonTangibleFactor->p1 ?? 0;
+            $p2 = $tangibleAsset->comparisonTangibleFactor->p2 ?? 0;
+            $p3 = $tangibleAsset->comparisonTangibleFactor->p3 ?? 0;
+            $d4 = $tangibleAsset->comparisonTangibleFactor->d4 ?? 0;
+            $p5 = $tangibleAsset->comparisonTangibleFactor->p5 ?? 0;
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(1500, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellVCentered)->addText($p1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellVCentered)->addText($p2 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellVCentered)->addText($p3 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellVCentered)->addText($d4 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellVCentered)->addText($p5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $stt++;
+        }
     }
 
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
         $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
-        $this->printNew1($section);
+        $this->printNew1($section, $tangibleAssets);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
         $table->addCell(1500, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
@@ -150,10 +178,10 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(1500, $this->cellRowSpan)->addText('CLCL (%)', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addRow();
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
-        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Móng, cột', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Móng, khung cột', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Tường', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Nền, sàn', ['bold' => true], $this->cellHCenteredKeepNext);
-        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Kết cấu mái', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Kết cấu đỡ mái', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, ['gridSpan' => 2, 'valign' => 'center'])->addText('Mái', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
         $table->addRow(400, $this->cantSplit);
