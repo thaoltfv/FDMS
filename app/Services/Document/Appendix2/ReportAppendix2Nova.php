@@ -12,7 +12,7 @@ class ReportAppendix2Nova extends ReportAppendix2
 {
     protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
-        $section->addText('❖ Về nguyên giá của nhà cửa, vật kiến trúc:', ['bold' => true, 'size' => 13], ['align' => 'left']);
+        $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('Căn cứ vào Quyết định 22/2019/QĐ-UBND ngày 30/08/2019 của UBND TP Hồ Chí Minh về Ban hành bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn thành phố Hồ Chí Minh, công văn số 2189/SXD-KTXD ngày 22 tháng 02 năm 2021 và công văn số 4381/SXD-KTXD ngày 27/04/2022 Về việc điều chỉnh, quy đổi về thời điểm tính toán đối với Bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn Thành phố Hồ Chí Minh');
         if ($dgxdSlug === 'dg-uoc-tinh') {
@@ -47,7 +47,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         } else {
             $table->addCell(6000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCentered);
             $table->addCell(2000, $this->cellRowSpan)->addText('Đvt', ['bold' => true], $this->cellHCentered);
-            $table->addCell(2500, $this->cellRowSpan)->addText('Đơn giá quyết định', ['bold' => true], $this->cellHCentered);
+            $table->addCell(2500, $this->cellRowSpan)->addText('Đơn giá', ['bold' => true], $this->cellHCentered);
         }
         foreach ($tangibleAssets as $tangibleAsset) {
             $name = $tangibleAsset->tangible_name;
@@ -88,5 +88,12 @@ class ReportAppendix2Nova extends ReportAppendix2
             $textRun->addText('Kết luận: ', $this->styleBold, null);
             $textRun->addText($description, null, null);
         }
+    }
+
+    protected function printRemainQualityDescription($section)
+    {
+        $section->addText('❖ Chất lượng còn lại công trình xây dựng: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
+        $textRun = $section->addTextRun();
+        $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
     }
 }
