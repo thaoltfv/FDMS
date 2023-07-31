@@ -443,7 +443,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             $clcl1 = $this->total[$tangibleAsset->id]['clcl1'];
             $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
             $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
-            $section->addText(json_encode($clclChoosed));
+            // $section->addText(json_encode($clclChoosed));
             $section->addText(json_encode($clcl1));
             $section->addText(json_encode($clcl2));
             // $section->addText(json_encode($cltb));
