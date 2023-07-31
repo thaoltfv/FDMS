@@ -225,6 +225,59 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected $cellHLeftKeepNext = array('align' => 'left', 'keepNext' => true);
 
+    protected function printNew2($section, $realEstates){
+        $section->addText('     ❖ Giá trị công trình xây dựng:', ['bold' => true]);
+        $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá VN số 09, chi phí thay thế công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
+        
+        $table3 = $section->addTable();
+        $table3->addRow();
+        $c0 = $table3->addCell(3000);
+        $c0->addText('    Chi phí thay thế',['italic' => true],['align' => 'center']);
+        $c01 = $table3->addCell(500);
+        $c01->addText('=',null,['align' => 'center']);
+        $c02 = $table3->addCell(3000);
+        $c02->addText('Đơn giá xây dựng công trình tương tự',['italic' => true],['align' => 'center']);
+        $c03 = $table3->addCell(500);
+        $c03->addText('X',null,['align' => 'center']);
+        $c04 = $table3->addCell(3000);
+        $c04->addText('Diện tích sàn xây dựng',['italic' => true],['align' => 'center']);
+        
+        $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá VN số 09, giá trị hao mòn công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
+        
+        $table4 = $section->addTable();
+        $table4->addRow();
+        $c0 = $table4->addCell(3000);
+        $c0->addText('    Tổng giá trị hao mòn',['italic' => true],['align' => 'center']);
+        $c01 = $table4->addCell(500);
+        $c01->addText('=',null,['align' => 'center']);
+        $c02 = $table4->addCell(3000);
+        $c02->addText('Chi phí thay thế',['italic' => true],['align' => 'center']);
+        $c03 = $table4->addCell(500);
+        $c03->addText('X',null,['align' => 'center']);
+        $c04 = $table4->addCell(3000);
+        $c04->addText('Tỷ lệ hao mòn',['italic' => true],['align' => 'center']);
+
+        $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá Việt Nam số 09, giá trị công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
+
+        $table5 = $section->addTable();
+        $table5->addRow();
+        $c0 = $table5->addCell(3000);
+        $c0->addText('    Giá trị ước tính của Công trình xây dựng',['italic' => true],['align' => 'center']);
+        $c01 = $table5->addCell(500);
+        $c01->addText('=',null,['align' => 'center']);
+        $c02 = $table5->addCell(3000);
+        $c02->addText('Chi phí thay thế',['italic' => true],['align' => 'center']);
+        $c03 = $table5->addCell(500);
+        $c03->addText('-',null,['align' => 'center']);
+        $c04 = $table5->addCell(3000);
+        $c04->addText('Tổng giá trị hao mòn (không bao gồm hao mòn chức năng)',['italic' => true],['align' => 'center']);
+
+        $textRun = $section->addTextRun();
+        $textRun->addText('Như vậy, giá trị công trình xây dựng là: ');
+        $textRun->addText(json_encode($realEstates),['bold' => true]);
+
+    }
+
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
         $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
@@ -281,10 +334,11 @@ class ReportAppendix2Nova extends ReportAppendix2
             $table->addCell(750, $this->cellVCentered)->addText($h4 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($p5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($h5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            $clcl2 = ($p1 + $p2 + $p3 + $d4 + $p5) != 0 ? round(($p1 * $h1 + $p2 * $h2 + $p3 * $h3 + $d4 * $h4 + $p5 * $h5) / ($p1 + $p2 + $p3 + $d4 + $p5), 0) : 0;
+            $clcl2 = ($p1 + $p2 + $p3 + $d4 + $p5) != 0 ? round(($p1 * $h1 + $p2 * $h2 + $p3 * $h3 + $d4 * $h4 + $p5 * $h5) / ($p1 + $p2 + $p3 + $d4 + $p5), 0).'%' : 0;
             $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $this->total[$tangibleAsset->id]['clcl2'] = $clcl2;
             $stt++;
         }
+        $this->printNew2($section, $this->realEstates);
     }
 }
