@@ -341,6 +341,55 @@ class ReportAppendix2Nova extends ReportAppendix2
             $this->total[$tangibleAsset->id]['clcl2'] = $clcl2;
             $stt++;
         }
-        $this->printNew2($section, $this->realEstates);
+        
+    }
+
+    protected function printContentByRealEstate($section, $realEstate, $key)
+    {
+        $appraise = $realEstate->appraises;
+        $tangibleAssets = $appraise->tangibleAssets;
+        $this->total = [];
+        if ($this->isOnlyAsset) {
+            $textRun = $section->addTextRun();
+            $textRun->addText('     ' . ($key + 1) . '. Tài sản thẩm định:', ['bold' => true, 'size' => 14]);
+        } else {
+            $textRun = $section->addTextRun('Heading2');
+            $textRun->addText('Tài sản thẩm định ' . ($key + 1) . ': ', ['bold' => true, 'size' => 14]);
+        }
+        if ($appraise->assetType->description == "ĐẤT TRỐNG") {
+            $textRun->addText('Tài sản thẩm định không có công trình xây dựng', ['size' => 13, 'bold' => false]);
+            return;
+        }
+        $this->printAssetInfo($section, $realEstate->appraise_asset, $appraise->full_address);
+        // $textRun->addText('Công trình xây dựng tọa lạc tại ' . ($appraise->ward ? $appraise->ward->name : ''), ['size' => 13, 'bold' => false]);
+        // $textRun->addText(', ' . ($appraise->district ? $appraise->district->name : ''), ['size' => 13, 'bold' => false]);
+        // $textRun->addText(', ' . ($appraise->province ? $appraise->province->name : ''), ['size' => 13, 'bold' => false]);
+
+        $dgxdSlug = 'dg-uoc-tinh';
+        $appraiseDgxd = $appraise->appraisal_dgxd;
+        if (!empty($appraiseDgxd)) {
+            $dgxdSlug = $appraiseDgxd->slug_value;
+        }
+
+        $this->printOriginalPriceDescription($section, $dgxdSlug);
+        $this->printBuildingComapanyInfo($section, $tangibleAssets, $dgxdSlug);
+        $this->printBuildingPriceChoosed($section, $dgxdSlug);
+        $this->printRemainQualityDescription($section);
+        $remainQualitySlug = 'trung-binh-cong';
+        $appraisalCLCL = $appraise->appraisal_clcl;
+        if (!empty($appraisalCLCL)) {
+            $remainQualitySlug = $appraisalCLCL->slug_value;
+        }
+        if ($remainQualitySlug == 'trung-binh-cong' || $remainQualitySlug == 'tuoi-doi') {
+            $this->printRemainQualityFunc1($section, $tangibleAssets);
+        }
+        if ($remainQualitySlug == 'trung-binh-cong' || $remainQualitySlug == 'chuyen-gia') {
+            $this->printRemainQualityFunc2($section, $tangibleAssets);
+        }
+        if ($remainQualitySlug == 'trung-binh-cong') {
+            $this->printRemainQualityFuncAvg($section, $tangibleAssets, $appraisalCLCL);
+        }
+
+        $this->printNew2($section, $realEstate);
     }
 }
