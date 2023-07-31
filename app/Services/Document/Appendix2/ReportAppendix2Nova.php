@@ -225,7 +225,7 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected $cellHLeftKeepNext = array('align' => 'left', 'keepNext' => true);
 
-    protected function printNew2($section, $realEstates){
+    protected function printNew2($section, $realEstate){
         $section->addText('     ❖ Giá trị công trình xây dựng:', ['bold' => true]);
         $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá VN số 09, chi phí thay thế công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
         
@@ -272,7 +272,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c04 = $table5->addCell(3000);
         $c04->addText('Tổng giá trị hao mòn (không bao gồm hao mòn chức năng)',['italic' => true],['align' => 'center']);
 
-        $appraise = $realEstates[0]->appraises;
+        $appraise = $realEstate->appraises;
         $tangibleAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'tangible_asset_price');
         $textRun = $section->addTextRun();
         $textRun->addText('Như vậy, giá trị công trình xây dựng là: ');
