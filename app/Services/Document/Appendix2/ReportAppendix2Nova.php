@@ -273,9 +273,14 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c04->addText('Tổng giá trị hao mòn (không bao gồm hao mòn chức năng)',['italic' => true],['align' => 'center']);
 
         $appraise = $realEstate->appraises;
-        $section->addText('dataa');
-        $section->addText(json_encode($realEstate));
-        $tangibleAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'tangible_asset_price');
+        // $section->addText('dataa');
+        // $section->addText(json_encode($realEstate));
+        if ($appraise->step){
+            $tangibleAssetTotal = CommonService::getAppraisePrice($appraise, 'tangible_asset_price');
+        } else {
+            $tangibleAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'tangible_asset_price');
+        }
+        
         $textRun = $section->addTextRun();
         $textRun->addText('Như vậy, giá trị công trình xây dựng là: ');
         $textRun->addText(number_format($tangibleAssetTotal, 0, ',', '.').' đồng',['bold' => true]);
