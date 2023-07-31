@@ -185,15 +185,15 @@ class ReportAppendix2Nova extends ReportAppendix2
             $h3 = $tangibleAsset->comparisonTangibleFactor->h3 ?? 0;
             $h4 = $tangibleAsset->comparisonTangibleFactor->h4 ?? 0;
             $h5 = $tangibleAsset->comparisonTangibleFactor->h5 ?? 0;
-            $note1 = $tangibleAsset->comparisonTangibleFactor->note->note1 ?? 'Không có mô tả chi tiết';
-            $note2 = $tangibleAsset->comparisonTangibleFactor->note->note2 ?? 'Không có mô tả chi tiết';
-            $note3 = $tangibleAsset->comparisonTangibleFactor->note->note3 ?? 'Không có mô tả chi tiết';
-            $note4 = $tangibleAsset->comparisonTangibleFactor->note->note4 ?? 'Không có mô tả chi tiết';
-            $note5 = $tangibleAsset->comparisonTangibleFactor->note->note5 ?? 'Không có mô tả chi tiết';
+            $note1 = json_decode($tangibleAsset->comparisonTangibleFactor->note)->note1 ?? 'Không có mô tả chi tiết';
+            $note2 = json_decode($tangibleAsset->comparisonTangibleFactor->note)->note2 ?? 'Không có mô tả chi tiết';
+            $note3 = json_decode($tangibleAsset->comparisonTangibleFactor->note)->note3 ?? 'Không có mô tả chi tiết';
+            $note4 = json_decode($tangibleAsset->comparisonTangibleFactor->note)->note4 ?? 'Không có mô tả chi tiết';
+            $note5 = json_decode($tangibleAsset->comparisonTangibleFactor->note)->note5 ?? 'Không có mô tả chi tiết';
             $table2->addRow(400, $this->cantSplit);
             $table2->addCell(500, $this->cellRowSpan)->addText('1', null, $this->cellHCenteredKeepNext);   
             $table2->addCell(3000, ['valign' => 'center'])->addText('Móng, khung cột', null, $this->cellHLeftKeepNext); 
-            $table2->addCell(5500, ['valign' => 'center'])->addText(json_decode($tangibleAsset->comparisonTangibleFactor->note)->note1, null, $this->cellHLeftKeepNext);        
+            $table2->addCell(5500, ['valign' => 'center'])->addText($note1, null, $this->cellHLeftKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h1 . '%', null, $this->cellHCenteredKeepNext);
             $table2->addRow(400, $this->cantSplit);
             $table2->addCell(500, $this->cellRowSpan)->addText('2', null, $this->cellHCenteredKeepNext);   
@@ -217,6 +217,9 @@ class ReportAppendix2Nova extends ReportAppendix2
             $table2->addCell(1500, $this->cellVCentered)->addText($h5 . '%', null, $this->cellHCentered);
             $section->addTextBreak(1);
         }
+
+        $section->addText('     Trên cơ sở đó, tỷ lệ hao mòn vật lý, chất lượng còn lại của tài sản ước tính theo phương pháp chuyên gia là:');
+
         
     }
 
