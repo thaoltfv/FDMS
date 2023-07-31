@@ -167,7 +167,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         }
 
         $section->addText('     Căn cứ thực trạng công trình xây dựng để xác định tỷ lệ chất lượng còn lại của các kết cấu chính của nhà theo TCXDVN 373:2006 “chỉ dẫn đánh giá mức độ nguy hiểm của kết cấu nhà” và Thông tư 13/LB-TT ngày 18/08/1994 về: Hướng dẫn phương pháp xác định “giá trị còn lại các kết cấu chính” như sau:');
-
+        $section->addTextBreak(1);
         
 
         
@@ -191,28 +191,28 @@ class ReportAppendix2Nova extends ReportAppendix2
             $note4 = $tangibleAsset->comparisonTangibleFactor->note->note4 ?? 'Không có mô tả chi tiết';
             $note5 = $tangibleAsset->comparisonTangibleFactor->note->note5 ?? 'Không có mô tả chi tiết';
             $table2->addRow(400, $this->cantSplit);
-            $table2->addCell(500, $this->cellRowSpan)->addText('1', ['bold' => true], $this->cellHCenteredKeepNext);   
-            $table2->addCell(3000, ['valign' => 'left'])->addText('Móng, khung cột', ['bold' => true], $this->cellHCenteredKeepNext); 
-            $table2->addCell(5500, ['valign' => 'left'])->addText($note1, null, $this->cellHCenteredKeepNext);        
+            $table2->addCell(500, $this->cellRowSpan)->addText('1', null, $this->cellHCenteredKeepNext);   
+            $table2->addCell(3000, ['valign' => 'left'])->addText('Móng, khung cột', null, $this->cellHCenteredKeepNext); 
+            $table2->addCell(5500, ['valign' => 'left'])->addText(json_encode($tangibleAsset->comparisonTangibleFactor), null, $this->cellHCenteredKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table2->addRow(400, $this->cantSplit);
-            $table2->addCell(500, $this->cellRowSpan)->addText('2', ['bold' => true], $this->cellHCenteredKeepNext);   
-            $table2->addCell(3000, ['valign' => 'left'])->addText('Tường', ['bold' => true], $this->cellHCenteredKeepNext); 
+            $table2->addCell(500, $this->cellRowSpan)->addText('2', null, $this->cellHCenteredKeepNext);   
+            $table2->addCell(3000, ['valign' => 'left'])->addText('Tường', null, $this->cellHCenteredKeepNext); 
             $table2->addCell(5500, ['valign' => 'left'])->addText($note2, null, $this->cellHCenteredKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h2 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table2->addRow(400, $this->cantSplit);
-            $table2->addCell(500, $this->cellRowSpan)->addText('3', ['bold' => true], $this->cellHCenteredKeepNext);   
-            $table2->addCell(3000, ['valign' => 'left'])->addText('Nền, sàn', ['bold' => true], $this->cellHCenteredKeepNext); 
+            $table2->addCell(500, $this->cellRowSpan)->addText('3', null, $this->cellHCenteredKeepNext);   
+            $table2->addCell(3000, ['valign' => 'left'])->addText('Nền, sàn', null, $this->cellHCenteredKeepNext); 
             $table2->addCell(5500, ['valign' => 'left'])->addText($note3, null, $this->cellHCenteredKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h3 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table2->addRow(400, $this->cantSplit);
-            $table2->addCell(500, $this->cellRowSpan)->addText('4', ['bold' => true], $this->cellHCenteredKeepNext);   
-            $table2->addCell(3000, ['valign' => 'left'])->addText('Kết cấu đỡ mái', ['bold' => true], $this->cellHCenteredKeepNext); 
+            $table2->addCell(500, $this->cellRowSpan)->addText('4', null, $this->cellHCenteredKeepNext);   
+            $table2->addCell(3000, ['valign' => 'left'])->addText('Kết cấu đỡ mái', null, $this->cellHCenteredKeepNext); 
             $table2->addCell(5500, ['valign' => 'left'])->addText($note4, null, $this->cellHCenteredKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h4 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table2->addRow(400, $this->cantSplit);
-            $table2->addCell(500, $this->cellRowSpan)->addText('5', ['bold' => true], $this->cellHCenteredKeepNext);   
-            $table2->addCell(3000, ['valign' => 'left'])->addText('Mái', ['bold' => true], $this->cellHCenteredKeepNext); 
+            $table2->addCell(500, $this->cellRowSpan)->addText('5', null, $this->cellHCenteredKeepNext);   
+            $table2->addCell(3000, ['valign' => 'left'])->addText('Mái', null, $this->cellHCenteredKeepNext); 
             $table2->addCell(5500, ['valign' => 'left'])->addText($note5, null, $this->cellHCenteredKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $section->addTextBreak(1);
