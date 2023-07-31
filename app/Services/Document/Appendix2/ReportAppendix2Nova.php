@@ -193,7 +193,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             $table2->addRow(400, $this->cantSplit);
             $table2->addCell(500, $this->cellRowSpan)->addText('1', null, $this->cellHCenteredKeepNext);   
             $table2->addCell(3000, ['valign' => 'center'])->addText('Móng, khung cột', null, $this->cellHLeftKeepNext); 
-            $table2->addCell(5500, ['valign' => 'center'])->addText(json_encode($tangibleAsset->comparisonTangibleFactor), null, $this->cellHLeftKeepNext);        
+            $table2->addCell(5500, ['valign' => 'center'])->addText(json_encode($tangibleAsset->comparisonTangibleFactor->note), null, $this->cellHLeftKeepNext);        
             $table2->addCell(1500, $this->cellVCentered)->addText($h1 . '%', null, $this->cellHCenteredKeepNext);
             $table2->addRow(400, $this->cantSplit);
             $table2->addCell(500, $this->cellRowSpan)->addText('2', null, $this->cellHCenteredKeepNext);   
