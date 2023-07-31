@@ -564,6 +564,13 @@ export default {
     onCancelNote() {
       this.choosenId = null
       this.showNoteHienTrang = false
+      this.noteHienTrang = {
+              "note1":'',
+              "note2":'',
+              "note3":'',
+              "note4":'',
+              "note5":'',
+            }
     },
     async handleSaveNote() {
       console.log('id save',this.choosenId)
@@ -580,6 +587,13 @@ export default {
         this.form.tangible_assets.forEach((data, index) => {
           if (data.comparison_tangible_factor.id == this.choosenId) {
             data.comparison_tangible_factor.note = JSON.stringify(this.noteHienTrang)
+            this.noteHienTrang = {
+              "note1":'',
+              "note2":'',
+              "note3":'',
+              "note4":'',
+              "note5":'',
+            }
           }
         })
 				this.showNoteHienTrang = false
