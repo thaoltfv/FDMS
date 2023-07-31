@@ -368,8 +368,8 @@ class ReportAppendix2Nova extends ReportAppendix2
             $table->addCell(750, $this->cellVCentered)->addText($h4 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($p5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($h5 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            $clcl2 = ($p1 + $p2 + $p3 + $d4 + $p5) != 0 ? round(($p1 * $h1 + $p2 * $h2 + $p3 * $h3 + $d4 * $h4 + $p5 * $h5) / ($p1 + $p2 + $p3 + $d4 + $p5), 0).'%' : 0 .'%';
-            $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $clcl2 = ($p1 + $p2 + $p3 + $d4 + $p5) != 0 ? round(($p1 * $h1 + $p2 * $h2 + $p3 * $h3 + $d4 * $h4 + $p5 * $h5) / ($p1 + $p2 + $p3 + $d4 + $p5), 0) : 0 ;
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl2.'%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $this->total[$tangibleAsset->id]['clcl2'] = $clcl2;
             $stt++;
         }
@@ -439,22 +439,17 @@ class ReportAppendix2Nova extends ReportAppendix2
         $stt = 1;
         $count = count($this->total);
         foreach ($tangibleAssets as $tangibleAsset) {
-            // $clclChoosed = CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
-            // $clcl1 = $this->total[$tangibleAsset->id]['clcl1'];
-            // $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
-            // $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
-            // $section->addText(json_encode($clclChoosed));
-            // $section->addText(json_encode($clcl1));
-            // $section->addText(json_encode($clcl2));
-            // $section->addText(json_encode($cltb));
-            $section->addText(json_encode($this->total));
-            // $table->addRow();
-            // $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($this->total[$tangibleAsset->id]['name']), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            // $table->addCell(1500, $this->cellRowSpan)->addText($this->total[$tangibleAsset->id]['start_using_year'], null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            // $table->addCell(1500, $this->cellRowSpan)->addText($clcl1, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            // $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            // $table->addCell(1500, $this->cellRowSpan)->addText($cltb, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
-            // $table->addCell(1500, $this->cellRowSpan)->addText($clclChoosed, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $clclChoosed = CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
+            $clcl1 = $this->total[$tangibleAsset->id]['clcl1'];
+            $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
+            $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
+            $table->addRow();
+            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($this->total[$tangibleAsset->id]['name']), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($this->total[$tangibleAsset->id]['start_using_year'], null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl1, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($cltb, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clclChoosed, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $stt++;
         }
     }
