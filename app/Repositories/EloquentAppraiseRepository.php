@@ -6908,7 +6908,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 ->update(['asset_title' => $objects]);
             }
 
-    public function updateNoteHienTrang(string $objects, int $id = null)
+    public function updateNoteHienTrang($objects, int $id = null)
     {
         return AppraiseTangibleComparisonFactor::query()
                 ->where('id', $id)
