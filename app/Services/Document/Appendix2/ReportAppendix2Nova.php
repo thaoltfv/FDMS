@@ -280,6 +280,38 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     }
 
+    protected function printRemainQualityFunc1($section, $tangibleAssets)
+    {
+        $section->addText('✔ Phương pháp 1: Phương pháp tuổi đời (PP1):', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left']);
+        $table = $section->addTable($this->styleTable);
+        $table->addRow(400, $this->rowHeader);
+        $table->addCell(3000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('Năm sử dụng', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(2250, $this->cellRowSpan)->addText('Thời gian đã sử dụng', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(2250, $this->cellRowSpan)->addText('Niên hạn theo qui định', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('CLCL (%)', ['bold' => true], $this->cellHCenteredKeepNext);
+        $level = '';
+        $stt = 1;
+        $countTangible = count($tangibleAssets);
+        foreach ($tangibleAssets as $tangibleAsset) {
+            $startUsingYear = $tangibleAsset->start_using_year ?? '';
+            $usingYear = '';
+            if ($startUsingYear != '') {
+                $usingYear = Carbon::now()->year - (int)$startUsingYear;
+            }
+            $usefulYear = isset($tangibleAsset->duration) ? CommonService::mbUcfirst($tangibleAsset->duration) : '';
+            $clcl = $tangibleAsset->remaining_quality ?? 0;
+            $table->addRow();
+            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($startUsingYear, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(2250, $this->cellRowSpan)->addText($usingYear, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(2250, $this->cellRowSpan)->addText($usefulYear, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $this->total[$tangibleAsset->id]['clcl1'] = $clcl;
+            $stt++;
+        }
+    }
+
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
         $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
@@ -386,10 +418,39 @@ class ReportAppendix2Nova extends ReportAppendix2
         if ($remainQualitySlug == 'trung-binh-cong' || $remainQualitySlug == 'chuyen-gia') {
             $this->printRemainQualityFunc2($section, $tangibleAssets);
         }
-        // if ($remainQualitySlug == 'trung-binh-cong') {
-        //     $this->printRemainQualityFuncAvg($section, $tangibleAssets, $appraisalCLCL);
-        // }
+        if ($remainQualitySlug == 'trung-binh-cong') {
+            $this->printRemainQualityFuncAvg($section, $tangibleAssets, $appraisalCLCL);
+        }
 
         $this->printNew2($section, $realEstate);
+    }
+
+    protected function printRemainQualityFuncAvg($section, $tangibleAssets, $appraisalCLCL)
+    {
+        $section->addText('✔ Chất lượng còn lại lựa chọn:', ['bold' => true, 'size' => 13], ['align' => 'left', 'keepNext' => true]);
+        $table = $section->addTable($this->styleTable);
+        $table->addRow(400, $this->rowHeader);
+        $table->addCell(3000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('Năm sử dụng', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('Theo PP1', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('Theo PP2', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('Theo bình quân', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellRowSpan)->addText('CLCL lựa chọn', ['bold' => true], $this->cellHCenteredKeepNext);
+        $stt = 1;
+        $count = count($this->total);
+        foreach ($tangibleAssets as $tangibleAsset) {
+            $clclChoosed = CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
+            $clcl1 = $this->total[$tangibleAsset->id]['clcl1'];
+            $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
+            $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
+            $table->addRow();
+            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($this->total[$tangibleAsset->id]['name']), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($this->total[$tangibleAsset->id]['start_using_year'], null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl1, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($cltb, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText($clclChoosed, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $stt++;
+        }
     }
 }
