@@ -803,8 +803,8 @@ class CertificateAssetsController extends Controller
     public function updateNoteHienTrang(Request $request, int $id = null){
         
         //TODO Handle your data
-        $note = $request;
-        $result = $this->appraiseRepository->updateNoteHienTrang($note->__toString(), $id);
+        $note = json_encode($request);
+        $result = $this->appraiseRepository->updateNoteHienTrang($note, $id);
         if(isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData( $result);
         return $this->respondWithCustomData($result);
