@@ -386,9 +386,9 @@ class ReportAppendix2Nova extends ReportAppendix2
         if ($remainQualitySlug == 'trung-binh-cong' || $remainQualitySlug == 'chuyen-gia') {
             $this->printRemainQualityFunc2($section, $tangibleAssets);
         }
-        if ($remainQualitySlug == 'trung-binh-cong') {
-            $this->printRemainQualityFuncAvg($section, $tangibleAssets, $appraisalCLCL);
-        }
+        // if ($remainQualitySlug == 'trung-binh-cong') {
+        //     $this->printRemainQualityFuncAvg($section, $tangibleAssets, $appraisalCLCL);
+        // }
 
         $this->printNew2($section, $realEstate);
     }
