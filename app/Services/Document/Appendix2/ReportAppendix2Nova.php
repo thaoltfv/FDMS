@@ -439,14 +439,15 @@ class ReportAppendix2Nova extends ReportAppendix2
         $stt = 1;
         $count = count($this->total);
         foreach ($tangibleAssets as $tangibleAsset) {
-            $clclChoosed = CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
-            $clcl1 = $this->total[$tangibleAsset->id]['clcl1'];
-            $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
-            $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
+            // $clclChoosed = CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
+            // $clcl1 = $this->total[$tangibleAsset->id]['clcl1'];
+            // $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
+            // $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
             // $section->addText(json_encode($clclChoosed));
-            $section->addText(json_encode($clcl1));
-            $section->addText(json_encode($clcl2));
+            // $section->addText(json_encode($clcl1));
+            // $section->addText(json_encode($clcl2));
             // $section->addText(json_encode($cltb));
+            $section->addText(json_encode($this->total));
             // $table->addRow();
             // $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($this->total[$tangibleAsset->id]['name']), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             // $table->addCell(1500, $this->cellRowSpan)->addText($this->total[$tangibleAsset->id]['start_using_year'], null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
