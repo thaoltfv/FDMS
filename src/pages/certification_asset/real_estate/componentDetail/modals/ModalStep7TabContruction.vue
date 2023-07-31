@@ -1,5 +1,66 @@
 <template>
   <div class="row mt-3 content_detail_asset" :key="render_tab_3">
+    <div class="modal-delete d-flex justify-content-center align-items-center" v-if="showNoteHienTrang" style="display: flex! important;
+    position: absolute;
+    z-index: 999;">
+      <div class="card-body card-info" style="background: aliceblue;
+    border: 1px solid;" :key="render_note">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <InputText
+									v-model="noteHienTrang.note1"
+									vid="note1"
+									label="Móng, khung cột"
+									class="col-12 col-lg-12 form-group-container"
+								/>
+            </div>
+            <div class="col-12">
+              <InputText
+									v-model="noteHienTrang.note2"
+									vid="note2"
+									label="Tường"
+									class="col-12 col-lg-12 form-group-container"
+								/>
+            </div>
+            <div class="col-12">
+              <InputText
+									v-model="noteHienTrang.note3"
+									vid="note3"
+									label="Nền, sàn"
+									class="col-12 col-lg-12 form-group-container"
+								/>
+            </div>
+            <div class="col-12">
+              <InputText
+									v-model="noteHienTrang.note4"
+									vid="note4"
+									label="Kết cấu đỡ mái"
+									class="col-12 col-lg-12 form-group-container"
+								/>
+            </div>
+            <div class="col-12">
+              <InputText
+									v-model="noteHienTrang.note5"
+									vid="note5"
+									label="Mái"
+									class="col-12 col-lg-12 form-group-container"
+								/>
+            </div>
+          </div>
+        </div>
+        <div class="d-md-flex d-block justify-content-end align-items-center" style="margin-top: 20px;">
+          <div class="d-md-flex d-block">
+            <button  @click="onCancelNote" class="btn btn-white text-nowrap" >
+              <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+            </button>
+            <button class="btn btn-white btn-orange text-nowrap" @click="handleSaveNote">
+              <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
+            </button>
+          </div>
+				</div>
+      </div>
+    </div>
     <div class="col-12" v-if="data.tangible_assets && data.tangible_assets.length > 0 &&  data.tangible_assets[0].construction_company.length > 0">
       <div class="col-12 contruction_block">
         <div class="d-flex align-items-center justify-content-between sub_header_title">
@@ -180,7 +241,12 @@
                     </thead>
                      <tbody>
                       <tr v-for="(tangibleAsset, indexTangible) in form.tangible_assets" :key="`PP2-${tangibleAsset.id}`">
-                        <td>{{ tangibleAsset ? tangibleAsset.tangible_name : ""}}</td>
+                        <td>
+                          <span>{{ tangibleAsset ? tangibleAsset.tangible_name : ""}}</span>
+                          <button class="btn btn-white" type="button" @click="handleNote(tangibleAsset)">
+                            <span>Xem hiện trạng</span>
+                          </button>
+                        </td>
                         <td>
                           <InputNumberNegative
 														:disabled="!editAsset"
@@ -403,6 +469,7 @@ import InputLengthArea from '@/components/Form/InputLengthArea'
 import ModalListContruction from './ModalListContruction'
 import { Tabs, TabItem } from 'vue-material-tabs'
 import CertificateAsset from '@/models/CertificateAsset'
+import InputText from '@/components/Form/InputText'
 import Vue from 'vue'
 import Icon from 'buefy'
 Vue.use(Icon)
@@ -417,7 +484,8 @@ export default {
 		InputCurrency,
 		InputNumberNew,
 		InputNumberNegative,
-		ModalListContruction
+		ModalListContruction,
+    InputText,
 	},
 	computed: {
 	},
@@ -443,7 +511,17 @@ export default {
 			contructionSelected: this.construction_company_ids ? JSON.parse(JSON.stringify(this.construction_company_ids)) : [],
 			title: 'Lựa chọn đơn vị xây dựng',
 			constructionRemainQualitySelected: [],
-			constructionPriceTypeSelected: []
+			constructionPriceTypeSelected: [],
+      noteHienTrang: {
+        "note1":'',
+        "note2":'',
+        "note3":'',
+        "note4":'',
+        "note5":'',
+      },
+      choosenId: null,
+      showNoteHienTrang: false,
+      render_note: 9999,
 		}
 	},
 	watch: {
@@ -483,6 +561,54 @@ export default {
 	beforeUpdate () {
 	},
 	methods: {
+    onCancelNote() {
+      this.choosenId = null
+      this.showNoteHienTrang = false
+    },
+    async handleSaveNote() {
+      console.log('id save',this.choosenId)
+      console.log('data save',this.noteHienTrang)
+      let data = {'note': this.noteHienTrang}
+      const res = await CertificateAsset.updateNoteHienTrang(data, this.choosenId)
+      if (res.data) {
+				this.$toast.open({
+					message: 'Lưu hiện trạng CTXD thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+        this.form.tangible_assets.forEach((data, index) => {
+          if (data.comparison_tangible_factor.id == this.choosenId) {
+            data.comparison_tangible_factor.note = JSON.stringify(this.noteHienTrang)
+          }
+        })
+				this.showNoteHienTrang = false
+        this.render_note += 1
+        // this.render_tab_3 += 1
+			} else if (res.error) {
+				this.$toast.open({
+					message: `${res.error.message}`,
+					type: 'error',
+					position: 'top-right'
+				})
+			} else {
+				this.$toast.open({
+					message: 'Lưu thất bại',
+					type: 'error',
+					position: 'top-right'
+				})
+			}
+    },
+    handleNote(data){
+      console.log('ddddd',data)
+      if (data.comparison_tangible_factor.note){
+        this.noteHienTrang = JSON.parse(data.comparison_tangible_factor.note)
+      }
+      this.choosenId = data.comparison_tangible_factor.id
+      console.log('note',this.noteHienTrang)
+      console.log('note1',this.noteHienTrang.note1)
+      this.showNoteHienTrang = true
+    },
 		setRemainQualityRate (remainQualitySelected) {
 			let slug = ''
 			if (remainQualitySelected.length > 0) {
