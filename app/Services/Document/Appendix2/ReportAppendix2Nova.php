@@ -446,7 +446,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             $section->addText(json_encode($clclChoosed));
             $section->addText(json_encode($clcl1));
             $section->addText(json_encode($clcl2));
-            $section->addText(json_encode($cltb));
+            // $section->addText(json_encode($cltb));
             // $table->addRow();
             // $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($this->total[$tangibleAsset->id]['name']), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             // $table->addCell(1500, $this->cellRowSpan)->addText($this->total[$tangibleAsset->id]['start_using_year'], null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
