@@ -276,7 +276,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $tangibleAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'tangible_asset_price');
         $textRun = $section->addTextRun();
         $textRun->addText('Như vậy, giá trị công trình xây dựng là: ');
-        $textRun->addText(number_format($tangibleAssetTotal, 0, ',', '.'),['bold' => true]);
+        $textRun->addText(number_format($tangibleAssetTotal, 0, ',', '.').' đồng',['bold' => true]);
 
     }
 
