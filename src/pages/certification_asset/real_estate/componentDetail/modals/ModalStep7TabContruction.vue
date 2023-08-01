@@ -220,10 +220,10 @@
                         <th rowspan="2">CLCL</th>
                       </tr>
                       <tr>
-                        <th colspan="2">Móng, cột</th>
+                        <th colspan="2">Móng, khung cột</th>
                         <th colspan="2">Tường</th>
                         <th colspan="2">Nền, sàn</th>
-                        <th colspan="2">Kết cấu mái</th>
+                        <th colspan="2">Kết cấu đỡ mái</th>
                         <th colspan="2">Mái</th>
                       </tr>
                       <tr>

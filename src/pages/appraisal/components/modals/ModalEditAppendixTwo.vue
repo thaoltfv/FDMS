@@ -68,7 +68,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="text-left" rowspan="2">Móng, cột</td>
+                        <td class="text-left" rowspan="2">Móng, khung cột</td>
                         <td>p</td>
                         <td>
                           <InputNumberFormat
@@ -149,7 +149,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td class="text-left" rowspan="2">Kếu cấu mái</td>
+                        <td class="text-left" rowspan="2">Kết cấu đỡ mái</td>
                         <td>p</td>
                         <td>
                             <InputNumberFormat
