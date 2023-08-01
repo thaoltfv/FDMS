@@ -1,13 +1,15 @@
 <template>
   <div class="row mt-3 content_detail_asset" :key="render_tab_3">
-    <div class="modal-delete d-flex justify-content-center align-items-center" v-if="showNoteHienTrang" style="display: flex! important;
-    position: absolute;
-    z-index: 999;">
-      <div class="card-body card-info" style="background: aliceblue;
-    border: 1px solid;" :key="render_note">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
+    <div class="modal-detail d-flex justify-content-center align-items-center" v-if="showNoteHienTrang" >
+        <div class="card" :key="render_note">
+          <div class="container-title">
+            <div class="d-lg-flex d-block shadow-bottom">
+              <h2 class="title">Đánh giá hiện trạng</h2>
+            </div>
+          </div>
+          <div class="contain-detail">
+            <div class="row">
+              <div class="col-12">
               <InputText
 									v-model="noteHienTrang.note1"
 									vid="note1"
@@ -47,9 +49,9 @@
 									class="col-12 col-lg-12 form-group-container"
 								/>
             </div>
+            </div>
           </div>
-        </div>
-        <div class="d-md-flex d-block justify-content-end align-items-center" style="margin-top: 20px;">
+          <div class="d-md-flex d-block justify-content-end align-items-center" style="margin-top: 20px;">
           <div class="d-md-flex d-block">
             <button  @click="onCancelNote" class="btn btn-white text-nowrap" >
               <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
@@ -59,8 +61,8 @@
             </button>
           </div>
 				</div>
+        </div>
       </div>
-    </div>
     <div class="col-12" v-if="data.tangible_assets && data.tangible_assets.length > 0 &&  data.tangible_assets[0].construction_company.length > 0">
       <div class="col-12 contruction_block">
         <div class="d-flex align-items-center justify-content-between sub_header_title">
@@ -1462,4 +1464,119 @@ export default {
 	background: #FFFFFF;
 }
 
+.modal-detail {
+  position: fixed;
+  z-index: 1031;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.6);
+  .card {
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    max-width: 1300px;
+    width: 100%;
+    max-height: 90vh;
+    margin-bottom: 0;
+    padding: 35px 95px;
+    @media (max-width: 787px) {
+      padding: 20px 10px;
+    }
+    &-header {
+      border-bottom: 1px solid #DDDDDD;
+      h3 {
+        color: #333333;
+      }
+      img {
+        cursor: pointer;
+      }
+    }
+    &-body {
+      text-align: center;
+      p {
+        color: #333333;
+        margin-bottom: 40px;
+      }
+
+      .btn__group {
+        .btn {
+          max-width: 150px;
+          width: 100%;
+          margin: 0 10px;
+        }
+      }
+    }
+  }
+}
+
+.card{
+  .contain-detail{
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 20px;
+    &::-webkit-scrollbar{
+      width: 2px;
+    }
+  }
+  &-title{
+    background: #F3F2F7;
+    padding: 16px 20px;
+    margin-bottom: 0;
+    .title{
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+  }
+  &-table{
+    border-radius: 5px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    width: 99%;
+    margin: 50px auto 50px;
+  }
+  &-body{
+    padding: 35px 30px 40px;
+  }
+  &-info{
+    .title{
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-top: 28px;
+    }
+  }
+  &-land{
+    position: relative;
+    padding: 0;
+  }
+}
+
+.container-title{
+  margin: -35px -95px auto;
+  padding: 35px 95px 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  .title{
+    font-size: 1.2rem;
+    @media (max-width: 767px) {
+      font-size: 1.125rem;
+    }
+  }
+  &__footer{
+    margin: auto -95px -35px;
+    padding: 20px 95px 20px;
+    @media (max-width: 767px) {
+      .btn-white{
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+.title{
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #000000;
+}
 </style>
