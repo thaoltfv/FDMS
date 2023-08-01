@@ -12,9 +12,11 @@ use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class EloquentProjectRepository extends EloquentRepository implements ProjectRepository
 {
+    private string $allowedSorts = 'updated_at';
     private function beforeSave(int $id, string $type)
     {
         $result = null;
@@ -43,41 +45,53 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
     }
     public function findPaging()
     {
+        // $perPage = (int)request()->get('limit');
+        // $page = (int)request()->get('page');
+        // $select = [
+        //     'id',
+        //     'name',
+        //     'province_id',
+        //     'district_id',
+        //     'ward_id',
+        //     'street_id',
+        //     'rank',
+        //     'total_blocks',
+        //     'total_apartments',
+        //     'nb_swim_dens',
+        //     'coordinates',
+        //     'status',
+        //     'utilities',
+        //     'basement',
+        //     'elevator',
+        //     'created_at',
+        //     'handover_year',
+        // ];
+        // $with = [
+        //     'province:id,name',
+        //     'district:id,name',
+        //     'ward:id,name',
+        // ];
+        // $result = Project::query()
+        //     ->with($with)
+        //     ->select($select)
+        //     ->orderByDesc('updated_at');
+
+        // $result = $result
+        //     ->forPage($page, $perPage)
+        //     ->paginate($perPage);
+        // return $result;
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
-        $select = [
-            'id',
-            'name',
-            'province_id',
-            'district_id',
-            'ward_id',
-            'street_id',
-            'rank',
-            'total_blocks',
-            'total_apartments',
-            'nb_swim_dens',
-            'coordinates',
-            'status',
-            'utilities',
-            'basement',
-            'elevator',
-            'created_at',
-            'handover_year',
-        ];
-        $with = [
-            'province:id,name',
-            'district:id,name',
-            'ward:id,name',
-        ];
-        $result = Project::query()
-            ->with($with)
-            ->select($select)
-            ->orderByDesc('updated_at');
-
-        $result = $result
+        $search = request()->get('search');
+        if (empty($search)) {
+            $search = '';
+        }
+        $query = 'name ilike '."'%".$search."%'";
+        return QueryBuilder::for($this->model)
+            ->whereRaw($query)
+            ->orderByDesc($this->allowedSorts )
             ->forPage($page, $perPage)
             ->paginate($perPage);
-        return $result;
     }
     public function createProject(array $objects)
     {
