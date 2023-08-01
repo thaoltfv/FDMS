@@ -799,4 +799,16 @@ class CertificateAssetsController extends Controller
 
 
     }
+
+    public function updateNoteHienTrang(Request $request, int $id = null){
+        
+        //TODO Handle your data
+        $note = json_encode($request->note);
+        $result = $this->appraiseRepository->updateNoteHienTrang($note, $id);
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData($result);
+
+
+    }
 }

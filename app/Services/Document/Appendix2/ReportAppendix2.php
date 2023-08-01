@@ -46,7 +46,7 @@ class ReportAppendix2 extends Report
         $section->addText('PHỤ LỤC 2 KÈM THEO BÁO CÁO THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
         $section->addText('NHÀ CỬA VẬT KIẾN TRÚC', ['italic' => true, 'size' => 14], ['align' => 'center']);
     }
-    private function setProperties($data)
+    protected function setProperties($data)
     {
         $this->isOnlyAsset = (!is_countable($data->realEstate) || count($data->realEstate) == 1);
         $this->realEstates = $data->realEstate;

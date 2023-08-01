@@ -33,5 +33,6 @@ class CertificateAssetTangibleComparisonFactor extends Model
         'p5',
         'h5',
         'tangible_asset_id',
+        'note'
     ];
 }
