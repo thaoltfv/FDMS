@@ -4,7 +4,7 @@
         <div class="card" :key="render_note">
           <div class="container-title">
             <div class="d-lg-flex d-block shadow-bottom">
-              <h2 class="title">Đánh giá hiện trạng</h2>
+              <h2 class="title">BẢNG ĐÁNH GIÁ HIỆN TRẠNG CÔNG TRÌNH THEO KẾT CẤU CHÍNH</h2>
             </div>
           </div>
           <div class="contain-detail">
