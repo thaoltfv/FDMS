@@ -1782,6 +1782,6 @@ class CommonService
 	public static function getPlaningInfo($id)
     {
         $dataAppraise = RealEstate::where('id', $id)->first();
-		return $dataAppraise;
+		return $dataAppraise->planning_info;
 	}
 }

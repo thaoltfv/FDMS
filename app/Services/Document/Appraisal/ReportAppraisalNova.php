@@ -283,14 +283,14 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
             ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/m2', null, ['align' => 'left']);
         
-        // if (CommonService::getPlaningInfo($appraise->id)){
+        if (CommonService::getPlaningInfo($appraise->appraise_id)){
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
-            $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText($appraise->id.'Thông tin quy hoạch', null, ['align' => 'left']);
-            $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText(json_encode(CommonService::getPlaningInfo($appraise->id)), null, ['align' => 'left']);
+            $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
+            $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->id)), null, ['align' => 'left']);
-        // }
+                ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->appraise_id)), null, ['align' => 'left']);
+        }
         
             if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
             $section->addTitle('Công trình xây dựng:', 3);
