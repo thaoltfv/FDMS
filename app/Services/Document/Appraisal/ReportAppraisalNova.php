@@ -435,7 +435,7 @@ class ReportAppraisalNova extends ReportAppraisal
                 // $ngay = preg_replace('/\s+/', '', $split_date[0]);
                 // $date = preg_replace('/\s+/', '', $split_date[1]);
                 // $c1->addText(CommonService::mbUcfirst($ngay).': '.$date, null, ['keepNext' => true]);
-                $c1->addText(json_encode($split_date));
+                $c1->addText('Ngày: '.$split_date[1], null, ['keepNext' => true]);
             } else {
                 $table->addCell(2000, $this->cellVCentered)->addText($law['document_num']. $law['document_date'], null, ['keepNext' => true]);
             }
