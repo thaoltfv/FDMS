@@ -264,14 +264,15 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND TPHCM', null, ['align' => 'left']);
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
+        $c0 = $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
+        $c0->addTextBreak();
         $vitri_id = json_decode($appraise->properties[0])->property_detail[0]->position_type_id;
         $dongiaUBND = json_decode($appraise->properties[0])->property_detail[0]->circular_unit_price;
         $loaidat = json_decode($appraise->properties[0])->property_detail[0]->land_type_purpose->description;
         $street = explode(",",$appraise->full_address);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(CommonService::getViTri($vitri_id).' '.$street[0], null, ['align' => 'left']);
+            ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' '.$street[0], null, ['align' => 'left']);
         
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -279,7 +280,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Đơn giá đất', null, ['align' => 'left']);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText($loaidat.': '.number_format($dongiaUBND, 0, ',', '.').' đồng/m2', null, ['align' => 'left']);
+            ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/m2', null, ['align' => 'left']);
         
         
         
