@@ -265,7 +265,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND TPHCM', null, ['align' => 'left']);
         $c0 = $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
-        $c0->addTextBreak();
+        $c0->addTextBreak(1);
         $vitri_id = json_decode($appraise->properties[0])->property_detail[0]->position_type_id;
         $dongiaUBND = json_decode($appraise->properties[0])->property_detail[0]->circular_unit_price;
         $loaidat = json_decode($appraise->properties[0])->property_detail[0]->land_type_purpose->description;
