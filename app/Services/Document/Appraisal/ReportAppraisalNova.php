@@ -195,9 +195,9 @@ class ReportAppraisalNova extends ReportAppraisal
             $textRun = $cell->addTextRun(['align' => 'left']);
             $textRun->addText($appraiseLaw->origin_of_use, null, ['align' => 'left']);
         }
-        $table->addRow(400, $this->cantSplit);
-        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
-        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        // $table->addRow(400, $this->cantSplit);
+        // $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        // $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $zoning = "";
         $stt = 0;
         $existLandTypePurpose = [];
