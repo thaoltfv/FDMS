@@ -268,9 +268,10 @@ class ReportAppraisalNova extends ReportAppraisal
         $vitri_id = json_decode($appraise->properties[0])->property_detail[0]->position_type_id;
         $dongiaUBND = json_decode($appraise->properties[0])->property_detail[0]->circular_unit_price;
         $loaidat = json_decode($appraise->properties[0])->property_detail[0]->land_type_purpose->description;
+        $street = explode(",",$appraise->full_address);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(CommonService::getViTri($vitri_id), null, ['align' => 'left']);
+            ->addText(CommonService::getViTri($vitri_id).' '.$street[0], null, ['align' => 'left']);
         
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
