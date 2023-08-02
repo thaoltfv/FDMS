@@ -427,7 +427,14 @@ class ReportAppraisalNova extends ReportAppraisal
                 $table->addCell(600, $this->cellVCentered)->addText($index, null, $this->cellHCenteredKeepNext);
             $table->addCell(2000, $this->cellVCentered)->addText($law['title'], null, ['keepNext' => true]);
             $split = explode("|",$law['document_num']);
-            $table->addCell(2000, $this->cellVCentered)->addText(json_encode($split).$law['document_num']. $law['document_date'], null, ['keepNext' => true]);
+            if (count($split) > 1){
+                $c1 = $table->addCell(2000, $this->cellVCentered);
+                $c1->addText('Số bìa: '.$split[0], null, ['keepNext' => true]);
+                $c1->addText('Số vào sổ cấp GCN: '.$split[1], null, ['keepNext' => true]);
+                $c1->addText('Ngày: '.$law['document_date'], null, ['keepNext' => true]);
+            } else {
+                $table->addCell(2000, $this->cellVCentered)->addText($law['document_num']. $law['document_date'], null, ['keepNext' => true]);
+            }
             $table->addCell(5000, $this->cellVCentered)->addText($law['content'], null, ['keepNext' => true]);
             $table->addCell(2000, $this->cellVCentered)->addText($law['certifying_agency']);
         }
