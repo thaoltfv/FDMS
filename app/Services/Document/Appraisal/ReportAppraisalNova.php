@@ -403,6 +403,7 @@ class ReportAppraisalNova extends ReportAppraisal
         // $section->addListItem('Điều kiện, tính chất thông tin thị trường: Dữ liệu thị trường về các tài sản giao dịch có đặc điểm tương đồng với TSTĐG tương đối phổ biến và đầy đủ nên việc sử dụng phương pháp so sánh để xác định giá trị tài sản thẩm định giá là phù hợp và đáng tin cậy.', 0, null, 'bullets', $this->indentFistLine);
         // $section->addListItem('Ngoài ra nguồn dữ liệu và thông tin có thể sử dụng để xác định giá trị tài sản thẩm định giá theo phương pháp khác là rất hạn chế. Vì vậy, căn cứ mục đích thẩm định giá của tài sản ' . $this->acronym . ' sử dụng phương pháp so sánh là phù hợp.', 0, null, 'bullets', $this->indentFistLine);
         $section->addTitle('Cách tiếp cận, phương pháp thẩm định giá áp dụng:', 2);
+        $section->addText(json_encode($certificate));
         if ($this->isApartment) {
             $this->step8sub3Apartment($section);
         } else {
