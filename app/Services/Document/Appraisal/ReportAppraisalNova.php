@@ -279,7 +279,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Đơn giá đất', null, ['align' => 'left']);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText('', null, ['align' => 'left']);
+            ->addText($loaidat.': '.number_format($dongiaUBND, 0, ',', '.').' đồng/m2', null, ['align' => 'left']);
         
         
         
