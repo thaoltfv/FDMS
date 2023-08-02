@@ -266,7 +266,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND TPHCM', null, ['align' => 'left']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(json_encode($appraise->properties), null, ['align' => 'left']);
+            ->addText(json_encode($appraise->properties[0]), null, ['align' => 'left']);
         
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
