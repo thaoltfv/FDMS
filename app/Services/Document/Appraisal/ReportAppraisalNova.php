@@ -431,7 +431,7 @@ class ReportAppraisalNova extends ReportAppraisal
                 $c1 = $table->addCell(2000, $this->cellVCentered);
                 $c1->addText('Số bìa: '.$split[0], null, ['keepNext' => true]);
                 $c1->addText('Số vào sổ cấp GCN: '.$split[1], null, ['keepNext' => true]);
-                $split_date = explode(" ",$law['document_num']);
+                $split_date = explode(" ",$law['document_date']);
                 $ngay = preg_replace('/\s+/', '', $split_date[0]);
                 $date = preg_replace('/\s+/', '', $split_date[1]);
                 $c1->addText(CommonService::mbUcfirst($ngay).': '.$date, null, ['keepNext' => true]);
