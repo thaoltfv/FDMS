@@ -325,14 +325,14 @@
         <div class="container-fluid">
 					<div class="row">
 						<div class="col-12 col-lg-6">
-							<InputText
+							<InputTextarea
 								v-model="data.real_estate.planning_info"
 								label="Thông tin quy hoạch"
 								class="form-group-container"
 							/>
 						</div>
 						<div class="col-12 col-lg-6">
-							<InputText
+							<InputTextarea
 								v-model="data.real_estate.planning_source"
 								label="Nguồn thông tin"
 								class="form-group-container"

@@ -417,8 +417,9 @@ export default {
 							material_id: '',
 							turning: 'Hẻm số 1'
 						}],
-						description: ''
+						description: '',
 					},
+					geographical_location: '- Phía trước:\n- Phía sau:\n- Phía bên trái ( Nhìn từ trong ra):\n- Phía bên phải ( Nhìn từ trong ra):',
 					picture_infomation: []
 				},
 				step_2: {
@@ -652,6 +653,7 @@ export default {
 				if (bindDataStep.economic_infomation) { this.form.step_1.economic_infomation = bindDataStep.economic_infomation }
 				if (bindDataStep.general_infomation) { this.form.step_1.general_infomation = bindDataStep.general_infomation }
 				if (bindDataStep.traffic_infomation) { this.form.step_1.traffic_infomation = bindDataStep.traffic_infomation }
+				if (bindDataStep.geographical_location) { this.form.step_1.geographical_location = bindDataStep.geographical_location }
 				if (bindDataStep.picture_infomation && bindDataStep.picture_infomation.length > 0) { this.form.step_1.picture_infomation = bindDataStep.picture_infomation }
 				// step 2
 				if (bindDataStep.land_details) { this.form.step_2.land_details = bindDataStep.land_details }

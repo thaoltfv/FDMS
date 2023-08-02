@@ -281,6 +281,9 @@
              <div class="col-12 ">
               <InputTextarea :autosize="true" :maxLength="1000" v-model="data.traffic_infomation.description" label="Mô tả vị trí" class="form-group-container" />
             </div>
+            <div class="col-12 ">
+              <InputTextarea :autosize="true" :maxLength="1000" v-model="data.geographical_location" label="Vị trí địa lý" class="form-group-container" />
+            </div>
           </div>
         </div>
       </div>

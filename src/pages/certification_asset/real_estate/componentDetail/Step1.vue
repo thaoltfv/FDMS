@@ -290,6 +290,9 @@
              <div class="col-12 ">
               <InputTextarea :autosize="true" :disableInput="true" v-model="data.traffic_infomation.description" label="Mô tả vị trí" class="form-group-container"/>
             </div>
+            <div class="col-12 ">
+              <InputTextarea :autosize="true" :disableInput="true" v-model="data.geographical_location" label="Vị trí địa lý" class="form-group-container"/>
+            </div>
           </div>
         </div>
       </div>
