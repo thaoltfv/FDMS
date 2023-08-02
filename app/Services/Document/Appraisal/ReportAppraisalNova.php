@@ -167,7 +167,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí địa lý', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(json_encode($appraise), null, ['align' => 'left']);
+            ->addText(htmlspecialchars($positionType1), null, ['align' => 'left']);
 
         $propertyData = $this->getAppraisePropertyData($appraise);
         $table->addRow(400, $this->cantSplit);
@@ -245,7 +245,7 @@ class ReportAppraisalNova extends ReportAppraisal
             $positionType .= ($index) ? ', ' : '';
             $positionType .= (isset($property->description) ? $property->description : '');
         }
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText(json_encode($appraise).'- Mô tả vị trí', null, ['align' => 'left']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Mô tả vị trí', null, ['align' => 'left']);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
             ->addText(htmlspecialchars($positionType), null, ['align' => 'left']);
