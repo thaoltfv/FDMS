@@ -36,6 +36,41 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
 
     }
+
+    protected function step1Sub3($section, $certificate)
+    {
+        $section->addTitle('Thông tin tài sản thẩm định giá:', 2);
+        $type1 = 0; //Đất trống
+        $type2 = 0; //Đất có nhà
+        $type3 = 0; //Chung cư
+        $appraiseAssetType = "Quyền sử dụng đất";
+        foreach ($this->realEstates as $realEstate) {
+            if ($realEstate->assetType->description == "ĐẤT TRỐNG") $type1 = 1;
+            if ($realEstate->assetType->description == "ĐẤT CÓ NHÀ") $type2 = 1;
+            if ($realEstate->assetType->description == "CHUNG CƯ") $type3 = 1;
+        }
+        if ($type1 && $type2 && $type3) {
+            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc và căn hộ chung cư";
+        } else if ($type1 && $type3) {
+            $appraiseAssetType = "Quyền sử dụng đất và căn hộ chung cư";
+        } else if (($type1 && $type2) || ($type2)) {
+            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc";
+        } else if ($type3) {
+            $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
+        }
+        $listTmp = $section->addListItemRun(0, 'bullets');
+        $listTmp->addText('Loại tài sản: ', ['bold' => true]);
+        $listTmp->addText('Bất động sản.');
+        $listTmp = $section->addListItemRun(0, 'bullets');
+        $listTmp->addText('Tên tài sản: ', ['bold' => true]);
+        $listTmp->addText($this->getAssetName($certificate) . '.');
+        $address = $this->getAssetAddress($certificate);
+        if (!empty($address)) {
+            $listTmp = $section->addListItemRun(0, 'bullets');
+            $listTmp->addText('Địa chỉ: ', ['bold' => true]);
+            $listTmp->addText($address . '.');
+        }
+    }
     protected function step1Sub4($section, $certificate)
     {
         $section->addTitle('Thông tin về cuộc thẩm định giá:', 2);
@@ -369,5 +404,32 @@ class ReportAppraisalNova extends ReportAppraisal
         $bien172 = $appraiserManager;
         $cell34->addText($bien172, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
+    }
+
+    protected function step3 (Section $section, $certificate)
+    {
+        $section->addTitle('PHÁP LÝ TÀI SẢN THẨM ĐỊNH GIÁ:', 1);
+        $table = $section->addTable($this->styleTable);
+        $table->addRow(400, $this->rowHeader);
+        $appraiseLaw = $this->getAppraiseLaw($this->realEstates);
+        $countLaw = count($appraiseLaw);
+        if ($countLaw > 1)
+            $table->addCell(600, $this->cellVCentered)->addText('Stt', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(2000, $this->cellVCentered)->addText('Loại văn bản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(2000, $this->cellVCentered)->addText(' Số, ngày', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(5000, $this->cellVCentered)->addText('Nội dung văn bản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(2000, $this->cellVCentered)->addText('Cơ quan cấp, xác nhận', ['bold' => true], $this->cellHCenteredKeepNext);
+        $index = 0;
+        foreach ($appraiseLaw as $law) {
+            $index++;
+            $table->addRow(400, $this->cantSplit);
+            if ($countLaw > 1)
+                $table->addCell(600, $this->cellVCentered)->addText($index, null, $this->cellHCenteredKeepNext);
+            $table->addCell(2000, $this->cellVCentered)->addText($law['title'], null, ['keepNext' => true]);
+            $split = explode("|",$law['document_date']);
+            $table->addCell(2000, $this->cellVCentered)->addText(json_encode($split).$law['document_num']. $law['document_date'], null, ['keepNext' => true]);
+            $table->addCell(5000, $this->cellVCentered)->addText($law['content'], null, ['keepNext' => true]);
+            $table->addCell(2000, $this->cellVCentered)->addText($law['certifying_agency']);
+        }
     }
 }
