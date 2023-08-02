@@ -5737,6 +5737,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result['max_version'] = $version;
         $geo = AppraiseProperty::where('appraise_id',$appraiseId)->first();
         $result['traffic_infomation']['geographical_location'] = $geo->geographical_location;
+        $result['test'] = $geo;
         return $result;
     }
 
