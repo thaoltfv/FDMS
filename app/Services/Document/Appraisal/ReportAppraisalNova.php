@@ -426,7 +426,7 @@ class ReportAppraisalNova extends ReportAppraisal
             if ($countLaw > 1)
                 $table->addCell(600, $this->cellVCentered)->addText($index, null, $this->cellHCenteredKeepNext);
             $table->addCell(2000, $this->cellVCentered)->addText($law['title'], null, ['keepNext' => true]);
-            $split = explode("|",$law['document_date']);
+            $split = explode("|",$law['document_num']);
             $table->addCell(2000, $this->cellVCentered)->addText(json_encode($split).$law['document_num']. $law['document_date'], null, ['keepNext' => true]);
             $table->addCell(5000, $this->cellVCentered)->addText($law['content'], null, ['keepNext' => true]);
             $table->addCell(2000, $this->cellVCentered)->addText($law['certifying_agency']);
