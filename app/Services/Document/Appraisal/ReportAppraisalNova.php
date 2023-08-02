@@ -281,7 +281,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Đơn giá đất', null, ['align' => 'left']);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/m2', null, ['align' => 'left']);
+            ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/'.$this->m2, null, ['align' => 'left']);
         
         if (CommonService::getPlaningInfo($appraise->appraise_id)){
             $table->addRow(400, $this->cantSplit);
@@ -326,7 +326,9 @@ class ReportAppraisalNova extends ReportAppraisal
                 if (!empty($rate)) $cellTmp->addListItem('Cấp công trình: ' . htmlspecialchars($rate), 0, null, 'bullets');
                 $cellTmp->addListItem('Kết cấu:', 0, null, 'bullets');
                 $cellTmp->addText('   ' . str_replace("\n", '<w:br/>   ', $tangibleAsset->contruction_description), null, ['valign' => 'center', 'align' => 'left']);
-                $table->addCell(2000, $this->cellVCentered)->addText(number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'center']);
+                $c1 = $table->addCell(2000, $this->cellVCentered);
+                $c1->addText('   - Diện tích xây dựng: '.number_format(floatval($tangibleAsset->total_construction_area), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'center']);
+                $c1->addText('   - Diện tích sàn: '.number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'center']);
             }
         }
     }
