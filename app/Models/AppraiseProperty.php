@@ -51,6 +51,7 @@ class AppraiseProperty extends Model
         'two_sides_land',
         'land_no',
         'doc_no',
+        'geographical_location'
     ];
 
     public function propertyDetail(): HasMany
