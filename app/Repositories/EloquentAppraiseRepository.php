@@ -3243,11 +3243,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'main_road_length' => $trafficInfomation['main_road_length'],
                             'material_id' => $trafficInfomation['material_id'],
                             'two_sides_land' => isset($trafficInfomation['two_sides_land']) ? $trafficInfomation['two_sides_land'] : null,
-                            'description' => $trafficInfomation['description']
+                            'description' => $trafficInfomation['description'],
+                            'geographical_location' => $trafficInfomation['geographical_location']
                         ]);
                     } else {
                         $trafficInfomation['appraise_id'] = $appraiseId;
                         $trafficInfomation['description'] = $generalInfomation['description'];
+                        $trafficInfomation['geographical_location'] = $generalInfomation['geographical_location'];
                         $appraiseProperties = new AppraiseProperty($trafficInfomation);
                         $propertieId = QueryBuilder::for($appraiseProperties)
                             ->insertGetId($appraiseProperties->attributesToArray());
