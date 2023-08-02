@@ -167,7 +167,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí địa lý', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(htmlspecialchars($positionType1), null, ['align' => 'left']);
+            ->addText('   ' . str_replace("\n", '<w:br/>   ', $positionType1), null, ['align' => 'left']);
 
         $propertyData = $this->getAppraisePropertyData($appraise);
         $table->addRow(400, $this->cantSplit);
@@ -249,6 +249,54 @@ class ReportAppraisalNova extends ReportAppraisal
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
             ->addText(htmlspecialchars($positionType), null, ['align' => 'left']);
+    }
+
+    protected function assetCharacteristicsAppraiseStatus($section, $table, $appraise)
+    {
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Hiện trạng', null, ['align' => 'left']);
+        $tangible = (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) ? "Có" : "Không có";
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText($this->statusDescription, null, ['align' => 'left']);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+            ->addText($tangible . ' công trình xây dựng trên đất.', null, ['align' => 'left']);
+        if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
+            $section->addTitle('Công trình xây dựng:', 3);
+            $table = $section->addTable($this->styleTable);
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(2000, $this->cellVCentered)->addText('Tên tài sản', ['bold' => true], array_merge($this->cellHCentered, $this->keepNext));
+            $table->addCell(8000, $this->cellVCentered)->addText('Đặc điểm kinh tế - kỹ thuật', ['bold' => true], $this->cellHCentered);
+            $table->addCell(2000, $this->cellVCentered)->addText('Số lượng ', ['bold' => true], $this->cellHCentered);
+            foreach ($appraise->tangibleAssets as $index => $tangibleAsset) {
+                $table->addRow(400, $this->cantSplit);
+                $structure = "";
+                $rate = "";
+                if (isset($tangibleAsset->buildingType->description)) {
+                    $buildingType = $tangibleAsset->buildingType->description;
+                    if ($buildingType == "NHÀ Ở RIÊNG LẺ") {
+                        $structure .= "Nhà ở riêng lẻ - " . $tangibleAsset->floor . " tầng";
+                        if (isset($tangibleAsset->buildingCategory->description))
+                            $rate .= $tangibleAsset->buildingCategory->description;
+                    } else if ($buildingType == "BIỆT THỰ") {
+                        $structure .= "Biệt thự - " . $tangibleAsset->floor . " tầng";
+                        if (isset($tangibleAsset->buildingCategory->description))
+                            $rate .= $tangibleAsset->buildingCategory->description;
+                    } else if ($buildingType == "NHÀ XƯỞNG (KHO)") {
+                        $structure .= "Nhà xưởng(kho)";
+                    } else {
+                        $structure .= "Công trình khác";
+                    }
+                }
+                $buildingType =  isset($tangibleAsset->tangible_name) ? CommonService::mbUcfirst($tangibleAsset->tangible_name) : '';
+                $table->addCell(2000, $this->cellVCentered)->addText($buildingType, null, $this->cellVCentered);
+                $cellTmp = $table->addCell(8000, ['valign' => 'center', 'align' => 'left']);
+                $cellTmp->addListItem('Cấu trúc: ' . $structure, 0, null, 'bullets');
+                if (!empty($rate)) $cellTmp->addListItem('Cấp công trình: ' . htmlspecialchars($rate), 0, null, 'bullets');
+                $cellTmp->addListItem('Kết cấu:', 0, null, 'bullets');
+                $cellTmp->addText('   ' . str_replace("\n", '<w:br/>   ', $tangibleAsset->contruction_description), null, ['valign' => 'center', 'align' => 'left']);
+                $table->addCell(2000, $this->cellVCentered)->addText(number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'center']);
+            }
+        }
     }
     //V
     protected function getPrincipleOfValuationDescription($certificatePrinciple, $section)
