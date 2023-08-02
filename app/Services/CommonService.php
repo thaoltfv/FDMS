@@ -1732,6 +1732,12 @@ class CommonService
         $data = Dictionary::query()->where(['type' => 'TIEN_ICH_CO_BAN', 'status' => 1])->get();
         return $data;
     }
+
+	public static function getViTri($id)
+    {
+        $data = Dictionary::query()->where(['type' => 'VI_TRI_DAT', 'id' => $id])->first();
+        return $data->description;
+    }
 	public static function getTotalRealEstatePrice($realEstates)
 	{
 		$value = 0;
