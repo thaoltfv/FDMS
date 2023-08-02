@@ -12,7 +12,7 @@
         vid="description"
         label="Tên chi tiết"
       />
-      <InputText v-if="form.type == 'LOAI_DAT_CHI_TIET'"
+      <InputText v-if="form.type == 'LOAI_DAT_CHI_TIET' || form.type == 'CHUC_VU'"
         v-model="form.acronym"
         placeholder="Nhập tên viết tắt"
         rules="required|max:200"
