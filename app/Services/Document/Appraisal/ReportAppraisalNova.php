@@ -260,7 +260,24 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText($this->statusDescription, null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
             ->addText($tangible . ' công trình xây dựng trên đất.', null, ['align' => 'left']);
-        if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
+
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND TPHCM', null, ['align' => 'left']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+            ->addText('', null, ['align' => 'left']);
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Đơn giá đất', null, ['align' => 'left']);
+
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+            ->addText('', null, ['align' => 'left']);
+        
+        
+        
+            if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
             $section->addTitle('Công trình xây dựng:', 3);
             $table = $section->addTable($this->styleTable);
             $table->addRow(400, $this->cantSplit);
