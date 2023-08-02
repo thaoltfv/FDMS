@@ -327,8 +327,8 @@ class ReportAppraisalNova extends ReportAppraisal
                 $cellTmp->addListItem('Kết cấu:', 0, null, 'bullets');
                 $cellTmp->addText('   ' . str_replace("\n", '<w:br/>   ', $tangibleAsset->contruction_description), null, ['valign' => 'center', 'align' => 'left']);
                 $c1 = $table->addCell(2000, $this->cellVCentered);
-                $c1->addText('- Diện tích xây dựng: '.number_format(floatval($tangibleAsset->total_construction_area), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'center']);
-                $c1->addText('- Diện tích sàn: '.number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'center']);
+                $c1->addText('- Diện tích xây dựng: '.number_format(floatval($tangibleAsset->total_construction_area), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
+                $c1->addText('- Diện tích sàn: '.number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
             }
         }
     }
@@ -414,6 +414,30 @@ class ReportAppraisalNova extends ReportAppraisal
                $this->step8Sub4Apartment($section, $stt);
             } else {
                 $this->step8Sub4Appraise($section, $stt);
+            }
+        }
+    }
+
+    protected function step8Sub4Appraise(Section $section, $stt)
+    {
+        if ($this->isOnlyAsset) {
+            if ($this->isTangibleAsset) {
+                $section->addTitle('Quyền sử dụng đất:', 3);
+                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addTitle('Công trình xây dựng:', 3);
+                $section->addText('- Chi tiết xem Phụ lục 2 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+            } else {
+                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+            }
+        } else {
+            $section->addTitle('Tài sản thẩm định giá ' . ($stt + 1), 3);
+            if ($this->isTangibleAsset) {
+                $section->addText('a) Quyền sử dụng đất:', ['italic' => true], $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('b) Công trình xây dựng:', ['italic' => true], $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 2 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+            } else {
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
             }
         }
     }
