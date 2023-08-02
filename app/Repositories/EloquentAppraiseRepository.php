@@ -3195,6 +3195,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $pictureInfomation = $objects['picture_infomation'];
                 $economicInfomation = $objects['economic_infomation'];
                 $trafficInfomation = $objects['traffic_infomation'];
+                $geographical_location = $objects['geographical_location'];
                 $appraiseId = $id;
 
                 Appraise::where('id', $appraiseId)->update([
@@ -3244,7 +3245,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'material_id' => $trafficInfomation['material_id'],
                             'two_sides_land' => isset($trafficInfomation['two_sides_land']) ? $trafficInfomation['two_sides_land'] : null,
                             'description' => $trafficInfomation['description'],
-                            'geographical_location' => $trafficInfomation['geographical_location']
+                            'geographical_location' => $geographical_location
                         ]);
                     } else {
                         $trafficInfomation['appraise_id'] = $appraiseId;
@@ -5737,7 +5738,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result['max_version'] = $version;
         $geo = AppraiseProperty::where('appraise_id',$appraiseId)->first();
         $result['traffic_infomation'] = $geo;
-        $result['test'] = $geo->geographical_location;
+        $result['geographical_location'] = $geo->geographical_location;
         return $result;
     }
 
