@@ -239,7 +239,7 @@ class ReportAppraisalNova extends ReportAppraisal
 
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
-        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(json_encode($appraise), ['valign' => 'center', 'vMerge' => 'continue']);
         $positionType = "";
         foreach ($appraise->properties as $index => $property) {
             $positionType .= ($index) ? ', ' : '';
