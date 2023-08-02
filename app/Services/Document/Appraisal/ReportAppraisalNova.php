@@ -201,10 +201,10 @@ class ReportAppraisalNova extends ReportAppraisal
         $zoning = "";
         $stt = 0;
         $existLandTypePurpose = [];
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Quy hoạch', null, ['align' => 'left']);
+        // $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Quy hoạch', null, ['align' => 'left']);
 
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText($propertyData['desciptionZoning'], null, ['align' => 'left']);
+        // $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+        //         ->addText($propertyData['desciptionZoning'], null, ['align' => 'left']);
     }
     protected function assetCharacteristicsAppraiseLocation($table, $appraise)
     {
