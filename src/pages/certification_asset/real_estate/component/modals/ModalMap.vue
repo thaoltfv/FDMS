@@ -3,10 +3,10 @@
     class="modal-delete d-flex justify-content-center align-items-center">
 	<div class="" v-if="isOpen" @click.self="closeModal" style="position: absolute;
     z-index: 999;
-    top: 165px;
-    left: 84px;">
+    top: 160px;
+    left: 80px;">
       <div class="">
-        <iframe :src="url_modal" frameborder="0" width="1512vw" height="600vh"></iframe>
+        <iframe :src="url_modal" frameborder="0" width="1522vw" height="500vh"></iframe>
         <button class="" @click="closeModal" style="position: absolute;
     width: 50px;
     height: 50px;
