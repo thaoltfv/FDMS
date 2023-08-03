@@ -103,6 +103,11 @@
                         :options="{zoomControl: false}"
                       >
                         <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
+                        <!-- <l-tile-layer
+                          url="https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png"
+                          :min-zoom="12"
+                          :options="{ maxNativeZoom: 19, maxZoom: 20}"
+                        /> -->
                         <l-control-zoom position="bottomright"></l-control-zoom>
                         <l-control position="bottomleft">
                           <button class="btn btn-map" @click="handleView" type="button">

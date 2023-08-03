@@ -1,6 +1,24 @@
 <template>
   <div
     class="modal-delete d-flex justify-content-center align-items-center">
+	<div class="" v-if="isOpen" @click.self="closeModal" style="position: absolute;
+    z-index: 999;
+    top: 165px;
+    left: 84px;">
+      <div class="">
+        <iframe :src="url_modal" frameborder="0" width="1512vw" height="600vh"></iframe>
+        <button class="" @click="closeModal" style="position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 7px;
+    right: 6px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0px;"><img 
+             src="@/assets/images/icon-btn-back.svg"
+             alt="icon"></button>
+      </div>
+    </div>
     <ValidationObserver tag="form"
                         ref="observer"
                         @submit.prevent="validateBeforeSubmit">
@@ -23,6 +41,13 @@
               <img src="@/assets/icons/ic_search.svg" alt="">
             </div>
           </div>
+			<button class="btn btn-search" type="button" @click="handleOpenEM" style="background-color: #FFFFFF;">
+				<svg width="25" height="25" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z"
+                    fill="#007EC6"/>
+                </svg>
+			</button>
           <input type="text" id="coordinate" :value="address" class="d-none">
           <button class="btn btn-search" type="button" @click="handleAction">Xác nhận</button>
           <button class="btn btn-white btn-cancel" type="button" @click="handleCancel">Trở lại</button>
@@ -47,6 +72,16 @@
 								:attribution="tileProvider.attribution"
 								:layer-type="tileProvider.type"
 								:options="{ maxNativeZoom: 19, maxZoom: 20}"/>
+				<!-- <l-tile-layer
+			:url="url_quyhoach"
+			:min-zoom="12"
+			:options="{ maxNativeZoom: 19, maxZoom: 20}" -->
+                        />
+						<!-- <l-tile-layer
+                          url="https://cdn.estatemanner.com/tile/paper_map/thanh_pho_ha_noi/quan_cau_giay/{z}/{x}/{y}.png"
+                          :min-zoom="12"
+                          :options="{ maxNativeZoom: 19, maxZoom: 20}"
+                        /> -->
               <l-control-zoom position="bottomright"></l-control-zoom>
 							<l-control position="bottomright">
 								<button class="btn btn-orange mini_btn" type="button" @click="geoLocate">
@@ -101,11 +136,14 @@ export default {
 	},
 	data () {
 		return {
+			url_modal: 'https://app.estatemanner.com/map',
+          	isOpen: false,
+			url_quyhoach:  '',
 			tileProviders: [
 				{
 					name: 'Ranh tờ, thửa (Liên hệ)',
 					visible: false,
-					url: '',
+					url: 'https://cdn.remaps.vn/land/{z}/{x}/{y}.png',
 					attribution: '© Fastvalue',
 					type: 'overlay'
 				},
@@ -113,7 +151,7 @@ export default {
 					name: 'Thông tin quy hoạch (Liên hệ)',
 					visible: false,
 					attribution: '© Fastvalue',
-					url: '',
+					url: 'https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png',
 					type: 'overlay'
 				}
 			],
@@ -145,6 +183,13 @@ export default {
 		}
 	},
 	methods: {
+		handleOpenEM(){
+			console.log('mở')
+			this.isOpen = true;
+		},
+		closeModal() {
+          this.isOpen = false;
+        },
 		changePlace (event) {
 			this.search_address = event.target.value
 		},
