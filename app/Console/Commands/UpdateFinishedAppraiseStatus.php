@@ -51,7 +51,7 @@ class UpdateFinishedAppraiseStatus extends Command
                     if ($appraise && $appraise->status != 4) {
                         $appraise->update([
                             'status' => 4,
-                            'updated_at' => DB::raw('updated_at')
+                            // 'updated_at' => DB::raw('updated_at')
                         ]);
                     }
                 }
@@ -59,19 +59,19 @@ class UpdateFinishedAppraiseStatus extends Command
                     if ($realEstate && $realEstate->status != 4) {
                         $realEstate->update([
                             'status' => 4,
-                            'updated_at' => DB::raw('updated_at')
+                            // 'updated_at' => DB::raw('updated_at')
                         ]);
                     }
                 }
                 Appraise::where('certificate_id', $certificate->id)
                     ->update([
                         'status' => 4,
-                        'updated_at' => DB::raw('updated_at')
+                        // 'updated_at' => DB::raw('updated_at')
                     ]);
                 RealEstate::where('certificate_id', $certificate->id)
                     ->update([
                         'status' => 4,
-                        'updated_at' => DB::raw('updated_at')
+                        // 'updated_at' => DB::raw('updated_at')
                     ]);
                 $this->output->progressAdvance();
                 usleep(10);
