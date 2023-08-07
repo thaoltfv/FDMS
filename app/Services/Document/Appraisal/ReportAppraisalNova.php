@@ -545,19 +545,20 @@ class ReportAppraisalNova extends ReportAppraisal
             if ($countLaw > 1)
                 $table->addCell(600, $this->cellVCentered)->addText($index, null, $this->cellHCenteredKeepNext);
             $table->addCell(2000, $this->cellVCentered)->addText($law['title'], null, ['keepNext' => true]);
-            $split = explode("|",$law['document_num']);
-            if (count($split) > 1){
-                $c1 = $table->addCell(2000, $this->cellVCentered);
-                $c1->addText('Số bìa: '.$split[0], null, ['keepNext' => true]);
-                $c1->addText('Số vào sổ cấp GCN: '.$split[1], null, ['keepNext' => true]);
-                $split_date = explode("ngày",$law['document_date']);
-                // $ngay = preg_replace('/\s+/', '', $split_date[0]);
-                // $date = preg_replace('/\s+/', '', $split_date[1]);
-                // $c1->addText(CommonService::mbUcfirst($ngay).': '.$date, null, ['keepNext' => true]);
-                $c1->addText('Ngày: '.$split_date[1], null, ['keepNext' => true]);
-            } else {
-                $table->addCell(2000, $this->cellVCentered)->addText($law['document_num']. $law['document_date'], null, ['keepNext' => true]);
-            }
+            // $split = explode("|",$law['document_num']);
+            // if (count($split) > 1){
+            //     $c1 = $table->addCell(2000, $this->cellVCentered);
+            //     $c1->addText('Số bìa: '.$split[0], null, ['keepNext' => true]);
+            //     $c1->addText('Số vào sổ cấp GCN: '.$split[1], null, ['keepNext' => true]);
+            //     $split_date = explode("ngày",$law['document_date']);
+            //     // $ngay = preg_replace('/\s+/', '', $split_date[0]);
+            //     // $date = preg_replace('/\s+/', '', $split_date[1]);
+            //     // $c1->addText(CommonService::mbUcfirst($ngay).': '.$date, null, ['keepNext' => true]);
+            //     $c1->addText('Ngày: '.$split_date[1], null, ['keepNext' => true]);
+            // } else {
+            //     $table->addCell(2000, $this->cellVCentered)->addText($law['document_num']. $law['document_date'], null, ['keepNext' => true]);
+            // }
+            $table->addCell(2000, $this->cellVCentered)->addText(str_replace("\n", '<w:br/>   ', $law['document_num']). $law['document_date'], null, ['keepNext' => true]);
             $table->addCell(5000, $this->cellVCentered)->addText($law['content'], null, ['keepNext' => true]);
             $table->addCell(2000, $this->cellVCentered)->addText($law['certifying_agency']);
         }
