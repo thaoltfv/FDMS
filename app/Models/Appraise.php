@@ -861,10 +861,10 @@ class Appraise extends Model
 		$item = AppraiseOtherInformation::where($where)->select($select)->first();
 		return $item->id;
     }
-    public function getDocumentDescriptionAttribute()
-    {
-        return 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
-    }
+    // public function getDocumentDescriptionAttribute()
+    // {
+    //     return 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
+    // }
 
     // protected function getDescriptionCapitalizeAttribute()
     // {
