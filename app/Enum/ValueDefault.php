@@ -23,7 +23,7 @@ class ValueDefault
     public const PRICE_VALIDATION_MESSAGE_UBND = 'Đơn giá UBND thấp nhất là 10,000';
     public const PRICE_VALIDATION_MESSAGE_OTHER = 'Đơn giá thấp nhất là 10,000';
 
-    public const CERTIFICATE_DESCRIPTION = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
+    public const CERTIFICATE_DESCRIPTION = '';
 
     public const MAXIMUM_AVERAGE_RATE = 15;
     public const TOTAL_ADJUST_RATE = 200;

@@ -1,5 +1,6 @@
 <?php
 namespace App\Services\Document\Appraisal;
+use PhpOffice\PhpWord\Element\Section;
 
 class ReportAppraisalDonava extends ReportAppraisal
 {
@@ -25,6 +26,12 @@ class ReportAppraisalDonava extends ReportAppraisal
         $section->addListItem('Kiểm soát viên: Trần Văn Luân', 0, null, 'bullets');
         $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
 
+    }
+
+    protected function step7(Section $section, $certificate)
+    {
+        $section->addTitle('CÁC GIẢ THIẾT VÀ GIẢ THIẾT ĐẶC BIỆT:', 1);
+        $section->addListItem('Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy', 0, null, 'bullets');
     }
     protected function step1Sub3($section, $certificate)
     {

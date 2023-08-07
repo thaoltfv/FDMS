@@ -339,12 +339,12 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addListItem('Phân tích sử dụng tốt nhất và hiệu quả nhất của tài sản thẩm định: Căn cứ vào đặc điểm pháp lý, đặc điểm kinh tế kỹ thuật và hiện trạng của tài sản thẩm định. Tổ thẩm định nhận thấy phương án sử dụng hiện tại là phương án sử dụng tốt nhất và có hiệu quả nhất.', 0, null, 'bullets', $this->indentFistLine);
     }
     //VII
-    protected function step7(Section $section, $certificate)
-    {
-        $section->addTitle('CÁC GIẢ THIẾT VÀ GIẢ THIẾT ĐẶC BIỆT:', 1);
-        $section->addListItem('Do đặc điểm giao dịch thị trường bất động sản tại địa phương, Công ty TNHH Thẩm định giá NOVA nhận định rằng mức giá rao bán của tài sản ở địa phương thường cao hơn giá giao dịch thành công một khoảng nhất định. Tổ thẩm định giá tiến hành thương lượng để tìm khoảng giá bán hợp lý nhất và giả định rằng giá thương lượng là mức giá có khả năng xảy ra giao dịch cao nhất.', 0, null, 'bullets');
-        $section->addListItem('Tổ thẩm định giá xác định diện tích đất và công trình xây dựng của tài sản thẩm định giá dựa trên hồ sơ khách hàng cung cấp, diện tích đất và công trình xây dựng của tài sản so sánh dựa trên thông tin thu thập được qua phỏng vấn trực tiếp chủ tài sản hoặc người chào bán. Việc thực hiện báo cáo này kèm theo giả định các thông tin thu thập trên là đúng và phù hợp với hiện trạng tài sản tại thời điểm thẩm định giá.', 0, null, 'bullets');
-    }
+    // protected function step7(Section $section, $certificate)
+    // {
+    //     $section->addTitle('CÁC GIẢ THIẾT VÀ GIẢ THIẾT ĐẶC BIỆT:', 1);
+    //     $section->addListItem('Do đặc điểm giao dịch thị trường bất động sản tại địa phương, Công ty TNHH Thẩm định giá NOVA nhận định rằng mức giá rao bán của tài sản ở địa phương thường cao hơn giá giao dịch thành công một khoảng nhất định. Tổ thẩm định giá tiến hành thương lượng để tìm khoảng giá bán hợp lý nhất và giả định rằng giá thương lượng là mức giá có khả năng xảy ra giao dịch cao nhất.', 0, null, 'bullets');
+    //     $section->addListItem('Tổ thẩm định giá xác định diện tích đất và công trình xây dựng của tài sản thẩm định giá dựa trên hồ sơ khách hàng cung cấp, diện tích đất và công trình xây dựng của tài sản so sánh dựa trên thông tin thu thập được qua phỏng vấn trực tiếp chủ tài sản hoặc người chào bán. Việc thực hiện báo cáo này kèm theo giả định các thông tin thu thập trên là đúng và phù hợp với hiện trạng tài sản tại thời điểm thẩm định giá.', 0, null, 'bullets');
+    // }
     //VIII
     protected function step8(Section $section, $certificate)
     {
