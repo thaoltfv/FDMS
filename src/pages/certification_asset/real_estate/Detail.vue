@@ -598,7 +598,7 @@ export default {
 						aperture_id: '',
 						factory_type_id: '',
 						created_at: new Date(),
-						contruction_description: '+ Móng cột:\n+ Dầm, sàn BTCT chịu lực: \n+ Tường xây: \n+ Mái BTCT: \n+ Nền lát: \n+ Cửa đi, cửa sổ: \n+ Khu vệ sinh: \n+ Khu bếp: \n+ Cầu thang: \n'
+						contruction_description: '+ Móng cột:\n+ Dầm, sàn BTCT chịu lực: \n+ Tường xây: \n+ Mái BTCT: \n+ Nền lát: \n+ Cửa đi, cửa sổ: \n+ Khu vệ sinh: \n+ Khu bếp: \n+ Cầu thang: \n+ Hiện trạng: \n'
 					}
 				},
 				step_4: {
@@ -620,7 +620,7 @@ export default {
 						}
 					},
 					value_base_and_approach: {
-						document_description: 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy',
+						document_description: '+ Giả thiết:\n+ Giả thiết đặc biệt:\n',
 						appraise_approach_id: '',
 						appraise_basis_property_id: '',
 						appraise_principle_id: '',

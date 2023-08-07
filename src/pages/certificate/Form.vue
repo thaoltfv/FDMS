@@ -225,7 +225,7 @@ export default {
 				appraise_asset: '',
 				appraise_basis_property_id: '',
 				document_description:
-          'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy',
+          '+ Giả thiết:\n+ Giả thiết đặc biệt:\n',
 				appraise_approach_id: '',
 				appraise_method_used_id: '',
 				appraise_principle_id: '',

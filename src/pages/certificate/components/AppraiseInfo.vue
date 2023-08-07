@@ -213,7 +213,7 @@ export default {
 				appraiser: '',
 				manager: '',
 				staff: '',
-				note: 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy'
+				note: '+ Giả thiết:\n+ Giả thiết đặc biệt:\n'
 			}
 		}
 	},

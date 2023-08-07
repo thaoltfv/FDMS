@@ -47,13 +47,14 @@
 													</div>
 													<div class="col">
 															<div class="row">
-																	<InputText
+																	<InputTextarea
 																			v-model="form.date"
 																			vid="date"
 																			class="form-group-container col-6"
 																			label="Số pháp lý"
 																			:disabledInput="true"
 																			rules="required"
+																			:autosize="true"
 																	/>
 																	<InputDatePicker
 																			v-model="form.law_date"

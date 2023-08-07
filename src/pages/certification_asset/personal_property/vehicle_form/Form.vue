@@ -171,7 +171,7 @@ export default {
 						basis_property_id: '',
 						method_used_id: '',
 						principle_id: '',
-						document_description: 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy'
+						document_description: '+ Giả thiết:\n+ Giả thiết đặc biệt:\n'
 					}
 				},
 				step_4: {

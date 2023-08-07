@@ -37,7 +37,7 @@
                   </div>
                   <div class="col m-h-100">
                     <div class="row">
-                      <InputText
+                      <InputTextarea
                         v-model="form.document_num"
                         vid="document_num"
                         class="form-group-container col-6"
