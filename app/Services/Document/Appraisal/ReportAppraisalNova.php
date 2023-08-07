@@ -411,10 +411,15 @@ class ReportAppraisalNova extends ReportAppraisal
         // $section->addListItem('Ngoài ra nguồn dữ liệu và thông tin có thể sử dụng để xác định giá trị tài sản thẩm định giá theo phương pháp khác là rất hạn chế. Vì vậy, căn cứ mục đích thẩm định giá của tài sản ' . $this->acronym . ' sử dụng phương pháp so sánh là phù hợp.', 0, null, 'bullets', $this->indentFistLine);
         $section->addTitle('Cách tiếp cận, phương pháp thẩm định giá áp dụng:', 2);
         // $section->addText(json_encode($certificate));
-        if ($this->isApartment) {
-            $this->step8sub3Apartment($section);
+        // if ($this->isApartment) {
+        //     $this->step8sub3Apartment($section);
+        // } else {
+        //     $this->step8sub3Appraise($section);
+        // }
+        if ($this->isTangibleAsset) {
+            $this->DCN($section);
         } else {
-            $this->step8sub3Appraise($section);
+            $this->DTCC($section);
         }
         $section->addTitle('Xác định giá trị tài sản cần thẩm định giá:', 2);
         foreach ($this->realEstates as $stt =>  $realEstate) {
@@ -424,6 +429,21 @@ class ReportAppraisalNova extends ReportAppraisal
                 $this->step8Sub4Appraise($section, $stt);
             }
         }
+    }
+
+    protected function DCN(Section $section) {
+        $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:');
+        $section->addText('   - Đối với phương pháp so sánh: Tài sản thẩm định gồm quyền sử dụng đất và công trình xây dựng trên đất. Tại thời điểm thẩm định, khu vực thẩm định không có các giao dịch trong đó các tài sản so sánh có quyền sử dụng đất và công trình xây dựng trên đất tương đồng với tài sản thẩm định. Do đó, trong trường hợp này tổ thẩm định không áp dụng được phương pháp so sánh để ước tính giá trị của tài sản thẩm định.');
+        $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng phương pháp vốn hóa trực tiếp để ước tính giá trị tài sản cần thẩm định giá.');
+        $section->addText('   - Đối với phương pháp thặng dư: Phương pháp này áp dụng đối với trường hợp thửa đất trống có tiềm năng phát triển hoặc đất có CTXD có thể cải tạo, sửa chữa để khai thác có hiệu quả nhất. Do thửa đất hiện tại đã có CTXD phục vụ vào mục đích để ở đang khai thác tốt nhất và hiệu quả nhất và trong tương lai cũng chưa có thông tin quy hoạch phát triển và phương án sử dụng tối ưu hơn. Vì vậy, chưa đủ điều kiện áp dụng được phương pháp thặng dư trong trường hợp này.');
+        $section->addText('   - Đối với phương pháp chi phí thay thế: Tổ thẩm định xác định giá trị công trình xây dựng của tài sản thẩm định giá dựa trên cơ sở chênh lệch giữa chi phí thay thế để tạo ra một tài sản công trình xây dựng tương tự tài sản thẩm định giá có cùng chức năng, công dụng theo giá thị trường hiện hành và giá trị hao mòn của công trình xây dựng tài sản thẩm định giá. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp chi phí thay thế để tiến hành ước tính giá trị tài sản cần thẩm định giá là công trình xây dựng trên đất.');
+        $section->addText('   Từ các nội dung trên, Tổ thẩm định nhận thấy chỉ áp dụng được phương pháp chi phí thay thế làm phương pháp chính để ước tính giá trị tài sản thẩm định. Không đủ điều kiện để áp dụng các phương pháp khác làm phương pháp kiểm tra, đối chiếu.');
+        $section->addText('   “Phương pháp chi phí thay thế là phương pháp thẩm định giá xác định giá trị của tài sản thẩm định giá dựa trên cơ sở chênh lệch giữa chi phí thay thế để tạo ra một tài sản tương tự tài sản thẩm định giá có cùng chức năng, công dụng theo giá thị trường hiện hành và giá trị hao mòn của tài sản thẩm định giá. Phương pháp chi phí thay thế thuộc cách tiếp cận từ chi phí”.',['italic' => true]);
+
+    }
+
+    protected function DTCC(Section $section) {
+        
     }
 
     protected function step8Sub4Appraise(Section $section, $stt)
