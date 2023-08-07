@@ -558,7 +558,7 @@ class ReportAppraisalNova extends ReportAppraisal
             // } else {
             //     $table->addCell(2000, $this->cellVCentered)->addText($law['document_num']. $law['document_date'], null, ['keepNext' => true]);
             // }
-            $table->addCell(2000, $this->cellVCentered)->addText(str_replace("\n", '<w:br/>   ', $law['document_num']). $law['document_date'], null, ['keepNext' => true]);
+            $table->addCell(2000, $this->cellVCentered)->addText(str_replace("\n", '<w:br/>', $law['document_num']). $law['document_date'], null, ['keepNext' => true, 'align' => 'left']);
             $table->addCell(5000, $this->cellVCentered)->addText($law['content'], null, ['keepNext' => true]);
             $table->addCell(2000, $this->cellVCentered)->addText($law['certifying_agency']);
         }
