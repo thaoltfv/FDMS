@@ -868,8 +868,23 @@ class Appraise extends Model
 
     public function getDocumentDescriptionAttribute()
     {
-        $result = Appraise::where('id', $this->id)->first();
-        return json_encode($result);
+        $select =['document_description', 'id','status','asset_type_id','province_id','district_id','ward_id','street_id','distance_id','topographic_id','coordinates','appraise_asset', 'full_address'];
+        $with=[
+                'createdBy:id,name',
+                'topographic:id,description',
+                'assetType:id,description',
+                'distance:id,name,street_id',
+                'province:id,name',
+                'district:id,name',
+                'ward:id,name',
+                'street:id,name'
+            ];
+        $result = Appraise::with($with)
+            ->select($select)
+            ->where(['id'=>$this->id])
+            ->get()->first();
+
+        return $result['document_description'];
         // return isset($result['document_description']) ? $result['document_description'] : '+ Giả thiết:
         // + Giả thiết đặc biệt:';
     }
