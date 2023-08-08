@@ -868,7 +868,7 @@ class Appraise extends Model
 
     public function getDocumentDescriptionAttribute()
     {
-        $result = Appraise::where('id', '=', $this->id)->get('id')->first();
+        $result = Appraise::where('id', '=', $this->id)->first();
         if ($result->document_description){
             return $result->document_description;
         } else {
