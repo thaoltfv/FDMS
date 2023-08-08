@@ -348,7 +348,7 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function step7(Section $section, $certificate)
     {
         $section->addTitle('CÁC GIẢ THIẾT VÀ GIẢ THIẾT ĐẶC BIỆT:', 1);
-        $section->addText(str_replace("\n", '<w:br/>   ', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
+        $section->addText('    '.str_replace("\n", '<w:br/>', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
         // $section->addListItem(json_encode($certificate->real_estate), 0, null, 'bullets');
         // $section->addListItem(json_encode(json_decode($certificate)->real_estate), 0, null, 'bullets');
     }
