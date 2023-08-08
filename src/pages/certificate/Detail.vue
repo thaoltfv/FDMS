@@ -340,7 +340,7 @@
               </div>
               <div class="content-detail">
                 <p class="content-title">Giả thiết và giả thiết đặc biệt:</p>
-                <p class="content-name">{{form.document_description ? form.document_description : '+ Giả thiết:\n+ Giả thiết đặc biệt:\n'}}</p>
+                <p class="content-name">{{form.document_description ? form.document_description : '+ Giả thiết:\n+ Giả thiết đặc biệt:'}}</p>
               </div>
             </div>
           </TabItem>

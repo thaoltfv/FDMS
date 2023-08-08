@@ -171,7 +171,7 @@ export default {
 						basis_property_id: '',
 						method_used_id: '',
 						principle_id: '',
-						document_description: '+ Giả thiết:\n+ Giả thiết đặc biệt:\n'
+						document_description: '+ Giả thiết:\n+ Giả thiết đặc biệt:'
 					}
 				},
 				step_4: {
