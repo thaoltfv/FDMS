@@ -868,13 +868,7 @@ class Appraise extends Model
 
     public function getDocumentDescriptionAttribute()
     {
-        $select = ['id', 'document_description'];
-        $with= [];
-        $result = Appraise::with($with)
-        ->select($select)
-        ->where(['id'=>$this->id])
-        ->get()
-        ->first();
+        $result = Appraise::where('id', $this->id)->first();
 
         return isset($result['document_description']) ? $result['document_description'] : '+ Giả thiết:
         + Giả thiết đặc biệt:';
