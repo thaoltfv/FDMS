@@ -490,7 +490,7 @@ export default {
 						}
 					},
 					value_base_and_approach: {
-						document_description: '+ Giả thiết:\n+ Giả thiết đặc biệt:',
+						document_description: '- Giả thiết:\n- Giả thiết đặc biệt:',
 						appraise_approach_id: '',
 						appraise_basis_property_id: '',
 						appraise_principle_id: '',
@@ -669,7 +669,7 @@ export default {
 				if (bindDataStep.appraisal_methods) { this.form.step_5.appraisal_methods = bindDataStep.appraisal_methods }
 				if (bindDataStep.value_base_and_approach) { this.form.step_5.value_base_and_approach = bindDataStep.value_base_and_approach }
 				if (bindDataStep.value_base_and_approach.document_description == '' || bindDataStep.value_base_and_approach.document_description == null) {
-					this.form.step_5.value_base_and_approach.document_description = '+ Giả thiết:\n+ Giả thiết đặc biệt:'
+					this.form.step_5.value_base_and_approach.document_description = '- Giả thiết:\n- Giả thiết đặc biệt:'
 				}
 				// step 6
 				if (bindDataStep.comparison_factor && bindDataStep.comparison_factor.length > 0) { this.form.step_6.comparison_factor = bindDataStep.comparison_factor }

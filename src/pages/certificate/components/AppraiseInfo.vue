@@ -213,7 +213,7 @@ export default {
 				appraiser: '',
 				manager: '',
 				staff: '',
-				note: '+ Giả thiết:\n+ Giả thiết đặc biệt:'
+				note: '- Giả thiết:\n- Giả thiết đặc biệt:'
 			}
 		}
 	},

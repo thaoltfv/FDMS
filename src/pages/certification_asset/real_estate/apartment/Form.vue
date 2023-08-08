@@ -318,7 +318,7 @@ export default {
 						}
 					},
 					value_base_and_approach: {
-						description: '+ Giả thiết:\n+ Giả thiết đặc biệt:',
+						description: '- Giả thiết:\n- Giả thiết đặc biệt:',
 						approach_id: '',
 						basis_property_id: '',
 						principle_id: '',

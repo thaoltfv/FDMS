@@ -225,7 +225,7 @@ export default {
 				appraise_asset: '',
 				appraise_basis_property_id: '',
 				document_description:
-          '+ Giả thiết:\n+ Giả thiết đặc biệt:',
+          '- Giả thiết:\n- Giả thiết đặc biệt:',
 				appraise_approach_id: '',
 				appraise_method_used_id: '',
 				appraise_principle_id: '',
