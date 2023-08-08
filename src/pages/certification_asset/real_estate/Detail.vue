@@ -830,6 +830,9 @@ export default {
 				// step 5
 				if (bindDataStep.appraisal_methods) { this.form.step_5.appraisal_methods = bindDataStep.appraisal_methods }
 				if (bindDataStep.value_base_and_approach) { this.form.step_5.value_base_and_approach = bindDataStep.value_base_and_approach }
+				if (this.form.step_5.value_base_and_approach.document_description == '' || this.form.step_5.value_base_and_approach.document_description == null) {
+					this.form.step_5.value_base_and_approach.document_description = '+ Giả thiết:\n+ Giả thiết đặc biệt:\n'
+				}
 				// step 6
 				if (bindDataStep.comparison_factor && bindDataStep.comparison_factor.length > 0) { this.form.step_6.comparison_factor = bindDataStep.comparison_factor }
 				if (bindDataStep.assets_general && bindDataStep.assets_general.length > 0) { this.form.step_6.assets_general = bindDataStep.assets_general }

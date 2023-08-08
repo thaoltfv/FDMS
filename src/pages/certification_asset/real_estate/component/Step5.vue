@@ -66,7 +66,7 @@
                   rules="required"
                   vid="document_description"
                   :rows="3"
-                  :maxLength="1000"
+                  :maxLength="1000000"
                   :autosize="true"
                   class="col-12"
                 />
