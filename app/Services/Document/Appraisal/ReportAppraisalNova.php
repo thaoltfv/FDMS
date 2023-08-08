@@ -282,10 +282,11 @@ class ReportAppraisalNova extends ReportAppraisal
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/'.$this->m2, null, ['align' => 'left']);
-            
-            $table->addRow(400, $this->cantSplit);
-            $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
-            $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+            if ($index + 1 < count($testtt)){
+                $table->addRow(400, $this->cantSplit);
+                $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+                $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+            }
         }
 
         if (CommonService::getPlaningInfo($appraise->appraise_id)){
