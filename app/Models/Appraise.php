@@ -870,7 +870,7 @@ class Appraise extends Model
     {
         return 
 '+ Giả thiết:
- + Giả thiết đặc biệt:';
++ Giả thiết đặc biệt:';
     }
 
     // protected function getDescriptionCapitalizeAttribute()
