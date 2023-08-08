@@ -866,12 +866,19 @@ class Appraise extends Model
     //     return 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
     // }
 
-//     public function getDocumentDescriptionAttribute()
-//     {
-//         return 
-// '+ Giả thiết:
-// + Giả thiết đặc biệt:';
-//     }
+    public function getDocumentDescriptionAttribute()
+    {
+        $select = ['id', 'document_description'];
+        $with= [];
+        $result = Appraise::with($with)
+        ->select($select)
+        ->where(['id'=>$this->id])
+        ->get()
+        ->first();
+
+        return isset($result['document_description']) ? $result['document_description'] : '+ Giả thiết:
+        + Giả thiết đặc biệt:';
+    }
 
     // protected function getDescriptionCapitalizeAttribute()
     // {
