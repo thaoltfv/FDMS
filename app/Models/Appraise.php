@@ -868,9 +868,9 @@ class Appraise extends Model
 
     public function getDocumentDescriptionAttribute()
     {
-        return '
-        + Giả thiết:
-        + Giả thiết đặc biệt:';
+        return 
+'+ Giả thiết:
+ + Giả thiết đặc biệt:';
     }
 
     // protected function getDescriptionCapitalizeAttribute()
