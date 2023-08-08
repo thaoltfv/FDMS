@@ -869,9 +869,9 @@ class Appraise extends Model
     public function getDocumentDescriptionAttribute()
     {
         $result = Appraise::where('id', $this->id)->first();
-
-        return isset($result['document_description']) ? $result['document_description'] : '+ Giả thiết:
-        + Giả thiết đặc biệt:';
+        return json_encode($result);
+        // return isset($result['document_description']) ? $result['document_description'] : '+ Giả thiết:
+        // + Giả thiết đặc biệt:';
     }
 
     // protected function getDescriptionCapitalizeAttribute()
