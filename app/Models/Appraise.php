@@ -866,6 +866,11 @@ class Appraise extends Model
     //     return 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
     // }
 
+    public function getDocumentDescriptionAttribute()
+    {
+        return ;
+    }
+
     // protected function getDescriptionCapitalizeAttribute()
     // {
     //     $dictionaryId = Dictionary::where('id',$this->compari)
