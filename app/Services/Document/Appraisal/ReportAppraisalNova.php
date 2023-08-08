@@ -266,11 +266,6 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND TPHCM', null, ['align' => 'left']);
         $testtt = json_decode($appraise->properties[0])->property_detail;
         foreach ($testtt as $index => $mucdich) {
-            if ($index > 1){
-                $table->addRow(400, $this->cantSplit);
-                $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
-                $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
-            }
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
             $vitri_id = $mucdich->position_type_id;
             $dongiaUBND = $mucdich->circular_unit_price;
@@ -287,6 +282,10 @@ class ReportAppraisalNova extends ReportAppraisal
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/'.$this->m2, null, ['align' => 'left']);
+            
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+            $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         }
 
         if (CommonService::getPlaningInfo($appraise->appraise_id)){
