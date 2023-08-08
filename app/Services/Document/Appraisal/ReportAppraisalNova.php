@@ -267,9 +267,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $testtt = json_decode($appraise->properties[0])->property_detail;
         foreach ($testtt as $index => $mucdich) {
 
-            $c0 = $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none']);
-            $c0->addText('- Vị trí', null, ['align' => 'left']);
-            $c0->addTextBreak(1);
+            $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
             $vitri_id = $mucdich->position_type_id;
             $dongiaUBND = $mucdich->circular_unit_price;
             $loaidat = $mucdich->land_type_purpose->description;
