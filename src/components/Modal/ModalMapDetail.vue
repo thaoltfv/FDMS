@@ -46,7 +46,8 @@
             <div class="card-body card-info card-land" v-if="show_description">
                 <div class="property-content row">
                   <p class="property-title col-4">Mã: </p>
-                  <p class="property-detail property-detail__id col">{{property.migrate_status + '_' + property.id}}</p>
+                  <a v-if="property.migrate_status == 'TSS'" class="property-detail property-detail__id col" :href="`/property/detail?id=${property.id}`" target='_blank'>{{property.migrate_status + '_' + property.id}}</a>
+                  <a v-else class="property-detail property-detail__id col" :href="`certification_asset/real-estate/detail?id=${property.id}`" target='_blank'>{{property.migrate_status + '_' + property.id}}</a>
                 </div>
                 <div class="property-content row" v-if="property.asset_type_id === 39">
                   <p class="property-title col-4">Tên chung cư: </p>
@@ -66,11 +67,14 @@
                 </div>
                 <div class="property-content row">
                   <p class="property-title col-4">Số tờ: </p>
-                  <p class="property-detail col">{{property.land_no ? property.doc_no : 'Không có'}}</p>
+                  <!-- <p class="property-detail col">{{property.land_no ? property.doc_no : 'Không có'}}</p> -->
+                  <p class="property-detail col">{{property.properties[0].compare_property_doc[0].doc_num ? property.properties[0].compare_property_doc[0].doc_num : 'Không có'}}</p>
                 </div>
                 <div class="property-content row">
                   <p class="property-title col-4">Số thửa: </p>
-                  <p class="property-detail col">{{property.land_no ? property.land_no : 'Không có'}}</p>
+                  <!-- <p class="property-detail col">{{property.land_no ? property.land_no : 'Không có'}}</p> -->
+                  <p class="property-detail col">{{property.properties[0].compare_property_doc[0].plot_num ? property.properties[0].compare_property_doc[0].plot_num : 'Không có'}}</p>
+
                 </div>
                 <div class="property-content row">
                   <p class="property-title col-4">Loại tài sản: </p>
