@@ -30,6 +30,20 @@ class ReportAppendix1Nova extends ReportAppendix1
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tổ thẩm định nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định sử dụng mức giá chỉ dẫn ' . $namePP . ' của 03 TSSS làm mức giá của tài sản thẩm định giá.');
     }
+
+    protected function collectInfoExploreTime($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            'Tháng ' . date_format(date_create(CommonService::getCompareWithId($this->asset1->id)), 'm/Y'),
+            'Tháng ' . date_format(date_create(CommonService::getCompareWithId($this->asset2->id)), 'm/Y'),
+            'Tháng ' . date_format(date_create(CommonService::getCompareWithId($this->asset3->id)), 'm/Y'),
+            false
+        ];
+        return $data;
+    }
     protected function collectInfomationAppraiseData($asset)
     {
         $data = [];
@@ -37,6 +51,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Tình trạng giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
+        $data[] = $this->collectInfoExploreTime('', 'Thời điểm khảo sát', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
         $data[] = $this->collectInfoAddressAppraise($stt++, 'Vị trí thửa đất', $asset);
         $data[] = $this->collectInfoDistanceAppraise('', 'Khoảng cách TSSS đến TSTĐ', $asset);

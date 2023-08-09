@@ -322,7 +322,7 @@ class CertificateAssetsController extends Controller
             'value_base_and_approach.appraise_principle_id'=>'required_with:value_base_and_approach|integer',
             'value_base_and_approach.appraise_approach_id'=>'required_with:value_base_and_approach|integer',
             'value_base_and_approach.appraise_method_used_id'=>'required_with:value_base_and_approach|integer',
-            'value_base_and_approach.document_description'=>'required_with:value_base_and_approach|string|max:255',
+            'value_base_and_approach.document_description'=>'required_with:value_base_and_approach|string',
             ];
 
         $customAttributes = [

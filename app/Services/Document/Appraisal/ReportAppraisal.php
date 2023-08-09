@@ -52,7 +52,7 @@ class ReportAppraisal extends Report
         // end //
         // $this->signature($section, $data);
     }
-    private function setProperties($data)
+    protected function setProperties($data)
     {
         $this->isOnlyAsset = (count($data->realEstate) == 1);
         $this->realEstates = $data->realEstate;

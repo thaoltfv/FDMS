@@ -3195,6 +3195,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $pictureInfomation = $objects['picture_infomation'];
                 $economicInfomation = $objects['economic_infomation'];
                 $trafficInfomation = $objects['traffic_infomation'];
+                $geographical_location = $objects['geographical_location'];
                 $appraiseId = $id;
 
                 Appraise::where('id', $appraiseId)->update([
@@ -3243,11 +3244,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'main_road_length' => $trafficInfomation['main_road_length'],
                             'material_id' => $trafficInfomation['material_id'],
                             'two_sides_land' => isset($trafficInfomation['two_sides_land']) ? $trafficInfomation['two_sides_land'] : null,
-                            'description' => $trafficInfomation['description']
+                            'description' => $trafficInfomation['description'],
+                            'geographical_location' => $geographical_location
                         ]);
                     } else {
                         $trafficInfomation['appraise_id'] = $appraiseId;
                         $trafficInfomation['description'] = $generalInfomation['description'];
+                        $trafficInfomation['geographical_location'] = $geographical_location;
                         $appraiseProperties = new AppraiseProperty($trafficInfomation);
                         $propertieId = QueryBuilder::for($appraiseProperties)
                             ->insertGetId($appraiseProperties->attributesToArray());
@@ -5733,6 +5736,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
         $version = AppraiseVersionService::getVersionAppraise($appraiseId);
         $result['max_version'] = $version;
+        $geo = AppraiseProperty::where('appraise_id',$appraiseId)->first();
+        $result['traffic_infomation'] = $geo;
+        $result['geographical_location'] = $geo->geographical_location;
         return $result;
     }
 

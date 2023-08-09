@@ -38,6 +38,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Ramsey\Uuid\Type\Decimal;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Spatie\Activitylog\Models\Activity;
 
 
 class CommonService
@@ -1731,6 +1732,12 @@ class CommonService
         $data = Dictionary::query()->where(['type' => 'TIEN_ICH_CO_BAN', 'status' => 1])->get();
         return $data;
     }
+
+	public static function getViTri($id)
+    {
+        $data = Dictionary::query()->where(['type' => 'VI_TRI_DAT', 'id' => $id])->first();
+        return $data->description;
+    }
 	public static function getTotalRealEstatePrice($realEstates)
 	{
 		$value = 0;
@@ -1764,5 +1771,17 @@ class CommonService
 			Log::error($ex);
 			return $return;
 		}
+	}
+
+	public static function getCompareWithId($id)
+    {
+        $dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->first();
+		return $dataAppraise->updated_at;
+	}
+
+	public static function getPlaningInfo($id)
+    {
+        $dataAppraise = RealEstate::where('id', $id)->first();
+		return $dataAppraise->planning_info;
 	}
 }
