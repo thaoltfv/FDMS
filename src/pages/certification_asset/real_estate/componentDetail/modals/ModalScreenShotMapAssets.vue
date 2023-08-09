@@ -104,7 +104,7 @@ export default {
 			isSubmit: false,
 			mapScreen: {},
 			search_address: '',
-			url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
+			url: 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff',
 			place: '',
 			provinces: [],
 			layerType: 'OSM',
