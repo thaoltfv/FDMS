@@ -116,9 +116,10 @@ class CompareAssetGeneralController extends Controller
             $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
             $comparisonAsset = $this->compareAssetGeneralRepository->findAllInElastic_v3();
             // $data = array_map(null,$certificateAssets,$comparisonAsset);
-            $data =  array_merge ($certificateAssets, []);
+            // $data =  array_merge ($certificateAssets, []);
             // $data =  array_merge ($certificateAssets, $comparisonAsset ? $comparisonAsset->toArray() : []);
-            return $this->respondWithCustomData($data);
+            // return $this->respondWithCustomData($data);
+            return $this->respondWithCustomData($certificateAssets);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
