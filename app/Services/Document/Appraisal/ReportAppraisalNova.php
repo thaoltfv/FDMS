@@ -358,7 +358,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addText('    '.str_replace("\n", '<w:br/>    ', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
 
         } else {
-        $section->addText('    '.str_replace("\n", '<w:br/>    ', $certificate->document_description, null, ['valign' => 'center', 'align' => 'left']);
+        $section->addText('    '.str_replace("\n", '<w:br/>    ', $certificate->document_description), null, ['valign' => 'center', 'align' => 'left']);
 
         }
         // $section->addText('    '.str_replace("\n", '<w:br/>    ', json_encode(json_decode($certificate)->real_estate)), null, ['valign' => 'center', 'align' => 'left']);
