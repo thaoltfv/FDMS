@@ -3356,7 +3356,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // ApartmentAssetAppraisalBase
         if (Certificate::where('id', $certificateId)->exists()) {
             $cert = Certificate::where('id', $certificateId)->first()->toArray();
-            if ($cert['document_type'][0] == 'CC'){
+            if ($cert['document_type'] && $cert['document_type'][0] == 'CC'){
                 $ccu =  RealEstate::where('certificate_id', $certificateId)->first()->toArray();
                 $apartment = ApartmentAsset::query()->where('real_estate_id', $ccu['id'])->first()->toArray();
                 $apartmentId = $apartment['id'];
