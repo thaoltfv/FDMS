@@ -26,6 +26,11 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
+
+//cors
+// import AxiosPlugin from 'vue-axios-cors';
+// Vue.use(AxiosPlugin)
+
 Vue.config.productionTip = false
 Vue.use(VueToast)
 Vue.use(VueGoogleMaps, {

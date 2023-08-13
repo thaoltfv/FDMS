@@ -535,7 +535,7 @@ export default {
         client_id: 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
         client_secret: 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
         }; // request JSON body
-        const headers = { 'Access-Control-Allow-Credentials':true }; // auth header with bearer token
+        const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true }; // auth header with bearer token
       const response = await uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/auth/credentials', body,{headers}).catch(function (error) {
           if (error.response) {
             console.log(error.response.data);
@@ -555,7 +555,7 @@ export default {
       if (APItoken){
         const uninterceptedAxiosInstance = axios.create();
         const body = { lat: coordinates[0], lng: coordinates[1] }; // request JSON body
-        const headers = { 'Access-Control-Allow-Credentials':true, 'Authorization': `Bearer ${APItoken}` }; // auth header with bearer token
+        const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true, 'Authorization': `Bearer ${APItoken}` }; // auth header with bearer token
         uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/map/feature/coord', body, { headers })
             .then(response => 
             {
