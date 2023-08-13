@@ -136,6 +136,30 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
     }
 
     /**
+     * @param array $objects
+     */
+    public function getInfoByCoord(array $objects)
+    {
+        $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/coord";
+        $postinput =  [
+            "lat" => $objects['lat'],
+            "lng" => $objects['lng']
+        ];
+        $header = [
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer '.$objects['token']
+        ];
+        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
+        $statusCode = $response->status();            
+        
+        if ($statusCode == 201) {
+            $responseBody = json_decode($response->getBody(), true);
+            $data = $responseBody;
+            return $data;
+        }
+    }
+
+    /**
      * @param $id
      * @return mixed
      */

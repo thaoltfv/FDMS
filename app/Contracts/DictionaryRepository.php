@@ -20,5 +20,7 @@ interface DictionaryRepository extends BaseRepository
 
     public function getToken();
 
+    public function getInfoByCoord(array $objects);
+
     public function deleteDictionary($id);
 }
