@@ -453,6 +453,7 @@ import Vue from "vue";
 import Icon from "buefy";
 import InputText from "@/components/Form/InputText";
 import axios from '@/plugins/axios'
+import File from '@/models/File'
 
 Vue.use(Icon);
 export default {
@@ -530,56 +531,93 @@ export default {
 	},
 	methods: {
     async getToken () {
-      const uninterceptedAxiosInstance = axios.create();
-        const body = {
-        client_id: 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
-        client_secret: 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
-        }; // request JSON body
-        const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true }; // auth header with bearer token
-      const response = await uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/auth/credentials', body,{headers}).catch(function (error) {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
-        })
-      console.log('data token', response.data.data.access_token)
-      if (response.data.data.access_token) {
-        return response.data.data.access_token
-      } else {
-        return null
-      }
+      // const uninterceptedAxiosInstance = axios.create();
+      //   const body = {
+      //   client_id: 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
+      //   client_secret: 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
+      //   }; // request JSON body
+      //   const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true }; // auth header with bearer token
+      // const response = await uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/auth/credentials', body,{headers}).catch(function (error) {
+      //     if (error.response) {
+      //       console.log(error.response.data);
+      //       console.log(error.response.status);
+      //       console.log(error.response.headers);
+      //     }
+      //   })
+      // console.log('data token', response.data.data.access_token)
+      // if (response.data.data.access_token) {
+      //   return response.data.data.access_token
+      // } else {
+      //   return null
+      // }
+      // let formData = {
+      //   client_id: 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
+      //   client_secret: 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
+      // }
+      let token = ''
+      await File.getToken().then((response) => {
+				console.log('response token',response)
+        token = response.data.data.data.access_token
+			})
+      return token
     },
     async getInfoByCoord (coordinates) {
       const APItoken = await this.getToken();
+      console.log('api token', APItoken)
       if (APItoken){
-        const uninterceptedAxiosInstance = axios.create();
-        const body = { lat: coordinates[0], lng: coordinates[1] }; // request JSON body
-        const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true, 'Authorization': `Bearer ${APItoken}` }; // auth header with bearer token
-        uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/map/feature/coord', body, { headers })
-            .then(response => 
-            {
-              console.log('response', response.data.data)
-              this.dataResult = response.data.data
-              this.geo_data = this.dataResult.geo_data
-              this.modalGeoInfo = true
+        // const uninterceptedAxiosInstance = axios.create();
+        // const body = { lat: coordinates[0], lng: coordinates[1] }; // request JSON body
+        // const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true, 'Authorization': `Bearer ${APItoken}` }; // auth header with bearer token
+        // uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/map/feature/coord', body, { headers })
+        //     .then(response => 
+        //     {
+        //       console.log('response', response.data.data)
+        //       this.dataResult = response.data.data
+        //       this.geo_data = this.dataResult.geo_data
+        //       this.modalGeoInfo = true
+        //     })
+        //     .catch(function (error) {
+        //       that = this
+        //       if (error.response) {
+        //         console.log(error.response.data);
+        //         console.log(error.response.status);
+        //         console.log(error.response.headers);
+        //         that.$toast.open({
+        //             message: error.response.data.message,
+        //             type: 'error',
+        //             position: 'top-right',
+        //             duration: 3000
+        //           })
+        //           that.dataResult = null
+        //           that.geo_data = null
+        //       }
+        //     });
+        let formdata = {
+          token: APItoken,
+          lat: coordinates[0],
+          lng: coordinates[1]
+        }
+        await File.getInfoByCoord({ data: formdata }).then((response) => {
+          console.log('response result',response)
+          let datafinal = response.data.data
+          let that = this
+          console.log('data final', datafinal)
+          if (datafinal) {
+            this.dataResult = datafinal.data
+            this.geo_data = this.dataResult.geo_data
+            this.modalGeoInfo = true
+          } else {
+            this.$toast.open({
+              message: 'Không tìm thấy dữ liệu quy hoạch',
+              type: 'error',
+              position: 'top-right',
+              duration: 3000
             })
-            .catch(function (error) {
-              that = this
-              if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                that.$toast.open({
-                    message: error.response.data.message,
-                    type: 'error',
-                    position: 'top-right',
-                    duration: 3000
-                  })
-                  that.dataResult = null
-                  that.geo_data = null
-              }
-            });
+            this.dataResult = null
+            this.geo_data = null
+            this.modalGeoInfo = false
+          }
+        })
       }
 		},
 		geoInfo() {

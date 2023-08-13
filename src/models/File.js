@@ -38,4 +38,10 @@ export default class File extends Model {
 	static async uploadDocument (data, id, type) {
 		return (new this()).makeRequest({ method: 'POST', url: `/api/certification_brief/upload-document/${id}/${type}`, data })
 	}
+	static async getToken () {
+		return (new this()).makeRequest({ method: 'POST', url: `/api/get-token` })
+	}
+	static async getInfoByCoord ({data}) {
+		return (new this()).makeRequest({ method: 'POST', url: `/api/get-info-by-coord`, data })
+	}
 }
