@@ -530,10 +530,13 @@ export default {
 	},
 	methods: {
     async getToken () {
-      const response = await axios.post('https://app.estatemanner.com/api/v1/auth/credentials', {
+      const uninterceptedAxiosInstance = axios.create();
+        const body = {
         client_id: 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
         client_secret: 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
-        }).catch(function (error) {
+        }; // request JSON body
+        const headers = { 'Access-Control-Allow-Credentials':true }; // auth header with bearer token
+      const response = await uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/auth/credentials', body,{headers}).catch(function (error) {
           if (error.response) {
             console.log(error.response.data);
             console.log(error.response.status);
@@ -552,7 +555,7 @@ export default {
       if (APItoken){
         const uninterceptedAxiosInstance = axios.create();
         const body = { lat: coordinates[0], lng: coordinates[1] }; // request JSON body
-        const headers = { 'Authorization': `Bearer ${APItoken}` }; // auth header with bearer token
+        const headers = { 'Access-Control-Allow-Credentials':true, 'Authorization': `Bearer ${APItoken}` }; // auth header with bearer token
         uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/map/feature/coord', body, { headers })
             .then(response => 
             {
@@ -562,18 +565,19 @@ export default {
               this.modalGeoInfo = true
             })
             .catch(function (error) {
+              that = this
               if (error.response) {
                 console.log(error.response.data);
                 console.log(error.response.status);
                 console.log(error.response.headers);
-                Vue.$toast.open({
+                that.$toast.open({
                     message: error.response.data.message,
                     type: 'error',
                     position: 'top-right',
                     duration: 3000
                   })
-                this.dataResult = null
-                this.geo_data = null
+                  that.dataResult = null
+                  that.geo_data = null
               }
             });
       }
