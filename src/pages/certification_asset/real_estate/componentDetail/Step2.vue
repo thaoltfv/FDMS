@@ -326,7 +326,8 @@
 								v-model="data.real_estate.planning_info"
 								label="Thông tin quy hoạch"
 								class="form-group-container"
-								:disabledInput="true"
+								:disableInput="true"
+                :autosize="true"
 							/>
 						</div>
 						<div class="col-12 col-lg-6">
@@ -334,7 +335,8 @@
 								v-model="data.real_estate.planning_source"
 								label="Nguồn thông tin"
 								class="form-group-container"
-								:disabledInput="true"
+								:disableInput="true"
+                :autosize="true"
 							/>
 						</div>
 						<div class="col-12 col-lg-6">
