@@ -65,12 +65,12 @@
                   <p class="property-title col-4">Địa chỉ: </p>
                   <p class="property-detail col">{{property.full_address !== undefined && property.full_address !== null ? property.full_address : ''}}</p>
                 </div>
-                <div class="property-content row">
+                <div class="property-content row" v-if="property.asset_type_id !== 39">
                   <p class="property-title col-4">Số tờ: </p>
                   <!-- <p class="property-detail col">{{property.land_no ? property.doc_no : 'Không có'}}</p> -->
                   <p class="property-detail col">{{property.properties[0].compare_property_doc[0].doc_num ? property.properties[0].compare_property_doc[0].doc_num : 'Không có'}}</p>
                 </div>
-                <div class="property-content row">
+                <div class="property-content row" v-if="property.asset_type_id !== 39">
                   <p class="property-title col-4">Số thửa: </p>
                   <!-- <p class="property-detail col">{{property.land_no ? property.land_no : 'Không có'}}</p> -->
                   <p class="property-detail col">{{property.properties[0].compare_property_doc[0].plot_num ? property.properties[0].compare_property_doc[0].plot_num : 'Không có'}}</p>
