@@ -491,6 +491,13 @@ export default {
 					attribution: "© Fastvalue",
 					url: "https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png",
 					type: "overlay"
+				},
+        {
+					name: "Bản đồ quy hoạch lộ giới",
+					visible: false,
+					attribution: "© Fastvalue",
+					url: "https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png",
+					type: "overlay"
 				}
 			],
 			search_address: "",
