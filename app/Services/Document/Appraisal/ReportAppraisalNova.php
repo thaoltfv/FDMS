@@ -5,6 +5,9 @@ use App\Services\CommonService;
 use Carbon\Carbon;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
+use App\Models\CertificateHasRealEstate;
+use App\Models\CertificateApartment;
+use App\Models\CertificateApartmentAppraisalBase;
 
 class ReportAppraisalNova extends ReportAppraisal
 {
@@ -355,7 +358,19 @@ class ReportAppraisalNova extends ReportAppraisal
     {
         $section->addTitle('CÁC GIẢ THIẾT VÀ GIẢ THIẾT ĐẶC BIỆT:', 1);
         if ($this->isApartment) {
-            $section->addText('    '.str_replace("\n", '<w:br/>    ', $certificate->document_description), null, ['valign' => 'center', 'align' => 'left']);
+            $apartment = CertificateHasRealEstate::where('certificate_id',$certificate->id)->first();
+            if ($apartment){
+                $asset = CertificateApartment::where('real_estate_id',$apartment->real_estate_id)->first();
+                if ($asset) {
+                    $description = CertificateApartmentAppraisalBase::where('apartment_asset_id',$asset->id)->first();
+                    if ($description){
+                        $giathiet = $description->description;
+                    }
+                }
+            } else {
+                $giathiet = $certificate->document_description;
+            }
+            $section->addText('    '.str_replace("\n", '<w:br/>    ', $giathiet), null, ['valign' => 'center', 'align' => 'left']);
         } else {
             $section->addText('    '.str_replace("\n", '<w:br/>    ', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
 
