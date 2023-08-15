@@ -66,7 +66,7 @@
                   rules="required"
                   vid="description"
                   :rows="3"
-                  :maxLength="1000"
+                  
                   :autosize="true"
                   class="col-12"
                 />

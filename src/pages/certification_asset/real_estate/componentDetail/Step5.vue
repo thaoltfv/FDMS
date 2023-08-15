@@ -67,7 +67,7 @@
                   vid="document_description"
                   :rows="3"
                   :disableInput="true"
-                  :maxLength="1000000"
+                  
                   :autosize="true"
                   class="col-12"
                 />
