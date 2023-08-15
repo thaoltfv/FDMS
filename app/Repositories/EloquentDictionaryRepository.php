@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\Http;
 
 class EloquentDictionaryRepository extends EloquentRepository implements DictionaryRepository
 {
@@ -112,6 +113,50 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         return $this->model->query()
             ->where('id', $id)
             ->update($objects);
+    }
+
+    public function getToken()
+    {
+        $apiUrl = "https://app.estatemanner.com/api/v1/auth/credentials";
+        $postinput =  [
+            "client_id" => 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
+            "client_secret" => 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
+        ];
+        $header = [
+            'Content-type' => 'application/json'
+        ];
+        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
+        $statusCode = $response->status();            
+        
+        if ($statusCode == 201) {
+            $responseBody = json_decode($response->getBody(), true);
+            $data = $responseBody;
+            return $data;
+        }
+    }
+
+    /**
+     * @param array $objects
+     */
+    public function getInfoByCoord(array $objects)
+    {
+        $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/coord";
+        $postinput =  [
+            "lat" => $objects['lat'],
+            "lng" => $objects['lng']
+        ];
+        $header = [
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer '.$objects['token']
+        ];
+        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
+        $statusCode = $response->status();            
+        
+        if ($statusCode == 201) {
+            $responseBody = json_decode($response->getBody(), true);
+            $data = $responseBody;
+            return $data;
+        }
     }
 
     /**

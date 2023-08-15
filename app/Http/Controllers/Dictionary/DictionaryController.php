@@ -187,6 +187,37 @@ class DictionaryController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getToken(Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->dictionaryRepository->getToken());
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getInfoByCoord(Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->dictionaryRepository->getInfoByCoord($request->toArray()));
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse

@@ -3355,18 +3355,20 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     {
         // ApartmentAssetAppraisalBase
         if (Certificate::where('id', $certificateId)->exists()) {
-            $cert = Certificate::where('id', $certificateId)->first()->toArray();
-            if ($cert['document_type'] && $cert['document_type'][0] == 'CC'){
-                $ccu =  RealEstate::where('certificate_id', $certificateId)->first()->toArray();
-                $apartment = ApartmentAsset::query()->where('real_estate_id', $ccu['id'])->first()->toArray();
-                $apartmentId = $apartment['id'];
-                $bases = ApartmentAssetAppraisalBase::query()->where('apartment_asset_id', $apartmentId)->first()->toArray();
-                Certificate::where('id', $certificateId)
-                ->update(['document_description' => $bases['description']]);
-            } else {
-                Certificate::where('id', $certificateId)
+            // $cert = Certificate::where('id', $certificateId)->first()->toArray();
+            // if ($cert['document_type'] && $cert['document_type'][0] == 'CC'){
+            //     $ccu =  RealEstate::where('certificate_id', $certificateId)->first()->toArray();
+            //     $apartment = ApartmentAsset::query()->where('real_estate_id', $ccu['id'])->first()->toArray();
+            //     $apartmentId = $apartment['id'];
+            //     $bases = ApartmentAssetAppraisalBase::query()->where('apartment_asset_id', $apartmentId)->first()->toArray();
+            //     Certificate::where('id', $certificateId)
+            //     ->update(['document_description' => $bases['description']]);
+            // } else {
+            //     Certificate::where('id', $certificateId)
+            //     ->update(['document_description' => ValueDefault::CERTIFICATE_DESCRIPTION]);
+            // }
+            Certificate::where('id', $certificateId)
                 ->update(['document_description' => ValueDefault::CERTIFICATE_DESCRIPTION]);
-            }
         }
     }
 

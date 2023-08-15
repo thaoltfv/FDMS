@@ -421,6 +421,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/DistrictAll', [DistrictController::class, 'findAllByProvince']);
 
     Route::post('/company-logo', [DictionaryController::class, 'uploadCompanyLogoImage']);
+    Route::post('/get-token', [DictionaryController::class, 'getToken']);
+    Route::post('/get-info-by-coord', [DictionaryController::class, 'getInfoByCoord']);
     Route::post('/local-image', [DictionaryController::class, 'uploadLocalImage']);
 
     Route::get('report/comparison-asset/total-by-province', [ComparisonAssetController::class, 'getAssetByProvince']);
