@@ -281,12 +281,12 @@ class ReportAppraisalNova extends ReportAppraisal
             //     $street = $street_ex[0];
             // }
             $appraise_full = Appraise::where('id',$appraise->id)->first();
-            if ($appraise_full) {
+            // if ($appraise_full) {
                 $street_full = Street::where('id',$appraise_full->street_id)->first();
-                if ($street_full){
+                // if ($street_full){
                     $street = $street_full->name;
-                }
-            }
+                // }
+            // }
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' '.$street, null, ['align' => 'left']);
