@@ -166,7 +166,7 @@ class ApartmentAssetController extends Controller
             'value_base_and_approach.principle_id'=>'required_with:value_base_and_approach|integer',
             'value_base_and_approach.approach_id'=>'required_with:value_base_and_approach|integer',
             'value_base_and_approach.method_used_id'=>'required_with:value_base_and_approach|integer',
-            'value_base_and_approach.description'=>'required_with:value_base_and_approach|string|max:255',
+            'value_base_and_approach.description'=>'required_with:value_base_and_approach|string',
             ];
         $customAttributes = [
             'appraisal_methods' => 'Phương pháp tính toán',

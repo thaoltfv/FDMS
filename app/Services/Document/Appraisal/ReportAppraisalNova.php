@@ -8,6 +8,8 @@ use PhpOffice\PhpWord\Shared\Converter;
 use App\Models\CertificateHasRealEstate;
 use App\Models\CertificateApartment;
 use App\Models\CertificateApartmentAppraisalBase;
+use App\Models\Appraise;
+use App\Models\Street;
 
 class ReportAppraisalNova extends ReportAppraisal
 {
@@ -273,10 +275,14 @@ class ReportAppraisalNova extends ReportAppraisal
             $vitri_id = $mucdich->position_type_id;
             $dongiaUBND = $mucdich->circular_unit_price;
             $loaidat = $mucdich->land_type_purpose->description;
-            $street = explode(",",$appraise->full_address);
+            $street_full = Street::where('id',$appraise->street_id)->first();
+            // $section->addText(json_encode($street_full));
+            if ($street_full){
+                $street = $street_full->name;
+            }
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' '.$street[0], null, ['align' => 'left']);
+                ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' '.$street, null, ['align' => 'left']);
             
             $table->addRow(400, $this->cantSplit);
             $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
