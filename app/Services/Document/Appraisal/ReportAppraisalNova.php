@@ -283,10 +283,10 @@ class ReportAppraisalNova extends ReportAppraisal
             $appraise_full = Appraise::where('id',$appraise->id)->first();
             $section->addText(json_encode($appraise_full));
             // if ($appraise_full) {
-                $street_full = Street::where('id',$appraise_full->street_id)->first();
-                $section->addText(json_encode($street_full));
-                // if ($street_full){
-                    $street = $street_full->name;
+                // $street_full = Street::where('id',$appraise_full->street_id)->first();
+                // $section->addText(json_encode($street_full));
+                // // if ($street_full){
+                //     $street = $street_full->name;
                 // }
             // }
 
