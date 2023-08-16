@@ -276,10 +276,10 @@ class ReportAppraisalNova extends ReportAppraisal
             $dongiaUBND = $mucdich->circular_unit_price;
             $loaidat = $mucdich->land_type_purpose->description;
             $street = '';
-            $street_ex = explode(",",$appraise->full_address);
-            if ($street_ex){
-                $street = $street_ex[0];
-            }
+            // $street_ex = explode(",",$appraise->full_address);
+            // if ($street_ex){
+            //     $street = $street_ex[0];
+            // }
             $appraise_full = Appraise::where('id',$appraise->id)->first();
             if ($appraise_full) {
                 $street_full = Street::where('id',$appraise_full->street_id)->first();
