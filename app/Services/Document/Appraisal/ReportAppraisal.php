@@ -362,7 +362,7 @@ class ReportAppraisal extends Report
             else {
                 $appraise = $realEstate->appraises;
                 $section->addTitle('Quyền sử dụng đất:', 3);
-                // if ((!isset($appraise->appraiseLaw)) || (!isset($appraise->appraiseLaw[0]))) continue;
+                if ((!isset($appraise->appraiseLaw)) || (!isset($appraise->appraiseLaw[0]))) continue;
                 $this->assetCharacteristicsAppraise($section, $appraise);
             }
             $this->assetCharacteristicsFooter($section);
