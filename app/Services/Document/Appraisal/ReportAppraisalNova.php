@@ -289,7 +289,7 @@ class ReportAppraisalNova extends ReportAppraisal
             }
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' Đường '.$street, null, ['align' => 'left']);
+                ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' '.$street, null, ['align' => 'left']);
             
             $table->addRow(400, $this->cantSplit);
             $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
