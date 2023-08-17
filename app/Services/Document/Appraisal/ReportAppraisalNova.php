@@ -1102,16 +1102,16 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Tiện ích');
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tiện ích nội khu');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText(json_encode($realEstate).'- Tiện ích nội khu');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($utiDescriptionStr);
         //7
-        if (CommonService::getPlaningInfo($realEstate->id)){
-            $table->addRow(400, $this->cantSplit);
-            $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
-            $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
-            $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
-            $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($realEstate->id)), null, ['align' => 'left']);
-        }
+        // if (CommonService::getPlaningInfo($realEstate->id)){
+        //     $table->addRow(400, $this->cantSplit);
+        //     $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
+        //     $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
+        //     $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
+        //     $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+        //         ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($realEstate->id)), null, ['align' => 'left']);
+        // }
     }
 }
