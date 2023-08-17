@@ -1107,7 +1107,7 @@ class ReportAppraisalNova extends ReportAppraisal
         //7
         if (CommonService::getPlaningInfo($realEstate->real_estate_id)){
             $table->addRow(400, $this->cantSplit);
-            $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
+            $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
             $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
