@@ -1035,4 +1035,83 @@ class ReportAppraisalNova extends ReportAppraisal
             $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 2))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($totalAllRound) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center']);
         }
     }
+
+    protected function assetCharacteristicsApartment(Section $section, $realEstate)
+    {
+        $section->addTitle('Quyền sở hữu căn hộ chung cư:', 3);
+        $table = $section->addTable($this->styleTable);
+        $this->assetCharacteristicsHeader($table);
+        $table->addRow(400, $this->cantSplit);
+        $apartment = $realEstate->apartment;
+        //1
+        $address = $apartment->full_address?: '';
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('1', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Pháp lý');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Địa chỉ:');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($address);
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Diện tích sàn');
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(number_format(floatval($realEstate->total_area), 2, ',', '.') . ' '. $this->m2);
+        //2
+        $coordinateArr = explode(',', $realEstate->coordinates);
+        $fullName = $apartment->appraise_asset ?: '';
+        $assetName = $fullName . ' tọa lạc tại '. $address;
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('2', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tọa độ X');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($coordinateArr[0]?: '');
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tọa độ Y');
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($coordinateArr[1]?: '');
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Khả năng tiếp cận');
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($assetName );
+        //3
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('3', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số tầng');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Độ cao');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText('Tầng '. $apartment->apartmentAssetProperties->floor->name);
+        //4
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('4', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Hướng nhìn');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Hướng chính');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->direction->description));
+        //5
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('5', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Nội thất');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tình trạng');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->furnitureQuality->description));
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Mô tả');
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(str_replace("\n", '<w:br/>   ', $apartment->apartmentAssetProperties->description) ?: '' );
+        //6
+        $utiDescriptionArr = CommonService::getUtilitiesDescription($apartment->apartmentAssetProperties->utilities);
+        $utiDescriptionStr = implode(', ', $utiDescriptionArr);
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Tiện ích');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tiện ích nội khu');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($utiDescriptionStr);
+        //7
+        if (CommonService::getPlaningInfo($realEstate->real_estate_id)){
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
+            $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
+            $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
+            $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+                ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($realEstate->real_estate_id)), null, ['align' => 'left']);
+        }
+    }
 }
