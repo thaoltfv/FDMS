@@ -63,19 +63,21 @@
 						<div class="card-body card-sub_header_title" v-show="showDetailPlanning">
 							<div class="container-fluid row">
 								<div class="col-12 mb-2">
-									<input-text
+									<InputTextarea
 										v-model="real_estate.planning_info"
-										:disabledInput="!isEditStatus"
+										:disableInput="!isEditStatus"
 										label="Thông tin quy hoạch"
 										class="form-group-container"
+										:autosize="true"
 									/>
 								</div>
 								<div class="col-12 mb-2">
-									<InputText
+									<InputTextarea
 										v-model="real_estate.planning_source"
-										:disabledInput="!isEditStatus"
+										:disableInput="!isEditStatus"
 										label="Nguồn thông tin"
 										class="form-group-container"
+										:autosize="true"
 									/>
 								</div>
 								<div class="col-12 mb-2">
@@ -335,6 +337,7 @@
 <script>
 import { FormWizard, TabContent } from 'vue-form-wizard'
 import InputText from '@/components/Form/InputText'
+import InputTextarea from '@/components/Form/InputTextarea'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import {
 	BCard,
@@ -371,6 +374,7 @@ export default {
 		BFormGroup,
 		BFormInput,
 		InputText,
+		InputTextarea,
 		Step1,
 		Step2,
 		Step3,
