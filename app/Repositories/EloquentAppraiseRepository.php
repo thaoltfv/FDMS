@@ -3306,6 +3306,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $pictureInfomation = $objects['picture_infomation'];
                 $economicInfomation = $objects['economic_infomation'];
                 $trafficInfomation = $objects['traffic_infomation'];
+                $geographical_location = $objects['geographical_location'];
                 $generalInfomation['created_by'] = $user->id;
                 $generalInfomation['status'] = 1;
                 $generalInfomation['front_side'] = $trafficInfomation['front_side'];
@@ -3320,6 +3321,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 if (isset($trafficInfomation)) {
                     $trafficInfomation['appraise_id'] = $appraiseId;
                     $trafficInfomation['two_sides_land'] = isset($trafficInfomation['two_sides_land']) ? $trafficInfomation['two_sides_land'] : null;
+                    $trafficInfomation['geographical_location'] = $geographical_location;
 
                     $appraiseProperties = new AppraiseProperty($trafficInfomation);
                     $propertieId =   QueryBuilder::for($appraiseProperties)
@@ -3337,6 +3339,22 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             $data = ['message' => ErrorMessage::APPRAISE_CHECK_TUNNING, 'exception' =>  ''];
                             return $data;
                         }
+                    }
+                }
+                if (isset($economicInfomation)) {
+                    if (isset($propertieId)) {
+                        AppraiseProperty::where('appraise_id', $appraiseId)->where('id', $propertieId)->update([
+                            'business_id' => $economicInfomation['business_id'],
+                            'social_security_id' => $economicInfomation['social_security_id'],
+                            'feng_shui_id' => $economicInfomation['feng_shui_id'],
+                            'zoning_id' => $economicInfomation['zoning_id'],
+                            'condition_id' => $economicInfomation['condition_id'],
+                        ]);
+                    } else {
+                        $economicInfomation['appraise_id'] = $appraiseId;
+                        $appraiseProperties = new AppraiseProperty($economicInfomation);
+                        QueryBuilder::for($appraiseProperties)
+                            ->insert($appraiseProperties->attributesToArray());
                     }
                 }
                 if (isset($economicInfomation)) {
