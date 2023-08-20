@@ -3662,8 +3662,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $data = ['message' => 'Vui lòng nhập thông tin giao thông, đặc điểm kinh tế ở bước 1', 'exception' =>  ''];
                 return $data;
             }
-            if (isset($real_estate) && isset($real_estate['id'])) {
-                $result = RealEstate::find($real_estate['id']);
+            // if (isset($real_estate) && isset($real_estate['id'])) {
+            if (isset($real_estate)){
+                // $result = RealEstate::find($real_estate['id']);
+                $result = RealEstate::find($appraiseId);
                 if ($result) {
                     $result->update($real_estate);
                 }
