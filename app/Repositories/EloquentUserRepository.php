@@ -51,6 +51,11 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->paginate($perPage);
         foreach ($result as $key => $value) {
             $result[$key]['role'] = $value->getRoleNames();
+            $appraiser = Appraiser::where('user_id', $result[$key]->id)->first();
+            if ($appraiser){
+                $result[$key]['is_legal_representative'] = $appraiser->is_legal_representative;
+                $result[$key]['appraiser_number'] = $appraiser->appraiser_number;
+            }
         }
         return $result;
     }
@@ -244,6 +249,26 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         return $this->model->query()
             ->where('id', $id)
             ->update(['status_user' => 'active']);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function isntLegalUser($id): int
+    {
+        return Appraiser::where('user_id',$id)
+        ->update(['is_legal_representative' => 0]);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function isLegalUser($id): int
+    {
+        return Appraiser::where('user_id',$id)
+        ->update(['is_legal_representative' => 1]);
     }
 
 

@@ -96,6 +96,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('users/active-user/{id}', [UserController::class, 'activeUser']);
 
+    Route::post('users/isnt-legal-user/{id}', [UserController::class, 'isntLegalUser']);
+
+    Route::post('users/is-legal-user/{id}', [UserController::class, 'isLegalUser']);
+
     Route::apiResource('user', UserController::class);
 
     Route::get('/users', [UserController::class, 'findAll']);
