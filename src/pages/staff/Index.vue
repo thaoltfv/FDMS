@@ -58,6 +58,24 @@
       <template slot="action"
                 slot-scope="action_edit , action">
         <div class="d-flex justify-content-end">
+			<a-tooltip placement="bottom"
+                     :title="$t('tooltip_is_legal_representative')" v-if="active && action.is_legal_representative == 0 && action.appraiser_number !== ''" class="mr-2">
+            <a href="#"
+               @click.prevent="handleOpenModalIsLegal(action)"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/images/account-tie.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip>
+		  <a-tooltip placement="bottom"
+                     :title="$t('tooltip_isnt_legal_representative')" v-if="deactive && action.is_legal_representative == 1 && action.appraiser_number !== ''" class="mr-2">
+            <a href="#"
+               @click.prevent="handleOpenModalIsntLegal(action)"
+               class="text-decoration-none action">
+              <img class="icon-action" src="../../assets/images/account-convert.svg"
+                   alt="icon">
+            </a>
+          </a-tooltip>
           <a-tooltip placement="bottom"
                      :title="$t('tooltip_edit')" v-if="edit" class="mr-2">
             <a @click.prevent="handleEdit(action_edit.id)"
@@ -122,6 +140,23 @@
 				background: #6E7582"> Vô hiệu hóa</span>
 		</div>
 	</template>
+	<template slot="is_legal_representative"
+                slot-scope="is_legal_representative">
+        <div class="d-flex justify-content-center">
+			<span v-if="is_legal_representative == 1" style="font-size: 14px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #9c6c2b"> Đại diện pháp luật</span>
+			<!-- <span v-else style="font-size: 14px;
+                font-weight: bold;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+				background: #6E7582"> Vô hiệu hóa</span> -->
+		</div>
+	</template>
     </a-table>
     <ModalDelete v-if="openModal"
                  @cancel="openModal = false"
@@ -132,6 +167,12 @@
 	<ModalActive v-if="openModalActive" :name="choose_name"
 	@cancel="openModalActive = false"
 	@action="handleActive"/>
+	<ModalIsntLegal v-if="openModalIsntLegal" :name="choose_name"
+	@cancel="openModalIsntLegal = false"
+	@action="handleIsntLegal"/>
+	<ModalIsLegal v-if="openModalIsLegal" :name="choose_name"
+	@cancel="openModalIsLegal = false"
+	@action="handleIsLegal"/>
     <ModalReset v-if="openModalReset" :name="choose_name"
                 @cancel="openModalReset = false"
                 @action="handleReset"
@@ -147,6 +188,8 @@ import {replace} from 'lodash-es'
 import ModalDelete from '@/components/Modal/ModalDelete'
 import ModalDeActive from '@/components/Modal/ModalDeActive'
 import ModalActive from '@/components/Modal/ModalActive'
+import ModalIsntLegal from '@/components/Modal/ModalIsntLegal'
+import ModalIsLegal from '@/components/Modal/ModalIsLegal'
 import ModalReset from '@/components/Modal/ModalReset'
 import InputCategory from '@/components/Form/InputCategory'
 import File from '@/models/File'
@@ -156,6 +199,8 @@ export default {
 		ModalDelete,
 		ModalDeActive,
 		ModalActive,
+		ModalIsntLegal,
+		ModalIsLegal,
 		ModalReset,
 		InputCategory,
 		Search
@@ -165,6 +210,8 @@ export default {
 			choose_name: '',
 			openModalActive: false,
 			openModalDeActive: false,
+			openModalIsLegal: false,
+			openModalIsntLegal: false,
 			openModalReset: false,
 			isSubmit: false,
 			excel: '',
@@ -239,8 +286,14 @@ export default {
 					dataIndex: 'branch.name'
 				},
 				{
+					title: 'Pháp lý',
+					align: 'center',
+					dataIndex: 'is_legal_representative',
+					scopedSlots: {customRender: 'is_legal_representative'},
+				},
+				{
 					title: 'Trạng thái',
-					align: 'left',
+					align: 'center',
 					dataIndex: 'status_user',
 					scopedSlots: {customRender: 'status_user'},
 				},
@@ -357,6 +410,24 @@ export default {
 				position: 'top-right'
 			})
 		},
+		async handleIsntLegal () {
+			await User.IsntLegalUser(this.id)
+			await this.getStaffs()
+			this.$toast.open({
+				message: 'Bỏ chọn đại diện pháp luật thành công',
+				type: 'success',
+				position: 'top-right'
+			})
+		},
+		async handleIsLegal () {
+			await User.IsLegalUser(this.id)
+			await this.getStaffs()
+			this.$toast.open({
+				message: 'Chọn đại diện pháp luật thành công',
+				type: 'success',
+				position: 'top-right'
+			})
+		},
 		async handleReset () {
 			await User.resetUser(this.id)
 			await this.getStaffs()
@@ -427,6 +498,16 @@ export default {
 		},
 		handleOpenModalDeActive (action) {
 			this.openModalDeActive = true
+			this.id = action.id
+			this.choose_name = action.name
+		},
+		handleOpenModalIsLegal (action) {
+			this.openModalIsLegal = true
+			this.id = action.id
+			this.choose_name = action.name
+		},
+		handleOpenModalIsntLegal (action) {
+			this.openModalIsntLegal = true
 			this.id = action.id
 			this.choose_name = action.name
 		},

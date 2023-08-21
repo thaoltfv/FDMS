@@ -19,6 +19,7 @@
 						:employeeBusiness="employeeBusiness"
 						:render_price_fee="render_price_fee"
 						@handleChangeAppraiser="handleChangeAppraiser"
+						@handleChangeAppraiserManager="handleChangeAppraiserManager"
 						:userAppraiserId="userAppraiserId"
 					/>
 				</div>
@@ -183,7 +184,7 @@ export default {
 			let managerId = await appraiserCompany.data.data[0].appraiser.id
 			this.employeePerformance = dataAppraise
 			this.employeeBusiness = dataAppraise
-			this.appraisersManager = dataAppraise.filter(item => item.id === managerId)
+			this.appraisersManager = dataAppraise.filter(item => item.is_legal_representative === 1)
 			this.form.step_1.appraiser_manager_id = await this.appraisersManager[0].id
 			let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
 			if (this.form && this.form.step_1.appraiser_manager_id) {
@@ -274,18 +275,31 @@ export default {
 			}
 		},
 		handleChangeAppraiser (event) {
-			if (event) {
-				this.form.step_1.appraiser_confirm_id = ''
-				if (event === this.form.appraiser_manager_id) {
-					this.signAppraisers = this.appraisers
-				} else {
-					const filterData = this.appraisers.filter(item => item.id !== event)
-					this.signAppraisers = filterData
-				}
-			} else {
-				this.form.step_1.appraiser_confirm_id = ''
-				this.signAppraisers = this.appraisers
-			}
+			// if (event) {
+			// 	this.form.step_1.appraiser_confirm_id = ''
+			// 	if (event === this.form.appraiser_manager_id) {
+			// 		this.signAppraisers = this.appraisers
+			// 	} else {
+			// 		const filterData = this.appraisers.filter(item => item.id !== event)
+			// 		this.signAppraisers = filterData
+			// 	}
+			// } else {
+			// 	this.form.step_1.appraiser_confirm_id = ''
+			// 	this.signAppraisers = this.appraisers
+			// }
+		},
+		async handleChangeAppraiserManager (event) {
+			// const resp = await Certificate.getAppraisers()
+			// let dataAppraise = [...resp.data]
+			// let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
+			// if (event){
+			// 	console.log('có event')
+			// 	this.appraisers = appraiser.filter(item => item.id !== event)
+			// } else {
+			// 	console.log('không evant')
+			// 	this.appraisers = appraiser
+			// }
+			
 		}
 	},
 	mounted () {

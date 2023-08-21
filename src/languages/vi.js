@@ -256,4 +256,6 @@ export default {
 	yes: 'Yes',
 	tooltip_active: 'Kích hoạt',
 	tooltip_deactive: 'Vô hiệu hóa',
+	tooltip_is_legal_representative: 'Chọn làm đại diện pháp luật',
+	tooltip_isnt_legal_representative: 'Bỏ chọn làm đại diện pháp luật',
 }

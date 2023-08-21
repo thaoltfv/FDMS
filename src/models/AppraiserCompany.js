@@ -19,6 +19,7 @@ export default class AppraiserCompany extends Model {
 	}
 	static async getAppraisersManager () {
 		// return (new this()).request({ method: 'GET', url: `appraisers?search=150`, isStatic: true })
-		return (new this()).request({ method: 'GET', url: `appraisers`, isStatic: true })
+		// return (new this()).request({ method: 'GET', url: `appraisers`, isStatic: true })
+		return (new this()).request({ method: 'GET', url: `appraisers?is_legal_representative=1`, isStatic: true })
 	}
 }

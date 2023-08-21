@@ -49,8 +49,17 @@
           </div>
           <div class="col-12">
 			<div style="text-align: left !important;" class="form-group-container">
-				<label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
-				<div class="form-control border_disable disabled"><p class="mb-0">{{appraisersManager.length > 0 ? appraisersManager[0].name : ''}}</p></div>
+				<!-- <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
+				<div class="form-control border_disable disabled"><p class="mb-0">{{appraisersManager.length > 0 ? appraisersManager[0].name : ''}}</p></div> -->
+				<InputCategory
+                v-model="form.appraiser_manager_id"
+                vid="appraiser_manager_id"
+                label="Đại diện theo pháp luật"
+                rules="required"
+                class="form-group-container"
+                @change="handleChangeAppraiserManager"
+                :options="optionsAppraiserManager"
+              />
 			</div>
           </div>
           <div class="col-12">
@@ -96,6 +105,7 @@ export default {
 		InputDatePickerV2
 	},
 	created () {
+		connsole.log('vô đây không')
 		this.getAppraisers()
 		this.getTimeStamp()
 	},
@@ -159,7 +169,8 @@ export default {
 			let idManager = await appraiserCompany.data.data[0].appraiser.id
 			this.employeePerformance = await dataAppraise
 			this.employeeBusiness = await dataAppraise
-			this.appraisersManager = await dataAppraise.filter(item => item.id === idManager)
+			this.appraisersManager = await dataAppraise.filter(item => item.is_legal_representative === 1)
+			console.log('dsadấdsad', this.appraisersManager)
 			this.form.appraiser_manager_id = await this.appraisersManager[0].id
 			let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
 			if (this.form && this.form.appraiser_manager_id) {
@@ -200,6 +211,20 @@ export default {
 				this.form.appraiser_confirm_id = ''
 				this.signAppraisers = this.appraisers
 			}
+		},
+		handleChangeAppraiserManager (event) {
+			// if (event) {
+			// 	this.form.appraiser_confirm_id = ''
+			// 	if (event === this.form.appraiser_manager_id) {
+			// 		this.signAppraisers = this.appraisers
+			// 	} else {
+			// 		const filterData = this.appraisers.filter(item => item.id !== event)
+			// 		this.signAppraisers = filterData
+			// 	}
+			// } else {
+			// 	this.form.appraiser_confirm_id = ''
+			// 	this.signAppraisers = this.appraisers
+			// }
 		},
 		handleChangeAppraiserPerform () {
 
@@ -273,6 +298,13 @@ export default {
 
 	},
 	computed: {
+		optionsAppraiserManager () {
+			return {
+				data: this.appraisersManager,
+				id: 'id',
+				key: 'name'
+			}
+		},
 		optionsAppraiser () {
 			return {
 				data: this.appraisers,

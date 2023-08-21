@@ -17,6 +17,14 @@ export default class User extends Model {
 		const data = {id: id}
 		return (new this()).request({ method: 'POST', url: `users/active-user/${id}`, data, isStatic: true })
 	}
+	static async IsntLegalUser (id) {
+		const data = {id: id}
+		return (new this()).request({ method: 'POST', url: `users/isnt-legal-user/${id}`, data, isStatic: true })
+	}
+	static async IsLegalUser (id) {
+		const data = {id: id}
+		return (new this()).request({ method: 'POST', url: `users/is-legal-user/${id}`, data, isStatic: true })
+	}
 	static async resetUser (id) {
 		const data = {id: id}
 		return (new this()).request({ method: 'POST', url: `users/reset-password/${id}`, data, isStatic: true })

@@ -15,16 +15,17 @@ export default class Certificate extends Model {
 		return resp
 	}
 	static async getAppraisers () {
-		let resp = localStorage.getItem('appraisers')
-		if (isEmpty(resp)) {
-			resp = await (new this()).request({ method: 'GET', url: `appraisers`, isStatic: true })
+		// let resp = localStorage.getItem('appraisers')
+		// if (isEmpty(resp)) {
+			let resp = await (new this()).request({ method: 'GET', url: `appraisers`, isStatic: true })
 			localStorage.setItem('appraisers', JSON.stringify(resp))
-		} else resp = JSON.parse(resp)
+		// } else resp = JSON.parse(resp)
 		return resp
 	}
 	static async getAppraisersManager () {
 		// return (new this()).request({ method: 'GET', url: `appraisers?search=150`, isStatic: true })
-		return (new this()).request({ method: 'GET', url: `appraisers?search=TONG-GIAM-DOC`, isStatic: true })
+		// return (new this()).request({ method: 'GET', url: `appraisers?search=TONG-GIAM-DOC`, isStatic: true })
+		return (new this()).request({ method: 'GET', url: `appraisers?is_legal_representative=1`, isStatic: true })
 	}
 	static async getAppraiseOthers () {
 		let resp = localStorage.getItem('appraise-others')

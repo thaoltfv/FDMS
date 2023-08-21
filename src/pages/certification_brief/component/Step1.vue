@@ -259,14 +259,23 @@
               :options="optionsAppraiser"
 
             />
-            <div class="form-group-container">
+            <!-- <div class="form-group-container">
               <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
               <div class="form-control border_disable disabled">
                 <p class="mb-0">
                   {{ appraisersManager.length > 0 ? appraisersManager[0].name : ""}}
                 </p>
               </div>
-            </div>
+            </div> -->
+            <InputCategory
+              v-model="data.appraiser_manager_id"
+              vid="appraiser_manager_id"
+              label="Đại diện theo pháp luật"
+              class="form-group-container"
+              @change="handleChangeAppraiserManager"
+              :options="optionsAppraiserManager"
+
+            />
             <InputCategory
               v-model="data.appraiser_confirm_id"
               vid="appraiser_confirm_id"
@@ -361,6 +370,13 @@ export default {
 		optionsAppraisalPurposes () {
 			return {
 				data: this.appraisalPurposes,
+				id: 'id',
+				key: 'name'
+			}
+		},
+    optionsAppraiserManager () {
+			return {
+				data: this.appraisersManager,
 				id: 'id',
 				key: 'name'
 			}
@@ -503,6 +519,9 @@ export default {
 		handleChangeAppraiserPerform () {},
 		handleChangeAppraiser (event) {
 			this.$emit('handleChangeAppraiser', event)
+		},
+    handleChangeAppraiserManager (event) {
+			this.$emit('handleChangeAppraiserManager', event)
 		},
 		changeDocumentDate (event) {
 			this.data.document_date = event
