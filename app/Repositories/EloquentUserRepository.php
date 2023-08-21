@@ -43,7 +43,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         }
 
         $result = QueryBuilder::for($this->model)
-            ->with('branch')
+            ->with(['branch','appraiser:id,is_legal_representative'])
             ->whereRaw($query)
             ->where('email', '<>', ValueDefault::ROOT_ADMIN_DEFAULT)
             ->orderByDesc($this->allowedSorts)
