@@ -65,4 +65,37 @@ class ReportAppraisalDonava extends ReportAppraisal
     {
         $section->addListItem('Thông tin quy hoạch được DONAVA tham chiếu tại ứng dụng DNAILIS của Trung tâm Công nghệ thông tin Sở Tài nguyên và Môi trường Đồng Nai tại thời điểm Thẩm định giá, ' . $this->acronym . ' loại trừ trong trường hợp có cập nhật hoặc thay đổi sau thời điểm phát hành chứng thư.', 0, null, 'bullets', array_merge($this->indentFistLine, $this->keepNext));
     }
+
+    protected function signature(Section $section, $certificate)
+    {
+        $section->addTextBreak(null, null, $this->keepNext);
+        $table3 = $section->addTable($this->tableBasicStyle);
+        $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
+        $cell31 = $table3->addCell(Converter::inchToTwip(4));
+        $cell31->addText("THẨM ĐỊNH VIÊN VỀ GIÁ", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell32 = $table3->addCell(Converter::inchToTwip(4));
+        if(isset($certificate->appraiserConfirm->name)) {
+            $cell32->addText("KT. ĐẠI DIỆN PHÁP LUẬT", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        } else {
+            // $cell32->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText("ĐẠI DIỆN PHÁP LUẬT", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        }
+        $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
+        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);;
+        $table3->addRow(Converter::inchToTwip(.1));
+        $cell33 = $table3->addCell(Converter::inchToTwip(4));
+        $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
+        $cell33->addText($bien171, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
+        $cell33->addText("Số thẻ TĐV về giá: " . $appraiserNumber, ['bold' => true], ['align' => 'center']);
+        $cell34 = $table3->addCell(Converter::inchToTwip(4));
+        $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
+        $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
+        $bien172 = $appraiserManager;
+        $cell34->addText($bien172, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
+    }
 }
