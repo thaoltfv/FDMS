@@ -250,6 +250,26 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->update(['status_user' => 'active']);
     }
 
+    /**
+     * @param $id
+     * @return int
+     */
+    public function isntLegalUser($id): int
+    {
+        return Appraiser::where('user_id',$id)
+        ->update(['is_legal_representative' => 0]);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function isLegalUser($id): int
+    {
+        return Appraiser::where('user_id',$id)
+        ->update(['is_legal_representative' => 1]);
+    }
+
 
     /**
      * @param $id

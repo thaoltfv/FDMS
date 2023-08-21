@@ -327,6 +327,46 @@ class UserController extends Controller
      * @param $id
      * @return JsonResponse
      */
+    public function isntLegalUser($id): JsonResponse
+    {
+        try {
+            if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                return $this->respondWithCustomData($this->userRepository->isntLegalUser($id));
+            } else {
+                $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                return $this->respondWithErrorData($data, 403);
+            }
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /** 
+     * @param $id
+     * @return JsonResponse
+     */
+    public function isLegalUser($id): JsonResponse
+    {
+        try {
+            if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                return $this->respondWithCustomData($this->userRepository->isLegalUser($id));
+            } else {
+                $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                return $this->respondWithErrorData($data, 403);
+            }
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /** 
+     * @param $id
+     * @return JsonResponse
+     */
     public function resetUserPasswordNew($id): JsonResponse
     {
         try {
