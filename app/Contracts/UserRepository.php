@@ -28,7 +28,7 @@ interface UserRepository extends BaseRepository
 
     public function isntLegalUser($id);
 
-    public function isLegal($id);
+    public function isLegalUser($id);
 
     public function resetUserPasswordNew($id);
 
