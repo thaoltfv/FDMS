@@ -1,6 +1,9 @@
 <?php
 namespace App\Services\Document\Appraisal;
 use PhpOffice\PhpWord\Element\Section;
+use PhpOffice\PhpWord\Shared\Converter;
+use PhpOffice\PhpWord\Element\Table;
+use Carbon\Carbon;
 
 class ReportAppraisalDonava extends ReportAppraisal
 {
