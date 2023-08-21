@@ -44,6 +44,7 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
     {
         $result = $this->model->query();
         $search = request()->get('search');
+        $is_legal_representative = request()->get('is_legal_representative');
         if (!empty($search)) {
             if(is_numeric($search)) {
                 $query = 'appraise_position_id = ' .  (int)$search ;
@@ -58,6 +59,11 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
                     $result = $result->whereRaw($query);
                 }
             }
+        }
+
+        if (!empty($is_legal_representative)) {
+            $query = 'is_legal_representative = ' .  (int)$is_legal_representative ;
+                $result = $result->whereRaw($query);  
         }
         
         return $result
