@@ -43,7 +43,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         }
 
         $result = QueryBuilder::for($this->model)
-            ->with(['branch','appraiser:id,is_legal_representative'])
+            ->with('branch')
             ->whereRaw($query)
             ->where('email', '<>', ValueDefault::ROOT_ADMIN_DEFAULT)
             ->orderByDesc($this->allowedSorts)
@@ -51,6 +51,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->paginate($perPage);
         foreach ($result as $key => $value) {
             $result[$key]['role'] = $value->getRoleNames();
+            $appraiser = Appraiser::where('user_id', $result[$key]->id)->first();
+            if ($appraiser){
+                $result[$key]['is_legal_representative'] = $appraiser->is_legal_representative;
+            }
         }
         return $result;
     }
