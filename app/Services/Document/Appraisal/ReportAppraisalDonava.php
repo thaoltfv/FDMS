@@ -83,7 +83,7 @@ class ReportAppraisalDonava extends ReportAppraisal
         } else {
             // $cell32->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
             $cell32->addText("ĐẠI DIỆN PHÁP LUẬT", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-            $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText( json_encode($certificate), ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         }
         $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
         $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
