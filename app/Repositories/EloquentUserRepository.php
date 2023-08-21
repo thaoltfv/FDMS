@@ -54,6 +54,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             $appraiser = Appraiser::where('user_id', $result[$key]->id)->first();
             if ($appraiser){
                 $result[$key]['is_legal_representative'] = $appraiser->is_legal_representative;
+                $result[$key]['appraiser_number'] = $appraiser->appraiser_number;
             }
         }
         return $result;
