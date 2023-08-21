@@ -187,9 +187,10 @@ export default {
 			this.appraisersManager = dataAppraise.filter(item => item.is_legal_representative === 1)
 			this.form.step_1.appraiser_manager_id = await this.appraisersManager[0].id
 			let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
-			if (this.form && this.form.step_1.appraiser_manager_id) {
-				this.appraisers = appraiser.filter(item => item.id !== this.form.step_1.appraiser_manager_id)
-			}
+			this.appraisers = appraiser
+			// if (this.form && this.form.step_1.appraiser_manager_id) {
+			// 	this.appraisers = appraiser.filter(item => item.id !== this.form.step_1.appraiser_manager_id)
+			// }
 			if (this.form && this.form.step_1.appraiser_id) {
 				const filterData = appraiser.filter(item => item.id !== this.form.step_1.appraiser_id && item.id !== this.form.step_1.appraiser_manager_id)
 				this.signAppraisers = filterData
