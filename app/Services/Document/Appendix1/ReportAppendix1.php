@@ -1617,7 +1617,8 @@ class ReportAppendix1 extends Report
             $title,
             '-',
             $this->assetPrice['asset1']['building_price'] ?  number_format($this->assetPrice['asset1']['building_price'], 0, ',', '.') : '-',
-            $this->assetPrice['asset2']['building_price'] ?  number_format($this->assetPrice['asset2']['building_price'], 0, ',', '.') : '-',
+            // $this->assetPrice['asset2']['building_price'] ?  number_format($this->assetPrice['asset2']['building_price'], 0, ',', '.') : '-',
+            json_encode($this->assetPrice),
             $this->assetPrice['asset3']['building_price'] ?  number_format($this->assetPrice['asset3']['building_price'], 0, ',', '.') : '-',
             false
         ];
