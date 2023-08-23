@@ -105,7 +105,7 @@ export default {
 		InputDatePickerV2
 	},
 	created () {
-		connsole.log('vô đây không')
+		console.log('vô đây không')
 		this.getAppraisers()
 		this.getTimeStamp()
 	},
