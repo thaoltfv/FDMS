@@ -44,4 +44,7 @@ export default class File extends Model {
 	static async getInfoByCoord ({data}) {
 		return (new this()).makeRequest({ method: 'POST', url: `/api/get-info-by-coord`, data })
 	}
+	static async getInfoByLand ({data}) {
+		return (new this()).makeRequest({ method: 'POST', url: `/api/get-info-by-land`, data })
+	}
 }

@@ -1,11 +1,61 @@
 <template>
 	<div class="modal-delete d-flex justify-content-center align-items-center">
-		<!-- <div class="" v-if="isOpen" @click.self="closeModal" style="position: absolute;
-    z-index: 999;
-    top: 150px;
-    left: 75px;">
+		<div class="modal-detail d-flex justify-content-center align-items-center" v-if="isOpen" >
+        <div class="card">
+          <div class="container-title">
+            <div class="d-lg-flex d-block shadow-bottom">
+              <h2 class="title">TÌM KIẾM THEO SỐ TỜ, SỐ THỬA</h2>
+            </div>
+          </div>
+          <div class="contain-detail">
+            <div class="row">
+              <div class="col-12">
+				<InputText
+					v-model="emSoToCode"
+					vid="emSoToCode"
+					label="Số tờ"
+					class="col-12 col-lg-12 form-group-container"
+				/>
+              </div>
+			  <div class="col-12">
+				<InputText
+					v-model="emSoThuaCode"
+					vid="emSoThuaCode"
+					label="Số thửa"
+					class="col-12 col-lg-12 form-group-container"
+				/>
+              </div>
+            </div>
+          </div>
+          <div class="d-md-flex d-block justify-content-end align-items-center" style="margin-top: 20px;">
+          <div class="d-md-flex d-block">
+            <button  @click="closeModal" class="btn btn-white text-nowrap" >
+              <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Trở lại
+            </button>
+            <button class="btn btn-white btn-orange text-nowrap" @click="searchByToThua()" :disabled="disabledButton">
+              <img src="@/assets/icons/ic_search.svg" style="margin-right: 12px" alt="save"/>Tìm kiếm
+            </button>
+          </div>
+				</div>
+        </div>
+      </div>
+		<ValidationObserver
+			tag="form"
+			ref="observer"
+			@submit.prevent="validateBeforeSubmit"
+		>
+			<div class="card" style="">
+				<!-- <div class="" v-if="isOpen" @click.self="closeModal" style="top: 9vh;position: absolute; overflow: scroll;
+    z-index: 999999;transform: none; transition: transform 525ms cubic-bezier(0, 0, 0.2, 1) 5ms;width: 27%;
+    height: -webkit-fill-available;">
       <div class="">
-        <iframe :src="url_modal" frameborder="0" width="1535vw" height="530vh"></iframe>
+        <div class="card" style="">
+			<div class="card-title">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="title text-nowrap">TÌM KIẾM THEO SỐ TỜ, SỐ THỬA</h3>
+              </div>
+            </div>
+		</div>
         <button class="" @click="closeModal" style="position: absolute;
     width: 50px;
     height: 50px;
@@ -15,15 +65,9 @@
     background-color: white;
     border: 0px;"><img 
              src="@/assets/images/icon-btn-back.svg"
-             alt="icon"></button>
+             alt="icon"></button> 
       </div>
     </div> -->
-		<ValidationObserver
-			tag="form"
-			ref="observer"
-			@submit.prevent="validateBeforeSubmit"
-		>
-			<div class="card" style="">
 				<div
 					v-if="modalGeoInfo"
 					class="card"
@@ -64,7 +108,7 @@
 								<span>Số tờ</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.so_to_ban_do ? dataResult.attributes.so_to_ban_do : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.so_to_ban_do ? dataResult.attributes.so_to_ban_do : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -74,7 +118,7 @@
 								<span>Số thửa</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.so_hieu_thua ? dataResult.attributes.so_hieu_thua : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.so_hieu_thua ? dataResult.attributes.so_hieu_thua : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -84,7 +128,7 @@
 								<span>Số nhà</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.so_nha ? dataResult.attributes.so_nha : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.so_nha ? dataResult.attributes.so_nha : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -94,7 +138,7 @@
 								<span>Đường</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.duong ? dataResult.attributes.duong : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.duong ? dataResult.attributes.duong : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -104,7 +148,7 @@
 								<span>Phường</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.phuong ? dataResult.attributes.phuong : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.phuong ? dataResult.attributes.phuong : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -114,7 +158,7 @@
 								<span>Quận</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.quan ? dataResult.attributes.quan : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.quan ? dataResult.attributes.quan : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -124,7 +168,7 @@
 								<span>Tọa độ Google Map</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.wgs84 ? dataResult.attributes.wgs84 : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.wgs84 ? dataResult.attributes.wgs84 : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -134,7 +178,7 @@
 								<span>Tọa độ địa chính</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.vn2000 ? dataResult.attributes.vn2000 : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.vn2000 ? dataResult.attributes.vn2000 : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -144,7 +188,7 @@
 								<span>Mục đích sử dụng đất</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.mdsdd ? dataResult.attributes.mdsdd : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.mdsdd ? dataResult.attributes.mdsdd : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -154,7 +198,7 @@
 								<span>Diện tích tổng (m2)</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.dien_tich_thua ? dataResult.attributes.dien_tich_thua : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.dien_tich_thua ? dataResult.attributes.dien_tich_thua : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -164,7 +208,7 @@
 								<span>Diện tích nằm trong lộ giới (m2)</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.dt_k_phu_hop ? dataResult.attributes.dt_k_phu_hop : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.dt_k_phu_hop ? dataResult.attributes.dt_k_phu_hop : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -174,7 +218,7 @@
 								<span>Loại đất quy hoạch</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.loai_dat_quy_hoach ? dataResult.attributes.loai_dat_quy_hoach : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.loai_dat_quy_hoach ? dataResult.attributes.loai_dat_quy_hoach : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -184,7 +228,7 @@
 								<span>Số mặt tiếp giáp</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.tong_mat_tien ? dataResult.attributes.tong_mat_tien : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.tong_mat_tien ? dataResult.attributes.tong_mat_tien : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -194,7 +238,7 @@
 								<span>Phân cấp</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.tiep_giap_1 ? dataResult.attributes.tiep_giap_1 : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.tiep_giap_1 ? dataResult.attributes.tiep_giap_1 : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -204,7 +248,7 @@
 								<span>Chiều dài</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.chieu_sau ? dataResult.attributes.chieu_sau : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.chieu_sau ? dataResult.attributes.chieu_sau : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -214,7 +258,7 @@
 								<span>Chiều rộng</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.mat_tien ? dataResult.attributes.mat_tien : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.mat_tien ? dataResult.attributes.mat_tien : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -224,7 +268,7 @@
 								<span>Độ rộng đường nhỏ nhất</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.rong_hem_nho_1 ? dataResult.attributes.rong_hem_nho_1 : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.rong_hem_nho_1 ? dataResult.attributes.rong_hem_nho_1 : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -234,7 +278,7 @@
 								<span>Độ rộng đường trước nhà</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.hem_truoc_nha_1 ? dataResult.attributes.hem_truoc_nha_1 : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.hem_truoc_nha_1 ? dataResult.attributes.hem_truoc_nha_1 : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -244,7 +288,7 @@
 								<span>Khoảng cách tới đường chính</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.khoang_cach_1 ? dataResult.attributes.khoang_cach_1 : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.khoang_cach_1 ? dataResult.attributes.khoang_cach_1 : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -254,7 +298,7 @@
 								<span>Hướng</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.huong ? dataResult.attributes.huong : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.huong ? dataResult.attributes.huong : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -264,7 +308,7 @@
 								<span>Hình dáng</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.nhan_dien ? dataResult.attributes.nhan_dien : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.nhan_dien ? dataResult.attributes.nhan_dien : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -274,7 +318,7 @@
 								<span>Quyết định</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.quyet_dinh ? dataResult.attributes.quyet_dinh : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.quyet_dinh ? dataResult.attributes.quyet_dinh : '-'}}</span>
 							</div>
 							<div
 								class="col-12"
@@ -284,13 +328,18 @@
 								<span>Đồ án</span>
 							</div>
 							<div class="col-7">
-								<span>{{ dataResult.attributes.do_an ? dataResult.attributes.do_an : 'Không có thông tin'}}</span>
+								<span>{{ dataResult.attributes.do_an ? dataResult.attributes.do_an : '-'}}</span>
 							</div>
 							<!-- <div class="col-12" style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"></div> -->
 						</div>
 					</div>
 				</div>
 				<div class="d-block d-sm-flex justify-content-between my-3">
+					<!-- <InputSwitchToThua
+                                v-model="search_to_thua"
+                                vid="search_to_thua"
+                                @input="changeSearchToThua"
+                              /> -->
 					<div class="search-container w-100 d-flex">
 						<gmap-autocomplete
 							:value="search_address"
@@ -308,13 +357,13 @@
 							<img src="@/assets/icons/ic_search.svg" alt="" />
 						</div>
 					</div>
-					<!-- <button class="btn btn-search" type="button" @click="handleOpenEM" style="background-color: #FFFFFF;">
+					<button class="btn btn-search" type="button" @click="handleOpenEM" style="background-color: #FFFFFF;">
 				<svg width="25" height="25" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z"
                     fill="#007EC6"/>
                 </svg>
-			</button> -->
+			</button>
 					<input type="text" id="coordinate" :value="address" class="d-none" />
 					<button class="btn btn-search" type="button" @click="handleAction">
 						Xác nhận
@@ -454,6 +503,8 @@ import Icon from "buefy";
 import InputText from "@/components/Form/InputText";
 import axios from '@/plugins/axios'
 import File from '@/models/File'
+import InputSwitchToThua from '@/components/Form/InputSwitchToThua'
+import cityJson from '@/assets/json/phuluc_dmhc/city/city.json'
 
 Vue.use(Icon);
 export default {
@@ -469,10 +520,12 @@ export default {
 		LIcon,
 		InputText,
 		LControlLayers,
-		LGeoJson
+		LGeoJson,
+		InputSwitchToThua
 	},
 	data() {
 		return {
+			search_to_thua: false,
 			dataResult: null,
 			url_modal: "https://app.estatemanner.com/map",
 			isOpen: false,
@@ -518,7 +571,30 @@ export default {
 			strPlaceHolder: "Nhập địa điểm, vị trí hoặc tọa độ",
 			geo_data: null,
 			modalGeoInfo: false,
+			duong:'',
+			phuongxa:'',
+			quanhuyen:'',
+			tinhthanh:'',
+			phuongxa_code:'',
+			quanhuyen_code:'',
+			tinhthanh_code:'',
+			listCity: [],
+			listDistrict: [],
+			listWard: [],
+			emCityCode: '',
+			emDistrictCode: '',
+			emWardCode: '',
+			emSoToCode: '',
+			emSoThuaCode: '',
 		};
+	},
+	computed: {
+		disabledButton () {
+			console.log('vô vô')
+			if (this.emSoToCode || this.emSoThuaCode) {
+				return false
+			} else return true
+		}
 	},
 	async mounted() {
 		this.search_address = this.address;
@@ -535,8 +611,117 @@ export default {
 		} else {
 			await this.initMap(this.address, "address");
 		}
+		// console.log('cityJSON', cityJson)
+		var result = [];
+
+		for(var i in cityJson)
+			result.push(cityJson [i])
+		this.listCity = result
+		console.log('city array', this.listCity)
 	},
 	methods: {
+		async searchByToThua(){
+			if (this.tinhthanh){
+				if (this.listCity.length > 0) {
+					for (let i = 0; i < this.listCity.length; i++) {
+						let e = this.listCity[i]
+						if (e.name_with_type.toLowerCase()  == this.tinhthanh.toLowerCase() || e.name.toLowerCase() == this.tinhthanh.toLowerCase()) {
+							console.log('dính chưởng tỉnh thành', e)
+							this.emCityCode = e.code
+							if (this.quanhuyen) {
+								const districtJson = require('@/assets/json/phuluc_dmhc/district/'+this.emCityCode+'.json')
+								// console.log('list district', listDistrict)
+								if (districtJson) {
+									for(var i in districtJson)
+										this.listDistrict.push(districtJson [i])
+									
+									if (this.listDistrict.length > 0) {
+										for (let i = 0; i < this.listDistrict.length; i++) {
+											let q = this.listDistrict[i]
+											if (q.name_with_type.toLowerCase()  == this.quanhuyen.toLowerCase() || q.name.toLowerCase() == this.quanhuyen.toLowerCase()) {
+												console.log('dính chưởng quận huyện', q)
+												this.emDistrictCode = q.code
+												if (this.phuongxa) {
+													const wardJson = require('@/assets/json/phuluc_dmhc/ward/'+this.emDistrictCode+'.json')
+													if (wardJson) {
+														for(var i in wardJson)
+															this.listWard.push(wardJson [i])
+
+														if (this.listWard.length > 0) {
+															for (let i = 0; i < this.listWard.length; i++) {
+																let x = this.listWard[i]
+																if (x.name_with_type.toLowerCase()  == this.phuongxa.toLowerCase() || x.name.toLowerCase() == this.phuongxa.toLowerCase()) {
+																	console.log('dính chưởng phường xã', x)
+																	this.emWardCode = x.code
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				if (this.quanhuyen_code || this.phuongxa_code) {
+
+				}
+			}
+			if (this.emSoToCode || this.emSoThuaCode && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
+				console.log('đầy đủ thông tin')
+				const APItoken = await this.getToken();
+				if (APItoken){
+					let formdata = {
+					token: APItoken,
+					land_plot: this.emSoThuaCode,
+					land_sheet: this.emSoToCode,
+					city_code: this.emCityCode,
+					district_code: this.emDistrictCode,
+					ward_code: this.emWardCode
+					}
+					await File.getInfoByLand({ data: formdata }).then((response) => {
+					console.log('response result',response)
+					let datafinal = response.data.data
+					//   let that = this
+					console.log('data final', datafinal)
+					if (datafinal) {
+						this.dataResult = datafinal.data
+						this.geo_data = this.dataResult.geo_data
+						this.modalGeoInfo = true
+						this.isOpen  = false
+						this.map.center = [
+							this.geo_data.geometry.coordinates[0][0][1],
+							this.geo_data.geometry.coordinates[0][0][0],
+						]
+						this.markerLatLng = [
+							this.geo_data.geometry.coordinates[0][0][1],
+							this.geo_data.geometry.coordinates[0][0][0],
+						]
+						// console.log('quan huyen', this.geo_data.geometry.coordinates[0][0])
+					} else {
+						this.$toast.open({
+						message: 'Không tìm thấy dữ liệu quy hoạch',
+						type: 'error',
+						position: 'top-right',
+						duration: 3000
+						})
+						this.dataResult = null
+						this.geo_data = null
+						this.modalGeoInfo = false
+						this.isOpen  = false
+					}
+					})
+				}
+			}
+		},
+		// changeSearchToThua(event){
+		// 	console.log('event', this.serch_to_thua)
+		// 	// this.search_to_thua = true
+		// },
     async getToken () {
       // const uninterceptedAxiosInstance = axios.create();
       //   const body = {
@@ -607,12 +792,15 @@ export default {
         await File.getInfoByCoord({ data: formdata }).then((response) => {
           console.log('response result',response)
           let datafinal = response.data.data
-          let that = this
+        //   let that = this
           console.log('data final', datafinal)
           if (datafinal) {
             this.dataResult = datafinal.data
             this.geo_data = this.dataResult.geo_data
             this.modalGeoInfo = true
+			this.phuongxa_code = this.dataResult.attributes.level_3
+			this.quanhuyen_code = this.dataResult.attributes.level_2
+			// console.log('quan huyen', this.quanhuyen)
           } else {
             this.$toast.open({
               message: 'Không tìm thấy dữ liệu quy hoạch',
@@ -662,12 +850,18 @@ export default {
 			}
 		},
 		async initMap(address, type) {
+			console.log('vô 3')
 			// eslint-disable-next-line no-undef
 			const geocoder = new google.maps.Geocoder();
 			await this.geocodeAddress(geocoder, address, type);
 		},
 		async geocodeAddress(geocoder, address, type) {
+			console.log('vô 4')
 			let center = {};
+			let duong = ''
+			let phuongxa = ''
+			let quanhuyen = ''
+			let tinhthanh = ''
 			// let address = this.address
 			if (!address) {
 				address = document.getElementById("coordinate").value;
@@ -685,7 +879,7 @@ export default {
 				}
 				await geocoder.geocode(keySearch, function(results, status) {
 					if (status === "OK") {
-						// console.log(results[0])
+						console.log('ket qua',results[0])
 						const marker = {
 							position: results[0].geometry.location
 						};
@@ -693,14 +887,55 @@ export default {
 							parseFloat(marker.position.lat()),
 							parseFloat(marker.position.lng())
 						];
+						if (results[0].address_components[results[0].address_components.length - 1].long_name.toLowerCase() == 'việt nam' ){
+							if (results[0].address_components.length == 5) {
+								duong = results[0].address_components[0].long_name
+								phuongxa = results[0].address_components[1].long_name
+								quanhuyen = results[0].address_components[2].long_name
+								tinhthanh = results[0].address_components[3].long_name
+							} else if (results[0].address_components.length == 4) {
+							phuongxa = results[0].address_components[0].long_name
+							quanhuyen = results[0].address_components[1].long_name
+							tinhthanh = results[0].address_components[2].long_name
+							} else if (results[0].address_components.length == 3) {
+								quanhuyen = results[0].address_components[0].long_name
+								tinhthanh = results[0].address_components[1].long_name
+							} else if (results[0].address_components.length == 2){
+								tinhthanh = results[0].address_components[0].long_name
+							}
+						} else {
+							if (results[0].address_components.length == 4) {
+								duong = results[0].address_components[0].long_name
+								phuongxa = results[0].address_components[1].long_name
+								quanhuyen = results[0].address_components[2].long_name
+								tinhthanh = results[0].address_components[3].long_name
+							} else if (results[0].address_components.length == 3) {
+							phuongxa = results[0].address_components[0].long_name
+							quanhuyen = results[0].address_components[1].long_name
+							tinhthanh = results[0].address_components[2].long_name
+							} else if (results[0].address_components.length == 2) {
+								quanhuyen = results[0].address_components[0].long_name
+								tinhthanh = results[0].address_components[1].long_name
+							} else {
+								tinhthanh = results[0].address_components[0].long_name
+							}
+						}
+						
+						 
+						console.log('ketqua dia chi',results[0].address_components)
 					} else {
 						// alert('Geocode was not successful for the following reason: ' + status)
 					}
 				});
 				this.map.center = center;
 				this.markerLatLng = center;
+				this.duong = duong;
+				this.phuongxa = phuongxa;
+				this.quanhuyen = quanhuyen;
+				this.tinhthanh = tinhthanh;
+				console.log('quan huyen', this.quanhuyen)
         console.log('gọi vô')
-        this.getInfoByCoord(this.markerLatLng)
+        // this.getInfoByCoord(this.markerLatLng)
 			}
 		},
 		choosePoint(event) {
@@ -719,6 +954,7 @@ export default {
 		},
 		setPlace(place) {
 			if (place.geometry && place.geometry.location) {
+				console.log('vô I')
 				this.search_address = place.formatted_address;
 				this.currentPlace = place;
 				this.map.center = [
@@ -729,9 +965,12 @@ export default {
 					place.geometry.location.lat(),
 					place.geometry.location.lng()
 				];
+				this.initMap(this.search_address, "address");
         this.getInfoByCoord(this.markerLatLng)
 			} else {
+				console.log('vô II')
 				if (place.name) {
+					console.log('vô II.1')
 					let location = place.name;
 					this.search_address = place.name;
 					if (
@@ -740,15 +979,18 @@ export default {
 						parseFloat(location.split(",")[0]) &&
 						parseFloat(location.split(",")[1])
 					) {
+						console.log('vô II.1.1')
 						let lat = parseFloat(location.split(",")[0]);
 						let lng = parseFloat(location.split(",")[1]);
 						this.map.center = [lat, lng];
 						this.markerLatLng = [lat, lng];
             this.getInfoByCoord(this.markerLatLng)
 					} else {
+						console.log('vô II.1.2')
 						this.initMap(location, "address");
 					}
 				} else {
+					console.log('vô II.2')
 					this.initMap(this.search_address, "address");
 				}
 			}
@@ -783,6 +1025,7 @@ export default {
 		handleSearch() {
       
 			if (this.search_address) {
+				console.log('vô 1')
 				let location = this.search_address;
 				if (
 					location.split(",") &&
@@ -790,15 +1033,18 @@ export default {
 					parseFloat(location.split(",")[0]) &&
 					parseFloat(location.split(",")[1])
 				) {
+					console.log('vô 1.1')
 					let lat = parseFloat(location.split(",")[0]);
 					let lng = parseFloat(location.split(",")[1]);
 					this.map.center = [lat, lng];
 					this.markerLatLng = [lat, lng];
           this.getInfoByCoord(this.markerLatLng)
 				} else {
+					console.log('vô 1.2')
 					this.initMap(location, "address");
 				}
 			} else {
+				console.log('vô 2')
 				this.initMap(this.search_address, "address");
 			}
 		}
@@ -967,5 +1213,120 @@ export default {
 		max-width: 50px;
 		height: auto;
 	}
+}
+.modal-detail {
+  position: fixed;
+  z-index: 1031;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.6);
+  .card {
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    max-width: 500px;
+    width: 100%;
+    max-height: 42vh;
+    margin-bottom: 0;
+    padding: 35px 95px;
+    @media (max-width: 787px) {
+      padding: 20px 10px;
+    }
+    &-header {
+      border-bottom: 1px solid #DDDDDD;
+      h3 {
+        color: #333333;
+      }
+      img {
+        cursor: pointer;
+      }
+    }
+    &-body {
+      text-align: center;
+      p {
+        color: #333333;
+        margin-bottom: 40px;
+      }
+
+      .btn__group {
+        .btn {
+          max-width: 150px;
+          width: 100%;
+          margin: 0 10px;
+        }
+      }
+    }
+  }
+}
+
+.card{
+  .contain-detail{
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 20px;
+    &::-webkit-scrollbar{
+      width: 2px;
+    }
+  }
+  &-title{
+    background: #F3F2F7;
+    padding: 16px 20px;
+    margin-bottom: 0;
+    .title{
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+  }
+  &-table{
+    border-radius: 5px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    width: 99%;
+    margin: 50px auto 50px;
+  }
+  &-body{
+    padding: 35px 30px 40px;
+  }
+  &-info{
+    .title{
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-top: 28px;
+    }
+  }
+  &-land{
+    position: relative;
+    padding: 0;
+  }
+}
+
+.container-title{
+  margin: -35px -95px auto;
+  padding: 35px 95px 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  .title{
+    font-size: 1.2rem;
+    @media (max-width: 767px) {
+      font-size: 1.125rem;
+    }
+  }
+  &__footer{
+    margin: auto -95px -35px;
+    padding: 20px 95px 20px;
+    @media (max-width: 767px) {
+      .btn-white{
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+.title{
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #000000;
 }
 </style>
