@@ -22,5 +22,7 @@ interface DictionaryRepository extends BaseRepository
 
     public function getInfoByCoord(array $objects);
 
+    public function getInfoByLand(array $objects);
+
     public function deleteDictionary($id);
 }
