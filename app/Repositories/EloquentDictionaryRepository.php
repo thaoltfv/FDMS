@@ -152,11 +152,11 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         $response = Http::withHeaders($header)->post($apiUrl,$postinput);
         $statusCode = $response->status();            
         
-        if ($statusCode == 201) {
+        // if ($statusCode == 201) {
             $responseBody = json_decode($response->getBody(), true);
             $data = $responseBody;
             return $data;
-        }
+        // }
     }
 
     /**
@@ -164,7 +164,12 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function getInfoByLand(array $objects)
     {
-        $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/cadastral";
+        if  ($objects['land_plot'] && $objects['land_sheet']) {
+            $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/landplot";
+        } else {
+            $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/cadastral";
+        }
+        
         $postinput =  [
             "city_code" => $objects['city_code'],
             "district_code" => $objects['district_code'],
