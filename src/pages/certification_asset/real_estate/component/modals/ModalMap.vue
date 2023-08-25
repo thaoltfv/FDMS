@@ -123,15 +123,16 @@ px
 				<div
 					v-if="modalGeoInfo"
 					class="card"
-					style="top: 9vh;position: absolute; overflow: scroll;
-    z-index: 999999;transform: none; transition: transform 525ms cubic-bezier(0, 0, 0.2, 1) 5ms;width: 27%;
+					style="top: 70px;position: absolute; overflow: scroll;
+    z-index: 999999;transform: none; transition: transform 525ms cubic-bezier(0, 0, 0.2, 1) 5ms;width: 45%;
     height: -webkit-fill-available;"
 				>
 					<button
 						class=""
 						@click="closeModalGeoInfo"
 						style="position: absolute;
-    right: 0;
+    right: 6px;
+	top:  10px;
     border-radius: 30px;
     background-color: white;
     border: 0px;"
@@ -140,7 +141,7 @@ px
 					</button>
 
 					<div class="row" style="margin: 0;">
-						<div class="col-12">
+						<!-- <div class="col-12">
 							<h2
 								style="margin: 0px;
     line-height: 1.6;
@@ -148,238 +149,168 @@ px
 							>
 								Thông tin chi tiết
 							</h2>
-						</div>
+						</div> -->
 						<div v-if="dataResult.length ==  0" class="row">
 							<h3>Không tìm thấy thông tin</h3>
 						</div>
 						<div v-else class="row" style="margin: 0;">
-							<div class="col-12">
-								<h3 style="color: rgb(9, 44, 76);">Bản vẽ kỹ thuật</h3>
+							<div class="col-12" style="margin-top:  15px;">
+								<h3 style="color: rgb(9, 44, 76);">Vị trí thửa đất</h3>
 							</div>
-							<div class="col-5">
+							<div
+								class="col-12"
+								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
+							></div>
+							<div class="col-6">
 								<span>Số tờ</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.so_to_ban_do ? dataResult.attributes.so_to_ban_do : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Số thửa</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.so_hieu_thua ? dataResult.attributes.so_hieu_thua : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Số nhà</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.so_nha ? dataResult.attributes.so_nha : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Đường</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.duong ? dataResult.attributes.duong : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Phường</span>
+							<div class="col-6">
+								<span>Phường xã</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.phuong ? dataResult.attributes.phuong : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Quận</span>
+							<div class="col-6">
+								<span>Quận huyện</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.quan ? dataResult.attributes.quan : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Tọa độ Google Map</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.wgs84 ? dataResult.attributes.wgs84 : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Tọa độ địa chính</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.vn2000 ? dataResult.attributes.vn2000 : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Mục đích sử dụng đất</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.mdsdd ? dataResult.attributes.mdsdd : '-'}}</span>
+							<div class="col-12" style="margin-top:  15px;">
+								<h3 style="color: rgb(9, 44, 76);">Đặc điểm thửa đất</h3>
 							</div>
 							<div
 								class="col-12"
 								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
 							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Diện tích tổng (m2)</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.dien_tich_thua ? dataResult.attributes.dien_tich_thua : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
+								<span>Mục đích sử dụng đất</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.mdsdd ? dataResult.attributes.mdsdd : '-'}}</span>
+							</div>
+							<div class="col-6">
 								<span>Diện tích nằm trong lộ giới (m2)</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.dt_k_phu_hop ? dataResult.attributes.dt_k_phu_hop : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Loại đất quy hoạch</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.loai_dat_quy_hoach ? dataResult.attributes.loai_dat_quy_hoach : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Số mặt tiếp giáp</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.tong_mat_tien ? dataResult.attributes.tong_mat_tien : '-'}}</span>
-							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Phân cấp</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.tiep_giap_1 ? dataResult.attributes.tiep_giap_1 : '-'}}</span>
-							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Chiều dài</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.chieu_sau ? dataResult.attributes.chieu_sau : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Chiều rộng</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.mat_tien ? dataResult.attributes.mat_tien : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Độ rộng đường nhỏ nhất</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.rong_hem_nho_1 ? dataResult.attributes.rong_hem_nho_1 : '-'}}</span>
-							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Độ rộng đường trước nhà</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.hem_truoc_nha_1 ? dataResult.attributes.hem_truoc_nha_1 : '-'}}</span>
-							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Khoảng cách tới đường chính</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.khoang_cach_1 ? dataResult.attributes.khoang_cach_1 : '-'}}</span>
-							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
-								<span>Hướng</span>
-							</div>
-							<div class="col-7">
-								<span>{{ dataResult.attributes.huong ? dataResult.attributes.huong : '-'}}</span>
-							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Hình dáng</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.nhan_dien ? dataResult.attributes.nhan_dien : '-'}}</span>
 							</div>
+							<div class="col-6">
+								<span>Hướng</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.huong ? dataResult.attributes.huong : '-'}}</span>
+							</div>
+							<div class="col-6">
+								<span>Số mặt tiếp giáp</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.tong_mat_tien ? dataResult.attributes.tong_mat_tien : '-'}}</span>
+							</div>
+							<div class="col-12" style="margin-top:  15px;">
+								<h3 style="color: rgb(9, 44, 76);">Thông tin khác</h3>
+							</div>
 							<div
 								class="col-12"
 								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
 							></div>
-							<div class="col-5">
+							<div class="col-6">
+								<span>Phân cấp</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.tiep_giap_1 ? dataResult.attributes.tiep_giap_1 : '-'}}</span>
+							</div>
+							<div class="col-6">
+								<span>Độ rộng đường nhỏ nhất</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.rong_hem_nho_1 ? dataResult.attributes.rong_hem_nho_1 : '-'}}</span>
+							</div>
+							<div class="col-6">
+								<span>Độ rộng đường trước nhà</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.hem_truoc_nha_1 ? dataResult.attributes.hem_truoc_nha_1 : '-'}}</span>
+							</div>
+							<div class="col-6">
+								<span>Khoảng cách tới đường chính</span>
+							</div>
+							<div class="col-6">
+								<span>{{ dataResult.attributes.khoang_cach_1 ? dataResult.attributes.khoang_cach_1 : '-'}}</span>
+							</div>
+							<div class="col-6">
 								<span>Quyết định</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.quyet_dinh ? dataResult.attributes.quyet_dinh : '-'}}</span>
 							</div>
-							<div
-								class="col-12"
-								style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"
-							></div>
-							<div class="col-5">
+							<div class="col-6">
 								<span>Đồ án</span>
 							</div>
-							<div class="col-7">
+							<div class="col-6">
 								<span>{{ dataResult.attributes.do_an ? dataResult.attributes.do_an : '-'}}</span>
 							</div>
 							<!-- <div class="col-12" style="border-bottom: 1px solid rgba(110,117,130,0.2);margin-bottom: 5px;"></div> -->
@@ -821,6 +752,7 @@ export default {
 			}
 		},
 		async searchByToThua(){
+			this.modalGeoInfo = false
 			this.progress = 0
 			this.runProgress = true
 			this.isOpenLoading = true
@@ -915,6 +847,7 @@ export default {
       return token
     },
     async getInfoByCoord (coordinates) {
+		this.modalGeoInfo = false
 		this.progress = 0
 		this.runProgress  = true
 		this.isOpenLoading = true
@@ -994,6 +927,7 @@ export default {
 			this.modalGeoInfo = false;
 		},
 		async handleOpenEM() {
+			this.modalGeoInfo = false
 			console.log("mở");
 			await this.getEmCode()
 			this.isOpen = true;
