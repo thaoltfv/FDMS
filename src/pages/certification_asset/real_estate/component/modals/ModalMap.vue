@@ -1,8 +1,31 @@
 <template>
 	<div class="modal-delete d-flex justify-content-center align-items-center">
+		<div class="modal-detail d-flex justify-content-center align-items-center" v-if="isOpenLoading" style="z-index: 1032;" >
+			<vep
+				:progress="progress"
+				color="#7579ff"
+				empty-color="transparent"
+				:empty-color-fill="emptyColorFill"
+				:size="180"
+				:thickness="5"
+				:empty-thickness="3"
+				lineMode="out 5"
+				:legend="false"
+				animation="default 0 0"
+				fontSize="1.5rem"
+			>
+			<img slot="legend-caption" src="@/assets/images/search_for_real_estate.jpeg" style="border-radius: 100px;
+    height: 160px;
+    width: 160px
+px
+;"/>
+			</vep>
+		</div>
 		<div class="modal-detail d-flex justify-content-center align-items-center" v-if="isOpen" >
         <div class="card" style="padding:  10px;">
-          <div class="container-title" style="margin-bottom: 20px;">
+          <div class="container-title" style="margin-bottom: 20px;width: 105%;
+    margin-left: -10px;
+    margin-top: -9px;">
             <div class="d-lg-flex d-block shadow-bottom">
               <h2 class="title">TÌM KIẾM THEO SỐ TỜ, SỐ THỬA</h2>
             </div>
@@ -126,7 +149,7 @@
 								Thông tin chi tiết
 							</h2>
 						</div>
-						<div v-if="!dataResult" class="row">
+						<div v-if="dataResult.length ==  0" class="row">
 							<h3>Không tìm thấy thông tin</h3>
 						</div>
 						<div v-else class="row" style="margin: 0;">
@@ -386,12 +409,14 @@
 							<img src="@/assets/icons/ic_search.svg" alt="" />
 						</div>
 					</div>
-					<button class="btn btn-search" type="button" @click="handleOpenEM" style="background-color: #FFFFFF;">
-				<svg width="25" height="25" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<button class="btn btn-search" title="Tìm kiếm theo tờ, thửa" alt="Tìm kiếm theo tờ, thửa" type="button" @click="handleOpenEM" style="background-color: #FFFFFF;padding: 0;pointer-events: auto">
+				<!-- <svg width="25" height="25" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z"
                     fill="#007EC6"/>
-                </svg>
+                </svg> -->
+				<img src="https://firebasestorage.googleapis.com/v0/b/fast-value.appspot.com/o/assets%2Fland%20parcel.2.png?alt=media&token=3a1a0bd8-4c64-4dbe-9373-423e664f3669" style="height: -webkit-fill-available;
+    width: 75px;">
 			</button>
 					<input type="text" id="coordinate" :value="address" class="d-none" />
 					<button class="btn btn-search" type="button" @click="handleAction">
@@ -536,6 +561,7 @@ import InputSwitchToThua from '@/components/Form/InputSwitchToThua'
 import cityJson from '@/assets/json/phuluc_dmhc/city/city.json'
 import InputCategory from '@/components/Form/InputCategory'
 
+
 Vue.use(Icon);
 export default {
 	name: "ModalMapAsset",
@@ -556,15 +582,31 @@ export default {
 	},
 	data() {
 		return {
+			progress: 0,
+			emptyColorFill: {
+			radial: false,
+			colors: [
+				{
+				color: "#754fc1",
+				offset: "0",
+				opacity: "0.3",
+				},
+				{
+				color: "#366bfc",
+				offset: "100",
+				opacity: "0.3",
+				},
+			],
+			},
 			search_to_thua: false,
-			dataResult: null,
+			dataResult: [],
 			url_modal: "https://app.estatemanner.com/map",
 			isOpen: false,
 			url_quyhoach: "",
 			tileProviders: [
 				{
 					name: "Bản đồ ranh tờ, thửa",
-					visible: false,
+					visible: true,
 					url: "https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png",
 					attribution: "© Fastvalue",
 					type: "overlay"
@@ -617,6 +659,8 @@ export default {
 			emWardCode: '',
 			emSoToCode: '',
 			emSoThuaCode: '',
+			isOpenLoading: false,
+			runProgress: true
 		};
 	},
 	computed: {
@@ -690,6 +734,8 @@ export default {
 		changeProvince (code) {
 			this.listDistrict =  []
 			this.emDistrictCode = ''
+			this.listWard = []
+			this.emWardCode = ''
 			const districtJson = require('@/assets/json/phuluc_dmhc/district/'+code+'.json')
 			for(var i in districtJson)
 				this.listDistrict.push(districtJson [i])
@@ -729,7 +775,7 @@ export default {
 													console.log('vô phường xã')
 													let split1 = this.phuongxa.split(' ')
 													console.log('cắt', split1)
-													if (split1[1].length == 1) {
+													if (split1[1] == '1' || split1[1] == '2' || split1[1] == '3' || split1[1] == '4' || split1[1] == '5' || split1[1] == '6' || split1[1] == '7' || split1[1] == '8' || split1[1] == '9') {
 														this.phuongxa = split1[0]+' 0'+split1[1]
 													}
 													const wardJson = require('@/assets/json/phuluc_dmhc/ward/'+this.emDistrictCode+'.json')
@@ -763,7 +809,22 @@ export default {
 				}
 			}
 		},
+		inscreaseProgress(progress){
+			console.log('gọi tăng')
+			progress = progress + 1
+			this.progress = progress
+			if (this.progress < 100 && this.runProgress == true) {
+				let that = this
+				setTimeout( function() {
+					that.inscreaseProgress(progress)
+				}, 30)
+			}
+		},
 		async searchByToThua(){
+			this.progress = 0
+			this.runProgress = true
+			this.isOpenLoading = true
+			this.inscreaseProgress(this.progress)
 			await this.getEmCode()
 			if ((this.emSoToCode || this.emSoThuaCode) && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
 				console.log('đầy đủ thông tin')
@@ -782,19 +843,22 @@ export default {
 					let datafinal = response.data.data
 					//   let that = this
 					console.log('data final', datafinal)
-					if (datafinal) {
+					if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
 						this.dataResult = datafinal.data
-						this.geo_data = this.dataResult.geo_data
+						this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
 						this.modalGeoInfo = true
 						this.isOpen  = false
 						this.map.center = [
-							this.geo_data.geometry.coordinates[0][0][1],
-							this.geo_data.geometry.coordinates[0][0][0],
+							this.geo_data.geometry.coordinates[0][0][0][1] ? this.geo_data.geometry.coordinates[0][0][0][1] : this.geo_data.geometry.coordinates[0][0][1],
+							this.geo_data.geometry.coordinates[0][0][0][0] ? this.geo_data.geometry.coordinates[0][0][0][0] : this.geo_data.geometry.coordinates[0][0][0],
 						]
 						this.markerLatLng = [
-							this.geo_data.geometry.coordinates[0][0][1],
-							this.geo_data.geometry.coordinates[0][0][0],
+							this.geo_data.geometry.coordinates[0][0][0][1] ? this.geo_data.geometry.coordinates[0][0][0][1] : this.geo_data.geometry.coordinates[0][0][1],
+							this.geo_data.geometry.coordinates[0][0][0][0] ? this.geo_data.geometry.coordinates[0][0][0][0] : this.geo_data.geometry.coordinates[0][0][0],
 						]
+						this.isOpenLoading = false
+						this.progress = 0
+						this.runProgress = false
 						// console.log('quan huyen', this.geo_data.geometry.coordinates[0][0])
 					} else {
 						this.$toast.open({
@@ -803,10 +867,13 @@ export default {
 						position: 'top-right',
 						duration: 3000
 						})
-						this.dataResult = null
-						this.geo_data = null
+						this.dataResult = []
+						this.geo_data = []
 						this.modalGeoInfo = false
 						this.isOpen  = false
+						this.isOpenLoading = false
+						this.progress = 0
+						this.runProgress = false
 					}
 					})
 				}
@@ -848,6 +915,10 @@ export default {
       return token
     },
     async getInfoByCoord (coordinates) {
+		this.progress = 0
+		this.runProgress  = true
+		this.isOpenLoading = true
+		this.inscreaseProgress(this.progress)
       const APItoken = await this.getToken();
       console.log('api token', APItoken)
       if (APItoken){
@@ -888,13 +959,16 @@ export default {
           let datafinal = response.data.data
         //   let that = this
           console.log('data final', datafinal)
-          if (datafinal) {
+          if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
             this.dataResult = datafinal.data
-            this.geo_data = this.dataResult.geo_data
+            this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
             this.modalGeoInfo = true
 			this.phuongxa_code = this.dataResult.attributes.level_3
 			this.quanhuyen_code = this.dataResult.attributes.level_2
 			// console.log('quan huyen', this.quanhuyen)
+			this.isOpenLoading = false
+			this.progress = 0
+			this.runProgress = false
           } else {
             this.$toast.open({
               message: 'Không tìm thấy dữ liệu quy hoạch',
@@ -902,9 +976,12 @@ export default {
               position: 'top-right',
               duration: 3000
             })
-            this.dataResult = null
-            this.geo_data = null
+            this.dataResult = []
+            this.geo_data = []
             this.modalGeoInfo = false
+			this.isOpenLoading = false
+			this.progress = 0
+			this.runProgress = false
           }
         })
       }
