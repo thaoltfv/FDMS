@@ -128,11 +128,11 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         $response = Http::withHeaders($header)->post($apiUrl,$postinput);
         $statusCode = $response->status();            
         
-        if ($statusCode == 201) {
+        // if ($statusCode == 201) {
             $responseBody = json_decode($response->getBody(), true);
             $data = $responseBody;
             return $data;
-        }
+        // }
     }
 
     /**
