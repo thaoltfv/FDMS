@@ -1,15 +1,44 @@
 <template>
 	<div class="modal-delete d-flex justify-content-center align-items-center">
 		<div class="modal-detail d-flex justify-content-center align-items-center" v-if="isOpen" >
-        <div class="card">
-          <div class="container-title">
+        <div class="card" style="padding:  10px;">
+          <div class="container-title" style="margin-bottom: 20px;">
             <div class="d-lg-flex d-block shadow-bottom">
               <h2 class="title">TÌM KIẾM THEO SỐ TỜ, SỐ THỬA</h2>
             </div>
           </div>
           <div class="contain-detail">
             <div class="row">
-              <div class="col-12">
+				<div class="col-12">
+					<InputCategory
+						v-model="emCityCode"
+						vid="emCityCode"
+						label="Tỉnh/thành"
+						class="mb-3"
+						@change="changeProvince"
+						:options="optionsProvince"
+					/>
+				</div>
+				<div class="col-12">
+					<InputCategory
+						v-model="emDistrictCode"
+						vid="emDistrictCode"
+						label="Quận/huyện"
+						class="mb-3"
+						@change="changeDistrict"
+						:options="optionsDistrict"
+					/>
+				</div>
+				<div class="col-12">
+					<InputCategory
+						v-model="emWardCode"
+						vid="emWardCode"
+						label="Phường/xã"
+						class="mb-3"
+						:options="optionsWard"
+					/>
+				</div>
+              <div class="col-6">
 				<InputText
 					v-model="emSoToCode"
 					vid="emSoToCode"
@@ -17,7 +46,7 @@
 					class="col-12 col-lg-12 form-group-container"
 				/>
               </div>
-			  <div class="col-12">
+			  <div class="col-6">
 				<InputText
 					v-model="emSoThuaCode"
 					vid="emSoThuaCode"
@@ -27,7 +56,7 @@
               </div>
             </div>
           </div>
-          <div class="d-md-flex d-block justify-content-end align-items-center" style="margin-top: 20px;">
+          <div class="d-md-flex d-block justify-content-center align-items-center" style="margin-top: 20px;">
           <div class="d-md-flex d-block">
             <button  @click="closeModal" class="btn btn-white text-nowrap" >
               <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Trở lại
@@ -505,6 +534,7 @@ import axios from '@/plugins/axios'
 import File from '@/models/File'
 import InputSwitchToThua from '@/components/Form/InputSwitchToThua'
 import cityJson from '@/assets/json/phuluc_dmhc/city/city.json'
+import InputCategory from '@/components/Form/InputCategory'
 
 Vue.use(Icon);
 export default {
@@ -521,7 +551,8 @@ export default {
 		InputText,
 		LControlLayers,
 		LGeoJson,
-		InputSwitchToThua
+		InputSwitchToThua,
+		InputCategory
 	},
 	data() {
 		return {
@@ -591,10 +622,46 @@ export default {
 	computed: {
 		disabledButton () {
 			console.log('vô vô')
-			if (this.emSoToCode || this.emSoThuaCode) {
+			if ((this.emSoToCode || this.emSoThuaCode) && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
 				return false
 			} else return true
-		}
+		},
+		optionsProvince () {
+			console.log('list tỉnh', {
+				data: this.listCity,
+				id: 'code',
+				key: 'name_with_type'
+			})
+			return {
+				data: this.listCity,
+				id: 'code',
+				key: 'name_with_type'
+			}
+		},
+		optionsDistrict () {
+			console.log('list huyện', {
+				data: this.listDistrict,
+				id: 'code',
+				key: 'name_with_type'
+			})
+			return {
+				data: this.listDistrict,
+				id: 'code',
+				key: 'name_with_type'
+			}
+		},
+		optionsWard () {
+			console.log('list xã', {
+				data: this.listWard,
+				id: 'code',
+				key: 'name_with_type'
+			})
+			return {
+				data: this.listWard,
+				id: 'code',
+				key: 'name_with_type'
+			}
+		},
 	},
 	async mounted() {
 		this.search_address = this.address;
@@ -620,7 +687,20 @@ export default {
 		console.log('city array', this.listCity)
 	},
 	methods: {
-		async searchByToThua(){
+		changeProvince (code) {
+			const districtJson = require('@/assets/json/phuluc_dmhc/district/'+code+'.json')
+			for(var i in districtJson)
+				this.listDistrict.push(districtJson [i])
+			console.log('list huyện', this.listDistrict)
+			console.log('tỉnh chọn', this.emCityCode)
+		},
+		changeDistrict (code) {
+			const wardJson = require('@/assets/json/phuluc_dmhc/ward/'+code+'.json')
+			for(var i in wardJson)
+				this.listWard.push(wardJson [i])
+			console.log('list xã', this.listWard)
+		},
+		getEmCode() {
 			if (this.tinhthanh){
 				if (this.listCity.length > 0) {
 					for (let i = 0; i < this.listCity.length; i++) {
@@ -678,6 +758,9 @@ export default {
 
 				}
 			}
+		},
+		async searchByToThua(){
+			await this.getEmCode()
 			if ((this.emSoToCode || this.emSoThuaCode) && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
 				console.log('đầy đủ thông tin')
 				const APItoken = await this.getToken();
@@ -829,8 +912,9 @@ export default {
 		closeModalGeoInfo() {
 			this.modalGeoInfo = false;
 		},
-		handleOpenEM() {
+		async handleOpenEM() {
 			console.log("mở");
+			await this.getEmCode()
 			this.isOpen = true;
 		},
 		closeModal() {
@@ -1065,7 +1149,7 @@ export default {
 <style lang="scss" scoped>
 .modal-delete {
 	position: fixed;
-	z-index: 10002;
+	z-index: 1030;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -1233,11 +1317,12 @@ export default {
   height: 100%;
   background: rgba(0,0,0,.6);
   .card {
+	height: auto;
     border-radius: 5px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     max-width: 500px;
     width: 100%;
-    max-height: 42vh;
+    max-height: 62vh;
     margin-bottom: 0;
     padding: 35px 95px;
     @media (max-width: 787px) {
