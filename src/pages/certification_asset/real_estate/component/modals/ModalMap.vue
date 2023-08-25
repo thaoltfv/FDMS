@@ -688,6 +688,8 @@ export default {
 	},
 	methods: {
 		changeProvince (code) {
+			this.listDistrict =  []
+			this.emDistrictCode = ''
 			const districtJson = require('@/assets/json/phuluc_dmhc/district/'+code+'.json')
 			for(var i in districtJson)
 				this.listDistrict.push(districtJson [i])
@@ -695,6 +697,8 @@ export default {
 			console.log('tỉnh chọn', this.emCityCode)
 		},
 		changeDistrict (code) {
+			this.listWard = []
+			this.emWardCode = ''
 			const wardJson = require('@/assets/json/phuluc_dmhc/ward/'+code+'.json')
 			for(var i in wardJson)
 				this.listWard.push(wardJson [i])
