@@ -642,6 +642,12 @@ export default {
 												console.log('dính chưởng quận huyện', q)
 												this.emDistrictCode = q.code
 												if (this.phuongxa) {
+													console.log('vô phường xã')
+													let split1 = this.phuongxa.split(' ')
+													console.log('cắt', split1)
+													if (split1[1].length == 1) {
+														this.phuongxa = split1[0]+' 0'+split1[1]
+													}
 													const wardJson = require('@/assets/json/phuluc_dmhc/ward/'+this.emDistrictCode+'.json')
 													if (wardJson) {
 														for(var i in wardJson)
@@ -650,6 +656,7 @@ export default {
 														if (this.listWard.length > 0) {
 															for (let i = 0; i < this.listWard.length; i++) {
 																let x = this.listWard[i]
+																console.log('x',this.phuongxa)
 																if (x.name_with_type.toLowerCase()  == this.phuongxa.toLowerCase() || x.name.toLowerCase() == this.phuongxa.toLowerCase()) {
 																	console.log('dính chưởng phường xã', x)
 																	this.emWardCode = x.code
@@ -671,7 +678,7 @@ export default {
 
 				}
 			}
-			if (this.emSoToCode || this.emSoThuaCode && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
+			if ((this.emSoToCode || this.emSoThuaCode) && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
 				console.log('đầy đủ thông tin')
 				const APItoken = await this.getToken();
 				if (APItoken){
@@ -894,9 +901,9 @@ export default {
 								quanhuyen = results[0].address_components[2].long_name
 								tinhthanh = results[0].address_components[3].long_name
 							} else if (results[0].address_components.length == 4) {
-							phuongxa = results[0].address_components[0].long_name
-							quanhuyen = results[0].address_components[1].long_name
-							tinhthanh = results[0].address_components[2].long_name
+								phuongxa = results[0].address_components[0].long_name
+								quanhuyen = results[0].address_components[1].long_name
+								tinhthanh = results[0].address_components[2].long_name
 							} else if (results[0].address_components.length == 3) {
 								quanhuyen = results[0].address_components[0].long_name
 								tinhthanh = results[0].address_components[1].long_name
@@ -923,6 +930,9 @@ export default {
 						
 						 
 						console.log('ketqua dia chi',results[0].address_components)
+						console.log('ketqua phuong xa',phuongxa)
+						console.log('ketqua quan huyen',quanhuyen)
+						console.log('ketqua tinh thanh',tinhthanh)
 					} else {
 						// alert('Geocode was not successful for the following reason: ' + status)
 					}
