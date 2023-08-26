@@ -11,6 +11,7 @@
 						:data="form.step_1"
 						:typeAppraiseProperty="typeAppraiseProperty"
 						:appraisersManager="appraisersManager"
+						:appraisersControl="appraisersControl"
 						:appraisalPurposes="appraisalPurposes"
 						:appraisers="appraisers"
 						:signAppraisers="signAppraisers"
@@ -83,6 +84,7 @@ export default {
 					petitioner_address: '',
 					appraiser_confirm_id: '',
 					appraiser_manager_id: '',
+					appraiser_control_id: '',
 					appraise_purpose_id: '',
 					appraiser_id: '',
 					document_num: '',
@@ -113,6 +115,7 @@ export default {
 			employeePerformance: [],
 			customers: [],
 			appraisersManager: [],
+			appraisersControl: [],
 			appraisers: [],
 			signAppraisers: [],
 			appraisalPurposes: [],
@@ -184,6 +187,7 @@ export default {
 			let managerId = await appraiserCompany.data.data[0].appraiser.id
 			this.employeePerformance = dataAppraise
 			this.employeeBusiness = dataAppraise
+			this.appraisersControl = dataAppraise
 			this.appraisersManager = dataAppraise.filter(item => item.is_legal_representative === 1)
 			this.form.step_1.appraiser_manager_id = await this.appraisersManager[0].id
 			let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')

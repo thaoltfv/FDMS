@@ -31,6 +31,7 @@ Dark mode
     --gray-dark: #545d6d;
     --dark: #354052;
     --primary: #206bc4;
+    --control: #e8bc6b;
     --secondary: #6e7582;
     --success: #26BF7F;
     --info: #45aaf2;
@@ -6428,6 +6429,10 @@ button.close {
     color: #206bc4;
 }
 
+.link-control {
+    color: #e8bc6b;
+}
+
 .link-primary:hover,
 .link-primary:focus {
     color: #154782;
@@ -6804,6 +6809,10 @@ button.close {
 
 .border-primary {
     border-color: #206bc4 !important;
+}
+
+.border-control {
+    border-color: #e8bc6b !important;
 }
 
 .border-secondary {
@@ -7767,6 +7776,10 @@ button.close {
     color: #0062AF !important;
 }
 
+.text-control {
+    color: #e8bc6b !important;
+}
+
 .text-secondary {
     color: #6e7582 !important;
 }
@@ -7837,6 +7850,10 @@ button.close {
 
 .bg-primary {
     background-color: #0062AF !important;
+}
+
+.bg-control {
+    background-color: #e8bc6b !important;
 }
 
 .bg-secondary {
@@ -7912,6 +7929,14 @@ button.close {
 }
 
 .bg-warning-25 {
+    background-color: #fab00533
+}
+
+.bg-control-15 {
+    background-color: #fab00526
+}
+
+.bg-control-25 {
     background-color: #fab00533
 }
 

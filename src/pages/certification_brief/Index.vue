@@ -472,6 +472,7 @@ export default {
 				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
 				appraiser_id: this.elementDragger.appraiser_id,
 				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
+				appraiser_control_id: this.elementDragger.appraiser_control_id,
 				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
 				status: 4
 			}
@@ -505,6 +506,7 @@ export default {
 				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
 				appraiser_id: this.elementDragger.appraiser_id,
 				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
+				appraiser_control_id: this.elementDragger.appraiser_control_id,
 				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
 				status: this.next_status,
 				sub_status: this.next_sub_status,

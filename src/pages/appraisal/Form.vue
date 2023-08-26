@@ -104,6 +104,7 @@ export default {
 				appraiser_id: '',
 				appraiser_confirm_id: '',
 				appraiser_manager_id: '',
+				appraiser_control_id: '',
 				document_description: '- Giả thiết:\n- Giả thiết đặc biệt:',
 				legal_documents_on_valuation: [],
 				legal_documents_on_land: [],

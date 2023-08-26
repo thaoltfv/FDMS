@@ -39,6 +39,17 @@
               />
           </div>
           <div class="col-12">
+              <InputCategory
+              v-model="data.appraiser_control_id"
+              vid="appraiser"
+              label="Kiểm soát viên"
+              rules="required"
+              class="form-group-container"
+              @change="handleChangeAppraiserControl"
+              :options="optionsAppraiserControl"
+              />
+          </div>
+          <div class="col-12">
               <div class="form-group-container">
               <label class="color-black font-weight-bold">Tổng giám đốc</label>
               <div class="form-control border_disable disabled"><p class="mb-0">{{appraisersManager.length > 0 ? appraisersManager[0].name : ''}}</p></div>

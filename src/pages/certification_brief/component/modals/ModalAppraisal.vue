@@ -47,6 +47,16 @@
                 :options="optionsAppraiser"
               />
           </div>
+		  <div class="col-12">
+              <InputCategory
+              v-model="form.appraiser_control_id"
+              vid="appraiser_control_id"
+              label="Kiểm soát viên"
+              class="form-group-container"
+              @change="handleChangeAppraiserControl"
+              :options="optionsAppraiserControl"
+              />
+          </div>
           <div class="col-12">
 			<div style="text-align: left !important;" class="form-group-container">
 				<!-- <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
@@ -117,6 +127,7 @@ export default {
 			appraisers: [],
 			signAppraisers: [],
 			appraisersManager: [],
+			appraisersControl: [],
 			users: [],
 			positions: [],
 			employeePerformance: [],
@@ -169,6 +180,7 @@ export default {
 			let idManager = await appraiserCompany.data.data[0].appraiser.id
 			this.employeePerformance = await dataAppraise
 			this.employeeBusiness = await dataAppraise
+			this.appraisersControl = await dataAppraise
 			this.appraisersManager = await dataAppraise.filter(item => item.is_legal_representative === 1)
 			console.log('dsadấdsad', this.appraisersManager)
 			this.form.appraiser_manager_id = await this.appraisersManager[0].id
@@ -226,6 +238,7 @@ export default {
 			// 	this.signAppraisers = this.appraisers
 			// }
 		},
+		handleChangeAppraiserControl () {},
 		handleChangeAppraiserPerform () {
 
 		},
@@ -243,6 +256,7 @@ export default {
 				appraiser_id: this.form.appraiser_id,
 				appraiser_confirm_id: this.form.appraiser_confirm_id,
 				appraiser_manager_id: this.form.appraiser_manager_id,
+				appraiser_control_id: this.form.appraiser_control_id,
 				status_expired_at: this.form.status_expired_at
 			}
 			if (this.ModalEdit) {
@@ -301,6 +315,13 @@ export default {
 		optionsAppraiserManager () {
 			return {
 				data: this.appraisersManager,
+				id: 'id',
+				key: 'name'
+			}
+		},
+		optionsAppraiserControl () {
+			return {
+				data: this.appraisersControl,
 				id: 'id',
 				key: 'name'
 			}

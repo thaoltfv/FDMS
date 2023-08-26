@@ -73,6 +73,9 @@
 									<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
 								</div>
 								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>
+								</div>
+								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
 								</div>
 								<div class="d-flex container_content">
@@ -151,6 +154,7 @@ export default {
 				appraise_purpose: '',
 				appraiser_confirm: '',
 				appraiser_manager: '',
+				appraiser_control: '',
 				appraiser_perform: '',
 				customer: '',
 				petitioner_address: '',
@@ -280,6 +284,7 @@ export default {
 				appraiser_confirm_id: this.form.appraiser_confirm_id,
 				appraiser_id: this.form.appraiser_id,
 				appraiser_manager_id: this.form.appraiser_manager_id,
+				appraiser_control_id: this.form.appraiser_control_id,
 				appraiser_perform_id: this.form.appraiser_perform_id,
 				status: this.targetConfig.status,
 				sub_status: this.targetConfig.sub_status,

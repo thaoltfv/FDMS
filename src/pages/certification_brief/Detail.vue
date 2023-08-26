@@ -87,6 +87,9 @@
 															<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
 														</div>
 														<div class="d-flex container_content">
+															<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>
+														</div>
+														<div class="d-flex container_content">
 															<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
 														</div>
 														<div class="d-flex container_content">
@@ -1231,6 +1234,8 @@ export default {
 			this.form.appraiser_confirm = dataAppraisal.appraiser_confirm
 			this.form.appraiser_manager_id = dataAppraisal.appraiser_manager_id
 			this.form.appraiser_manager = dataAppraisal.appraiser_manager
+			this.form.appraiser_control_id = dataAppraisal.appraiser_control_id
+			this.form.appraiser_control = dataAppraisal.appraiser_control
 			this.form.appraiser = dataAppraisal.appraiser
 			this.form.appraiser_id = dataAppraisal.appraiser_id
 			this.key_render_appraisal += 1
@@ -1252,7 +1257,7 @@ export default {
 			this.getTotalPrice()
 		},
 		async handleAction () {
-			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser } = this.form
+			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser, appraiser_control, appraiser_control_id } = this.form
 			let dataSend = {
 				appraiser_perform,
 				appraiser_id,
@@ -1261,6 +1266,8 @@ export default {
 				appraiser_confirm,
 				appraiser_manager_id,
 				appraiser_manager,
+				appraiser_control,
+				appraiser_control_id,
 				appraiser,
 				status: 1,
 				sub_status: 1,
@@ -1391,7 +1398,7 @@ export default {
 			return status_expired_at
 		},
 		async handleAction2 (note) {
-			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser } = this.form
+			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser, appraiser_control, appraiser_control_id } = this.form
 			let dataSend = {
 				appraiser_perform,
 				appraiser_id,
@@ -1400,6 +1407,8 @@ export default {
 				appraiser_confirm,
 				appraiser_manager_id,
 				appraiser_manager,
+				appraiser_control,
+				appraiser_control_id,
 				appraiser,
 				status: this.targetStatus,
 				sub_status: this.targetSubStatus,
@@ -1434,7 +1443,7 @@ export default {
 			this.isHandleAction = false
 		},
 		async handleActionDenined () {
-			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser } = this.form
+			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser, appraiser_control, appraiser_control_id } = this.form
 			let dataSend = {
 				appraiser_perform,
 				appraiser_id,
@@ -1443,6 +1452,8 @@ export default {
 				appraiser_confirm,
 				appraiser_manager_id,
 				appraiser_manager,
+				appraiser_control,
+				appraiser_control_id,
 				appraiser,
 				status: 0
 			}

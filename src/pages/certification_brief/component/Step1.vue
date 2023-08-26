@@ -259,6 +259,15 @@
               :options="optionsAppraiser"
 
             />
+            <InputCategory
+              v-model="data.appraiser_control_id"
+              vid="appraiser_control_id"
+              label="Kiểm soát viên"
+              class="form-group-container"
+              @change="handleChangeAppraiserControl"
+              :options="optionsAppraiserControl"
+
+            />
             <!-- <div class="form-group-container">
               <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
               <div class="form-control border_disable disabled">
@@ -334,6 +343,7 @@ export default {
 		'appraisers',
 		'signAppraisers',
 		'appraisersManager',
+    'appraisersControl',
 		'customers',
 		'idData',
 		'render_price_fee',
@@ -377,6 +387,13 @@ export default {
     optionsAppraiserManager () {
 			return {
 				data: this.appraisersManager,
+				id: 'id',
+				key: 'name'
+			}
+		},
+    optionsAppraiserControl () {
+			return {
+				data: this.appraisersControl,
 				id: 'id',
 				key: 'name'
 			}
@@ -522,6 +539,9 @@ export default {
 		},
     handleChangeAppraiserManager (event) {
 			this.$emit('handleChangeAppraiserManager', event)
+		},
+    handleChangeAppraiserControl (event) {
+			this.$emit('handleChangeAppraiserControl', event)
 		},
 		changeDocumentDate (event) {
 			this.data.document_date = event

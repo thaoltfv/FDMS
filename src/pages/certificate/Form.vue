@@ -267,6 +267,7 @@ export default {
 			distances: [],
 			juridicals: [],
 			appraisersManager: [],
+			appraisersControl: [],
 			appraisers: [],
 			appraisalPurposes: [],
 			appraisalFacility: [],
