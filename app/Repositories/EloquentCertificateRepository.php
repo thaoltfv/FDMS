@@ -2588,7 +2588,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'certificates.updated_at', 'status_updated_at',
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
-            'appraiser_sale_id',
+            'appraiser_sale_id', 'appraiser_control_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
@@ -2917,6 +2917,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'petitioner_address',
             'appraiser_confirm_id',
             'appraiser_manager_id',
+            'appraiser_control_id',
             'appraise_purpose_id',
             'document_num',
             'document_date',
@@ -2970,6 +2971,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_id',
             'appraiser_confirm_id',
             'appraiser_manager_id',
+            'appraiser_control_id',
             'appraise_purpose_id',
             'document_num',
             'document_date',
@@ -4583,6 +4585,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_manager_id' => $object['appraiser_manager_id'],
                 'appraiser_confirm_id' => $object['appraiser_confirm_id'],
                 'appraiser_perform_id' => $object['appraiser_perform_id'],
+                'appraiser_control_id' => $object['appraiser_control_id'],
             ]);
         }
     }
@@ -4596,6 +4599,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_perform_id',
                 'appraiser_id',
                 'appraiser_manager_id',
+                'appraiser_control_id',
                 'appraiser_confirm_id',
                 'status_expired_at',
                 'updated_at'
@@ -4788,6 +4792,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $appraiser['appraiser_manager_id'] =  request()->get('appraiser_manager_id');
                     $appraiser['appraiser_confirm_id'] =  request()->get('appraiser_confirm_id');
                     $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
+                    $appraiser['appraiser_control_id'] =  request()->get('appraiser_control_id');
                     if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
