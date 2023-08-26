@@ -2993,6 +2993,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $with = [
             'appraiser:id,name,user_id',
             'appraiserManager:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             'appraiserConfirm:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
