@@ -2396,6 +2396,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         then 'Hoàn thành'
                     when 5
                         then 'Huỷ'
+                    when 6
+                        then 'Đang kiểm soát'
                 end as status_text
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2602,6 +2604,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then 'Hoàn thành'
                         when 5
                             then 'Huỷ'
+                        when 6
+                            then 'Đang kiểm soát'
                     end as status_text
                 "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2619,6 +2623,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then u1.image
                         when 5
                             then users.image
+                        when 6
+                            then u4.image
                     end as image
                 "),
             'sub_status',
