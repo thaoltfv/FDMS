@@ -251,15 +251,6 @@
               :options="optionsPeformance"
             />
             <InputCategory
-              v-model="data.appraiser_id"
-              vid="appraiser_id"
-              label="Thẩm định viên"
-              class="form-group-container"
-              @change="handleChangeAppraiser"
-              :options="optionsAppraiser"
-
-            />
-            <InputCategory
               v-model="data.appraiser_control_id"
               vid="appraiser_control_id"
               label="Kiểm soát viên"
@@ -268,6 +259,16 @@
               :options="optionsAppraiserControl"
 
             />
+            <InputCategory
+              v-model="data.appraiser_id"
+              vid="appraiser_id"
+              label="Thẩm định viên"
+              class="form-group-container"
+              @change="handleChangeAppraiser"
+              :options="optionsAppraiser"
+
+            />
+            
             <!-- <div class="form-group-container">
               <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
               <div class="form-control border_disable disabled">

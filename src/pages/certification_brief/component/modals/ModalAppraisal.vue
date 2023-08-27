@@ -36,6 +36,16 @@
               :options="optionsPeformance"
               />
           </div>
+		  <div class="col-12">
+              <InputCategory
+              v-model="form.appraiser_control_id"
+              vid="appraiser_control_id"
+              label="Kiểm soát viên"
+              class="form-group-container"
+              @change="handleChangeAppraiserControl"
+              :options="optionsAppraiserControl"
+              />
+          </div>
           <div class="col-12">
               <InputCategory
                 v-model="form.appraiser_id"
@@ -47,16 +57,7 @@
                 :options="optionsAppraiser"
               />
           </div>
-		  <div class="col-12">
-              <InputCategory
-              v-model="form.appraiser_control_id"
-              vid="appraiser_control_id"
-              label="Kiểm soát viên"
-              class="form-group-container"
-              @change="handleChangeAppraiserControl"
-              :options="optionsAppraiserControl"
-              />
-          </div>
+		  
           <div class="col-12">
 			<div style="text-align: left !important;" class="form-group-container">
 				<!-- <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>

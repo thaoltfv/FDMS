@@ -29,17 +29,6 @@
           </div>
           <div class="col-12">
               <InputCategory
-              v-model="data.appraiser_id"
-              vid="appraiser"
-              label="Thẩm định viên"
-              rules="required"
-              class="form-group-container"
-              @change="handleChangeAppraiser"
-              :options="optionsAppraiser"
-              />
-          </div>
-          <div class="col-12">
-              <InputCategory
               v-model="data.appraiser_control_id"
               vid="appraiser"
               label="Kiểm soát viên"
@@ -49,6 +38,18 @@
               :options="optionsAppraiserControl"
               />
           </div>
+          <div class="col-12">
+              <InputCategory
+              v-model="data.appraiser_id"
+              vid="appraiser"
+              label="Thẩm định viên"
+              rules="required"
+              class="form-group-container"
+              @change="handleChangeAppraiser"
+              :options="optionsAppraiser"
+              />
+          </div>
+          
           <div class="col-12">
               <div class="form-group-container">
               <label class="color-black font-weight-bold">Tổng giám đốc</label>

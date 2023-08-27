@@ -9,6 +9,7 @@
 								{{idData ? `HSTD_${idData}` : 'HSTD'}} |
 								<span v-if="form.status === 1">Bản nháp</span>
 								<span v-if="form.status === 2">Đang thẩm định</span>
+								<span v-if="form.status === 6">Đang kiểm soát</span>
 								<span v-if="form.status === 3">Đang duyệt</span>
 								<span v-if="form.status === 4">Đã duyệt</span>
 								<span v-if="form.status === 5">Đã hủy</span>
@@ -84,11 +85,12 @@
 															</div>
 														</div>
 														<div class="d-flex container_content">
-															<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
-														</div>
-														<div class="d-flex container_content">
 															<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>
 														</div>
+														<div class="d-flex container_content">
+															<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
+														</div>
+														
 														<div class="d-flex container_content">
 															<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
 														</div>

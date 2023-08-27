@@ -70,11 +70,12 @@
 									</div>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
-								</div>
-								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>
 								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
+								</div>
+								
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
 								</div>
