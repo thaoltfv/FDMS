@@ -119,8 +119,8 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
     {
         $apiUrl = "https://app.estatemanner.com/api/v1/auth/credentials";
         $postinput =  [
-            "client_id" => 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
-            "client_secret" => 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
+            "client_id" => 'meI2rBIVba1F9SKTxKXhuYX9bBZqWWcU',
+            "client_secret" => 'd197ac7cc0e3cbb8eb13ac7a7e241bc5120f4341d7a18139d00cf1020d6d8bf1'
         ];
         $header = [
             'Content-type' => 'application/json'
