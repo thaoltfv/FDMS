@@ -2633,6 +2633,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserSale:id,name,user_id',
             // 'appraiserSale.appraiserUser:id,appraisers_number,image',
             'appraiserPerform:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             // 'appraiserPerform.appraiserUser:appraisers_number,image',
             // 'createdBy:id,image',
             // 'assetPrice' => function($query){
@@ -2693,6 +2694,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->select('u3.image')
                     ->limit(1);
             })
+            ->leftjoin('appraisers as control', function ($join) {
+                $join->on('control.id', '=', 'certificates.appraiser_control_id')
+                    ->join('users as u4', function ($j) {
+                        $j->on('control.user_id', '=', 'u4.id');
+                    })
+                    ->select('u4.image')
+                    ->limit(1);
+            })
             ->select($select);
 
         //// command tạm - sẽ xử lý phân quyền sau
@@ -2716,6 +2725,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
