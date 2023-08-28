@@ -3074,12 +3074,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         //     ->first();
         //     $result['image'] = $user->image;
         // }
-        // if ($result['status'] == 6) {
-        //     $user = User::query()
-        //     ->where('id', '=', $result['appraiser_control_id'])
-        //     ->first();
-        //     $result['image'] = $user->image;
-        // }
+        if ($result['status'] == 6) {
+            $user = User::query()
+            ->where('id', '=', $result['appraiser_control_id'])
+            ->first();
+            $result['image'] = $user->image;
+        }
 
         return $result;
     }
