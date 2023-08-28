@@ -18,6 +18,14 @@
         <h5 style="font-size: 18px" v-html="notification" class="padding-bottom : 5px">
         </h5>
         <div>
+          <InputCategory
+            v-if="notification == 'Bạn có muốn hủy hồ sơ này?' || notification == `Bạn có muốn 'Từ chối' hồ sơ này?`"
+						v-model="reason_id"
+						vid="reason_id"
+						label="Lí do"
+						class="mb-3"
+						:options="optionsReasons"
+					/>
               <InputTextarea :rows="rows" :autosize="false" :maxLength="1000" v-model="note" label="Ghi chú" class="form-group-container mb-3" />
           </div>
         <div class="btn__group">
@@ -27,7 +35,7 @@
             v-text="$t('popup_btn_no')"/>
           <button
             class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
-            @click.prevent="handleAction(note)"
+            @click.prevent="handleAction(note, reason_id)"
             v-text="$t('popup_btn_yes')"/>
         </div>
       </div>
@@ -37,25 +45,56 @@
 
 <script>
 import InputTextarea from '@/components/Form/InputTextarea'
+import InputCategory from '@/components/Form/InputCategory'
+import WareHouse from '@/models/WareHouse'
+import store from '@/store'
+import * as types from '@/store/mutation-types'
 export default {
-	components: { InputTextarea },
+	components: { InputTextarea, InputCategory },
 	name: 'ModalNotificationCertificateNote',
 	data () {
 		return {
 			note: '',
-			rows: 3
+			rows: 3,
+      reason_id: null,
+      reasons: []
 		}
 	},
 	props: ['notification'],
+  computed: {
+    optionsReasons () {
+			return {
+				data: this.reasons,
+				id: 'id',
+				key: 'description'
+			}
+		},
+  },
+  mounted () {
+    this.getDictionary()
+  },
 	methods: {
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},
 
-		handleAction (event, note) {
-			this.$emit('action', event, note)
+		handleAction (event, note, reason_id) {
+			this.$emit('action', event, note, reason_id)
 			this.$emit('cancel', event)
-		}
+		},
+    async getDictionary () {
+      
+			// let resp = this.$store.getters.dictionaries
+      // console.log('vô đây', resp)
+			// if (resp && resp.length === 0) {
+        // console.log('vô đây nè', resp)
+				const resp = await WareHouse.getDictionaries()
+				// store.commit(types.SET_DICTIONARIES, {...resp})
+			// }
+			this.reasons = resp.data.li_do
+      console.log('vô đây cuối', this.reasons )
+		},
+
 	}
 }
 </script>
@@ -63,7 +102,7 @@ export default {
 <style lang="scss" scoped>
 .modal-delete {
   position: fixed;
-  z-index: 10002;
+  z-index: 1002;
   left: 0;
   top: 0;
   width: 100%;

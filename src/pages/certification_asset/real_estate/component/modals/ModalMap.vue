@@ -124,7 +124,7 @@ px
 					v-if="modalGeoInfo"
 					class="card"
 					style="top: 70px;position: absolute; overflow: scroll;
-    z-index: 999999;transform: none; transition: transform 525ms cubic-bezier(0, 0, 0.2, 1) 5ms;width: 45%;
+    z-index: 999999;transform: none; transition: transform 525ms cubic-bezier(0, 0, 0.2, 1) 5ms;width: 37%;
     height: -webkit-fill-available;"
 				>
 					<button

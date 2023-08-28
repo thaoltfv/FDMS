@@ -501,7 +501,7 @@ export default {
 			}
 			this.showAcceptCertificate = await false
 		},
-		async handleChangeAccept2 (note) {
+		async handleChangeAccept2 (note, reason_id) {
 			let dataSend = {
 				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
 				appraiser_id: this.elementDragger.appraiser_id,
@@ -516,9 +516,11 @@ export default {
 				required: this.changeStatusRequire,
 				status_expired_at: this.getExpireStatusDate(),
 				status_note: note,
+				status_reason_id: reason_id,
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			}
+			console.log('data send', dataSend)
 			const res = await CertificationBrief.updateStatusCertificate(this.idDragger, dataSend)
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(i => i.id === this.idDragger)

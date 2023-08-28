@@ -122,6 +122,7 @@
 					</template>
 					<p><strong >{{ item.causer && item.causer.name ? item.causer.name : 'Không xác	định' }}</strong></p>
 					<p> {{ item.description }} </p>
+					<p :class="`${getHistoryTextColor[index]}`" v-if="item.properties.reason_id && item.reason_description"> Lí do : {{ item.reason_description }} </p>
 					<p :class="`${getHistoryTextColor[index]}`" v-if="item.properties.note"> Ghi chú : {{item.properties.note}} </p>
 					<p> {{formatDateTime(item.updated_at)}} </p>
 				</a-timeline-item>
@@ -557,7 +558,7 @@
 			@updateAppraises="updateAppraises"
 			@cancel="showAppraiseListDialog = false"
 		/>
-		<ModalNotificationCertificate
+		<ModalNotificationCertificateNote
 			v-if="openNotification"
 			@cancel="handleCancel"
 			v-bind:notification="message"
@@ -1013,6 +1014,7 @@ export default {
 			let color = ''
 			if (item.log_name == 'update_status') {
 				if (item.description.includes('từ chối')) color = 'text-danger'
+				if (item.description.includes('Hủy')) color = 'text-danger'
 				else color = 'text-success'
 			}
 			return color
@@ -1114,7 +1116,21 @@ export default {
 		async getHistoryTimeLine () {
 			const res = await CertificationBrief.getHistoryTimeline(this.idData)
 			if (res.data) {
-				this.historyList = res.data
+				const resp = await WareHouse.getDictionaries()
+				if (resp)
+				{
+					this.historyList = res.data
+					for (let i = 0; i < this.historyList.length; i++) {
+						let e = this.historyList[i]
+						if (e.properties.reason_id) {
+							let result = resp.data.li_do.filter(item => item.id === e.properties.reason_id)
+							console.log('répóne',result)
+							e.reason_description = result[0].description
+						}
+					}
+				}				
+				
+				console.log('timeline', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,
@@ -1258,7 +1274,7 @@ export default {
 			this.form.general_asset = data.general_asset
 			this.getTotalPrice()
 		},
-		async handleAction () {
+		async handleAction (note, reason_id) {
 			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser, appraiser_control, appraiser_control_id } = this.form
 			let dataSend = {
 				appraiser_perform,
@@ -1273,7 +1289,9 @@ export default {
 				appraiser,
 				status: 1,
 				sub_status: 1,
-				status_config: this.jsonConfig.principle
+				status_config: this.jsonConfig.principle,
+				status_note: note,
+				status_reason_id: reason_id,
 			}
 			if (this.form.status === 2 && !this.cancel_certificate) {
 				// change status 2 --> 3
@@ -1399,7 +1417,7 @@ export default {
 			let status_expired_at = moment(dateConverted).format('DD-MM-YYYY HH:mm')
 			return status_expired_at
 		},
-		async handleAction2 (note) {
+		async handleAction2 (note, reason_id) {
 			const { appraiser_id, appraiser_perform_id, appraiser_confirm_id, appraiser_manager_id, appraiser_perform, appraiser_confirm, appraiser_manager, appraiser, appraiser_control, appraiser_control_id } = this.form
 			let dataSend = {
 				appraiser_perform,
@@ -1420,6 +1438,7 @@ export default {
 				required: this.changeStatusRequire,
 				status_expired_at: this.getExpireStatusDate(),
 				status_note: note,
+				status_reason_id: reason_id,
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			}
