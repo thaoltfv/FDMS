@@ -3016,21 +3016,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             'created_by',
             'document_type',
-            DB::raw("case status
-                        when 1
-                            then u2.image
-                        when 2
-                            then u3.image
-                        when 3
-                            then u1.image
-                        when 4
-                            then u1.image
-                        when 5
-                            then users.image
-                        when 6
-                            then u4.image
-                    end as image
-                "),
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3059,6 +3044,28 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.apartment.assetPrice',
         ];
         $result = $this->model->query()
+            ->with($with)
+            ->leftjoin('users', function ($join) {
+                $join->on('certificates.created_by', '=', 'users.id')
+                    ->select(['id', 'image'])
+                    ->limit(1);
+            })
+            ->leftjoin('certificate_prices', function ($join) {
+                $join->on('certificates.id', '=', 'certificate_prices.certificate_id')
+                    ->where('slug', '=', 'total_asset_price')
+                    ->select(['id', 'certificate_id', 'slug', 'value'])
+                    ->limit(1);
+            })
+            ->leftjoin(
+                DB::raw('(select certificate_id , count(certificate_id) as document_count
+                                    from certificate_other_documents
+                                    where deleted_at is null
+                                    group by certificate_id) as "tbCount"'),
+                function ($join) {
+                    $join->on('certificates.id', '=', 'tbCount.certificate_id')
+                        ->select(['certificate_id', 'document_count']);
+                }
+            )
             ->leftjoin('appraisers', function ($join) {
                 $join->on('appraisers.id', '=', 'certificates.appraiser_id')
                     ->join('users as u1', function ($j) {
@@ -3091,12 +3098,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->select('u4.image')
                     ->limit(1);
             })
-            ->with($with)
             ->where('id', $id)
             ->select($select)
             ->first();
         $result->append(['status_text', 'general_asset']);
         $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
+        if ($result['status'] == )
 
         return $result;
     }
