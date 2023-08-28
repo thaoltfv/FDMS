@@ -3206,7 +3206,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                     $this->notifyChangeStatus($id, $status);
                 }
-                $result = $this->getAppraisalTeam($id);
+                // $result = $this->getAppraisalTeam($id);
+                $result = $this->getCertificate($id);
 
                 return $result;
             } catch (Exception $exception) {
