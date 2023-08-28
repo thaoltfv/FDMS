@@ -138,7 +138,7 @@ class CertificateBriefController extends Controller
             return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
 
         $rules = [
-            'status' => 'integer|required|between:1,10',
+            'status' => 'integer|required|between:1,6',
         ];
         $customAttributes = [
             'status' => 'Trạng thái phiếu',
