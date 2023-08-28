@@ -161,6 +161,7 @@ use App\Services\AppraiseVersionService;
 use App\Services\CommonService;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use App\Models\User;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -2990,47 +2991,32 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (!empty($check))
             return $check;
         $select = [
-            'certificates.id',
-            'certificates.petitioner_name',
-            'certificates.petitioner_phone',
-            'certificates.petitioner_identity_card',
-            'certificates.petitioner_address',
-            'certificates.appraiser_id',
-            'certificates.appraiser_confirm_id',
-            'certificates.appraiser_manager_id',
-            'certificates.appraiser_control_id',
-            'certificates.appraise_purpose_id',
-            'certificates.document_num',
-            'certificates.document_date',
-            'certificates.appraise_date',
-            'certificates.service_fee',
-            'certificates.appraiser_sale_id',
-            'certificates.appraiser_perform_id',
-            'certificates.certificate_date',
-            'certificates.certificate_num',
-            'certificates.customer_id',
-            'certificates.status',
-            'certificates.sub_status',
-            'certificates.commission_fee',
-            'certificates.note',
-            'certificates.status_expired_at',
-            'certificates.created_by',
-            'certificates.document_type',
-            DB::raw("case status
-                        when 1
-                            then u2.image
-                        when 2
-                            then u3.image
-                        when 3
-                            then u1.image
-                        when 4
-                            then u1.image
-                        when 5
-                            then users.image
-                        when 6
-                            then u4.image
-                    end as image
-                "),
+            'id',
+            'petitioner_name',
+            'petitioner_phone',
+            'petitioner_identity_card',
+            'petitioner_address',
+            'appraiser_id',
+            'appraiser_confirm_id',
+            'appraiser_manager_id',
+            'appraiser_control_id',
+            'appraise_purpose_id',
+            'document_num',
+            'document_date',
+            'appraise_date',
+            'service_fee',
+            'appraiser_sale_id',
+            'appraiser_perform_id',
+            'certificate_date',
+            'certificate_num',
+            'customer_id',
+            'status',
+            'sub_status',
+            'commission_fee',
+            'note',
+            'status_expired_at',
+            'created_by',
+            'document_type',
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3060,49 +3046,41 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         ];
         $result = $this->model->query()
             ->with($with)
-            ->leftjoin('users', function ($join) {
-                $join->on('certificates.created_by', '=', 'users.id')
-                    ->select(['id', 'image'])
-                    ->limit(1);
-            })
-            ->leftjoin('appraisers', function ($join) {
-                $join->on('appraisers.id', '=', 'certificates.appraiser_id')
-                    ->join('users as u1', function ($j) {
-                        $j->on('appraisers.user_id', '=', 'u1.id');
-                    })
-                    ->select('u1.image')
-                    ->limit(1);
-            })
-            ->leftjoin('appraisers as sale', function ($join) {
-                $join->on('sale.id', '=', 'certificates.appraiser_sale_id')
-                    ->join('users as u2', function ($j) {
-                        $j->on('sale.user_id', '=', 'u2.id');
-                    })
-                    ->select('u2.image')
-                    ->limit(1);
-            })
-            ->leftjoin('appraisers as perform', function ($join) {
-                $join->on('perform.id', '=', 'certificates.appraiser_perform_id')
-                    ->join('users as u3', function ($j) {
-                        $j->on('perform.user_id', '=', 'u3.id');
-                    })
-                    ->select('u3.image')
-                    ->limit(1);
-            })
-            ->leftjoin('appraisers as control', function ($join) {
-                $join->on('control.id', '=', 'certificates.appraiser_control_id')
-                    ->join('users as u4', function ($j) {
-                        $j->on('control.user_id', '=', 'u4.id');
-                    })
-                    ->select('u4.image')
-                    ->limit(1);
-            })
             ->where('id', $id)
             ->select($select)
             ->first();
         $result->append(['status_text', 'general_asset']);
         $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
-        // if ($result['status'] == )
+        if ($result['status'] == 5) {
+            $user = User::query()
+            ->where('id', '=', $result['created_by'])
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 1) {
+            $user = User::query()
+            ->where('id', '=', $result['appraiser_sale_id'])
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 2) {
+            $user = User::query()
+            ->where('id', '=', $result['appraiser_perform_id'])
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 3 || $result['status'] == 4) {
+            $user = User::query()
+            ->where('id', '=', $result['appraiser_id'])
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 6) {
+            $user = User::query()
+            ->where('id', '=', $result['appraiser_control_id'])
+            ->first();
+            $result['image'] = $user->image;
+        }
 
         return $result;
     }
