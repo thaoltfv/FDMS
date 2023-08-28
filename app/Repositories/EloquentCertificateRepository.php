@@ -5032,6 +5032,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser:id,user_id,name',
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
+                'appraiserControl:id,user_id,name',
                 'createdBy:id,name',
             ];
             $select = [
@@ -5040,6 +5041,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_id',
                 'appraiser_sale_id',
                 'appraiser_perform_id',
+                'appraiser_control_id',
             ];
             $certificate = Certificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
@@ -5056,6 +5058,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if ($certificate->appraiser->user_id != $loginUser->id && $certificate->appraiser->user_id != $certificate->appraiserPerform->user_id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiser->user_id);
                 }
+            if (isset($certificate->appraiserControl->user_id))
+                if ($certificate->appraiserControl->user_id != $loginUser->id) {
+                    $users[] =  $eloquenUser->getUser($certificate->appraiserControl->user_id);
+                }
             switch ($status) {
                 case 2:
                     $statusText = 'Đang thẩm định';
@@ -5068,6 +5074,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     break;
                 case 5:
                     $statusText = 'Đã hủy';
+                    break;
+                case 6:
+                    $statusText = 'Đang kiểm soát';
                     break;
                 default:
                     $statusText = 'Mới';
