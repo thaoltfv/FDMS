@@ -4683,6 +4683,48 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserControl:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
+            if ($result['status'] == 5) {
+                $user = User::query()
+                ->where('id', '=', $result['created_by'])
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 1) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_sale_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 2) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_perform_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 3 || $result['status'] == 4) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 6) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_control_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
         }
         return $result;
     }
