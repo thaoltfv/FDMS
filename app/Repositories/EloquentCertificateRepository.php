@@ -3050,36 +3050,36 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->first();
         $result->append(['status_text', 'general_asset']);
         $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
-        if ($result['status'] == 5) {
-            $user = User::query()
-            ->where('id', '=', $result['created_by'])
-            ->first();
-            $result['image'] = $user->image;
-        }
-        if ($result['status'] == 1) {
-            $user = User::query()
-            ->where('id', '=', $result['appraiser_sale_id'])
-            ->first();
-            $result['image'] = $user->image;
-        }
-        if ($result['status'] == 2) {
-            $user = User::query()
-            ->where('id', '=', $result['appraiser_perform_id'])
-            ->first();
-            $result['image'] = $user->image;
-        }
-        if ($result['status'] == 3 || $result['status'] == 4) {
-            $user = User::query()
-            ->where('id', '=', $result['appraiser_id'])
-            ->first();
-            $result['image'] = $user->image;
-        }
-        if ($result['status'] == 6) {
-            $user = User::query()
-            ->where('id', '=', $result['appraiser_control_id'])
-            ->first();
-            $result['image'] = $user->image;
-        }
+        // if ($result['status'] == 5) {
+        //     $user = User::query()
+        //     ->where('id', '=', $result['created_by'])
+        //     ->first();
+        //     $result['image'] = $user->image;
+        // }
+        // if ($result['status'] == 1) {
+        //     $user = User::query()
+        //     ->where('id', '=', $result['appraiser_sale_id'])
+        //     ->first();
+        //     $result['image'] = $user->image;
+        // }
+        // if ($result['status'] == 2) {
+        //     $user = User::query()
+        //     ->where('id', '=', $result['appraiser_perform_id'])
+        //     ->first();
+        //     $result['image'] = $user->image;
+        // }
+        // if ($result['status'] == 3 || $result['status'] == 4) {
+        //     $user = User::query()
+        //     ->where('id', '=', $result['appraiser_id'])
+        //     ->first();
+        //     $result['image'] = $user->image;
+        // }
+        // if ($result['status'] == 6) {
+        //     $user = User::query()
+        //     ->where('id', '=', $result['appraiser_control_id'])
+        //     ->first();
+        //     $result['image'] = $user->image;
+        // }
 
         return $result;
     }
