@@ -3103,7 +3103,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->first();
         $result->append(['status_text', 'general_asset']);
         $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
-        if ($result['status'] == )
+        // if ($result['status'] == )
 
         return $result;
     }
