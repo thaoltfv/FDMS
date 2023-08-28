@@ -3050,22 +3050,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->select(['id', 'image'])
                     ->limit(1);
             })
-            ->leftjoin('certificate_prices', function ($join) {
-                $join->on('certificates.id', '=', 'certificate_prices.certificate_id')
-                    ->where('slug', '=', 'total_asset_price')
-                    ->select(['id', 'certificate_id', 'slug', 'value'])
-                    ->limit(1);
-            })
-            ->leftjoin(
-                DB::raw('(select certificate_id , count(certificate_id) as document_count
-                                    from certificate_other_documents
-                                    where deleted_at is null
-                                    group by certificate_id) as "tbCount"'),
-                function ($join) {
-                    $join->on('certificates.id', '=', 'tbCount.certificate_id')
-                        ->select(['certificate_id', 'document_count']);
-                }
-            )
             ->leftjoin('appraisers', function ($join) {
                 $join->on('appraisers.id', '=', 'certificates.appraiser_id')
                     ->join('users as u1', function ($j) {
