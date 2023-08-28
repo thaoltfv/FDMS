@@ -18,7 +18,7 @@
 			ghost-class="ghost"
 			class="list-group kanban-column"
           >
-          <b-card :class="{'border_expired':checkDateExpired(element), ['border-' + config.css.color]: true}" class="card_container mb-3" v-for="element in subStatusData[config.id]" :key="element.id">
+          <b-card :class="{'border_expired':checkDateExpired(element), ['border-' + config.css.color]: true}" class="card_container mb-3" v-for="element in subStatusData[config.id]" :key="element.id+'_'+element.status">
             <div class="col-12 d-flex mb-2 justify-content-between">
               <span @click="handleDetailCertificate(element.id)" class="content_id" :class="`bg-${config.css.color}-15 text-${config.css.color}`">{{element.slug}}</span>
               <img v-if="checkDateExpired(element)" class="mr-2 icon_expired" src="@/assets/icons/ic_expire_calender.svg" alt="ic_expire_calender"/>
@@ -527,6 +527,7 @@ export default {
 					returnData.sub_status = this.next_sub_status
 					returnData.status_expired_at = res.data.status_expired_at
 					returnData.updated_at = res.data.updated_at
+					returnData.image = res.data.image
 				}
 				this.returnData()
 				await this.$toast.open({
@@ -535,6 +536,7 @@ export default {
 					position: 'top-right',
 					duration: 3000
 				})
+				this.key_dragg++
 			} else {
 				await this.$toast.open({
 					message: `${res.error.message}`,
@@ -555,6 +557,7 @@ export default {
 				if (returnData) {
 					returnData.status = data.status
 					returnData.sub_status = data.sub_status
+					returnData.image = res.data.image
 				}
 				this.returnData()
 				await this.$toast.open({
@@ -563,6 +566,7 @@ export default {
 					position: 'top-right',
 					duration: 3000
 				})
+				this.key_dragg++
 			} else {
 				await this.$toast.open({
 					message: `${res.error.message}`,
@@ -597,7 +601,7 @@ export default {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(i => i.status === item.status && i.sub_status === item.sub_status)
 				this.subStatusDataTmp[item.id] = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
 			})
-			// this.key_dragg ++
+			this.key_dragg ++
 		},
 		checkMoveVerify () {
 			return true
