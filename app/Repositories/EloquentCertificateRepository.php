@@ -4840,6 +4840,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         if (!($data->appraiser && $data->appraiser->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có thẩm định viên mới có quyền cập nhật.', 'exception' => ''];
                         break;
+                    case 6:
+                        if (!($data->appraiserControl && $data->appraiserControl->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có kiểm soát viên mới có quyền cập nhật.', 'exception' => ''];
+                        break;
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
                         break;
