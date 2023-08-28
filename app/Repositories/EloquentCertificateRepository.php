@@ -336,6 +336,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->with('appraiser')
             ->with('appraiserManager')
             ->with('appraiserConfirm')
+            ->with('appraiserControl')
             ->with('appraiserSale')
             ->with('appraiserPerform')
             ->with('certificateApproach')
@@ -470,6 +471,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->with('appraiser')
                 ->with('appraiserManager')
                 ->with('appraiserConfirm')
+                ->with('appraiserControl')
                 ->with('appraiserSale')
                 ->with('appraiserPerform')
                 ->with('certificateApproach')
@@ -688,6 +690,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->with('appraiser')
                 ->with('appraiserManager')
                 ->with('appraiserConfirm')
+                ->with('appraiserControl')
                 ->with('appraiserSale')
                 ->with('appraiserPerform')
                 ->with('certificateApproach')
@@ -2385,6 +2388,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'created_by',
             'appraiser_id',
             'appraiser_perform_id',
+            'appraiser_control_id',
             DB::raw("case status
                     when 1
                         then 'Mới'
@@ -2412,6 +2416,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // 'appraiserSale:id,name',
             'appraiserPerform:id,name',
             'appraisePurpose:id,name',
+            'appraiserControl:id,name',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
@@ -2454,6 +2459,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -2957,6 +2965,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser:id,name,user_id',
             'appraiserManager:id,name,user_id',
             'appraiserConfirm:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name,user_id',
@@ -3013,6 +3022,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserManager:id,name,user_id',
             'appraiserControl:id,name,user_id',
             'appraiserConfirm:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name',
