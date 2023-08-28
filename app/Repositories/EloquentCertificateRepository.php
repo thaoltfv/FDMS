@@ -4628,6 +4628,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserPerform:id,name,user_id',
                 'appraiserManager:id,name,user_id',
                 'appraiserConfirm:id,name,user_id',
+                'appraiserControl:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
         }
@@ -4862,6 +4863,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if ($user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])
                 || ((isset($data->appraiser) && $data->appraiser->user_id == $user->id)
                 || (isset($data->appraiserManager) && $data->appraiserManager->user_id == $user->id)
+                || (isset($data->appraiserControl) && $data->appraiserControl->user_id == $user->id)
                 || (isset($data->appraiserConfirm) && $data->appraiserConfirm->user_id == $user->id)
                 || (isset($data->appraiserSale) && $data->appraiserSale->user_id == $user->id)
                 || (isset($data->appraiserPerform) && $data->appraiserPerform->user_id == $user->id)
