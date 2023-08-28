@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar" :class="toggleItem? 'sidebar-mini' : 'sidebar'">
+  <div v-if="!isMobile()" class="navbar" :class="toggleItem? 'sidebar-mini' : 'sidebar'">
     <aside :class="[toggleItem ? navbar_mini : '']" class="navbar navbar-vertical d-flex flex-column navbar-expand-lg h-100">
       <button class="navbar-toggler" data-target="#navbar-menu" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
@@ -77,6 +77,91 @@
       </div>
     </aside>
   </div>
+  <div v-else class="navbar" :class="toggleItem? 'sidebar-mini' : 'sidebar'">
+    <aside :class="[toggleItem ? navbar_mini : '']" class="navbar navbar-vertical d-flex flex-column navbar-expand-lg h-100">
+      <button class="navbar-toggler" data-target="#navbar-menu" data-toggle="collapse" type="button" style="z-index: 201;">
+        <span class="navbar-toggler-icon" style="color: orange!important;" @click="minimize"></span>
+      </button>
+        <div class="d-flex w-100 navbar-brand align-items-center justify-content-center">
+          <img class="navbar-brand-image" :src="logo" alt="company logo">
+        </div>
+
+      <div v-show="minimize_key" class="collapse navbar-collapse" id="navbar-menu" style="position: fixed;
+    top: 0;
+    z-index: 200;
+    background: #F6F7FB;
+    width: 70%!important;">
+        <ul class="navbar-nav" style="margin-top: 40px;">
+          <li  v-for="item of getNav"
+               :key="item.id"
+               @click="item.dropdown ? dropdownClick($event) : !item.dropdown ? removeDropdown() : () => {}"
+               class="nav-item"
+               :id = "item.id"
+               :class="{'dropdown': item.dropdown}"
+               >
+            <svg width="11" height="6" viewBox="0 0 11 6" xmlns="http://www.w3.org/2000/svg" class="icon-dropdown">
+              <path d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z" fill="currentColor"/>
+            </svg>
+            <!--navigation normal-->
+            <router-link
+              v-if="hasPermission(item)"
+              :exact="item.exact"
+              :to="{name: item.routeName}"
+              class="nav-link"
+              style="justify-content: left;">
+              <div class="nav-contain-wrapper">
+                <div class="contain-icon">
+                  <icon-base :name="item.icon" v-if="item.customImage" width="20px" height="20px" class="item-icon svg-inline--fa" />
+                  <font-awesome-icon :icon="item.icon" class="item-icon" width="20px" height="20px" v-else />
+                </div>
+                <span class="nav-link-title">
+                  {{ $t(`${ item.title }`) }}
+                </span>
+              </div>
+            </router-link>
+            <ul v-if="item.dropdown" class="dropdown-item">
+              <li v-for="dropdown in item.dropdown" :key="dropdown.id" class="nav-link-title nav-dropdown">
+                <router-link v-if="hasPermission(dropdown)"
+                             :exact="dropdown.exact"
+                             :to="{name: dropdown.routeName}"
+                             class="nav-link"
+                             style="justify-content: left;">
+                  {{ dropdown.title }}
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li id="user" @click="dropdownClick($event)" class="nav-item nav-user dropdown">
+            <svg width="11" height="6" viewBox="0 0 11 6" xmlns="http://www.w3.org/2000/svg" class="icon-dropdown">
+              <path d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z" fill="currentColor"/>
+            </svg>
+            <!--navigation normal-->
+            <div class="nav-link" style="justify-content: left;">
+              <div class="nav-contain-wrapper">
+                <div class="contain-icon" >
+                  <font-awesome-icon icon="user-circle" class="item-icon"></font-awesome-icon>
+                </div>
+                <span class="name mb-0 d-flex flex-column nav-link-title">{{currentUser ? currentUser.name : ''}}<span class="mt-1">{{currentUser ? currentUser.roles[0].role_name : ''}}</span></span>
+              </div>
+            </div>
+            <ul class="dropdown-item">
+              <li class="nav-link-title nav-dropdown" >
+                <router-link :to="{name: 'profile.index'}" class="nav-link">
+                  Thông tin
+                </router-link>
+              </li>
+              <li class="nav-link-title nav-dropdown" @click="logout()"> <div class="nav-link">Đăng xuất</div> </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="toggle d-flex justify-content-end" :class="[toggleItem ? toggle_mini : '']">
+        <div class="toggle-btn" @click="handleClick">
+          <font-awesome-icon icon="angle-right" class="item-icon arrow"/>
+        </div>
+      </div>
+    </aside>
+  </div>
 </template>
 
 <script>
@@ -120,13 +205,25 @@ export default {
 			toggleItem: true,
 			toggleDropdown: false,
 			isLogout: false,
-			logo: `${process.env.API_URL}/storage/images/company_logo.png`
+			logo: `${process.env.API_URL}/storage/images/company_logo.png`,
+      minimize_key: false,
 		}
 	},
 	// mounted() {
 	//   console.log(this.navigations)
 	// },
 	methods: {
+    minimize(){
+      console.log('dính')
+      this.minimize_key = !this.minimize_key
+    },
+    isMobile() {
+   if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+     return true
+   } else {
+     return false
+   }
+ },
 		async logout () {
 			if (!this.isLogout) {
 				this.isLogout = true
@@ -419,7 +516,7 @@ ul,li {
           background: rgba(224, 224, 224, 0.1);
         }
         &.router-link-active {
-          color: #FAA831 !important;
+          color: white !important;
           background: rgba(224, 224, 224, 0.1);
           &+.dropdown-menu {
             opacity: 0.2;
