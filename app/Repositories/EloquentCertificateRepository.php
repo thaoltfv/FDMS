@@ -3202,7 +3202,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $logName = 'update_status';
                     // activity-log Update status
                     $note = $request['status_note'] ?? '';
-                    $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note);
+                    $reason_id = $request['status_reason_id'] ?? null;
+                    $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
 
                     $this->notifyChangeStatus($id, $status);
                 }

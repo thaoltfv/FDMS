@@ -54,7 +54,7 @@ trait ActivityLog
         return $log;
     }
 
-    public function CreateActivityLog($model, $request, $activity, $log, $note = '')
+    public function CreateActivityLog($model, $request, $activity, $log, $note = '', $reason_id = null)
     {
         // if (is_object($model)) {
             // $loga = $this->CustomizeLogMessage($model, $activity, $log);
@@ -65,7 +65,8 @@ trait ActivityLog
                 ->on($model)
                 ->withProperties([
                     'data' => [$request],
-                    'note' => $note
+                    'note' => $note,
+                    'reason_id' => $reason_id
                 ])
                 ->log($log);
         // }
