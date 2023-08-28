@@ -3016,6 +3016,21 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             'created_by',
             'document_type',
+            DB::raw("case status
+                        when 1
+                            then u2.image
+                        when 2
+                            then u3.image
+                        when 3
+                            then u1.image
+                        when 4
+                            then u1.image
+                        when 5
+                            then users.image
+                        when 6
+                            then u4.image
+                    end as image
+                "),
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3044,6 +3059,38 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.apartment.assetPrice',
         ];
         $result = $this->model->query()
+            ->leftjoin('appraisers', function ($join) {
+                $join->on('appraisers.id', '=', 'certificates.appraiser_id')
+                    ->join('users as u1', function ($j) {
+                        $j->on('appraisers.user_id', '=', 'u1.id');
+                    })
+                    ->select('u1.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as sale', function ($join) {
+                $join->on('sale.id', '=', 'certificates.appraiser_sale_id')
+                    ->join('users as u2', function ($j) {
+                        $j->on('sale.user_id', '=', 'u2.id');
+                    })
+                    ->select('u2.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as perform', function ($join) {
+                $join->on('perform.id', '=', 'certificates.appraiser_perform_id')
+                    ->join('users as u3', function ($j) {
+                        $j->on('perform.user_id', '=', 'u3.id');
+                    })
+                    ->select('u3.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as control', function ($join) {
+                $join->on('control.id', '=', 'certificates.appraiser_control_id')
+                    ->join('users as u4', function ($j) {
+                        $j->on('control.user_id', '=', 'u4.id');
+                    })
+                    ->select('u4.image')
+                    ->limit(1);
+            })
             ->with($with)
             ->where('id', $id)
             ->select($select)
