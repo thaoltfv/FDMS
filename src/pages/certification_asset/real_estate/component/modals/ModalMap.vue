@@ -567,7 +567,7 @@ export default {
 			markerLatLng: [10.964112, 106.856461],
 			map: {
 				center: [10.964112, 106.856461],
-				zoom: 15
+				zoom: 17
 			},
 			imageMap: true,
 			render_map: 3232102,
