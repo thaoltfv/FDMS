@@ -675,6 +675,12 @@ export default {
 			result.push(cityJson [i])
 		this.listCity = result
 		console.log('city array', this.listCity)
+
+        if (this.$store.getters.navExp == false) {
+            this.resizeWidth = '84vw'
+        } else {
+            this.resizeWidth = '95vw'
+        }
 	},
 	methods: {
 		changeProvince (code) {
