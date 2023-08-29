@@ -1014,7 +1014,7 @@ export default {
 			let color = ''
 			if (item.log_name == 'update_status') {
 				if (item.description.includes('từ chối')) color = 'text-danger'
-				if (item.description.includes('Hủy')) color = 'text-danger'
+				else if (item.description.includes('Hủy')) color = 'text-danger'
 				else color = 'text-success'
 			}
 			return color

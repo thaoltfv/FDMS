@@ -290,6 +290,9 @@ export default {
 			case 3:
 				strExpire = element.status_expired_at ? this.updateDate(element.status_expired_at, new Date()) : 'Đã hết hạn'
 				break
+			case 6:
+				strExpire = element.status_expired_at ? this.updateDate(element.status_expired_at, new Date()) : 'Đã hết hạn'
+				break
 			case 4:
 				strExpire = 'Đã hoàn thành'
 				break
