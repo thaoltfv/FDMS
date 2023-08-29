@@ -25,7 +25,8 @@ export default new Vuex.Store({
 			dictionaries: [],
 			appraiseOther: [],
 			mapLocation: [],
-			mapFilter: []
+			mapFilter: [],
+			navExp: true
 		}
 	},
 	getters: {
@@ -46,7 +47,8 @@ export default new Vuex.Store({
 		isResponseError: state => state.isResponseError,
 		unreadNotification: state => state.unreadNotification,
 		mapLocation: state => state.mapLocation,
-		mapFilter: state => state.mapFilter
+		mapFilter: state => state.mapFilter,
+		navExp: state => state.navExp,
 	},
 	mutations: {
 		setIsResponseError (state, payload) {
@@ -121,6 +123,9 @@ export default new Vuex.Store({
 		},
 		[types.SET_MAP_FILTER] (state, mapFilter) {
 			state.mapFilter = mapFilter
-		}
+		},
+		[types.SET_NAV_EXP] (state, data) {
+			state.navExp = data
+		},
 	}
 })

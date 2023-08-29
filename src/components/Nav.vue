@@ -253,6 +253,8 @@ export default {
 		},
 		handleClick () {
 			this.toggleItem = !this.toggleItem
+      console.log('mở rộng thu gọn', this.toggleItem)
+      store.commit(types.SET_NAV_EXP, this.toggleItem )
 		},
 		dropdownClick (e) {
 			const element = e.target.closest('li.nav-item')
