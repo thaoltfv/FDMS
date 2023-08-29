@@ -27,7 +27,7 @@
           </div>
           <input type="text" id="coordinate" :value="address" class="d-none" />
           <button class="btn btn-search" type="button" @click="handleAction">
-            Xác nhận
+            Xác nhận 
           </button>
           <button
             class="btn btn-white btn-cancel"
