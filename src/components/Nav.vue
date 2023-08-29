@@ -114,7 +114,7 @@
                   <icon-base :name="item.icon" v-if="item.customImage" width="20px" height="20px" class="item-icon svg-inline--fa" />
                   <font-awesome-icon :icon="item.icon" class="item-icon" width="20px" height="20px" v-else />
                 </div>
-                <span class="nav-link-title">
+                <span class="nav-link-title nav-mobile">
                   {{ $t(`${ item.title }`) }}
                 </span>
               </div>
@@ -516,7 +516,7 @@ ul,li {
           background: rgba(224, 224, 224, 0.1);
         }
         &.router-link-active {
-          color: white !important;
+          color: #FAA831 !important;
           background: rgba(224, 224, 224, 0.1);
           &+.dropdown-menu {
             opacity: 0.2;
@@ -782,6 +782,9 @@ ul,li {
   background: #FF963D;
   box-shadow: 0px 1px 9px #C7CAD9;
   border-radius: 10px;
+  .nav-mobile {
+    color: white! important;
+  }
 }
 
 .sidebar-mini .nav-item:not(.dropdown) .nav-link.router-link-exact-active .contain-icon {
@@ -804,4 +807,5 @@ ul,li {
 .sidebar-mini .contain-icon .item-icon {
   margin-right: unset;
 }
+
 </style>

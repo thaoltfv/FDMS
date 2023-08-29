@@ -22,7 +22,7 @@ jobs:
           cd config 
           wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Ftrial.env.js?alt=media&token=f8de7143-fce2-4106-88fc-0b5e66c725a1" -O trial.env.js
           wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fdashboard.json?alt=media&token=89bf517b-ad18-4758-82a3-65bed61cedc5" -O dashboard.json
-          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fworkflow.json?alt=media&token=6554f43d-db48-439e-aeec-c95d6bdd054d" -O workflow.json
+          wget "https://firebasestorage.googleapis.com/v0/b/fastvalue-trial.appspot.com/o/configs%2Fworkflow.json?alt=media&token=fe84cf85-a6ea-4d20-aa52-d35893c8df27" -O workflow.json
       - name: Install dependencies
         run: npm set unsafe-perm true & npm i
       - name: Build into dist
