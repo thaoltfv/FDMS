@@ -43,6 +43,7 @@ class Certificate extends Model
         'petitioner_address',
         'appraiser_id',
         'appraiser_manager_id',
+        'appraiser_control_id',
         'appraiser_confirm_id',
         'document_description',
         'appraise_purpose_id',
@@ -115,6 +116,11 @@ class Certificate extends Model
     public function appraiserManager(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_manager_id', 'id');
+    }
+
+    public function appraiserControl(): BelongsTo
+    {
+        return $this->belongsTo(Appraiser::class, 'appraiser_control_id', 'id');
     }
 
     public function appraiserConfirm(): BelongsTo

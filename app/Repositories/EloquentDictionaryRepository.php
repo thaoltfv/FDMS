@@ -119,8 +119,8 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
     {
         $apiUrl = "https://app.estatemanner.com/api/v1/auth/credentials";
         $postinput =  [
-            "client_id" => 'BWflWM57LHSivze237MRNsOQxb23DUQ6',
-            "client_secret" => 'K9I1955xyA_uQsiei0ucoXAUyO0rnXGz_Cvxx40ZqUOtvcEP0hZaz4pHGSHYIwql'
+            "client_id" => 'meI2rBIVba1F9SKTxKXhuYX9bBZqWWcU',
+            "client_secret" => 'd197ac7cc0e3cbb8eb13ac7a7e241bc5120f4341d7a18139d00cf1020d6d8bf1'
         ];
         $header = [
             'Content-type' => 'application/json'
@@ -128,11 +128,11 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         $response = Http::withHeaders($header)->post($apiUrl,$postinput);
         $statusCode = $response->status();            
         
-        if ($statusCode == 201) {
+        // if ($statusCode == 201) {
             $responseBody = json_decode($response->getBody(), true);
             $data = $responseBody;
             return $data;
-        }
+        // }
     }
 
     /**
@@ -152,11 +152,43 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         $response = Http::withHeaders($header)->post($apiUrl,$postinput);
         $statusCode = $response->status();            
         
-        if ($statusCode == 201) {
+        // if ($statusCode == 201) {
             $responseBody = json_decode($response->getBody(), true);
             $data = $responseBody;
             return $data;
+        // }
+    }
+
+    /**
+     * @param array $objects
+     */
+    public function getInfoByLand(array $objects)
+    {
+        if  ($objects['land_plot'] && $objects['land_sheet']) {
+            $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/landplot";
+        } else {
+            $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/cadastral";
         }
+        
+        $postinput =  [
+            "city_code" => $objects['city_code'],
+            "district_code" => $objects['district_code'],
+            "ward_code" => $objects['ward_code'],
+            "land_plot" => $objects['land_plot'],
+            "land_sheet" => $objects['land_sheet'],
+        ];
+        $header = [
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer '.$objects['token']
+        ];
+        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
+        $statusCode = $response->status();            
+        
+        // if ($statusCode == 201) {
+            $responseBody = json_decode($response->getBody(), true);
+            $data = $responseBody;
+            return $data;
+        // }
     }
 
     /**

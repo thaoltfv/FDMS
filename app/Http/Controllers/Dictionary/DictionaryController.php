@@ -222,6 +222,21 @@ class DictionaryController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function getInfoByLand(Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->dictionaryRepository->getInfoByLand($request->toArray()));
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function uploadLocalImage(Request $request): JsonResponse
     {
         try {

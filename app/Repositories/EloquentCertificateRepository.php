@@ -336,6 +336,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->with('appraiser')
             ->with('appraiserManager')
             ->with('appraiserConfirm')
+            ->with('appraiserControl')
             ->with('appraiserSale')
             ->with('appraiserPerform')
             ->with('certificateApproach')
@@ -470,6 +471,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->with('appraiser')
                 ->with('appraiserManager')
                 ->with('appraiserConfirm')
+                ->with('appraiserControl')
                 ->with('appraiserSale')
                 ->with('appraiserPerform')
                 ->with('certificateApproach')
@@ -688,6 +690,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->with('appraiser')
                 ->with('appraiserManager')
                 ->with('appraiserConfirm')
+                ->with('appraiserControl')
                 ->with('appraiserSale')
                 ->with('appraiserPerform')
                 ->with('certificateApproach')
@@ -2385,6 +2388,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'created_by',
             'appraiser_id',
             'appraiser_perform_id',
+            'appraiser_control_id',
             DB::raw("case status
                     when 1
                         then 'Mới'
@@ -2396,6 +2400,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         then 'Hoàn thành'
                     when 5
                         then 'Huỷ'
+                    when 6
+                        then 'Đang kiểm soát'
                 end as status_text
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2410,6 +2416,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // 'appraiserSale:id,name',
             'appraiserPerform:id,name',
             'appraisePurpose:id,name',
+            'appraiserControl:id,name',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
@@ -2452,6 +2459,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -2588,7 +2598,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'certificates.updated_at', 'status_updated_at',
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
-            'appraiser_sale_id',
+            'appraiser_sale_id', 'appraiser_control_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
@@ -2602,6 +2612,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then 'Hoàn thành'
                         when 5
                             then 'Huỷ'
+                        when 6
+                            then 'Đang kiểm soát'
                     end as status_text
                 "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2619,6 +2631,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then u1.image
                         when 5
                             then users.image
+                        when 6
+                            then u4.image
                     end as image
                 "),
             'sub_status',
@@ -2633,6 +2647,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserSale:id,name,user_id',
             // 'appraiserSale.appraiserUser:id,appraisers_number,image',
             'appraiserPerform:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             // 'appraiserPerform.appraiserUser:appraisers_number,image',
             // 'createdBy:id,image',
             // 'assetPrice' => function($query){
@@ -2693,6 +2708,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->select('u3.image')
                     ->limit(1);
             })
+            ->leftjoin('appraisers as control', function ($join) {
+                $join->on('control.id', '=', 'certificates.appraiser_control_id')
+                    ->join('users as u4', function ($j) {
+                        $j->on('control.user_id', '=', 'u4.id');
+                    })
+                    ->select('u4.image')
+                    ->limit(1);
+            })
             ->select($select);
 
         //// command tạm - sẽ xử lý phân quyền sau
@@ -2716,6 +2739,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -2917,6 +2943,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'petitioner_address',
             'appraiser_confirm_id',
             'appraiser_manager_id',
+            'appraiser_control_id',
             'appraise_purpose_id',
             'document_num',
             'document_date',
@@ -2938,6 +2965,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser:id,name,user_id',
             'appraiserManager:id,name,user_id',
             'appraiserConfirm:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name,user_id',
@@ -2970,6 +2998,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_id',
             'appraiser_confirm_id',
             'appraiser_manager_id',
+            'appraiser_control_id',
             'appraise_purpose_id',
             'document_num',
             'document_date',
@@ -2991,7 +3020,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $with = [
             'appraiser:id,name,user_id',
             'appraiserManager:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             'appraiserConfirm:id,name,user_id',
+            'appraiserControl:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name',
@@ -3019,6 +3050,48 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->first();
         $result->append(['status_text', 'general_asset']);
         $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
+        if ($result['status'] == 5) {
+            $user = User::query()
+            ->where('id', '=', $result['created_by'])
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 1) {
+            $appraiser = Appraiser::query()
+            ->where('id', '=', $result['appraiser_sale_id'])
+            ->first();
+            $user = User::query()
+            ->where('id', '=', $appraiser->user_id)
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 2) {
+            $appraiser = Appraiser::query()
+            ->where('id', '=', $result['appraiser_perform_id'])
+            ->first();
+            $user = User::query()
+            ->where('id', '=', $appraiser->user_id)
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 3 || $result['status'] == 4) {
+            $appraiser = Appraiser::query()
+            ->where('id', '=', $result['appraiser_id'])
+            ->first();
+            $user = User::query()
+            ->where('id', '=', $appraiser->user_id)
+            ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 6) {
+            $appraiser = Appraiser::query()
+            ->where('id', '=', $result['appraiser_control_id'])
+            ->first();
+            $user = User::query()
+            ->where('id', '=', $appraiser->user_id)
+            ->first();
+            $result['image'] = $user->image;
+        }
 
         return $result;
     }
@@ -3129,11 +3202,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $logName = 'update_status';
                     // activity-log Update status
                     $note = $request['status_note'] ?? '';
-                    $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note);
+                    $reason_id = $request['status_reason_id'] ?? null;
+                    $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
 
                     $this->notifyChangeStatus($id, $status);
                 }
-                $result = $this->getAppraisalTeam($id);
+                // $result = $this->getAppraisalTeam($id);
+                $result = $this->getCertificate($id);
 
                 return $result;
             } catch (Exception $exception) {
@@ -4583,6 +4658,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_manager_id' => $object['appraiser_manager_id'],
                 'appraiser_confirm_id' => $object['appraiser_confirm_id'],
                 'appraiser_perform_id' => $object['appraiser_perform_id'],
+                'appraiser_control_id' => $object['appraiser_control_id'],
             ]);
         }
     }
@@ -4596,17 +4672,63 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_perform_id',
                 'appraiser_id',
                 'appraiser_manager_id',
+                'appraiser_control_id',
                 'appraiser_confirm_id',
+                'appraiser_sale_id',
                 'status_expired_at',
-                'updated_at'
+                'updated_at',
+                'status'
             ];
             $with = [
                 'appraiser:id,name,user_id',
                 'appraiserPerform:id,name,user_id',
                 'appraiserManager:id,name,user_id',
                 'appraiserConfirm:id,name,user_id',
+                'appraiserControl:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
+            if ($result['status'] == 5) {
+                $user = User::query()
+                ->where('id', '=', $result['created_by'])
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 1) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_sale_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 2) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_perform_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 3 || $result['status'] == 4) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
+            if ($result['status'] == 6) {
+                $appraiser = Appraiser::query()
+                ->where('id', '=', $result['appraiser_control_id'])
+                ->first();
+                $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+                $result['image'] = $user->image;
+            }
         }
         return $result;
     }
@@ -4788,6 +4910,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $appraiser['appraiser_manager_id'] =  request()->get('appraiser_manager_id');
                     $appraiser['appraiser_confirm_id'] =  request()->get('appraiser_confirm_id');
                     $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
+                    $appraiser['appraiser_control_id'] =  request()->get('appraiser_control_id');
                     if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
@@ -4815,6 +4938,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         if (!($data->appraiser && $data->appraiser->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có thẩm định viên mới có quyền cập nhật.', 'exception' => ''];
                         break;
+                    case 6:
+                        if (!($data->appraiserControl && $data->appraiserControl->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có kiểm soát viên mới có quyền cập nhật.', 'exception' => ''];
+                        break;
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
                         break;
@@ -4838,6 +4965,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if ($user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])
                 || ((isset($data->appraiser) && $data->appraiser->user_id == $user->id)
                 || (isset($data->appraiserManager) && $data->appraiserManager->user_id == $user->id)
+                || (isset($data->appraiserControl) && $data->appraiserControl->user_id == $user->id)
                 || (isset($data->appraiserConfirm) && $data->appraiserConfirm->user_id == $user->id)
                 || (isset($data->appraiserSale) && $data->appraiserSale->user_id == $user->id)
                 || (isset($data->appraiserPerform) && $data->appraiserPerform->user_id == $user->id)
@@ -4992,6 +5120,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser:id,user_id,name',
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
+                'appraiserControl:id,user_id,name',
                 'createdBy:id,name',
             ];
             $select = [
@@ -5000,6 +5129,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_id',
                 'appraiser_sale_id',
                 'appraiser_perform_id',
+                'appraiser_control_id',
             ];
             $certificate = Certificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
@@ -5016,6 +5146,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if ($certificate->appraiser->user_id != $loginUser->id && $certificate->appraiser->user_id != $certificate->appraiserPerform->user_id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiser->user_id);
                 }
+            if (isset($certificate->appraiserControl->user_id))
+                if ($certificate->appraiserControl->user_id != $loginUser->id) {
+                    $users[] =  $eloquenUser->getUser($certificate->appraiserControl->user_id);
+                }
             switch ($status) {
                 case 2:
                     $statusText = 'Đang thẩm định';
@@ -5028,6 +5162,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     break;
                 case 5:
                     $statusText = 'Đã hủy';
+                    break;
+                case 6:
+                    $statusText = 'Đang kiểm soát';
                     break;
                 default:
                     $statusText = 'Mới';
@@ -5535,6 +5672,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         return $q->where('user_id', $userId);
                     });
                     $query = $query->orwhereHas('appraiserPerform', function ($q) use ($userId) {
+                        return $q->where('user_id', $userId);
+                    });
+                    $query = $query->orwhereHas('appraiserControl', function ($q) use ($userId) {
                         return $q->where('user_id', $userId);
                     });
                 });

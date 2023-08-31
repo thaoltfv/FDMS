@@ -67,9 +67,10 @@ class CertificateBriefController extends Controller
             'appraise_purpose_id' => 'required',
             //'appraiser_confirm_id' => 'integer',
             'appraiser_manager_id' => 'nullable',
-            'appraise_purpose_id' => 'required',
+            // 'appraise_purpose_id' => 'required',
             'appraiser_sale_id' => 'required',
             'appraiser_perform_id' => 'nullable',
+            'appraiser_control_id' => 'nullable',
             'appraiser_id' => 'nullable',
             'service_fee' => 'integer|max:2000000000|min:0',
             'appraise_date' => 'required|string|max:255',
@@ -90,6 +91,7 @@ class CertificateBriefController extends Controller
             'petitioner_address' => 'Địa chỉ',
             'appraiser_confirm_id' => 'Đại diện ủy quyền',
             'appraiser_manager_id' => 'Đại diện theo pháp luật',
+            'appraiser_control_id' => 'Kiểm soát viên',
             'appraise_purpose_id' => 'Mục đích thẩm định',
             'document_num' => 'Số hợp đồng',
             'document_date' => 'Ngày hợp đồng',
@@ -136,7 +138,7 @@ class CertificateBriefController extends Controller
             return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
 
         $rules = [
-            'status' => 'integer|required|between:1,5',
+            'status' => 'integer|required|between:1,6',
         ];
         $customAttributes = [
             'status' => 'Trạng thái phiếu',
