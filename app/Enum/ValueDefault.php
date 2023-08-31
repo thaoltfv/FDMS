@@ -76,6 +76,7 @@ class ValueDefault
         'customer_name' => 'Tên đối tác',
         'customer_address' => 'Địa chỉ đối tác',
         'appraise_asset' => 'Tên Tài Sản',
+        'gcn' => 'GCN',
         'front_side' => 'Vị trí',
         'full_address' => 'Địa chỉ BĐS Thẩm định giá',
         'province' => 'Tỉnh/ Thành phố',
