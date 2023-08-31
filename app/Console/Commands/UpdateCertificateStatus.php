@@ -48,7 +48,7 @@ class UpdateCertificateStatus extends Command
         try {
             DB::beginTransaction();
             // $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_base_status_01.01.22_31.03.23.csv'));
-            $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_update_done_quyII_2023.csv'));
+            $sheets = (new FastExcel())->configureCsv(';')->import(database_path('mocks/donava_update_done_31082023.csv'));
             $this->output->progressStart(count($sheets));
             print_r('Bắt đầu update');
             $sheets->map(function ($value) {
