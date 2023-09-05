@@ -493,7 +493,8 @@ class AssetReport
             $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
             $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);
             $cell2 = $table3->addCell($cellWidth);
-            $cell2->addText('Ngày ' . date('d') . ' tháng ' . date('m') . ' năm ' . date('Y'), ['italic' => true], ['align' => 'center', 'keepNext' => true]);
+            // $cell2->addText('Ngày ' . date('d') . ' tháng ' . date('m') . ' năm ' . date('Y'), ['italic' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell2->addText('Ngày ' . '     ' . ' tháng ' . '     ' . ' năm ' . '       ', ['italic' => true], ['align' => 'center', 'keepNext' => true]);
             $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
             $cell3 = $table3->addCell($cellWidth);
             $cell3->addText("Chuyên viên thẩm định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
