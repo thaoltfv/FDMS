@@ -305,11 +305,11 @@ class CertificateBriefController extends Controller
             return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
 
         $result =  $this->certificateRepository->exportSelectedCertificateAssets();
-        // if(isset($result['message']) && isset($result['exception']))
-        //     return $this->respondWithErrorData( $result);
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
             // return $this->respondWithCustomData($result);
-        return $result;
-        // return $this->respondWithCustomData((new ExportCertificateBriefs())->exportCustomizeBrieft($result));
+
+        return $this->respondWithCustomData((new ExportCertificateBriefs())->exportCustomizeBrieft($result));
     }
 
     public function updateCertificateVersion(Request $request, int $certificateId )
