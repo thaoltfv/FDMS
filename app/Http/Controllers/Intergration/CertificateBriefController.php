@@ -307,8 +307,8 @@ class CertificateBriefController extends Controller
         $result =  $this->certificateRepository->exportSelectedCertificateAssets();
         // if(isset($result['message']) && isset($result['exception']))
         //     return $this->respondWithErrorData( $result);
-            return $this->respondWithCustomData($result);
-
+            // return $this->respondWithCustomData($result);
+        return $result;
         // return $this->respondWithCustomData((new ExportCertificateBriefs())->exportCustomizeBrieft($result));
     }
 
