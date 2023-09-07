@@ -5344,7 +5344,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if ($isExportTangibleDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
         }
-        // dd($result->toArray());
+        dd($result->toArray());
         return $result;
     }
 
