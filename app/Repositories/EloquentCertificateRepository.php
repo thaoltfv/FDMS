@@ -5333,6 +5333,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
+        return $query;
         // $result = $query->with($with)->limit(5)->get();
         $result = $query->with($with)->get();
         if ($isExportLandDetail) {
@@ -5344,8 +5345,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if ($isExportTangibleDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
         }
-        dd($result->toArray());
-        return $result;
+        // dd($result->toArray());
+        // return $result;
     }
 
     private function updatePersonaltyPrice(int $id)
