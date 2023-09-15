@@ -3322,8 +3322,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 foreach ($realEstateList as $realEstateId) {
                     $data = CertificateApartment::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
                     $provine[] = $data['province']['name']??'Tất cả';
+                    dd($realEstateId,$data);
                 }
-                dd($provine);
             } else {
                 foreach ($realEstateList as $realEstateId) {
                     $data = Appraise::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
