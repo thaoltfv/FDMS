@@ -3318,9 +3318,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     {
         if (isset($realEstateList)) {
             $provine = [];
-            foreach ($realEstateList as $realEstateId) {
-                $data = Appraise::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
-                $provine[] = $data['province']['name']??'Tất cả';
+            if ($type == 'apartment') {
+                foreach ($realEstateList as $realEstateId) {
+                    $data = CertificateApartment::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
+                    $provine[] = $data['province']['name']??'Tất cả';
+                }
+            } else {
+                foreach ($realEstateList as $realEstateId) {
+                    $data = Appraise::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
+                    $provine[] = $data['province']['name']??'Tất cả';
+                }
             }
             $provine[] = 'Tất cả';
             $lawDocument = AppraiseLawDocument::whereIn('provinces', $provine)->orderBy('position')->get();
@@ -4350,7 +4357,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $has->whereIn('real_estate_id', $realEstateApartmentIds);
             })->forceDelete();
 
-        $this->saveDocumentLaw($certificateId, $realEstateApartmentIds, 'appartment');
+        $this->saveDocumentLaw($certificateId, $realEstateApartmentIds, 'apartment');
         $this->saveMethod($certificateId);
         $this->updateDocumentDescription($certificateId);
 
