@@ -3321,7 +3321,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if ($type == 'apartment') {
                 $listApartment = CertificateHasRealEstate::query()
                 ->where('certificate_id' , $certificateId)->get();
-                dd($listApartment)
+                dd($listApartment);
                 // foreach ($realEstateList as $realEstateId) {
                 //     $data = CertificateApartment::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
                 //     $provine[] = $data['province']['name']??'Tất cả';
