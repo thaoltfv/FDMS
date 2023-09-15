@@ -3314,7 +3314,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         return $paginated_data;
     }
 
-    private function saveDocumentLaw(int $certificateId, array $realEstateList)
+    private function saveDocumentLaw(int $certificateId, array $realEstateList, string $type)
     {
         if (isset($realEstateList)) {
             $provine = [];
@@ -3324,7 +3324,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             }
             $provine[] = 'Tất cả';
             $lawDocument = AppraiseLawDocument::whereIn('provinces', $provine)->orderBy('position')->get();
-            dd($provine, $lawDocument);
+            dd($type, $provine, $lawDocument);
             CertificateLegalDocumentsOnValuation::query()->where('certificate_id', '=', $certificateId)->forceDelete();
             CertificateLegalDocumentsOnConstruction::query()->where('certificate_id', '=', $certificateId)->forceDelete();
             CertificateLegalDocumentsOnLand::query()->where('certificate_id', '=', $certificateId)->forceDelete();
@@ -3515,7 +3515,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $oldCertificateAssetIds[$oldAppraise->appraise_id] = $oldAppraise->id;
                     }
                     // $this->saveMethod($certificateId);
-                    $this->saveDocumentLaw($certificateId, $objects['general_asset']);
+                    $this->saveDocumentLaw($certificateId, $objects['general_asset'], 'land');
                     $this->saveMethod($certificateId);
                     $this->updateDocumentDescription($certificateId);
 
@@ -4184,7 +4184,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         foreach ($oldRealEstates as $realEstate) {
             $oldCertificateAssetIds[$realEstate->real_estate_id] = $realEstate->id;
         }
-        $this->saveDocumentLaw($certificateId, $realEstateAppraiseIds);
+        $this->saveDocumentLaw($certificateId, $realEstateAppraiseIds, 'land');
         $this->saveMethod($certificateId);
         $this->updateDocumentDescription($certificateId);
 
@@ -4350,7 +4350,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $has->whereIn('real_estate_id', $realEstateApartmentIds);
             })->forceDelete();
 
-        $this->saveDocumentLaw($certificateId, $realEstateApartmentIds);
+        $this->saveDocumentLaw($certificateId, $realEstateApartmentIds, 'appartment');
         $this->saveMethod($certificateId);
         $this->updateDocumentDescription($certificateId);
 
