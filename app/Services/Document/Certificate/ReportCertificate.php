@@ -19,7 +19,8 @@ class ReportCertificate extends Report
             $yearCVD = "        ";
         }
         $reportID = 'HSTD_'. $data->id;
-        return mb_strtoupper($this->envDocument)  .'/'. $createdName.'/'.$yearCVD.'/'.$reportID;
+        // return mb_strtoupper($this->envDocument)  .'/'. $createdName.'/'.$yearCVD.'/'.$reportID;
+        return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {

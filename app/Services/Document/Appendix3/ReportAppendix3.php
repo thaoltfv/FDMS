@@ -49,7 +49,8 @@ class ReportAppendix3 extends Report
         if (is_countable($data->realEstate)) $reportID = 'HSTD_' . $data->id;
         else $reportID = 'TSTD_' . $data->id;
 
-        return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {

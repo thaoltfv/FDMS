@@ -205,7 +205,11 @@ class ReportAppendix1Nova extends ReportAppendix1
                 $title = $other1->name;
                 $other2 = $this->comparisonFactor2->where('type', 'yeu_to_khac')->where('position', $position)->first();
                 $other3 = $this->comparisonFactor3->where('type', 'yeu_to_khac')->where('position', $position)->first();
-                $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                if ($this->isApartment) {
+                    $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->apartment_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                } else {
+                    $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                }
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
