@@ -3324,7 +3324,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             }
             $provine[] = 'Tất cả';
             $lawDocument = AppraiseLawDocument::whereIn('provinces', $provine)->orderBy('position')->get();
-            dd($provine[], $lawDocument);
+            dd($provine, $lawDocument);
             CertificateLegalDocumentsOnValuation::query()->where('certificate_id', '=', $certificateId)->forceDelete();
             CertificateLegalDocumentsOnConstruction::query()->where('certificate_id', '=', $certificateId)->forceDelete();
             CertificateLegalDocumentsOnLand::query()->where('certificate_id', '=', $certificateId)->forceDelete();
