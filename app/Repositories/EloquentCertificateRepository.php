@@ -3319,11 +3319,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (isset($realEstateList)) {
             $provine = [];
             if ($type == 'apartment') {
-                foreach ($realEstateList as $realEstateId) {
-                    $data = CertificateApartment::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
-                    $provine[] = $data['province']['name']??'Tất cả';
-                    dd($realEstateId,$data);
-                }
+                $listApartment = CertificateHasRealEstate::query()
+                ->where('certificate_id' , $certificateId)->get();
+                dd($listApartment)
+                // foreach ($realEstateList as $realEstateId) {
+                //     $data = CertificateApartment::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
+                //     $provine[] = $data['province']['name']??'Tất cả';
+                //     dd($realEstateId,$data);
+                // }
             } else {
                 foreach ($realEstateList as $realEstateId) {
                     $data = Appraise::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
