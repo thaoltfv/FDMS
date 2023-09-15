@@ -3323,6 +3323,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $data = CertificateApartment::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
                     $provine[] = $data['province']['name']??'Tất cả';
                 }
+                dd($provine);
             } else {
                 foreach ($realEstateList as $realEstateId) {
                     $data = Appraise::with('province:id,name')->where('real_estate_id', $realEstateId)->select('province_id')->first();
@@ -3331,7 +3332,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             }
             $provine[] = 'Tất cả';
             $lawDocument = AppraiseLawDocument::whereIn('provinces', $provine)->orderBy('position')->get();
-            dd($type, $provine, $lawDocument);
             CertificateLegalDocumentsOnValuation::query()->where('certificate_id', '=', $certificateId)->forceDelete();
             CertificateLegalDocumentsOnConstruction::query()->where('certificate_id', '=', $certificateId)->forceDelete();
             CertificateLegalDocumentsOnLand::query()->where('certificate_id', '=', $certificateId)->forceDelete();
