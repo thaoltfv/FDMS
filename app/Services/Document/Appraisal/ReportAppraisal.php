@@ -265,9 +265,9 @@ class ReportAppraisal extends Report
             $table->addCell(5300, $this->cellVCentered)->addText(isset($doc['content']) ? CommonService::nl2br($doc['content']) : '');
         }
         $section->addTitle('Văn bản pháp luật của địa phương:', 2);
-        $section->addText(json_encode($certificate->legalDocumentsOnLocal));
-        $section->addText('------------------------------------------');
-        $section->addText(json_encode($certificate));
+        // $section->addText(json_encode($certificate->legalDocumentsOnLocal));
+        // $section->addText('------------------------------------------');
+        // $section->addText(json_encode($certificate));
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
         $table->addCell(600, $this->cellVCentered)->addText('Stt', ['bold' => true], $this->cellHCenteredKeepNext);
