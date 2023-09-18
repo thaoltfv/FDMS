@@ -15,6 +15,9 @@ export default class CertificateAsset extends Model {
 	static async updateDistance (data, id = '') {
 		return (new this()).request({ method: 'POST', url: `certification_asset/update-distance/${id}`, data: data, isStatic: true })
 	}
+	static async updateMucdichchinh (data, id = '') {
+		return (new this()).request({ method: 'POST', url: `certification_asset/update-mucdichchinh/${id}`, data: data, isStatic: true })
+	}
 	static async updateNoteHienTrang (data, id = '') {
 		return (new this()).request({ method: 'POST', url: `certification_asset/update-note-hientrang/${id}`, data: data, isStatic: true })
 	}
