@@ -6965,6 +6965,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 ->where('id', $id)
                 ->update(['asset_title' => $objects]);
             }
+    
+    public function updateMucdichchinh(int $objects, int $id = null)
+    {
+        return AppraiseComparisonFactor::query()
+                ->where('id', $id)
+                ->update(['asset_title' => $objects]);
+            }
 
     public function updateNoteHienTrang($objects, int $id = null)
     {
