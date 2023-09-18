@@ -4654,7 +4654,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $name = 'Khoảng cách TSSS đến TSTĐ';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }elseif($comparisonFactorTmp == 'muc_dich_chinh'){
-                $appraiseValue = true ;
+                $appraiseValue = 'false' ;
                 $assetValue = 0;
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
