@@ -6966,7 +6966,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 ->update(['asset_title' => $objects]);
             }
     
-    public function updateMucdichchinh(int $objects, int $id = null)
+    public function updateMucdichchinh(string $objects, int $id = null)
     {
         return AppraiseComparisonFactor::query()
                 ->where('id', $id)
