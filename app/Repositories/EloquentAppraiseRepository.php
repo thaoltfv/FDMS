@@ -4656,7 +4656,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             }elseif($comparisonFactorTmp == 'muc_dich_chinh'){
                 $appraiseValue = 'false' ;
                 $assetValue = 0;
-                dd('sdsdsds', $asset, $property)
+                dd('sdsdsds', $asset, $property);
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
