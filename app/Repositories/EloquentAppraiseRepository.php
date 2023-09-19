@@ -4657,7 +4657,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $appraiseValue = 'false' ;
                 // $assetValue = 0;
                 // $assetValue = $asset->properties[0]->property_detail[0]->land_type_purpose_data->acronym;
-                dd('sdsdsds', $asset);
+                dd('sdsdsds', $asset['properties']);
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
