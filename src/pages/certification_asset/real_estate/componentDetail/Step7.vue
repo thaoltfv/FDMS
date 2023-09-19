@@ -519,7 +519,7 @@
 						</tr>
 						<tr v-if="!this.form.composite_land_remaning_value">
 						<td>28</td>
-						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} B.Quân.</td>
+						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} bình quân.</td>
 						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
 								Đơn giá QSDĐ (28) = (27) / (6) <br/>
 								Đơn giá của MDSD chính
@@ -533,25 +533,25 @@
 						<td>
 							28
 						</td>
-						<td id="dt_dat_qd">Diện tích đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false).land_type_purpose.acronym}} quy về đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} (m2)</td>
+						<td id="dt_dat_qd">Diện tích đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false).land_type_purpose.acronym}} quy về đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} (m<sup>2</sup>)</td>
 						<td>-</td>
-						<td>{{quydoivemucdichchinh1}}</td>
-						<td>{{quydoivemucdichchinh2}}</td>
-						<td>{{quydoivemucdichchinh3}}</td>
+						<td>{{formatNumber(quydoivemucdichchinh1)}}</td>
+						<td>{{formatNumber(quydoivemucdichchinh2)}}</td>
+						<td>{{formatNumber(quydoivemucdichchinh3)}}</td>
 						</tr>
 						<tr v-if="this.form.composite_land_remaning_value">
 						<td>
 							29
 						</td>
-						<td id="tong_dt_dat_qd">Diện tích đất  {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} sau khi quy đổi (m2)</td>
+						<td id="tong_dt_dat_qd">Diện tích đất  {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} sau khi quy đổi (m<sup>2</sup>)</td>
 						<td>-</td>
-						<td>{{sauquydoivemucdichchinh1}}</td>
-						<td>{{sauquydoivemucdichchinh2}}</td>
-						<td>{{sauquydoivemucdichchinh3}}</td>
+						<td>{{formatNumber(sauquydoivemucdichchinh1)}}</td>
+						<td>{{formatNumber(sauquydoivemucdichchinh2)}}</td>
+						<td>{{formatNumber(sauquydoivemucdichchinh3)}}</td>
 						</tr>
 						<tr v-if="this.form.composite_land_remaning_value">
 						<td>30</td>
-						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} B.Quân.</td>
+						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} bình quân.</td>
 						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
 								Đơn giá QSDĐ (30) = (26) / (29) <br/>
 								Đơn giá của MDSD chính
@@ -4402,35 +4402,35 @@ export default {
 				this.type_method = `Phương pháp: tỷ lệ ${this.form.composite_land_remaning_value}% giá đất cơ sở chính`
 				this.checkProcedure = true
 				this.remaining_commerce_price = parseFloat(this.formatCurrent(this.mgtnTemp) * this.form.composite_land_remaning_value / 100).toFixed(0)
-				// console.log('ffsdấdsd', comparisonFactor1['muc_dich_chinh'].asset_title)
+				console.log('ffsdấdsd', this.asset_appropriate_area_arr)
 				// console.log('ffsdấdsd', comparisonFactor2['muc_dich_chinh'].asset_title)
 				// console.log('ffsdấdsd', comparisonFactor3['muc_dich_chinh'].asset_title)
 				// console.log('asset 1', asset1.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym !== comparisonFactor1['muc_dich_chinh'].asset_title))
-				let arena1 = asset1.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym !== comparisonFactor1['muc_dich_chinh'].asset_title)[0].total_area
-				let arena2 = asset2.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym !== comparisonFactor2['muc_dich_chinh'].asset_title)[0].total_area
-				let arena3 = asset3.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym !== comparisonFactor3['muc_dich_chinh'].asset_title)[0].total_area
-				let Tarena1 = asset1.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title).length > 0 ? asset1.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title)[0].total_area : 0
-				let Tarena2 = asset2.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title).length > 0 ? asset2.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title)[0].total_area  : 0
-				let Tarena3 = asset3.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title).length > 0 ? asset3.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title)[0].total_area  : 0
-				
-				if (arena1){
+				let arena1 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id)[0].total_area : 0
+				let arena2 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id)[0].total_area : 0
+				let arena3 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id)[0].total_area : 0
+				let Tarena1 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset == comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset == comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id)[0].total_area : 0
+				let Tarena2 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset == comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset == comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id)[0].total_area : 0
+				let Tarena3 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset == comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset == comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id)[0].total_area : 0
+				console.log('ffsdấdsd 11', arena1)
+				// if (arena1){
 					this.quydoivemucdichchinh1 = parseFloat(arena1*this.form.composite_land_remaning_value/100).toFixed(2)
 					this.sauquydoivemucdichchinh1 = parseFloat(arena1*this.form.composite_land_remaning_value/100 + Tarena1).toFixed(2)
 					this.dgd1 = (typeof this.detail1.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice1 / (arena1*this.form.composite_land_remaning_value/100 + Tarena1)) : 0
 
-				}
-				if (arena2){
+				// }
+				// if (arena2){
 					this.quydoivemucdichchinh2 = parseFloat(arena2*this.form.composite_land_remaning_value/100).toFixed(2)
 					this.sauquydoivemucdichchinh2 = parseFloat(arena2*this.form.composite_land_remaning_value/100 + Tarena2).toFixed(2)
 					this.dgd2 = (typeof this.detail2.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice2 / (arena2*this.form.composite_land_remaning_value/100 + Tarena2)) : 0
 
-				}
-				if (arena3){
+				// }
+				// if (arena3){
 					this.quydoivemucdichchinh3 = parseFloat(arena3*this.form.composite_land_remaning_value/100).toFixed(2)
 					this.sauquydoivemucdichchinh3 = parseFloat(arena3*this.form.composite_land_remaning_value/100 + Tarena3).toFixed(2)
 					this.dgd3 = (typeof this.detail3.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice3 / (arena3*this.form.composite_land_remaning_value/100 + Tarena3)) : 0
 
-				}
+				// }
 
 
 				// Phương pháp: tính giá độc lập
