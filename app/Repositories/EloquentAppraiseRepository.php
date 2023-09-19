@@ -4655,8 +4655,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }elseif($comparisonFactorTmp == 'muc_dich_chinh'){
                 $appraiseValue = 'false' ;
-                $assetValue = 0;
-                dd('sdsdsds', $asset, $property);
+                // $assetValue = 0;
+                $assetValue = $asset->properties[0]->propertyDetail[0]->land_type_purpose_data->acronym;
+                // dd('sdsdsds', $asset, $property);
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
