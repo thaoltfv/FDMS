@@ -152,6 +152,11 @@ class ReportAppendix1 extends Report
         }
 
         $this->asset1->muc_dich_chinh = 0;
+        $this->asset1->method_value = 0;
+        $this->asset2->muc_dich_chinh = 0;
+        $this->asset2->method_value = 0;
+        $this->asset3->muc_dich_chinh = 0;
+        $this->asset3->method_value = 0;
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
             //Filter with all status
             $comparisonFactors = $asset->comparisonFactor;
@@ -305,30 +310,43 @@ class ReportAppendix1 extends Report
                 // dd($area_phu_ve_chinh,$area_chinh_cuoicung,$totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice, $estimateAmount );
                 
                 // dd($item);
+                $result = [
+                    'id' => $item->id,
+                    'building_price' => $buildingPrice,
+                    'other_asset_price' => $otherAssetPrice,
+                    'total_amount' => $totalAmount,
+                    'percent' => $adjustPercent,
+                    'total_estimate_amount' => $totalEstimateAmount,
+                    'change_violate_price' => $violatePrice,
+                    'change_purpose_price' => $purposePrice,
+                    'estimate_amount' => $estimateAmount,
+                    'avg_price' => $avgPrice,
+                    'area_phu_ve_chinh' => $area_phu_ve_chinh,
+                    'area_chinh_cuoicung' => $area_chinh_cuoicung,
+                    'ti_le_dat' => $item->method_value,
+                ];
             } else {
                 $purposePrice = floatval($adapter->change_purpose_price);
                 $violatePrice = floatval($adapter->change_violate_price);
                 $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
                 $avgPrice = round($estimateAmount / $mainArea);
+                $result = [
+                    'id' => $item->id,
+                    'building_price' => $buildingPrice,
+                    'other_asset_price' => $otherAssetPrice,
+                    'total_amount' => $totalAmount,
+                    'percent' => $adjustPercent,
+                    'total_estimate_amount' => $totalEstimateAmount,
+                    'change_violate_price' => $violatePrice,
+                    'change_purpose_price' => $purposePrice,
+                    'estimate_amount' => $estimateAmount,
+                    'avg_price' => $avgPrice,
+                ];
             }
             
         }
         
-        $result = [
-            'id' => $item->id,
-            'building_price' => $buildingPrice,
-            'other_asset_price' => $otherAssetPrice,
-            'total_amount' => $totalAmount,
-            'percent' => $adjustPercent,
-            'total_estimate_amount' => $totalEstimateAmount,
-            'change_violate_price' => $violatePrice,
-            'change_purpose_price' => $purposePrice,
-            'estimate_amount' => $estimateAmount,
-            'avg_price' => $avgPrice,
-            'area_phu_ve_chinh' => $area_phu_ve_chinh,
-            'area_chinh_cuoicung' => $area_chinh_cuoicung,
-            'ti_le_dat' => $item->method_value,
-        ];
+        
         return $result;
     }
 
