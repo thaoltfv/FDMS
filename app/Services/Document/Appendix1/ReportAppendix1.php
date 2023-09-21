@@ -255,6 +255,23 @@ class ReportAppendix1 extends Report
             if ($item->muc_dich_chinh){
                 $purposePrice = 0;
                 // AppraiseUnitArea
+                $appraise_id = $item->appraise_id;
+                $asset_general_id = $item->id;
+                $lst_land_type = $item->properties[0]->property_detail;
+                $area_chinh = 0;
+                $area_phu = 0;
+                $id_chinh = 0;
+                $id_phu = 0;
+                foreach ($lst_land_type as $key) {
+                    if ($key->land_type_purpose_data->acronym == $item->muc_dich_chinh) {
+                        $area_chinh = $key->total_area;
+                        $id_chinh = $key->land_type_purpose;
+                    } else {
+                        $area_phu = $key->total_area;
+                        $id_phu = $key->land_type_purpose;
+                    }
+                }
+                dd($area_chinh,$area_phu,$id_chinh,$id_phu);
                 dd($item);
             } else {
                 $purposePrice = floatval($adapter->change_purpose_price);
