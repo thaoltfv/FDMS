@@ -234,7 +234,7 @@ class ReportAppendix1 extends Report
 
     private function getAssetPriceData($item, $adapter, $mainArea)
     {
-        dd($item);
+        // dd($item);
         $result = [];
         $totalAmount = floatval($item->total_amount);
         $buildingPrice = floatval($item->total_construction_amount);
@@ -242,6 +242,7 @@ class ReportAppendix1 extends Report
         $purposePrice = 0;
         $violatePrice = 0;
         $adjustPercent = floatval($adapter->percent);
+        dd($adjustPercent);
         $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
