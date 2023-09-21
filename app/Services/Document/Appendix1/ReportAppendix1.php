@@ -242,14 +242,20 @@ class ReportAppendix1 extends Report
         $purposePrice = 0;
         $violatePrice = 0;
         $adjustPercent = floatval($adapter->percent);
-        dd($adjustPercent);
+        // dd($adjustPercent);
         $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
         } else {
-            $purposePrice = floatval($adapter->change_purpose_price);
-            $violatePrice = floatval($adapter->change_violate_price);
-            $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
+            if ($item->muc_dich_chinh){
+                $purposePrice = 0;
+                dd($item);
+            } else {
+                $purposePrice = floatval($adapter->change_purpose_price);
+                $violatePrice = floatval($adapter->change_violate_price);
+                $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
+            }
+            
         }
         $avgPrice = round($estimateAmount / $mainArea);
         $result = [
