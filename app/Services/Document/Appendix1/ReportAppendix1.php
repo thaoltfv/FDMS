@@ -33,6 +33,8 @@ class ReportAppendix1 extends Report
     protected $assetPrice = [];
     protected $gdtt = [];
     protected $baseAcronym = '';
+
+    protected $notbaseAcronym = '';
     protected $asset1;
     protected $asset2;
     protected $asset3;
@@ -402,8 +404,12 @@ class ReportAppendix1 extends Report
             $id = $detail->land_type_purpose_id;
             $acronym = $detail->landTypePurpose->acronym;
             $isMain = $detail->is_transfer_facility;
-            if ($isMain)
+            if ($isMain) {
                 $this->baseAcronym = $acronym;
+            } else {
+                $this->notbaseAcronym = $acronym;
+            }
+                
             $this->landType['appraise'][$id] = $this->setLandTypeData($id, $acronym, $isMain, $totalArea, $planinngArea, $mainArea, $price);
         }
         foreach ($asset->assetGeneral as $item) {
@@ -605,8 +611,8 @@ class ReportAppendix1 extends Report
         }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
-            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->acronym.'/đất '. $this->baseAcronym.'', $asset);
-            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->acronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
+            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
+            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
             $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
         }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đ/giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
