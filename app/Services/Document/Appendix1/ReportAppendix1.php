@@ -148,9 +148,9 @@ class ReportAppendix1 extends Report
             $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
             $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
             $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
-            $this->asset1->muc_dich_chinh = $this->getComparisonType($comparisonFactor1, 'muc_dich_chinh');
-            $this->asset2->muc_dich_chinh = $this->getComparisonType($comparisonFactor2, 'muc_dich_chinh');
-            $this->asset3->muc_dich_chinh = $this->getComparisonType($comparisonFactor3, 'muc_dich_chinh');
+            $this->asset1->muc_dich_chinh = $this->getComparisonType($comparisonFactor1, 'muc_dich_chinh')->asset_title;
+            $this->asset2->muc_dich_chinh = $this->getComparisonType($comparisonFactor2, 'muc_dich_chinh')->asset_title;
+            $this->asset3->muc_dich_chinh = $this->getComparisonType($comparisonFactor3, 'muc_dich_chinh')->asset_title;
         }
         $this->assetPrice['asset1'] = $this->getAssetPriceData($this->asset1, $this->adapter1, $area1);
         $this->assetPrice['asset2'] = $this->getAssetPriceData($this->asset2, $this->adapter2, $area2);
