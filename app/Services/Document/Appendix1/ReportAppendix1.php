@@ -150,13 +150,6 @@ class ReportAppendix1 extends Report
             $area2 =  $this->sumArea($this->landType['asset2'], 'main_area');
             $area3 =  $this->sumArea($this->landType['asset3'], 'main_area');
         }
-
-        $this->asset1->muc_dich_chinh = 0;
-        $this->asset1->method_value = 0;
-        $this->asset2->muc_dich_chinh = 0;
-        $this->asset2->method_value = 0;
-        $this->asset3->muc_dich_chinh = 0;
-        $this->asset3->method_value = 0;
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
             //Filter with all status
             $comparisonFactors = $asset->comparisonFactor;
@@ -276,7 +269,7 @@ class ReportAppendix1 extends Report
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
         } else {
-            if ($item->muc_dich_chinh != 0){
+            if ($item->muc_dich_chinh){
                 $purposePrice = 0;
                 // AppraiseUnitArea
                 $appraise_id = $item->appraise_id;
