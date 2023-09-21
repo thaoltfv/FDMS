@@ -286,8 +286,8 @@ class ReportAppendix1 extends Report
                         $id_phu = $key->land_type_purpose;
                     }
                 }
-                $violent_area_chinh = $item->unit_area->where('land_type_id', $id_chinh)->first()->violation_asset_area;
-                $violent_area_phu = $item->unit_area->where('land_type_id', $id_phu)->first()->violation_asset_area;
+                $violent_area_chinh = $item->unit_area->where('land_type_id', $id_chinh)->first() ? $item->unit_area->where('land_type_id', $id_chinh)->first()->violation_asset_area : 0;
+                $violent_area_phu = $item->unit_area->where('land_type_id', $id_phu)->first() ? $item->unit_area->where('land_type_id', $id_phu)->first()->violation_asset_area : 0;
 
                 $area_chinh_conlai = $area_chinh - $violent_area_chinh;
                 $area_phu_conlai = $area_phu - $violent_area_phu;
