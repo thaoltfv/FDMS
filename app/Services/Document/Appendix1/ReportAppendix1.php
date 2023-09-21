@@ -476,6 +476,7 @@ class ReportAppendix1 extends Report
     protected function collectInfomationAppraiseData($asset)
     {
         $data = [];
+        $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
@@ -525,7 +526,9 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
         $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
         $data[] = $this->collectInfoAppraiseViolatePrice($stt++, 'Giá trị phần diện tích vi phạm QH (đ)', $asset);
-        $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, "Chi phí chuyển MĐSD (đ)", $asset);
+        if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
+            $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, "Chi phí chuyển MĐSD (đ)", $asset);
+        }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đ/giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
         return $data;
