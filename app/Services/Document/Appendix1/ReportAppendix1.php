@@ -156,6 +156,14 @@ class ReportAppendix1 extends Report
             $this->asset1->muc_dich_chinh = $this->getComparisonType($comparisonFactor1, 'muc_dich_chinh')->asset_title;
             $this->asset2->muc_dich_chinh = $this->getComparisonType($comparisonFactor2, 'muc_dich_chinh')->asset_title;
             $this->asset3->muc_dich_chinh = $this->getComparisonType($comparisonFactor3, 'muc_dich_chinh')->asset_title;
+
+            $unitArea1 = $asset->assetUnitArea->where('asset_general_id', $this->asset1->id);
+            $unitArea2 = $asset->assetUnitArea->where('asset_general_id', $this->asset2->id);
+            $unitArea3 = $asset->assetUnitArea->where('asset_general_id', $this->asset3->id);
+
+            $this->asset1->unit_area = $unitArea1;
+            $this->asset2->unit_area = $unitArea2;
+            $this->asset3->unit_area = $unitArea3;
         }
         $this->assetPrice['asset1'] = $this->getAssetPriceData($this->asset1, $this->adapter1, $area1);
         $this->assetPrice['asset2'] = $this->getAssetPriceData($this->asset2, $this->adapter2, $area2);
@@ -271,7 +279,8 @@ class ReportAppendix1 extends Report
                         $id_phu = $key->land_type_purpose;
                     }
                 }
-                dd($area_chinh,$area_phu,$id_chinh,$id_phu);
+                // dd($area_chinh,$area_phu,$id_chinh,$id_phu);
+                
                 dd($item);
             } else {
                 $purposePrice = floatval($adapter->change_purpose_price);
