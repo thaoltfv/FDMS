@@ -143,6 +143,7 @@ class ReportAppendix1 extends Report
             $area3 =  $this->sumArea($this->landType['asset3'], 'main_area');
         }
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
+            dd($this->comparisonFactor1);
             dd($this->getComparisonType($this->comparisonFactor1, 'muc_dich_chinh'));
             $this->asset1->muc_dich_chinh = $this->getComparisonType($this->comparisonFactor1, 'muc_dich_chinh');
             $this->asset2->muc_dich_chinh = $this->getComparisonType($this->comparisonFactor2, 'muc_dich_chinh');
