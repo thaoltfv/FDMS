@@ -143,11 +143,14 @@ class ReportAppendix1 extends Report
             $area3 =  $this->sumArea($this->landType['asset3'], 'main_area');
         }
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
-            dd($this->comparisonFactor1);
-            dd($this->getComparisonType($this->comparisonFactor1, 'muc_dich_chinh'));
-            $this->asset1->muc_dich_chinh = $this->getComparisonType($this->comparisonFactor1, 'muc_dich_chinh');
-            $this->asset2->muc_dich_chinh = $this->getComparisonType($this->comparisonFactor2, 'muc_dich_chinh');
-            $this->asset3->muc_dich_chinh = $this->getComparisonType($this->comparisonFactor3, 'muc_dich_chinh');
+            //Filter with all status
+            $comparisonFactors = $asset->comparisonFactor;
+            $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
+            $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
+            $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
+            $this->asset1->muc_dich_chinh = $this->getComparisonType($comparisonFactor1, 'muc_dich_chinh');
+            $this->asset2->muc_dich_chinh = $this->getComparisonType($comparisonFactor2, 'muc_dich_chinh');
+            $this->asset3->muc_dich_chinh = $this->getComparisonType($comparisonFactor3, 'muc_dich_chinh');
         }
         $this->assetPrice['asset1'] = $this->getAssetPriceData($this->asset1, $this->adapter1, $area1);
         $this->assetPrice['asset2'] = $this->getAssetPriceData($this->asset2, $this->adapter2, $area2);
