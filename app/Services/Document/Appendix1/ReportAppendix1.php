@@ -107,7 +107,7 @@ class ReportAppendix1 extends Report
     {
         // dd($asset);
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
-        dd($method);
+        // dd($method);
         $this->asset1 = $asset->assetGeneral[0];
         $this->asset2 = $asset->assetGeneral[1];
         $this->asset3 = $asset->assetGeneral[2];
@@ -157,6 +157,10 @@ class ReportAppendix1 extends Report
             $this->asset1->muc_dich_chinh = $this->getComparisonType($comparisonFactor1, 'muc_dich_chinh')->asset_title;
             $this->asset2->muc_dich_chinh = $this->getComparisonType($comparisonFactor2, 'muc_dich_chinh')->asset_title;
             $this->asset3->muc_dich_chinh = $this->getComparisonType($comparisonFactor3, 'muc_dich_chinh')->asset_title;
+
+            $this->asset1->method_value = $method->value;
+            $this->asset2->method_value = $method->value;
+            $this->asset3->method_value = $method->value;
 
             $unitArea1 = $asset->assetUnitArea->where('asset_general_id', $this->asset1->id);
             $unitArea2 = $asset->assetUnitArea->where('asset_general_id', $this->asset2->id);
@@ -285,8 +289,10 @@ class ReportAppendix1 extends Report
                 $area_chinh_conlai = $area_chinh - $violent_area_chinh;
                 $area_phu_conlai = $area_phu - $violent_area_phu;
 
+                $area_phu_ve_chinh = round($area_phu_conlai * $item->method_value / 100);
+                $area_chinh_cuoicung = $area_chinh_conlai + $area_phu_ve_chinh;
 
-                // dd($area_chinh,$area_phu,$id_chinh,$id_phu);
+                dd($area_phu_ve_chinh,$area_chinh_cuoicung);
                 
                 dd($item);
             } else {
