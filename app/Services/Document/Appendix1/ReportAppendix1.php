@@ -105,11 +105,14 @@ class ReportAppendix1 extends Report
 
     protected function processAssetData($asset)
     {
-        dd($asset);
+        // dd($asset);
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         $this->asset1 = $asset->assetGeneral[0];
         $this->asset2 = $asset->assetGeneral[1];
         $this->asset3 = $asset->assetGeneral[2];
+        $this->asset1->appraise_id = $asset->id;
+        $this->asset2->appraise_id = $asset->id;
+        $this->asset3->appraise_id = $asset->id;
         $this->assetPrice = [];
         $this->total = [];
         $this->gdtt = [];
