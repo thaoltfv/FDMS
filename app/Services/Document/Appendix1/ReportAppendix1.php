@@ -251,7 +251,7 @@ class ReportAppendix1 extends Report
         } else {
             if ($item->muc_dich_chinh){
                 $purposePrice = 0;
-                AppraiseUnitArea
+                // AppraiseUnitArea
                 dd($item);
             } else {
                 $purposePrice = floatval($adapter->change_purpose_price);
