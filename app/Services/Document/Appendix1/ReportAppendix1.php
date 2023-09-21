@@ -164,6 +164,10 @@ class ReportAppendix1 extends Report
             $this->asset2->method_value = $method->value;
             $this->asset3->method_value = $method->value;
 
+            $this->asset1->slug_value = $method->slug_value;
+            $this->asset2->slug_value = $method->slug_value;
+            $this->asset3->slug_value = $method->slug_value;
+
             $unitArea1 = $asset->assetUnitArea->where('asset_general_id', $this->asset1->id);
             $unitArea2 = $asset->assetUnitArea->where('asset_general_id', $this->asset2->id);
             $unitArea3 = $asset->assetUnitArea->where('asset_general_id', $this->asset3->id);
@@ -269,7 +273,7 @@ class ReportAppendix1 extends Report
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
         } else {
-            if ($item->muc_dich_chinh){
+            if ($item->slug_value === 'theo-ty-le-gia-dat-co-so-chinh'){
                 $purposePrice = 0;
                 // AppraiseUnitArea
                 $appraise_id = $item->appraise_id;
