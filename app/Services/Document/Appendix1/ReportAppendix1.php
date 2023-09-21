@@ -105,7 +105,7 @@ class ReportAppendix1 extends Report
 
     protected function processAssetData($asset)
     {
-        // dd($asset);
+        dd($asset);
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         $this->asset1 = $asset->assetGeneral[0];
         $this->asset2 = $asset->assetGeneral[1];
@@ -160,7 +160,6 @@ class ReportAppendix1 extends Report
             $unitArea1 = $asset->assetUnitArea->where('asset_general_id', $this->asset1->id);
             $unitArea2 = $asset->assetUnitArea->where('asset_general_id', $this->asset2->id);
             $unitArea3 = $asset->assetUnitArea->where('asset_general_id', $this->asset3->id);
-
             $this->asset1->unit_area = $unitArea1;
             $this->asset2->unit_area = $unitArea2;
             $this->asset3->unit_area = $unitArea3;
@@ -279,6 +278,13 @@ class ReportAppendix1 extends Report
                         $id_phu = $key->land_type_purpose;
                     }
                 }
+                $violent_area_chinh = $item->unit_area->where('land_type_id', $id_chinh)->first()->violation_asset_area;
+                $violent_area_phu = $item->unit_area->where('land_type_id', $id_phu)->first()->violation_asset_area;
+
+                $area_chinh_conlai = $area_chinh - $violent_area_chinh;
+                $area_phu_conlai = $area_phu - $violent_area_phu;
+
+
                 // dd($area_chinh,$area_phu,$id_chinh,$id_phu);
                 
                 dd($item);
