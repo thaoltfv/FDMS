@@ -3,6 +3,7 @@
 namespace App\Services\Document\Appendix1;
 
 use App\Enum\EstimateAssetDefault;
+use App\Models\AppraiseUnitArea;
 use App\Services\CommonService;
 use App\Services\Document\DocumentInterface\Report;
 use Illuminate\Support\Carbon;
@@ -104,6 +105,7 @@ class ReportAppendix1 extends Report
 
     protected function processAssetData($asset)
     {
+        dd($asset);
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         $this->asset1 = $asset->assetGeneral[0];
         $this->asset2 = $asset->assetGeneral[1];
@@ -249,6 +251,7 @@ class ReportAppendix1 extends Report
         } else {
             if ($item->muc_dich_chinh){
                 $purposePrice = 0;
+                AppraiseUnitArea
                 dd($item);
             } else {
                 $purposePrice = floatval($adapter->change_purpose_price);
