@@ -292,9 +292,10 @@ class ReportAppendix1 extends Report
                 $area_phu_ve_chinh = round($area_phu_conlai * $item->method_value / 100, 2);
                 $area_chinh_cuoicung = round($area_chinh_conlai + $area_phu_ve_chinh, 2);
 
-                $estimateAmount = round(($totalEstimateAmount - $buildingPrice - $otherAssetPrice) / $area_chinh_cuoicung);
+                $violatePrice = floatval($adapter->change_violate_price);
+                $estimateAmount = round(($totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice) / $area_chinh_cuoicung);
 
-                dd($area_phu_ve_chinh,$area_chinh_cuoicung,$totalEstimateAmount - $buildingPrice - $otherAssetPrice, $estimateAmount );
+                dd($area_phu_ve_chinh,$area_chinh_cuoicung,$totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice, $estimateAmount );
                 
                 dd($item);
             } else {
