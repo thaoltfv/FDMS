@@ -289,8 +289,8 @@ class ReportAppendix1 extends Report
                 $area_chinh_conlai = $area_chinh - $violent_area_chinh;
                 $area_phu_conlai = $area_phu - $violent_area_phu;
 
-                $area_phu_ve_chinh = round($area_phu_conlai * $item->method_value / 100);
-                $area_chinh_cuoicung = $area_chinh_conlai + $area_phu_ve_chinh;
+                $area_phu_ve_chinh = round($area_phu_conlai * $item->method_value / 100, 2);
+                $area_chinh_cuoicung = round($area_chinh_conlai + $area_phu_ve_chinh, 2);
 
                 dd($area_phu_ve_chinh,$area_chinh_cuoicung);
                 
