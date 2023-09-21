@@ -1859,7 +1859,7 @@ class ReportAppendix1 extends Report
         return $data;
     }
 
-    protected function dientichdatquydoicuoicung($stt, $title, $asset)
+    protected function dientichdatcuoicung($stt, $title, $asset)
     {
         $data = [
             $stt,
