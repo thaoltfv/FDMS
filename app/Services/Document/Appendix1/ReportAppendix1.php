@@ -323,7 +323,7 @@ class ReportAppendix1 extends Report
             'avg_price' => $avgPrice,
             'area_phu_ve_chinh' => $area_phu_ve_chinh,
             'area_chinh_cuoicung' => $area_chinh_cuoicung,
-            'ti_le_date' => $item->method_value,
+            'ti_le_dat' => $item->method_value,
         ];
         return $result;
     }
