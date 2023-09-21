@@ -223,6 +223,7 @@ class ReportAppendix1 extends Report
 
     private function getAssetPriceData($item, $adapter, $mainArea)
     {
+        dd($item);
         $result = [];
         $totalAmount = floatval($item->total_amount);
         $buildingPrice = floatval($item->total_construction_amount);
