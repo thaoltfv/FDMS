@@ -3801,7 +3801,7 @@ export default {
 			let change_purpose_price2 = (typeof asset.appraise_adapter[1] !== 'undefined') ? +asset.appraise_adapter[1].change_purpose_price : null
 			let change_purpose_price3 = (typeof asset.appraise_adapter[2] !== 'undefined') ? +asset.appraise_adapter[2].change_purpose_price : null
 
-			if (this.form.composite_land_remaning_slug) {
+			if (this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh') {
 				change_purpose_price1 = null
 				change_purpose_price2 = null
 				change_purpose_price3 = null
