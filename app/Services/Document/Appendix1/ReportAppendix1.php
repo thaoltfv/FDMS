@@ -1059,7 +1059,7 @@ class ReportAppendix1 extends Report
                         $formular = '     Đất ' . $acronym . ' = ' . number_format($mgtbr, 0, ',', '.') . 'đ/' . $this->m2 . ' x ' . $method->value . '% = ' . $resultTmp . 'đ/' . $this->m2 . '';
                         if (!$sttTmp) {
                             $textRun = $section->addTextRun();
-                            $textRun->addText('     - Qua khảo sát thực tế tại khu vực thẩm định giá, TTĐ nhận định Đơn giá đất CHN thị trường bằng ' . $method->value . '% đơn giá đất ' . $baseAcronym . ' thị trường là phù hợp', ['bold' => false]);
+                            $textRun->addText('     - Qua khảo sát thực tế tại khu vực thẩm định giá, TTĐ nhận định Đơn giá đất ' . $acronym . ' thị trường bằng ' . $method->value . '% đơn giá đất ' . $baseAcronym . ' thị trường là phù hợp', ['bold' => false]);
                         }
                         $textRun = $section->addTextRun();
                         $textRun->addText($formular, ['bold' => false]);
