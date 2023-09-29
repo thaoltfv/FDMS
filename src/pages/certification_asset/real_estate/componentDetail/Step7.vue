@@ -2521,36 +2521,39 @@ export default {
 					}
 				})
 			})
-			console.log('--------',this.form.asset_unit_price)
+			// console.log('--------',this.form.asset_unit_price)
 			this.form.asset_unit_price.forEach((itemUnitPrice) => {
 				if (!map1.has(itemUnitPrice.land_type_id)) {
 					map1.set(itemUnitPrice.land_type_id, true)
 					// console.log('map1', map1)
-					console.log('data_land_price_demo', this.data_land_price_demo)
+					// console.log('data_land_price_demo', this.data_land_price_demo)
 					this.data_land_price_demo.forEach((itemLandPrice, index) => {
 						// console.log('itemLandPrice', itemLandPrice)
 						// console.log('itemUnitPrice', itemLandPrice)
 						if (itemUnitPrice.land_type_data.acronym == itemLandPrice.purpose_land) {
-							console.log('compare', itemUnitPrice.land_type_data.acronym, itemLandPrice.purpose_land)
+							// console.log('compare', itemUnitPrice.land_type_data.acronym, itemLandPrice.purpose_land)
 							let get_data_filter = this.form.asset_unit_price.filter(item_filter => item_filter.land_type_data.acronym === itemLandPrice.purpose_land)
-							console.log('get_data_filter', get_data_filter)
+							// console.log('get_data_filter', get_data_filter)
 							for (let i = 0; i < get_data_filter.length; i++) {
 								let check1 = get_data_filter[i]
 								let count = 0
 								for (let t = 0; t < arr_compare.length; t++) {
 									let check2 = arr_compare[t]
-									if (check1.asset_general_id === check2.asset_general_id && check1.land_type_data.acronym == check2.acronym) {
+										console.log('check check', check1.asset_general_id, check1.land_type_data.acronym, check2.asset_general_id, check2.acronym)
+									if (check1.asset_general_id === check2.asset_general_id && check1.land_type_data.acronym === check2.acronym) {
 										count = 1
+										
 									}
 								}
 								if (count == 0){
 									get_data_filter.splice(i,1)
 								}
+								i--
 							}
 							this.data_land_price_demo[index].price_asset.push(...get_data_filter)
-							console.log('this.data_land_price_demo[index]', this.data_land_price_demo[index])
+							// console.log('this.data_land_price_demo[index]', this.data_land_price_demo[index])
 						}
-						console.log('this.data_land_price_demo', this.data_land_price_demo)
+						// console.log('this.data_land_price_demo', this.data_land_price_demo)
 					})
 				}
 			})
