@@ -28,6 +28,7 @@
         </div>
       </div>
       <div class="card">
+        
         <div class="card-title">
           <div class="d-flex justify-content-between align-items-center">
             <h3 class="title text-nowrap">Thông tin giao dịch</h3>
@@ -35,6 +36,9 @@
           </div>
         </div>
         <div class="card-body card-info" v-if="showInfo">
+          <div class="container-fluid color_content">
+          <div class="row"  v-if="form.asset_type_id !== 39">
+            <div class="col-12 col-lg-8" style="padding-left: 0;">
           <div class="d-grid">
             <div class="content-detail" v-if="this.form.source !== null">
               <p class="content-title">Nguồn thông tin:</p>
@@ -72,6 +76,7 @@
             </div>
           </div>
           <p class=" title" v-if="form.asset_type_id !== 39">Vị trí tài sản</p>
+          
           <div class="d-grid" v-if="form.asset_type_id !== 39">
                 <div class="content-detail">
                   <p class="content-title">Tỉnh/Thành:</p>
@@ -81,12 +86,13 @@
                   <p class="content-title">Quận/Huyện:</p>
                   <p class="content-name">{{this.form.district !== undefined && this.form.district != null ? this.form.district.name : ''}}</p>
                 </div>
+                
                 <div class="content-detail">
                   <p class="content-title">Phường/Xã:</p>
                   <p class="content-name">{{this.form.ward !== undefined && this.form.ward !== null ? this.form.ward.name : ''}}</p>
                 </div>
-          </div>
-          <div class="d-grid" v-if="form.asset_type_id !== 39">
+          <!-- </div>
+          <div class="d-grid" v-if="form.asset_type_id !== 39"> -->
                 <div class="content-detail">
                   <p class="content-title">Đường:</p>
                   <p class="content-name">{{this.form.street !== undefined && this.form.street !== null ? this.form.street.name: ''}}</p>
@@ -95,10 +101,88 @@
                   <p class="content-title">Đoạn:</p>
                   <p class="content-name">{{this.form.distance !== null && this.form.distance !== undefined ? this.form.distance.detail : 'Chưa có đoạn'}}</p>
                 </div>
-                <div class="content-detail">
+                <div class="content-detail"  v-if="form.asset_type_id !== 39">
+							<p class="content-title">Địa hình:</p>
+							<p class="content-name">{{form.topographic_data !== null && form.topographic_data !== undefined ? this.form.topographic_data.description : 'Chưa có địa hình'}}</p>
+						</div>
+                <!-- <div class="content-detail">
+                  <p class="content-title">Tọa độ:</p>
+                  <p class="content-name">{{this.form.coordinates}}</p>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-12 col-lg-4">
+              <div class="d-flex flex-column h-100">
+                <div class="form-group-container position-relative w-100">
+                  <InputText
+                    id="coordinate"
+                    :disabledInput="true"
+                    v-model="this.form.coordinates"
+                    vid="coordinates"
+                    label="Tọa độ"
+                    class="coordinates"
+                    rules="required"
+                    />
+                  <!-- <div class="img-locate">
+                    <img src="@/assets/icons/ic_locate.svg" alt="locate" @click="handleOpenModalMap()">
+                  </div> -->
+                </div>
+                <!-- Map -->
+                <div class="col-12 w-100 h-100 mt-3 layer-map" style="flex: 1">
+              <div class="d-flex all-map w-100 h-100">
+                <div class="main-map w-100 h-100">
+                  <div id="mapid" class="layer-map w-100 h-100">
+                      <l-map
+                        ref="map_step1"
+                        :zoom="map.zoom"
+                        :center="map.center"
+                        :maxZoom="20"
+                        :options="{zoomControl: false}"
+                      >
+                      <l-tile-layer :url="url" :options="{ maxNativeZoom: 20, maxZoom: 20}"></l-tile-layer>
+                      <l-tile-layer
+                        v-for="tileProvider in tileProviders"
+                        :key="tileProvider.name"
+                        :name="tileProvider.name"
+                        :visible="tileProvider.visible"
+                        :url="tileProvider.url"
+                        :attribution="tileProvider.attribution"
+                        :layer-type="tileProvider.type"
+                        :options="{ maxNativeZoom: 20, maxZoom: 20 }"
+                      />
+                        <!-- <l-tile-layer :url="url"></l-tile-layer> -->
+                        <l-control-zoom position="bottomright"></l-control-zoom>
+                        
+                        <l-control position="bottomleft">
+                          <button class="btn btn-map" @click="handleView" type="button">
+                            <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
+                            <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
+                          </button>
+                        </l-control>
+                        <l-control-layers position="bottomleft"></l-control-layers>
+                        <l-marker :lat-lng="markerLatLng">
+                          <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
+                            <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
+                          </l-icon>
+                          <l-tooltip>Vị trí tài sản</l-tooltip>
+                        </l-marker>
+                      </l-map>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- <div class="col-4">
+            <div class="d-grid" v-if="form.asset_type_id !== 39">
+              <div class="content-detail">
                   <p class="content-title">Tọa độ:</p>
                   <p class="content-name">{{this.form.coordinates}}</p>
                 </div>
+            </div>
+          </div> -->
+          
+          </div>
           </div>
           <div class="d-grid" v-if="form.asset_type_id !== 39">
                 <!-- <div class="content-detail">
@@ -130,15 +214,12 @@
               <p class="content-name">{{this.form.apartment_specification ? this.form.apartment_specification.apartment_name : ""}}</p>
             </div>
           </div>
-					<div class="d-grid">
-						<div class="content-detail">
+					<div class="">
+						<div class="">
 							<p class="content-title">Địa chỉ đầy đủ:</p>
 							<p class="content-name">{{this.form.full_address !== '' && this.form.full_address !== undefined && this.form.full_address !== null ? this.form.full_address : 'Không xác định'}}</p>
 						</div>
-						<div class="content-detail"  v-if="form.asset_type_id !== 39">
-							<p class="content-title">Địa hình:</p>
-							<p class="content-name">{{form.topographic_data !== null && form.topographic_data !== undefined ? this.form.topographic_data.description : 'Chưa có địa hình'}}</p>
-						</div>
+						
 					</div>
         </div>
       </div>
@@ -597,6 +678,11 @@
     </div>
     </div>
 </template>
+<style lang="scss">
+@import "../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
+@import "../../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
+@import '../../../node_modules/leaflet/dist/leaflet.css';
+</style>
 <script>
 import InputText from '@/components/Form/InputText'
 import InputCategoryData from '@/components/Form/InputCategoryData'
@@ -607,6 +693,7 @@ import ModalPrint from '@/components/Modal/ModalPrint'
 import ModalTangibleDetail from '@/components/Modal/ModalTangibleDetail'
 import {BDropdown, BDropdownItem} from 'bootstrap-vue'
 import moment from 'moment'
+import {LMap, LControlZoom, LTileLayer, LMarker, LTooltip, LIcon, LControl, LControlLayers} from 'vue2-leaflet'
 
 export default {
 	name: 'Detail',
@@ -618,10 +705,52 @@ export default {
 		ModalImage,
 		'b-dropdown': BDropdown,
 		'b-dropdown-item': BDropdownItem,
-		InputCategoryData
+		InputCategoryData,
+    LMap,
+		LControlZoom,
+		LTileLayer,
+		LMarker,
+		LTooltip,
+		LControl,
+    LControlLayers,
+		LIcon,
 	},
 	data () {
 		return {
+      imageMap: true,
+      location: {
+				lng: '',
+				lat: ''
+			},
+			markerLatLng: [10.964112, 106.856461],
+			map: {
+				center: [10.964112, 106.856461],
+				zoom: 17
+			},
+			url: 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff',
+      tileProviders: [
+				{
+					name: "Bản đồ ranh tờ, thửa",
+					visible: true,
+					url: "https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png",
+					attribution: "© Fastvalue",
+					type: "overlay"
+				},
+				{
+					name: "Bản đồ thông tin quy hoạch",
+					visible: false,
+					attribution: "© Fastvalue",
+					url: "https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png",
+					type: "overlay"
+				},
+        {
+					name: "Bản đồ quy hoạch lộ giới",
+					visible: false,
+					attribution: "© Fastvalue",
+					url: "https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png",
+					type: "overlay"
+				}
+			],
       visibleHistoryDrawer: false,
       historyList: [],
 			version: '',
@@ -720,6 +849,13 @@ export default {
 			edit: false
 		}
 	},
+  async mounted () {
+		if (this.$refs.map_step1 && this.$refs.map_step1.mapObject) {
+			this.$refs.map_step1.mapObject.invalidateSize()
+		}
+
+		await this.initMap()
+	},
 	async created () {
 		if ('id' in this.$route.query && this.$route.name === 'warehouse.detail') {
 			if (this.$route.meta['detail']) {
@@ -761,6 +897,27 @@ export default {
 		}
 	},
 	methods: {
+    async initMap () {
+			// eslint-disable-next-line no-undef
+			if (this.form.coordinates) {
+				this.map.center = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
+				this.markerLatLng = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
+				this.map.zoom = 17
+			} else {
+				this.markerLatLng = [10.964112, 106.856461]
+				this.map.center = [10.964112, 106.856461]
+			}
+		},
+    handleView () {
+			if (this.url === 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff') {
+				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
+        this.imageMap = false
+			} else {
+				this.url = 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
+				this.imageMap = true
+			}
+		},
     formatDateTime (value) {
 			return moment(String(value)).format('HH:mm DD/MM/YYYY')
 		},
@@ -1319,5 +1476,43 @@ export default {
 	@media (max-width: 418px) {
 		margin-bottom: 10px;
 	}
+}
+
+.form-group-container {
+  margin-top: 10px;
+}
+.main-map {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transition-timing-function: ease;
+  transition-duration: 0.25s;
+  overflow-x: hidden;
+  @media (max-width: 1023px) {
+    width: 100%;
+  }
+  .layer-map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    transition-timing-function: ease;
+    transition-duration: 0.25s;
+
+  }
+  // map
+  .btn-map {
+  background: #FFFFFF;
+  border-radius: 5px;
+  border: 3px solid #FFFFFF;
+  padding: 0;
+  box-sizing: border-box;
+  img{
+    max-width: 50px;
+    height: auto;
+  }
+}
 }
 </style>

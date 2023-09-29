@@ -102,7 +102,17 @@
                         :maxZoom="20"
                         :options="{zoomControl: false}"
                       >
-                        <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
+                        <l-tile-layer :url="url" :options="{ maxNativeZoom: 20, maxZoom: 20}"></l-tile-layer>
+                        <l-tile-layer
+                        v-for="tileProvider in tileProviders"
+                        :key="tileProvider.name"
+                        :name="tileProvider.name"
+                        :visible="tileProvider.visible"
+                        :url="tileProvider.url"
+                        :attribution="tileProvider.attribution"
+                        :layer-type="tileProvider.type"
+                        :options="{ maxNativeZoom: 20, maxZoom: 20 }"
+                      />
                         <!-- <l-tile-layer
                           url="https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png"
                           :min-zoom="12"
@@ -115,6 +125,7 @@
                             <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
                           </button>
                         </l-control>
+                        <l-control-layers position="bottomleft"></l-control-layers>
                         <l-marker :lat-lng="markerLatLng">
                           <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
                             <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
@@ -464,7 +475,7 @@ import ModalDeleteIndex from '@/components/Modal/ModalDeleteIndex'
 import ModalMap from './modals/ModalMap'
 import { Tabs, TabItem } from 'vue-material-tabs'
 import File from '@/models/File'
-import {LMap, LControlZoom, LTileLayer, LMarker, LTooltip, LIcon, LControl} from 'vue2-leaflet'
+import {LMap, LControlZoom, LTileLayer, LMarker, LTooltip, LIcon, LControl, LControlLayers} from 'vue2-leaflet'
 import Vue from 'vue'
 import Icon from 'buefy'
 import InputLengthArea from '@/components/Form/InputLengthArea.vue'
@@ -491,6 +502,7 @@ export default {
 		LMarker,
 		LTooltip,
 		LControl,
+    LControlLayers,
 		LIcon,
 		InputLengthArea
 	},
@@ -590,14 +602,37 @@ export default {
 				center: [10.964112, 106.856461],
 				zoom: 17
 			},
-			url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
+			url: 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff',
 			type: '',
 			file: '',
 			material: '',
 			imageType: null,
 			imgOverall: null,
 			imageCurrentStatus: null,
-			imageJuridical: null
+			imageJuridical: null,
+      tileProviders: [
+				{
+					name: "Bản đồ ranh tờ, thửa",
+					visible: true,
+					url: "https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png",
+					attribution: "© Fastvalue",
+					type: "overlay"
+				},
+				{
+					name: "Bản đồ thông tin quy hoạch",
+					visible: false,
+					attribution: "© Fastvalue",
+					url: "https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png",
+					type: "overlay"
+				},
+        {
+					name: "Bản đồ quy hoạch lộ giới",
+					visible: false,
+					attribution: "© Fastvalue",
+					url: "https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png",
+					type: "overlay"
+				}
+			],
 		}
 	},
 	async mounted () {
@@ -625,7 +660,7 @@ export default {
 			if (this.data.general_infomation.coordinates) {
 				this.map.center = [this.data.general_infomation.coordinates.split(',')[0], this.data.general_infomation.coordinates.split(',')[1]]
 				this.markerLatLng = [this.data.general_infomation.coordinates.split(',')[0], this.data.general_infomation.coordinates.split(',')[1]]
-				this.map.zoom = 16
+				this.map.zoom = 17
 			} else {
 				this.markerLatLng = [10.964112, 106.856461]
 				this.map.center = [10.964112, 106.856461]
@@ -689,12 +724,12 @@ export default {
 			await this.getTheLastTurningTime()
 		},
 		handleView () {
-			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
+			if (this.url === 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
+				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
         this.imageMap = false
 			} else {
-				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
+				this.url = 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
 				this.imageMap = true
 			}
 		},
