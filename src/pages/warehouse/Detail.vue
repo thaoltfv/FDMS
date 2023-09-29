@@ -849,13 +849,13 @@ export default {
 			edit: false
 		}
 	},
-  async mounted () {
-		if (this.$refs.map_step1 && this.$refs.map_step1.mapObject) {
-			this.$refs.map_step1.mapObject.invalidateSize()
-		}
+  // async mounted () {
+	// 	if (this.$refs.map_step1 && this.$refs.map_step1.mapObject) {
+	// 		this.$refs.map_step1.mapObject.invalidateSize()
+	// 	}
 
-		await this.initMap()
-	},
+	// 	await this.initMap()
+	// },
 	async created () {
 		if ('id' in this.$route.query && this.$route.name === 'warehouse.detail') {
 			if (this.$route.meta['detail']) {
@@ -865,6 +865,7 @@ export default {
 				await this.getVersion()
 				this.version = this.versions[this.versions.length - 1].version
 				this.changeVersion()
+        await this.initMap()
 			} else {
 				this.$router.push({name: 'page-not-found'})
 			}
@@ -899,10 +900,13 @@ export default {
 	methods: {
     async initMap () {
 			// eslint-disable-next-line no-undef
+      console.log('form', this.form)
 			if (this.form.coordinates) {
+        
 				this.map.center = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.markerLatLng = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.map.zoom = 17
+        console.log('vô đây', map)
 			} else {
 				this.markerLatLng = [10.964112, 106.856461]
 				this.map.center = [10.964112, 106.856461]
