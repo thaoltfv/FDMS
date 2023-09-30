@@ -3,6 +3,7 @@
 namespace App\Services\Document\Appendix1;
 
 use App\Enum\EstimateAssetDefault;
+use App\Models\AppraiseUnitArea;
 use App\Services\CommonService;
 use App\Services\Document\DocumentInterface\Report;
 use Illuminate\Support\Carbon;
@@ -32,6 +33,8 @@ class ReportAppendix1 extends Report
     protected $assetPrice = [];
     protected $gdtt = [];
     protected $baseAcronym = '';
+
+    protected $notbaseAcronym = '';
     protected $asset1;
     protected $asset2;
     protected $asset3;
@@ -104,9 +107,15 @@ class ReportAppendix1 extends Report
 
     protected function processAssetData($asset)
     {
+        // dd($asset);
+        $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
+        // dd($method);
         $this->asset1 = $asset->assetGeneral[0];
         $this->asset2 = $asset->assetGeneral[1];
         $this->asset3 = $asset->assetGeneral[2];
+        $this->asset1->appraise_id = $asset->id;
+        $this->asset2->appraise_id = $asset->id;
+        $this->asset3->appraise_id = $asset->id;
         $this->assetPrice = [];
         $this->total = [];
         $this->gdtt = [];
@@ -140,6 +149,27 @@ class ReportAppendix1 extends Report
             $area1 =  $this->sumArea($this->landType['asset1'], 'main_area');
             $area2 =  $this->sumArea($this->landType['asset2'], 'main_area');
             $area3 =  $this->sumArea($this->landType['asset3'], 'main_area');
+        }
+        if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
+            //Filter with all status
+            $comparisonFactors = $asset->comparisonFactor;
+            $comparisonFactor1 = $comparisonFactors->where('asset_general_id', $this->asset1->id);
+            $comparisonFactor2 = $comparisonFactors->where('asset_general_id', $this->asset2->id);
+            $comparisonFactor3 = $comparisonFactors->where('asset_general_id', $this->asset3->id);
+            $this->asset1->muc_dich_chinh = $this->getComparisonType($comparisonFactor1, 'muc_dich_chinh')->asset_title;
+            $this->asset2->muc_dich_chinh = $this->getComparisonType($comparisonFactor2, 'muc_dich_chinh')->asset_title;
+            $this->asset3->muc_dich_chinh = $this->getComparisonType($comparisonFactor3, 'muc_dich_chinh')->asset_title;
+
+            $this->asset1->method_value = $method->value;
+            $this->asset2->method_value = $method->value;
+            $this->asset3->method_value = $method->value;
+
+            $unitArea1 = $asset->assetUnitArea->where('asset_general_id', $this->asset1->id);
+            $unitArea2 = $asset->assetUnitArea->where('asset_general_id', $this->asset2->id);
+            $unitArea3 = $asset->assetUnitArea->where('asset_general_id', $this->asset3->id);
+            $this->asset1->unit_area = $unitArea1;
+            $this->asset2->unit_area = $unitArea2;
+            $this->asset3->unit_area = $unitArea3;
         }
         $this->assetPrice['asset1'] = $this->getAssetPriceData($this->asset1, $this->adapter1, $area1);
         $this->assetPrice['asset2'] = $this->getAssetPriceData($this->asset2, $this->adapter2, $area2);
@@ -223,6 +253,7 @@ class ReportAppendix1 extends Report
 
     private function getAssetPriceData($item, $adapter, $mainArea)
     {
+        // dd($item);
         $result = [];
         $totalAmount = floatval($item->total_amount);
         $buildingPrice = floatval($item->total_construction_amount);
@@ -230,15 +261,57 @@ class ReportAppendix1 extends Report
         $purposePrice = 0;
         $violatePrice = 0;
         $adjustPercent = floatval($adapter->percent);
+        // dd($adjustPercent);
+        $area_chinh_cuoicung = 0;
+        $area_phu_ve_chinh = 0;
+        //
         $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
         } else {
-            $purposePrice = floatval($adapter->change_purpose_price);
-            $violatePrice = floatval($adapter->change_violate_price);
-            $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
+            if (isset($item->muc_dich_chinh)){
+                $purposePrice = 0;
+                // AppraiseUnitArea
+                $appraise_id = $item->appraise_id;
+                $asset_general_id = $item->id;
+                $lst_land_type = $item->properties[0]->property_detail;
+                $area_chinh = 0;
+                $area_phu = 0;
+                $id_chinh = 0;
+                $id_phu = 0;
+                foreach ($lst_land_type as $key) {
+                    if ($key->land_type_purpose_data->acronym == $item->muc_dich_chinh) {
+                        $area_chinh = $key->total_area;
+                        $id_chinh = $key->land_type_purpose;
+                    } else {
+                        $area_phu = $key->total_area;
+                        $id_phu = $key->land_type_purpose;
+                    }
+                }
+                $violent_area_chinh = $item->unit_area->where('land_type_id', $id_chinh)->first() ? $item->unit_area->where('land_type_id', $id_chinh)->first()->violation_asset_area : 0;
+                $violent_area_phu = $item->unit_area->where('land_type_id', $id_phu)->first() ? $item->unit_area->where('land_type_id', $id_phu)->first()->violation_asset_area : 0;
+
+                $area_chinh_conlai = $area_chinh - $violent_area_chinh;
+                $area_phu_conlai = $area_phu - $violent_area_phu;
+
+                $area_phu_ve_chinh = round($area_phu_conlai * $item->method_value / 100, 2);
+                $area_chinh_cuoicung = round($area_chinh_conlai + $area_phu_ve_chinh, 2);
+
+                $violatePrice = floatval($adapter->change_violate_price);
+                $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice;
+                $avgPrice = round($estimateAmount / $area_chinh_cuoicung);
+                // dd($area_phu_ve_chinh,$area_chinh_cuoicung,$totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice, $estimateAmount );
+                
+                // dd($item);
+            } else {
+                $purposePrice = floatval($adapter->change_purpose_price);
+                $violatePrice = floatval($adapter->change_violate_price);
+                $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
+                $avgPrice = round($estimateAmount / $mainArea);
+            }
+            
         }
-        $avgPrice = round($estimateAmount / $mainArea);
+        
         $result = [
             'id' => $item->id,
             'building_price' => $buildingPrice,
@@ -249,7 +322,10 @@ class ReportAppendix1 extends Report
             'change_violate_price' => $violatePrice,
             'change_purpose_price' => $purposePrice,
             'estimate_amount' => $estimateAmount,
-            'avg_price' => $avgPrice
+            'avg_price' => $avgPrice,
+            'area_phu_ve_chinh' => $area_phu_ve_chinh,
+            'area_chinh_cuoicung' => $area_chinh_cuoicung,
+            'ti_le_dat' => isset($item->method_value) ? $item->method_value : 0,
         ];
         return $result;
     }
@@ -328,8 +404,12 @@ class ReportAppendix1 extends Report
             $id = $detail->land_type_purpose_id;
             $acronym = $detail->landTypePurpose->acronym;
             $isMain = $detail->is_transfer_facility;
-            if ($isMain)
+            if ($isMain) {
                 $this->baseAcronym = $acronym;
+            } else {
+                $this->notbaseAcronym = $acronym;
+            }
+                
             $this->landType['appraise'][$id] = $this->setLandTypeData($id, $acronym, $isMain, $totalArea, $planinngArea, $mainArea, $price);
         }
         foreach ($asset->assetGeneral as $item) {
@@ -476,6 +556,7 @@ class ReportAppendix1 extends Report
     protected function collectInfomationAppraiseData($asset)
     {
         $data = [];
+        $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
@@ -525,8 +606,15 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
         $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
         $data[] = $this->collectInfoAppraiseViolatePrice($stt++, 'Giá trị phần diện tích vi phạm QH (đ)', $asset);
-        $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, "Chi phí chuyển MĐSD (đ)", $asset);
+        if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
+            $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, "Chi phí chuyển MĐSD (đ)", $asset);
+        }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
+        if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
+            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
+            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
+            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
+        }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đ/giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
         return $data;
     }
@@ -971,7 +1059,7 @@ class ReportAppendix1 extends Report
                         $formular = '     Đất ' . $acronym . ' = ' . number_format($mgtbr, 0, ',', '.') . 'đ/' . $this->m2 . ' x ' . $method->value . '% = ' . $resultTmp . 'đ/' . $this->m2 . '';
                         if (!$sttTmp) {
                             $textRun = $section->addTextRun();
-                            $textRun->addText('     - Qua khảo sát thực tế tại khu vực thẩm định giá, TTĐ nhận định Đơn giá đất CHN thị trường bằng ' . $method->value . '% đơn giá đất ' . $baseAcronym . ' thị trường là phù hợp', ['bold' => false]);
+                            $textRun->addText('     - Qua khảo sát thực tế tại khu vực thẩm định giá, TTĐ nhận định Đơn giá đất ' . $acronym . ' thị trường bằng ' . $method->value . '% đơn giá đất ' . $baseAcronym . ' thị trường là phù hợp', ['bold' => false]);
                         }
                         $textRun = $section->addTextRun();
                         $textRun->addText($formular, ['bold' => false]);
@@ -1744,6 +1832,48 @@ class ReportAppendix1 extends Report
             number_format($this->assetPrice['asset1']['estimate_amount'], 0, ',', '.'),
             number_format($this->assetPrice['asset2']['estimate_amount'], 0, ',', '.'),
             number_format($this->assetPrice['asset3']['estimate_amount'], 0, ',', '.'),
+            false
+        ];
+        return $data;
+    }
+
+    protected function tiledatquydoi($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            number_format($this->assetPrice['asset1']['ti_le_dat'], 0, ',', '.').'%',
+            number_format($this->assetPrice['asset2']['ti_le_dat'], 0, ',', '.').'%',
+            number_format($this->assetPrice['asset3']['ti_le_dat'], 0, ',', '.').'%',
+            false
+        ];
+        return $data;
+    }
+
+    protected function dientichdatquydoi($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            number_format($this->assetPrice['asset1']['area_phu_ve_chinh'], 2, ',', '.'),
+            number_format($this->assetPrice['asset2']['area_phu_ve_chinh'], 2, ',', '.'),
+            number_format($this->assetPrice['asset3']['area_phu_ve_chinh'], 2, ',', '.'),
+            false
+        ];
+        return $data;
+    }
+
+    protected function dientichdatcuoicung($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            number_format($this->assetPrice['asset1']['area_chinh_cuoicung'], 2, ',', '.'),
+            number_format($this->assetPrice['asset2']['area_chinh_cuoicung'], 2, ',', '.'),
+            number_format($this->assetPrice['asset3']['area_chinh_cuoicung'], 2, ',', '.'),
             false
         ];
         return $data;

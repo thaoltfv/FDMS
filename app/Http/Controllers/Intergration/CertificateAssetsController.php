@@ -800,6 +800,18 @@ class CertificateAssetsController extends Controller
 
     }
 
+    public function updateMucdichchinh(Request $request, int $id = null){
+        
+        //TODO Handle your data
+        $mucdichchinh = $request->mucdichchinh;
+        $result = $this->appraiseRepository->updateMucdichchinh($mucdichchinh, $id);
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData($result);
+
+
+    }
+
     public function updateNoteHienTrang(Request $request, int $id = null){
         
         //TODO Handle your data

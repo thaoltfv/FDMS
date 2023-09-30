@@ -1908,6 +1908,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "quy_hoach" => "Quy hoạch/hiện trạng",
             "dieu_kien_thanh_toan" => "Điều kiện thanh toán",
             "khoang_cach" => "Khoảng cách TSSS đến TSTĐ",
+            "muc_dich_chinh"  => "Mục đích sử dụng đất chính",
             //'yeu_to_khac' => 'Yếu tố khác',
         ];
 
@@ -1927,6 +1928,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "quy_hoach" => 0,
             "dieu_kien_thanh_toan" => 0,
             "khoang_cach" => 0,
+            "muc_dich_chinh" => 0
             //"yeu_to_khac" => 0
         ];
         $items = $this->model->query()
@@ -2000,7 +2002,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "dieu_kien_thanh_toan",
 
             "yeu_to_khac",
-            "khoang_cach"
+            "khoang_cach",
+            "muc_dich_chinh",
         ];
 
         $object = $this->findById($id);
@@ -2613,6 +2616,22 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'status' => (in_array('khoang_cach', $comparisonFactorInput)),
                         'type' => 'khoang_cach',
                         'name' => 'Khoảng cách TSSS đến TSTĐ',
+                        'appraise_title' => 0,
+                        'asset_title' => 0,
+                        'description' => 'Không xác định',
+                        'adjust_percent' => 0,
+                    ];
+                    $comparisonFactor = new AppraiseComparisonFactor($comparisonFactor);
+                    $comparisonFactorId = QueryBuilder::for($comparisonFactor)
+                        ->insertGetId($comparisonFactor->attributesToArray());
+                } else if ($comparisonFactorTmp == 'muc_dich_chinh') {
+                    continue;
+                    $comparisonFactor = [
+                        'appraise_id' => $appraiseId,
+                        'asset_general_id' => $appraiseHasAsset->asset_general_id,
+                        'status' => (in_array('muc_dich_chinh', $comparisonFactorInput)),
+                        'type' => 'muc_dich_chinh',
+                        'name' => 'Mục đích sử dụng đất chính',
                         'appraise_title' => 0,
                         'asset_title' => 0,
                         'description' => 'Không xác định',
@@ -4404,7 +4423,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "quy_hoach",
             "dieu_kien_thanh_toan",
             "yeu_to_khac",
-            "khoang_cach"
+            "khoang_cach",
+            "muc_dich_chinh"
         ];
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
@@ -4632,6 +4652,20 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'khoang_cach';
                 $name = 'Khoảng cách TSSS đến TSTĐ';
+                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
+            }elseif($comparisonFactorTmp == 'muc_dich_chinh'){
+                $appraiseValue = 'false' ;
+                // $assetValue = 0;
+                $assetValue = $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym'];
+                // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
+                // $dictionary = $dictionaries['khoang_cach'];
+                // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
+                $type = 'muc_dich_chinh';
+                $name = 'Mục đích sử dụng đất chính';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }
         }
@@ -6928,6 +6962,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     }
 
     public function updateDistance(int $objects, int $id = null)
+    {
+        return AppraiseComparisonFactor::query()
+                ->where('id', $id)
+                ->update(['asset_title' => $objects]);
+            }
+    
+    public function updateMucdichchinh(string $objects, int $id = null)
     {
         return AppraiseComparisonFactor::query()
                 ->where('id', $id)
