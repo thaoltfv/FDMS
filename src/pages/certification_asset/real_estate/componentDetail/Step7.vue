@@ -3533,7 +3533,7 @@ export default {
 			// 		}
 			// 	}
 			// }
-			// const appraise_adapter = this.form.appraise_adapter
+			const appraise_adapter = this.form.appraise_adapter
 			// for (let i of appraise_adapter) {
 			// 	if (i.change_violate_price < 0) {
 			// 		this.openMessage('Giá trị vi phạm quy hoạch không được âm')
