@@ -501,7 +501,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('activity/get-compare/{id}', [ActivityController::class, 'getCompareWithId']);
 
     // lấy lịch sử tsss
-    Route::get('activity/get-/{id}', [ActivityController::class, 'getAppraiseWithId']);
+    Route::get('activity/get-appraise/{id}', [ActivityController::class, 'getAppraiseWithId']);
 
     // SUM Total TSSS
     Route::get('report/get-count-compare-asset', [ComparisonAssetController::class, 'countCompareAssetGeneral']);
