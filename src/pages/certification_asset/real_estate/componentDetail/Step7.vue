@@ -2547,8 +2547,9 @@ export default {
 								}
 								if (count == 0){
 									get_data_filter.splice(i,1)
+									i--
 								}
-								i--
+								
 							}
 							this.data_land_price_demo[index].price_asset.push(...get_data_filter)
 							// console.log('this.data_land_price_demo[index]', this.data_land_price_demo[index])

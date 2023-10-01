@@ -13,7 +13,7 @@ export const navigations = [
 		customImage: true
 	},
 	{ id: 'home', type: 'item', icon: 'nav_bdg', title: 'Bản đồ giá', routeName: 'home', exact: true, customImage: true },
-	{ id: 'quyhoach', type: 'item', icon: 'nav_bdg', title: 'Bản đồ địa chính', routeName: 'map_dia_chinh', exact: true, customImage: true },
+	// { id: 'quyhoach', type: 'item', icon: 'nav_bdg', title: 'Bản đồ địa chính', routeName: 'map_dia_chinh', exact: true, customImage: true },
 	{ id: 'warehouse', type: 'item', icon: 'nav_kg', title: 'Kho giá', routeName: 'warehouse.index', customImage: true },
 	{ id: 'price_estimate', type: 'item', icon: 'nav_utg', title: 'Ước tính giá', routeName: 'price_estimate.index', customImage: true, denied: ['nova']},
 	{ id: 'log', type: 'item', icon: 'nav_lsut', title: 'Lịch sử ước tính', routeName: 'log.index', customImage: true, denied: ['nova'] },

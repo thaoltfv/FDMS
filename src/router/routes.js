@@ -245,23 +245,23 @@ export const routes = [
 		}]
 	},
 	// Map địa chính
-	{
-		path: '/map_dia_chinh',
-		component: Resource,
-		children: [{
-			path: '',
-			name: 'map_dia_chinh',
-			component: page('map/MapDiaChinh.vue'),
-			beforeEnter: ResolveGuard([AuthGuard]),
-			meta: {
-				title: 'Bản đồ địa chính',
-				permissions: [PERMISSIONS.VIEW_MAP],
-				breadcrumbs: [
-					//   { title: 'Bất động sản' }
-				]
-			}
-		}]
-	},
+	// {
+	// 	path: '/map_dia_chinh',
+	// 	component: Resource,
+	// 	children: [{
+	// 		path: '',
+	// 		name: 'map_dia_chinh',
+	// 		component: page('map/MapDiaChinh.vue'),
+	// 		beforeEnter: ResolveGuard([AuthGuard]),
+	// 		meta: {
+	// 			title: 'Bản đồ địa chính',
+	// 			permissions: [PERMISSIONS.VIEW_MAP],
+	// 			breadcrumbs: [
+	// 				//   { title: 'Bất động sản' }
+	// 			]
+	// 		}
+	// 	}]
+	// },
 	// warehouse
 	{
 		path: '/property',
