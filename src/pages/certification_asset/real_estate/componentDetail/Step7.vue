@@ -2099,7 +2099,7 @@ export default {
 				// let islayerCuttingPirce = islayerCuttingPirceData ? islayerCuttingPirceData.value : false
 				// let layerCuttingPirce = layerCuttingPirceData ? layerCuttingPirceData.value : 0
 				console.log('round', roundData)
-				let round = roundData && roundData.value > 2 ? roundData.value : 0
+				let round = roundData && roundData.value ? roundData.value : 0
 				let price = this.mgtb
 				let islayerCuttingPirce = this.layer_cutting_procedure
 				let layerCuttingPirce = this.layer_cutting_procedure_price
