@@ -890,7 +890,7 @@ class ReportAppendix1 extends Report
         $avgPrice = round(($price1 + $price2 + $price3) / 3);
         if ($slugValue == 'trung-binh') {
             $price = $avgPrice;
-        } else if ($slugValue == 'lon-nhat') {
+        } else if ($slugValue == 'cao-nhat') {
             $price = $maxPrice;
         } else {
             $price = $minPrice;
