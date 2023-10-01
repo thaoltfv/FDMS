@@ -395,6 +395,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certification_asset/appraise-all-step/{id}', [CertificateAssetsController::class, 'getAppraiseDataStepOneToSix']);
     Route::post('certification_asset/step7-other-asset/{id}', [CertificateAssetsController::class, 'postOtherAssets']);
     Route::post('certification_asset/step7-comparison-factor/{id}', [CertificateAssetsController::class, 'updateComparisonFactor_V2']);
+    Route::post('certification_asset/step7-comparison-factor-ver1/{id}', [CertificateAssetsController::class, 'updateComparisonFactor_V2_ver1']);
     Route::get('certification_asset/appraise-paging', [CertificateAssetsController::class, 'findPaging']);
     Route::post('certification_asset/step7-construction-company/{id}', [CertificateAssetsController::class, 'updateConstructionCompany']);
     Route::post('certification_asset/step7-round-appraise-total/{id}', [CertificateAssetsController::class, 'updateRoundAppraiseTotal']);

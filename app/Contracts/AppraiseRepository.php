@@ -74,6 +74,8 @@ interface AppraiseRepository extends BaseRepository
 
     public function updateComparisonFactor_V2($objects,int $id);
 
+    public function updateComparisonFactor_V2_ver1($objects,int $id);
+
     public function findPaging_v2();
 
     public function updateConstructionCompany(array $object , int $appraiseId);
