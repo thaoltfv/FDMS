@@ -5514,6 +5514,36 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $update;
     }
 
+    private function updateAppraiseStepVer1(int $appraiseId, int $step){
+        if(Appraise::where('id',$appraiseId)->exists()){
+            $appraise = Appraise::where('id',$appraiseId)->first();
+            if ($appraise->status === 3) {
+                $status = 3;
+            } else {
+                if ($step == 6 || $step == 7) {
+                    $status = 2;
+                } else {
+                    $status = 1;
+                    if (!empty($appraise->appraiseHasAssets))
+                        $this->resetDataStep6($appraiseId);
+                }
+            }
+            $update = ['step' => $step,
+                    'status' => $status
+                ];
+            if($appraise->status != $status){
+                $edited = $appraise;
+                $edited->step = $step;
+                $edited->status = $status;
+                // $this->CreateActivityLog($appraise, $edited, 'update_status', 'cập nhật trạng thái');
+            }
+            Appraise::where('id',$appraiseId)->update($update);
+
+            $this->updateRealEstates($appraiseId);
+        }
+        return $update;
+    }
+
     public function getAppraiseStep(int $appraiseId = null){
         $result = ['step' => 1];
         if(isset($appraiseId))
@@ -6021,6 +6051,242 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $this->calculateTotalPrice($appraiseId);
         }
         $this->updateAppraiseStep($appraiseId, 7);
+        $price = $this->getPriceById($id);
+        $price['comparison_factor'] =$this->getComparisonFactorList($id);
+        $data = Appraise::where('id', $appraiseId)->first();
+
+        # cập nhật bảng tổng hợp thông tin
+        # activity-log
+        $this->CreateActivityLog($data, $data, 'update-data', 'cập nhật dữ liệu bảng tổng hợp thông tin');
+        $this->processAfterSave($appraiseId);
+        return $price;
+    }
+
+    public function updateComparisonFactor_V2_ver1($objects , int $id)
+    {
+        $appraiseId = $id;
+        // CommonService::getComparisonAsset($appraiseId);
+        // CommonService::getComparisonAppraise($appraiseId);
+        $check = $this->beforeSave($appraiseId);
+        if(isset($check)){
+            return $check;
+        }
+        $user = CommonService::getUser();
+
+        if (isset($objects['comparison_factor'])) {
+            $comparisonFactorDatas = isset($objects['other_comparison']) ? array_merge($objects['comparison_factor'], $objects['other_comparison']) : $objects['comparison_factor'];
+            foreach ($comparisonFactorDatas as $comparisonFactorData) {
+                $comparisonFactorData = array_map(function($v){
+                    return (is_null($v)) ? "" : $v;
+                },$comparisonFactorData);
+
+                if(!isset($appraiseId)&&(isset($comparisonFactorData['appraise_id'])))
+                    $appraiseId = $comparisonFactorData['appraise_id'];
+
+                if (!isset($comparisonFactorData['adjust_percent'])) {
+                    $comparisonFactorData['adjust_percent'] = 0;
+                }
+                if ($comparisonFactorData['adjust_percent']  > 0) {
+                    $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['kem_thuan_loi'];
+                } else if ($comparisonFactorData['adjust_percent']  < 0) {
+                    $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['thuan_loi'];
+                }
+                else {
+                    $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
+                }
+
+                if(!$comparisonFactorData['status']&&($comparisonFactorData['type']=='yeu_to_khac')) {
+                    $comparisonFactorData['status'] = 1;
+                }
+
+                $comparisonFactor = new AppraiseComparisonFactor($comparisonFactorData);
+                if(isset($comparisonFactorData['id'])) {
+                    $comparisonFactorId = QueryBuilder::for($comparisonFactor)
+                        ->updateOrInsert(['id' => $comparisonFactorData['id']], $comparisonFactor->attributesToArray());
+                } else {
+                    $comparisonFactorId = QueryBuilder::for($comparisonFactor)
+                        ->insert($comparisonFactor->attributesToArray());
+                }
+
+            }
+        }
+
+        if (isset($objects['delete_other_comparison'])) {
+            foreach ($objects['delete_other_comparison'] as $comparisonFactorData) {
+                if(isset($comparisonFactorData['id'])) {
+                    AppraiseComparisonFactor::where('id', $comparisonFactorData['id'])->forceDelete();
+                }
+            }
+        }
+
+        if (isset($objects['asset_unit_price'])) {
+            foreach ($objects['asset_unit_price'] as $item) {
+                unset($item['land_type_data']);
+                $item['created_by'] = $user->id;
+
+                $appraiseUnitPrice = new AppraiseUnitPrice($item);
+                if(isset($item['id'])) {
+                    $appraiseUnitPriceId = QueryBuilder::for($appraiseUnitPrice)
+                        ->updateOrInsert(['id' => $item['id']], $appraiseUnitPrice->attributesToArray());
+                } else {
+                    $appraiseUnitPriceId = QueryBuilder::for($appraiseUnitPrice)
+                        ->insert($appraiseUnitPrice->attributesToArray());
+                }
+            }
+        }
+
+        if (isset($objects['asset_unit_area'])) {
+            foreach ($objects['asset_unit_area'] as $item) {
+                unset($item['land_type_data']);
+                $item['created_by'] = $user->id;
+
+                $appraiseUnitArea = new AppraiseUnitArea($item);
+                if(isset($item['id'])) {
+                    $appraiseUnitAreaId = QueryBuilder::for($appraiseUnitArea)
+                        ->updateOrInsert(['id' => $item['id']], $appraiseUnitArea->attributesToArray());
+                } else {
+                    $appraiseUnitAreaId = QueryBuilder::for($appraiseUnitArea)
+                        ->insert($appraiseUnitArea->attributesToArray());
+                }
+            }
+        }
+
+        if(isset($appraiseId)) {
+            $appraise = $this->findById($appraiseId);
+
+            if (isset($objects['remaining_price'])&&!empty($objects['remaining_price'])&&isset($appraise->composite_land_remaning_slug)&&$appraise->composite_land_remaning_slug=='theo-phuong-phap-doc-lap') {
+                $remainingPrice = $objects['remaining_price'];
+                if(isset($remainingPrice['remaining_commerce_price'])&&isset($remainingPrice['land_type'])) {
+                    CommonService::setAppraisePrice($appraise, $remainingPrice['remaining_commerce_price'], 'land_asset_purpose_'.$remainingPrice['land_type'].'_price');
+                }
+            }
+            $existAssetGeneralIds = [];
+            if (isset($objects['appraise_adapter'])&&!empty($objects['appraise_adapter'])) {
+                foreach($objects['appraise_adapter'] as $item) {
+                    $appraiseAdapter = AppraiseAdapter::where('appraise_id', $item['appraise_id'])
+                        ->where('asset_general_id', $item['asset_general_id'])->first();
+                    if(isset($appraiseAdapter)) {
+                        AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
+                            'percent' => $item['percent'],
+                            'change_purpose_price' => $item['change_purpose_price'],
+                            'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
+                        ]);
+                        $existAssetGeneralIds[] = $appraiseAdapter->id;
+                    } else {
+                        $appraiseAdapterId = AppraiseAdapter::insert([
+                            'appraise_id' => $item['appraise_id'],
+                            'asset_general_id' => $item['asset_general_id'],
+                            'percent' => $item['percent'],
+                            'change_purpose_price' => $item['change_purpose_price'],
+                            'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
+                        ]);
+                        $existAssetGeneralIds[] = $appraiseAdapterId;
+                    }
+                }
+            }
+
+            if (isset($objects['layer_cutting_procedure'])) {
+                $items = AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->get();
+                if(count($items)==1) {
+                    AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->update([
+                        'appraise_id' => $appraiseId,
+                        'slug' => "layer_cutting_procedure",
+                        'slug_value' => $objects['layer_cutting_procedure'],
+                    ]);
+                } else {
+                    if(count($items)>1) {
+                        AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->forceDelete();
+                    }
+                    AppraiseAppraisalMethods::create([
+                        'appraise_id' => $appraiseId,
+                        'slug' => "layer_cutting_procedure",
+                        'slug_value' => $objects['layer_cutting_procedure'],
+                    ]);
+                }
+                if($objects['layer_cutting_procedure']) {
+                    if (isset($objects['layer_cutting_price'])&&!empty($objects['layer_cutting_price'])) {
+                        CommonService::setAppraisePrice($appraise, $objects['layer_cutting_price'], 'layer_cutting_price');
+                    }
+                }else
+                {
+                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                }
+            }else{
+                if(AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->exists()){
+                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                }
+            }
+            $appraise = Appraise::where('id', $appraiseId)->first();
+            if (isset($objects['round_total'])) {
+                CommonService::setAppraisePrice($appraise, $objects['round_total'], 'round_total');
+            }
+            if (isset($objects['round_composite'])) {
+                CommonService::setAppraisePrice($appraise, $objects['round_composite'], 'round_composite');
+            }
+            if (isset($objects['round_violation_composite'])) {
+                CommonService::setAppraisePrice($appraise, $objects['round_violation_composite'], 'round_violation_composite');
+            }
+            if (isset($objects['round_violation_facility'])) {
+                CommonService::setAppraisePrice($appraise, $objects['round_violation_facility'], 'round_violation_facility');
+            }
+            $landPrice = 0;
+
+            if (!empty($objects['main_price'])) {
+                $mainPrice = $objects['main_price'];
+                $islayerCuttingPirce = $mainPrice['islayerCuttingPirce'];
+                $layerCuttingPirce = $mainPrice['layerCuttingPirce'];
+                AppraiseAppraisalMethods::query()->updateOrCreate([
+                    'appraise_id' => $appraiseId,
+                    'slug' => 'layer_cutting_procedure'
+                ], [
+                    'slug_value' => $islayerCuttingPirce ? 1 : 0
+                ]);
+                if ($islayerCuttingPirce) {
+                    CommonService::setAppraisePrice($appraise, $layerCuttingPirce, 'layer_cutting_price');
+                } else {
+                    if(AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->exists()){
+                        AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                    }
+                }
+                $price = intval($mainPrice['price']);
+                $round = $mainPrice['round'] ? $mainPrice['round'] : 0;
+                $slug_round = $mainPrice['slug_round'];
+                $slug_price = $mainPrice['slug_price'];
+                $area = $mainPrice['area'];
+                CommonService::setAppraisePrice($appraise, $price, $slug_price);
+                CommonService::setAppraisePrice($appraise, $round, $slug_round);
+
+                $landPrice += CommonService::roundPrice($islayerCuttingPirce ?  $layerCuttingPirce : $price, $round) * $area;
+            }
+            if (!empty($objects['purpose_price'])) {
+                foreach ($objects['purpose_price'] as $purposePrice) {
+                    $price = $purposePrice['price'];
+                    $round =  $purposePrice['round'];
+                    $area =  $purposePrice['area'];
+                    $slug_round = $purposePrice['slug_round'];
+                    $slug_price = $purposePrice['slug_price'];
+                    CommonService::setAppraisePrice($appraise, $price, $slug_price);
+                    CommonService::setAppraisePrice($appraise, $round, $slug_round);
+                    $landPrice += CommonService::roundPrice($price, $round) * $area;
+                }
+            }
+            if (!empty($objects['violate_price'])) {
+                foreach ($objects['violate_price'] as $violatePrice) {
+                    $price = $violatePrice['price'];
+                    $area = $violatePrice['area'];
+                    $round =  $violatePrice['round'];
+                    $slug_round = $violatePrice['slug_round'];
+                    $slug_price = $violatePrice['slug_price'];
+                    CommonService::setAppraisePrice($appraise, $price, $slug_price);
+                    CommonService::setAppraisePrice($appraise, $round, $slug_round);
+                    $landPrice += CommonService::roundPrice($price, $round) * $area;
+                }
+            }
+
+            AppraisePrice::query()->updateOrCreate(['appraise_id' => $appraiseId, 'slug' => 'land_asset_price'],['value' =>$landPrice]);
+            $this->calculateTotalPrice($appraiseId);
+        }
+        $this->updateAppraiseStepVer1($appraiseId, 7);
         $price = $this->getPriceById($id);
         $price['comparison_factor'] =$this->getComparisonFactorList($id);
         $data = Appraise::where('id', $appraiseId)->first();

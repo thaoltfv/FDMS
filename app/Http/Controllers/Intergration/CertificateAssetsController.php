@@ -628,6 +628,63 @@ class CertificateAssetsController extends Controller
         }
     }
 
+    public function updateComparisonFactor_V2_ver1(Request $request, int $id){
+        if(! CommonService::checkUserPermission($this->permissionEdit)){
+            return $this->respondWithErrorData( ['message' => ErrorMessage::APPRAISE_CHECK_UPDATE,'exception' =>''], 403);
+        }
+        $rules = [
+                'appraise_adapter' => 'nullable|array|sometimes',
+                'appraise_adapter.*.change_purpose_price' => 'required_with:appraise_adapter|numeric',
+                'appraise_adapter.*.percent' => 'required_with:appraise_adapter|numeric',
+                'appraise_adapter.*.change_violate_price' => 'required_with:appraise_adapter|numeric|min:0',
+                'asset_unit_area' => 'nullable|array|sometimes',
+                'asset_unit_area.*.violation_asset_area' => 'required_with:asset_unit_area|numeric',
+                'asset_unit_price' => 'nullable|array|sometimes',
+                'asset_unit_price.*.original_value' => 'required_with:asset_unit_price|numeric',
+                'asset_unit_price.*.update_value' => 'required_with:asset_unit_price|numeric',
+                // 'layer_cutting_price' => 'required|numeric',
+                // 'round_composite' => 'required|numeric',
+                // 'round_total' => 'required|numeric',
+                // 'round_violation_composite' => 'required|numeric',
+                // 'round_violation_facility' => 'required|numeric',
+                // 'remaining_price' => 'nullable|array|sometimes',
+                // 'remaining_price.remaining_commerce_price' => 'required_with:remaining_price|numeric',
+            ];
+
+        $customAttributes = [
+                'appraise_adapter.*.change_purpose_price' => 'Chi phí chuyển mục đích sử dụng.',
+                'appraise_adapter.*.change_violate_price' => 'Giá trị diện tích vi phạm quy hoạch.',
+                'appraise_adapter.*.percent' => 'Tỷ lệ giá rao bán.',
+                'asset_unit_area.*.violation_asset_area' => 'Đất vi phạm quy hoạch.',
+                'asset_unit_price.*.original_value' => 'Đơn giá đất cơ sở.',
+                'asset_unit_price.*.update_value' => 'Đơn giá đất cơ sở.',
+                // 'layer_cutting_price' => 'Đơn giá sau cắt lớp.',
+                // 'round_composite' => 'Làm tròn.',
+                // 'round_total' => 'Làm tròn.',
+                // 'round_violation_composite' => 'Làm tròn.',
+                // 'round_violation_facility' => 'Làm tròn.',
+                // 'remaining_price.remaining_commerce_price' => 'Đơn giá đất thị trường.',
+            ];
+        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+        if ($validator->passes()) {
+            //TODO Handle your data
+            $data = $request->toArray();
+            if (!empty($data['main_price']) && $data['main_price']['islayerCuttingPirce'] && $data['main_price']['layerCuttingPirce'] <= 0) {
+                $data = ['message' => 'Đơn giá sau cắt lớp phải lớn hơn 0', 'exception' => null];
+                return $this->respondWithErrorData($data);
+            }
+
+            $result = $this->appraiseRepository->updateComparisonFactor_V2_ver1($request->toArray(), $id);
+            if(isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData( $result);
+            return $this->respondWithCustomData($result);
+        } else {
+            //TODO Handle your error
+            $data = ['message' => $validator->errors()->all(), 'exception' => null];
+            return $this->respondWithErrorData( $data);
+        }
+    }
+
     public function updateConstructionCompany(Request $request, int $id){
         if(! CommonService::checkUserPermission($this->permissionEdit))
             return $this->respondWithErrorData( ['message' => ErrorMessage::APPRAISE_CHECK_UPDATE,'exception' =>''], 403);
