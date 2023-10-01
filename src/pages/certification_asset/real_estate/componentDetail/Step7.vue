@@ -2129,7 +2129,7 @@ export default {
 					let landPriceData = this.form.asset_price.find(i => i.slug === slug_price)
 					let roundData = this.form.asset_price.find(i => i.slug === slug_round)
 					let price = landPriceData ? landPriceData.value : 0
-					let round = roundData && roundData.value > 2 ? roundData.value : 0
+					let round = roundData && roundData.value ? roundData.value : 0
 					data.push({
 						acronym: item.land_type_purpose.acronym,
 						area: item.main_area,
@@ -2154,7 +2154,7 @@ export default {
 					let landPriceData = this.form.asset_price.find(i => i.slug === slug_price)
 					let roundData = this.form.asset_price.find(i => i.slug === slug_round)
 					let price = landPriceData ? landPriceData.value : 0
-					let round = roundData && roundData.value > 2 ? roundData.value : 0
+					let round = roundData && roundData.value ? roundData.value : 0
 					data.push({
 						acronym: item.land_type_purpose.acronym,
 						area: item.planning_area,
