@@ -165,6 +165,7 @@ export default {
 		}
 	},
 	mounted () {
+		console.log('tổng', this.form.price_land_asset)
 		if (this.form && this.form.round_appraise_total) {
 			this.round_appraise_total = this.form.round_appraise_total
 		} else this.round_appraise_total = 0

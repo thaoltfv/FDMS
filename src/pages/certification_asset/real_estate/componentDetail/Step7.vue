@@ -1880,6 +1880,12 @@ export default {
 			this.setDefaultConstructionData()
 			this.checkOld()
 			this.key_render_around += 1
+			setTimeout(() => {
+				this.handleSaveTab1Ver1()
+			}, 1000)
+			setTimeout(() => {
+				this.handleSaveTab2Ver3()
+			}, 2000)
 		}
 	},
 
@@ -2591,6 +2597,7 @@ export default {
 			this.key_render_around += 1
 		},
 		handleSaveTab1 (tab1) {
+			console.log('lưu nè')
 			// let check = this.isEditStatus
 			// if (check !== '') {
 			// 	this.openMessage(check)
@@ -2683,6 +2690,110 @@ export default {
 					duration: 3000
 				})
 			} else this.handleSaveSummarization(payloadData)
+		},
+		handleSaveTab1Ver1 (tab1) {
+			console.log('lưu nè')
+			// let check = this.isEditStatus
+			// if (check !== '') {
+			// 	this.openMessage(check)
+			// 	return
+			// }
+
+			const dataSave = []
+			const otherDataSave = null
+			const dataDelete = null
+			const asset_unit_price = this.form.asset_unit_price
+			const asset_unit_area = this.form.asset_unit_area
+			const round_total = null
+			const round_composite = null
+			const round_violation_composite = null
+			const round_violation_facility = null
+			const appraise_adapter = this.form.appraise_adapter
+			const layer_cutting_procedure = null
+			const layer_cutting_procedure_price = null
+			// check area violation
+			let checkArea = false
+			let checkTypeArea = false
+			this.asset_appropriate_area_arr.forEach(itemLandAsset => {
+				if (itemLandAsset.total_area < 0) {
+					checkTypeArea = true
+				}
+			})
+			this.form.asset_general.forEach(item => {
+				if (this.arrayTotalAppropriateArea[item.id] <= 0) {
+					checkArea = true
+				}
+			})
+			// check price
+			let checkPrice = false
+			this.form.asset_unit_price.forEach(item_price => {
+				if (item_price.update_value < 0) {
+					checkPrice = true
+				}
+			})
+
+			let checkViolatePrice = false
+			appraise_adapter.forEach(item_price => {
+				if (item_price.change_violate_price < 0) {
+					checkViolatePrice = true
+				}
+			})
+			const payloadData = {
+				comparison_factor: dataSave,
+				other_comparison: otherDataSave,
+				delete_other_comparison: dataDelete,
+				asset_unit_price: asset_unit_price,
+				asset_unit_area: asset_unit_area,
+				round_total: +round_total,
+				round_composite: +round_composite,
+				round_violation_composite: +round_violation_composite,
+				round_violation_facility: +round_violation_facility,
+				appraise_adapter: appraise_adapter,
+				layer_cutting_procedure: layer_cutting_procedure,
+				layer_cutting_price: +layer_cutting_procedure_price,
+				remaining_price: null,
+				main_price: this.mainPrice,
+				purpose_price: this.purposePrice,
+				violate_price: this.violatePrice
+			}
+			 this.handleSaveSummarizationVer1(payloadData)
+		},
+		async handleSaveSummarizationVer1 (payloadData) {
+			// if (this.isSubmit == true) {
+			// 	this.$toast.open({
+			// 		message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+			// 		type: 'warning',
+			// 		position: 'top-right'
+			// 	})
+			// 	return
+			// } else {
+			// 	this.isSubmit = true
+			// }
+			const res = await CertificateAsset.submitStep7(payloadData, this.idData)
+			if (res.data) {
+				// this.$toast.open({
+				// 	message: 'Lưu bảng tổng hợp thành công',
+				// 	type: 'success',
+				// 	position: 'top-right',
+				// 	duration: 3000
+				// })
+				this.form.price_land_asset = res.data.price_land_asset
+				this.form.price_other_asset = res.data.price_other_asset
+				this.form.price_tangible_asset = res.data.price_tangible_asset
+				this.form.price_total_asset = res.data.price_total_asset
+				this.form.round_appraise_total = res.data.round_appraise_total
+				this.key_render_5 += 1
+				this.$emit('updateDataStep7')
+				// this.isSubmit = false
+			} else {
+				// this.isSubmit = false
+				// this.$toast.open({
+				// 	message: `${res.error.message}`,
+				// 	type: 'error',
+				// 	position: 'top-right',
+				// 	duration: 3000
+				// })
+			}
 		},
 		async handleSaveSummarization (payloadData) {
 			if (this.isSubmit == true) {
@@ -3143,6 +3254,7 @@ export default {
 			this.calculation(this.form)
 		},
 		handleSaveTab2 () {
+			console.log('lưu 2')
 			// let check = this.isEditStatus
 			// if (check !== '') {
 			// 	this.openMessage(check)
@@ -3271,6 +3383,7 @@ export default {
 		},
 		handleSaveTab2Ver2 () {
 			// check data tab 1
+			console.log('lưu 2 ver 2')
 
 			for (let i of this.form.asset_unit_price) {
 				if (i.update_value < 0) {
@@ -3364,6 +3477,102 @@ export default {
 				this.handleSaveAdjustPlan(payloadData)
 			}
 		},
+		handleSaveTab2Ver3 () {
+			// check data tab 1
+			console.log('lưu 2 ver 3')
+
+			for (let i of this.form.asset_unit_price) {
+				if (i.update_value < 0) {
+					this.openMessage('Đơn giá UBND không được âm')
+					return
+				}
+			}
+			for (let i of this.form.asset_general) {
+				if (this.arrayTotalAppropriateArea[i.id] <= 0) {
+					this.openMessage('Diện tích phù hợp quy hoạch phải lớn hơn 0')
+					return
+				}
+			}
+			for (let i of this.asset_appropriate_area_arr) {
+				if (i.total_area < 0) {
+					this.openMessage('Diện tích phù hợp quy hoạch không được âm')
+					return
+				}
+			}
+			// check data tab 2
+			if (this.mainPrice.isError) {
+				this.openMessage('Đơn giá cắt lớp phải lớn hơn 0')
+				return
+			}
+			if (this.mainPrice.price < 0) {
+				this.openMessage('Đơn giá đất phải lớn hơn 0')
+				return
+			}
+			const roundMessage = 'Số làm tròn thuộc khoảng -7 tới 7, vui lòng kiểm tra lại'
+			if (this.mainPrice.round > 7 || this.mainPrice.round < -7) {
+				this.openMessage(roundMessage)
+				return
+			}
+			if (this.purposePrice.length > 0) {
+				for (let i of this.purposePrice) {
+					if (i.round > 7 || i.round < -7) {
+						this.openMessage(roundMessage)
+						return
+					}
+					if (i.price < 0) {
+						this.openMessage('Đơn giá đất phải lớn hơn 0')
+						return
+					}
+				}
+			}
+			if (this.violatePrice.length > 0) {
+				for (let i of this.violatePrice) {
+					if (i.round > 7 || i.round < -7) {
+						this.openMessage(roundMessage)
+						return
+					}
+				}
+			}
+			const appraise_adapter = this.form.appraise_adapter
+			for (let i of appraise_adapter) {
+				if (i.change_violate_price < 0) {
+					this.openMessage('Giá trị vi phạm quy hoạch không được âm')
+					return
+				}
+			}
+			const dataSave = []
+			const asset_unit_price = this.form.asset_unit_price
+			const asset_unit_area = this.form.asset_unit_area
+			const otherDataSave = this.other_comparison
+			const dataDelete = this.delete_other_comparison
+			const land_asset_price = this.calTotalLandPrice
+			if (typeof this.appraises !== 'undefined') {
+				this.appraises.comparison_factor.forEach(comparison => {
+					comparison.comparison_factor.forEach(data => {
+						dataSave.push(data)
+					})
+				})
+			}
+			this.mainPrice.price = this.roundPrice(this.mainPrice.price, 0)
+			const payloadData = {
+				asset_unit_price: asset_unit_price,
+				asset_unit_area: asset_unit_area,
+				appraise_adapter: appraise_adapter,
+				comparison_factor: dataSave,
+				other_comparison: otherDataSave,
+				delete_other_comparison: dataDelete,
+				main_price: this.mainPrice,
+				purpose_price: this.purposePrice,
+				violate_price: this.violatePrice,
+				land_asset_price: land_asset_price
+			}
+			// if (Math.abs(this.mgcl1) > 15 || Math.abs(this.mgcl2) > 15 || Math.abs(this.mgcl3) > 15) {
+			// 	this.dataTab2 = payloadData
+			// 	this.showWarningSave = true
+			// } else {
+				this.handleSaveAdjustPlanVer1(payloadData)
+			// }
+		},
 		openMessage (message, type = 'error', position = 'top-right', duration = 3000) {
 			this.$toast.open({
 				message: message,
@@ -3424,6 +3633,57 @@ export default {
 					position: 'top-right',
 					duration: 3000
 				})
+			}
+		},
+		async handleSaveAdjustPlanVer1 (payloadData) {
+			// if (this.isSubmit == true) {
+			// 	this.$toast.open({
+			// 		message: 'Hệ thống đang xử lý, vui lòng đợi trong giây lát.',
+			// 		type: 'warning',
+			// 		position: 'top-right'
+			// 	})
+			// 	return
+			// } else {
+			// 	this.isSubmit = true
+			// }
+			const res = await CertificateAsset.submitStep7(payloadData, this.idData)
+			if (res.data) {
+				// this.$toast.open({
+				// 	message: 'Lưu bảng điều chỉnh QSDĐ thành công',
+				// 	type: 'success',
+				// 	position: 'top-right',
+				// 	duration: 3000
+				// })
+				this.form.price_land_asset = res.data.price_land_asset
+				this.form.price_other_asset = res.data.price_other_asset
+				this.form.price_tangible_asset = res.data.price_tangible_asset
+				this.form.price_total_asset = res.data.price_total_asset
+				this.form.round_appraise_total = res.data.round_appraise_total
+				let comparison_factor_resfresh = []
+				await this.form.asset_general.forEach(asset_general => {
+					const comparison_factor_TSSS = res.data.comparison_factor.filter(comparison => comparison.asset_general_id === asset_general.id)
+					comparison_factor_resfresh.push({
+						id: asset_general.id,
+						comparison_factor: comparison_factor_TSSS
+					})
+				})
+				this.delete_other_comparison = []
+				this.other_comparison = []
+				this.appraises.comparison_factor = comparison_factor_resfresh
+				this.form.comparison_factor = res.data.comparison_factor
+				this.getOtherComparison()
+				// await this.refreshData()
+				// this.$emit('updateDataStep7')
+				this.key_render_5 += 1
+				// this.isSubmit = false
+			} else {
+				// this.isSubmit = false
+				// this.$toast.open({
+				// 	message: `${res.error.message}`,
+				// 	type: 'error',
+				// 	position: 'top-right',
+				// 	duration: 3000
+				// })
 			}
 		},
 		async refreshData () {
