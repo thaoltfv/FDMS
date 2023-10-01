@@ -459,7 +459,7 @@
 						<td>{{totalPriceViolationArea2 ? formatNumber(totalPriceViolationArea2) : 0}} đ</td>
 						<td>{{totalPriceViolationArea3 ? formatNumber(totalPriceViolationArea3) : 0}} đ</td> -->
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug !== 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug !== 'theo-ty-le-gia-dat-co-so-chinh' || checkOld()">
 						<td>26</td>
 						<td id="land_price_change">Chi phí chuyển mục đích sử dụng</td>
 						<b-tooltip placement="rightbottom" target="land_price_change">
@@ -481,7 +481,7 @@
 							/>
 						</td>
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug !== 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug !== 'theo-ty-le-gia-dat-co-so-chinh' || checkOld()">
 						<td>
 							27
 						</td>
@@ -507,7 +507,7 @@
 						<td>{{formatNumber(totalPrice2.toFixed(0))}} đ</td>
 						<td>{{formatNumber(totalPrice3.toFixed(0))}} đ</td>
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh' && !checkOld()">
 						<td>
 							27
 						</td>
@@ -517,7 +517,7 @@
 						<td>{{this.form.composite_land_remaning_value}}%</td>
 						<td>{{this.form.composite_land_remaning_value}}%</td>
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug !== 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug !== 'theo-ty-le-gia-dat-co-so-chinh' || checkOld()">
 						<td>28</td>
 						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} bình quân.</td>
 						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
@@ -529,7 +529,7 @@
 						<td>{{formatNumber(parseFloat(dgd2).toFixed(0))}} đ</td>
 						<td>{{formatNumber(parseFloat(dgd3).toFixed(0))}} đ</td>
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh' && !checkOld()">
 						<td>
 							28
 						</td>
@@ -539,7 +539,7 @@
 						<td>{{formatNumber(quydoivemucdichchinh2)}}</td>
 						<td>{{formatNumber(quydoivemucdichchinh3)}}</td>
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh' && !checkOld()">
 						<td>
 							29
 						</td>
@@ -549,7 +549,7 @@
 						<td>{{formatNumber(sauquydoivemucdichchinh2)}}</td>
 						<td>{{formatNumber(sauquydoivemucdichchinh3)}}</td>
 						</tr>
-						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh'">
+						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh' && !checkOld()">
 						<td>30</td>
 						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} bình quân.</td>
 						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
@@ -1878,6 +1878,7 @@ export default {
 			this.mainPrice = this.getMainLandType()
 			this.totalPrice = this.getTotalPrice()
 			this.setDefaultConstructionData()
+			this.checkOld()
 			this.key_render_around += 1
 		}
 	},
@@ -2239,6 +2240,20 @@ export default {
 		},
 		checkRemain () {
 			if (this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh') {
+				return true
+			} else {
+				return false
+			}
+		},
+		checkOld () {
+			let count = 0
+			this.form.comparison_factor.forEach((comparisonFactor, index) => {
+				if (comparisonFactor.type === 'muc_dich_chinh'){
+					console.log('test----',comparisonFactor )
+					count = 1
+				}
+			})
+			if (count === 0) {
 				return true
 			} else {
 				return false
@@ -2847,7 +2862,7 @@ export default {
 				await this.calculationViolationPrice(this.form, indexPrice)
 				// await this.calculationChangePrice(this.form, indexPrice)
 			}
-			await this.calculation(this.form)
+			await this.calculation(this.form, indexPrice)
 			this.key_render_1 += 1
 		},
 		async changeDistanceLand (event, comparator) {
@@ -3727,7 +3742,7 @@ export default {
 			// this.form.appraise_adapter[1].change_purpose_price = purpose_price2
 			// this.form.appraise_adapter[2].change_purpose_price = purpose_price3
 		},
-		calculation (asset) {
+		async calculation (asset, indexPrice = null) {
 			let arrayPriceTem = []
 			// detail asset
 			let asset1 = (typeof asset.asset_general[0] !== 'undefined') ? asset.asset_general[0] : null
@@ -3868,14 +3883,14 @@ export default {
 			let change_purpose_price2 = (typeof asset.appraise_adapter[1] !== 'undefined') ? +asset.appraise_adapter[1].change_purpose_price : null
 			let change_purpose_price3 = (typeof asset.appraise_adapter[2] !== 'undefined') ? +asset.appraise_adapter[2].change_purpose_price : null
 
-			if (this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh') {
-				change_purpose_price1 = null
-				change_purpose_price2 = null
-				change_purpose_price3 = null
-				this.form.appraise_adapter[0].change_purpose_price = 0
-				this.form.appraise_adapter[1].change_purpose_price = 0
-				this.form.appraise_adapter[2].change_purpose_price = 0
-			}
+			// if (this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh') {
+			// 	change_purpose_price1 = null
+			// 	change_purpose_price2 = null
+			// 	change_purpose_price3 = null
+			// 	this.form.appraise_adapter[0].change_purpose_price = 0
+			// 	this.form.appraise_adapter[1].change_purpose_price = 0
+			// 	this.form.appraise_adapter[2].change_purpose_price = 0
+			// }
 			// tính Tổng giá trị tài sản ước tính
 			this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
 			this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
@@ -3924,6 +3939,14 @@ export default {
 				// console.log('ffsdấdsd', comparisonFactor2['muc_dich_chinh'].asset_title)
 				// console.log('ffsdấdsd', comparisonFactor3['muc_dich_chinh'].asset_title)
 				// console.log('asset 1', asset1.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym !== comparisonFactor1['muc_dich_chinh'].asset_title))
+				if (comparisonFactor1['muc_dich_chinh'] && comparisonFactor2['muc_dich_chinh'] && comparisonFactor2['muc_dich_chinh']){
+					change_purpose_price1 = null
+				change_purpose_price2 = null
+				change_purpose_price3 = null
+				this.form.appraise_adapter[0].change_purpose_price = 0
+				this.form.appraise_adapter[1].change_purpose_price = 0
+				this.form.appraise_adapter[2].change_purpose_price = 0
+				
 				let arena1 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id)[0].total_area : 0
 				let arena2 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id)[0].total_area : 0
 				let arena3 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id)[0].total_area : 0
@@ -3949,11 +3972,12 @@ export default {
 					this.dgd3 = (typeof this.detail3.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice3 / (arena3*this.form.composite_land_remaning_value/100 + Tarena3)) : 0
 
 				// }
-
+				}
 
 				// Phương pháp: tính giá độc lập
 			} else if (this.form.composite_land_remaning_slug === 'theo-chi-phi-chuyen-mdsd-dat') {
 				// console.log('dataa', this.form.asset_unit_price)
+				if (comparisonFactor1['muc_dich_chinh'] && comparisonFactor2['muc_dich_chinh'] && comparisonFactor3['muc_dich_chinh']){
 				let Tarena1 = asset.asset_general[0].properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title).length > 0 ? asset.asset_general[0].properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title)[0].circular_unit_price : 0
 				let Tarena2 = asset.asset_general[1].properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title).length > 0 ? asset.asset_general[1].properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title)[0].circular_unit_price : 0
 				let Tarena3 = asset.asset_general[2].properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title).length > 0 ? asset.asset_general[2].properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title)[0].circular_unit_price : 0
@@ -4006,6 +4030,11 @@ export default {
 					// console.log('chiphichuyendoi', chiphichuyendoi)
 					this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi
 				}
+			} else {
+				if (indexPrice || indexPrice === 0){
+					await this.calculationChangePrice(asset, indexPrice)
+				}
+			}
 			}
 
 			// YTSS
@@ -4574,6 +4603,7 @@ export default {
 				// console.log('ffsdấdsd', comparisonFactor2['muc_dich_chinh'].asset_title)
 				// console.log('ffsdấdsd', comparisonFactor3['muc_dich_chinh'].asset_title)
 				// console.log('asset 1', asset1.properties[0].propertyDetail.filter(item => item.land_type_purpose_data.acronym !== comparisonFactor1['muc_dich_chinh'].asset_title))
+				if (comparisonFactor1['muc_dich_chinh'] && comparisonFactor2['muc_dich_chinh'] && comparisonFactor3['muc_dich_chinh']){
 				let arena1 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor1['muc_dich_chinh'].asset_title && item.asset_general_id == asset1.id)[0].total_area : 0
 				let arena2 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id)[0].total_area : 0
 				let arena3 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id).length > 0 ? this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id)[0].total_area : 0
@@ -4599,7 +4629,7 @@ export default {
 					this.dgd3 = (typeof this.detail3.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice3 / (arena3*this.form.composite_land_remaning_value/100 + Tarena3)) : 0
 
 				// }
-
+				}
 
 				// Phương pháp: tính giá độc lập
 			} else if (this.form.composite_land_remaning_slug === 'theo-phuong-phap-doc-lap') {
