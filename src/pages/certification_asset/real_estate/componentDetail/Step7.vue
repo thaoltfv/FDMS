@@ -2769,7 +2769,7 @@ export default {
 			// } else {
 			// 	this.isSubmit = true
 			// }
-			const res = await CertificateAsset.submitStep7(payloadData, this.idData)
+			const res = await CertificateAsset.submitStep7ver1(payloadData, this.idData)
 			if (res.data) {
 				// this.$toast.open({
 				// 	message: 'Lưu bảng tổng hợp thành công',
@@ -3481,65 +3481,65 @@ export default {
 			// check data tab 1
 			console.log('lưu 2 ver 3')
 
-			for (let i of this.form.asset_unit_price) {
-				if (i.update_value < 0) {
-					this.openMessage('Đơn giá UBND không được âm')
-					return
-				}
-			}
-			for (let i of this.form.asset_general) {
-				if (this.arrayTotalAppropriateArea[i.id] <= 0) {
-					this.openMessage('Diện tích phù hợp quy hoạch phải lớn hơn 0')
-					return
-				}
-			}
-			for (let i of this.asset_appropriate_area_arr) {
-				if (i.total_area < 0) {
-					this.openMessage('Diện tích phù hợp quy hoạch không được âm')
-					return
-				}
-			}
-			// check data tab 2
-			if (this.mainPrice.isError) {
-				this.openMessage('Đơn giá cắt lớp phải lớn hơn 0')
-				return
-			}
-			if (this.mainPrice.price < 0) {
-				this.openMessage('Đơn giá đất phải lớn hơn 0')
-				return
-			}
-			const roundMessage = 'Số làm tròn thuộc khoảng -7 tới 7, vui lòng kiểm tra lại'
-			if (this.mainPrice.round > 7 || this.mainPrice.round < -7) {
-				this.openMessage(roundMessage)
-				return
-			}
-			if (this.purposePrice.length > 0) {
-				for (let i of this.purposePrice) {
-					if (i.round > 7 || i.round < -7) {
-						this.openMessage(roundMessage)
-						return
-					}
-					if (i.price < 0) {
-						this.openMessage('Đơn giá đất phải lớn hơn 0')
-						return
-					}
-				}
-			}
-			if (this.violatePrice.length > 0) {
-				for (let i of this.violatePrice) {
-					if (i.round > 7 || i.round < -7) {
-						this.openMessage(roundMessage)
-						return
-					}
-				}
-			}
-			const appraise_adapter = this.form.appraise_adapter
-			for (let i of appraise_adapter) {
-				if (i.change_violate_price < 0) {
-					this.openMessage('Giá trị vi phạm quy hoạch không được âm')
-					return
-				}
-			}
+			// for (let i of this.form.asset_unit_price) {
+			// 	if (i.update_value < 0) {
+			// 		this.openMessage('Đơn giá UBND không được âm')
+			// 		return
+			// 	}
+			// }
+			// for (let i of this.form.asset_general) {
+			// 	if (this.arrayTotalAppropriateArea[i.id] <= 0) {
+			// 		this.openMessage('Diện tích phù hợp quy hoạch phải lớn hơn 0')
+			// 		return
+			// 	}
+			// }
+			// for (let i of this.asset_appropriate_area_arr) {
+			// 	if (i.total_area < 0) {
+			// 		this.openMessage('Diện tích phù hợp quy hoạch không được âm')
+			// 		return
+			// 	}
+			// }
+			// // check data tab 2
+			// if (this.mainPrice.isError) {
+			// 	this.openMessage('Đơn giá cắt lớp phải lớn hơn 0')
+			// 	return
+			// }
+			// if (this.mainPrice.price < 0) {
+			// 	this.openMessage('Đơn giá đất phải lớn hơn 0')
+			// 	return
+			// }
+			// const roundMessage = 'Số làm tròn thuộc khoảng -7 tới 7, vui lòng kiểm tra lại'
+			// if (this.mainPrice.round > 7 || this.mainPrice.round < -7) {
+			// 	this.openMessage(roundMessage)
+			// 	return
+			// }
+			// if (this.purposePrice.length > 0) {
+			// 	for (let i of this.purposePrice) {
+			// 		if (i.round > 7 || i.round < -7) {
+			// 			this.openMessage(roundMessage)
+			// 			return
+			// 		}
+			// 		if (i.price < 0) {
+			// 			this.openMessage('Đơn giá đất phải lớn hơn 0')
+			// 			return
+			// 		}
+			// 	}
+			// }
+			// if (this.violatePrice.length > 0) {
+			// 	for (let i of this.violatePrice) {
+			// 		if (i.round > 7 || i.round < -7) {
+			// 			this.openMessage(roundMessage)
+			// 			return
+			// 		}
+			// 	}
+			// }
+			// const appraise_adapter = this.form.appraise_adapter
+			// for (let i of appraise_adapter) {
+			// 	if (i.change_violate_price < 0) {
+			// 		this.openMessage('Giá trị vi phạm quy hoạch không được âm')
+			// 		return
+			// 	}
+			// }
 			const dataSave = []
 			const asset_unit_price = this.form.asset_unit_price
 			const asset_unit_area = this.form.asset_unit_area
@@ -3646,7 +3646,7 @@ export default {
 			// } else {
 			// 	this.isSubmit = true
 			// }
-			const res = await CertificateAsset.submitStep7(payloadData, this.idData)
+			const res = await CertificateAsset.submitStep7ver1(payloadData, this.idData)
 			if (res.data) {
 				// this.$toast.open({
 				// 	message: 'Lưu bảng điều chỉnh QSDĐ thành công',

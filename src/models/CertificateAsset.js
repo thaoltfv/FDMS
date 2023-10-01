@@ -55,6 +55,9 @@ export default class CertificateAsset extends Model {
 	static async submitStep7 (data, id = '') {
 		return (new this()).request({ method: 'POST', url: `certification_asset/step7-comparison-factor/${id}`, data: data, isStatic: true })
 	}
+	static async submitStep7ver1 (data, id = '') {
+		return (new this()).request({ method: 'POST', url: `certification_asset/step7-comparison-factor-ver1/${id}`, data: data, isStatic: true })
+	}
 	static async submitContructionStep7 (data, id = '') {
 		return (new this()).request({ method: 'POST', url: `certification_asset/step7-construction-company/${id}`, data: data, isStatic: true })
 	}
