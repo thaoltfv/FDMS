@@ -1513,7 +1513,7 @@
 									<td></td>
 									<td class="text-right">
 										<strong>
-											{{formatNumber(calTotalLandPrice)}}
+											{{formatNumber(roundPrice(calTotalLandPrice, 0))}}
 										</strong>
 									</td>
 								</tbody>
@@ -1878,7 +1878,7 @@ export default {
 			this.mainPrice = this.getMainLandType()
 			this.totalPrice = this.getTotalPrice()
 			this.setDefaultConstructionData()
-			this.checkOld()
+			// this.checkOld()
 			this.key_render_around += 1
 			setTimeout(() => {
 				this.handleSaveTab1Ver1()
@@ -2255,7 +2255,7 @@ export default {
 			let count = 0
 			this.form.comparison_factor.forEach((comparisonFactor, index) => {
 				if (comparisonFactor.type === 'muc_dich_chinh'){
-					console.log('test----',comparisonFactor )
+					// console.log('test----',comparisonFactor )
 					count = 1
 				}
 			})
@@ -2512,7 +2512,7 @@ export default {
 				}
 				arr_compare.push(obj_insert)
 			}
-			console.log('arr_compare', arr_compare)
+			// console.log('arr_compare', arr_compare)
 
 			this.form.asset_unit_price.forEach((item, index) => {
 				if (!item.update_value) {
@@ -2560,7 +2560,7 @@ export default {
 								let count = 0
 								for (let t = 0; t < arr_compare.length; t++) {
 									let check2 = arr_compare[t]
-										console.log('check check', check1.asset_general_id, check1.land_type_data.acronym, check2.asset_general_id, check2.acronym)
+										// console.log('check check', check1.asset_general_id, check1.land_type_data.acronym, check2.asset_general_id, check2.acronym)
 									if (check1.asset_general_id === check2.asset_general_id && check1.land_type_data.acronym === check2.acronym) {
 										count = 1
 										
