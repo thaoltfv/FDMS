@@ -15,7 +15,7 @@
 												<td>
 													<div class="col-10 col-lg-10">Quyền sử dụng đất</div>
 												</td>
-												<td>{{form.price_land_asset ? `${formatNumber(form.price_land_asset)} đ` : '0 đ'}}</td>
+												<td>{{form.price_land_asset ? `${formatNumber(roundPrice(form.price_land_asset, 0))} đ` : '0 đ'}}</td>
 										</tr>
 										<tr>
 												<td>
@@ -174,6 +174,18 @@ export default {
 	beforeUpdate () {
 	},
 	methods: {
+		roundPrice (value, roundPrice) {
+			if (!value) {
+				return value
+			}
+			if (roundPrice && roundPrice > 0 && roundPrice <= 7) {
+				let round = Math.pow(10, roundPrice)
+				return Math.ceil(value / round) * round
+			} else if (roundPrice && roundPrice < 0 && roundPrice >= -7) {
+				let round = Math.pow(10, Math.abs(roundPrice))
+				return Math.floor(value / round) * round
+			} else return parseInt(Number(value).toFixed(0))
+		},
 		async printTSSS () {
 			let arrayAsset = []
 			if (this.data.appraise_has_assets && this.data.appraise_has_assets.length > 0) {
