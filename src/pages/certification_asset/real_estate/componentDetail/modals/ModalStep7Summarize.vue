@@ -21,19 +21,19 @@
 												<td>
 													<div class="col-10 col-lg-10">Nhà cửa, vật kiến trúc</div>
 												</td>
-												<td>{{form.price_tangible_asset ? `${formatNumber(form.price_tangible_asset)} đ` : '0 đ'}}</td>
+												<td>{{form.price_tangible_asset ? `${formatNumber(roundPrice(form.price_tangible_asset), 0)} đ` : '0 đ'}}</td>
 										</tr>
 										<tr>
 												<td>
 													<div class="col-10 col-lg-10">Tài sản khác</div>
 												</td>
-												<td>{{form.price_other_asset ? `${formatNumber(form.price_other_asset)} đ` : '0 đ'}}</td>
+												<td>{{form.price_other_asset ? `${formatNumber(roundPrice(form.price_other_asset), 0)} đ` : '0 đ'}}</td>
 										</tr>
 										<tr>
 												<td>
 													<div class="col-10 col-lg-10"><strong>TỔNG CỘNG</strong></div>
 												</td>
-												<td><strong>{{form.price_total_asset ? `${formatNumber(form.price_total_asset)} đ` : '0 đ'}}</strong></td>
+												<td><strong>{{form.price_total_asset ? `${formatNumber(roundPrice(form.price_total_asset), 0)} đ` : '0 đ'}}</strong></td>
 										</tr>
 										<tr>
 											<td>
@@ -63,7 +63,7 @@
 													</div>
 												</div>
 											</td>
-											<td><strong>{{form.price_total_asset ? `${formatNumber(formatCurrent(form.price_total_asset))} đ` : `0 đ`}}</strong></td>
+											<td><strong>{{form.price_total_asset ? `${formatNumber(formatCurrent(roundPrice(form.price_total_asset), 0))} đ` : `0 đ`}}</strong></td>
 										</tr>
 								</tbody>
 					</table>
@@ -165,7 +165,8 @@ export default {
 		}
 	},
 	mounted () {
-		console.log('tổng', this.form.price_land_asset)
+		console.log('sdd', this.form.price_land_asset)
+		console.log('tổng cộng', this.form.price_total_asset)
 		if (this.form && this.form.round_appraise_total) {
 			this.round_appraise_total = this.form.round_appraise_total
 		} else this.round_appraise_total = 0
