@@ -6294,7 +6294,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         # cập nhật bảng tổng hợp thông tin
         # activity-log
         // $this->CreateActivityLog($data, $data, 'update-data', 'cập nhật dữ liệu bảng tổng hợp thông tin');
-        $this->processAfterSave($appraiseId);
+        // $this->processAfterSave($appraiseId);
         return $price;
     }
     private function getComparisonFactorList(int $appraiseId)
