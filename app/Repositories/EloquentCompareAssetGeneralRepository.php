@@ -4597,18 +4597,10 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             'assetType:id,description',
             'transactionType:id,description',
             'createdBy:id,name',
+            'project:id,name'
         ];
         DB::enableQueryLog();
         $result = $this->model->query()->with($with)->where($where)->select($select);
-        foreach ($result as $item) {
-            $item->append('area_total');
-            if (isset($item['project_id'])){
-                $name_project_result = Project::query()->where('id', '=', $item['project_id'])->first();
-                if ($name_project_result) {
-                    $item['full_address'] = $name_project_result['name'] . ', ' . $item['full_address'];
-                }
-            }
-        }
         if (!empty($search)) {
             $result = $result->where(function($query) use ($search) {
                 $query->where('full_address', 'ilike', '%' . $search . '%');
@@ -4620,6 +4612,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 });
                 $query->orWhereHas('transactionType', function ($has) use ($search) {
                     $has->where('description', 'ilike' , '%' . $search . '%');
+                });
+                $query->orWhereHas('project', function ($has) use ($search) {
+                    $has->where('name', 'ilike' , '%' . $search . '%');
                 });
                 if (intval($search))
                     $query->orWhere('id', intval($search));
@@ -4704,15 +4699,15 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         $result = $result->forPage($page, $perPage)
             ->paginate($perPage);
             // dd(DB::getQueryLog());
-        // foreach ($result as $item) {
-        //     $item->append('area_total');
-        //     if (isset($item['project_id'])){
-        //         $name_project_result = Project::query()->where('id', '=', $item['project_id'])->first();
-        //         if ($name_project_result) {
-        //             $item['full_address'] = $name_project_result['name'] . ', ' . $item['full_address'];
-        //         }
-        //     }
-        // }
+        foreach ($result as $item) {
+            $item->append('area_total');
+            if (isset($item['project_id'])){
+                $name_project_result = Project::query()->where('id', '=', $item['project_id'])->first();
+                if ($name_project_result) {
+                    $item['full_address'] = $name_project_result['name'] . ', ' . $item['full_address'];
+                }
+            }
+        }
 
         return $result;
 
