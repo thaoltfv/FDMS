@@ -26,6 +26,7 @@ use App\Models\Dictionary;
 use App\Models\Distance;
 use App\Models\RoomDetail;
 use App\Models\RoomFurnitureDetail;
+use App\Models\Project;
 use App\Models\UnitPrice;
 use App\Services\CommonService;
 use App\Notifications\ActivityLog;
@@ -4590,6 +4591,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             'created_by',
             'asset_type_id',
             'transaction_type_id',
+            'project_id'
         ];
         $with = [
             'assetType:id,description',
@@ -4695,6 +4697,12 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             // dd(DB::getQueryLog());
         foreach ($result as $item) {
             $item->append('area_total');
+            if (isset($item['project_id'])){
+                $name_project_result = Project::query()->where('id', '=', $item['project_id'])->first();
+                if ($name_project_result) {
+                    $item['full_address'] = $name_project_result['name'] . ', ' . $item['full_address'];
+                }
+            }
         }
 
         return $result;
