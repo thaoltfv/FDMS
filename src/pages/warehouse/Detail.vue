@@ -906,7 +906,7 @@ export default {
 				this.map.center = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.markerLatLng = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.map.zoom = 17
-        console.log('vô đây', map)
+        // console.log('vô đây', map)
 			} else {
 				this.markerLatLng = [10.964112, 106.856461]
 				this.map.center = [10.964112, 106.856461]
