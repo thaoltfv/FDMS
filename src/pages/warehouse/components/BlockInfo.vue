@@ -14,14 +14,15 @@
           </div>
         </div> -->
         <p class="title title-highlight">Tiện ích cơ bản</p>
-        <div class="row justify-content-space-evenly container-utilities">
-          <div class="col-12 col-md-5 text-center form-group-container d-flex" v-for="(basic_utility, index) in basic_utilities" :key="index">
-            <div class="col d-flex justify-content-between align-items-center">
-              <label :for="basic_utility.acronym" style="cursor:pointer" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
-              <label class="input-checkbox">
+        <div class="row justify-content-flex-start container-utilities">
+          <div class="col-12 col-md-6 text-center form-group-container d-flex" v-for="(basic_utility, index) in basic_utilities" :key="index">
+            <div class="col d-flex justify-content-flex-start align-items-center">
+              <label class="input-checkbox" style="margin-right: 10px;">
                 <input type="checkbox" :id="basic_utility.acronym" :value="basic_utility.acronym" v-model="apartment_specification.utilities" >
                 <span class="check-mark"/>
               </label>
+              <label :for="basic_utility.acronym" style="cursor:pointer" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
+              
             </div>
           </div>
           <div class="col-12 col-md-4 text-center"/>

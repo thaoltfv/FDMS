@@ -168,14 +168,14 @@
                     @change="totalConstructionBase($event)"
 									/>
                 </div>
-                <div class="col-12 col-lg-6 input-contain">
+                <!-- <div class="col-12 col-lg-6 input-contain">
                   <InputCategory
                     v-model="form.plot_num"
                     vid="build"
                     label="Thửa đất xây dựng"
                     :options="optionsBuild"
                   />
-                </div>
+                </div> -->
 								<div class="col-12 col-lg-6 input-contain">
 									<InputCurrency
 										v-model="form.unit_price_m2"
@@ -418,7 +418,8 @@ export default {
 				this.form.start_using_year = this.tangible.start_using_year
 				this.form.gpxd = this.tangible.gpxd
 				this.form.total_construction_area = this.tangible.total_construction_area
-				this.form.plot_num = this.tangible.plot_num
+				// this.form.plot_num = this.tangible.plot_num
+        this.form.plot_num = ''
 				this.form.pic = this.tangible.pic
 				this.form.rate_id = this.tangible.rate_id
 				this.form.structure_id = this.tangible.structure_id

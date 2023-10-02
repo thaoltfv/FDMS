@@ -1211,9 +1211,10 @@ export default {
 			}
 		},
 		handleShowAppraisal () {
-			this.showAppraisalDialog = true
+			console.log('-----------',this.form)
 			this.key_render_appraisal += 1
 			this.status = this.form.status
+			this.showAppraisalDialog = true
 		},
 		handleShowAppraiseInformation () {
 			this.showAppraiseInformationDialog = true

@@ -164,7 +164,7 @@
 															</tr>
 															<tr>
 																<td>19</td>
-																<td>Đ/giá B.Quân.</td>
+																<td>Đơn giá bình quân.</td>
 																<td></td>
 																<td>{{formatNumber(parseFloat(dgcc1).toFixed(0))}}đ</td>
 																<td>{{formatNumber(parseFloat(dgcc2).toFixed(0))}}đ</td>
@@ -189,7 +189,7 @@
 								</ValidationObserver>
 							</div>
 						</TabItem>
-						<TabItem class="item_2" name="Bảng điều chỉnh QSDĐ">
+						<TabItem class="item_2" name="Bảng điều chỉnh căn hộ">
 							<div class="content_detail_asset">
 								<div class="ant-table ant-table-scroll-position-left ant-table-default">
 										<div class="ant-table-content">
@@ -206,7 +206,7 @@
 													<tbody class="ant-table-tbody">
 															<tr>
 																<td>1</td>
-																<td>Đơn giá quyền sử dụng đất (đồng/m<sup>2</sup>)</td>
+																<td>Đơn giá căn hộ (đồng/m<sup>2</sup>)</td>
 																<td>Chưa biết</td>
 																<td>{{formatNumber(parseFloat(dgcc1).toFixed(0))}}đ</td>
 																<td>{{formatNumber(parseFloat(dgcc2).toFixed(0))}}đ</td>

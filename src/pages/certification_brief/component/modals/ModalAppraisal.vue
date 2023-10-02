@@ -27,7 +27,7 @@
           </div>
           <div class="col-12">
               <InputCategory
-              v-model="form.appraiser_perform_id"
+              v-model="appraiser_perform_compute"
               vid="appraiser_perform_id"
               label="Chuyên viên thực hiện"
               :rules="requiredAppraiserPerform"
@@ -38,7 +38,7 @@
           </div>
 		  <div class="col-12">
               <InputCategory
-              v-model="form.appraiser_control_id"
+              v-model="appraiser_control_compute"
               vid="appraiser_control_id"
               label="Kiểm soát viên"
               class="form-group-container"
@@ -48,7 +48,7 @@
           </div>
           <div class="col-12">
               <InputCategory
-                v-model="form.appraiser_id"
+                v-model="appraiser_compute"
                 vid="appraiser_id"
                 label="Thẩm định viên"
                 rules="required"
@@ -63,7 +63,7 @@
 				<!-- <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
 				<div class="form-control border_disable disabled"><p class="mb-0">{{appraisersManager.length > 0 ? appraisersManager[0].name : ''}}</p></div> -->
 				<InputCategory
-                v-model="form.appraiser_manager_id"
+                v-model="appraiser_manager_compute"
                 vid="appraiser_manager_id"
                 label="Đại diện theo pháp luật"
                 rules="required"
@@ -75,7 +75,7 @@
           </div>
           <div class="col-12">
             <InputCategory
-              v-model="form.appraiser_confirm_id"
+              v-model="appraiser_confirm_compute"
               vid="appraiser_confirm_id"
               label="Đại diện ủy quyền"
               class="form-group-container"
@@ -313,6 +313,41 @@ export default {
 
 	},
 	computed: {
+		appraiser_perform_compute () {
+			if (this.employeePerformance.length > 0) {
+				return this.form.appraiser_perform_id
+			} else {
+				return this.form.appraiser_perform.name
+			}
+		},
+		appraiser_control_compute () {
+			if (this.appraisersControl.length > 0) {
+				return this.form.appraiser_control_id
+			} else {
+				return this.form.appraiser_control.name
+			}
+		},
+		appraiser_compute () {
+			if (this.appraisers.length > 0) {
+				return this.form.appraiser_id
+			} else {
+				return this.form.appraiser.name
+			}
+		},
+		appraiser_manager_compute () {
+			if (this.appraisersManager.length > 0) {
+				return this.form.appraiser_manager_id
+			} else {
+				return this.form.appraiser_manager.name
+			}
+		},
+		appraiser_confirm_compute () {
+			if (this.signAppraisers.length > 0) {
+				return this.form.appraiser_confirm_id
+			} else {
+				return this.form.appraiser_confirm.name
+			}
+		},
 		optionsAppraiserManager () {
 			return {
 				data: this.appraisersManager,
