@@ -41,7 +41,11 @@
             </l-control>
             <l-control class="control-note" position="topleft">
               <div class="container-note">
-                <div class="mr-18 d-flex align-items-center">
+				<div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_all}" @click="handleTransactionType({sold: true, for_sale: true, is_appraise: true, for_rent: true, rented_out: true})" style="cursor: pointer;">
+                  <div class="note-color note-color__orange"/>
+                  <p class="note-content">Tất cả</p>
+                </div>
+                <div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_db}" @click="handleTransactionType({sold: true})" style="cursor: pointer;">
                   <div class="note-color note-color__blue"/>
                   <p class="note-content">Đã bán</p>
                 </div>
@@ -49,11 +53,11 @@
                   <div class="note-color note-color__orange"/>
                   <p class="note-content">Đã cho thuê</p>
                 </div> -->
-                <div class="mr-18 d-flex align-items-center">
+                <div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_rb}" @click="handleTransactionType({for_sale: true})" style="cursor: pointer;">
                   <div class="note-color note-color__purple"/>
                   <p class="note-content">Rao bán</p>
                 </div>
-                <div class="mr-18 d-flex align-items-center">
+                <div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_dtd}" @click="handleTransactionType({is_appraise: true})" style="cursor: pointer;">
                   <div class="note-color note-color__green"/>
                   <p class="note-content">Đã thẩm định</p>
                 </div>
@@ -246,6 +250,10 @@ export default {
 	},
 	data () {
 		return {
+			choosed_background_all: 'bisque',
+			choosed_background_db: 'transparent',
+			choosed_background_rb: 'transparent',
+			choosed_background_dtd: 'transparent',
 			frontSideOptions: {
 				items: {
 					preSelected: 'all',
@@ -256,7 +264,7 @@ export default {
 					]
 				}
 			},
-			hiddenList: false,
+			hiddenList: true,
 			transaction: '',
 			pic: [],
 			assetGeneralDetail: [],
@@ -508,12 +516,20 @@ export default {
 			let transaction = ''
 			if (data.sold === true) {
 				transactions.push(51)
+				this.choosed_background_all = 'transparent'
+				this.choosed_background_db = 'bisque'
+				this.choosed_background_rb = 'transparent'
+				this.choosed_background_dtd = 'transparent'
 			}
 			if (data.rented_out === true) {
 				transactions.push(53)
 			}
 			if (data.for_sale === true) {
 				transactions.push(52)
+				this.choosed_background_all = 'transparent'
+				this.choosed_background_rb = 'bisque'
+				this.choosed_background_db = 'transparent'
+				this.choosed_background_dtd = 'transparent'
 			}
 			if (data.for_rent === true) {
 				transactions.push(54)
@@ -522,6 +538,20 @@ export default {
 				transaction = '[' + transactions + ']'
 			} else {
 				transaction = '[' + 0 + ']'
+			}
+			
+			if (data.is_appraise === true) {
+				this.choosed_background_all = 'transparent'
+				this.choosed_background_dtd = 'bisque'
+				this.choosed_background_rb = 'transparent'
+				this.choosed_background_db = 'transparent'
+			}
+
+			if (data.is_appraise === true && data.is_appraise === true && data.for_rent === true && data.for_sale === true && data.rented_out === true && data.sold === true) {
+				this.choosed_background_db = 'transparent'
+				this.choosed_background_all = 'bisque'
+				this.choosed_background_rb = 'transparent'
+				this.choosed_background_dtd = 'transparent'
 			}
 			this.transaction = transaction
 			this.transaction_type = data

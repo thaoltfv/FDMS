@@ -59,15 +59,27 @@
               label="Địa chỉ"
               class="form-group-container input_certification_brief"
             />
+            <div class="row justify-content-between">
             <InputCategory
               v-model="data.appraise_purpose_id"
-              class="form-group-container input_certification_brief"
+              class="form-group-container input_certification_brief  col-sm-12 col-md-6"
               vid="appraise_purpose_id"
               label="Mục đích thẩm định"
               rules="required"
               :options="optionsAppraisalPurposes"
               @change="handleChangeAppraisePurpose"
             />
+            <InputDatePicker
+                v-model="data.appraise_date"
+                vid="appraise_date"
+                label="Thời điểm thẩm định"
+                placeholder="Ngày / tháng / năm"
+                rules="required"
+                :formatDate="'DD/MM/YYYY'"
+                class="form-group-container col-sm-12 col-md-6"
+                @change="changeAppraiseDate"
+              />
+              </div>
             <!-- <InputCategoryMulti
               v-model="data.document_type"
               :maxTagCount="1"
@@ -88,16 +100,18 @@
                 class="form-group-container col-sm-12 col-md-6"
                 @change="changeServiceFee($event)"
               />
-              <InputDatePicker
-                v-model="data.appraise_date"
-                vid="appraise_date"
-                label="Thời điểm thẩm định"
-                placeholder="Ngày / tháng / năm"
-                rules="required"
-                :formatDate="'DD/MM/YYYY'"
-                class="form-group-container col-sm-12 col-md-6"
-                @change="changeAppraiseDate"
-              />
+              <InputPercent
+              :key="render_price_fee"
+              v-model="data.commission_fee"
+              label="Chiết khấu"
+              vid="test"
+              :max="100"
+              :decimal="0"
+              rules="required"
+              class="form-group-container col-sm-12 col-md-6"
+              @change="changeCommissionFee($event)"
+            />
+              
             </div>
             <div class="row justify-content-between">
               <InputText
@@ -199,17 +213,7 @@
               :showIcon="true"
               label="Điện thoại"
             />
-            <InputPercent
-              :key="render_price_fee"
-              v-model="data.commission_fee"
-              label="Chiết khấu"
-              vid="test"
-              :max="100"
-              :decimal="0"
-              rules="required"
-              class="form-group-container"
-              @change="changeCommissionFee($event)"
-            />
+            
           </div>
         </div>
       </div>
@@ -233,12 +237,13 @@
           v-show="showCardDetailEconomicAndSocial"
         >
           <div class="d-flex-column">
+            <div class="row justify-content-between">
             <InputCategory
               v-model="data.appraiser_sale_id"
               vid="appraiser_sale_id"
               label="Nhân viên kinh doanh"
               rules="required"
-              class="form-group-container"
+              class="form-group-container col-sm-12 col-md-6"
               @change="handleChangeAppraiserSale"
               :options="optionsBusiness"
             />
@@ -246,15 +251,17 @@
               v-model="data.appraiser_perform_id"
               vid="appraiser_perform_id"
               label="Chuyên viên thực hiện"
-              class="form-group-container"
+              class="form-group-container col-sm-12 col-md-6"
               @change="handleChangeAppraiserPerform"
               :options="optionsPeformance"
             />
+            </div>
+            <div class="row justify-content-between">
             <InputCategory
               v-model="data.appraiser_control_id"
               vid="appraiser_control_id"
               label="Kiểm soát viên"
-              class="form-group-container"
+              class="form-group-container col-sm-12 col-md-6"
               @change="handleChangeAppraiserControl"
               :options="optionsAppraiserControl"
 
@@ -263,11 +270,12 @@
               v-model="data.appraiser_id"
               vid="appraiser_id"
               label="Thẩm định viên"
-              class="form-group-container"
+              class="form-group-container col-sm-12 col-md-6"
               @change="handleChangeAppraiser"
               :options="optionsAppraiser"
 
             />
+            </div>
             
             <!-- <div class="form-group-container">
               <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
