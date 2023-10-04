@@ -270,6 +270,7 @@ class ReportAppendix1 extends Report
         $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
+            $avgPrice = round($estimateAmount / $mainArea);
         } else {
             if (isset($item->muc_dich_chinh)){
                 $purposePrice = 0;
