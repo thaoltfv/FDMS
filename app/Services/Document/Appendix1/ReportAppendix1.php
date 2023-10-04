@@ -265,6 +265,8 @@ class ReportAppendix1 extends Report
         $area_chinh_cuoicung = 0;
         $area_phu_ve_chinh = 0;
         //
+        $avgPrice = 0;
+        //
         $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
