@@ -560,6 +560,7 @@ class ReportAppendix1 extends Report
     {
         $data = [];
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
+        dd($method);
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
