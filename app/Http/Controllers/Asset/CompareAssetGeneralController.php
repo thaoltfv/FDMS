@@ -113,6 +113,14 @@ class CompareAssetGeneralController extends Controller
     public function findAllInElastic(): JsonResponse
     {
         try {
+            $property_type = request()->get('property_type');
+            if($property_type == null){
+                $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
+            }elseif($property_type == 0){
+                $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
+            }else{
+                $certificateAssets = [];
+            }
             $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
             $comparisonAsset = $this->compareAssetGeneralRepository->findAllInElastic_v3();
             // $data = array_map(null,$certificateAssets,$comparisonAsset);
