@@ -560,7 +560,7 @@ class ReportAppendix1 extends Report
     {
         $data = [];
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
-        dd($method);
+        // dd($method);
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
@@ -619,7 +619,7 @@ class ReportAppendix1 extends Report
             $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
             $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
         }
-        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đ/giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
         return $data;
     }
     protected function getStringCoordinates($coordinates)
