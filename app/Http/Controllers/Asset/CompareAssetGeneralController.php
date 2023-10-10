@@ -121,7 +121,8 @@ class CompareAssetGeneralController extends Controller
             }else{
                 $certificateAssets = [];
             }
-            $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
+            // $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
+            dd($certificateAssets);
             $comparisonAsset = $this->compareAssetGeneralRepository->findAllInElastic_v3();
             // $data = array_map(null,$certificateAssets,$comparisonAsset);
             // $data =  array_merge ($certificateAssets, []);
