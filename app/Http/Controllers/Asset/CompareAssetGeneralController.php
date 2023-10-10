@@ -118,10 +118,10 @@ class CompareAssetGeneralController extends Controller
                 $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
             }elseif($property_type == 0){
                 $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
-                dd($certificateAssets);
+                // dd($certificateAssets);
             }else{
                 $certificateAssets = [];
-                dd($certificateAssets);
+                // dd($certificateAssets);
             }
             // $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
             
