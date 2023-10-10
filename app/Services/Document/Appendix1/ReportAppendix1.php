@@ -1200,9 +1200,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            ($this->asset1->source && $this->asset1->source->description) ? CommonService::mbUcfirst($this->asset1->source->description) : '-',
-            ($this->asset2->source && $this->asset2->source->description) ? CommonService::mbUcfirst($this->asset2->source->description) : '-',
-            ($this->asset3->source && $this->asset3->source->description) ? CommonService::mbUcfirst($this->asset3->source->description) : '-',
+            ($this->asset1->source && $this->asset1->source->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset1->source->description)) : '-',
+            ($this->asset2->source && $this->asset2->source->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset2->source->description)) : '-',
+            ($this->asset3->source && $this->asset3->source->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset3->source->description)) : '-',
             false
         ];
         return $data;
