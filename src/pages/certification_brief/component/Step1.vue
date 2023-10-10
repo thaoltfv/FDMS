@@ -239,7 +239,7 @@
           <div class="d-flex-column">
             <div class="row justify-content-between">
             <InputCategory
-              v-model="data.appraiser_sale_id"
+              v-model="appraiser_sale_compute"
               vid="appraiser_sale_id"
               label="Nhân viên kinh doanh"
               rules="required"
@@ -248,7 +248,7 @@
               :options="optionsBusiness"
             />
             <InputCategory
-              v-model="data.appraiser_perform_id"
+              v-model="appraiser_perform_compute"
               vid="appraiser_perform_id"
               label="Chuyên viên thực hiện"
               class="form-group-container col-sm-12 col-md-6"
@@ -258,7 +258,7 @@
             </div>
             <div class="row justify-content-between">
             <InputCategory
-              v-model="data.appraiser_control_id"
+              v-model="appraiser_control_compute"
               vid="appraiser_control_id"
               label="Kiểm soát viên"
               class="form-group-container col-sm-12 col-md-6"
@@ -267,7 +267,7 @@
 
             />
             <InputCategory
-              v-model="data.appraiser_id"
+              v-model="appraiser_compute"
               vid="appraiser_id"
               label="Thẩm định viên"
               class="form-group-container col-sm-12 col-md-6"
@@ -286,7 +286,7 @@
               </div>
             </div> -->
             <InputCategory
-              v-model="data.appraiser_manager_id"
+              v-model="appraiser_manager_compute"
               vid="appraiser_manager_id"
               label="Đại diện theo pháp luật"
               class="form-group-container"
@@ -295,7 +295,7 @@
 
             />
             <InputCategory
-              v-model="data.appraiser_confirm_id"
+              v-model="appraiser_confirm_compute"
               vid="appraiser_confirm_id"
               label="Đại diện ủy quyền"
               class="form-group-container"
@@ -386,6 +386,98 @@ export default {
 		InputTextPrefixCustomIcon
 	},
 	computed: {
+    appraiser_perform_compute: {
+			// getter
+			get: function () {
+				if (this.employeePerformance.length > 0) {
+          // console.log('vô đây trước 1')
+					return this.data.appraiser_perform_id
+				} else {
+          // console.log('vô đây trước 2')
+					return this.data.appraiser_perform.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.data.appraiser_perform_id = newValue
+			}
+		},
+		appraiser_control_compute: {
+			// getter
+			get: function () {
+				if (this.appraisersControl.length > 0) {
+					return this.data.appraiser_control_id
+				} else {
+					return this.data.appraiser_control.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.data.appraiser_control_id = newValue
+			}
+		},
+		appraiser_compute: {
+			// getter
+			get: function () {
+				if (this.appraisers.length > 0) {
+					return this.data.appraiser_id
+				} else {
+					return this.data.appraiser.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.data.appraiser_id = newValue
+			}
+		},
+		appraiser_manager_compute: {
+			// getter
+			get: function () {
+				if (this.appraisersManager.length > 0) {
+					return this.data.appraiser_manager_id
+				} else {
+					return this.data.appraiser_manager.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.data.appraiser_manager_id = newValue
+			}
+		},
+		appraiser_confirm_compute: {
+			// getter
+			get: function () {
+				if (this.signAppraisers.length > 0) {
+					return this.data.appraiser_confirm_id
+				} else {
+					return this.data.appraiser_confirm.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.data.appraiser_confirm_id = newValue
+			}
+		},
+    appraiser_sale_compute: {
+			// getter
+			get: function () {
+				if (this.employeeBusiness.length > 0) {
+					return this.data.appraiser_sale_id
+				} else {
+					return this.data.appraiser_sale.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.data.appraiser_sale_id = newValue
+			}
+		},
 		optionsAppraisalPurposes () {
 			return {
 				data: this.appraisalPurposes,
@@ -426,7 +518,7 @@ export default {
 				data: this.employeeBusiness,
 				id: 'id',
 				key: 'name',
-				selected: this.userAppraiserId
+				// selected: this.userAppraiserId
 			}
 		},
 		optionsSignAppraiser () {
@@ -498,6 +590,7 @@ export default {
 	},
 	created () {
 		// this.getCustomer()
+    console.log('data', this.data)
 	},
 	methods: {
 		disabledDate (current) {

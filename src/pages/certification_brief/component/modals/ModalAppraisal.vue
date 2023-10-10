@@ -313,39 +313,79 @@ export default {
 
 	},
 	computed: {
-		appraiser_perform_compute () {
-			if (this.employeePerformance.length > 0) {
-				return this.form.appraiser_perform_id
-			} else {
-				return this.form.appraiser_perform.name
+		appraiser_perform_compute: {
+			// getter
+			get: function () {
+				if (this.employeePerformance.length > 0) {
+					return this.form.appraiser_perform_id
+				} else {
+					return this.form.appraiser_perform.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.form.appraiser_perform_id = newValue
 			}
 		},
-		appraiser_control_compute () {
-			if (this.appraisersControl.length > 0) {
-				return this.form.appraiser_control_id
-			} else {
-				return this.form.appraiser_control.name
+		appraiser_control_compute: {
+			// getter
+			get: function () {
+				if (this.appraisersControl.length > 0) {
+					return this.form.appraiser_control_id
+				} else {
+					return this.form.appraiser_control.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.form.appraiser_control_id = newValue
 			}
 		},
-		appraiser_compute () {
-			if (this.appraisers.length > 0) {
-				return this.form.appraiser_id
-			} else {
-				return this.form.appraiser.name
+		appraiser_compute: {
+			// getter
+			get: function () {
+				if (this.appraisers.length > 0) {
+					return this.form.appraiser_id
+				} else {
+					return this.form.appraiser.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.form.appraiser_id = newValue
 			}
 		},
-		appraiser_manager_compute () {
-			if (this.appraisersManager.length > 0) {
-				return this.form.appraiser_manager_id
-			} else {
-				return this.form.appraiser_manager.name
+		appraiser_manager_compute: {
+			// getter
+			get: function () {
+				if (this.appraisersManager.length > 0) {
+					return this.form.appraiser_manager_id
+				} else {
+					return this.form.appraiser_manager.name 
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.form.appraiser_manager_id = newValue
 			}
 		},
-		appraiser_confirm_compute () {
-			if (this.signAppraisers.length > 0) {
-				return this.form.appraiser_confirm_id
-			} else {
-				return this.form.appraiser_confirm.name
+		appraiser_confirm_compute: {
+			// getter
+			get: function () {
+				if (this.signAppraisers.length > 0) {
+					return this.form.appraiser_confirm_id
+				} else {
+					return this.form.appraiser_confirm.name
+				}
+			},
+			// setter
+			set: function (newValue) {
+				// console.log('newwww', newValue)
+				this.form.appraiser_confirm_id = newValue
 			}
 		},
 		optionsAppraiserManager () {

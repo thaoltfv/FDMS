@@ -511,7 +511,7 @@
 						<td>
 							27
 						</td>
-						<td id="ti_le_dat">Tỉ lệ đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false).land_type_purpose.acronym}}/đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}}</td>
+						<td id="ti_le_dat">Tỉ lệ đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false) ? appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false).land_type_purpose.acronym : 'mục đích phụ'}}/đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false) ? appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym : 'mục đích chính'}}</td>
 						<td>-</td>
 						<td>{{this.form.composite_land_remaning_value}}%</td>
 						<td>{{this.form.composite_land_remaning_value}}%</td>
@@ -533,7 +533,7 @@
 						<td>
 							28
 						</td>
-						<td id="dt_dat_qd">Diện tích đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false).land_type_purpose.acronym}} quy về đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} (m<sup>2</sup>)</td>
+						<td id="dt_dat_qd">Diện tích đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false) ? appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false).land_type_purpose.acronym : 'mục đích phụ'}} quy về đất {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false) ? appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym : 'mục đích chính'}} (m<sup>2</sup>)</td>
 						<td>-</td>
 						<td>{{formatNumber(quydoivemucdichchinh1)}}</td>
 						<td>{{formatNumber(quydoivemucdichchinh2)}}</td>
@@ -543,7 +543,7 @@
 						<td>
 							29
 						</td>
-						<td id="tong_dt_dat_qd">Diện tích đất  {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} sau khi quy đổi (m<sup>2</sup>)</td>
+						<td id="tong_dt_dat_qd">Diện tích đất  {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false) ? appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym : 'mục đích chính'}} sau khi quy đổi (m<sup>2</sup>)</td>
 						<td>-</td>
 						<td>{{formatNumber(sauquydoivemucdichchinh1)}}</td>
 						<td>{{formatNumber(sauquydoivemucdichchinh2)}}</td>
@@ -551,7 +551,7 @@
 						</tr>
 						<tr v-if="this.form.composite_land_remaning_slug === 'theo-ty-le-gia-dat-co-so-chinh' && !checkOld()">
 						<td>30</td>
-						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym}} bình quân.</td>
+						<td id="land_unit_price_estimate">Đơn giá {{appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === false) ? appraises.properties[0].property_detail.find(property_detail => property_detail.is_transfer_facility === true).land_type_purpose.acronym : 'mục đích chính'}} bình quân.</td>
 						<b-tooltip placement="rightbottom" target="land_unit_price_estimate">
 								Đơn giá QSDĐ (30) = (26) / (29) <br/>
 								Đơn giá của MDSD chính
