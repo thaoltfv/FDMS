@@ -5461,6 +5461,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $query = ViewSelectedCertificateAsset::query();
         $query1 = ViewSelectedCertificateApartment::query();
 
+        dd($query1);
+        
         if (isset($status)){
             $status = explode(',', $status);
             $query=$query->whereIn('status',$status);
