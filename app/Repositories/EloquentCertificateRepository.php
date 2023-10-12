@@ -5172,7 +5172,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             FROM certificates t1
                                 inner join certificate_has_real_estates t2 on t1.id = t2.certificate_id
                                 inner join certificate_apartments t3 on t2.real_estate_id = t3.real_estate_id
-                                left join certificate_apartment_prices t4 on t3.id = t4.apartment_asset_id and t4.slug ='apartment_asset_price'
+                                left join certificate_apartment_prices t4 on t3.id = t4.apartment_asset_id and t4.slug ='apartment_total_price'
                                 left join certificate_apartment_prices t5 on t3.id = t5.apartment_asset_id and t5.slug ='apartment_area'
                                 inner join (select id ,  :earthRadius * 2 * asin(sqrt(power(SIN((pi()/180) * ( SPLIT_PART(coordinates , ',',1)::float - :lat) /2),2)
                                             + cos((pi()/180) * SPLIT_PART(coordinates , ',',1)::float)
