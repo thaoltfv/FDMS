@@ -5219,7 +5219,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // dd(DB::getQueryLog());
         $result = array_column($data, 'id');
         $pic = ApartmentAsset::with('pic')->where(['id' => $result])->get(['id'])->toArray();
-        dd($result , $pic);
+        if ($result && $pic) {
+            dd($result , $pic);
+        }
+        
         foreach ($data as $item) {
             $find = array_search($item->id, array_column($pic, 'id'));
             if ($find === false)
