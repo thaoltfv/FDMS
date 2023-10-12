@@ -5497,7 +5497,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result1 = $result1->toArray();
         
         $final_result = array_merge($result, $result1);
-        // dd($result->toArray());
+        dd($final_result);
         return $final_result;
     }
 
