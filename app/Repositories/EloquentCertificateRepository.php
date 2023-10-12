@@ -5217,9 +5217,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         ]);
         // dd(DB::getQueryLog());
         $result = array_column($data, 'id');
-        $pic = ApartmentAsset::with('pic')->where(['apartment_asset_id' => $result])->get(['apartment_asset_id'])->toArray();
+        $pic = ApartmentAsset::with('pic')->where(['id' => $result])->get(['id'])->toArray();
         foreach ($data as $item) {
-            $find = array_search($item->id, array_column($pic, 'apartment_asset_id'));
+            $find = array_search($item->id, array_column($pic, 'id'));
             if ($find === false)
                 $item->pic = [];
             else
