@@ -228,7 +228,8 @@ class ExportCertificateBriefs
         $mappingHeader = $customizeHeader;
 
         // Processing data: rename key and append missing value for land, construction, others
-        $reducedData = []
+        $reducedData = [];
+        $data = collect($data);
 ;        foreach ($data as $datas) {
             $xxx = $datas->map(function ($item) use ($mappingHeader) {
 
