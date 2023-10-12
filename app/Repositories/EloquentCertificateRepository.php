@@ -5495,12 +5495,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
             $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
         }
-        // $result = $result->toArray();
-        // $result1 = $result1->toArray();
+        $result = $result->toArray();
+        $result1 = $result1->toArray();
         
-        // $final_result = array_merge($result, $result1);
-        dd($result, $result1);
-        return $result;
+        $final_result = array_merge($result, $result1);
+        dd($final_result);
+        return $final_result;
     }
 
     private function updatePersonaltyPrice(int $id)
