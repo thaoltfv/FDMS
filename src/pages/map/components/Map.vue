@@ -168,6 +168,12 @@
       :property="this.property"
       :pic="this.pic"
     />
+	<ModalMapDetailApartment
+      v-if="open_detail_apartment"
+      @cancel="open_detail_apartment = false"
+      :property="this.property"
+      :pic="this.pic"
+    />
     <ModalRadius
       v-if="open_radius"
       @cancel="open_radius = false"
@@ -195,6 +201,7 @@ import Icon from 'buefy'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import ModalMapDetail from '@/components/Modal/ModalMapDetail'
 import ModalMapDetailAppraise from '@/components/Modal/ModalMapDetailAppraise'
+import ModalMapDetailApartment from '@/components/Modal/ModalMapDetailApartment'
 import PropertiesList from '@/pages/map/components/PropertiesList'
 import InputCategory from '@/components/Form/InputCategory'
 import InputNumberFormat from '@/components/Form/InputNumber'
@@ -233,7 +240,8 @@ export default {
 		VueLeafletMinimap,
 		ToggleSwitchSearch,
 		ModalMapDetailAppraise,
-		ModalFilterAdvance
+		ModalFilterAdvance,
+		ModalMapDetailApartment
 	},
 	computed: {
 		optionsYear () {
@@ -301,6 +309,7 @@ export default {
 			open_radius: false,
 			open_detail: false,
 			open_detail_appraise: false,
+			open_detail_apartment: false,
 			assetGenerals: [],
 			location: [],
 			locationApartments: [],
@@ -436,20 +445,36 @@ export default {
 			this.zoom = zoom
 		},
 		async handleDetail (property) {
+			console.log('property', property)
 			if (property.transaction_type_id && property.transaction_type_id !== 0) {
 				await this.getAssetGeneralDetail(property.id)
 				this.pic = property.pic
 				this.open_detail = true
 			} else if (property.transaction_type_id === 0) {
-				await this.getAppraisersDetail(property.id)
-				this.pic = property.pic
-				this.open_detail_appraise = true
+				if (property.loaitaisan !== 'CC') {
+					await this.getAppraisersDetail(property.id)
+					this.pic = property.pic
+					this.open_detail_appraise = true
+				} else {
+					await this.getApartmentDetail(property.id)
+					this.pic = property.pic
+					this.open_detail_apartment = true
+				}
+				
+				
 			}
 		},
 		async getAppraisersDetail (id) {
 			this.isSubmit = true
 			const resp = await WareHouse.getAppraiseDetail(id)
 			this.property = resp.data
+			this.isSubmit = false
+		},
+		async getApartmentDetail (id) {
+			this.isSubmit = true
+			const resp = await WareHouse.getApartmentDetail(id)
+			this.property = resp.data
+			console.log('apartment',this.property )
 			this.isSubmit = false
 		},
 		async getAssetGeneralDetail (id) {
@@ -579,6 +604,7 @@ export default {
 			const isAppraise = !!this.transaction_type.is_appraise
 			const resp = await WareHouse.getSearchAll(year, province, district, ward, street, transaction, total_area_from, total_area_to, total_amount_from, total_amount_to, distance, location, front_side, isAppraise, property_type)
 			this.assetGenerals = [...resp.data]
+			console.log('asset', this.assetGenerals)
 			await this.getLatLng()
 			this.isSubmit = false
 		},
@@ -646,7 +672,7 @@ export default {
 			this.locationLand = []
 			this.assetGenerals.forEach(assetGeneral => {
 				if (assetGeneral.transaction_type === 51 || assetGeneral.transaction_type === 52 || assetGeneral.transaction_type === 0) {
-					if (assetGeneral.asset_type_id === 39) {
+					if (assetGeneral.asset_type === 'CHUNG CƯ') {
 						this.locationApartments.push({
 							id: assetGeneral.id,
 							center: [parseFloat(assetGeneral.coordinates.split(',')[0]), parseFloat(assetGeneral.coordinates.split(',')[1])],
@@ -663,7 +689,27 @@ export default {
 							properties: assetGeneral.properties,
 							total_estimate_amount: assetGeneral.total_estimate_amount,
 							total_construction_amount: assetGeneral.total_construction_amount,
-							public_date: assetGeneral.public_date
+							public_date: assetGeneral.public_date,
+							loaitaisan: 'CC'
+						})
+						this.location.push({
+							id: assetGeneral.id,
+							center: [parseFloat(assetGeneral.coordinates.split(',')[0]), parseFloat(assetGeneral.coordinates.split(',')[1])],
+							migrate_status: assetGeneral.migrate_status,
+							transaction_type_id: assetGeneral.transaction_type,
+							transaction_type: assetGeneral.transaction_type_description,
+							total_area: assetGeneral.total_area,
+							total_amount: assetGeneral.total_amount,
+							pic: assetGeneral.pic,
+							contact_person: assetGeneral.contact_person,
+							contact_phone: assetGeneral.contact_phone,
+							full_address: assetGeneral.full_address,
+							tangible_assets: assetGeneral.tangible_assets,
+							properties: assetGeneral.properties,
+							total_estimate_amount: assetGeneral.total_estimate_amount,
+							total_construction_amount: assetGeneral.total_construction_amount,
+							public_date: assetGeneral.public_date,
+							loaitaisan: 'CC'
 						})
 					} else {
 						this.locationLand.push({
@@ -682,27 +728,30 @@ export default {
 							properties: assetGeneral.properties,
 							total_estimate_amount: assetGeneral.total_estimate_amount,
 							total_construction_amount: assetGeneral.total_construction_amount,
-							public_date: assetGeneral.public_date
+							public_date: assetGeneral.public_date,
+							loaitaisan: 'NĐ'
+						})
+						this.location.push({
+							id: assetGeneral.id,
+							center: [parseFloat(assetGeneral.coordinates.split(',')[0]), parseFloat(assetGeneral.coordinates.split(',')[1])],
+							migrate_status: assetGeneral.migrate_status,
+							transaction_type_id: assetGeneral.transaction_type,
+							transaction_type: assetGeneral.transaction_type_description,
+							total_area: assetGeneral.total_area,
+							total_amount: assetGeneral.total_amount,
+							pic: assetGeneral.pic,
+							contact_person: assetGeneral.contact_person,
+							contact_phone: assetGeneral.contact_phone,
+							full_address: assetGeneral.full_address,
+							tangible_assets: assetGeneral.tangible_assets,
+							properties: assetGeneral.properties,
+							total_estimate_amount: assetGeneral.total_estimate_amount,
+							total_construction_amount: assetGeneral.total_construction_amount,
+							public_date: assetGeneral.public_date,
+							loaitaisan: 'NĐ'
 						})
 					}
-					this.location.push({
-						id: assetGeneral.id,
-						center: [parseFloat(assetGeneral.coordinates.split(',')[0]), parseFloat(assetGeneral.coordinates.split(',')[1])],
-						migrate_status: assetGeneral.migrate_status,
-						transaction_type_id: assetGeneral.transaction_type,
-						transaction_type: assetGeneral.transaction_type_description,
-						total_area: assetGeneral.total_area,
-						total_amount: assetGeneral.total_amount,
-						pic: assetGeneral.pic,
-						contact_person: assetGeneral.contact_person,
-						contact_phone: assetGeneral.contact_phone,
-						full_address: assetGeneral.full_address,
-						tangible_assets: assetGeneral.tangible_assets,
-						properties: assetGeneral.properties,
-						total_estimate_amount: assetGeneral.total_estimate_amount,
-						total_construction_amount: assetGeneral.total_construction_amount,
-						public_date: assetGeneral.public_date
-					})
+					
 				}
 			})
 		},

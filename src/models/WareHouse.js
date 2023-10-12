@@ -168,6 +168,9 @@ export default class WareHouse extends Model {
 	static async getAppraiseDetail (id, data) {
 		return (new this()).request({ method: 'GET', url: `asset-generals/appraise-detail/${id}`, data: data, isStatic: true })
 	}
+	static async getApartmentDetail (id, data) {
+		return (new this()).request({ method: 'GET', url: `asset-generals/apartment-detail/${id}`, data: data, isStatic: true })
+	}
 	static async getProjectsByDistrictId (id) {
 		let resp = localStorage.getItem('projects_' + id)
 		if (isEmpty(resp)) {
