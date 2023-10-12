@@ -228,30 +228,25 @@ class ExportCertificateBriefs
         $mappingHeader = $customizeHeader;
 
         // Processing data: rename key and append missing value for land, construction, others
-        $reducedData = [];
+        $reducedData = $data->map(function ($item) use ($mappingHeader) {
 
-        foreach ($data as $datas) {
-            $datas = collect($datas);
-            $xxx = $datas->map(function ($item) use ($mappingHeader) {
+            // Check if 'land_detail' existed in $selectedHeader array
+            if (in_array('land_detail', $mappingHeader)) {
+                // Check if 'land_detail_zoning' existed in $selectedHeader array
+                if (in_array('land_detail_zoning', $mappingHeader)) {
+                }
+            }
+            // Rename the key
+            $reduceItem = [];
+            foreach ($mappingHeader as $key => $value) {
+                $reduceItem[$value] = $item[$key] ?? '';
+            }
+            unset($item);
+            return $reduceItem;
+        });
 
-                // Check if 'land_detail' existed in $selectedHeader array
-                if (in_array('land_detail', $mappingHeader)) {
-                    // Check if 'land_detail_zoning' existed in $selectedHeader array
-                    if (in_array('land_detail_zoning', $mappingHeader)) {
-                    }
-                }
-                // Rename the key
-                $reduceItem = [];
-                foreach ($mappingHeader as $key => $value) {
-                    $reduceItem[$value] = $item[$key] ?? '';
-                }
-                unset($item);
-                return $reduceItem;
-            });
-            array_push($reducedData, $xxx);
-        }
-        
-        // dd($reducedData);
+        dd($reducedData);
+
         // Generate excel
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
         $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
