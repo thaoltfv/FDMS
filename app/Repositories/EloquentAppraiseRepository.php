@@ -7245,7 +7245,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             // 'tangibleAssets:id,building_type_id',
             // 'tangibleAssets.buildingType:id,description'
         ];
-        $result = ApartmentAsset::query()->with($with)->where('id', $id)->first($select);
+        // $result = ApartmentAsset::query()->with($with)->where('id', $id)->first($select);
+        $result = ApartmentAsset::query()->where('id', $id)->first($select);
         return $result;
     }
     private function checkAuthorization ($id)
