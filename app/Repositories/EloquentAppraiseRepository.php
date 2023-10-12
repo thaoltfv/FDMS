@@ -7227,7 +7227,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $with = [
             // 'topographic:id,description',
             'assetType:id,description',
-            'price:id,appraise_id,slug,value',
+            'price:id,apartment_asset_id,slug,value',
             // 'apartmentAssetProperties:id,appraise_id,front_side_width,insight_width,land_shape_id,appraise_land_sum_area,front_side,main_road_length',
             // 'apartmentAssetProperties.landShape:id,description',
             // 'apartmentAssetProperties.propertyTurningTime',
@@ -7247,6 +7247,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         ];
         // $result = ApartmentAsset::query()->with($with)->where('id', $id)->first($select);
         $result = ApartmentAsset::query()->where('id', $id)->with($with)->first($select);
+        // dd($result);
         return $result;
     }
     private function checkAuthorization ($id)
