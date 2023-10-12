@@ -5224,9 +5224,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $pic = array_merge ( $pic, $anh);
         }
 
-        if ($result && $pic) {
-            dd($result , $pic);
-        }
+        // if ($result && $pic) {
+        //     dd($result , $pic);
+        // }
         
         foreach ($data as $item) {
             $find = array_search($item->id, array_column($pic, 'id'));
