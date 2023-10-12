@@ -5500,7 +5500,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         
         // $final_result = array_merge($result, $result1);
         // dd($final_result);
-        return $result->unionAll($result1)->get();
+        return $result->merge($result1);
     }
 
     private function updatePersonaltyPrice(int $id)
