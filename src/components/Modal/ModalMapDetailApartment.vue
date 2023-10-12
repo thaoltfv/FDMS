@@ -176,7 +176,7 @@ import moment from 'moment'
 import WareHouse from '@/models/WareHouse'
 import ModalPrint from '@/components/Modal/ModalPrint'
 export default {
-	name: 'ModalMapDetailAppraise',
+	name: 'ModalMapDetailApartment',
 	props: ['property', 'pic'],
 	data () {
 		return {
@@ -231,7 +231,7 @@ export default {
 	methods: {
 		handleOpenCertificateAsset (id) {
 			let routeData = this.$router.resolve({
-				name: 'certification_asset.detail',
+				name: 'certification_asset.apartment.detail',
 				query: { id: id }
 			})
 			window.open(routeData.href, '_blank')
