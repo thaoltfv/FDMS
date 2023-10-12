@@ -229,8 +229,9 @@ class ExportCertificateBriefs
 
         // Processing data: rename key and append missing value for land, construction, others
         $reducedData = [];
-        $data = collect($data);
-;        foreach ($data as $datas) {
+
+        foreach ($data as $datas) {
+            $datas = collect($datas);
             $xxx = $datas->map(function ($item) use ($mappingHeader) {
 
                 // Check if 'land_detail' existed in $selectedHeader array
