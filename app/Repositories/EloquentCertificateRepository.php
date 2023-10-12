@@ -5218,7 +5218,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         ]);
         // dd(DB::getQueryLog());
         $result = array_column($data, 'id');
-        $pic = ApartmentAsset::with('pic')->where(['id' => $result])->get(['id'])->toArray();
+        $pic = []; 
+        foreach ($result as $id) {
+            $anh = ApartmentAsset::with('pic')->where(['id' => $id])->get(['id'])->toArray();
+            $pic = array_merge ( $pic, $anh);
+        }
+
         if ($result && $pic) {
             dd($result , $pic);
         }
