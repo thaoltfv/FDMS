@@ -155,6 +155,7 @@ use App\Models\VerhicleCertificateBriefLaw;
 use App\Models\VerhicleCertificateBriefLawInfo;
 use App\Models\VerhicleCertificateBriefPrice;
 use App\Models\Views\ViewSelectedCertificateAsset;
+use App\Models\Views\ViewSelectedCertificateApartment;
 use App\Notifications\ActivityLog;
 use App\Repositories\EloquentBuildingPriceRepository;
 use App\Services\AppraiseVersionService;
@@ -5458,34 +5459,46 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'propertyDetail:id,appraise_property_id,land_type_purpose_id,position_type_id,total_area,planning_area,is_zoning',
         ];
         $query = ViewSelectedCertificateAsset::query();
+        $query1 = ViewSelectedCertificateApartment::query();
 
         if (isset($status)){
             $status = explode(',', $status);
             $query=$query->whereIn('status',$status);
+            $query1=$query1->whereIn('status',$status);
         }
 
         if (isset($fromDate)){
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
+            $query1=$query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
         }
 
         if (isset($toDate)){
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
+            $query1=$query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
         // $result = $query->with($with)->limit(5)->get();
         $result = $query->with($with)->get();
+        $result1 = $query1->get();
         if ($isExportLandDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
+            $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
         }
         if ($isExportLandZoningDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST));
+            $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST));
         }
         if ($isExportTangibleDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
+            $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
         }
+        $result = $result->toArray();
+        $result1 = $result1->toArray();
+        
+        $final_result = array_merge($result, $result1);
         // dd($result->toArray());
-        return $result;
+        return $final_result;
     }
 
     private function updatePersonaltyPrice(int $id)
