@@ -5164,7 +5164,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                                 ,t3.coordinates
                                 , CONCAT(t10.name , ', ' , t9.name , ', ' , t8.name , ', ' , t7.name) as full_address
                                 ,'TSTD' as migrate_status
-                                , 3 as transaction_type_id
+                                , 0 as transaction_type_id
                                 , 0 as transaction_type
                                 ,'ĐÃ THẨM ĐỊNH' as transaction_type_description
                                 ,t11.description as asset_type
@@ -5235,7 +5235,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             else
                 $item->pic = $pic[$find]['pic'];
         }
-        // dd($data);
+        dd($data);
         return $data;
     }
 
