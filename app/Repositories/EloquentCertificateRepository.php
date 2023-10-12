@@ -5169,7 +5169,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                                 ,'ĐÃ THẨM ĐỊNH' as transaction_type_description
                                 ,t11.description as asset_type
                                 ,t1.created_at
-                                ,'CC' as asset_type
+                                ,'CC' as loaitaisan
                             FROM certificates t1
                                 inner join certificate_has_real_estates t2 on t1.id = t2.certificate_id
                                 inner join certificate_apartments t3 on t2.real_estate_id = t3.real_estate_id
