@@ -29,16 +29,6 @@ class ViewSelectedCertificateApartment extends Model
 
     public function getResidentialAreaAttribute()
     {
-        if (isset ($this->propertyDetail)) {
-            foreach ($this->propertyDetail as $detail) {
-                $acronym = $this->getPurposeAcronym($detail->land_type_purpose_id);
-                if( in_array($acronym, self::RESIDENTIAL_PURPOSE)) {
-                    $areaModel = $this->certificateAssetPrice->where('slug', 'land_asset_purpose_' . $acronym . '_area')->first();
-                    if (isset($areaModel))
-                        return floatval($areaModel->value);
-                }
-            }
-        }
         return 0;
     }
 
