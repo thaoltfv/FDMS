@@ -248,7 +248,7 @@ class ExportCertificateBriefs
                 unset($item);
                 return $reduceItem;
             });
-            $reducedData = array_push($reducedData, $xxx);
+            array_push($reducedData, $xxx);
         }
         
         dd($reducedData);
