@@ -115,12 +115,14 @@ class CompareAssetGeneralController extends Controller
         try {
             $property_type = request()->get('property_type');
             if($property_type == null){
-                $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
+                $certificate1 = $this->certificateRepository->getFinishCertificateAssets();
+                $certificate2 = $this->certificateRepository->getFinishCertificateApartment();
+                $certificateAssets = array_merge ($certificate1, $certificate2);
             }elseif($property_type == 0){
                 $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();
                 // dd($certificateAssets);
             }else{
-                $certificateAssets = [];
+                $certificateAssets = $this->certificateRepository->getFinishCertificateApartment();
                 // dd($certificateAssets);
             }
             // $certificateAssets = $this->certificateRepository->getFinishCertificateAssets();

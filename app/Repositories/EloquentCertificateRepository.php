@@ -5111,6 +5111,124 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         return $data;
     }
 
+    public function getFinishCertificateApartment()
+    {
+        $data = [];
+        if (request()->get('is_appraise') == 'false') {
+            return $data;
+        }
+        $year = request()->get('year');
+        // $year =  Carbon::parse($year)->format('Y');
+        $province_id = request()->get('province_id') ?? "%";
+        $district_id = request()->get('district_id') ?? "%";
+        $ward_id = request()->get('ward_id') ?? "%";
+        $street_id = request()->get('street_id') ?? "%";
+        $transaction_type = request()->get('transaction_type');
+        $total_area_from = request()->get('total_area_from') ?? 0;
+        $total_area_to = request()->get('total_area_to') ?? 1000000;
+        $total_amount_from = request()->get('total_amount_from') ?? 0;
+        $total_amount_to = request()->get('total_amount_to') ?? 100000000000000;
+        $distance = request()->get('distance') ?? 10;
+        $location = request()->get('location');
+        $front_side = request()->get('front_side');
+        if (isset($location)) {
+            $location1 = explode(',', $location);
+            $lat = (float)$location1[0] ?? null;
+            $lon = (float)$location1[1] ?? null;
+        }
+        else {
+            return [];
+        }
+        $earthRadius = 6371;
+        $with = [
+            'pic'
+        ];
+        $tbName = '"coord"';
+        $stringSql = sprintf(
+            "SELECT 
+            t13.name as apartment_name, t3.apartment_asset_id as id, 
+            t1.petitioner_name as contact_person,t1.petitioner_phone as contact_phone
+                                ,t1.petitioner_identity_card
+                                ,t1.appraise_date as public_date
+                                ,coalesce(
+                                    case
+                                        when  t12.value::bigint > 0
+                                        then ceil(t4.value::bigint / power(10, t12.value::bigint)) * power(10, t12.value::bigint)
+                                        when   t12.value::bigint < 0
+                                            then floor( t4.value::bigint * abs(power(10, t12.value::bigint))  ) / abs(power(10, t12.value::bigint))
+                                        else
+                                            t4.value::bigint
+                                    end, 0)
+                                as total_amount
+                                ,t5.value::float as total_area
+                                ,t3.coordinates
+                                , CONCAT(t10.name , ', ' , t9.name , ', ' , t8.name , ', ' , t7.name) as full_address
+                                ,'TSTD' as migrate_status
+                                , 0 as transaction_type_id
+                                , 0 as transaction_type
+                                ,'ĐÃ THẨM ĐỊNH' as transaction_type_description
+                                ,t11.description as asset_type
+                                ,t1.created_at
+                            FROM certificates t1
+                                inner join certificate_has_real_estates t2 on t1.id = t2.certificate_id
+                                inner join certificate_apartments t3 on t2.real_estate_id = t3.real_estate_id
+                                left join certificate_apartment_prices t4 on t3.id = t4.apartment_asset_id and t4.slug ='apartment_asset_price'
+                                left join certificate_apartment_prices t5 on t3.id = t5.apartment_asset_id and t5.slug ='apartment_area'
+                                inner join (select id ,  :earthRadius * 2 * asin(sqrt(power(SIN((pi()/180) * ( SPLIT_PART(coordinates , ',',1)::float - :lat) /2),2)
+                                            + cos((pi()/180) * SPLIT_PART(coordinates , ',',1)::float)
+                                            * cos((pi()/180) * :lat)
+                                            * POWER(sin( (pi()/180) * (SPLIT_PART(coordinates , ',',2)::float - :lon) /2),2)))
+                                            as distance
+                                        from certificate_apartments ) t6 on t3.id = t6.id
+                                inner join provinces t7 on t3.province_id = t7.id
+                                inner join districts t8 on t3.district_id = t8.id
+                                inner join wards t9 on t3.ward_id = t9.id
+                                left join streets t10 on t3.street_id = t10.id
+                                inner join projects t13 on t3.project_id = t13.id
+                                inner join dictionaries t11 on t3.asset_type_id = t11.id
+                                left join certificate_apartment_prices t12 on t3.id = t12.apartment_asset_id and t12.slug ='round_total'
+                            WHERE t1.status IN (3, 4)
+                                and t1.created_at >= :year
+                                and t6.distance <= :distance
+                                -- and cast(t3.province_id as text) like  :province_id
+                                -- and cast(t3.district_id as text) like  :district_id
+                                -- and cast(t3.ward_id as text) like  :ward_id
+                                -- and cast(t3.street_id as text) like  :street_id
+                                and t5.value between :total_area_from and :total_area_to
+                                and t4.value between :total_amount_from and :total_amount_to
+            "
+        );
+        // dd($stringSql);
+        DB::enableQueryLog();
+        $data = DB::select($stringSql, [
+            ":year" => $year,
+            ":lat" => $lat,
+            ":lon" => $lon,
+            ":distance" => $distance,
+            ":earthRadius" => $earthRadius,
+            // ":province_id" => $province_id,
+            // ":district_id" => $district_id,
+            // ":ward_id" => $ward_id,
+            // ":street_id" => $street_id,
+            ":total_area_from" => $total_area_from,
+            ":total_area_to" => $total_area_to,
+            ":total_amount_from" => $total_amount_from,
+            ":total_amount_to" => $total_amount_to,
+        ]);
+        // dd(DB::getQueryLog());
+        $result = array_column($data, 'id');
+        $pic = ApartmentAssetPic::with('pic')->where(['apartment_asset_id' => $result])->get(['apartment_asset_id'])->toArray();
+        foreach ($data as $item) {
+            $find = array_search($item->id, array_column($pic, 'apartment_asset_id'));
+            if ($find === false)
+                $item->pic = [];
+            else
+                $item->pic = $pic[$find]['pic'];
+        }
+        // dd($data);
+        return $data;
+    }
+
     public  function getComparisonAppraise(array $ids)
     {
         $ids = $ids['ids'];
