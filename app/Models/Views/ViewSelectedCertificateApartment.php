@@ -39,6 +39,11 @@ class ViewSelectedCertificateApartment extends Model
         return 0;
     }
 
+    public function getAgriculturalAreaAttribute()
+    {
+        return 0;
+    }
+
     public function getAgriculturalUnitPriceAttribute()
     {
         return 0;
