@@ -228,8 +228,9 @@ class ExportCertificateBriefs
         $mappingHeader = $customizeHeader;
 
         // Processing data: rename key and append missing value for land, construction, others
-        // foreach ($data as $datas) {
-            $reducedData = $data->map(function ($item) use ($mappingHeader) {
+        $reducedData = []
+;        foreach ($data as $datas) {
+            $xxx = $datas->map(function ($item) use ($mappingHeader) {
 
                 // Check if 'land_detail' existed in $selectedHeader array
                 if (in_array('land_detail', $mappingHeader)) {
@@ -245,10 +246,10 @@ class ExportCertificateBriefs
                 unset($item);
                 return $reduceItem;
             });
-            dd($reducedData);
-        // }
+            $reducedData = array_merge($reducedData, $xxx);
+        }
         
-
+        dd($reducedData);
         // Generate excel
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
         $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
