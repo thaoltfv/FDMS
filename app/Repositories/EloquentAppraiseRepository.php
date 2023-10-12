@@ -7234,6 +7234,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'apartmentAssetProperties.direction',
             'apartmentAssetProperties.legal',
             'apartmentAssetProperties.furnitureQuality',
+            'apartmentAssetProperties.apartment',
             'certificate:id,appraiser_perform_id,appraise_date,certificate_num,certificate_date',
             'certificate.appraiserPerform:id,name',
             'pic',
