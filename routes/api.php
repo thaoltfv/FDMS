@@ -543,6 +543,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('certification_brief/certificate-update-appraise-version/{id}', [CertificateBriefController::class, 'updateCertificateVersion']);
     Route::get('asset-generals/appraise-detail/{id}', [CertificateAssetsController::class, 'getAppraiseDetail']);
+    Route::get('asset-generals/apartment-detail/{id}', [CertificateAssetsController::class, 'getApartmentDetail']);
     Route::get('certification_brief/asset-version', [CertificateBriefController::class, 'getVersionAppraises']);
     Route::get('certification_brief/get-status/{id}', [CertificateBriefController::class, 'getCertificateStatus']);
 

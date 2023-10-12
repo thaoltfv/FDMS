@@ -44,6 +44,9 @@ use App\Models\CompareAssetGeneral;
 use App\Models\CompareProperty;
 use App\Models\Dictionary;
 use App\Models\RealEstate;
+
+use App\Models\ApartmentAsset;
+
 use App\Notifications\ActivityLog;
 use App\Services\AppraiseVersionService;
 use Elasticsearch\ClientBuilder;
@@ -7205,6 +7208,44 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'tangibleAssets.buildingType:id,description'
         ];
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
+        return $result;
+    }
+
+    public function getApartmentDetail ($id)
+    {
+        $select = [
+            'id',
+            'province_id',
+            'district_id',
+            'ward_id',
+            'street_id',
+            'asset_type_id',
+            // 'topographic_id',
+            'certificate_id',
+            'updated_at'
+        ];
+        $with = [
+            // 'topographic:id,description',
+            'assetType:id,description',
+            'price:id,appraise_id,slug,value',
+            'apartmentAssetProperties:id,appraise_id,front_side_width,insight_width,land_shape_id,appraise_land_sum_area,front_side,main_road_length',
+            'apartmentAssetProperties.landShape:id,description',
+            'apartmentAssetProperties.propertyTurningTime',
+            'apartmentAssetProperties.propertyDetail:id,appraise_property_id,land_type_purpose_id',
+            'apartmentAssetProperties.propertyDetail.landTypePurpose:id,description,acronym',
+            'certificate:id,appraiser_perform_id,appraise_date,certificate_num,certificate_date',
+            'certificate.appraiserPerform:id,name',
+            'pic',
+            'law:id,appraise_id',
+            'law.landDetails:id,doc_no,land_no',
+            'province:id,name',
+            'district:id,name',
+            'street:id,name',
+            'ward:id,name',
+            // 'tangibleAssets:id,building_type_id',
+            // 'tangibleAssets.buildingType:id,description'
+        ];
+        $result = ApartmentAsset::query()->with($with)->where('id', $id)->first($select);
         return $result;
     }
     private function checkAuthorization ($id)
