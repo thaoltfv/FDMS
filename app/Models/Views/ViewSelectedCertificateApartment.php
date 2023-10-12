@@ -25,9 +25,16 @@ class ViewSelectedCertificateApartment extends Model
         'id' => 'integer',
     ];
 
-    const  RESIDENTIAL_PURPOSE = ['ODT', 'ONT'];
-
     public function getResidentialAreaAttribute()
+    {
+        return 0;
+    }
+
+    public function getResidentialUnitPriceAttribute()
+    {
+        return 0;
+    }
+    public function getResidentialPriceAttribute()
     {
         return 0;
     }
