@@ -7241,12 +7241,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'province:id,name',
             'district:id,name',
             'street:id,name',
-            'ward:id,name',
+            'ward:id,name'
             // 'tangibleAssets:id,building_type_id',
             // 'tangibleAssets.buildingType:id,description'
         ];
         // $result = ApartmentAsset::query()->with($with)->where('id', $id)->first($select);
-        $result = ApartmentAsset::query()->select()->where('id', $id)->with($with)->first($select);
+        $result = ApartmentAsset::query()->where('id', $id)->with($with)->first($select);
         return $result;
     }
     private function checkAuthorization ($id)
