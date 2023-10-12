@@ -5459,10 +5459,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'propertyDetail:id,appraise_property_id,land_type_purpose_id,position_type_id,total_area,planning_area,is_zoning',
         ];
         $query = ViewSelectedCertificateAsset::query();
+        dd($query);
         $query1 = ViewSelectedCertificateApartment::query();
 
-        dd($query1);
         
+
         if (isset($status)){
             $status = explode(',', $status);
             $query=$query->whereIn('status',$status);
