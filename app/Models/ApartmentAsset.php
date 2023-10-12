@@ -85,7 +85,7 @@ class ApartmentAsset extends Model
 
     public function street():BelongsTo
     {
-        return $this->belongsTo(Street::class, 'ward_id', 'id');
+        return $this->belongsTo(Street::class, 'street_id', 'id');
     }
 
     public function createBy():BelongsTo
