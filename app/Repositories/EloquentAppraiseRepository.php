@@ -7222,7 +7222,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'asset_type_id',
             // 'topographic_id',
             'certificate_id',
-            'updated_at'
+            'updated_at',
+            'project_id'
         ];
         $with = [
             // 'topographic:id,description',
