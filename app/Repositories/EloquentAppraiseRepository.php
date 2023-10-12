@@ -7237,12 +7237,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'certificate:id,appraiser_perform_id,appraise_date,certificate_num,certificate_date',
             'certificate.appraiserPerform:id,name',
             'pic',
-            // 'law:id,appraise_id',
-            // 'law.landDetails:id,doc_no,land_no',
+            'law',
+            'law.lawDocument',
             'province:id,name',
             'district:id,name',
             'street:id,name',
-            'ward:id,name'
+            'ward:id,name',
+            'valueBaseAndApproach',
+            'appraisal',
+            'project',
+            'comparisonFactor'
             // 'tangibleAssets:id,building_type_id',
             // 'tangibleAssets.buildingType:id,description'
         ];
