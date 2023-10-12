@@ -245,7 +245,7 @@ class ExportCertificateBriefs
             return $reduceItem;
         });
 
-        dd($reducedData);
+        // dd($reducedData);
 
         // Generate excel
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');

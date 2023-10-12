@@ -27,43 +27,43 @@ class ViewSelectedCertificateApartment extends Model
 
     public function getResidentialAreaAttribute()
     {
-        return 0;
+        return '';
     }
 
     public function getResidentialUnitPriceAttribute()
     {
-        return 0;
+        return '';
     }
     public function getResidentialPriceAttribute()
     {
-        return 0;
+        return '';
     }
 
     public function getAgriculturalAreaAttribute()
     {
-        return 0;
+        return '';
     }
 
     public function getAgriculturalUnitPriceAttribute()
     {
-        return 0;
+        return '';
     }
     public function getAgriculturalPriceAttribute()
     {
-        return 0;
+        return '';
     }
 
     public function getAgriculturalArea2Attribute()
     {
-        return 0;
+        return '';
     }
     public function getAgriculturalUnitPrice2Attribute()
     {
-        return 0;
+        return '';
     }
     public function getAgriculturalPrice2Attribute()
     {
-        return 0;
+        return '';
     }
     public function getTangibleTypeAttribute()
     {
@@ -71,25 +71,25 @@ class ViewSelectedCertificateApartment extends Model
     }
     public function getTangibleAreaAttribute()
     {
-        return 0;
+        return '';
     }
     public function getTangibleUnitPriceAttribute()
     {
-        return 0;
+        return '';
 
     }
     public function getTangibleRemainAttribute()
     {
-        return 0;
+        return '';
 
     }
     public function getOtherTangiblePriceAttribute()
     {
-        return 0;
+        return '';
     }
 
     public function getFirstTangiblePriceAttribute()
     {
-        return 0;
+        return '';
     }
 }
