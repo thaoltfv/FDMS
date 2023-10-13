@@ -4,11 +4,7 @@ namespace App\Models\Views;
 
 use App\Enum\ValueDefault;
 use App\Models\Certificate;
-use App\Models\CertificateAssetAppraisalMethods;
-use App\Models\CertificateAssetOtherAsset;
-use App\Models\CertificateAssetPrice;
-use App\Models\CertificateAssetPropertyDetail;
-use App\Models\CertificateAssetTangibleAsset;
+use App\Models\ApartmentAssetPrice;
 use App\Models\Dictionary;
 use App\Services\CommonService;
 use Illuminate\Database\Eloquent\Model;
