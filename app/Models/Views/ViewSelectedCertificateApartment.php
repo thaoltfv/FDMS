@@ -4,7 +4,7 @@ namespace App\Models\Views;
 
 use App\Enum\ValueDefault;
 use App\Models\Certificate;
-use App\Models\ApartmentAssetPrice;
+use App\Models\CertificateApartmentPrice;
 use App\Models\Dictionary;
 use App\Services\CommonService;
 use Illuminate\Database\Eloquent\Model;
@@ -23,11 +23,11 @@ class ViewSelectedCertificateApartment extends Model
 
     public function price():HasMany
     {
-        return $this->hasMany(ApartmentAssetPrice::class, 'apartment_asset_id');
+        return $this->hasMany(CertificateApartmentPrice::class, 'apartment_asset_id');
     }
     public function getResidentialAreaAttribute()
     {
-        dd($this->price);
+        // dd($this->price);
         if (isset ($this->price)) {
             foreach ($this->price as $detail) {
                 if ($detail->slug === 'apartment_area') {
