@@ -27,6 +27,7 @@ class ViewSelectedCertificateApartment extends Model
     }
     public function getResidentialAreaAttribute()
     {
+        dd($this->price);
         if (isset ($this->price)) {
             foreach ($this->price as $detail) {
                 if ($detail->slug === 'apartment_area') {
