@@ -27,69 +27,69 @@ class ViewSelectedCertificateApartment extends Model
 
     public function getResidentialAreaAttribute()
     {
-        return '';
+        return 1;
     }
 
     public function getResidentialUnitPriceAttribute()
     {
-        return '';
+        return 2;
     }
     public function getResidentialPriceAttribute()
     {
-        return '';
+        return 3;
     }
 
     public function getAgriculturalAreaAttribute()
     {
-        return '';
+        return 4;
     }
 
     public function getAgriculturalUnitPriceAttribute()
     {
-        return '';
+        return 5;
     }
     public function getAgriculturalPriceAttribute()
     {
-        return '';
+        return 6;
     }
 
     public function getAgriculturalArea2Attribute()
     {
-        return '';
+        return 7;
     }
     public function getAgriculturalUnitPrice2Attribute()
     {
-        return '';
+        return 8;
     }
     public function getAgriculturalPrice2Attribute()
     {
-        return '';
+        return 9;
     }
     public function getTangibleTypeAttribute()
     {
-        return '';
+        return 10;
     }
     public function getTangibleAreaAttribute()
     {
-        return '';
+        return 11;
     }
     public function getTangibleUnitPriceAttribute()
     {
-        return '';
+        return 12;
 
     }
     public function getTangibleRemainAttribute()
     {
-        return '';
+        return 13;
 
     }
     public function getOtherTangiblePriceAttribute()
     {
-        return '';
+        return 14;
     }
 
     public function getFirstTangiblePriceAttribute()
     {
-        return '';
+        return 15;
     }
 }
