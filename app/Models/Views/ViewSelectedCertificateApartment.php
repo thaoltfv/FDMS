@@ -25,71 +25,89 @@ class ViewSelectedCertificateApartment extends Model
         'id' => 'integer',
     ];
 
+    public function price():HasMany
+    {
+        return $this->hasMany(ApartmentAssetPrice::class, 'apartment_asset_id');
+    }
     public function getResidentialAreaAttribute()
     {
+        if (isset ($this->price)) {
+            foreach ($this->price as $detail) {
+                if ($detail->slug === 'apartment_area') {
+                    return $detail->value;
+                }
+            }
+        }
         return 1;
     }
 
     public function getResidentialUnitPriceAttribute()
     {
+        if (isset ($this->price)) {
+            foreach ($this->price as $detail) {
+                if ($detail->slug === 'apartment_asset_price') {
+                    return $detail->value;
+                }
+            }
+        }
         return 2;
     }
     public function getResidentialPriceAttribute()
     {
-        return 3;
+        return '';
     }
 
     public function getAgriculturalAreaAttribute()
     {
-        return 4;
+        return '';
     }
 
     public function getAgriculturalUnitPriceAttribute()
     {
-        return 5;
+        return '';
     }
     public function getAgriculturalPriceAttribute()
     {
-        return 6;
+        return '';
     }
 
     public function getAgriculturalArea2Attribute()
     {
-        return 7;
+        return '';
     }
     public function getAgriculturalUnitPrice2Attribute()
     {
-        return 8;
+        return '';
     }
     public function getAgriculturalPrice2Attribute()
     {
-        return 9;
+        return '';
     }
     public function getTangibleTypeAttribute()
     {
-        return 10;
+        return '';
     }
     public function getTangibleAreaAttribute()
     {
-        return 11;
+        return '';
     }
     public function getTangibleUnitPriceAttribute()
     {
-        return 12;
+        return '';
 
     }
     public function getTangibleRemainAttribute()
     {
-        return 13;
+        return '';
 
     }
     public function getOtherTangiblePriceAttribute()
     {
-        return 14;
+        return '';
     }
 
     public function getFirstTangiblePriceAttribute()
     {
-        return 15;
+        return '';
     }
 }
