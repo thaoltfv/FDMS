@@ -43,7 +43,7 @@ class ViewSelectedCertificateApartment extends Model
         if (isset ($this->price)) {
             foreach ($this->price as $detail) {
                 if ($detail->slug === 'apartment_asset_price') {
-                    return $detail->value;
+                    return CommonService::roundPrice($detail->value, 0);
                 }
             }
         }
