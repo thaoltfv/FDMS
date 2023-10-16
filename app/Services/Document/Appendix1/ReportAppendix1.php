@@ -335,11 +335,12 @@ class ReportAppendix1 extends Report
 
     private function getAssetLandType($item, $asset)
     {
-        dd($item, $asset);
+        // dd($item, $asset);
         $result = [];
         $assetDetails = $asset->properties[0]->propertyDetail;
         $unitArea = $asset->assetUnitArea->where('asset_general_id', $item->id);
         $unitPrice = $asset->assetUnitPrice->where('asset_general_id', $item->id);
+        dd($unitPrice);
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
             $mainArea = 0;
