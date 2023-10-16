@@ -342,11 +342,11 @@ class ReportAppendix1 extends Report
         $unitArea = $asset->assetUnitArea->where('asset_general_id', $item->id);
         $unitPrice = $asset->assetUnitPrice->where('asset_general_id', $item->id);
         // dd($itemDetails, $unitPrice);
-        $result1 = [];
-        foreach ($itemDetails as $detail) {
-            array_push($result1, $unitPrice->where('land_type_id', $detail->land_type_purpose));
+        // $result1 = [];
+        foreach ($unitPrice as $unitP) {
+            dd($unitP);
         }
-        $unitPrice = collect($result1);
+        
         // dd($result1);
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
