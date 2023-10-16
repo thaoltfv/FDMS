@@ -343,11 +343,21 @@ class ReportAppendix1 extends Report
         $unitPrice = $asset->assetUnitPrice->where('asset_general_id', $item->id);
         // dd($itemDetails, $unitPrice);
         // $result1 = [];
-        foreach ($unitPrice as $unitP) {
-            dd($unitP);
+        foreach ($unitPrice as $idP => $unitP) {
+            // dd($unitP);
+            $count = 0;
+            foreach ($itemDetails as $detailP) {
+                if ($unitP->land_type_id === $detailP->land_type_purpose) {
+                    $count = 1;
+                }
+            }
+            if ($count === 0) {
+                unset($unitPrice[$idP]);
+            }
         }
         
-        // dd($result1);
+        dd($unitPrice);
+        
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
             $mainArea = 0;
