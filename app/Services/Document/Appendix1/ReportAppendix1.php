@@ -1599,6 +1599,7 @@ class ReportAppendix1 extends Report
             !empty($this->landType['asset3'][$id]) && !empty($this->landType['asset3'][$id][$columnName]) ? number_format($this->landType['asset3'][$id][$columnName], 0, ',', '.') : '-',
             true
         ];
+        dd($data);
         return $data;
     }
     protected function collectInfoOnlyTitle($stt, $title)
