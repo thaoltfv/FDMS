@@ -335,6 +335,7 @@ class ReportAppendix1 extends Report
 
     private function getAssetLandType($item, $asset)
     {
+        dd($item, $asset);
         $result = [];
         $assetDetails = $asset->properties[0]->propertyDetail;
         $unitArea = $asset->assetUnitArea->where('asset_general_id', $item->id);
@@ -1599,7 +1600,7 @@ class ReportAppendix1 extends Report
             !empty($this->landType['asset3'][$id]) && !empty($this->landType['asset3'][$id][$columnName]) ? number_format($this->landType['asset3'][$id][$columnName], 0, ',', '.') : '-',
             true
         ];
-        dd($data);
+        // dd($data);
         return $data;
     }
     protected function collectInfoOnlyTitle($stt, $title)
