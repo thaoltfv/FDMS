@@ -341,7 +341,11 @@ class ReportAppendix1 extends Report
         $itemDetails = $item->properties[0]->propertyDetail;
         $unitArea = $asset->assetUnitArea->where('asset_general_id', $item->id);
         $unitPrice = $asset->assetUnitPrice->where('asset_general_id', $item->id);
-        dd($itemDetails, $unitPrice);
+        // dd($itemDetails, $unitPrice);
+        foreach ($itemDetails as $detail) {
+            $result = $result->merge($unitPrice->where('land_type_id'), $detail->land_type_purpose);
+        }
+        dd($result);
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
             $mainArea = 0;
