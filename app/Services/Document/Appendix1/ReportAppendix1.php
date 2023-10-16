@@ -340,7 +340,7 @@ class ReportAppendix1 extends Report
         $assetDetails = $asset->properties[0]->propertyDetail;
         $unitArea = $asset->assetUnitArea->where('asset_general_id', $item->id);
         $unitPrice = $asset->assetUnitPrice->where('asset_general_id', $item->id);
-        dd($unitPrice);
+        dd($item, $unitPrice);
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
             $mainArea = 0;
