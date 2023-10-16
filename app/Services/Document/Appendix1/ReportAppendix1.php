@@ -356,8 +356,8 @@ class ReportAppendix1 extends Report
             }
         }
         
-        dd($unitPrice);
-        
+        // dd($unitPrice);
+
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
             $mainArea = 0;
