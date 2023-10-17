@@ -749,6 +749,7 @@ export default {
 		},
 		async handleChangeAlley () {
 			if (this.data.traffic_infomation.property_turning_time.length > 0) {
+        this.data.traffic_infomation.main_road_length = null
 				await this.getTheLastTurningTime()
 			}
 			if (this.data.traffic_infomation.property_turning_time.length === 0) {
@@ -773,6 +774,7 @@ export default {
 			} else {}
 		},
 		handleChangeFrontSide () {
+      this.data.traffic_infomation.property_turning_time = []
 			if (this.addressName.street) {
 				let streetName = this.addressName.street.toLowerCase().includes('đường') ? this.titleCase(this.addressName.street).replace('Đường', 'đường') : `đường ${this.titleCase(this.addressName.street)}`
 				let description = 'Tiếp giáp mặt tiền ' + `${streetName}`

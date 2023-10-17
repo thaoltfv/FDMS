@@ -1,5 +1,5 @@
 <template>
-	<div class="main-wrapper-new">
+	<div v-if="!isMobile()" class="main-wrapper-new">
 		<a-tabs @change="callback" default-active-key="2">
 			<a-tab-pane key="1">
 				<span slot="tab">
@@ -55,6 +55,48 @@
 				:statusOptions="statusOptions"
 				/>
 		</div>
+	</div>
+	<div v-else class="main-wrapper-new">
+		<div slot="tabBarExtraContent">
+			<div class="container-button appraise-container">
+				<div class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center">
+					<!-- <div class="col-12 col-md-6 col-xl-8">
+						<button-checkbox :options="statusOptions" :value="selectedStatus" @change="onChangeStatus" />
+					</div> -->
+					<div class="search-block col-7 col-md-6 col-xl-4 d-flex justify-content-end align-items-center">
+						<Search @filter-changed="onFilterQuickSearchChange($event)" />
+					</div>
+					<div class="col-4" style="padding: 0;
+    margin-top: 10px;">
+						<router-link v-if="add" :to="{ name: 'certification_brief.create' }" class="btn text-nowrap index-screen-button ml-md-2">
+								<img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
+							</router-link>
+					</div>
+					<div class="col-1" style="padding: 0;
+    margin-top: 15px;">
+						<b-dropdown class="dropdown-container" no-caret v-if="this.export">
+								<template #button-content>
+									<div class="container_image">
+										<img src="@/assets/icons/ic_more.svg" alt="">
+									</div>
+								</template>
+								<b-dropdown-item @click.prevent="export30daysBefore()">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
+								<b-dropdown-item @click.prevent="exportMonthBefore()">Xuất dữ liệu tháng trước</b-dropdown-item>
+								<b-dropdown-item @click.prevent="exportQuarter()">Xuất dữ liệu quý trước</b-dropdown-item>
+								<b-dropdown-item @click.prevent="exportAdjust()">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
+							</b-dropdown>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<board :search_kanban="search_kanban" :key="render_kanban" ref="kanban" />
+		</div>
+		<ModalExportCertificateBrief
+				v-if="showAdjustModal"
+				@cancel="showAdjustModal = false"
+				:statusOptions="statusOptions"
+				/>
 	</div>
 </template>
 
@@ -163,6 +205,13 @@ export default {
 		})
 	},
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		callback (key) {
 			if (+key === 2) {
 				this.showFilter = false

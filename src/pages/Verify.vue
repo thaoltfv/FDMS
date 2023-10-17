@@ -67,7 +67,12 @@ export default {
 					if (profile) {
 						store.commit(types.SET_PROFILE, { profile })
 						store.commit(types.SET_PERMISSION, profile.data.permissions)
-						return await this.$router.push({ name: 'certification_brief.index' })
+						if (this.isMobile()) {
+							return await this.$router.push({ name: 'dashboard.index' })
+						} else {
+							return await this.$router.push({ name: 'certification_brief.index' })
+						}
+						
 					}
 				}
 			} catch (error) {
@@ -79,7 +84,14 @@ export default {
 				})
 				await this.$router.push({ name: 'login' })
 			}
-		}
+		},
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 	}
 }
 </script>
