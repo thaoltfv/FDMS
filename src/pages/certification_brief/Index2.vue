@@ -60,9 +60,7 @@
 		<div slot="tabBarExtraContent">
 			<div class="container-button appraise-container">
 				<div class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center">
-					<!-- <div class="col-12 col-md-6 col-xl-8">
-						<button-checkbox :options="statusOptions" :value="selectedStatus" @change="onChangeStatus" />
-					</div> -->
+					
 					<div class="search-block col-7 col-md-6 col-xl-4 d-flex justify-content-end align-items-center">
 						<Search @filter-changed="onFilterQuickSearchChange($event)" />
 					</div>
@@ -86,11 +84,20 @@
 								<b-dropdown-item @click.prevent="exportAdjust()">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
 							</b-dropdown>
 					</div>
+					<div class="col-12 col-md-6 col-xl-8">
+						<button-checkbox :options="statusOptions" :value="selectedStatus" @change="onChangeStatus" />
+					</div>
 				</div>
+				
 			</div>
 		</div>
-		<div>
-			<board :search_kanban="search_kanban" :key="render_kanban" ref="kanban" />
+		<div class="container-fluid appraise-container mt-3">
+			<Tables
+						:listCertificates="listCertificatesAll"
+						:isLoading="isLoading"
+						:pagination="paginationAll"
+						@handleChange="onPageChange"
+					/>
 		</div>
 		<ModalExportCertificateBrief
 				v-if="showAdjustModal"
@@ -203,6 +210,10 @@ export default {
 				this.export = true
 			}
 		})
+
+		if (this.isMobile()) {
+			this.selectedStatus = ['3']
+		}
 	},
 	methods: {
 		isMobile() {
@@ -274,6 +285,7 @@ export default {
 		},
 		onChangeStatus (value) {
 			this.selectedStatus = value
+			console.log('this.selectedStatus',this.selectedStatus)
 			this.getCertificateAll()
 		},
 		async export30daysBefore () {

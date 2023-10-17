@@ -68,7 +68,7 @@ export default {
 						store.commit(types.SET_PROFILE, { profile })
 						store.commit(types.SET_PERMISSION, profile.data.permissions)
 						if (this.isMobile()) {
-							return await this.$router.push({ name: 'dashboard.index' })
+							return await this.$router.push({ name: 'certification_brief.index' })
 						} else {
 							return await this.$router.push({ name: 'certification_brief.index' })
 						}

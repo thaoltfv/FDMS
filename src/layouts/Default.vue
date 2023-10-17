@@ -33,40 +33,41 @@ export default {
 data: () => ({
       selected: 1,
       options: [
+        // {
+        //   id: 1,
+        //   icon: "chart-line",
+        //   title: "Dashboard",
+        //   customImage: false,
+        //   isActive: false,
+        //   path: { name: "dashboard.index" }
+        // },
         {
           id: 1,
-          icon: "chart-line",
-          title: "Dashboard",
-          customImage: false,
-          isActive: false,
-          path: { name: "dashboard.index" }
-        },
-        {
-          id: 2,
           icon: "nav_hstd",
           title: "Hồ sơ thẩm định",
           customImage: true,
           isActive: false,
           path: { name: "certification_brief.index" }
         },
-        { id: 3, icon: "nav_tstd",
+        { id: 2, icon: "nav_tstd",
          title: "Tài sản thẩm định",
           customImage: true ,
           isActive: false,
           childs: [
-            { id: 301, icon: "icon_bds", title: "BĐS" , customImage: true, path: { name: "certification_asset.index" }},
-            { id: 302, icon: "icon_ds", title: "ĐS", customImage: true, path: { name: "certification_personal_property.index" }},
+            { id: 201, icon: "icon_bds", title: "BĐS" , customImage: true, path: { name: "certification_asset.index" }},
+            { id: 202, icon: "icon_ds", title: "ĐS", customImage: true, path: { name: "certification_personal_property.index" }},
           ]
         },
         {
-          id: 4,
+          id: 3,
           icon: "nav_bdg",
           title: "Bản đồ giá",
           customImage: true,
           isActive: false,
           path: { name: "home" }
         },
-        { id: 5, icon: "nav_kg", title: "Kho giá", isActive: false,customImage: true,path: { name: "warehouse.index" }},
+        { id: 4, icon: "nav_kg", title: "Kho giá", isActive: false,customImage: true,path: { name: "warehouse.index" }},
+        { id: 5, icon: "users-cog", title: "Tài khoản", isActive: false,customImage: false,path: { name: "profile.index" }},
       ],
     }),
   methods: {

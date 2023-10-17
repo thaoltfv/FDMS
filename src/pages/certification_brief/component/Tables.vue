@@ -1,5 +1,5 @@
 <template>
-  <div class="table-wrapper">
+  <div v-if="!isMobile()" class="table-wrapper">
     <div class="table-detail position-relative empty-data">
       <a-table
         bordered
@@ -127,11 +127,91 @@
       </div>
     </div>
   </div>
+  <div v-else class="table-wrapper">
+	<div class="table-detail position-relative empty-data" style="margin-bottom: 40px;">
+		<b-card :class="{'border_expired':checkDateExpired(element), ['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
+            <div class="col-12 d-flex mb-2 justify-content-between">
+              <span @click="handleDetailCertificate(element.id)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">HSTD_{{element.id}}</span>
+              <img v-if="checkDateExpired(element)" class="mr-2 icon_expired" src="@/assets/icons/ic_expire_calender.svg" alt="ic_expire_calender"/>
+            </div>
+            <div class="property-content mb-2 d-flex color_content">
+              <div class="label_container d-flex">
+                <img style="min-width:15px" width="15px" height="21px" class="mr-2" src="@/assets/icons/ic_user_2.svg" alt="user"/>
+                <div class="d-flex">
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Khách hàng:</strong>{{element.petitioner_name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="property-content mb-2 d-flex color_content">
+              <img class="mr-2" src="@/assets/icons/ic_price.svg" alt="user"/>
+              <div class="label_container d-flex">
+                <strong class="d_inline mr-1">Tổng giá trị:</strong><span style="font-weight: 500">{{element.total_price ? `${formatPrice(element.total_price)}` : '-'}}</span>
+              </div>
+            </div>
+            <div class="property-content mb-2 d-flex color_content">
+              <img class="mr-2" src="@/assets/icons/ic_clock.svg" alt="user"/>
+              <div class="label_container d-flex">
+                <strong class="d_inline mr-1">Thời hạn:</strong><span style="font-weight: 500">{{getExpireDate(element)}}</span>
+              </div>
+            </div>
+			<div class="property-content mb-2 d-flex color_content">
+              <img class="mr-2" src="@/assets/icons/ic_id_card_2.svg" alt="user"/>
+              <div class="label_container d-flex">
+                <strong class="d_inline mr-1">Trạng thái:</strong><span style="font-weight: 500">{{element.status_text}}</span>
+              </div>
+            </div>
+            <div class="property-content d-flex justify-content-between mb-0">
+              <div class="label_container d-flex">
+                <img width="15px" class="mr-2" src="@/assets/icons/ic_taglink.svg" alt="user"/><span style="color:#8B94A3">{{element.document_count}}</span>
+              </div>
+              <img class="img_user" :src="element.image ? element.image : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'">
+            </div>
+          </b-card>
+		<div class="pagination-wrapper">
+			<div class="page-size">
+			Hiển thị
+			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
+				@change="onSizeChange" />
+			hàng
+			</div>
+			<a-pagination :current="Number(pagination.current)" :page-size="Number(pagination.pageSize)"
+			:total="Number(pagination.total)"
+			:show-total="(total, range) => `Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`"
+			@change="onPaginationChange">
+			</a-pagination>
+      	</div>
+	</div>
+	<ModalDetailCertificate
+		v-if="showDetailPopUp"
+		:idData="idData"
+		:edit="edit"
+		:add="add"
+		:user_id="user_id"
+		:appraiser_number="appraiser_number"
+		:jsonConfig="jsonConfig"
+		:profile="profile"
+		:data="detailData"
+		@cancel="showDetailPopUp = false"
+		@action="handleUpdateStatus"
+		@handleFooterAccept="handleFooterAccept"
+    />
+  </div>
 </template>
 <script>
+import { PERMISSIONS } from '@/enum/permissions.enum'
 import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
 import moment from 'moment'
 import Certificate from '@/models/Certificate'
+import CertificationBrief from '@/models/CertificationBrief'
+import ModalDetailCertificate from '../component/modals/ModalDetailCertificate'
+import ModalSendVerify from '@/components/Modal/ModalSendVerify'
+const jsonConfig = require('../../../../config/workflow.json')
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
@@ -143,15 +223,133 @@ export default {
 				{ value: '10', label: '10' },
 				{ value: '20', label: '20' },
 				{ value: '30', label: '30' }
-			]
+			],
+			theme: {
+				navItem: '#000000',
+				navActiveItem: '#FAA831',
+				slider: '#FAA831',
+				arrow: '#000000'
+			},
+			now: new Date(),
+			total_amount: '',
+			width: '',
+			currency: '',
+			listTest: [
+				{
+					name: 'test',
+					id: 1
+				}
+			],
+			idUpdate: '',
+			idData: '',
+			key_render_appraisal: 321000,
+			render_lock: 1234,
+			render_open: 5678,
+			listCertificate: [],
+			listCertificateDraft: [],
+			listCertificateOpen: [],
+			listCertificateLock: [],
+			listCertificatesClose: [],
+			listCertificatesCanceled: [],
+
+			listCertificateTemp: [],
+			listCertificateDraftTemp: [],
+			listCertificateOpenTemp: [],
+			listCertificateLockTemp: [],
+			listCertificatesCloseTemp: [],
+			listCertificatesCanceledTemp: [],
+			filter: {},
+			status: '',
+			activeStatus: false,
+			showAppraisalDialog: false,
+			showModalSearch: false,
+			view: false,
+			add: false,
+			edit: false,
+			deleted: false,
+			accept: false,
+			export: false,
+			showDetailPopUp: false,
+			showVerifyCertificate: false,
+			showAcceptCertificate: false,
+			idDraft: '',
+			elementDragger: '',
+			position_profile: '',
+			appraise_number: '',
+			checkRole: false,
+			profile: {},
+			user_id: '',
+			countData: 0,
+			isAccept: false,
+			jsonConfig: jsonConfig,
+			principleConfig: [],
+			subStatusData: {},
+			subStatusDataTmp: {},
+			next_status: '',
+			next_sub_status: '',
+			confirm_message: '',
+			isMoved: false,
+			config: {},
+			subStatusDataReturn: [],
+			key_dragg: 1,
+			detailData: [],
+			isHandleAction: false,
+			isCheckPrice: false,
+			isCheckLegal: false,
+			isCheckVersion: false,
+			changeStatusRequire: {}
 		}
 	},
 	components: {
+		CertificationBrief,
+		ModalDetailCertificate,
+		ModalSendVerify,
 		'b-dropdown': BDropdown,
 		'b-dropdown-item': BDropdownItem,
-		'b-tooltip': BTooltip
+		'b-tooltip': BTooltip,
+		BCard,
+		BRow,
+		BCol,
+		BFormGroup,
+		BFormInput,
+	},
+	created () {
+		// fix_permission
+		this.profile = this.$store.getters.profile
+		const profile = this.$store.getters.profile
+		if (profile.data.user) {
+			this.position_profile = profile.data.user.appraiser.appraise_position.acronym
+			this.appraiser_number = profile.data.user.appraiser.appraiser_number
+		}
+		this.user_id = profile.data.user.id
+		const permission = this.$store.getters.currentPermissions
+		permission.forEach((value) => {
+			if (value === PERMISSIONS.VIEW_CERTIFICATE_BRIEF) {
+				this.view = true
+			}
+			if (value === PERMISSIONS.ADD_CERTIFICATE_BRIEF) {
+				this.add = true
+			}
+			if (value === PERMISSIONS.EDIT_CERTIFICATE_BRIEF) {
+				this.edit = true
+			}
+			if (value === PERMISSIONS.DELETE_CERTIFICATE_BRIEF) {
+				this.deleted = true
+			}
+			if (value === PERMISSIONS.ACCEPT_CERTIFICATE_BRIEF) {
+				this.accept = true
+			}
+			if (value === PERMISSIONS.EXPORT_CERTIFICATE_BRIEF) {
+				this.export = true
+			}
+		})
 	},
 	computed: {
+		updateDate () {
+			return dateUpdate => {
+				return moment(dateUpdate).fromNow()
+			}
+		},
 		columns () {
 			let dataColumn = [
 				{
@@ -244,9 +442,175 @@ export default {
 		}
 	},
 	beforeMount () {
+		if (this.search_kanban) {
+			this.getDataWorkFlow2(this.search_kanban.search)
+		} else this.getDataWorkFlow2()
 		this.getProfiles()
 	},
+	mounted () {
+		if (this.jsonConfig && this.jsonConfig.principle) {
+			this.principleConfig = this.jsonConfig.principle.filter(i => i.isActive === 1)
+		}
+	},
 	methods: {
+		async getDataWorkFlow2 (search = '') {
+			this.isLoading1 = true
+			try {
+				const resp = await CertificationBrief.getListKanbanCertificate(search)
+				if (resp.data) {
+					this.listCertificate = resp.data.HSTD
+					if (this.principleConfig.length > 0) {
+						let dataTmp = []
+						this.principleConfig.forEach(item => {
+							dataTmp = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
+							this.subStatusDataTmp[item.id] = dataTmp
+						})
+						this.pushSubStatusData()
+					}
+				}
+			} catch (e) {
+				this.isLoading1 = false
+			}
+		},
+		async getProfiles () {
+			const profile = this.$store.getters.profile
+			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
+				this.activeStatus = true
+			}
+		},
+		handleFooterAccept (target) {
+			let check = true
+			let config = this.principleConfig.find(i => i.id === target.id)
+			this.elementDragger = this.detailData
+			if (config) {
+				this.config = config
+				check = this.checkRequired(config.require, this.detailData)
+			}
+			// console.log(check)
+			if (check) {
+				this.next_status = config.status
+				this.next_sub_status = config.sub_status
+				this.confirm_message = target.description
+				this.isHandleAction = true
+			}
+		},
+		async handleUpdateStatus (id, data, message) {
+			const res = await CertificationBrief.updateStatusCertificate(id, data)
+			if (res.data) {
+				await this.$toast.open({
+					message: message + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.key_dragg++
+			} else {
+				await this.$toast.open({
+					message: `${res.error.message}`,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.showDetailPopUp = false
+			}
+			this.showDetailPopUp = false
+		},
+		handleDetailCertificate (id) {
+			this.idData = id
+			this.getDetailCertificate(id)
+		},
+		async getDetailCertificate (id) {
+			const res = await CertificationBrief.getDetailCertificateBrief(id)
+			if (res.data) {
+				this.detailData = await res.data
+				this.showDetailPopUp = true
+				this.idDragger = id
+			} else {
+				await this.$toast.open({
+					message: 'Lấy dữ liệu thất bại',
+					type: 'error',
+					position: 'top-right'
+				})
+			}
+		},
+		configColor(element) {
+			if (element.status == 1) {
+				return 'info'
+			}
+			if (element.status == 2) {
+				return 'primary'
+			}
+			if (element.status == 3) {
+				return 'warning'
+			}
+			if (element.status == 4) {
+				return 'success'
+			}
+			if (element.status == 5) {
+				return 'secondary'
+			}
+			if (element.status == 6) {
+				return 'control'
+			}
+			return 'red'
+		},
+		getExpireStatusDate () {
+			let dateConvert = new Date()
+			let minutes = this.config.process_time ? this.config.process_time : 1440
+			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000)
+			let status_expired_at = moment(dateConverted).format('DD-MM-YYYY HH:mm')
+			return status_expired_at
+		},
+		getExpireDate (element) {
+			console.log('elemt', element)
+			let strExpire = ''
+			switch (element.status) {
+			case 1:
+			case 2:
+			case 3:
+				strExpire = element.status_expired_at ? this.updateDate(element.status_expired_at, new Date()) : 'Đã hết hạn'
+				break
+			case 6:
+				strExpire = element.status_expired_at ? this.updateDate(element.status_expired_at, new Date()) : 'Đã hết hạn'
+				break
+			case 4:
+				strExpire = 'Đã hoàn thành'
+				break
+			default:
+				strExpire = 'Đã hủy'
+			}
+			return strExpire
+		},
+		checkDateExpired (element) {
+			let check = false
+			switch (element.status) {
+			case 1:
+			case 2:
+			case 3:
+				if (element.status_expired_at) {
+					if (this.updateDate(element.status_expired_at, this.now).includes('Đã hết hạn')) {
+						check = true
+					}
+				} else {
+					check = true
+				}
+				break
+			}
+			return check
+		},
+		formatPrice (value) {
+			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
+			if (num.length > 3 && num.length <= 6) {
+				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
+			} else if (num.length > 6 && num.length <= 9) {
+				return parseFloat(num / 1000000).toFixed(1).replace('.', ',') + ' Triệu'
+			} else if (num.length > 9) {
+				return parseFloat(num / 1000000000).toFixed(1).replace('.', ',') + ' Tỷ'
+			} else if (num < 900) {
+				return num + ' đ' // if value < 1000, nothing to do
+			}
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		},
 		showDetailAppraise (data) {
 			let arconymText = ''
 			let arconymText1 = ''
@@ -378,6 +742,13 @@ export default {
 		onPaginationChange (current) {
 			const pagination = { ...this.pagination, current: Number(current) }
 			this.handleTableChange(pagination)
+		},
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
 		}
 	}
 }
@@ -628,4 +999,240 @@ export default {
   margin: unset;
   font-family: unset;
 }
+
+.scroll_board {
+    // transform:rotateX(180deg);
+    // -ms-transform:rotateX(180deg); /* IE 9 */
+    // -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+    scroll-snap-align: start;
+    overflow: auto;
+	overflow-y: auto;
+	overflow-x: auto;
+    margin-bottom: 1px;
+    max-height: 71vh !important;
+    @media (max-height: 800px) and (min-height: 660px) { // M-MD Screen
+      max-height: 75vh !important;
+    }
+    @media (max-height: 970px) and (min-height: 800px) { // FD Screen
+      max-height: 78vh !important;
+    }
+    @media (min-height: 970px) {  // >2k Screen
+      max-height: 85vh !important;
+    }
+  }
+  .name_card {
+    text-align: left;
+    width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .badge {
+    border-radius: 10px;
+    display: inline-block;
+    text-transform: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 85%;
+    color: #FFF;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .badgeSuccess {
+    background-color: rgba(40,199,111,.12);
+    color: #28C76F!important;
+  }
+  .badgeWarning {
+    background-color: rgba(255,159,67,.12);
+    color: #FF9F43!important;
+  }
+  .badgeDanger {
+        background-color: rgba(234,84,85,.12);
+    color: #EA5455!important;
+  }
+  .badgeInfo {
+    background-color: rgba(0,207,232,.12);
+    color: #00CFE8!important;
+  }
+  .badgePrimary {
+    background-color: rgba(115,103,240,.12);
+    color: #7367F0!important;
+  }
+  .content_id {
+	border: 1px solid;
+    background: aliceblue;
+    border-radius: 5px;
+    padding: 0px 3px;
+    font-weight: 500;
+    cursor: pointer;
+    &_primary {
+      color: #007EC6;
+      background-color: #E3F5FF;
+    }
+    &_secondary {
+      color: #FFFFFF;
+      background-color: #8B94A3;
+    }
+    &_warning {
+      color: #FF963D;
+      background-color: #FFF1E6;
+    }
+    &_danger {
+      color: #FF5E7B;
+      background-color: #FFEBEF;
+    }
+    &_success {
+      color: #FFFFFF;
+      background-color: #26BF7F;
+    }
+  }
+  .img_user {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+  }
+  .appraise-container {
+    padding: 0 1.25rem;
+  }
+  .kanban-column {
+    min-height: 300px;
+  }
+  .height_icon {
+    height: 1.3rem;
+  }
+  .card-body {
+    padding: 0.75rem 0.75rem !important;
+  }
+  .card_container {
+    border-radius: 5px;
+    &_primary {
+      border: 1px solid #B5E5FF
+    }
+    &_secondary {
+      border: 1px solid #8B94A3
+    }
+    &_warning {
+      border: 1px solid #FFD1AD
+    }
+    &_danger {
+      border: 1px solid #FFC8D3
+    }
+    &_success {
+      border: 1px solid #26BF7F;
+      background-color: #EAFFF6;
+    }
+  }
+  .container_kanban {
+	height: fit-content;
+    background-color: #F6F7FB;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+    border-top: 4px solid;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    min-width: 17rem;
+  }
+  // border
+  .border {
+    &_primary {
+      color:#72CDFF
+    }
+    &_secondary {
+      color:#9EA6B4
+    }
+    &_danger {
+      color:#FF7E9B
+    }
+    &_warning {
+      color:#FFB880
+    }
+    &_success {
+      color:#3DDC99
+    }
+  }
+  // title
+  .title {
+    font-weight: 600;
+    &_primary{
+      color:#00507C;
+    }
+    &_secondary{
+      color:#9EA6B4;
+    }
+    &_warning {
+      color:#FFB880;
+    }
+    &_danger {
+      color:#FF5E7B;
+    }
+    &_success {
+      color:#3DDC99;
+    }
+  }
+  //quatity
+  .quatity {
+    min-width: 32px;
+    height: 22px;
+    padding: 0px 5px;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    &_primary{
+      background-color: #007EC6;
+    }
+    &_warning{
+      background-color: #FF963D;
+    }
+     &_danger{
+      background-color: #FF5E7B;
+    }
+    &_success{
+      background-color: #26bf7f;
+    }
+    &_secondary{
+      background-color: #8B94A3;
+    }
+  }
+
+  .title_kanban {
+    font-weight: 600;
+  }
+  .title_group {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .kanban_board {
+    font-size: 0.875rem !important;
+    min-width: 1200px;
+  }
+  .d_inline {
+    @media (min-width: 1500px) {
+      display: inline !important;
+      min-width: 4.7rem;
+    }
+  }
+  .label_container {
+    @media (min-width: 1500px) {
+      min-width: 120px
+    }
+  }
+  .icon_expired {
+     margin-inline-end: 1rem;
+     width: 1rem;
+     justify-content: end;
+  }
+  .container_card_success {
+    background: white;
+    margin-bottom: 1rem;
+    .card {
+      margin-bottom: unset !important;
+    }
+  }
+  .border_expired {
+    border-color: red !important
+  }
+
 </style>

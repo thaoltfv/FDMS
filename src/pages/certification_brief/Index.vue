@@ -282,7 +282,15 @@ export default {
 	},
 
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		getExpireDate (element) {
+			console.log('elemt', element)
 			let strExpire = ''
 			switch (element.status) {
 			case 1:
