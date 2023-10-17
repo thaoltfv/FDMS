@@ -84,7 +84,7 @@
 								</div>
 							</div>
 						</div>
-						<div class=" d-flex justify-content-between align-items-center m-2">
+						<div v-if="!isMobile()" class=" d-flex justify-content-between align-items-center m-2">
 							<div style="cursor:pointer" @click="handleDetail(idData)" class="btn-edit">
 								<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
 								<span class="color_content content_btn_edit">Xem chi tiết</span>
@@ -94,6 +94,21 @@
 									<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit">{{target.description}}
 								</button>
 								<button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
+							</div>
+						</div>
+						<div v-else class="row" style="padding: 0;    margin-bottom: 20px;">
+							<div style="cursor:pointer" @click="handleDetail(idData)" class="btn-edit col-12">
+								<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
+								<span class="color_content content_btn_edit">Xem chi tiết</span>
+							</div>
+							<div class="button-contain row">
+								<div class="col-6" style="padding: 0">
+								<button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+									<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit">{{target.description}}
+								</button>
+							</div><div class="col-6" style="margin-top: 8px; padding-left: 45px;">
+								<button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
+							</div>
 							</div>
 						</div>
 					</div>
@@ -348,6 +363,13 @@ export default {
 		},
 		handleFooterAccept (target) {
 			this.$emit('handleFooterAccept', target)
+		},
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
 		}
 	},
 	beforeMount () {

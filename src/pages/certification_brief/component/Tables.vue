@@ -195,7 +195,47 @@
 		@action="handleUpdateStatus"
 		@handleFooterAccept="handleFooterAccept"
     />
-  </div>
+	<ModalNotificationCertificateNote
+      v-if="isMoved"
+      :notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+      @action="handleChangeAccept2"
+      @cancel="handleCancelAccept2"
+    />
+	<ModalNotificationCertificateNote
+		v-if="isHandleAction"
+		@cancel="isHandleAction = false"
+		:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+		@action="handleChangeAccept2"
+		/>
+		<ModalAppraisal
+      :key="key_render_appraisal"
+      v-if="showAppraisalDialog"
+      :data="elementDragger"
+      :idData="idDragger"
+      :status="status"
+      requiredAppraiserPerform="required"
+      :requiredAppraiser="null"
+      @cancel="handleCancelAppraisal"
+      @updateAppraisal="updateAppraisal"
+    />
+    <ModalAppraisal
+      :key="key_render_appraisal"
+      v-if="showVerifyCertificate"
+      :data="elementDragger"
+      :idData="idDragger"
+      :status="status"
+      requiredAppraiserPerform="required"
+      requiredAppraiser="required"
+      @cancel="handleCancelVerify"
+      @updateAppraisal="handleChangeVerify"
+    />
+	<ModalSendVerify
+      v-if="showAcceptCertificate"
+      notification="Bạn có muốn muốn duyệt hồ sơ này"
+      @action="handleChangeAccept"
+      @cancel="handleCancelAccept"
+    />
+   </div>
 </template>
 <script>
 import { PERMISSIONS } from '@/enum/permissions.enum'
@@ -205,6 +245,9 @@ import Certificate from '@/models/Certificate'
 import CertificationBrief from '@/models/CertificationBrief'
 import ModalDetailCertificate from '../component/modals/ModalDetailCertificate'
 import ModalSendVerify from '@/components/Modal/ModalSendVerify'
+import ModalAppraisal from '../component/modals/ModalAppraisal'
+import ModalNotificationCertificate from '@/components/Modal/ModalNotificationCertificate'
+import ModalNotificationCertificateNote from '@/components/Modal/ModalNotificationCertificateNote'
 const jsonConfig = require('../../../../config/workflow.json')
 import {
 	BCard,
@@ -215,6 +258,22 @@ import {
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
+	components: {
+		ModalAppraisal,
+		ModalNotificationCertificate,
+		ModalNotificationCertificateNote,
+		CertificationBrief,
+		ModalDetailCertificate,
+		ModalSendVerify,
+		'b-dropdown': BDropdown,
+		'b-dropdown-item': BDropdownItem,
+		'b-tooltip': BTooltip,
+		BCard,
+		BRow,
+		BCol,
+		BFormGroup,
+		BFormInput,
+	},
 	data () {
 		return {
 			selectedRowKeys: [],
@@ -299,19 +358,6 @@ export default {
 			isCheckVersion: false,
 			changeStatusRequire: {}
 		}
-	},
-	components: {
-		CertificationBrief,
-		ModalDetailCertificate,
-		ModalSendVerify,
-		'b-dropdown': BDropdown,
-		'b-dropdown-item': BDropdownItem,
-		'b-tooltip': BTooltip,
-		BCard,
-		BRow,
-		BCol,
-		BFormGroup,
-		BFormInput,
 	},
 	created () {
 		// fix_permission
@@ -453,6 +499,98 @@ export default {
 		}
 	},
 	methods: {
+		handleCancelAccept2 () {
+			this.isMoved = false
+			this.isHandleAction = false
+			this.showDetailPopUp = false
+			this.returnData()
+		},
+		returnData () {
+			this.principleConfig.forEach(item => {
+				this.subStatusData[item.id] = this.subStatusDataReturn.filter(i => i.status === item.status && i.sub_status === item.sub_status)
+				this.subStatusDataTmp[item.id] = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
+			})
+			this.key_dragg ++
+		},
+		async handleChangeAccept2 (note, reason_id) {
+			let dataSend = {
+				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
+				appraiser_id: this.elementDragger.appraiser_id,
+				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
+				appraiser_control_id: this.elementDragger.appraiser_control_id,
+				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
+				status: this.next_status,
+				sub_status: this.next_sub_status,
+				check_price: this.isCheckPrice,
+				check_legal: this.isCheckLegal,
+				check_version: this.isCheckVersion,
+				required: this.changeStatusRequire,
+				status_expired_at: this.getExpireStatusDate(),
+				status_note: note,
+				status_reason_id: reason_id,
+				status_description: this.message,
+				status_config: this.jsonConfig.principle
+			}
+			console.log('data send', dataSend)
+			const res = await CertificationBrief.updateStatusCertificate(this.idDragger, dataSend)
+			if (res.data) {
+				let returnData = this.subStatusDataReturn.find(i => i.id === this.idDragger)
+				if (returnData) {
+					returnData.status = this.next_status
+					returnData.sub_status = this.next_sub_status
+					returnData.status_expired_at = res.data.status_expired_at
+					returnData.updated_at = res.data.updated_at
+					returnData.image = res.data.image
+				}
+				this.returnData()
+				await this.$toast.open({
+					message: this.confirm_message + ' thành công',
+					type: 'success',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.key_dragg++
+			} else {
+				await this.$toast.open({
+					message: `${res.error.message}`,
+					type: 'error',
+					position: 'top-right',
+					duration: 3000
+				})
+				this.handleCancelAccept2()
+			}
+			this.isMoved = false
+			this.showDetailPopUp = false
+			this.isHandleAction = false
+		},
+		checkAppraiser (data) {
+			if (data.appraiser_perform_id && data.appraiser_id) { return true } else { return false }
+		},
+		checkItemList (draggerElement) {
+			if (draggerElement.personal_properties.length > 0 || draggerElement.real_estate.length > 0) { return true } else { return false }
+		},
+		checkRequired (require, data) {
+			let check = true
+			if (require) {
+				this.changeStatusRequire = require
+				this.isCheckPrice = require.check_price ? require.check_price : false
+				this.isCheckLegal = require.check_legal ? require.check_legal : false
+				this.isCheckVersion = require.check_version ? require.check_version : false
+				if (require.appraiser) {
+					check = this.checkAppraiser(data)
+					if (!check) {
+						this.openMessage('Chưa có thông tin tổ thẩm định')
+					}
+				}
+				if (check && require.appraise_item_list) {
+					check = this.checkItemList(data)
+					if (!check) {
+						this.openMessage('Chưa có chi tiết tài sản thẩm định')
+					}
+				}
+			}
+			return check
+		},
 		async getDataWorkFlow2 (search = '') {
 			this.isLoading1 = true
 			try {

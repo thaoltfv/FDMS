@@ -28,7 +28,7 @@
 					/>
               <InputTextarea :rows="rows" :autosize="false" :maxLength="1000" v-model="note" label="Ghi chú" class="form-group-container mb-3" />
           </div>
-        <div class="btn__group">
+        <div v-if="!isMobile()" class="btn__group">
           <button
             class="btn btn-white font-weight-normal font-weight-bold"
             @click.prevent="handleCancel"
@@ -37,6 +37,20 @@
             class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
             @click.prevent="handleAction(note, reason_id)"
             v-text="$t('popup_btn_yes')"/>
+        </div>
+        <div v-else class="btn__group row" style="padding: 0;">
+          <div class="col-6" style="padding:0;     margin-top: 8px;">
+            <button
+            class="btn btn-white font-weight-normal font-weight-bold"
+            @click.prevent="handleCancel"
+            v-text="$t('popup_btn_no')"/>
+          </div>
+          <div class="col-6" style="padding:0;">
+            <button
+            class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
+            @click.prevent="handleAction(note, reason_id)"
+            v-text="$t('popup_btn_yes')"/>
+        </div>
         </div>
       </div>
     </div>
@@ -74,6 +88,13 @@ export default {
     this.getDictionary()
   },
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},
