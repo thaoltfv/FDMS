@@ -2407,7 +2407,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
-            'document_type'
+            'document_type',
+            'status_expired_at',
+            'status_updated_at',
+            'sub_status'
         ];
         $with = [
             'createdBy:id,name',
