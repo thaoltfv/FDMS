@@ -36,7 +36,7 @@ data: () => ({
         {
           id: 1,
           icon: "chart-line",
-          title: "Bảng điều khiển",
+          title: "Dashboard",
           customImage: false,
           isActive: false,
           path: { name: "dashboard.index" }
