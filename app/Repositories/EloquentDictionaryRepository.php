@@ -153,9 +153,14 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         $statusCode = $response->status();            
         
         // if ($statusCode == 201) {
-            $responseBody = json_decode($response->getBody(), true);
-            $data = $responseBody;
-            return $data;
+        $responseBody = json_decode($response->getBody(), true);
+        $data = $responseBody;
+        if ($data == null) {
+            $data['code'] = 1;
+            $data['message'] = 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau';
+        }
+
+        return $data;
         // }
     }
 
