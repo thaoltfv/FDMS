@@ -335,10 +335,29 @@ class ReportAppendix1 extends Report
 
     private function getAssetLandType($item, $asset)
     {
+        // dd($item, $asset);
         $result = [];
         $assetDetails = $asset->properties[0]->propertyDetail;
+        $itemDetails = $item->properties[0]->propertyDetail;
         $unitArea = $asset->assetUnitArea->where('asset_general_id', $item->id);
         $unitPrice = $asset->assetUnitPrice->where('asset_general_id', $item->id);
+        // dd($itemDetails, $unitPrice);
+        // $result1 = [];
+        foreach ($unitPrice as $idP => $unitP) {
+            // dd($unitP);
+            $count = 0;
+            foreach ($itemDetails as $detailP) {
+                if ($unitP->land_type_id === $detailP->land_type_purpose) {
+                    $count = 1;
+                }
+            }
+            if ($count === 0) {
+                unset($unitPrice[$idP]);
+            }
+        }
+        
+        // dd($unitPrice);
+
         foreach ($assetDetails as $detail) {
             $totalArea = 0;
             $mainArea = 0;
@@ -560,6 +579,7 @@ class ReportAppendix1 extends Report
     {
         $data = [];
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
+        // dd($method);
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoSourceBy('', 'Hình thức thu thập', $asset);
@@ -618,7 +638,7 @@ class ReportAppendix1 extends Report
             $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
             $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
         }
-        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đ/giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
         return $data;
     }
     protected function getStringCoordinates($coordinates)
@@ -1199,9 +1219,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            ($this->asset1->source && $this->asset1->source->description) ? CommonService::mbUcfirst($this->asset1->source->description) : '-',
-            ($this->asset2->source && $this->asset2->source->description) ? CommonService::mbUcfirst($this->asset2->source->description) : '-',
-            ($this->asset3->source && $this->asset3->source->description) ? CommonService::mbUcfirst($this->asset3->source->description) : '-',
+            ($this->asset1->source && $this->asset1->source->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset1->source->description)) : '-',
+            ($this->asset2->source && $this->asset2->source->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset2->source->description)) : '-',
+            ($this->asset3->source && $this->asset3->source->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset3->source->description)) : '-',
             false
         ];
         return $data;
@@ -1598,6 +1618,7 @@ class ReportAppendix1 extends Report
             !empty($this->landType['asset3'][$id]) && !empty($this->landType['asset3'][$id][$columnName]) ? number_format($this->landType['asset3'][$id][$columnName], 0, ',', '.') : '-',
             true
         ];
+        // dd($data);
         return $data;
     }
     protected function collectInfoOnlyTitle($stt, $title)

@@ -245,6 +245,8 @@ class ExportCertificateBriefs
             return $reduceItem;
         });
 
+        // dd($reducedData);
+
         // Generate excel
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
         $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';

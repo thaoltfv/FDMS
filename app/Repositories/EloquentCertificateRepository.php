@@ -155,6 +155,7 @@ use App\Models\VerhicleCertificateBriefLaw;
 use App\Models\VerhicleCertificateBriefLawInfo;
 use App\Models\VerhicleCertificateBriefPrice;
 use App\Models\Views\ViewSelectedCertificateAsset;
+use App\Models\Views\ViewSelectedCertificateApartment;
 use App\Notifications\ActivityLog;
 use App\Repositories\EloquentBuildingPriceRepository;
 use App\Services\AppraiseVersionService;
@@ -2406,7 +2407,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
-            'document_type'
+            'document_type',
+            'status_expired_at',
+            'status_updated_at',
+            'sub_status'
         ];
         $with = [
             'createdBy:id,name',
@@ -5107,6 +5111,138 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             else
                 $item->pic = $pic[$find]['pic'];
         }
+        // dd($data);
+        return $data;
+    }
+
+    public function getFinishCertificateApartment()
+    {
+        $data = [];
+        if (request()->get('is_appraise') == 'false') {
+            return $data;
+        }
+        $year = request()->get('year');
+        // $year =  Carbon::parse($year)->format('Y');
+        $province_id = request()->get('province_id') ?? "%";
+        $district_id = request()->get('district_id') ?? "%";
+        $ward_id = request()->get('ward_id') ?? "%";
+        $street_id = request()->get('street_id') ?? "%";
+        $transaction_type = request()->get('transaction_type');
+        $total_area_from = request()->get('total_area_from') ?? 0;
+        $total_area_to = request()->get('total_area_to') ?? 1000000;
+        $total_amount_from = request()->get('total_amount_from') ?? 0;
+        $total_amount_to = request()->get('total_amount_to') ?? 100000000000000;
+        $distance = request()->get('distance') ?? 10;
+        $location = request()->get('location');
+        $front_side = request()->get('front_side');
+        if (isset($location)) {
+            $location1 = explode(',', $location);
+            $lat = (float)$location1[0] ?? null;
+            $lon = (float)$location1[1] ?? null;
+        }
+        else {
+            return [];
+        }
+        $earthRadius = 6371;
+        $with = [
+            'pic'
+        ];
+        $tbName = '"coord"';
+        $stringSql = sprintf(
+            "SELECT 
+            t13.name as apartment_name, t3.apartment_asset_id as id, 
+            t1.petitioner_name as contact_person,t1.petitioner_phone as contact_phone
+                                ,t1.petitioner_identity_card
+                                ,t1.appraise_date as public_date
+                                ,coalesce(
+                                    case
+                                        when  t12.value::bigint > 0
+                                        then ceil(t4.value::bigint / power(10, t12.value::bigint)) * power(10, t12.value::bigint)
+                                        when   t12.value::bigint < 0
+                                            then floor( t4.value::bigint * abs(power(10, t12.value::bigint))  ) / abs(power(10, t12.value::bigint))
+                                        else
+                                            t4.value::bigint
+                                    end, 0)
+                                as total_amount
+                                ,t5.value::float as total_area
+                                ,t3.coordinates
+                                , CONCAT(t10.name , ', ' , t9.name , ', ' , t8.name , ', ' , t7.name) as full_address
+                                ,'TSTD' as migrate_status
+                                , 0 as transaction_type_id
+                                , 0 as transaction_type
+                                ,'ĐÃ THẨM ĐỊNH' as transaction_type_description
+                                ,t11.description as asset_type
+                                ,t1.created_at
+                                ,'CC' as loaitaisan
+                            FROM certificates t1
+                                inner join certificate_has_real_estates t2 on t1.id = t2.certificate_id
+                                inner join certificate_apartments t3 on t2.real_estate_id = t3.real_estate_id
+                                left join certificate_apartment_prices t4 on t3.id = t4.apartment_asset_id and t4.slug ='apartment_total_price'
+                                left join certificate_apartment_prices t5 on t3.id = t5.apartment_asset_id and t5.slug ='apartment_area'
+                                inner join (select id ,  :earthRadius * 2 * asin(sqrt(power(SIN((pi()/180) * ( SPLIT_PART(coordinates , ',',1)::float - :lat) /2),2)
+                                            + cos((pi()/180) * SPLIT_PART(coordinates , ',',1)::float)
+                                            * cos((pi()/180) * :lat)
+                                            * POWER(sin( (pi()/180) * (SPLIT_PART(coordinates , ',',2)::float - :lon) /2),2)))
+                                            as distance
+                                        from certificate_apartments ) t6 on t3.id = t6.id
+                                inner join provinces t7 on t3.province_id = t7.id
+                                inner join districts t8 on t3.district_id = t8.id
+                                inner join wards t9 on t3.ward_id = t9.id
+                                left join streets t10 on t3.street_id = t10.id
+                                inner join projects t13 on t3.project_id = t13.id
+                                inner join dictionaries t11 on t3.asset_type_id = t11.id
+                                left join certificate_apartment_prices t12 on t3.id = t12.apartment_asset_id and t12.slug ='round_total'
+                            WHERE t1.status IN (3, 4)
+                                and t1.created_at >= :year
+                                and t6.distance <= :distance
+                                -- and cast(t3.province_id as text) like  :province_id
+                                -- and cast(t3.district_id as text) like  :district_id
+                                -- and cast(t3.ward_id as text) like  :ward_id
+                                -- and cast(t3.street_id as text) like  :street_id
+                                and t5.value between :total_area_from and :total_area_to
+                                and t4.value between :total_amount_from and :total_amount_to
+            "
+        );
+        // dd($stringSql);
+        DB::enableQueryLog();
+        $data = DB::select($stringSql, [
+            ":year" => $year,
+            ":lat" => $lat,
+            ":lon" => $lon,
+            ":distance" => $distance,
+            ":earthRadius" => $earthRadius,
+            // ":province_id" => $province_id,
+            // ":district_id" => $district_id,
+            // ":ward_id" => $ward_id,
+            // ":street_id" => $street_id,
+            ":total_area_from" => $total_area_from,
+            ":total_area_to" => $total_area_to,
+            ":total_amount_from" => $total_amount_from,
+            ":total_amount_to" => $total_amount_to,
+        ]);
+        // dd(DB::getQueryLog());
+        $result = array_column($data, 'id');
+        $pic = []; 
+        foreach ($result as $id) {
+            $anh = ApartmentAsset::with('pic')->where(['id' => $id])->get(['id'])->toArray();
+            $pic = array_merge ( $pic, $anh);
+        }
+
+        // if ($result && $pic) {
+        //     dd($result , $pic);
+        // }
+        
+        foreach ($data as $item) {
+            $find = array_search($item->id, array_column($pic, 'id'));
+            if ($find === false)
+                $item->pic = [];
+            else
+                $item->pic = $pic[$find]['pic'];
+        }
+        // if ($data) {
+        //     dd($data);
+        // }
+        
         return $data;
     }
 
@@ -5326,34 +5462,48 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'propertyDetail:id,appraise_property_id,land_type_purpose_id,position_type_id,total_area,planning_area,is_zoning',
         ];
         $query = ViewSelectedCertificateAsset::query();
+        $query1 = ViewSelectedCertificateApartment::query();
 
+        // dd($query1);
+        
         if (isset($status)){
             $status = explode(',', $status);
             $query=$query->whereIn('status',$status);
+            $query1=$query1->whereIn('status',$status);
         }
 
         if (isset($fromDate)){
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
+            $query1=$query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
         }
 
         if (isset($toDate)){
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $query=$query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
+            $query1=$query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
         // $result = $query->with($with)->limit(5)->get();
         $result = $query->with($with)->get();
+        $result1 = $query1->get();
         if ($isExportLandDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
+            $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
         }
         if ($isExportLandZoningDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST));
+            $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST));
         }
         if ($isExportTangibleDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
+            $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
         }
-        // dd($result->toArray());
-        return $result;
+        // $result = $result->toArray();
+        // $result1 = $result1->toArray();
+        
+        // $final_result = array_merge($result, $result1);
+        // dd($final_result);
+        return $result->merge($result1)->sortBy('certificate_id');
     }
 
     private function updatePersonaltyPrice(int $id)

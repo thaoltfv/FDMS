@@ -91,4 +91,6 @@ interface AppraiseRepository extends BaseRepository
     public function updateEstimateAssetPrice(int $id);
 
     public function getAppraiseDetail(int $id);
+
+    public function getApartmentDetail(int $id);
 }

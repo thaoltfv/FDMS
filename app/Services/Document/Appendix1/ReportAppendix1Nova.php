@@ -47,6 +47,7 @@ class ReportAppendix1Nova extends ReportAppendix1
     protected function collectInfomationAppraiseData($asset)
     {
         $data = [];
+        $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         $stt = 1;
         $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
         $data[] = $this->collectInfoTransactionType($stt++, 'Tình trạng giao dịch', $asset);
@@ -96,8 +97,15 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
         $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
         $data[] = $this->collectInfoAppraiseViolatePrice($stt++, 'Giá trị phần diện tích vi phạm QH (đ)', $asset);
-        $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, 'Tiền nộp thuế quy đổi chuyển mục đích sử dụng đất (đ)', $asset);
+        if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
+            $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, 'Tiền nộp thuế quy đổi chuyển mục đích sử dụng đất (đ)', $asset);
+        }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
+        if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
+            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
+            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
+            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
+        }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/'. $this->m2 .')', $asset);
         return $data;
     }

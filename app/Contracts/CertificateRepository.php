@@ -58,6 +58,8 @@ interface CertificateRepository extends BaseRepository
 
     public function getFinishCertificateAssets();
 
+    public function getFinishCertificateApartment();
+
     public function getComparisonAppraise( array $ids);
 
     public function exportCertificateBriefs();

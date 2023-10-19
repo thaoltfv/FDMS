@@ -840,6 +840,13 @@ class CertificateAssetsController extends Controller
             return $this->respondWithErrorData( $result);
         return $this->respondWithCustomData($result);
     }
+
+    public function getApartmentDetail(int $id){
+        $result = $this->appraiseRepository->getApartmentDetail($id);
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData($result);
+    }
     // public function getCertificateByRealEstateId($id) {
     //     $result = AppraiseVersionService::getCertificateByRealEstateId($id);
     //     return $this->respondWithCustomData($result);
