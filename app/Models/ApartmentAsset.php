@@ -165,6 +165,9 @@ class ApartmentAsset extends Model
             case 4:
                 return 'Hoàn thành';
                 break;
+            case 6:
+                return 'Đang kiểm soát';
+                break;
             default:
                 return 'Hủy';
         }

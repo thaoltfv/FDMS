@@ -1721,6 +1721,9 @@ class CommonService
 			case 5:
 				$data = 'Đã Hủy';
 				break;
+			case 6:
+				$data = 'Đang Kiểm Soát';
+				break;
 			default:
 				$data = 'Mới';
 		}

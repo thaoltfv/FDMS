@@ -26,6 +26,9 @@ trait ActivityLog
                     case 5:
                          $log =  $log . ' đã hủy';
                         break;
+                    case 6:
+                        $log = $log  . ' đang kiểm soát';
+                        break;
                     default:
                          $log =  $log . ' mới';
                 }

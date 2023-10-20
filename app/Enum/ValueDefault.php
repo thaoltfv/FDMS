@@ -124,6 +124,7 @@ class ValueDefault
         3 => 'Đang duyệt',
         4 => 'Hoàn thành',
         5 => 'Hủy',
+        6 => 'Đang kiểm soát',
     ];
 }
 
