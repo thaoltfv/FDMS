@@ -1377,7 +1377,8 @@ class ReportAppendix1 extends Report
         $landNo = isset($item->properties[0]->compare_property_doc[0]->plot_num) ? 'Thửa số: ' . $item->properties[0]->compare_property_doc[0]->plot_num . ', ' : '';
         $docNo = isset($item->properties[0]->compare_property_doc[0]->doc_num) ? 'tờ: ' . $item->properties[0]->compare_property_doc[0]->doc_num . ', ' : '';
         // $address = $landNo . $docNo . $item->ward->name . ', ' . $item->district->name . ', ' . $item->province->name;
-        $address = $landNo . $docNo . $item->full_address;
+        // $address = $landNo . $docNo . $item->full_address;
+        $address = $item->full_address;
         return $address;
     }
     protected function collectInfoAddressAppraise($stt, $title, $asset)
