@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" :style="isMobile() ? {'margin':'0', 'padding': '0'} : {}">
     <Form/>
   </div>
 </template>
@@ -22,6 +22,15 @@ export default {
 		if ('id' in this.$route.params && this.$route.name === 'certification_asset.create') {
 			this.open_select_type = false
 		} else this.open_select_type = true
+	},
+	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		}
 	}
 }
 </script>

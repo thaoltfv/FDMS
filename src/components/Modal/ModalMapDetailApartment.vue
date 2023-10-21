@@ -6,7 +6,7 @@
         <div class="loading" :class="{'loading__true': isSubmit}">
           <a-spin />
         </div>
-        <div class="card">
+        <div class="card" :style="isMobile() ? {'margin-top':'-55px', 'max-height': '94vh', 'min-height': '94vh'} : {}">
           <div class="container-title">
             <div class="d-flex justify-content-between align-items-center">
               <h2 class="title">Thông tin chi tiết</h2>
@@ -229,6 +229,13 @@ export default {
 		},
 	},
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		handleOpenCertificateAsset (id) {
 			let routeData = this.$router.resolve({
 				name: 'certification_asset.apartment.detail',

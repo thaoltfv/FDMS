@@ -28,6 +28,7 @@
             <div v-if="status === 3" class="status-color bg-warning" />
             <div v-if="status === 4" class="status-color bg-success" />
             <div v-if="status === 5" class="status-color bg-secondary" />
+			<div v-if="status === 6" class="status-color bg-control" />
             <b-dropdown class="dropdown-container" no-caret>
               <template #button-content>
                 <img src="@/assets/icons/ic_more.svg" alt=''>
@@ -127,8 +128,8 @@
       </div>
     </div>
   </div>
-  <div v-else class="table-wrapper">
-	<div class="table-detail position-relative empty-data" style="margin-bottom: 40px;">
+  <div v-else class="table-wrapper" style="margin: 0;">
+	<div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
 		<b-card :class="{'border_expired':checkDateExpired(element), ['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
             <div class="col-12 d-flex mb-2 justify-content-between">
               <span @click="handleDetailCertificate(element.id)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">HSTD_{{element.id}}</span>
@@ -167,7 +168,8 @@
               <img class="img_user" :src="element.image ? element.image : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'">
             </div>
           </b-card>
-		<div class="pagination-wrapper">
+	</div>
+	<div class="pagination-wrapper">
 			<div class="page-size">
 			Hiển thị
 			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
@@ -180,7 +182,6 @@
 			@change="onPaginationChange">
 			</a-pagination>
       	</div>
-	</div>
 	<ModalDetailCertificate
 		v-if="showDetailPopUp"
 		:idData="idData"
@@ -700,7 +701,7 @@ export default {
 			return status_expired_at
 		},
 		getExpireDate (element) {
-			console.log('elemt', element)
+			// console.log('elemt', element)
 			let strExpire = ''
 			switch (element.status) {
 			case 1:

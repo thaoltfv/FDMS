@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isMobile()">
     <div class="card">
       <div class="card-title">
         <div class="d-flex justify-content-between align-items-center">
@@ -458,6 +458,465 @@
       @action="handleCoordinates"
     />
   </div>
+  <div v-else>
+    <div class="card">
+      <div class="card-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="title">Thông tin chung về tài sản thẩm định</h3>
+          <img class="img-dropdown" :class="!showCardDetailAppraise ? 'img-dropdown__hide' : ''"
+            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailAppraise = !showCardDetailAppraise">
+        </div>
+      </div>
+      <div class="card-body card-info" v-show="showCardDetailAppraise">
+        <div class="container-fluid color_content">
+          <div class="row">
+            <div class="col-12 col-lg-7" style="padding:0;">
+              <div class="row">
+                <div class="col-6">
+                  <InputCategory
+                    v-model="data.general_infomation.asset_type_id"
+                    vid="asset_type_id"
+                    label="Loại tài sản"
+                    rules="required" class="form-group-container"
+                    :options="optionsType"
+                    :disabled="isEdit ? true : false"
+                    @change="changeAssetType($event)" />
+                </div>
+                <div class="col-6">
+                  <InputCategory
+                    v-model="data.general_infomation.province_id"
+                    vid="province_id"
+                    label="Tỉnh/Thành"
+                    rules="required"
+                    class="form-group-container"
+                    :options="optionsProvince"
+                    @change="changeProvince($event)"
+                  />
+                </div>
+                <div class="col-6">
+                  <InputCategory
+                    v-model="data.general_infomation.district_id"
+                    vid="district_id"
+                    label="Quận/Huyện"
+                    rules="required"
+                    class="form-group-container"
+                    @change="changeDistrict($event)"
+                    :options="optionsDistrict"
+                  />
+                </div>
+                <div class="col-6">
+                  <InputCategory
+                    v-model="data.general_infomation.ward_id"
+                    vid="ward_id"
+                    label="Phường/Xã"
+                    rules="required"
+                    class="form-group-container"
+                    :options="optionsWard"
+                    @change="changeWard($event)"
+                  />
+                </div>
+                <div class="col-6">
+                  <InputCategory v-model="data.general_infomation.street_id" vid="street_id" label="Đường/Phố" rules="required"
+                    class="form-group-container" @change="changeStreet($event)" :options="optionsStreet" />
+                </div>
+                <div class="col-6">
+                  <InputCategory v-model="data.general_infomation.distance_id" vid="distance_id" label="Đoạn" class="form-group-container"
+                    :options="optionsDistance" @change="changeDistance($event)" />
+                </div>
+                <div class="col-12">
+                  <InputText v-model="data.general_infomation.full_address" vid="full_address" label="Địa chỉ"
+                    rules="required" class="form-group-container" />
+                </div>
+                <div class="col-12">
+                  <InputText v-model="data.general_infomation.appraise_asset" vid="appraise_asset" label="Tên tài sản thẩm định giá"
+                    rules="required" class="form-group-container" />
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-5" style="padding:0;">
+              <div class="d-flex flex-column h-100">
+                <div class="form-group-container position-relative w-100">
+                  <InputText
+                    id="coordinate"
+                    :disabledInput="true"
+                    v-model="data.general_infomation.coordinates"
+                    vid="coordinates"
+                    label="Tọa độ"
+                    class="coordinates"
+                    rules="required"
+                    />
+                  <div class="img-locate">
+                    <img src="@/assets/icons/ic_edit_2.svg" alt="locate" @click="handleOpenModalMap()">
+                  </div>
+                </div>
+                <!-- Map -->
+                <div class="col-12 mt-3 layer-map">
+              <div class="d-flex all-map" style="padding: 0; height: 50vh;margin-top: 10px;">
+                <div class="main-map">
+                  <div id="mapid" class="layer-map">
+                      <l-map
+                        ref="map_step1"
+                        :zoom="map.zoom"
+                        :center="map.center"
+                        :maxZoom="20"
+                        :options="{zoomControl: false}"
+                      >
+                        <l-tile-layer :url="url" :options="{ maxNativeZoom: 20, maxZoom: 20}"></l-tile-layer>
+                        <l-tile-layer
+                        v-for="tileProvider in tileProviders"
+                        :key="tileProvider.name"
+                        :name="tileProvider.name"
+                        :visible="tileProvider.visible"
+                        :url="tileProvider.url"
+                        :attribution="tileProvider.attribution"
+                        :layer-type="tileProvider.type"
+                        :options="{ maxNativeZoom: 20, maxZoom: 20 }"
+                      />
+                        <!-- <l-tile-layer
+                          url="https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png"
+                          :min-zoom="12"
+                          :options="{ maxNativeZoom: 19, maxZoom: 20}"
+                        /> -->
+                        <l-control-zoom position="bottomright"></l-control-zoom>
+                        <l-control position="bottomleft">
+                          <button class="btn btn-map" @click="handleView" type="button">
+                            <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
+                            <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
+                          </button>
+                        </l-control>
+                        <l-control-layers position="bottomleft"></l-control-layers>
+                        <l-marker :lat-lng="markerLatLng">
+                          <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
+                            <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
+                          </l-icon>
+                          <l-tooltip>Vị trí tài sản</l-tooltip>
+                        </l-marker>
+                      </l-map>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="title">Đặc điểm giao thông</h3>
+          <img class="img-dropdown" :class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
+            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailTraffic = !showCardDetailTraffic">
+        </div>
+      </div>
+      <div class="card-body card-info" v-show="showCardDetailTraffic" style="padding-left: 0;padding-right: 0;">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="select-group sub_header_title" style="padding-left: 10px;">
+                <div class="d-flex">
+                  <label  class="select-title pr-2">Vị trí tài sản</label>
+                  <div class="w-100 row">
+                    <div class="col-12 col-md-3 col-lg-2"></div>
+                    <div class="col-6">
+                      <div  class="d-flex">
+                        <input type="radio" name="front_side" :value="1" @click="handleChangeFrontSide" id="front_side1" :checked="false" v-model="data.traffic_infomation.front_side">
+                       <div  style="margin-left: 0.5rem"  class=""><label class="color_content font-weight-normal" style="margin-bottom: unset !important" for="front_side1">Mặt tiền</label></div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div  class="d-flex">
+                        <input type="radio" name="front_side" :value="0" @click="handleChangeAlley" id="front_side2" :checked="false" v-model="data.traffic_infomation.front_side">
+                        <div style="margin-left: 0.5rem"  class=""><label class="color_content font-weight-normal" style="margin-bottom: unset !important" for="front_side2">Trong hẻm</label></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-4">
+              <div class="select-group">
+                <div class="d-flex">
+                  <label class="select-title">Căn góc</label>
+                  <div class="w-100 row">
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                      <div class="d-flex" >
+                        <input type="radio" name="two_sides_land" :value="true" id="two_sides_land1" :checked="false" v-model="data.traffic_infomation.two_sides_land">
+                        <div style="margin-left: 0.5rem"><label class="color_content" style="margin-bottom: unset !important" for="two_sides_land1">Có</label></div>
+                      </div>
+                    </div>
+                    <div class="col-5">
+                      <div class="d-flex">
+                        <input type="radio" name="two_sides_land" :value="false"  :checked="false" id="two_sides_land2" v-model="data.traffic_infomation.two_sides_land">
+                        <div style="margin-left: 0.5rem"><label class="color_content" style="margin-bottom: unset !important" for="two_sides_land2">Không</label></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!-- Có -->
+            <div v-if="data.traffic_infomation.front_side" class="col-12">
+              <div class="row content_form" style="padding-left: 0;">
+                <div class="col-6 col-md-5 col-lg-3">
+                  <InputLengthArea
+                    label="Bề rộng đường"
+                    :required="true"
+                    rules="required"
+                    v-model="data.traffic_infomation.main_road_length"
+                    :decimal="2"
+                    class="form-group-container"
+                    @change="handleChangeRoadFrontSide"
+                  />
+                </div>
+                <div class="col-6 col-md-7 col-lg-4">
+                  <InputCategory
+                    v-model="data.traffic_infomation.material_id"
+                    label="Chất liệu đường"
+                    rules="required"
+                    class="form-group-container"
+                    :options="optionsMaterial"
+                  />
+                </div>
+                <div class="infor-box pl-2 pb-0 col d-none mt-3 mr-3 d-lg-flex">
+                  <p>
+                  - <b>Bề rộng đường</b>: Chiều rộng mặt đường tiếp giáp với tài sản <br/>
+                  - <b>Chất liệu đường</b>: Chất liệu mặt đường tiếp giáp với tài sản
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Không -->
+            <div v-if="data.traffic_infomation.front_side === 0" class="col-12">
+              <div v-for="(detail_alley, index) in data.traffic_infomation.property_turning_time" :key="index" class="d-flex">
+                <div class="w-100 row content_form" style="padding-left: 0;">
+                  <div class="col-6 col-lg-3">
+                    <InputText
+                      label="Số lần rẽ/quẹo"
+                      v-model="detail_alley.turning"
+                      vid="turning"
+                      rules="required"
+                      disabled-input
+                      class="form-group-container"
+                    />
+                  </div>
+                  <div class="col-6 col-lg-2">
+                    <InputLengthArea
+                      label="Bề rộng đường"
+                      :required="true"
+                      rules="required"
+                      :value="detail_alley.main_road_length"
+                      class="form-group-container"
+                      :decimal="2"
+                      @change="handleChangeRoadAlley($event, index)"
+                    />
+                  </div>
+                  <div class="col-6 col-lg-3">
+                    <InputCategory
+                      v-model="detail_alley.material_id"
+                      label="Chất liệu đường"
+                      rules="required"
+                      class="form-group-container"
+                      :options="optionsMaterial"
+                      @change="changeMaterial"
+                    />
+                  </div>
+                  <div class="col-6 col-lg">
+                    <InputLengthArea
+                      label="Cách đường chính"
+                      :required="true"
+                      rules="required"
+                      v-model="detail_alley.main_road_distance"
+                      class="form-group-container"
+                      :decimal="2"
+                      @change="handleChangeRoadDistance($event, index)"
+                    />
+                  </div>
+                  <div v-if="data.traffic_infomation.property_turning_time.length > 1" class="col-12 col-lg-1 px-3 d-flex align-items-end">
+                    <div @click="handleDeleteTurning(index)" class="btn-delete">
+                      <img src="@/assets/icons/ic_delete_2.svg" alt="delete">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="d-flex">
+                <div class="w-100 d-flex justify-content-end">
+                  <button class="btn text-warning btn-ghost btn-add" type="button" @click="handleAddTurning">
+                    <img src="@/assets/icons/ic_add-white.svg" alt="add">
+                    + Thêm
+                  </button>
+                </div>
+                <div  v-if="data.traffic_infomation.property_turning_time.length > 1" class="col-1 px-3"></div>
+              </div>
+            </div>
+             <div class="col-12 ">
+              <InputTextarea :autosize="true" :maxLength="1000" v-model="data.traffic_infomation.description" label="Mô tả vị trí" class="form-group-container" />
+            </div>
+            <div class="col-12 ">
+              <InputTextarea :autosize="true" :maxLength="1000" v-model="data.geographical_location" label="Vị trí địa lý" class="form-group-container" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="title">Đặc điểm kinh tế - xã hội</h3>
+          <img class="img-dropdown" :class="!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''"
+            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial">
+        </div>
+      </div>
+      <div class="card-body card-info" v-show="showCardDetailEconomicAndSocial" style="padding-left: 0;padding-right: 0;">
+        <div class="container-fluid">
+          <div class="row">
+            <div v-if="businesses.length > 0" class="col-12 col-lg-6 form-group-container">
+              <h3>Kinh doanh</h3>
+              <div v-for="business of businesses" :key="business.id">
+                <div class="d-flex div_radio">
+                  <input type="radio" name="business_id" :id="business.id" :value="business.id" v-model="data.economic_infomation.business_id">
+                  <div class="content_economy"><label class="color_content" style="margin-bottom: unset !important" :for="business.id">{{formatSentenceCase(business.description)}}</label></div>
+                </div>
+              </div>
+            </div>
+            <div v-if="conditions.length > 0" class="col-12 col-lg-6 form-group-container">
+              <h3>Cơ sở hạ tầng</h3>
+              <div v-for="condition of conditions" :key="condition.id">
+                 <div class="d-flex div_radio">
+                  <input type="radio" name="condition_id" :id="condition.id" :value="condition.id" v-model="data.economic_infomation.condition_id">
+                  <div class="content_economy"><label class="color_content" style="margin-bottom: unset !important" :for="condition.id">{{formatSentenceCase(condition.description)}}</label></div>
+                </div>
+              </div>
+            </div>
+            <div v-if="socialSecurities.length > 0" class="col-12 col-lg-6 form-group-container">
+              <h3>An ninh trật tự, xã hội</h3>
+              <div v-for="sercurity of socialSecurities" :key="sercurity.id">
+                <div class="d-flex div_radio">
+                  <input type="radio" name="social_security_id" :id="sercurity.id" :value="sercurity.id" v-model="data.economic_infomation.social_security_id">
+                  <div class="content_economy"><label class="color_content" style="margin-bottom: unset !important" :for="sercurity.id">{{formatSentenceCase(sercurity.description)}}</label></div>
+                </div>
+              </div>
+            </div>
+            <div v-if="fengshuies.length > 0" class="col-12 col-lg-6 form-group-container">
+              <h3>Phong thủy</h3>
+              <div v-for="fengshui of fengshuies" :key="fengshui.id">
+                <div class="d-flex div_radio">
+                  <input type="radio" name="feng_shui_id" :id="fengshui.id" :value="fengshui.id" v-model="data.economic_infomation.feng_shui_id">
+                  <div class="content_economy"><label class="color_content" style="margin-bottom: unset !important" :for="fengshui.id">{{formatSentenceCase(fengshui.description)}}</label></div>
+                </div>
+              </div>
+            </div>
+            <!-- <div v-if="zones.length > 0" class="col-6 form-group-container">
+              <h3>Quy hoạch</h3>
+              <div v-for="zone of zones" :key="zone.id">
+                <div class="d-flex div_radio">
+                  <input type="radio" name="zoning_id" :id="zone.id" :value="zone.id" v-model="data.economic_infomation.zoning_id">
+                  <div class="content_economy"><label class="color_content" style="margin-bottom: unset !important" :for="zone.id">{{formatSentenceCase(zone.description)}}</label></div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title d-flex align-items-center justify-content-between">
+        <form enctype="multipart/form-data" class="d-flex align-items-center">
+          <h3 class="title">Hình ảnh</h3>
+        </form>
+        <img class="img-dropdown" :class="!showCardDetailImage ? 'img-dropdown__hide' : ''"
+          src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailImage = !showCardDetailImage">
+      </div>
+      <div class="card-body" v-show="showCardDetailImage" style="padding-left: 0;padding-right: 0;">
+        <Tabs class="tab_contruction" :theme="theme" :navAuto="true">
+          <TabItem name="Đường tiếp giáp tài sản">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0">
+                <div style="width: auto;" class="contain-img contain-img__property" v-if="imageType && data.picture_infomation.length > 0 && imageType.id && images.type_id === imageType.id" v-for="(images, index) in data.picture_infomation" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+                  <div class="container_input_img" style="width: unset;">
+                    <input class="input_file_4" type="file" ref="file" id="image_property" multiple
+                      accept="image/png, image/gif, image/jpeg, image/jpg"
+                      @change="onImageChange($event, 'đường tiếp giáp tài sản thẩm định giá')" />
+                </div>
+              </div>
+            </div>
+          </TabItem>
+          <TabItem name="Tổng thể tài sản">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0">
+                <div style="width: auto;" class="contain-img contain-img__property" v-if="imgOverall && data.picture_infomation.length > 0 && imgOverall.id && images.type_id === imgOverall.id" v-for="(images, index) in data.picture_infomation" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+								<div class="container_input_img" style="width: unset;">
+									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'tổng thể tài sản thẩm định giá')" />
+								</div>
+              </div>
+            </div>
+          </TabItem>
+          <TabItem name="Hiện trạng tài sản">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0">
+                <div style="width: auto;" class="contain-img contain-img__property" v-if="imageCurrentStatus && data.picture_infomation.length > 0 && imageCurrentStatus.id && images.type_id === imageCurrentStatus.id" v-for="(images, index) in data.picture_infomation" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+								<div class="container_input_img" style="width: unset;">
+									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'hiện trạng tài sản thẩm định giá')" />
+								</div>
+              </div>
+            </div>
+          </TabItem>
+          <TabItem name="Khác">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0">
+                <div style="width: auto;" class="contain-img contain-img__property" v-if="imageJuridical && data.picture_infomation.length > 0 && imageJuridical.id && images.type_id === imageJuridical.id" v-for="(images, index) in data.picture_infomation" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+								<div class="container_input_img" style="width: unset;">
+									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'pháp lý tài sản')" />
+								</div>
+              </div>
+            </div>
+          </TabItem>
+        </Tabs>
+      </div>
+    </div>
+    <ModalMap
+      v-if="openModalMap"
+      @cancel="openModalMap = false"
+      :location="location"
+      :address="full_address_street"
+      :center_map="data.general_infomation.coordinates"
+      @action="handleCoordinates"
+    />
+  </div>
 </template>
 <style lang="scss">
 @import "../../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
@@ -844,6 +1303,13 @@ export default {
 		},
 		removeImage (index) {
 			this.data.picture_infomation.splice(index, 1)
+		},
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
 		}
 	}
 }

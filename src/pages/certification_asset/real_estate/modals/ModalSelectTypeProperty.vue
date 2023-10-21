@@ -1,12 +1,12 @@
 <template>
   <div @click.self="handleCancel" class="modal-purpose d-flex justify-content-center align-items-center">
     <div class="card card__show">
-      <div class="card-header">
+      <div class="card-header" :style="isMobile() ? {'padding-top':'10px', 'padding': '0'} : {}">
         <div class="title">
           Chọn loại tài sản thẩm định
         </div>
       </div>
-      <div class="card-body">
+      <div class="card-body" :style="isMobile() ? {'padding-bottom':'0'} : {}">
         <div class="row">
           <div class="col">
             <button type="button" class="btn btn-purpose h-100" :class="landHouse? 'active' : ''" @click="selectLandHaveHouse">
@@ -24,7 +24,7 @@
             </button>
           </div>
         </div>
-        <div class="container__selected">
+        <div class="container__selected" :style="isMobile() ? {'margin-top':'10px'} : {}">
           <button type="button" class="btn btn-select"
             :class="!landHouse && !apartment  ? 'disabled' : ''"
             @click="handleAction">
@@ -51,6 +51,17 @@ export default {
 		}
 	},
 	methods: {
+    isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		selectLandHaveHouse () {
 			this.land = false
 			this.apartment = false

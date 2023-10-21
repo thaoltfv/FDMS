@@ -1,5 +1,5 @@
 <template>
-  <div class="table-wrapper">
+  <div v-if="!isMobile()" class="table-wrapper">
     <div class="table-detail position-relative empty-data">
       <a-table
           ref="table"
@@ -37,6 +37,7 @@
             <div v-if="status === 3" class="status-color bg-warning" />
             <div v-if="status === 4" class="status-color bg-success" />
             <div v-if="status === 5" class="status-color bg-secondary" />
+			<div v-if="status === 6" class="status-color bg-control" />
             <b-dropdown class="dropdown-container" no-caret>
               <template #button-content>
                 <img src="@/assets/icons/ic_more.svg" alt="">
@@ -87,11 +88,91 @@
     </div> -->
     </div>
   </div>
+  <div v-else class="table-wrapper" style="margin: 0;">
+    <div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
+		<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
+            <div class="col-12 d-flex mb-2 justify-content-between">
+              <span @click="handleDetail(element.id, element)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">BDS_{{element.id}}</span>
+            </div>
+			<div class="property-content mb-2 d-flex color_content">
+              <div class="label_container d-flex">
+                <div class="d-flex">
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Tên tài sản:</strong><span :id="element.id + 'all'" class="text-left">{{ element.appraise_asset.substring(30,0)+'...'}}</span></span>
+				<b-tooltip :target="(element.id + 'all').toString()">{{ element.appraise_asset }}</b-tooltip>
+                </div>
+              </div>
+            </div>
+			<div class="row" style="margin: 0">
+				<div class="col-7  property-content mb-2 d-flex color_content" style="padding:0;">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+						<span style="font-weight: 500"><strong class="d_inline mr-1">Loại tài sản:</strong><span class="text-capitalize">{{element.asset_type.description.toLowerCase()}}</span></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-5 property-content mb-2 d-flex color_content" style="padding:0;justify-content: right;">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+						<span style="font-weight: 500"><strong class="d_inline mr-1">Vị trí:</strong><span class="text-none">{{element.front_side ? 'Mặt tiền' : element.front_side === 0 ? 'Hẻm' : '-' }}</span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng diện tích:</strong><span class="text-none">{{ element.total_area ? formatNumber(element.total_area) : 0 }} m<sup>2</sup></span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong><span class="text-none">{{element.total_price ? formatNumber(element.total_price) + ' đ' : '-' }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Ngày tạo:</strong><span class="public_date">{{ formatDate(element.created_at) }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Người tạo:</strong><span class="text-capitalize">{{element.created_by.name}}</span></span>
+					</div>
+				</div>
+			</div>
+          </b-card>
+	</div>
+	<div class="pagination-wrapper">
+			<div class="page-size">
+			Hiển thị
+			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
+				@change="onSizeChange" />
+			hàng
+			</div>
+			<a-pagination :current="Number(pagination.current)" :page-size="Number(pagination.pageSize)"
+			:total="Number(pagination.total)"
+			:show-total="(total, range) => `Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`"
+			@change="onPaginationChange">
+			</a-pagination>
+      	</div>
+  </div>
 </template>
 <script>
 
 import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
 import moment from 'moment'
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
@@ -114,7 +195,12 @@ export default {
 	components: {
 		'b-dropdown': BDropdown,
 		'b-dropdown-item': BDropdownItem,
-		'b-tooltip': BTooltip
+		'b-tooltip': BTooltip,
+		BCard,
+		BRow,
+		BCol,
+		BFormGroup,
+		BFormInput,
 	},
 	computed: {
 		columns () {
@@ -260,6 +346,34 @@ export default {
 		this.getProfiles()
 	},
 	methods: {
+		configColor(element) {
+			if (element.status == 1) {
+				return 'info'
+			}
+			if (element.status == 2) {
+				return 'primary'
+			}
+			if (element.status == 3) {
+				return 'warning'
+			}
+			if (element.status == 4) {
+				return 'success'
+			}
+			if (element.status == 5) {
+				return 'secondary'
+			}
+			if (element.status == 6) {
+				return 'control'
+			}
+			return 'red'
+		},
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		async getProfiles () {
 			const profile = this.$store.getters.profile
 			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
@@ -507,6 +621,238 @@ export default {
       flex-direction: column;
       gap: 20px;
     }
+  }
+  .scroll_board {
+    // transform:rotateX(180deg);
+    // -ms-transform:rotateX(180deg); /* IE 9 */
+    // -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+    scroll-snap-align: start;
+    overflow: auto;
+	overflow-y: auto;
+	overflow-x: auto;
+    margin-bottom: 1px;
+    max-height: 71vh !important;
+    @media (max-height: 800px) and (min-height: 660px) { // M-MD Screen
+      max-height: 75vh !important;
+    }
+    @media (max-height: 970px) and (min-height: 800px) { // FD Screen
+      max-height: 78vh !important;
+    }
+    @media (min-height: 970px) {  // >2k Screen
+      max-height: 85vh !important;
+    }
+  }
+  .name_card {
+    text-align: left;
+    width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .badge {
+    border-radius: 10px;
+    display: inline-block;
+    text-transform: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 85%;
+    color: #FFF;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .badgeSuccess {
+    background-color: rgba(40,199,111,.12);
+    color: #28C76F!important;
+  }
+  .badgeWarning {
+    background-color: rgba(255,159,67,.12);
+    color: #FF9F43!important;
+  }
+  .badgeDanger {
+        background-color: rgba(234,84,85,.12);
+    color: #EA5455!important;
+  }
+  .badgeInfo {
+    background-color: rgba(0,207,232,.12);
+    color: #00CFE8!important;
+  }
+  .badgePrimary {
+    background-color: rgba(115,103,240,.12);
+    color: #7367F0!important;
+  }
+  .content_id {
+    border-radius: 5px;
+    padding: 0px 3px;
+    font-weight: 500;
+    cursor: pointer;
+    &_primary {
+      color: #007EC6;
+      background-color: #E3F5FF;
+    }
+    &_secondary {
+      color: #FFFFFF;
+      background-color: #8B94A3;
+    }
+    &_warning {
+      color: #FF963D;
+      background-color: #FFF1E6;
+    }
+    &_danger {
+      color: #FF5E7B;
+      background-color: #FFEBEF;
+    }
+    &_success {
+      color: #FFFFFF;
+      background-color: #26BF7F;
+    }
+  }
+  .img_user {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+  }
+  .appraise-container {
+    padding: 0 1.25rem;
+  }
+  .kanban-column {
+    min-height: 300px;
+  }
+  .height_icon {
+    height: 1.3rem;
+  }
+  .card-body {
+    padding: 0.75rem 0.75rem !important;
+  }
+  .card_container {
+    border-radius: 5px;
+    &_primary {
+      border: 1px solid #B5E5FF
+    }
+    &_secondary {
+      border: 1px solid #8B94A3
+    }
+    &_warning {
+      border: 1px solid #FFD1AD
+    }
+    &_danger {
+      border: 1px solid #FFC8D3
+    }
+    &_success {
+      border: 1px solid #26BF7F;
+      background-color: #EAFFF6;
+    }
+  }
+  .container_kanban {
+	height: fit-content;
+    background-color: #F6F7FB;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+    border-top: 4px solid;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    min-width: 17rem;
+  }
+  // border
+  .border {
+    &_primary {
+      color:#72CDFF
+    }
+    &_secondary {
+      color:#9EA6B4
+    }
+    &_danger {
+      color:#FF7E9B
+    }
+    &_warning {
+      color:#FFB880
+    }
+    &_success {
+      color:#3DDC99
+    }
+  }
+  // title
+  .title {
+    font-weight: 600;
+    &_primary{
+      color:#00507C;
+    }
+    &_secondary{
+      color:#9EA6B4;
+    }
+    &_warning {
+      color:#FFB880;
+    }
+    &_danger {
+      color:#FF5E7B;
+    }
+    &_success {
+      color:#3DDC99;
+    }
+  }
+  //quatity
+  .quatity {
+    min-width: 32px;
+    height: 22px;
+    padding: 0px 5px;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    &_primary{
+      background-color: #007EC6;
+    }
+    &_warning{
+      background-color: #FF963D;
+    }
+     &_danger{
+      background-color: #FF5E7B;
+    }
+    &_success{
+      background-color: #26bf7f;
+    }
+    &_secondary{
+      background-color: #8B94A3;
+    }
+  }
+
+  .title_kanban {
+    font-weight: 600;
+  }
+  .title_group {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .kanban_board {
+    font-size: 0.875rem !important;
+    min-width: 1200px;
+  }
+  .d_inline {
+    @media (min-width: 1500px) {
+      display: inline !important;
+      min-width: 4.7rem;
+    }
+  }
+  .label_container {
+    @media (min-width: 1500px) {
+      min-width: 120px
+    }
+  }
+  .icon_expired {
+     margin-inline-end: 1rem;
+     width: 1rem;
+     justify-content: end;
+  }
+  .container_card_success {
+    background: white;
+    margin-bottom: 1rem;
+    .card {
+      margin-bottom: unset !important;
+    }
+  }
+  .border_expired {
+    border-color: red !important
   }
 }
 </style>

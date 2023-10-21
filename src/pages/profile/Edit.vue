@@ -1,5 +1,5 @@
 <template>
-  <div class="card px-4 py-2">
+  <div class="card px-4 py-2" :style="isMobile() ? {'margin':'0', 'padding':'0!important'} : {}">
     <ValidationObserver tag="form"
                         ref="observer"
                         @submit.prevent="validateBeforeSubmit">
@@ -63,18 +63,30 @@
         />
       </div>
     </div>
-    <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-      <div class="d-md-flex d-block button-contain ">
-        <button class="btn btn-white" type="button" @click="handleCancel">
-          <img class="img" src="../../assets/icons/ic_cancel.svg" alt="cancel">
-          Trở về
-        </button>
-        <button class="btn btn-white btn-orange text-nowrap" :class="{'btn-loading disabled': isSubmit}" type="submit">
-          <img class="img" src="../../assets/icons/ic_save.svg" alt="save">
-          Lưu
-        </button>
+    <div v-if="!isMobile()"  class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+        <div class="d-md-flex d-block button-contain ">
+          <button class="btn btn-white" type="button" @click="handleCancel">
+            <img class="img" src="../../assets/icons/ic_cancel.svg" alt="cancel">
+            Trở về
+          </button>
+          <button class="btn btn-white btn-orange text-nowrap" :class="{'btn-loading disabled': isSubmit}" type="submit">
+            <img class="img" src="../../assets/icons/ic_save.svg" alt="save">
+            Lưu
+          </button>
+        </div>
       </div>
-    </div>
+      <div v-else class="btn-footer d-md-flex d-block"  style="bottom: 60px;">
+        <div class="d-md-flex d-block button-contain row" style="justify-content: space-around;display: flex!important;">
+          <button class="btn btn-white col-6" type="button" @click="handleCancel" style="width: unset;margin: 0;padding: 0;">
+            <img class="img" src="../../assets/icons/ic_cancel.svg" alt="cancel">
+            Trở về
+          </button>
+          <button class="btn btn-white btn-orange text-nowrap col-6" :class="{'btn-loading disabled': isSubmit}" type="submit" style="width: unset;margin: 0;padding: 0;">
+            <img class="img" src="../../assets/icons/ic_save.svg" alt="save">
+            Lưu
+          </button>
+        </div>
+      </div>
     </ValidationObserver>
     <ModalImage
       v-if="viewImage"
@@ -137,6 +149,13 @@ export default {
 		}
 	},
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		handleCancel () {
 			this.$router.push({name: 'profile.index'})
 		},

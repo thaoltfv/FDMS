@@ -44,13 +44,13 @@ data: () => ({
         {
           id: 1,
           icon: "nav_hstd",
-          title: "Hồ sơ thẩm định",
+          title: "Hồ sơ",
           customImage: true,
           isActive: false,
           path: { name: "certification_brief.index" }
         },
         { id: 2, icon: "nav_tstd",
-         title: "Tài sản thẩm định",
+         title: "Tài sản",
           customImage: true ,
           isActive: false,
           childs: [

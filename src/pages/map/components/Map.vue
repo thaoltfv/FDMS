@@ -3,7 +3,160 @@
     <div class="loading" :class="{'loading__true': isSubmit}">
       <a-spin />
     </div>
-    <div class="d-flex all-map">
+    <div v-if="!isMobile()" class="d-flex all-map">
+      <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''">
+        <div id="mapid" class="layer-map">
+          <l-map ref="lmap"
+                 :zoom="zoom"
+                 :center="center"
+                 :options="{zoomControl: false}"
+                 :maxZoom="20"
+                 @update:zoom="zoomUpdated"
+                 @update:bounds="boundsUpdated"
+                 @click="choosePoint($event)"
+          >
+            <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
+            <l-control-zoom position="bottomright"></l-control-zoom>
+
+            <l-control position="bottomright">
+              <button class="btn btn-orange mini_btn" type="button" id="filterButton" @click="handleFilter">
+                <img src="@/assets/icons/ic_filter.svg" alt="filter" >
+              </button>
+            </l-control>
+            <l-control position="bottomright">
+              <button class="btn btn-orange mini_btn" type="button" @click="openPopUp($event)">
+                <img src="@/assets/icons/ic_radius.svg" alt="radius">
+              </button>
+            </l-control>
+            <l-control position="bottomright">
+              <button class="btn btn-orange mini_btn" type="button" @click="geoLocate">
+                <img src="@/assets/icons/ic_locate_white.svg" alt="location">
+              </button>
+            </l-control>
+            <l-control position="bottomleft">
+              <button class="btn btn-map" @click="handleView">
+                <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
+                <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
+              </button>
+            </l-control>
+            <l-control class="control-note" position="topleft">
+              <div class="container-note">
+				<div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_all}" @click="handleTransactionType({sold: true, for_sale: true, is_appraise: true, for_rent: true, rented_out: true})" style="cursor: pointer;">
+                  <div class="note-color note-color__orange"/>
+                  <p class="note-content">Tất cả</p>
+                </div>
+                <div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_db}" @click="handleTransactionType({sold: true})" style="cursor: pointer;">
+                  <div class="note-color note-color__blue"/>
+                  <p class="note-content">Đã bán</p>
+                </div>
+                <!-- <div class="mr-18 d-flex align-items-center">
+                  <div class="note-color note-color__orange"/>
+                  <p class="note-content">Đã cho thuê</p>
+                </div> -->
+                <div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_rb}" @click="handleTransactionType({for_sale: true})" style="cursor: pointer;">
+                  <div class="note-color note-color__purple"/>
+                  <p class="note-content">Rao bán</p>
+                </div>
+                <div class="mr-18 d-flex align-items-center" :style="{ background: choosed_background_dtd}" @click="handleTransactionType({is_appraise: true})" style="cursor: pointer;">
+                  <div class="note-color note-color__green"/>
+                  <p class="note-content">Đã thẩm định</p>
+                </div>
+              </div>
+            </l-control>
+            <l-marker :lat-lng="markerLatLng">
+              <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
+                <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
+              </l-icon>
+            </l-marker>
+            <l-circle
+              :lat-lng="circle.center"
+              :radius="circle.radius"
+              :color="circle.color"
+              :weight="2"
+            />
+            <v-marker-cluster>
+              <l-marker v-for="(apartment, index) in locationApartments" :key="index" :lat-lng="apartment.center" @click="handleMarker($event)" @mouseover="handleMarkerHover(apartment.id)">
+                <l-icon  class-name="someExtraClass">
+
+                  <div class="marker marker__blue" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 51"/>
+                  <div class="marker marker__purple" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 52"/>
+                  <!-- <div class="marker marker__orange" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 53"/>
+                  <div class="marker marker__green" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 54"/> -->
+                  <div class="marker marker__green" :class="apartment.center === center ? 'marker__active' : ''" v-if="apartment.transaction_type_id === 0"/>
+                </l-icon>
+                <l-popup class="sp-custom-popup" ref="popup">
+                  <img class="popup-img" v-if="apartment.pic.length > 0" :src="apartment.pic[0].link" alt="img">
+                  <div class="d-flex justify-content-between">
+                    <p class="popup-name">Mã:</p>
+                    <p class="popup-content popup-content__id">{{apartment.migrate_status + '_' + apartment.id}}</p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="popup-name">Loại BĐS:</p>
+                    <p class="popup-content popup-content__blue" v-if="apartment.transaction_type_id === 51">{{apartment.transaction_type}}</p>
+                    <p class="popup-content popup-content__purple" v-if="apartment.transaction_type_id === 52">{{apartment.transaction_type}}</p>
+                    <!-- <p class="popup-content popup-content__orange" v-if="apartment.transaction_type_id === 53">{{apartment.transaction_type}}</p>
+                    <p class="popup-content popup-content__green" v-if="apartment.transaction_type_id === 54">{{apartment.transaction_type}}</p> -->
+                    <p class="popup-content popup-content__green" v-if="apartment.transaction_type_id === 0">{{apartment.transaction_type}}</p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="popup-name">Diện tích:</p>
+                    <p class="popup-content">{{formatNumber(apartment.total_area)}} m<sup>2</sup></p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="popup-name">Tổng giá trị:</p>
+                    <p class="popup-content">{{formatNumber(apartment.total_amount)}} đ</p>
+                  </div>
+                  <p class="popup-link" @click="handleDetail(apartment)">Xem chi tiết</p>
+                </l-popup>
+              </l-marker>
+            </v-marker-cluster>
+			<l-marker v-for="(location, index) in locationLand" :key="index" :lat-lng="location.center" @click="handleMarker($event)" @mouseover="handleMarkerHover(location.id)">
+				<l-icon  class-name="someExtraClass">
+					<!-- require(`../../assets/icons/${icon}.svg`) marker_colors "@/assets/icons/ic_pin_blue.svg" -->
+					<img :id="'img_'+location.id" class="img-location-marker" :src="require(`@/assets/icons/ic_pin_${marker_colors[location.transaction_type_id]}.svg`)" :alt="location.transaction_type_id">
+					<div :id="'price_'+location.id" class="price-marker"> {{location.total_amount ? formatPrice(location.total_amount) : '-'}} </div>
+				</l-icon>
+				<l-popup class="sp-custom-popup" ref="popup">
+					<img class="popup-img" v-if="location.pic.length > 0" :src="location.pic[0].link" alt="img">
+					<div class="d-flex justify-content-between">
+						<p class="popup-name">Mã:</p>
+						<p class="popup-content popup-content__id">{{location.migrate_status + '_' + location.id}}</p>
+					</div>
+					<div class="d-flex justify-content-between">
+						<p class="popup-name">Loại BĐS:</p>
+						<p class="popup-content popup-content__blue" v-if="location.transaction_type_id === 51">{{location.transaction_type}}</p>
+						<p class="popup-content popup-content__purple" v-if="location.transaction_type_id === 52">{{location.transaction_type}}</p>
+						<!-- <p class="popup-content popup-content__orange" v-if="location.transaction_type_id === 53">{{location.transaction_type}}</p>
+						<p class="popup-content popup-content__green" v-if="location.transaction_type_id === 54">{{location.transaction_type}}</p> -->
+						<p class="popup-content popup-content__green" v-if="location.transaction_type_id === 0">{{location.transaction_type}}</p>
+					</div>
+					<div class="d-flex justify-content-between">
+						<p class="popup-name">Diện tích:</p>
+						<p class="popup-content">{{formatNumber(location.total_area)}} m<sup>2</sup></p>
+					</div>
+					<div class="d-flex justify-content-between">
+						<p class="popup-name">Tổng giá trị:</p>
+						<p class="popup-content">{{formatNumber(location.total_amount)}} đ</p>
+					</div>
+					<p class="popup-link" @click="handleDetail(location)">Xem chi tiết</p>
+				</l-popup>
+			</l-marker>
+          </l-map>
+        </div>
+      </div>
+      <PropertiesList
+        @hiddenList="handleHidden"
+        :hiddenFromMap="hiddenList"
+        :asset_generals='assetGenerals'
+        :location="location"
+        :transaction_type="transaction_type"
+        :marker_id="marker_id"
+        @action="handleTransactionType"
+        @get_center="handleCenter"
+        @show_marker="handleShowMarker"
+      />
+    </div>
+	<div v-else class="d-flex all-map" style="padding: 0; height: 93vh;margin-top: -15px;">
       <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''">
         <div id="mapid" class="layer-map">
           <l-map ref="lmap"
@@ -342,6 +495,13 @@ export default {
 		}
 	},
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		handleHidden (event) {
 			this.hiddenList = event
 			setTimeout(() => {

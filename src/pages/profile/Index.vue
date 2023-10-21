@@ -7,10 +7,16 @@
           <img v-if="currentUser.image !== '' && currentUser.image !== undefined && currentUser.image !== null" class="w-100 h-100 img__avatar" :src="currentUser.image" alt="img">
         </div>
         <p class="name__user" >{{currentUser.name !== undefined && currentUser.name !== null ? currentUser.name : '' }}</p>
-        <div class="d-flex">
+        <div v-if="!isMobile()" class="d-flex">
           <router-link :to="{name: 'profile.password'}" class="btn btn-orange btn__change-password">Thay đổi mật khẩu</router-link>
           <div class="container__input">
             <router-link type="button" class="btn btn-orange" :to="{name: 'profile.edit'}">Chỉnh sửa thông tin</router-link>
+          </div>
+        </div>
+        <div v-else class="d-flex">
+          <router-link :to="{name: 'profile.password'}" class="btn btn-orange btn__change-password">Đổi mật khẩu</router-link>
+          <div class="container__input">
+            <router-link type="button" class="btn btn-orange" :to="{name: 'profile.edit'}">Chỉnh sửa</router-link>
           </div>
         </div>
       </div>
@@ -82,7 +88,15 @@ export default {
 			}
 		}
 	},
-	methods: {}
+	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
+  }
 }
 </script>
 

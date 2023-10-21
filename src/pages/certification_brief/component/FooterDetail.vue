@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+    <div v-if="!isMobile()" class="btn-footer d-md-flex d-block justify-content-end align-items-center">
 		<button v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion">
             <img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
             Cập nhật Version
@@ -16,6 +16,38 @@
 				Chỉnh sửa
 			</button>
         <b-button-group  class="btn_group">
+                <button style="margin-right: 2px" class="btn btn-white" @click="onCancel" type="button">
+                    <img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel">Trở về
+                </button>
+                <b-dropdown v-if="isCancel && isPermission" class="btn_dropdown" right dropup>
+                    <b-dropdown-item @click.prevent="handleCancelCertificate">
+                        <div class="div_item_dropdown">
+                            <img style="height: 20px" class="img" src="@/assets/icons/ic_destroy.svg" alt="edit">
+                                Hủy hồ sơ
+                        </div>
+                    </b-dropdown-item>
+                </b-dropdown>
+        </b-button-group>
+	</div>
+	<div v-else class="btn-footer row" style="margin: 0;justify-content: space-around;padding-top: 0;">
+		<!--hiện full -->
+		<button v-if="isPermission && isGrossCheck" class=" col-6 btn btn-white" @click="viewDetailAppraise" style="width: unset;margin: 0;padding: 0;">
+            <img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit">
+            Cross check
+        </button>
+		<button v-if="isPermission && checkVersion.length > 0" class="col-6 btn btn-white" @click="viewAppraiseListVersion" style="width: unset;margin: 0;padding-left: 10px;">
+            <img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
+            Cập nhật Version
+        </button>
+        
+        <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn col-6" :class="target.css" @click="handleFooterAccept(target)" style="width: unset;margin: 0;">
+			<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit">{{target.description}}
+		</button>
+         <button v-if="editForm && isPermission" class="btn btn-white col-6" @click.prevent="handleEdit(idData)" style="width: unset;margin: 0;margin-top: 10px;">
+				<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
+				Chỉnh sửa
+			</button>
+        <b-button-group  class="btn_group col-6" style="width: unset;margin: 0;padding: 0;">
                 <button style="margin-right: 2px" class="btn btn-white" @click="onCancel" type="button">
                     <img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel">Trở về
                 </button>
@@ -77,6 +109,13 @@ export default {
 		}
 	},
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		getTargetDescription () {
 			let data = []
 			if (this.isPermission) {

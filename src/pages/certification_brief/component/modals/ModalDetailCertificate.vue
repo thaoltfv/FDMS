@@ -3,14 +3,14 @@
 			<div
 				class="modal-detail d-flex justify-content-center align-items-center"
 				@click.self="handleCancel">
-				<div class="card">
-					<div class="container-title">
+				<div class="card" :style="isMobile() ? {'margin-top':'-55px', 'max-height': '94vh', 'min-height': '94vh'} : {}">
+					<div class="container-title" :style="isMobile() ? {'padding-bottom':'0'} : {}">
 						<div class="d-flex justify-content-between">
 							<h2 class="title">Thông tin chung</h2>
 							<img height="35px" @click="handleCancel" class="cancel" src="../../../../assets/icons/ic_cancel_2.svg" alt="">
 						</div>
 					</div>
-					<div class="contain-detail">
+					<div class="contain-detail" :style="isMobile() ? {'padding-top':'0'} : {}">
 
 						<div class="detail_certificate_1 col-12 mb-2">
 							<div class="col-12 d-flex mb-2 justify-content-between">
@@ -96,19 +96,25 @@
 								<button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
 							</div>
 						</div>
-						<div v-else class="row" style="padding: 0;    margin-bottom: 20px;">
+						<div v-else class="row" style="padding: 0;    margin-bottom: 40px;">
 							<div style="cursor:pointer" @click="handleDetail(idData)" class="btn-edit col-12">
 								<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
 								<span class="color_content content_btn_edit">Xem chi tiết</span>
 							</div>
-							<div class="button-contain row">
+							<div class="button-contain row" style="justify-content: space-around;position: fixed;bottom: 70px;">
 								<div class="col-6" style="padding: 0">
-								<button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
-									<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit">{{target.description}}
-								</button>
-							</div><div class="col-6" style="margin-top: 8px; padding-left: 45px;">
-								<button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
-							</div>
+									<button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+										<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
+										<span style="font-size: 15px;">{{target.description}}</span>
+									</button>
+								</div>
+								<div class="col-6" style="">
+									<button class="btn btn-white" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
+										<span style="font-size: 15px;">Trở lại</span>
+									</button>
+								</div>
+								<!-- <div class="col-3" style="padding: 0"></div>
+								<div class="col-3" style="padding: 0"></div> -->
 							</div>
 						</div>
 					</div>

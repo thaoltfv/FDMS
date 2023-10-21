@@ -56,7 +56,7 @@
 				/>
 		</div>
 	</div>
-	<div v-else class="main-wrapper-new">
+	<div v-else class="main-wrapper-new" style="margin: 0;padding-top:0;">
 		<div slot="tabBarExtraContent">
 			<div class="container-button appraise-container">
 				<div class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center">
@@ -91,7 +91,7 @@
 				
 			</div>
 		</div>
-		<div class="container-fluid appraise-container mt-3">
+		<div class="container-fluid appraise-container mt-3" style="margin-top: 0!important;">
 			<Tables
 						:listCertificates="listCertificatesAll"
 						:isLoading="isLoading"
@@ -157,6 +157,7 @@ export default {
 				data: [
 					{ label: 'Mới', value: '1', class: 'bg-info' },
 					{ label: 'Đang thẩm định', value: '2', class: 'bg-primary' },
+					{ label: 'Đang kiểm soát', value: '6', class: 'bg-control' },
 					{ label: 'Đang duyệt', value: '3', class: 'bg-warning' },
 					{ label: 'Hoàn thành', value: '4', class: 'bg-success' },
 					{ label: 'Hủy', value: '5', class: 'bg-secondary' }

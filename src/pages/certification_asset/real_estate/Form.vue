@@ -1,5 +1,5 @@
 <template>
-  <div class="certification-asset">
+  <div v-if="!isMobile()" class="certification-asset">
     <form-wizard
       :key="key_render_formwizard"
       ref="wizard"
@@ -282,6 +282,98 @@
       </tab-content>
     </form-wizard>
     <ModalNotificationAppraisal
+      v-if="showConfirmEdit"
+      @cancel="showConfirmEdit = false"
+      v-bind:notification="messageConfirm"
+      @action="confirmEditStep"
+    />
+		<ModalNotificationAppraisal
+			v-if="openCancelAppraisal"
+			@cancel="openCancelAppraisal = false"
+			v-bind:notification="message"
+			@action="handleActionCancelAppraise"
+		/>
+	<ModalNotificationAppraisal
+      v-if="showConfirmDuplicate"
+      @cancel="showConfirmDuplicate = false"
+      :notification="'Bạn có muốn nhân bản tài sản thẩm định không'"
+      @action="actionDuplicate"
+    />
+  </div>
+  <div v-else class="certification-asset" style="margin-bottom: 140px;">
+	<ValidationObserver
+          tag="div"
+          ref="step_1"
+          @submit.prevent="validateSubmitStep1"
+        >
+          <Step1
+						:isEdit="isEdit"
+            :data="form.step_1"
+            :key="key_step_1"
+            :propertyTypes="propertyTypes"
+            :businesses="businesses"
+            :conditions="conditions"
+            :socialSecurities="socialSecurities"
+            :fengshuies="fengshuies"
+            :zones="zones"
+            :provinces="provinces"
+            :districts="districts"
+            :wards="wards"
+            :streets="streets"
+            :distances="distances"
+            :materials="materials"
+            :full_address="full_address"
+            :full_address_street="full_address_street"
+            :imageDescriptions="imageDescriptions"
+            :addressName="addressName"
+            @getDistrict="changeProvince"
+            @getWardStreet="changeDistrict"
+            @getWard="changeWard"
+            @changeStreet="changeStreet"
+            @changeDistance="changeDistance"
+            @getAssetType="changeAssetType"
+            @addTurning="addTurning"
+            @deleteTurning="deleteTurning"
+            @changeRoadDistance="changeRoadDistance"
+            @changeRoadAlley="changeRoadAlley"
+            @uploadImage="uploadImage"
+            @changeDescriptionFrontSide="changeDescriptionFrontSide"
+          />
+          <!-- <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+            <div class="d-lg-flex d-block button-contain">
+              <button @click.prevent="handleChangeBack" class="btn btn-white text-nowrap" >
+                <img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Trở lại
+              </button>
+              <button class="btn btn-white btn-orange text-nowrap" :class="{ 'btn_loading disabled': isSubmit }" @click.prevent="validateSubmitStep1" type="submit">
+                <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
+              </button>
+							<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+								<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+							</button>
+            </div>
+          </div> -->
+		  <div class="btn-footer d-md-flex d-block" style="bottom: 60px;">
+				<div class="d-lg-flex d-block button-contain row" style="justify-content: space-around;display: flex!important;">
+					<div class="col-6">
+					<button @click.prevent="handleChangeBack" class="btn btn-white text-nowrap">
+						<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save">
+						Trở lại
+					</button>
+					</div>
+					<div class="col-6">
+					<button :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="validateSubmitStep1" type="submit">
+						<img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
+					</button>
+					</div>
+					<div class="col-12">
+					<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+						<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+					</button>
+					</div>
+				</div>
+			</div>
+        </ValidationObserver>
+	<ModalNotificationAppraisal
       v-if="showConfirmEdit"
       @cancel="showConfirmEdit = false"
       v-bind:notification="messageConfirm"
@@ -767,6 +859,13 @@ export default {
 		this.getProvinces()
 	},
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		async handleChange (prevIndex, nextIndex) {
 			if (nextIndex === 5 && this.isAutomation) {
 				const response = await CertificateAsset.getAssetAutomationStep6(this.idData)
@@ -905,15 +1004,19 @@ export default {
 					position: 'top-right',
 					duration: 3000
 				})
-				this.$refs.wizard.maxStep = 1
-				this.$refs.wizard.tabs.forEach((tab, index) => {
-					if (index > 1) {
-						tab.checked = false
-					}
-				})
-				this.key_step_2 += 1
-				await this.$refs.wizard.nextTab()
-				this.status_text = 'Mới'
+				if (!this.isMobile()){
+					this.$refs.wizard.maxStep = 1
+					this.$refs.wizard.tabs.forEach((tab, index) => {
+						if (index > 1) {
+							tab.checked = false
+						}
+					})
+					this.key_step_2 += 1
+					await this.$refs.wizard.nextTab()
+					this.status_text = 'Mới'
+				} else {
+					await this.$router.push({name: 'certification_asset.index'}).catch(_ => {})
+				}
 			} else if (res.error) {
 				this.isSubmit = false
 				this.$toast.open({

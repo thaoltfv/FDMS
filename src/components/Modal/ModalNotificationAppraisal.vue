@@ -14,12 +14,13 @@
              alt="icon">
       </div>
 
-      <div class="card-body">
-        <p style="font-size: 18px;white-space: pre-line" v-html="notification">
+      <div class="card-body" :style="isMobile() ? {'padding': '0'} : {}">
+        <p :style="isMobile() ? {'margin-bottom':'0'} : {}" style="font-size: 18px;white-space: pre-line" v-html="notification">
         </p>
 
-        <div class="btn__group">
+        <div class="btn__group" :style="isMobile() ? {'margin-bottom':'10px'} : {}">
           <button
+          :style="isMobile() ? {'margin-top':'10px'} : {}"
             class="btn btn-white font-weight-normal font-weight-bold"
             @click.prevent="handleCancel"
             v-text="$t('popup_btn_no')"/>
@@ -38,6 +39,13 @@ export default {
 	name: 'ModalNotificationCustomer',
 	props: ['notification'],
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},

@@ -29,7 +29,7 @@
         </div>
 
         <div
-          v-if="hasChild(button)"
+          v-if="hasChild(button) && onlyClick == true"
           :class="{
             ['btn-super-parent']: button.isActive,
             ['btn-class-showable']: showable,
@@ -109,7 +109,8 @@ export default {
 	data () {
 		return {
       showable: false,
-      enableWatch: true
+      enableWatch: true,
+      onlyClick: false,
 		}
 	},
   mounted () {
@@ -133,8 +134,41 @@ export default {
               console.log('vô 4')
               e.isActive = true
             }
+            //TSTĐ
+            if (i.path && i.path.name === 'certification_asset.index' 
+            && (this.$route.name === 'certification_asset.create' 
+            || this.$route.name === 'certification_asset.detail'
+            || this.$route.name === 'certification_asset.edit'
+            || this.$route.name === 'certification_asset.apartment.create' 
+            || this.$route.name === 'certification_asset.apartment.detail'
+            || this.$route.name === 'certification_asset.apartment.edit')){
+              console.log('vô 5')
+              e.isActive = true
+            }
+            if (i.path && i.path.name === 'certification_personal_property.index' 
+            && (this.$route.name === 'certification_asset.other_purpose.create' 
+            || this.$route.name === 'certification_asset.other_purpose.detail'
+            || this.$route.name === 'certification_asset.other_purpose.edit'
+            || this.$route.name === 'certification_asset.vehicle.create' 
+            || this.$route.name === 'certification_asset.vehicle.detail'
+            || this.$route.name === 'certification_asset.vehicle.edit'
+            || this.$route.name === 'certification_asset.machine.create' 
+            || this.$route.name === 'certification_asset.machine.detail'
+            || this.$route.name === 'certification_asset.machine.edit')){
+              console.log('vô 6')
+              e.isActive = true
+            }
           })
         }
+        //HSTĐ
+        if (e.path && e.path.name === 'certification_brief.index' 
+        && (this.$route.name === 'certification_brief.create' 
+        || this.$route.name === 'certification_brief.detail'
+        || this.$route.name === 'certification_brief.edit')){
+          console.log('vô 7')
+          e.isActive = true
+        }
+        
       })
     }, 5000)
     
@@ -213,12 +247,14 @@ export default {
       return Boolean((button.childs || []).length)
     },
     handleChildClick(button) {
+      this.onlyClick = false
       this.updateValue(button);
       this.toggleClass();
     },
     handleLabelClick(button) {
       if (!this.showable || button.isActive) {
         this.toggleClass();
+        this.onlyClick = true
       }
 
       this.updateValue(button, this.hasChild(button));

@@ -8,7 +8,7 @@
           placeholder="Tìm kiếm nhanh"
           vid="search"
            />
-          <b-tooltip placement="rightbottom" target="search_input">
+          <b-tooltip v-if="!isMobile()" placement="rightbottom" target="search_input">
               "!" - Tìm theo số hợp đồng hoặc số chứng thư <br/>
               "#" - Tìm theo mã TSTD <br/>
               "@" - Tìm theo tên Người tạo <br/>
@@ -39,6 +39,13 @@ export default {
 		}
 	},
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		search () {
 			this.$emit('filter-changed', this.filter)
 		},

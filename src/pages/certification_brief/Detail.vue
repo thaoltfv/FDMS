@@ -1,6 +1,6 @@
 <template>
-	<div class="detail_certification_brief row">
-		<div class="col-12">
+	<div class="detail_certification_brief row" :style="isMobile() ? {'margin':'0'} : {}">
+		<div class="col-12" :style="isMobile() ? {'padding':'0'} : {}">
 			<div class="card">
 					<div class="card-title">
 							<div class="d-flex justify-content-between align-items-center">
@@ -108,7 +108,7 @@
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer"><img src="@/assets/icons/ic_log_history.svg" alt="history"> </button>
 		</div>
-		<a-drawer
+		<a-drawer v-if="!isMobile()"
 			width="400"
 			title="Lịch sử hoạt động"
 			placement="right"
@@ -128,7 +128,27 @@
 				</a-timeline-item>
 			</a-timeline>
 		</a-drawer>
-		<div v-if="(form.status !== 1 || form.general_asset.length > 0) ? true : false " class="col-12">
+		<a-drawer v-else
+			width="100%"
+			title="Lịch sử hoạt động"
+			placement="right"
+			:visible="visible"
+			@close="onClose"
+		>
+			<a-timeline style="padding-bottom: 10px;">
+				<a-timeline-item  v-for="(item, index) in historyList" :key="index"  color="red">
+					<template #dot>
+						<img class="dot-image" :src="item.causer && item.causer.image ? item.causer.image : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'" style="width: 2em" />
+					</template>
+					<p><strong >{{ item.causer && item.causer.name ? item.causer.name : 'Không xác	định' }}</strong></p>
+					<p> {{ item.description }} </p>
+					<p :class="`${getHistoryTextColor[index]}`" v-if="item.properties.reason_id && item.reason_description"> Lí do : {{ item.reason_description }} </p>
+					<p :class="`${getHistoryTextColor[index]}`" v-if="item.properties.note"> Ghi chú : {{item.properties.note}} </p>
+					<p> {{formatDateTime(item.updated_at)}} </p>
+				</a-timeline-item>
+			</a-timeline>
+		</a-drawer>
+		<div v-if="(form.status !== 1 || form.general_asset.length > 0) ? true : false " class="col-12" :style="isMobile() ? {'padding':'0'} : {}">
 			<div class="card">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
@@ -198,7 +218,7 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="form.general_asset.length > 0 && printConfig" class="col-12">
+		<div v-if="form.general_asset.length > 0 && printConfig" class="col-12" :style="isMobile() ? {'padding':'0'} : {}">
 			<div class="d-flex flex-column flex-lg-row justify-content-around align-items-center">
 				<div class="card w-100 mr-lg-2">
 					<div class="card-title text-center">
@@ -433,8 +453,8 @@
 			</div>
 		</div>
 
-		<div v-if="form.general_asset.length > 0 || form.status === 1 || form.status === 2" class="col-12">
-			<div class="card">
+		<div v-if="form.general_asset.length > 0 || form.status === 1 || form.status === 2" class="col-12" :style="isMobile() ? {'padding':'0'} : {}">
+			<div class="card" :style="isMobile() ? {'margin-bottom':'150px'} : {}">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tài liệu đính kèm</h3>
@@ -464,6 +484,7 @@
 			</div>
 		</div>
 		<Footer
+			:style="isMobile() ? {'bottom':'60px'} : {}"
 			:key="form.status + '_' + form.sub_status"
 			:form="form"
 			:jsonConfig="jsonConfig"
@@ -2068,6 +2089,13 @@ export default {
 				}
 			}
 			)
+		},
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
 		}
 	},
 	beforeMount () {

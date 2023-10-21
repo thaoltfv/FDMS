@@ -1,5 +1,5 @@
 <template>
-  <div class="checkbox-group">
+  <div v-if="!isMobile()" class="checkbox-group">
     <a-checkbox-group :value="value" @change="handleChange">
       <a-checkbox
         v-for="(item, index) in options.data"
@@ -10,6 +10,32 @@
         <span class="txt">{{ item[options.label] }}</span>
       </a-checkbox>
     </a-checkbox-group>
+  </div>
+  <div v-else>
+    <!-- <div class="btn-filter">
+			<button class="btn btn-orange btn-filter" @click="showDrawer"><img src="@/assets/icons/ic_log_history.svg" alt="history"> </button>
+		</div> -->
+		<div class="card" style="border: 0;">
+      <div class="box_fixRight">
+        <div class="btn-filter">
+			<button class="btn btn-orange btn-filter" @click="showDrawer"><img src="@/assets/icons/ic_filter.svg" alt="history"> </button>
+		</div>
+      <div class="box_content">
+        <a-checkbox-group :value="value" @change="handleChange">
+          <div v-for="(item, index) in options.data"
+            :key="index" style="padding-bottom: 5px;padding-top: 5px;">
+          <a-checkbox
+            
+            :value="item[options.value]"
+            
+          >
+            <span :class="item.class" style="color: white; font-weight: bold;">{{ item[options.label] }}</span>
+          </a-checkbox>
+          </div>
+        </a-checkbox-group>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -39,10 +65,28 @@ export default {
 			default: () => []
 		}
 	},
+  data () {
+		return {
+      visible: false
+    }
+  },
 
 	methods: {
+    onClose () {
+			this.visible = false
+		},
+    showDrawer () {
+			this.visible = true
+		},
 		handleChange (value) {
 			this.$emit('change', value)
+		},
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
 		}
 	}
 }
@@ -192,5 +236,55 @@ export default {
 
 /deep/ .bg-secondary .ant-checkbox-checked .ant-checkbox-inner::after {
   border-color: #6e7582 !important;
+}
+
+.btn {
+    &-filter {
+      position: fixed;
+      right: 0;
+      top: 130px;
+      z-index: 100;
+			border-radius: 5px 0 0 5px;
+			padding: 0.5rem 0.3rem
+    }
+  }
+
+  .box_fixRight {
+  position: fixed;
+  top: 170px;
+  right: -100%;
+  width: auto;
+  transition: all 0.2s ease-in-out 0s;
+  z-index: 100;
+}
+.box_fixRight .box_content {
+  background: #fff;
+  padding: 10px;
+  box-shadow: 10px 0px 30px #888888;
+  border-radius: 10px 0 0 10px;
+}
+.box_fixRight .box_content .item {
+  display: block;
+  padding: 13px 10px 13px 47px;
+  color: #111;
+}
+.box_fixRight .box_content .item:hover {
+  color: #db0000;
+}
+// .box_fixRight .box_content .item.item_3 {
+//   background: url(../assets/img/blackberry-messenger.png) no-repeat left;
+//   background-size: 35px 35px;
+// }
+// .box_fixRight .box_content .item.item_2 {
+//   background: url(../assets/img/address-1.png) no-repeat left;
+//   background-size: 35px 35px;
+// }
+// .box_fixRight .box_content .item.item_1 {
+//   background: url(../assets/img/contacts-1.png) no-repeat left;
+//   background-size: 35px 35px;
+// }
+.box_fixRight:hover {
+  right: 0;
+  transition: all 0.2s ease-in-out 0s;
 }
 </style>

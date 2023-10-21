@@ -219,7 +219,7 @@
       </div>
     </div>
     <div class="col-md-12 col-lg-6">
-      <div class="card">
+      <div class="card" :style="isMobile() ? {'margin-bottom':'70px'} : {}">
         <div class="card-title">
           <div class="d-flex justify-content-between align-items-center">
             <h3 class="title">Tổ thẩm định</h3>
@@ -593,6 +593,13 @@ export default {
     console.log('data', this.data)
 	},
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		disabledDate (current) {
 			if (
 				this.data.document_date !== '' &&

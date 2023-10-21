@@ -6,7 +6,7 @@
         <div class="loading" :class="{'loading__true': isSubmit}">
           <a-spin />
         </div>
-        <div class="card">
+        <div class="card" :style="isMobile() ? {'margin-top':'-55px', 'max-height': '94vh', 'min-height': '94vh'} : {}">
           <div class="container-title">
             <div class="d-flex justify-content-between align-items-center">
               <h2 class="title">Thông tin chi tiết</h2>
@@ -282,6 +282,13 @@ export default {
 		this.findFrontSide()
 	},
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		async getPrint (id) {
 			const resp = await WareHouse.getPrintPdf(id)
 			this.printDetail = resp.data.url
