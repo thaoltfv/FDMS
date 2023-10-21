@@ -781,16 +781,18 @@ export default {
 				if (bindDataStep.step >= 6) {
 					this.step_active = 5
 				} else this.step_active = bindDataStep.step
-
-				await this.$refs.wizard.tabs.forEach((tab, index) => {
-					if (index <= this.step_active) {
-						tab.checked = true
+				if (!this.isMobile()){
+					await this.$refs.wizard.tabs.forEach((tab, index) => {
+						if (index <= this.step_active) {
+							tab.checked = true
+						}
+					})
+				
+					if (this.step_active === 7) {
+						await this.$refs.wizard.changeTab(0, 5)
+					} else {
+						await this.$refs.wizard.changeTab(0, this.step_active)
 					}
-				})
-				if (this.step_active === 7) {
-					await this.$refs.wizard.changeTab(0, 5)
-				} else {
-					await this.$refs.wizard.changeTab(0, this.step_active)
 				}
 			}
 			// if (this.$route.meta['step7']) { this.form.step_7 = Object.assign(this.form.step_7, { ...this.$route.meta['step7'] }) }
@@ -814,8 +816,10 @@ export default {
 			this.key_step_4 += 1
 			this.key_step_5 += 1
 			this.key_step_6 += 1
-			if (this.$route.params.step || this.$route.params.step === 0) {
-				await this.$refs.wizard.changeTab(0, this.$route.params.step)
+			if (!this.isMobile()){
+				if (this.$route.params.step || this.$route.params.step === 0) {
+					await this.$refs.wizard.changeTab(0, this.$route.params.step)
+				}
 			}
 			if (this.step_active < 5) {
 				// Remove the automated selection of comparison asset.
