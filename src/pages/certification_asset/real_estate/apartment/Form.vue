@@ -1,5 +1,5 @@
 <template>
-  <div class="certification-asset">
+  <div v-if="!isMobile()" class="certification-asset">
     <form-wizard
       :key="key_render_formwizard"
       ref="wizard"
@@ -174,6 +174,81 @@
       <tab-content title="Giá trị tài sản" icon="">
       </tab-content>
     </form-wizard>
+    <ModalNotificationAppraisal
+      v-if="showConfirmEdit"
+      @cancel="showConfirmEdit = false"
+      v-bind:notification="messageConfirm"
+      @action="confirmEditStep"
+    />
+		<ModalNotificationAppraisal
+      v-if="showConfirmDuplicate"
+      @cancel="showConfirmDuplicate = false"
+      :notification="'Bạn có muốn nhân bản tài sản thẩm định không'"
+      @action="actionDuplicate"
+    />
+		<ModalNotificationAppraisal
+			v-if="openCancelAppraisal"
+			@cancel="openCancelAppraisal = false"
+			v-bind:notification="message"
+			@action="handleActionCancelAppraise"
+		/>
+  </div>
+  <div v-else class="certification-asset" style="margin-bottom: 140px;">
+
+        <ValidationObserver
+          tag="div"
+          ref="step_1"
+          @submit.prevent="validateSubmitStep1"
+        >
+          <Step1
+			:isEdit="isEdit"
+			:data="form.step_1"
+			:key="key_step_1"
+			:propertyTypes="propertyTypes"
+			:provinces="provinces"
+			:districts="districts"
+			:wards="wards"
+			:streets="streets"
+			:full_address="full_address"
+			:projects="projects"
+			:blocks="blocks"
+			:floors="floors"
+			:apartments="apartments"
+			:directions="directions"
+			:furniture_list="furniture_list"
+			:basic_utilities="basic_utilities"
+			:imageDescriptions="imageDescriptions"
+			@getDistrict="changeProvince"
+			@getWardStreet="changeDistrict"
+			@getWard="changeWard"
+			@changeStreet="changeStreet"
+			@changeDistance="changeDistance"
+			@getAssetType="changeAssetType"
+			@handleChangeProject="handleChangeProject"
+			@handleChangeBlock="handleChangeBlock"
+			@handleChangeFloor="handleChangeFloor"
+          />
+		  <div class="btn-footer d-md-flex d-block" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
+				<div class="d-lg-flex d-block button-contain row" style="justify-content: space-around;display: flex!important;">
+					<div class="col-6">
+					<button @click.prevent="handleChangeBack" class="btn btn-white text-nowrap">
+						<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save">
+						Trở lại
+					</button>
+					</div>
+					<div class="col-6">
+					<button :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="validateSubmitStep1" type="submit">
+						<img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
+					</button>
+					</div>
+					<div class="col-12">
+					<button v-if="isEdit && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+						<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+					</button>
+					</div>
+				</div>
+			</div>
+        </ValidationObserver>
     <ModalNotificationAppraisal
       v-if="showConfirmEdit"
       @cancel="showConfirmEdit = false"
@@ -582,6 +657,13 @@ export default {
 		this.getProvinces()
 	},
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		async handleChange (prevIndex, nextIndex) {
 			if (nextIndex === 3 && this.isAutomation) {
 				const response = await CertificateAsset.getAutomationApartment(this.idData)

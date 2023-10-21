@@ -37,7 +37,7 @@
                :keyboard="false">
         <div class="row m-2">
           <label class="form-label text-capitalize d-flex align-items-center mb-2">{{ $t('html_editor') }}</label>
-          <textarea style="min-height: 50vh"
+          <textarea style="min-height: 40vh"
                     class="form-control"
                     :max-length="maxLength"
                     v-model="htmlContent"></textarea>

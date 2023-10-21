@@ -352,7 +352,7 @@
 							</button>
             </div>
           </div> -->
-		  <div class="btn-footer d-md-flex d-block" style="bottom: 60px;">
+		  <div class="btn-footer d-md-flex d-block" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
 				<div class="d-lg-flex d-block button-contain row" style="justify-content: space-around;display: flex!important;">
 					<div class="col-6">
 					<button @click.prevent="handleChangeBack" class="btn btn-white text-nowrap">

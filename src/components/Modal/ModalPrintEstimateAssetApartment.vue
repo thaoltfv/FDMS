@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div v-if="!isMobile()"
     class="modal-delete d-flex justify-content-center align-items-center"
     @click.self="handleCancel">
     <div class="card">
@@ -9,6 +9,165 @@
              alt="icon">
       </div>
       <div class="card-body" id="printBody">
+        <div class="text-right" style="color: #000">Mã sơ bộ: {{data.id? data.id : ''}}</div>
+        <div class="title__property text-center">KẾT QUẢ ƯỚC TÍNH SƠ BỘ</div>
+        <div class="w-100">
+          <div class="card mb-3">
+            <div class="card-header vendorListHeading">Mô tả tài sản</div>
+              <div class="card-body">
+                <div class="container__description container__description--apartment">
+                  <div class="data-row data-row--apartment">
+                    <div class="title">Chung cư:</div>
+                    <div class="content">{{data.project.name}}</div>
+                  </div>
+                </div>
+                <div class="container__description container__description--apartment">
+                  <div class="data-row data-row--apartment">
+                    <p class="title">Tầng:</p>
+                    <p class="content">{{data.apartment_asset_properties.floor ? data.apartment_asset_properties.floor.name : ''}}</p>
+                  </div>
+                  <div class="data-row data-row--apartment">
+                    <p class="title">Block (khu):</p>
+                    <p class="content">{{data.apartment_asset_properties.block ? data.apartment_asset_properties.block.name : ''}}</p>
+                  </div>
+                </div>
+                <div class="container__description container__description--apartment">
+                  <div class="data-row data-row--apartment">
+                    <p class="title">Diện tích:</p>
+                    <p class="content">{{data.apartment_asset_properties.area ? formatArea(data.apartment_asset_properties.area) : ''}}m<sup style="font-size: 11px">2</sup></p>
+                  </div>
+                  <div class="data-row data-row--apartment">
+                    <p class="title">Số phòng ngủ:</p>
+                    <p class="content">{{data.apartment_asset_properties.bedroom_num}}</p>
+                  </div>
+                </div>
+                <div class="container__description container__description--apartment">
+                  <div class="data-row data-row--apartment data-row--address">
+                    <p class="title ">Địa chỉ:</p>
+                    <p class="content content--full-address">{{data.full_address}}</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="main-map">
+            <div class="layer-map">
+              <l-map
+                ref="lmap"
+                :zoom="zoom"
+                :center="[data.coordinates.split(',')[0], data.coordinates.split(',')[1]]"
+                :options="{zoomControl: false}"
+                :maxZoom="20"
+              >
+                <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
+                <l-control-zoom position="bottomright"></l-control-zoom>
+                <l-marker :lat-lng="[data.coordinates.split(',')[0], data.coordinates.split(',')[1]]">
+                  <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
+                            <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
+                          </l-icon>
+                  <!-- <l-tooltip :options="{ permanent: true, interactive: true }">Vị trí tài sản</l-tooltip> -->
+                </l-marker>
+              </l-map>
+            </div>
+          </div>
+          <!-- <div class="card mb-3" v-if="data.assets && data.assets.length > 0">
+            <table>
+              <thead class="vendorListHeading p-0">
+              <tr>
+                <th class="text-center">Quyền sử dụng đất</th>
+                <th class="text-center">Loại đất</th>
+                <th class="text-center">Diện tích</th>
+                <th class="text-center">Đơn giá</th>
+                <th class="text-center">Thành tiền</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item, index) in data.assets" :key="'detail' + index">
+                <td class="text-center">{{item.description}}</td>
+                <td class="text-center">{{formatSentenceCase(item.land_type_description)}}</td>
+                <td class="text-right">{{formatArea(item.area)}}m<sup style="font-size: 11px">2</sup></td>
+                <td class="text-right">{{format(item.price) + ' đ'}}</td>
+                <td class="text-right">{{format(item.total) + ' đ'}}</td>
+              </tr>
+              <tr class="summary">
+                <td class="text-center">Tổng cộng:</td>
+                <td class="text-right"></td>
+                <td class="text-right">{{formatArea(data.land_area)}}m<sup style="font-size: 11px">2</sup></td>
+                <td class="text-right"></td>
+                <td class="text-right">{{format(data.land_total) + ' đ'}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card mb-3" v-if="data.tangibles && data.tangibles.length > 0">
+            <table>
+              <thead class="vendorListHeading p-0">
+              <tr>
+                <th class="text-center">Loại công trình</th>
+                <th class="text-center">Diện tích sàn xây dựng</th>
+                <th class="text-center">% Chất lượng còn lại</th>
+                <th class="text-center">Đơn giá</th>
+                <th class="text-center">Thành tiền</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item, index) in data.tangibles" :key="'building'+index">
+                <td class="text-center">
+                  <div class="text-center">{{item.name ? item.name : ''}}</div>
+                </td>
+                <td class="text-center">{{formatArea(item.area)}}m<sup style="font-size: 11px">2</sup></td>
+                <td class="text-center">{{item.clcl + '  %'}}</td>
+                <td class="text-right">{{format(item.price ) + ' đ'}}</td>
+                <td class="text-right">{{format(item.total) + ' đ'}}</td>
+              </tr>
+              <tr class="summary">
+                <td class="text-center">Tổng cộng:</td>
+                <td class="text-center">{{formatArea(data.tangible_area)}}m<sup style="font-size: 11px">2</sup></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-right">{{format(data.tangible_total) + ' đ'}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div> -->
+          <div class="text-danger mb-2">
+            *Kết quả ước tính sơ bộ chỉ có giá trị tham khảo và có thể thay đổi sau khi kiểm tra hiện trạng tài sản thực tế
+          </div>
+          <div style="break-inside: avoid">
+          <div class="result-apartment">
+            <div class="text-right result-total">ĐƠN GIÁ</div>
+            <div class="text-right result-total-amount" style="text-align: right!important;">{{format(data.unit_price)}} VND/M<sup>2</sup></div>
+          </div>
+          <div class="result-apartment">
+            <div class="text-right result-total">TỔNG GIÁ TRỊ TÀI SẢN</div>
+            <div class="text-right result-total-amount" style="text-align: right!important;">{{format(data.total)}} VND</div>
+          </div>
+          <div class="report-info">
+            <div class="report-label">Người ước tính:</div>
+            <div class="" style="text-align: right!important;">{{data.created_by ? data.created_by.name : ''}}</div>
+          </div>
+          <div class="report-info">
+            <div class="report-label">Thời điểm:</div>
+            <div class="report-value" style="text-align: right!important;">{{data.updated_at ? formatDate(data.updated_at) : ''}}</div>
+          </div>
+        </div>
+        </div>
+       </div>
+      <div class="card-footer footer-print">
+        <button v-print="'printBody'" @click="statusPrint" class="btn btn-orange">In</button>
+      </div>
+    </div>
+  </div>
+  <div v-else
+    class="modal-delete" style="padding: 0;"
+    @click.self="handleCancel">
+    <div class="card">
+      <div class="card-header d-flex justify-content-end align-items-center">
+        <img @click="handleCancel"
+             src="../../assets/icons/ic_cancel-1.svg"
+             alt="icon">
+      </div>
+      <div class="card-body" id="printBody" style="padding: 10px;">
         <div class="text-right" style="color: #000">Mã sơ bộ: {{data.id? data.id : ''}}</div>
         <div class="title__property text-center">KẾT QUẢ ƯỚC TÍNH SƠ BỘ</div>
         <div class="w-100">
@@ -153,7 +312,7 @@
         </div>
         </div>
        </div>
-      <div class="card-footer footer-print">
+      <div class="card-footer footer-print" style="margin-top: 30px;">
         <button v-print="'printBody'" @click="statusPrint" class="btn btn-orange">In</button>
       </div>
     </div>
@@ -207,6 +366,13 @@ export default {
 		this.getCreatedAt()
 	},
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		formatSentenceCase (phrase) {
 			let text = phrase.toLowerCase()
 			return text.charAt(0).toUpperCase() + text.slice(1)
@@ -382,7 +548,7 @@ export default {
     }
 
     .report-value {
-      width: 80%;
+      // width: 80%;
       display: inline-block;
       box-sizing: border-box;
       font-weight: bold;

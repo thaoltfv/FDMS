@@ -1,6 +1,6 @@
 <template>
-	<div class="container-fluid">
-		<div class="certification-asset">
+	<div class="container-fluid" :style="isMobile() ? {'margin':'0', 'padding': '0'} : {}">
+		<div v-if="!isMobile()" class="certification-asset">
 			<form-wizard
 				:key="key_render_formwizard"
 				ref="wizard"
@@ -307,6 +307,181 @@
 					</ValidationObserver>
 				</tab-content>
 			</form-wizard>
+			<ModalNotificationAppraisal
+				v-if="openCancelAppraisal"
+				@cancel="openCancelAppraisal = false"
+				v-bind:notification="message"
+				@action="handleActionCancelAppraise"
+			/>
+			<ModalNotificationAppraisal
+				v-if="showConfirmEdit"
+				@cancel="showConfirmEdit = false"
+				v-bind:notification="messageConfirm"
+				@action="confirmEditStep"
+			/>
+			<ModalNotificationAppraisal
+					v-if="showConfirmDuplicate"
+					@cancel="showConfirmDuplicate = false"
+					:notification="'Bạn có muốn nhân bản tài sản thẩm định không'"
+					@action="actionDuplicate"
+				/>
+			<ModalPrintEstimateAssetApartment
+				v-if="openPrint"
+				@cancel="openPrint = false"
+				:data="reportData"
+			/>
+		</div>
+		<div v-else class="certification-asset" style="margin-bottom: 190px;">
+			<div>
+				<button class="btn btn-orange btn-print btn-extra" @click="handlePrint">
+					<!-- <font-awesome-icon icon="print" /> -->
+					<img src="@/assets/icons/ic_printer_white.svg" alt="history">
+				</button>
+				<button class="btn btn-orange btn-history btn-extra" @click="showHistoryDrawerDrawer">
+					<img src="@/assets/icons/ic_log_history.svg" alt="history">
+				</button>
+				<button class="btn btn-orange btn-additional btn-extra" @click="showAdditionalDrawer">
+					<img src="@/assets/icons/ic_category.svg" alt="additional">
+				</button>
+				<a-drawer
+					width="100%"
+					title="Lịch sử hoạt động"
+					placement="right"
+					:visible="visibleHistoryDrawer"
+					@close="onHistoryDrawerClose"
+					closeIcon="true"
+				>
+					<a-timeline>
+						<a-timeline-item  v-for="(item, index) in historyList" :key="index"  color="green">
+							<template #dot>
+								<img class="dot-image" :src="item.causer && item.causer.image ? item.causer.image : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'" style="width: 2em" />
+							</template>
+							<p><strong >{{ item.causer && item.causer.name ? item.causer.name : 'Không xác	định' }}</strong></p>
+							<p> {{ item.description }} </p>
+							<p> {{formatDateTime(item.updated_at)}} </p>
+						</a-timeline-item>
+					</a-timeline>
+				</a-drawer>
+				<a-drawer
+					width="100%"
+					placement="right"
+					:visible="visibleAdditionalDrawer"
+					@close="onAdditionalDrawerClose"
+					closeIcon="true"
+					>
+					<div class="card" style="    margin-top: 15px;">
+						<div class="card-title">
+							<div class="d-flex justify-content-between align-items-center">
+								<h3 class="title">Thông tin tham khảo</h3>
+								<img class="img-dropdown" :class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
+										src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showDetailPlanning = !showDetailPlanning">
+							</div>
+						</div>
+						<div class="card-body card-sub_header_title" v-show="showDetailPlanning">
+							<div class="container-fluid row">
+								<div class="col-12 mb-2">
+									<InputTextarea
+										v-model="real_estate.planning_info"
+										:disableInput="!isEditStatus"
+										label="Thông tin quy hoạch"
+										class="form-group-container"
+										:autosize="true"
+									/>
+								</div>
+								<div class="col-12 mb-2">
+									<InputTextarea
+										v-model="real_estate.planning_source"
+										:disableInput="!isEditStatus"
+										label="Nguồn thông tin"
+										class="form-group-container"
+										:autosize="true"
+									/>
+								</div>
+								<div class="col-12 mb-2">
+									<InputText
+										v-model="real_estate.contact_person"
+										:disabledInput="!isEditStatus"
+										label="Người hướng dẫn khảo sát"
+										class="form-group-container"
+									/>
+								</div>
+								<div class="col-12 mb-2">
+									<InputText
+										v-model="real_estate.contact_phone"
+										:disabledInput="!isEditStatus"
+										label="Số điện thoại"
+										class="form-group-container"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="btn-drawer-footer btn-footer d-md-flex d-block justify-content-end align-items-center">
+						<div class="d-md-flex d-block">
+							<button v-if="isEditStatus" :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="handleSaveAdditional">
+								<img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"/>Lưu
+							</button>
+						</div>
+					</div>
+				</a-drawer>
+			</div>
+					<ValidationObserver
+						tag="div"
+						ref="step_1"
+						@submit.prevent="validateSubmitStep1"
+					>
+						<Step1
+							:isEdit="isEdit"
+							:data="form.step_1"
+							:key="key_step_1"
+							:propertyTypes="propertyTypes"
+							:provinces="provinces"
+							:districts="districts"
+							:wards="wards"
+							:streets="streets"
+							:full_address="full_address"
+							:projects="projects"
+							:blocks="blocks"
+							:floors="floors"
+							:apartments="apartments"
+							:directions="directions"
+							:furniture_list="furniture_list"
+							:basic_utilities="basic_utilities"
+							:imageDescriptions="imageDescriptions"
+							@getDistrict="changeProvince"
+							@getWardStreet="changeDistrict"
+							@getWard="changeWard"
+							@changeStreet="changeStreet"
+							@getAssetType="changeAssetType"
+							@handleChangeProject="handleChangeProject"
+							@handleChangeBlock="handleChangeBlock"
+							@handleChangeFloor="handleChangeFloor"
+						/>
+						<div class="btn-footer d-md-flex d-block" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
+							<div class="d-lg-flex d-block button-contain row" style="justify-content: space-around;display: flex!important;">
+								<div class="col-6">
+								<button  @click.prevent="handleChangeBack" class="btn btn-white text-nowrap" >
+									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+								</button>
+							</div>
+							<div class="col-6">
+								<button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+										<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản
+								</button>
+								</div>
+								<div class="col-6">
+								<button v-if="isEditStatus" class="btn btn-white" @click.prevent="handleEdit(0)" type="submit">
+									<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px" alt="save"/>Chỉnh sửa
+								</button>
+								</div>
+								<div class="col-6">
+								<button v-if="isEditStatus && isCancelEnable" @click.prevent="handleCancelProperty()" class="btn btn-white text-nowrap">
+									<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px" alt="cancel">Hủy tài sản
+								</button>
+								</div>
+							</div>
+						</div>
+					</ValidationObserver>
 			<ModalNotificationAppraisal
 				v-if="openCancelAppraisal"
 				@cancel="openCancelAppraisal = false"
@@ -696,13 +871,14 @@ export default {
 				if (bindDataStep.step >= 4) {
 					this.step_active = 5
 				} else this.step_active = bindDataStep.step
-
-				await this.$refs.wizard.tabs.forEach((tab, index) => {
-					if (index <= this.step_active - 1) {
-						tab.checked = true
-					}
-				})
-				await this.$refs.wizard.changeTab(0, this.step_active - 1)
+				if (!this.isMobile()){
+					await this.$refs.wizard.tabs.forEach((tab, index) => {
+						if (index <= this.step_active - 1) {
+							tab.checked = true
+						}
+					})
+					await this.$refs.wizard.changeTab(0, this.step_active - 1)
+				}
 			}
 			// if (this.$route.meta['step7']) { this.form.step_7 = Object.assign(this.form.step_7, { ...this.$route.meta['step7'] }) }
 			// if (this.form.step_7.construction_company && this.form.step_7.construction_company.length > 0) {
@@ -724,8 +900,10 @@ export default {
 			this.key_step_3 += 1
 			this.key_step_4 += 1
 			this.key_step_5 += 1
-			if (this.$route.params.step || this.$route.params.step === 0) {
-				await this.$refs.wizard.changeTab(0, this.$route.params.step)
+			if (!this.isMobile()){
+				if (this.$route.params.step || this.$route.params.step === 0) {
+					await this.$refs.wizard.changeTab(0, this.$route.params.step)
+				}
 			}
 			if (this.step_active < 4) {
 				this.isAutomation = true
@@ -767,6 +945,13 @@ export default {
 	},
 
 	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		async handleEdit (step) {
 			await this.$router.push({
 				name: 'certification_asset.apartment.edit',

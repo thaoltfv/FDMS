@@ -559,7 +559,7 @@
                 </div>
                 <!-- Map -->
                 <div class="col-12 mt-3 layer-map">
-              <div class="d-flex all-map" style="padding: 0; height: 50vh;margin-top: 10px;">
+              <div class="d-flex all-map" style="padding: 0; height: 40vh;margin-top: 10px;">
                 <div class="main-map">
                   <div id="mapid" class="layer-map">
                       <l-map
@@ -625,13 +625,13 @@
                   <label  class="select-title pr-2">Vị trí tài sản</label>
                   <div class="w-100 row">
                     <div class="col-12 col-md-3 col-lg-2"></div>
-                    <div class="col-6">
+                    <div class="col-6" style="padding-right:0">
                       <div  class="d-flex">
                         <input disabled type="radio" name="front_side" :value="1" @click="handleChangeFrontSide" id="front_side1" :checked="false" v-model="data.traffic_infomation.front_side">
                        <div  style="margin-left: 0.5rem"  class=""><label disabled class="color_content  font-weight-normal" style="margin-bottom: unset !important" for="front_side1">Mặt tiền</label></div>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6" style="padding:0">
                       <div  class="d-flex">
                         <input disabled type="radio" name="front_side" :value="0" @click="handleChangeAlley" id="front_side2" :checked="false" v-model="data.traffic_infomation.front_side">
                         <div style="margin-left: 0.5rem"  class=""><label disabled class="color_content  font-weight-normal" style="margin-bottom: unset !important" for="front_side2">Trong hẻm</label></div>
