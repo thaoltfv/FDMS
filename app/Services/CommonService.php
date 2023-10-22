@@ -1784,7 +1784,7 @@ class CommonService
 
 	public static function getCompareWithIdNote($id)
     {
-        $dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->first();
+        $dataAppraise = CompareAssetGeneral::where('id', $id)->orderBy('id', 'desc')->first();
 		return $dataAppraise->note;
 	}
 
