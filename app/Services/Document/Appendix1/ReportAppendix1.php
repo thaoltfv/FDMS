@@ -1275,9 +1275,9 @@ class ReportAppendix1 extends Report
             // '-',
             // '-',
             // '-',
-            CommonService::getCompareWithId($this->asset1->id) ? CommonService::mbUcfirst(CommonService::getCompareWithId($this->asset1->id)) : '',
-            CommonService::getCompareWithId($this->asset2->id) ? CommonService::mbUcfirst(CommonService::getCompareWithId($this->asset2->id)) : '',
-            CommonService::getCompareWithId($this->asset3->id) ? CommonService::mbUcfirst(CommonService::getCompareWithId($this->asset3->id)) : '',
+            CommonService::getCompareWithIdNote($this->asset1->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset1->id)) : '',
+            CommonService::getCompareWithIdNote($this->asset2->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset2->id)) : '',
+            CommonService::getCompareWithIdNote($this->asset3->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset3->id)) : '',
             false
         ];
         return $data;
