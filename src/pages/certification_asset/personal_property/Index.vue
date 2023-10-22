@@ -1,5 +1,5 @@
 <template>
-  <div class="main-wrapper-new">
+  <div v-if="!isMobile()" class="main-wrapper-new">
     <div class="container-button appraise-container">
       <div class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center">
         <div class="col-12 col-md-6 col-xl-8">
@@ -25,6 +25,66 @@
             <b-dropdown-item @click.prevent="exportAdjust">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
           </b-dropdown>
         </div>
+      </div>
+    </div>
+    <div class="container-fluid appraise-container mt-3">
+      <TableAll
+        :listCertificates="listAppraiseAll"
+        :isLoading="isLoading"
+        :pagination="paginationAll"
+        @handleChange="onPageChange"
+      />
+    </div>
+    <div>
+        <ModalExportAdjust
+        v-if="showAdjustModal"
+        @cancel="showAdjustModal = false"
+        :statusOptions="statusOptions"
+        />
+				<ModalSelectTypeProperty
+					v-if="open_select_type"
+					@cancel="open_select_type = false"
+				/>
+    </div>
+  </div>
+  <div v-else class="main-wrapper-new" style="margin: 0;padding-top:0;">
+    <div class="container-button appraise-container">
+      <div class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center">
+        <div class="col-12 col-md-6 col-xl-8">
+          <button-checkbox :options="statusOptions" :value="selectedStatus" @change="onChangeStatus" />
+        </div>
+        <div class="search-block col-7 col-md-6 col-xl-4 d-flex justify-content-end align-items-center">
+          <Search @filter-changed="onFilterQuickSearchChange($event)" />
+		  </div>
+          <!-- <router-link v-if="add" :to="{ name: 'certification_asset.create' }" class="btn text-nowrap index-screen-button ml-md-2">
+            <img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
+          </router-link> -->
+		  <div
+					class="col-4"
+					style="padding: 0;
+    margin-top: 10px;"
+				>
+					<button @click="openChooseTypeCreate" class="btn text-nowrap index-screen-button ml-md-2">
+						<img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
+					</button>
+					</div>
+					<div
+					class="col-1"
+					style="padding: 0;
+    margin-top: 15px;"
+				>
+          <b-dropdown class="dropdown-container" no-caret v-if="this.export">
+            <template #button-content>
+							<div class="container_image">
+								<img src="@/assets/icons/ic_more.svg" alt="">
+							</div>
+            </template>
+            <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportMonthBefore">Xuất dữ liệu tháng trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportAdjust">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
+          </b-dropdown>
+		  </div>
       </div>
     </div>
     <div class="container-fluid appraise-container mt-3">
@@ -104,6 +164,7 @@ export default {
 				data: [
 					{ label: 'Mới', value: '1', class: 'bg-info' },
 					{ label: 'Đang thực hiện', value: '2', class: 'bg-primary' },
+					{ label: 'Đang kiểm soát', value: '6', class: 'bg-control' },
 					{ label: 'Đang duyệt', value: '3', class: 'bg-warning' },
 					{ label: 'Hoàn thành', value: '4', class: 'bg-success' },
 					{ label: 'Hủy', value: '5', class: 'bg-secondary' }
@@ -156,6 +217,17 @@ export default {
 		})
 	},
 	methods: {
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		openChooseTypeCreate () {
 			this.open_select_type = true
 		},

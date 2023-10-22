@@ -1,5 +1,5 @@
 <template>
-  <div id="wareHouse" class="container-fluid position-relative">
+  <div v-if="!isMobile()" id="wareHouse" class="container-fluid position-relative">
     <div class="loading" :class="{'loading__true': isSubmit}">
       <a-spin />
     </div>
@@ -222,6 +222,172 @@
 			@cancel="showAdjustModal = false"
 		/>
   </div>
+  <div v-else id="wareHouse" class="container-fluid position-relative">
+    <div class="loading" :class="{'loading__true': isSubmit}">
+      <a-spin />
+    </div>
+    <div class="pannel">
+      <div class="pannel__content row mx-0 justify-content-between justify-content-lg-end align-items-center">
+        <div
+					class="search-block col-6 col-md-6 col-xl-4 d-flex justify-content-end align-items-center" style="padding: 0;"
+				>
+		<Search @filter-changed="onFilterChange($event)" class="search-box"/>
+		</div>
+		<div
+					class="col-4"
+					style="padding: 0;
+    margin-top: -10px;"
+				>
+					<button class="btn mr-0 btn-white text-nowrap index-screen-button ml-2" @click="openSelectType" v-if="add">
+						<img src="@/assets/icons/ic_add.svg" style="margin-right: 8px" alt="search">Tạo mới
+					</button>
+					</div>
+					<div
+					class="col-1"
+					style="padding: 0;"
+				>
+          <b-dropdown class="dropdown_btn d-lg-inline-flex" no-caret>
+            <template #button-content>
+							<div class="container_image">
+								<img src="@/assets/icons/ic_more.svg" alt="">
+							</div>
+            </template>
+            <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportMonthBefore">Xuất dữ liệu tháng trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportAdjust">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
+          </b-dropdown>
+		  </div>
+      </div>
+    </div>
+    <div class="table-detail position-relative mt-3" :class="totalRecord === 0 ? 'empty-data' : ''" style="overflow: scroll;max-height: 76vh;">
+		<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listWarehouses" :key="element.id+'_'+element.status">
+            <div class="col-12 d-flex mb-2 justify-content-between">
+              <span @click="handleDetail(element.id, element)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">TSS_{{element.id}}</span>
+            </div>
+			<div class="property-content mb-2 d-flex color_content">
+              <div class="label_container d-flex">
+                <div class="d-flex">
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Địa chỉ:</strong><span :id="element.id + 'all'" class="text-left">{{ element.full_address.substring(30,0)+'...'}}</span></span>
+				<b-tooltip :target="(element.id + 'all').toString()">{{ element.full_address }}</b-tooltip>
+                </div>
+              </div>
+            </div>
+			<div class="property-content mb-2 d-flex color_content" >
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Loại tài sản:</strong><span class="text-capitalize">{{element.asset_type.description.toLowerCase()}}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content" >
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Loại giao dịch:</strong><span class="text-capitalize">{{element.transaction_type.description.toLowerCase()}}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng diện tích:</strong><span class="text-none">{{ element.total_area ? formatNumber(element.total_area) : 0 }} m<sup>2</sup></span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Đơn giá bình quân(VNĐ):</strong><span class="text-none">{{element.average_land_unit_price ? formatPrice(element.average_land_unit_price) : '-' }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong><span class="text-none">{{element.total_amount ? formatPrice(element.total_amount) : '-' }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Thời điểm đăng:</strong><span class="public_date">{{ formatDate(element.public_date) }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Ngày cập nhật:</strong><span class="public_date">{{ formatDate(element.updated_at) }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Người tạo:</strong><span class="text-capitalize">{{element.created_by.name}}</span></span>
+					</div>
+				</div>
+			</div>
+          </b-card>
+    </div>
+	<div class="pagination-wrapper">
+			<div class="page-size">
+			Hiển thị
+			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
+				@change="onSizeChange" />
+			hàng
+			</div>
+			<a-pagination :current="Number(pagination.current)" :page-size="Number(pagination.pageSize)"
+			:total="Number(pagination.total)"
+			:show-total="(total, range) => `Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`"
+			@change="onPaginationChange">
+			</a-pagination>
+      	</div>
+    <ModalSearchAdvanced
+      v-if="showModalSearch"
+      @cancel="showModalSearch = false"
+      @filter-changed="onFilterChange($event)"
+      v-bind:roles="this.activeStatus"
+      :filter_search="this.filter"
+    />
+    <ModalViewImage
+      v-if="showModalImage"
+      @cancel="showModalImage = false"
+      v-bind:pics="this.picList"
+    />
+    <ModalPrint
+      v-if="modalPrint"
+      @cancel="modalPrint = false"
+      v-bind:print_detail="this.printDetail"
+    />
+    <ModalNotification
+      v-if="modalNotification"
+      @cancel="modalNotification = false"
+      v-bind:notification="this.message"
+    />
+    <ModalNotificationCustomer
+      v-if="modalNotificationCustomer"
+      @cancel="modalNotificationCustomer = false"
+      v-bind:notification="this.messageNotification"
+      @action="actionDisable"
+    />
+    <ModalNotificationProperty
+      v-if="modalNotificationProperty"
+      @cancel="modalNotificationProperty = false"
+      v-bind:notification="this.messageNotificationProperty"
+      v-bind:id="this.indexProperty"
+      @action="actionDisableProperty"
+    />
+		<ModalSelectTypeAsset
+			v-if="open_select_type"
+			@cancel="open_select_type = false"
+		/>
+		<ModalExportAdjust
+			v-if="showAdjustModal"
+			@cancel="showAdjustModal = false"
+		/>
+  </div>
 </template>
 <script>
 import Search from '@/pages/warehouse/Search'
@@ -242,6 +408,12 @@ import ModalNotificationCustomer from '@/components/Modal/ModalNotificationCusto
 import ModalNotificationProperty from '@/components/Modal/ModalNotificationProperty'
 import ModalSelectTypeAsset from './modals/ModalSelectTypeAsset'
 import {LTooltip} from 'vue2-leaflet'
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
 Vue.filter('formatDate', function (value) {
 	if (value) {
 		return moment(String(value)).format('DD/MM/YYYY')
@@ -263,10 +435,20 @@ export default {
 		ModalNotificationProperty,
 		ModalSelectTypeAsset,
 		ModalExportAdjust,
-		LTooltip
+		LTooltip,
+		BCard,
+		BRow,
+		BCol,
+		BFormGroup,
+		BFormInput,
 	},
 	data () {
 		return {
+			pageSizeOptions: [
+				{ value: '10', label: '10' },
+				{ value: '20', label: '20' },
+				{ value: '30', label: '30' }
+			],
 			modalNotificationProperty: false,
 			modalNotificationCustomer: false,
 			open_select_type: false,
@@ -480,6 +662,46 @@ export default {
 		}
 	},
 	methods: {
+		onSizeChange (pageSize) {
+			const pagination = { ...this.pagination, pageSize: Number(pageSize) }
+			this.onPageChange(pagination)
+		},
+		onPaginationChange (current) {
+			const pagination = { ...this.pagination, current: Number(current) }
+			this.onPageChange(pagination)
+		},
+		configColor(element) {
+			if (element.status == 1) {
+				return 'info'
+			}
+			if (element.status == 2) {
+				return 'primary'
+			}
+			if (element.status == 3) {
+				return 'warning'
+			}
+			if (element.status == 4) {
+				return 'success'
+			}
+			if (element.status == 5) {
+				return 'secondary'
+			}
+			if (element.status == 6) {
+				return 'control'
+			}
+			return 'red'
+		},
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		openSelectType () {
 			this.open_select_type = true
 		},
@@ -702,7 +924,7 @@ export default {
 
 			await this.getWarehouses(query)
 		},
-		async onPageChange (pagination, filters, sorter) {
+		async onPageChange (pagination, filter = {}, sorter = {}) {
 			this.perPage = pagination.pageSize
 			const sortDesc = replace(sorter.order, 'end', '')
 
@@ -798,14 +1020,21 @@ export default {
 		},
 		async handleDetail (id, property) {
 			// let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});
-			const routeData = this.$router.resolve({
-				name: 'warehouse.detail',
-				query: {
-					id: id,
-					version: property.version
-				}
-			})
-			window.open(routeData.href, '_blank')
+			if (this.isMobile()){
+				this.$router.push({
+					name: 'warehouse.detail',
+					query: { id: id }
+				}).catch(_ => {})
+			} else {
+				const routeData = this.$router.resolve({
+					name: 'warehouse.detail',
+					query: {
+						id: id,
+						version: property.version
+					}
+				})
+				window.open(routeData.href, '_blank')
+			}
 		}
 	},
 	beforeRouteEnter: async (to, from, next) => {
@@ -1052,4 +1281,70 @@ export default {
 	width: 35px;
 	height: 30px;
 }
+.pagination-wrapper {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .ant-select {
+      margin-left: 11px;
+      margin-right: 11px;
+    }
+
+    .page-size {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+			@media (max-width: 1024px) {
+				display: none;
+			}
+    }
+
+    .ant-pagination {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      row-gap: 10px;
+
+      /deep/ .ant-pagination-total-text {
+        height: unset;
+        flex-grow: 1;
+        @media (max-width: 1024px) {
+					display: none;
+        }
+      }
+
+      /deep/ .ant-pagination-item-active {
+        background: #007EC6;
+
+        a {
+          color: #FFFFFF;
+        }
+      }
+
+      /deep/ .ant-pagination-prev,
+      /deep/ .ant-pagination-next {
+        border: 1px solid #d9d9d9;
+
+        &:hover {
+          border-color: #1890ff;
+          transition: all 0.3s;
+        }
+
+        a:hover {
+          i {
+            color: #1890ff;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 1024px) {
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
 </style>

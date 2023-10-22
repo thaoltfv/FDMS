@@ -1,5 +1,5 @@
 <template>
-  <div @click.self="handleCancel" class="modal-purpose d-flex justify-content-center align-items-center">
+  <div v-if="!isMobile()" @click.self="handleCancel" class="modal-purpose d-flex justify-content-center align-items-center">
     <div class="card card__show">
       <div class="card-header">
         <div class="title">
@@ -42,6 +42,49 @@
       </div>
     </div>
   </div>
+  <div v-else @click.self="handleCancel" class="modal-purpose d-flex justify-content-center align-items-center">
+    <div class="card card__show">
+      <div class="card-header" style="padding: 10px;">
+        <div class="title">
+          Chọn loại tài sản thẩm định
+        </div>
+      </div>
+      <div class="card-body" style="    padding: 0;">
+        <!-- <div class="row">
+          <lord-icon
+            src="https://cdn.lordicon.com/uetqnvvg.json"
+            trigger="hover"
+            style="width:250px;height:250px">
+        </lord-icon>
+        </div> -->
+
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-purpose h-100" :class="machine? 'active' : ''" @click="selectMachine" style="    padding: 0;">
+              Máy móc thiết bị
+            </button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-purpose h-100" :class="vehicle? 'active' : ''" @click="selectVehicle" style="    padding: 0;">
+              Phương tiện vận tải
+            </button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-purpose h-100" :class="other? 'active' : ''" @click="activeOther" style="    padding: 0;">
+              Động sản khác
+            </button>
+          </div>
+        </div>
+        <div class="container__selected" style="margin-top: 10px;">
+          <button type="button" class="btn btn-select"
+            :class="!other && !machine && !vehicle ? 'disabled' : ''"
+            @click="handleAction">
+            Chọn
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -55,6 +98,17 @@ export default {
 		}
 	},
 	methods: {
+    isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		activeOther () {
 			this.machine = false
 			this.vehicle = false

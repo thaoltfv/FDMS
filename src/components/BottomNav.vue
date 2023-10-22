@@ -168,6 +168,15 @@ export default {
           console.log('vô 7')
           e.isActive = true
         }
+
+        //TSSS
+        if (e.path && e.path.name === 'warehouse.index' 
+        && (this.$route.name === 'warehouse.create' 
+        || this.$route.name === 'warehouse.detail'
+        || this.$route.name === 'warehouse.edit')){
+          console.log('vô 8')
+          e.isActive = true
+        }
         
       })
     }, 5000)

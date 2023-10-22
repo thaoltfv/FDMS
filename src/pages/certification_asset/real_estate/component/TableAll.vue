@@ -97,7 +97,7 @@
 			<div class="property-content mb-2 d-flex color_content">
               <div class="label_container d-flex">
                 <div class="d-flex">
-                <span style="font-weight: 500"><strong class="d_inline mr-1">Tên tài sản:</strong><span :id="element.id + 'all'" class="text-left">{{ element.appraise_asset.substring(30,0)+'...'}}</span></span>
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Tên tài sản:</strong><span :id="element.id + 'all'" class="text-left">{{ element.appraise_asset.substring(25,0)+'...'}}</span></span>
 				<b-tooltip :target="(element.id + 'all').toString()">{{ element.appraise_asset }}</b-tooltip>
                 </div>
               </div>
@@ -128,7 +128,7 @@
 			<div class="property-content mb-2 d-flex color_content">
 				<div class="label_container d-flex">
 					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong><span class="text-none">{{element.total_price ? formatNumber(element.total_price) + ' đ' : '-' }}</span></span>
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong><span class="text-none">{{element.total_price ? formatPrice(element.total_price) : '-' }}</span></span>
 					</div>
 				</div>
 			</div>
@@ -346,6 +346,19 @@ export default {
 		this.getProfiles()
 	},
 	methods: {
+    formatPrice (value) {
+			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
+			if (num.length > 3 && num.length <= 6) {
+				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
+			} else if (num.length > 6 && num.length <= 9) {
+				return parseFloat(num / 1000000).toFixed(1).replace('.', ',') + ' Triệu'
+			} else if (num.length > 9) {
+				return parseFloat(num / 1000000000).toFixed(1).replace('.', ',') + ' Tỷ'
+			} else if (num < 900) {
+				return num + ' đ' // if value < 1000, nothing to do
+			}
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+		},
 		configColor(element) {
 			if (element.status == 1) {
 				return 'info'

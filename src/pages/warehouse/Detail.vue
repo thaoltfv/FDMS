@@ -1,6 +1,608 @@
 <template>
-  <div class="container-fluid">
-    <div class="contain-detail">
+  <div class="container-fluid" :style="isMobile() ? {'margin':'0', 'padding': '0'} : {}">
+    <div v-if="!isMobile()" class="contain-detail">
+      <div class="loading" :class="{'loading__true': isSubmit}">
+        <a-spin />
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <h3 class="title text-nowrap">Phiên bản</h3>
+              <div class="ml-2" style="width:150px">
+                <InputCategoryData
+                  v-model="version"
+                  vid="version"
+                  label="version"
+                  placeholder="Chọn phiên bản"
+                  :options="optionsVersion"
+                  class="label-none"
+                  @change="changeVersion"
+                />
+              </div>
+            </div>
+            <div v-if="form.id" class=" color_content card-status">
+								{{form.id ? `TSSS_${form.id}` : 'TSSS'}}
+							</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="title text-nowrap">Thông tin giao dịch</h3>
+            <img class="img-dropdown" :class="!showInfo? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showInfo = !showInfo">
+          </div>
+        </div>
+        <div class="card-body card-info" v-if="showInfo">
+          <div class="container-fluid color_content">
+          <div class="row"  v-if="form.asset_type_id !== 39">
+            <div class="col-12 col-lg-8" style="padding-left: 0;">
+          <div class="d-grid">
+            <div class="content-detail" v-if="this.form.source !== null">
+              <p class="content-title">Nguồn thông tin:</p>
+              <p class="content-name">{{this.form.source.description}}</p>
+            </div>
+          </div>
+          <div class="d-grid">
+            <div class="content-detail" v-if="this.form.asset_type != null">
+              <p class="content-title">Loại tài sản:</p>
+              <p class="content-name" v-if="this.form.asset_type != null">{{this.form.asset_type.description}}</p>
+              <p class="content-name" v-if="this.form.asset_type === null">Chưa có loại tài sản</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Loại giao dịch:</p>
+              <p class="content-name" v-if="this.form.transaction_type !== null">{{this.form.transaction_type.description}}</p>
+              <p class="content-name" v-if="this.form.transaction_type === null">Chưa có loại giao dịch</p>
+            </div>
+            <div class="content-detail" v-if="this.form.transaction_type !== null">
+              <p class="content-title">Giá (VND):</p>
+              <p class="content-name">{{formatCurrency(this.form.total_amount)}}đ</p>
+            </div>
+          </div>
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Thời điểm đăng tin:</p>
+              <p class="content-name"> {{formatDate(this.form.public_date)}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Người liên hệ</p>
+              <p class="content-name">{{this.form.contact_person}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">SĐT người liên hệ:</p>
+              <p class="content-name">{{this.form.contact_phone}}</p>
+            </div>
+          </div>
+          <p class=" title" v-if="form.asset_type_id !== 39">Vị trí tài sản</p>
+          
+          <div class="d-grid" v-if="form.asset_type_id !== 39">
+                <div class="content-detail">
+                  <p class="content-title">Tỉnh/Thành:</p>
+                  <p class="content-name">{{this.form.province !== undefined && this.form.province !== null ? this.form.province.name : ''}}</p>
+                </div>
+                <div class="content-detail">
+                  <p class="content-title">Quận/Huyện:</p>
+                  <p class="content-name">{{this.form.district !== undefined && this.form.district != null ? this.form.district.name : ''}}</p>
+                </div>
+                
+                <div class="content-detail">
+                  <p class="content-title">Phường/Xã:</p>
+                  <p class="content-name">{{this.form.ward !== undefined && this.form.ward !== null ? this.form.ward.name : ''}}</p>
+                </div>
+          <!-- </div>
+          <div class="d-grid" v-if="form.asset_type_id !== 39"> -->
+                <div class="content-detail">
+                  <p class="content-title">Đường:</p>
+                  <p class="content-name">{{this.form.street !== undefined && this.form.street !== null ? this.form.street.name: ''}}</p>
+                </div>
+                <div class="content-detail" >
+                  <p class="content-title">Đoạn:</p>
+                  <p class="content-name">{{this.form.distance !== null && this.form.distance !== undefined ? this.form.distance.detail : 'Chưa có đoạn'}}</p>
+                </div>
+                <div class="content-detail"  v-if="form.asset_type_id !== 39">
+							<p class="content-title">Địa hình:</p>
+							<p class="content-name">{{form.topographic_data !== null && form.topographic_data !== undefined ? this.form.topographic_data.description : 'Chưa có địa hình'}}</p>
+						</div>
+                <!-- <div class="content-detail">
+                  <p class="content-title">Tọa độ:</p>
+                  <p class="content-name">{{this.form.coordinates}}</p>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-12 col-lg-4">
+              <div class="d-flex flex-column h-100">
+                <div class="form-group-container position-relative w-100">
+                  <InputText
+                    id="coordinate"
+                    :disabledInput="true"
+                    v-model="this.form.coordinates"
+                    vid="coordinates"
+                    label="Tọa độ"
+                    class="coordinates"
+                    rules="required"
+                    />
+                  <!-- <div class="img-locate">
+                    <img src="@/assets/icons/ic_locate.svg" alt="locate" @click="handleOpenModalMap()">
+                  </div> -->
+                </div>
+                <!-- Map -->
+                <div class="col-12 w-100 h-100 mt-3 layer-map" style="flex: 1">
+              <div class="d-flex all-map w-100 h-100">
+                <div class="main-map w-100 h-100">
+                  <div id="mapid" class="layer-map w-100 h-100">
+                      <l-map
+                        ref="map_step1"
+                        :zoom="map.zoom"
+                        :center="map.center"
+                        :maxZoom="20"
+                        :options="{zoomControl: false}"
+                      >
+                      <l-tile-layer :url="url" :options="{ maxNativeZoom: 20, maxZoom: 20}"></l-tile-layer>
+                      <l-tile-layer
+                        v-for="tileProvider in tileProviders"
+                        :key="tileProvider.name"
+                        :name="tileProvider.name"
+                        :visible="tileProvider.visible"
+                        :url="tileProvider.url"
+                        :attribution="tileProvider.attribution"
+                        :layer-type="tileProvider.type"
+                        :options="{ maxNativeZoom: 20, maxZoom: 20 }"
+                      />
+                        <!-- <l-tile-layer :url="url"></l-tile-layer> -->
+                        <l-control-zoom position="bottomright"></l-control-zoom>
+                        
+                        <l-control position="bottomleft">
+                          <button class="btn btn-map" @click="handleView" type="button">
+                            <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
+                            <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
+                          </button>
+                        </l-control>
+                        <l-control-layers position="bottomleft"></l-control-layers>
+                        <l-marker :lat-lng="markerLatLng">
+                          <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
+                            <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
+                          </l-icon>
+                          <l-tooltip>Vị trí tài sản</l-tooltip>
+                        </l-marker>
+                      </l-map>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- <div class="col-4">
+            <div class="d-grid" v-if="form.asset_type_id !== 39">
+              <div class="content-detail">
+                  <p class="content-title">Tọa độ:</p>
+                  <p class="content-name">{{this.form.coordinates}}</p>
+                </div>
+            </div>
+          </div> -->
+          
+          </div>
+          </div>
+          <div class="d-grid" v-if="form.asset_type_id !== 39">
+                <!-- <div class="content-detail">
+                  <p class="content-title">Thửa đất số:</p>
+                  <p class="content-name">{{this.form.land_no !== '' && this.form.land_no !== undefined && this.form.land_no !== null ? this.form.land_no : 'Trống'}}</p>
+                </div>
+                <div class="content-detail">
+                  <p class="content-title">Bản đồ số:</p>
+                  <p class="content-name">{{this.form.doc_no !== '' && this.form.doc_no !== undefined && this.form.doc_no !== null ? this.form.doc_no : 'Trống'}}</p>
+                </div> -->
+          </div>
+          <div class="d-grid" v-if="form.asset_type_id === 39">
+            <div class="content-detail">
+              <p class="content-title">Tên chung cư/dự án:</p>
+              <p class="content-name">{{this.form.project !== undefined && this.form.project !== null ? this.form.project.name : ''}}</p>
+            </div>
+            <div class="content-detail" >
+              <p class="content-title">Block (khu):</p>
+              <p class="content-name">{{this.form.block ? this.form.block.name : 'Trống'}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Tầng</p>
+              <p class="content-name">{{this.form.floor ? this.form.floor.name : ""}}</p>
+            </div>
+          </div>
+          <div class="d-grid" v-if="form.asset_type_id === 39">
+            <div class="content-detail">
+              <p class="content-title">Mã căn hộ:</p>
+              <p class="content-name">{{this.form.apartment_specification ? this.form.apartment_specification.apartment_name : ""}}</p>
+            </div>
+          </div>
+					<div class="">
+						<div class="">
+							<p class="content-title">Địa chỉ đầy đủ:</p>
+							<p class="content-name">{{this.form.full_address !== '' && this.form.full_address !== undefined && this.form.full_address !== null ? this.form.full_address : 'Không xác định'}}</p>
+						</div>
+						
+					</div>
+        </div>
+      </div>
+
+      <div class="card" v-if="form.asset_type_id === 39">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="title">Thông tin block</h3>
+            <img class="img-dropdown" :class="!showBlock? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showBlock = !showBlock">
+          </div>
+        </div>
+        <div class="card-body card-info" v-if="showBlock">
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Năm xây dựng:</p>
+              <p class="content-name"> {{this.form.apartment_specification.handover_year}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Tổng số tầng:</p>
+              <p class="content-name">{{this.form.apartment_specification.total_floors}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Số tầng hầm:</p>
+              <p class="content-name">{{this.form.apartment_specification.nb_basement}}</p>
+            </div>
+          </div>
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Số tầng ở:</p>
+              <p class="content-name">{{this.form.apartment_specification.nb_living_floor}}</p>
+            </div>
+            <div class="content-detail" >
+              <p class="content-title">Số căn hộ mỗi tầng:</p>
+              <p class="content-name" >{{this.form.apartment_specification.total_apartments}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Số lượng thang máy</p>
+              <p class="content-name">{{this.form.apartment_specification.nb_elevator}}</p>
+            </div>
+          </div>
+          <p class="title title-highlight">Tiện ích cơ bản</p>
+          <div class="d-grid justify-content-between container-utilities">
+            <div class="col-12 text-center form-group-container d-flex" v-for="(basic_utility, index) in basic_utilities" :key="index">
+              <div class=" col-12 d-flex justify-content-flex-start align-items-center">
+                <label class="input-checkbox" style="margin-right: 10px;">
+                  <input type="checkbox" :id="basic_utility.acronym" v-model="form.apartment_specification.utilities" :value="basic_utility.acronym" disabled>
+                  <span class="check-mark"/>
+                </label>
+                <label class="color-black font-weight-bold mr-2 mb-2">{{basic_utility !== undefined && basic_utility !== null ? basic_utility.description : ''}}</label>
+                
+              </div>
+            </div>
+            <div class="col-12 col-md-4 text-center"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" v-if="form.asset_type_id === 39">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="title">Thông tin chi tiết căn hộ</h3>
+            <img class="img-dropdown" :class="!showApartment? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showApartment = !showApartment">
+          </div>
+        </div>
+        <div class="card-body card-info" v-if="showApartment">
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Diện tích (m<sup>2</sup>):</p>
+              <p class="content-name">{{ formatNumber(this.form.room_details[0].area)}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Số phòng ngủ:</p>
+              <p class="content-name">{{this.form.room_details[0].bedroom_num}}</p>
+            </div>
+            <div class="content-detail" >
+              <p class="content-title">Số phòng WC:</p>
+              <p class="content-name" >{{this.form.room_details[0].wc_num}}</p>
+            </div>
+          </div>
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Hướng chính:</p>
+              <p class="content-name">{{this.form.room_details[0].direction !== undefined && this.form.room_details[0].direction !== null ? this.form.room_details[0].direction.description : ''}}</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Tổng quan chất lượng nội thất:</p>
+              <p class="content-name">{{this.form.room_details[0].furniture_quality !== undefined && this.form.room_details[0].furniture_quality !== null ? this.form.room_details[0].furniture_quality.description : ''}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" v-if="this.form.asset_type_id !== 39">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <h3 class="title">Thông tin thửa đất</h3>
+              <b-dropdown class="dropdown-container ml-3" no-caret>
+                <template #button-content>
+                  <img src="../../assets/icons/ic_more.svg" alt="">
+                </template>
+                <b-dropdown-item v-for ="(property) in form.properties" :key="property.id" @click="openModalDetail(property)">
+                  <div class="dropdown-item-container"><img
+                    src="../../assets/icons/ic_paper.svg" alt="">Tài sản đất số {{property.id}}
+                  </div>
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
+              <img class="img-dropdown" :class="!showLand? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showLand = !showLand">
+
+          </div>
+        </div>
+        <div class="card-body card-info card-land" v-if="showLand">
+          <div class="contain-table">
+            <table class="table-property">
+              <thead>
+              <tr>
+                <th>Mã số</th>
+                <th>Số tờ</th>
+                <th>Số thửa</th>
+                <th>Chiều rộng</th>
+                <th>Chiều dài</th>
+                <th>Diện tích</th>
+                <th>Hình ảnh</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for = "(property) in form.properties" :key="property.id">
+                <td>
+                  <div class="input-code" @click="openModalDetail(property)">
+                    TSD_{{property.id}}
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    {{property.compare_property_doc !== undefined && property.compare_property_doc !== null && property.compare_property_doc.length > 0 ? property.compare_property_doc[0].doc_num : 'Chưa có số tờ'}}
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    {{property.compare_property_doc[0] !== undefined && property.compare_property_doc[0] !== null && property.compare_property_doc.length > 0 ? property.compare_property_doc[0].plot_num : 'Chưa có số thửa'}}
+                  </div>
+                </td>
+                <td>
+                  {{formatNumber(property.front_side_width)}}m
+                </td>
+                <td>{{formatNumber(property.insight_width)}}m</td>
+                <td style="white-space: nowrap" >
+                  <div>
+                    {{formatNumber(property.asset_general_land_sum_area)}}
+                  </div>
+                </td>
+                <td>
+                  <div class="img-contain img-contain__table" v-if="property.pic.length > 0" @click="openModalImage(property.pic[0])">
+                    <img :src="property.pic[0].link" alt="pic">
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <div class="card" v-if="form.asset_type !== null && form.asset_type_id === 38 && form.tangible_assets.length > 0">
+      <div class="card-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="title">Công trình xây dựng</h3>
+          <img class="img-dropdown" :class="!showTable? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showTable =! showTable">
+        </div>
+      </div>
+      <div class="card-body card-info card-land" v-if="showTable">
+        <div class="contain-table">
+          <table class="table-property">
+            <thead>
+            <tr>
+              <th>Mã số</th>
+              <th>Loại</th>
+              <th>Cấp nhà</th>
+              <th>Chất lượng còn lại</th>
+              <th>Diện tích sàn (m<sup>2</sup>)</th>
+              <th>Giá trị ước tính (VND)</th>
+              <th>Hình ảnh</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for = "(tangible_asset) in form.tangible_assets" :key="tangible_asset.id">
+              <td>
+                <div class="input-code" @click="openTangibleDetail(tangible_asset)">
+                  TSN_{{tangible_asset.id}}
+                </div>
+              </td>
+              <td style="white-space: nowrap">
+                {{tangible_asset.building_type !== undefined && tangible_asset.building_type !== null? tangible_asset.building_type.description : ''}}
+              </td>
+              <td style="white-space: nowrap">
+                {{tangible_asset.building_category !== undefined && tangible_asset.building_category !== null ? tangible_asset.building_category.description : ''}}
+              </td>
+              <td>{{ formatNumber(tangible_asset.remaining_quality) }}%</td>
+              <td>{{ formatNumber(tangible_asset.total_construction_base) }}m<sup>2</sup></td>
+              <td>
+                {{ formatCurrency(tangible_asset.estimation_value) }}đ
+              </td>
+              <td>
+                <div class="d-flex justify-content-center">
+                  <div class="img-contain img-contain__table" v-if="tangible_asset.pic.length > 0" @click="openModalImage(tangible_asset.pic[0])">
+                    <img :src="tangible_asset.pic[0].link" alt="">
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" v-if="form.asset_type !== null && form.asset_type_id !== 39 && form.other_assets.length > 0">
+      <div class="card-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="title">Tài sản khác</h3>
+          <img class="img-dropdown" :class="!showOther? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showOther = !showOther">
+        </div>
+      </div>
+      <div class="card-body card-info card-land" v-if="showOther">
+        <div class="contain-table">
+          <table class="table-property table-property__order">
+            <thead>
+            <tr>
+              <th>Mã số</th>
+              <th>Loại tài sản</th>
+              <th>Giá trị (VND)</th>
+              <th>Hình ảnh</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for = "(other_asset) in form.other_assets" :key="other_asset.id">
+              <td>
+                <div class="input-code" style="cursor: default">
+                  PL_{{other_asset.id}}
+                </div>
+              </td>
+              <td>
+                  {{other_asset.other_asset !== undefined && other_asset.other_asset !== null ? other_asset.other_asset : ''}}
+              </td>
+              <td>
+                {{formatCurrency(other_asset.total_amount)}}đ
+              </td>
+              <td>
+                <div class="img-contain img-contain__table" v-for="images in other_asset.pic" :key="images.id" @click="openModalImage(images)">
+                  <img :src="images.link" alt="">
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+      <div class="card">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="title">Hình ảnh</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="container-img row mr-0 ml-0">
+            <div class="img-empty text-center" v-if="form.pic.length === 0">
+              <img src="../../assets/images/img_emply.svg" alt="empty">
+              <p class="empty-content"> Chưa có hình</p>
+            </div>
+            <div class="img-contain col-4 col-lg-2" v-for="images in form.pic" :key="images.id" @click="openModalImage(images)">
+              <img :src="images.link" alt="img">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="title">Ước tính đơn giá {{this.form.asset_type_id === 39? 'căn hộ' : 'đất'}}</h3>
+            <img class="img-dropdown" :class="!showDeal? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showDeal = !showDeal">
+          </div>
+        </div>
+        <div class="card-body card-info" v-if="showDeal">
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Tổng giá trị (VND):</p>
+              <p class="content-name">{{ formatCurrency(this.form.total_amount)}}đ</p>
+            </div>
+            <div class="content-detail" v-if="this.form.asset_type_id === 39">
+              <p class="content-title">Diện tích (m<sup>2</sup>):</p>
+              <p class="content-name">{{ formatNumber(this.form.room_details[0].area) }}m<sup>2</sup></p>
+            </div>
+          </div>
+          <div class="d-grid">
+            <div class="content-detail">
+              <p class="content-title">Tổng giá trị {{this.form.asset_type_id === 39? 'căn hộ' : 'tài sản'}} sau điều chỉnh (VND):</p>
+              <p class="content-name">{{ formatCurrency(this.form.total_estimate_amount)}}đ </p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Tỉ lệ điều chỉnh (%): </p>
+              <p class="content-name">{{ formatCurrency(this.form.adjust_percent)}}% </p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Giá trị giảm/tăng (VND): </p>
+              <p class="content-name">{{ formatCurrency(this.form.adjust_amount)}}đ </p>
+            </div>
+          </div>
+          <div class="d-grid" v-if="this.form.asset_type_id === 39">
+            <div class="content-detail">
+              <p class="content-title">Đơn giá bình quân căn hộ (đ/m<sup>2</sup>):</p>
+              <p class="content-name">{{ formatCurrency(this.form.room_details[0].unit_price)}}đ</p>
+            </div>
+          </div>
+          <div class="d-grid" v-if="this.form.asset_type_id !== 39">
+            <div class="content-detail">
+              <p class="content-title">Giá trị đất thuần còn lại (VND): </p>
+              <p class="content-name">{{ formatCurrency(this.form.total_raw_amount)}}đ </p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Tổng giá trị công trình xây dựng (VND):</p>
+              <p class="content-name">{{formatCurrency(this.form.total_construction_amount)}}đ</p>
+            </div>
+            <div class="content-detail">
+              <p class="content-title">Tổng giá trị tài sản khác (VND):</p>
+              <p class="content-name">{{formatCurrency(this.form.total_order_amount)}}đ</p>
+            </div>
+          </div>
+          <hr>
+          <div v-if="this.form.asset_type_id !== 39">
+						<div v-if="this.form.convert_fee_total > 0">
+							<div>
+								<h3 class="title">Chi phí chuyển đổi mục đích sử dụng đất</h3>
+							</div>
+							<div class="d-grid">
+								<div class="content-detail">
+									<p class="content-title">Tổng chi phí chuyển mục đích sử dụng đất (VND):</p>
+									<p class="content-name">{{formatCurrency(this.form.convert_fee_total)}}đ</p>
+								</div>
+							</div>
+							<h3 class="title mb-2" v-if="this.form.convert_fee_total > 0">Trong đó:</h3>
+							<div class="d-grid">
+								<div v-for="property in form.properties" :key="property.id">
+									<div class="content-detail" v-for="property_detail in property.property_detail" :key="property_detail.id" v-if="property_detail.convert_fee > 0">
+										<p class="content-title" v-if="property_detail.land_type_purpose_data !== null">Chi phí chuyển mục đích sử dụng từ {{ property_detail.land_type_purpose_data.description }} sang {{form.max_value_description}} (VND)</p>
+										<p class="content-name">{{formatCurrency(property_detail.convert_fee)}}đ</p>
+									</div>
+								</div>
+							</div>
+							<hr>
+						</div>
+            <h3 class="title">Giá Trị QSDĐ và đơn giá đất chi tiết</h3>
+            <div class="d-grid">
+              <div class="content-detail">
+                <p class="content-title">Giá trị QSDĐ ước tính (VND):</p>
+                <p class="content-name">{{formatCurrency(this.form.total_land_unit_price)}}đ</p>
+              </div>
+            </div>
+            <h3 class="title mb-2">Trong đó:</h3>
+            <div class="d-grid">
+              <div class="content-detail" v-for="property_detail in sortedArray" :key="property_detail.id">
+                <p class="content-title" >Đơn giá đất {{ property_detail.land_type_purpose_data !== undefined && property_detail.land_type_purpose_data !== null ? property_detail.land_type_purpose_data.description : ''}} (VND)</p>
+                <p class="content-name">{{formatCurrency(property_detail.price_land)}}đ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" v-if="this.form.note !== '' && this.form.note !== undefined && this.form.note !== null">
+        <div class="card-title">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="title">Ghi chú</h3>
+            <img class="img-dropdown" :class="!showInfo? 'img-dropdown__hide' : ''" src="../../assets/images/icon-btn-down.svg" alt="dropdown" @click="showInfo = !showInfo">
+          </div>
+        </div>
+        <div class="card-body card-info" v-if="showInfo">
+          <div class="content-detail">
+            <p class="content-name">{{this.form.note}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="contain-detail">
       <div class="loading" :class="{'loading__true': isSubmit}">
         <a-spin />
       </div>
@@ -899,6 +1501,17 @@ export default {
 		}
 	},
 	methods: {
+    isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
     async initMap () {
 			// eslint-disable-next-line no-undef
       console.log('form', this.form)

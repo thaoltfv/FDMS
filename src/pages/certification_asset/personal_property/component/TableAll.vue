@@ -1,5 +1,5 @@
 <template>
-	<div class="table-wrapper">
+	<div v-if="!isMobile()" class="table-wrapper">
 		<div class="table-detail position-relative empty-data">
 			<a-table
 					ref="table"
@@ -85,11 +85,85 @@
 		</div> -->
 		</div>
 	</div>
+	<div v-else class="table-wrapper" style="margin: 0;">
+		<div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
+			<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
+            <div class="col-12 d-flex mb-2 justify-content-between">
+              <span @click="handleDetail(element.id, element)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">DS_{{element.id}}</span>
+            </div>
+			<div class="property-content mb-2 d-flex color_content">
+              <div class="label_container d-flex">
+                <div class="d-flex">
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Tên tài sản:</strong><span :id="element.id + 'all'" class="text-left">{{ element.name.length > 25 ? element.name.substring(25,0)+'...' : element.name}}</span></span>
+				<b-tooltip :target="(element.id + 'all').toString()">{{ element.name }}</b-tooltip>
+                </div>
+              </div>
+            </div>
+			<div class="col-12  property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Loại tài sản:</strong><span class="text-capitalize">{{element.asset_type.description.toLowerCase()}}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Đơn giá(VNĐ):</strong><span class="text-none">{{element.price ? formatPrice(element.price.unit_price) : '-' }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong><span class="text-none">{{element.total_price ? formatPrice(element.total_price) : '-' }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Ngày tạo:</strong><span class="public_date">{{ formatDate(element.created_at) }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="property-content mb-2 d-flex color_content">
+				<div class="label_container d-flex">
+					<div class="d-flex">
+					<span style="font-weight: 500"><strong class="d_inline mr-1">Người tạo:</strong><span class="text-capitalize">{{element.created_by.name}}</span></span>
+					</div>
+				</div>
+			</div>
+          </b-card>
+	</div>
+	<div class="pagination-wrapper">
+			<div class="page-size">
+			Hiển thị
+			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
+				@change="onSizeChange" />
+			hàng
+			</div>
+			<a-pagination :current="Number(pagination.current)" :page-size="Number(pagination.pageSize)"
+			:total="Number(pagination.total)"
+			:show-total="(total, range) => `Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`"
+			@change="onPaginationChange">
+			</a-pagination>
+      	</div>
+			<!-- <div class="total position-absolute">
+				(*) Giá trị chỉ mang tính chất tham khảo
+		</div> -->
+		</div>
 </template>
 <script>
 
 import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
 import moment from 'moment'
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
@@ -112,7 +186,12 @@ export default {
 	components: {
 		'b-dropdown': BDropdown,
 		'b-dropdown-item': BDropdownItem,
-		'b-tooltip': BTooltip
+		'b-tooltip': BTooltip,
+		BCard,
+		BRow,
+		BCol,
+		BFormGroup,
+		BFormInput,
 	},
 	computed: {
 		columns () {
@@ -236,6 +315,47 @@ export default {
 		this.getProfiles()
 	},
 	methods: {
+		formatPrice (value) {
+			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
+			if (num.length > 3 && num.length <= 6) {
+				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
+			} else if (num.length > 6 && num.length <= 9) {
+				return parseFloat(num / 1000000).toFixed(1).replace('.', ',') + ' Triệu'
+			} else if (num.length > 9) {
+				return parseFloat(num / 1000000000).toFixed(1).replace('.', ',') + ' Tỷ'
+			} else if (num < 900) {
+				return num + ' đ' // if value < 1000, nothing to do
+			}
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+		},
+		configColor(element) {
+			if (element.status == 1) {
+				return 'info'
+			}
+			if (element.status == 2) {
+				return 'primary'
+			}
+			if (element.status == 3) {
+				return 'warning'
+			}
+			if (element.status == 4) {
+				return 'success'
+			}
+			if (element.status == 5) {
+				return 'secondary'
+			}
+			if (element.status == 6) {
+				return 'control'
+			}
+			return 'red'
+		},
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		showAcronym (acronym) {
 			if (acronym === 'KHAC') {
 				return 'TSK'
@@ -484,5 +604,50 @@ export default {
 			gap: 20px;
 		}
 	}
+	.card_container {
+    border-radius: 5px;
+    &_primary {
+      border: 1px solid #B5E5FF
+    }
+    &_secondary {
+      border: 1px solid #8B94A3
+    }
+    &_warning {
+      border: 1px solid #FFD1AD
+    }
+    &_danger {
+      border: 1px solid #FFC8D3
+    }
+    &_success {
+      border: 1px solid #26BF7F;
+      background-color: #EAFFF6;
+    }
+  }
+  .content_id {
+    border-radius: 5px;
+    padding: 0px 3px;
+    font-weight: 500;
+    cursor: pointer;
+    &_primary {
+      color: #007EC6;
+      background-color: #E3F5FF;
+    }
+    &_secondary {
+      color: #FFFFFF;
+      background-color: #8B94A3;
+    }
+    &_warning {
+      color: #FF963D;
+      background-color: #FFF1E6;
+    }
+    &_danger {
+      color: #FF5E7B;
+      background-color: #FFEBEF;
+    }
+    &_success {
+      color: #FFFFFF;
+      background-color: #26BF7F;
+    }
+  }
 }
 </style>

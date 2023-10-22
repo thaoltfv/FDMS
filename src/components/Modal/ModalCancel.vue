@@ -19,7 +19,7 @@
           Bạn có chắc muốn hủy không ?
         </p>
 
-        <div class="btn__group">
+        <div v-if="!isMobile()" class="btn__group">
           <button
             class="btn btn-white font-weight-normal font-weight-bold"
             @click.prevent="handleCancel"
@@ -28,6 +28,20 @@
             class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
             @click.prevent="handleAction"
             v-text="$t('popup_btn_yes')"/>
+        </div>
+        <div v-else class="btn__group row" style="padding: 0;">
+          <div class="col-6" style="padding:0;     margin-top: 8px;">
+          <button
+            class="btn btn-white font-weight-normal font-weight-bold"
+            @click.prevent="handleCancel"
+            v-text="$t('popup_btn_no')"/>
+            </div>
+            <div class="col-6" style="padding:0;">
+          <button
+            class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
+            @click.prevent="handleAction"
+            v-text="$t('popup_btn_yes')"/>
+            </div>
         </div>
       </div>
     </div>
@@ -39,6 +53,13 @@ export default {
 	name: 'ModalCancel',
 
 	methods: {
+    isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
 		},

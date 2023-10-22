@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" :style="isMobile() ? {'margin':'0', 'padding': '0'} : {}">
     <Form/>
   </div>
 </template>
@@ -15,6 +15,15 @@ export default {
 		const warehouse = await WareHouse.find(to.query['id'])
 		to.meta['detail'] = warehouse.data
 		return next()
+	},
+	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		}
 	}
 }
 </script>
