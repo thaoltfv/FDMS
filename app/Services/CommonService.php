@@ -1782,6 +1782,12 @@ class CommonService
 		return $dataAppraise->updated_at;
 	}
 
+	public static function getCompareWithIdNote($id)
+    {
+        $dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->first();
+		return $dataAppraise->note;
+	}
+
 	public static function getPlaningInfo($id)
     {
         $dataAppraise = RealEstate::where('id', $id)->first();

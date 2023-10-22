@@ -1269,12 +1269,15 @@ class ReportAppendix1 extends Report
             // $this->asset1->note ? CommonService::mbUcfirst($this->asset1->note) : '-',
             // $this->asset2->note ? CommonService::mbUcfirst($this->asset2->note) : '-',
             // $this->asset3->note ? CommonService::mbUcfirst($this->asset3->note) : '-',
-            $this->asset1 ? json_encode($this->asset1) : '-',
-            $this->asset2 ? json_encode($this->asset2) : '-',
-            $this->asset3 ? json_encode($this->asset3) : '-',
+            // $this->asset1 ? json_encode($this->asset1) : '-',
+            // $this->asset2 ? json_encode($this->asset2) : '-',
+            // $this->asset3 ? json_encode($this->asset3) : '-',
             // '-',
             // '-',
             // '-',
+            CommonService::getCompareWithId($this->asset1->id) ? CommonService::mbUcfirst(CommonService::getCompareWithId($this->asset1->id)) : '',
+            CommonService::getCompareWithId($this->asset2->id) ? CommonService::mbUcfirst(CommonService::getCompareWithId($this->asset2->id)) : '',
+            CommonService::getCompareWithId($this->asset3->id) ? CommonService::mbUcfirst(CommonService::getCompareWithId($this->asset3->id)) : '',
             false
         ];
         return $data;
