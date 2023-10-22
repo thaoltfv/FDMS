@@ -1272,9 +1272,12 @@ class ReportAppendix1 extends Report
             // $this->asset1 ? json_encode($this->asset1) : '-',
             // $this->asset2 ? json_encode($this->asset2) : '-',
             // $this->asset3 ? json_encode($this->asset3) : '-',
-            '-',
-            '-',
-            '-',
+            // '-',
+            // '-',
+            // '-',
+            CommonService::getCompareWithIdNote($this->asset1->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset1->id)) : '-',
+            CommonService::getCompareWithIdNote($this->asset2->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset2->id)) : '-',
+            CommonService::getCompareWithIdNote($this->asset3->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset3->id)) : '-',
             false
         ];
         return $data;
@@ -1377,7 +1380,8 @@ class ReportAppendix1 extends Report
         $landNo = isset($item->properties[0]->compare_property_doc[0]->plot_num) ? 'Thửa số: ' . $item->properties[0]->compare_property_doc[0]->plot_num . ', ' : '';
         $docNo = isset($item->properties[0]->compare_property_doc[0]->doc_num) ? 'tờ: ' . $item->properties[0]->compare_property_doc[0]->doc_num . ', ' : '';
         // $address = $landNo . $docNo . $item->ward->name . ', ' . $item->district->name . ', ' . $item->province->name;
-        $address = $landNo . $docNo . $item->full_address;
+        // $address = $landNo . $docNo . $item->full_address;
+        $address = $item->full_address;
         return $address;
     }
     protected function collectInfoAddressAppraise($stt, $title, $asset)

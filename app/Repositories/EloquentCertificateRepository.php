@@ -5400,6 +5400,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         then 'Đang duyệt'
                     when 4
                         then 'Hoàn thành'
+                    when 6
+                        then 'Đang kiểm soát'
                     else 'Huỷ'
                 end as status_text"),
             'commission_fee',

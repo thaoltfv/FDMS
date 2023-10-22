@@ -79,6 +79,9 @@ class Certificate extends Model
 			case 4:
 				$statusText = "Hoàn Thành";
 			    break;
+            case 6:
+                return 'Đang Kiểm Soát';
+                break;
 			case 5:
 				$statusText = "Huỷ";
 			    break;

@@ -1721,6 +1721,9 @@ class CommonService
 			case 5:
 				$data = 'Đã Hủy';
 				break;
+			case 6:
+				$data = 'Đang Kiểm Soát';
+				break;
 			default:
 				$data = 'Mới';
 		}
@@ -1777,6 +1780,12 @@ class CommonService
     {
         $dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->first();
 		return $dataAppraise->updated_at;
+	}
+
+	public static function getCompareWithIdNote($id)
+    {
+        $dataAppraise = CompareAssetGeneral::where('id', $id)->orderBy('id', 'desc')->first();
+		return $dataAppraise->note;
 	}
 
 	public static function getPlaningInfo($id)

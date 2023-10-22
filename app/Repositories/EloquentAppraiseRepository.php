@@ -6868,6 +6868,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         when 2 then 'Đang Thực Hiện'
                         when 3 then 'Đang Duyệt'
                         when 4 then 'Hoàn Thành'
+                        when 6 then 'Đang Kiểm Soát'
                         else 'Hủy' end as status_text"),
             // DB::raw("case appraises.is_check_frontside
             //             when false then 'Hẻm'
