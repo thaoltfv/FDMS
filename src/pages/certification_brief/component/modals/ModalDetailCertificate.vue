@@ -4,7 +4,7 @@
 				class="modal-detail d-flex justify-content-center align-items-center"
 				@click.self="handleCancel">
 				<div class="card" :style="isMobile() ? {'margin-top':'-55px', 'max-height': '94vh', 'min-height': '94vh'} : {}">
-					<div class="container-title" :style="isMobile() ? {'padding-bottom':'0'} : {}">
+					<div class="container-title" :style="isMobile() ? {'padding-bottom':'0', 'margin-bottom':'0'} : {}">
 						<div class="d-flex justify-content-between">
 							<h2 class="title">Thông tin chung</h2>
 							<img height="35px" @click="handleCancel" class="cancel" src="../../../../assets/icons/ic_cancel_2.svg" alt="">
