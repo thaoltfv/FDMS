@@ -29,37 +29,51 @@
                 </b-dropdown>
         </b-button-group>
 	</div>
-	<div v-else class="btn-footer row" style="margin: 0;justify-content: space-around;padding-top: 0;">
+	<div v-else class="btn-footer row" style="margin: 0;padding-top: 0;">
 		<!--hiện full -->
-		<button v-if="isPermission && isGrossCheck" class=" col-6 btn btn-white" @click="viewDetailAppraise" style="width: unset;margin: 0;padding: 0;">
-            <img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit">
-            Cross check
-        </button>
-		<button v-if="isPermission && checkVersion.length > 0" class="col-6 btn btn-white" @click="viewAppraiseListVersion" style="width: unset;margin: 0;padding-left: 10px;">
-            <img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
-            Cập nhật Version
-        </button>
-        
-        <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn col-6" :class="target.css" @click="handleFooterAccept(target)" style="width: unset;margin: 0;">
-			<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit">{{target.description}}
-		</button>
-         <button v-if="editForm && isPermission" class="btn btn-white col-6" @click.prevent="handleEdit(idData)" style="width: unset;margin: 0;margin-top: 10px;">
-				<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
-				Chỉnh sửa
+		<div class="col-6" style="">
+			<b-dropdown v-if="getTargetDescription().length > 0" class="btn_dropdown" no-caret right dropup style="margin-top: 5px;">
+				<template #button-content>
+					<button style="margin-right: 2px" class="btn btn-white" type="button">
+						<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
+					</button>
+				</template>
+				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="isPermission && isGrossCheck" class="btn btn-white" @click="viewDetailAppraise">
+					<div class="div_item_dropdown">
+						<img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit">
+						<span style="font-size: 13px;">Cross check</span>
+					</div>
+				</b-dropdown-item>
+				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion">
+					<div class="div_item_dropdown">
+						<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
+						<span style="font-size: 13px;">Cập nhật Version</span>
+					</div>
+				</b-dropdown-item>
+				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+					<div class="div_item_dropdown">
+						<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
+						<span style="font-size: 13px;">{{target.description}}</span>
+						<!-- {{target.description}} -->
+					</div>
+				</b-dropdown-item>
+				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="editForm && isPermission" class="btn btn-white" @click.prevent="handleEdit(idData)">
+					<div class="div_item_dropdown">
+						<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
+						<span style="font-size: 13px;">Chỉnh sửa</span>
+					</div>
+				</b-dropdown-item>
+				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="isCancel && isPermission" class="btn btn-white" @click.prevent="handleCancelCertificate">
+					<img class="img" src="@/assets/icons/ic_destroy.svg" alt="edit">
+            		<span style="font-size: 13px;">Hủy hồ sơ</span>
+				</b-dropdown-item>
+			</b-dropdown>
+		</div>
+		<div class="col-6" style="text-align: right;">
+			<button class="btn btn-white" type="button" @click="onCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
+				<span style="font-size: 15px;">Trở lại</span>
 			</button>
-        <b-button-group  class="btn_group col-6" style="width: unset;margin: 0;padding: 0;">
-                <button style="margin-right: 2px" class="btn btn-white" @click="onCancel" type="button">
-                    <img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel">Trở về
-                </button>
-                <b-dropdown v-if="isCancel && isPermission" class="btn_dropdown" right dropup>
-                    <b-dropdown-item @click.prevent="handleCancelCertificate">
-                        <div class="div_item_dropdown">
-                            <img style="height: 20px" class="img" src="@/assets/icons/ic_destroy.svg" alt="edit">
-                                Hủy hồ sơ
-                        </div>
-                    </b-dropdown-item>
-                </b-dropdown>
-        </b-button-group>
+		</div>
     </div>
 </template>
 
@@ -196,5 +210,13 @@ export default {
 			border-color: none !important;
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
 		}
+	}
+	/deep/ .dropdown-item {
+		min-width: unset!important;
+		// padding: 0!important;
+	}
+	/deep/ .dropdown-menu.show {
+		background: transparent!important;
+		box-shadow: none!important;
 	}
 </style>

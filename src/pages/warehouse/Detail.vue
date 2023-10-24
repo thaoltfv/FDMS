@@ -1257,7 +1257,7 @@
 					</a-timeline>
 				</a-drawer>
     </div>
-    <div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
+    <div v-if="!isMobile()" class="btn-footer d-md-flex d-block justify-content-end align-items-center">
       <div class="d-md-flex d-block button-contain ">
         <button class="btn btn-white" @click="onCancel" type="button">
           <img class="img" src="../../assets/icons/ic_cancel.svg" alt="cancel">
@@ -1279,6 +1279,56 @@
         </button>
       </div>
     </div>
+    <div v-else class="btn-footer row" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
+      <div class="col-6">
+        <b-dropdown class="btn_dropdown" no-caret right dropup >
+          <template #button-content>
+            <button style="margin-right: 2px" class="btn btn-white" type="button">
+              <img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
+            </button>
+          </template>
+          <b-dropdown-item v-if="edit && checkRole" style="margin-left: 20px;width: 150px;padding: 0;" class="btn btn-white" @click.prevent="handleEdit(form.id)">
+            <div class="div_item_dropdown" v-if="form.status = 2 ? 'disabled' : ''">
+              <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px; height: 1.25rem" alt="edit"/>
+              <span style="font-size: 13px;">Chỉnh sửa</span>
+            </div>
+          </b-dropdown-item>
+          <b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" class="btn btn-white" @click="print(form.id)">
+            <div class="div_item_dropdown">
+              <img src="@/assets/icons/ic_download.svg" style="margin-right: 12px; height: 1.25rem" alt="print"/>
+              <span style="font-size: 13px;">Tải xuống</span>
+            </div>
+          </b-dropdown-item>
+          <b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" class="btn btn-white" @click="openModalPrint(form.id)">
+            <div class="div_item_dropdown">
+              <img src="@/assets/icons/ic_printer.svg" style="margin-right: 12px; height: 1.25rem" alt="print"/>
+              <span style="font-size: 13px;">In</span>
+            </div>
+          </b-dropdown-item>
+        </b-dropdown>
+      </div>
+      <div class="col-6" style="text-align: right;">
+        <button class="btn btn-white text-nowrap" @click="onCancel" type="button" style="width: fit-content;">
+          <img class="img" src="../../assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="cancel">
+          Trở về
+        </button>
+      </div>
+        
+        <!-- <div v-if="edit && checkRole" class="mr-15">
+          <button v-if="form.status = 2 ? 'disabled' : ''" class="btn btn-white" @click.prevent="handleEdit(form.id)">
+            <img class="img" src="../../assets/icons/ic_edit.svg" alt="edit">
+            Chỉnh sửa
+          </button>
+        </div> -->
+        <!-- <button class="btn btn-white" @click="print(form.id)">
+          <img class="img" src="../../assets/icons/ic_download.svg" alt="print">
+          Tải xuống
+        </button>
+        <button class="btn btn-white" @click="openModalPrint(form.id)">
+          <img class="img" src="../../assets/icons/ic_printer.svg" alt="print">
+          In
+        </button> -->
+      </div>
     </div>
 </template>
 <style lang="scss">
@@ -1728,6 +1778,31 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+    /deep/ .dropdown-item {
+    min-width: unset!important;
+    // padding: 0!important;
+  }
+
+  // /deep/ .dropdown-menu.show {
+  //   background: transparent!important;
+  //   box-shadow: none!important;
+  // }
+
+  // /deep/ .dropdown-menu-right.show {
+  //   background: transparent!important;
+  //   box-shadow: none!important;
+  // }
+
+  // /deep/ .dropdown-menu {
+  //   background: transparent!important;
+  //   box-shadow: none!important;
+  // }
+
+  /deep/ .dropup .dropdown-menu {
+    background: transparent!important;
+    box-shadow: none!important;
+  }
+
 .contain-detail {
   margin-bottom: 80px;
   @media (max-width: 767px) {
@@ -2132,5 +2207,6 @@ export default {
     height: auto;
   }
 }
+
 }
 </style>

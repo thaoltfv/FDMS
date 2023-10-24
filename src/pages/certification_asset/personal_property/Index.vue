@@ -53,13 +53,13 @@
         <div class="col-12 col-md-6 col-xl-8">
           <button-checkbox :options="statusOptions" :value="selectedStatus" @change="onChangeStatus" />
         </div>
-        <div class="search-block col-7 col-md-6 col-xl-4 d-flex justify-content-end align-items-center">
+        <div class="search-block col-11 col-md-6 col-xl-4 d-flex justify-content-end align-items-center">
           <Search @filter-changed="onFilterQuickSearchChange($event)" />
 		  </div>
           <!-- <router-link v-if="add" :to="{ name: 'certification_asset.create' }" class="btn text-nowrap index-screen-button ml-md-2">
             <img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
           </router-link> -->
-		  <div
+		  <!-- <div
 					class="col-4"
 					style="padding: 0;
     margin-top: 10px;"
@@ -67,7 +67,7 @@
 					<button @click="openChooseTypeCreate" class="btn text-nowrap index-screen-button ml-md-2">
 						<img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
 					</button>
-					</div>
+					</div> -->
 					<div
 					class="col-1"
 					style="padding: 0;

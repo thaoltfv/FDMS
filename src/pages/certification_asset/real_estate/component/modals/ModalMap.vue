@@ -360,7 +360,7 @@ px
 						Trở lại
 					</button>
 				</div>
-				<div class="main-map">
+				<div class="main-map" style="height: -webkit-fill-available; margin-bottom: 60px;">
 					<div id="mapid" class="layer-map">
 						<l-map
 							ref="lmap"
@@ -464,7 +464,7 @@ px
 			</div>
 		</ValidationObserver>
 	</div>
-	<div v-else class="modal-delete">
+	<div v-else class="modal-delete" style="padding:0;">
 		<div class="modal-detail d-flex justify-content-center align-items-center" v-if="isOpenLoading" style="z-index: 1032;" >
 			<vep
 				:progress="progress"
@@ -596,9 +596,10 @@ px
 				<div
 					v-if="modalGeoInfo"
 					class="card"
-					style="top: 15vh;position: absolute; overflow: scroll;
+					style="position: fixed; overflow: scroll;
     z-index: 999999;transform: none; transition: transform 525ms cubic-bezier(0, 0, 0.2, 1) 5ms;width: 100%;
-    height: 76vh;"
+    height: -webkit-fill-available;
+    margin-bottom: 60px;left:0;"
 				>
 					<button
 						class=""
@@ -837,7 +838,7 @@ px
 						</div>
 					</div>
 				</div>
-				<div class="main-map" style="    height: 76vh;">
+				<div class="main-map" style="    height: 80vh;">
 					<div id="mapid" class="layer-map">
 						<l-map
 							ref="lmap"

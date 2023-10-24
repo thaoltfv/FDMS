@@ -89,7 +89,7 @@
 		<div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
 			<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
             <div class="col-12 d-flex mb-2 justify-content-between">
-              <span @click="handleDetail(element.id, element)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">DS_{{element.id}}</span>
+              <span class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">DS_{{element.id}}</span>
             </div>
 			<div class="property-content mb-2 d-flex color_content">
               <div class="label_container d-flex">

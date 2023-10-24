@@ -3,7 +3,7 @@
 			<div
 				class="modal-detail d-flex justify-content-center align-items-center"
 				@click.self="handleCancel">
-				<div class="card" :style="isMobile() ? {'margin-top':'-55px', 'max-height': '94vh', 'min-height': '94vh'} : {}">
+				<div class="card" :style="isMobile() ? {'margin-top':'-55px'} : {}">
 					<div class="container-title" :style="isMobile() ? {'padding-bottom':'0', 'margin-bottom':'0'} : {}">
 						<div class="d-flex justify-content-between">
 							<h2 class="title">Thông tin chung</h2>
@@ -96,20 +96,39 @@
 								<button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
 							</div>
 						</div>
-						<div v-else class="row" style="padding: 0;    margin-bottom: 40px;">
+						<div v-else class="row" style="padding: 0;">
 							<div style="cursor:pointer" @click="handleDetail(idData)" class="btn-edit col-12">
 								<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
 								<span class="color_content content_btn_edit">Xem chi tiết</span>
 							</div>
-							<div class="button-contain row" style="justify-content: space-around;position: fixed;bottom: 70px;">
-								<div class="col-6" style="padding: 0">
-									<button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+							<div class="button-contain row">
+								<div class="col-6" style="">
+									<!-- <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
 										<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
 										<span style="font-size: 15px;">{{target.description}}</span>
-									</button>
+									</button> -->
+									<!-- <button style="margin-right: 2px" class="btn btn-white" type="button">
+										<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
+									</button> -->
+									<!-- <b-button-group  class="btn_group" > -->
+										<b-dropdown v-if="getTargetDescription().length > 0" class="btn_dropdown" no-caret right dropup style="margin-top: 5px;">
+											<template #button-content>
+												<button style="margin-right: 2px" class="btn btn-white" type="button">
+													<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
+												</button>
+											</template>
+											<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+												<div class="div_item_dropdown">
+													<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
+													<span style="font-size: 15px;">{{target.description}}</span>
+													<!-- {{target.description}} -->
+												</div>
+											</b-dropdown-item>
+										</b-dropdown>
+									<!-- </b-button-group> -->
 								</div>
-								<div class="col-6" style="">
-									<button class="btn btn-white" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
+								<div class="col-6" style="text-align: right;">
+									<button class="btn btn-white" type="button" @click="handleCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
 										<span style="font-size: 15px;">Trở lại</span>
 									</button>
 								</div>
@@ -162,6 +181,7 @@ import InputDatePicker from '@/components/Form/InputDatePicker'
 import InputCurrency from '@/components/Form/InputCurrency'
 import moment from 'moment'
 import CertificationBrief from '@/models/CertificationBrief'
+import {BTooltip, BDropdown, BDropdownItem, BButtonGroup} from 'bootstrap-vue'
 
 export default {
 	name: 'ModalAppraiseInformation',
@@ -218,7 +238,11 @@ export default {
 		InputDatePicker,
 		InputCurrency,
 		ModalAppraisal,
-		ModalSendVerify
+		ModalSendVerify,
+		'b-tooltip': BTooltip,
+		'b-dropdown-item': BDropdownItem,
+		'b-button-group': BButtonGroup,
+		'b-dropdown': BDropdown
 	},
 	computed: {
 		optionsAppraisalPurposes () {
@@ -778,4 +802,30 @@ export default {
 		border: 1px solid #007EC6;
 		}
 }
+.btn_dropdown {
+		border:white;
+		border-radius: 5px;
+		height: 35px;
+		@media (max-width: 767px) {
+			margin-top: 10px;
+		}
+	}
+.btn_group {
+		@media (max-width: 767px) {
+			width: 100%;
+		}
+		/deep/ .btn-secondary {
+			background-image: none;
+			border-color: none !important;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+		}
+	}
+	/deep/ .dropdown-item {
+		min-width: unset!important;
+		// padding: 0!important;
+	}
+	/deep/ .dropdown-menu.show {
+		background: transparent!important;
+		box-shadow: none!important;
+	}
 </style>

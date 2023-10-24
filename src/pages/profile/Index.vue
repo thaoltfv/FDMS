@@ -42,6 +42,13 @@
           </div>
         </div>
       </div>
+      <div v-if="isMobile()" class="d-flex" style="justify-content: center;margin-top: 20px;">
+        <div class="row">
+          <button :class="{ 'btn_loading disabled': isSubmit }" class="btn btn-white btn-orange text-nowrap" @click.prevent="logout()">
+              <img src="@/assets/icons/ic_logout.svg" style="margin-right: 12px" alt="logout"/>Đăng xuất
+            </button>
+        </div>
+      </div>
     </div>
     <ModalImage
       v-if="viewImage"
@@ -56,6 +63,9 @@ import UploadDragDrop from '@/components/file/UploadDragDrop'
 import store from '@/store'
 import InputText from '@/components/Form/InputText'
 import ModalImage from '@/components/Modal/ModalImage'
+import Admin from '@/models/Admin'
+import firebase from 'firebase/app'
+import * as types from '@/store/mutation-types'
 
 export default {
 	name: 'password',
@@ -89,6 +99,14 @@ export default {
 		}
 	},
 	methods: {
+    async logout () {
+			try {
+				await Admin.logout()
+				await firebase.auth().signOut()
+			} catch (e) { }
+			store.commit(types.LOG_OUT)
+			await this.$router.push({ name: 'login' })
+		},
     isMobile() {
 			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
