@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="isMobile() ? {'margin':'0'} : {}">
     <Map/>
   </div>
 </template>
@@ -16,6 +16,15 @@ export default {
 		}
 	},
 	beforeMount () {
+	},
+	methods: {
+		isMobile() {
+			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		}
 	}
 }
 </script>

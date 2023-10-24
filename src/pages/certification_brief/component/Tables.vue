@@ -169,7 +169,7 @@
             </div>
           </b-card>
 	</div>
-	<div class="pagination-wrapper">
+	<div class="pagination-wrapper" style="margin-bottom: 20px;">
 			<div class="page-size">
 			Hiển thị
 			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"

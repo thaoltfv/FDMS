@@ -156,8 +156,9 @@
         @show_marker="handleShowMarker"
       />
     </div>
-	<div v-else class="d-flex all-map" style="padding: 0; height: 93vh;margin-top: -15px;">
-      <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''">
+	<div v-else class="d-flex all-map" style="padding: 0; height: 100vh;">
+      <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''" style="height: -webkit-fill-available;
+    margin-bottom: 60px;">
         <div id="mapid" class="layer-map">
           <l-map ref="lmap"
                  :zoom="zoom"

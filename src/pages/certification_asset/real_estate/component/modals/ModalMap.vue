@@ -360,7 +360,7 @@ px
 						Trở lại
 					</button>
 				</div>
-				<div class="main-map" style="height: -webkit-fill-available; margin-bottom: 60px;">
+				<div class="main-map">
 					<div id="mapid" class="layer-map">
 						<l-map
 							ref="lmap"
@@ -838,7 +838,7 @@ px
 						</div>
 					</div>
 				</div>
-				<div class="main-map" style="    height: 80vh;">
+				<div class="main-map" style="height: -webkit-fill-available;margin-bottom: 60px;">
 					<div id="mapid" class="layer-map">
 						<l-map
 							ref="lmap"
