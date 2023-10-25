@@ -38,7 +38,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             'updated_at',
             'total_price',
         ];
-        $result = $this->model->query()->with(['createdBy', 'assetType', 'asset:id,real_estate_id'])->select($select);
+        $result = $this->model->query()->with(['createdBy', 'assetType', 'asset:id,real_estate_id', 'appraises', 'apartment'])->select($select);
         $role = $user->roles->last();
         if (($role->name == 'USER')) {
             $result = $result->where('created_by', $user->id);
