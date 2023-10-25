@@ -179,7 +179,7 @@ export default {
         }
         
       })
-    }, 5000)
+    }, 3000)
     
   },
   watch: {

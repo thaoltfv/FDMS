@@ -8,7 +8,8 @@
              class="form-label font-weight-bold d-flex justify-content-between align-items-center color_content">
         <div class="d-flex align-items-start">
           {{ $t(label) }}
-          <span v-if="required" class="required">{{$t('required')}}</span>
+          <!-- <span v-if="required" class="required">{{$t('required')}}</span> -->
+		  <b  v-if="required" class="text-red">*</b>
         </div>
         <span v-if="rules.includes('max:')" class="character-count">
           {{value.length}}/{{maxLength}}
