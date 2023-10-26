@@ -67,13 +67,13 @@
                 <div class="property-content row" v-if="property.appraise_law && property.appraise_law.length > 0">
                   <p class="property-title col-4">Số tờ: </p>
                   <p class="property-detail col">
-                    {{property.appraise_law[0].land_details && property.appraise_law[0].land_details.length > 0 ? (property.appraise_law[0].land_details.length === 1 ? property.appraise_law[0].land_details[0].doc_no : 'Nhiều tờ') : 'Không có'}}
+                    {{property.tothua && property.tothua.length > 0 ? (property.tothua.length === 1 ? property.tothua[0].doc_no : 'Nhiều tờ') : 'Không có'}}
                     </p>
                 </div>
                 <div class="property-content row" v-if="property.appraise_law && property.appraise_law.length > 0">
                   <p class="property-title col-4">Số thửa: </p>
                   <p class="property-detail col">
-                    {{property.appraise_law[0].land_details && property.appraise_law[0].land_details.length > 0 ? (property.appraise_law[0].land_details.length === 1 ? property.appraise_law[0].land_details[0].land_no : 'Nhiều thửa') : 'Không có'}}
+                    {{property.tothua && property.tothua.length > 0 ? (property.tothua.length === 1 ? property.tothua[0].land_no : 'Nhiều thửa') : 'Không có'}}
                     </p>
                 </div>
                 <div class="property-content row">

@@ -2321,7 +2321,27 @@ export default {
 	background: transparent!important;
 	box-shadow: none!important;
 }
+@media (max-width: 767px) {
+	/deep/ .ant-timeline-item-content{
+			margin-left: 25px;
+			p {
+				margin-bottom: 0.2em
+			}
+		}
+/deep/ .ant-timeline-item-tail{
+	border-left: 2px solid #26bf5fad;
+}
 
+/deep/ .ant-drawer-body {
+	overflow: scroll;
+    height: 86vh;
+    padding-bottom: 0;
+}
+/deep/ .ant-drawer-content {
+	height: 93vh;
+    overflow: scroll;
+}
+}
 .certification-asset {
 	@media (max-width: 449px){
 		margin-bottom: 100px;
@@ -2375,25 +2395,8 @@ export default {
 		position: absolute !important;
 	}
 }
-/deep/ .ant-timeline-item-content{
-			margin-left: 25px;
-			p {
-				margin-bottom: 0.2em
-			}
-		}
-/deep/ .ant-timeline-item-tail{
-	border-left: 2px solid #26bf5fad;
-}
 
-/deep/ .ant-drawer-body {
-	overflow: scroll;
-    height: 86vh;
-    padding-bottom: 0;
-}
-/deep/ .ant-drawer-content {
-	height: 93vh;
-    overflow: scroll;
-}
+
 .card {
 	border-radius: 5px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
