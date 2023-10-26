@@ -7211,7 +7211,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
         // dd($result['appraiseLaw'][0]['id']);
         if ($result['appraiseLaw'][0]['id']){
-            $clone = AppraiseLawLandDetail::quer()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->first();
+            $clone = AppraiseLawLandDetail::query()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->first();
             dd($clone);
         }
         return $result;
