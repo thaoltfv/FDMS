@@ -135,6 +135,7 @@ export default {
       $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
       
       setTimeout(() => {
+        console.log('lỗi email', $('[class="firebaseui-info-bar-message"]').text())
         if ($('[class="firebaseui-info-bar-message"]').text() !== ''){
           this.$toast.open({
             message: 'Email không tồn tại, vui lòng thử lại',
@@ -148,20 +149,28 @@ export default {
           $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
           // console.log('lỗi nè',$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text())
           setTimeout(() => {
-            if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text() !== ''){
+            console.log('lỗi mật khẩu', $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text())
+            if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == 'You have entered an incorrect password too many times. Please try again in a few minutes.'){
+              this.$toast.open({
+                message: 'Bạn đã nhập sai quá nhiều lần, vui lòng thử lại sau ít phút',
+                type: 'error',
+                position: 'top-right'
+              })
+              $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text('')
+            } else if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == "The email and password you entered don't match") {
               this.$toast.open({
                 message: 'Mật khẩu không đúng, vui lòng thử lại',
                 type: 'error',
                 position: 'top-right'
               })
-              $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text('')
+              $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text('')
             }
-          },500)
+          },1000)
         }
         // $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
         
         // console.log('lỗi nè',$('[class="firebaseui-info-bar firebaseui-id-info-bar"]').length)
-      },500)
+      },1000)
       
       // let email = $('[name="email"]').value
       // console.log('email', email)

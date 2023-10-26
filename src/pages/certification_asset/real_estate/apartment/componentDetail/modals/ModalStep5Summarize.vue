@@ -15,15 +15,15 @@
                           <td>
                             <div class="col-10 col-lg-10">Giá trị chung cư</div>
                           </td>
-                          <td>{{apartment_total_price ? `${formatNumber(apartment_total_price)} đ` : '0 đ'}}</td>
+                          <td>{{apartment_total_price ? `${formatNumber(apartment_total_price.toFixed(0))} đ` : '0 đ'}}</td>
                       </tr>
                       <tr>
                           <td><div class="col-10 col-lg-10">Tài sản khác</div></td>
-                          <td>{{other_asset_price ? `${formatNumber(other_asset_price)} đ` : '0 đ'}}</td>
+                          <td>{{other_asset_price ? `${formatNumber(other_asset_price.toFixed(0))} đ` : '0 đ'}}</td>
                       </tr>
                       <tr>
                           <td><div class="col-10 col-lg-10"><strong>TỔNG CỘNG</strong></div></td>
-                          <td><strong>{{total_price ? `${formatNumber(total_price)} đ` : '0 đ'}}</strong></td>
+                          <td><strong>{{total_price ? `${formatNumber(total_price.toFixed(0))} đ` : '0 đ'}}</strong></td>
                       </tr>
                       <tr>
                         <td>

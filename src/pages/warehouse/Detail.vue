@@ -1281,25 +1281,31 @@
     </div>
     <div v-else class="btn-footer row" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
       <div class="col-6">
+        <button class="btn btn-white text-nowrap" @click="onCancel" type="button" style="width: fit-content;">
+          <img class="img" src="../../assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="cancel">
+          Trở về
+        </button>
+      </div>
+      <div class="col-6"  style="text-align: right;">
         <b-dropdown class="btn_dropdown" no-caret right dropup >
           <template #button-content>
             <button style="margin-right: 2px" class="btn btn-white" type="button">
               <img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
             </button>
           </template>
-          <b-dropdown-item v-if="edit && checkRole" style="margin-left: 20px;width: 150px;padding: 0;" class="btn btn-white" @click.prevent="handleEdit(form.id)">
+          <b-dropdown-item v-if="edit && checkRole" style="margin-left: 55px;width: 150px;padding: 0;" class="btn btn-white" @click.prevent="handleEdit(form.id)">
             <div class="div_item_dropdown" v-if="form.status = 2 ? 'disabled' : ''">
               <img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px; height: 1.25rem" alt="edit"/>
               <span style="font-size: 13px;">Chỉnh sửa</span>
             </div>
           </b-dropdown-item>
-          <b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" class="btn btn-white" @click="print(form.id)">
+          <b-dropdown-item style="margin-left: 55px;width: 150px;padding: 0;" class="btn btn-white" @click="print(form.id)">
             <div class="div_item_dropdown">
               <img src="@/assets/icons/ic_download.svg" style="margin-right: 12px; height: 1.25rem" alt="print"/>
               <span style="font-size: 13px;">Tải xuống</span>
             </div>
           </b-dropdown-item>
-          <b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" class="btn btn-white" @click="openModalPrint(form.id)">
+          <b-dropdown-item style="margin-left: 55px;width: 150px;padding: 0;" class="btn btn-white" @click="openModalPrint(form.id)">
             <div class="div_item_dropdown">
               <img src="@/assets/icons/ic_printer.svg" style="margin-right: 12px; height: 1.25rem" alt="print"/>
               <span style="font-size: 13px;">In</span>
@@ -1307,12 +1313,7 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
-      <div class="col-6" style="text-align: right;">
-        <button class="btn btn-white text-nowrap" @click="onCancel" type="button" style="width: fit-content;">
-          <img class="img" src="../../assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="cancel">
-          Trở về
-        </button>
-      </div>
+      
         
         <!-- <div v-if="edit && checkRole" class="mr-15">
           <button v-if="form.status = 2 ? 'disabled' : ''" class="btn btn-white" @click.prevent="handleEdit(form.id)">

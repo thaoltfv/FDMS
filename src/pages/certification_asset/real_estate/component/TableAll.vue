@@ -91,14 +91,19 @@
   <div v-else class="table-wrapper" style="margin: 0;">
     <div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
 		<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
-            <div class="col-12 d-flex mb-2 justify-content-between">
+      
+      <div class="col-12 d-flex mb-2 justify-content-between">
               <span @click="handleDetail(element.id, element)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">BDS_{{element.id}}</span>
             </div>
 			<div class="property-content mb-2 d-flex color_content">
               <div class="label_container d-flex">
-                <div class="d-flex">
-                <span style="font-weight: 500"><strong class="d_inline mr-1">Tên tài sản:</strong><span :id="element.id + 'all'" class="text-left">{{ element.appraise_asset.substring(25,0)+'...'}}</span></span>
-				<b-tooltip :target="(element.id + 'all').toString()">{{ element.appraise_asset }}</b-tooltip>
+                <div v-if="element.appraises" class="d-flex">
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Địa chỉ:</strong><span :id="element.id + 'all'" class="text-left">{{ element.appraises.full_address.length > 25 ? element.appraises.full_address.substring(25,0)+'...' : element.appraises.full_address}}</span></span>
+				<b-tooltip :target="(element.id + 'all').toString()">{{ element.appraises.full_address }}</b-tooltip>
+                </div>
+                <div v-if="element.apartment" class="d-flex">
+                <span style="font-weight: 500"><strong class="d_inline mr-1">Địa chỉ:</strong><span :id="element.id + 'all'" class="text-left">{{ element.apartment.full_address.length > 25 ? element.apartment.full_address.substring(25,0)+'...' : element.appraises.full_address}}</span></span>
+				<b-tooltip :target="(element.id + 'all').toString()">{{ element.apartment.full_address }}</b-tooltip>
                 </div>
               </div>
             </div>
@@ -121,8 +126,9 @@
 			<div class="property-content mb-2 d-flex color_content">
 				<div class="label_container d-flex">
 					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng diện tích:</strong><span class="text-none">{{ element.total_area ? formatNumber(element.total_area) : 0 }} m<sup>2</sup></span></span>
-					</div>
+					<span :id="element.id + 'card'" style="font-weight: 500"><strong class="d_inline mr-1">Tổng diện tích:</strong><span class="text-none">{{ element.total_area ? formatNumber(element.total_area) : 0 }} m<sup>2</sup></span></span>
+					<b-tooltip placement="right" :target="(element.id + 'card').toString()">{{ element.appraise_asset }}</b-tooltip>
+        </div>
 				</div>
 			</div>
 			<div class="property-content mb-2 d-flex color_content">

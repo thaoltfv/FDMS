@@ -31,49 +31,50 @@
 	</div>
 	<div v-else class="btn-footer row" style="margin: 0;padding-top: 0;">
 		<!--hiện full -->
-		<div class="col-6" style="">
+		<div class="col-6" >
+			<button class="btn btn-white" type="button" @click="onCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
+				<span style="font-size: 15px;">Trở lại</span>
+			</button>
+		</div>
+		<div class="col-6" style="text-align: right;">
 			<b-dropdown v-if="getTargetDescription().length > 0" class="btn_dropdown" no-caret right dropup style="margin-top: 5px;">
 				<template #button-content>
 					<button style="margin-right: 2px" class="btn btn-white" type="button">
 						<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
 					</button>
 				</template>
-				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="isPermission && isGrossCheck" class="btn btn-white" @click="viewDetailAppraise">
+				<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-if="isPermission && isGrossCheck" class="btn btn-white" @click="viewDetailAppraise">
 					<div class="div_item_dropdown">
 						<img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit">
 						<span style="font-size: 13px;">Cross check</span>
 					</div>
 				</b-dropdown-item>
-				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion">
+				<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion">
 					<div class="div_item_dropdown">
 						<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
 						<span style="font-size: 13px;">Cập nhật Version</span>
 					</div>
 				</b-dropdown-item>
-				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+				<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
 					<div class="div_item_dropdown">
 						<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
 						<span style="font-size: 13px;">{{target.description}}</span>
 						<!-- {{target.description}} -->
 					</div>
 				</b-dropdown-item>
-				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="editForm && isPermission" class="btn btn-white" @click.prevent="handleEdit(idData)">
+				<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-if="editForm && isPermission" class="btn btn-white" @click.prevent="handleEdit(idData)">
 					<div class="div_item_dropdown">
 						<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
 						<span style="font-size: 13px;">Chỉnh sửa</span>
 					</div>
 				</b-dropdown-item>
-				<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-if="isCancel && isPermission" class="btn btn-white" @click.prevent="handleCancelCertificate">
+				<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-if="isCancel && isPermission" class="btn btn-white" @click.prevent="handleCancelCertificate">
 					<img class="img" src="@/assets/icons/ic_destroy.svg" alt="edit">
             		<span style="font-size: 13px;">Hủy hồ sơ</span>
 				</b-dropdown-item>
 			</b-dropdown>
 		</div>
-		<div class="col-6" style="text-align: right;">
-			<button class="btn btn-white" type="button" @click="onCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
-				<span style="font-size: 15px;">Trở lại</span>
-			</button>
-		</div>
+		
     </div>
 </template>
 
@@ -193,6 +194,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+		/deep/ .dropdown-item {
+		min-width: unset!important;
+		// padding: 0!important;
+	}
+	/deep/ .dropdown-menu.show {
+		background: transparent!important;
+		box-shadow: none!important;
+		text-align: right;
+	}
 .btn_dropdown {
 		border:white;
 		border-radius: 5px;
@@ -211,12 +221,5 @@ export default {
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
 		}
 	}
-	/deep/ .dropdown-item {
-		min-width: unset!important;
-		// padding: 0!important;
-	}
-	/deep/ .dropdown-menu.show {
-		background: transparent!important;
-		box-shadow: none!important;
-	}
+
 </style>

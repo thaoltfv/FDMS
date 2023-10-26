@@ -102,7 +102,12 @@
 								<span class="color_content content_btn_edit">Xem chi tiết</span>
 							</div>
 							<div class="button-contain row">
-								<div class="col-6" style="">
+								<div class="col-6" >
+									<button class="btn btn-white" type="button" @click="handleCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
+										<span style="font-size: 15px;">Trở lại</span>
+									</button>
+								</div>
+								<div class="col-6" style="text-align: right;">
 									<!-- <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
 										<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
 										<span style="font-size: 15px;">{{target.description}}</span>
@@ -117,7 +122,7 @@
 													<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
 												</button>
 											</template>
-											<b-dropdown-item style="margin-left: 20px;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+											<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
 												<div class="div_item_dropdown">
 													<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
 													<span style="font-size: 15px;">{{target.description}}</span>
@@ -127,11 +132,7 @@
 										</b-dropdown>
 									<!-- </b-button-group> -->
 								</div>
-								<div class="col-6" style="text-align: right;">
-									<button class="btn btn-white" type="button" @click="handleCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
-										<span style="font-size: 15px;">Trở lại</span>
-									</button>
-								</div>
+								
 								<!-- <div class="col-3" style="padding: 0"></div>
 								<div class="col-3" style="padding: 0"></div> -->
 							</div>
@@ -412,6 +413,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+		/deep/ .dropdown-item {
+		min-width: unset!important;
+		// padding: 0!important;
+	}
+	/deep/ .dropdown-menu.show {
+		background: transparent!important;
+		box-shadow: none!important;
+		text-align: right;
+		margin-right: 0;
+	}
 .title{
 	font-size: 1.125rem;
 	font-weight: 700;
@@ -820,12 +831,5 @@ export default {
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
 		}
 	}
-	/deep/ .dropdown-item {
-		min-width: unset!important;
-		// padding: 0!important;
-	}
-	/deep/ .dropdown-menu.show {
-		background: transparent!important;
-		box-shadow: none!important;
-	}
+
 </style>

@@ -459,26 +459,31 @@
 						/>
 						<!-- <div class="btn-footer d-md-flex d-block" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;"> -->
 							<div class="btn-footer row" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
-							<div class="col-6">
+								<div class="col-6" >
+								<button  @click.prevent="handleChangeBack" class="btn btn-white text-nowrap" style="width: fit-content;" >
+									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
+								</button>
+							</div>
+								<div class="col-6" style="text-align: right;">
 								<b-dropdown class="btn_dropdown" no-caret right dropup >
 										<template #button-content>
 											<button style="margin-right: 2px" class="btn btn-white" type="button">
 												<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
 											</button>
 										</template>
-										<b-dropdown-item v-if="edit || add" style="margin-left: 10px;width: 150px;padding: 0;" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
+										<b-dropdown-item v-if="edit || add" style="margin-left: 55px;width: 150px;padding: 0;" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
 											<div class="div_item_dropdown">
 												<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>
 												<span style="font-size: 13px;">Nhân bản</span>
 											</div>
 										</b-dropdown-item>
-										<b-dropdown-item v-if="isEditStatus" style="margin-left: 10px;width: 150px;padding: 0;" class="btn btn-white" @click.prevent="handleEdit(0)" type="submit">
+										<b-dropdown-item v-if="isEditStatus" style="margin-left: 55px;width: 150px;padding: 0;" class="btn btn-white" @click.prevent="handleEdit(0)" type="submit">
 											<div class="div_item_dropdown">
 												<img src="@/assets/icons/ic_edit.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>
 												<span style="font-size: 13px;">Chỉnh sửa</span>
 											</div>
 										</b-dropdown-item>
-										<b-dropdown-item v-if="isEditStatus && isCancelEnable" style="margin-left: 10px;width: 150px;padding: 0;" class="btn btn-white text-nowrap" @click.prevent="handleCancelProperty()">
+										<b-dropdown-item v-if="isEditStatus && isCancelEnable" style="margin-left: 55px;width: 150px;padding: 0;" class="btn btn-white text-nowrap" @click.prevent="handleCancelProperty()">
 											<div class="div_item_dropdown">
 												<img src="@/assets/icons/ic_destroy.svg" style="margin-right: 12px; height: 1.25rem" alt="cancle"/>
 												<span style="font-size: 13px;">Hủy tài sản</span>
@@ -486,11 +491,7 @@
 										</b-dropdown-item>
 									</b-dropdown>
 							</div>
-							<div class="col-6" style="text-align: right;">
-								<button  @click.prevent="handleChangeBack" class="btn btn-white text-nowrap" style="width: fit-content;" >
-									<img src="@/assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="save" />Thoát
-								</button>
-							</div>
+							
 							</div>
 						<!-- </div> -->
 					</ValidationObserver>
@@ -2064,6 +2065,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
+	/deep/ .dropdown-item {
+	min-width: unset!important;
+	// padding: 0!important;
+}
+
+/deep/ .dropdown-menu.show {
+	background: transparent!important;
+	box-shadow: none!important;
+}
+
+/deep/ .dropdown-menu-right.show {
+	background: transparent!important;
+	box-shadow: none!important;
+}
+
+/deep/ .dropdown-menu {
+	background: transparent!important;
+	box-shadow: none!important;
+}
+
+/deep/ .dropup.dropdown-menu {
+	background: transparent!important;
+	box-shadow: none!important;
+}
 .certification-asset {
   // padding-left: 16px;
   // padding-right: 16px;
@@ -2230,30 +2255,7 @@ export default {
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
 		}
 	}
-/deep/ .dropdown-item {
-	min-width: unset!important;
-	// padding: 0!important;
-}
 
-/deep/ .dropdown-menu.show {
-	background: transparent!important;
-	box-shadow: none!important;
-}
-
-/deep/ .dropdown-menu-right.show {
-	background: transparent!important;
-	box-shadow: none!important;
-}
-
-/deep/ .dropdown-menu {
-	background: transparent!important;
-	box-shadow: none!important;
-}
-
-/deep/ .dropup.dropdown-menu {
-	background: transparent!important;
-	box-shadow: none!important;
-}
 
 }
 
