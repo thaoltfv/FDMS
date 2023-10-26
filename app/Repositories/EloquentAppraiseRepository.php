@@ -7209,7 +7209,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'tangibleAssets.buildingType:id,description'
         ];
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
-        dd($result['appraise_law']);
+        dd($result);
         if ($result['appraise_law'][0]['id']){
             $clone = AppraiseLawLandDetail::quer()->where('appraise_law_id', $result['appraise_law'][0]['id'])->first();
             dd($clone);
