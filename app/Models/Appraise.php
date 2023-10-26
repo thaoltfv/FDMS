@@ -319,7 +319,8 @@ class Appraise extends Model
 
     public function appraiseLaw(): HasMany
     {
-        return $this->hasMany(AppraiseLaw::class, 'appraise_id')->orderBy('id', 'ASC');
+        // return $this->hasMany(AppraiseLaw::class, 'appraise_id')->orderBy('id', 'ASC');
+        return $this->hasMany(AppraiseLaw::class, 'appraise_id');
     }
 
     public function constructionCompany(): HasMany
