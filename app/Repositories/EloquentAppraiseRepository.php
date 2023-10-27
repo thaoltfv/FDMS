@@ -3551,8 +3551,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $real_estate = $objects['real_estate'] ?? [];
             $isDuplicate = $this->checkDuplicateLandTypePurpose($totalArea);
             if (!$isDuplicate)
-                if (isset($planningArea))
-                    $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
+                // if (isset($planningArea))
+                //     $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
             if (!$isDuplicate)
                 $isDuplicate = $this->checkDuplicateLandTypePurpose($ubndPrice);
             if ($isDuplicate) {
