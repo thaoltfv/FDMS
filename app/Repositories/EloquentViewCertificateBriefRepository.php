@@ -279,7 +279,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $data = $this->model
                     ->query()
                     ->select($select)
-                    ->whereIn('status',[1,2,3])
+                    ->whereIn('status',[1,2,3,6])
                     ->groupBy(['status','status_text'])
                     ->get()->toArray();
         $result = array('label' => Arr::pluck($data,'status_text'),'data' => Arr::pluck($data,'count'),'status' => Arr::pluck($data,'status'));
