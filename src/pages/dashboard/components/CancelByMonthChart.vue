@@ -95,8 +95,8 @@ export default {
 						dataset.push({
 							data: item.count,
 							label: item.label,
-							borderColor: '#9EA6B4',
-							backgroundColor: '#9EA6B4',
+							borderColor: '#e99a99',
+							backgroundColor: '#e99a99',
 							fill: false
 						})
 					}

@@ -78,10 +78,10 @@ export default {
 				this.chartDoughnut.total = res.data.data.reduce((a, b) => a + b, 0)
 				res.data.status.forEach(item => {
 					if (item === 'New') {
-						this.chartDoughnut.datasets[0].backgroundColor.push('#45AAF2')
+						this.chartDoughnut.datasets[0].backgroundColor.push('#45818e')
 						this.chartDoughnut.labels.push('Mới trong tháng')
 					} else if (item === 'Backlog') {
-						this.chartDoughnut.datasets[0].backgroundColor.push('#0062AF')
+						this.chartDoughnut.datasets[0].backgroundColor.push('#a2c4c9')
 						this.chartDoughnut.labels.push('Tồn cũ')
 					}
 				})

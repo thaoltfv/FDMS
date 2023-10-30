@@ -1096,6 +1096,7 @@ export default {
 			if (checkIsCheckFacility && checkIsCheckFacility.length === 0) {
 				this.form.step_2.total_area[0].is_transfer_facility = true
 			}
+			console.log('mục đích',this.form.step_2.total_area)
 			this.handleChangeUBNDPrice()
 			this.handleGetTotalArea()
 		},

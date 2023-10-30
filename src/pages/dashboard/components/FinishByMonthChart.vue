@@ -87,16 +87,16 @@ export default {
 						dataset.push({
 							data: item.count,
 							label: item.label,
-							borderColor: '#FAB005',
-							backgroundColor: '#FAB005',
+							borderColor: '#33a853',
+							backgroundColor: '#33a853',
 							fill: false
 						})
 					} else {
 						dataset.push({
 							data: item.count,
 							label: item.label,
-							borderColor: '#45AAF2',
-							backgroundColor: '#45AAF2',
+							borderColor: '#b6d7a8',
+							backgroundColor: '#b6d7a8',
 							fill: false
 						})
 					}

@@ -73,7 +73,7 @@
             <div class="col-12 mt-2">
               <div v-for="(main_land, index) in data.total_area" :key="index" class=" mb-2 row content_form">
                 <div class="col-5">
-                  <InputCategoryCustom
+                  <!-- <InputCategoryCustom
                     v-model="main_land.land_type_purpose_id"
                     vid="land_type_purpose_id"
                     nonLabel="Mục đích sử dụng"
@@ -81,6 +81,14 @@
                     :options="optionsTypePurposes"
                     @change="changeLandTypePurpose(index, $event, main_land)"
                     :errorCustom="checkDuplicateLandType(main_land.land_type_purpose_id, data.total_area)"
+                  /> -->
+                  <InputCategoryCustom
+                    v-model="main_land.land_type_purpose_id"
+                    vid="land_type_purpose_id"
+                    nonLabel="Mục đích sử dụng"
+                    rules="required"
+                    :options="optionsTypePurposes"
+                    @change="changeLandTypePurpose(index, $event, main_land)"
                   />
                 </div>
                 <div :key="renderInputMainArea" class="col-3">
@@ -168,7 +176,7 @@
             <div v-if="data.planning_area.length > 0" class="col-12 mt-2">
               <div v-for="(planning_area, index) in data.planning_area" :key="index" class="mb-2 row content_form">
                 <div class="col-5">
-                  <InputCategoryCustom
+                  <!-- <InputCategoryCustom
                     v-model="planning_area.land_type_purpose_id"
                     vid="land_type_purpose_id"
                     nonLabel="Mục đích sử dụng"
@@ -176,6 +184,14 @@
                     :options="optionsTypePurposes"
                     @change="changeLandPlanningPurpose(index, $event, planning_area)"
                     :errorCustom="checkDuplicateLandType(planning_area.land_type_purpose_id, data.planning_area)"
+                  /> -->
+                  <InputCategoryCustom
+                    v-model="planning_area.land_type_purpose_id"
+                    vid="land_type_purpose_id"
+                    nonLabel="Mục đích sử dụng"
+                    rules="required"
+                    :options="optionsTypePurposes"
+                    @change="changeLandPlanningPurpose(index, $event, planning_area)"
                   />
                 </div>
                 <div class="col-3">
@@ -534,9 +550,11 @@ export default {
 			return error
 		},
 		checkDuplicateLandType (landTypePurposeId, data) {
+      console.log('trùng 1', landTypePurposeId)
 			let error = ''
 			if (landTypePurposeId) {
 				let checkDuplicate = data.filter(item => item.land_type_purpose_id === landTypePurposeId)
+        console.log('trùng',checkDuplicate)
 				if (checkDuplicate && checkDuplicate.length > 1) error = 'Trùng mục đích sử dụng'
 				else error = ''
 			} else error = ''

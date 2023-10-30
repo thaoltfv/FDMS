@@ -72,6 +72,7 @@ export default {
 	methods: {
 		async getDataProcessProgress () {
 			const res = await Report.getReportProcessProgress(this.form)
+			console.log('data process', res)
 			if (res.data && res.data.status && res.data.status.length > 0) {
 				this.chartDoughnut.datasets[0].data = res.data.data
 				this.chartDoughnut.datasets[0].backgroundColor = []
@@ -79,13 +80,16 @@ export default {
 				res.data.status.forEach(item => {
 					if (item === 1) {
 						this.chartDoughnut.datasets[0].backgroundColor.push('#45AAF2')
-						this.chartDoughnut.labels.push('Mới')
+						this.chartDoughnut.labels.push('Tiếp nhận')
 					} else if (item === 2) {
 						this.chartDoughnut.datasets[0].backgroundColor.push('#0062AF')
-						this.chartDoughnut.labels.push('Đang thẩm định')
+						this.chartDoughnut.labels.push('Thẩm định')
+					} else if (item === 6) {
+						this.chartDoughnut.datasets[0].backgroundColor.push('#e8bc6b')
+						this.chartDoughnut.labels.push('Kiểm soát')
 					} else if (item === 3) {
 						this.chartDoughnut.datasets[0].backgroundColor.push('#fab005')
-						this.chartDoughnut.labels.push('Đang duyệt')
+						this.chartDoughnut.labels.push('Phê duyệt')
 					}
 				})
 			} else {
