@@ -6951,7 +6951,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = RealEstate::query()
             ->select(DB::raw('count(*) as total'))
             // ->groupBy('assetFull.province_id')
-            ->with('assetFull')
+            ->with('certificateAsset')
             ->where('status', 4)
             ->get();
         return $result;
