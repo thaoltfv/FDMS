@@ -4461,6 +4461,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if (isset($objects['general_asset'])) {
                     $generalAsset = $objects['general_asset'];
                     $personalIds = [];
+                    $realEstateApartmentIds = [];
+                    $realEstateAppraiseIds = [];
                     if (count($generalAsset) > 0) {
                         $dictionary = Dictionary::query()->where(['type' => 'LOAI_TAI_SAN', 'status' => 1])->get();
                         $appraiseType = $dictionary->whereIn('acronym', ['DCN', 'DT']);
@@ -4473,8 +4475,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $apartmentTypeIds = Arr::pluck($apartmentType, 'id');
                         $personalTypeIds = Arr::pluck($personalType, 'id');
                         // $personalIds = [];
-                        $realEstateApartmentIds = [];
-                        $realEstateAppraiseIds = [];
+                        // $realEstateApartmentIds = [];
+                        // $realEstateAppraiseIds = [];
                         foreach ($generalAsset as $asset) {
                             $assetTypeId = $asset['asset_type_id'];
                             $assetId = $asset['general_asset_id'];
