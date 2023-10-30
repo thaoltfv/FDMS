@@ -200,6 +200,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $appraises = $oldCertificate->appraises;
                         foreach ($appraises as $appraiseTmp) {
                             Appraise::where('id', $appraiseTmp->appraise_id)->update(['status' => 4]); // updateStatus : 4 = closed
+                            CertificateAsset::where('appraise_id', $appraiseTmp->appraise_id)->update(['status' => 4]);
                         }
                     } else if ($status == 5) {
                         $oldCertificate = Certificate::where('id', $id)->first();
