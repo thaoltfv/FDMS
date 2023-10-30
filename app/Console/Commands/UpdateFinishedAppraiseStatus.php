@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Appraise;
 use App\Models\RealEstate;
 use App\Models\Certificate;
+use App\Models\CertificateAsset;
 use DB;
 use Exception;
 use Illuminate\Console\Command;
@@ -73,6 +74,14 @@ class UpdateFinishedAppraiseStatus extends Command
                         'status' => 4,
                         // 'updated_at' => DB::raw('updated_at')
                     ]);
+                $final = RealEstate::where('certificate_id', $certificate->id)->get();
+                foreach ($final as $t) {
+                    CertificateAsset::where('appraise_id', $t->id)
+                    ->update([
+                        'status' => 4,
+                        // 'updated_at' => DB::raw('updated_at')
+                    ]);
+                }
                 $this->output->progressAdvance();
                 usleep(10);
             }
