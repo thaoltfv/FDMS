@@ -47,9 +47,9 @@ class RealEstate extends Model
         return $this->hasOne(Appraise::class, 'real_estate_id','id');
     }
 
-    public function certificateAsset():HasOne
+    public function certificateAsset(): BelongsTo
     {
-        return $this->hasOne(CertificateAsset::class, 'appraise_id','id');
+        return $this->belongsTo(CertificateAsset::class, 'appraise_id','id');
     }
 
     public function apartment():HasOne
