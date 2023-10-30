@@ -75,7 +75,9 @@ class UpdateFinishedAppraiseStatus extends Command
                         // 'updated_at' => DB::raw('updated_at')
                     ]);
                 $final = RealEstate::where('certificate_id', $certificate->id)->get();
+                $this->output->progressStart($final);
                 foreach ($final as $t) {
+                    $this->output->progressStart($t);
                     CertificateAsset::where('appraise_id', $t->id)
                     ->update([
                         'status' => 4,
