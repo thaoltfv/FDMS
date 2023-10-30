@@ -6942,7 +6942,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         // if(! isset($date_from) || ! isset($date_to)){
         //     return ['message' => 'Vui lòng chọn ngày', 'exception' => ''];
         // }
-        $result = CertificateAsset::query()
+        // $result = CertificateAsset::query()
+        //     ->select('province_id', DB::raw('count(*) as total'))
+        //     ->groupBy('province_id')
+        //     ->with('province:id,name')
+        //     ->where('status', 4)
+        //     ->get();
+        $result = RealEstate::query()
             ->select('province_id', DB::raw('count(*) as total'))
             ->groupBy('province_id')
             ->with('province:id,name')
