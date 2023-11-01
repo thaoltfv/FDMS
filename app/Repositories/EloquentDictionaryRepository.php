@@ -117,10 +117,18 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
 
     public function getToken()
     {
-        $apiUrl = "https://app.estatemanner.com/api/v1/auth/credentials";
+        // production
+        // $apiUrl = "https://app.estatemanner.com/api/v1/auth/credentials";
+        // $postinput =  [
+        //     "client_id" => 'meI2rBIVba1F9SKTxKXhuYX9bBZqWWcU',
+        //     "client_secret" => 'd197ac7cc0e3cbb8eb13ac7a7e241bc5120f4341d7a18139d00cf1020d6d8bf1'
+        // ];
+
+        //trial
+        $apiUrl = "https://app-stg.estatemanner.com/api/v1/auth/credentials";
         $postinput =  [
-            "client_id" => 'meI2rBIVba1F9SKTxKXhuYX9bBZqWWcU',
-            "client_secret" => 'd197ac7cc0e3cbb8eb13ac7a7e241bc5120f4341d7a18139d00cf1020d6d8bf1'
+            "client_id" => 'ch3ELh1kAlH1QQP6SOq7PZHEEZ3p8qKS',
+            "client_secret" => '370dfee19ee9db1fcc974e5492d254359c92b718ceebdf8c1603192565780845'
         ];
         $header = [
             'Content-type' => 'application/json'
@@ -140,7 +148,12 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function getInfoByCoord(array $objects)
     {
-        $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/coord";
+        // production
+        // $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/coord";
+
+        // trial
+        $apiUrl = "https://app-stg.estatemanner.com/api/v1/map/feature/coord";
+
         $postinput =  [
             "lat" => $objects['lat'],
             "lng" => $objects['lng']
@@ -170,9 +183,19 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
     public function getInfoByLand(array $objects)
     {
         if  ($objects['land_plot'] && $objects['land_sheet']) {
-            $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/landplot";
+            // production
+            // $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/landplot";
+
+            // trial
+            $apiUrl = "https://app-stg.estatemanner.com/api/v1/map/feature/landplot";
+
         } else {
-            $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/cadastral";
+            // production
+            // $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/cadastral";
+
+            // trial
+            $apiUrl = "https://app-stg.estatemanner.com/api/v1/map/feature/cadastral";
+
         }
         
         $postinput =  [
