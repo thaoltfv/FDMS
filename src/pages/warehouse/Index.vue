@@ -25,9 +25,9 @@
 								<img src="@/assets/icons/ic_more.svg" alt="">
 							</div>
             </template>
-            <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
+            <!-- <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
             <b-dropdown-item @click.prevent="exportMonthBefore">Xuất dữ liệu tháng trước</b-dropdown-item>
-            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item> -->
             <b-dropdown-item @click.prevent="exportAdjust">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
           </b-dropdown>
           <!-- <download-excel
@@ -252,9 +252,9 @@
 								<img src="@/assets/icons/ic_more.svg" alt="">
 							</div>
             </template>
-            <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
+            <!-- <b-dropdown-item @click.prevent="export30daysBefore">Xuất dữ liệu 30 ngày trước</b-dropdown-item>
             <b-dropdown-item @click.prevent="exportMonthBefore">Xuất dữ liệu tháng trước</b-dropdown-item>
-            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item>
+            <b-dropdown-item @click.prevent="exportQuarter">Xuất dữ liệu quý trước</b-dropdown-item> -->
             <b-dropdown-item @click.prevent="exportAdjust">Xuất dữ liệu tùy chỉnh</b-dropdown-item>
           </b-dropdown>
 		  </div>
