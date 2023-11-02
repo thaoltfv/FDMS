@@ -25,7 +25,17 @@
               class="mb-3 col-12 col-lg-4"
               vid="rank"
               label="Loại chung cư"
+			  			hidden
             />
+			<InputCategory
+				v-model="form.rank"
+				class="mb-3 col-12 col-lg-4"
+				vid="rank"
+				label="Loại chung cư"
+				rules="required"
+				:options= optionsRank
+              
+			/>
             <InputCategory
               v-model="form.province_id"
               class="mb-3 col-12 col-lg-4"
@@ -88,6 +98,7 @@
               :min="0"
 							:decimal="0"
               @change="changeTotalBlock($event)"
+			  				hidden
             />
             <InputNumberNoneFormat
               v-model="form.total_apartments"
@@ -99,6 +110,7 @@
               :min="0"
 							:decimal="0"
               @change="changeTotalApartment($event)"
+			  			hidden
             />
 
           </div>
@@ -317,6 +329,20 @@ export default {
 			districts: [],
 			wards: [],
 			streets: [],
+			ranks: [
+					{
+						id: 'binh-dan',
+						name: 'Bình dân'
+					},
+					{
+						id: 'trung-cap',
+						name: 'Trung cấp'
+					},
+					{
+						id: 'cao-cap',
+						name: 'Cao cấp'
+					},
+				],
 			form: {
 				name: '',
 				province_id: '',
@@ -325,8 +351,8 @@ export default {
 				street_id: '',
 				coordinates: '',
 				rank: '',
-				total_blocks: '',
-				total_apartments: '',
+				total_blocks: 0,
+				total_apartments: 0,
 				block: []
 			},
 			formBlock: {
@@ -377,6 +403,7 @@ export default {
 		await WareHouse.getProvince()
 			.then((resp) => {
 				this.provinces = resp.data
+				console.log('this.provinces', this.provinces)
 			})
 
 		if ('id' in this.$route.query && this.$route.name === 'apartment.edit') {
@@ -654,6 +681,8 @@ export default {
 
 		async updateApartment (data) {
 			try {
+				console.log('dâta', data)
+				
 				const res = await Apartment.postProject(data, this.idData)
 				if (res.data) {
 					await this.$router.push({name: 'apartment.index'}).catch(_ => {})
@@ -781,12 +810,20 @@ export default {
 				}
 			]
 		},
+		optionsRank(){
+			return{
+				data: this.ranks,
+				id: 'id',
+				key: 'name'
+			}
+		},
 		optionsProvince () {
 			return {
 				data: this.provinces,
 				id: 'id',
 				key: 'name'
 			}
+
 		},
 		optionsDistrict () {
 			return {

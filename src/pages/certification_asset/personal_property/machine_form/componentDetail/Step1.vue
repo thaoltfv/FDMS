@@ -36,6 +36,7 @@
               label="Mẫu mã"
               rules="required"
               :disabledInput="true"
+                  hidden
             />
             <InputCategory
               v-model="data.manufacturer_id"
@@ -46,6 +47,7 @@
               :options="optionsManufacturer"
               :disabled="true"
               @change="changeAssetType($event)"
+                        hidden
             />
             <InputCategory
               v-model="data.manufacturer_country_id"
@@ -66,6 +68,7 @@
               :options="optionsFuelTypes"
               :disabled="true"
               @change="changeAssetType($event)"
+                      hidden
             />
             <InputCategory
               v-model="data.manufacturer_year"

@@ -335,11 +335,14 @@
 								</tbody>
 							</table>
 						</div>
+					
 						<div v-if="form.properties.length < 1" class="btn-property">
-							<button class="btn btn-white btn-orange btn-add" type="button" @click.prevent="handleOpenModal()">
-								<img src="@/assets/icons/ic_add-white.svg" alt="add">
-								Thêm
-							</button>
+							<div>
+								<button class="btn btn-white btn-orange btn-add" type="button" @click.prevent="handleOpenModal()">
+									<img src="@/assets/icons/ic_add-white.svg" alt="add">
+									Thêm
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -476,6 +479,7 @@
 								<tbody>
 										<tr v-for="(other, index) in form.other_assets" :key="other.id">
 										<td>
+											
 											<InputText
 												v-model="other.other_asset"
 												label="Loại tài sản"
@@ -516,6 +520,7 @@
 											</div>
 										</td>
 									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -1833,6 +1838,15 @@ export default {
 		},
 		getAddress () {
 			const data = this.form
+			
+			if (data.coordinates === '') {
+				this.$toast.open({
+					message: 'Vui lòng chọn tọa độ',
+					type: 'error',
+					position: 'top-right'
+				})
+				return
+			}
 			let provinceName = ''
 			let districtName = ''
 			let wardName = ''
@@ -1989,7 +2003,27 @@ export default {
 			})
 			return asset_type
 		},
+
 		async validateBeforeSubmit () {
+			
+			let set = false
+			for(let i=0;i < this.form.other_assets.length; i++)
+			{
+				let other = this.form.other_assets[i]
+				if (other.total_amount <= 0) {
+					set = true
+				}
+		
+			} if (set == true)
+			{
+				this.$toast.open({
+					message: 'Vui lòng nhập giá trị tài sản khác lơn hơn 0',
+					type: 'error',
+					position: 'top-right'
+				})
+				return
+			}
+
 			const isValid = await this.$refs.observer.validate()
 			if (!isValid) {
 				this.$toast.open({
@@ -2003,12 +2037,13 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if (this.form.asset_type_id === 38 && this.form.tangible_assets.length === 0) {
+			} else if ((this.form.asset_type_id === 37 || this.form.asset_type_id === 38) && this.form.properties.length === 0) {
 				this.$toast.open({
-					message: 'Vui lòng nhập công trình xây dựng',
+					message: 'Vui lòng nhập thông tin thửa đất',
 					type: 'error',
 					position: 'top-right'
 				})
+				
 			} else if ((this.form.total_land_unit_price < 0 || this.form.total_raw_amount < 0) && (this.form.asset_type_id === 37 || this.form.asset_type_id === 38)) {
 				this.$toast.open({
 					message: 'Giá trị tài sản không được nhỏ hơn 0',
@@ -2042,13 +2077,11 @@ export default {
 				return
 			} else {
 				this.isSubmit = true
-			}
-			
+			}	
 			let data = this.form
-			
+			console.log('data', data)
 			if (this.$route.name === 'warehouse.edit') {
 				data['data_change'] = this.data_change
-				console.log('form update', data)
 				await this.updateDictionary(data)
 			} else {
 				await this.createDictionary(data)

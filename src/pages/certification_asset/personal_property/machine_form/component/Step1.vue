@@ -32,16 +32,18 @@
               vid="model"
               class="form-group-container col-12 col-lg-6"
               label="Mẫu mã"
-              rules="required"
+              
+                    hidden
             />
             <InputCategory
               v-model="data.manufacturer_id"
               vid="manufacturer_id"
               label="Nhà sản xuất"
-              rules="required"
+             
               class="form-group-container col-12 col-lg-3"
               :options="optionsManufacturer"
               @change="changeAssetType($event)"
+                      hidden
             />
             <InputCategory
               v-model="data.manufacturer_country_id"
@@ -56,10 +58,10 @@
               v-model="data.fuel_id"
               vid="fuel_id"
               label="Nhiên liệu"
-              rules="required"
               class="form-group-container col-12 col-lg-6"
               :options="optionsFuelTypes"
               @change="changeAssetType($event)"
+                          hidden
             />
             <InputCategory
               v-model="data.manufacturer_year"

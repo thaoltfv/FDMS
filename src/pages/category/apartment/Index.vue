@@ -38,6 +38,9 @@
 			<template slot="name" slot-scope="name">
 				<p class="text-none mb-0">{{name}}</p>
 			</template>
+			<template slot="rank" slot-scope="rank">
+				<p class="text-none mb-0">{{rank[0]}}</p>
+			</template>
 			<template slot="created_at" slot-scope="created_at">
 				<p class="created_at mb-0">{{created_at | formatDate}}</p>
 			</template>
@@ -118,6 +121,7 @@ export default {
 				{
 					title: 'Loại',
 					align: 'left',
+					scopedSlots: {customRender: 'rank'},
 					dataIndex: 'rank'
 				},
 				{
@@ -240,6 +244,28 @@ export default {
 				})
 
 				this.list_apartments = [...resp.data.data]
+				console.log('this.list_apartments', this.list_apartments)
+				for (let i = 0; i < this.list_apartments.length; i++)
+				{
+					let apartment = this.list_apartments[i]
+					for(let j = 0; j< apartment.rank.length; j++)
+					{
+						let rank = apartment.rank[j]
+						console.log('rank', rank)
+						if(rank == 'trung-cap')
+						{
+							apartment.rank[j] = 'Trung cấp'
+						} 
+						if(rank == 'cao-cap')
+						{
+							apartment.rank[j] = 'Cao cấp'
+						} 
+						if(rank == 'binh-dan')
+						{
+							apartment.rank[j] = 'Bình dân'
+						} 
+					}
+				}
 				this.totalRecord = resp.data.total
 				this.pagination = convertPagination(resp.data)
 				this.isLoading = false

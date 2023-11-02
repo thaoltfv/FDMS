@@ -278,6 +278,7 @@ export default {
 		},
 		// ----------------------------------------------------- STEP 1 ---------------------------------------------------------------- //
 		async validateSubmitStep1 () {
+			console.log('form', this.form)
 			const isValid = await this.$refs.step_1.validate()
 			if (isValid) {
 				if ('id' in this.$route.query && this.$route.name === 'certification_asset.machine.edit') {

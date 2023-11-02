@@ -183,15 +183,15 @@
                           />
                         </td>
                         <td>
-													<InputCurrencyUnit
+							<InputCurrencyUnit
                             v-model="property_detail.circular_unit_price"
                             :vid="'circular_unit_price' + index"
-														nonLabel="Đơn giá"
-														rules="required"
+							nonLabel="Đơn giá"
+							rules="required"
                             :disabled="property_detail.land_type_purpose === ''"
                             class="contain-input contain-input__number contain-input__scale contain-input__scale-five d-block"
                             @change="totalUnitPrice($event, index)"
-													/>
+							/>
                         </td>
                         <!-- <td>
                           <InputNumberFormat
@@ -1261,6 +1261,7 @@ export default {
 			})
 			this.submit = this.checkSubmit.length === 0
 			this.isSubmit = true
+			// console.log('log', this.form)
 			if (this.checkDuplicateLandType(this.form.property_detail)) {
 				this.isSubmit = false
 				this.duplicateLandTypePurpose = true
@@ -1273,6 +1274,20 @@ export default {
 				this.isSubmit = false
 				this.$toast.open({
 					message: 'Vui lòng chọn mặt tiền',
+					type: 'error',
+					position: 'top-right'
+				})
+			} else if (this.form.property_detail[0].circular_unit_price === '') {
+				this.isSubmit = false
+				this.$toast.open({
+					message: 'Vui lòng nhập đơn giá theo QĐ của UBND',
+					type: 'error',
+					position: 'top-right'
+				})
+			} else if (this.form.property_detail[0].circular_unit_price < 10000) {
+				this.isSubmit = false
+				this.$toast.open({
+					message: 'Đơn giá UBND thấp nhất là 10,000',
 					type: 'error',
 					position: 'top-right'
 				})

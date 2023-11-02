@@ -51,6 +51,7 @@
                 label="Nguồn gốc sử dụng"
                 class="form-group-container col-12 col-lg-6"
                 :disabledInput="true"
+                            hidden
               />
               <InputTextarea
                 v-model="form.content"

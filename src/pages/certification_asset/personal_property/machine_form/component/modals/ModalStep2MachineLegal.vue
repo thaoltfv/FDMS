@@ -45,8 +45,9 @@
               <InputText
                 v-model="form.origin_of_use"
                 vid="origin_of_use"
-                label="Nguồn gốc sử dụng"
+                label="Nguồn gốc sử dụng "
                 class="form-group-container col-12 col-lg-6"
+                                hidden
               />
               <InputTextarea
                 v-model="form.content"
