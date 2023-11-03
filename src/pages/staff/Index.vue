@@ -11,7 +11,7 @@
             src="../../assets/icons/ic_export.svg" alt="excel" style="margin-right: 8px"/> Tải lên </button>
           <input class="input__excel" type="file" accept=".xls, .xlsx" @change="onExcelChange($event)">
         </div>
-        <router-link :to="{name: 'staff.create'}" class="btn btn-create btn-white text-nowrap index-screen-button mt-md-0 mt-2 m-0 px-3" tag="button" v-if="add"><img
+        <router-link :to="{name: 'staff.create'}" class="btn btn-create btn-white text-nowrap index-screen-button mt-md-0 mt-2 m-0 px-3" tag="button" v-if="add && can_add"><img
           src="../../assets/icons/ic_add.svg" style="margin-right: 8px" alt="icon add">
           Tạo nhân viên
         </router-link>
@@ -192,6 +192,7 @@ import ModalIsntLegal from '@/components/Modal/ModalIsntLegal'
 import ModalIsLegal from '@/components/Modal/ModalIsLegal'
 import ModalReset from '@/components/Modal/ModalReset'
 import InputCategory from '@/components/Form/InputCategory'
+import AppraiserCompany from '@/models/AppraiserCompany'
 import File from '@/models/File'
 export default {
 	name: 'index',
@@ -231,9 +232,21 @@ export default {
 			active: false,
 			deactive: false,
 			edit: false,
-			email: ''
+			email: '',
+			total_account: null,
+			can_add: false
 		}
 	},
+	// async mounted() {
+	// 	const appraiserCompany = await AppraiserCompany.detail()
+	// 	// console.log(';dsdsad',appraiserCompany )
+	// 	this.total_account = appraiserCompany.data.data[0].total_account
+	// 	// console.log('total 1', this.total_account)
+	// 	// console.log('total 1', this.total_account, this.list_total1.length)
+	// 	// if (this.total_account && this.list_total1.length){
+	// 	// 	console.log('total 1', this.total_account, this.list.length)
+	// 	// }
+	// },
 	created () {
 		this.list = this.$route.query['list']
 		this.pagination = this.$route.meta['pagination']
@@ -251,6 +264,7 @@ export default {
 				this.deactive = true
 			}
 		})
+		// console.log('total 2',this.total_account)
 	},
 	computed: {
 		list_total() {
@@ -386,6 +400,7 @@ export default {
 		async handleDelete () {
 			await User.deleteUser(this.id)
 			await this.getStaffs()
+			await this.getStaffsFull()
 			this.$toast.open({
 				message: 'Xóa nhân viên thành công',
 				type: 'success',
@@ -395,6 +410,7 @@ export default {
 		async handleDeActive () {
 			await User.deActiveUser(this.id)
 			await this.getStaffs()
+			await this.getStaffsFull()
 			this.$toast.open({
 				message: 'Vô hiệu hóa tài khoản nhân viên thành công',
 				type: 'success',
@@ -404,6 +420,7 @@ export default {
 		async handleActive () {
 			await User.activeUser(this.id)
 			await this.getStaffs()
+			await this.getStaffsFull()
 			this.$toast.open({
 				message: 'Kích hoạt lại tài khoản nhân viên thành công',
 				type: 'success',
@@ -413,6 +430,7 @@ export default {
 		async handleIsntLegal () {
 			await User.IsntLegalUser(this.id)
 			await this.getStaffs()
+			await this.getStaffsFull()
 			this.$toast.open({
 				message: 'Bỏ chọn đại diện pháp luật thành công',
 				type: 'success',
@@ -422,6 +440,7 @@ export default {
 		async handleIsLegal () {
 			await User.IsLegalUser(this.id)
 			await this.getStaffs()
+			await this.getStaffsFull()
 			this.$toast.open({
 				message: 'Chọn đại diện pháp luật thành công',
 				type: 'success',
@@ -431,6 +450,7 @@ export default {
 		async handleReset () {
 			await User.resetUser(this.id)
 			await this.getStaffs()
+			await this.getStaffsFull()
 			this.$toast.open({
 				message: 'Đã gửi email đặt lại mật khẩu thành công',
 				type: 'success',
@@ -477,6 +497,16 @@ export default {
 				})
 
 				this.list_total1 = [...resp.data.data]
+				const appraiserCompany = await AppraiserCompany.detail()
+				// console.log(';dsdsad',appraiserCompany )
+				this.total_account = appraiserCompany.data.data[0].total_account
+				if (this.list_total1.filter(function (item) {
+					return item.status_user == 'active'
+				}).length >= this.total_account){
+					this.can_add = false
+				} else {
+					this.can_add = true
+				}
 				this.isLoading = false
 			} catch (e) {
 				this.isLoading = false

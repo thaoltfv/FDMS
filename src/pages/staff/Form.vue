@@ -147,6 +147,7 @@ import InputText from '@/components/Form/InputText'
 import User from '@/models/User'
 import WareHouse from '@/models/WareHouse'
 import { capitalize } from 'lodash-es'
+import AppraiserCompany from '@/models/AppraiserCompany'
 
 export default {
 	props: {
@@ -164,6 +165,8 @@ export default {
 
 	data () {
 		return {
+			list_total1: [],
+			total_account: null,
 			roles: [],
 			branches: [],
 			positions: [],
@@ -187,6 +190,16 @@ export default {
 			role_id: ''
 		}
 	},
+	// async mounted() {
+	// 	const appraiserCompany = await AppraiserCompany.detail()
+	// 	// console.log(';dsdsad',appraiserCompany )
+	// 	this.total_account = appraiserCompany.data.data[0].total_account
+	// 	// console.log('total 1', this.total_account)
+	// 	// console.log('total 1', this.total_account, this.list_total1.length)
+	// 	// if (this.total_account && this.list_total1.length){
+	// 	// 	console.log('total 1', this.total_account, this.list.length)
+	// 	// }
+	// },
 	created () {
 		console.log('dsadsađâs',this.$route.meta['detail'])
 		if ('id' in this.$route.query && this.$route.name === 'staff.edit') {
@@ -333,12 +346,50 @@ export default {
 				this.isSubmit = false
 				throw err
 			}
-		}
+		},
+		async getStaffsFull (params = {}) {
+			this.isLoading = true
+			const filter = {}
+
+			try {
+				const resp = await User.paginate({
+					query: {
+						page: 1,
+						limit: 2000000,
+						...params,
+						...filter
+					}
+				})
+
+				this.list_total1 = [...resp.data.data]
+				const appraiserCompany = await AppraiserCompany.detail()
+				// console.log(';dsdsad',appraiserCompany )
+				this.total_account = appraiserCompany.data.data[0].total_account
+				if (this.list_total1.filter(function (item) {
+					return item.status_user == 'active'
+				}).length >= this.total_account){
+					this.$toast.open({
+						message: 'Số lượng tại khoản sử dụng đã đạt giới hạn',
+						type: 'error',
+						position: 'top-right',
+						duration: 3000
+					})
+					this.$router.push({name: 'staff.index'})
+				}
+				this.isLoading = false
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
 	},
 	beforeMount () {
 		this.getRoles()
 		this.getBranches()
 		this.getDictionary()
+		console.log('this.$route.name',this.$route.name)
+		if (this.$route.name === 'staff.create'){
+			this.getStaffsFull()
+		}
 	},
 	mounted () {
 		console.log(this.form.password)
