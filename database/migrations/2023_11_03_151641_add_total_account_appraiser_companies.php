@@ -15,7 +15,7 @@ class AddTotalAccountAppraiserCompanies extends Migration
     {
         if (!Schema::hasColumn('appraiser_companies', 'total_account')) {
             Schema::table('appraiser_companies', function (Blueprint $table) {
-				$table->integer('total_account')->nullable()->before('created_at');
+				$table->integer('total_account')->nullable()->default(0)->before('created_at');
             });
         }
     }
