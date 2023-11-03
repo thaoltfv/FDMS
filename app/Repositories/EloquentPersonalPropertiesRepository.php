@@ -182,7 +182,7 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $where = [];
-        dd('$status',$status);
+        // dd('$status',$status);
 
         $select = [
             'id',
@@ -198,7 +198,12 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
             'assetType:id,description',
             'createdBy:id,name',
         ];
-        $result = $this->model->query()->with($with)->where($where)->select($select);
+        if ($status){
+            $result = $this->model->query()->with($with)->where($where)->whereIn('status', $status)->select($select);
+        } else {
+            $result = $this->model->query()->with($with)->where($where)->select($select);
+        }
+        
         // if (!empty($assetTypeId)) {
         //     $result->whereHas('assetType', function ($has) use ($assetTypeId) {
         //         $has->where('id', $assetTypeId);
