@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTotalAccountAppraiseCompanies extends Migration
+class AddTotalAccountAppraiserCompanies extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class AddTotalAccountAppraiseCompanies extends Migration
     {
         if (!Schema::hasColumn('appraiser_companies', 'total_account')) {
             Schema::table('appraiser_companies', function (Blueprint $table) {
-				$table->text('total_account')->nullable()->before('created_at');
+				$table->integer('total_account')->nullable()->before('created_at');
             });
         }
     }
