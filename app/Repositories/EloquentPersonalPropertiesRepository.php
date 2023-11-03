@@ -199,6 +199,7 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
             'createdBy:id,name',
         ];
         if ($status){
+            $status = explode(",", $status);
             $result = $this->model->query()->with($with)->where($where)->whereIn('status', $status)->select($select);
         } else {
             $result = $this->model->query()->with($with)->where($where)->select($select);
