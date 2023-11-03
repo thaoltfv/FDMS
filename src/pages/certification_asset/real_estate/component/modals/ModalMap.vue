@@ -1161,6 +1161,7 @@ export default {
 		getEmCode() {
 			if (this.tinhthanh){
 				if (this.listCity.length > 0) {
+					let checkcotinh = 0
 					for (let i = 0; i < this.listCity.length; i++) {
 						let e = this.listCity[i]
 						if (e.name_with_type.toLowerCase()  == this.tinhthanh.toLowerCase() || e.name.toLowerCase() == this.tinhthanh.toLowerCase()) {
@@ -1174,6 +1175,7 @@ export default {
 										this.listDistrict.push(districtJson [i])
 									
 									if (this.listDistrict.length > 0) {
+										let checkcohuyen = 0
 										for (let i = 0; i < this.listDistrict.length; i++) {
 											let q = this.listDistrict[i]
 											if (q.name_with_type.toLowerCase()  == this.quanhuyen.toLowerCase() || q.name.toLowerCase() == this.quanhuyen.toLowerCase()) {
@@ -1192,23 +1194,34 @@ export default {
 															this.listWard.push(wardJson [i])
 
 														if (this.listWard.length > 0) {
+															let checkcoxa = 0
 															for (let i = 0; i < this.listWard.length; i++) {
 																let x = this.listWard[i]
 																console.log('x',this.phuongxa)
 																if (x.name_with_type.toLowerCase()  == this.phuongxa.toLowerCase() || x.name.toLowerCase() == this.phuongxa.toLowerCase()) {
 																	console.log('dính chưởng phường xã', x)
 																	this.emWardCode = x.code
+																	return
 																}
+															}
+															if (checkcoxa == 0) {
+																return
 															}
 														}
 													}
 												}
 											}
 										}
+										if (checkcohuyen == 0) {
+											return
+										}
 									}
 								}
 							}
 						}
+					}
+					if (checkcotinh == 0) {
+						return
 					}
 				}
 			} else {

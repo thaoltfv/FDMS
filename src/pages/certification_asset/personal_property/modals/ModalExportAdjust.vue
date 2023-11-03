@@ -72,7 +72,7 @@ import InputNumberFormat from '@/components/Form/InputNumber'
 import InputCategoryMulti from '@/components/Form/InputCategoryMulti'
 import InputDatePickerRangeCondition from '@/components/Form/InputDatePickerRangeCondition'
 import WareHouse from '@/models/WareHouse'
-import CertificateAsset from '@/models/CertificateAsset'
+import CertificatePersonalProperty from '@/models/CertificatePersonalProperty'
 import ButtonCheckbox from '@/components/Form/ButtonCheckbox'
 import InputDatePicker from '@/components/Form/InputDatePicker'
 import moment from 'moment'
@@ -136,7 +136,7 @@ export default {
 			await this.$emit('cancel')
 		},
 		async handleExportData (data) {
-			const res = await CertificateAsset.exportDataCertificationAsset(data)
+			const res = await CertificatePersonalProperty.exportDataCertificatePersonalProperty(data)
 			if (res.data) {
 				const fileLink = document.createElement('a')
 				fileLink.href = res.data.url
