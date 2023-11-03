@@ -220,6 +220,43 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
             $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
         }
         // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
+        $ketqua = $result->get();
+        foreach ($ketqua as $k) {
+            if ($k->asset_type_id  == 181){
+                $stringSql = sprintf(
+                    "select c2.unit, c2.quantity from machine_certificate_assets c1
+                    join machine_certificate_asset_prices c2 on c2.machine_asset_id = c1.id
+                    where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
+                );
+                DB::enableQueryLog();
+                $data = DB::select($stringSql, [
+                    ":personal_property_id" => $k->id,
+                ]);
+                dd('máy móc thiết bị', $data);
+            } else if ($k->asset_type_id  == 182) {
+                $stringSql = sprintf(
+                    "select c2.unit, c2.quantity from verhicle_certificate_assets c1
+                    join verhicle_certificate_asset_prices c2 on c2.verhicle_asset_id = c1.id
+                    where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
+                );
+                DB::enableQueryLog();
+                $data = DB::select($stringSql, [
+                    ":personal_property_id" => $k->id,
+                ]);
+                dd('phương tiện vận tải', $data);
+            } else {
+                $stringSql = sprintf(
+                    "select c2.unit, c2.quantity from other_certificate_assets c1
+                    join other_certificate_asset_prices c2 on c2.other_asset_id = c1.id
+                    where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
+                );
+                DB::enableQueryLog();
+                $data = DB::select($stringSql, [
+                    ":personal_property_id" => $k->id,
+                ]);
+                dd('khác', $data);
+            }
+        }
         return $result->get();
 
     }

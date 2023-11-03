@@ -33,7 +33,7 @@ class ExportCertificatePersonalProperty
         }
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
-        $fileName = 'ĐS' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $fileName = 'TSTĐ' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
         $border = (new BorderBuilder())
             ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
             ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
