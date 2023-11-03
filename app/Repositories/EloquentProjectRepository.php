@@ -102,7 +102,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 $blockObjs = $objects['block'];
                 // unset($objects['block']);
                 $objects['status'] = true;
-                $objects['rank'] = explode(',', $objects['rank']);
+                // $objects['rank'] = explode(',', $objects['rank']);
                 $project = new Project($objects);
                 $dataProj = $this->model->query()->create($project->attributesToArray());
                 if (isset($blockObjs)) {
@@ -192,7 +192,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 DB::beginTransaction();
                 $blockObjs = $objects['block'];
                 // $this->log_to_console($objects);
-                $objects['rank'] = explode(',', $objects['rank']);
+                // $objects['rank'] = explode(',', $objects['rank']);
                 $projectAtt = new Project($objects);
                 $this->model->find($id)->update($projectAtt->attributesToArray());
                 if (isset($blockObjs)) {

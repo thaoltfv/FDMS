@@ -173,4 +173,54 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
             $personalProperties->update($dataUpdate);
         });
     }
+
+    public function exportPersonalProperty()
+    {
+        // $assetTypeId = request()->get('asset_type_id');
+        $status = request()->get('status');
+        $createdBy = request()->get('created_by');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        $where = [];
+        $select = [
+            'id',
+            'name',
+            'asset_type_id',
+            'status',
+            'step',
+            'total_price',
+            'created_at',
+            'created_by',
+        ];
+        $with = [
+            'assetType:id,description',
+            'createdBy:id,name',
+        ];
+        $result = $this->model->query()->with($with)->where($where)->select($select);
+        // if (!empty($assetTypeId)) {
+        //     $result->whereHas('assetType', function ($has) use ($assetTypeId) {
+        //         $has->where('id', $assetTypeId);
+        //     });
+        // }
+        if (!empty($status)) {
+            $result->WhereHas('status', function ($has) use ($status) {
+                $has->where('status', 'ilike' , '%' . $status . '%');
+            });
+        }
+
+        if (!empty($createdBy)) {
+            $result->WhereHas('createdBy', function ($has) use ($createdBy) {
+                $has->where('name', 'ilike' , '%' . $createdBy . '%');
+            });
+        }
+        if (!empty($fromDate) && $fromDate != 'Invalid date') {
+            $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
+        }
+        if (!empty($toDate) && $toDate != 'Invalid date') {
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
+        }
+        // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
+        return $result;
+
+    }
 }

@@ -461,6 +461,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('machine-certificate/step3/{id}', [MachineCertificateAssetController::class, 'postStep3']);
     Route::post('machine-certificate/step4/{id}', [MachineCertificateAssetController::class, 'postStep4']);
     Route::get('machine-certificate/all-step/{id}', [MachineCertificateAssetController::class, 'getAll']);
+    //export động sản
+    Route::get('personal-property/adjust-export', [PersonalPropertiesController::class, 'exportPersonalProperty']);
 
     Route::post('verhicle-certificate/step1/{id?}', [VerhicleCertificateAssetController::class, 'postStep1']);
     Route::post('verhicle-certificate/step2/{id}', [VerhicleCertificateAssetController::class, 'postStep2']);
