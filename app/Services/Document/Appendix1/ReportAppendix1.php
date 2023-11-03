@@ -632,11 +632,11 @@ class ReportAppendix1 extends Report
         if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
             $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, "Chi phí chuyển MĐSD (đ)", $asset);
         }
-        $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
+        $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ước tính (đ)', $asset);
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
             $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
             $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
-            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
+            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất sau khi quy đổi về '. $this->baseAcronym.' ('.$this->m2.')', $asset);
         }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
         return $data;

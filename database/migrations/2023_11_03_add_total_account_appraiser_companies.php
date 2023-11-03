@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddTotalAccountAppraiseCompanies extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (!Schema::hasColumn('appraiser_companies', 'total_account')) {
+            Schema::table('appraiser_companies', function (Blueprint $table) {
+				$table->text('total_account')->nullable()->before('created_at');
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        if (Schema::hasColumn('appraiser_companies', 'total_account')){
+            Schema::table('appraiser_companies', function (Blueprint $table) {
+                $table->dropColumn('total_account');
+            });
+        }
+    }
+}
