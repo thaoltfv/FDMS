@@ -224,7 +224,7 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
         foreach ($ketqua as $k) {
             if ($k->asset_type_id  == 181){
                 $stringSql = sprintf(
-                    "select c2.unit, c2.quantity from machine_certificate_assets c1
+                    "select c2.unit, c2.quantity, c2.unit_price from machine_certificate_assets c1
                     join machine_certificate_asset_prices c2 on c2.machine_asset_id = c1.id
                     where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
                 );
@@ -236,11 +236,12 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
                 if (count($data) > 0){
                     $k->unit = $data[0]->unit;
                     $k->quantity = $data[0]->quantity;
+                    $k->unit_price = $data[0]->unit_price;
                 }
                 
             } else if ($k->asset_type_id  == 182) {
                 $stringSql = sprintf(
-                    "select c2.unit, c2.quantity from verhicle_certificate_assets c1
+                    "select c2.unit, c2.quantity, c2.unit_price from verhicle_certificate_assets c1
                     join verhicle_certificate_asset_prices c2 on c2.verhicle_asset_id = c1.id
                     where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
                 );
@@ -252,10 +253,11 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
                 if (count($data) > 0){
                     $k->unit = $data[0]->unit;
                     $k->quantity = $data[0]->quantity;
+                    $k->unit_price = $data[0]->unit_price;
                 }
             } else {
                 $stringSql = sprintf(
-                    "select c2.unit, c2.quantity from other_certificate_assets c1
+                    "select c2.unit, c2.quantity, c2.unit_price from other_certificate_assets c1
                     join other_certificate_asset_prices c2 on c2.other_asset_id = c1.id
                     where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
                 );
@@ -267,6 +269,7 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
                 if (count($data) > 0){
                     $k->unit = $data[0]->unit;
                     $k->quantity = $data[0]->quantity;
+                    $k->unit_price = $data[0]->unit_price;
                 }
             }
         }
