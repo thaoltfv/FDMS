@@ -232,7 +232,9 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
                 $data = DB::select($stringSql, [
                     ":personal_property_id" => $k->id,
                 ]);
-                dd('máy móc thiết bị', $data);
+                // dd('máy móc thiết bị', $data);
+                $k->unit = $data[0]->unit;
+                $k->quantity = $data[0]->quantity;
             } else if ($k->asset_type_id  == 182) {
                 $stringSql = sprintf(
                     "select c2.unit, c2.quantity from verhicle_certificate_assets c1
@@ -243,7 +245,9 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
                 $data = DB::select($stringSql, [
                     ":personal_property_id" => $k->id,
                 ]);
-                dd('phương tiện vận tải', $data);
+                // dd('phương tiện vận tải', $data);
+                $k->unit = $data[0]->unit;
+                $k->quantity = $data[0]->quantity;
             } else {
                 $stringSql = sprintf(
                     "select c2.unit, c2.quantity from other_certificate_assets c1
@@ -254,10 +258,12 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
                 $data = DB::select($stringSql, [
                     ":personal_property_id" => $k->id,
                 ]);
-                dd('khác', $data);
+                // dd('khác', $data);
+                $k->unit = $data[0]->unit;
+                $k->quantity = $data[0]->quantity;
             }
         }
-        return $result->get();
+        return $ketqua;
 
     }
 }
