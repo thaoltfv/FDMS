@@ -182,6 +182,8 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $where = [];
+        dd('$status',$status);
+
         $select = [
             'id',
             'name',
@@ -202,11 +204,11 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
         //         $has->where('id', $assetTypeId);
         //     });
         // }
-        if (!empty($status)) {
-            $result->WhereHas('status', function ($has) use ($status) {
-                $has->where('status', 'ilike' , '%' . $status . '%');
-            });
-        }
+        // if (!empty($status)) {
+        //     $result->WhereHas('status', function ($has) use ($status) {
+        //         $has->where('status', 'ilike' , '%' . $status . '%');
+        //     });
+        // }
 
         if (!empty($createdBy)) {
             $result->WhereHas('createdBy', function ($has) use ($createdBy) {
