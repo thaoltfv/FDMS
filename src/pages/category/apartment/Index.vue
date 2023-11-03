@@ -39,7 +39,7 @@
 				<p class="text-none mb-0">{{name}}</p>
 			</template>
 			<template slot="rank" slot-scope="rank">
-				<p class="text-none mb-0">{{rank[0]}}</p>
+				<p class="text-none mb-0">{{rank}}</p>
 			</template>
 			<template slot="created_at" slot-scope="created_at">
 				<p class="created_at mb-0">{{created_at | formatDate}}</p>
@@ -248,6 +248,8 @@ export default {
 				for (let i = 0; i < this.list_apartments.length; i++)
 				{
 					let apartment = this.list_apartments[i]
+					console.log('âpartmetn',apartment )
+					let rank_text = ''
 					for(let j = 0; j< apartment.rank.length; j++)
 					{
 						let rank = apartment.rank[j]
@@ -263,8 +265,15 @@ export default {
 						if(rank == 'binh-dan')
 						{
 							apartment.rank[j] = 'Bình dân'
-						} 
+						}
+						if (j == 0){
+							rank_text = apartment.rank[j]
+						} else {
+							rank_text += ', '+ apartment.rank[j]
+						}
+						
 					}
+					apartment.rank = rank_text
 				}
 				this.totalRecord = resp.data.total
 				this.pagination = convertPagination(resp.data)

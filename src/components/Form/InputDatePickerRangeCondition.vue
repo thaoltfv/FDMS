@@ -170,7 +170,7 @@ export default {
 
 		disabledEndDate (endValue) {
 			const startValue = this.startValue
-			let startValueTemp = new Date(new Date(startValue).setMonth(new Date(startValue).getMonth() + 13))
+			let startValueTemp = new Date(new Date(startValue).setMonth(new Date(startValue).getMonth() + 6))
 			if (!endValue || !startValue) {
 				return false
 			} else if (endValue && endValue.valueOf() > startValueTemp) {

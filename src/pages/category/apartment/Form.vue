@@ -27,7 +27,7 @@
               label="Loại chung cư"
 			  			hidden
             />
-			<InputCategory
+			<InputCategoryMulti
 				v-model="form.rank"
 				class="mb-3 col-12 col-lg-4"
 				vid="rank"
@@ -270,6 +270,7 @@
 
 </template>
 <script>
+import InputCategoryMulti from '@/components/Form/InputCategoryMulti'
 import InputText from '@/components/Form/InputText'
 import InputCategory from '@/components/Form/InputCategory'
 import InputNumberNoneFormat from '@/components/Form/InputNumberNoneFormat'
@@ -305,7 +306,8 @@ export default {
 		ModalNotification,
 		ModalCancel,
 		ModalBlock,
-		ModalFloor
+		ModalFloor,
+		InputCategoryMulti
 	},
 
 	data () {
