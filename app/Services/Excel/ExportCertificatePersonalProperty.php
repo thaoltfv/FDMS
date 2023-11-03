@@ -57,9 +57,9 @@ class ExportCertificatePersonalProperty
                     'Mã TSTĐ' => 'TSTD_'. $data->id,
                     'Loại TSTĐ' =>CommonService::mbCaseTitle($data->assetType->description) ,
                     'Tên TSTĐ' => $data->name,
-                    'Đvt' => '',
-                    'Số lượng' => '',
-                    'Đơn giá' => '',
+                    'Đvt' => $data->unit,
+                    'Số lượng' => $data->quantity,
+                    'Đơn giá (VNĐ)' => floatval($data->unit_price),
                     'Thành tiền (VNĐ)' => floatval($data->total_price) ,
                     'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('d/m/Y')  ,
                     'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
@@ -91,6 +91,9 @@ class ExportCertificatePersonalProperty
             $cellValue = strval($activeSheet->getCell($cellAddress)->getValue());
             if ($cellValue === "Tên TSTĐ") {
                 $activeSheet->getColumnDimension($lastCol)->setWidth(40);
+            } else if ($cellValue === "Đơn giá (VNĐ)") {
+                $activeSheet->getStyle($lastCol)->getNumberFormat()->setFormatCode('###,###');
+                $activeSheet->getColumnDimension($lastCol)->setAutoSize(true);
             } else if ($cellValue === "Thành tiền (VNĐ)") {
                 $activeSheet->getStyle($lastCol)->getNumberFormat()->setFormatCode('###,###');
                 $activeSheet->getColumnDimension($lastCol)->setAutoSize(true);
