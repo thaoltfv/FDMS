@@ -320,7 +320,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
 
         if(!isset($buildingCategory))
             return 0;
-        $query = 'building_category = ' . "'" . $buildingCategory . "'";
+        $query = 'building_category = ' . $buildingCategory ;
         if ($level > 0 && $buildingCategory == 41 ) {
             $query = $query . ' and level = ' . $level;
         } else {
@@ -359,17 +359,17 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         // DB::enableQueryLog();
         if ($province_id){
             $result_1 = $this->model->query()
+                ->where('province_id', '=', $province_id)
                 ->whereRaw($query)
                 ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
                 ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
-                ->where('province_id', '=', $province_id)
                 ->orWhereNull('effect_to')->get();
                 // ->avg('unit_price_m2');
         }
         $result= $this->model->query()
-            ->whereRaw($query)
             ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
             ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+            ->whereRaw($query)
             ->orWhereNull('effect_to')->get();
             // ->avg('unit_price_m2');
         
