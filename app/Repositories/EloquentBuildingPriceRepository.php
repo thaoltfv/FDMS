@@ -30,7 +30,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
             $search = '';
         }
 
-        $query = 'categoryBuilding.description ilike ' . "'%%" . strtolower($search) . "%%'";
+        $query = 'dictionary.description ilike ' . "'%%" . strtolower($search) . "%%'";
         if ($provinceId > 0) {
             $query = $query . ' and province_id = ' . $provinceId;
         }
