@@ -393,7 +393,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
 
         $result->merge($result_x)->avg('unit_price_m2');
         
-        // dd($query, $result, $result_1) ;
+        dd($query, $result, $result_1) ;
         if ($result_1){
             $result = $result_1;
         }
