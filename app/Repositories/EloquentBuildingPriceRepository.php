@@ -362,36 +362,36 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->where('province_id', '=', $province_id)
                 ->whereRaw($query)
                 ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
-                ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))->get();
                 // ->orWhere('effect_to', 'IS', 'NULL')
-                ->avg('unit_price_m2');
+                // ->avg('unit_price_m2');
             
             $result_12 = $this->model->query()
                 ->where('province_id', '=', $province_id)
                 ->whereRaw($query)
                 ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
                 // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
-                ->WhereNull('effect_to')
-                ->avg('unit_price_m2');
+                ->WhereNull('effect_to')->get();
+                // ->avg('unit_price_m2');
 
-            $result_1->merge($result_12);
+            $result_1->merge($result_12)->avg('unit_price_m2');
         }
         $result= $this->model->query()
             ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
             ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
-            ->whereRaw($query)
+            ->whereRaw($query)->get();
             // ->orWhere('effect_to', 'IS', 'NULL')
-            ->avg('unit_price_m2');
+            // ->avg('unit_price_m2');
 
         $result_x= $this->model->query()
             ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
             // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
             ->WhereNull('effect_to')
-            ->whereRaw($query)
+            ->whereRaw($query)->get();
             // ->orWhere('effect_to', 'IS', 'NULL')
-            ->avg('unit_price_m2');
+            // ->avg('unit_price_m2');
 
-        $result->merge($result_x);
+        $result->merge($result_x)->avg('unit_price_m2');
         
         // dd($query, $result, $result_1) ;
         if ($result_1){
