@@ -27,6 +27,7 @@ class BuildingPrice extends Model
         'p3' => 'integer',
         'p4' => 'integer',
         'p5' => 'integer',
+        'province_id' => 'integer',
     ];
 
     protected $fillable = [
@@ -42,11 +43,16 @@ class BuildingPrice extends Model
         'effect_to',
         'h1','h2','h3','h4','h5',
         'p1','p2','p3','p4','p5',
+        'province_id'
     ];
 
     public function categoryBuilding(): BelongsTo
     {
         return $this->belongsTo(Dictionary::class, 'building_category', 'id');
+    }
+    public function provinces(): BelongsTo
+    {
+        return $this->belongsTo(Province::class, 'province_id', 'id');
     }
     public function level(): BelongsTo
     {
