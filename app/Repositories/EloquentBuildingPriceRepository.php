@@ -26,26 +26,41 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         $page = (int)request()->get('page');
         $provinceId = (int)request()->get('province_id');
 
-        $query = '';
-        if ($provinceId > 0) {
-            $query = 'province_id = ' . $provinceId;
-        }
-        return QueryBuilder::for($this->model)
-            ->with([
-                'categoryBuilding:id,description',
-                'factoryType:id,description',
-                'level:id,description',
-                'structure:id,description',
-                'crane:id,description',
-                'aperture:id,description',
-                'factoryType:id,description',
-                'rate:id,description',
-                'provinces:id,name',
-                ])
-            ->whereRaw($query)
-            ->orderByDesc($this->allowedSorts)
-            ->forPage($page, $perPage)
-            ->paginate($perPage);
+        if ($provinceId) {
+            $result = QueryBuilder::for($this->model)
+                ->with([
+                    'categoryBuilding:id,description',
+                    'factoryType:id,description',
+                    'level:id,description',
+                    'structure:id,description',
+                    'crane:id,description',
+                    'aperture:id,description',
+                    'factoryType:id,description',
+                    'rate:id,description',
+                    'provinces:id,name',
+                    ])
+                ->where('province_id', '=', $provinceId)
+                ->orderByDesc($this->allowedSorts)
+                ->forPage($page, $perPage)
+                ->paginate($perPage);
+        } else {
+            $result = QueryBuilder::for($this->model)
+                ->with([
+                    'categoryBuilding:id,description',
+                    'factoryType:id,description',
+                    'level:id,description',
+                    'structure:id,description',
+                    'crane:id,description',
+                    'aperture:id,description',
+                    'factoryType:id,description',
+                    'rate:id,description',
+                    'provinces:id,name',
+                    ])
+                ->orderByDesc($this->allowedSorts)
+                ->forPage($page, $perPage)
+                ->paginate($perPage);
+        }  
+        return $result;
     }
 
 
