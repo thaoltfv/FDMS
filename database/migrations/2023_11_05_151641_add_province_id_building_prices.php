@@ -15,7 +15,7 @@ class AddProvinceIdBuildingPrices extends Migration
     {
         if (!Schema::hasColumn('building_prices', 'province_id')) {
             Schema::table('building_prices', function (Blueprint $table) {
-				$table->integer('province_id')->nullable()->default(34)->before('created_at');
+				$table->integer('province_id')->nullable()->before('created_at');
             });
         }
     }

@@ -34,6 +34,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 'aperture:id,description',
                 'factoryType:id,description',
                 'rate:id,description',
+                'provinces:id,name',
                 ])
             ->orderByDesc($this->allowedSorts)
             ->forPage($page, $perPage)
