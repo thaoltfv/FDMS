@@ -2,7 +2,7 @@
 <div class="container-fluid">
 	<div class="pannel">
 		<div class="pannel__content d-md-flex d-block justify-content-end align-items-center">
-<!--       <Search @filter-changed="onFilterChange($event)" />-->
+      		<Search @filter-changed="onFilterChange($event)" />
 			<router-link :to="{name: 'building.create'}" class="btn btn-create btn-white text-nowrap index-screen-button mb-0 px-3" tag="button" v-if="add"><img
 				src="../../../assets/icons/ic_add.svg" style="margin-right: 8px" alt="icon add">
 				Tạo mới
@@ -49,6 +49,9 @@
 			</template>
 			<template slot="unit_price_m2" slot-scope="unit_price_m2">
 				<p class="unit_price_m2 mb-0">{{unit_price_m2 | formatedNumber}}</p>
+			</template>
+			<template slot="provinces" slot-scope="provinces">
+				<p class="provinces mb-0">{{provinces ? provinces.name : 'Toàn quốc'}}</p>
 			</template>
 
 			<!--     <template slot="action_delete"-->
@@ -161,6 +164,12 @@ export default {
 					align: 'center',
 					scopedSlots: {customRender: 'unit_price_m2'},
 					dataIndex: 'unit_price_m2'
+				},
+				{
+					title: 'Nơi áp dụng',
+					align: 'center',
+					scopedSlots: {customRender: 'provinces'},
+					dataIndex: 'provinces'
 				},
 				{
 					title: 'Ngày tạo',

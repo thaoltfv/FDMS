@@ -5,17 +5,26 @@
 		<div class="pannel card">
 				<div class="row">
 					<div class="col-12 col-md-6">
+						<div class="row">
 						<InputCategory
 							v-model="form.building_category"
 							placeholder="Loại công trình xây dựng"
 							rules="required"
-							class="mb-3 col-12"
+							class="mb-3 col-6"
 							vid="building"
 							:disabled="$route.name === 'building.edit'"
 							label="Loại công trình xây dựng"
 							:options="optionBuildingCategory"
 							@change="changeBuildingCategory($event)"
 						/>
+						<InputCategory
+							v-model="form.province_id"
+							vid="province_id"
+							label="Nơi áp dụng"
+							class="mb-3 col-6"
+							:options="optionsProvince"
+						/>
+						</div>
 					<div class="row justify-content-between">
 							<InputCategory
 								v-model="form.level"
@@ -161,6 +170,7 @@
 												:sufix="false"
 												@change="changeP1"
 												v-model="form.p1"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -173,6 +183,7 @@
 												:sufix="false"
 												@change="changeH1"
 												v-model="form.h1"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -185,6 +196,7 @@
 												:sufix="false"
 												@change="changeP2"
 												v-model="form.p2"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -197,6 +209,7 @@
 												:sufix="false"
 												@change="changeH2"
 												v-model="form.h2"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -209,6 +222,7 @@
 												:sufix="false"
 												@change="changeP3"
 												v-model="form.p3"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -221,6 +235,7 @@
 												:sufix="false"
 												@change="changeH3"
 												v-model="form.h3"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -233,6 +248,7 @@
 												:sufix="false"
 												@change="changeP4"
 												v-model="form.p4"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -245,6 +261,7 @@
 												:sufix="false"
 												@change="changeH4"
 												v-model="form.h4"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -257,6 +274,7 @@
 												:sufix="false"
 												@change="changeP5"
 												v-model="form.p5"
+												rules="required"
 											/>
 										</td>
 										<td>
@@ -269,6 +287,7 @@
 												:sufix="false"
 												@change="changeH5"
 												v-model="form.h5"
+												rules="required"
 											/>
 										</td>
 										<td>{{ total ? total : 0 }}</td>
@@ -299,6 +318,7 @@ import InputCategory from '@/components/Form/InputCategory'
 import InputNumberFormat from '@/components/Form/InputNumber'
 import InputDatePickerRange from '@/components/Form/InputDatePickerRange'
 import Building from '@/models/Building'
+import WareHouse from '@/models/WareHouse'
 
 export default {
 	props: {
@@ -325,6 +345,7 @@ export default {
 			buildingCrane: [],
 			buildingAperture: [],
 			buildingFactoryType: [],
+			provinces: [],
 			building: '',
 			total: 0,
 			form: {
@@ -338,16 +359,16 @@ export default {
 				unit_price_m2: '',
 				effect_from: '',
 				effect_to: '',
-				p1: '',
-				p2: '',
-				p3: '',
-				p4: '',
-				p5: '',
-				h1: '',
-				h2: '',
-				h3: '',
-				h4: '',
-				h5: ''
+				p1: 0,
+				p2: 0,
+				p3: 0,
+				p4: 0,
+				p5: 0,
+				h1: 0,
+				h2: 0,
+				h3: 0,
+				h4: 0,
+				h5: 0
 			},
 			isSubmit: false
 		}
@@ -361,6 +382,13 @@ export default {
 		}
 	},
 	computed: {
+		optionsProvince () {
+			return {
+				data: this.provinces,
+				key: 'name',
+				id: 'id'
+			}
+		},
 		optionBuildingCategory () {
 			return {
 				data: this.buildingCategory,
@@ -442,6 +470,15 @@ export default {
 					this.building = buildingCategory.description
 				}
 			})
+		},
+		async getProvinces () {
+			try {
+				const resp = await WareHouse.getProvince()
+				this.provinces = [...resp.data]
+			} catch (err) {
+				this.isSubmit = false
+				throw err
+			}
 		},
 		async getDictionaries () {
 			try {
@@ -565,6 +602,8 @@ export default {
 		handleSubmit () {
 			this.isSubmit = true
 			let data = this.form
+			console.log('data',data)
+			// return
 			if (this.$route.name === 'building.edit') {
 				this.updateBuilding(data)
 			} else {
@@ -614,6 +653,7 @@ export default {
 	},
 	async beforeMount () {
 		await this.getDictionaries()
+		await this.getProvinces()
 		if (this.$route.name === 'building.create') {
 			this.getDate()
 		}

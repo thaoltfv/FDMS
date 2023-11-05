@@ -1990,6 +1990,7 @@ export default {
 			}
 			let constructionPriceType = this.constructionPriceType
 			let priceTypeInAppraisal = appraisal_methods.find(i => toLower(i.slug) === 'xac_dinh_don_gia_xay_dung')
+			console.log('--------dd-----',appraisal_methods)
 			if (priceTypeInAppraisal) {
 				constructionPriceType.forEach(item => {
 					if (toLower(item.slug) === toLower(priceTypeInAppraisal.slug_value)) {

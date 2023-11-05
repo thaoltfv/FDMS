@@ -14,20 +14,20 @@ export const routes = [
 		path: '/login',
 		name: 'login',
 		component: page('Login.vue'),
-		meta: { layout: 'auth' },
+		meta: { layout: 'auth' , gtm: 'Trang đăng nhập'},
 		beforeEnter: ResolveGuard([LoginGuard])
 	},
 	{
 		path: '/ping',
 		name: 'ping',
 		component: page('Ping.vue'),
-		meta: { layout: 'auth' }
+		meta: { layout: 'auth', gtm: 'Trang ping' }
 	},
 	{
 		path: '/verify',
 		name: 'verify',
 		component: page('Verify.vue'),
-		meta: { layout: 'auth' },
+		meta: { layout: 'auth', gtm: 'Trang kiểm tra thông tin' },
 		beforeEnter: ResolveGuard([LoginGuard])
 	},
 
@@ -45,7 +45,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_USER],
 				breadcrumbs: [
 					{ title: 'Thông tin cá nhân', name: 'profile.index' }
-				]
+				],
+				gtm: 'Trang thông tin cá nhân'
 			}
 		},
 		{
@@ -56,7 +57,8 @@ export const routes = [
 			meta: {
 				title: 'Chỉnh sửa thông tin cá nhân',
 				permissions: [PERMISSIONS.EDIT_USER],
-				breadcrumbs: []
+				breadcrumbs: [],
+				gtm: 'Trang chỉnh sửa thông tin cá nhân'
 			}
 		},
 		{
@@ -67,7 +69,8 @@ export const routes = [
 			meta: {
 				title: 'Thay đổi mật khẩu',
 				permissions: [PERMISSIONS.EDIT_USER],
-				breadcrumbs: []
+				breadcrumbs: [],
+				gtm: 'Trang thay đổi mật khẩu'
 			}
 		}
 		]
@@ -86,7 +89,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PROPERTIES],
 				breadcrumbs: [
 					{ title: 'Cấu hình', name: 'configuration.index' }
-				]
+				],
+				gtm: 'Trang cấu hình'
 			}
 		}]
 	},
@@ -103,7 +107,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PROPERTIES],
 				breadcrumbs: [
 					{ title: 'Cập nhật sub-status', name: 'UpdateCertificateBriefSubStatus.index' }
-				]
+				],
+				gtm: 'Trang cập nhật sub-status'
 			}
 		}]
 	},
@@ -121,7 +126,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PROPERTIES],
 				breadcrumbs: [
 					{ title: 'Cấu hình Dashboard', name: 'DashBoardConfig.index' }
-				]
+				],
+				gtm: 'Trang cấu hình Dashboard'
 			}
 		}]
 	},
@@ -138,7 +144,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PROPERTIES],
 				breadcrumbs: [
 					{ title: 'Cấu hình quy trình', name: 'PrincipleConfig.index' }
-				]
+				],
+				gtm: 'Trang cấu hình quy trình'
 			}
 		}]
 	},
@@ -155,7 +162,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PROPERTIES],
 				breadcrumbs: [
 					{ title: 'Cấu hình', name: 'configuration.index' }
-				]
+				],
+				gtm: 'Trang cấu hình'
 			}
 		}]
 	},
@@ -172,7 +180,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PRICE],
 				breadcrumbs: [
 					{ title: 'Lịch sử ước tính', name: 'log.index' }
-				]
+				],
+				gtm: 'Trang lịch sử ước tính'
 			}
 		},
 		{
@@ -186,7 +195,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Lịch sử ước tính', name: 'log.index' },
 					{ title: 'Chi tiết ước tính', name: 'log.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết lịch sử ước tính'
 			}
 		}
 		]
@@ -204,7 +214,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PRICE],
 				breadcrumbs: [
 					{ title: 'Lịch sử ước tính', name: 'logAll.index' }
-				]
+				],
+				gtm: 'Trang tất cả lịch sử ước tính'
 			}
 		}]
 	},
@@ -222,7 +233,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PROPERTIES],
 				breadcrumbs: [
 					{ title: 'Thêm dữ liệu', name: 'import_street.index' }
-				]
+				],
+				gtm: 'Trang import dữ liệu'
 			}
 		}]
 	},
@@ -240,7 +252,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_MAP],
 				breadcrumbs: [
 					//   { title: 'Bất động sản' }
-				]
+				],
+				gtm: 'Trang bản đồ giá'
 			}
 		}]
 	},
@@ -258,7 +271,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_MAP],
 				breadcrumbs: [
 					//   { title: 'Bất động sản' }
-				]
+				],
+				gtm: 'Trang bản đồ địa chính'
 			}
 		}]
 	},
@@ -276,7 +290,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PRICE],
 				breadcrumbs: [
 					{ title: 'Kho giá', name: 'warehouse.index' }
-				]
+				],
+				gtm: 'Trang kho giá'
 			}
 		},
 		{
@@ -290,7 +305,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Kho giá', name: 'warehouse.index' },
 					{ title: 'Tạo mới tài sản so sánh', name: 'warehouse.create' }
-				]
+				],
+				gtm: 'Trang tạo mới TSSS'
 			}
 		},
 		{
@@ -304,7 +320,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Kho giá', name: 'warehouse.index' },
 					{ title: 'Chi tiết tài sản so sánh', name: 'warehouse.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết TSSS'
 			}
 		},
 		{
@@ -318,7 +335,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Kho giá', name: 'warehouse.index' },
 					{ title: 'Chỉnh sửa tài sản so sánh', name: 'warehouse.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSSS'
 			}
 		}
 		]
@@ -399,7 +417,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_CUSTOMER],
 				breadcrumbs: [
 					{ title: 'Khách hàng', name: 'customer.index' }
-				]
+				],
+				gtm: 'Trang khách hàng'
 			}
 		},
 		{
@@ -413,7 +432,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Khách hàng', name: 'customer.index' },
 					{ title: 'Tạo mới khách hàng', name: 'customer.create' }
-				]
+				],
+				gtm: 'Trang tạo mới khách hàng'
 			}
 		},
 		{
@@ -427,7 +447,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Khách hàng', name: 'customer.index' },
 					{ title: 'Chi tiết khách hàng', name: 'customer.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết khách hàng'
 			}
 		},
 		{
@@ -441,7 +462,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Khách hàng', name: 'customer.index' },
 					{ title: 'Chỉnh sửa khách hàng', name: 'customer.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa khách hàng'
 			}
 		}
 		]
@@ -453,7 +475,8 @@ export const routes = [
 		component: page('price_estimate/Index.vue'),
 		beforeEnter: ResolveGuard([AuthGuard]),
 		meta: {
-			permissions: [PERMISSIONS.VIEW_PRICE]
+			permissions: [PERMISSIONS.VIEW_PRICE],
+			gtm: 'Trang ước tính giá'
 		}
 	},
 	{
@@ -462,7 +485,8 @@ export const routes = [
 		component: page('price_estimate/GetLog.vue'),
 		beforeEnter: ResolveGuard([AuthGuard]),
 		meta: {
-			permissions: [PERMISSIONS.VIEW_PRICE]
+			permissions: [PERMISSIONS.VIEW_PRICE],
+			gtm: 'Trang lịch sử ước tính giá'
 		}
 	},
 
@@ -480,7 +504,8 @@ export const routes = [
 				permissions: [PERMISSIONS.ADD_ROLE], // Force need role permision
 				breadcrumbs: [
 					{ title: 'Nhân viên', name: 'staff.index' }
-				]
+				],
+				gtm: 'Trang nhân viên'
 			}
 		},
 		{
@@ -494,7 +519,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Nhân viên', name: 'staff.index' },
 					{ title: 'Tạo nhân viên', name: 'staff.create' }
-				]
+				],
+				gtm: 'Trang tạo nhân viên'
 			}
 		},
 		{
@@ -508,7 +534,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Nhân viên', name: 'staff.index' },
 					{ title: 'Chỉnh sửa', name: 'staff.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa nhân viên'
 			}
 		},
 			// role
@@ -522,7 +549,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_ROLE],
 				breadcrumbs: [
 					{ title: 'Phân quyền', name: 'role.index' }
-				]
+				],
+				gtm: 'Trang phân quyền'
 			}
 		},
 		{
@@ -536,7 +564,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Phân quyền', name: 'role.index' },
 					{ title: 'Tạo phân quyền', name: 'role.create' }
-				]
+				],
+				gtm: 'Trang tạo phân quyền'
 			}
 		},
 		{
@@ -550,7 +579,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Phân quyền', name: 'role.index' },
 					{ title: 'Chỉnh sửa phân quyền', name: 'role.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa phân quyền'
 			}
 		}
 		]
@@ -572,7 +602,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Đơn giá UBND', name: 'unit_price.index' }
-					]
+					],
+					gtm: 'Trang đơn giá UBND'
 				}
 			},
 			{
@@ -586,7 +617,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Đơn giá UBND', name: 'unit_price.index' },
 						{ title: 'Đơn giá UBND chi tiết', name: 'unit_price.detail' }
-					]
+					],
+					gtm: 'Trang đơn giá UBND chi tiết'
 				}
 			},
 			// street
@@ -600,7 +632,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Đường phố', name: 'street.index' }
-					]
+					],
+					gtm: 'Trang đường phố'
 				}
 			},
 			{
@@ -614,7 +647,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Đường phố', name: 'street.index' },
 						{ title: 'Thêm đường phố', name: 'street.create' }
-					]
+					],
+					gtm: 'Trang thêm đường phố'
 				}
 			},
 			{
@@ -628,7 +662,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Đường phố', name: 'street.index' },
 						{ title: 'Chỉnh sửa đường phố', name: 'street.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa đường phố'
 				}
 			},
 			{
@@ -641,7 +676,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Tỉnh/Thành', name: 'province.index' }
-					]
+					],
+					gtm: 'Trang tỉnh thành'
 				}
 			},
 			{
@@ -655,7 +691,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Tỉnh/Thành', name: 'province.index' },
 						{ title: 'Tạo Tỉnh/Thành', name: 'province.create' }
-					]
+					],
+					gtm: 'Trang tạo tỉnh thành'
 				}
 			},
 			{
@@ -669,7 +706,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Tỉnh/Thành', name: 'province.index' },
 						{ title: 'Chỉnh sửa Tỉnh/Thành', name: 'province.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa tỉnh thành'
 				}
 			},
 			// district
@@ -683,7 +721,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Quận/Huyện', name: 'district.index' }
-					]
+					],
+					gtm: 'Trang quận huyện'
 				}
 			},
 			{
@@ -697,7 +736,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Quận/Huyện', name: 'district.index' },
 						{ title: 'Tạo Quận/Huyện', name: 'district.create' }
-					]
+					],
+					gtm: 'Trang tạo quận huyện'
 				}
 			},
 			{
@@ -711,7 +751,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Quận/Huyện', name: 'district.index' },
 						{ title: 'Chỉnh sửa Quận/Huyện', name: 'district.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa quận huyện'
 				}
 			},
 			// ward
@@ -725,7 +766,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Phường/Xã', name: 'ward.index' }
-					]
+					],
+					gtm: 'Trang phường/xã'
 				}
 			},
 			{
@@ -739,7 +781,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Phường/Xã', name: 'ward.index' },
 						{ title: 'Tạo Phường/Xã', name: 'ward.create' }
-					]
+					],
+					gtm: 'Trang tạo phường/xã'
 				}
 			},
 			{
@@ -753,7 +796,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Phường/Xã', name: 'ward.index' },
 						{ title: 'Chỉnh sửa Phường/Xã', name: 'ward.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa phường/xã'
 				}
 			},
 			// branch
@@ -767,7 +811,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Chi nhánh', name: 'branch.index' }
-					]
+					],
+					gtm: 'Trang chi nhánh'
 				}
 			},
 			{
@@ -781,7 +826,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Chi nhánh', name: 'branch.index' },
 						{ title: 'Tạo chi nhánh', name: 'branch.create' }
-					]
+					],
+					gtm: 'Trang tạo chi nhánh'
 				}
 			},
 			{
@@ -795,7 +841,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Chi nhánh', name: 'branch.index' },
 						{ title: 'Chỉnh sửa chi nhánh', name: 'branch.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa chi nhánh'
 				}
 			},
 			// apartment
@@ -809,7 +856,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Chung cư', name: 'apartment.index' }
-					]
+					],
+					gtm: 'Trang chung cư'
 				}
 			},
 			{
@@ -823,7 +871,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Chung cư', name: 'apartment.index' },
 						{ title: 'Tạo chung cư', name: 'apartment.create' }
-					]
+					],
+					gtm: 'Trang tạo chung cư'
 				}
 			},
 			{
@@ -837,7 +886,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Chung cư', name: 'apartment.index' },
 						{ title: 'Chỉnh sửa chung cư', name: 'apartment.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa chung cư'
 				}
 			},
 			{
@@ -850,7 +900,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Danh mục', name: 'dictionary.index' }
-					]
+					],
+					gtm: 'Trang danh mục'
 				}
 			},
 			{
@@ -864,7 +915,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Danh mục', name: 'dictionary.index' },
 						{ title: 'Thêm danh mục', name: 'dictionary.create' }
-					]
+					],
+					gtm: 'Trang thêm danh mục'
 				}
 			},
 			{
@@ -878,7 +930,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Danh mục', name: 'dictionary.index' },
 						{ title: 'Chỉnh sửa danh mục', name: 'dictionary.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa danh mục'
 				}
 			},
 			// map
@@ -892,7 +945,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Bản đồ', name: 'map.index' }
-					]
+					],
+					gtm: 'Trang bản đồ giá'
 				}
 			},
 			// building
@@ -906,7 +960,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Công trình xây dựng', name: 'building.index' }
-					]
+					],
+					gtm: 'Trang công trình xây dựng'
 				}
 			},
 			{
@@ -920,7 +975,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Công trình xây dựng', name: 'building.index' },
 						{ title: 'Thêm công trình xây dựng', name: 'building.create' }
-					]
+					],
+					gtm: 'Trang thêm công trình xây dựng'
 				}
 			},
 			{
@@ -934,7 +990,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Công trình xây dựng', name: 'building.index' },
 						{ title: 'Chỉnh sửa công trình xây dựng', name: 'building.edit' }
-					]
+					],
+					gtm: 'Trang chỉnh sửa công trình xây dựng'
 				}
 			}
 		]
@@ -958,7 +1015,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Yếu tố so sánh', name: 'element.index' }
 					]
-				}
+				},
+				gtm: 'Trang yếu tố so sánh'
 			},
 			{
 				path: 'appraisal-construction',
@@ -971,7 +1029,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Khai báo CTXD thẩm định', name: 'appraisal-construction.index' }
-					]
+					],
+					gtm: 'Trang khai báo CTXD thẩm định'
 				}
 			},
 			{
@@ -985,7 +1044,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Khai báo thông tin TDK', name: 'appraise-other.index' }
-					]
+					],
+					gtm: 'Trang khai báo thông tin TDK'
 				}
 			},
 			{
@@ -999,7 +1059,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CATEGORY],
 					breadcrumbs: [
 						{ title: 'Khai báo văn bản pháp luật', name: 'appraise-law.index' }
-					]
+					],
+					gtm: 'Trang khai báo VBPL'
 				}
 			},
 			{
@@ -1013,7 +1074,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_ROLE],
 					breadcrumbs: [
 						{ title: 'Thông tin công ty', name: 'appraiser-company.index' }
-					]
+					],
+					gtm: 'Trang thông tin công ty'
 				}
 			},
 			{
@@ -1028,7 +1090,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Thông tin công ty', name: 'appraiser-company.index' },
 						{ title: 'Thêm thông tin công ty', name: 'appraiser-company.create' }
-					]
+					],
+					gtm: 'Trang thêm thông tin công ty'
 				}
 			},
 			{
@@ -1043,7 +1106,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Thông tin công ty', name: 'appraiser-company.index' },
 						{ title: 'Cập nhật thông tin công ty', name: 'appraiser-company.edit' }
-					]
+					],
+					gtm: 'Trang thông tin công ty'
 				}
 			},
 			{
@@ -1058,7 +1122,8 @@ export const routes = [
 					breadcrumbs: [
 						{ title: 'Thông tin công ty', name: 'appraiser-company.index' }
 						// { title: 'Cập nhật thông tin công ty', name: 'appraiser-company.edit' }
-					]
+					],
+					gtm: 'Trang cập nhật thông tin công ty'
 				}
 			},
 			{
@@ -1072,7 +1137,8 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_ROLE],
 					breadcrumbs: [
 						{ title: 'Thông tin tài liệu', name: 'watermark.index' }
-					]
+					],
+					gtm: 'Trang thông tin tài liệu'
 				}
 			}
 		]
@@ -1092,7 +1158,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' }
-				]
+				],
+				gtm: 'Trang tài sản thẩm định'
 			}
 		},
 		{
@@ -1108,7 +1175,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' }
-				]
+				],
+				gtm: 'Trang tài sản thẩm định động sản'
 			}
 		},
 		{
@@ -1124,7 +1192,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' },
 					{ title: 'Tạo mới tài sản thẩm định', name: 'certification_asset.create' }
-				]
+				],
+				gtm: 'Trang tạo mới TSTĐ'
 			}
 		},
 		{
@@ -1140,7 +1209,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' },
 					{ title: 'Chi tiết tài sản thẩm định', name: 'certification_asset.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết TSTĐ'
 			}
 		},
 		{
@@ -1156,7 +1226,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' },
 					{ title: 'Chỉnh sửa tài sản thẩm định', name: 'certification_asset.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSTĐ'
 			}
 		},
 			// ------------------------------------------Apartment ------------------------------------------------------------------
@@ -1173,7 +1244,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' },
 					{ title: 'Tạo mới tài sản thẩm định', name: 'certification_asset.apartment.create' }
-				]
+				],
+				gtm: 'Trang tạo mới TSTĐ'
 			}
 		},
 		{
@@ -1189,7 +1261,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' },
 					{ title: 'Chỉnh sửa tài sản thẩm định', name: 'certification_asset.apartment.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSTĐ'
 			}
 		},
 		{
@@ -1205,7 +1278,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_asset.index' },
 					{ title: 'Bất động sản', name: 'certification_asset.index' },
 					{ title: 'Chi tiết tài sản thẩm định', name: 'certification_asset.apartment.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết TSTĐ'
 			}
 		},
 			// ----------------------------------------Other-Purpose ----------------------------------------------------------------
@@ -1222,7 +1296,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Tạo mới động sản khác', name: 'certification_asset.other_purpose.create' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSTĐ ĐS khác' 
 			}
 		},
 		{
@@ -1238,7 +1313,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Chỉnh sửa động sản khác', name: 'certification_asset.other_purpose.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSTĐ ĐS khác'
 			}
 		},
 		{
@@ -1254,7 +1330,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Chi tiết động sản khác', name: 'certification_asset.other_purpose.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết TSTĐ ĐS khác'
 			}
 		},
 			// ---------------------------------------- vehicle ----------------------------------------------------------------
@@ -1271,7 +1348,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Tạo mới phương tiện vận tải', name: 'certification_asset.vehicle.create' }
-				]
+				],
+				gtm: 'Trang tạo mới TSTĐ ĐS PTVT'
 			}
 		},
 		{
@@ -1287,7 +1365,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Chỉnh sửa phương tiện vận tải', name: 'certification_asset.vehicle.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSTĐ ĐS PTVT'
 			}
 		},
 		{
@@ -1303,7 +1382,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Chi tiết phương tiện vận tải', name: 'certification_asset.vehicle.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết TSTĐ ĐS PTVT'
 			}
 		},
 			// ---------------------------------------- Machine ----------------------------------------------------------------
@@ -1320,7 +1400,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Thêm mới máy móc thiết bị', name: 'certification_asset.machine.create' }
-				]
+				],
+				gtm: 'Trang tạo mới TSTĐ ĐS MMTB'
 			}
 		},
 		{
@@ -1336,7 +1417,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Chỉnh sửa máy móc thiết bị', name: 'certification_asset.machine.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa TSTĐ ĐS MMTB'
 			}
 		},
 		{
@@ -1352,7 +1434,8 @@ export const routes = [
 					{ title: 'Tài sản thẩm định', name: 'certification_personal_property.index' },
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Chi tiết máy móc thiết bị', name: 'certification_asset.machine.edit' }
-				]
+				],
+				gtm: 'Trang chi tiết TSTĐ ĐS MMTB'
 			}
 		}
 		]
@@ -1438,7 +1521,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_PRICE],
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'appraisal.index' }
-				]
+				],
+				gtm: 'Trang HSTĐ'
 			}
 		},
 		{
@@ -1453,7 +1537,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'appraisal.index' },
 					{ title: 'Tạo mới hồ sơ thẩm định', name: 'appraisal.create' }
-				]
+				],
+				gtm: 'Trang tạo mới HSTĐ'
 			}
 		},
 		{
@@ -1468,7 +1553,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'appraisal.index' },
 					{ title: 'Chi tiết hồ sơ thẩm định', name: 'appraisal.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết HSTĐ'
 			}
 		},
 		{
@@ -1483,7 +1569,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'appraisal.index' },
 					{ title: 'Chỉnh sửa hồ sơ thẩm định', name: 'appraisal.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa HSTĐ'
 			}
 		}
 		]
@@ -1503,7 +1590,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'certification_brief.index' }
-				]
+				],
+				gtm: 'Trang HSTĐ'
 			}
 		},
 		{
@@ -1518,7 +1606,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'certification_brief.index' },
 					{ title: 'Tạo mới hồ sơ thẩm định', name: 'certification_brief.create' }
-				]
+				],
+				gtm: 'Trang tạo mới HSTĐ'
 			}
 		},
 		{
@@ -1533,7 +1622,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'certification_brief.index' },
 					{ title: 'Chi tiết hồ sơ thẩm định', name: 'certification_brief.detail' }
-				]
+				],
+				gtm: 'Trang chi tiết HSTĐ'
 			}
 		},
 		{
@@ -1548,7 +1638,8 @@ export const routes = [
 				breadcrumbs: [
 					{ title: 'Hồ sơ thẩm định', name: 'certification_brief.index' },
 					{ title: 'Chỉnh sửa hồ sơ thẩm định', name: 'certification_brief.edit' }
-				]
+				],
+				gtm: 'Trang chỉnh sửa HSTĐ'
 			}
 		}
 		]
@@ -1567,7 +1658,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_DASHBOARD],
 				breadcrumbs: [
 					{ title: 'Bảng thông tin tổng hợp', name: 'dashboard.index' }
-				]
+				],
+				gtm: 'Trang Dashboard'
 			}
 		}]
 	},
@@ -1584,7 +1676,8 @@ export const routes = [
 				// permissions: PERMISSIONS.ALL,
 				breadcrumbs: [
 					{ title: 'error', name: 'error.403' }
-				]
+				],
+				gtm: 'Trang lỗi 403'
 			}
 		},
 		{
@@ -1596,7 +1689,8 @@ export const routes = [
 				// permissions: PERMISSIONS.ALL,
 				breadcrumbs: [
 					{ title: 'error', name: 'error.404' }
-				]
+				],
+				gtm: 'Trang lõi 404'
 			}
 		},
 		{
@@ -1608,7 +1702,8 @@ export const routes = [
 				// permissions: PERMISSIONS.ALL,
 				breadcrumbs: [
 					{ title: 'error', name: 'error.409' }
-				]
+				],
+				gtm: 'Trang lõi 409'
 			}
 		},
 		{
@@ -1620,7 +1715,8 @@ export const routes = [
 				// permissions: PERMISSIONS.ALL,
 				breadcrumbs: [
 					{ title: 'error', name: 'error.429' }
-				]
+				],
+				gtm: 'Trang lõi 429'
 			}
 		},
 		{
@@ -1632,7 +1728,8 @@ export const routes = [
 				// permissions: PERMISSIONS.ALL,
 				breadcrumbs: [
 					{ title: 'error', name: 'error.500' }
-				]
+				],
+				gtm: 'Trang lõi 500'
 			}
 		},
 		{
@@ -1644,7 +1741,8 @@ export const routes = [
 				// permissions: PERMISSIONS.ALL,
 				breadcrumbs: [
 					{ title: 'error', name: 'error.503' }
-				]
+				],
+				gtm: 'Trang lõi 503'
 			}
 		}
 		]
@@ -1653,7 +1751,10 @@ export const routes = [
 	// Page not found
 	{
 		path: '*',
-		component: page('error/Error404.vue')
+		component: page('error/Error404.vue'),
+		meta: {
+			gtm: 'Trang lõi 404'
+		}
 	},
 
 	{
@@ -1669,7 +1770,8 @@ export const routes = [
 				permissions: [PERMISSIONS.VIEW_DASHBOARD],
 				breadcrumbs: [
 					//   { title: 'Bất động sản' }
-				]
+				],
+				gtm: 'Trang lõi không tìm thấy trang'
 			}
 		}]
 	}
