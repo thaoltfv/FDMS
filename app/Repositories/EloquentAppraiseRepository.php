@@ -3759,7 +3759,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
             $buildingPriceRepository = new EloquentBuildingPriceRepository(new BuildingPrice());
             foreach($objects['construction'] as $construct){
-                dd('contruct',$construct);
+                
+                $province_id = Appraise::where('id', '=', $construct->appraise_id)->get('province_id')->first();
+                dd('province_id',$province_id);
                 $desicionAverage = $buildingPriceRepository->getAverageBuildPriceV3($construct);
                 $construction = $construct;
                 $construction['appraise_id']= $appraiseId;
