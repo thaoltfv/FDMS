@@ -25,12 +25,8 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
         $provinceId = (int)request()->get('province_id');
-        $search = request()->get('search');
-        if (empty($search)) {
-            $search = '';
-        }
 
-        $query = 'dictionary.description ilike ' . "'%%" . strtolower($search) . "%%'";
+        $query = '';
         if ($provinceId > 0) {
             $query = $query . ' and province_id = ' . $provinceId;
         }
