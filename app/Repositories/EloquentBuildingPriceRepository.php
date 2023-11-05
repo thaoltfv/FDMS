@@ -24,10 +24,15 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
     {
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
-        $province_id = (int)request()->get('province_id');
-        $query = '';
-        if ($province_id > 0) {
-            $query = 'province_id = ' . $province_id;
+        $provinceId = (int)request()->get('province_id');
+        $search = request()->get('search');
+        if (empty($search)) {
+            $search = '';
+        }
+
+        $query = 'categoryBuilding.description ilike ' . "'%%" . strtolower($search) . "%%'";
+        if ($provinceId > 0) {
+            $query = $query . ' and province_id = ' . $provinceId;
         }
         return QueryBuilder::for($this->model)
             ->with([
