@@ -27,7 +27,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         $province_id = (int)request()->get('province_id');
         $query = '';
         if ($province_id > 0) {
-            $query = $query . ' and province_id = ' . $province_id;
+            $query = 'province_id = ' . $province_id;
         }
         return QueryBuilder::for($this->model)
             ->with([
@@ -41,6 +41,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 'rate:id,description',
                 'provinces:id,name',
                 ])
+            ->whereRaw($query)
             ->orderByDesc($this->allowedSorts)
             ->forPage($page, $perPage)
             ->paginate($perPage);
