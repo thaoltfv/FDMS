@@ -376,7 +376,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         if ($result_1){
             $result = $result_1;
         }
-        //   dd( DB::getQueryLog()) ;
+          dd($result, $result_1) ;
         return $result?(int)$result:0;
     }
 
