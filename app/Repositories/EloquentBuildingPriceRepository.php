@@ -24,6 +24,11 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
     {
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
+        $province_id = (int)request()->get('province_id');
+        $query = '';
+        if ($province_id > 0) {
+            $query = $query . ' and province_id = ' . $province_id;
+        }
         return QueryBuilder::for($this->model)
             ->with([
                 'categoryBuilding:id,description',
