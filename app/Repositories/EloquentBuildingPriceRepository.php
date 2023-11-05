@@ -374,7 +374,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->WhereNull('effect_to')->get();
                 // ->avg('unit_price_m2');
 
-            $result_1->merge($result_12)->avg('unit_price_m2');
+            $result_1 = $result_1->merge($result_12)->avg('unit_price_m2');
         }
         $result= $this->model->query()
             ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
@@ -391,9 +391,9 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
             // ->orWhere('effect_to', 'IS', 'NULL')
             // ->avg('unit_price_m2');
 
-        $result->merge($result_x)->avg('unit_price_m2');
+        $result = $result->merge($result_x)->avg('unit_price_m2');
         
-        dd($query, $result, $result_1) ;
+        // dd($query, $result, $result_1) ;
         if ($result_1){
             $result = $result_1;
         }
