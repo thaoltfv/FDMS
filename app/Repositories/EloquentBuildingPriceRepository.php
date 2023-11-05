@@ -307,6 +307,66 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         return $result?(int)$result:0;
     }
 
+    public function getAverageBuildPriceV4($object, $province_id): int
+    {
+        $buildingCategory = $object['building_type_id'];
+        $level = $object['building_category_id'] ;
+        $rate = $object['rate_id'];
+        $structure = $object['structure_id'];
+        $crane = $object['crane_id'];
+        $aperture = $object['aperture_id'];
+        $factoryType = $object['factory_type_id'];
+
+        if(!isset($buildingCategory))
+            return 0;
+        $query = 'building_category = ' . "'" . $buildingCategory . "'";
+        if ($level > 0 && $buildingCategory == 41 ) {
+            $query = $query . ' and level = ' . $level;
+        } else {
+            $query = $query . ' and level is null';
+        }
+
+        if ($rate > 0 && ($buildingCategory == 41 || $buildingCategory ==42)) {
+            $query = $query . ' and rate = ' . $rate;
+        } else {
+            $query = $query . ' and rate is null';
+        }
+
+        if ($structure > 0 && $buildingCategory == 42 ) {
+            $query = $query . ' and structure = ' . $structure;
+        } else {
+            $query = $query . ' and structure is null';
+        }
+
+        if ($crane > 0 && $buildingCategory == 43) {
+            $query = $query . ' and crane = ' . $crane;
+        } else {
+            $query = $query . ' and crane is null';
+        }
+
+        if ($aperture > 0 && $buildingCategory == 43) {
+            $query = $query . ' and aperture = ' . $aperture;
+        } else {
+            $query = $query . ' and aperture is null';
+        }
+
+        if ($factoryType > 0 && $buildingCategory == 43 )  {
+            $query = $query . ' and factory_type = ' . $factoryType;
+        } else {
+            $query = $query . ' and factory_type is null';
+        }
+        // DB::enableQueryLog();
+        $result= $this->model->query()
+            ->whereRaw($query)
+            ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+            ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+            ->orWhereNull('effect_to')
+            ->avg('unit_price_m2');
+
+        //   dd( DB::getQueryLog()) ;
+        return $result?(int)$result:0;
+    }
+
     public function getPP2($object)
     {
         $buildingCategory = $object['building_type_id'];
