@@ -360,15 +360,15 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         if ($province_id){
             $result_1 = $this->model->query()
                 ->where('province_id', '=', $province_id)
-                ->whereRaw($query)->get();
-                // ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
-                // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->whereRaw($query)
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))->get();
                 // ->orWhereNull('effect_to')->get();
                 // ->avg('unit_price_m2');
         }
         $result= $this->model->query()
-            // ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
-            // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+            ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+            ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
             ->whereRaw($query)->get();
             // ->orWhereNull('effect_to')->get();
             // ->avg('unit_price_m2');
