@@ -28,7 +28,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
 
         $query = '';
         if ($provinceId > 0) {
-            $query = $query . ' and province_id = ' . $provinceId;
+            $query = 'province_id = ' . $provinceId;
         }
         return QueryBuilder::for($this->model)
             ->with([
