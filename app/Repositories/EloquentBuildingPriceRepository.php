@@ -309,7 +309,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
 
     public function getAverageBuildPriceV4($object, $province_id): int
     {
-        dd('province_id', $province_id);
+        // dd('province_id', $province_id);
         $buildingCategory = $object['building_type_id'];
         $level = $object['building_category_id'] ;
         $rate = $object['rate_id'];
@@ -357,13 +357,25 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
             $query = $query . ' and factory_type is null';
         }
         // DB::enableQueryLog();
+        if ($province_id){
+            $result_1 = $this->model->query()
+                ->whereRaw($query)
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->where('province_id', '=', $province_id)
+                ->orWhereNull('effect_to')
+                ->avg('unit_price_m2');
+        }
         $result= $this->model->query()
             ->whereRaw($query)
             ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
             ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
             ->orWhereNull('effect_to')
             ->avg('unit_price_m2');
-
+        
+        if ($result_1){
+            $result = $result_1;
+        }
         //   dd( DB::getQueryLog()) ;
         return $result?(int)$result:0;
     }
