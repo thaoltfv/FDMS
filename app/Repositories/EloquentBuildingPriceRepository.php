@@ -309,6 +309,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
 
     public function getAverageBuildPriceV4($object, $province_id): int
     {
+        dd('province_id', $province_id);
         $buildingCategory = $object['building_type_id'];
         $level = $object['building_category_id'] ;
         $rate = $object['rate_id'];
