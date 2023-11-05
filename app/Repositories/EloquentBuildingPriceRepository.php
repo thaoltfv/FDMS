@@ -363,17 +363,37 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->whereRaw($query)
                 ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
                 ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
-                ->orWhere('effect_to', 'IS', 'NULL')
+                // ->orWhere('effect_to', 'IS', 'NULL')
                 ->avg('unit_price_m2');
+            
+            $result_12 = $this->model->query()
+                ->where('province_id', '=', $province_id)
+                ->whereRaw($query)
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->WhereNull('effect_to')
+                ->avg('unit_price_m2');
+
+            $result_1->merge($result_12);
         }
         $result= $this->model->query()
             ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
             ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
             ->whereRaw($query)
-            ->orWhere('effect_to', 'IS', 'NULL')
+            // ->orWhere('effect_to', 'IS', 'NULL')
             ->avg('unit_price_m2');
+
+        $result_x= $this->model->query()
+            ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+            // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+            ->WhereNull('effect_to')
+            ->whereRaw($query)
+            // ->orWhere('effect_to', 'IS', 'NULL')
+            ->avg('unit_price_m2');
+
+        $result->merge($result_x);
         
-        dd($query, $result, $result_1) ;
+        // dd($query, $result, $result_1) ;
         if ($result_1){
             $result = $result_1;
         }
