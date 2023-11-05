@@ -373,10 +373,11 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
             ->orWhereNull('effect_to')
             ->avg('unit_price_m2');
         
+        dd($result, $result_1) ;
         if ($result_1){
             $result = $result_1;
         }
-          dd($result, $result_1) ;
+          
         return $result?(int)$result:0;
     }
 
