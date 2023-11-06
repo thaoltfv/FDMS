@@ -3841,7 +3841,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     ];
             $with= [
                     'law:id,type,content',
-                    'landDetails:id,appraise_law_id,doc_no,land_no',
+                    'landDetails:id,appraise_law_id,doc_no,land_no,land_type_purpose_id,total_area',
                     ];
             $result = AppraiseLaw::with($with)
                 ->select($select)
