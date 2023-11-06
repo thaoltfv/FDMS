@@ -472,7 +472,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->where('province_id', '=', $province_id)
                 ->orderByDesc('updated_at')
                 ->first();
-            $result = $result->merge($result_x);        
+            $result->merge($result_x);        
         } else {
             $result= $this->model->query()
                 ->whereRaw($query)
@@ -491,7 +491,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->WhereNull('province_id')
                 ->orderByDesc('updated_at')
                 ->first();
-            $result = $result->merge($result_x);
+            $result->merge($result_x);
         }
         
 
