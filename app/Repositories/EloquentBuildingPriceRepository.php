@@ -462,7 +462,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 // ->orWhereNull('effect_to')
                 ->where('province_id', '=', $province_id)
                 ->orderByDesc('updated_at')
-                ->first();
+                ->get();
             
             $result_x= $this->model->query()
                 ->whereRaw($query)
@@ -471,8 +471,8 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->WhereNull('effect_to')
                 ->where('province_id', '=', $province_id)
                 ->orderByDesc('updated_at')
-                ->first();
-            $result->merge($result_x);        
+                ->get();
+            $result = $result->merge($result_x)->first();        
         } else {
             $result= $this->model->query()
                 ->whereRaw($query)
@@ -481,7 +481,7 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 // ->orWhereNull('effect_to')
                 ->WhereNull('province_id')
                 ->orderByDesc('updated_at')
-                ->first();
+                ->get();
             
             $result_x= $this->model->query()
                 ->whereRaw($query)
@@ -490,8 +490,8 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 ->WhereNull('effect_to')
                 ->WhereNull('province_id')
                 ->orderByDesc('updated_at')
-                ->first();
-            $result->merge($result_x);
+                ->get();
+            $result = $result->merge($result_x)->first();
         }
         
 
