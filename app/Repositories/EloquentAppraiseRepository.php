@@ -3785,7 +3785,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         QueryBuilder::for($constructionCompanyData)
                         ->insert($constructionCompanyData->attributesToArray());
                 }
-                $pp2 = $buildingPriceRepository->getPP2($construct);
+                $pp2 = $buildingPriceRepository->getPP2_V1($construct, $province_id['province_id']);
 
                 $tangibleComparisonFactor = [];
                 $tangibleComparisonFactor['appraise_id'] = $appraiseId;
