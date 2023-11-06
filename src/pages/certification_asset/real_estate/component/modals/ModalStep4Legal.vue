@@ -11,136 +11,156 @@
             </div>
         </div>
         <div class="contain-detail">
-					<div class="row">
-						<div class="col-12 col-xl-6">
-							<div class="row flex-column h-100">
-								<div class="col">
-									<InputCategory
-										v-model="form.appraise_law_id"
-										vid="appraise_law_id"
-										label="Loại pháp lý"
-										rules="required"
-										:options="optionsJuridicals"
-										@change="handleChangeTypeLegal"
-									/>
-								</div>
-								<div v-if="form.appraise_law_id === 0" class="col">
-									<InputText
-											v-model="form.description"
-											vid="description"
-											class="form-group-container"
-											label="Tên pháp lý"
-											rules="required"
-										/>
-								</div>
-								<div class="col">
-									<div class="row">
-										<InputTextarea
-											v-model="form.date"
-											vid="date"
-											class="form-group-container col-6"
-											label="Số pháp lý"
-											rules="required"
-											:autosize="true"
-										/>
-										<InputDatePicker
-											v-model="form.law_date"
-											vid="law_date"
-											label="Ngày pháp lý"
-											placeholder="Ngày/tháng/năm"
-											class="form-group-container col-6"
-											formatDate='DD/MM/YYYY'
-											@change="changeLegalDate"
-										/>
-									</div>
-								</div>
-								<div class="col input-contain" v-if="form.appraise_law_id !== 0">
-									<InputText
-										v-model="form.duration"
-										vid="duration"
-										label="Thời hạn sử dụng"
-										class="form-group-container"
-									/>
-								</div>
-								<div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0">
-									<div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
-										<div class="col-12 col-lg-6 item_land input-contain">
-											<InputText
-												v-model="itemLand.doc_no"
-												vid="doc_num"
-												label="Số tờ"
-												class="form-group-container"
-												@change="changeDocNo($event, index)"
-											/>
-										</div>
-										<div class="col-12 col item_land input-contain" :class="[form.land_details.length > 1 ? 'col-lg-5' : 'col-lg-6']">
-											<InputText
-												v-model="itemLand.land_no"
-												vid="plot_num"
-												label="Số thửa"
-												class="form-group-container"
-												@change="changeLandNo($event, index)"
-											/>
-										</div>
-										<div v-if="form.land_details.length > 1" class="button_delete_land col-12 col-lg-1 d-flex align-items-end p-0">
-											<button class="btn-delete" type="button" @click="handleDeleteLand(index)">
-												<img alt="delete_land" src="@/assets/icons/ic_delete_2.svg">
-											</button>
-										</div>
-									</div>
-									<div class="row">
-										<div class="d-flex justify-content-end w-100 pr-0">
-											<button class="btn text-warning btn-ghost btn-add pr-0" type="button" @click="handleAddLandDoc">
-												<img alt="add" src="@/assets/icons/ic_add-white.svg" class="mr-0">
-												+ Thêm
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-12 col-xl-6">
-							<div class="row flex-column h-100">
-								<div class="col input-contain">
-									<InputText
-										v-model="form.certifying_agency"
-										vid="certifying_agency"
-										label="Cơ quan các cấp xác nhận"
-										rules="required"
-									/>
-								</div>
-								<div class="col" v-if="form.appraise_law_id !== 0">
-									<InputText
-										v-model="form.legal_name_holder"
-										class="form-group-container"
-										vid="name_building"
-										label="Người đứng tên pháp lý"
-										@change="changeLegal"
-										rules="required"
-									/>
-								</div>
-								<div class="col input-contain">
-									<InputTextarea
-										v-model="form.origin_of_use"
-										vid="origin_of_use"
-										label="Nguồn gốc sử dụng"
-										class="form-group-container"
-										:autosize="true"
-									/>
-								</div>
-								<div class="col input-contain">
-									<InputTextarea
-										v-model="form.content"
-										vid="content"
-										label="Nội dung"
-										rules="required"
-										class="form-group-container"
-										:rows="contentRows"
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <div class="row flex-column h-100">
+                                <div class="col">
+                                    <InputCategory
+                                        v-model="form.appraise_law_id"
+                                        vid="appraise_law_id"
+                                        label="Loại pháp lý"
+                                        rules="required"
+                                        :options="optionsJuridicals"
+                                        @change="handleChangeTypeLegal"
+                                    />
+                                </div>
+                                <div v-if="form.appraise_law_id === 0" class="col">
+                                    <InputText
+                                            v-model="form.description"
+                                            vid="description"
+                                            class="form-group-container"
+                                            label="Tên pháp lý"
+                                            rules="required"
+                                        />
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <InputTextarea
+                                            v-model="form.date"
+                                            vid="date"
+                                            class="form-group-container col-6"
+                                            label="Số pháp lý"
+                                            rules="required"
+                                            :autosize="true"
+                                        />
+                                        <InputDatePicker
+                                            v-model="form.law_date"
+                                            vid="law_date"
+                                            label="Ngày pháp lý"
+                                            placeholder="Ngày/tháng/năm"
+                                            class="form-group-container col-6"
+                                            formatDate='DD/MM/YYYY'
+                                            @change="changeLegalDate"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col input-contain" v-if="form.appraise_law_id !== 0">
+                                    <InputText
+                                        v-model="form.duration"
+                                        vid="duration"
+                                        label="Thời hạn sử dụng"
+                                        class="form-group-container"
+                                    />
+                                </div>
+                                <div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0">
+                                    <div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
+                                        <div class="col-12 col-lg-6 item_land input-contain">
+                                            <InputCategoryCustom
+                                                v-model="itemLand.land_type_purpose_id"
+                                                vid="land_type_purpose_id"
+                                                class="form-group-container"
+                                                label="Mục đích sử dụng"
+                                                :options="optionsTypePurposes"
+                                                @change="changeLandtypepurpose($event, index)"
+                                            />
+                                        </div>
+                                        <div class="col-12 col item_land input-contain" :class="[form.land_details.length > 1 ? 'col-lg-5' : 'col-lg-6']">
+                                            <InputAreaCustom
+                                                v-model="itemLand.total_area"
+                                                vid="total_area"
+                                                label="Diện tích"
+                                                class="form-group-container"
+                                                @change="changeTotal_area($event, index)"
+                                            />
+                                        </div>
+                                        <div class="col-12 col-lg-6 item_land input-contain">
+                                            <InputText
+                                                v-model="itemLand.doc_no"
+                                                vid="doc_num"
+                                                label="Số tờ"
+                                                class="form-group-container"
+                                                @change="changeDocNo($event, index)"
+                                            />
+                                            
+                                        </div>
+                                        <div class="col-12 col item_land input-contain" :class="[form.land_details.length > 1 ? 'col-lg-5' : 'col-lg-6']">
+                                            <InputText
+                                                v-model="itemLand.land_no"
+                                                vid="plot_num"
+                                                label="Số thửa"
+                                                class="form-group-container"
+                                                @change="changeLandNo($event, index)"
+                                            />
+                                        </div>
+                                        <div v-if="form.land_details.length > 1" class="button_delete_land col-12 col-lg-1 d-flex align-items-end p-0">
+                                            <button class="btn-delete" type="button" @click="handleDeleteLand(index)">
+                                                <img alt="delete_land" src="@/assets/icons/ic_delete_2.svg">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-end w-100 pr-0">
+                                            <button class="btn text-warning btn-ghost btn-add pr-0" type="button" @click="handleAddLandDoc">
+                                                <img alt="add" src="@/assets/icons/ic_add-white.svg" class="mr-0">
+                                                + Thêm
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <div class="row flex-column h-100">
+                                <div class="col input-contain">
+                                    <InputText
+                                        v-model="form.certifying_agency"
+                                        vid="certifying_agency"
+                                        label="Cơ quan các cấp xác nhận"
+                                        rules="required"
+                                    />
+                                </div>
+                                <div class="col" v-if="form.appraise_law_id !== 0">
+                                    <InputText
+                                        v-model="form.legal_name_holder"
+                                        class="form-group-container"
+                                        vid="name_building"
+                                        label="Người đứng tên pháp lý"
+                                        @change="changeLegal"
+                                        rules="required"
+                                    />
+                                </div>
+                                <div class="col input-contain">
+                                    <InputTextarea
+                                        v-model="form.origin_of_use"
+                                        vid="origin_of_use"
+                                        label="Nguồn gốc sử dụng"
+                                        class="form-group-container"
+                                        :autosize="true"
+                                    />
+                                </div>
+                                <div class="col input-contain">
+                                    <InputTextarea
+                                        v-model="form.content"
+                                        vid="content"
+                                        label="Nội dung"
+                                        rules="required"
+                                        class="form-group-container"
+                                        :rows="contentRows"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         </div>
         <div class="container-title container-title__footer">
             <div class="d-lg-flex d-block justify-content-end shadow-bottom">
@@ -160,156 +180,235 @@ import InputCategory from '@/components/Form/InputCategory'
 import InputText from '@/components/Form/InputText'
 import InputTextarea from '@/components/Form/InputTextarea'
 import InputDatePicker from '@/components/Form/InputDatePicker'
+import InputAreaCustom from '@/components/Form/InputAreaCustom'
+import InputCategoryCustom from '@/components/Form/InputCategoryCustom'
+import WareHouse from '@/models/WareHouse'
 // import moment from 'moment'
 export default {
-	name: 'ModalBuildingDetail',
-	props: ['data', 'juridicals', 'provinceName', 'full_address'],
-	components: {
-		InputCategory,
-		InputText,
-		InputTextarea,
-		InputNumberNoneFormat,
-		InputDatePicker
-	},
-	data () {
-		return {
-			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
-			contentRows: 3
-		}
-	},
+    name: 'ModalBuildingDetail',
+    props: ['data', 'juridicals', 'provinceName', 'full_address'],
+    components: {
+        InputCategory,
+        InputText,
+        InputTextarea,
+        InputNumberNoneFormat,
+        InputDatePicker,
+        InputAreaCustom,
+        InputCategoryCustom
+    },
+    data () {
+        return {
+            form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
+            contentRows: 3,
+            type_purposes: []
+        }
+    },
 
-	computed: {
-		optionsJuridicals () {
-			return {
-				data: this.juridicals,
-				id: 'id',
-				key: 'content'
-			}
-		}
+    computed: {
+        optionsJuridicals () {
+            return {
+                data: this.juridicals,
+                id: 'id',
+                key: 'content'
+            }
+        },
+        optionsTypePurposes () {
+            return {
+                data: this.type_purposes,
+                id: 'id',
+                key: 'description'
+
+            }
+        }
+
+    },
+    mounted () {
+        this.setContentRows()
+    },
+    async beforeMount () {
+		this.getDictionaryLand()
 	},
-	mounted () {
-		this.setContentRows()
-	},
-	methods: {
-		changeLegalDate (event) {
-			if (event) { this.form.law_date = event }
-		},
-		handleAddLandDoc () {
-			this.form.land_details.push({
-				doc_no: '',
-				land_no: ''
+    methods: {
+		async getDictionaryLand () {
+			const resp = await WareHouse.getDictionariesLand()
+			this.type_purposes = [...resp.data]
+			this.type_purposes.forEach(item => {
+				item.description = this.formatSentenceCase(item.description)
 			})
-			this.setContentRows()
 		},
-		changeLegal () {
-			this.getContent()
+        formatSentenceCase (phrase) {
+			let text = phrase.toLowerCase()
+			return text.charAt(0).toUpperCase() + text.slice(1)
 		},
-		changeDocNo (event, index) {
-			if (event) {
-				this.form.land_details[index].doc_no = event
-			} else {
-				this.form.land_details[index].doc_no = ''
-			}
-			this.getContent()
-		},
-		changeLandNo (event, index) {
-			if (event) {
-				this.form.land_details[index].land_no = event
-			} else {
-				this.form.land_details[index].land_no = ''
-			}
-			this.getContent()
-		},
-		async getContent () {
-			let land_description = ''
-			const map = new Map()
-			if (this.form.land_details.length > 0) {
-				await this.form.land_details.forEach(item => {
-					let land_no_description = ''
-					let land_description_item = ''
-					if (!map.has(item.doc_no)) {
-						map.set(item.doc_no, true)
-						let filterArray = this.form.land_details.filter(itemFilter => item.doc_no === itemFilter.doc_no)
-						land_description_item = ''
-						land_no_description = ''
-						let land_no_number = null
-						if (filterArray.length > 0) {
-							filterArray.forEach(landItem => {
-								land_no_number = landItem.land_no
-								if (!land_no_description) {
-									land_no_description = `${land_no_description} ` + `${land_no_number === 0 ? 0 : land_no_number || ''}`
-								} else land_no_description = `${land_no_description}, ` + `${land_no_number}`
-							})
-						}
-						land_description_item = 'thửa đất số' + `${land_no_description || ''}` + ' tờ bản đồ số ' + `${item.doc_no || item.doc_no === 0 ? item.doc_no : ''}`
-						if (!land_description) {
-							land_description = `${land_description}` + `${land_description_item}`
-						} else land_description = `${land_description}, ` + `${land_description_item}`
-					}
-				})
-				this.setContentRows()
-			}
-			this.form.content = await 'Chứng nhận ' + `${this.form.legal_name_holder ? this.form.legal_name_holder + ' ' : ''}` + 'được quyền sử dụng đất thuộc ' + `${land_description} ` + `${this.full_address ? this.full_address : ''}.`
-			land_description = ''
-		},
-		getProvince () {
-			this.form.certifying_agency = `Sở Tài nguyên và Môi trường ${this.provinceName && this.provinceName.toLowerCase().includes('thành phố') ? this.provinceName : this.provinceName ? 'Tỉnh ' + this.provinceName : ''}`
-		},
-		setContentRows () {
-			if (this.form.appraise_law_id === 0) {
-				this.contentRows = 9
-			} else this.contentRows = this.form.land_details.length * 3
-		},
-		handleDeleteLand (index) {
-			this.form.land_details.splice(index, 1)
-			this.setContentRows()
-			this.getContent()
-		},
-		handleChangeTypeLegal (event) {
-			if (event === 0) {
-				this.form.content = ''
-				this.form.certifying_agency = ''
-				this.form.land_details = [
-					{
-						doc_no: '',
-						land_no: ''
-					}
-				]
-			} else {
-				this.form.description = ''
-				this.getContent()
-				this.getProvince()
-			}
-			this.setContentRows()
-		},
-		handleCancel (event) {
-			this.$emit('cancel', event)
-		},
-		async validateLegal () {
-			const valid = await this.$refs.formLegal.validate()
-			if (valid) {
-				let getLaw = await this.juridicals.filter(item => item.id === this.form.appraise_law_id)
-				this.form.law = getLaw[0]
-				let checkDocLand = true
-				this.form.land_details.forEach(item => {
-					if ((item.doc_no || item.doc_no === 0) && (item.land_no || item.land_no === 0)) {
-						checkDocLand = false
-					}
-				})
-				if (checkDocLand && this.form.appraise_law_id !== 0) {
-					return this.$toast.open({
-						message: 'Vui lòng nhập Số tờ , Số thửa',
-						type: 'error',
-						position: 'top-right'
+		async getAppraiseLaws () {
+			await Certificate.getAppraiseLaws().then((resp) => {
+				if (resp.data && resp.data.phap_ly) {
+					this.juridicals = resp.data.phap_ly
+					this.juridicals.push({
+						content: 'Văn bản pháp lý khác',
+						created_at: new Date(),
+						date: '',
+						deleted_at: null,
+						document_type: '',
+						id: 0,
+						is_defaults: false,
+						provinces: 'Tất cả',
+						type: 'PHAP_LY'
 					})
+				} else {
+					this.juridicals = []
 				}
-				await this.handleAction()
-			}
+			})
 		},
-		handleAction () {
-			this.$emit('action', this.form)
-		}
-	}
+        changeLegalDate (event) {
+            if (event) { this.form.law_date = event }
+        },
+        handleAddLandDoc () {
+            this.form.land_details.push({
+                doc_no: '',
+                land_no: ''
+            })
+            this.setContentRows()
+        },
+        handleAddLandMainArea () {
+            this.form.land_details.push({
+                land_type_purpose_id: '',
+                total_area: ''
+            })
+            this.setContentRows()
+        },
+        changeLegal () {
+            this.getContent()
+        },
+        changeDocNo (event, index) {
+            if (event) {
+                this.form.land_details[index].doc_no = event
+            } else {
+                this.form.land_details[index].doc_no = ''
+            }
+            this.getContent()
+        },
+        changeLandNo (event, index) {
+            if (event) {
+                this.form.land_details[index].land_no = event
+            } else {
+                this.form.land_details[index].land_no = ''
+            }
+            this.getContent()
+        },
+        changeLandtypepurpose (event, index) {
+            if (event) {
+                this.form.land_details[index].land_type_purpose_id = event
+            } else {
+                this.form.land_details[index].land_type_purpose_id = ''
+            }
+            this.getContent()
+        },
+        changeTotal_area (event, index) {
+            if (event) {
+                this.form.land_details[index].total_area = event
+            } else {
+                this.form.land_details[index].total_area = ''
+            }
+            this.getContent()
+        },
+        async getContent () {
+            let land_description = ''
+            console.log('data', this.form)
+            const map = new Map()
+            if (this.form.land_details.length > 0) {
+                await this.form.land_details.forEach(item => {
+                    let land_no_description = ''
+                    let land_description_item = ''
+                    if (!map.has(item.doc_no)) {
+                        map.set(item.doc_no, true)
+                        let filterArray = this.form.land_details.filter(itemFilter => item.doc_no === itemFilter.doc_no)
+                        land_description_item = ''
+                        land_no_description = ''
+                        let land_no_number = null
+                        if (filterArray.length > 0) {
+                            filterArray.forEach(landItem => {
+                                land_no_number = landItem.land_no
+                                if (!land_no_description) {
+                                    land_no_description = `${land_no_description} ` + `${land_no_number === 0 ? 0 : land_no_number || ''}`
+                                } else land_no_description = `${land_no_description}, ` + `${land_no_number}`
+                            })
+                        }
+                        land_description_item = 'thửa đất số' + `${land_no_description || ''}` + ' tờ bản đồ số ' + `${item.doc_no || item.doc_no === 0 ? item.doc_no : ''}`
+                        if (!land_description) {
+                            land_description = `${land_description}` + `${land_description_item}`
+                        } else land_description = `${land_description}, ` + `${land_description_item}`
+                    }
+                })
+                this.setContentRows()
+            }
+            this.form.content = await 'Chứng nhận ' + `${this.form.legal_name_holder ? this.form.legal_name_holder + ' ' : ''}` + 'được quyền sử dụng đất thuộc ' + `${land_description} ` + `${this.full_address ? this.full_address : ''}.`
+            land_description = ''
+        },
+        getProvince () {
+            this.form.certifying_agency = `Sở Tài nguyên và Môi trường ${this.provinceName && this.provinceName.toLowerCase().includes('thành phố') ? this.provinceName : this.provinceName ? 'Tỉnh ' + this.provinceName : ''}`
+        },
+        setContentRows () {
+            if (this.form.appraise_law_id === 0) {
+                this.contentRows = 9
+            } else this.contentRows = this.form.land_details.length * 3
+        },
+        handleDeleteLand (index) {
+            this.form.land_details.splice(index, 1)
+            this.setContentRows()
+            this.getContent()
+        },
+        handleDeleteMainArea (index) {
+            this.form.land_details.splice(index, 1)
+            this.setContentRows()
+            this.getContent()
+        },
+        handleChangeTypeLegal (event) {
+            if (event === 0) {
+                this.form.content = ''
+                this.form.certifying_agency = ''
+                this.form.land_details = [
+                    {
+                        doc_no: '',
+                        land_no: ''
+                    }
+                ]
+            } else {
+                this.form.description = ''
+                this.getContent()
+                this.getProvince()
+            }
+            this.setContentRows()
+        },
+        handleCancel (event) {
+            this.$emit('cancel', event)
+        },
+        async validateLegal () {
+            const valid = await this.$refs.formLegal.validate()
+            console.log('form', this.form)
+            if (valid) {
+                let getLaw = await this.juridicals.filter(item => item.id === this.form.appraise_law_id)
+                this.form.law = getLaw[0]
+                let checkDocLand = true
+                this.form.land_details.forEach(item => {
+                    if ((item.doc_no || item.doc_no === 0) && (item.land_no || item.land_no === 0)) {
+                        checkDocLand = false
+                    }
+                })
+                if (checkDocLand && this.form.appraise_law_id !== 0) {
+                    return this.$toast.open({
+                        message: 'Vui lòng nhập Số tờ , Số thửa',
+                        type: 'error',
+                        position: 'top-right'
+                    })
+                }
+                await this.handleAction()
+            }
+        },
+        handleAction () {
+            this.$emit('action', this.form)
+        }
+    }
 
 }
 </script>
@@ -321,7 +420,7 @@ export default {
   align-items: center;
   background: #FFFFFF;
   border: none;
-	margin-bottom: 0.6rem;
+    margin-bottom: 0.6rem;
   img {
     width: 100%;
     height: auto;
@@ -641,3 +740,5 @@ padding: .75rem 0;
 border: 1px solid #0b0d10;
 }
 </style>
+
+

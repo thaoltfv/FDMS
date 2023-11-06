@@ -34,17 +34,6 @@
 																	rules="required"
 															/>
 													</div>
-													<div class="col" v-if="form.appraise_law_id !== 0">
-															<InputText
-																	:disabledInput="true"
-																	v-model="form.legal_name_holder"
-																	class="form-group-container"
-																	vid="name_building"
-																	label="Người đứng tên pháp lý"
-																	@change="changeLegal"
-																	rules="required"
-															/>
-													</div>
 													<div class="col">
 															<div class="row">
 																	<InputTextarea
@@ -52,7 +41,7 @@
 																			vid="date"
 																			class="form-group-container col-6"
 																			label="Số pháp lý"
-																			:disabledInput="true"
+																			:disableInput="true"
 																			rules="required"
 																			:autosize="true"
 																	/>
@@ -78,7 +67,26 @@
 													</div>
 													<div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0">
 															<div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
-																	<div class="col-12 col-lg-6 item_land input-contain">
+																<div class="col-12 col-lg-6 item_land input-contain">
+																		<InputCategoryCustom
+																			v-model="itemLand.land_type_purpose_id"
+																			vid="land_type_purpose_id"
+																			class="form-group-container"
+																			label="Mục đích sử dụng"
+																			:options="optionsTypePurposes"
+																			:disabled="true"
+																		/>
+																</div>
+																<div class="col-12 col item_land input-contain col-lg-6 " >
+																		<InputAreaCustom
+																			v-model="itemLand.total_area"
+																			vid="total_area"
+																			label="Diện tích"
+																			class="form-group-container"
+																			:disabled="true"
+																		/>
+																</div>
+																<div class="col-12 col-lg-6 item_land input-contain">
 																			<InputText
 																					v-model="itemLand.doc_no"
 																					vid="doc_num"
@@ -108,6 +116,16 @@
 																	v-model="form.certifying_agency"
 																	vid="certifying_agency"
 																	label="Cơ quan các cấp xác nhận"
+																	rules="required"
+															/>
+													</div>
+													<div class="col input-contain" v-if="form.appraise_law_id !== 0">
+															<InputText
+																	:disabledInput="true"
+																	v-model="form.legal_name_holder"
+																	class="form-group-container"
+																	vid="name_building"
+																	label="Người đứng tên pháp lý"
 																	rules="required"
 															/>
 													</div>
@@ -153,6 +171,10 @@ import InputCategory from '@/components/Form/InputCategory'
 import InputText from '@/components/Form/InputText'
 import InputTextarea from '@/components/Form/InputTextarea'
 import InputDatePicker from '@/components/Form/InputDatePicker'
+import InputCategoryCustom from '@/components/Form/InputCategoryCustom'
+import InputAreaCustom from '@/components/Form/InputAreaCustom'
+import WareHouse from '@/models/WareHouse'
+
 export default {
 	name: 'ModalBuildingDetail',
 	props: ['data', 'juridicals'],
@@ -161,12 +183,15 @@ export default {
 		InputText,
 		InputTextarea,
 		InputNumberNoneFormat,
-		InputDatePicker
+		InputDatePicker,
+		InputCategoryCustom,
+		InputAreaCustom
 	},
 	data () {
 		return {
 			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
-			contentRows: 3
+			contentRows: 3,
+			type_purposes: []
 		}
 	},
 
@@ -177,12 +202,36 @@ export default {
 				id: 'id',
 				key: 'content'
 			}
-		}
+		},
+		optionsTypePurposes () {
+            console.log('data1', this.type_purposes)
+            return {
+                data: this.type_purposes,
+                id: 'id',
+                key: 'description'
+
+            }
+        }
 	},
 	mounted () {
 		this.setContentRows()
+	}, 
+	async beforeMount () {
+		this.getDictionaryLand()
 	},
 	methods: {
+		async getDictionaryLand () {
+			const resp = await WareHouse.getDictionariesLand()
+			console.log('data', resp)
+			this.type_purposes = [...resp.data]
+			this.type_purposes.forEach(item => {
+				item.description = this.formatSentenceCase(item.description)
+			})
+		},
+        formatSentenceCase (phrase) {
+			let text = phrase.toLowerCase()
+			return text.charAt(0).toUpperCase() + text.slice(1)
+		},
 		handleAddLandDoc () {
 			this.form.land_details.push({
 				doc_no: '',
@@ -284,8 +333,6 @@ export default {
 		handleAction () {
 			this.$emit('action', this.form)
 		}
-	},
-	beforeMount () {
 	}
 }
 </script>
