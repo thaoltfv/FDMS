@@ -19,6 +19,11 @@ class AddPurposeLandDetail extends Migration
                 $table->integer('total_area')->nullable()->before('created_at');
             });
         }
+        if (!Schema::hasColumn('appraise_law', 'note')) {
+            Schema::table('appraise_law', function (Blueprint $table) {
+                $table->text('note')->nullable()->before('created_at');
+            });
+        }
     }
 
     /**
@@ -32,6 +37,11 @@ class AddPurposeLandDetail extends Migration
             Schema::table('appraise_law_land_details', function (Blueprint $table) {
                 $table->dropColumn('land_type_purpose_id');
                 $table->dropColumn('total_area');
+            });
+        }
+        if (!Schema::hasColumn('appraise_law', 'note')) {
+            Schema::table('appraise_law', function (Blueprint $table) {
+                $table->dropColumn('note');
             });
         }
     }
