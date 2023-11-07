@@ -55,18 +55,29 @@
                                     </div>
                                 </div>
                                 <div class="col input-contain" v-if="form.appraise_law_id !== 0">
-                                    <InputText
-                                        v-model="form.duration"
-                                        vid="duration"
-                                        label="Thời hạn sử dụng"
-                                        class="form-group-container"
-                                    />
+                                    <div class="row">
+                                        <InputText
+                                            v-model="form.duration"
+                                            vid="duration"
+                                            label="Thời hạn sử dụng"
+                                            class="form-group-container col-6"
+                                        />
+
+                                        <InputTextarea
+                                            v-model="form.origin_of_use"
+                                            vid="origin_of_use"
+                                            label="Nguồn gốc sử dụng"
+                                            class="form-group-container col-6"
+                                            :autosize="true"
+                                        />
+
+                                    </div>
                                 </div>
-                                <div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0">
-                                    <div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
+                                <div class="col" ref="purposeDetails" v-if="form.appraise_law_id !== 0 && form.purpose_details.length > 0">
+                                    <div class="row" v-for="(itemPurpose, index) in form.purpose_details" :key="index">
                                         <div class="col-12 col-lg-6 item_land input-contain">
                                             <InputCategoryCustom
-                                                v-model="itemLand.land_type_purpose_id"
+                                                v-model="itemPurpose.land_type_purpose_id"
                                                 vid="land_type_purpose_id"
                                                 class="form-group-container"
                                                 label="Mục đích sử dụng"
@@ -74,15 +85,32 @@
                                                 @change="changeLandtypepurpose($event, index)"
                                             />
                                         </div>
-                                        <div class="col-12 col item_land input-contain" :class="[form.land_details.length > 1 ? 'col-lg-5' : 'col-lg-6']">
+                                        <div class="col-12 col item_land input-contain" :class="[form.purpose_details.length > 1 ? 'col-lg-5' : 'col-lg-6']">
                                             <InputAreaCustom
-                                                v-model="itemLand.total_area"
+                                                v-model="itemPurpose.total_area"
                                                 vid="total_area"
                                                 label="Diện tích"
                                                 class="form-group-container"
                                                 @change="changeTotal_area($event, index)"
                                             />
                                         </div>
+                                        <div v-if="form.purpose_details.length > 1" class="button_delete_land col-12 col-lg-1 d-flex align-items-end p-0">
+                                            <button class="btn-delete" type="button" @click="handleDeletePurpose(index)">
+                                                <img alt="delete_land" src="@/assets/icons/ic_delete_2.svg">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-end w-100 pr-0">
+                                            <button class="btn text-warning btn-ghost btn-add pr-0" type="button" @click="handleAddPurpose">
+                                                <img alt="add" src="@/assets/icons/ic_add-white.svg" class="mr-0">
+                                                + Thêm
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0 && form.land_details.length > 0">
+                                    <div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
                                         <div class="col-12 col-lg-6 item_land input-contain">
                                             <InputText
                                                 v-model="itemLand.doc_no"
@@ -141,11 +169,11 @@
                                 </div>
                                 <div class="col input-contain">
                                     <InputTextarea
-                                        v-model="form.origin_of_use"
-                                        vid="origin_of_use"
-                                        label="Nguồn gốc sử dụng"
+                                        v-model="form.note"
+                                        vid="note"
+                                        label="Thông tin khác"
                                         class="form-group-container"
-                                        :autosize="true"
+                                        :rows="contentRowsNote"
                                     />
                                 </div>
                                 <div class="col input-contain">
@@ -200,6 +228,7 @@ export default {
         return {
             form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
             contentRows: 3,
+            contentRowsNote: 6,
             type_purposes: []
         }
     },
@@ -270,8 +299,8 @@ export default {
             })
             this.setContentRows()
         },
-        handleAddLandMainArea () {
-            this.form.land_details.push({
+        handleAddPurpose () {
+            this.form.purpose_details.push({
                 land_type_purpose_id: '',
                 total_area: ''
             })
@@ -298,17 +327,17 @@ export default {
         },
         changeLandtypepurpose (event, index) {
             if (event) {
-                this.form.land_details[index].land_type_purpose_id = event
+                this.form.purpose_details[index].land_type_purpose_id = event
             } else {
-                this.form.land_details[index].land_type_purpose_id = ''
+                this.form.purpose_details[index].land_type_purpose_id = ''
             }
             this.getContent()
         },
         changeTotal_area (event, index) {
             if (event) {
-                this.form.land_details[index].total_area = event
+                this.form.purpose_details[index].total_area = event
             } else {
-                this.form.land_details[index].total_area = ''
+                this.form.purpose_details[index].total_area = ''
             }
             this.getContent()
         },
@@ -358,8 +387,8 @@ export default {
             this.setContentRows()
             this.getContent()
         },
-        handleDeleteMainArea (index) {
-            this.form.land_details.splice(index, 1)
+        handleDeletePurpose (index) {
+            this.form.purpose_details.splice(index, 1)
             this.setContentRows()
             this.getContent()
         },

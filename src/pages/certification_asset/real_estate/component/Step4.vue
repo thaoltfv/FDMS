@@ -153,10 +153,15 @@ export default {
                     {
                         doc_no: '',
                         land_no: '',
+                    }
+                ],
+                purpose_details: [
+                    {
                         land_type_purpose_id: '',
                         total_area: ''
                     }
-                ]
+                ],
+                note: '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-',
             },
             contentRows: 3
         }
@@ -182,14 +187,21 @@ export default {
                     {
                         doc_no: '',
                         land_no: '',
+                    }
+                ],
+                purpose_details: [
+                    {
                         land_type_purpose_id: '',
                         total_area: ''
                     }
-                ]
+                ],
+                note: '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồng: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú:  -/-',
             }
         },
         actionSaveLegal (data) {
             let dataSend = data
+            // console.log('data send', dataSend)
+            // return
             if (dataSend.law_date) {
                 dataSend.law_date = moment(dataSend.law_date, 'DD/MM/YYYY').format('YYYY-MM-DD')
             }
@@ -216,6 +228,9 @@ export default {
             this.form = JSON.parse(JSON.stringify(this.data.law[index]))
             if (this.form.law_date) {
                 this.form.law_date = moment(this.form.law_date).format('DD/MM/YYYY')
+            }
+            if (this.form.note == null) {
+                this.form.note = '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-'
             }
         }
 
