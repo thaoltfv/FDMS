@@ -42,6 +42,7 @@ class ErrorMessage
     public const APPRAISE_CHECK_UPDATE =  'Bạn không có quyền chỉnh sửa TSTD ';
     public const APPRAISE_CHECK_ADD = 'Bạn không có quyền tạo mới TSTD ';
     public const APPRAISE_CHECK_EXPORT = 'Bạn không có xuất danh sách TSTD ';
+    public const PERSONAL_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách Động sản ';
     public const COMPAREASSET_NOTEXISTS = 'Không tồn tại tài sản so sánh - TSSS ';
     public const LOG_ACTIVITY_NOT_FOUND = 'Không tìm thấy lịch sử được ghi lại';
 

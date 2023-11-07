@@ -26,6 +26,8 @@ class AppraiseLawLandDetail extends Model
         'land_no',
         'doc_no_old',
         'land_no_old',
+        'land_type_purpose_id',
+        'total_area',
         'deleted_at',
     ];
 }

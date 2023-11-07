@@ -243,6 +243,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
     public function countBrieftBacklog()
     {
         $date = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-01');
+        // dd($date);
         $this->model->refresh();
         $backlogSelect = [
             DB::raw("'Backlog' as type,'Tồn cũ' as description, count(id) as count")
@@ -254,13 +255,13 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                     ->query()
                     ->select($backlogSelect)
                     ->where('created_at' ,'<', $date)
-                    ->whereIn('status',[1,2,3]);
+                    ->whereIn('status',[1,2,3,6]);
 
         $data = $this->model
                     ->query()
                     ->select($newlogSelect)
                     ->where('created_at' ,'>=', $date)
-                    ->whereIn('status',[1,2,3])
+                    ->whereIn('status',[1,2,3,6])
                     ->unionAll($backlog)
                     ->get()->toArray();
                     // ->get()->toArray();
@@ -278,7 +279,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $data = $this->model
                     ->query()
                     ->select($select)
-                    ->whereIn('status',[1,2,3])
+                    ->whereIn('status',[1,2,3,6])
                     ->groupBy(['status','status_text'])
                     ->get()->toArray();
         $result = array('label' => Arr::pluck($data,'status_text'),'data' => Arr::pluck($data,'count'),'status' => Arr::pluck($data,'status'));

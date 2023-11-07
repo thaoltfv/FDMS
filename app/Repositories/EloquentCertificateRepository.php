@@ -200,6 +200,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $appraises = $oldCertificate->appraises;
                         foreach ($appraises as $appraiseTmp) {
                             Appraise::where('id', $appraiseTmp->appraise_id)->update(['status' => 4]); // updateStatus : 4 = closed
+                            CertificateAsset::where('appraise_id', $appraiseTmp->appraise_id)->update(['status' => 4]);
                         }
                     } else if ($status == 5) {
                         $oldCertificate = Certificate::where('id', $id)->first();
@@ -4459,6 +4460,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (Certificate::where('id', $certificateId)->where('status', 2)->exists()) {
                 if (isset($objects['general_asset'])) {
                     $generalAsset = $objects['general_asset'];
+                    $personalIds = [];
+                    $realEstateApartmentIds = [];
+                    $realEstateAppraiseIds = [];
                     if (count($generalAsset) > 0) {
                         $dictionary = Dictionary::query()->where(['type' => 'LOAI_TAI_SAN', 'status' => 1])->get();
                         $appraiseType = $dictionary->whereIn('acronym', ['DCN', 'DT']);
@@ -4470,9 +4474,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $appraiseTypeIds = Arr::pluck($appraiseType, 'id');
                         $apartmentTypeIds = Arr::pluck($apartmentType, 'id');
                         $personalTypeIds = Arr::pluck($personalType, 'id');
-                        $personalIds = [];
-                        $realEstateApartmentIds = [];
-                        $realEstateAppraiseIds = [];
+                        // $personalIds = [];
+                        // $realEstateApartmentIds = [];
+                        // $realEstateAppraiseIds = [];
                         foreach ($generalAsset as $asset) {
                             $assetTypeId = $asset['asset_type_id'];
                             $assetId = $asset['general_asset_id'];

@@ -55,6 +55,10 @@ class CertificateAsset extends Model
     ];
     protected $guarded = [];
 
+	public function realestate(): BelongsTo
+    {
+        return $this->belongsTo(RealEstate::class, 'id','appraise_id');
+    }
 	public function getRoundTotalAttribute()
     {
 		$item = AppraisePrice::where('appraise_id', $this->appraise_id)->where('slug', 'round_total')->first();

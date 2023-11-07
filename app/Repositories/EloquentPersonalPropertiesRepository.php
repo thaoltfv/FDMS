@@ -173,4 +173,115 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
             $personalProperties->update($dataUpdate);
         });
     }
+
+    public function exportPersonalProperty()
+    {
+        // $assetTypeId = request()->get('asset_type_id');
+        $status = request()->get('status');
+        $createdBy = request()->get('created_by');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        $where = [];
+        // dd('$status',$status);
+
+        $select = [
+            'id',
+            'name',
+            'asset_type_id',
+            'status',
+            'step',
+            'total_price',
+            'created_at',
+            'created_by',
+        ];
+        $with = [
+            'assetType:id,description',
+            'createdBy:id,name',
+        ];
+        if ($status){
+            $status = explode(",", $status);
+            $result = $this->model->query()->with($with)->where($where)->whereIn('status', $status)->select($select);
+        } else {
+            $result = $this->model->query()->with($with)->where($where)->select($select);
+        }
+        
+        // if (!empty($assetTypeId)) {
+        //     $result->whereHas('assetType', function ($has) use ($assetTypeId) {
+        //         $has->where('id', $assetTypeId);
+        //     });
+        // }
+        // if (!empty($status)) {
+        //     $result->WhereHas('status', function ($has) use ($status) {
+        //         $has->where('status', 'ilike' , '%' . $status . '%');
+        //     });
+        // }
+
+        if (!empty($createdBy)) {
+            $result->WhereHas('createdBy', function ($has) use ($createdBy) {
+                $has->where('name', 'ilike' , '%' . $createdBy . '%');
+            });
+        }
+        if (!empty($fromDate) && $fromDate != 'Invalid date') {
+            $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
+        }
+        if (!empty($toDate) && $toDate != 'Invalid date') {
+            $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
+        }
+        // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
+        $ketqua = $result->get();
+        foreach ($ketqua as $k) {
+            if ($k->asset_type_id  == 181){
+                $stringSql = sprintf(
+                    "select c2.unit, c2.quantity, c2.unit_price from machine_certificate_assets c1
+                    join machine_certificate_asset_prices c2 on c2.machine_asset_id = c1.id
+                    where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
+                );
+                DB::enableQueryLog();
+                $data = DB::select($stringSql, [
+                    ":personal_property_id" => $k->id,
+                ]);
+                // dd('máy móc thiết bị', $data);
+                if (count($data) > 0){
+                    $k->unit = $data[0]->unit;
+                    $k->quantity = $data[0]->quantity;
+                    $k->unit_price = $data[0]->unit_price;
+                }
+                
+            } else if ($k->asset_type_id  == 182) {
+                $stringSql = sprintf(
+                    "select c2.unit, c2.quantity, c2.unit_price from verhicle_certificate_assets c1
+                    join verhicle_certificate_asset_prices c2 on c2.verhicle_asset_id = c1.id
+                    where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
+                );
+                DB::enableQueryLog();
+                $data = DB::select($stringSql, [
+                    ":personal_property_id" => $k->id,
+                ]);
+                // dd('phương tiện vận tải', $data);
+                if (count($data) > 0){
+                    $k->unit = $data[0]->unit;
+                    $k->quantity = $data[0]->quantity;
+                    $k->unit_price = $data[0]->unit_price;
+                }
+            } else {
+                $stringSql = sprintf(
+                    "select c2.unit, c2.quantity, c2.unit_price from other_certificate_assets c1
+                    join other_certificate_asset_prices c2 on c2.other_asset_id = c1.id
+                    where c1.personal_property_id = :personal_property_id and c2.deleted_at is null"
+                );
+                DB::enableQueryLog();
+                $data = DB::select($stringSql, [
+                    ":personal_property_id" => $k->id,
+                ]);
+                // dd('khác', $data);
+                if (count($data) > 0){
+                    $k->unit = $data[0]->unit;
+                    $k->quantity = $data[0]->quantity;
+                    $k->unit_price = $data[0]->unit_price;
+                }
+            }
+        }
+        return $ketqua;
+
+    }
 }

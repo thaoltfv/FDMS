@@ -3551,8 +3551,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $real_estate = $objects['real_estate'] ?? [];
             $isDuplicate = $this->checkDuplicateLandTypePurpose($totalArea);
             if (!$isDuplicate)
-                if (isset($planningArea))
-                    $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
+                // if (isset($planningArea))
+                //     $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
             if (!$isDuplicate)
                 $isDuplicate = $this->checkDuplicateLandTypePurpose($ubndPrice);
             if ($isDuplicate) {
@@ -3759,7 +3759,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
             $buildingPriceRepository = new EloquentBuildingPriceRepository(new BuildingPrice());
             foreach($objects['construction'] as $construct){
-                $desicionAverage = $buildingPriceRepository->getAverageBuildPriceV3($construct);
+                
+                $province_id = Appraise::where('id', '=', $appraiseId)->get('province_id')->first();
+                // dd('province_id',$province_id);
+                $desicionAverage = $buildingPriceRepository->getAverageBuildPriceV4($construct, $province_id['province_id']);
                 $construction = $construct;
                 $construction['appraise_id']= $appraiseId;
                 $construction['total_desicion_average']= $desicionAverage;
@@ -3782,7 +3785,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         QueryBuilder::for($constructionCompanyData)
                         ->insert($constructionCompanyData->attributesToArray());
                 }
-                $pp2 = $buildingPriceRepository->getPP2($construct);
+                $pp2 = $buildingPriceRepository->getPP2_V1($construct, $province_id['province_id']);
 
                 $tangibleComparisonFactor = [];
                 $tangibleComparisonFactor['appraise_id'] = $appraiseId;
@@ -3838,7 +3841,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     ];
             $with= [
                     'law:id,type,content',
-                    'landDetails:id,appraise_law_id,doc_no,land_no',
+                    'landDetails:id,appraise_law_id,doc_no,land_no,land_type_purpose_id,total_area',
                     ];
             $result = AppraiseLaw::with($with)
                 ->select($select)
@@ -7209,6 +7212,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'tangibleAssets.buildingType:id,description'
         ];
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
+        // dd($result['appraiseLaw'][0]['id']);
+        if ($result['appraiseLaw'][0]['id']){
+            $clone = AppraiseLawLandDetail::query()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->get();
+            // dd($clone);
+            $result['tothua'] = $clone;
+        }
         return $result;
     }
 
