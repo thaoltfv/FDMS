@@ -3841,7 +3841,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     ];
             $with= [
                     'law:id,type,content',
-                    'landDetails:id,appraise_law_id,doc_no,land_no,land_type_purpose_id,total_area',
+                    'landDetails:id,appraise_law_id,doc_no,land_no',
+                    'purposeDetails:id,appraise_law_id,land_type_purpose_id,total_area',
                     ];
             $result = AppraiseLaw::with($with)
                 ->select($select)
@@ -3865,6 +3866,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $lawData = AppraiseLaw::where('appraise_id', '=', $appraiseId)->get(['id']);
                     foreach($lawData as $lawId){
                         AppraiseLawLandDetail::where(['appraise_law_id'=>$lawId['id']])->delete();
+                        AppraiseLawPurposeDetail::where(['appraise_law_id'=>$lawId['id']])->delete();
                     }
                     AppraiseLaw::where(['appraise_id'=>$appraiseId])->delete();
                 }
@@ -3878,12 +3880,19 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $lawId = QueryBuilder::for($appraiseLaw)
                         ->insertGetId($appraiseLaw->attributesToArray());
                     $lawLandDetails = $law['land_details'];
+                    $lawPurposeDetails = $law['purpose_details'];
                     if(isset($law['appraise_law_id']) && $law['appraise_law_id']!=0 ){
                         foreach($lawLandDetails as $land){
                             $land['appraise_law_id'] = $lawId;
                             $lawLandDetail = new AppraiseLawLandDetail($land);
                             QueryBuilder::for($lawLandDetail)
                             ->insertGetId($lawLandDetail->attributesToArray());
+                        }
+                        foreach($lawPurposeDetails as $land){
+                            $land['appraise_law_id'] = $lawId;
+                            $lawPurposeDetail = new AppraiseLawPurposeDetail($land);
+                            QueryBuilder::for($lawPurposeDetail)
+                            ->insertGetId($lawPurposeDetail->attributesToArray());
                         }
                     }
                 }

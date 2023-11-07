@@ -48,4 +48,9 @@ class AppraiseLaw extends Model
     {
         return $this->hasMany(AppraiseLawLandDetail::class, 'appraise_law_id');
     }
+
+    public function purposeDetails(): HasMany
+    {
+        return $this->hasMany(AppraiseLawPurposeDetail::class, 'appraise_law_id');
+    }
 }
