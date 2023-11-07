@@ -422,7 +422,7 @@ export default {
 					screen.name = response
 					if(screen.name=='DASHBOARD')
 					{
-						screen.name_vietsub='THÔNG TIN TỔNG HỢP'
+						screen.name_vietsub='BÁO CÁO QUẢN TRỊ'
 					}
 					if(screen.name=='USER')
 					{
@@ -430,7 +430,7 @@ export default {
 					}
 					if(screen.name=='ROLE')
 					{
-						screen.name_vietsub='QUẢN LÝ NHÂN VIÊN'
+						screen.name_vietsub='HRM'
 					}
 					if(screen.name=='MAP')
 					{
@@ -442,7 +442,7 @@ export default {
 					}
 					if(screen.name=='CATEGORY')
 					{
-						screen.name_vietsub='DANH MỤC HÀNH CHÍNH'
+						screen.name_vietsub='DANH MỤC DỮ LIỆU'
 					}
 					if(screen.name=='CUSTOMER')
 					{
