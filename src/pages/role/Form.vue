@@ -86,45 +86,46 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(item) of screens" :key="item.name">
-            <td>{{ item.name }}</td>
-            <td>
-              <label class="input-checkbox">
-                <input class="cursor-pointer" v-model="viewPermissions" checked @click="select('VIEW')" :value="`VIEW_${item.name}`" @change="change('VIEW')" type="checkbox">
-                <span class="check-mark"></span>
-              </label>
-            </td>
-            <td>
-              <label class="input-checkbox">
-                <input class="cursor-pointer" v-model="addPermissions" @click="select('ADD')" :value="`ADD_${item.name}`" @change="change('ADD')" type="checkbox">
-                <span class="check-mark"></span>
-              </label>
-            </td>
-            <td>
-              <label class="input-checkbox">
-                <input class="cursor-pointer" v-model="editPermissions" @click="select('EDIT')" :value="`EDIT_${item.name}`" @change="change('EDIT')" type="checkbox">
-                <span class="check-mark"></span>
-              </label>
-            </td>
-            <td>
-              <label class="input-checkbox">
-                <input class="cursor-pointer" v-model="deletePermissions" @click="select('DELETE')" :value="`DELETE_${item.name}`" @change="change('DELETE')" type="checkbox">
-                <span class="check-mark"></span>
-              </label>
-            </td>
-            <td>
-              <label class="input-checkbox">
-                <input class="cursor-pointer" v-model="acceptPermissions" @click="select('ACCEPT')" :value="`ACCEPT_${item.name}`" @change="change('ACCEPT')" type="checkbox">
-                <span class="check-mark"></span>
-              </label>
-            </td>
-            <td>
-              <label class="input-checkbox">
-                <input class="cursor-pointer" v-model="exportPermissions" @click="select('EXPORT')" :value="`EXPORT_${item.name}`" @change="change('EXPORT')" type="checkbox">
-                <span class="check-mark"></span>
-              </label>
-            </td>
-          </tr>
+		
+          <tr v-for="(item) of screens " :key="item.name">
+				<td>{{ item.name_vietsub }}</td>
+				<td>
+				<label class="input-checkbox">
+					<input class="cursor-pointer" v-model="viewPermissions" checked @click="select('VIEW')" :value="`VIEW_${item.name}`" @change="change('VIEW')" type="checkbox">
+					<span class="check-mark"></span>
+				</label>
+				</td>
+				<td>
+				<label class="input-checkbox">
+					<input class="cursor-pointer" v-model="addPermissions" @click="select('ADD')" :value="`ADD_${item.name}`" @change="change('ADD')" type="checkbox">
+					<span class="check-mark"></span>
+				</label>
+				</td>
+				<td>
+				<label class="input-checkbox">
+					<input class="cursor-pointer" v-model="editPermissions" @click="select('EDIT')" :value="`EDIT_${item.name}`" @change="change('EDIT')" type="checkbox">
+					<span class="check-mark"></span>
+				</label>
+				</td>
+				<td>
+				<label class="input-checkbox">
+					<input class="cursor-pointer" v-model="deletePermissions" @click="select('DELETE')" :value="`DELETE_${item.name}`" @change="change('DELETE')" type="checkbox">
+					<span class="check-mark"></span>
+				</label>
+				</td>
+				<td>
+				<label class="input-checkbox">
+					<input class="cursor-pointer" v-model="acceptPermissions" @click="select('ACCEPT')" :value="`ACCEPT_${item.name}`" @change="change('ACCEPT')" type="checkbox">
+					<span class="check-mark"></span>
+				</label>
+				</td>
+				<td>
+				<label class="input-checkbox">
+					<input class="cursor-pointer" v-model="exportPermissions" @click="select('EXPORT')" :value="`EXPORT_${item.name}`" @change="change('EXPORT')" type="checkbox">
+					<span class="check-mark"></span>
+				</label>
+				</td>
+        	</tr>
           </tbody>
         </table>
       </div>
@@ -419,6 +420,42 @@ export default {
 				response.forEach(response => {
 					const screen = []
 					screen.name = response
+					if(screen.name=='DASHBOARD')
+					{
+						screen.name_vietsub='THÔNG TIN TỔNG HỢP'
+					}
+					if(screen.name=='USER')
+					{
+						screen.name_vietsub='NHÂN VIÊN'
+					}
+					if(screen.name=='ROLE')
+					{
+						screen.name_vietsub='QUẢN LÝ NHÂN VIÊN'
+					}
+					if(screen.name=='MAP')
+					{
+						screen.name_vietsub='BẢN ĐỒ'
+					}
+					if(screen.name=='PRICE')
+					{
+						screen.name_vietsub='KHO GIÁ'
+					}
+					if(screen.name=='CATEGORY')
+					{
+						screen.name_vietsub='DANH MỤC HÀNH CHÍNH'
+					}
+					if(screen.name=='CUSTOMER')
+					{
+						screen.name_vietsub='QUẢN LÝ ĐỐI TÁC'
+					}
+					if(screen.name=='CERTIFICATE_ASSET')
+					{
+						screen.name_vietsub='TÀI SẢN THẨM ĐỊNH'
+					}
+					if(screen.name=='CERTIFICATE_BRIEF')
+					{
+						screen.name_vietsub='HỒ SƠ THẨM ĐỊNH'
+					}
 					if (this.permissions.length > 0) {
 						this.permissions.forEach(permission => {
 							const perScreen = permission.name.split(/^([A-Z]+)/g)
@@ -448,6 +485,7 @@ export default {
 					}
 					this.screens.push(screen)
 				})
+				console.log('this.screens',this.screens)
 				if (this.viewPermissions.length === this.screens.length) { this.viewSelected = true }
 				if (this.addPermissions.length === this.screens.length) { this.addSelected = true }
 				if (this.editPermissions.length === this.screens.length) { this.editSelected = true }
