@@ -1382,6 +1382,14 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                     ->insert($landDetail->attributesToArray());
                             }
                         }
+                        if (isset($lawData['purpose_details'])) {
+                            foreach ($lawData['purpose_details'] as $purposeDetail) {
+                                $purposeDetail['appraise_law_id'] = $lawId;
+                                $purposeDetail = new AppraiseLawPurposeDetail($purposeDetail);
+                                QueryBuilder::for($purposeDetail)
+                                    ->insert($purposeDetail->attributesToArray());
+                            }
+                        }
                     }
                 }
 
@@ -1660,6 +1668,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 $landDetail = new AppraiseLawLandDetail($landDetail);
                                 QueryBuilder::for($landDetail)
                                     ->insert($landDetail->attributesToArray());
+                            }
+                        }
+
+                        if (isset($lawData['purpose_details'])) {
+                            foreach ($lawData['purpose_details'] as $purposeDetail) {
+                                $purposeDetail['appraise_law_id'] = $lawId;
+                                $purposeDetail = new AppraiseLawPurposeDetail($purposeDetail);
+                                QueryBuilder::for($purposeDetail)
+                                    ->insert($purposeDetail->attributesToArray());
                             }
                         }
                     }
@@ -7225,8 +7242,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         // dd($result['appraiseLaw'][0]['id']);
         if ($result['appraiseLaw'][0]['id']){
             $clone = AppraiseLawLandDetail::query()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->get();
+            $clone1 = AppraiseLawPurposeDetail::query()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->get();
             // dd($clone);
             $result['tothua'] = $clone;
+            $result['mucdichsudung'] = $clone1;
         }
         return $result;
     }
