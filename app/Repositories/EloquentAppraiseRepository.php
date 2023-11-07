@@ -28,6 +28,7 @@ use App\Models\AppraiseHasAsset;
 use App\Models\AppraiseLaw;
 use App\Models\AppraiseLawDetail;
 use App\Models\AppraiseLawLandDetail;
+use App\Models\AppraiseLawPurposeDetail;
 use App\Models\AppraiseOtherAsset;
 use App\Models\AppraisePic;
 use App\Models\AppraisePrice;
