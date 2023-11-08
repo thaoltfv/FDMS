@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
 
-class ReportCertificateNova extends ReportCertificate
+class ReportCertificateVavc extends ReportCertificate
 {
     protected function content1(Section $section, $certificate)
     {

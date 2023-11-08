@@ -8,7 +8,7 @@ use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Element\Table;
 use App\Services\CommonService;
 
-class ReportAppendix1Nova extends ReportAppendix1
+class ReportAppendix1Vavc extends ReportAppendix1
 {
     protected $appraiseTitle = 'ƯỚC TÍNH GIÁ TRỊ QUYỀN SỬ DỤNG ĐẤT';
 

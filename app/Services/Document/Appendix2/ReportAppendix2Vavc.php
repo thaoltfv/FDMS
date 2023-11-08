@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\SimpleType\JcTable;
 
-class ReportAppendix2Nova extends ReportAppendix2
+class ReportAppendix2Vavc extends ReportAppendix2
 {
     public function printTitle(Section $section, $data)
     {

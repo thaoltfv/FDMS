@@ -11,7 +11,7 @@ use App\Models\CertificateApartmentAppraisalBase;
 use App\Models\Appraise;
 use App\Models\Street;
 
-class ReportAppraisalNova extends ReportAppraisal
+class ReportAppraisalVavc extends ReportAppraisal
 {
     protected $gridSpan2 = ['gridSpan' => 2];
     protected $locationDescription = '- Mô tả vị trí';
@@ -92,9 +92,9 @@ class ReportAppraisalNova extends ReportAppraisal
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Mục đích thẩm định giá: ', ['bold' => true], []);
         $listTmp->addText($appraisePurpose . '.', null, []);
-        $this->step1Sub4NovaInfo($section);
+        $this->step1Sub4VavcInfo($section);
     }
-    private function step1Sub4NovaInfo($section)
+    private function step1Sub4VavcInfo($section)
     {
         $textRun = $section->addListItemRun(0, 'bullets');
         $textRun->addText('Các nguồn thông tin được sử dụng trong quá trình thẩm định giá và mức độ kiểm tra, thẩm định các nguồn thông tin đó:', ['bold' => true], $this->cellVCenteredKeepNext);
