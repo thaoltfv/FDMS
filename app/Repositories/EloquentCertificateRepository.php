@@ -2912,7 +2912,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $status_expired_at = \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addMinutes($minutes)->format('Y-m-d H:i');
                 $data['status_expired_at'] = $status_expired_at;
                 $certificateArr = new Certificate($data);
-                dd($certificateArr);
+                // dd($certificateArr);
                 $certificateCreate = Certificate::query()->create($certificateArr->attributesToArray());
                 $certificateId = $certificateCreate->id;
                 $this->saveMethod($certificateId);

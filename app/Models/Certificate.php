@@ -59,7 +59,8 @@ class Certificate extends Model
         'petitioner_identity_card',
         'sub_status',
         'status_updated_at',
-        'status_expired_at'
+        'status_expired_at',
+        'note'
     ];
 
     public function getStatusTextAttribute()
