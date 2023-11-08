@@ -4779,9 +4779,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             });
         }
         if (!empty($createdBy)) {
-            $result->WhereHas('createdBy', function ($has) use ($createdBy) {
-                $has->where('name', 'ilike' , '%' . $createdBy . '%');
-            });
+            $list_user = explode(',',$createdBy);
+            $result = $result->whereIn('created_by', $list_user);
         }
         if (!empty($fromDate) && $fromDate != 'Invalid date') {
             $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");

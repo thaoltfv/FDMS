@@ -265,13 +265,6 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
         }
         if (!empty($createdBy)) {
             $list_user = explode(',',$createdBy);
-            // dd($list_user);
-            // foreach ($list_user as $user) {
-            //     # code...
-            // }
-            // $result->WhereHas('createdBy', function ($has) use ($createdBy) {
-            //     $has->where('name', 'ilike' , '%' . $createdBy . '%');
-            // });
             $result = $result->whereIn('created_by', $list_user);
         }
         if (!empty($fromDate) && $fromDate != 'Invalid date') {
