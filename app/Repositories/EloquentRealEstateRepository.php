@@ -269,10 +269,10 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             // foreach ($list_user as $user) {
             //     # code...
             // }
-            $result->WhereHas('createdBy', function ($has) use ($list_user) {
-                $has->where('id', 'IN' , $list_user);
-            });
-            
+            // $result->WhereHas('createdBy', function ($has) use ($createdBy) {
+            //     $has->where('name', 'ilike' , '%' . $createdBy . '%');
+            // });
+            $result = $result->whereIn('created_by', $list_user);
         }
         if (!empty($fromDate) && $fromDate != 'Invalid date') {
             $result->whereRaw("created_at >= to_date('$fromDate', 'dd/MM/yyyy') ");
