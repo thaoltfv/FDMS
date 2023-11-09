@@ -1261,7 +1261,7 @@ export default {
 			})
 			this.submit = this.checkSubmit.length === 0
 			this.isSubmit = true
-			// console.log('log', this.form)
+			console.log('log', this.form)
 			if (this.checkDuplicateLandType(this.form.property_detail)) {
 				this.isSubmit = false
 				this.duplicateLandTypePurpose = true
@@ -1277,6 +1277,20 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
+			} else if (this.form.front_side_width <=0) {
+				this.isSubmit = false
+				this.$toast.open({
+					message: 'Vui lòng nhập chiều rộng mặt tiền lớn hơn 0',
+					type: 'error',
+					position: 'top-right'
+				})
+			}  else if (this.form.insight_width <=0) {
+				this.isSubmit = false
+				this.$toast.open({
+					message: 'Vui lòng nhập chiều dài lớn hơn 0',
+					type: 'error',
+					position: 'top-right'
+				})
 			} else if (this.form.property_detail[0].circular_unit_price === '') {
 				this.isSubmit = false
 				this.$toast.open({
@@ -1284,7 +1298,7 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if (this.form.property_detail[0].circular_unit_price < 10000) {
+			}  else if (this.form.property_detail[0].circular_unit_price < 10000) {
 				this.isSubmit = false
 				this.$toast.open({
 					message: 'Đơn giá UBND thấp nhất là 10,000',

@@ -93,18 +93,34 @@ export default {
 					petitioner_name: 'Ông / Bà',
 					petitioner_phone: '',
 					petitioner_address: '',
-					appraiser_confirm_id: '',
-					appraiser_manager_id: '',
-					appraiser_control_id: '',
+					appraiser_confirm_id: null,
+					appraiser_confirm: {
+						name: ''
+					},
+					appraiser_manager_id: null,
+					appraiser_manager: {
+						name: ''
+					},
+					appraiser_control_id: null,
+					appraiser_control: {
+						name: ''
+					},
 					appraise_purpose_id: '',
 					appraiser_id: '',
+					appraiser: '',
 					document_num: '',
 					document_date: '',
 					document_type: [],
 					appraise_date: '',
 					service_fee: 0,
-					appraiser_sale_id: '',
-					appraiser_perform_id: '',
+					appraiser_sale_id: null,
+					appraiser_sale: {
+						name: ''
+					},
+					appraiser_perform_id: null,
+					appraiser_perform: {
+						name: ''
+					},
 					certificate_date: '',
 					certificate_num: '',
 					commission_fee: 0,
