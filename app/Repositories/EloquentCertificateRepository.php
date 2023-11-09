@@ -2877,6 +2877,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $branch_id = Appraiser::query()->where('user_id', $user->id)->first()->branch_id;
             }
             $data = $objects;
+            // dd('note', $data);
             $data['document_date'] = isset($objects['document_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['document_date'])->format('Y-m-d') : null;
             $data['appraise_date'] = isset($objects['appraise_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['appraise_date'])->format('Y-m-d') : null;
             $data['certificate_date'] = isset($objects['certificate_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['certificate_date'])->format('Y-m-d') : null;
@@ -2911,6 +2912,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $status_expired_at = \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addMinutes($minutes)->format('Y-m-d H:i');
                 $data['status_expired_at'] = $status_expired_at;
                 $certificateArr = new Certificate($data);
+                // dd($certificateArr);
                 $certificateCreate = Certificate::query()->create($certificateArr->attributesToArray());
                 $certificateId = $certificateCreate->id;
                 $this->saveMethod($certificateId);

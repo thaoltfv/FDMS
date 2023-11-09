@@ -32,6 +32,7 @@ class AppraiseLaw extends Model
         'content',
         'duration',
         'law_date',
+        'note'
     ];
 
     public function law(): BelongsTo
@@ -47,5 +48,10 @@ class AppraiseLaw extends Model
 	public function landDetails(): HasMany
     {
         return $this->hasMany(AppraiseLawLandDetail::class, 'appraise_law_id');
+    }
+
+    public function purposeDetails(): HasMany
+    {
+        return $this->hasMany(AppraiseLawPurposeDetail::class, 'appraise_law_id');
     }
 }
