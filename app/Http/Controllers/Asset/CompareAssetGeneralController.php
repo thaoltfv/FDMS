@@ -239,13 +239,13 @@ class CompareAssetGeneralController extends Controller
             $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // // dd(Storage::disk('spaces'));
-            // Storage::put($name, file_get_contents($image));
+            Storage::put($name, file_get_contents($image));
             
-            // $fileUrl = Storage::url($name);
+            $fileUrl = Storage::url($name);
 
             //test s3
-            Storage::disk('spaces')->put($name, 'public');
-            $fileUrl = Storage::disk('spaces')->url($name);
+            // Storage::disk('spaces')->put($name, 'public');
+            // $fileUrl = Storage::disk('spaces')->url($name);
 
             // test firebase
 
