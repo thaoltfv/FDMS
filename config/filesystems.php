@@ -76,6 +76,7 @@ return [
             'region' => env('DIGITAL_DEFAULT_REGION', 'us-east-1'),
             'bucket' => env('DIGITAL_BUCKET'),
             'use_path_style_endpoint' => env('DIGITAL_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'public',
         ],
 
         'viettel' => [
