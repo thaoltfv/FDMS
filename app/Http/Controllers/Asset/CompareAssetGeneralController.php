@@ -236,7 +236,8 @@ class CompareAssetGeneralController extends Controller
         try {
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+            // $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+            $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // dd($name, file_get_contents($image));
             Storage::put($name, file_get_contents($image));
             
