@@ -239,25 +239,33 @@ class CompareAssetGeneralController extends Controller
             $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // dd(Storage::disk('s3'));
-            // Storage::put($name, file_get_contents($image));
+            Storage::put($name, file_get_contents($image));
             
-            // $fileUrl = Storage::url($name);
+            $fileUrl = Storage::url($name);
 
             //test s3
-            dd($image->storeAs(
-                'images',
-                $name,
-                's3'
-            ));
+            // Storage::disk('spaces')->put($name, 'public');
+            // $fileUrl = Storage::disk('spaces')->url($name);
 
-            // $fileUrl = $image->storeAs(
-            //     'images',
-            //     $name,
-            //     's3'
-            // );
-            
-            
-            // return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
+            // test firebase
+
+            // $image = $request->file('image');
+            // $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+            // $name = $firebase_storage_path . Uuid::uuid4()->toString();
+            // $localfolder = public_path('firebase-temp-uploads') .'/';  
+            // $extension = $image->getClientOriginalExtension();  
+            // $file      = $name. '.' . $extension;  
+            // $storage = app('firebase.storage');
+            // if ($image->move($localfolder, $file)) {  
+            //     $uploadedfile = fopen($localfolder.$file, 'r');  
+            //     $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
+            //     //will remove from local laravel folder  
+            //     unlink($localfolder . $file);  
+            //     Session::flash('message', 'Succesfully Uploaded');
+            //     $expiresAt = new \DateTime('tomorrow');
+            //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
+            // } 
+            return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
