@@ -64,7 +64,7 @@ class MigrationAllImageToS3 extends Command
                            $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                            Storage::put($name, $old_image);
                            $fileUrl = Storage::url($name);
-                           $this->compareGeneralPicRepository->updateGeneralPic($image->id,['link'=>$fileUrl, 'old_link'=>$image->link]);
+                           $this->compareGeneralPicRepository->updateGeneralPic($image->id,['link'=>$fileUrl]);
                        } catch (\Exception $e) {
                            Log::error('Migration compareGeneralPicRepository is error with message  ' . $e);
                        }
