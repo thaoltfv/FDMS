@@ -91,7 +91,16 @@ class MigrationAllImageToS3 extends Command
                    if($status == 200){
                        try {
                            $old_image = file_get_contents( $image->link);
-                           $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+                           $check_dic_certi = substr($image->link, strpos($image->link,"certification_assets"), 20);
+                           $check_dic_compa = substr($image->link, strpos($image->link,"comparison_assets"), 17);
+                           if ($check_dic_certi == 'certification_assets') {
+                            $path =env('STORAGE_IMAGES') .'/'. 'certification_assets/';
+                           } else if ($check_dic_compa == 'comparison_assets') {
+                            $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+                           } else {
+                            $path =env('STORAGE_IMAGES') .'/'. 'other/';
+                           }
+                           
                            $last_part = substr(strrchr($image->link, "."), 1);
                         //    dd($last_part);
                            $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
