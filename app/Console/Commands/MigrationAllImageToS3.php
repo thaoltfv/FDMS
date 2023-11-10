@@ -58,7 +58,7 @@ class MigrationAllImageToS3 extends Command
                            $old_image = file_get_contents( $image->link);
                            $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
                            $last_part = substr(strrchr($image->link, "."), 1);
-                           dd($last_part);
+                        //    dd($last_part);
                            $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                            Storage::put($name, $old_image);
                            $fileUrl = Storage::url($name);
