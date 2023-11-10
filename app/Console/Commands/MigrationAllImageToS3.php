@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Contracts\CompareGeneralPicRepository;
+use App\Models\AppraisePic;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -74,6 +75,39 @@ class MigrationAllImageToS3 extends Command
                     Log::error('Migration compareGeneralPicRepository is error with message  ' . $e);
                 }
             }
+            //appraise_pics
+            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $images = AppraisePic::query()->select()
+                    ->whereRaw($query)
+                    ->whereNull('deleted_at')
+                    ->whereNotNull('link')
+                    ->get();
+            Log::info("Migration appraise_pics is start!");
+            foreach ($images as $image) {
+                $client = new Client;
+                try {
+                    $response = $client->request('GET', $image->link);
+                    $status = $response->getStatusCode();
+                   if($status == 200){
+                       try {
+                           $old_image = file_get_contents( $image->link);
+                           $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+                           $last_part = substr(strrchr($image->link, "."), 1);
+                        //    dd($last_part);
+                           $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
+                           Storage::put($name, $old_image);
+                           $fileUrl = Storage::url($name);
+                           AppraisePic::query()->where('id', $image->id)->update(['link' => $fileUrl]);;
+                       } catch (\Exception $e) {
+                           Log::error('Migration appraise_pics is error with message  ' . $e);
+                       }
+                   }
+                } catch (\Exception $e) {
+                    // $this->compareGeneralPicRepository->deleteGeneralPic($image->id);
+                    Log::error('Migration appraise_pics is error with message  ' . $e);
+                }
+            }
+
         Log::info('Migration images is end!');
     }
 }
