@@ -47,7 +47,8 @@ class MigrationAllImageToS3 extends Command
     public function handle()
     {
         Log::info("Migration images is start!");
-            $images = $this->compareGeneralPicRepository->findAll();
+            $images = $this->compareGeneralPicRepository->findImage();
+            Log::info("Migration images is start!");
             foreach ($images as $image) {
                 $client = new Client;
                 try {

@@ -17,4 +17,6 @@ interface CompareGeneralPicRepository extends BaseRepository
     public function updateGeneralPic($id, array $objects);
 
     public function deleteGeneralPic($id);
+
+    public function findImage();
 }

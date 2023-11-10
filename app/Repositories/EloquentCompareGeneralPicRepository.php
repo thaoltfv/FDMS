@@ -45,6 +45,13 @@ class EloquentCompareGeneralPicRepository extends EloquentRepository implements 
             ->get();
     }
 
+    public function findImage()
+    {
+        return $this->model->query()->select()
+            ->whereNull('deleted_at')
+            ->get();
+    }
+
     /**
      * @param $type
      * @return Builder[]|Collection
