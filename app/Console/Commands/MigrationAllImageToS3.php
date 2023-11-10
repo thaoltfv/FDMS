@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 use Storage;
 
-class MigrationAsyncImageToS3 extends Command
+class MigrationAllImageToS3 extends Command
 
 {
     /**
