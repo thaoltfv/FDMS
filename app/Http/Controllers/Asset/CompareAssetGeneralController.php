@@ -249,14 +249,15 @@ class CompareAssetGeneralController extends Controller
                 $name,
                 's3'
             ));
-            $fileUrl = $image->storeAs(
-                'images',
-                $name,
-                's3'
-            );
+
+            // $fileUrl = $image->storeAs(
+            //     'images',
+            //     $name,
+            //     's3'
+            // );
             
             
-            return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
+            // return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
