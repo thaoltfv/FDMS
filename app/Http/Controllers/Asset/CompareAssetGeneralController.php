@@ -233,7 +233,7 @@ class CompareAssetGeneralController extends Controller
      */
     public function uploadImage(Request $request): JsonResponse
     {
-        try {
+        // try {
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
             // $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
@@ -266,11 +266,11 @@ class CompareAssetGeneralController extends Controller
             //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
             // } 
             return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
-        } catch (\Exception $exception) {
-            Log::error($exception);
-            $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
-            return $this->respondWithErrorData($data);
-        }
+        // } catch (\Exception $exception) {
+            // Log::error($exception);
+            // $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
+            // return $this->respondWithErrorData($data);
+        // }
     }
 
     /**
