@@ -47,8 +47,9 @@ class MigrationAllImageToS3 extends Command
     public function handle()
     {
         Log::info("Migration images is start!");
+            //compareGeneralPicRepository
             $images = $this->compareGeneralPicRepository->findImage();
-            Log::info("Migration images is start!");
+            Log::info("Migration compareGeneralPicRepository is start!");
             foreach ($images as $image) {
                 $client = new Client;
                 try {
@@ -63,16 +64,16 @@ class MigrationAllImageToS3 extends Command
                            $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                            Storage::put($name, $old_image);
                            $fileUrl = Storage::url($name);
-                           $this->compareGeneralPicRepository->updateGeneralPic($image->id,['old_link'=>$fileUrl]);
+                           $this->compareGeneralPicRepository->updateGeneralPic($image->id,['link'=>$fileUrl, 'old_link'=>$image->link]);
                        } catch (\Exception $e) {
-                           Log::error('Migration images is error with message  ' . $e);
+                           Log::error('Migration compareGeneralPicRepository is error with message  ' . $e);
                        }
                    }
                 } catch (\Exception $e) {
                     $this->compareGeneralPicRepository->deleteGeneralPic($image->id);
-                    Log::error('Migration images is error with message  ' . $e);
+                    Log::error('Migration compareGeneralPicRepository is error with message  ' . $e);
                 }
             }
-            Log::info('Migration images is end!');
+        Log::info('Migration images is end!');
     }
 }

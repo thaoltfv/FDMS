@@ -49,6 +49,7 @@ class EloquentCompareGeneralPicRepository extends EloquentRepository implements 
     {
         return $this->model->query()->select()
             ->whereNull('deleted_at')
+            ->whereNotNull('link')
             ->get();
     }
 
