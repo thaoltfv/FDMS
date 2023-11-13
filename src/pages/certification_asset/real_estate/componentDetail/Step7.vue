@@ -4248,7 +4248,7 @@ export default {
 					let arr_arena2 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor2['muc_dich_chinh'].asset_title && item.asset_general_id == asset2.id)
 					let arr_arena3 = this.asset_appropriate_area_arr.filter(item => item.name_purpose_land_asset !== comparisonFactor3['muc_dich_chinh'].asset_title && item.asset_general_id == asset3.id)
 					// console.log('array phu', arr_arena1, arr_arena2, arr_arena3,this.form.asset_unit_price)
-					if (arr_arena1.length > 0 && this.form.asset_unit_price.length > 0) {
+					if (arr_arena1.length > 0 && this.form.asset_unit_price.length > 0 && !this.form.appraise_adapter[0].change_purpose_price) {
 						let giatienchinh = this.form.asset_unit_price.filter(item => item.asset_general_id == asset1.id && item.land_type_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title)[0].update_value ? this.form.asset_unit_price.filter(item => item.asset_general_id == asset1.id && item.land_type_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title)[0].update_value : this.form.asset_unit_price.filter(item => item.asset_general_id == asset1.id && item.land_type_data.acronym == comparisonFactor1['muc_dich_chinh'].asset_title)[0].original_value
 						console.log('giá tiền chính', giatienchinh)
 						let chiphichuyendoi = 0
@@ -4262,10 +4262,10 @@ export default {
 						console.log('chiphichuyendoi', chiphichuyendoi)
 						this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi
 					} else {
-						this.form.appraise_adapter[0].change_purpose_price = 0
+						this.form.appraise_adapter[0].change_purpose_price = this.form.appraise_adapter[0].change_purpose_price ? this.form.appraise_adapter[0].change_purpose_price : 0
 					}
 
-					if (arr_arena2.length > 0 && this.form.asset_unit_price.length > 0) {
+					if (arr_arena2.length > 0 && this.form.asset_unit_price.length > 0 && !this.form.appraise_adapter[1].change_purpose_price) {
 						let giatienchinh = this.form.asset_unit_price.filter(item => item.asset_general_id == asset2.id && item.land_type_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title)[0].update_value ? this.form.asset_unit_price.filter(item => item.asset_general_id == asset2.id && item.land_type_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title)[0].update_value : this.form.asset_unit_price.filter(item => item.asset_general_id == asset2.id && item.land_type_data.acronym == comparisonFactor2['muc_dich_chinh'].asset_title)[0].original_value
 						console.log('giá tiền chính', giatienchinh)
 						let chiphichuyendoi = 0
@@ -4279,10 +4279,10 @@ export default {
 						console.log('chiphichuyendoi', chiphichuyendoi)
 						this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi
 					} else {
-						this.form.appraise_adapter[1].change_purpose_price = 0
+						this.form.appraise_adapter[1].change_purpose_price = this.form.appraise_adapter[1].change_purpose_price ? this.form.appraise_adapter[1].change_purpose_price : 0
 					}
 
-					if (arr_arena3.length > 0 && this.form.asset_unit_price.length > 0) {
+					if (arr_arena3.length > 0 && this.form.asset_unit_price.length > 0 && !this.form.appraise_adapter[2].change_purpose_price) {
 						let giatienchinh = this.form.asset_unit_price.filter(item => item.asset_general_id == asset3.id && item.land_type_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title)[0].update_value ? this.form.asset_unit_price.filter(item => item.asset_general_id == asset3.id && item.land_type_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title)[0].update_value : this.form.asset_unit_price.filter(item => item.asset_general_id == asset3.id && item.land_type_data.acronym == comparisonFactor3['muc_dich_chinh'].asset_title)[0].original_value
 						console.log('giá tiền chính', giatienchinh)
 						let chiphichuyendoi = 0
@@ -4296,7 +4296,7 @@ export default {
 						console.log('chiphichuyendoi', chiphichuyendoi)
 						this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi
 					} else {
-						this.form.appraise_adapter[2].change_purpose_price = 0
+						this.form.appraise_adapter[2].change_purpose_price = this.form.appraise_adapter[2].change_purpose_price ? this.form.appraise_adapter[2].change_purpose_price : 0
 					}
 				} else {
 					if (indexPrice || indexPrice === 0){
