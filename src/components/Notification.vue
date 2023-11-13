@@ -138,7 +138,7 @@ export default {
 <style lang="scss" scoped>
 .popover-notification {
   max-width: 375px;
-  height: calc(100vh - 150px);
+  height: calc(100dvh - 150px);
 
   .list-group {
     height: 100%;

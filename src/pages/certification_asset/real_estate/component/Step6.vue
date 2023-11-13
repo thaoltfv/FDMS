@@ -971,8 +971,8 @@ export default {
   margin-top: 5px;
 
   @media (max-width: 767px) {
-    max-width: 100vh;
-    height: 100vh;
+    max-width: 100dvh;
+    height: 100dvh;
   }
 
   &-header {

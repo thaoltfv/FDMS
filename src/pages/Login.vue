@@ -188,7 +188,7 @@ export default {
     // background: url("../assets/images/im_background.png") no-repeat ;
     // background-size: contain;
     background-size: cover;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -248,10 +248,10 @@ export default {
   }
 	#firebaseui-auth-container {
 		display: flex;
-		height: 100vh;
+		height: 100dvh;
 	}
   .background_news_mobile {
-    height: 100vh;
+    height: 100dvh;
   width: 100%;
   background-repeat: no-repeat;
   background-size: 100%;

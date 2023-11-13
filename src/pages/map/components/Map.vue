@@ -156,7 +156,7 @@
         @show_marker="handleShowMarker"
       />
     </div>
-	<div v-else class="d-flex all-map" style="padding: 0; height: 100vh;">
+	<div v-else class="d-flex all-map" style="padding: 0; height: 100dvh;">
       <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''" style="height: -webkit-fill-available;
     margin-bottom: 60px;">
         <div id="mapid" class="layer-map">
@@ -170,7 +170,13 @@
                  @click="choosePoint($event)"
           >
             <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
-            <l-control-zoom position="bottomright"></l-control-zoom>
+			<!-- <l-control position="bottomright">
+				<div class="test" style="margin-bottom:40px;"></div>
+			</l-control>
+			<l-control position="bottomleft">
+				<div class="test" style="margin-bottom:40px;"></div>
+			</l-control> -->
+            <l-control-zoom position="topright"></l-control-zoom>
 
             <l-control position="bottomright">
               <button class="btn btn-orange mini_btn" type="button" id="filterButton" @click="handleFilter">
@@ -934,6 +940,7 @@ export default {
 		},
 		geoLocate () {
 			navigator.geolocation.getCurrentPosition(position => {
+				this.center = [position.coords.latitude, position.coords.longitude]
 				this.circle.center = [position.coords.latitude, position.coords.longitude]
 				this.filter.coordinate = [position.coords.latitude, position.coords.longitude]
 				this.markerLatLng = [position.coords.latitude, position.coords.longitude]
@@ -1204,7 +1211,7 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    height: 100vh;
+    height: 100dvh;
     background: rgba(0, 0, 0, 0.62);
     z-index: 100000;
     display: flex;

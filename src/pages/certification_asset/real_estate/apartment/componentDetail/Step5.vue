@@ -2016,21 +2016,21 @@ export default {
 
 .content_detail_asset {
 	margin-top: 1rem;
-	max-height: calc(100vh - 240px) !important;
-	min-height: calc(100vh - 240px) !important;
+	max-height: calc(100dvh - 240px) !important;
+	min-height: calc(100dvh - 240px) !important;
 
 	@media (max-height: 449px){
-		max-height: calc(100vh - 220px) !important;
-		min-height: calc(100vh - 260px) !important;
+		max-height: calc(100dvh - 220px) !important;
+		min-height: calc(100dvh - 260px) !important;
 	}
 	@media (max-height: 660px){
-		max-height: calc(100vh - 260px) !important;
-		min-height: calc(100vh - 260px) !important;
+		max-height: calc(100dvh - 260px) !important;
+		min-height: calc(100dvh - 260px) !important;
 	}
 
 	@media (max-height: 970px) and (min-height: 660px) {
-		max-height: calc(100vh - 260px) !important;
-		min-height: calc(100vh - 260px) !important;
+		max-height: calc(100dvh - 260px) !important;
+		min-height: calc(100dvh - 260px) !important;
 	}
 }
 ::-webkit-scrollbar {
@@ -2307,21 +2307,21 @@ $minWidth: 170px;
 	}
 }
 .ant-table-body {
-  max-height: calc(100vh - 240px) !important;
-  min-height: calc(100vh - 240px) !important;
+  max-height: calc(100dvh - 240px) !important;
+  min-height: calc(100dvh - 240px) !important;
 
   @media (max-height: 449px){
-    max-height: calc(100vh - 220px) !important;
-    min-height: calc(100vh - 260px) !important;
+    max-height: calc(100dvh - 220px) !important;
+    min-height: calc(100dvh - 260px) !important;
   }
   @media (max-height: 659px) and (min-height: 450px) {
-    max-height: calc(100vh - 260px) !important;
-    min-height: calc(100vh - 260px) !important;
+    max-height: calc(100dvh - 260px) !important;
+    min-height: calc(100dvh - 260px) !important;
   }
 
   @media (max-height: 970px) and (min-height: 660px) {
-    max-height: calc(100vh - 260px) !important;
-    min-height: calc(100vh - 260px) !important;
+    max-height: calc(100dvh - 260px) !important;
+    min-height: calc(100dvh - 260px) !important;
   }
 }
 .ant-table-content {

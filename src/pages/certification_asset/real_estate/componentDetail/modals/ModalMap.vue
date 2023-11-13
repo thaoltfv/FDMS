@@ -287,8 +287,8 @@ export default {
     height: 80vh;
     margin-bottom: 0;
     @media (max-width: 767px) {
-      max-width: 100vh;
-      height: 100vh;
+      max-width: 100dvh;
+      height: 100dvh;
     }
     &-header {
       border-bottom: 1px solid #DDDDDD;
@@ -324,7 +324,7 @@ export default {
     //  }
     //  @media (max-width: 767px) {
     //    max-width: 100vw;
-    //    height: 100vh;
+    //    height: 100dvh;
     //  }
     //}
   }
