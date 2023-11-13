@@ -87,7 +87,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration compareGeneralPicRepository is end!");
 
             //appraise_pics
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = AppraisePic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -132,7 +132,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration appraise_pics is end!");
 
             //apartment_asset_pics
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = ApartmentAssetPic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -177,7 +177,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration apartment_asset_pics is end!");
 
             //certificate_apartment_pics
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = CertificateApartmentPic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -222,7 +222,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration certificate_apartment_pics is end!");
 
             //CertificateAssetPic
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = CertificateAssetPic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -267,7 +267,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration CertificateAssetPic is end!");
 
             //ComparePropertyPic
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = ComparePropertyPic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -312,7 +312,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration ComparePropertyPic is end!");
 
             //CompareTangiblePic
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = CompareTangiblePic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -357,7 +357,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration CompareTangiblePic is end!");
 
             //CustomerPic
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = CustomerPic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
@@ -402,7 +402,7 @@ class MigrationAllImageToS3 extends Command
             Log::info("Migration CustomerPic is end!");
 
             //CompareOtherPic
-            $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+            $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
             $images = CompareOtherPic::query()->select()
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
