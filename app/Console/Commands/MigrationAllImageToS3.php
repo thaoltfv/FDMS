@@ -68,7 +68,7 @@ class MigrationAllImageToS3 extends Command
                         try {
                             $old_image = file_get_contents( $image->link);
                             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -113,7 +113,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -158,7 +158,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -203,7 +203,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -248,7 +248,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -293,7 +293,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -338,7 +338,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -383,7 +383,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
@@ -428,7 +428,7 @@ class MigrationAllImageToS3 extends Command
                                 $path =env('STORAGE_IMAGES') .'/'. 'other/';
                             }
                             
-                            $last_part = substr(strrchr($image->link, "."), 1);
+                            $last_part = strtolower(substr(strrchr($image->link, "."), 1));
                             //    dd($last_part);
                             $name = $path . Uuid::uuid4()->toString() . '.' .$last_part;
                             Storage::put($name, $old_image);
