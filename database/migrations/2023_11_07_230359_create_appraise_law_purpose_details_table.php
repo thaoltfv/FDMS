@@ -24,7 +24,7 @@ class CreateAppraiseLawPurposeDetailsTable extends Migration
                 ->on('appraise_law')
                 ->onDelete('cascade');
 			$table->integer('land_type_purpose_id')->nullable();
-            $table->integer('total_area')->nullable();
+            $table->double('total_area')->nullable();
 			$table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->softDeletes();

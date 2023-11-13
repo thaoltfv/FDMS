@@ -45,6 +45,17 @@ class EloquentCompareGeneralPicRepository extends EloquentRepository implements 
             ->get();
     }
 
+    public function findImage()
+    {
+        $query = 'link not ilike ' . "'%fv-trial.s3-ap-southeast-1.amazonaws.com%'";
+
+        return $this->model->query()->select()
+            ->whereRaw($query)
+            ->whereNull('deleted_at')
+            ->whereNotNull('link')
+            ->get();
+    }
+
     /**
      * @param $type
      * @return Builder[]|Collection
