@@ -115,9 +115,12 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tài sản thẩm định giá: " . $this->getAssetName($certificate),0 , ['size' => '12.5'], 'bullets');
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , ['size' => '12.5'], 'bullets');
-        $listItemRun2 = $section->addListItemRun(0,'bullets',['spaceAfter' => 1000]);
-        $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5']);
-        $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true]);
+        $textRun = $section->addTextRun();
+        $textRun->addText("   - Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5']);
+        $textRun->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo." , ['size' => '12.5','italic' => true]);
+        // $listItemRun2 = $section->addListItemRun(0,'bullets');
+        // $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5']);
+        // $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true]);
         // $section->addListItem("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ",0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         // $list1->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['italic' => true, 'size' => '12.5']);
         // $section->addTextBreak(2);
