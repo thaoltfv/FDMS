@@ -88,12 +88,14 @@ class ReportCertificateVavc extends ReportCertificate
     }
     protected function content1(Section $section, $certificate)
     {
-        $section->addListItem("Căn cứ Hợp đồng thẩm định giá/Tờ trình thuê ngoài định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " về nội dung " . $certificate->petitioner_name . ' đề nghị ' . $this->companyName . ' thực hiện việc thẩm định giá giá trị tài sản.', 0 , [], null, $this->indentFistLine);
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , [], null, $this->indentFistLine);
-        $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:",0 , [], null, $this->indentFistLine);
+        $section->addListItem("Căn cứ Hợp đồng thẩm định giá/Tờ trình thuê ngoài định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " về nội dung " . $certificate->petitioner_name . ' đề nghị ' . $this->companyName . ' thực hiện việc thẩm định giá giá trị tài sản.', 0 , ['size' => '13'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , ['size' => '13'], 'bullets', $this->indentFistLine);
+        $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:", 0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addTitle("Khách hàng thẩm định giá:", 2);
-        $section->addListItem("Khách hàng: " . $certificate->petitioner_name,0 , [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Khách hàng yêu cầu: " . $certificate->petitioner_name,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Ngày sinh: " . json_encode($certificate),0 , ['size' => '13'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Số CCCD: " ,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate),0 , [], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , [], 'bullets', $this->indentFistLine);
