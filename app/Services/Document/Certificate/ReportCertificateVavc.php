@@ -17,7 +17,7 @@ class ReportCertificateVavc extends ReportCertificate
         // $table->addRow();
         // $table->addCell(4500)->addText($strFooter, array('size' => 8), array('align' => 'left', 'indentation' => array('left' => $indentLeft)));
         // $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right',  'indentation' => array('right' => $indentRight)));
-        $footer->addPreserveText('{PAGE}',['size' => '12'], array('align' => 'right',  'indentation' => array('right' => $indentRight+20)));
+        $footer->addPreserveText('{PAGE}',['size' => '12'], array('align' => 'right',  'indentation' => array('right' => $indentRight)));
         $imgName = env('STORAGE_IMAGES','images').'/'.'company_footer.png';
         $footer->addImage(storage_path('app/public/'.$imgName), $this->styleImageFooter);
     }
@@ -94,7 +94,8 @@ class ReportCertificateVavc extends ReportCertificate
             // $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
             // $cell13->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], $this->styleAlignCenter);
             $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
-            $indentRight = $this->marginRightContent - $this->marginRightNational;
+            // $indentRight = $this->marginRightContent - $this->marginRightNational;
+            $indentRight = 150;
             $this->printFooter($section, $data, $indentLeft, $indentRight);
         }
     }
