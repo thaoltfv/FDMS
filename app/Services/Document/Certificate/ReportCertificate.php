@@ -10,6 +10,51 @@ use PhpOffice\PhpWord\PhpWord;
 
 class ReportCertificate extends Report
 {
+        protected function processData ($data, $documentConfig)
+    {
+        $this->envDocument = config('services.document_service.document_module');
+        $this->createdName = !empty($data->createdBy) ? CommonService::withoutAccents($data->createdBy->name) : '';
+        $this->logoUrl = storage_path('app/public/' . env('STORAGE_IMAGES','images').'/'.'company_logo.png');
+        if (!empty($documentConfig)) {
+            $this->documentConfig = $documentConfig;
+            $this->certificateNumberSuffix = $documentConfig->where('slug', 'certificatte_number_suffix')->first()->value ?: '';
+            $this->certificateNumberPrefix = $documentConfig->where('slug', 'certificatte_number_prefix')->first()->value ?: '';
+            $this->documentNumberSuffix = $documentConfig->where('slug', 'document_number_suffix')->first()->value ?: '';
+            $this->documentNumberPrefix = $documentConfig->where('slug', 'document_number_prefix')->first()->value ?: '';
+            $this->contractCodeSuffix = $documentConfig->where('slug', 'contract_code_suffix')->first()->value ?: '';
+            $this->contractCodePrefix = $documentConfig->where('slug', 'contract_code_prefix')->first()->value ?: '';
+            $this->documentWatermask = $documentConfig->where('slug', 'print_watermask')->first()->value ?: '';
+
+        }
+        // Report code
+        if(isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
+            $this->reportCode = $this->documentNumberPrefix . $data->certificate_num . $this->documentNumberSuffix;
+        } else {
+            $this->reportCode = $this->documentNumberPrefix . '            ' . $this->documentNumberSuffix;
+        }
+        // Certificate code
+        if(isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
+            $this->certificateCode = $this->certificateNumberPrefix . $data->certificate_num . $this->certificateNumberSuffix;
+        } else {
+            $this->certificateCode = $this->certificateNumberPrefix . '            ' . $this->certificateNumberSuffix;
+        }
+        //Contract code
+        if(isset($data->document_num) && !empty(trim($data->document_num))) {
+            $this->contractCode = $this->contractCodePrefix . $data->document_num . $this->contractCodeSuffix;
+        } else {
+            $this->contractCode = $this->contractCodePrefix . '            ' . $this->contractCodeSuffix;
+        }
+        if(!empty($data->certificate_date)) {
+            $certificateDate = date_create($data->certificate_date);
+            $this->certificateShortDateText = $certificateDate->format("d/m/Y");
+            $this->certificateLongDateText = "ngày " . $certificateDate->format('d') . " tháng " . $certificateDate->format('m') . " năm " . $certificateDate->format('Y');
+        }
+        if(!empty($data->document_date)) {
+            $documentDate = date_create($data->document_date);
+            $this->documentShortDateText = $documentDate->format("d/m/Y");
+            $this->documentLongDateText =  "ngày " . $documentDate->format('d') . " tháng " . $documentDate->format('m') . " năm " . $documentDate->format('Y');
+        }
+    }
     protected function nationalName(PhpWord $phpWord, $data)
     {
         if ($this->isPrintNational) {
