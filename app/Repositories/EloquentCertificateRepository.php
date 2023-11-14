@@ -5678,6 +5678,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'legalDocumentsOnLocal:id,document_type,date,content'
         ];
         $result = $this->model->query()->where('id', $id)->with($with)->first($select);
+        dd($result);
         return $result;
     }
 
