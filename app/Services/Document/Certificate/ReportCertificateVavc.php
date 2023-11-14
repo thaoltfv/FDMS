@@ -171,7 +171,7 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addListItem("Hồ sơ pháp lý của tài sản thẩm định giá.",0 , ['size' => '12.5',], 'bullets', $this->indentFistLine);
         // $section->addTitle("Những lưu ý về Chứng thư thẩm định giá:", 2);
         $textRun6 = $section->addTextRun();
-        $textRun6->addText("13. Những lưu ý về Chứng thư thẩm định giá: ", ['size' => '12.5','bold' => true]);
+        $textRun6->addText("13. Những lưu ý về Chứng thư thẩm định giá: ", ['size' => '12.5','bold' => true],$this->keepNext);
         $section->addListItem($certificate->note,0 , ['size' => '12.5',], 'bullets', $this->indentFistLine);
         $section->addListItem("Khách hàng có trách nhiệm sử dụng Chứng thư thẩm định giá đúng quy định của Pháp luật.",0 , ['size' => '12.5',], 'bullets', $this->indentFistLine);
         $section->addListItem("Chứng thư thẩm định giá được phát hành 03 (ba) bản chính bằng tiếng Việt, " . $this->companyName . " giữ 01 (một) bản, Khách hàng thẩm định giá giữ 02 (hai) bản, có giá trị như nhau",0 , ['size' => '12.5',], 'bullets', $this->indentFistLine);
