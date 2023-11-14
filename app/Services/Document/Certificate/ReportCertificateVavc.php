@@ -14,12 +14,12 @@ class ReportCertificateVavc extends ReportCertificate
         $table2 = $section->addTable($this->tableBasicStyle);
         $table2->addRow(Converter::inchToTwip(.1));
         $cell21 = $table2->addCell(Converter::inchToTwip(2));
-        $cell21->addText("Số: ". $this->certificateCode, null, array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
+        $cell21->addText("Số: ". $this->certificateCode, ["name" => "Cambria", 'size' => '12'], array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
         $cell22 = $table2->addCell(Converter::inchToTwip(5));
-        $cell22->addText(ucfirst($this->certificateLongDateText), ['italic' => true], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
+        $cell22->addText(ucfirst($this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
 
         $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ["name" => "Cambria", 'bold' => true, 'size' => '18', 'color' => '1f497d'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
-        $section->addText("Kính gửi: " . $data->petitioner_name, ['bold' => true, 'size' => '14'], array_merge($this->styleAlignCenter, ['spaceAfter' => 300]));
+        $section->addText("Kính gửi: " . $data->petitioner_name, ['bold' => true, 'size' => '13'], array_merge($this->styleAlignCenter, ['spaceAfter' => 300]));
     }
         protected function processData ($data, $documentConfig)
     {
