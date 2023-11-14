@@ -104,6 +104,7 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , ['size' => '12.5'], 'bullets');
         $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:", 0 , ['size' => '12.5'], 'bullets');
         // $section->addTitle("Khách hàng thẩm định giá:", 2);
+        $section->addTextBreak(2);
         $textRun = $section->addTextRun();
         $textRun->addText("1. Khách hàng thẩm định giá: ", ['size' => '12.5','bold' => true]);
         $listItemRun1 = $section->addListItemRun(0,'bullets');
@@ -181,7 +182,7 @@ class ReportCertificateVavc extends ReportCertificate
     }
     protected function signature(Section $section, $certificate)
     {
-        $section->addTextBreak(3);
+        $section->addTextBreak(2);
         $section->addText(mb_strtoupper($this->companyName), ["name" => "Cambria", 'size' => '12.5', 'bold' => true ], array_merge($this->styleAlignCenter,$this->keepNext));
         $table3 = $section->addTable($this->tableBasicStyle);
         $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
