@@ -209,6 +209,8 @@ class ReportCertificateVavc extends ReportCertificate
         $bien172 = $appraiserManager;
         $cell34->addText(mb_strtoupper($bien172), ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
         $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ["name" => "Cambria", 'size' => '12.5','bold' => false], ['align' => 'center']);
-        $cell34->addText( $certificate->appraiserConfirm->appraisePosition->description, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
+        if(isset($certificate->appraiserConfirm->name)) {
+            $cell34->addText( $certificate->appraiserConfirm->appraisePosition->description, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
+        }
     }
 }
