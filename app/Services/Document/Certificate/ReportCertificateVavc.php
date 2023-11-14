@@ -28,7 +28,7 @@ class ReportCertificateVavc extends ReportCertificate
         $cell21 = $table2->addCell(Converter::inchToTwip(2));
         $cell21->addText("Số: ". $this->certificateCode, ["name" => "Cambria", 'size' => '12'], array_merge($this->styleAlignCenter, ['spaceBefore' => 0]));
         $cell22 = $table2->addCell(Converter::inchToTwip(4));
-        $cell22->addText(ucfirst('Hà Nội, ' . $this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignCenter, ['spaceBefore' => 0]));
+        $cell22->addText(ucfirst('Hà Nội, ' . $this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 0]));
 
         $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ["name" => "Cambria", 'bold' => true, 'size' => '18', 'color' => '1f497d'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
         $section->addText("Kính gửi: " . $data->petitioner_name, ['bold' => true, 'size' => '12.5'], array_merge($this->styleAlignCenter, ['spaceAfter' => 300]));
