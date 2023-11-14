@@ -28,7 +28,7 @@ class ReportCertificateVavc extends ReportCertificate
         $cell21 = $table2->addCell(Converter::inchToTwip(2));
         $cell21->addText("Số: ". $this->certificateCode, ["name" => "Cambria", 'size' => '12'], array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
         $cell22 = $table2->addCell(Converter::inchToTwip(5));
-        $cell22->addText(ucfirst('Hà Nội ,' . $this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
+        $cell22->addText(ucfirst('Hà Nội, ' . $this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceAfter' => 200]));
 
         $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ["name" => "Cambria", 'bold' => true, 'size' => '18', 'color' => '1f497d'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
         $section->addText("Kính gửi: " . $data->petitioner_name, ['bold' => true, 'size' => '12.5'], array_merge($this->styleAlignCenter, ['spaceAfter' => 300]));
@@ -115,11 +115,9 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tài sản thẩm định giá: " . $this->getAssetName($certificate),0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
-        $listItemRun2 = $section->addListItemRun(0,'bullets');
+        $listItemRun2 = $section->addListItemRun(0,'bullets',$this->keepNext);
         $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5']);
-        $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true],['space' => [
-            'line' => 1000,
-        ],]);
+        $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true]);
         // $section->addListItem("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ",0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         // $list1->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['italic' => true, 'size' => '12.5']);
         $appraise_date = date_create($certificate->appraise_date);
