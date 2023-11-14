@@ -69,7 +69,7 @@ class Report implements ReportInterface
 
     protected $styleImageFooter = [
         'width' => 488,
-        'align' => 'left',
+        'align' => 'right',
         'space' => [
             'line' => 1000,
             'rule' => 'single',
