@@ -175,11 +175,11 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addListItem("Chứng thư thẩm định giá được phát hành 03 (ba) bản chính bằng tiếng Việt, " . $this->companyName . " giữ 01 (một) bản, Khách hàng thẩm định giá giữ 02 (hai) bản, có giá trị như nhau",0 , ['size' => '12.5',], 'bullets', $this->indentFistLine);
         $section->addListItem("Chứng thư thẩm định giá thuộc quyền sở hữu trí tuệ của " . $this->companyName . " và không được sao chép, bán, xuất bản hoặc phân phát dưới bất kỳ hình thức nào khi không có sự đồng ý trước bằng văn bản của " . $this->acronym . ". " . $this->acronym . " chỉ chịu trách nhiệm về số lượng văn bản (bản chính và bản sao) do Công ty phát hành. Mọi hình thức sao chép Chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật và không có giá trị.",0 , ['size' => '12.5',], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
 
-        $section->addTextBreak(null, null, $this->keepNext);
+        // $section->addTextBreak(null, null, $this->keepNext);
     }
     protected function signature(Section $section, $certificate)
     {
-        $section->addTextBreak(null, null, $this->keepNext);
+        // $section->addTextBreak(null, null, $this->keepNext);
         $section->addText(mb_strtoupper($this->companyName), ["name" => "Cambria", 'size' => '12.5', 'bold' => true ], $this->styleAlignCenter);
         $table3 = $section->addTable($this->tableBasicStyle);
         $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
