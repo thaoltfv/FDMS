@@ -13,11 +13,11 @@ class ReportCertificateVavc extends ReportCertificate
     {
         if ($this->isPrintNational) {
             $section = $phpWord->addSection($this->styleNationalSection);
-            $table1 = $section->addTable($this->tableBasicStyle);
-            $table1->addRow(1000);
-            $cell11 = $table1->addCell(Converter::cmToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            // $table1 = $section->addTable($this->tableBasicStyle);
+            // $table1->addRow(1000);
+            // $cell11 = $table1->addCell(Converter::cmToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $imgName = env('STORAGE_IMAGES','images').'/'.'company_header.png';
-            $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
+            $section->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
             // $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             // $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
             // // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
