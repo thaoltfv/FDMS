@@ -18,7 +18,7 @@ class ReportCertificateVavc extends ReportCertificate
         $cell22 = $table2->addCell(Converter::inchToTwip(5));
         $cell22->addText(ucfirst($this->certificateLongDateText), ['italic' => true], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
 
-        $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '18'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
+        $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ["name" => "Cambria", 'bold' => true, 'size' => '18', 'color' => '1f497d'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
         $section->addText("Kính gửi: " . $data->petitioner_name, ['bold' => true, 'size' => '14'], array_merge($this->styleAlignCenter, ['spaceAfter' => 300]));
     }
         protected function processData ($data, $documentConfig)
