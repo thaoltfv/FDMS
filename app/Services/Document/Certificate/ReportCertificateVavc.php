@@ -95,7 +95,7 @@ class ReportCertificateVavc extends ReportCertificate
             // $cell13->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], $this->styleAlignCenter);
             $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
             // $indentRight = $this->marginRightContent - $this->marginRightNational;
-            $indentRight = 150;
+            $indentRight = -50;
             $this->printFooter($section, $data, $indentLeft, $indentRight);
         }
     }
