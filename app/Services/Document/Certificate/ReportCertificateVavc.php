@@ -16,7 +16,7 @@ class ReportCertificateVavc extends ReportCertificate
         $cell21 = $table2->addCell(Converter::inchToTwip(2));
         $cell21->addText("Số: ". $this->certificateCode, ["name" => "Cambria", 'size' => '12'], array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
         $cell22 = $table2->addCell(Converter::inchToTwip(5));
-        $cell22->addText(ucfirst($this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
+        $cell22->addText(ucfirst('Hà Nội ,' . $this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
 
         $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ["name" => "Cambria", 'bold' => true, 'size' => '18', 'color' => '1f497d'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
         $section->addText("Kính gửi: " . $data->petitioner_name, ['bold' => true, 'size' => '13'], array_merge($this->styleAlignCenter, ['spaceAfter' => 300]));
@@ -58,12 +58,12 @@ class ReportCertificateVavc extends ReportCertificate
         if(!empty($data->certificate_date)) {
             $certificateDate = date_create($data->certificate_date);
             $this->certificateShortDateText = $certificateDate->format("d/m/Y");
-            $this->certificateLongDateText = "Hà Nội, ngày " . $certificateDate->format('d') . " tháng " . $certificateDate->format('m') . " năm " . $certificateDate->format('Y');
+            $this->certificateLongDateText = "ngày " . $certificateDate->format('d') . " tháng " . $certificateDate->format('m') . " năm " . $certificateDate->format('Y');
         }
         if(!empty($data->document_date)) {
             $documentDate = date_create($data->document_date);
             $this->documentShortDateText = $documentDate->format("d/m/Y");
-            $this->documentLongDateText =  "Hà Nội, ngày " . $documentDate->format('d') . " tháng " . $documentDate->format('m') . " năm " . $documentDate->format('Y');
+            $this->documentLongDateText =  "ngày " . $documentDate->format('d') . " tháng " . $documentDate->format('m') . " năm " . $documentDate->format('Y');
         }
     }
     protected function nationalName(PhpWord $phpWord, $data)
@@ -88,8 +88,9 @@ class ReportCertificateVavc extends ReportCertificate
     }
     protected function content1(Section $section, $certificate)
     {
-        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0 , [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:",0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Căn cứ Hợp đồng thẩm định giá/Tờ trình thuê ngoài định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " về nội dung " . $certificate->petitioner_name . ' đề nghị ' . $this->companyName . ' thực hiện việc thẩm định giá giá trị tài sản.', 0 , [], null, $this->indentFistLine);
+        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , [], null, $this->indentFistLine);
+        $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:",0 , [], null, $this->indentFistLine);
         $section->addTitle("Khách hàng thẩm định giá:", 2);
         $section->addListItem("Khách hàng: " . $certificate->petitioner_name,0 , [], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , [], 'bullets', $this->indentFistLine);
