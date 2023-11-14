@@ -4653,7 +4653,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraise_date' => isset($object['appraise_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['appraise_date'])->format('Y-m-d') : null,
                 'certificate_date' => isset($object['certificate_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['certificate_date'])->format('Y-m-d') : null,
                 'commission_fee' => $object['commission_fee'],
-                'document_type' => $object['document_type']
+                'document_type' => $object['document_type'],
+                'note' => $object['note']
             ]);
 
             $edited = Certificate::where('id', $id)->first();

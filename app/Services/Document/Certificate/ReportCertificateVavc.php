@@ -102,7 +102,7 @@ class ReportCertificateVavc extends ReportCertificate
     protected function content1(Section $section, $certificate)
     {
         $section->addListItem("Căn cứ Hợp đồng thẩm định giá/Tờ trình thuê ngoài định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " về nội dung " . $certificate->petitioner_name . ' đề nghị ' . $this->companyName . ' thực hiện việc thẩm định giá giá trị tài sản.', 0 , ['size' => '12.5'], 'bullets');
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , ['size' => '12.5'], 'bullets');
+        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . '.', 0 , ['size' => '12.5'], 'bullets');
         $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:", 0 , ['size' => '12.5'], 'bullets');
         // $section->addTitle("Khách hàng thẩm định giá:", 2);
         $section->addTextBreak(1);
