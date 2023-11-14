@@ -122,7 +122,7 @@ class ReportCertificateVavc extends ReportCertificate
         // $list1->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['italic' => true, 'size' => '12.5']);
         // $section->addTextBreak(2);
         $appraise_date = date_create($certificate->appraise_date);
-        $textRun = $section->addTextRun();
+        $textRun = $section->addTextRun('Heading1');
         $textRun->addText("Thời điểm thẩm định giá: ", ['size' => '12.5','bold' => true]);
         $textRun->addText('Tháng ' . date_format($appraise_date, "m/Y") . '.', ['size' => '12.5','bold' => false]);
         $appraisePurpose = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
