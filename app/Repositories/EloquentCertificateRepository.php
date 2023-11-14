@@ -5670,7 +5670,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserPerform:id,name,appraiser_number',
             'assetPrice:id,certificate_id,slug,value',
             'createdBy:id,name',
-            'appraiserManager:id,name,appraiser_number',
+            'appraiserManager:id,name,appraiser_number,appraise_position_id',
             'appraiserManager.appraisePosition:id,description',
             'legalDocumentsOnValuation:id,document_type,date,content',
             'legalDocumentsOnConstruction:id,document_type,date,content',
@@ -5678,7 +5678,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'legalDocumentsOnLocal:id,document_type,date,content'
         ];
         $result = $this->model->query()->where('id', $id)->with($with)->first($select);
-        dd($result);
+        // dd($result);
         return $result;
     }
 
