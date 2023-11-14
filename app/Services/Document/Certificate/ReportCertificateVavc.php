@@ -93,9 +93,9 @@ class ReportCertificateVavc extends ReportCertificate
             // $cell13 = $table1->addCell(Converter::inchToTwip(4), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             // $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
             // $cell13->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], $this->styleAlignCenter);
-            $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
-            $indentRight = $this->marginRightContent - $this->marginRightNational;
-            $this->printFooter($section, $data, $indentLeft, $indentRight);
+            // $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
+            // $indentRight = $this->marginRightContent - $this->marginRightNational;
+            $this->printFooter($section, $data, 0, 0);
         }
     }
     protected function content1(Section $section, $certificate)
