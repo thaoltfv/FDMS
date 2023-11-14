@@ -182,10 +182,8 @@ class ReportCertificateVavc extends ReportCertificate
     protected function signature(Section $section, $certificate)
     {
         // $section->addTextBreak(null, null, $this->keepNext);
-        // $section->addText(mb_strtoupper($this->companyName), ["name" => "Cambria", 'size' => '12.5', 'bold' => true ], $this->styleAlignCenter);
+        $section->addText(mb_strtoupper($this->companyName), ["name" => "Cambria", 'size' => '12.5', 'bold' => true ], array_merge($this->styleAlignCenter,$this->keepNext));
         $table3 = $section->addTable($this->tableBasicStyle);
-        $table3->addRow();
-        $table3->addCell()->addText(mb_strtoupper($this->companyName), ["name" => "Cambria", 'size' => '12.5', 'bold' => true ], $this->styleAlignCenter);
         $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
         $cell31 = $table3->addCell(Converter::inchToTwip(4));
         $cell31->addText("THẨM ĐỊNH VIÊN VỀ GIÁ", ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
