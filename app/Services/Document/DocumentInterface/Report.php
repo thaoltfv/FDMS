@@ -59,13 +59,13 @@ class Report implements ReportInterface
     ];
 
     protected $styleImageHeader = [
-        'width' => 600,
-        'align' => 'center',
+        'width' => 500,
+        'align' => 'left',
     ];
 
     protected $styleImageFooter = [
-        'width' => 600,
-        'align' => 'center',
+        'width' => 500,
+        'align' => 'left',
     ];
     protected $styleMapImage = [
         'width' => 488,
