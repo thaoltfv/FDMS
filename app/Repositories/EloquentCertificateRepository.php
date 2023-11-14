@@ -5671,6 +5671,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'assetPrice:id,certificate_id,slug,value',
             'createdBy:id,name',
             'appraiserManager:id,name,appraiser_number',
+            'appraiserManager.appraisePosition:id,description',
             'legalDocumentsOnValuation:id,document_type,date,content',
             'legalDocumentsOnConstruction:id,document_type,date,content',
             'legalDocumentsOnLand:id,document_type,date,content',
