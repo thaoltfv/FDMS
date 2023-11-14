@@ -1749,6 +1749,15 @@ class CommonService
 		}
 		return $value;
 	}
+
+	public static function getTotalRealEstatePriceNotRound($realEstates)
+	{
+		$value = 0;
+		foreach ($realEstates as $item) {
+			$value += $item->total_price;
+		}
+		return $value;
+	}
 	public static function getUtilitiesDescription($utilities)
 	{
 		$descriptionArr = [];

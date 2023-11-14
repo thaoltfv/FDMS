@@ -26,7 +26,7 @@ class ReportCertificateVavc extends ReportCertificate
         $table2 = $section->addTable($this->tableBasicStyle);
         $table2->addRow(Converter::inchToTwip(.1));
         $cell21 = $table2->addCell(Converter::inchToTwip(2));
-        $cell21->addText("Số: ". $this->certificateCode, ["name" => "Cambria", 'size' => '12'], array_merge($this->styleAlignCenter, ['spaceBefore' => 0]));
+        $cell21->addText("Số: ". $this->certificateCode, ["name" => "Cambria", 'size' => '12'], array_merge($this->styleAlignLeft, ['spaceBefore' => 0]));
         $cell22 = $table2->addCell(Converter::inchToTwip(4));
         $cell22->addText(ucfirst('Hà Nội, ' . $this->certificateLongDateText), ["name" => "Cambria", 'italic' => true, 'size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 0]));
 
@@ -152,8 +152,10 @@ class ReportCertificateVavc extends ReportCertificate
         $textRun1->addText("9. Kết quả thẩm định giá: ", ['size' => '12.5','bold' => true]);
         $section->addListItem("Trên cơ sở kết hợp các thông tin hồ sơ của tài sản do khách hàng cung cấp, khảo sát, xem xét tình hình giao dịch trên thị trường mua bán các tài sản tương tự để ứng dụng các phương pháp trong tính toán, " . $this->companyName . " thông báo kết quả thẩm định giá tài sản tại thời điểm thẩm định giá như sau:",0 , [], 'bullets', $this->indentFistLine);
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
-        $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['size' => '12.5','bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
-        $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['size' => '12.5','italic' => true, 'bold' => true], $this->styleAlignCenter);
+        $totalAllNotRound = CommonService::getTotalRealEstatePriceNotRound($certificate->realEstate);
+        $section->addText('Tổng cộng: ' . number_format($totalAllNotRound, 0, ',', '.') . " đồng", ['size' => '12.5','bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
+        $section->addText('Làm tròn: ' . number_format($totalAll, 0, ',', '.') . " đồng", ['size' => '12.5','bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
+        $section->addText("Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng./.", ['size' => '12','italic' => true, 'bold' => false], $this->styleAlignCenter);
         $section->addText("(Chi tiết xem tại Báo cáo kết quả thẩm định giá kèm theo)", ['size' => '12.5','italic' => true], $this->styleAlignCenter);
         $textRun6 = $section->addTextRun();
         $textRun6->addText("10. Những điều khoản loại trừ và hạn chế kèm theo kết quả thẩm định giá: ", ['size' => '12.5','bold' => true]);
