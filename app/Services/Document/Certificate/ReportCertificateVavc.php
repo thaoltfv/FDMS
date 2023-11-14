@@ -96,7 +96,8 @@ class ReportCertificateVavc extends ReportCertificate
         $listItemRun1->addText("Khách hàng yêu cầu: ", ['size' => '13']);
         $listItemRun1->addText($certificate->petitioner_name, ['size' => '13', 'bold' => true]);
         // $section->addListItem("Khách hàng yêu cầu: " . $certificate->petitioner_name,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
-        $section->addListItem("Ngày sinh: " . $certificate->note,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
+        $certificate->petitioner_birthday = '01/01/1970';
+        $section->addListItem("Ngày sinh: " . $certificate->petitioner_birthday,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
@@ -119,72 +120,68 @@ class ReportCertificateVavc extends ReportCertificate
         $textRun->addText($appraisePurpose, ['bold' => false]);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Căn cứ pháp lý: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục II, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
+        $textRun->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['bold' => false, 'italic' => true]);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Cơ sở giá trị của tài sản thẩm định giá: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
+        $textRun->addText("Cơ sở giá trị thị trường và phi thị trường.", ['bold' => false]);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Giả thiết và giả thiết đặc biệt: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục VII, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
+        $textRun->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['bold' => false, 'italic' => true]);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
+        $textRun->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['bold' => false, 'italic' => true]);
         $section->addTitle("Kết quả thẩm định giá: ", 2);
-        $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, $this->keepNext));
+        $section->addText("Trên cơ sở kết hợp các thông tin hồ sơ của tài sản do khách hàng cung cấp, khảo sát, xem xét tình hình giao dịch trên thị trường mua bán các tài sản tương tự để ứng dụng các phương pháp trong tính toán, " . $this->companyName . " thông báo kết quả thẩm định giá tài sản tại thời điểm thẩm định giá như sau:", [], array_merge($this->indentFistLine, $this->keepNext));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], $this->styleAlignCenter);
-        $section->addText("(Chi tiết xem tại phần IX, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], $this->styleAlignCenter);
-        $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
-        $section->addListItem("Nội dung chi tiết xem tại Mục X, Báo cáo kết quả thẩm định giá.",0 , [], 'bullets', $this->indentFistLine);
-        $section->addTitle("Thời hạn có hiệu lực của kết quả thẩm định giá:", 2);
-        $section->addListItem("Kết quả thẩm định giá có hiệu lực trong thời hạn 06 tháng kể từ ngày phát hành chứng thư (nếu thị trường không có biến động nhiều).",0 , [], 'bullets', $this->indentFistLine);
+        $section->addText("(Chi tiết xem tại Báo cáo kết quả thẩm định giá kèm theo)", ['italic' => true], $this->styleAlignCenter);
+        $textRun = $section->addTextRun('Heading2');
+        $textRun->addText("Những điều khoản loại trừ và hạn chế kèm theo kết quả thẩm định giá: ", ['bold' => true]);
+        $textRun->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['bold' => false, 'italic' => true]);
+        $textRun = $section->addTextRun('Heading2');
+        $textRun->addText("Thời hạn có hiệu lực của kết quả thẩm định giá: ", ['bold' => true]);
+        $textRun->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['bold' => false, 'italic' => true]);
         $section->addTitle("Các tài liệu kèm theo:", 2);
-        $section->addListItem("Báo cáo kết quả thẩm định giá số ". $this->reportCode . ' ngày ' . $this->certificateShortDateText ,0 , [], 'bullets', $this->indentFistLine);
-        $section->addText('', [], ['borderBottomSize' => 6, 'underline' => 'dash']);
-        $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo kết quả TĐG và các phụ lục.",0 , ['italic' => true], 'bullets', $this->indentFistLine);
-        $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt, cấp cho khách hàng 02 bản, lưu tại " . $this->companyName . " 01 bản và có giá trị pháp lý như nhau.",0 , ['italic' => true], 'bullets', $this->indentFistLine);
-        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.",0 , ['italic' => true], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
+        $section->addListItem("Báo cáo kết quả thẩm định giá.",0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Các phụ lục chi tiết kèm theo.",0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Hồ sơ pháp lý của tài sản thẩm định giá.",0 , [], 'bullets', $this->indentFistLine);
+        $section->addTitle("Những lưu ý về Chứng thư thẩm định giá:", 2);
+        $section->addListItem($certificate->note,0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Khách hàng có trách nhiệm sử dụng Chứng thư thẩm định giá đúng quy định của Pháp luật.",0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Chứng thư thẩm định giá được phát hành 03 (ba) bản chính bằng tiếng Việt, " . $this->companyName . " giữ 01 (một) bản, Khách hàng thẩm định giá giữ 02 (hai) bản, có giá trị như nhau",0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Chứng thư thẩm định giá thuộc quyền sở hữu trí tuệ của " . $this->companyName . " và không được sao chép, bán, xuất bản hoặc phân phát dưới bất kỳ hình thức nào khi không có sự đồng ý trước bằng văn bản của " . mb_strtoupper($this->acronym) . ". " . mb_strtoupper($this->acronym) . " chỉ chịu trách nhiệm về số lượng văn bản (bản chính và bản sao) do Công ty phát hành. Mọi hình thức sao chép Chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật và không có giá trị.",0 , [], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
 
         $section->addTextBreak(null, null, $this->keepNext);
     }
-    // protected function signature(Section $section, $certificate)
-    // {
-    //     $section->addTextBreak(null, null, $this->keepNext);
-    //     $table3 = $section->addTable($this->tableBasicStyle);
-    //     $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
-    //     $cell31 = $table3->addCell(Converter::inchToTwip(4));
-    //     $cell31->addText("Chuyên Viên Thẩm Định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //     $cell31 = $table3->addCell(Converter::inchToTwip(4));
-    //     $cell31->addText("Thẩm Định Viên Về Giá", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //     $cell32 = $table3->addCell(Converter::inchToTwip(4));
-    //     if(isset($certificate->appraiserConfirm->name)) {
-    //         $cell32->addText("KT. Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //         $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //     } else {
-    //         $cell32->addText("Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //     }
-    //     $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
-    //     $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
-    //     $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
-    //     $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
-
-    //     $table3->addRow(Converter::inchToTwip(.1));
-    //     $cell33 = $table3->addCell(Converter::inchToTwip(4));
-    //     $bien170 = (isset($certificate->appraiserPerform) && isset($certificate->appraiserPerform->name)) ? $certificate->appraiserPerform->name : '';
-    //     $cell33->addText($bien170, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-
-    //     $cell33 = $table3->addCell(Converter::inchToTwip(4));
-    //     $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
-    //     $cell33->addText($bien171, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //     $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
-    //     $cell33->addText("Số thẻ TĐV về giá: " . $appraiserNumber, ['bold' => true], ['align' => 'center']);
-    //     $cell34 = $table3->addCell(Converter::inchToTwip(4));
-
-    //     $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
-    //     $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
-    //     $bien172 = $appraiserManager;
-    //     $cell34->addText($bien172, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-    //     $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
-    // }
+    protected function signature(Section $section, $certificate)
+    {
+        $section->addTextBreak(null, null, $this->keepNext);
+        $table3 = $section->addTable($this->tableBasicStyle);
+        $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
+        $cell31 = $table3->addCell(Converter::inchToTwip(4));
+        $cell31->addText("THẨM ĐỊNH VIÊN VỀ GIÁ", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell32 = $table3->addCell(Converter::inchToTwip(4));
+        if(isset($certificate->appraiserConfirm->name)) {
+            $cell32->addText("KT. TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        } else {
+            $cell32->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        }
+        $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
+        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);;
+        $table3->addRow(Converter::inchToTwip(.1));
+        $cell33 = $table3->addCell(Converter::inchToTwip(4));
+        $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
+        $cell33->addText($bien171, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
+        $cell33->addText("Số thẻ TĐV về giá: " . $appraiserNumber, ['bold' => true], ['align' => 'center']);
+        $cell34 = $table3->addCell(Converter::inchToTwip(4));
+        $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
+        $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
+        $bien172 = $appraiserManager;
+        $cell34->addText($bien172, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
+    }
 }
