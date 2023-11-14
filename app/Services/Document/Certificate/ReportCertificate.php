@@ -10,6 +10,15 @@ use PhpOffice\PhpWord\PhpWord;
 
 class ReportCertificate extends Report
 {
+    public function printFooter(Section $section, $data, $indentLeft = 0, $indentRight = 0)
+    {
+        $footer = $section->addFooter();
+        $strFooter = $this->getFooterString($data);
+        $table = $footer->addTable();
+        $table->addRow();
+        $table->addCell(4500)->addText($strFooter, array('size' => 8), array('align' => 'left', 'indentation' => array('left' => $indentLeft)));
+        $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right',  'indentation' => array('right' => $indentRight)));
+    }
         protected function processData ($data, $documentConfig)
     {
         $this->envDocument = config('services.document_service.document_module');

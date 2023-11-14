@@ -9,6 +9,18 @@ use PhpOffice\PhpWord\PhpWord;
 
 class ReportCertificateVavc extends ReportCertificate
 {
+    public function printFooter(Section $section, $data, $indentLeft = 0, $indentRight = 0)
+    {
+        $footer = $section->addFooter();
+        // $strFooter = $this->getFooterString($data);
+        // $table = $footer->addTable();
+        // $table->addRow();
+        // $table->addCell(4500)->addText($strFooter, array('size' => 8), array('align' => 'left', 'indentation' => array('left' => $indentLeft)));
+        // $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right',  'indentation' => array('right' => $indentRight)));
+        $footer->addPreserveText('{PAGE}',['size' => '12'], array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
+        $imgName = env('STORAGE_IMAGES','images').'/'.'company_footer.png';
+        $footer->addImage(storage_path('app/public/'.$imgName), $this->styleImageFooter);
+    }
     public function printTitle(Section $section, $data)
     {
         $table2 = $section->addTable($this->tableBasicStyle);
@@ -173,14 +185,14 @@ class ReportCertificateVavc extends ReportCertificate
         $table3->addRow(Converter::inchToTwip(.1));
         $cell33 = $table3->addCell(Converter::inchToTwip(4));
         $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
-        $cell33->addText($bien171, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell33->addText(mb_strtoupper($bien171), ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
         $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
         $cell33->addText("Số thẻ TĐV về giá: " . $appraiserNumber, ["name" => "Cambria", 'size' => '12.5','bold' => false], ['align' => 'center']);
         $cell34 = $table3->addCell(Converter::inchToTwip(4));
         $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
         $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
         $bien172 = $appraiserManager;
-        $cell34->addText($bien172, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell34->addText(mb_strtoupper($bien172), ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
         $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ["name" => "Cambria", 'size' => '12.5','bold' => false], ['align' => 'center']);
         $cell34->addText( $certificate->appraiserConfirm->appraisePosition->description, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
     }
