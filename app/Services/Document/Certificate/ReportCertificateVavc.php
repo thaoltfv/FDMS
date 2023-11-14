@@ -81,7 +81,7 @@ class ReportCertificateVavc extends ReportCertificate
     protected function nationalName(PhpWord $phpWord, $data)
     {
         if ($this->isPrintNational) {
-            $section = $phpWord->addSection($this->styleNationalSection);
+            $section = $phpWord->addSection($this->styleSection);
             // $table1 = $section->addTable($this->tableBasicStyle);
             // $table1->addRow(1000);
             // $cell11 = $table1->addCell(Converter::cmToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
