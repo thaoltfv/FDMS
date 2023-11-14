@@ -212,7 +212,7 @@ class ReportCertificateVavc extends ReportCertificate
         if(isset($certificate->appraiserConfirm->name)) {
             $cell34->addText( $certificate->appraiserConfirm->appraisePosition->description, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
         } else {
-            $cell34->addText( "TỔNG GIÁM ĐỐC", ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell34->addText( $certificate->appraiserManager->appraisePosition->description, ["name" => "Cambria", 'size' => '12.5','bold' => true], ['align' => 'center', 'keepNext' => true]);
         }
     }
 }
