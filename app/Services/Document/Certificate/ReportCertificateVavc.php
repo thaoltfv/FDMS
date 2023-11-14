@@ -113,7 +113,7 @@ class ReportCertificateVavc extends ReportCertificate
         $listItemRun1->addText($certificate->petitioner_name, ['size' => '12.5', 'bold' => true]);
         // $section->addListItem("Khách hàng yêu cầu: " . $certificate->petitioner_name,0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         // $certificate->petitioner_birthday = '01/01/1970';
-        $section->addListItem("Ngày sinh: " . $certificate->petitioner_birthday->format("dd/mm/YYYY"),0 , ['size' => '12.5'], 'bullets');
+        $section->addListItem("Ngày sinh: " . $certificate->petitioner_birthday ? $certificate->petitioner_birthday->format("dd/mm/YYYY") : '',0 , ['size' => '12.5'], 'bullets');
         $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , ['size' => '12.5'], 'bullets');
         $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card,0 , ['size' => '12.5'], 'bullets');
         // $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
