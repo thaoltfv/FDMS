@@ -118,6 +118,7 @@ class ReportCertificateVavc extends ReportCertificate
         $listItemRun2 = $section->addListItemRun(0,'bullets',);
         $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5']);
         $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true]);
+        $listItemRun2 = $section->addListItemRun(0,'bullets',);
         // $section->addListItem("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ",0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         // $list1->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['italic' => true, 'size' => '12.5']);
         // $section->addTextBreak(2);
