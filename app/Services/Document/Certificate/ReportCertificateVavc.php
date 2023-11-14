@@ -92,7 +92,7 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:", 0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addTitle("Khách hàng thẩm định giá:", 2);
-        $listItemRun1 = $section->addListItemRun();
+        $listItemRun1 = $section->addListItemRun(0,'bullets', $this->indentFistLine);
         $listItemRun1->addText("Khách hàng yêu cầu: ", ['size' => '13']);
         $listItemRun1->addText($certificate->petitioner_name, ['size' => '13', 'bold' => true]);
         // $section->addListItem("Khách hàng yêu cầu: " . $certificate->petitioner_name,0 , ['size' => '13'], 'bullets', $this->indentFistLine);
@@ -102,7 +102,7 @@ class ReportCertificateVavc extends ReportCertificate
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tài sản thẩm định giá: " . $this->getAssetName($certificate),0 , ['size' => '13'], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , ['size' => '13'], 'bullets', $this->indentFistLine);
-        $listItemRun2 = $section->addListItemRun();
+        $listItemRun2 = $section->addListItemRun(0,'bullets', $this->indentFistLine);
         $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '13']);
         $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '13', 'italic' => true]);
         // $section->addListItem("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ",0 , ['size' => '13'], 'bullets', $this->indentFistLine);
