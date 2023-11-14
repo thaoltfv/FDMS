@@ -100,30 +100,30 @@ class ReportCertificateVavc extends ReportCertificate
     }
     protected function content1(Section $section, $certificate)
     {
-        $section->addListItem("Căn cứ Hợp đồng thẩm định giá/Tờ trình thuê ngoài định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " về nội dung " . $certificate->petitioner_name . ' đề nghị ' . $this->companyName . ' thực hiện việc thẩm định giá giá trị tài sản.', 0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
-        $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:", 0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
+        $section->addListItem("Căn cứ Hợp đồng thẩm định giá/Tờ trình thuê ngoài định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " về nội dung " . $certificate->petitioner_name . ' đề nghị ' . $this->companyName . ' thực hiện việc thẩm định giá giá trị tài sản.', 0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ' . $this->documentLongDateText . " của " . $this->companyName . ' .', 0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
+        $section->addListItem($this->companyName . " cung cấp Chứng thư thẩm định giá số " . $this->certificateCode .' ' . $this->documentLongDateText . " với các nội dung sau đây:", 0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         $section->addTitle("Khách hàng thẩm định giá:", 2);
-        $listItemRun1 = $section->addListItemRun(0,'bullets',array_merge($this->indentFistLine, $this->keepNext));
-        $listItemRun1->addText("Khách hàng yêu cầu: ", ['size' => '12.5'],array_merge($this->indentFistLine, $this->keepNext));
-        $listItemRun1->addText($certificate->petitioner_name, ['size' => '12.5', 'bold' => true],array_merge($this->indentFistLine, $this->keepNext));
+        $listItemRun1 = $section->addListItemRun(0,'bullets');
+        $listItemRun1->addText("Khách hàng yêu cầu: ", ['size' => '12.5']);
+        $listItemRun1->addText($certificate->petitioner_name, ['size' => '12.5', 'bold' => true]);
         // $section->addListItem("Khách hàng yêu cầu: " . $certificate->petitioner_name,0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         $certificate->petitioner_birthday = '01/01/1970';
-        $section->addListItem("Ngày sinh: " . $certificate->petitioner_birthday,0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
-        $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card,0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
+        $section->addListItem("Ngày sinh: " . $certificate->petitioner_birthday,0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card,0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
-        $section->addListItem("Tài sản thẩm định giá: " . $this->getAssetName($certificate),0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
-        $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , ['size' => '12.5'], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
-        $listItemRun2 = $section->addListItemRun(0,'bullets',array_merge($this->indentFistLine, $this->keepNext));
-        $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5'],array_merge($this->indentFistLine, $this->keepNext));
-        $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true],array_merge($this->indentFistLine, $this->keepNext));
+        $section->addListItem("Tài sản thẩm định giá: " . $this->getAssetName($certificate),0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
+        $listItemRun2 = $section->addListItemRun(0,'bullets',['keepLines' => true]);
+        $listItemRun2->addText("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ", ['size' => '12.5']);
+        $listItemRun2->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['size' => '12.5', 'italic' => true]);
         // $section->addListItem("Đặc điểm pháp lý và kinh tế kỹ thuật của tài sản: ",0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         // $list1->addText("Chi tiết tại Báo cáo kết quả thẩm định giá kèm theo.", ['italic' => true, 'size' => '12.5']);
         // $section->addTextBreak(2);
         $appraise_date = date_create($certificate->appraise_date);
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Thời điểm thẩm định giá: ", ['size' => '12.5','bold' => true]);
+        $textRun->addText("Thời điểm thẩm định giá: ", ['size' => '12.5','bold' => true],array_merge($this->indentFistLine, $this->keepNext));
         $textRun->addText('Tháng ' . date_format($appraise_date, "m/Y") . '.', ['size' => '12.5','bold' => false]);
         $appraisePurpose = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
         $textRun1 = $section->addTextRun('Heading2');
