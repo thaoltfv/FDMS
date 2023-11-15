@@ -3568,7 +3568,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $ubndPrice = $objects['UBND_price'];
             $real_estate = $objects['real_estate'] ?? [];
             $isDuplicate = $this->checkDuplicateLandTypePurpose($totalArea);
-            if (!$isDuplicate)
+            // if (!$isDuplicate)
                 // if (isset($planningArea))
                 //     $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
             if (!$isDuplicate)
@@ -3652,6 +3652,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
                             }
                         }
+                        dd($AppraisePropertyDetailData);
                     }
                     if(! $isMain){
                         DB::rollBack();
