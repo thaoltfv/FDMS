@@ -121,13 +121,14 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                         } else {
                             $startFloor = intval($block['first_floor']);
                             $endFloor = intval($block['last_floor']);
+                            $totalFloor = intval($block['total_floors']);
 
                             $floorData = [];
                             for ($i=$startFloor; $i<=$endFloor; $i++) {
                                 $floorData[] = [
                                     'block_id' => $dataBlock->id,
                                     'status' => true,
-                                    'name' => $i
+                                    'name' => 'Tầng ' . $i
                                 ];
                             }
                             Floor::insert($floorData);
