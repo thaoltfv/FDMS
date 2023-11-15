@@ -4772,6 +4772,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'commission_fee',
                 'status_expired_at',
                 'document_type',
+                'note'
             ];
             $with = [
                 'appraisePurpose:id,name',
