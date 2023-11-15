@@ -550,7 +550,6 @@ class Appraise extends Model
             ->select($select)
             ->where(['appraise_property_id'=>$propertieId])
             ->where('total_area','>',0)
-            ->where(['is_zoning'=>false])
             ->get();
         return $result;
 
@@ -580,7 +579,6 @@ class Appraise extends Model
         $result = AppraisePropertyDetail::with($with)
             ->select($select)
             ->where(['appraise_property_id'=>$propertieId])
-            ->where(['is_zoning'=>false])
             ->get();
         return $result;
     }

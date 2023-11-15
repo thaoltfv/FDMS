@@ -3628,8 +3628,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     // $key =array_search(61, array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
                     if(isset($planningArea) && count($planningArea) >0){
                         foreach($planningArea as $planning){
-                            // $key =array_search($planning['land_type_purpose_id'], array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
-                            // if( ($key === false) ){
+                            $key =array_search($planning['land_type_purpose_id'], array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
+                            if( ($key === false) ){
                                 $AppraisePropertyDetailData[] =[
                                     'appraise_property_id'=> $propertieId,
                                     'land_type_purpose_id'=> $planning['land_type_purpose_id'],
@@ -3642,17 +3642,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                     'type_zoning'=>  $planning['type_zoning'],
                                     'is_zoning'=>  true,
                                 ];
-                            // }
-                            // else
-                            // {
-                            //     $mainArea = $AppraisePropertyDetailData[$key]['main_area'] - $planning['planning_area'];
-                            //     $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0 ;
-                            //     $AppraisePropertyDetailData[$key]['planning_area'] =  $planning['planning_area'] ;
-                            //     $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
-                            //     $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
-                            // }
+                            }
+                            else
+                            {
+                                $mainArea = $AppraisePropertyDetailData[$key]['main_area'] - $planning['planning_area'];
+                                $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0 ;
+                                $AppraisePropertyDetailData[$key]['planning_area'] =  $planning['planning_area'] ;
+                                $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
+                                $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
+                            }
                         }
-                        // dd($AppraisePropertyDetailData);
                     }
                     if(! $isMain){
                         DB::rollBack();
