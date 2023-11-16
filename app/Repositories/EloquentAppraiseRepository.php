@@ -3654,9 +3654,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 $AppraisePropertyDetailData[$key]['extra_planning'][] = [
                                     'land_type_purpose_id'=> $planning['land_type_purpose_id'],
                                     'planning_area'=>  $planning['planning_area'],
-                                    'type_zoning'=>  $planning['type_zoning'],
-                                    'appraise_property_id'=> $propertieId,
                                 ];
+                            }
                             dd($AppraisePropertyDetailData);
                         }
                     }
