@@ -39,6 +39,7 @@ class AppraisePropertyDetail extends Model
         'type_zoning',
         'planning_area',
         'main_area',
+        'extra_planning'
     ];
 
     public function landTypePurpose(): BelongsTo
