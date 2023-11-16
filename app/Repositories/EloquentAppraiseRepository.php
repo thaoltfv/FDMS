@@ -3565,7 +3565,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
             if ($planArea > $total) {
-                $result = ['message' => 'Diện tích quy hoạch không được lớn hơn diện sử dụng', 'exception' => ''];
+                $result = ['message' => 'Diện tích quy hoạch '.$item['land_type_purpose']['description'].' không được lớn hơn diện sử dụng', 'exception' => ''];
             }
         }
         return $result;
