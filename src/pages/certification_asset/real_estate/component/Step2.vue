@@ -523,8 +523,8 @@ export default {
       for (let i = 0; i < this.data.planning_area.length; i++) {
         const e = this.data.planning_area[i];
         if (e.extra_planning) {
-          // e.extra_planning = JSON.parse(e.extra_planning)
-          // console.log('đã parse', e.extra_planning)
+          e.extra_planning = JSON.parse(e.extra_planning)
+          console.log('đã parse', e.extra_planning)
           for (let index = 0; index < e.extra_planning.length; index++) {
             const element = e.extra_planning[index];
             new_planning.push({
@@ -539,6 +539,7 @@ export default {
       }
       if (new_planning.length > 0) {
         this.data.planning_area = new_planning
+        // return
       }
 		}
 		if (this.coordinates) {

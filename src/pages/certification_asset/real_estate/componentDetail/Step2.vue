@@ -497,16 +497,19 @@ export default {
 		}
 	},
 	mounted () {
+    console.log('this.data',this.data.planning_area.length)
 		if (this.data.planning_area.length > 0) {
+      let origin = this.data.planning_area
 			this.checkShowPlanning = true
       console.log('xử lý planning mới',this.data.planning_area)
       let new_planning = []
       for (let i = 0; i < this.data.planning_area.length; i++) {
         const e = this.data.planning_area[i];
+        console.log('-----', e)
         if (e.extra_planning) {
           // console.log('e.extra_planning',e.extra_planning)
-          // e.extra_planning = JSON.parse(e.extra_planning)
-          // console.log('đã parse', e.extra_planning)
+          e.extra_planning = JSON.parse(e.extra_planning)
+          console.log('đã parse', e.extra_planning.length)
           for (let index = 0; index < e.extra_planning.length; index++) {
             const element = e.extra_planning[index];
             new_planning.push({
