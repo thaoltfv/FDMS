@@ -3649,19 +3649,14 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 $planningArea = $AppraisePropertyDetailData[$key]['planning_area'] + $planning['planning_area'];
                                 $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0 ;
                                 $AppraisePropertyDetailData[$key]['planning_area'] =  $planningArea;
-                                if (isset($AppraisePropertyDetailData[$key]['type_zoning']) && $AppraisePropertyDetailData[$key]['type_zoning'] == ''){
-                                    $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
-                                }
+                                $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
                                 $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
-                                if (!isset($AppraisePropertyDetailData[$key]['extra_planning']) || (isset($AppraisePropertyDetailData[$key]['extra_planning']) && isset($AppraisePropertyDetailData[$key]['extra_planning']['type_zoning']) && $AppraisePropertyDetailData[$key]['extra_planning']['type_zoning'] !== $AppraisePropertyDetailData[$key]['type_zoning'])){
-                                    $AppraisePropertyDetailData[$key]['extra_planning'][] = [
-                                        'land_type_purpose_id'=> $planning['land_type_purpose_id'],
-                                        'planning_area'=>  $planning['planning_area'],
-                                        'type_zoning'=>  $planning['type_zoning'],
-                                        'appraise_property_id'=> $propertieId,
-                                    ];
-                                }
-                                
+                                $AppraisePropertyDetailData[$key]['extra_planning'][] = [
+                                    'land_type_purpose_id'=> $planning['land_type_purpose_id'],
+                                    'planning_area'=>  $planning['planning_area'],
+                                    'type_zoning'=>  $planning['type_zoning'],
+                                    'appraise_property_id'=> $propertieId,
+                                ];
                             }
                         }
                         dd($AppraisePropertyDetailData);
