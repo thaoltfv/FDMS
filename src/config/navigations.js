@@ -1,5 +1,5 @@
 export let navigations = []
-if (process.env.API_URL === 'https://trial-api.fastvalue.com.vn') {
+if (process.env.API_URL === 'https://trial-api.fastvalue.com.vn' || process.env.API_URL === 'https://vavc-api.fastvalue.vn') {
 	navigations = [
 		{ id: 'dashboard', type: 'item', icon: 'chart-line', title: 'Dashboard', routeName: 'dashboard.index', exact: true },
 		{ id: 'certification_brief', type: 'item', icon: 'nav_hstd', title: 'Hồ sơ thẩm định', routeName: 'certification_brief.index', customImage: true },
