@@ -3708,6 +3708,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             return $data;
                         }
                         $sumArea  = $sumArea + $data['total_area'];
+                        $data['extra_planning'] = json_encode($data['extra_planning']);
                         $propertieDetail = new AppraisePropertyDetail($data);
                         QueryBuilder::for($propertieDetail)
                         ->insert($propertieDetail->attributesToArray());
