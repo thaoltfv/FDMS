@@ -18,7 +18,7 @@ interface BuildingPriceRepository extends BaseRepository
 
     public function getAverageBuildPrice();
 
-    public function getAverageBuildPriceNew($object);
+    public function getAverageBuildPriceNew();
 
     public function getAverageBuildEstimatePrice($object);
 

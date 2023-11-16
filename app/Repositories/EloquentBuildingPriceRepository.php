@@ -557,17 +557,17 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
         return $result;
     }
 
-    public function getAverageBuildPriceNew($object)
+    public function getAverageBuildPriceNew()
     {
         // dd('province_id', $province_id);
-        $buildingCategory = $object['building_type_id'];
-        $level = $object['building_category_id'] ;
-        $rate = $object['rate_id'];
-        $structure = $object['structure_id'];
-        $crane = $object['crane_id'];
-        $aperture = $object['aperture_id'];
-        $factoryType = $object['factory_type_id'];
-        $province_id = $object['province_id'];
+        $buildingCategory = request()->get('building_category');
+        $level = request()->get('level');
+        $rate = request()->get('rate');
+        $structure = request()->get('structure');
+        $crane = request()->get('crane');
+        $aperture = request()->get('aperture');
+        $factoryType = request()->get('factory_type');
+        $province_id = request()->get('province_id');
 
         if(!isset($buildingCategory))
             return 0;
