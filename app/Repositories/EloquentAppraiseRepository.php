@@ -3544,7 +3544,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $total = $item['total_area'];
             $planArea = 0;
             if ($key !== false) {
-                $planArea = $planningArea[$key]['planning_area'];
+                $planArea += $planningArea[$key]['planning_area'];
             }
             if ($planArea > $total) {
                 $result = ['message' => 'Diện tích quy hoạch không được lớn hơn diện sử dụng', 'exception' => ''];
