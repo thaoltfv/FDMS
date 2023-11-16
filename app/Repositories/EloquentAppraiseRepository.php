@@ -3641,6 +3641,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                     'planning_area'=>  $planning['planning_area'],
                                     'type_zoning'=>  $planning['type_zoning'],
                                     'is_zoning'=>  true,
+                                    'extra_planning' => []
                                 ];
                             }
                             else
