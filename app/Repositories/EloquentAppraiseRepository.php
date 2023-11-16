@@ -3541,11 +3541,28 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         foreach ($totalArea as $item) {
             $landTypeId = $item['land_type_purpose_id'];
             $key =array_search($landTypeId, array_column($planningArea, 'land_type_purpose_id'));
-            print_r($key);
             $total = $item['total_area'];
             $planArea = 0;
             if ($key !== false) {
                 $planArea = $planningArea[$key]['planning_area'];
+            }
+            if ($planArea > $total) {
+                $result = ['message' => 'Diện tích quy hoạch không được lớn hơn diện sử dụng', 'exception' => ''];
+            }
+        }
+        return $result;
+    }
+
+    private function checkPlanningArea1($totalArea , $planningArea) {
+        $result = null;
+        foreach ($totalArea as $item) {
+            $landTypeId = $item['land_type_purpose_id'];
+            $total = $item['total_area'];
+            $planArea = 0;
+            foreach ($planningArea as $y) {
+                if ($y['land_type_purpose_id'] == $landTypeId){
+                    $planArea = $planArea + intval($y['planning_area']);
+                }
             }
             if ($planArea > $total) {
                 $result = ['message' => 'Diện tích quy hoạch không được lớn hơn diện sử dụng', 'exception' => ''];
@@ -3577,7 +3594,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             if ($isDuplicate) {
                 return ['message' => 'Trùng mục đích sử dụng. Vui lòng kiểm tra lại' , 'exception' => ''];
             }
-            $check = $this->checkPlanningArea($totalArea, $planningArea);
+            $check = $this->checkPlanningArea1($totalArea, $planningArea);
             if (isset($check))
                 return $check;
             if (AppraiseProperty::where('appraise_id', '=',$appraiseId)->exists()) {
