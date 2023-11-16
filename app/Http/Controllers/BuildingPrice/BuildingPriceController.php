@@ -147,4 +147,23 @@ class BuildingPriceController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getAverageBuildPriceNew(): JsonResponse
+    {
+        try {
+            //if ($this->getUserPermission(PermissionsDefault::VIEW_PERMISSION . '_' . ScreensDefault::CATEGORY_SCREEN)) {
+                return $this->respondWithCustomData($this->buildingPriceRepository->getAverageBuildPriceNew());
+            /* } else {
+                $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                return $this->respondWithErrorData($data, 403);
+            } */
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }

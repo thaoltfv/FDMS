@@ -186,7 +186,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/building-prices', [BuildingPriceController::class, 'findAll']);
 
-    Route::get('/building-prices/average-building-price', [BuildingPriceController::class, 'getAverageBuildPrice']);
+    Route::get('/building-prices/average-building-price', [BuildingPriceController::class, 'getAverageBuildPriceNew']);
 
     Route::apiResource('unit-price', UnitPriceController::class);
 
