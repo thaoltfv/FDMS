@@ -3699,7 +3699,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         return $data;
                     }
                     $sumArea = 0.00;
-                    dd($AppraisePropertyDetailData);
+                    // dd($AppraisePropertyDetailData);
                     foreach($AppraisePropertyDetailData as $data)
                     {
                         if(!isset($data['position_type_id'])){
