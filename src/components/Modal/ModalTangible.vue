@@ -627,8 +627,9 @@ export default {
 			const crane = this.form.crane_id
 			const aperture = this.form.aperture_id
 			const factory_type = this.form.factory_type_id
+      const province_id = this.info.province_id
 			if ((this.form.building_category_id !== '' && this.form.building_category_id !== undefined && this.form.building_category_id !== null && this.form.rate_id !== '' && this.form.rate_id !== undefined && this.form.rate_id !== null) || (this.form.structure_id !== '' && this.form.structure_id !== undefined && this.form.structure_id !== null && this.form.rate_id !== '' && this.form.rate_id !== undefined && this.form.rate_id !== null) || (this.form.crane_id !== '' && this.form.crane_id !== undefined && this.form.crane_id !== null && this.form.aperture_id !== '' && this.form.aperture_id !== undefined && this.form.aperture_id !== null && this.form.factory_type_id !== '' && this.form.factory_type_id !== undefined && this.form.factory_type_id !== null)) {
-				const resp = await WareHouse.getBuildingPrices(building_category, level, rate, structure, crane, aperture, factory_type)
+				const resp = await WareHouse.getBuildingPrices(building_category, level, rate, structure, crane, aperture, factory_type, province_id)
 				this.form.unit_price_m2 = parseInt(resp.data)
 			} else {
 				this.form.unit_price_m2 = 0
