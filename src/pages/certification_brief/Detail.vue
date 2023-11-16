@@ -57,6 +57,10 @@
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline">Chiết khấu:</strong> <p>{{form.commission_fee ? form.commission_fee : 0}}%</p>
 										</div>
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline">Ghi chú:</strong><span  id="note" class="text-left">{{ form.note.length > 25 ? form.note.substring(25,0)+'...' : form.note}}</span>
+											<b-tooltip target="note" placement="top-right">{{ form.note }}</b-tooltip>
+										</div>
 									</div>
 								</div>
 								<div class="col-md-12 col-lg-6 mt-1">
@@ -782,7 +786,8 @@ export default {
 				customer_request: '',
 				appraises: [],
 				other_documents: [],
-				document_type: []
+				document_type: [],
+				note:''
 			},
 			file: '',
 			documentAppraise: [],
@@ -1251,7 +1256,7 @@ export default {
 				duration: 3000
 			})
 		},
-		updateAppraiseInformation (dataAppraiseInformation) {
+		updateAppraiseInformation (dataAppraiseInformation) {		
 			this.form.appraise_date = dataAppraiseInformation.appraise_date
 			this.form.appraise_purpose_id = dataAppraiseInformation.appraise_purpose_id
 			this.form.appraise_purpose = dataAppraiseInformation.appraise_purpose
@@ -1266,6 +1271,7 @@ export default {
 			this.form.commission_fee = dataAppraiseInformation.commission_fee
 			this.form.petitioner_identity_card = dataAppraiseInformation.petitioner_identity_card
 			this.form.document_type = dataAppraiseInformation.document_type
+			this.form.note = dataAppraiseInformation.note
 		},
 		updateAppraisal (dataAppraisal) {
 			this.form.appraiser_perform = dataAppraisal.appraiser_perform

@@ -187,6 +187,23 @@ export default {
 		},
 		async saveOtherAsset () {
 			const data = { price: this.form }
+			if(data.price.unit_price <= 0)
+			{
+				this.$toast.open({
+					message: 'Vui lòng nhập đơn giá lớn hơn 0',
+					type: 'error',
+					position: 'top-right'
+				})
+				return
+			} else if(data.price.quantity <= 0)
+			{
+				this.$toast.open({
+					message: 'Vui lòng nhập số lượng lớn hơn 0',
+					type: 'error',
+					position: 'top-right'
+				})
+				return
+			}
 			const res = await CertificateAsset.submitOtherStep4(this.idData, data)
 			if (res.data) {
 				this.$toast.open({
