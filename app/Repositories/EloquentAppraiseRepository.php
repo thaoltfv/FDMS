@@ -3641,7 +3641,6 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                     'planning_area'=>  $planning['planning_area'],
                                     'type_zoning'=>  $planning['type_zoning'],
                                     'is_zoning'=>  true,
-                                    'extra_planning' => []
                                 ];
                             }
                             else
@@ -3654,7 +3653,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                     $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
                                 }
                                 $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
-                                if ($AppraisePropertyDetailData[$key]['extra_planning']['type_zoning'] !== $AppraisePropertyDetailData[$key]['type_zoning']){
+                                if (!isset($AppraisePropertyDetailData[$key]['extra_planning']) || (isset($AppraisePropertyDetailData[$key]['extra_planning']) && $AppraisePropertyDetailData[$key]['extra_planning']['type_zoning'] !== $AppraisePropertyDetailData[$key]['type_zoning'])){
                                     $AppraisePropertyDetailData[$key]['extra_planning'][] = [
                                         'land_type_purpose_id'=> $planning['land_type_purpose_id'],
                                         'planning_area'=>  $planning['planning_area'],
