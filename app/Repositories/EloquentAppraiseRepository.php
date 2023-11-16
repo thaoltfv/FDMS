@@ -3541,7 +3541,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         foreach ($totalArea as $item) {
             $landTypeId = $item['land_type_purpose_id'];
             $key =array_search($landTypeId, array_column($planningArea, 'land_type_purpose_id'));
-            dd($key);
+            print_r($key);
             $total = $item['total_area'];
             $planArea = 0;
             if ($key !== false) {
