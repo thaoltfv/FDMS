@@ -921,16 +921,16 @@ export default {
 					ward_code: this.emWardCode
 					}
 					await File.getInfoByLand({ data: formdata }).then((response) => {
-					console.log('response result',response)
+					// console.log('response result',response)
 					let datafinal = response.data.data
 					//   let that = this
-					console.log('data final', datafinal)
+					// console.log('data final', datafinal)
 					if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
 						this.dataResult = datafinal.data
 						this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
 						//xử lý tọa độ
 						this.seg_data = this.dataResult  ? this.dataResult.seg_data :  []
-						
+						console.log('data seg', this.seg_data)
 						for (let i = 0; i < this.seg_data.length; i++) {
 							let item = this.seg_data[i].geometry.coordinates
 							let f2 = item[0][0], l2 = item[0][1], f1 = item[1][0], l1 = item[1][1];
