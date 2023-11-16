@@ -3659,7 +3659,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 ];
                             }
                         }
-                        dd($AppraisePropertyDetailData);
+                        // dd($AppraisePropertyDetailData);
                     }
                     if(! $isMain){
                         DB::rollBack();
