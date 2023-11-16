@@ -13,7 +13,7 @@
         class="modal-detail d-flex justify-content-center align-items-center"
         @click.self="handleCancel">
         <div class="card">
-          <iframe style="height: 100vh;" :src="print_detail" frameborder="0"></iframe>
+          <iframe style="height: 100dvh;" :src="print_detail" frameborder="0"></iframe>
         </div>
       </div>
   </div>
@@ -84,7 +84,7 @@ export default {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     max-width: 1300px;
     width: 100%;
-    max-height: 100vh;
+    max-height: 100dvh;
     background: transparent;
     overflow-y: auto;
     margin-bottom: 0;

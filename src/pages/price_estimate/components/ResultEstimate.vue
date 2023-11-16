@@ -110,7 +110,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   &__result {
-    //min-height: calc(100vh - 68px);
+    //min-height: calc(100dvh - 68px);
     max-width: 1710px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
     border-radius: 5px;

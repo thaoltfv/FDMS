@@ -141,6 +141,9 @@ export default class WareHouse extends Model {
 	static async getBuildingPrices (building_category, level, rate, structure, crane, aperture, factory_type) {
 		return (new this()).request({ method: 'GET', url: `building-prices/average-building-price?building_category=${building_category}&level=${level}&rate=${rate}&structure=${structure}&crane=${crane}&aperture=${aperture}&factory_type=${factory_type}`, isStatic: true })
 	}
+	static async getBuildingPricesNew (building_category, level, rate, structure, crane, aperture, factory_type, province_id) {
+		return (new this()).request({ method: 'GET', url: `building-prices/average-building-price?building_category=${building_category}&province_id=${province_id}&level=${level}&rate=${rate}&structure=${structure}&crane=${crane}&aperture=${aperture}&factory_type=${factory_type}`, isStatic: true })
+	}
 	static async getApartment () {
 		return (new this()).request({ method: 'GET', url: `apartments`, isStatic: true })
 	}

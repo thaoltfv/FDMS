@@ -370,6 +370,7 @@ px
 							:maxZoom="20"
 							:options="{ zoomControl: false }"
 							@click="choosePoint($event)"
+							@update:zoom="updateZoom"
 						>
 							<l-tile-layer
 								:url="url"
@@ -435,7 +436,14 @@ px
 								</l-icon>
 								<l-tooltip>Vị trí tài sản</l-tooltip>
 							</l-marker>
-							<l-geo-json :geojson="geo_data"></l-geo-json>
+							<!-- <l-geo-json :geojson="geo_data"></l-geo-json> -->
+							<l-feature-group ref="features">
+								<l-geo-json :key="seg_key" :geojson="seg_data" :options="options" ></l-geo-json>
+							</l-feature-group>
+							<l-polygon
+								:lat-lngs="seg_data"
+								color="green"
+							></l-polygon>
 							<l-control position="topleft">
 								<button v-if="dataResult.length > 0"
 									class="btn btn-orange mini_btn"
@@ -480,7 +488,10 @@ import {
 	LIcon,
 	LControl,
 	LControlLayers,
-	LGeoJson
+	LGeoJson,
+	LPopup,
+	LFeatureGroup,
+	LPolygon
 } from "vue2-leaflet";
 import Vue from "vue";
 import Icon from "buefy";
@@ -504,14 +515,18 @@ export default {
 		LTooltip,
 		LControl,
 		LIcon,
+		LPopup,
 		InputText,
 		LControlLayers,
 		LGeoJson,
 		InputSwitchToThua,
-		InputCategory
+		InputCategory,
+		LFeatureGroup,
+		LPolygon
 	},
 	data() {
 		return {
+			seg_key: 0,
 			progress: 0,
 			emptyColorFill: {
 			radial: false,
@@ -591,7 +606,8 @@ export default {
 			emSoThuaCode: '',
 			isOpenLoading: false,
 			runProgress: true,
-            resizeWidth: '95vw'
+            resizeWidth: '95vw',
+			seg_data: null,
 		};
 	},
     watch: {
@@ -603,9 +619,106 @@ export default {
             } else {
                 this.resizeWidth = '95vw'
             }
-        }
+        },
     },
 	computed: {
+		options() {
+			return {
+				onEachFeature: this.onEachFeatureFunction
+			};
+		},
+		onEachFeatureFunction() {
+			return (feature, layer) => {
+				// console.log('jhjhjhjjhjhj',this.map.zoom)
+				let final_length = feature.properties.length.toFixed(1)
+				// console.log('final_length',final_length.slice(final_length.indexOf('.') + 1))
+				//xử lý font
+				let m_font_size = '16px'
+				let m_font_color = '#00007c'
+				let m_font_weight = 'bold'
+				if (this.map.zoom >= 17  && this.map.zoom <  18) {
+					m_font_size = '14px'
+				}
+				if (this.map.zoom >= 18  && this.map.zoom <  19) {
+					m_font_size = '13px'
+				}
+				if (this.map.zoom >= 19  && this.map.zoom <  20) {
+					m_font_size = '12px'
+				}
+				if (this.map.zoom >= 20  && this.map.zoom <  21) {
+					m_font_size = '11px'
+				}
+
+
+				if (final_length.slice(final_length.indexOf('.') + 1) == '0'){
+					final_length = feature.properties.length.toFixed(0)
+				}
+				if ( (this.map.zoom >= 17 && this.map.zoom < 18 && feature.properties.length > 60) && (!layer.getTooltip()) ) {
+					// console.log('vô vẽ nè 1',feature.properties.length.toFixed(1))
+					layer.bindTooltip(
+						"<div class='test' style='transform: rotate("+feature.angle+"deg); padding-top: 20px; font-size: "+m_font_size+"; font-weight: "+m_font_weight+"; color: "+m_font_color+"'>" +
+							final_length + ' m' +
+								"</div>",
+									{ interactive: true, direction: 'center',
+						permanent: true,
+						sticky: false,
+						offset: [0, 0],
+						className: 'leaflet-tooltip-own'  }
+					); 
+				} else if (layer.getTooltip() && feature.properties.length < 60 ){
+                    //console.log('remove tooltip');
+                    layer.unbindTooltip()
+                }
+				if ((this.map.zoom >= 18 && this.map.zoom < 19 && feature.properties.length > 40) && (!layer.getTooltip()) ) {
+					// console.log('vô vẽ nè 2',feature.properties.length.toFixed(1))
+					layer.bindTooltip(
+						"<div class='test' style='transform: rotate("+feature.angle+"deg); padding-top: 25px; font-size: "+m_font_size+"; font-weight: "+m_font_weight+"; color: "+m_font_color+"'>" +
+							final_length + ' m' +
+								"</div>",
+									{ interactive: true, direction: 'center',
+						permanent: true,
+						sticky: false,
+						offset: [0, 0],
+						className: 'leaflet-tooltip-own'  }
+					); 
+				} else if (layer.getTooltip() && feature.properties.length < 40 ){
+                    //console.log('remove tooltip');
+                    layer.unbindTooltip()
+                }
+				if ((this.map.zoom >= 19 && this.map.zoom < 20 && feature.properties.length > 20) && (!layer.getTooltip()) ) {
+					// console.log('vô vẽ nè 3',feature.properties.length.toFixed(1))
+					layer.bindTooltip(
+						"<div class='test' style='transform: rotate("+feature.angle+"deg); padding-top: 30px; font-size: "+m_font_size+"; font-weight: "+m_font_weight+"; color: "+m_font_color+"'>" +
+							final_length + ' m' +
+								"</div>",
+									{ interactive: true, direction: 'center',
+						permanent: true,
+						sticky: false,
+						offset: [0, 0],
+						className: 'leaflet-tooltip-own'  }
+					); 
+				} else if (layer.getTooltip() && feature.properties.length < 20 ){
+                    //console.log('remove tooltip');
+                    layer.unbindTooltip()
+                }
+				if ( (this.map.zoom >= 20 && this.map.zoom < 21 && feature.properties.length > 0) && (!layer.getTooltip()) ) {
+					// console.log('vô vẽ nè 4',feature.properties.length.toFixed(1))
+					layer.bindTooltip(
+						"<div class='test' style='transform: rotate("+feature.angle+"deg); padding-top: 35px; font-size: "+m_font_size+"; font-weight: "+m_font_weight+"; color: "+m_font_color+"'>" +
+							final_length + ' m' +
+								"</div>",
+									{ interactive: true, direction: 'center',
+						permanent: true,
+						sticky: false,
+						offset: [0, 0],
+						className: 'leaflet-tooltip-own'  }
+					); 
+				} else if (layer.getTooltip() && feature.properties.length < 0 ){
+                    //console.log('remove tooltip');
+                    layer.unbindTooltip()
+                }
+			};
+		},
         navExp() {
             console.log('store',this.$store.getters.navExp)
             return this.$store.getters.navExp
@@ -683,6 +796,10 @@ export default {
         }
 	},
 	methods: {
+		updateZoom(zoom) {
+			this.map.zoom = zoom
+			this.seg_key++
+		},
 		changeProvince (code) {
 			this.listDistrict =  []
 			this.emDistrictCode = ''
@@ -705,6 +822,7 @@ export default {
 		getEmCode() {
 			if (this.tinhthanh){
 				if (this.listCity.length > 0) {
+					let checkcotinh = 0
 					for (let i = 0; i < this.listCity.length; i++) {
 						let e = this.listCity[i]
 						if (e.name_with_type.toLowerCase()  == this.tinhthanh.toLowerCase() || e.name.toLowerCase() == this.tinhthanh.toLowerCase()) {
@@ -718,6 +836,7 @@ export default {
 										this.listDistrict.push(districtJson [i])
 									
 									if (this.listDistrict.length > 0) {
+										let checkcohuyen = 0
 										for (let i = 0; i < this.listDistrict.length; i++) {
 											let q = this.listDistrict[i]
 											if (q.name_with_type.toLowerCase()  == this.quanhuyen.toLowerCase() || q.name.toLowerCase() == this.quanhuyen.toLowerCase()) {
@@ -736,6 +855,7 @@ export default {
 															this.listWard.push(wardJson [i])
 
 														if (this.listWard.length > 0) {
+															let checkcoxa = 0
 															for (let i = 0; i < this.listWard.length; i++) {
 																let x = this.listWard[i]
 																console.log('x',this.phuongxa)
@@ -744,15 +864,24 @@ export default {
 																	this.emWardCode = x.code
 																}
 															}
+															if (checkcoxa == 0) {
+																return
+															}
 														}
 													}
 												}
 											}
 										}
+										if (checkcohuyen == 0) {
+											return
+										}
 									}
 								}
 							}
 						}
+					}
+					if (checkcotinh == 0) {
+						return
 					}
 				}
 			} else {
@@ -792,13 +921,52 @@ export default {
 					ward_code: this.emWardCode
 					}
 					await File.getInfoByLand({ data: formdata }).then((response) => {
-					console.log('response result',response)
+					// console.log('response result',response)
 					let datafinal = response.data.data
 					//   let that = this
-					console.log('data final', datafinal)
+					// console.log('data final', datafinal)
 					if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
 						this.dataResult = datafinal.data
 						this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
+						//xử lý tọa độ
+						this.seg_data = this.dataResult  ? this.dataResult.seg_data :  []
+						console.log('data seg', this.seg_data)
+						for (let i = 0; i < this.seg_data.length; i++) {
+							let item = this.seg_data[i].geometry.coordinates
+							let f2 = item[0][0], l2 = item[0][1], f1 = item[1][0], l1 = item[1][1];
+							let toRadian = Math.PI / 180;
+							let y = Math.sin((l2 - l1) * toRadian) * Math.cos(f2 * toRadian);
+							let x = Math.cos(f1 * toRadian) * Math.sin(f2 * toRadian) - Math.sin(f1 * toRadian) * Math.cos(f2 * toRadian) * Math.cos((l2 - l1) * toRadian);
+							let brng = Math.atan2(y, x) * (180 / Math.PI);
+							brng += brng < 0 ? 360 : 0;
+							this.seg_data[i].brng = brng
+							if ((brng < 360 && brng + 20 > 360) || (brng > 100 && brng < 110)) {
+								this.seg_data[i].angle = (brng - 10).toFixed(0)
+							} else if ((brng >= 79 && brng < 90)) {
+								this.seg_data[i].angle = (brng + 10).toFixed(0)
+							} else if ((brng >= 180 && brng < 190)) {
+								this.seg_data[i].angle = (brng + 180).toFixed(0)
+							} else if ((brng > 180 && brng < 190)) {
+								this.seg_data[i].angle = (brng+180).toFixed(0)
+							} else if ((brng > 90 && brng < 100) || (brng >= 0 && brng < 10) || (brng > 270 && brng < 280)|| (brng > 80 && brng < 90) || (brng > 260 && brng < 270)) {
+								this.seg_data[i].angle = brng.toFixed(0)
+							} else if (brng < 180 && brng + 20 > 170 && brng + 20 < 180) {
+								this.seg_data[i].angle = (brng + 140).toFixed(0)
+							} else if (brng < 180 && brng + 20 > 160 && brng + 20 < 170) {
+								this.seg_data[i].angle = (brng + 150).toFixed(0)
+							} else if (brng < 180 && brng + 50 > 170 && brng + 50 < 180) {
+								this.seg_data[i].angle = (brng - 20).toFixed(0)
+							}  else if (brng < 180 && brng + 20 < 170) {
+								this.seg_data[i].angle = (brng + 20).toFixed(0)
+							} else if (brng < 180 && brng + 20 > 180) {
+								this.seg_data[i].angle = (brng + 170).toFixed(0)
+							} else if ((brng > 270 && brng + 60 > 360) || (brng > 130 &&  brng < 140)) {
+								this.seg_data[i].angle = (brng - 30).toFixed(0)
+							} else {
+								this.seg_data[i].angle = (brng - 160).toFixed(0)
+							}
+						}
+
 						this.modalGeoInfo = true
 						this.isOpen  = false
 						this.map.center = [
@@ -916,6 +1084,44 @@ export default {
           if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
             this.dataResult = datafinal.data
             this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
+		
+			//xử lý tọa độ
+			this.seg_data = this.dataResult  ? this.dataResult.seg_data :  []
+			
+			for (let i = 0; i < this.seg_data.length; i++) {
+				let item = this.seg_data[i].geometry.coordinates
+				let f2 = item[0][0], l2 = item[0][1], f1 = item[1][0], l1 = item[1][1];
+				let toRadian = Math.PI / 180;
+				let y = Math.sin((l2 - l1) * toRadian) * Math.cos(f2 * toRadian);
+				let x = Math.cos(f1 * toRadian) * Math.sin(f2 * toRadian) - Math.sin(f1 * toRadian) * Math.cos(f2 * toRadian) * Math.cos((l2 - l1) * toRadian);
+				let brng = Math.atan2(y, x) * (180 / Math.PI);
+				brng += brng < 0 ? 360 : 0;
+				this.seg_data[i].brng = brng
+				if ((brng < 360 && brng + 20 > 360) || (brng > 100 && brng < 110)) {
+					this.seg_data[i].angle = (brng - 10).toFixed(0)
+				} else if ((brng >= 79 && brng < 90)) {
+					this.seg_data[i].angle = (brng + 10).toFixed(0)
+				} else if ((brng >= 180 && brng < 190)) {
+					this.seg_data[i].angle = (brng + 180).toFixed(0)
+				}else if ((brng > 90 && brng < 100) || (brng >= 0 && brng < 10) || (brng > 270 && brng < 280)|| (brng > 80 && brng < 90) || (brng > 260 && brng < 270)) {
+					this.seg_data[i].angle = brng.toFixed(0)
+				}else if (brng < 180 && brng + 20 > 170 && brng + 20 < 180) {
+					this.seg_data[i].angle = (brng + 140).toFixed(0)
+				} else if (brng < 180 && brng + 20 > 160 && brng + 20 < 170) {
+					this.seg_data[i].angle = (brng + 150).toFixed(0)
+				} else if (brng < 180 && brng + 50 > 170 && brng + 50 < 180) {
+					this.seg_data[i].angle = (brng - 20).toFixed(0)
+				}  else if (brng < 180 && brng + 20 < 170) {
+					this.seg_data[i].angle = (brng + 20).toFixed(0)
+				} else if (brng < 180 && brng + 20 > 180) {
+					this.seg_data[i].angle = (brng + 170).toFixed(0)
+				} else if ((brng > 270 && brng + 60 > 360) || (brng > 130 &&  brng < 140)) {
+					this.seg_data[i].angle = (brng - 30).toFixed(0)
+				} else {
+					this.seg_data[i].angle = (brng - 160).toFixed(0)
+				}
+			}
+
             this.modalGeoInfo = true
 			this.phuongxa_code = this.dataResult.attributes.level_3
 			this.quanhuyen_code = this.dataResult.attributes.level_2
@@ -1193,6 +1399,11 @@ export default {
 	100% { transform: scale(1,1)      translateY(0); }
 }
 
+/deep/ .leaflet-tooltip {
+	background: none !important;;
+	border: none !important;
+	box-shadow: none !important;
+}
 .modal-delete {
 	// position: fixed;
     position: relative;
@@ -1211,8 +1422,8 @@ export default {
 		height: 90vh;
 		margin-bottom: 0;
 		@media (max-width: 767px) {
-			max-width: 100vh;
-			height: 100vh;
+			max-width: 100dvh;
+			height: 100dvh;
 		}
 		&-header {
 			border-bottom: 1px solid #dddddd;
@@ -1248,7 +1459,7 @@ export default {
 		//  }
 		//  @media (max-width: 767px) {
 		//    max-width: 100vw;
-		//    height: 100vh;
+		//    height: 100dvh;
 		//  }
 		//}
 	}
@@ -1473,4 +1684,7 @@ export default {
   margin-bottom: 25px;
   color: #000000;
 }
+
+
+
 </style>

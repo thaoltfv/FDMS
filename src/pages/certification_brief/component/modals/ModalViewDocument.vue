@@ -407,7 +407,7 @@ export default {
       top: 0;
       left: 0;
       right: 0;
-      height: 100vh;
+      height: 100dvh;
       background: rgba(0, 0, 0, 0.62);
       z-index: 100000;
       display: flex;
