@@ -3553,6 +3553,24 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $result;
     }
 
+    private function checkPlanningArea1($totalArea , $planningArea) {
+        $result = null;
+        foreach ($totalArea as $item) {
+            $landTypeId = $item['land_type_purpose_id'];
+            $total = $item['total_area'];
+            $planArea = 0;
+            foreach ($planningArea as $y) {
+                if ($y['land_type_purpose_id'] == $landTypeId){
+                    $planArea = $planArea + intval($y['planning_area']);
+                }
+            }
+            if ($planArea > $total) {
+                $result = ['message' => 'Diện tích quy hoạch '.strtolower($item['land_type_purpose']['description']).' không được lớn hơn diện sử dụng', 'exception' => ''];
+            }
+        }
+        return $result;
+    }
+
     public function postLandDetailInfomation(array $objects , int $appraiseId)
     {
         DB::beginTransaction();
@@ -3568,7 +3586,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $ubndPrice = $objects['UBND_price'];
             $real_estate = $objects['real_estate'] ?? [];
             $isDuplicate = $this->checkDuplicateLandTypePurpose($totalArea);
-            if (!$isDuplicate)
+            // if (!$isDuplicate)
                 // if (isset($planningArea))
                 //     $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
             if (!$isDuplicate)
@@ -3576,7 +3594,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             if ($isDuplicate) {
                 return ['message' => 'Trùng mục đích sử dụng. Vui lòng kiểm tra lại' , 'exception' => ''];
             }
-            $check = $this->checkPlanningArea($totalArea, $planningArea);
+            $check = $this->checkPlanningArea1($totalArea, $planningArea);
             if (isset($check))
                 return $check;
             if (AppraiseProperty::where('appraise_id', '=',$appraiseId)->exists()) {
@@ -3646,12 +3664,20 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             else
                             {
                                 $mainArea = $AppraisePropertyDetailData[$key]['main_area'] - $planning['planning_area'];
+                                $planningArea = $AppraisePropertyDetailData[$key]['planning_area'] + $planning['planning_area'];
                                 $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0 ;
-                                $AppraisePropertyDetailData[$key]['planning_area'] =  $planning['planning_area'] ;
+                                $AppraisePropertyDetailData[$key]['planning_area'] =  $planningArea;
                                 $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
                                 $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
+                                $AppraisePropertyDetailData[$key]['extra_planning'][] = [
+                                    'land_type_purpose_id'=> $planning['land_type_purpose_id'],
+                                    'planning_area'=>  $planning['planning_area'],
+                                    'type_zoning'=>  $planning['type_zoning'],
+                                    'appraise_property_id'=> $propertieId,
+                                ];
                             }
                         }
+                        // dd($AppraisePropertyDetailData);
                     }
                     if(! $isMain){
                         DB::rollBack();
@@ -3682,6 +3708,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             return $data;
                         }
                         $sumArea  = $sumArea + $data['total_area'];
+                        if (isset($data['extra_planning'])) {
+                            $data['extra_planning'] = json_encode($data['extra_planning']);
+                        }
+                        
                         $propertieDetail = new AppraisePropertyDetail($data);
                         QueryBuilder::for($propertieDetail)
                         ->insert($propertieDetail->attributesToArray());

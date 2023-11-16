@@ -6,9 +6,84 @@ use App\Services\Document\DocumentInterface\Report;
 use Carbon\Carbon;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
+use PhpOffice\PhpWord\PhpWord;
 
 class ReportCertificate extends Report
 {
+    public function printFooter(Section $section, $data, $indentLeft = 0, $indentRight = 0)
+    {
+        $footer = $section->addFooter();
+        $strFooter = $this->getFooterString($data);
+        $table = $footer->addTable();
+        $table->addRow();
+        $table->addCell(4500)->addText($strFooter, array('size' => 8), array('align' => 'left', 'indentation' => array('left' => $indentLeft)));
+        $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right',  'indentation' => array('right' => $indentRight)));
+    }
+        protected function processData ($data, $documentConfig)
+    {
+        $this->envDocument = config('services.document_service.document_module');
+        $this->createdName = !empty($data->createdBy) ? CommonService::withoutAccents($data->createdBy->name) : '';
+        $this->logoUrl = storage_path('app/public/' . env('STORAGE_IMAGES','images').'/'.'company_logo.png');
+        if (!empty($documentConfig)) {
+            $this->documentConfig = $documentConfig;
+            $this->certificateNumberSuffix = $documentConfig->where('slug', 'certificatte_number_suffix')->first()->value ?: '';
+            $this->certificateNumberPrefix = $documentConfig->where('slug', 'certificatte_number_prefix')->first()->value ?: '';
+            $this->documentNumberSuffix = $documentConfig->where('slug', 'document_number_suffix')->first()->value ?: '';
+            $this->documentNumberPrefix = $documentConfig->where('slug', 'document_number_prefix')->first()->value ?: '';
+            $this->contractCodeSuffix = $documentConfig->where('slug', 'contract_code_suffix')->first()->value ?: '';
+            $this->contractCodePrefix = $documentConfig->where('slug', 'contract_code_prefix')->first()->value ?: '';
+            $this->documentWatermask = $documentConfig->where('slug', 'print_watermask')->first()->value ?: '';
+
+        }
+        // Report code
+        if(isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
+            $this->reportCode = $this->documentNumberPrefix . $data->certificate_num . $this->documentNumberSuffix;
+        } else {
+            $this->reportCode = $this->documentNumberPrefix . '            ' . $this->documentNumberSuffix;
+        }
+        // Certificate code
+        if(isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
+            $this->certificateCode = $this->certificateNumberPrefix . $data->certificate_num . $this->certificateNumberSuffix;
+        } else {
+            $this->certificateCode = $this->certificateNumberPrefix . '            ' . $this->certificateNumberSuffix;
+        }
+        //Contract code
+        if(isset($data->document_num) && !empty(trim($data->document_num))) {
+            $this->contractCode = $this->contractCodePrefix . $data->document_num . $this->contractCodeSuffix;
+        } else {
+            $this->contractCode = $this->contractCodePrefix . '            ' . $this->contractCodeSuffix;
+        }
+        if(!empty($data->certificate_date)) {
+            $certificateDate = date_create($data->certificate_date);
+            $this->certificateShortDateText = $certificateDate->format("d/m/Y");
+            $this->certificateLongDateText = "ngày " . $certificateDate->format('d') . " tháng " . $certificateDate->format('m') . " năm " . $certificateDate->format('Y');
+        }
+        if(!empty($data->document_date)) {
+            $documentDate = date_create($data->document_date);
+            $this->documentShortDateText = $documentDate->format("d/m/Y");
+            $this->documentLongDateText =  "ngày " . $documentDate->format('d') . " tháng " . $documentDate->format('m') . " năm " . $documentDate->format('Y');
+        }
+    }
+    protected function nationalName(PhpWord $phpWord, $data)
+    {
+        if ($this->isPrintNational) {
+            $section = $phpWord->addSection($this->styleNationalSection);
+            $table1 = $section->addTable($this->tableBasicStyle);
+            $table1->addRow(1000);
+            $cell11 = $table1->addCell(Converter::cmToTwip(1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $imgName = env('STORAGE_IMAGES','images').'/'.'company_logo.png';
+            $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
+            $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
+            // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $cell13 = $table1->addCell(Converter::inchToTwip(4), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
+            $cell13->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], $this->styleAlignCenter);
+            $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
+            $indentRight = $this->marginRightContent - $this->marginRightNational;
+            $this->printFooter($section, $data, $indentLeft, $indentRight);
+        }
+    }
     public function getFooterString($data)
     {
         $data = (Object)$data;

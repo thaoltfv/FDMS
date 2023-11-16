@@ -556,4 +556,103 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
 
         return $result;
     }
+
+    public function getAverageBuildPriceNew()
+    {
+        // dd('province_id', $province_id);
+        $buildingCategory = request()->get('building_category');
+        $level = request()->get('level');
+        $rate = request()->get('rate');
+        $structure = request()->get('structure');
+        $crane = request()->get('crane');
+        $aperture = request()->get('aperture');
+        $factoryType = request()->get('factory_type');
+        $province_id = request()->get('province_id');
+
+        if(!isset($buildingCategory))
+            return 0;
+        $query = 'building_category = ' . $buildingCategory ;
+        if ($level > 0 && $buildingCategory == 41 ) {
+            $query = $query . ' and level = ' . $level;
+        } else {
+            $query = $query . ' and level is null';
+        }
+
+        if ($rate > 0 && ($buildingCategory == 41 || $buildingCategory ==42)) {
+            $query = $query . ' and rate = ' . $rate;
+        } else {
+            $query = $query . ' and rate is null';
+        }
+
+        if ($structure > 0 && $buildingCategory == 42 ) {
+            $query = $query . ' and structure = ' . $structure;
+        } else {
+            $query = $query . ' and structure is null';
+        }
+
+        if ($crane > 0 && $buildingCategory == 43) {
+            $query = $query . ' and crane = ' . $crane;
+        } else {
+            $query = $query . ' and crane is null';
+        }
+
+        if ($aperture > 0 && $buildingCategory == 43) {
+            $query = $query . ' and aperture = ' . $aperture;
+        } else {
+            $query = $query . ' and aperture is null';
+        }
+
+        if ($factoryType > 0 && $buildingCategory == 43 )  {
+            $query = $query . ' and factory_type = ' . $factoryType;
+        } else {
+            $query = $query . ' and factory_type is null';
+        }
+        // DB::enableQueryLog();
+        if ($province_id){
+            $result = $this->model->query()
+                ->where('province_id', '=', $province_id)
+                ->whereRaw($query)
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))->get();
+                // ->orWhere('effect_to', 'IS', 'NULL')
+                // ->avg('unit_price_m2');
+            
+            $result_x = $this->model->query()
+                ->where('province_id', '=', $province_id)
+                ->whereRaw($query)
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->WhereNull('effect_to')->get();
+                // ->avg('unit_price_m2');
+
+            $result = $result->merge($result_x)->avg('unit_price_m2');
+        } else {
+            $result= $this->model->query()
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->WhereNull('province_id')
+                ->whereRaw($query)->get();
+                // ->orWhere('effect_to', 'IS', 'NULL')
+                // ->avg('unit_price_m2');
+
+            $result_x= $this->model->query()
+                ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
+                // ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
+                ->WhereNull('effect_to')
+                ->WhereNull('province_id')
+                ->whereRaw($query)->get();
+                // ->orWhere('effect_to', 'IS', 'NULL')
+                // ->avg('unit_price_m2');
+
+            $result = $result->merge($result_x)->avg('unit_price_m2');
+        }
+        
+        
+        // dd($query, $result, $result_1) ;
+        // if ($result_1){
+        //     $result = $result_1;
+        // }
+          
+        return $result?(int)$result:0;
+    }
 }

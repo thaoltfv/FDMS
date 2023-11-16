@@ -4653,7 +4653,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraise_date' => isset($object['appraise_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['appraise_date'])->format('Y-m-d') : null,
                 'certificate_date' => isset($object['certificate_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['certificate_date'])->format('Y-m-d') : null,
                 'commission_fee' => $object['commission_fee'],
-                'document_type' => $object['document_type']
+                'document_type' => $object['document_type'],
+                'note' => $object['note']
             ]);
 
             $edited = Certificate::where('id', $id)->first();
@@ -4771,6 +4772,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'commission_fee',
                 'status_expired_at',
                 'document_type',
+                'note'
             ];
             $with = [
                 'appraisePurpose:id,name',
@@ -5669,13 +5671,15 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserPerform:id,name,appraiser_number',
             'assetPrice:id,certificate_id,slug,value',
             'createdBy:id,name',
-            'appraiserManager:id,name,appraiser_number',
+            'appraiserManager:id,name,appraiser_number,appraise_position_id',
+            'appraiserManager.appraisePosition:id,description',
             'legalDocumentsOnValuation:id,document_type,date,content',
             'legalDocumentsOnConstruction:id,document_type,date,content',
             'legalDocumentsOnLand:id,document_type,date,content',
             'legalDocumentsOnLocal:id,document_type,date,content'
         ];
         $result = $this->model->query()->where('id', $id)->with($with)->first($select);
+        // dd($result);
         return $result;
     }
 

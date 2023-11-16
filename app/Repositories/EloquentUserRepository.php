@@ -179,7 +179,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'branch_id' => $objects['appraiser']['branch_id'] ?? null,
             'address' => $objects['address'] ?? "",
             'appraisers_number' => $objects['appraisers_number'] ?? "",
-            'image' => $objects['image'] ?? ""
+            'image' => $objects['image'] ?? "",
+            'mailing_address' => $objects['mailing_address'] ?? ""
         ];
 
         $this->model->query()

@@ -557,7 +557,7 @@ class Appraise extends Model
 
     public function getPlanningAreaAttribute()
     {
-        $select = ['id','appraise_property_id','land_type_purpose_id','planning_area','type_zoning'];
+        $select = ['id','appraise_property_id','land_type_purpose_id','planning_area','type_zoning','extra_planning'];
         $with=['landTypePurpose:id,type,description'];
 		$propertieId = AppraiseProperty::where('appraise_id', $this->id)->first()->id;
 
