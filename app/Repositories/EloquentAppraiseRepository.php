@@ -3565,7 +3565,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
             if ($planArea > $total) {
-                $result = ['message' => 'Diện tích quy hoạch '.$item['land_type_purpose']['description'].' không được lớn hơn diện sử dụng', 'exception' => ''];
+                $result = ['message' => 'Diện tích quy hoạch '.strtolower($item['land_type_purpose']['description']).' không được lớn hơn diện sử dụng', 'exception' => ''];
             }
         }
         return $result;
@@ -3699,7 +3699,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         return $data;
                     }
                     $sumArea = 0.00;
-                    // dd($AppraisePropertyDetailData);
+                    dd($AppraisePropertyDetailData);
                     foreach($AppraisePropertyDetailData as $data)
                     {
                         if(!isset($data['position_type_id'])){
