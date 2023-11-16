@@ -3649,7 +3649,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 $planningArea = $AppraisePropertyDetailData[$key]['planning_area'] + $planning['planning_area'];
                                 $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0 ;
                                 $AppraisePropertyDetailData[$key]['planning_area'] =  $planningArea;
-                                if (!$AppraisePropertyDetailData[$key]['type_zoning']){
+                                if (isset($AppraisePropertyDetailData[$key]['type_zoning']) && $AppraisePropertyDetailData[$key]['type_zoning'] == ''){
                                     $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
                                 }
                                 $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
