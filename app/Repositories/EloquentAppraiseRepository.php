@@ -3541,10 +3541,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         foreach ($totalArea as $item) {
             $landTypeId = $item['land_type_purpose_id'];
             $key =array_search($landTypeId, array_column($planningArea, 'land_type_purpose_id'));
+            dd($key);
             $total = $item['total_area'];
             $planArea = 0;
             if ($key !== false) {
-                $planArea += $planningArea[$key]['planning_area'];
+                $planArea = $planningArea[$key]['planning_area'];
             }
             if ($planArea > $total) {
                 $result = ['message' => 'Diện tích quy hoạch không được lớn hơn diện sử dụng', 'exception' => ''];
