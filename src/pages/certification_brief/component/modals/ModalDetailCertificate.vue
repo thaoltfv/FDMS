@@ -70,8 +70,11 @@
 							<div class="detail_certificate_2">
 								<div class="d-flex container_content justify-content-between">
 									<div class="d-flex">
-										<strong class="margin_content_inline">Chuyên viên thực hiện:</strong><p>{{form.appraiser_perform ? form.appraiser_perform.name : ''}}</p>
+										<strong class="margin_content_inline">Nhân viên kinh doanh:</strong><p>{{form.appraiser_sale ? form.appraiser_sale.name : ''}}</p>
 									</div>
+								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Chuyên viên thực hiện:</strong ><p>{{form.appraiser_perform ? form.appraiser_perform.name : ''}}</p>
 								</div>
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>

@@ -210,11 +210,11 @@ export default {
 		}
 	},
 	// mounted() {
-	//   console.log(this.navigations)
+	//   // console.log(this.navigations)
 	// },
 	methods: {
     minimize(){
-      console.log('dính')
+      // console.log('dính')
       this.minimize_key = !this.minimize_key
     },
     isMobile() {
@@ -253,7 +253,7 @@ export default {
 		},
 		handleClick () {
 			this.toggleItem = !this.toggleItem
-      console.log('mở rộng thu gọn', this.toggleItem)
+      // console.log('mở rộng thu gọn', this.toggleItem)
       store.commit(types.SET_NAV_EXP, this.toggleItem )
 		},
 		dropdownClick (e) {

@@ -1261,7 +1261,7 @@ export default {
 			})
 			this.submit = this.checkSubmit.length === 0
 			this.isSubmit = true
-			console.log('log', this.form)
+			// console.log('log', this.form)
 			if (this.checkDuplicateLandType(this.form.property_detail)) {
 				this.isSubmit = false
 				this.duplicateLandTypePurpose = true

@@ -812,7 +812,7 @@ export default {
 				})
 
 			// const res = await CertificateAsset.getAllDataApartment(to.query['id'])
-			// await console.log(res, 'res')
+			// await // console.log(res, 'res')
 		}
 		return next()
 	},

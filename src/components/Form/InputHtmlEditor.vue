@@ -234,7 +234,7 @@ export default {
 			// let matchesSpansOption = toolbarElement.querySelectorAll('.ql-align .ql-picker-options > span')
 			// for (let el of matchesSpansOption) {
 			//   el.classList.add('position-relative')
-			//   console.log('option', el)
+			//   // console.log('option', el)
 			//   showTooltip('span', el)
 			// }
 		}

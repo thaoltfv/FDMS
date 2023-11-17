@@ -343,7 +343,7 @@ export default {
         },
         async getContent () {
             let land_description = ''
-            console.log('data', this.form)
+            // console.log('data', this.form)
             const map = new Map()
             if (this.form.land_details.length > 0) {
                 await this.form.land_details.forEach(item => {
@@ -414,7 +414,7 @@ export default {
         },
         async validateLegal () {
             const valid = await this.$refs.formLegal.validate()
-            console.log('form', this.form)
+            // console.log('form', this.form)
             if (valid) {
                 let getLaw = await this.juridicals.filter(item => item.id === this.form.appraise_law_id)
                 this.form.law = getLaw[0]

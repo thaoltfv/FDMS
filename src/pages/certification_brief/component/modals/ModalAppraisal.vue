@@ -116,7 +116,7 @@ export default {
 		InputDatePickerV2
 	},
 	created () {
-		console.log('vô đây không')
+		// console.log('vô đây không')
 		this.getAppraisers()
 		this.getTimeStamp()
 	},
@@ -183,7 +183,7 @@ export default {
 			this.employeeBusiness = await dataAppraise
 			this.appraisersControl = await dataAppraise
 			this.appraisersManager = await dataAppraise.filter(item => item.is_legal_representative === 1)
-			console.log('dsadấdsad', this.appraisersManager)
+			// console.log('dsadấdsad', this.appraisersManager)
 			this.form.appraiser_manager_id = await this.appraisersManager[0].id
 			let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
 			if (this.form && this.form.appraiser_manager_id) {
@@ -324,7 +324,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.form.appraiser_perform_id = newValue
 			}
 		},
@@ -339,7 +339,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.form.appraiser_control_id = newValue
 			}
 		},
@@ -354,7 +354,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.form.appraiser_id = newValue
 			}
 		},
@@ -369,7 +369,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.form.appraiser_manager_id = newValue
 			}
 		},
@@ -384,7 +384,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.form.appraiser_confirm_id = newValue
 			}
 		},

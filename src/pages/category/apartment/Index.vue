@@ -244,16 +244,16 @@ export default {
 				})
 
 				this.list_apartments = [...resp.data.data]
-				console.log('this.list_apartments', this.list_apartments)
+				// console.log('this.list_apartments', this.list_apartments)
 				for (let i = 0; i < this.list_apartments.length; i++)
 				{
 					let apartment = this.list_apartments[i]
-					console.log('âpartmetn',apartment )
+					// console.log('âpartmetn',apartment )
 					let rank_text = ''
 					for(let j = 0; j< apartment.rank.length; j++)
 					{
 						let rank = apartment.rank[j]
-						console.log('rank', rank)
+						// console.log('rank', rank)
 						if(rank == 'trung-cap')
 						{
 							apartment.rank[j] = 'Trung cấp'

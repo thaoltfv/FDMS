@@ -366,8 +366,8 @@ export default {
 					this.showDetailAllSelected = true
 				}
 			}
-			// console.log(this.showChoosingAssetDetails, 'showChoosingAssetDetails')
-			// console.log(this.assetHasChoose, 'this.assetHasChoose')
+			// // console.log(this.showChoosingAssetDetails, 'showChoosingAssetDetails')
+			// // console.log(this.assetHasChoose, 'this.assetHasChoose')
 		},
 		handleCancelShowAllDetail () {
 			this.showDetailAllSelected = false

@@ -995,7 +995,7 @@ export default {
 			}
 		},
 		optionsProvince () {
-      console.log('llll tỉnh', this.provinces)
+      // console.log('llll tỉnh', this.provinces)
 			return {
 				data: this.provinces,
 				id: 'id',

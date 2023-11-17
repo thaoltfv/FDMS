@@ -187,7 +187,7 @@ export default {
 		},
 		async saveOtherAsset () {
 			const data = { price: this.form }
-			console.log('data', data)
+			// console.log('data', data)
 			if(data.price.unit_price <= 0)
 			{
 				this.$toast.open({
@@ -205,7 +205,7 @@ export default {
 				})
 				return
 			}
-			console.log('data', data)
+			// console.log('data', data)
 			const res = await CertificateAsset.submitMachineStep4(this.idData, data)
 			if (res.data) {
 				this.$toast.open({

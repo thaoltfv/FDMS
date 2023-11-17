@@ -106,14 +106,14 @@ export default {
     async getDictionary () {
       
 			// let resp = this.$store.getters.dictionaries
-      // console.log('vô đây', resp)
+      // // console.log('vô đây', resp)
 			// if (resp && resp.length === 0) {
-        // console.log('vô đây nè', resp)
+        // // console.log('vô đây nè', resp)
 				const resp = await WareHouse.getDictionaries()
 				// store.commit(types.SET_DICTIONARIES, {...resp})
 			// }
 			this.reasons = resp.data.li_do
-      console.log('vô đây cuối', this.reasons )
+      // console.log('vô đây cuối', this.reasons )
 		},
 
 	}

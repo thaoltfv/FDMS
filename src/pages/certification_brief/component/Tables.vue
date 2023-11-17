@@ -532,7 +532,7 @@ export default {
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			}
-			console.log('data send', dataSend)
+			// console.log('data send', dataSend)
 			const res = await CertificationBrief.updateStatusCertificate(this.idDragger, dataSend)
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(i => i.id === this.idDragger)
@@ -625,7 +625,7 @@ export default {
 				this.config = config
 				check = this.checkRequired(config.require, this.detailData)
 			}
-			// console.log(check)
+			// // console.log(check)
 			if (check) {
 				this.next_status = config.status
 				this.next_sub_status = config.sub_status
@@ -701,7 +701,7 @@ export default {
 			return status_expired_at
 		},
 		getExpireDate (element) {
-			// console.log('elemt', element)
+			// // console.log('elemt', element)
 			let strExpire = ''
 			switch (element.status) {
 			case 1:

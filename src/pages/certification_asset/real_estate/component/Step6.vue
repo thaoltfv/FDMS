@@ -514,7 +514,7 @@ export default {
 	},
 	methods: {
     changeFilterYear(payload) {
-        console.log('year change', payload)
+        // console.log('year change', payload)
         this.$emit('filter_year', payload)
     },
 		openSelectType () {
@@ -599,7 +599,7 @@ export default {
 			if (getDetailAsset.data) {
 				this.assetDetails = getDetailAsset.data[0]
 				let checkAsset = this.listAssetGeneral.filter(item => item.id === asset.id && item.isChoosing === true)
-				// console.log('checkAsset', checkAsset)
+				// // console.log('checkAsset', checkAsset)
 				if (checkAsset && checkAsset.length > 0) {
 					this.assetDetails['isChoosing'] = true
 				}

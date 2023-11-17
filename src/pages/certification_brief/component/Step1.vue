@@ -390,16 +390,16 @@ export default {
 			// getter
 			get: function () {
 				if (this.employeePerformance.length > 0) {
-          // console.log('vô đây trước 1')
+          // // console.log('vô đây trước 1')
 					return this.data.appraiser_perform_id
 				} else {
-          // console.log('vô đây trước 2')
+          // // console.log('vô đây trước 2')
 					return this.data.appraiser_perform.name
 				}
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.data.appraiser_perform_id = newValue
 			}
 		},
@@ -414,7 +414,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.data.appraiser_control_id = newValue
 			}
 		},
@@ -429,7 +429,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.data.appraiser_id = newValue
 			}
 		},
@@ -444,7 +444,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.data.appraiser_manager_id = newValue
 			}
 		},
@@ -459,7 +459,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.data.appraiser_confirm_id = newValue
 			}
 		},
@@ -474,7 +474,7 @@ export default {
 			},
 			// setter
 			set: function (newValue) {
-				// console.log('newwww', newValue)
+				// // console.log('newwww', newValue)
 				this.data.appraiser_sale_id = newValue
 			}
 		},
@@ -590,7 +590,7 @@ export default {
 	},
 	created () {
 		// this.getCustomer()
-    console.log('data', this.data)
+    // console.log('data', this.data)
 	},
 	methods: {
     isMobile() {

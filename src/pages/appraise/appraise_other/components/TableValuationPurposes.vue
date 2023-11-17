@@ -300,7 +300,7 @@ export default {
 				this.totalRecord = resp.data.total
 				this.isLoading = false
 			} catch (e) {
-				console.log(e)
+				// console.log(e)
 				this.isLoading = false
 			}
 		},

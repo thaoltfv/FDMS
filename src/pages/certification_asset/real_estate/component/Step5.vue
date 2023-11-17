@@ -202,7 +202,7 @@ export default {
 		}
 	},
   mounted(){
-    console.log('--------------------',this.data)
+    // console.log('--------------------',this.data)
     if (this.data && this.data.value_base_and_approach.document_description == '') {
       this.data.value_base_and_approach.document_description = '- Giả thiết:\n- Giả thiết đặc biệt:'
     }

@@ -612,7 +612,7 @@ export default {
 			this.zoom = zoom
 		},
 		async handleDetail (property) {
-			console.log('property', property)
+			// console.log('property', property)
 			if (property.transaction_type_id && property.transaction_type_id !== 0) {
 				await this.getAssetGeneralDetail(property.id)
 				this.pic = property.pic
@@ -641,7 +641,7 @@ export default {
 			this.isSubmit = true
 			const resp = await WareHouse.getApartmentDetail(id)
 			this.property = resp.data
-			console.log('apartment',this.property )
+			// console.log('apartment',this.property )
 			this.isSubmit = false
 		},
 		async getAssetGeneralDetail (id) {
@@ -771,7 +771,7 @@ export default {
 			const isAppraise = !!this.transaction_type.is_appraise
 			const resp = await WareHouse.getSearchAll(year, province, district, ward, street, transaction, total_area_from, total_area_to, total_amount_from, total_amount_to, distance, location, front_side, isAppraise, property_type)
 			this.assetGenerals = [...resp.data]
-			console.log('asset', this.assetGenerals)
+			// console.log('asset', this.assetGenerals)
 			await this.getLatLng()
 			this.isSubmit = false
 		},

@@ -249,7 +249,7 @@ export default {
 			let address_components = []
 			// let addressLog = []
 			let formatted_address = ''
-			console.log(address, type)
+			// console.log(address, type)
 			await geocoder.geocode({'address': address}, function (results, status) {
 				if (status === 'OK') {
 					// addressLog = results[0]

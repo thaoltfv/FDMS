@@ -325,10 +325,10 @@ export default {
 			// let dataAppraise = [...resp.data]
 			// let appraiser = dataAppraise.filter(item => item.appraiser_number !== '')
 			// if (event){
-			// 	console.log('có event')
+			// 	// console.log('có event')
 			// 	this.appraisers = appraiser.filter(item => item.id !== event)
 			// } else {
-			// 	console.log('không evant')
+			// 	// console.log('không evant')
 			// 	this.appraisers = appraiser
 			// }
 			
@@ -342,7 +342,7 @@ export default {
 		}
 	},
 	mounted () {
-		// console.log(this.profile)
+		// // console.log(this.profile)
 	},
 	async beforeMount () {
 		this.getAppraisers()

@@ -200,7 +200,7 @@ export default {
         },
         actionSaveLegal (data) {
             let dataSend = data
-            // console.log('data send', dataSend)
+            // // console.log('data send', dataSend)
             // return
             if (dataSend.law_date) {
                 dataSend.law_date = moment(dataSend.law_date, 'DD/MM/YYYY').format('YYYY-MM-DD')

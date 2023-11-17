@@ -130,12 +130,12 @@ export default {
 			}
 		},
     clickLogin(){
-      console.log('data', this.new_email,this.new_password)
+      // console.log('data', this.new_email,this.new_password)
       $('[name="email"]').val(this.new_email)
       $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
       
       setTimeout(() => {
-        console.log('lỗi email', $('[class="firebaseui-info-bar-message"]').text())
+        // console.log('lỗi email', $('[class="firebaseui-info-bar-message"]').text())
         if ($('[class="firebaseui-info-bar-message"]').text() !== ''){
           this.$toast.open({
             message: 'Email không tồn tại, vui lòng thử lại',
@@ -145,11 +145,11 @@ export default {
           $('[class="firebaseui-info-bar-message"]').text('')
         } else {
           $('[name="password"]').val(this.new_password)
-          // console.log('gọi login',$('[name="email"]') ,$('[name="password"]'))
+          // // console.log('gọi login',$('[name="email"]') ,$('[name="password"]'))
           $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
-          // console.log('lỗi nè',$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text())
+          // // console.log('lỗi nè',$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text())
           setTimeout(() => {
-            console.log('lỗi mật khẩu', $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text())
+            // console.log('lỗi mật khẩu', $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text())
             if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == 'You have entered an incorrect password too many times. Please try again in a few minutes.'){
               this.$toast.open({
                 message: 'Bạn đã nhập sai quá nhiều lần, vui lòng thử lại sau ít phút',
@@ -169,11 +169,11 @@ export default {
         }
         // $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
         
-        // console.log('lỗi nè',$('[class="firebaseui-info-bar firebaseui-id-info-bar"]').length)
+        // // console.log('lỗi nè',$('[class="firebaseui-info-bar firebaseui-id-info-bar"]').length)
       },1000)
       
       // let email = $('[name="email"]').value
-      // console.log('email', email)
+      // // console.log('email', email)
     }
 	}
 }

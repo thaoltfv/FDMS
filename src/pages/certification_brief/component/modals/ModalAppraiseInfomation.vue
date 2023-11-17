@@ -253,7 +253,7 @@ export default {
 	methods: {
 		async getAppraiseOthers () {
 			const resp = await Certificate.getAppraiseOthers()
-      console.log('resp', resp)
+      // console.log('resp', resp)
 			this.appraisalPurposes = [...resp.data.muc_dich_tham_dinh_gia]
 		},
 		formatDate (date) {
@@ -269,7 +269,7 @@ export default {
 			}
 		},
 		async getDataEdit () {
-      console.log('vào đây nè')
+      // console.log('vào đây nè')
 			this.form.document_date = this.data.document_date ? moment(this.data.document_date).format('DD/MM/YYYY') : ''
 			this.form.certificate_date = this.data.certificate_date ? moment(this.data.certificate_date).format('DD/MM/YYYY') : ''
 			this.form.appraise_date = this.data.appraise_date ? moment(this.data.appraise_date).format('DD/MM/YYYY') : ''
@@ -340,9 +340,9 @@ export default {
 			return message
 		},
 		async handleAction () {
-      console.log('Lưu nè')
+      // console.log('Lưu nè')
 			let form = this.form
-      console.log('this.form', form)
+      // console.log('this.form', form)
 			let message = this.checkDocumentType(form.document_type, form.general_asset)
 			if (message !== '') {
 				this.$toast.open({
@@ -368,17 +368,17 @@ export default {
 				document_type: form.document_type,
         note: form.note
 			}
-      console.log('data',data)
+      // console.log('data',data)
 			const res = await CertificateBrief.updateDetailCertificate(this.idData, data)
-      console.log('res',res)
-      console.log('this.idData', this.idData)
+      // console.log('res',res)
+      // console.log('this.idData', this.idData)
 			if (res.data) {
 				this.$toast.open({
 					message: 'Lưu thông tin hồ sơ thẩm định thành công',
 					type: 'success',
 					position: 'top-right'
 				})
-        console.log('res.data', res.data)
+        // console.log('res.data', res.data)
 				this.$emit('updateAppraiseInformation', res.data)
 				this.$emit('cancel')
 			} else if (res.error) {

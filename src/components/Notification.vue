@@ -79,7 +79,7 @@ export default {
 				this.notificationShow = []
 				this.handleNext()
 			} catch (err) {
-				console.log(err)
+				// console.log(err)
 				throw err
 			}
 		},
@@ -97,7 +97,7 @@ export default {
 					.markAsRead({ read: ids })
 					.then(resp => store.commit(SET_UNREAD_NOTIFICATION, resp.data.unread))
 			} catch (err) {
-				console.log(err)
+				// console.log(err)
 				throw err
 			}
 		},
@@ -107,7 +107,7 @@ export default {
 					.markAllAsRead()
 					.then(resp => store.commit(SET_UNREAD_NOTIFICATION, 0))
 			} catch (err) {
-				console.log(err)
+				// console.log(err)
 				throw err
 			}
 		},

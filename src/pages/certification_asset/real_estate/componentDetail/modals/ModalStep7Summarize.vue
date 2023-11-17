@@ -165,8 +165,8 @@ export default {
 		}
 	},
 	mounted () {
-		console.log('sdd', this.form.price_land_asset)
-		console.log('tổng cộng', this.form.price_total_asset)
+		// console.log('sdd', this.form.price_land_asset)
+		// console.log('tổng cộng', this.form.price_total_asset)
 		if (this.form && this.form.round_appraise_total) {
 			this.round_appraise_total = this.form.round_appraise_total
 		} else this.round_appraise_total = 0

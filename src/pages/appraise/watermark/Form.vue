@@ -274,7 +274,7 @@ export default {
 			return `${value}%`
 		},
 		onImageChange (e) {
-			console.log('eee', e)
+			// console.log('eee', e)
 			let files = e.target.files || e.dataTransfer.files
 			if (!files.length) {
 				return
@@ -284,7 +284,7 @@ export default {
 				this.createImage()
 				this.uploadImage()
 			}
-			console.log('Upload')
+			// console.log('Upload')
 		},
 		createImage () {
 			let reader = new FileReader()
