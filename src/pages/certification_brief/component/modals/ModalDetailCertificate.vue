@@ -48,6 +48,10 @@
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Chiết khấu:</strong> <p>{{form.commission_fee ? form.commission_fee : 0}}%</p>
 							</div>
+							<div class="d-flex container_content">
+									<strong class="margin_content_inline">Ghi chú:</strong><span  id="note" class="text-left">{{ form.note.length > 25 ? form.note.substring(25,0)+'...' : form.note}}</span>
+									<b-tooltip target="note" placement="top-right">{{ form.note }}</b-tooltip>
+							</div>
 						</div>
 						<div class="col-12 mb-2">
 							<div class="detail_certificate_2">
@@ -214,7 +218,8 @@ export default {
 				address: '',
 				petitioner_identity_card: '',
 				status: 1,
-				sub_status: 1
+				sub_status: 1,
+				note: ''
 			},
 			appraisalPurposes: [],
 			showAppraisalDialog: false,
