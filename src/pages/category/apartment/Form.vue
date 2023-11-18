@@ -256,7 +256,7 @@
         v-if="openModalBlock"
         :data="formBlock"
         :isEdit="isEdit"
-        @action="handleActionBlock"
+        @action="handleCheckActionBlock"
         @cancel="openModalBlock = false"
       />
       <ModalFloor
@@ -266,6 +266,13 @@
         @action="handleActionFloor"
         @cancel="openModalFloor = false"
       />
+	  <ModalActiveFloor
+		v-if="openModalActiveFloor"
+        :data="checkdata"
+        :isEdit="isEdit"
+		@action="handleActionBlock"
+		@cancel="openModalActiveFloor = false"
+	  />
   </div>
 
 </template>
@@ -285,6 +292,8 @@ import { Form } from 'ant-design-vue'
 import ModalCancel from '@/components/Modal/ModalCancel'
 import ModalBlock from './modals/ModalBlock'
 import ModalFloor from './modals/ModalFloor'
+import ModalActiveFloor from '@/components/Modal/ModalActiveFloor.vue'
+
 
 export default {
 	props: {
@@ -296,22 +305,24 @@ export default {
 	},
 	name: 'Form',
 	components: {
-		InputText,
-		InputCategory,
-		ModalMap,
-		InputNumberNoneFormat,
-		'a-form': Form,
-		'a-form-item': Form.Item,
-		ModalDelete,
-		ModalNotification,
-		ModalCancel,
-		ModalBlock,
-		ModalFloor,
-		InputCategoryMulti
-	},
+    InputText,
+    InputCategory,
+    ModalMap,
+    InputNumberNoneFormat,
+    "a-form": Form,
+    "a-form-item": Form.Item,
+    ModalDelete,
+    ModalNotification,
+    ModalCancel,
+    ModalBlock,
+    ModalFloor,
+    InputCategoryMulti,
+    ModalActiveFloor
+},
 
 	data () {
 		return {
+			checkdata: null,
 			location: {
 				lng: '',
 				lat: ''
@@ -323,6 +334,7 @@ export default {
 			openModalMap: false,
 			openModalBlock: false,
 			openModalFloor: false,
+			openModalActiveFloor: false,
 			openModalApartment: false,
 			selectedRows: [],
 			selectedRowKeysBlock: [],
@@ -445,11 +457,13 @@ export default {
 			}
 		},
 		handleActionFloor (data) {
+			console.log('data3',data)
 			if (this.isEdit) {
 				this.form.block[this.indexBlock].floor[this.indexEdit] = data
 			} else {
 				this.form.block[this.indexBlock].floor.push(data)
 			}
+			console.log('block',this.form.block[this.indexBlock].floor)
 			this.openModalFloor = false
 			this.isEdit = false
 		},
@@ -457,7 +471,15 @@ export default {
 			this.openModalFloor = true
 			this.isEdit = true
 			this.indexEdit = index
+			console.log('index',index)
+			console.log('this.block',this.indexBlock)
+			console.log('this.form.block[this.indexBlock]',this.form.block)
+			console.log('this.form.block[this.indexBlock]',this.form.block[this.indexBlock].floor)
+			console.log('this.form.block[this.indexBlock].floor[index]',this.form.block[this.indexBlock].floor[index])
 			this.formFloor = JSON.parse(JSON.stringify(this.form.block[this.indexBlock].floor[index]))
+			 console.log('formFloor', this.formFloor)
+			 console.log('Vào hàm sửa tầng nè')
+			
 		},
 		handleDeleteFloor () {
 
@@ -475,9 +497,44 @@ export default {
 				floor: []
 			}
 		},
-		handleActionBlock (data) {
+		handleCheckActionBlock (data) {	
+			this.openModalBlock = false
 			if (this.isEdit) {
+				console.log('this.data',data)
+				console.log('this.form.block[this.indexEdit]',this.form.block[this.indexEdit] )
+				if(data.total_floors !== this.form.block[this.indexEdit].total_floors)
+				{
+					this.openModalActiveFloor = true
+					this.checkdata = data
+				} else 
+				{
+					this.openModalActiveFloor = false
+					this.indexFloor = 0;
+				}
+			} else {
+				this.handleActionBlock(data)
+			}
+		},
+		handleActionBlock (data) {			
+			if (this.isEdit) {
+				console.log('dataaaaa',data)
+				this.openModalActiveFloor = false
+				
+				// if (data.total_floors == this.form.block[this.indexEdit].total_floors)
+				// {
+				// 	this.indexFloor = 0;
+				
+				// } else {
+					this.form.block[this.indexEdit].floor = []
+					for (let i = 0; i < data.total_floors ; i++) {
+						this.form.block[this.indexEdit].floor.push({
+							name: 'Tầng ' + (i + 1)
+						})
+						this.floors = this.form.block[this.indexEdit].floor
+					}
+				// } 
 				this.form.block[this.indexEdit] = data
+				this.form.block[this.indexEdit].floor = this.floors
 			} else {
 				this.form.block.push(data)
 			}
@@ -629,7 +686,7 @@ export default {
 		handleSubmit () {
 			this.isSubmit = true
 			let data = this.form
-			if (this.$route.name === 'apartment.edit') {
+			if (this.$route.name === 'apartment.edit') {			
 				this.updateApartment(data)
 			} else {
 				this.createApartment(data)
@@ -697,7 +754,7 @@ export default {
 					this.$toast.open({
 						message: res.error.message,
 						type: 'error',
-						position: 'top-right'
+						position: 'top-rormBlockight'
 					})
 					this.isSubmit = false
 				}
@@ -706,13 +763,29 @@ export default {
 				throw err
 			}
 		},
-		onClickTableBlock (item, index) {
+		onClickTableBlock (item, index) {	
 			this.selectedRowKeysBlock = [index]
 			this.selectedRowKeysFloor = []
 			this.indexBlock = index
 			this.floors = this.form.block[index].floor
-			if (this.floors && this.floors.length > 0) {
-				this.indexFloor = 0
+			console.log('index', index)
+			console.log('this.form',this.form)
+			console.log('this.form.block',this.form.block)
+			console.log('this.form.block[index]',this.form.block[index])
+			console.log('this.form.block[index].floor',this.form.block[index].floor)
+			console.log('item.total_floors',item.total_floors)
+			console.log('this.floors.length',this.floors.length)
+			if (item.total_floors !== this.floors.length) {
+				this.form.block[index].floor = []
+				console.log('vao if ne')
+				for (let i = 0; i < item.total_floors; i++) {
+					this.form.block[index].floor.push({
+						name: 'Tầng ' + (i + 1)
+					})
+					this.floors = this.form.block[index].floor
+				}	
+			} else if (this.floors && this.floors.length > 0)  {
+				this.indexFloor = 0;
 			}
 			this.apartments = []
 		},

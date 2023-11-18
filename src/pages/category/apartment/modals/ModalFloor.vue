@@ -11,8 +11,7 @@
             <ValidationObserver tag="form" ref="formFloor" @submit.prevent="validateFloor">
               <InputText
                 v-model="form.name"
-                rules="required"
-                :max-length="200"
+                :rules="required"
                 class="form-group-container col-12"
                 vid="name_block"
                 label="Tên tầng chung cư"
@@ -30,7 +29,6 @@
 <script>
 import InputText from '@/components/Form/InputText'
 import InputNumberNoneFormat from '@/components/Form/InputNumberNoneFormat'
-// import moment from 'moment'
 export default {
 	name: 'ModalStep2OtherLegal',
 	props: ['data', 'isEdit'],
@@ -40,7 +38,7 @@ export default {
 	},
 	data () {
 		return {
-			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {}
+			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
 		}
 	},
 	mounted () {
@@ -74,7 +72,7 @@ export default {
 			}
 		},
 		handleAction () {
-			this.$emit('action', this.form)
+      this.$emit('action', this.form)
 		}
 	}
 
