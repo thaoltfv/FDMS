@@ -1048,7 +1048,7 @@ export default {
 			this.handleBuiltYear()
 		}
 		await this.getImageDescriptions(this.imageDescriptions)
-		// console.log(this.data)
+		// // console.log(this.data)
 	},
 	methods: {
     isMobile() {
@@ -1065,7 +1065,7 @@ export default {
 			this.imageJuridical = data.find(imageDescription => imageDescription.description.toLowerCase() === 'pháp lý tài sản')
 		},
 		handleClickUtilities (event) {
-			// console.log(this.data.apartment_asset_properties.utilities, 'event')
+			// // console.log(this.data.apartment_asset_properties.utilities, 'event')
 		},
 		handleBuiltYear () {
 			const year = new Date().getFullYear()

@@ -485,7 +485,7 @@ export default {
 					}
 					this.screens.push(screen)
 				})
-				console.log('this.screens',this.screens)
+				// console.log('this.screens',this.screens)
 				if (this.viewPermissions.length === this.screens.length) { this.viewSelected = true }
 				if (this.addPermissions.length === this.screens.length) { this.addSelected = true }
 				if (this.editPermissions.length === this.screens.length) { this.editSelected = true }

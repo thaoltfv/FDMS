@@ -115,23 +115,23 @@ export default {
 	},
   mounted () {
     this.cssLoader();
-    // console.log('---------this.$route', this.$route)
+    // // console.log('---------this.$route', this.$route)
     // window.addEventListener('resize', this.onResize());
 
-    // console.log('------this.options', this.options)
+    // // console.log('------this.options', this.options)
     setTimeout(() => {
-      console.log('---------this.$route', this.$route),
+      // console.log('---------this.$route', this.$route),
       this.options.forEach(e => {
         if (e.path && e.path.name === this.$route.name) {
-          console.log('vô 1')
+          // console.log('vô 1')
           e.isActive = true
         }
         if (e.childs && e.childs.length > 0) {
-          console.log('vô 2')
+          // console.log('vô 2')
           e.childs.forEach(i => {
-            console.log('vô 3')
+            // console.log('vô 3')
             if (i.path && i.path.name === this.$route.name) {
-              console.log('vô 4')
+              // console.log('vô 4')
               e.isActive = true
             }
             //TSTĐ
@@ -142,7 +142,7 @@ export default {
             || this.$route.name === 'certification_asset.apartment.create' 
             || this.$route.name === 'certification_asset.apartment.detail'
             || this.$route.name === 'certification_asset.apartment.edit')){
-              console.log('vô 5')
+              // console.log('vô 5')
               e.isActive = true
             }
             if (i.path && i.path.name === 'certification_personal_property.index' 
@@ -155,7 +155,7 @@ export default {
             || this.$route.name === 'certification_asset.machine.create' 
             || this.$route.name === 'certification_asset.machine.detail'
             || this.$route.name === 'certification_asset.machine.edit')){
-              console.log('vô 6')
+              // console.log('vô 6')
               e.isActive = true
             }
           })
@@ -165,7 +165,7 @@ export default {
         && (this.$route.name === 'certification_brief.create' 
         || this.$route.name === 'certification_brief.detail'
         || this.$route.name === 'certification_brief.edit')){
-          console.log('vô 7')
+          // console.log('vô 7')
           e.isActive = true
         }
 
@@ -174,7 +174,7 @@ export default {
         && (this.$route.name === 'warehouse.create' 
         || this.$route.name === 'warehouse.detail'
         || this.$route.name === 'warehouse.edit')){
-          console.log('vô 8')
+          // console.log('vô 8')
           e.isActive = true
         }
         
@@ -217,7 +217,7 @@ export default {
 		},
     'this.$route': {
       handler: function (route, newRoute) {
-        console.log('đasa', route, newRoute)
+        // console.log('đasa', route, newRoute)
 				if (newRoute) {
           nextTick(() => {
             const childs = [];

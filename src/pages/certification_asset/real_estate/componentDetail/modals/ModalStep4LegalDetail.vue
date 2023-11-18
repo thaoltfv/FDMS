@@ -222,7 +222,7 @@ export default {
 			}
 		},
 		optionsTypePurposes () {
-            console.log('data1', this.type_purposes)
+            // console.log('data1', this.type_purposes)
             return {
                 data: this.type_purposes,
                 id: 'id',
@@ -240,7 +240,7 @@ export default {
 	methods: {
 		async getDictionaryLand () {
 			const resp = await WareHouse.getDictionariesLand()
-			console.log('data', resp)
+			// console.log('data', resp)
 			this.type_purposes = [...resp.data]
 			this.type_purposes.forEach(item => {
 				item.description = this.formatSentenceCase(item.description)

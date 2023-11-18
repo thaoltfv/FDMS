@@ -2268,7 +2268,7 @@ export default {
 	},
 	computed: {
 		isEditStatus () {
-			// console.log(this.form)
+			// // console.log(this.form)
 			let check = false
 			const certificate = this.form.certificate
 			if (this.checkRole) {

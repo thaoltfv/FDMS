@@ -72,7 +72,7 @@ export default {
 	methods: {
 		async getDataProcessProgress () {
 			const res = await Report.getReportProcessProgress(this.form)
-			console.log('data process', res)
+			// console.log('data process', res)
 			if (res.data && res.data.status && res.data.status.length > 0) {
 				this.chartDoughnut.datasets[0].data = res.data.data
 				this.chartDoughnut.datasets[0].backgroundColor = []

@@ -518,13 +518,13 @@ export default {
 	mounted () {
 		if (this.data.planning_area.length > 0) {
 			this.checkShowPlanning = true
-      console.log('xử lý planning mới',this.data.planning_area)
+      // console.log('xử lý planning mới',this.data.planning_area)
       let new_planning = []
       for (let i = 0; i < this.data.planning_area.length; i++) {
         const e = this.data.planning_area[i];
         if (e.extra_planning) {
           e.extra_planning = JSON.parse(e.extra_planning)
-          console.log('đã parse', e.extra_planning)
+          // console.log('đã parse', e.extra_planning)
           for (let index = 0; index < e.extra_planning.length; index++) {
             const element = e.extra_planning[index];
             new_planning.push({
@@ -533,7 +533,7 @@ export default {
               land_type_purpose_id: element.land_type_purpose_id,
               type_zoning: element.type_zoning
             })
-            console.log('new_planning',new_planning)
+            // console.log('new_planning',new_planning)
           }
         }
       }
@@ -552,7 +552,7 @@ export default {
 				this.$refs.map_step2.mapObject.invalidateSize()
 			}, 1000)
 		}
-		// console.log(this.data)
+		// // console.log(this.data)
 	},
 	beforeUpdate () {
 	},
@@ -573,11 +573,11 @@ export default {
 			return error
 		},
 		checkDuplicateLandType (landTypePurposeId, data) {
-      console.log('trùng 1', landTypePurposeId)
+      // console.log('trùng 1', landTypePurposeId)
 			let error = ''
 			if (landTypePurposeId) {
 				let checkDuplicate = data.filter(item => item.land_type_purpose_id === landTypePurposeId)
-        console.log('trùng',checkDuplicate)
+        // console.log('trùng',checkDuplicate)
 				if (checkDuplicate && checkDuplicate.length > 1) error = 'Trùng mục đích sử dụng'
 				else error = ''
 			} else error = ''
@@ -664,7 +664,7 @@ export default {
 			}
 		},
 		changeLandTypePurpose (index, land_type_purpose_id, dataMainArea) {
-			// console.log('step 2', this.data.total_area)
+			// // console.log('step 2', this.data.total_area)
 			// let oldMainArea = JSON.parse(JSON.stringify(this.data.total_area))
 			// let oldPlanningArea = JSON.parse(JSON.stringify(this.data.planning_area))
 			// this.indexPurpose = index
@@ -675,7 +675,7 @@ export default {
 			//   this.message = 'Bạn có muốn thay đổi mục đích sử dụng không'
 			// } else {
 			// }
-			// console.log(this.message)
+			// // console.log(this.message)
 			this.falseIndex = ''
 			this.$emit('changeLandTypePurpose', index, land_type_purpose_id)
 			if (this.isDuplicateLandTypeTotal) {

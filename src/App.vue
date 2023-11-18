@@ -20,7 +20,7 @@ export default {
 		}
 	},
   created() {
-    // console.log('gtm', gtm)
+    // // console.log('gtm', gtm)
     // gtm.enable(true)
   },
   mounted () {

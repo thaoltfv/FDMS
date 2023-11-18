@@ -58,7 +58,7 @@
 											<strong class="margin_content_inline">Chiết khấu:</strong> <p>{{form.commission_fee ? form.commission_fee : 0}}%</p>
 										</div>
 										<div class="d-flex container_content">
-											<strong class="margin_content_inline">Ghi chú:</strong><span  id="note" class="text-left">{{ form.note.length > 25 ? form.note.substring(25,0)+'...' : form.note}}</span>
+											<strong class="margin_content_inline">Ghi chú:</strong><span  id="note" class="text-left">{{ form.note && form.note.length > 25 ? form.note.substring(25,0)+'...' : form.note}}</span>
 											<b-tooltip target="note" placement="top-right">{{ form.note }}</b-tooltip>
 										</div>
 									</div>
@@ -82,11 +82,14 @@
 													<div class="detail_certificate_2">
 														<div  class="d-flex container_content justify-content-between">
 															<div class="d-flex">
-																<strong class="margin_content_inline">Chuyên viên thực hiện:</strong><p>{{form.appraiser_perform ? form.appraiser_perform.name : ''}}</p>
+																<strong class="margin_content_inline">Nhân viên kinh doanh:</strong><p>{{form.appraiser_sale ? form.appraiser_sale.name : ''}}</p>
 															</div>
 															<div v-if="editAppraiser && edit" @click="handleShowAppraisal" class="btn-edit ">
 																<img src="@/assets/icons/ic_edit_3.svg" alt="add"/>
 															</div>
+														</div>
+														<div class="d-flex container_content">
+															<strong class="margin_content_inline">Chuyên viên thực hiện:</strong ><p>{{form.appraiser_perform ? form.appraiser_perform.name : ''}}</p>
 														</div>
 														<div class="d-flex container_content">
 															<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>
@@ -1150,13 +1153,13 @@ export default {
 						let e = this.historyList[i]
 						if (e.properties.reason_id) {
 							let result = resp.data.li_do.filter(item => item.id === e.properties.reason_id)
-							console.log('répóne',result)
+							// console.log('répóne',result)
 							e.reason_description = result[0].description
 						}
 					}
 				}				
 				
-				console.log('timeline', this.historyList)
+				// console.log('timeline', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,
@@ -1237,7 +1240,7 @@ export default {
 			}
 		},
 		handleShowAppraisal () {
-			console.log('-----------',this.form)
+			// console.log('-----------',this.form)
 			this.key_render_appraisal += 1
 			this.status = this.form.status
 			this.showAppraisalDialog = true
@@ -1781,7 +1784,7 @@ export default {
 		},
 		async downloadAssetDocument () {
 			let arrayAsset = []
-			console.log(this.form.real_estate)
+			// console.log(this.form.real_estate)
 			if (this.form.real_estate && this.form.real_estate.length > 0) {
 				await this.form.real_estate.forEach(item => {
 					if (item.appraises && item.appraises.appraise_has_assets && item.appraises.appraise_has_assets.length > 0) {
@@ -2005,7 +2008,7 @@ export default {
 			this.isShowAppraiseListVersion = true
 		},
 		setDocumentViewStatus () {
-			console.log('this.form.document_type',this.form.document_type)
+			// console.log('this.form.document_type',this.form.document_type)
 			let isExportAutomatic = true
 			let isCheckRealEstate = true
 			let isCheckConstruction = false

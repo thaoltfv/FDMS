@@ -168,7 +168,7 @@ export default {
 			if (res && res.data) {
 				this.form = res.data
 			} else {
-				console.log('error-refresh-data')
+				// console.log('error-refresh-data')
 			}
 			this.isSubmit = await false
 		},
@@ -178,7 +178,7 @@ export default {
 			if (res && res.data) {
 				this.form = res.data
 			} else {
-				console.log('error-refresh-data')
+				// console.log('error-refresh-data')
 			}
 			this.isSubmit = await false
 			// this.$emit('refresh_action', id)
@@ -364,7 +364,7 @@ export default {
 			if (res && res.data) {
 				this.form = res.data
 			} else {
-				console.log('error-refresh-data')
+				// console.log('error-refresh-data')
 			}
 		},
 		handleActionRouteToEdit () {

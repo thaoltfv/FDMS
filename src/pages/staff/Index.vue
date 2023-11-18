@@ -239,12 +239,12 @@ export default {
 	},
 	// async mounted() {
 	// 	const appraiserCompany = await AppraiserCompany.detail()
-	// 	// console.log(';dsdsad',appraiserCompany )
+	// 	// // console.log(';dsdsad',appraiserCompany )
 	// 	this.total_account = appraiserCompany.data.data[0].total_account
-	// 	// console.log('total 1', this.total_account)
-	// 	// console.log('total 1', this.total_account, this.list_total1.length)
+	// 	// // console.log('total 1', this.total_account)
+	// 	// // console.log('total 1', this.total_account, this.list_total1.length)
 	// 	// if (this.total_account && this.list_total1.length){
-	// 	// 	console.log('total 1', this.total_account, this.list.length)
+	// 	// 	// console.log('total 1', this.total_account, this.list.length)
 	// 	// }
 	// },
 	created () {
@@ -264,7 +264,7 @@ export default {
 				this.deactive = true
 			}
 		})
-		// console.log('total 2',this.total_account)
+		// // console.log('total 2',this.total_account)
 	},
 	computed: {
 		list_total() {
@@ -498,7 +498,7 @@ export default {
 
 				this.list_total1 = [...resp.data.data]
 				const appraiserCompany = await AppraiserCompany.detail()
-				// console.log(';dsdsad',appraiserCompany )
+				// // console.log(';dsdsad',appraiserCompany )
 				this.total_account = appraiserCompany.data.data[0].total_account
 				if (this.list_total1.filter(function (item) {
 					return item.status_user == 'active'

@@ -149,24 +149,24 @@ export const routes = [
 			}
 		}]
 	},
-	{
-		path: '/configuration',
-		component: Resource,
-		children: [{
-			path: '',
-			name: 'configuration.index',
-			component: page('configuration/Index.vue'),
-			beforeEnter: ResolveGuard([AuthGuard]),
-			meta: {
-				title: 'Cấu hình',
-				permissions: [PERMISSIONS.VIEW_PROPERTIES],
-				breadcrumbs: [
-					{ title: 'Cấu hình', name: 'configuration.index' }
-				],
-				gtm: 'Trang cấu hình'
-			}
-		}]
-	},
+	// {
+	// 	path: '/configuration',
+	// 	component: Resource,
+	// 	children: [{
+	// 		path: '',
+	// 		name: 'configuration.index',
+	// 		component: page('configuration/Index.vue'),
+	// 		beforeEnter: ResolveGuard([AuthGuard]),
+	// 		meta: {
+	// 			title: 'Cấu hình',
+	// 			permissions: [PERMISSIONS.VIEW_PROPERTIES],
+	// 			breadcrumbs: [
+	// 				{ title: 'Cấu hình', name: 'configuration.index' }
+	// 			],
+	// 			gtm: 'Trang cấu hình'
+	// 		}
+	// 	}]
+	// },
 	{
 		path: '/log-estimate',
 		component: Resource,

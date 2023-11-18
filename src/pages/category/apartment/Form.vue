@@ -417,7 +417,7 @@ export default {
 		await WareHouse.getProvince()
 			.then((resp) => {
 				this.provinces = resp.data
-				console.log('this.provinces', this.provinces)
+				// console.log('this.provinces', this.provinces)
 			})
 
 		if ('id' in this.$route.query && this.$route.name === 'apartment.edit') {
@@ -740,7 +740,7 @@ export default {
 
 		async updateApartment (data) {
 			try {
-				console.log('dâta', data)
+				// console.log('dâta', data)
 				
 				const res = await Apartment.postProject(data, this.idData)
 				if (res.data) {

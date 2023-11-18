@@ -1170,7 +1170,7 @@ export default {
 				if (!this.data_change.includes(value)){
 					this.data_change.push(value)
 				}	
-				console.log('các trường bị thay đổi', this.data_change)
+				// console.log('các trường bị thay đổi', this.data_change)
 			}
 		},
 		getCenter (center) {
@@ -2079,7 +2079,7 @@ export default {
 				this.isSubmit = true
 			}	
 			let data = this.form
-			console.log('data', data)
+			// console.log('data', data)
 			if (this.$route.name === 'warehouse.edit') {
 				data['data_change'] = this.data_change
 				await this.updateDictionary(data)

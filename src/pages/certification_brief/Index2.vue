@@ -286,7 +286,7 @@ export default {
 		},
 		onChangeStatus (value) {
 			this.selectedStatus = value
-			console.log('this.selectedStatus',this.selectedStatus)
+			// console.log('this.selectedStatus',this.selectedStatus)
 			this.getCertificateAll()
 		},
 		async export30daysBefore () {

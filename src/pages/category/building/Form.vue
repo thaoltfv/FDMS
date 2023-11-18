@@ -602,7 +602,7 @@ export default {
 		handleSubmit () {
 			this.isSubmit = true
 			let data = this.form
-			console.log('data',data)
+			// console.log('data',data)
 			// return
 			if (this.$route.name === 'building.edit') {
 				this.updateBuilding(data)

@@ -1073,17 +1073,17 @@ export default {
 	},
 	computed: {
 		disabledButton () {
-			console.log('vô vô')
+			// console.log('vô vô')
 			if ((this.emSoToCode || this.emSoThuaCode) && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
 				return false
 			} else return true
 		},
 		optionsProvince () {
-			console.log('list tỉnh', {
-				data: this.listCity,
-				id: 'code',
-				key: 'name_with_type'
-			})
+			// // console.log('list tỉnh', {
+			// 	data: this.listCity,
+			// 	id: 'code',
+			// 	key: 'name_with_type'
+			// })
 			return {
 				data: this.listCity,
 				id: 'code',
@@ -1091,11 +1091,11 @@ export default {
 			}
 		},
 		optionsDistrict () {
-			console.log('list huyện', {
-				data: this.listDistrict,
-				id: 'code',
-				key: 'name_with_type'
-			})
+			// // console.log('list huyện', {
+			// 	data: this.listDistrict,
+			// 	id: 'code',
+			// 	key: 'name_with_type'
+			// })
 			return {
 				data: this.listDistrict,
 				id: 'code',
@@ -1103,11 +1103,11 @@ export default {
 			}
 		},
 		optionsWard () {
-			console.log('list xã', {
-				data: this.listWard,
-				id: 'code',
-				key: 'name_with_type'
-			})
+			// // console.log('list xã', {
+			// 	data: this.listWard,
+			// 	id: 'code',
+			// 	key: 'name_with_type'
+			// })
 			return {
 				data: this.listWard,
 				id: 'code',
@@ -1130,13 +1130,13 @@ export default {
 		} else {
 			await this.initMap(this.address, "address");
 		}
-		// console.log('cityJSON', cityJson)
+		// // console.log('cityJSON', cityJson)
 		var result = [];
 
 		for(var i in cityJson)
 			result.push(cityJson [i])
 		this.listCity = result
-		console.log('city array', this.listCity)
+		// console.log('city array', this.listCity)
 	},
 	methods: {
 		changeProvince (code) {
@@ -1147,8 +1147,8 @@ export default {
 			const districtJson = require('@/assets/json/phuluc_dmhc/district/'+code+'.json')
 			for(var i in districtJson)
 				this.listDistrict.push(districtJson [i])
-			console.log('list huyện', this.listDistrict)
-			console.log('tỉnh chọn', this.emCityCode)
+			// console.log('list huyện', this.listDistrict)
+			// console.log('tỉnh chọn', this.emCityCode)
 		},
 		changeDistrict (code) {
 			this.listWard = []
@@ -1156,7 +1156,7 @@ export default {
 			const wardJson = require('@/assets/json/phuluc_dmhc/ward/'+code+'.json')
 			for(var i in wardJson)
 				this.listWard.push(wardJson [i])
-			console.log('list xã', this.listWard)
+			// console.log('list xã', this.listWard)
 		},
 		getEmCode() {
 			if (this.tinhthanh){
@@ -1165,11 +1165,11 @@ export default {
 					for (let i = 0; i < this.listCity.length; i++) {
 						let e = this.listCity[i]
 						if (e.name_with_type.toLowerCase()  == this.tinhthanh.toLowerCase() || e.name.toLowerCase() == this.tinhthanh.toLowerCase()) {
-							console.log('dính chưởng tỉnh thành', e)
+							// console.log('dính chưởng tỉnh thành', e)
 							this.emCityCode = e.code
 							if (this.quanhuyen) {
 								const districtJson = require('@/assets/json/phuluc_dmhc/district/'+this.emCityCode+'.json')
-								// console.log('list district', listDistrict)
+								// // console.log('list district', listDistrict)
 								if (districtJson) {
 									for(var i in districtJson)
 										this.listDistrict.push(districtJson [i])
@@ -1179,12 +1179,12 @@ export default {
 										for (let i = 0; i < this.listDistrict.length; i++) {
 											let q = this.listDistrict[i]
 											if (q.name_with_type.toLowerCase()  == this.quanhuyen.toLowerCase() || q.name.toLowerCase() == this.quanhuyen.toLowerCase()) {
-												console.log('dính chưởng quận huyện', q)
+												// console.log('dính chưởng quận huyện', q)
 												this.emDistrictCode = q.code
 												if (this.phuongxa) {
-													console.log('vô phường xã')
+													// console.log('vô phường xã')
 													let split1 = this.phuongxa.split(' ')
-													console.log('cắt', split1)
+													// console.log('cắt', split1)
 													if (split1[1] == '1' || split1[1] == '2' || split1[1] == '3' || split1[1] == '4' || split1[1] == '5' || split1[1] == '6' || split1[1] == '7' || split1[1] == '8' || split1[1] == '9') {
 														this.phuongxa = split1[0]+' 0'+split1[1]
 													}
@@ -1197,9 +1197,9 @@ export default {
 															let checkcoxa = 0
 															for (let i = 0; i < this.listWard.length; i++) {
 																let x = this.listWard[i]
-																console.log('x',this.phuongxa)
+																// console.log('x',this.phuongxa)
 																if (x.name_with_type.toLowerCase()  == this.phuongxa.toLowerCase() || x.name.toLowerCase() == this.phuongxa.toLowerCase()) {
-																	console.log('dính chưởng phường xã', x)
+																	// console.log('dính chưởng phường xã', x)
 																	this.emWardCode = x.code
 																	return
 																}
@@ -1231,7 +1231,7 @@ export default {
 			}
 		},
 		inscreaseProgress(progress){
-			console.log('gọi tăng')
+			// console.log('gọi tăng')
 			progress = progress + 1
 			this.progress = progress
 			if (this.progress < 100 && this.runProgress == true) {
@@ -1249,7 +1249,7 @@ export default {
 			this.inscreaseProgress(this.progress)
 			await this.getEmCode()
 			if ((this.emSoToCode || this.emSoThuaCode) && (this.emCityCode && this.emDistrictCode && this.emWardCode)) {
-				console.log('đầy đủ thông tin')
+				// console.log('đầy đủ thông tin')
 				const APItoken = await this.getToken();
 				if (APItoken){
 					let formdata = {
@@ -1261,10 +1261,10 @@ export default {
 					ward_code: this.emWardCode
 					}
 					await File.getInfoByLand({ data: formdata }).then((response) => {
-					console.log('response result',response)
+					// console.log('response result',response)
 					let datafinal = response.data.data
 					//   let that = this
-					console.log('data final', datafinal)
+					// console.log('data final', datafinal)
 					if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
 						this.dataResult = datafinal.data
 						this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
@@ -1281,7 +1281,7 @@ export default {
 						this.isOpenLoading = false
 						this.progress = 0
 						this.runProgress = false
-						// console.log('quan huyen', this.geo_data.geometry.coordinates[0][0])
+						// // console.log('quan huyen', this.geo_data.geometry.coordinates[0][0])
 					} else {
 						this.$toast.open({
 						message: 'Không tìm thấy dữ liệu quy hoạch',
@@ -1302,7 +1302,7 @@ export default {
 			}
 		},
 		// changeSearchToThua(event){
-		// 	console.log('event', this.serch_to_thua)
+		// 	// console.log('event', this.serch_to_thua)
 		// 	// this.search_to_thua = true
 		// },
     async getToken () {
@@ -1314,12 +1314,12 @@ export default {
       //   const headers = { 'Content-type': 'application/json','Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials':true }; // auth header with bearer token
       // const response = await uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/auth/credentials', body,{headers}).catch(function (error) {
       //     if (error.response) {
-      //       console.log(error.response.data);
-      //       console.log(error.response.status);
-      //       console.log(error.response.headers);
+      //       // console.log(error.response.data);
+      //       // console.log(error.response.status);
+      //       // console.log(error.response.headers);
       //     }
       //   })
-      // console.log('data token', response.data.data.access_token)
+      // // console.log('data token', response.data.data.access_token)
       // if (response.data.data.access_token) {
       //   return response.data.data.access_token
       // } else {
@@ -1331,7 +1331,7 @@ export default {
       // }
       let token = ''
       await File.getToken().then((response) => {
-				console.log('response token',response)
+				// console.log('response token',response)
         token = response.data.data.data.access_token
 			})
       return token
@@ -1343,7 +1343,7 @@ export default {
 		this.isOpenLoading = true
 		this.inscreaseProgress(this.progress)
       const APItoken = await this.getToken();
-      console.log('api token', APItoken)
+      // console.log('api token', APItoken)
       if (APItoken){
         // const uninterceptedAxiosInstance = axios.create();
         // const body = { lat: coordinates[0], lng: coordinates[1] }; // request JSON body
@@ -1351,7 +1351,7 @@ export default {
         // uninterceptedAxiosInstance.post('https://app.estatemanner.com/api/v1/map/feature/coord', body, { headers })
         //     .then(response => 
         //     {
-        //       console.log('response', response.data.data)
+        //       // console.log('response', response.data.data)
         //       this.dataResult = response.data.data
         //       this.geo_data = this.dataResult.geo_data
         //       this.modalGeoInfo = true
@@ -1359,9 +1359,9 @@ export default {
         //     .catch(function (error) {
         //       that = this
         //       if (error.response) {
-        //         console.log(error.response.data);
-        //         console.log(error.response.status);
-        //         console.log(error.response.headers);
+        //         // console.log(error.response.data);
+        //         // console.log(error.response.status);
+        //         // console.log(error.response.headers);
         //         that.$toast.open({
         //             message: error.response.data.message,
         //             type: 'error',
@@ -1378,17 +1378,17 @@ export default {
           lng: coordinates[1]
         }
         await File.getInfoByCoord({ data: formdata }).then((response) => {
-          console.log('response result',response)
+          // console.log('response result',response)
           let datafinal = response.data.data
         //   let that = this
-          console.log('data final', datafinal)
+          // console.log('data final', datafinal)
           if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
             this.dataResult = datafinal.data
             this.geo_data = this.dataResult  ? this.dataResult.geo_data :  []
             this.modalGeoInfo = true
 			this.phuongxa_code = this.dataResult.attributes.level_3
 			this.quanhuyen_code = this.dataResult.attributes.level_2
-			// console.log('quan huyen', this.quanhuyen)
+			// // console.log('quan huyen', this.quanhuyen)
 			this.isOpenLoading = false
 			this.progress = 0
 			this.runProgress = false
@@ -1411,14 +1411,14 @@ export default {
 		},
 		geoInfo() {
 			this.modalGeoInfo = !this.modalGeoInfo;
-			console.log("open", this.modalGeoInfo);
+			// console.log("open", this.modalGeoInfo);
 		},
 		closeModalGeoInfo() {
 			this.modalGeoInfo = false;
 		},
 		async handleOpenEM() {
 			this.modalGeoInfo = false
-			console.log("mở");
+			// console.log("mở");
 			await this.getEmCode()
 			this.isOpen = true;
 		},
@@ -1446,13 +1446,13 @@ export default {
 			}
 		},
 		async initMap(address, type) {
-			console.log('vô 3')
+			// console.log('vô 3')
 			// eslint-disable-next-line no-undef
 			const geocoder = new google.maps.Geocoder();
 			await this.geocodeAddress(geocoder, address, type);
 		},
 		async geocodeAddress(geocoder, address, type) {
-			console.log('vô 4')
+			// console.log('vô 4')
 			let center = {};
 			let duong = ''
 			let phuongxa = ''
@@ -1475,7 +1475,7 @@ export default {
 				}
 				await geocoder.geocode(keySearch, function(results, status) {
 					if (status === "OK") {
-						console.log('ket qua',results[0])
+						// console.log('ket qua',results[0])
 						const marker = {
 							position: results[0].geometry.location
 						};
@@ -1518,10 +1518,10 @@ export default {
 						}
 						
 						 
-						console.log('ketqua dia chi',results[0].address_components)
-						console.log('ketqua phuong xa',phuongxa)
-						console.log('ketqua quan huyen',quanhuyen)
-						console.log('ketqua tinh thanh',tinhthanh)
+						// console.log('ketqua dia chi',results[0].address_components)
+						// console.log('ketqua phuong xa',phuongxa)
+						// console.log('ketqua quan huyen',quanhuyen)
+						// console.log('ketqua tinh thanh',tinhthanh)
 					} else {
 						// alert('Geocode was not successful for the following reason: ' + status)
 					}
@@ -1532,13 +1532,13 @@ export default {
 				this.phuongxa = phuongxa;
 				this.quanhuyen = quanhuyen;
 				this.tinhthanh = tinhthanh;
-				console.log('quan huyen', this.quanhuyen)
-        console.log('gọi vô')
+				// console.log('quan huyen', this.quanhuyen)
+        // console.log('gọi vô')
         // this.getInfoByCoord(this.markerLatLng)
 			}
 		},
 		choosePoint(event) {
-			// console.log('choosePoint', event)
+			// // console.log('choosePoint', event)
 			this.map.center = [event.latlng.lat, event.latlng.lng];
 			this.markerLatLng = [event.latlng.lat, event.latlng.lng];
 			this.search_address = event.latlng.lat + "," + event.latlng.lng;
@@ -1553,7 +1553,7 @@ export default {
 		},
 		setPlace(place) {
 			if (place.geometry && place.geometry.location) {
-				console.log('vô I')
+				// console.log('vô I')
 				this.search_address = place.formatted_address;
 				this.currentPlace = place;
 				this.map.center = [
@@ -1567,9 +1567,9 @@ export default {
 				this.initMap(this.search_address, "address");
         this.getInfoByCoord(this.markerLatLng)
 			} else {
-				console.log('vô II')
+				// console.log('vô II')
 				if (place.name) {
-					console.log('vô II.1')
+					// console.log('vô II.1')
 					let location = place.name;
 					this.search_address = place.name;
 					if (
@@ -1578,18 +1578,18 @@ export default {
 						parseFloat(location.split(",")[0]) &&
 						parseFloat(location.split(",")[1])
 					) {
-						console.log('vô II.1.1')
+						// console.log('vô II.1.1')
 						let lat = parseFloat(location.split(",")[0]);
 						let lng = parseFloat(location.split(",")[1]);
 						this.map.center = [lat, lng];
 						this.markerLatLng = [lat, lng];
             this.getInfoByCoord(this.markerLatLng)
 					} else {
-						console.log('vô II.1.2')
+						// console.log('vô II.1.2')
 						this.initMap(location, "address");
 					}
 				} else {
-					console.log('vô II.2')
+					// console.log('vô II.2')
 					this.initMap(this.search_address, "address");
 				}
 			}
@@ -1624,7 +1624,7 @@ export default {
 		handleSearch() {
       
 			if (this.search_address) {
-				console.log('vô 1')
+				// console.log('vô 1')
 				let location = this.search_address;
 				if (
 					location.split(",") &&
@@ -1632,18 +1632,18 @@ export default {
 					parseFloat(location.split(",")[0]) &&
 					parseFloat(location.split(",")[1])
 				) {
-					console.log('vô 1.1')
+					// console.log('vô 1.1')
 					let lat = parseFloat(location.split(",")[0]);
 					let lng = parseFloat(location.split(",")[1]);
 					this.map.center = [lat, lng];
 					this.markerLatLng = [lat, lng];
           this.getInfoByCoord(this.markerLatLng)
 				} else {
-					console.log('vô 1.2')
+					// console.log('vô 1.2')
 					this.initMap(location, "address");
 				}
 			} else {
-				console.log('vô 2')
+				// console.log('vô 2')
 				this.initMap(this.search_address, "address");
 			}
 		},

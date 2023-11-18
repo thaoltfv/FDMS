@@ -94,7 +94,7 @@ export default {
 		const listElm = document.querySelector('#infinite-list')
 		listElm.addEventListener('scroll', e => {
 			if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight - 5) {
-				console.log(this.subStatusData)
+				// console.log(this.subStatusData)
 				this.loadMore2()
 			}
 		})
@@ -125,10 +125,10 @@ export default {
 				this.subStatusData[item.id] = data
 			})
 			this.countData += 10
-			// console.log('this.countData',this.countData)
+			// // console.log('this.countData',this.countData)
 		},
 		handleMoveDraft (event) {
-			// console.log(event)
+			// // console.log(event)
 			// if (event.draggedContext.element.appraiser_sale && (this.user_id === event.draggedContext.element.appraiser_sale.user_id || event.draggedContext.element.created_by === this.profile.data.user.id)) {
 			this.idDragger = event.draggedContext.element.id
 			this.elementDragger = event.draggedContext.element

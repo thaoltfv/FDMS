@@ -31,7 +31,8 @@ if (process.env.API_URL === 'https://trial-api.fastvalue.com.vn' || process.env.
 				{ id: 'appraise-other', title: 'Cơ sở thẩm định', routeName: 'appraise-other.index', exact: true },
 				{ id: 'appraisal-construction', title: 'Đơn vị xây dựng', routeName: 'appraisal-construction.index', exact: true },
 				{ id: 'building', title: 'Quản lý loại công trình', routeName: 'building.index', exact: true },
-				{ id: 'element', title: 'Yếu tố so sánh', routeName: 'element.index', exact: true }
+				{ id: 'element', title: 'Yếu tố so sánh', routeName: 'element.index', exact: true },
+				{ id: 'dictionary', title: 'Quản lý dữ liệu khác', routeName: 'dictionary.index', exact: true }
 			],
 			customImage: true
 		},
@@ -47,7 +48,7 @@ if (process.env.API_URL === 'https://trial-api.fastvalue.com.vn' || process.env.
 				{ id: 'street', title: 'Quản lý Đường phố', routeName: 'street.index', exact: true },
 				{ id: 'apartment', title: 'Quản lý Chung cư', routeName: 'apartment.index', exact: true },
 				// { id: 'unit', title: 'Quản lý đơn giá UBND', routeName: 'unit_price.index', exact: true },
-				{ id: 'dictionary', title: 'Quản lý Chung', routeName: 'dictionary.index', exact: true }
+				
 			],
 			customImage: true
 		},

@@ -1565,13 +1565,13 @@ export default {
 		},
     async initMap () {
 			// eslint-disable-next-line no-undef
-      console.log('form', this.form)
+      // console.log('form', this.form)
 			if (this.form.coordinates) {
         
 				this.map.center = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.markerLatLng = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.map.zoom = 17
-        // console.log('vô đây', map)
+        // // console.log('vô đây', map)
 			} else {
 				this.markerLatLng = [10.964112, 106.856461]
 				this.map.center = [10.964112, 106.856461]
@@ -1594,7 +1594,7 @@ export default {
 			const res = await WareHouse.getHistoryTimeline(id)
 			if (res.data) {
 				this.historyList = res.data
-        console.log('history_list', this.historyList)
+        // console.log('history_list', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,

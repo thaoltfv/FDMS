@@ -1036,7 +1036,7 @@ export default {
 					comparison_factor: asset_generals,
 					assets_general: appraise.assets_general
 				}
-				// console.log(this.apartment, 'apartment')
+				// // console.log(this.apartment, 'apartment')
 			}
 		},
 

@@ -192,16 +192,16 @@ export default {
 	},
 	// async mounted() {
 	// 	const appraiserCompany = await AppraiserCompany.detail()
-	// 	// console.log(';dsdsad',appraiserCompany )
+	// 	// // console.log(';dsdsad',appraiserCompany )
 	// 	this.total_account = appraiserCompany.data.data[0].total_account
-	// 	// console.log('total 1', this.total_account)
-	// 	// console.log('total 1', this.total_account, this.list_total1.length)
+	// 	// // console.log('total 1', this.total_account)
+	// 	// // console.log('total 1', this.total_account, this.list_total1.length)
 	// 	// if (this.total_account && this.list_total1.length){
-	// 	// 	console.log('total 1', this.total_account, this.list.length)
+	// 	// 	// console.log('total 1', this.total_account, this.list.length)
 	// 	// }
 	// },
 	created () {
-		console.log('dsadsađâs',this.$route.meta['detail'])
+		// console.log('dsadsađâs',this.$route.meta['detail'])
 		if ('id' in this.$route.query && this.$route.name === 'staff.edit') {
 			this.form = Object.assign(this.form, {
 				...this.$route.meta['detail']
@@ -363,7 +363,7 @@ export default {
 
 				this.list_total1 = [...resp.data.data]
 				const appraiserCompany = await AppraiserCompany.detail()
-				// console.log(';dsdsad',appraiserCompany )
+				// // console.log(';dsdsad',appraiserCompany )
 				this.total_account = appraiserCompany.data.data[0].total_account
 				if (this.list_total1.filter(function (item) {
 					return item.status_user == 'active'
@@ -386,13 +386,13 @@ export default {
 		this.getRoles()
 		this.getBranches()
 		this.getDictionary()
-		console.log('this.$route.name',this.$route.name)
+		// console.log('this.$route.name',this.$route.name)
 		if (this.$route.name === 'staff.create'){
 			this.getStaffsFull()
 		}
 	},
 	mounted () {
-		console.log(this.form.password)
+		// console.log(this.form.password)
 	}
 }
 </script>

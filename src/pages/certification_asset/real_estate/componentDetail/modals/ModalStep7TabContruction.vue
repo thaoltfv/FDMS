@@ -575,8 +575,8 @@ export default {
             }
     },
     async handleSaveNote() {
-      console.log('id save',this.choosenId)
-      console.log('data save',this.noteHienTrang)
+      // console.log('id save',this.choosenId)
+      // console.log('data save',this.noteHienTrang)
       let data = {'note': this.noteHienTrang}
       const res = await CertificateAsset.updateNoteHienTrang(data, this.choosenId)
       if (res.data) {
@@ -616,13 +616,13 @@ export default {
 			}
     },
     handleNote(data){
-      console.log('ddddd',data)
+      // console.log('ddddd',data)
       if (data.comparison_tangible_factor.note){
         this.noteHienTrang = JSON.parse(data.comparison_tangible_factor.note)
       }
       this.choosenId = data.comparison_tangible_factor.id
-      console.log('note',this.noteHienTrang)
-      console.log('note1',this.noteHienTrang.note1)
+      // console.log('note',this.noteHienTrang)
+      // console.log('note1',this.noteHienTrang.note1)
       this.showNoteHienTrang = true
     },
 		setRemainQualityRate (remainQualitySelected) {
@@ -641,7 +641,7 @@ export default {
 			}
 		},
 		selectConstructionPriceType (event) {
-			// console.log(event)
+			// // console.log(event)
 			this.constructionPriceTypeSelected = []
 			let slug = event.target.id
 			let checked = event.target.checked
@@ -650,7 +650,7 @@ export default {
 			}
 		},
 		selectConstructionRemainQuality (event) {
-			// console.log(event)
+			// // console.log(event)
 			this.constructionRemainQualitySelected = []
 			let slug = event.target.id
 			let checked = event.target.checked

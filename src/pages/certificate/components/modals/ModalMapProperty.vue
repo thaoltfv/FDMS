@@ -462,7 +462,7 @@ export default {
 			// await this.locationArray.forEach((location, index) => {
 			//   if (location.asset === true) {
 			//     const select = this.assetGenerals.find(item =>{location.id === item.id})
-			//     console.log(select,'select')
+			//     // console.log(select,'select')
 			//     if(select){
 			//       this.locationArrayPopup.push(this.assetGenerals[index])
 			//       // this.locationArrayPopup.push(select)

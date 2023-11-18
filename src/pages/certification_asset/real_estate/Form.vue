@@ -769,7 +769,7 @@ export default {
 				if (bindDataStep.map_img) { this.form.step_6.map_img = bindDataStep.map_img }
 				if (bindDataStep.distance_max) { this.distance_max = bindDataStep.distance_max }
 				if (bindDataStep.filter_year) { this.filter_year = bindDataStep.filter_year }
-				// console.log('dấdasđá', this.form)
+				// // console.log('dấdasđá', this.form)
 				this.status_text = bindDataStep.status_text
 				this.form.status = bindDataStep.status
 				this.idData = await this.form.step_1.general_infomation.id
@@ -879,7 +879,7 @@ export default {
 					this.form.step_6.map_img = ''
 					this.distance_max = response.data.distance_max
 					this.filter_year = response.data.filter_year
-					// console.log('đsdấdasđâsd', response.data)
+					// // console.log('đsdấdasđâsd', response.data)
 					if (response.data.assets.length === 0) {
 						this.$toast.open({
 							message: `${response.data.message}`,
@@ -1096,7 +1096,7 @@ export default {
 			if (checkIsCheckFacility && checkIsCheckFacility.length === 0) {
 				this.form.step_2.total_area[0].is_transfer_facility = true
 			}
-			console.log('mục đích',this.form.step_2.total_area)
+			// console.log('mục đích',this.form.step_2.total_area)
 			this.handleChangeUBNDPrice()
 			this.handleGetTotalArea()
 		},
@@ -1228,7 +1228,7 @@ export default {
 			const isValid = await this.$refs.step_2.validate()
 			let step_2 = this.form.step_2
 			let checkValidPurpose = false
-			// console.log('step_2.errorCustom', this.step2DuplicateLandType)
+			// // console.log('step_2.errorCustom', this.step2DuplicateLandType)
 			step_2.total_area.forEach(item => {
 				if (!item.land_type_purpose_id) {
 					checkValidPurpose = true
