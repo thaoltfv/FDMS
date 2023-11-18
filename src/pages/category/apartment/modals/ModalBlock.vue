@@ -34,8 +34,9 @@
 				label="Tầng đầu tiên"
 				:max="99999999999999"
 				:min="0"
-				rules="required"
+				
 				@change="changeFirstFloor($event)"
+						hidden
 				/>
 				<InputNumberNoneFormat
 				v-model="form.last_floor"
@@ -44,8 +45,9 @@
 				label="Tầng cuối cùng"
 				:max="99999999999999"
 				:min="0"
-				rules="required"
+				
 				@change="changeLastFloor($event)"
+						hidden
 				/>
 				<InputNumberNoneFormat
 				v-model="form.apartments_per_floor"
@@ -90,7 +92,7 @@ export default {
 			this.$emit('cancel', event)
 		},
 		changeTotalFloor (e) {
-			this.form.total_floors = e
+			this.form.total_floors = e		
 		},
 		changeFirstFloor (e) {
 			this.form.first_floor = e
