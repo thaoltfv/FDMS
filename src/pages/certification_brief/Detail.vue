@@ -939,7 +939,7 @@ export default {
 					align: 'right',
 					scopedSlots: {customRender: 'area'},
 					dataIndex: 'total_area',
-					hiddenItem: this.isCheckRealEstate
+					hiddenItem: !this.isCheckRealEstate
 				},
 				{
 					title: 'Tổng giá trị',
@@ -2005,6 +2005,7 @@ export default {
 			this.isShowAppraiseListVersion = true
 		},
 		setDocumentViewStatus () {
+			console.log('this.form.document_type',this.form.document_type)
 			let isExportAutomatic = true
 			let isCheckRealEstate = true
 			let isCheckConstruction = false

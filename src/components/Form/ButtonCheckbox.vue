@@ -238,6 +238,10 @@ export default {
   border-color: #6e7582 !important;
 }
 
+/deep/ .bg-control .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: #e8bc6b !important;
+}
+
 .btn {
     &-filter {
       position: fixed;

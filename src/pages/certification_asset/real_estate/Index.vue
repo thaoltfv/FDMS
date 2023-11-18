@@ -405,6 +405,7 @@ export default {
 		},
 		onChangeStatus(value) {
 			this.selectedStatus = value;
+			console.log('00o0',this.selectedStatus)
 			this.getDataAll();
 		},
 		async export30daysBefore() {
