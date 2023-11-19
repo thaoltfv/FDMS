@@ -207,6 +207,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
 
                         $dataBlock = Block::query()->updateOrCreate($blockCheck, $blockAtt->attributesToArray());
                         if (isset($block['floor']) && count($block['floor']) > 0) {
+                            Floor::where('block_id', $dataBlock->id)->delete();
                             foreach ($block['floor'] as $floor) {
                                 $floor['block_id'] = $floor['block_id']??$dataBlock->id;
                                 $floorAtt = new Floor($floor);
@@ -221,12 +222,14 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                             $startFloor = intval($block['first_floor']);
                             $endFloor = intval($block['last_floor']);
 
+                            $totalFloor = intval($block['total_floors']);
+
                             $floorData = [];
-                            for ($i=$startFloor; $i<=$endFloor; $i++) {
+                            for ($i=1; $i<=$totalFloor; $i++) {
                                 $floorData[] = [
                                     'block_id' => $dataBlock->id,
                                     'status' => true,
-                                    'name' => $i
+                                    'name' => 'Tầng ' . $i
                                 ];
                             }
                             Floor::insert($floorData);

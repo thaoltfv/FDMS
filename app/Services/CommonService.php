@@ -1694,7 +1694,7 @@ class CommonService
 				}
 				$appraise->message = '';
 			} else
-				$appraise->message = 'Không tìm được TSTĐ có chung điều kiện tìm kiếm';
+				$appraise->message = 'Chưa có TSTĐ tương tự để kiểm soát chéo';
 			$appraise->appraiseList = $appraiseList;
 		}
 		return $appraises;
