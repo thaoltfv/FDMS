@@ -104,6 +104,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 $objects['status'] = true;
                 // $objects['rank'] = explode(',', $objects['rank']);
                 $project = new Project($objects);
+                dd($project->attributesToArray());
                 $dataProj = $this->model->query()->create($project->attributesToArray());
                 if (isset($blockObjs)) {
                     foreach ($blockObjs as $block) {
