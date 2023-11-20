@@ -265,8 +265,8 @@ class CertificateAssetsController extends Controller
                 'law.*.land_details' => 'nullable|required_unless:law.*.appraise_law_id,0|array',
                 'law.*.land_details.*.doc_no' => 'nullable|required_unless:law.*.appraise_law_id,0',
                 'law.*.land_details.*.land_no' => 'nullable|required_unless:law.*.appraise_law_id,0',
-                'law.*.purpose_details.*.land_type_purpose_id' => 'nullable|required_unless:law.*.appraise_law_id,0',
-                'law.*.purpose_details.*.total_area' => 'nullable|required_unless:law.*.appraise_law_id,0',
+                // 'law.*.purpose_details.*.land_type_purpose_id' => 'nullable|required_unless:law.*.appraise_law_id,0',
+                // 'law.*.purpose_details.*.total_area' => 'nullable|required_unless:law.*.appraise_law_id,0',
                 ];
 
         $customAttributes = [
@@ -279,8 +279,8 @@ class CertificateAssetsController extends Controller
                 'law.*.land_details' => 'Thông tin số tờ , số thửa',
                 'law.*.land_details.*.doc_no' => 'Số tờ',
                 'law.*.land_details.*.land_no' => 'Số thửa',
-                'law.*.purpose_details.*.land_type_purpose_id' => 'Mục đích sử dụng',
-                'law.*.purpose_details.*.total_area' => 'Diện tích',
+                // 'law.*.purpose_details.*.land_type_purpose_id' => 'Mục đích sử dụng',
+                // 'law.*.purpose_details.*.total_area' => 'Diện tích',
                 ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
