@@ -98,7 +98,6 @@
               :min="0"
 							:decimal="0"
               @change="changeTotalBlock($event)"
-			  				hidden
             />
             <InputNumberNoneFormat
               v-model="form.total_apartments"
@@ -110,7 +109,6 @@
               :min="0"
 							:decimal="0"
               @change="changeTotalApartment($event)"
-			  			hidden
             />
 
           </div>
