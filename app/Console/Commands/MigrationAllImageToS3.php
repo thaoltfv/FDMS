@@ -94,6 +94,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
+            dd($images);
             Log::info("Migration appraise_pics is start!");
             if ($images) {
                 foreach ($images as $image) {
