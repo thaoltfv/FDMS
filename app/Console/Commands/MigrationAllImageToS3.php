@@ -92,6 +92,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration appraise_pics is start!");
             if ($images) {
@@ -137,6 +138,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration apartment_asset_pics is start!");
             if ($images) {
@@ -182,6 +184,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration certificate_apartment_pics is start!");
             if ($images) {
@@ -227,6 +230,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration CertificateAssetPic is start!");
             if ($images) {
@@ -272,6 +276,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration ComparePropertyPic is start!");
             if ($images) {
@@ -317,6 +322,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration CompareTangiblePic is start!");
             if ($images) {
@@ -362,6 +368,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration CustomerPic is start!");
             if ($images) {
@@ -407,6 +414,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereRaw($query)
                     ->whereNull('deleted_at')
                     ->whereNotNull('link')
+                    ->limit(500)
                     ->get();
             Log::info("Migration CompareOtherPic is start!");
             if ($images) {
