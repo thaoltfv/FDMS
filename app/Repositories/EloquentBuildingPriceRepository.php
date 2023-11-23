@@ -375,7 +375,9 @@ class EloquentBuildingPriceRepository extends EloquentRepository implements Buil
                 // ->avg('unit_price_m2');
 
             $result = $result->merge($result_x)->avg('unit_price_m2');
-        } else {
+        } 
+
+        if (!$result){
             $result= $this->model->query()
                 ->where('effect_from', '<=', Carbon::now()->format('Y-m-d'))
                 ->where('effect_to', '>=', Carbon::now()->format('Y-m-d'))
