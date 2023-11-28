@@ -54,10 +54,10 @@ class MigrationAllImageToS3 extends Command
 
     public function handle()
     {
-        Log::info("Migration images is start!");
+        // Log::info("Migration images is start!");
             //compareGeneralPicRepository
             $images = $this->compareGeneralPicRepository->findImage();
-            Log::info("Migration compareGeneralPicRepository is start!");
+            // Log::info("Migration compareGeneralPicRepository is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -84,7 +84,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration compareGeneralPicRepository is end!");
+            // Log::info("Migration compareGeneralPicRepository is end!");
 
             //appraise_pics
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -94,7 +94,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration appraise_pics is start!");
+            // Log::info("Migration appraise_pics is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -130,7 +130,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration appraise_pics is end!");
+            // Log::info("Migration appraise_pics is end!");
 
             //apartment_asset_pics
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -140,7 +140,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration apartment_asset_pics is start!");
+            // Log::info("Migration apartment_asset_pics is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -176,7 +176,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration apartment_asset_pics is end!");
+            // Log::info("Migration apartment_asset_pics is end!");
 
             //certificate_apartment_pics
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -186,7 +186,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration certificate_apartment_pics is start!");
+            // Log::info("Migration certificate_apartment_pics is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -222,7 +222,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration certificate_apartment_pics is end!");
+            // Log::info("Migration certificate_apartment_pics is end!");
 
             //CertificateAssetPic
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -232,7 +232,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration CertificateAssetPic is start!");
+            // Log::info("Migration CertificateAssetPic is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -268,7 +268,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration CertificateAssetPic is end!");
+            // Log::info("Migration CertificateAssetPic is end!");
 
             //ComparePropertyPic
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -278,7 +278,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration ComparePropertyPic is start!");
+            // Log::info("Migration ComparePropertyPic is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -314,7 +314,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration ComparePropertyPic is end!");
+            // Log::info("Migration ComparePropertyPic is end!");
 
             //CompareTangiblePic
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -324,7 +324,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration CompareTangiblePic is start!");
+            // Log::info("Migration CompareTangiblePic is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -360,7 +360,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration CompareTangiblePic is end!");
+            // Log::info("Migration CompareTangiblePic is end!");
 
             //CustomerPic
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -370,7 +370,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration CustomerPic is start!");
+            // Log::info("Migration CustomerPic is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -406,7 +406,7 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration CustomerPic is end!");
+            // Log::info("Migration CustomerPic is end!");
 
             //CompareOtherPic
             $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
@@ -416,7 +416,7 @@ class MigrationAllImageToS3 extends Command
                     ->whereNotNull('link')
                     ->limit(500)
                     ->get();
-            Log::info("Migration CompareOtherPic is start!");
+            // Log::info("Migration CompareOtherPic is start!");
             if ($images) {
                 foreach ($images as $image) {
                     $client = new Client;
@@ -452,8 +452,8 @@ class MigrationAllImageToS3 extends Command
                     }
                 }
             }
-            Log::info("Migration CompareOtherPic is end!");
+            // Log::info("Migration CompareOtherPic is end!");
 
-        Log::info('Migration images is end!');
+        // Log::info('Migration images is end!');
     }
 }
