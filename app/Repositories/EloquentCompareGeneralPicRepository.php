@@ -47,7 +47,7 @@ class EloquentCompareGeneralPicRepository extends EloquentRepository implements 
 
     public function findImage()
     {
-        $query = 'link not ilike ' . "'%s3-ap-southeast-1.amazonaws.com%'";
+        $query = 'link not ilike ' . "'%s3-ap-southeast-2.amazonaws.com%'";
 
         return $this->model->query()->select()
             ->whereRaw($query)
