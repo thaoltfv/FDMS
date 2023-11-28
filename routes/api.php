@@ -296,6 +296,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('/certificate', CertificateController::class);
 
+    Route::apiResource('/pre_certificate', PreCertificateController::class);
+
     Route::post('appraise/status/{id}', [AppraiseController::class, 'updateStatus']);
 
     Route::post('certificate/status/{id}', [CertificateController::class, 'updateStatus']);

@@ -16,6 +16,7 @@ class CreatePreCertificateTable extends Migration
         Schema::create('pre_certificates', function (Blueprint $table) {
             // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2021_12_08_231456_create_certificate_table.php
             $table->increments('id');
+            $table->integer('pre_status');
             $table->integer('status');
             $table->integer('ticket_num')->nullable();
 			$table->string('document_num')->nullable();
