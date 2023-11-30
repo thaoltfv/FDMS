@@ -1,5 +1,5 @@
 <template>
-	<div class="" style="margin: 0;" :style="{ 'width': resizeWidth }">
+	<div class="" style="margin: 0;">
 		<iframe :src="url_modal" frameborder="0" width="100%" height="820dvh"></iframe>
 	</div>
 </template>
