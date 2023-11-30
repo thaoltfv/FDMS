@@ -1,96 +1,100 @@
 <template>
-	<div>
-		<ValidationObserver
-			tag="div"
-			ref="step_1"
-			@submit.prevent="validateSubmitStep1"
-		>
-			<div style="margin-bottom:60px">
-				<Step1x
-					:idData="idData"
-					:data="form.step_1"
-					:typeAppraiseProperty="typeAppraiseProperty"
-					:appraisersManager="appraisersManager"
-					:appraisersControl="appraisersControl"
-					:appraisalPurposes="appraisalPurposes"
-					:appraisers="appraisers"
-					:signAppraisers="signAppraisers"
-					:customers="customers"
-					:employeePerformance="employeePerformance"
-					:employeeBusiness="employeeBusiness"
-					:render_price_fee="render_price_fee"
-					@handleChangeAppraiser="handleChangeAppraiser"
-					@handleChangeAppraiserManager="handleChangeAppraiserManager"
-					:userAppraiserId="userAppraiserId"
-				/>
-			</div>
-
-			<div
-				v-if="!isMobile()"
-				class="btn-footer d-md-flex d-block justify-content-end align-items-center"
+	<div
+		class="container-fluid"
+		:style="isMobile() ? { margin: '0', padding: '0' } : {}"
+	>
+		<div>
+			<ValidationObserver
+				tag="div"
+				ref="step_1"
+				@submit.prevent="validateSubmitStep1"
 			>
-				<div class="d-lg-flex d-block button-contain">
-					<button
-						@click.prevent="$router.go(-1)"
-						class="btn btn-white text-nowrap"
-					>
-						<img
-							src="../../assets/icons/ic_cancel.svg"
-							style="margin-right: 12px"
-							alt="save"
-						/>
-						Trở lại
-					</button>
-					<button
-						:class="{ 'btn_loading disabled': isSubmit }"
-						class="btn btn-white btn-orange text-nowrap"
-						@click.prevent="validateSubmitStep1"
-						type="submit"
-					>
-						<img
-							src="../../assets/icons/ic_save.svg"
-							style="margin-right: 12px"
-							alt="save"
-						/>Lưu
-					</button>
+				<div style="margin-bottom:60px">
+					<Step1x
+						:idData="idData"
+						:data="form.step_1"
+						:typeAppraiseProperty="typeAppraiseProperty"
+						:appraisersManager="appraisersManager"
+						:appraisersControl="appraisersControl"
+						:appraisalPurposes="appraisalPurposes"
+						:appraisers="appraisers"
+						:signAppraisers="signAppraisers"
+						:customers="customers"
+						:employeePerformance="employeePerformance"
+						:employeeBusiness="employeeBusiness"
+						:render_price_fee="render_price_fee"
+						@handleChangeAppraiser="handleChangeAppraiser"
+						@handleChangeAppraiserManager="handleChangeAppraiserManager"
+						:userAppraiserId="userAppraiserId"
+					/>
 				</div>
-			</div>
-			<div v-else class="btn-footer d-md-flex d-block" style="bottom: 60px;">
+
 				<div
-					class="d-lg-flex d-block button-contain row"
-					style="justify-content: space-around;display: flex!important;"
+					v-if="!isMobile()"
+					class="btn-footer d-md-flex d-block justify-content-end align-items-center"
 				>
-					<button
-						@click.prevent="$router.go(-1)"
-						class="btn btn-white text-nowrap col-6"
-						style="width: unset;margin: 0;padding: 0;"
-					>
-						<img
-							src="../../assets/icons/ic_cancel.svg"
-							style="margin-right: 12px"
-							alt="save"
-						/>
-						Trở lại
-					</button>
-					<button
-						:class="{ 'btn_loading disabled': isSubmit }"
-						class="btn btn-white btn-orange text-nowrap col-6"
-						@click.prevent="validateSubmitStep1"
-						type="submit"
-						style="width: unset;margin: 0;padding: 0;"
-					>
-						<img
-							src="../../assets/icons/ic_save.svg"
-							style="margin-right: 12px"
-							alt="save"
-						/>Lưu
-					</button>
+					<div class="d-lg-flex d-block button-contain">
+						<button
+							@click.prevent="$router.go(-1)"
+							class="btn btn-white text-nowrap"
+						>
+							<img
+								src="../../assets/icons/ic_cancel.svg"
+								style="margin-right: 12px"
+								alt="save"
+							/>
+							Trở lại
+						</button>
+						<button
+							:class="{ 'btn_loading disabled': isSubmit }"
+							class="btn btn-white btn-orange text-nowrap"
+							@click.prevent="validateSubmitStep1"
+							type="submit"
+						>
+							<img
+								src="../../assets/icons/ic_save.svg"
+								style="margin-right: 12px"
+								alt="save"
+							/>Lưu
+						</button>
+					</div>
 				</div>
-			</div>
-		</ValidationObserver>
+				<div v-else class="btn-footer d-md-flex d-block" style="bottom: 60px;">
+					<div
+						class="d-lg-flex d-block button-contain row"
+						style="justify-content: space-around;display: flex!important;"
+					>
+						<button
+							@click.prevent="$router.go(-1)"
+							class="btn btn-white text-nowrap col-6"
+							style="width: unset;margin: 0;padding: 0;"
+						>
+							<img
+								src="../../assets/icons/ic_cancel.svg"
+								style="margin-right: 12px"
+								alt="save"
+							/>
+							Trở lại
+						</button>
+						<button
+							:class="{ 'btn_loading disabled': isSubmit }"
+							class="btn btn-white btn-orange text-nowrap col-6"
+							@click.prevent="validateSubmitStep1"
+							type="submit"
+							style="width: unset;margin: 0;padding: 0;"
+						>
+							<img
+								src="../../assets/icons/ic_save.svg"
+								style="margin-right: 12px"
+								alt="save"
+							/>Lưu
+						</button>
+					</div>
+				</div>
+			</ValidationObserver>
+		</div>
 	</div>
 </template>
-
 <script>
 import { FormWizard, TabContent } from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
@@ -106,7 +110,7 @@ import AppraiserCompany from "@/models/AppraiserCompany";
 const jsonConfig = require("../../../config/workflow.json");
 
 export default {
-	name: "Index",
+	name: "Create",
 	components: {
 		BCard,
 		FormWizard,
@@ -117,6 +121,7 @@ export default {
 		BFormInput,
 		Step1
 	},
+
 	data() {
 		return {
 			idData: null,
@@ -194,58 +199,18 @@ export default {
 			userAppraiserId: ""
 		};
 	},
-	async created() {
-		await this.getProfiles();
-		const permission = this.$store.getters.currentPermissions;
-		// fix_permission
-		await permission.forEach(value => {
-			if (value === "VIEW_CERTIFICATE_BRIEF") {
-				this.view = true;
-			}
-			if (value === "ADD_CERTIFICATE_BRIEF") {
-				this.add = true;
-			}
-			if (value === "EDIT_CERTIFICATE_BRIEF") {
-				this.edit = true;
-			}
-			if (value === "DELETE_CERTIFICATE_BRIEF") {
-				this.deleted = true;
-			}
-			if (value === "ACCEPT_CERTIFICATE_BRIEF") {
-				this.accept = true;
-			}
-		});
-		if (
-			"id" in this.$route.query &&
-			this.$route.name === "certification_brief.edit"
-		) {
-			if (this.$route.meta["data"]) {
-				this.form.step_1 = Object.assign(this.form.step_1, {
-					...this.$route.meta["data"]
-				});
-			}
-			this.form.step_1.document_date = this.form.step_1.document_date
-				? moment(this.form.step_1.document_date).format("DD/MM/YYYY")
-				: "";
-			this.form.step_1.certificate_date = this.form.step_1.certificate_date
-				? moment(this.form.step_1.certificate_date).format("DD/MM/YYYY")
-				: "";
-			this.form.step_1.appraise_date = this.form.step_1.appraise_date
-				? moment(this.form.step_1.appraise_date).format("DD/MM/YYYY")
-				: "";
-			if (!this.form.step_1.customer) {
-				this.form.step_1.customer = {
-					name: "",
-					address: "",
-					phone: "",
-					full_info: ""
-				};
-			}
-			this.idData = this.form.step_1.id;
-		}
-	},
-
 	methods: {
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		async getProfiles() {
 			const profile = this.$store.getters.profile;
 			this.form.created_by = profile.data.user.id;
@@ -396,19 +361,9 @@ export default {
 			// 	// console.log('không evant')
 			// 	this.appraisers = appraiser
 			// }
-		},
-		isMobile() {
-			if (
-				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-					navigator.userAgent
-				)
-			) {
-				return true;
-			} else {
-				return false;
-			}
 		}
 	},
+
 	mounted() {
 		// // console.log(this.profile)
 	},
@@ -421,31 +376,4 @@ export default {
 	}
 };
 </script>
-<style scoped lang="scss">
-.certification-asset {
-	padding-left: 16px;
-	// padding-right: 16px;
-}
-.btn_loading {
-	position: relative;
-	color: white !important;
-	text-shadow: none !important;
-	pointer-events: none;
-}
-.btn_loading:after {
-	content: "";
-	display: inline-block;
-	vertical-align: text-bottom;
-	border: 1px solid wheat;
-	border-right-color: transparent;
-	border-radius: 50%;
-	color: #ffffff;
-	position: absolute;
-	width: 1rem;
-	height: 1rem;
-	left: calc(50% - 0.5rem);
-	top: calc(50% - 0.5rem);
-	-webkit-animation: spinner-border 0.75s linear infinite;
-	animation: spinner-border 0.75s linear infinite;
-}
-</style>
+<style></style>
