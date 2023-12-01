@@ -25,6 +25,15 @@ class AssetReport
      * @throws Exception
      * @throws \Exception
      */
+
+     protected $styleMapImage = [
+        'width' => 488,
+        'align' => 'left',
+        'space' => [
+            'line' => 1000,
+            'rule' => 'single',
+        ],
+    ];
     public function generateDocx($company, $objects, $format): array
     {
         $certificateId = request()->get('certificate_id');
@@ -482,8 +491,11 @@ class AssetReport
                 $textRun->addText('3. Hình ảnh hiện trạng đất, nhà: ', ['bold' => true]);
             }
             if ($count > 0) {
-                $textRun->addText(json_encode($object->pic));
+                // $textRun->addText(json_encode($object->pic));
                 // $textRun->addText('Có (chi tiết xem trên hệ thống phần mềm lưu trữ kho giá)');
+                foreach ($object->pic as $key) {
+                    $section->addImage($key->link, $this->styleMapImage);
+                }
             }
             else {
                 $textRun->addText('Không có');
