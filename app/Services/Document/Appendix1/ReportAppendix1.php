@@ -140,7 +140,7 @@ class ReportAppendix1 extends Report
             $this->adapter1 = $asset->appraiseAdapter->where('asset_general_id', $this->asset1->id)->first();
             $this->adapter2 = $asset->appraiseAdapter->where('asset_general_id', $this->asset2->id)->first();
             $this->adapter3 = $asset->appraiseAdapter->where('asset_general_id', $this->asset3->id)->first();
-            dd($this->adapter1,$this->adapter2,$this->adapter3);
+            // dd($this->adapter1,$this->adapter2,$this->adapter3);
             $this->getAllLandType($asset);
             $this->adapters = $asset->appraiseAdapter;
             $this->landType['asset1'] = $this->getAssetLandType($this->asset1, $asset);

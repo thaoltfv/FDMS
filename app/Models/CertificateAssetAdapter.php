@@ -26,5 +26,6 @@ class CertificateAssetAdapter extends Model
         'percent',
         'change_purpose_price',
         'change_violate_price',
+        'change_negotiated_price'
     ];
 }
