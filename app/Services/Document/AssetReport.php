@@ -482,7 +482,7 @@ class AssetReport
                 $textRun->addText('3. Hình ảnh hiện trạng đất, nhà: ', ['bold' => true]);
             }
             if ($count > 0) {
-                $textRun->addText(json_decode($object->pic));
+                $textRun->addText(json_encode($object->pic));
                 // $textRun->addText('Có (chi tiết xem trên hệ thống phần mềm lưu trữ kho giá)');
             }
             else {
