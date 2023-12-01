@@ -93,14 +93,28 @@ class CommonService
 
 	public static function roundPrice($total, $round = 0)
 	{
+		
+		// if ($round > 0) {
+		// 	$round = pow(10, $round);
+		// 	$result = ceil($total / $round) * $round;
+		// } elseif ($round == 0) {
+		// 	$result = round($total, 0);
+		// } else {
+		// 	$round = pow(10, abs($round));
+		// 	$result = floor($total / $round) * $round;
+		// }
 		if ($round > 0) {
 			$round = pow(10, $round);
-			$result = ceil($total / $round) * $round;
-		} elseif ($round == 0) {
-			$result = round($total, 0);
+			$check_var = 5*$round/10;
+			$devide_value = (float) $total / (float) $round;
+			$check_part = $devide_value - floor($devide_value);
+			if ($check_part > $check_var) {
+				$result = ceil($total / $round) * $round;
+			} else if ($check_part < $check_var) {
+				$result = floor($total / $round) * $round;
+			} else $result = round($total, 0);
 		} else {
-			$round = pow(10, abs($round));
-			$result = floor($total / $round) * $round;
+			$result = round($total, 0);
 		}
 		return $result;
 	}
