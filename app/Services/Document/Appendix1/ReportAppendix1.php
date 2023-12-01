@@ -261,6 +261,7 @@ class ReportAppendix1 extends Report
         $purposePrice = 0;
         $violatePrice = 0;
         $adjustPercent = floatval($adapter->percent);
+        $change_negotiated_price = floatval($adapter->change_negotiated_price);
         // dd($adjustPercent);
         $area_chinh_cuoicung = 0;
         $area_phu_ve_chinh = 0;
@@ -329,6 +330,7 @@ class ReportAppendix1 extends Report
             'area_phu_ve_chinh' => $area_phu_ve_chinh,
             'area_chinh_cuoicung' => $area_chinh_cuoicung,
             'ti_le_dat' => isset($item->method_value) ? $item->method_value : 0,
+            'change_negotiated_price' => $change_negotiated_price
         ];
         return $result;
     }
