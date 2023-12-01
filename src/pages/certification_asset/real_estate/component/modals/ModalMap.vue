@@ -1016,20 +1016,20 @@ export default {
 					name: "Bản đồ ranh tờ, thửa",
 					visible: true,
 					url: "https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png",
-					attribution: "© Fastvalue",
+					// attribution: "© Fastvalue",
 					type: "overlay"
 				},
 				{
 					name: "Bản đồ thông tin quy hoạch",
 					visible: false,
-					attribution: "© Fastvalue",
+					// attribution: "© Fastvalue",
 					url: "https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png",
 					type: "overlay"
 				},
         {
 					name: "Bản đồ quy hoạch lộ giới",
 					visible: false,
-					attribution: "© Fastvalue",
+					// attribution: "© Fastvalue",
 					url: "https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png",
 					type: "overlay"
 				}
@@ -1037,7 +1037,7 @@ export default {
 			search_address: "",
 			url:
 				"https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff",
-			attribution: "",
+			attribution: "*Thông tin chỉ có giá trị tham khảo",
 			place: "",
 			provinces: [],
 			places: [],
