@@ -88,6 +88,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         // giá trị tài sản
         $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
         $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
 
@@ -144,6 +145,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         // // giá trị tài sản
         $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
         $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
         $data[] = $this->collectInfoAppraiseViolatePrice($stt++, 'Giá trị phần diện tích vi phạm QH (đ)', $asset);
         if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
@@ -156,6 +158,20 @@ class ReportAppendix1Nova extends ReportAppendix1
             $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
         }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/'. $this->m2 .')', $asset);
+        return $data;
+    }
+
+    protected function collectInfoSellingNegotiatedPrice($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            number_format($this->assetPrice['asset1']['change_negotiated_price'] ? $this->assetPrice['asset1']['change_negotiated_price'] : 0, 0, ',', '.'),
+            number_format($this->assetPrice['asset2']['change_negotiated_price'] ? $this->assetPrice['asset2']['change_negotiated_price'] : 0, 0, ',', '.'),
+            number_format($this->assetPrice['asset3']['change_negotiated_price'] ? $this->assetPrice['asset3']['change_negotiated_price'] : 0, 0, ',', '.'),
+            false
+        ];
         return $data;
     }
 
