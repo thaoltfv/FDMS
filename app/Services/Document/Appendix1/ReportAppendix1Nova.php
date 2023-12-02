@@ -241,6 +241,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset3']['avg_price'], $this->countDecimals($this->assetPrice['asset3']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
         $compares = $this->comparisonFactor1;
         $alphas = range('A', 'Z');
+        $coefficientTitle = 'Hệ số tương quan';
         $rateTitle = 'Tỷ lệ điều chỉnh';
         $adjustTitle = 'Mức điều chỉnh';
         $priceAfterAdjust = 'Giá sau điều chỉnh';
@@ -264,6 +265,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                     else
                         $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                 }
+                $this->addCompareRowExt1($table,  $coefficientTitle, '', '-', $compare1->adjust_coefficient, $compare2->adjust_coefficient, $compare3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $compare1->adjust_percent, $compare2->adjust_percent, $compare3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $compare1->adjust_price, $compare2->adjust_price, $compare3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $compare1->total_price, $compare2->total_price, $compare3->total_price);
