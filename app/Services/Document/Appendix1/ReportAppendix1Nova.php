@@ -265,7 +265,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                     else
                         $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                 }
-                $this->addCompareRowExt1($table,  $coefficientTitle, '', '-', $compare1->adjust_coefficient, $compare2->adjust_coefficient, $compare3->adjust_coefficient, false, '%');
+                $this->addCompareRowExt1($table,  $coefficientTitle, '', '100%', $compare1->adjust_coefficient, $compare2->adjust_coefficient, $compare3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $compare1->adjust_percent, $compare2->adjust_percent, $compare3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $compare1->adjust_price, $compare2->adjust_price, $compare3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $compare1->total_price, $compare2->total_price, $compare3->total_price);
@@ -285,6 +285,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                 } else {
                     $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
                 }
+                $this->addCompareRowExt1($table,  $coefficientTitle, '', '100%', $other1->adjust_coefficient, $other2->adjust_coefficient, $other3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
