@@ -31,5 +31,6 @@ class CertificateAssetComparisonFactor extends Model
         'adjust_percent',
         'name',
         'position',
+        'adjust_coefficient'
     ];
 }
