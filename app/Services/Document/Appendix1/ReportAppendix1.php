@@ -1535,9 +1535,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            $this->assetPrice['asset1']['percent'] . '%',
-            $this->assetPrice['asset2']['percent'] . '%',
-            $this->assetPrice['asset3']['percent'] . '%',
+            number_format($this->assetPrice['asset1']['percent'], 0, ',', '.') . '%',
+            number_format($this->assetPrice['asset2']['percent'], 0, ',', '.') . '%',
+            number_format($this->assetPrice['asset3']['percent'], 0, ',', '.') . '%',
             false
         ];
         return $data;
