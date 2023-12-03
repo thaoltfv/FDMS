@@ -10,7 +10,8 @@ class CertificateApartmentAdapter extends Model
     use SoftDeletes;
     protected $casts = [
         'id' => 'integer',
-        'percent' => 'integer',
+        'percent' => 'float',
+        'change_negotiated_price' => 'float'
     ];
     protected $hidden = [
         'created_at',

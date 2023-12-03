@@ -18,6 +18,8 @@ class CertificateAssetAdapter extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'percent' => 'float',
+        'change_negotiated_price' => 'float'
     ];
 
     protected $fillable = [
