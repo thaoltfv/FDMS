@@ -411,10 +411,11 @@
 						</tr>
 						<tr>
 						<td>23</td>
-						<td>Tỷ lệ giá rao bán</td>
+						<td><p>Tỷ lệ thương lượng</p> <p>Số tiền thương lượng</p></td>
 						<td>-</td>
 						<td v-for="(asset, index) in form.appraise_adapter" :key="'adjustPercent' + index">
 							<InputPercent
+								:key="234+key_render_1"
 								:disabled="!isEditStatus"
 								class="label-none input_center"
 								v-model="asset.percent"
@@ -425,13 +426,24 @@
 								:text_center="true"
 								@change="changePercentSaleRating($event, index)"
 							/>
+							<br/>
+							<InputNumberNegative
+								:disabled="!isEditStatus"
+								:key="345+key_render_1"
+								class="label-none input_center"
+								v-model="asset.change_negotiated_price"
+								vid="change_negotiated_price"
+								:text_center="true"
+								defaultValue="0"
+								@change="changeNegotiatedPrice($event, index)"
+							/>
 						</td>
 						</tr>
 						<tr>
 						<td>24</td>
 						<td id="total_price">Tổng giá trị tài sản ước tính</td>
 						<b-tooltip placement="rightbottom" target="total_price">
-								Tổng giá trị tài sản ước tính (24) = (22) x (23)
+								Tổng giá trị tài sản ước tính (24) = (22) + (23)
 						</b-tooltip>
 						<td>-</td>
 						<td>{{formatNumber(totalPriceEstimate1)}} đ</td>
@@ -445,7 +457,7 @@
 						<td v-for="(asset, indexVioPrice) in form.appraise_adapter" :key="'changeViolationPrice' + indexVioPrice">
 							<InputCurrency
 								:disabled="!isEditStatus"
-								:key="key_render_1"
+								:key="456+key_render_1"
 								class="label-none input_center"
 								v-model="asset.change_violate_price"
 								vid="change_violate_price"
@@ -470,7 +482,7 @@
 						<td v-for="(asset, index) in form.appraise_adapter" :key="'changePurposePrice' + index">
 							<InputNumberNegative
 								:disabled="!isEditStatus"
-								:key="key_render_1"
+								:key="789+key_render_1"
 								class="label-none input_center input_highlight"
 								:required="true"
 								v-model="asset.change_purpose_price"
@@ -602,11 +614,30 @@
                         </tr>
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)" :key="'appraisalLegalRow' + index">
-                        <td rowspan="4">A</td>
+                        <td rowspan="5">A</td>
                         <td><strong>Pháp lý</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)"  :key="'appraisalLegal' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetInfo' + index"><span  v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)" :key="'phap_ly' + indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
                         </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)" :key="'changeLegalRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputLegal' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)" :key="'phap_lyC' + index">
+                            <InputPercent
+							:key="1123+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
+                        </tr>
+
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)" :key="'changeLegalRow' + index">
                         <td>Tỷ lệ điều chỉnh</td>
@@ -614,7 +645,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputLegal' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phap_ly' && comparison_factor_appraise.status === 1)" :key="'phap_ly' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="1123+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -644,12 +676,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('quy_mo')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Quy mô</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo1' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}m<sup>2</sup></td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetQuymo' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo2' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}m<sup>2</sup></span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo3C' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputQuymo' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo4C' + index">
+							<InputPercent
+							:key="2234+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo3' + index">
@@ -658,7 +708,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputQuymo' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_mo' && comparison_factor_appraise.status === 1)" :key="'quymo4' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="2234+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -695,13 +746,32 @@
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_rong_mat_tien' && comparison_factor_appraise.status === 1)" :key="'chieu_rong_mat_tien' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}m</span></td>
                         </tr>
 
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_rong_mat_tien' && comparison_factor_appraise.status === 1)" :key="'WidthRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputWidth' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_rong_mat_tien' && comparison_factor_appraise.status === 1)" :key="'chieu_rong_mat_tienC' + index">
+								<InputPercent
+								:key="3345+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
+                        </tr>
+
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_rong_mat_tien' && comparison_factor_appraise.status === 1)" :key="'WidthRow' + index">
                         <td>Tỷ lệ điều chỉnh</td>
                         <td></td>
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputWidth' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_rong_mat_tien' && comparison_factor_appraise.status === 1)" :key="'chieu_rong_mat_tien' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="3345+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -730,12 +800,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'appraisalDepthRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('chieu_sau_khu_dat')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Chiều sâu khu đất</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'appraisalDepth' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}m</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'chieu_sau_khu_dat' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}m</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'DepthRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputDepth' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'chieu_sau_khu_datC' + index">
+								<InputPercent
+								:key="4456+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'DepthRow' + index">
@@ -744,7 +832,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputDepth' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'chieu_sau_khu_dat' && comparison_factor_appraise.status === 1)" :key="'chieu_sau_khu_dat' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="4456+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -773,12 +862,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'appraisalLandRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('hinh_dang_dat')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Hình dáng</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'appraisalLand' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'hinh_dang_dat' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'LandRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputLand' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'hinh_dang_datC' + index">
+								<InputPercent
+								:key="5567+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'LandRow' + index">
@@ -787,7 +894,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputLand' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'hinh_dang_dat' && comparison_factor_appraise.status === 1)" :key="'hinh_dang_dat' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="5567+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -817,20 +925,40 @@
 <!-- Adjust Comparison BEGIN -->
 						<!-- Kết cấu đường -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('ket_cau_duong')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Kết cấu đường</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong1' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetKetcauduong' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong2' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
                         </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong3C' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputKetcauduong' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong4C' + index">
+								<InputPercent
+								:key="6678+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
+                        </tr>
+
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong3' + index">
                         <td>Tỷ lệ điều chỉnh</td>
                         <td></td>
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputKetcauduong' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'ket_cau_duong' && comparison_factor_appraise.status === 1)" :key="'ketcauduong4' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="6678+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -858,12 +986,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'appraisalStreetRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('do_rong_duong')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Độ rộng đường</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'appraisalStreet' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}m</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'do_rong_duong' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}m</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'StreetRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputStreet' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'do_rong_duongC' + index">
+								<InputPercent
+								:key="7789+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'StreetRow' + index">
@@ -872,7 +1018,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputStreet' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'do_rong_duong' && comparison_factor_appraise.status === 1)" :key="'do_rong_duong' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="7789+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -901,12 +1048,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'appraisalConditionsRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('dieu_kien_ha_tang')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Điều kiện hạ tầng</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'appraisalConditions' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'dieu_kien_ha_tang' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'ConditionsRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputConditions' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'dieu_kien_ha_tangC' + index">
+								<InputPercent
+								:key="8891+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'ConditionsRow' + index">
@@ -915,7 +1080,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputConditions' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_ha_tang' && comparison_factor_appraise.status === 1)" :key="'dieu_kien_ha_tang' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="8891+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -944,12 +1110,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'appraisalBusinessRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('kinh_doanh')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Kinh doanh</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'appraisalBusiness' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'kinh_doanh' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'BusinessRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputBusiness' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'kinh_doanhC' + index">
+								<InputPercent
+								:key="9912+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'BusinessRow' + index">
@@ -958,7 +1142,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputBusiness' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'kinh_doanh' && comparison_factor_appraise.status === 1)" :key="'kinh_doanh' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="9912+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -986,12 +1171,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'appraisalSecurityRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('an_ninh_moi_truong_song')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>An ninh, môi trường sống</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'appraisalSecurity' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'an_ninh_moi_truong_song' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'SecurityRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputSecurity' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'an_ninh_moi_truong_songC' + index">
+								<InputPercent
+								:key="11123+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'SecurityRow' + index">
@@ -1000,7 +1203,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputSecurity' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'an_ninh_moi_truong_song' && comparison_factor_appraise.status === 1)" :key="'an_ninh_moi_truong_song' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="11123+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -1028,12 +1232,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'appraisalFengShuiRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('phong_thuy')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Phong thủy</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'appraisalFengShui' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'phong_thuy' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'FengShuiRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputFengShui' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'phong_thuyC' + index">
+								<InputPercent
+								:key="22234+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'FengShuiRow' + index">
@@ -1042,7 +1264,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputFengShui' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'phong_thuy' && comparison_factor_appraise.status === 1)" :key="'phong_thuy' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="22234+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -1070,12 +1293,30 @@
 
 <!-- Adjust Comparison BEGIN -->
 						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'appraisalTrafficRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('giao_thong')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                             </td>
                         <td><strong>Giao thông</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'appraisalTraffic' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'giao_thong' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'TrafficRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputTraffic' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'giao_thongC' + index">
+								<InputPercent
+								:key="33345+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'TrafficRow' + index">
@@ -1084,7 +1325,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputTraffic' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'giao_thong' && comparison_factor_appraise.status === 1)" :key="'giao_thong' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="33345+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -1121,13 +1363,32 @@
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetQuyhoach' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_hoach' && comparison_factor_appraise.status === 1)" :key="'quyhoach2' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
                         </tr>
 
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_hoach' && comparison_factor_appraise.status === 1)" :key="'quyhoach3C' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputQuyhoach' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_hoach' && comparison_factor_appraise.status === 1)" :key="'quyhoach4C' + index">
+								<InputPercent
+								:key="44456+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
+                        </tr>
+
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_hoach' && comparison_factor_appraise.status === 1)" :key="'quyhoach3' + index">
                         <td>Tỷ lệ điều chỉnh</td>
                         <td></td>
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputQuyhoach' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'quy_hoach' && comparison_factor_appraise.status === 1)" :key="'quyhoach4' + index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="44456+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -1156,12 +1417,30 @@
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'appraisalPayRow' + index">
-                        <td rowspan="4">
+                        <td rowspan="5">
                             <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('dieu_kien_thanh_toan')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                         </td>
                         <td><strong>Điều kiện thanh toán</strong></td>
                         <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'appraisalPay' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
                         <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'dieu_kien_thanh_toan' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'PayRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputPay' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'dieu_kien_thanh_toanC' +index">
+								<InputPercent
+								:key="55567+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
                         </tr>
 
                         <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'PayRow' + index">
@@ -1170,7 +1449,8 @@
                         <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputPay' + indexAsset">
                             <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dieu_kien_thanh_toan' && comparison_factor_appraise.status === 1)" :key="'dieu_kien_thanh_toan' +index">
                             <InputPercentNegative
-																:disabled="!isEditStatus"
+							:key="55567+key_render_1"
+																:disabled="true"
                                 class="label-none input_center"
                                 v-model="comparison_factor.adjust_percent"
                                 vid="number_legal"
@@ -1204,7 +1484,7 @@
                             <td style="padding: unset" colspan="6">
                             <table class="table_of_other_comparison color_content">
                             <tr style="width: 100% !important">
-                                <td rowspan="4">
+                                <td rowspan="5">
                                 <div v-if="isEditStatus" class="btn-delete" type="button" @click="handleDialogDeleteComparision(index, data_appraise.other_factor_asset)"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
                                 </td>
                                 <td class="td_other_appraise">
@@ -1238,13 +1518,31 @@
                                 </div>
                                 </td>
                             </tr>
+							<tr v-if="showOtherFactor" >
+                                <td class="td_other_appraise">Hệ số tương quan</td>
+                                <td class="td_other_asset_title">100%</td>
+                                <td class="td_other_asset_title" v-for="(rate_asset, index) in data_appraise.other_factor_asset" :key="'yeutokhac4C' +index">
+                                <div>
+                                    <InputPercent
+									:key="key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="rate_asset.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeOtherCoefficient($event, rate_asset)"
+                            />
+                                </div>
+                                </td>
+                            </tr>
                             <tr v-if="showOtherFactor" >
                                 <td class="td_other_appraise">Tỷ lệ điều chỉnh</td>
                                 <td class="td_other_asset_title"></td>
                                 <td class="td_other_asset_title" v-for="(rate_asset, index) in data_appraise.other_factor_asset" :key="'yeutokhac4' +index">
                                 <div>
                                     <InputPercentNegative
-																			:disabled="!isEditStatus"
+									:key="123+key_render_1"
+																			:disabled="true"
 																			class="label-none input_center"
 																			v-model="rate_asset.adjust_percent"
 																			vid="number_legal"
@@ -1385,7 +1683,7 @@
 																			v-model="mainPrice.round"
 																			vid="round_total"
 																			:max="10"
-																			:min="-10"
+																			:min="0"
 																			@change="changeRoundTotal($event)"
                                     />
                                 </div>
@@ -1428,7 +1726,7 @@
 										v-model="purpose.round"
 										:vid="purpose.acronym + index"
 										:max="10"
-										:min="-10"
+										:min="0"
 										@change="changeDynamicPurposeRound($event, index)"
 									/>
 								</div>
@@ -1454,7 +1752,7 @@
 										v-model="violate.round"
 										:vid="violate.acronym + index"
 										:max="10"
-										:min="-10"
+										:min="0"
 										@change="changeDynamicViolateRound($event, index)"
 									/>
 								</div>
@@ -1679,6 +1977,7 @@ export default {
 			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
 			key_render_5: 900000,
 			key_render_1: 7000000,
+			key_render_111: 989898989898989,
 			key_render_10: 123456789,
 			key_render_around: 600023,
 			showDetailContruction: true,
@@ -1869,7 +2168,7 @@ export default {
 			this.env = process.env.CLIENT_ENV
 			this.getOtherComparison()
 			this.getDataLand()
-			this.calculation(this.form)
+			
 			this.getData()
 			this.getDataPrice()
 			this.appraisal_methods = this.form.appraisal_methods
@@ -1878,6 +2177,7 @@ export default {
 			this.mainPrice = this.getMainLandType()
 			this.totalPrice = this.getTotalPrice()
 			this.setDefaultConstructionData()
+			this.calculation(this.form)
 			// this.checkOld()
 			this.key_render_around += 1
 			setTimeout(() => {
@@ -2222,8 +2522,23 @@ export default {
 			} else return '-'
 		},
 		changePercentSaleRating (event, index) {
+			console.log('đổi %')
 			if (event) {
 				this.form.appraise_adapter[index].percent = event
+				this.form.appraise_adapter[index].change_negotiated_price  = (this.form.asset_general[index].total_amount * event / 100)-this.form.asset_general[index].total_amount
+				console.log('this.form.appraise_adapter[index]',this.form.appraise_adapter[index])
+				this.key_render_1++
+			}
+			this.calculation(this.form)
+		},
+		changeNegotiatedPrice (event, index) {
+			console.log('đổi tiền')
+			if (event) {
+				this.form.appraise_adapter[index].change_negotiated_price = event
+				this.form.appraise_adapter[index].percent = ((this.form.asset_general[index].total_amount + event) / this.form.asset_general[index].total_amount * 100).toFixed(2)
+				console.log('this.form.appraise_adapter[index]',this.form.appraise_adapter[index])
+				console.log('this.form.asset_general[index]',this.form.asset_general[index])
+				this.key_render_1++
 			}
 			this.calculation(this.form)
 		},
@@ -2315,7 +2630,14 @@ export default {
 						appraise.comparison_factor[index].asset_title = 'Không biết'
 						appraise.comparison_factor[index].appraise_title = 'Không biết'
 					}
+					if (data.adjust_coefficient === '100' && data.adjust_percent !== '0') {
+						// console.log('lấy data cũ', index, data.adjust_percent)
+						appraise.comparison_factor[index].adjust_coefficient = (100 / (parseFloat(appraise.comparison_factor[index].adjust_percent) + 100)*100).toFixed(0)
+						// console.log('tính data mới', index, data.adjust_coefficient)
+					}
 				})
+				this.key_render_around += 1
+				// console.log('appraise.comparison_factor',appraise.comparison_factor)
 				appraise.asset_general.forEach(asset_general => {
 					// asset_general.adjust_percent = 100 + +asset_general.adjust_percent
 					const comparison_factor_TSSS = appraise.comparison_factor.filter(comparison => comparison.asset_general_id === asset_general.id)
@@ -2323,6 +2645,7 @@ export default {
 						id: asset_general.id,
 						comparison_factor: comparison_factor_TSSS
 					})
+
 					asset_general.properties.forEach(property => {
 						let appraiseHasAsset = appraise.appraise_has_assets.filter(item => item.asset_general_id === asset_general.id && item.asset_property_detail_id === property.id)
 						if (appraiseHasAsset && appraiseHasAsset.length > 0) {
@@ -2330,6 +2653,20 @@ export default {
 						}
 					})
 				})
+				// console.log('lấy data comparison', asset_generals)
+				// asset_generals.forEach(e => {
+				// 	// console.log('lấy data for', e)
+				// 	e.comparison_factor.forEach(yeu_to => {
+				// 		// console.log('lấy data yếu tố', yeu_to)
+				// 		if (yeu_to.adjust_coefficient === '100' && yeu_to.adjust_percent !== '0') {
+				// 			// console.log('lấy data cũ', yeu_to.adjust_percent)
+				// 			yeu_to.adjust_coefficient = (100 / (parseFloat(yeu_to.adjust_percent) + 100)*100).toFixed(0)
+				// 			// console.log('tính data mới', yeu_to.adjust_coefficient)
+				// 		}
+				// 	})
+				// });
+				// console.log('appraise.asset_general',appraise.asset_general)
+				// console.log('data mới', asset_generals)
 				this.appraises = {
 					id: appraise.id,
 					coordinates: appraise.coordinates,
@@ -2344,6 +2681,8 @@ export default {
 					tangible_assets: appraise.tangible_assets,
 					full_address_appraise: full_address_appraise
 				}
+				this.key_render_111++
+				// console.log('data mới 2', this.appraises.comparison_factor)
 			}
 		},
 		async getOtherComparison () {
@@ -2364,6 +2703,17 @@ export default {
 					map.set(item.position, true)
 					indexTem['id_check'] = item.position
 					const comparison_other = this.other_comparison.filter(data => data.position === indexTem['id_check'])
+					
+					comparison_other.forEach(yeu_to => {
+					// console.log('lấy data for', e)
+						// console.log('lấy data yếu tố', yeu_to)
+						if (yeu_to.adjust_coefficient === '100' && yeu_to.adjust_percent !== '0') {
+							// console.log('lấy data cũ', yeu_to.adjust_percent)
+							yeu_to.adjust_coefficient = (100 / (parseFloat(yeu_to.adjust_percent) + 100)*100).toFixed(0)
+							// console.log('tính data mới', yeu_to.adjust_coefficient)
+						}
+					});
+					console.log('comparison_other',comparison_other)
 					// tạo data ảo hiển thị
 					this.data_other_comparison.push({
 						appraise_title: item.appraise_title,
@@ -2901,13 +3251,33 @@ export default {
 			return total
 		},
 		formatCurrent (value) {
-			if (this.round_total && this.round_total > 0 && this.round_total <= 7) {
-				let round = Math.pow(10, this.round_total)
-				return Math.ceil(value / round) * round
-			} else if (this.round_total && this.round_total < 0 && this.round_total >= -7) {
-				let round = Math.pow(10, Math.abs(this.round_total))
-				return Math.floor(value / round) * round
-			} else return value
+			// if (this.round_total && this.round_total > 0 && this.round_total <= 7) {
+			// 	let round = Math.pow(10, this.round_total)
+			// 	return Math.ceil(value / round) * round
+			// } else if (this.round_total && this.round_total < 0 && this.round_total >= -7) {
+			// 	let round = Math.pow(10, Math.abs(this.round_total))
+			// 	return Math.floor(value / round) * round
+			// } else return value
+
+			if (this.round_total >= value.length) {
+				this.round_total = value.length - 1
+			}
+			let value_round = Math.round(value)
+			if (this.round_total && this.round_total > 0) {
+				let round_new = Math.pow(10, this.round_total)
+				let check_var = 5*round_new/10
+				let divide_value = (value_round/round_new).toFixed(this.round_total)
+				let check_val = divide_value.toString().indexOf(".")
+				let check_part = Number(divide_value.substring(check_val+1))
+				// console.log('check_part,check_var',divide_value.toString(),divide_value.toString().length,this.round_total,check_part,check_var)
+				if (check_part > check_var) {
+					return Math.ceil(value_round / round_new) * round_new
+				} else if (check_part < check_var) {
+					return Math.floor(value_round / round_new) * round_new
+				} else return value_round
+			} else {
+				return value_round
+			}
 		},
 		formatRoundComposite (value) {
 			if (this.round_composite && this.round_composite > 0 && this.round_composite <= 7) {
@@ -3045,6 +3415,17 @@ export default {
 			this.form.comparison_factor = tempArrayComparison
 			this.calculation(this.form)
 		},
+		changeLegalCoefficient (e, indexAsset, type) { 
+			let rate = ((100 - e)/e*100).toFixed(2)
+			console.log('rate', rate)
+			let factor = this.appraises.comparison_factor[indexAsset].comparison_factor.find(i => i.type === type)
+			if (factor) {
+				factor.adjust_percent = rate
+				this.key_render_1++
+				this.changeLegalRate(rate, indexAsset, type)
+			}
+
+		},
 		changeLegalRate (e, indexAsset, type) {
 			let tempArrayComparison = []
 			let factor = this.appraises.comparison_factor[indexAsset].comparison_factor.find(i => i.type === type)
@@ -3074,6 +3455,7 @@ export default {
 			await this.form.asset_general.forEach(asset => {
 				// tạo data gửi
 				this.other_comparison.push({
+					adjust_coefficient: 100,
 					adjust_percent: 0,
 					appraise_id: data.id,
 					appraise_title: 'Không biết',
@@ -3186,6 +3568,17 @@ export default {
 					item.name = event
 				}
 			})
+		},
+		changeOtherCoefficient (event, data) { 
+			let rate = ((100 - event)/event*100).toFixed(2)
+			console.log('rate', rate)
+			this.other_comparison.forEach(item => {
+					if (item.position === data.position && item.asset_general_id === data.asset_general_id) {
+						item.adjust_percent = rate
+						this.key_render_1++
+						this.changeOtherRate(rate, data)
+					}
+				})
 		},
 		changeOtherRate (event, data) {
 			if (event) {
@@ -4014,6 +4407,28 @@ export default {
 			let asset_percent2 = (typeof asset.appraise_adapter[1] !== 'undefined') ? asset.appraise_adapter[1].percent : null
 			let asset_percent3 = (typeof asset.appraise_adapter[2] !== 'undefined') ? asset.appraise_adapter[2].percent : null
 
+			let asset_neo_price1 = (typeof asset.appraise_adapter[0] !== 'undefined') ? asset.appraise_adapter[0].change_negotiated_price : null
+			let asset_neo_price2 = (typeof asset.appraise_adapter[1] !== 'undefined') ? asset.appraise_adapter[1].change_negotiated_price : null
+			let asset_neo_price3 = (typeof asset.appraise_adapter[2] !== 'undefined') ? asset.appraise_adapter[2].change_negotiated_price : null
+			console.log('dgh',asset_percent1,asset_neo_price1,asset_percent2,asset_neo_price2,asset_percent3,asset_neo_price3 )
+			if (asset_percent1 !== 100 && asset_neo_price1  === null) {
+				console.log('tính 1')
+				asset_neo_price1 =  (asset1.total_amount * asset_percent1 / 100)-asset1.total_amount
+				asset.appraise_adapter[0].change_negotiated_price  = (asset1.total_amount * asset_percent1 / 100)-asset1.total_amount
+			}
+			if (asset_percent2 !== 100 && asset_neo_price2  === null) {
+				console.log('tính 2')
+				asset_neo_price2 =  (asset2.total_amount * asset_percent2 / 100)-asset2.total_amount
+				asset.appraise_adapter[1].change_negotiated_price  = (asset2.total_amount * asset_percent2 / 100)-asset2.total_amount
+			}
+
+			if (asset_percent3 !== 100 && asset_neo_price3  === null) {
+				console.log('tính 3')
+				asset_neo_price3 =  (asset3.total_amount * asset_percent3 / 100)-asset3.total_amount
+				asset.appraise_adapter[2].change_negotiated_price  = (asset3.total_amount * asset_percent3 / 100)-asset3.total_amount
+			}
+
+
 			// detail contruction
 			this.dtsxd1 = (typeof asset1.tangible_assets[0] !== 'undefined') ? asset1.tangible_assets[0].total_construction_base : 0
 			this.dtsxd2 = (typeof asset2.tangible_assets[0] !== 'undefined') ? asset2.tangible_assets[0].total_construction_base : 0
@@ -4152,16 +4567,33 @@ export default {
 			// 	this.form.appraise_adapter[1].change_purpose_price = 0
 			// 	this.form.appraise_adapter[2].change_purpose_price = 0
 			// }
-			// tính Tổng giá trị tài sản ước tính
-			this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
-			this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
-			this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
+			if (asset_neo_price1) {
+				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? asset1.total_amount+asset_neo_price1 : 0)
+				this.totalPrice1 = ((typeof asset1.total_estimate_amount !== 'undefined') ? asset1.total_amount+asset_neo_price1 : 0) - totalPriceViolationArea1 + +change_purpose_price1 - floor(this.dgxd1 * this.dtsxd1 * this.clcl1 / 100) - +otherAmount1
+			} else {
+				// tính Tổng giá trị tài sản ước tính
+				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
+				// Tính giá trị Quyền sử dụng đất của TSSS
+				// Tổng giá trị ước tính - Đơn giá vi phạm quy hoạch + Chi phí chuyển mục đích sử dụng - Đơn giá đơn vị xây dựng - Tổng giá trị tài sản khác
+				this.totalPrice1 = ((typeof asset1.total_estimate_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0) - totalPriceViolationArea1 + +change_purpose_price1 - floor(this.dgxd1 * this.dtsxd1 * this.clcl1 / 100) - +otherAmount1
+			}
 
-			// Tính giá trị Quyền sử dụng đất của TSSS
-			// Tổng giá trị ước tính - Đơn giá vi phạm quy hoạch + Chi phí chuyển mục đích sử dụng - Đơn giá đơn vị xây dựng - Tổng giá trị tài sản khác
-			this.totalPrice1 = ((typeof asset1.total_estimate_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0) - totalPriceViolationArea1 + +change_purpose_price1 - floor(this.dgxd1 * this.dtsxd1 * this.clcl1 / 100) - +otherAmount1
-			this.totalPrice2 = ((typeof asset2.total_estimate_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0) - totalPriceViolationArea2 + +change_purpose_price2 - floor(this.dgxd2 * this.dtsxd2 * this.clcl2 / 100) - +otherAmount2
-			this.totalPrice3 = ((typeof asset3.total_estimate_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0) - totalPriceViolationArea3 + +change_purpose_price3 - floor(this.dgxd3 * this.dtsxd3 * this.clcl3 / 100) - +otherAmount3
+			if (asset_neo_price2) {
+				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? asset2.total_amount+asset_neo_price2 : 0)
+				this.totalPrice2 = ((typeof asset2.total_estimate_amount !== 'undefined') ? asset2.total_amount+asset_neo_price2 : 0) - totalPriceViolationArea2 + +change_purpose_price2 - floor(this.dgxd2 * this.dtsxd2 * this.clcl2 / 100) - +otherAmount2
+			} else {
+				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
+				this.totalPrice2 = ((typeof asset2.total_estimate_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0) - totalPriceViolationArea2 + +change_purpose_price2 - floor(this.dgxd2 * this.dtsxd2 * this.clcl2 / 100) - +otherAmount2
+			}
+
+			if (asset_neo_price3) {
+				this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? asset3.total_amount+asset_neo_price3  : 0)
+				this.totalPrice3 = ((typeof asset3.total_estimate_amount !== 'undefined') ? asset3.total_amount+asset_neo_price3  : 0) - totalPriceViolationArea3 + +change_purpose_price3 - floor(this.dgxd3 * this.dtsxd3 * this.clcl3 / 100) - +otherAmount3	
+			} else {
+				this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
+				this.totalPrice3 = ((typeof asset3.total_estimate_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0) - totalPriceViolationArea3 + +change_purpose_price3 - floor(this.dgxd3 * this.dtsxd3 * this.clcl3 / 100) - +otherAmount3	
+			}
+			
 
 			// tính đơn giá dất của TSSS
 			this.dgd1 = (typeof this.detail1.asset_general_land_sum_area !== 'undefined') ? (this.totalPrice1 / this.arrayTotalAppropriateArea[this.detail1.asset_general_id]) : 0
@@ -5016,16 +5448,39 @@ export default {
 			}
 		},
 		roundPrice (value, roundPrice) {
+			// console.log('vô đây', Math.round(value), roundPrice)
 			if (!value) {
 				return value
 			}
-			if (roundPrice && roundPrice > 0 && roundPrice <= 7) {
-				let round = Math.pow(10, roundPrice)
-				return Math.ceil(value / round) * round
-			} else if (roundPrice && roundPrice < 0 && roundPrice >= -7) {
-				let round = Math.pow(10, Math.abs(roundPrice))
-				return Math.floor(value / round) * round
-			} else return parseInt(Number(value).toFixed(0))
+			// console.log('dsdsds',value.toFixed(0).length,roundPrice)
+			if (roundPrice >= value.toFixed(0).length) {
+				roundPrice = value.toFixed(0).length - 1
+			}
+			let value_round = Math.round(value)
+			if (roundPrice && roundPrice > 0) {
+				let round_new = Math.pow(10, roundPrice)
+				let check_var = 5*round_new/10
+				let divide_value = (value_round/round_new).toFixed(roundPrice)
+				let check_val = divide_value.toString().indexOf(".")
+				let check_part = Number(divide_value.substring(check_val+1))
+				// console.log('divide_value.toString(),divide_value.toString().length,check_part,check_var',divide_value.toString(),divide_value.toString().length,roundPrice,check_part,check_var)
+				if (check_part > check_var) {
+					return Math.ceil(value_round / round_new) * round_new
+				} else if (check_part < check_var) {
+					return Math.floor(value_round / round_new) * round_new
+				} else return value_round
+			} else {
+				return value_round
+			}
+			// if (roundPrice && roundPrice > 0 && roundPrice <= 7) {
+			// 	let round = Math.pow(10, roundPrice)
+			// 	console.log('round', round)
+			// 	console.log('Math.ceil(value / round)', Math.ceil(value / round))
+			// 	return Math.ceil(value / round) * round
+			// } else if (roundPrice && roundPrice < 0 && roundPrice >= -7) {
+			// 	let round = Math.pow(10, Math.abs(roundPrice))
+			// 	return Math.floor(value / round) * round
+			// } else return parseInt(Number(value).toFixed(0))
 		},
 		async printEstimateAssetPrice () {
 			let id = this.idData ? this.idData : ''
