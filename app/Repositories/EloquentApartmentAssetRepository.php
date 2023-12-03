@@ -660,13 +660,13 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 if(isset($method)){
                     switch($method['slug_value']){
                         case 'thap-nhat':
-                            $apartmentPrice = $min;
+                            $apartmentPrice = round($min);
                             break;
                         case 'cao-nhat':
-                            $apartmentPrice = $max;
+                            $apartmentPrice = round($max);
                             break;
                         default:
-                            $apartmentPrice = $total/3;
+                            $apartmentPrice = round($total/3);
                     }
                     $slug = 'apartment_asset_price';
                     $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
