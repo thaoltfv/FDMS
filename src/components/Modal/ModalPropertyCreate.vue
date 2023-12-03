@@ -1277,14 +1277,14 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if (this.form.front_side_width <=0) {
+			} else if (this.form.front_side_width <= 0) {
 				this.isSubmit = false
 				this.$toast.open({
 					message: 'Vui lòng nhập chiều rộng mặt tiền lớn hơn 0',
 					type: 'error',
 					position: 'top-right'
 				})
-			}  else if (this.form.insight_width <=0) {
+			} else if (this.form.insight_width <= 0) {
 				this.isSubmit = false
 				this.$toast.open({
 					message: 'Vui lòng nhập chiều dài lớn hơn 0',
@@ -1298,7 +1298,7 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			}  else if (this.form.property_detail[0].circular_unit_price < 10000) {
+			} else if (this.form.property_detail[0].circular_unit_price < 10000) {
 				this.isSubmit = false
 				this.$toast.open({
 					message: 'Đơn giá UBND thấp nhất là 10,000',

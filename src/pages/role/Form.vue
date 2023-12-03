@@ -86,7 +86,7 @@
           </tr>
           </thead>
           <tbody>
-		
+
           <tr v-for="(item) of screens " :key="item.name">
 				<td>{{ item.name_vietsub }}</td>
 				<td>
@@ -420,41 +420,32 @@ export default {
 				response.forEach(response => {
 					const screen = []
 					screen.name = response
-					if(screen.name=='DASHBOARD')
-					{
-						screen.name_vietsub='BÁO CÁO QUẢN TRỊ'
+					if (screen.name == 'DASHBOARD') {
+						screen.name_vietsub = 'BÁO CÁO QUẢN TRỊ'
 					}
-					if(screen.name=='USER')
-					{
-						screen.name_vietsub='NHÂN VIÊN'
+					if (screen.name == 'USER') {
+						screen.name_vietsub = 'NHÂN VIÊN'
 					}
-					if(screen.name=='ROLE')
-					{
-						screen.name_vietsub='HRM'
+					if (screen.name == 'ROLE') {
+						screen.name_vietsub = 'HRM'
 					}
-					if(screen.name=='MAP')
-					{
-						screen.name_vietsub='BẢN ĐỒ'
+					if (screen.name == 'MAP') {
+						screen.name_vietsub = 'BẢN ĐỒ'
 					}
-					if(screen.name=='PRICE')
-					{
-						screen.name_vietsub='KHO GIÁ'
+					if (screen.name == 'PRICE') {
+						screen.name_vietsub = 'KHO GIÁ'
 					}
-					if(screen.name=='CATEGORY')
-					{
-						screen.name_vietsub='DANH MỤC DỮ LIỆU'
+					if (screen.name == 'CATEGORY') {
+						screen.name_vietsub = 'DANH MỤC DỮ LIỆU'
 					}
-					if(screen.name=='CUSTOMER')
-					{
-						screen.name_vietsub='QUẢN LÝ ĐỐI TÁC'
+					if (screen.name == 'CUSTOMER') {
+						screen.name_vietsub = 'QUẢN LÝ ĐỐI TÁC'
 					}
-					if(screen.name=='CERTIFICATE_ASSET')
-					{
-						screen.name_vietsub='TÀI SẢN THẨM ĐỊNH'
+					if (screen.name == 'CERTIFICATE_ASSET') {
+						screen.name_vietsub = 'TÀI SẢN THẨM ĐỊNH'
 					}
-					if(screen.name=='CERTIFICATE_BRIEF')
-					{
-						screen.name_vietsub='HỒ SƠ THẨM ĐỊNH'
+					if (screen.name == 'CERTIFICATE_BRIEF') {
+						screen.name_vietsub = 'HỒ SƠ THẨM ĐỊNH'
 					}
 					if (this.permissions.length > 0) {
 						this.permissions.forEach(permission => {

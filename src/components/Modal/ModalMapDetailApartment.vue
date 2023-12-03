@@ -214,7 +214,7 @@ export default {
 			}
 			return this.roundPrice(price, round) || 0
 		},
-    unitPrice () {
+		unitPrice () {
 			let price = 0
 			let round = 0
 			let priceData = this.property.price.find(i => i.slug === 'apartment_asset_price')
@@ -226,11 +226,11 @@ export default {
 				round = roundData.value
 			}
 			return this.roundPrice(price, round) || 0
-		},
+		}
 	},
 	methods: {
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

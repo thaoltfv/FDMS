@@ -491,7 +491,7 @@
 										</b-dropdown-item>
 									</b-dropdown>
 							</div>
-							
+
 							</div>
 						<!-- </div> -->
 					</ValidationObserver>
@@ -523,18 +523,17 @@
 </template>
 
 <script>
-import {BTooltip, BDropdown, BDropdownItem, BButtonGroup} from 'bootstrap-vue'
-import { FormWizard, TabContent } from 'vue-form-wizard'
-import InputText from '@/components/Form/InputText'
-import InputTextarea from '@/components/Form/InputTextarea'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import {
+import {BTooltip, BDropdown, BDropdownItem, BButtonGroup,
 	BCard,
 	BRow,
 	BCol,
 	BFormGroup,
 	BFormInput
 } from 'bootstrap-vue'
+import { FormWizard, TabContent } from 'vue-form-wizard'
+import InputText from '@/components/Form/InputText'
+import InputTextarea from '@/components/Form/InputTextarea'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import Step1 from './componentDetail/Step1'
 import Step2 from './componentDetail/Step2'
 import Step3 from './componentDetail/Step3'
@@ -889,7 +888,7 @@ export default {
 				if (bindDataStep.step >= 4) {
 					this.step_active = 5
 				} else this.step_active = bindDataStep.step
-				if (!this.isMobile()){
+				if (!this.isMobile()) {
 					await this.$refs.wizard.tabs.forEach((tab, index) => {
 						if (index <= this.step_active - 1) {
 							tab.checked = true
@@ -918,7 +917,7 @@ export default {
 			this.key_step_3 += 1
 			this.key_step_4 += 1
 			this.key_step_5 += 1
-			if (!this.isMobile()){
+			if (!this.isMobile()) {
 				if (this.$route.params.step || this.$route.params.step === 0) {
 					await this.$refs.wizard.changeTab(0, this.$route.params.step)
 				}
@@ -963,8 +962,8 @@ export default {
 	},
 
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -2256,9 +2255,6 @@ export default {
 		}
 	}
 
-
 }
-
-	
 
 </style>

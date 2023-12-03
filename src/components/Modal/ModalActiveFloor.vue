@@ -8,7 +8,7 @@
             Thông báo
           </h3>
         </div>
-  
+
         <div class="card-body">
           <p class="font-weight-bold" style="font-size: 18px">
            Tổng số tầng đã thay đổi, dữ liệu tầng sẽ cập nhập lại. Bạn vẫn muốn tiếp tục ?<br/><span style="font-size: 16px;
@@ -18,7 +18,7 @@
                   border-radius: 5px;
                  ">{{name}}</span>
           </p>
-  
+
           <div class="btn__group">
             <button
               class="btn btn-white font-weight-normal font-weight-bold"
@@ -33,25 +33,25 @@
       </div>
     </div>
   </template>
-  
-  <script>
-  export default {
-      name: 'ModalActiveFloor',
-      props: ['data'],
-      methods: {
-          handleCancel (event) {
-              this.$emit('cancel', event)
-          },
-  
-          handleAction () {
-            console.log('data2', this.data)
-              this.$emit('action', this.data)
-              // this.$emit('cancel', event)
-          }
-      }
-  }
-  </script>
-  
+
+<script>
+export default {
+	name: 'ModalActiveFloor',
+	props: ['data'],
+	methods: {
+		handleCancel (event) {
+			this.$emit('cancel', event)
+		},
+
+		handleAction () {
+			console.log('data2', this.data)
+			this.$emit('action', this.data)
+			// this.$emit('cancel', event)
+		}
+	}
+}
+</script>
+
   <style lang="scss" scoped>
   .modal-delete {
     position: fixed;
@@ -61,7 +61,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,.6);
-  
+
     @media (max-width: 787px) {
       padding: 20px;
     }
@@ -85,7 +85,7 @@
           color: #333333;
           margin-bottom: 40px;
         }
-  
+
         .btn__group {
           .btn {
             max-width: 150px;
@@ -104,4 +104,3 @@
     }
   }
   </style>
-  

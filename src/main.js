@@ -26,11 +26,10 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
-import VueEllipseProgress from 'vue-ellipse-progress';
-Vue.use(VueEllipseProgress, "vep")
+import VueEllipseProgress from 'vue-ellipse-progress'
+Vue.use(VueEllipseProgress, 'vep')
 
-
-//cors
+// cors
 // import AxiosPlugin from 'vue-axios-cors';
 // Vue.use(AxiosPlugin)
 

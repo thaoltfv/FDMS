@@ -1073,11 +1073,11 @@ export default {
 			let value_round = Math.round(value)
 			if (roundPrice && roundPrice > 0) {
 				let round_new = Math.pow(10, roundPrice)
-				let check_var = 5*round_new/10
-				let divide_value = (value_round/round_new).toFixed(roundPrice)
-				let check_val = divide_value.toString().indexOf(".")
-				let check_part = Number(divide_value.substring(check_val+1))
-				console.log('divide_value.toString(),divide_value.toString().length,check_part,check_var',divide_value.toString(),divide_value.toString().length,roundPrice,check_part,check_var)
+				let check_var = 5 * round_new / 10
+				let divide_value = (value_round / round_new).toFixed(roundPrice)
+				let check_val = divide_value.toString().indexOf('.')
+				let check_part = Number(divide_value.substring(check_val + 1))
+				console.log('divide_value.toString(),divide_value.toString().length,check_part,check_var', divide_value.toString(), divide_value.toString().length, roundPrice, check_part, check_var)
 				if (check_part > check_var) {
 					return Math.ceil(value_round / round_new) * round_new
 				} else if (check_part < check_var) {
@@ -1165,9 +1165,9 @@ export default {
 		},
 		changePercentSaleRating (event, index) {
 			if (event) {
-				console.log('this.form',this.form)
+				console.log('this.form', this.form)
 				this.form.apartment_adapter[index].percent = event
-				this.form.apartment_adapter[index].change_negotiated_price  = (this.form.assets_general[index].total_amount * event / 100)-this.form.assets_general[index].total_amount
+				this.form.apartment_adapter[index].change_negotiated_price = (this.form.assets_general[index].total_amount * event / 100) - this.form.assets_general[index].total_amount
 				// console.log('this.form.apartment_adapter[index]',this.form.apartment_adapter[index])
 				this.key_render_1++
 			}
@@ -1206,7 +1206,7 @@ export default {
 					}
 					if (data.adjust_coefficient === '100' && data.adjust_percent !== '0') {
 						// console.log('lấy data cũ', index, data.adjust_percent)
-						appraise.comparison_factor[index].adjust_coefficient = (100 / (parseFloat(appraise.comparison_factor[index].adjust_percent) + 100)*100).toFixed(0)
+						appraise.comparison_factor[index].adjust_coefficient = (100 / (parseFloat(appraise.comparison_factor[index].adjust_percent) + 100) * 100).toFixed(0)
 						// console.log('tính data mới', index, data.adjust_coefficient)
 					}
 				})
@@ -1251,10 +1251,10 @@ export default {
 						// console.log('lấy data yếu tố', yeu_to)
 						if (yeu_to.adjust_coefficient === '100' && yeu_to.adjust_percent !== '0') {
 							// console.log('lấy data cũ', yeu_to.adjust_percent)
-							yeu_to.adjust_coefficient = (100 / (parseFloat(yeu_to.adjust_percent) + 100)*100).toFixed(0)
+							yeu_to.adjust_coefficient = (100 / (parseFloat(yeu_to.adjust_percent) + 100) * 100).toFixed(0)
 							// console.log('tính data mới', yeu_to.adjust_coefficient)
 						}
-					});
+					})
 					// tạo data ảo hiển thị
 					this.data_other_comparison.push({
 						apartment_title: item.apartment_title,
@@ -1342,10 +1342,10 @@ export default {
 			let value_round = Math.round(value)
 			if (this.round_total && this.round_total > 0) {
 				let round_new = Math.pow(10, this.round_total)
-				let check_var = 5*round_new/10
-				let divide_value = (value_round/round_new).toFixed(this.round_total)
-				let check_val = divide_value.toString().indexOf(".")
-				let check_part = Number(divide_value.substring(check_val+1))
+				let check_var = 5 * round_new / 10
+				let divide_value = (value_round / round_new).toFixed(this.round_total)
+				let check_val = divide_value.toString().indexOf('.')
+				let check_part = Number(divide_value.substring(check_val + 1))
 				// console.log('check_part,check_var',divide_value.toString(),divide_value.toString().length,this.round_total,check_part,check_var)
 				if (check_part > check_var) {
 					return Math.ceil(value_round / round_new) * round_new
@@ -1392,8 +1392,8 @@ export default {
 			this.form.comparison_factor = await tempArrayComparison
 			await this.calculation(this.form)
 		},
-		changeLegalCoefficient (e, indexAsset, type) { 
-			let rate = ((100 - e)/e*100).toFixed(2)
+		changeLegalCoefficient (e, indexAsset, type) {
+			let rate = ((100 - e) / e * 100).toFixed(2)
 			console.log('rate', rate)
 			let factor = this.apartment.comparison_factor[indexAsset].comparison_factor.find(i => i.type === type)
 			if (factor) {
@@ -1401,7 +1401,6 @@ export default {
 				this.key_render_1++
 				this.changeLegalRate(rate, indexAsset, type)
 			}
-
 		},
 		changeLegalRate (e, indexAsset, type) {
 			let tempArrayComparison = []
@@ -1513,16 +1512,16 @@ export default {
 				}
 			})
 		},
-		changeOtherCoefficient (event, data) { 
-			let rate = ((100 - event)/event*100).toFixed(2)
+		changeOtherCoefficient (event, data) {
+			let rate = ((100 - event) / event * 100).toFixed(2)
 			console.log('rate', rate)
 			this.other_comparison.forEach(item => {
-					if (item.position === data.position && item.asset_general_id === data.asset_general_id) {
-						item.adjust_percent = rate
-						this.key_render_1++
-						this.changeOtherRate(rate, data)
-					}
-				})
+				if (item.position === data.position && item.asset_general_id === data.asset_general_id) {
+					item.adjust_percent = rate
+					this.key_render_1++
+					this.changeOtherRate(rate, data)
+				}
+			})
 		},
 		changeOtherRate (event, data) {
 			if (event) {
@@ -1659,21 +1658,21 @@ export default {
 			let asset_neo_price2 = (typeof asset.apartment_adapter[1] !== 'undefined') ? asset.apartment_adapter[1].change_negotiated_price : null
 			let asset_neo_price3 = (typeof asset.apartment_adapter[2] !== 'undefined') ? asset.apartment_adapter[2].change_negotiated_price : null
 
-			if (asset_percent1 !== 100 && asset_neo_price1  === null) {
+			if (asset_percent1 !== 100 && asset_neo_price1 === null) {
 				console.log('tính 1')
-				asset_neo_price1 =  (asset1.total_amount * asset_percent1 / 100)-asset1.total_amount
-				asset.apartment_adapter[0].change_negotiated_price  = (asset1.total_amount * asset_percent1 / 100)-asset1.total_amount
+				asset_neo_price1 = (asset1.total_amount * asset_percent1 / 100) - asset1.total_amount
+				asset.apartment_adapter[0].change_negotiated_price = (asset1.total_amount * asset_percent1 / 100) - asset1.total_amount
 			}
-			if (asset_percent2 !== 100 && asset_neo_price2  === null) {
+			if (asset_percent2 !== 100 && asset_neo_price2 === null) {
 				console.log('tính 2')
-				asset_neo_price2 =  (asset2.total_amount * asset_percent2 / 100)-asset2.total_amount
-				asset.apartment_adapter[1].change_negotiated_price  = (asset2.total_amount * asset_percent2 / 100)-asset2.total_amount
+				asset_neo_price2 = (asset2.total_amount * asset_percent2 / 100) - asset2.total_amount
+				asset.apartment_adapter[1].change_negotiated_price = (asset2.total_amount * asset_percent2 / 100) - asset2.total_amount
 			}
 
-			if (asset_percent3 !== 100 && asset_neo_price3  === null) {
+			if (asset_percent3 !== 100 && asset_neo_price3 === null) {
 				console.log('tính 3')
-				asset_neo_price3 =  (asset3.total_amount * asset_percent3 / 100)-asset3.total_amount
-				asset.apartment_adapter[2].change_negotiated_price  = (asset3.total_amount * asset_percent3 / 100)-asset3.total_amount
+				asset_neo_price3 = (asset3.total_amount * asset_percent3 / 100) - asset3.total_amount
+				asset.apartment_adapter[2].change_negotiated_price = (asset3.total_amount * asset_percent3 / 100) - asset3.total_amount
 			}
 
 			// tính Tổng giá trị tài sản ước tính
@@ -1681,20 +1680,20 @@ export default {
 			// this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
 			// this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
 			if (asset_neo_price1) {
-				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? asset1.total_amount+asset_neo_price1 : 0)
+				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? asset1.total_amount + asset_neo_price1 : 0)
 			} else {
 				// tính Tổng giá trị tài sản ước tính
 				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
 			}
 
 			if (asset_neo_price2) {
-				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? asset2.total_amount+asset_neo_price2 : 0)
+				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? asset2.total_amount + asset_neo_price2 : 0)
 			} else {
 				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent2 * asset2.total_amount) / 100 : 0)
 			}
 
 			if (asset_neo_price3) {
-				this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? asset3.total_amount+asset_neo_price3  : 0)
+				this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? asset3.total_amount + asset_neo_price3 : 0)
 			} else {
 				this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
 			}

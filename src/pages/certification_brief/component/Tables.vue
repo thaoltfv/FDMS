@@ -240,7 +240,12 @@
 </template>
 <script>
 import { PERMISSIONS } from '@/enum/permissions.enum'
-import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
+import { BDropdown, BDropdownItem, BTooltip,
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
 import moment from 'moment'
 import Certificate from '@/models/Certificate'
 import CertificationBrief from '@/models/CertificationBrief'
@@ -250,12 +255,6 @@ import ModalAppraisal from '../component/modals/ModalAppraisal'
 import ModalNotificationCertificate from '@/components/Modal/ModalNotificationCertificate'
 import ModalNotificationCertificateNote from '@/components/Modal/ModalNotificationCertificateNote'
 const jsonConfig = require('../../../../config/workflow.json')
-import {
-	BCard,
-	BRow,
-	BCol,
-	BFormGroup,
-	BFormInput } from 'bootstrap-vue'
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
@@ -273,7 +272,7 @@ export default {
 		BRow,
 		BCol,
 		BFormGroup,
-		BFormInput,
+		BFormInput
 	},
 	data () {
 		return {
@@ -511,7 +510,7 @@ export default {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(i => i.status === item.status && i.sub_status === item.sub_status)
 				this.subStatusDataTmp[item.id] = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
 			})
-			this.key_dragg ++
+			this.key_dragg++
 		},
 		async handleChangeAccept2 (note, reason_id) {
 			let dataSend = {
@@ -672,7 +671,7 @@ export default {
 				})
 			}
 		},
-		configColor(element) {
+		configColor (element) {
 			if (element.status == 1) {
 				return 'info'
 			}
@@ -758,30 +757,30 @@ export default {
 				data.detail_list_id.forEach((item, index) => {
 					if (index === 0) {
 						if (data.document_type && data.document_type[0] === 'KHAC') {
-							arconymText = `DS_${item}`;
-							arconymText2 = `DS_${item}`;
+							arconymText = `DS_${item}`
+							arconymText2 = `DS_${item}`
 						} else if (data.document_type && data.document_type[0] === 'DS') {
-							arconymText = `DS_${item}`;
-							arconymText2 = `DS_${item}`;
+							arconymText = `DS_${item}`
+							arconymText2 = `DS_${item}`
 						} else {
-							arconymText = `BDS_${item}`;
-							arconymText2 = `BDS_${item}`;
+							arconymText = `BDS_${item}`
+							arconymText2 = `BDS_${item}`
 						}
 					} else {
 						if (data.document_type && data.document_type[0] === 'KHAC') {
-							arconymText += `\nDS_${item}`;
-							arconymText2 = `\nDS_${item}`;
+							arconymText += `\nDS_${item}`
+							arconymText2 = `\nDS_${item}`
 						} else if (data.document_type && data.document_type[0] === 'DS') {
-							arconymText += `\nDS_${item}`;
-							arconymText2 = `\nDS_${item}`;
+							arconymText += `\nDS_${item}`
+							arconymText2 = `\nDS_${item}`
 						} else {
-							arconymText += `\nBDS_${item}`;
-							arconymText2 = `\nBDS_${item}`;
+							arconymText += `\nBDS_${item}`
+							arconymText2 = `\nBDS_${item}`
 						}
 					}
 					arconymText1 += `<a href="/certification_asset/real-estate/detail?id=${item}" target='_blank'>${arconymText2}</a><br/>`
 				})
-				
+
 				return arconymText1
 			} else return ''
 		},
@@ -882,8 +881,8 @@ export default {
 			const pagination = { ...this.pagination, current: Number(current) }
 			this.handleTableChange(pagination)
 		},
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

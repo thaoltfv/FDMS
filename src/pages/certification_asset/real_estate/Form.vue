@@ -509,7 +509,7 @@ export default {
 							material_id: '',
 							turning: 'Hẻm số 1'
 						}],
-						description: '',
+						description: ''
 					},
 					geographical_location: '- Phía trước:\n- Phía sau:\n- Phía bên trái ( Nhìn từ trong ra):\n- Phía bên phải ( Nhìn từ trong ra):',
 					picture_infomation: []
@@ -781,13 +781,13 @@ export default {
 				if (bindDataStep.step >= 6) {
 					this.step_active = 5
 				} else this.step_active = bindDataStep.step
-				if (!this.isMobile()){
+				if (!this.isMobile()) {
 					await this.$refs.wizard.tabs.forEach((tab, index) => {
 						if (index <= this.step_active) {
 							tab.checked = true
 						}
 					})
-				
+
 					if (this.step_active === 7) {
 						await this.$refs.wizard.changeTab(0, 5)
 					} else {
@@ -816,7 +816,7 @@ export default {
 			this.key_step_4 += 1
 			this.key_step_5 += 1
 			this.key_step_6 += 1
-			if (!this.isMobile()){
+			if (!this.isMobile()) {
 				if (this.$route.params.step || this.$route.params.step === 0) {
 					await this.$refs.wizard.changeTab(0, this.$route.params.step)
 				}
@@ -863,8 +863,8 @@ export default {
 		this.getProvinces()
 	},
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -1008,7 +1008,7 @@ export default {
 					position: 'top-right',
 					duration: 3000
 				})
-				if (!this.isMobile()){
+				if (!this.isMobile()) {
 					this.$refs.wizard.maxStep = 1
 					this.$refs.wizard.tabs.forEach((tab, index) => {
 						if (index > 1) {
@@ -1631,7 +1631,7 @@ export default {
 			this.form.step_6.assets_general = assets
 			this.form.step_6.map_img = ''
 		},
-		filter_change (payload){
+		filter_change (payload) {
 			this.form.step_6.filter_year = payload
 		},
 		saveImageMap (link) {

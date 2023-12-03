@@ -323,11 +323,11 @@ export default {
 			let value_round = Math.round(value)
 			if (this.round_appraise_total && this.round_appraise_total > 0) {
 				let round_new = Math.pow(10, this.round_appraise_total)
-				let check_var = 5*round_new/10
-				let divide_value = (value_round/round_new).toFixed(this.round_appraise_total)
-				let check_val = divide_value.toString().indexOf(".")
-				let check_part = Number(divide_value.substring(check_val+1))
-				console.log('check_part,check_var',divide_value.toString(),divide_value.toString().length,this.round_appraise_total,check_part,check_var)
+				let check_var = 5 * round_new / 10
+				let divide_value = (value_round / round_new).toFixed(this.round_appraise_total)
+				let check_val = divide_value.toString().indexOf('.')
+				let check_part = Number(divide_value.substring(check_val + 1))
+				console.log('check_part,check_var', divide_value.toString(), divide_value.toString().length, this.round_appraise_total, check_part, check_var)
 				if (check_part > check_var) {
 					return Math.ceil(value_round / round_new) * round_new
 				} else if (check_part < check_var) {

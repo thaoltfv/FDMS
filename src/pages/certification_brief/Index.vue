@@ -282,8 +282,8 @@ export default {
 	},
 
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -614,7 +614,7 @@ export default {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(i => i.status === item.status && i.sub_status === item.sub_status)
 				this.subStatusDataTmp[item.id] = this.listCertificate.filter(i => i.status === item.status && i.sub_status === item.sub_status)
 			})
-			this.key_dragg ++
+			this.key_dragg++
 		},
 		checkMoveVerify () {
 			return true

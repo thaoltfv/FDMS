@@ -14,71 +14,71 @@
 </template>
 
 <script>
-  import District from '@/models/District'
-  import InputCategory from '@/components/Form/InputCategory'
-  import InputText from '@/components/Form/InputText'
-  export default {
-    name: 'Search',
-  
-    components: {
-      InputCategory,
-      InputText
-    },
-  
-    data () {
-      return {
-        provinces: [],
-        filter: {
-          search: '',
-          province_id: ''
-        }
-      }
-    },
-  
-    created () {
-    },
-    computed: {
-      optionsProvince () {
-        return {
-          data: this.provinces,
-          id: 'id',
-          key: 'name'
-        }
-      }
-    },
-    methods: {
-      search () {
-        this.$emit('filter-changed', this.filter)
-      },
-      changeProvinces() {
-        this.$emit('filter-changed', this.filter)
-      },
-  
-      async getProvinces () {
-        try {
-          const resp = await District.getProvince()
-          this.provinces = [...resp.data]
-        } catch (err) {
-          this.isSubmit = false
-          throw err
-        }
-      },
-  
-      reset () {
-        for (let property in this.filter) {
-          if (this.filter.hasOwnProperty(property)) {
-            this.filter[property] = ''
-          }
-        }
-        this.$emit('filter-changed', this.filter)
-      }
-    },
-    beforeMount () {
-      this.getProvinces()
-    }
-  }
-  </script>
-  
+import District from '@/models/District'
+import InputCategory from '@/components/Form/InputCategory'
+import InputText from '@/components/Form/InputText'
+export default {
+	name: 'Search',
+
+	components: {
+		InputCategory,
+		InputText
+	},
+
+	data () {
+		return {
+			provinces: [],
+			filter: {
+				search: '',
+				province_id: ''
+			}
+		}
+	},
+
+	created () {
+	},
+	computed: {
+		optionsProvince () {
+			return {
+				data: this.provinces,
+				id: 'id',
+				key: 'name'
+			}
+		}
+	},
+	methods: {
+		search () {
+			this.$emit('filter-changed', this.filter)
+		},
+		changeProvinces () {
+			this.$emit('filter-changed', this.filter)
+		},
+
+		async getProvinces () {
+			try {
+				const resp = await District.getProvince()
+				this.provinces = [...resp.data]
+			} catch (err) {
+				this.isSubmit = false
+				throw err
+			}
+		},
+
+		reset () {
+			for (let property in this.filter) {
+				if (this.filter.hasOwnProperty(property)) {
+					this.filter[property] = ''
+				}
+			}
+			this.$emit('filter-changed', this.filter)
+		}
+	},
+	beforeMount () {
+		this.getProvinces()
+	}
+}
+</script>
+
   <style lang="scss" scoped>
   .input{
     @media (max-width: 1023px) {
@@ -118,7 +118,7 @@
     width: auto;
     color: #555555;
     border-radius: 5px;
-  
+
     @media (max-width: 1023px) {
       width: 100%;
     }
@@ -169,4 +169,3 @@
   //   top: 45px;
   // }
   </style>
-  

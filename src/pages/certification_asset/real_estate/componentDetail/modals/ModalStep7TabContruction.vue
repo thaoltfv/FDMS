@@ -487,7 +487,7 @@ export default {
 		InputNumberNew,
 		InputNumberNegative,
 		ModalListContruction,
-    InputText,
+		InputText
 	},
 	computed: {
 	},
@@ -514,16 +514,16 @@ export default {
 			title: 'Lựa chọn đơn vị xây dựng',
 			constructionRemainQualitySelected: [],
 			constructionPriceTypeSelected: [],
-      noteHienTrang: {
-        "note1":'',
-        "note2":'',
-        "note3":'',
-        "note4":'',
-        "note5":'',
-      },
-      choosenId: null,
-      showNoteHienTrang: false,
-      render_note: 9999,
+			noteHienTrang: {
+				'note1': '',
+				'note2': '',
+				'note3': '',
+				'note4': '',
+				'note5': ''
+			},
+			choosenId: null,
+			showNoteHienTrang: false,
+			render_note: 9999
 		}
 	},
 	watch: {
@@ -563,44 +563,44 @@ export default {
 	beforeUpdate () {
 	},
 	methods: {
-    onCancelNote() {
-      this.choosenId = null
-      this.showNoteHienTrang = false
-      this.noteHienTrang = {
-              "note1":'',
-              "note2":'',
-              "note3":'',
-              "note4":'',
-              "note5":'',
-            }
-    },
-    async handleSaveNote() {
-      // console.log('id save',this.choosenId)
-      // console.log('data save',this.noteHienTrang)
-      let data = {'note': this.noteHienTrang}
-      const res = await CertificateAsset.updateNoteHienTrang(data, this.choosenId)
-      if (res.data) {
+		onCancelNote () {
+			this.choosenId = null
+			this.showNoteHienTrang = false
+			this.noteHienTrang = {
+				'note1': '',
+				'note2': '',
+				'note3': '',
+				'note4': '',
+				'note5': ''
+			}
+		},
+		async handleSaveNote () {
+			// console.log('id save',this.choosenId)
+			// console.log('data save',this.noteHienTrang)
+			let data = {'note': this.noteHienTrang}
+			const res = await CertificateAsset.updateNoteHienTrang(data, this.choosenId)
+			if (res.data) {
 				this.$toast.open({
 					message: 'Lưu hiện trạng CTXD thành công',
 					type: 'success',
 					position: 'top-right',
 					duration: 3000
 				})
-        this.form.tangible_assets.forEach((data, index) => {
-          if (data.comparison_tangible_factor.id == this.choosenId) {
-            data.comparison_tangible_factor.note = JSON.stringify(this.noteHienTrang)
-            this.noteHienTrang = {
-              "note1":'',
-              "note2":'',
-              "note3":'',
-              "note4":'',
-              "note5":'',
-            }
-          }
-        })
+				this.form.tangible_assets.forEach((data, index) => {
+					if (data.comparison_tangible_factor.id == this.choosenId) {
+						data.comparison_tangible_factor.note = JSON.stringify(this.noteHienTrang)
+						this.noteHienTrang = {
+							'note1': '',
+							'note2': '',
+							'note3': '',
+							'note4': '',
+							'note5': ''
+						}
+					}
+				})
 				this.showNoteHienTrang = false
-        this.render_note += 1
-        // this.render_tab_3 += 1
+				this.render_note += 1
+				// this.render_tab_3 += 1
 			} else if (res.error) {
 				this.$toast.open({
 					message: `${res.error.message}`,
@@ -614,17 +614,17 @@ export default {
 					position: 'top-right'
 				})
 			}
-    },
-    handleNote(data){
-      // console.log('ddddd',data)
-      if (data.comparison_tangible_factor.note){
-        this.noteHienTrang = JSON.parse(data.comparison_tangible_factor.note)
-      }
-      this.choosenId = data.comparison_tangible_factor.id
-      // console.log('note',this.noteHienTrang)
-      // console.log('note1',this.noteHienTrang.note1)
-      this.showNoteHienTrang = true
-    },
+		},
+		handleNote (data) {
+			// console.log('ddddd',data)
+			if (data.comparison_tangible_factor.note) {
+				this.noteHienTrang = JSON.parse(data.comparison_tangible_factor.note)
+			}
+			this.choosenId = data.comparison_tangible_factor.id
+			// console.log('note',this.noteHienTrang)
+			// console.log('note1',this.noteHienTrang.note1)
+			this.showNoteHienTrang = true
+		},
 		setRemainQualityRate (remainQualitySelected) {
 			let slug = ''
 			if (remainQualitySelected.length > 0) {

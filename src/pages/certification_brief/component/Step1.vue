@@ -111,7 +111,7 @@
               class="form-group-container col-sm-12 col-md-6"
               @change="changeCommissionFee($event)"
             />
-              
+
             </div>
             <div class="row justify-content-between">
               <InputText
@@ -213,7 +213,7 @@
               :showIcon="true"
               label="Điện thoại"
             />
-            
+
           </div>
         </div>
       </div>
@@ -276,7 +276,7 @@
 
             />
             </div>
-            
+
             <!-- <div class="form-group-container">
               <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
               <div class="form-control border_disable disabled">
@@ -352,7 +352,7 @@ export default {
 		'appraisers',
 		'signAppraisers',
 		'appraisersManager',
-    'appraisersControl',
+		'appraisersControl',
 		'customers',
 		'idData',
 		'render_price_fee',
@@ -386,14 +386,14 @@ export default {
 		InputTextPrefixCustomIcon
 	},
 	computed: {
-    appraiser_perform_compute: {
+		appraiser_perform_compute: {
 			// getter
 			get: function () {
 				if (this.employeePerformance.length > 0) {
-          // // console.log('vô đây trước 1')
+					// // console.log('vô đây trước 1')
 					return this.data.appraiser_perform_id
 				} else {
-          // // console.log('vô đây trước 2')
+					// // console.log('vô đây trước 2')
 					return this.data.appraiser_perform.name
 				}
 			},
@@ -463,7 +463,7 @@ export default {
 				this.data.appraiser_confirm_id = newValue
 			}
 		},
-    appraiser_sale_compute: {
+		appraiser_sale_compute: {
 			// getter
 			get: function () {
 				if (this.employeeBusiness.length > 0) {
@@ -485,14 +485,14 @@ export default {
 				key: 'name'
 			}
 		},
-    optionsAppraiserManager () {
+		optionsAppraiserManager () {
 			return {
 				data: this.appraisersManager,
 				id: 'id',
 				key: 'name'
 			}
 		},
-    optionsAppraiserControl () {
+		optionsAppraiserControl () {
 			return {
 				data: this.appraisersControl,
 				id: 'id',
@@ -517,7 +517,7 @@ export default {
 			return {
 				data: this.employeeBusiness,
 				id: 'id',
-				key: 'name',
+				key: 'name'
 				// selected: this.userAppraiserId
 			}
 		},
@@ -590,11 +590,11 @@ export default {
 	},
 	created () {
 		// this.getCustomer()
-    // console.log('data', this.data)
+		// console.log('data', this.data)
 	},
 	methods: {
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -646,10 +646,10 @@ export default {
 		handleChangeAppraiser (event) {
 			this.$emit('handleChangeAppraiser', event)
 		},
-    handleChangeAppraiserManager (event) {
+		handleChangeAppraiserManager (event) {
 			this.$emit('handleChangeAppraiserManager', event)
 		},
-    handleChangeAppraiserControl (event) {
+		handleChangeAppraiserControl (event) {
 			this.$emit('handleChangeAppraiserControl', event)
 		},
 		changeDocumentDate (event) {

@@ -74,7 +74,7 @@
 				</b-dropdown-item>
 			</b-dropdown>
 		</div>
-		
+
     </div>
 </template>
 
@@ -124,8 +124,8 @@ export default {
 		}
 	},
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

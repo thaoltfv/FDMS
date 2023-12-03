@@ -261,27 +261,26 @@ export default {
 			// 	let round = Math.pow(10, Math.abs(this.apartments_round_total))
 			// 	return Math.floor(value / round) * round
 			// } else return value
-      // console.log('dsdsds',value.length,this.apartments_round_total)
-      if (this.apartments_round_total >= value.length) {
-        this.apartments_round_total = value.length - 1
-      }
-      let value_round = Math.round(value)
-      if (this.apartments_round_total && this.apartments_round_total > 0) {
-        let round_new = Math.pow(10, this.apartments_round_total)
-        let check_var = 5*round_new/10
-        let divide_value = (value_round/round_new).toFixed(this.apartments_round_total)
-        let check_val = divide_value.toString().indexOf(".")
-        let check_part = Number(divide_value.substring(check_val+1))
-        // console.log('check_part,check_var',divide_value.toString(),divide_value.toString().length,this.apartments_round_total,check_part,check_var)
-        if (check_part > check_var) {
-          return Math.ceil(value_round / round_new) * round_new
-        } else if (check_part < check_var) {
-          return Math.floor(value_round / round_new) * round_new
-        } else return value_round
-      } else {
-        return value_round
-      }
-
+			// console.log('dsdsds',value.length,this.apartments_round_total)
+			if (this.apartments_round_total >= value.length) {
+				this.apartments_round_total = value.length - 1
+			}
+			let value_round = Math.round(value)
+			if (this.apartments_round_total && this.apartments_round_total > 0) {
+				let round_new = Math.pow(10, this.apartments_round_total)
+				let check_var = 5 * round_new / 10
+				let divide_value = (value_round / round_new).toFixed(this.apartments_round_total)
+				let check_val = divide_value.toString().indexOf('.')
+				let check_part = Number(divide_value.substring(check_val + 1))
+				// console.log('check_part,check_var',divide_value.toString(),divide_value.toString().length,this.apartments_round_total,check_part,check_var)
+				if (check_part > check_var) {
+					return Math.ceil(value_round / round_new) * round_new
+				} else if (check_part < check_var) {
+					return Math.floor(value_round / round_new) * round_new
+				} else return value_round
+			} else {
+				return value_round
+			}
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)

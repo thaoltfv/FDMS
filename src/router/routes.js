@@ -14,7 +14,7 @@ export const routes = [
 		path: '/login',
 		name: 'login',
 		component: page('Login.vue'),
-		meta: { layout: 'auth' , gtm: 'Trang đăng nhập'},
+		meta: { layout: 'auth', gtm: 'Trang đăng nhập'},
 		beforeEnter: ResolveGuard([LoginGuard])
 	},
 	{
@@ -1297,7 +1297,7 @@ export const routes = [
 					{ title: 'Động sản', name: 'certification_personal_property.index' },
 					{ title: 'Tạo mới động sản khác', name: 'certification_asset.other_purpose.create' }
 				],
-				gtm: 'Trang chỉnh sửa TSTĐ ĐS khác' 
+				gtm: 'Trang chỉnh sửa TSTĐ ĐS khác'
 			}
 		},
 		{

@@ -155,7 +155,7 @@ export default {
 				front_side: '',
 				property_type: 0,
 				search_address: '',
-				coordinate:[],
+				coordinate: [],
 				year: moment(new Date(new Date().setFullYear(new Date().getFullYear() - 1))).format('YYYY-MM-DD')
 			},
 			front_sides: [
@@ -224,7 +224,7 @@ export default {
 				id: 'id',
 				key: 'name'
 			}
-		},
+		}
 	},
 	async mounted () {
 		const data = await this.getCacheFilterData()
@@ -237,14 +237,14 @@ export default {
 		getCacheFilterData () {
 			let data = store.getters.mapFilter
 			if (isEmpty(data)) {
-				data =  JSON.parse(localStorage.getItem('mapFilter'))
+				data = JSON.parse(localStorage.getItem('mapFilter'))
 				if (!isEmpty(data)) {
 					store.commit(types.SET_MAP_FILTER, data)
 				}
 			}
 			return data
 		},
-		getDefaultLocation() {
+		getDefaultLocation () {
 			let mapLocation = store.getters.mapLocation
 			if (isEmpty(mapLocation)) {
 				let mapLocation = JSON.parse(localStorage.getItem('mapLocation'))
@@ -313,7 +313,7 @@ export default {
 		handleFilter () {
 			this.$emit('action', this.form)
 		}
-	},
+	}
 
 }
 </script>

@@ -66,7 +66,7 @@
                   rules="required"
                   vid="description"
                   :rows="3"
-                  
+
                   :autosize="true"
                   class="col-12"
                 />

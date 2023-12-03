@@ -367,7 +367,7 @@ export default {
 				this.total_account = appraiserCompany.data.data[0].total_account
 				if (this.list_total1.filter(function (item) {
 					return item.status_user == 'active'
-				}).length >= this.total_account){
+				}).length >= this.total_account) {
 					this.$toast.open({
 						message: 'Số lượng tại khoản sử dụng đã đạt giới hạn',
 						type: 'error',
@@ -380,14 +380,14 @@ export default {
 			} catch (e) {
 				this.isLoading = false
 			}
-		},
+		}
 	},
 	beforeMount () {
 		this.getRoles()
 		this.getBranches()
 		this.getDictionary()
 		// console.log('this.$route.name',this.$route.name)
-		if (this.$route.name === 'staff.create'){
+		if (this.$route.name === 'staff.create') {
 			this.getStaffsFull()
 		}
 	},

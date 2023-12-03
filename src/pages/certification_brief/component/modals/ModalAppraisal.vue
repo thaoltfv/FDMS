@@ -57,7 +57,7 @@
                 :options="optionsAppraiser"
               />
           </div>
-		  
+
           <div class="col-12">
 			<div style="text-align: left !important;" class="form-group-container">
 				<!-- <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
@@ -364,7 +364,7 @@ export default {
 				if (this.appraisersManager.length > 0) {
 					return this.form.appraiser_manager_id
 				} else {
-					return this.form.appraiser_manager.name 
+					return this.form.appraiser_manager.name
 				}
 			},
 			// setter

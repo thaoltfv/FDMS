@@ -67,7 +67,7 @@
                   vid="document_description"
                   :rows="3"
                   :disableInput="true"
-                  
+
                   :autosize="true"
                   class="col-12"
                 />
@@ -254,7 +254,7 @@ export default {
 		}
 	},
 	mounted () {
-    // console.log('--------------------',this.data)
+		// console.log('--------------------',this.data)
 	},
 	beforeUpdate () {
 	},

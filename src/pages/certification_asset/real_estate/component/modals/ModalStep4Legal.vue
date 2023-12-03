@@ -119,7 +119,7 @@
                                                 class="form-group-container"
                                                 @change="changeDocNo($event, index)"
                                             />
-                                            
+
                                         </div>
                                         <div class="col-12 col item_land input-contain" :class="[form.land_details.length > 1 ? 'col-lg-5' : 'col-lg-6']">
                                             <InputText
@@ -213,51 +213,51 @@ import InputCategoryCustom from '@/components/Form/InputCategoryCustom'
 import WareHouse from '@/models/WareHouse'
 // import moment from 'moment'
 export default {
-    name: 'ModalBuildingDetail',
-    props: ['data', 'juridicals', 'provinceName', 'full_address'],
-    components: {
-        InputCategory,
-        InputText,
-        InputTextarea,
-        InputNumberNoneFormat,
-        InputDatePicker,
-        InputAreaCustom,
-        InputCategoryCustom
-    },
-    data () {
-        return {
-            form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
-            contentRows: 3,
-            contentRowsNote: 6,
-            type_purposes: []
-        }
-    },
+	name: 'ModalBuildingDetail',
+	props: ['data', 'juridicals', 'provinceName', 'full_address'],
+	components: {
+		InputCategory,
+		InputText,
+		InputTextarea,
+		InputNumberNoneFormat,
+		InputDatePicker,
+		InputAreaCustom,
+		InputCategoryCustom
+	},
+	data () {
+		return {
+			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
+			contentRows: 3,
+			contentRowsNote: 6,
+			type_purposes: []
+		}
+	},
 
-    computed: {
-        optionsJuridicals () {
-            return {
-                data: this.juridicals,
-                id: 'id',
-                key: 'content'
-            }
-        },
-        optionsTypePurposes () {
-            return {
-                data: this.type_purposes,
-                id: 'id',
-                key: 'description'
+	computed: {
+		optionsJuridicals () {
+			return {
+				data: this.juridicals,
+				id: 'id',
+				key: 'content'
+			}
+		},
+		optionsTypePurposes () {
+			return {
+				data: this.type_purposes,
+				id: 'id',
+				key: 'description'
 
-            }
-        }
+			}
+		}
 
-    },
-    mounted () {
-        this.setContentRows()
-    },
-    async beforeMount () {
+	},
+	mounted () {
+		this.setContentRows()
+	},
+	async beforeMount () {
 		this.getDictionaryLand()
 	},
-    methods: {
+	methods: {
 		async getDictionaryLand () {
 			const resp = await WareHouse.getDictionariesLand()
 			this.type_purposes = [...resp.data]
@@ -265,7 +265,7 @@ export default {
 				item.description = this.formatSentenceCase(item.description)
 			})
 		},
-        formatSentenceCase (phrase) {
+		formatSentenceCase (phrase) {
 			let text = phrase.toLowerCase()
 			return text.charAt(0).toUpperCase() + text.slice(1)
 		},
@@ -289,155 +289,155 @@ export default {
 				}
 			})
 		},
-        changeLegalDate (event) {
-            if (event) { this.form.law_date = event }
-        },
-        handleAddLandDoc () {
-            this.form.land_details.push({
-                doc_no: '',
-                land_no: ''
-            })
-            this.setContentRows()
-        },
-        handleAddPurpose () {
-            this.form.purpose_details.push({
-                land_type_purpose_id: '',
-                total_area: ''
-            })
-            this.setContentRows()
-        },
-        changeLegal () {
-            this.getContent()
-        },
-        changeDocNo (event, index) {
-            if (event) {
-                this.form.land_details[index].doc_no = event
-            } else {
-                this.form.land_details[index].doc_no = ''
-            }
-            this.getContent()
-        },
-        changeLandNo (event, index) {
-            if (event) {
-                this.form.land_details[index].land_no = event
-            } else {
-                this.form.land_details[index].land_no = ''
-            }
-            this.getContent()
-        },
-        changeLandtypepurpose (event, index) {
-            if (event) {
-                this.form.purpose_details[index].land_type_purpose_id = event
-            } else {
-                this.form.purpose_details[index].land_type_purpose_id = ''
-            }
-            this.getContent()
-        },
-        changeTotal_area (event, index) {
-            if (event) {
-                this.form.purpose_details[index].total_area = event
-            } else {
-                this.form.purpose_details[index].total_area = ''
-            }
-            this.getContent()
-        },
-        async getContent () {
-            let land_description = ''
-            // console.log('data', this.form)
-            const map = new Map()
-            if (this.form.land_details.length > 0) {
-                await this.form.land_details.forEach(item => {
-                    let land_no_description = ''
-                    let land_description_item = ''
-                    if (!map.has(item.doc_no)) {
-                        map.set(item.doc_no, true)
-                        let filterArray = this.form.land_details.filter(itemFilter => item.doc_no === itemFilter.doc_no)
-                        land_description_item = ''
-                        land_no_description = ''
-                        let land_no_number = null
-                        if (filterArray.length > 0) {
-                            filterArray.forEach(landItem => {
-                                land_no_number = landItem.land_no
-                                if (!land_no_description) {
-                                    land_no_description = `${land_no_description} ` + `${land_no_number === 0 ? 0 : land_no_number || ''}`
-                                } else land_no_description = `${land_no_description}, ` + `${land_no_number}`
-                            })
-                        }
-                        land_description_item = 'thửa đất số' + `${land_no_description || ''}` + ' tờ bản đồ số ' + `${item.doc_no || item.doc_no === 0 ? item.doc_no : ''}`
-                        if (!land_description) {
-                            land_description = `${land_description}` + `${land_description_item}`
-                        } else land_description = `${land_description}, ` + `${land_description_item}`
-                    }
-                })
-                this.setContentRows()
-            }
-            this.form.content = await 'Chứng nhận ' + `${this.form.legal_name_holder ? this.form.legal_name_holder + ' ' : ''}` + 'được quyền sử dụng đất thuộc ' + `${land_description} ` + `${this.full_address ? this.full_address : ''}.`
-            land_description = ''
-        },
-        getProvince () {
-            this.form.certifying_agency = `Sở Tài nguyên và Môi trường ${this.provinceName && this.provinceName.toLowerCase().includes('thành phố') ? this.provinceName : this.provinceName ? 'Tỉnh ' + this.provinceName : ''}`
-        },
-        setContentRows () {
-            if (this.form.appraise_law_id === 0) {
-                this.contentRows = 9
-            } else this.contentRows = this.form.land_details.length * 3
-        },
-        handleDeleteLand (index) {
-            this.form.land_details.splice(index, 1)
-            this.setContentRows()
-            this.getContent()
-        },
-        handleDeletePurpose (index) {
-            this.form.purpose_details.splice(index, 1)
-            this.setContentRows()
-            this.getContent()
-        },
-        handleChangeTypeLegal (event) {
-            if (event === 0) {
-                this.form.content = ''
-                this.form.certifying_agency = ''
-                this.form.land_details = [
-                    {
-                        doc_no: '',
-                        land_no: ''
-                    }
-                ]
-            } else {
-                this.form.description = ''
-                this.getContent()
-                this.getProvince()
-            }
-            this.setContentRows()
-        },
-        handleCancel (event) {
-            this.$emit('cancel', event)
-        },
-        async validateLegal () {
-            const valid = await this.$refs.formLegal.validate()
-            // console.log('form', this.form)
-            if (valid) {
-                let getLaw = await this.juridicals.filter(item => item.id === this.form.appraise_law_id)
-                this.form.law = getLaw[0]
-                let checkDocLand = true
-                this.form.land_details.forEach(item => {
-                    if ((item.doc_no || item.doc_no === 0) && (item.land_no || item.land_no === 0)) {
-                        checkDocLand = false
-                    }
-                })
-                if (checkDocLand && this.form.appraise_law_id !== 0) {
-                    return this.$toast.open({
-                        message: 'Vui lòng nhập Số tờ , Số thửa',
-                        type: 'error',
-                        position: 'top-right'
-                    })
-                }
-                await this.handleAction()
-            }
-        },
-        handleAction () {
-            this.$emit('action', this.form)
-        }
-    }
+		changeLegalDate (event) {
+			if (event) { this.form.law_date = event }
+		},
+		handleAddLandDoc () {
+			this.form.land_details.push({
+				doc_no: '',
+				land_no: ''
+			})
+			this.setContentRows()
+		},
+		handleAddPurpose () {
+			this.form.purpose_details.push({
+				land_type_purpose_id: '',
+				total_area: ''
+			})
+			this.setContentRows()
+		},
+		changeLegal () {
+			this.getContent()
+		},
+		changeDocNo (event, index) {
+			if (event) {
+				this.form.land_details[index].doc_no = event
+			} else {
+				this.form.land_details[index].doc_no = ''
+			}
+			this.getContent()
+		},
+		changeLandNo (event, index) {
+			if (event) {
+				this.form.land_details[index].land_no = event
+			} else {
+				this.form.land_details[index].land_no = ''
+			}
+			this.getContent()
+		},
+		changeLandtypepurpose (event, index) {
+			if (event) {
+				this.form.purpose_details[index].land_type_purpose_id = event
+			} else {
+				this.form.purpose_details[index].land_type_purpose_id = ''
+			}
+			this.getContent()
+		},
+		changeTotal_area (event, index) {
+			if (event) {
+				this.form.purpose_details[index].total_area = event
+			} else {
+				this.form.purpose_details[index].total_area = ''
+			}
+			this.getContent()
+		},
+		async getContent () {
+			let land_description = ''
+			// console.log('data', this.form)
+			const map = new Map()
+			if (this.form.land_details.length > 0) {
+				await this.form.land_details.forEach(item => {
+					let land_no_description = ''
+					let land_description_item = ''
+					if (!map.has(item.doc_no)) {
+						map.set(item.doc_no, true)
+						let filterArray = this.form.land_details.filter(itemFilter => item.doc_no === itemFilter.doc_no)
+						land_description_item = ''
+						land_no_description = ''
+						let land_no_number = null
+						if (filterArray.length > 0) {
+							filterArray.forEach(landItem => {
+								land_no_number = landItem.land_no
+								if (!land_no_description) {
+									land_no_description = `${land_no_description} ` + `${land_no_number === 0 ? 0 : land_no_number || ''}`
+								} else land_no_description = `${land_no_description}, ` + `${land_no_number}`
+							})
+						}
+						land_description_item = 'thửa đất số' + `${land_no_description || ''}` + ' tờ bản đồ số ' + `${item.doc_no || item.doc_no === 0 ? item.doc_no : ''}`
+						if (!land_description) {
+							land_description = `${land_description}` + `${land_description_item}`
+						} else land_description = `${land_description}, ` + `${land_description_item}`
+					}
+				})
+				this.setContentRows()
+			}
+			this.form.content = await 'Chứng nhận ' + `${this.form.legal_name_holder ? this.form.legal_name_holder + ' ' : ''}` + 'được quyền sử dụng đất thuộc ' + `${land_description} ` + `${this.full_address ? this.full_address : ''}.`
+			land_description = ''
+		},
+		getProvince () {
+			this.form.certifying_agency = `Sở Tài nguyên và Môi trường ${this.provinceName && this.provinceName.toLowerCase().includes('thành phố') ? this.provinceName : this.provinceName ? 'Tỉnh ' + this.provinceName : ''}`
+		},
+		setContentRows () {
+			if (this.form.appraise_law_id === 0) {
+				this.contentRows = 9
+			} else this.contentRows = this.form.land_details.length * 3
+		},
+		handleDeleteLand (index) {
+			this.form.land_details.splice(index, 1)
+			this.setContentRows()
+			this.getContent()
+		},
+		handleDeletePurpose (index) {
+			this.form.purpose_details.splice(index, 1)
+			this.setContentRows()
+			this.getContent()
+		},
+		handleChangeTypeLegal (event) {
+			if (event === 0) {
+				this.form.content = ''
+				this.form.certifying_agency = ''
+				this.form.land_details = [
+					{
+						doc_no: '',
+						land_no: ''
+					}
+				]
+			} else {
+				this.form.description = ''
+				this.getContent()
+				this.getProvince()
+			}
+			this.setContentRows()
+		},
+		handleCancel (event) {
+			this.$emit('cancel', event)
+		},
+		async validateLegal () {
+			const valid = await this.$refs.formLegal.validate()
+			// console.log('form', this.form)
+			if (valid) {
+				let getLaw = await this.juridicals.filter(item => item.id === this.form.appraise_law_id)
+				this.form.law = getLaw[0]
+				let checkDocLand = true
+				this.form.land_details.forEach(item => {
+					if ((item.doc_no || item.doc_no === 0) && (item.land_no || item.land_no === 0)) {
+						checkDocLand = false
+					}
+				})
+				if (checkDocLand && this.form.appraise_law_id !== 0) {
+					return this.$toast.open({
+						message: 'Vui lòng nhập Số tờ , Số thửa',
+						type: 'error',
+						position: 'top-right'
+					})
+				}
+				await this.handleAction()
+			}
+		},
+		handleAction () {
+			this.$emit('action', this.form)
+		}
+	}
 
 }
 </script>
@@ -769,5 +769,3 @@ padding: .75rem 0;
 border: 1px solid #0b0d10;
 }
 </style>
-
-

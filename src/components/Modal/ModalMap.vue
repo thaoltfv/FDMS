@@ -27,7 +27,7 @@
           </div>
           <input type="text" id="coordinate" :value="address" class="d-none" />
           <button class="btn btn-search" type="button" @click="handleAction">
-            Xác nhận 
+            Xác nhận
           </button>
           <button
             class="btn btn-white btn-cancel"
@@ -178,10 +178,10 @@ export default {
 		},
 		handleView () {
 			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
-		// 		this.url =
-        //   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-		this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'		
-		this.imageMap = false
+				// 		this.url =
+				//   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
+				this.imageMap = false
 			} else {
 				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
 				this.imageMap = true

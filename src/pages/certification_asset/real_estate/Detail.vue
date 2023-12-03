@@ -608,7 +608,7 @@
 										</b-dropdown-item>
 									</b-dropdown>
 								</div>
-								
+
 							</div>
 						<!-- </div> -->
 					</ValidationObserver>
@@ -638,7 +638,7 @@ import {
 	BCol,
 	BFormGroup,
 	BFormInput
-} from 'bootstrap-vue'
+	, BTooltip, BDropdown, BDropdownItem, BButtonGroup} from 'bootstrap-vue'
 import Step1 from './componentDetail/Step1'
 import Step2 from './componentDetail/Step2'
 import Step3 from './componentDetail/Step3'
@@ -655,7 +655,6 @@ import CertificateAsset from '@/models/CertificateAsset'
 import moment from 'moment'
 import ModalPrintEstimateAssets from '@/components/Modal/ModalPrintEstimateAsset'
 import ModalNotificationAppraisal from '@/components/Modal/ModalNotificationAppraisal'
-import {BTooltip, BDropdown, BDropdownItem, BButtonGroup} from 'bootstrap-vue'
 const jsonConfig = require('../../../../config/workflow.json')
 
 export default {
@@ -751,7 +750,7 @@ export default {
 							material_id: '',
 							turning: 'Hẻm số 1'
 						}],
-						description: '',
+						description: ''
 
 					},
 					geographical_location: '- Phía trước:\n- Phía sau:\n- Phía bên trái ( Nhìn từ trong ra):\n- Phía bên phải ( Nhìn từ trong ra):',
@@ -1060,9 +1059,8 @@ export default {
 				if (bindDataStep.step === 6) {
 					this.step_active = await bindDataStep.step + 1
 				} else this.step_active = bindDataStep.step ? bindDataStep.step : 1
-				if (!this.isMobile()){
-
-				await this.$refs.wizard.tabs.forEach((tab, index) => {
+				if (!this.isMobile()) {
+					await this.$refs.wizard.tabs.forEach((tab, index) => {
 						if (index <= this.step_active - 1) {
 							tab.checked = true
 						}
@@ -1099,8 +1097,8 @@ export default {
 		this.getProvinces(isBindData)
 	},
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -1111,7 +1109,7 @@ export default {
 		},
 		getProfiles () {
 			const profile = this.$store.getters.profile
-			this.checkRole = (this.createdBy && profile.data.user.id === this.createdBy.id)  || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
+			this.checkRole = (this.createdBy && profile.data.user.id === this.createdBy.id) || ['ROOT_ADMIN', 'SUB_ADMIN'].includes(profile.data.user.roles[0].name)
 		},
 		showHistoryDrawer () {
 			this.visibleHistoryDrawer = true
@@ -2395,7 +2393,6 @@ export default {
 		position: absolute !important;
 	}
 }
-
 
 .card {
 	border-radius: 5px;

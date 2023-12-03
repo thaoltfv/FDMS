@@ -49,7 +49,7 @@
               :options="optionsAppraiser"
               />
           </div>
-          
+
           <div class="col-12">
               <div class="form-group-container">
               <label class="color-black font-weight-bold">Tổng giám đốc</label>

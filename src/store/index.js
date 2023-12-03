@@ -48,7 +48,7 @@ export default new Vuex.Store({
 		unreadNotification: state => state.unreadNotification,
 		mapLocation: state => state.mapLocation,
 		mapFilter: state => state.mapFilter,
-		navExp: state => state.navExp,
+		navExp: state => state.navExp
 	},
 	mutations: {
 		setIsResponseError (state, payload) {
@@ -126,6 +126,6 @@ export default new Vuex.Store({
 		},
 		[types.SET_NAV_EXP] (state, data) {
 			state.navExp = data
-		},
+		}
 	}
 })

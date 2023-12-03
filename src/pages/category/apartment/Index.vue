@@ -245,33 +245,27 @@ export default {
 
 				this.list_apartments = [...resp.data.data]
 				// console.log('this.list_apartments', this.list_apartments)
-				for (let i = 0; i < this.list_apartments.length; i++)
-				{
+				for (let i = 0; i < this.list_apartments.length; i++) {
 					let apartment = this.list_apartments[i]
 					// console.log('âpartmetn',apartment )
 					let rank_text = ''
-					for(let j = 0; j< apartment.rank.length; j++)
-					{
+					for (let j = 0; j < apartment.rank.length; j++) {
 						let rank = apartment.rank[j]
 						// console.log('rank', rank)
-						if(rank == 'trung-cap')
-						{
+						if (rank == 'trung-cap') {
 							apartment.rank[j] = 'Trung cấp'
-						} 
-						if(rank == 'cao-cap')
-						{
+						}
+						if (rank == 'cao-cap') {
 							apartment.rank[j] = 'Cao cấp'
-						} 
-						if(rank == 'binh-dan')
-						{
+						}
+						if (rank == 'binh-dan') {
 							apartment.rank[j] = 'Bình dân'
 						}
-						if (j == 0){
+						if (j == 0) {
 							rank_text = apartment.rank[j]
 						} else {
-							rank_text += ', '+ apartment.rank[j]
+							rank_text += ', ' + apartment.rank[j]
 						}
-						
 					}
 					apartment.rank = rank_text
 				}

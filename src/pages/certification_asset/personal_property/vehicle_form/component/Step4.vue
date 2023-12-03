@@ -187,16 +187,14 @@ export default {
 		},
 		async saveOtherAsset () {
 			const data = { price: this.form }
-			if(data.price.unit_price <= 0)
-			{
+			if (data.price.unit_price <= 0) {
 				this.$toast.open({
 					message: 'Vui lòng nhập đơn giá lơn hơn 0',
 					type: 'error',
 					position: 'top-right'
 				})
 				return
-			} else if(data.price.quantity <= 0)
-			{
+			} else if (data.price.quantity <= 0) {
 				this.$toast.open({
 					message: 'Vui lòng nhập số lượng lớn hơn 0',
 					type: 'error',

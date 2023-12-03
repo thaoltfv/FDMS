@@ -104,137 +104,137 @@ import moment from 'moment'
 
 Vue.use(Icon)
 export default {
-    name: 'Step4',
-    props: ['data', 'juridicals', 'provinceName', 'full_address'],
-    components: {
-        InputCategory,
-        InputText,
-        InputTextarea,
-        BAlert,
-        InputNumberNoneFormat,
-        ModalStep4Legal,
-        'b-dropdown': BDropdown,
-        'b-dropdown-item': BDropdownItem,
-        'b-tooltip': BTooltip,
-        'b-button-group': BButtonGroup,
-        ModalNotificationAppraisal
-    },
-    computed: {
-        optionsJuridicals () {
-            return {
-                data: this.juridicals,
-                id: 'id',
-                key: 'content'
-            }
-        }
-    },
-    data () {
-        return {
-            showDetailLegal: true,
-            showAddLegal: true,
-            isAddLegal: false,
-            isEditLegal: false,
-            showModalActionLegal: false,
-            isEdit: false,
-            showConfirmDelete: false,
-            indexEdit: '',
-            form: {
-                appraise_law_id: '',
-                date: '',
-                law_date: '',
-                description: '',
-                legal_name_holder: '',
-                certifying_agency: '',
-                origin_of_use: '',
-                content: '',
-                duration: '',
-                law: '',
-                land_details: [
-                    {
-                        doc_no: '',
-                        land_no: '',
-                    }
-                ],
-                purpose_details: [
-                    {
-                        land_type_purpose_id: '',
-                        total_area: ''
-                    }
-                ],
-                note: '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-',
-            },
-            contentRows: 3
-        }
-    },
-    methods: {
-        formatDate (date) {
-            return moment(date).format('DD/MM/YYYY')
-        },
-        handleAddLegal () {
-            this.isEdit = false
-            this.showModalActionLegal = true
-            this.form = {
-                appraise_law_id: '',
-                date: '',
-                description: '',
-                legal_name_holder: '',
-                certifying_agency: '',
-                origin_of_use: '',
-                content: '',
-                duration: '',
-                law: '',
-                land_details: [
-                    {
-                        doc_no: '',
-                        land_no: '',
-                    }
-                ],
-                purpose_details: [
-                    {
-                        land_type_purpose_id: '',
-                        total_area: ''
-                    }
-                ],
-                note: '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồng: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú:  -/-',
-            }
-        },
-        actionSaveLegal (data) {
-            let dataSend = data
-            // // console.log('data send', dataSend)
-            // return
-            if (dataSend.law_date) {
-                dataSend.law_date = moment(dataSend.law_date, 'DD/MM/YYYY').format('YYYY-MM-DD')
-            }
-            if (this.isEdit) {
-                this.$emit('updateLegal', dataSend, this.indexEdit)
-                this.isEdit = false
-                this.showModalActionLegal = false
-            } else {
-                this.$emit('createLegal', dataSend)
-                this.showModalActionLegal = false
-            }
-        },
-        handleDeleteLegal (index) {
-            this.indexEdit = index
-            this.showConfirmDelete = true
-        },
-        actionDeleteContruction () {
-            this.$emit('deleteLegal', this.indexEdit)
-        },
-        handleEditLegal (index) {
-            this.showModalActionLegal = true
-            this.isEdit = true
-            this.indexEdit = index
-            this.form = JSON.parse(JSON.stringify(this.data.law[index]))
-            if (this.form.law_date) {
-                this.form.law_date = moment(this.form.law_date).format('DD/MM/YYYY')
-            }
-            if (this.form.note == null) {
-                this.form.note = '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-'
-            }
-        }
+	name: 'Step4',
+	props: ['data', 'juridicals', 'provinceName', 'full_address'],
+	components: {
+		InputCategory,
+		InputText,
+		InputTextarea,
+		BAlert,
+		InputNumberNoneFormat,
+		ModalStep4Legal,
+		'b-dropdown': BDropdown,
+		'b-dropdown-item': BDropdownItem,
+		'b-tooltip': BTooltip,
+		'b-button-group': BButtonGroup,
+		ModalNotificationAppraisal
+	},
+	computed: {
+		optionsJuridicals () {
+			return {
+				data: this.juridicals,
+				id: 'id',
+				key: 'content'
+			}
+		}
+	},
+	data () {
+		return {
+			showDetailLegal: true,
+			showAddLegal: true,
+			isAddLegal: false,
+			isEditLegal: false,
+			showModalActionLegal: false,
+			isEdit: false,
+			showConfirmDelete: false,
+			indexEdit: '',
+			form: {
+				appraise_law_id: '',
+				date: '',
+				law_date: '',
+				description: '',
+				legal_name_holder: '',
+				certifying_agency: '',
+				origin_of_use: '',
+				content: '',
+				duration: '',
+				law: '',
+				land_details: [
+					{
+						doc_no: '',
+						land_no: ''
+					}
+				],
+				purpose_details: [
+					{
+						land_type_purpose_id: '',
+						total_area: ''
+					}
+				],
+				note: '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-'
+			},
+			contentRows: 3
+		}
+	},
+	methods: {
+		formatDate (date) {
+			return moment(date).format('DD/MM/YYYY')
+		},
+		handleAddLegal () {
+			this.isEdit = false
+			this.showModalActionLegal = true
+			this.form = {
+				appraise_law_id: '',
+				date: '',
+				description: '',
+				legal_name_holder: '',
+				certifying_agency: '',
+				origin_of_use: '',
+				content: '',
+				duration: '',
+				law: '',
+				land_details: [
+					{
+						doc_no: '',
+						land_no: ''
+					}
+				],
+				purpose_details: [
+					{
+						land_type_purpose_id: '',
+						total_area: ''
+					}
+				],
+				note: '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồng: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú:  -/-'
+			}
+		},
+		actionSaveLegal (data) {
+			let dataSend = data
+			// // console.log('data send', dataSend)
+			// return
+			if (dataSend.law_date) {
+				dataSend.law_date = moment(dataSend.law_date, 'DD/MM/YYYY').format('YYYY-MM-DD')
+			}
+			if (this.isEdit) {
+				this.$emit('updateLegal', dataSend, this.indexEdit)
+				this.isEdit = false
+				this.showModalActionLegal = false
+			} else {
+				this.$emit('createLegal', dataSend)
+				this.showModalActionLegal = false
+			}
+		},
+		handleDeleteLegal (index) {
+			this.indexEdit = index
+			this.showConfirmDelete = true
+		},
+		actionDeleteContruction () {
+			this.$emit('deleteLegal', this.indexEdit)
+		},
+		handleEditLegal (index) {
+			this.showModalActionLegal = true
+			this.isEdit = true
+			this.indexEdit = index
+			this.form = JSON.parse(JSON.stringify(this.data.law[index]))
+			if (this.form.law_date) {
+				this.form.law_date = moment(this.form.law_date).format('DD/MM/YYYY')
+			}
+			if (this.form.note == null) {
+				this.form.note = '2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-'
+			}
+		}
 
-    }
+	}
 
 }
 </script>
@@ -551,5 +551,3 @@ export default {
     max-height: 75px;
 }
 </style>
-
-
