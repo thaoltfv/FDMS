@@ -32,6 +32,7 @@ class ApartmentAssetComparisonFactor extends Model
         'adjust_percent',
         'name',
         'position',
+        'adjust_coefficient'
     ];
 
 }
