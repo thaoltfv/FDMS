@@ -22,5 +22,6 @@ class ApartmentAssetAdapter extends Model
         'apartment_asset_id',
         'asset_general_id',
         'percent',
+        'change_negotiated_price'
     ];
 }
