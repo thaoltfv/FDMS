@@ -659,32 +659,34 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $data[$asset->id]['not_legal_rate'] = $notLegalRate;
                 $data[$asset->id]['price'] = $price;
             }
-            $apartmentPrice = 0;
-            if(isset($methods)){
-                $method = $methods['thong_nhat_muc_gia_chi_dan']??null;
-                if(isset($method)){
-                    switch($method['slug_value']){
-                        case 'thap-nhat':
-                            $apartmentPrice = $min;
-                            break;
-                        case 'cao-nhat':
-                            $apartmentPrice = $max;
-                            break;
-                        default:
-                            $apartmentPrice = $total/3;
-                    }
-                    $slug = 'apartment_asset_price';
-                    $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
-                }
-            }
+            // $apartmentPrice = 0;
+            // if(isset($methods)){
+            //     $method = $methods['thong_nhat_muc_gia_chi_dan']??null;
+            //     if(isset($method)){
+            //         switch($method['slug_value']){
+            //             case 'thap-nhat':
+            //                 $apartmentPrice = $min;
+            //                 break;
+            //             case 'cao-nhat':
+            //                 $apartmentPrice = $max;
+            //                 break;
+            //             default:
+            //                 $apartmentPrice = $total/3;
+            //         }
+            //         $slug = 'apartment_asset_price';
+            //         $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
+            //     }
+            // }
             $slug = 'apartment_area';
             $this->updateOrCreatePrice($id, $slug, $apartmentArea??0);
             //total
             $roundTotal = 0;
             $otherPrice = 0;
+            $apartmentPrice  =  0;
             if(isset($assetPrice)){
                 $priceRound = $assetPrice->where('slug', 'round_total')->first();
                 $roundTotal = $priceRound->value??0;
+                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first()->value;
             }
             if(isset($otherAssets)){
                 $otherPrice = $otherAssets->sum('total_price');
