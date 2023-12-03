@@ -372,7 +372,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }
             if (isset($adapters)){
                 foreach ($adapters as $adapter){
-                    ApartmentAssetAdapter::query()->where('id', $adapter['id'])->update(['percent' => $adapter['percent']]);
+                    ApartmentAssetAdapter::query()->where('id', $adapter['id'])->update(['percent' => $adapter['percent'],'change_negotiated_price' => $adapter['change_negotiated_price']]);
                 }
             }
             if (isset($comparisons)){
