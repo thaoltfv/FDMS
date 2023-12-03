@@ -138,7 +138,7 @@
 															</tr>
 															<tr>
 																<td>17</td>
-																<td><p>Tỷ lệ thương lượng</p> <p>Số tiền thương lượng</p></td>
+																<td><p>Tỷ lệ rao bán</p> <p>Số tiền thương lượng</p></td>
 																<td></td>
 																<td v-for="(asset, index) in form.apartment_adapter" :key="'adjustPercent' + index">
 																		<InputPercent
@@ -1569,7 +1569,9 @@ export default {
 				comparison_factor: dataSave,
 				other_comparison: otherDataSave,
 				delete_other_comparison: dataDelete,
-				round_total: +round_total
+				round_total: +round_total,
+				apartment_asset_price: parseFloat(this.mgtn).toFixed(0),
+
 			}
 			if (round_total < -7 || round_total > 7) {
 				this.$toast.open({
@@ -1658,6 +1660,8 @@ export default {
 			let asset_neo_price2 = (typeof asset.apartment_adapter[1] !== 'undefined') ? asset.apartment_adapter[1].change_negotiated_price : null
 			let asset_neo_price3 = (typeof asset.apartment_adapter[2] !== 'undefined') ? asset.apartment_adapter[2].change_negotiated_price : null
 
+			console.log(' asset.apartment_adapter[', asset.apartment_adapter)
+
 			if (asset_percent1 !== 100 && asset_neo_price1 === null) {
 				console.log('tính 1')
 				asset_neo_price1 = (asset1.total_amount * asset_percent1 / 100) - asset1.total_amount
@@ -1674,6 +1678,7 @@ export default {
 				asset_neo_price3 = (asset3.total_amount * asset_percent3 / 100) - asset3.total_amount
 				asset.apartment_adapter[2].change_negotiated_price = (asset3.total_amount * asset_percent3 / 100) - asset3.total_amount
 			}
+			
 
 			// tính Tổng giá trị tài sản ước tính
 			// this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
@@ -1681,10 +1686,13 @@ export default {
 			// this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
 			if (asset_neo_price1) {
 				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? asset1.total_amount + asset_neo_price1 : 0)
+				console.log('this.totalPriceEstimate1',this.totalPriceEstimate1)
 			} else {
 				// tính Tổng giá trị tài sản ước tính
 				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
+				console.log('this.totalPriceEstimate12',this.totalPriceEstimate1)
 			}
+			
 
 			if (asset_neo_price2) {
 				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? asset2.total_amount + asset_neo_price2 : 0)

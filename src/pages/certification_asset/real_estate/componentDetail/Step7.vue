@@ -411,7 +411,7 @@
 						</tr>
 						<tr>
 						<td>23</td>
-						<td><p>Tỷ lệ thương lượng</p> <p>Số tiền thương lượng</p></td>
+						<td><p>Tỷ lệ rao bán</p> <p>Số tiền thương lượng</p></td>
 						<td>-</td>
 						<td v-for="(asset, index) in form.appraise_adapter" :key="'adjustPercent' + index">
 							<InputPercent
