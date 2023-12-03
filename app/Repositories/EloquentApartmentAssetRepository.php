@@ -630,7 +630,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $legalRate = $legal->adjust_percent;
                 $legalUnitPrice = $unitPrice + $unitPrice * $legalRate/100;
                 $notLegalRate = $notLegal->sum('adjust_percent');
-                $price = $legalUnitPrice + $legalUnitPrice * $notLegalRate/100;
+                $price = round($legalUnitPrice) + round($legalUnitPrice) * round($notLegalRate/100);
                 $total+= round($price);
                 if($min ==0){
                     $min = $price;
