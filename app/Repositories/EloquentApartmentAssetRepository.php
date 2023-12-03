@@ -365,9 +365,14 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $otherComparisons = $objects['other_comparison'];
             $deleteComparisons = $objects['delete_other_comparison'];
             $roundTotal = $objects['round_total'];
+            $apartment_asset_price = $objects['apartment_asset_price'];
             $adapters = $objects['apartment_adapter'];
             if (isset($roundTotal)){
                 $slug = 'round_total';
+                $this->updateOrCreatePrice($id, $slug, $roundTotal);
+            }
+            if (isset($apartment_asset_price)){
+                $slug = 'apartment_asset_price';
                 $this->updateOrCreatePrice($id, $slug, $roundTotal);
             }
             if (isset($adapters)){
@@ -630,8 +635,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $legalRate = $legal->adjust_percent;
                 $legalUnitPrice = $unitPrice + $unitPrice * $legalRate/100;
                 $notLegalRate = $notLegal->sum('adjust_percent');
-                $price = round($legalUnitPrice) + round($legalUnitPrice) * round($notLegalRate/100);
-                $total+= round($price);
+                $price = $legalUnitPrice + $legalUnitPrice * $notLegalRate/100;
+                $total+= $price;
                 if($min ==0){
                     $min = $price;
                 }elseif($price < $min){
@@ -660,13 +665,13 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 if(isset($method)){
                     switch($method['slug_value']){
                         case 'thap-nhat':
-                            $apartmentPrice = round($min);
+                            $apartmentPrice = $min;
                             break;
                         case 'cao-nhat':
-                            $apartmentPrice = round($max);
+                            $apartmentPrice = $max;
                             break;
                         default:
-                            $apartmentPrice = round($total/3);
+                            $apartmentPrice = $total/3;
                     }
                     $slug = 'apartment_asset_price';
                     $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
