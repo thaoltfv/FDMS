@@ -373,7 +373,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }
             if (isset($apartment_asset_price)){
                 $slug = 'apartment_asset_price';
-                $this->updateOrCreatePrice($id, $slug, $roundTotal);
+                $this->updateOrCreatePrice($id, $slug, $apartment_asset_price);
             }
             if (isset($adapters)){
                 foreach ($adapters as $adapter){
