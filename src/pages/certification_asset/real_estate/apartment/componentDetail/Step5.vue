@@ -1570,7 +1570,7 @@ export default {
 				other_comparison: otherDataSave,
 				delete_other_comparison: dataDelete,
 				round_total: +round_total,
-				apartment_asset_price: parseFloat(this.mgtn).toFixed(0),
+				apartment_asset_price: parseFloat(this.mgtn).toFixed(0)
 
 			}
 			if (round_total < -7 || round_total > 7) {
@@ -1678,7 +1678,6 @@ export default {
 				asset_neo_price3 = (asset3.total_amount * asset_percent3 / 100) - asset3.total_amount
 				asset.apartment_adapter[2].change_negotiated_price = (asset3.total_amount * asset_percent3 / 100) - asset3.total_amount
 			}
-			
 
 			// tính Tổng giá trị tài sản ước tính
 			// this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
@@ -1686,13 +1685,12 @@ export default {
 			// this.totalPriceEstimate3 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent3 * asset3.total_amount) / 100 : 0)
 			if (asset_neo_price1) {
 				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? asset1.total_amount + asset_neo_price1 : 0)
-				console.log('this.totalPriceEstimate1',this.totalPriceEstimate1)
+				console.log('this.totalPriceEstimate1', this.totalPriceEstimate1)
 			} else {
 				// tính Tổng giá trị tài sản ước tính
 				this.totalPriceEstimate1 = ((typeof asset1.total_amount !== 'undefined') ? (asset_percent1 * asset1.total_amount) / 100 : 0)
-				console.log('this.totalPriceEstimate12',this.totalPriceEstimate1)
+				console.log('this.totalPriceEstimate12', this.totalPriceEstimate1)
 			}
-			
 
 			if (asset_neo_price2) {
 				this.totalPriceEstimate2 = ((typeof asset1.total_amount !== 'undefined') ? asset2.total_amount + asset_neo_price2 : 0)
