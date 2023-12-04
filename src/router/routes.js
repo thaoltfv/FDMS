@@ -1880,87 +1880,24 @@ export const routes = [
 		component: Resource,
 		children: [
 			{
-				path: "",
-				name: "pre_certification.index",
-				component: page("pre_certification/Index2.vue"),
-				beforeEnter: ResolveGuard([AuthGuard]),
-				meta: {
-					title: "Hồ sơ thẩm định",
-					// fix_permission
-					permissions: [PERMISSIONS.VIEW_PRE_CERTIFICATE],
-					breadcrumbs: [
-						{
-							title: "Hồ sơ thẩm định",
-							name: "pre_certification.index"
-						}
-					],
-					gtm: "Trang HSTĐ"
-				}
-			},
-			{
 				path: "/pre_certification/create",
 				name: "pre_certification.create",
-				component: page("pre_certification/Create.vue"),
-				beforeEnter: ResolveGuard([AuthGuard]),
+				component: page("pre_certification/create.vue"),
 				meta: {
-					title: "Tạo mới hồ sơ thẩm định",
+					title: "Tạo mới hồ sơ thẩm định sơ bộ",
 					// fix_permission
 					permissions: [PERMISSIONS.ADD_PRE_CERTIFICATE],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định",
+							title: "Hồ sơ thẩm định sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Tạo mới hồ sơ thẩm định",
+							title: "Tạo mới hồ sơ thẩm định sơ bộ",
 							name: "pre_certification.create"
 						}
 					],
-					gtm: "Trang tạo mới HSTĐ"
-				}
-			},
-			{
-				path: "/pre_certification/detail",
-				name: "pre_certification.detail",
-				component: page("pre_certification/Detail.vue"),
-				beforeEnter: ResolveGuard([AuthGuard]),
-				meta: {
-					title: "Chi tiết hồ sơ thẩm định",
-					// fix_permission
-					permissions: [PERMISSIONS.VIEW_PRE_CERTIFICATE],
-					breadcrumbs: [
-						{
-							title: "Hồ sơ thẩm định",
-							name: "pre_certification.index"
-						},
-						{
-							title: "Chi tiết hồ sơ thẩm định",
-							name: "pre_certification.detail"
-						}
-					],
-					gtm: "Trang chi tiết HSTĐ"
-				}
-			},
-			{
-				path: "/pre_certification/edit",
-				name: "pre_certification.edit",
-				component: page("pre_certification/Edit.vue"),
-				beforeEnter: ResolveGuard([AuthGuard]),
-				meta: {
-					title: "Chỉnh sửa hồ sơ thẩm định",
-					// fix_permission
-					permissions: [PERMISSIONS.EDIT_PRE_CERTIFICATE],
-					breadcrumbs: [
-						{
-							title: "Hồ sơ thẩm định",
-							name: "pre_certification.index"
-						},
-						{
-							title: "Chỉnh sửa hồ sơ thẩm định",
-							name: "pre_certification.edit"
-						}
-					],
-					gtm: "Trang chỉnh sửa HSTĐ"
+					gtm: "Trang tạo mới HSTĐSB"
 				}
 			}
 		]

@@ -63,10 +63,32 @@ export default class Certificate extends Model {
 		} else resp = JSON.parse(resp);
 		return resp;
 	}
-	static async getCertificate(id) {
+	static async getPreCertificate(id) {
 		return new this().request({
 			method: "GET",
 			url: `pre-certificate/${id}`,
+			isStatic: true
+		});
+	}
+
+	static async getCustomer(search = "") {
+		return new this().request({
+			method: "GET",
+			url: `customers?key=${search}`,
+			isStatic: true
+		});
+	}
+	static async downloadDocument(id) {
+		return new this().request({
+			method: "GET",
+			url: `certification_brief/download-document/${id}`,
+			isStatic: true
+		});
+	}
+	static async deleteDocument(id) {
+		return new this().request({
+			method: "DELETE",
+			url: `certification_brief/delete-document/${id}`,
 			isStatic: true
 		});
 	}

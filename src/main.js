@@ -56,6 +56,7 @@ Vue.use(VueEllipseProgress, "vep");
 
 Vue.use(PiniaVuePlugin);
 
+const pinia = createPinia();
 //cors
 // import AxiosPlugin from 'vue-axios-cors';
 // Vue.use(AxiosPlugin)

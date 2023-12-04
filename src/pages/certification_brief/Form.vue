@@ -6,7 +6,7 @@
 			@submit.prevent="validateSubmitStep1"
 		>
 			<div style="margin-bottom:60px">
-				<Step1x
+				<Step1
 					:idData="idData"
 					:data="form.step_1"
 					:typeAppraiseProperty="typeAppraiseProperty"
