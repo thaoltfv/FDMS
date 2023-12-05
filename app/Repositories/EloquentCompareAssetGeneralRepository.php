@@ -4437,7 +4437,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'pic.id',
                 'block',
                 'floor',
-                'apartment'
+                'apartment',
+                'created_at'
             ];
         }
         $search_result = CompareAssetVersion::searchByQuery($array, null, $sourceField, 1, 0, null);
