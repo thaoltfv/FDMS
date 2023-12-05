@@ -60,7 +60,7 @@
 		<div slot="tabBarExtraContent">
 			<div class="container-button appraise-container">
 				<div class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center">
-					
+
 					<div class="search-block col-7 col-md-6 col-xl-4 d-flex justify-content-end align-items-center">
 						<Search @filter-changed="onFilterQuickSearchChange($event)" />
 					</div>
@@ -88,7 +88,7 @@
 						<button-checkbox :options="statusOptions" :value="selectedStatus" @change="onChangeStatus" />
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 		<div class="container-fluid appraise-container mt-3" style="margin-top: 0!important;">
@@ -217,8 +217,8 @@ export default {
 		}
 	},
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

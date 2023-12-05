@@ -34,7 +34,7 @@
 				label="Tầng đầu tiên"
 				:max="99999999999999"
 				:min="0"
-				
+
 				@change="changeFirstFloor($event)"
 						hidden
 				/>
@@ -45,7 +45,7 @@
 				label="Tầng cuối cùng"
 				:max="99999999999999"
 				:min="0"
-				
+
 				@change="changeLastFloor($event)"
 						hidden
 				/>
@@ -92,7 +92,7 @@ export default {
 			this.$emit('cancel', event)
 		},
 		changeTotalFloor (e) {
-			this.form.total_floors = e		
+			this.form.total_floors = e
 		},
 		changeFirstFloor (e) {
 			this.form.first_floor = e

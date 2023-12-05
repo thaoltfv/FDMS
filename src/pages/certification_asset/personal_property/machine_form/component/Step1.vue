@@ -32,14 +32,14 @@
               vid="model"
               class="form-group-container col-12 col-lg-6"
               label="Mẫu mã"
-              
+
                     hidden
             />
             <InputCategory
               v-model="data.manufacturer_id"
               vid="manufacturer_id"
               label="Nhà sản xuất"
-             
+
               class="form-group-container col-12 col-lg-3"
               :options="optionsManufacturer"
               @change="changeAssetType($event)"

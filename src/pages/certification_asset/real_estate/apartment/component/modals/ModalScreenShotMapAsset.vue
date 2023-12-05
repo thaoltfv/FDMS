@@ -53,18 +53,13 @@
                   </div>
                 </l-tooltip> -->
               </l-marker>
-              <l-marker v-for="(asset, index) in assets" :key="asset.id" :lat-lng="[asset.coordinates.split(',')[0], asset.coordinates.split(',')[1]]" @click="handleRotate(index + 1)">
+              <!-- <l-marker v-for="(asset, index) in assets" :key="asset.id" :lat-lng="[asset.coordinates.split(',')[0], asset.coordinates.split(',')[1]]" @click="handleRotate(index + 1)">
                 <l-icon :iconAnchor="[30, 60]" >
-                  <!-- <div class="marker marker__blue"/> -->
                     <img v-if="index === 0" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation1}deg)`}" src="@/assets/images/svg_marker_1.svg" alt="">
                     <img v-if="index === 1" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation2}deg)`}" src="@/assets/images/svg_marker_2.svg" alt="">
-                    <img v-if="index === 2" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation3}deg)`}" src="@/assets/images/svg_marker_3.svg" alt="">
-                  <!-- <img class="icon_marker" style="width: 40px" src="../../../../assets/images/iconhouse.png" alt=""> -->
-                </l-icon>
-                <!-- <l-tooltip class="sp-custom-popup" ref="popup" :options="{ permanent: true, interactive: true }">
-                  <p class="popup-content__id mb-0" v-for="(assetId, index) in assets" :key="'id' + assetId.id" v-if="asset.coordinates === assetId.coordinates">{{`TSSS ${index + 1}`}}</p>
-                </l-tooltip> -->
-              </l-marker>
+                    <img v-if="index === 2" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation3}deg)`}" src="@/assets/images/svg_marker_3.svg" alt="">                
+                  </l-icon>
+              </l-marker> -->
             </l-map>
           </div>
         </div>
@@ -208,7 +203,7 @@ export default {
 			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
-        this.imageMap = false
+				this.imageMap = false
 			} else {
 				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
 				this.imageMap = true

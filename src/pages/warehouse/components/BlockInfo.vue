@@ -22,7 +22,7 @@
                 <span class="check-mark"/>
               </label>
               <label :for="basic_utility.acronym" style="cursor:pointer" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
-              
+
             </div>
           </div>
           <div class="col-12 col-md-4 text-center"/>

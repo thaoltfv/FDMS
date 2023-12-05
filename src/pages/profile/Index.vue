@@ -99,7 +99,7 @@ export default {
 		}
 	},
 	methods: {
-    async logout () {
+		async logout () {
 			try {
 				await Admin.logout()
 				await firebase.auth().signOut()
@@ -107,14 +107,14 @@ export default {
 			store.commit(types.LOG_OUT)
 			await this.$router.push({ name: 'login' })
 		},
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
 			}
-		},
-  }
+		}
+	}
 }
 </script>
 

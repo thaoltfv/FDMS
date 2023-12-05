@@ -82,7 +82,7 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
 								</div>
-								
+
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
 								</div>
@@ -139,7 +139,7 @@
 										</b-dropdown>
 									<!-- </b-button-group> -->
 								</div>
-								
+
 								<!-- <div class="col-3" style="padding: 0"></div>
 								<div class="col-3" style="padding: 0"></div> -->
 							</div>
@@ -403,8 +403,8 @@ export default {
 		handleFooterAccept (target) {
 			this.$emit('handleFooterAccept', target)
 		},
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

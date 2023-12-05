@@ -411,7 +411,7 @@ export default {
 		TabItem,
 		InputCategoryBoolean,
 		InputCurrency,
-    InputCurrencyUnit,
+		InputCurrencyUnit,
 		ModalNotificationAppraisal,
 		LMap,
 		LControlZoom,
@@ -497,34 +497,34 @@ export default {
 		}
 	},
 	mounted () {
-    // console.log('this.data',this.data.planning_area.length)
+		// console.log('this.data',this.data.planning_area.length)
 		if (this.data.planning_area.length > 0) {
-      let origin = this.data.planning_area
+			let origin = this.data.planning_area
 			this.checkShowPlanning = true
-      // console.log('xử lý planning mới',this.data.planning_area)
-      let new_planning = []
-      for (let i = 0; i < this.data.planning_area.length; i++) {
-        const e = this.data.planning_area[i];
-        // console.log('-----', e)
-        if (e.extra_planning) {
-          // // console.log('e.extra_planning',e.extra_planning)
-          e.extra_planning = JSON.parse(e.extra_planning)
-          // console.log('đã parse', e.extra_planning.length)
-          for (let index = 0; index < e.extra_planning.length; index++) {
-            const element = e.extra_planning[index];
-            new_planning.push({
-              appraise_property_id: element.appraise_property_id,
-              planning_area: element.planning_area,
-              land_type_purpose_id: element.land_type_purpose_id,
-              type_zoning: element.type_zoning
-            })
-            // console.log('new_planning',new_planning)
-          }
-        }
-      }
-      if (new_planning.length > 0) {
-        this.data.planning_area = new_planning
-      }
+			// console.log('xử lý planning mới',this.data.planning_area)
+			let new_planning = []
+			for (let i = 0; i < this.data.planning_area.length; i++) {
+				const e = this.data.planning_area[i]
+				// console.log('-----', e)
+				if (e.extra_planning) {
+					// // console.log('e.extra_planning',e.extra_planning)
+					e.extra_planning = JSON.parse(e.extra_planning)
+					// console.log('đã parse', e.extra_planning.length)
+					for (let index = 0; index < e.extra_planning.length; index++) {
+						const element = e.extra_planning[index]
+						new_planning.push({
+							appraise_property_id: element.appraise_property_id,
+							planning_area: element.planning_area,
+							land_type_purpose_id: element.land_type_purpose_id,
+							type_zoning: element.type_zoning
+						})
+						// console.log('new_planning',new_planning)
+					}
+				}
+			}
+			if (new_planning.length > 0) {
+				this.data.planning_area = new_planning
+			}
 		}
 		if (this.coordinates) {
 			this.map.center = [this.coordinates.split(',')[0], this.coordinates.split(',')[1]]
@@ -553,7 +553,7 @@ export default {
 			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
-        this.imageMap = false
+				this.imageMap = false
 			} else {
 				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
 				this.imageMap = true

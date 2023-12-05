@@ -222,18 +222,18 @@ export default {
 			}
 		},
 		optionsTypePurposes () {
-            // console.log('data1', this.type_purposes)
-            return {
-                data: this.type_purposes,
-                id: 'id',
-                key: 'description'
+			// console.log('data1', this.type_purposes)
+			return {
+				data: this.type_purposes,
+				id: 'id',
+				key: 'description'
 
-            }
-        }
+			}
+		}
 	},
 	mounted () {
 		this.setContentRows()
-	}, 
+	},
 	async beforeMount () {
 		this.getDictionaryLand()
 	},
@@ -246,7 +246,7 @@ export default {
 				item.description = this.formatSentenceCase(item.description)
 			})
 		},
-        formatSentenceCase (phrase) {
+		formatSentenceCase (phrase) {
 			let text = phrase.toLowerCase()
 			return text.charAt(0).toUpperCase() + text.slice(1)
 		},

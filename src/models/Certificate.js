@@ -17,8 +17,8 @@ export default class Certificate extends Model {
 	static async getAppraisers () {
 		// let resp = localStorage.getItem('appraisers')
 		// if (isEmpty(resp)) {
-			let resp = await (new this()).request({ method: 'GET', url: `appraisers`, isStatic: true })
-			localStorage.setItem('appraisers', JSON.stringify(resp))
+		let resp = await (new this()).request({ method: 'GET', url: `appraisers`, isStatic: true })
+		localStorage.setItem('appraisers', JSON.stringify(resp))
 		// } else resp = JSON.parse(resp)
 		return resp
 	}

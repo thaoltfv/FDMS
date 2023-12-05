@@ -206,24 +206,24 @@ export default {
 			toggleDropdown: false,
 			isLogout: false,
 			logo: `${process.env.API_URL}/storage/images/company_logo.png`,
-      minimize_key: false,
+			minimize_key: false
 		}
 	},
 	// mounted() {
 	//   // console.log(this.navigations)
 	// },
 	methods: {
-    minimize(){
-      // console.log('dính')
-      this.minimize_key = !this.minimize_key
-    },
-    isMobile() {
-   if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-     return true
-   } else {
-     return false
-   }
- },
+		minimize () {
+			// console.log('dính')
+			this.minimize_key = !this.minimize_key
+		},
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
 		async logout () {
 			if (!this.isLogout) {
 				this.isLogout = true
@@ -253,8 +253,8 @@ export default {
 		},
 		handleClick () {
 			this.toggleItem = !this.toggleItem
-      // console.log('mở rộng thu gọn', this.toggleItem)
-      store.commit(types.SET_NAV_EXP, this.toggleItem )
+			// console.log('mở rộng thu gọn', this.toggleItem)
+			store.commit(types.SET_NAV_EXP, this.toggleItem)
 		},
 		dropdownClick (e) {
 			const element = e.target.closest('li.nav-item')

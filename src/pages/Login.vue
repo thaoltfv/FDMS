@@ -50,7 +50,7 @@
                       </button>
                   </div>
                 </div>
-                
+
               </div>
             </div>
           </div>
@@ -80,19 +80,19 @@ export default {
 				company_code: ''
 			},
 			error: null,
-      new_email: '',
-      new_password: '',
+			new_email: '',
+			new_password: ''
 		}
 	},
-  components: {
-    InputText
-  },
+	components: {
+		InputText
+	},
 	async created () {
 
 	},
 	mounted () {
-    // if (!this.isMobile()){
-      const uiConfig = {
+		// if (!this.isMobile()){
+		const uiConfig = {
 			signInSuccessUrl: '/verify',
 			signInOptions: [
 				{
@@ -102,18 +102,18 @@ export default {
 					forceSameDevice: false
 				}
 			],
-			credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-      // callbacks: {
-      //   uiShown: function() {
-      //     document.querySelector('.firebaseui-button').style.setProperty("background-color", "#00507c", "important");
-      //     document.querySelector('.firebaseui-button').style.setProperty("color", "#FFFFFF", "important");
-      //     document.querySelector('.firebaseui-button').innerHTML = 'TIẾP TỤC';
-      //   }
-      // }
+			credentialHelper: firebaseui.auth.CredentialHelper.NONE
+			// callbacks: {
+			//   uiShown: function() {
+			//     document.querySelector('.firebaseui-button').style.setProperty("background-color", "#00507c", "important");
+			//     document.querySelector('.firebaseui-button').style.setProperty("color", "#FFFFFF", "important");
+			//     document.querySelector('.firebaseui-button').innerHTML = 'TIẾP TỤC';
+			//   }
+			// }
 		}
 		const ui = new firebaseui.auth.AuthUI(firebase.auth())
 		ui.start('#firebaseui-auth-container', uiConfig)
-    // }
+		// }
 	},
 	computed: {
 		layout () {
@@ -122,59 +122,59 @@ export default {
 	},
 
 	methods: {
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
 			}
 		},
-    clickLogin(){
-      // console.log('data', this.new_email,this.new_password)
-      $('[name="email"]').val(this.new_email)
-      $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
-      
-      setTimeout(() => {
-        // console.log('lỗi email', $('[class="firebaseui-info-bar-message"]').text())
-        if ($('[class="firebaseui-info-bar-message"]').text() !== ''){
-          this.$toast.open({
-            message: 'Email không tồn tại, vui lòng thử lại',
-            type: 'error',
-            position: 'top-right'
-          })
-          $('[class="firebaseui-info-bar-message"]').text('')
-        } else {
-          $('[name="password"]').val(this.new_password)
-          // // console.log('gọi login',$('[name="email"]') ,$('[name="password"]'))
-          $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
-          // // console.log('lỗi nè',$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text())
-          setTimeout(() => {
-            // console.log('lỗi mật khẩu', $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text())
-            if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == 'You have entered an incorrect password too many times. Please try again in a few minutes.'){
-              this.$toast.open({
-                message: 'Bạn đã nhập sai quá nhiều lần, vui lòng thử lại sau ít phút',
-                type: 'error',
-                position: 'top-right'
-              })
-              $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text('')
-            } else if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == "The email and password you entered don't match") {
-              this.$toast.open({
-                message: 'Mật khẩu không đúng, vui lòng thử lại',
-                type: 'error',
-                position: 'top-right'
-              })
-              $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text('')
-            }
-          },1000)
-        }
-        // $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
-        
-        // // console.log('lỗi nè',$('[class="firebaseui-info-bar firebaseui-id-info-bar"]').length)
-      },1000)
-      
-      // let email = $('[name="email"]').value
-      // // console.log('email', email)
-    }
+		clickLogin () {
+			// console.log('data', this.new_email,this.new_password)
+			$('[name="email"]').val(this.new_email)
+			$('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
+
+			setTimeout(() => {
+				// console.log('lỗi email', $('[class="firebaseui-info-bar-message"]').text())
+				if ($('[class="firebaseui-info-bar-message"]').text() !== '') {
+					this.$toast.open({
+						message: 'Email không tồn tại, vui lòng thử lại',
+						type: 'error',
+						position: 'top-right'
+					})
+					$('[class="firebaseui-info-bar-message"]').text('')
+				} else {
+					$('[name="password"]').val(this.new_password)
+					// // console.log('gọi login',$('[name="email"]') ,$('[name="password"]'))
+					$('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
+					// // console.log('lỗi nè',$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error firebaseui-hidden"]').text())
+					setTimeout(() => {
+						// console.log('lỗi mật khẩu', $('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text())
+						if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == 'You have entered an incorrect password too many times. Please try again in a few minutes.') {
+							this.$toast.open({
+								message: 'Bạn đã nhập sai quá nhiều lần, vui lòng thử lại sau ít phút',
+								type: 'error',
+								position: 'top-right'
+							})
+							$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text('')
+						} else if ($('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text() == "The email and password you entered don't match") {
+							this.$toast.open({
+								message: 'Mật khẩu không đúng, vui lòng thử lại',
+								type: 'error',
+								position: 'top-right'
+							})
+							$('[class="firebaseui-error firebaseui-text-input-error firebaseui-id-password-error"]').text('')
+						}
+					}, 1000)
+				}
+				// $('[class="firebaseui-id-submit firebaseui-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored"]').click()
+
+				// // console.log('lỗi nè',$('[class="firebaseui-info-bar firebaseui-id-info-bar"]').length)
+			}, 1000)
+
+			// let email = $('[name="email"]').value
+			// // console.log('email', email)
+		}
 	}
 }
 </script>

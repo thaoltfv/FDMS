@@ -91,7 +91,7 @@
   <div v-else class="table-wrapper" style="margin: 0;">
     <div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
 		<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
-      
+
       <div class="col-12 d-flex mb-2 justify-content-between">
               <span @click="handleDetail(element.id, element)" class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">BDS_{{element.id}}</span>
             </div>
@@ -171,14 +171,13 @@
 </template>
 <script>
 
-import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
-import moment from 'moment'
-import {
+import { BDropdown, BDropdownItem, BTooltip,
 	BCard,
 	BRow,
 	BCol,
 	BFormGroup,
 	BFormInput } from 'bootstrap-vue'
+import moment from 'moment'
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
@@ -206,7 +205,7 @@ export default {
 		BRow,
 		BCol,
 		BFormGroup,
-		BFormInput,
+		BFormInput
 	},
 	computed: {
 		columns () {
@@ -352,7 +351,7 @@ export default {
 		this.getProfiles()
 	},
 	methods: {
-    formatPrice (value) {
+		formatPrice (value) {
 			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
 			if (num.length > 3 && num.length <= 6) {
 				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
@@ -365,7 +364,7 @@ export default {
 			}
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 		},
-		configColor(element) {
+		configColor (element) {
 			if (element.status == 1) {
 				return 'info'
 			}
@@ -386,8 +385,8 @@ export default {
 			}
 			return 'red'
 		},
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

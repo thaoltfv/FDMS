@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="card">
-        
+
         <div class="card-title">
           <div class="d-flex justify-content-between align-items-center">
             <h3 class="title text-nowrap">Thông tin giao dịch</h3>
@@ -76,7 +76,7 @@
             </div>
           </div>
           <p class=" title" v-if="form.asset_type_id !== 39">Vị trí tài sản</p>
-          
+
           <div class="d-grid" v-if="form.asset_type_id !== 39">
                 <div class="content-detail">
                   <p class="content-title">Tỉnh/Thành:</p>
@@ -86,7 +86,7 @@
                   <p class="content-title">Quận/Huyện:</p>
                   <p class="content-name">{{this.form.district !== undefined && this.form.district != null ? this.form.district.name : ''}}</p>
                 </div>
-                
+
                 <div class="content-detail">
                   <p class="content-title">Phường/Xã:</p>
                   <p class="content-name">{{this.form.ward !== undefined && this.form.ward !== null ? this.form.ward.name : ''}}</p>
@@ -152,7 +152,7 @@
                       />
                         <!-- <l-tile-layer :url="url"></l-tile-layer> -->
                         <l-control-zoom position="bottomright"></l-control-zoom>
-                        
+
                         <l-control position="bottomleft">
                           <button class="btn btn-map" @click="handleView" type="button">
                             <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
@@ -181,7 +181,7 @@
                 </div>
             </div>
           </div> -->
-          
+
           </div>
           </div>
           <div class="d-grid" v-if="form.asset_type_id !== 39">
@@ -219,7 +219,7 @@
 							<p class="content-title">Địa chỉ đầy đủ:</p>
 							<p class="content-name">{{this.form.full_address !== '' && this.form.full_address !== undefined && this.form.full_address !== null ? this.form.full_address : 'Không xác định'}}</p>
 						</div>
-						
+
 					</div>
         </div>
       </div>
@@ -269,7 +269,7 @@
                   <span class="check-mark"/>
                 </label>
                 <label class="color-black font-weight-bold mr-2 mb-2">{{basic_utility !== undefined && basic_utility !== null ? basic_utility.description : ''}}</label>
-                
+
               </div>
             </div>
             <div class="col-12 col-md-4 text-center"/>
@@ -630,7 +630,7 @@
         </div>
       </div>
       <div class="card">
-        
+
         <div class="card-title">
           <div class="d-flex justify-content-between align-items-center">
             <h3 class="title text-nowrap">Thông tin giao dịch</h3>
@@ -678,7 +678,7 @@
             </div>
           </div>
           <p class=" title" v-if="form.asset_type_id !== 39">Vị trí tài sản</p>
-          
+
           <div class="d-grid" v-if="form.asset_type_id !== 39">
                 <div class="content-detail">
                   <p class="content-title">Tỉnh/Thành:</p>
@@ -688,7 +688,7 @@
                   <p class="content-title">Quận/Huyện:</p>
                   <p class="content-name">{{this.form.district !== undefined && this.form.district != null ? this.form.district.name : ''}}</p>
                 </div>
-                
+
                 <div class="content-detail">
                   <p class="content-title">Phường/Xã:</p>
                   <p class="content-name">{{this.form.ward !== undefined && this.form.ward !== null ? this.form.ward.name : ''}}</p>
@@ -754,7 +754,7 @@
                       />
                         <!-- <l-tile-layer :url="url"></l-tile-layer> -->
                         <l-control-zoom position="bottomright"></l-control-zoom>
-                        
+
                         <l-control position="bottomleft">
                           <button class="btn btn-map" @click="handleView" type="button">
                             <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
@@ -783,7 +783,7 @@
                 </div>
             </div>
           </div> -->
-          
+
           </div>
           </div>
           <div class="d-grid" v-if="form.asset_type_id !== 39">
@@ -821,7 +821,7 @@
 							<p class="content-title">Địa chỉ đầy đủ:</p>
 							<p class="content-name">{{this.form.full_address !== '' && this.form.full_address !== undefined && this.form.full_address !== null ? this.form.full_address : 'Không xác định'}}</p>
 						</div>
-						
+
 					</div>
         </div>
       </div>
@@ -871,7 +871,7 @@
                   <span class="check-mark"/>
                 </label>
                 <label class="color-black font-weight-bold mr-2 mb-2">{{basic_utility !== undefined && basic_utility !== null ? basic_utility.description : ''}}</label>
-                
+
               </div>
             </div>
             <div class="col-12 col-md-4 text-center"/>
@@ -1313,8 +1313,7 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
-      
-        
+
         <!-- <div v-if="edit && checkRole" class="mr-15">
           <button v-if="form.status = 2 ? 'disabled' : ''" class="btn btn-white" @click.prevent="handleEdit(form.id)">
             <img class="img" src="../../assets/icons/ic_edit.svg" alt="edit">
@@ -1360,19 +1359,19 @@ export default {
 		'b-dropdown': BDropdown,
 		'b-dropdown-item': BDropdownItem,
 		InputCategoryData,
-    LMap,
+		LMap,
 		LControlZoom,
 		LTileLayer,
 		LMarker,
 		LTooltip,
 		LControl,
-    LControlLayers,
-		LIcon,
+		LControlLayers,
+		LIcon
 	},
 	data () {
 		return {
-      imageMap: true,
-      location: {
+			imageMap: true,
+			location: {
 				lng: '',
 				lat: ''
 			},
@@ -1382,31 +1381,31 @@ export default {
 				zoom: 17
 			},
 			url: 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff',
-      tileProviders: [
+			tileProviders: [
 				{
-					name: "Bản đồ ranh tờ, thửa",
+					name: 'Bản đồ ranh tờ, thửa',
 					visible: true,
-					url: "https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png",
-					attribution: "© Fastvalue",
-					type: "overlay"
+					url: 'https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png',
+					attribution: '© Fastvalue',
+					type: 'overlay'
 				},
 				{
-					name: "Bản đồ thông tin quy hoạch",
+					name: 'Bản đồ thông tin quy hoạch',
 					visible: false,
-					attribution: "© Fastvalue",
-					url: "https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png",
-					type: "overlay"
+					attribution: '© Fastvalue',
+					url: 'https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png',
+					type: 'overlay'
 				},
-        {
-					name: "Bản đồ quy hoạch lộ giới",
+				{
+					name: 'Bản đồ quy hoạch lộ giới',
 					visible: false,
-					attribution: "© Fastvalue",
-					url: "https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png",
-					type: "overlay"
+					attribution: '© Fastvalue',
+					url: 'https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png',
+					type: 'overlay'
 				}
 			],
-      visibleHistoryDrawer: false,
-      historyList: [],
+			visibleHistoryDrawer: false,
+			historyList: [],
 			version: '',
 			versions: [],
 			frontSideOptions: {
@@ -1503,7 +1502,7 @@ export default {
 			edit: false
 		}
 	},
-  // async mounted () {
+	// async mounted () {
 	// 	if (this.$refs.map_step1 && this.$refs.map_step1.mapObject) {
 	// 		this.$refs.map_step1.mapObject.invalidateSize()
 	// 	}
@@ -1519,7 +1518,7 @@ export default {
 				await this.getVersion()
 				this.version = this.versions[this.versions.length - 1].version
 				this.changeVersion()
-        await this.initMap()
+				await this.initMap()
 			} else {
 				this.$router.push({name: 'page-not-found'})
 			}
@@ -1552,49 +1551,48 @@ export default {
 		}
 	},
 	methods: {
-    isMobile() {
+		isMobile () {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 					navigator.userAgent
 				)
 			) {
-				return true;
+				return true
 			} else {
-				return false;
+				return false
 			}
 		},
-    async initMap () {
+		async initMap () {
 			// eslint-disable-next-line no-undef
-      // console.log('form', this.form)
+			// console.log('form', this.form)
 			if (this.form.coordinates) {
-        
 				this.map.center = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.markerLatLng = [this.form.coordinates.split(',')[0], this.form.coordinates.split(',')[1]]
 				this.map.zoom = 17
-        // // console.log('vô đây', map)
+				// // console.log('vô đây', map)
 			} else {
 				this.markerLatLng = [10.964112, 106.856461]
 				this.map.center = [10.964112, 106.856461]
 			}
 		},
-    handleView () {
+		handleView () {
 			if (this.url === 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
-        this.imageMap = false
+				this.imageMap = false
 			} else {
 				this.url = 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
 				this.imageMap = true
 			}
 		},
-    formatDateTime (value) {
+		formatDateTime (value) {
 			return moment(String(value)).format('HH:mm DD/MM/YYYY')
 		},
-    async getHistoryTimeline (id) {
+		async getHistoryTimeline (id) {
 			const res = await WareHouse.getHistoryTimeline(id)
 			if (res.data) {
 				this.historyList = res.data
-        // console.log('history_list', this.historyList)
+				// console.log('history_list', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,
@@ -1604,10 +1602,10 @@ export default {
 				})
 			}
 		},
-    onHistoryDrawerClose () {
+		onHistoryDrawerClose () {
 			this.visibleHistoryDrawer = false
 		},
-    showHistoryDrawer () {
+		showHistoryDrawer () {
 			this.visibleHistoryDrawer = true
 			this.getHistoryTimeline(this.form.id)
 		},

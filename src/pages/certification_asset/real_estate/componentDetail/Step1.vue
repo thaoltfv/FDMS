@@ -118,7 +118,7 @@
                       />
                         <!-- <l-tile-layer :url="url"></l-tile-layer> -->
                         <l-control-zoom position="bottomright"></l-control-zoom>
-                        
+
                         <l-control position="bottomleft">
                           <button class="btn btn-map" @click="handleView" type="button">
                             <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
@@ -582,7 +582,7 @@
                       />
                         <!-- <l-tile-layer :url="url"></l-tile-layer> -->
                         <l-control-zoom position="bottomright"></l-control-zoom>
-                        
+
                         <l-control position="bottomleft">
                           <button class="btn btn-map" @click="handleView" type="button">
                             <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
@@ -973,7 +973,7 @@ export default {
 		LTooltip,
 		LControl,
 		LIcon,
-    LControlLayers,
+		LControlLayers,
 		InputLengthArea
 	},
 	computed: {
@@ -1099,29 +1099,29 @@ export default {
 			selectedDistrictId: null,
 			selectedWardId: null,
 			selectedStreetId: null,
-      tileProviders: [
+			tileProviders: [
 				{
-					name: "Bản đồ ranh tờ, thửa",
+					name: 'Bản đồ ranh tờ, thửa',
 					visible: true,
-					url: "https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png",
-					attribution: "© Fastvalue",
-					type: "overlay"
+					url: 'https://cdn.estatemanner.com/tile/ranh_thua/{z}/{x}/{y}.png',
+					attribution: '© Fastvalue',
+					type: 'overlay'
 				},
 				{
-					name: "Bản đồ thông tin quy hoạch",
+					name: 'Bản đồ thông tin quy hoạch',
 					visible: false,
-					attribution: "© Fastvalue",
-					url: "https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png",
-					type: "overlay"
+					attribution: '© Fastvalue',
+					url: 'https://cdn.estatemanner.com/tile/qhsdd/{z}/{x}/{y}.png',
+					type: 'overlay'
 				},
-        {
-					name: "Bản đồ quy hoạch lộ giới",
+				{
+					name: 'Bản đồ quy hoạch lộ giới',
 					visible: false,
-					attribution: "© Fastvalue",
-					url: "https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png",
-					type: "overlay"
+					attribution: '© Fastvalue',
+					url: 'https://cdn.estatemanner.com/tile/qhlg/{z}/{x}/{y}.png',
+					type: 'overlay'
 				}
-			],
+			]
 		}
 	},
 	async mounted () {
@@ -1142,8 +1142,8 @@ export default {
 		await this.getImageDescriptions(this.imageDescriptions)
 	},
 	methods: {
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -1228,7 +1228,7 @@ export default {
 			if (this.url === 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
-        this.imageMap = false
+				this.imageMap = false
 			} else {
 				this.url = 'https://mts0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}&s=Gal&apistyle=s.t%3A2|s.e%3Al|p.v%3Aoff'
 				this.imageMap = true

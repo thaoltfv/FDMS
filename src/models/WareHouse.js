@@ -9,8 +9,8 @@ export default class WareHouse extends Model {
 	static async getDictionaries () {
 		// let resp = localStorage.getItem('dictionaries')
 		// if (isEmpty(resp)) {
-			let resp = await (new this()).request({ method: 'GET', url: `dictionaries`, isStatic: true })
-			localStorage.setItem('dictionaries', JSON.stringify(resp))
+		let resp = await (new this()).request({ method: 'GET', url: `dictionaries`, isStatic: true })
+		localStorage.setItem('dictionaries', JSON.stringify(resp))
 		// } else resp = JSON.parse(resp)
 		return resp
 	}

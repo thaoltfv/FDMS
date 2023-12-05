@@ -280,7 +280,7 @@
                   <span class="check-mark"/>
                 </label>
                 <label :for="basic_utility.id" style="cursor:pointer" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
-                
+
               </div>
             </div>
           </div>
@@ -711,7 +711,7 @@
                   <span class="check-mark"/>
                 </label>
                 <label :for="basic_utility.id" style="cursor:pointer;font-size: 14px;" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
-                
+
               </div>
             </div>
           </div>
@@ -1051,8 +1051,8 @@ export default {
 		// // console.log(this.data)
 	},
 	methods: {
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -1175,7 +1175,7 @@ export default {
 			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
-        this.imageMap = false
+				this.imageMap = false
 			} else {
 				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
 				this.imageMap = true

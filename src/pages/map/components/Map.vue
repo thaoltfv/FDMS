@@ -463,7 +463,7 @@ export default {
 				total_amount_from: '',
 				total_amount_to: '',
 				property_type: '',
-				year: '',
+				year: ''
 			},
 			showModalFilter: false,
 			open_radius: false,
@@ -498,12 +498,12 @@ export default {
 			// url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
 			bounds: null,
 			asset_events: new Vue(),
-			imageMap: true,
+			imageMap: true
 		}
 	},
 	methods: {
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -560,10 +560,10 @@ export default {
 			this.getAssetGenerals()
 			this.storeMapFilter(this.filter)
 		},
-		getDefaultLocation() {
+		getDefaultLocation () {
 			let mapLocation = store.getters.mapLocation
 			if (isEmpty(mapLocation)) {
-				mapLocation =  JSON.parse(localStorage.getItem('mapLocation'))
+				mapLocation = JSON.parse(localStorage.getItem('mapLocation'))
 				if (!isEmpty(mapLocation)) {
 					this.storeMapLocation(mapLocation)
 				}
@@ -627,8 +627,6 @@ export default {
 					this.pic = property.pic
 					this.open_detail_apartment = true
 				}
-				
-				
 			}
 		},
 		async getAppraisersDetail (id) {
@@ -655,7 +653,7 @@ export default {
 		},
 		async handleFilterAsset (data) {
 			this.filter = data
-			if(!this.filter.coordinate || this.filter.coordinate.length < 2) {
+			if (!this.filter.coordinate || this.filter.coordinate.length < 2) {
 				const geocoder = new google.maps.Geocoder()
 				let keySearch = {
 					'address': this.filter.search_address
@@ -731,7 +729,7 @@ export default {
 			} else {
 				transaction = '[' + 0 + ']'
 			}
-			
+
 			if (data.is_appraise === true) {
 				this.choosed_background_all = 'transparent'
 				this.choosed_background_dtd = 'bisque'
@@ -918,7 +916,6 @@ export default {
 							loaitaisan: 'NĐ'
 						})
 					}
-					
 				}
 			})
 		},
@@ -946,7 +943,7 @@ export default {
 				this.markerLatLng = [position.coords.latitude, position.coords.longitude]
 				this.getAssetGenerals()
 			})
-		},
+		}
 	},
 	beforeMount () {
 

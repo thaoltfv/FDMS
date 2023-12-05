@@ -122,12 +122,12 @@ export default {
 					}
 				],
 				purpose_details: [
-                    {
-                        land_type_purpose_id: '',
-                        total_area: ''
-                    }
-                ],
-                note: ''
+					{
+						land_type_purpose_id: '',
+						total_area: ''
+					}
+				],
+				note: ''
 			},
 			GPXDType: [
 				{ id: 1, description: 'Có giấy phép' },

@@ -38,7 +38,7 @@ export default {
 	},
 	data () {
 		return {
-			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
+			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {}
 		}
 	},
 	mounted () {
@@ -72,7 +72,7 @@ export default {
 			}
 		},
 		handleAction () {
-      this.$emit('action', this.form)
+			this.$emit('action', this.form)
 		}
 	}
 

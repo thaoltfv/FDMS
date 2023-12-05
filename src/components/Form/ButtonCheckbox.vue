@@ -25,9 +25,9 @@
           <div v-for="(item, index) in options.data"
             :key="index" style="padding-bottom: 5px;padding-top: 5px;">
           <a-checkbox
-            
+
             :value="item[options.value]"
-            
+
           >
             <span :class="item.class" style="color: white; font-weight: bold;">{{ item[options.label] }}</span>
           </a-checkbox>
@@ -65,24 +65,24 @@ export default {
 			default: () => []
 		}
 	},
-  data () {
+	data () {
 		return {
-      visible: false
-    }
-  },
+			visible: false
+		}
+	},
 
 	methods: {
-    onClose () {
+		onClose () {
 			this.visible = false
 		},
-    showDrawer () {
+		showDrawer () {
 			this.visible = true
 		},
 		handleChange (value) {
 			this.$emit('change', value)
 		},
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

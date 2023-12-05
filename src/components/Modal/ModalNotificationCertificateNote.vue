@@ -70,26 +70,26 @@ export default {
 		return {
 			note: '',
 			rows: 3,
-      reason_id: null,
-      reasons: []
+			reason_id: null,
+			reasons: []
 		}
 	},
 	props: ['notification'],
-  computed: {
-    optionsReasons () {
+	computed: {
+		optionsReasons () {
 			return {
 				data: this.reasons,
 				id: 'id',
 				key: 'description'
 			}
-		},
-  },
-  mounted () {
-    this.getDictionary()
-  },
+		}
+	},
+	mounted () {
+		this.getDictionary()
+	},
 	methods: {
-    isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
@@ -103,18 +103,17 @@ export default {
 			this.$emit('action', event, note, reason_id)
 			this.$emit('cancel', event)
 		},
-    async getDictionary () {
-      
+		async getDictionary () {
 			// let resp = this.$store.getters.dictionaries
-      // // console.log('vô đây', resp)
+			// // console.log('vô đây', resp)
 			// if (resp && resp.length === 0) {
-        // // console.log('vô đây nè', resp)
-				const resp = await WareHouse.getDictionaries()
-				// store.commit(types.SET_DICTIONARIES, {...resp})
+			// // console.log('vô đây nè', resp)
+			const resp = await WareHouse.getDictionaries()
+			// store.commit(types.SET_DICTIONARIES, {...resp})
 			// }
 			this.reasons = resp.data.li_do
-      // console.log('vô đây cuối', this.reasons )
-		},
+			// console.log('vô đây cuối', this.reasons )
+		}
 
 	}
 }

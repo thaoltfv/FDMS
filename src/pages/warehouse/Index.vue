@@ -401,19 +401,18 @@ import JsonExcel from 'vue-json-excel'
 import Vue from 'vue'
 import {STATUS} from '@/enum/status.enum'
 import ModalPrint from '@/components/Modal/ModalPrint'
-import {BDropdown, BDropdownItem, BTooltip} from 'bootstrap-vue'
+import {BDropdown, BDropdownItem, BTooltip,
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput } from 'bootstrap-vue'
 import ModalExportAdjust from './modals/ModalExportAdjust'
 import ModalNotification from '@/components/Modal/ModalNotification'
 import ModalNotificationCustomer from '@/components/Modal/ModalNotificationCustomer'
 import ModalNotificationProperty from '@/components/Modal/ModalNotificationProperty'
 import ModalSelectTypeAsset from './modals/ModalSelectTypeAsset'
 import {LTooltip} from 'vue2-leaflet'
-import {
-	BCard,
-	BRow,
-	BCol,
-	BFormGroup,
-	BFormInput } from 'bootstrap-vue'
 Vue.filter('formatDate', function (value) {
 	if (value) {
 		return moment(String(value)).format('DD/MM/YYYY')
@@ -440,7 +439,7 @@ export default {
 		BRow,
 		BCol,
 		BFormGroup,
-		BFormInput,
+		BFormInput
 	},
 	data () {
 		return {
@@ -670,7 +669,7 @@ export default {
 			const pagination = { ...this.pagination, current: Number(current) }
 			this.onPageChange(pagination)
 		},
-		configColor(element) {
+		configColor (element) {
 			if (element.status == 1) {
 				return 'info'
 			}
@@ -691,15 +690,15 @@ export default {
 			}
 			return 'red'
 		},
-		isMobile() {
+		isMobile () {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 					navigator.userAgent
 				)
 			) {
-				return true;
+				return true
 			} else {
-				return false;
+				return false
 			}
 		},
 		openSelectType () {
@@ -990,7 +989,7 @@ export default {
 			this.form.toDate = await moment(lastQuarterEndDate).format('DD/MM/YYYY')
 			this.exportData()
 		},
-		async exportData() {
+		async exportData () {
 			const res = await WareHouse.exportDataComparisionAsset(this.form)
 			if (res.data) {
 				const fileLink = document.createElement('a')
@@ -1020,7 +1019,7 @@ export default {
 		},
 		async handleDetail (id, property) {
 			// let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});
-			if (this.isMobile()){
+			if (this.isMobile()) {
 				this.$router.push({
 					name: 'warehouse.detail',
 					query: { id: id }

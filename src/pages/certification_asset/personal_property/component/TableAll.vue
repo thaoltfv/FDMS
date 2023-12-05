@@ -156,14 +156,13 @@
 </template>
 <script>
 
-import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
-import moment from 'moment'
-import {
+import { BDropdown, BDropdownItem, BTooltip,
 	BCard,
 	BRow,
 	BCol,
 	BFormGroup,
 	BFormInput } from 'bootstrap-vue'
+import moment from 'moment'
 export default {
 	name: 'Tables',
 	props: ['listCertificates', 'pagination', 'isLoading'],
@@ -191,7 +190,7 @@ export default {
 		BRow,
 		BCol,
 		BFormGroup,
-		BFormInput,
+		BFormInput
 	},
 	computed: {
 		columns () {
@@ -328,7 +327,7 @@ export default {
 			}
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 		},
-		configColor(element) {
+		configColor (element) {
 			if (element.status == 1) {
 				return 'info'
 			}
@@ -349,8 +348,8 @@ export default {
 			}
 			return 'red'
 		},
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false

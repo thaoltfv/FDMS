@@ -267,7 +267,7 @@ export default {
 		// // console.log('total 2',this.total_account)
 	},
 	computed: {
-		list_total() {
+		list_total () {
 			return this.list_total1
 		},
 		columns () {
@@ -303,13 +303,13 @@ export default {
 					title: 'Pháp lý',
 					align: 'center',
 					dataIndex: 'is_legal_representative',
-					scopedSlots: {customRender: 'is_legal_representative'},
+					scopedSlots: {customRender: 'is_legal_representative'}
 				},
 				{
 					title: 'Trạng thái',
 					align: 'center',
 					dataIndex: 'status_user',
-					scopedSlots: {customRender: 'status_user'},
+					scopedSlots: {customRender: 'status_user'}
 				},
 				{
 					title: 'Thao tác',
@@ -319,18 +319,18 @@ export default {
 				}
 			]
 		},
-		count_disable() {
+		count_disable () {
 			let count = this.list_total1.filter(function (item) {
 				return item.status_user == 'deactive'
 			}).length
 			return count
 		},
-		count_enable() {
+		count_enable () {
 			let count = this.list_total1.filter(function (item) {
 				return item.status_user == 'active'
 			}).length
 			return count
-		},
+		}
 	},
 	methods: {
 
@@ -502,7 +502,7 @@ export default {
 				this.total_account = appraiserCompany.data.data[0].total_account
 				if (this.list_total1.filter(function (item) {
 					return item.status_user == 'active'
-				}).length >= this.total_account){
+				}).length >= this.total_account) {
 					this.can_add = false
 				} else {
 					this.can_add = true

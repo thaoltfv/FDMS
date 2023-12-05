@@ -78,18 +78,18 @@ import { forEach } from 'lodash-es'
 
 export default {
 	name: 'BottomNav',
-  props: {
-    modelValue: {
+	props: {
+		modelValue: {
 			type: [Number, String],
 			default: 1
 		},
-    options: [],
-    foregroundColor: String,
-    backgroundColor: String,
-    iconColor: String,
-    badgeColor: String,
-    replaceRoute: Boolean,
-  },
+		options: [],
+		foregroundColor: String,
+		backgroundColor: String,
+		iconColor: String,
+		badgeColor: String,
+		replaceRoute: Boolean
+	},
 	components: {
 		IconBase
 	},
@@ -102,263 +102,261 @@ export default {
 				return store.getters.profile.data.user
 			}
 		},
-    hasActiveClass () {
-      return this.options.find((option) => option.isActive);
-    }
+		hasActiveClass () {
+			return this.options.find((option) => option.isActive)
+		}
 	},
 	data () {
 		return {
-      showable: false,
-      enableWatch: true,
-      onlyClick: false,
+			showable: false,
+			enableWatch: true,
+			onlyClick: false
 		}
 	},
-  mounted () {
-    this.cssLoader();
-    // // console.log('---------this.$route', this.$route)
-    // window.addEventListener('resize', this.onResize());
+	mounted () {
+		this.cssLoader()
+		// // console.log('---------this.$route', this.$route)
+		// window.addEventListener('resize', this.onResize());
 
-    // // console.log('------this.options', this.options)
-    setTimeout(() => {
-      // console.log('---------this.$route', this.$route),
-      this.options.forEach(e => {
-        if (e.path && e.path.name === this.$route.name) {
-          // console.log('vô 1')
-          e.isActive = true
-        }
-        if (e.childs && e.childs.length > 0) {
-          // console.log('vô 2')
-          e.childs.forEach(i => {
-            // console.log('vô 3')
-            if (i.path && i.path.name === this.$route.name) {
-              // console.log('vô 4')
-              e.isActive = true
-            }
-            //TSTĐ
-            if (i.path && i.path.name === 'certification_asset.index' 
-            && (this.$route.name === 'certification_asset.create' 
-            || this.$route.name === 'certification_asset.detail'
-            || this.$route.name === 'certification_asset.edit'
-            || this.$route.name === 'certification_asset.apartment.create' 
-            || this.$route.name === 'certification_asset.apartment.detail'
-            || this.$route.name === 'certification_asset.apartment.edit')){
-              // console.log('vô 5')
-              e.isActive = true
-            }
-            if (i.path && i.path.name === 'certification_personal_property.index' 
-            && (this.$route.name === 'certification_asset.other_purpose.create' 
-            || this.$route.name === 'certification_asset.other_purpose.detail'
-            || this.$route.name === 'certification_asset.other_purpose.edit'
-            || this.$route.name === 'certification_asset.vehicle.create' 
-            || this.$route.name === 'certification_asset.vehicle.detail'
-            || this.$route.name === 'certification_asset.vehicle.edit'
-            || this.$route.name === 'certification_asset.machine.create' 
-            || this.$route.name === 'certification_asset.machine.detail'
-            || this.$route.name === 'certification_asset.machine.edit')){
-              // console.log('vô 6')
-              e.isActive = true
-            }
-          })
-        }
-        //HSTĐ
-        if (e.path && e.path.name === 'certification_brief.index' 
-        && (this.$route.name === 'certification_brief.create' 
-        || this.$route.name === 'certification_brief.detail'
-        || this.$route.name === 'certification_brief.edit')){
-          // console.log('vô 7')
-          e.isActive = true
-        }
+		// // console.log('------this.options', this.options)
+		setTimeout(() => {
+			// console.log('---------this.$route', this.$route),
+			this.options.forEach(e => {
+				if (e.path && e.path.name === this.$route.name) {
+					// console.log('vô 1')
+					e.isActive = true
+				}
+				if (e.childs && e.childs.length > 0) {
+					// console.log('vô 2')
+					e.childs.forEach(i => {
+						// console.log('vô 3')
+						if (i.path && i.path.name === this.$route.name) {
+							// console.log('vô 4')
+							e.isActive = true
+						}
+						// TSTĐ
+						if (i.path && i.path.name === 'certification_asset.index' &&
+            (this.$route.name === 'certification_asset.create' ||
+            this.$route.name === 'certification_asset.detail' ||
+            this.$route.name === 'certification_asset.edit' ||
+            this.$route.name === 'certification_asset.apartment.create' ||
+            this.$route.name === 'certification_asset.apartment.detail' ||
+            this.$route.name === 'certification_asset.apartment.edit')) {
+							// console.log('vô 5')
+							e.isActive = true
+						}
+						if (i.path && i.path.name === 'certification_personal_property.index' &&
+            (this.$route.name === 'certification_asset.other_purpose.create' ||
+            this.$route.name === 'certification_asset.other_purpose.detail' ||
+            this.$route.name === 'certification_asset.other_purpose.edit' ||
+            this.$route.name === 'certification_asset.vehicle.create' ||
+            this.$route.name === 'certification_asset.vehicle.detail' ||
+            this.$route.name === 'certification_asset.vehicle.edit' ||
+            this.$route.name === 'certification_asset.machine.create' ||
+            this.$route.name === 'certification_asset.machine.detail' ||
+            this.$route.name === 'certification_asset.machine.edit')) {
+							// console.log('vô 6')
+							e.isActive = true
+						}
+					})
+				}
+				// HSTĐ
+				if (e.path && e.path.name === 'certification_brief.index' &&
+        (this.$route.name === 'certification_brief.create' ||
+        this.$route.name === 'certification_brief.detail' ||
+        this.$route.name === 'certification_brief.edit')) {
+					// console.log('vô 7')
+					e.isActive = true
+				}
 
-        //TSSS
-        if (e.path && e.path.name === 'warehouse.index' 
-        && (this.$route.name === 'warehouse.create' 
-        || this.$route.name === 'warehouse.detail'
-        || this.$route.name === 'warehouse.edit')){
-          // console.log('vô 8')
-          e.isActive = true
-        }
-        
-      })
-    }, 3000)
-    
-  },
-  watch: {
-    'this.options': {
+				// TSSS
+				if (e.path && e.path.name === 'warehouse.index' &&
+        (this.$route.name === 'warehouse.create' ||
+        this.$route.name === 'warehouse.detail' ||
+        this.$route.name === 'warehouse.edit')) {
+					// console.log('vô 8')
+					e.isActive = true
+				}
+			})
+		}, 3000)
+	},
+	watch: {
+		'this.options': {
 			handler: function (newVal, oldVal) {
 				if (newVal) {
-          this.options = newVal.map(option => ({
-            ...option,
-            isActive: this.isActive(option),
-          }));
-          this.cssLoader();
-        }
+					this.options = newVal.map(option => ({
+						...option,
+						isActive: this.isActive(option)
+					}))
+					this.cssLoader()
+				}
 			},
 			deep: true
 		},
-    'this.modelValue': {
+		'this.modelValue': {
 			handler: function (newVal, oldVal) {
 				if (newVal != oldVal && this.enableWatch) {
-          const childs  = [];
-          this.options.forEach((option) => {
-            if (this.hasChild(option) && option.childs) {
-              childs.push(...option.childs);
-            }
-          });
-          const target = [...this.options, ...childs].find(
-            option => option.id == newVal
-          );
-          if (target) {
-            this.updateValue(target, this.hasChild(target));
-          }
-        }
+					const childs = []
+					this.options.forEach((option) => {
+						if (this.hasChild(option) && option.childs) {
+							childs.push(...option.childs)
+						}
+					})
+					const target = [...this.options, ...childs].find(
+						option => option.id == newVal
+					)
+					if (target) {
+						this.updateValue(target, this.hasChild(target))
+					}
+				}
 			},
 			deep: true,
 			immediate: true
 		},
-    'this.$route': {
-      handler: function (route, newRoute) {
-        // console.log('đasa', route, newRoute)
+		'this.$route': {
+			handler: function (route, newRoute) {
+				// console.log('đasa', route, newRoute)
 				if (newRoute) {
-          nextTick(() => {
-            const childs = [];
-            this.options.forEach((option) => {
-              if (this.hasChild(option) && option.childs) {
-                childs.push(...option.childs);
-              }
-            });
-            const target = [...this.options, ...childs]
-              .filter(item => item.path)
-              .find(option => {
-                if (typeof option.path === 'string') {
-                  return option.path === newRoute.path;
-                } else {
-                  return (option.path || {}).name === newRoute.name;
-                }
-              });
-            if (target) {
-              this.updateValue(target, this.hasChild(target));
-            }
-          });
-        }
+					nextTick(() => {
+						const childs = []
+						this.options.forEach((option) => {
+							if (this.hasChild(option) && option.childs) {
+								childs.push(...option.childs)
+							}
+						})
+						const target = [...this.options, ...childs]
+							.filter(item => item.path)
+							.find(option => {
+								if (typeof option.path === 'string') {
+									return option.path === newRoute.path
+								} else {
+									return (option.path || {}).name === newRoute.name
+								}
+							})
+						if (target) {
+							this.updateValue(target, this.hasChild(target))
+						}
+					})
+				}
 			},
 			immediate: true
-    }
-  },
+		}
+	},
 	methods: {
-    isMobile() {
-      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        return true
-      } else {
-        return false
-      }
-    },
-    hasChild(button) {
-      return Boolean((button.childs || []).length)
-    },
-    handleChildClick(button) {
-      this.onlyClick = false
-      this.updateValue(button);
-      this.toggleClass();
-    },
-    handleLabelClick(button) {
-      if (!this.showable || button.isActive) {
-        this.toggleClass();
-        this.onlyClick = true
-      }
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true
+			} else {
+				return false
+			}
+		},
+		hasChild (button) {
+			return Boolean((button.childs || []).length)
+		},
+		handleChildClick (button) {
+			this.onlyClick = false
+			this.updateValue(button)
+			this.toggleClass()
+		},
+		handleLabelClick (button) {
+			if (!this.showable || button.isActive) {
+				this.toggleClass()
+				this.onlyClick = true
+			}
 
-      this.updateValue(button, this.hasChild(button));
-    },
-    updateValue(button, prevent = false) {
-      this.options.forEach(
-        (option) => (option.isActive = this.isActive(option, button.id))
-      );
+			this.updateValue(button, this.hasChild(button))
+		},
+		updateValue (button, prevent = false) {
+			this.options.forEach(
+				(option) => (option.isActive = this.isActive(option, button.id))
+			)
 
-      if (!prevent) {
-        // $emit('update:modelValue', button.id);
-        this.enableWatch = false;
-        setTimeout(() => {
-          this.enableWatch = true;
-        }, 0);
+			if (!prevent) {
+				// $emit('update:modelValue', button.id);
+				this.enableWatch = false
+				setTimeout(() => {
+					this.enableWatch = true
+				}, 0)
 
-        if (button.path && Object.keys(button.path).length) {
-          if (this.replaceRoute) {
-            this.$router.replace(button.path).catch(() => {});
-          } else {
-            this.$router.push(button.path);
-          }
-        }
-      }
-    },
-    isActive(button, value = props.modelValue) {
-      return (
-        button.id == value ||
+				if (button.path && Object.keys(button.path).length) {
+					if (this.replaceRoute) {
+						this.$router.replace(button.path).catch(() => {})
+					} else {
+						this.$router.push(button.path)
+					}
+				}
+			}
+		},
+		isActive (button, value = props.modelValue) {
+			return (
+				button.id == value ||
         Boolean((button.childs || []).find(child => child.id == value))
-      );
-    },
-    toggleClass() {
-      this.showable = !this.showable;
-    },
-    cssLoader() {
-      let customStyle = '';
-      const containerWidth =
+			)
+		},
+		toggleClass () {
+			this.showable = !this.showable
+		},
+		cssLoader () {
+			let customStyle = ''
+			const containerWidth =
         (document.querySelector('.btn-container')).offsetWidth ||
-        window.innerWidth;
+        window.innerWidth
 
-      this.options.forEach((item, index) => {
-        const translateX = ((item.childs || []).length * 45) / 2 - 35;
-        const endsClassName = `.btn-item-${index}.checked .btn-class-showable .btn-child-parent`;
-        if ((item.childs || []).length > 1) {
-          if (index === 0 && hasChild(item)) {
-            customStyle += `${endsClassName}{transform:translateX(${translateX}px)}`;
-          }
+			this.options.forEach((item, index) => {
+				const translateX = ((item.childs || []).length * 45) / 2 - 35
+				const endsClassName = `.btn-item-${index}.checked .btn-class-showable .btn-child-parent`
+				if ((item.childs || []).length > 1) {
+					if (index === 0 && hasChild(item)) {
+						customStyle += `${endsClassName}{transform:translateX(${translateX}px)}`
+					}
 
-          if (index === this.options.length - 1 && hasChild(item)) {
-            customStyle += `${endsClassName}{transform:translateX(-${translateX}px)}`;
-          }
-        }
+					if (index === this.options.length - 1 && hasChild(item)) {
+						customStyle += `${endsClassName}{transform:translateX(-${translateX}px)}`
+					}
+				}
 
-        const itemWidth = containerWidth / this.options.length;
-        customStyle += `.btn-item-${index}{width:${itemWidth}px !important;}`;
+				const itemWidth = containerWidth / this.options.length
+				customStyle += `.btn-item-${index}{width:${itemWidth}px !important;}`
 
-        const sweepTranslateX =
+				const sweepTranslateX =
           (index * containerWidth) / this.options.length +
-          containerWidth / this.options.length / 4;
-        customStyle += `.btn-item-${index}.checked ~ #sweep{transform:translateX(${sweepTranslateX}px)}`;
+          containerWidth / this.options.length / 4
+				customStyle += `.btn-item-${index}.checked ~ #sweep{transform:translateX(${sweepTranslateX}px)}`
 
-        if (this.hasChild(item)) {
-          (item.childs || []).forEach((child, idx) => {
-            customStyle += `.btn-item-${index}.checked .btn-class-showable .btn-child:nth-child(${
-              idx + 1
-            }){transform:translateX(${
-              (0.5 + idx) * 45 - ((item.childs || []).length * 45) / 2
-            }px)}`;
-          });
-        }
-      });
+				if (this.hasChild(item)) {
+					(item.childs || []).forEach((child, idx) => {
+						customStyle += `.btn-item-${index}.checked .btn-class-showable .btn-child:nth-child(${
+							idx + 1
+						}){transform:translateX(${
+							(0.5 + idx) * 45 - ((item.childs || []).length * 45) / 2
+						}px)}`
+					})
+				}
+			});
 
-      (document.getElementById('sweep')).style.left = `
-          ${containerWidth / this.options.length / 4 - 135 / 2}px`;
+			(document.getElementById('sweep')).style.left = `
+          ${containerWidth / this.options.length / 4 - 135 / 2}px`
 
-      const head = document.getElementsByTagName('head')[0];
-      const style = document.createElement('style');
-      style.id = 'bottom-navigation-style';
+			const head = document.getElementsByTagName('head')[0]
+			const style = document.createElement('style')
+			style.id = 'bottom-navigation-style'
 
-      if (style.styleSheet) {
-        style.styleSheet.cssText = customStyle;
-      } else {
-        style.appendChild(document.createTextNode(customStyle));
-      }
+			if (style.styleSheet) {
+				style.styleSheet.cssText = customStyle
+			} else {
+				style.appendChild(document.createTextNode(customStyle))
+			}
 
-      head.appendChild(style);
-    },
-    onResize() {
-      nextTick(() => {
-        const styleElement = document.getElementById('bottom-navigation-style');
-        styleElement && styleElement.remove();
-      });
+			head.appendChild(style)
+		},
+		onResize () {
+			nextTick(() => {
+				const styleElement = document.getElementById('bottom-navigation-style')
+				styleElement && styleElement.remove()
+			})
 
-      this.cssLoader();
-    }
+			this.cssLoader()
+		}
 	}
 }
 </script>

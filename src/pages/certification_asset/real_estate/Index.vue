@@ -156,27 +156,27 @@
 </template>
 
 <script>
-import { PERMISSIONS } from "@/enum/permissions.enum";
-import AppraisePagingData from "@/models/AppraisePagingData";
-import ButtonCheckbox from "@/components/Form/ButtonCheckbox";
-import Search from "../personal_property/Search.vue";
-import TableAll from "./component/TableAll";
-import ModalExportAdjust from "./modals/ModalExportAdjust";
-import { Tabs, TabItem } from "vue-material-tabs";
-import { convertPagination } from "@/utils/filters";
-import CertificateAsset from "@/models/CertificateAsset";
-import { BDropdown, BDropdownItem, BTooltip } from "bootstrap-vue";
-import moment from "moment";
-import ModalSelectTypeProperty from "./modals/ModalSelectTypeProperty";
+import { PERMISSIONS } from '@/enum/permissions.enum'
+import AppraisePagingData from '@/models/AppraisePagingData'
+import ButtonCheckbox from '@/components/Form/ButtonCheckbox'
+import Search from '../personal_property/Search.vue'
+import TableAll from './component/TableAll'
+import ModalExportAdjust from './modals/ModalExportAdjust'
+import { Tabs, TabItem } from 'vue-material-tabs'
+import { convertPagination } from '@/utils/filters'
+import CertificateAsset from '@/models/CertificateAsset'
+import { BDropdown, BDropdownItem, BTooltip } from 'bootstrap-vue'
+import moment from 'moment'
+import ModalSelectTypeProperty from './modals/ModalSelectTypeProperty'
 export default {
-	name: "Index",
-	data() {
+	name: 'Index',
+	data () {
 		return {
 			theme: {
-				navItem: "#000000",
-				navActiveItem: "#FAA831",
-				slider: "#FAA831",
-				arrow: "#000000"
+				navItem: '#000000',
+				navActiveItem: '#FAA831',
+				slider: '#FAA831',
+				arrow: '#000000'
 			},
 			listAppraiseDraft: [],
 			listAppraiseOpen: [],
@@ -204,23 +204,23 @@ export default {
 			selectedStatus: [],
 			statusOptions: {
 				data: [
-					{ label: "Mới", value: "1", class: "bg-info" },
-					{ label: "Đang thực hiện", value: "2", class: "bg-primary" },
+					{ label: 'Mới', value: '1', class: 'bg-info' },
+					{ label: 'Đang thực hiện', value: '2', class: 'bg-primary' },
 					{ label: 'Đang kiểm soát', value: '6', class: 'bg-control' },
-					{ label: "Đang duyệt", value: "3", class: "bg-warning" },
-					{ label: "Hoàn thành", value: "4", class: "bg-success" },
-					{ label: "Hủy", value: "5", class: "bg-secondary" }
+					{ label: 'Đang duyệt', value: '3', class: 'bg-warning' },
+					{ label: 'Hoàn thành', value: '4', class: 'bg-success' },
+					{ label: 'Hủy', value: '5', class: 'bg-secondary' }
 				],
-				value: "value",
-				label: "label"
+				value: 'value',
+				label: 'label'
 			},
 			form: {
 				createdBy: [],
-				fromDate: "",
-				toDate: "",
+				fromDate: '',
+				toDate: '',
 				status: []
 			}
-		};
+		}
 	},
 	components: {
 		TabItem,
@@ -228,137 +228,137 @@ export default {
 		Search,
 		TableAll,
 		ButtonCheckbox,
-		"b-dropdown": BDropdown,
-		"b-dropdown-item": BDropdownItem,
-		"b-tooltip": BTooltip,
+		'b-dropdown': BDropdown,
+		'b-dropdown-item': BDropdownItem,
+		'b-tooltip': BTooltip,
 		ModalExportAdjust,
 		ModalSelectTypeProperty
 	},
-	created() {
+	created () {
 		// fix_permission
-		const permission = this.$store.getters.currentPermissions;
+		const permission = this.$store.getters.currentPermissions
 		permission.forEach(value => {
 			if (value === PERMISSIONS.VIEW_CERTIFICATE_ASSET) {
-				this.view = true;
+				this.view = true
 			}
 			if (value === PERMISSIONS.ADD_CERTIFICATE_ASSET) {
-				this.add = true;
+				this.add = true
 			}
 			if (value === PERMISSIONS.EDIT_CERTIFICATE_ASSET) {
-				this.edit = true;
+				this.edit = true
 			}
 			if (value === PERMISSIONS.DELETE_CERTIFICATE_ASSET) {
-				this.deleted = true;
+				this.deleted = true
 			}
 			if (value === PERMISSIONS.ACCEPT_CERTIFICATE_ASSET) {
-				this.accept = true;
+				this.accept = true
 			}
 			if (value === PERMISSIONS.EXPORT_CERTIFICATE_ASSET) {
-				this.export = true;
+				this.export = true
 			}
-		});
+		})
 	},
 	methods: {
-		isMobile() {
+		isMobile () {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 					navigator.userAgent
 				)
 			) {
-				return true;
+				return true
 			} else {
-				return false;
+				return false
 			}
 		},
-		openChooseTypeCreate() {
-			this.open_select_type = true;
+		openChooseTypeCreate () {
+			this.open_select_type = true
 		},
-		handleChangeTab(event) {
+		handleChangeTab (event) {
 			if (event === 0) {
-				this.status = 1;
+				this.status = 1
 			} else if (event === 1) {
-				this.status = 2;
+				this.status = 2
 			} else if (event === 2) {
-				this.status = 3;
+				this.status = 3
 			} else if (event === 3) {
-				this.status = 4;
-			} else this.status = 0;
+				this.status = 4
+			} else this.status = 0
 		},
-		async getProfiles() {
-			const profile = this.$store.getters.profile;
-			if (profile && profile.data.user.roles[0].name.slice(-5) === "ADMIN") {
-				this.activeStatus = true;
+		async getProfiles () {
+			const profile = this.$store.getters.profile
+			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
+				this.activeStatus = true
 			}
 		},
-		async onFilterQuickSearchChange($event) {
-			this.filter = { ...$event };
-			await this.getDataAll();
+		async onFilterQuickSearchChange ($event) {
+			this.filter = { ...$event }
+			await this.getDataAll()
 		},
 		// async onFilterChange ($event) {
 		//   const filter = { ...$event }
 		//   await this.getDataAll(filter)
 		// },
-		handleSearch() {
-			this.showModalSearch = true;
+		handleSearch () {
+			this.showModalSearch = true
 		},
-		async getDataDraft(params = {}) {
-			this.isLoading = true;
-			const filter = {};
+		async getDataDraft (params = {}) {
+			this.isLoading = true
+			const filter = {}
 			try {
 				const resp = await AppraisePagingData.paginate({
 					query: { page: 1, limit: 20, ...params, ...filter, status: 1 }
-				});
-				this.listAppraiseDraft = [...resp.data.data];
-				this.paginationDraft = convertPagination(resp.data);
-				this.isLoading = false;
+				})
+				this.listAppraiseDraft = [...resp.data.data]
+				this.paginationDraft = convertPagination(resp.data)
+				this.isLoading = false
 			} catch (e) {
-				this.isLoading = false;
+				this.isLoading = false
 			}
 		},
-		async getDataOpen(params = {}) {
-			this.isLoading = true;
-			const filter = {};
+		async getDataOpen (params = {}) {
+			this.isLoading = true
+			const filter = {}
 			try {
 				const resp = await AppraisePagingData.paginate({
 					query: { page: 1, limit: 20, ...params, ...filter, status: 2 }
-				});
-				this.listAppraiseOpen = [...resp.data.data];
-				this.paginationOpen = convertPagination(resp.data);
-				this.isLoading = false;
+				})
+				this.listAppraiseOpen = [...resp.data.data]
+				this.paginationOpen = convertPagination(resp.data)
+				this.isLoading = false
 			} catch (e) {
-				this.isLoading = false;
+				this.isLoading = false
 			}
 		},
-		async getDataLock(params = {}) {
-			this.isLoading = true;
-			const filter = {};
+		async getDataLock (params = {}) {
+			this.isLoading = true
+			const filter = {}
 			try {
 				const resp = await AppraisePagingData.paginate({
 					query: { page: 1, limit: 20, ...params, ...filter, status: 3 }
-				});
-				this.listAppraiseLock = [...resp.data.data];
-				this.paginationLock = convertPagination(resp.data);
-				this.isLoading = false;
+				})
+				this.listAppraiseLock = [...resp.data.data]
+				this.paginationLock = convertPagination(resp.data)
+				this.isLoading = false
 			} catch (e) {
-				this.isLoading = false;
+				this.isLoading = false
 			}
 		},
-		async getDataClose(params = {}) {
-			this.isLoading = true;
-			const filter = {};
+		async getDataClose (params = {}) {
+			this.isLoading = true
+			const filter = {}
 			try {
 				const resp = await AppraisePagingData.paginate({
 					query: { page: 1, limit: 20, ...params, ...filter, status: 4 }
-				});
-				this.listAppraiseClose = [...resp.data.data];
-				this.paginationClose = convertPagination(resp.data);
-				this.isLoading = false;
+				})
+				this.listAppraiseClose = [...resp.data.data]
+				this.paginationClose = convertPagination(resp.data)
+				this.isLoading = false
 			} catch (e) {
-				this.isLoading = false;
+				this.isLoading = false
 			}
 		},
-		async getDataAll(params = {}) {
-			this.isLoading = true;
+		async getDataAll (params = {}) {
+			this.isLoading = true
 			try {
 				const resp = await AppraisePagingData.paginate({
 					query: {
@@ -368,113 +368,113 @@ export default {
 						...this.filter,
 						status: this.selectedStatus
 					}
-				});
-				this.listAppraiseAll = [...resp.data.data];
-				this.paginationAll = convertPagination(resp.data);
-				this.isLoading = false;
+				})
+				this.listAppraiseAll = [...resp.data.data]
+				this.paginationAll = convertPagination(resp.data)
+				this.isLoading = false
 			} catch (e) {
-				this.isLoading = false;
+				this.isLoading = false
 			}
 		},
-		async onPageChange(pagination, type, filter = {}, sorter = {}) {
-			this.perPage = pagination.pageSize;
+		async onPageChange (pagination, type, filter = {}, sorter = {}) {
+			this.perPage = pagination.pageSize
 			const params = {
 				page: pagination.current,
 				limit: pagination.pageSize,
 				filters: filter,
 				sortField: sorter.field,
 				sortOrder: sorter.order
-			};
+			}
 
 			switch (type) {
-				case "Draft":
-					await this.getDataDraft(params);
-					break;
-				case "Lock":
-					await this.getDataLock(params);
-					break;
-				case "Close":
-					await this.getDataClose(params);
-					break;
-				case "Open":
-					await this.getDataOpen(params);
-					break;
-				default:
-					await this.getDataAll(params);
+			case 'Draft':
+				await this.getDataDraft(params)
+				break
+			case 'Lock':
+				await this.getDataLock(params)
+				break
+			case 'Close':
+				await this.getDataClose(params)
+				break
+			case 'Open':
+				await this.getDataOpen(params)
+				break
+			default:
+				await this.getDataAll(params)
 			}
 		},
-		onChangeStatus(value) {
-			this.selectedStatus = value;
+		onChangeStatus (value) {
+			this.selectedStatus = value
 			// console.log('00o0',this.selectedStatus)
-			this.getDataAll();
+			this.getDataAll()
 		},
-		async export30daysBefore() {
+		async export30daysBefore () {
 			this.form.fromDate = await moment(
 				new Date(new Date().setDate(new Date().getDate() - 30))
-			).format("DD/MM/YYYY");
-			this.form.toDate = await moment(new Date()).format("DD/MM/YYYY");
-			this.exportData();
+			).format('DD/MM/YYYY')
+			this.form.toDate = await moment(new Date()).format('DD/MM/YYYY')
+			this.exportData()
 		},
-		async exportMonthBefore() {
-			let date = new Date();
-			let datePrevious = new Date(date.setDate(0));
-			let from_date = new Date(new Date(datePrevious).setDate(1));
-			let to_date = new Date(datePrevious);
-			this.form.fromDate = await moment(from_date).format("DD/MM/YYYY");
-			this.form.toDate = await moment(to_date).format("DD/MM/YYYY");
-			this.exportData();
+		async exportMonthBefore () {
+			let date = new Date()
+			let datePrevious = new Date(date.setDate(0))
+			let from_date = new Date(new Date(datePrevious).setDate(1))
+			let to_date = new Date(datePrevious)
+			this.form.fromDate = await moment(from_date).format('DD/MM/YYYY')
+			this.form.toDate = await moment(to_date).format('DD/MM/YYYY')
+			this.exportData()
 		},
-		async exportQuarter() {
-			let quarterAdjustment = (moment().month() % 3) + 1;
+		async exportQuarter () {
+			let quarterAdjustment = (moment().month() % 3) + 1
 			let lastQuarterEndDate = moment()
 				.subtract({ months: quarterAdjustment })
-				.endOf("month");
+				.endOf('month')
 			let lastQuarterStartDate = lastQuarterEndDate
 				.clone()
 				.subtract({ months: 2 })
-				.startOf("month");
+				.startOf('month')
 			this.form.fromDate = await moment(lastQuarterStartDate).format(
-				"DD/MM/YYYY"
-			);
-			this.form.toDate = await moment(lastQuarterEndDate).format("DD/MM/YYYY");
-			this.exportData();
+				'DD/MM/YYYY'
+			)
+			this.form.toDate = await moment(lastQuarterEndDate).format('DD/MM/YYYY')
+			this.exportData()
 		},
-		async exportData() {
+		async exportData () {
 			const res = await CertificateAsset.exportDataCertificationAsset(
 				this.form
-			);
+			)
 			if (res.data) {
-				const fileLink = document.createElement("a");
-				fileLink.href = res.data.url;
-				fileLink.setAttribute("download", res.data.file_name);
-				document.body.appendChild(fileLink);
-				fileLink.click();
-				fileLink.remove();
-				window.URL.revokeObjectURL(fileLink);
+				const fileLink = document.createElement('a')
+				fileLink.href = res.data.url
+				fileLink.setAttribute('download', res.data.file_name)
+				document.body.appendChild(fileLink)
+				fileLink.click()
+				fileLink.remove()
+				window.URL.revokeObjectURL(fileLink)
 				this.$toast.open({
-					message: "Xuất dữ liệu thành công",
-					type: "success",
+					message: 'Xuất dữ liệu thành công',
+					type: 'success',
 					duration: 3000,
-					position: "top-right"
-				});
+					position: 'top-right'
+				})
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
-					type: "error",
+					type: 'error',
 					duration: 3000,
-					position: "top-right"
-				});
+					position: 'top-right'
+				})
 			}
 		},
-		exportAdjust() {
-			this.showAdjustModal = true;
+		exportAdjust () {
+			this.showAdjustModal = true
 		}
 	},
-	beforeMount() {
-		this.getDataAll();
-		this.getProfiles();
+	beforeMount () {
+		this.getDataAll()
+		this.getProfiles()
 	},
-	async mounted() {
+	async mounted () {
 		// if (this.$store.getters.provinces && this.$store.getters.provinces.length === 0) {
 		// 	const resp = await WareHouse.getProvinceAll()
 		// 	store.commit(types.SET_PROVINCE, [...resp.data])
@@ -492,7 +492,7 @@ export default {
 		// 	store.commit(types.SET_APARTMENT, [...apartment.data])
 		// }
 	}
-};
+}
 </script>
 
 <style scoped lang="scss">

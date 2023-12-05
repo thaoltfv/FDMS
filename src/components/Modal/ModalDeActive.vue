@@ -42,12 +42,12 @@
 <script>
 export default {
 	name: 'ModalDeActive',
-  props: {
+	props: {
 		name: {
 			type: String,
 			default: ''
-		},
-  },
+		}
+	},
 	methods: {
 		handleCancel (event) {
 			this.$emit('cancel', event)

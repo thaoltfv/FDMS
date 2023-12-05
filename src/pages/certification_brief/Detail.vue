@@ -97,7 +97,7 @@
 														<div class="d-flex container_content">
 															<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
 														</div>
-														
+
 														<div class="d-flex container_content">
 															<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
 														</div>
@@ -790,7 +790,7 @@ export default {
 				appraises: [],
 				other_documents: [],
 				document_type: [],
-				note:''
+				note: ''
 			},
 			file: '',
 			documentAppraise: [],
@@ -1146,8 +1146,7 @@ export default {
 			const res = await CertificationBrief.getHistoryTimeline(this.idData)
 			if (res.data) {
 				const resp = await WareHouse.getDictionaries()
-				if (resp)
-				{
+				if (resp) {
 					this.historyList = res.data
 					for (let i = 0; i < this.historyList.length; i++) {
 						let e = this.historyList[i]
@@ -1157,8 +1156,8 @@ export default {
 							e.reason_description = result[0].description
 						}
 					}
-				}				
-				
+				}
+
 				// console.log('timeline', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
@@ -1259,7 +1258,7 @@ export default {
 				duration: 3000
 			})
 		},
-		updateAppraiseInformation (dataAppraiseInformation) {		
+		updateAppraiseInformation (dataAppraiseInformation) {
 			this.form.appraise_date = dataAppraiseInformation.appraise_date
 			this.form.appraise_purpose_id = dataAppraiseInformation.appraise_purpose_id
 			this.form.appraise_purpose = dataAppraiseInformation.appraise_purpose
@@ -1322,7 +1321,7 @@ export default {
 				sub_status: 1,
 				status_config: this.jsonConfig.principle,
 				status_note: note,
-				status_reason_id: reason_id,
+				status_reason_id: reason_id
 			}
 			if (this.form.status === 2 && !this.cancel_certificate) {
 				// change status 2 --> 3
@@ -2100,8 +2099,8 @@ export default {
 			}
 			)
 		},
-		isMobile() {
-			if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		isMobile () {
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 				return true
 			} else {
 				return false
