@@ -477,7 +477,7 @@ class CertificateAssetsController extends Controller
     public function findAllInElastic(): JsonResponse
     {
         try {
-            return $this->respondWithCustomData($this->compareAssetGeneralRepository->findAllInElastic_v3());
+            return $this->respondWithCustomData($this->compareAssetGeneralRepository->findAllInElastic_v2());
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
