@@ -1259,6 +1259,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'asset_type_id',
                 'total_estimate_amount',
                 'updated_at',
+                'apartment'
             ];
 
             $result = CompareAssetGeneral::searchByQuery($array, null, $sourceField, 10000, null, $sortBy);
