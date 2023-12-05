@@ -11,7 +11,8 @@ class ApartmentAssetAdapter extends Model
     protected $table = 'apartment_asset_adapter';
     protected $casts = [
         'id' => 'integer',
-        'percent' => 'integer',
+        'percent' => 'float',
+        'change_negotiated_price' => 'float'
     ];
     protected $hidden = [
         'created_at',
@@ -22,5 +23,6 @@ class ApartmentAssetAdapter extends Model
         'apartment_asset_id',
         'asset_general_id',
         'percent',
+        'change_negotiated_price'
     ];
 }

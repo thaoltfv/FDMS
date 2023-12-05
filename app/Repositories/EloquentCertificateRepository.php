@@ -980,6 +980,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                                 "description" => $comparisonFactor->description,
                                 "adjust_percent" => $comparisonFactor->adjust_percent,
                                 "name" => $comparisonFactor->name,
+                                "adjust_coefficient" => $comparisonFactor->adjust_coefficient,
                             ];
                             $checked[$comparisonFactor->type]++;
                         }

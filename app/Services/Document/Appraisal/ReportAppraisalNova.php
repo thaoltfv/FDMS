@@ -451,10 +451,14 @@ class ReportAppraisalNova extends ReportAppraisal
         // } else {
         //     $this->step8sub3Appraise($section);
         // }
-        if ($this->isTangibleAsset) {
-            $this->DCN($section);
-        } else {
-            $this->DTCC($section);
+        if ($this->isApartment) {
+            $this->DCC($section);
+        }else {
+            if ($this->isTangibleAsset) {
+                $this->DCN($section);
+            } else {
+                $this->DTCC($section);
+            }
         }
         $section->addTitle('Xác định giá trị tài sản cần thẩm định giá:', 2);
         foreach ($this->realEstates as $stt =>  $realEstate) {
@@ -477,6 +481,18 @@ class ReportAppraisalNova extends ReportAppraisal
     }
 
     protected function DTCC(Section $section) {
+        $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:');
+        $section->addText('   - Đối với phương pháp so sánh: Tổ thẩm định đã thu thập được các thông tin giao dịch (tối thiểu 3 giao dịch) trên thị trường của các thửa đất, BĐS tương tự. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp so sánh để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
+        $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng được phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu để ước tính giá trị tài sản cần thẩm định giá.');
+        $section->addText('   - Đối với phương pháp thặng dư: Phương pháp này áp dụng đối với trường hợp thửa đất trống có tiềm năng phát triển hoặc đất có CTXD có thể cải tạo, sửa chữa để khai thác có hiệu quả nhất. Khu vực này có nhiều loại hình kinh doanh, dịch vụ khác nhau, khách hàng cũng chưa có phương án hoạt động kinh doanh trong tương lai, do đó không thể lên phương án hoạt động kinh doanh tối ưu. Vì vậy, chưa đủ điều kiện áp dụng được phương pháp thặng dư trong trường hợp này.');
+        $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định không có công trình xây dựng trên đất nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
+        // $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định là quyền sở hữu căn hộ nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
+        $section->addText('   Từ các nội dung trên, Tổ thẩm định nhận thấy chỉ áp dụng được phương pháp so sánh làm phương pháp chính để ước tính giá trị tài sản thẩm định. Không đủ điều kiện để áp dụng các phương pháp khác làm phương pháp kiểm tra, đối chiếu.');
+        $section->addText('   “Phương pháp so sánh là phương pháp thẩm định giá, xác định giá trị của tài sản thẩm định giá dựa trên cơ sở phân tích mức giá của các tài sản so sánh để ước tính, xác định giá trị của tài sản thẩm định giá. Phương pháp so sánh thuộc cách tiếp cận từ thị trường”.',['italic' => true]);
+    
+    }
+
+    protected function DCC(Section $section) {
         $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:');
         $section->addText('   - Đối với phương pháp so sánh: Tổ thẩm định đã thu thập được các thông tin giao dịch (tối thiểu 3 giao dịch) trên thị trường của các thửa đất, BĐS tương tự. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp so sánh để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng được phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu để ước tính giá trị tài sản cần thẩm định giá.');

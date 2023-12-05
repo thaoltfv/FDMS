@@ -1242,10 +1242,24 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
 
             $sourceField = [
                 'id',
-                'version',
+                'contact_person',
+                'contact_phone',
+                'public_date',
+                'total_amount',
+                'total_area',
                 'coordinates',
+                'full_address',
+                'migrate_status',
                 'transaction_type_id',
-                'total_amount'
+                'transaction_type',
+                'transaction_type_description',
+                'asset_type',
+                'pic',
+                'created_at',
+                'asset_type_id',
+                'total_estimate_amount',
+                'updated_at',
+                '*'
             ];
 
             $result = CompareAssetGeneral::searchByQuery($array, null, $sourceField, 10000, null, $sortBy);
@@ -4424,7 +4438,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'pic.id',
                 'block',
                 'floor',
-                'apartment'
+                'apartment',
+                'created_at',
+                'created_by'
             ];
         }
         $search_result = CompareAssetVersion::searchByQuery($array, null, $sourceField, 1, 0, null);

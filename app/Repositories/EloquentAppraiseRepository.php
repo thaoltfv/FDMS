@@ -5995,6 +5995,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     if(isset($appraiseAdapter)) {
                         AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6004,6 +6005,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'appraise_id' => $item['appraise_id'],
                             'asset_general_id' => $item['asset_general_id'],
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6231,6 +6233,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     if(isset($appraiseAdapter)) {
                         AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6240,6 +6243,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'appraise_id' => $item['appraise_id'],
                             'asset_general_id' => $item['asset_general_id'],
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
