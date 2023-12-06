@@ -53,6 +53,8 @@ use App\Http\Controllers\Report\CertificateAssetReportController;
 use App\Http\Controllers\Workflow\WorkflowController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AppraiseDictionary\PreCertificateController;
+use App\Http\Controllers\PreCertificateConfig\PreCertificateConfigController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -296,6 +298,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('/certificate', CertificateController::class);
 
+    Route::apiResource('/pre_certificate', PreCertificateController::class);
+
     Route::post('appraise/status/{id}', [AppraiseController::class, 'updateStatus']);
 
     Route::post('certificate/status/{id}', [CertificateController::class, 'updateStatus']);
@@ -307,6 +311,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certificate/other-document/download/{id}', [CertificateController::class, 'otherDocumentDownload']);
 
     Route::get('/certificates', [CertificateController::class, 'findAll']);
+
+    Route::post('pre_certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
+
+    Route::post('pre_certificate/other-document/upload/{id}', [PreCertificateController::class, 'otherDocumentUpload']);
+
+    Route::post('pre_certificate/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
+
+    Route::get('pre_certificate/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
+
+    Route::get('/pre_certificate', [PreCertificateController::class, 'findAll']);
+
+    Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
+
+    Route::get('/pre-certificate-config', [PreCertificateConfigController::class, 'findAll']);
 
     Route::get('certificate-assets', [CertificateAssetController::class, 'findAll']);
 
