@@ -298,7 +298,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('/certificate', CertificateController::class);
 
-    Route::apiResource('/pre_certificate', PreCertificateController::class);
 
     Route::post('appraise/status/{id}', [AppraiseController::class, 'updateStatus']);
 
@@ -312,15 +311,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/certificates', [CertificateController::class, 'findAll']);
 
-    Route::post('pre_certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
+    Route::apiResource('/pre-certificate', PreCertificateController::class);
+    
+    Route::post('pre-certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
 
-    Route::post('pre_certificate/other-document/upload/{id}', [PreCertificateController::class, 'otherDocumentUpload']);
+    Route::post('pre-certificate/other-document/upload/{id}', [PreCertificateController::class, 'otherDocumentUpload']);
 
-    Route::post('pre_certificate/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
+    Route::post('pre-certificate/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
 
-    Route::get('pre_certificate/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
+    Route::get('pre-certificate/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
 
-    Route::get('/pre_certificate', [PreCertificateController::class, 'findAll']);
+    Route::get('/pre-certificate', [PreCertificateController::class, 'findAll']);
 
     Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
 
