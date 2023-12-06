@@ -43,7 +43,7 @@
                           </l-icon>
                           <l-tooltip>Vị trí tài sản</l-tooltip>
                         </l-marker>
-                        <l-marker v-for="(location, index) in listAssetGeneral" :key="index" :lat-lng="location.center" @click="handleMarker($event, location)">
+                        <l-marker v-for="(location, index) in listAssetGeneral" :key="index" :lat-lng="location.center" @click="handleMarker(location)">
                           <l-icon class-name="someExtraClass">
                             <img v-if="location.id === assetDetails.id && location.isChoosing"
                                  class="img-location-marker checking"
@@ -80,6 +80,17 @@
                       </l-map>
                     </div>
                   </div>
+                  <PropertiesList
+                  :key="key_render_list"
+                    @hiddenListTSSS="handleHiddenTSSS"
+                    :hiddenFromMapTSSS="hiddenListTSSS"
+                    :listTSSS="listAssetGeneral"
+                    :max_listTSSS="listAssetGeneralMax"
+                    :marker_id="marker_id"
+                    @get_center="handleCenter"
+                    @show_marker="handleShowMarker"
+                    @changeList="changeList"
+                  />
                   <div class="position-relative">
                     <div v-if="showDetailAsset" type="button" class="d-flex btn__hide">
                       <img @click="cancelShowDetailAsset" class="button_hidden_property"
@@ -404,6 +415,8 @@ import Icon from 'buefy'
 import {LCircle, LControl, LControlZoom, LIcon, LMap, LMarker, LPopup, LTileLayer, LTooltip} from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import ModalSelectTypeAsset from './modals/ModalSelectTypeAsset.vue'
+import PropertiesList from './PropertiesList'
+import $ from 'jquery'
 
 Vue.use(Icon)
 export default {
@@ -427,11 +440,14 @@ export default {
 		ModalScreenShotMapAssets,
 		ModalDetailSelectedAsset,
 		ModalFilterMap,
-		ModalSelectTypeAsset
+		ModalSelectTypeAsset,
+    PropertiesList
 	},
 	computed: {},
 	data () {
 		return {
+      key_render_list: 9898989,
+      hiddenListTSSS: false,
 			marker_colors: {
 				0: 'green',
 				51: 'blue',
@@ -471,6 +487,7 @@ export default {
 			},
 			marker_id: '',
 			listAssetGeneral: [],
+      listAssetGeneralMax: [],
 			assetHasChoose: [],
 			bothSide: false,
 			yearRange: moment().subtract(this.filter_year, 'year').format('YYYY-MM-DD'),
@@ -504,6 +521,7 @@ export default {
 				}
 			})
 		})
+    this.listAssetGeneralMax = this.listAssetGeneral
 		if (this.data.map_img) {
 			this.imageMapScreenShot = this.data.map_img
 		}
@@ -585,6 +603,7 @@ export default {
 				checkAsset = this.data.assets_general.filter(asset => asset.id === item.id)
 				if (checkAsset.length > 0) { item['isChoosing'] = true } else { item['isChoosing'] = false }
 			})
+      this.listAssetGeneralMax = this.listAssetGeneral
 			this.isRefesh = false
 		},
 		handleHidden () {
@@ -593,7 +612,14 @@ export default {
 				this.$refs.lmap.mapObject.invalidateSize()
 			}, 501)
 		},
-		async handleMarker (event, asset) {
+    handleHiddenTSSS (event) {
+			this.hiddenListTSSS = event
+			setTimeout(() => {
+				this.$refs.map_step6.mapObject.invalidateSize()
+			}, 501)
+      this.key_render_list++
+		},
+		async handleMarker (asset) {
 			const data = [asset]
 			const getDetailAsset = await CertificateAsset.getDetailAssetStep6(data)
 			if (getDetailAsset.data) {
@@ -602,6 +628,7 @@ export default {
 				// // console.log('checkAsset', checkAsset)
 				if (checkAsset && checkAsset.length > 0) {
 					this.assetDetails['isChoosing'] = true
+          this.map.center = [this.assetDetails.coordinates.split(',')[0], this.assetDetails.coordinates.split(',')[1]]
 				}
 				this.showDetailAsset = true
 			}
@@ -653,6 +680,7 @@ export default {
 					} else { item['isChoosing'] = false }
 				} else { item['isChoosing'] = false }
 			})
+      this.listAssetGeneralMax = this.listAssetGeneral
 			this.reRenderMap += 1
 		},
 		zoomUpdated (zoom) {
@@ -759,7 +787,16 @@ export default {
 					this.renderImage += 1
 				}
 			}
-		}
+		},
+    async handleCenter (asset) {
+      this.handleMarker(asset)
+		},
+    handleShowMarker (asset) {
+			this.marker_id = asset.id
+		},
+    changeList (asset) {
+      this.listAssetGeneral = asset
+    }
 	}
 
 }

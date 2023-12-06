@@ -57,7 +57,7 @@
                 <l-icon :iconAnchor="[30, 60]" >
                     <img v-if="index === 0" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation1}deg)`}" src="@/assets/images/svg_marker_1.svg" alt="">
                     <img v-if="index === 1" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation2}deg)`}" src="@/assets/images/svg_marker_2.svg" alt="">
-                    <img v-if="index === 2" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation3}deg)`}" src="@/assets/images/svg_marker_3.svg" alt="">                
+                    <img v-if="index === 2" class="icon_marker asset_icon" :style="{transform: `rotate(${rotation3}deg)`}" src="@/assets/images/svg_marker_3.svg" alt="">
                   </l-icon>
               </l-marker> -->
             </l-map>

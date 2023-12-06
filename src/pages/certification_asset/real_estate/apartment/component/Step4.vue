@@ -7,7 +7,7 @@
             <div class="col-12">
               <div class="container_map">
                 <div  class="d-flex all-map">
-                  <div class="main-map">
+                  <div class="main-map" :class="hiddenList ? 'main-map--hidden' : ''">
                     <div :key="reRenderMap" id="mapid" class="layer-map">
                       <l-map
                         ref="map_step6"
@@ -43,8 +43,8 @@
                           </l-icon>
                           <l-tooltip>Vị trí của bạn</l-tooltip>
                         </l-marker>
-                        <v-marker-cluster  @clusterclick="handleClickOut">
-                          <l-marker v-for="(location, index) in listAssetGeneral" :key="index" :lat-lng="location.center" @click="handleMarker($event, location)">
+                        <v-marker-cluster id="cluster_1"  @clusterclick="handleClickOut($event)">
+                          <l-marker v-for="(location, index) in listAssetGeneral" :key="index" :lat-lng="location.center" @click="handleMarker(location)">
                             <l-icon :key="reRenderCluster" class-name="someExtraClass">
 															<img v-if="location.id === assetDetails.id && location.isChoosing"
 																	class="img-location-marker checking"
@@ -81,6 +81,17 @@
                       </l-map>
                     </div>
                   </div>
+                  <PropertiesList
+                  :key="key_render_list"
+                    @hiddenListTSSS="handleHiddenTSSS"
+                    :hiddenFromMapTSSS="hiddenListTSSS"
+                    :listTSSS="listAssetGeneral"
+                    :max_listTSSS="listAssetGeneralMax"
+                    :marker_id="marker_id"
+                    @get_center="handleCenter"
+                    @show_marker="handleShowMarker"
+                    @changeList="changeList"
+                  />
                   <div class="position-relative">
                     <div v-if="showDetailAsset" type="button" class="d-flex btn__hide">
                       <img @click="cancelShowDetailAsset" class="button_hidden_property"
@@ -135,7 +146,7 @@
                           </div>
                           <div class="d-flex justify-content-between w-100 mt-1">
                             <div class="name_title color_content">Nhân viên xác thực:</div>
-                            <div class="content_detail color_content">{{ assetDetails.created_by ? assetDetails.created_by.name : '-' }}
+                            <div class="content_detail color_content" style="text-align: right;">{{ assetDetails.created_by ? assetDetails.created_by.name : '-' }}
                             </div>
                           </div>
                         </div>
@@ -388,6 +399,8 @@ import Vue from 'vue'
 import Icon from 'buefy'
 import {LCircle, LControl, LControlZoom, LIcon, LMap, LMarker, LPopup, LTileLayer, LTooltip} from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+import PropertiesList from './PropertiesList'
+import $ from 'jquery'
 
 Vue.use(Icon)
 export default {
@@ -410,11 +423,14 @@ export default {
 		TabItem,
 		ModalScreenShotMapAsset,
 		ModalDetailSelectedAsset,
-		ModalFilterMap
+		ModalFilterMap,
+    PropertiesList
 	},
 	computed: {},
 	data () {
 		return {
+      key_render_list: 9898989,
+      hiddenListTSSS: false,
 			marker_colors: {
 				0: 'green',
 				51: 'blue',
@@ -455,6 +471,7 @@ export default {
 			},
 			marker_id: '',
 			listAssetGeneral: [],
+      listAssetGeneralMax: [],
 			assetHasChoose: [],
 			assetType: [39],
 			yearRange: moment().subtract(1, 'year').format('YYYY-MM-DD'),
@@ -473,7 +490,7 @@ export default {
 		if (this.step_active >= 3) {
 			await this.getListAsset()
 		}
-		if (this.$refs.map_stemap_step6p2) {
+		if (this.$refs.map_step6) {
 			setTimeout(() => {
 				this.$refs.map_step6.mapObject.invalidateSize()
 			}, 2000)
@@ -488,6 +505,7 @@ export default {
 		if (this.data.map_img) {
 			this.imageMapScreenShot = this.data.map_img
 		}
+    // this.listAssetGeneralMax = this.listAssetGeneral
 		this.renderImage += 1
 		this.reRenderMap += 1
 	},
@@ -514,8 +532,10 @@ export default {
 			const routeData = this.$router.resolve({ name: 'warehouse.create', query: { asset_type_id: 39 } })
 			window.open(routeData.href, '_blank')
 		},
-		handleClickOut () {
+		handleClickOut (e) {
+      console.log('vô nè',e)
 			this.reRenderCluster += 1
+      // this.handleHiddenTSSS(false)
 		},
 		formatNumberArea (num) {
 			// convert number to dot format
@@ -556,6 +576,7 @@ export default {
 			const yearRange = this.yearRange
 			const getAllAsset = await CertificateAsset.getAllAssetApartment(distance, location, transaction, assetType, yearRange)
 			this.listAssetGeneral = [...getAllAsset.data]
+      this.listAssetGeneralMax = [...getAllAsset.data]
 			let checkAsset = []
 			this.listAssetGeneral.forEach(item => {
 				item['center'] = [parseFloat(item.coordinates.split(',')[0]), parseFloat(item.coordinates.split(',')[1])]
@@ -566,10 +587,18 @@ export default {
 		handleHidden () {
 			this.hiddenList = !this.hiddenList
 			setTimeout(() => {
-				this.$refs.lmap.mapObject.invalidateSize()
+				this.$refs.map_step6.mapObject.invalidateSize()
 			}, 501)
 		},
-		async handleMarker (event, asset) {
+    handleHiddenTSSS (event) {
+			this.hiddenListTSSS = event
+			setTimeout(() => {
+				this.$refs.map_step6.mapObject.invalidateSize()
+			}, 501)
+      this.key_render_list++
+		},
+		async handleMarker (asset) {
+      console.log('data gì', asset)
 			const data = [asset]
 			const getDetailAsset = await CertificateAsset.getDetailAssetApartment(data)
 			if (getDetailAsset.data) {
@@ -578,7 +607,11 @@ export default {
 				if (checkAsset && checkAsset.length > 0) {
 					this.assetDetails['isChoosing'] = true
 				}
+        // this.handleHiddenTSSS(true)
+        this.map.center = [this.assetDetails.coordinates.split(',')[0], this.assetDetails.coordinates.split(',')[1]]
+        console.log('this.map.center',this.map.center)
 				this.showDetailAsset = true
+        this.reRenderCluster++
 			}
 		},
 		hoverDetailToMarker (property) {
@@ -611,6 +644,7 @@ export default {
 			const yearRange = this.yearRange
 			const getAllAsset = await CertificateAsset.getAllAssetApartment(distance, location, transaction, assetType, yearRange)
 			this.listAssetGeneral = [...getAllAsset.data]
+      this.listAssetGeneralMax = [...getAllAsset.data]
 			this.listAssetGeneral.forEach(item => {
 				item['center'] = [parseFloat(item.coordinates.split(',')[0]), parseFloat(item.coordinates.split(',')[1])]
 				// item['isChoosing'] = false
@@ -621,6 +655,7 @@ export default {
 					} else { item['isChoosing'] = false }
 				} else { item['isChoosing'] = false }
 			})
+      // this.listAssetGeneralMax = this.listAssetGeneral
 			this.reRenderMap += 1
 		},
 		zoomUpdated (zoom) {
@@ -632,6 +667,7 @@ export default {
 
 		cancelShowDetailAsset () {
 			this.showDetailAsset = false
+      // this.handleHiddenTSSS(false)
 			this.assetDetails = ''
 		},
 		handleAddProperty (assetDetail, select) {
@@ -729,7 +765,17 @@ export default {
 					this.renderImage += 1
 				}
 			}
-		}
+		},
+    async handleCenter (asset) {
+      this.handleMarker(asset)
+		},
+    handleShowMarker (asset) {
+			this.marker_id = asset.id
+		},
+    changeList (asset) {
+      this.listAssetGeneral = asset
+      console.log('change', this.listAssetGeneral)
+    }
 	}
 }
 </script>
