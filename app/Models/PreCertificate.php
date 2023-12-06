@@ -68,7 +68,7 @@ class PreCertificate extends Model
 
     public function getStatusTextAttribute()
     {
-		$status = $this->pre_status;
+		$status = $this->pre_status_code;
 		$statusText = "";
 		switch ($status) {
             case 1:
