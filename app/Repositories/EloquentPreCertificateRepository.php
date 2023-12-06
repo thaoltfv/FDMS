@@ -22,7 +22,7 @@ use App\Models\CertificatePrinciple;
 use App\Models\CertificateTangibleComparisonFactor;
 use App\Models\CertificateAssetUnitPrice;
 use App\Models\CertificateAssetUnitArea;
-use App\Models\CertificateOtherDocuments;
+use App\Models\PreCertificateOtherDocuments;
 use App\Models\CertificateAssetAppraisalMethods;
 use App\Models\CertificateAssetPrice;
 
@@ -251,18 +251,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             'created_by' => $user->id,
                         ];
 
-                        $item = new CertificateOtherDocuments($item);
+                        $item = new PreCertificateOtherDocuments($item);
                         QueryBuilder::for($item)->insert($item->attributesToArray());
                         $result[] = $item;
                     }
                     $edited = PreCertificate::where('id', $id)->first();
-                    $edited2 = CertificateOtherDocuments::where('certificate_id', $id)->first();
+                    $edited2 = PreCertificateOtherDocuments::where('certificate_id', $id)->first();
                     # activity-log upload file
                     $this->CreateActivityLog($edited, $edited2, 'upload_file', 'tải phụ lục');
                     // chưa lấy ra được model user và id user
                 }
 
-                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                $result = PreCertificateOtherDocuments::where('certificate_id', $id)
                     ->with('createdBy')
                     ->get();
                 return $result;
@@ -280,11 +280,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     {
         return DB::transaction(function () use ($id, $request) {
             try {
-                $certificateId = CertificateOtherDocuments::select('certificate_id')->where('id', $id)->get();
-                $item = CertificateOtherDocuments::where('id', $id)->delete();
+                $certificateId = PreCertificateOtherDocuments::select('certificate_id')->where('id', $id)->get();
+                $item = PreCertificateOtherDocuments::where('id', $id)->delete();
                 $edited = PreCertificate::where('id', $certificateId[0]->certificate_id)->first();
-                $edited2 = CertificateOtherDocuments::where('id', $id)->get();
-                $item = CertificateOtherDocuments::where('id', $id)->delete();
+                $edited2 = PreCertificateOtherDocuments::where('id', $id)->get();
+                $item = PreCertificateOtherDocuments::where('id', $id)->delete();
                 # activity-log delete file
                 $this->CreateActivityLog($edited, $edited2, 'delete_file', 'xóa phụ lục');
                 // chưa lấy ra được model user và id user
@@ -303,7 +303,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     {
         return DB::transaction(function () use ($id, $request) {
             try {
-                $item = CertificateOtherDocuments::where('id', $id)->first();
+                $item = PreCertificateOtherDocuments::where('id', $id)->first();
                 return $item;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -2029,7 +2029,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if (isset($objects['delete_other_documents'])) {
                     foreach ($objects['delete_other_documents'] as $otherDocument) {
                         if (isset($otherDocument['id'])) {
-                            CertificateOtherDocuments::where('id', $otherDocument['id'])->delete();
+                            PreCertificateOtherDocuments::where('id', $otherDocument['id'])->delete();
                         }
                     }
                 }
@@ -2681,7 +2681,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             })
             ->leftjoin(
                 DB::raw('(select certificate_id , count(certificate_id) as document_count
-                                    from certificate_other_documents
+                                    from pre_certificate_other_documents
                                     where deleted_at is null
                                     group by certificate_id) as "tbCount"'),
                 function ($join) {
@@ -4839,18 +4839,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             'created_by' => $user->id,
                         ];
 
-                        $item = new CertificateOtherDocuments($item);
+                        $item = new PreCertificateOtherDocuments($item);
                         QueryBuilder::for($item)->insert($item->attributesToArray());
                         $result[] = $item;
                     }
                     $edited = PreCertificate::where('id', $id)->first();
-                    $edited2 = CertificateOtherDocuments::where('certificate_id', $id)->first();
+                    $edited2 = PreCertificateOtherDocuments::where('certificate_id', $id)->first();
                     # activity-log upload file
                     $this->CreateActivityLog($edited, $edited2, 'upload_file', 'tải phụ lục');
                     // chưa lấy ra được model user và id user
                 }
 
-                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                $result = PreCertificateOtherDocuments::where('certificate_id', $id)
                     ->with('createdBy')
                     ->get();
                 return $result;
@@ -5738,16 +5738,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             'description' => $description,
                             'created_by' => $user->id,
                         ];
-                        $item = new CertificateOtherDocuments($item);
-                        CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $description], $item->attributesToArray());
+                        $item = new PreCertificateOtherDocuments($item);
+                        PreCertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $description], $item->attributesToArray());
                     }
                     $edited = PreCertificate::where('id', $id)->first();
-                    $edited2 = CertificateOtherDocuments::where('certificate_id', $id)->first();
+                    $edited2 = PreCertificateOtherDocuments::where('certificate_id', $id)->first();
                     # activity-log upload file
                     $this->CreateActivityLog($edited, $edited2, 'upload_file', 'upload '. $logDescription);
                 }
 
-                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                $result = PreCertificateOtherDocuments::where('certificate_id', $id)
                     ->with('createdBy')
                     ->get();
                 return $result;
@@ -5760,7 +5760,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     public function deleteDocument($id)
     {
         try {
-            $other = CertificateOtherDocuments::query()->where('id', $id)->first();
+            $other = PreCertificateOtherDocuments::query()->where('id', $id)->first();
             $certificateId = $other->certificate_id;
             $check = $this->checkAuthorizationCertificate($certificateId);
             if (!empty($check))
@@ -5799,7 +5799,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     private function removeUploadFile ($id, $description, $path)
     {
         try {
-            $others = CertificateOtherDocuments::query()->where(['certificate_id' => $id, 'description' => $description])->get();
+            $others = PreCertificateOtherDocuments::query()->where(['certificate_id' => $id, 'description' => $description])->get();
             if (!empty($others)) {
                 foreach ($others as $other) {
                     $url = $other->link;
