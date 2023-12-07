@@ -365,7 +365,10 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $otherComparisons = $objects['other_comparison'];
             $deleteComparisons = $objects['delete_other_comparison'];
             $roundTotal = $objects['round_total'];
-            $apartment_asset_price = $objects['apartment_asset_price'];
+            if (isset($objects['apartment_asset_price'])){
+                $apartment_asset_price = $objects['apartment_asset_price'];
+            }
+            
             $adapters = $objects['apartment_adapter'];
             if (isset($roundTotal)){
                 $slug = 'round_total';
