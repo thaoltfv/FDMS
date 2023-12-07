@@ -1285,7 +1285,8 @@ export default {
 				other_comparison: otherDataSave,
 				delete_other_comparison: dataDelete,
 				round_total: +round_total,
-				apartment_adapter: apartment_adapter
+				apartment_adapter: apartment_adapter,
+				apartment_asset_price: parseFloat(this.mgtn).toFixed(0)
 			}
 			this.handleSaveSummarization(payloadData)
 		},

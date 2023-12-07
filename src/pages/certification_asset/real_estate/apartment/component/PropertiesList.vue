@@ -24,7 +24,7 @@
           <div class="property-contain" v-if="listTSSS.length > 0">
             <div class="property-info" v-for="(asset_general, index) in listTSSS" :key="index" :id="asset_general.id" :class="marker_id === asset_general.id ? 'property-info__active' : ''" @click="handleDetail(asset_general)" @mousemove="handleMarkerDetail(asset_general)">
               <div class="property-info--content">
-                <p class="info-content"> Mã: <span class="info-content color__green">{{`TSS_${asset_general.id}`}}</span></p>
+                <p class="info-content"> Mã: <span class="info-content " style="color: #00507c">{{`TSS_${asset_general.id}`}}</span></p>
                 <p class="info-content"> Loại giao dịch:
                   <span class="info-content__detail color__blue" v-if="asset_general.transaction_type_id === 51">{{asset_general.transaction_type_description}}</span>
                   <span class="info-content__detail color__purple" v-if="asset_general.transaction_type_id === 52">{{asset_general.transaction_type_description}}</span>
@@ -33,14 +33,14 @@
                   <span class="info-content__detail color__green" v-if="asset_general.transaction_type_id === 0">{{asset_general.transaction_type_description}}</span>
                 </p>
                 <p class="info-content"> Tên chung cư: <span class="info-content__detail color__blue">{{asset_general.project.name}}</span></p>
-                <p class="info-content"> 
+                <p class="info-content">
                   Block: <span class="info-content__detail">{{asset_general.block.name}}</span>
                   | Tầng: <span class="info-content__detail">{{asset_general.floor.name}}</span>
                 </p>
                 <p class="info-content" :id="`address_`+asset_general.id"> Địa chỉ: <span class="info-content__detail">{{asset_general.full_address}}</span></p>
                 <b-tooltip :target="('address_' + asset_general.id).toString()">{{ asset_general.full_address}}</b-tooltip>
                 <p class="info-content">{{asset_general.migrate_status === 'TSS' ? 'Giá trị ước tính:' : 'Giá trị thẩm định' }} <span class="info-content color__orange">{{formatPrice(asset_general.total_amount)}}</span> </p>
-                <p class="info-content">{{asset_general.migrate_status === 'TSS' ? 'Ngày đăng tin:' : 'Ngày thẩm định' }} <span class="info-content__detail">{{formatDate(asset_general.public_date)}}</span> </p>                
+                <p class="info-content">{{asset_general.migrate_status === 'TSS' ? 'Ngày đăng tin:' : 'Ngày thẩm định' }} <span class="info-content__detail">{{formatDate(asset_general.public_date)}}</span> </p>
               </div>
             </div>
           </div>
@@ -58,48 +58,47 @@ import InputText from '@/components/Form/InputText'
 
 export default {
 	name: 'PropertiesList',
-	props: ['max_listTSSS','listTSSS','hiddenFromMapTSSS','marker_id'],
+	props: ['max_listTSSS', 'listTSSS', 'hiddenFromMapTSSS', 'marker_id'],
 	components: {
-    'b-tooltip': BTooltip,
-    InputText
+		'b-tooltip': BTooltip,
+		InputText
 	},
 	data () {
 		return {
-      hiddenList: this.hiddenFromMapTSSS,
-      search_code: '',
-      // filer_list: this.max_listTSSS
+			hiddenList: this.hiddenFromMapTSSS,
+			search_code: ''
+			// filer_list: this.max_listTSSS
 		}
 	},
 	async mounted () {
 		// this.max_listTSSS  = this.listTSSS
-    // if (this.max_listTSSS){
-      // await this.search()
-    // }
-    
-    // console.log('this.max_listTSSS',this.max_listTSSS)
+		// if (this.max_listTSSS){
+		// await this.search()
+		// }
+
+		// console.log('this.max_listTSSS',this.max_listTSSS)
 	},
 	methods: {
-    async search () {
-      console.log('vô search',this.search_code)
-      if (this.search_code !== ''){
-        let filteredList = [];
-        for (let i= 0; i<this.max_listTSSS.length; i++) {
-          const e = this.max_listTSSS[i]
-          if (e['id'].toString().includes(this.search_code) === true
-          || e['full_address'].toString().includes(this.search_code) === true
-          || e['project']['name'].toString().includes(this.search_code) === true) {
-            filteredList = [...filteredList, e];
-          }
-        }
-        this.listTSSS = filteredList
-        this.$emit('changeList', this.listTSSS)
-      } else {
-        this.listTSSS = this.max_listTSSS
-        this.$emit('changeList', this.listTSSS)
-      }
-      
-    },
-    handleHidden () {
+		async search () {
+			console.log('vô search', this.search_code)
+			if (this.search_code !== '') {
+				let filteredList = []
+				for (let i = 0; i < this.max_listTSSS.length; i++) {
+					const e = this.max_listTSSS[i]
+					if (e['id'].toString().includes(this.search_code) === true ||
+          e['full_address'].toString().includes(this.search_code) === true ||
+          e['project']['name'].toString().includes(this.search_code) === true) {
+						filteredList = [...filteredList, e]
+					}
+				}
+				this.listTSSS = filteredList
+				this.$emit('changeList', this.listTSSS)
+			} else {
+				this.listTSSS = this.max_listTSSS
+				this.$emit('changeList', this.listTSSS)
+			}
+		},
+		handleHidden () {
 			this.hiddenList = !this.hiddenList
 			this.$emit('hiddenListTSSS', this.hiddenList)
 		},
@@ -115,7 +114,7 @@ export default {
 				})
 			}
 		},
-    formatPrice (value) {
+		formatPrice (value) {
 			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
 			if (num.length > 3 && num.length <= 6) {
 				return parseFloat(num / 1000).toFixed(0) + ' ng'
@@ -128,7 +127,7 @@ export default {
 			}
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 		},
-    handleDetail (property) {
+		handleDetail (property) {
 			this.$emit('get_center', property)
 			// this.property = property
 			// this.handleShowImage(property.id)
