@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App;
-use App\Contracts\CertificateRepository;
+use App\Contracts\PreCertificateRepository;
 use App\Enum\CompareMaterData;
 use App\Enum\ErrorMessage;
 use App\Models\PreCertificate;
@@ -166,7 +166,7 @@ use Illuminate\Support\Arr;
 
 use function PHPUnit\Framework\isEmpty;
 
-class  EloquentCertificateRepository extends EloquentRepository implements CertificateRepository
+class  EloquentPreCertificateRepository extends EloquentRepository implements PreCertificateRepository
 {
 
     use ActivityLog;

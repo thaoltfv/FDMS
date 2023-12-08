@@ -139,6 +139,8 @@ use App\Repositories\EloquentRealEstateRepository;
 use App\Repositories\EloquentTechnologyCertificateAssetRepository;
 use App\Repositories\EloquentVerhicleCertificateAssetRepository;
 use App\Repositories\EloquentViewCertificateBriefRepository;
+use App\Repositories\EloquentPreCertificateRepository;
+use App\Repositories\EloquentPreCertificateConfigRepository;
 use App\Services\Document\Certificate\ReportCertificate;
 use App\Services\Document\Certificate\ReportCertificateInterface;
 use App\Services\Document\DocumentInterface\Report;
