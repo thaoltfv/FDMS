@@ -6,9 +6,9 @@
 				<div class="row">
 					<div class="col-md-9">
 						<p style="padding: 15px; margin-bottom: 0;">
-							Tài sản thẩm định đã được chỉnh sửa. Vui lòng 
+							Tài sản thẩm định đã được chỉnh sửa. Vui lòng
 							<span style="font-weight: bold; color: red">
-								Cập nhật Version 
+								Cập nhật Version
 							</span>
 							để có kết quả và xuất file mới nhất
 						</p>

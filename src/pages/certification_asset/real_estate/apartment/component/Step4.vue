@@ -97,7 +97,7 @@
                       <img @click="cancelShowDetailAsset" class="button_hidden_property" style="width: unset;
                             left: 38px;
                             position: absolute;
-                            z-index: 333;"        
+                            z-index: 333;"
                            src="@/assets/icons/ic_delete_1.svg"
                            :class="{'open_property': hiddenList, 'button_action_hide':!showDetailAsset}" alt=""/>
                       <div v-if="showDetailAsset" class="card_detail_asset">
