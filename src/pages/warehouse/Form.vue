@@ -584,11 +584,11 @@
 										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.total_estimate_amount)}}</p></div>
 									</div>
 									<div class="col-12 col-md-4 col-lg-3">
-										<InputPercent
+										<InputPercentNegative
 										:key="render_percent"
 											v-model="form.adjust_percent"
 											vid="adjust_percent"
-											label="Tỉ lệ giá rao bán (%)"
+											label="Tỉ lệ điều chỉnh"
 											rules="required"
 											@change="changeAdjustPercent($event)"
 											class="form-group-container"
@@ -601,7 +601,7 @@
 										:key="render_percent"
 											v-model="form.adjust_amount"
 											vid="adjust_amount"
-											label="Số tiền thương lượng"
+											label="Giá trị giảm/tăng (VND)"
 											rules="required"
 											@change="changeAdjustAmount($event)"
 											class="form-group-container"
@@ -2632,7 +2632,9 @@ export default {
 		changeTotalAmount (event) {
 			this.change_data_log('Giá (VND)')
 			this.form.total_amount = event
-			this.form.adjust_amount = parseFloat((this.form.total_amount * event / 100) - this.form.total_amount).toFixed(0)
+			this.form.adjust_amount = parseFloat(this.form.total_amount * (this.form.adjust_percent / 100)).toFixed(0)
+			this.render_percent++
+			console.log('this.form.adjust_amount',this.form.adjust_amount)
 			if (this.form.total_amount) {
 				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
 			} else {
@@ -2687,7 +2689,7 @@ export default {
 			console.log('đổi tiền')
 			if (event) {
 				this.form.adjust_amount = event
-				this.form.adjust_percent = ((this.form.total_amount + event) / this.form.total_amount * 100)
+				this.form.adjust_percent = event / this.form.total_amount * 100
 				this.render_percent++
 			}
 			this.changeAdjustPercent(this.form.adjust_percent)
@@ -2698,9 +2700,8 @@ export default {
 			} else {
 				this.form.adjust_percent = 0
 			}
-			this.form.adjust_amount = parseFloat((this.form.total_amount * event / 100) - this.form.total_amount).toFixed(0)
+			this.form.adjust_amount = parseFloat(this.form.total_amount * (event / 100)).toFixed(0)
 			this.render_percent++
-			console.log('this.form.adjust_amount',this.form.adjust_amount)
 			if (this.form.total_amount !== null && this.form.total_amount !== undefined && this.form.total_amount !== '') {
 				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
 			}

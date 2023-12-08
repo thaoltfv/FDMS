@@ -520,11 +520,11 @@
               <p class="content-name">{{ formatCurrency(this.form.total_estimate_amount)}}đ </p>
             </div>
             <div class="content-detail">
-              <p class="content-title">Tỉ lệ giá rao bán (%): </p>
-              <p class="content-name">{{ formatNumber(this.form.adjust_percent)}}% </p>
+              <p class="content-title">Tỉ lệ điều chỉnh (%): </p>
+              <p class="content-name">{{ formatCurrency(this.form.adjust_percent)}}% </p>
             </div>
             <div class="content-detail">
-              <p class="content-title">Số tiền thương lượng: </p>
+              <p class="content-title">Giá trị giảm/tăng (VND): </p>
               <p class="content-name">{{ formatCurrency(this.form.adjust_amount)}}đ </p>
             </div>
           </div>
@@ -1122,11 +1122,11 @@
               <p class="content-name">{{ formatCurrency(this.form.total_estimate_amount)}}đ </p>
             </div>
             <div class="content-detail">
-              <p class="content-title">Tỉ lệ giá rao bán (%): </p>
+              <p class="content-title">Tỉ lệ điều chỉnh (%): </p>
               <p class="content-name">{{ formatNumber(this.form.adjust_percent)}}% </p>
             </div>
             <div class="content-detail">
-              <p class="content-title">Số tiền thương lượng: </p>
+              <p class="content-title">Giá trị giảm/tăng (VND): </p>
               <p class="content-name">{{ formatCurrency(this.form.adjust_amount)}}đ </p>
             </div>
           </div>
