@@ -6,6 +6,13 @@ export default class Certificate extends Model {
 		const { params } = request;
 		return ["pre-certificate", ...params];
 	}
+	static async getDetailPreCertificate(id = "") {
+		return new this().request({
+			method: "GET",
+			url: `pre_certification/certificate-infomation/${id}`,
+			isStatic: true
+		});
+	}
 	static async getAppraiseLaws() {
 		let resp = localStorage.getItem("appraise-laws");
 		if (isEmpty(resp)) {

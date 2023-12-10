@@ -13,7 +13,7 @@ export const usePreCertificateStore = defineStore(
 			petitioner_address: null,
 			petitioner_identity_card: null,
 			customer_id: null,
-			pre_status_code: null,
+			status: 1,
 			appraise_purpose_id: null,
 			note: null,
 			appraiser_sale_id: null,
@@ -41,15 +41,21 @@ export const usePreCertificateStore = defineStore(
 			}
 		});
 
-		const preCertificateOtherDocuments = ref({
-			pre_certificate_id: null,
-			name: null,
-			link: null,
-			type: null,
-			size: null,
-			description: null,
-			type_document: null
+		const permission = ref({
+			allowDelete: true
 		});
+
+		const preCertificateOtherDocuments = ref([
+			{
+				pre_certificate_id: null,
+				name: null,
+				link: null,
+				type: null,
+				size: null,
+				description: null,
+				type_document: null
+			}
+		]);
 
 		const lstData = ref({
 			business_managers: [],
@@ -77,6 +83,13 @@ export const usePreCertificateStore = defineStore(
 		}
 
 		getStartData();
+		async function getPreCertificate(id) {
+			console.log("runhere23");
+			const getDataCertificate = await PreCertificate.getDetailPreCertificate(
+				id
+			);
+			dataPC.value = getDataCertificate.data;
+		}
 		function resetData() {
 			data.value = {
 				id: null,
@@ -86,7 +99,7 @@ export const usePreCertificateStore = defineStore(
 				petitioner_address: null,
 				petitioner_identity_card: null,
 				customer_id: null,
-				pre_status_code: null,
+				status: null,
 				appraise_purpose_id: null,
 				note: null,
 				appraiser_sale_id: null,
@@ -120,8 +133,10 @@ export const usePreCertificateStore = defineStore(
 			dataPC,
 			lstData,
 			preCertificateOtherDocuments,
+			permission,
 
-			resetData
+			resetData,
+			getPreCertificate
 		};
 	},
 	{

@@ -1885,7 +1885,6 @@ export const routes = [
 				component: page("pre_certification/create.vue"),
 				meta: {
 					title: "Tạo mới hồ sơ thẩm định sơ bộ",
-					// fix_permission
 					permissions: [PERMISSIONS.ADD_PRE_CERTIFICATE],
 					breadcrumbs: [
 						{
@@ -1898,6 +1897,27 @@ export const routes = [
 						}
 					],
 					gtm: "Trang tạo mới HSTĐSB"
+				}
+			},
+			{
+				path: "/pre_certification/edit",
+				name: "pre_certification.edit",
+				component: page("pre_certification/Edit.vue"),
+				props: true,
+				meta: {
+					title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
+					permissions: [PERMISSIONS.EDIT_PRE_CERTIFICATE],
+					breadcrumbs: [
+						{
+							title: "Hồ sơ thẩm định sơ bộ",
+							name: "pre_certification.index"
+						},
+						{
+							title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
+							name: "pre_certification.create"
+						}
+					],
+					gtm: "Trang chỉnh sửa HSTĐSB"
 				}
 			}
 		]

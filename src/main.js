@@ -50,12 +50,10 @@ import "firebase/auth";
 import "firebase/firestore";
 
 import { createPinia, PiniaVuePlugin } from "pinia";
-
 import VueEllipseProgress from "vue-ellipse-progress";
 Vue.use(VueEllipseProgress, "vep");
 
 Vue.use(PiniaVuePlugin);
-
 const pinia = createPinia();
 //cors
 // import AxiosPlugin from 'vue-axios-cors';

@@ -292,6 +292,11 @@ import InputCurrency from "@/components/Form/InputCurrency";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
 import OtherFile from "./OtherFile.vue";
 export default {
+	props: {
+		routeId: {
+			type: String
+		}
+	},
 	components: {
 		OtherFile,
 		InputCategory,
@@ -305,7 +310,8 @@ export default {
 		InputCategoryMulti,
 		InputTextPrefixCustomIcon
 	},
-	setup() {
+
+	setup(props) {
 		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -363,6 +369,8 @@ export default {
 		});
 
 		const preCertificateStore = usePreCertificateStore();
+		console.log("pres", preCertificateStore);
+		preCertificateStore.getPreCertificate(props.routeId);
 		const { dataPC, lstData, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
@@ -400,6 +408,7 @@ export default {
 			dataPC,
 			lstData,
 			preCertificateOtherDocuments,
+			preCertificateStore,
 
 			handleChangeAppraisePurpose,
 			handleChangeCustomer,
