@@ -2634,7 +2634,7 @@ export default {
 			this.form.total_amount = event
 			this.form.adjust_amount = parseFloat(this.form.total_amount * (this.form.adjust_percent / 100)).toFixed(0)
 			this.render_percent++
-			console.log('this.form.adjust_amount',this.form.adjust_amount)
+			console.log('this.form.adjust_amount', this.form.adjust_amount)
 			if (this.form.total_amount) {
 				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
 			} else {
