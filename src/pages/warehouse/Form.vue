@@ -585,6 +585,7 @@
 									</div>
 									<div class="col-12 col-md-4 col-lg-3">
 										<InputPercentNegative
+										:key="render_percent"
 											v-model="form.adjust_percent"
 											vid="adjust_percent"
 											label="Tỉ lệ điều chỉnh"
@@ -592,11 +593,20 @@
 											@change="changeAdjustPercent($event)"
 											class="form-group-container"
 										/>
-										<span class="text-error" v-if="form.adjust_percent > 20 || form.adjust_percent < -20">Tỉ lệ điều chỉnh không được nhỏ hơn -20% và không được lớn hơn 20%</span>
+										<!-- <span class="text-error" v-if="form.adjust_percent > 20 || form.adjust_percent < -20">Tỉ lệ điều chỉnh không được nhỏ hơn -20% và không được lớn hơn 20%</span> -->
 									</div>
 									<div class="col-12 col-md-4 col-lg-4 form-group-container">
-										<label class="color-black font-weight-bold">Giá trị giảm/tăng (VND)</label>
-										<div class="form-control disabled d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.adjust_amount)}}</p></div>
+										<!-- <label class="color-black font-weight-bold">Giá trị giảm/tăng (VND)</label> -->
+										<InputNumberNegative
+										:key="render_percent"
+											v-model="form.adjust_amount"
+											vid="adjust_amount"
+											label="Giá trị giảm/tăng (VND)"
+											rules="required"
+											@change="changeAdjustAmount($event)"
+											class="form-group-container"
+										/>
+										<!-- <div class="form-control d-flex justify-content-end"><p class="mb-0">{{formatCurrency(form.adjust_amount)}}</p></div> -->
 									</div>
 								</div>
 								<div class="row justify-content-between" v-if="this.form.asset_type_id === 39">
@@ -793,6 +803,7 @@ import BlockInfo from '@/pages/warehouse/components/BlockInfo'
 import ApartmentInfoDetail from '@/pages/warehouse/components/ApartmentInfoDetail'
 import store from '@/store'
 import * as types from '@/store/mutation-types'
+import InputNumberNegative from '@/components/Form/InputNumberNegative'
 Vue.use(VueNumeric)
 export default {
 	name: '',
@@ -818,10 +829,12 @@ export default {
 		ApartmentInfoDetail,
 		InputTextarea,
 		InputCurrency,
-		InputArea
+		InputArea,
+		InputNumberNegative
 	},
 	data () {
 		return {
+			render_percent: 989898,
 			key_render_apartment: 2323221,
 			frontSideOptions: {
 				items: {
@@ -2045,12 +2058,12 @@ export default {
 					type: 'error',
 					position: 'top-right'
 				})
-			} else if (this.form.adjust_percent > 20 || this.form.adjust_percent < -20) {
-				this.$toast.open({
-					message: 'Tỉ lệ điều chỉnh không được nhỏ hơn -20% và không được lớn hơn 20%',
-					type: 'error',
-					position: 'top-right'
-				})
+			// } else if (this.form.adjust_percent > 20 || this.form.adjust_percent < -20) {
+			// 	this.$toast.open({
+			// 		message: 'Tỉ lệ điều chỉnh không được nhỏ hơn -20% và không được lớn hơn 20%',
+			// 		type: 'error',
+			// 		position: 'top-right'
+			// 	})
 			} else if (this.sortedArray.length > 0 && this.sortedArray.find(array => array.price_land <= 0)) {
 				this.$toast.open({
 					message: 'Hiện có đơn giá đất bằng 0. Vui lòng kiểm tra lại giá trị đầu vào',
@@ -2620,6 +2633,8 @@ export default {
 			this.change_data_log('Giá (VND)')
 			this.form.total_amount = event
 			this.form.adjust_amount = parseFloat(this.form.total_amount * (this.form.adjust_percent / 100)).toFixed(0)
+			this.render_percent++
+			console.log('this.form.adjust_amount', this.form.adjust_amount)
 			if (this.form.total_amount) {
 				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
 			} else {
@@ -2670,13 +2685,23 @@ export default {
 				this.sortArrayPropertyDetail()
 			}
 		},
+		changeAdjustAmount (event) {
+			console.log('đổi tiền')
+			if (event) {
+				this.form.adjust_amount = event
+				this.form.adjust_percent = event / this.form.total_amount * 100
+				this.render_percent++
+			}
+			this.changeAdjustPercent(this.form.adjust_percent)
+		},
 		changeAdjustPercent (event) {
 			if (event !== undefined && event !== null) {
 				this.form.adjust_percent = parseFloat(event).toFixed(2)
 			} else {
 				this.form.adjust_percent = 0
 			}
-			this.form.adjust_amount = parseFloat(this.form.total_amount * (this.form.adjust_percent / 100)).toFixed(0)
+			this.form.adjust_amount = parseFloat(this.form.total_amount * (event / 100)).toFixed(0)
+			this.render_percent++
 			if (this.form.total_amount !== null && this.form.total_amount !== undefined && this.form.total_amount !== '') {
 				this.form.total_estimate_amount = parseInt(this.form.total_amount) + parseInt(this.form.adjust_amount)
 			}

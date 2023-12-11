@@ -4685,8 +4685,8 @@ export default {
 							// console.log('giá tiền phụ', giatienphu)
 							chiphichuyendoi += parseFloat(a1.total_area) * (giatienchinh - giatienphu)
 						}
-						// console.log('chiphichuyendoi', chiphichuyendoi)
-						this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi
+						console.log('chiphichuyendoi1', chiphichuyendoi)
+						this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi.toFixed(0)
 					} else {
 						this.form.appraise_adapter[0].change_purpose_price = this.form.appraise_adapter[0].change_purpose_price ? this.form.appraise_adapter[0].change_purpose_price : 0
 					}
@@ -4703,8 +4703,8 @@ export default {
 							// console.log('giá tiền phụ', giatienphu)
 							chiphichuyendoi += parseFloat(a2.total_area) * (giatienchinh - giatienphu)
 						}
-						// console.log('chiphichuyendoi', chiphichuyendoi)
-						this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi
+						console.log('chiphichuyendoi2', chiphichuyendoi)
+						this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi.toFixed(0)
 					} else {
 						this.form.appraise_adapter[1].change_purpose_price = this.form.appraise_adapter[1].change_purpose_price ? this.form.appraise_adapter[1].change_purpose_price : 0
 					}
@@ -4720,8 +4720,8 @@ export default {
 							// console.log('giá tiền phụ', giatienphu)
 							chiphichuyendoi += parseFloat(a3.total_area) * (giatienchinh - giatienphu)
 						}
-						// console.log('chiphichuyendoi', chiphichuyendoi)
-						this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi
+						console.log('chiphichuyendoi3', chiphichuyendoi)
+						this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi.toFixed(0)
 					} else {
 						this.form.appraise_adapter[2].change_purpose_price = this.form.appraise_adapter[2].change_purpose_price ? this.form.appraise_adapter[2].change_purpose_price : 0
 					}

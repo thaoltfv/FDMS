@@ -1,6 +1,6 @@
 <template>
-	<div class="" style="margin: 0;">
-		<iframe :src="url_modal" frameborder="0" width="100%" height="820dvh"></iframe>
+	<div class="test_iframe" style="margin: 0;">
+		<iframe :src="url_modal" frameborder="0" width="100%" height="100%" allow="clipboard-write"></iframe>
 	</div>
 </template>
 <style lang="scss">
@@ -299,6 +299,11 @@ export default {
 		}
 	},
 	async mounted () {
+		// css
+		this.$el.style.overflowY = 'hidden'
+		this.$el.style.overflowX = 'hidden'
+		// console.log('this.$el',this.$el)
+
 		this.search_address = this.address
 		await this.$gmapApiPromiseLazy()
 		if (this.center_map !== '' && this.center_map) {
@@ -924,10 +929,30 @@ export default {
 	100% { transform: scale(1,1)      translateY(0); }
 }
 
+/deep/ .page {
+	overflow: hidden!important;
+}
+
+/deep/ #header_new {
+	display: none;
+}
+
+/deep/ body {
+	overflow: hidden!important;
+}
+
 /deep/ .leaflet-tooltip {
-	background: none !important;;
+	background: none !important;
 	border: none !important;
 	box-shadow: none !important;
+}
+
+.test_iframe  {
+	height: calc(100vh - 3.5rem);
+	width: calc(100vw - 4rem);
+	position: fixed;
+	right: 0;
+	overflow: hidden;
 }
 .modal-delete {
 	// position: fixed;

@@ -1,9 +1,32 @@
 <template>
     <div v-if="!isMobile()" class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-		<button v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion">
+		<div v-if="isPermission && checkVersion.length > 0" style="position: fixed; top: 4.5rem;
+    right: 0.75rem;">
+			<div class="card" style="border-radius: 7px;background:#ddf4ff; border:1px solid #007EC6">
+				<div class="row">
+					<div class="col-md-9">
+						<p style="padding: 15px; margin-bottom: 0;">
+							Tài sản thẩm định đã được chỉnh sửa. Vui lòng
+							<span style="font-weight: bold; color: red">
+								Cập nhật Version
+							</span>
+							để có kết quả và xuất file mới nhất
+						</p>
+					</div>
+					<div class="col-md-3" style="    padding: 15px;">
+						<button v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion" style="background: #1f883d;
+    color: white;">
+							<!-- <img class="img" src="@/assets/icons/ic_edit.svg" alt="edit"> -->
+							Cập nhật Version
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- <button v-if="isPermission && checkVersion.length > 0" class="btn btn-white" @click="viewAppraiseListVersion">
             <img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
             Cập nhật Version
-        </button>
+        </button> -->
         <button v-if="isPermission && isGrossCheck" class="btn btn-white" @click="viewDetailAppraise">
             <img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit">
             Cross check

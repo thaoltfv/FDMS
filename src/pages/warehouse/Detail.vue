@@ -521,7 +521,7 @@
             </div>
             <div class="content-detail">
               <p class="content-title">Tỉ lệ điều chỉnh (%): </p>
-              <p class="content-name">{{ formatCurrency(this.form.adjust_percent)}}% </p>
+              <p class="content-name">{{ formatNumber(this.form.adjust_percent)}}% </p>
             </div>
             <div class="content-detail">
               <p class="content-title">Giá trị giảm/tăng (VND): </p>
@@ -1123,7 +1123,7 @@
             </div>
             <div class="content-detail">
               <p class="content-title">Tỉ lệ điều chỉnh (%): </p>
-              <p class="content-name">{{ formatCurrency(this.form.adjust_percent)}}% </p>
+              <p class="content-name">{{ formatNumber(this.form.adjust_percent)}}% </p>
             </div>
             <div class="content-detail">
               <p class="content-title">Giá trị giảm/tăng (VND): </p>
