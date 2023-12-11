@@ -20,7 +20,7 @@ class PreCertificate extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'preCertificates';
+    protected $table = 'pre_certificates';
     //protected $dateFormat = 'd-m-Y H:i:s';
     protected $casts = [
         'id' => 'integer',
@@ -40,7 +40,7 @@ class PreCertificate extends Model
         'customer_id',
 
         // Loại sơ bộ
-        'pre_status_code',
+        'status',
         'status_updated_at',
 
         'appraise_purpose_id',
@@ -68,7 +68,7 @@ class PreCertificate extends Model
 
     public function getStatusTextAttribute()
     {
-		$status = $this->pre_status_code;
+		$status = $this->status;
 		$statusText = "";
 		switch ($status) {
             case 1:

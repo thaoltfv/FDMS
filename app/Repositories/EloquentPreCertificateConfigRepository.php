@@ -16,41 +16,12 @@ class EloquentPreCertificateConfigRepository extends EloquentRepository implemen
 
     private string $allowedSorts = 'id';
 
-    public function findPaging()
+    public function findAll()
     {
-        
-        $perPage = (int)request()->get('limit');
-        $page = (int)request()->get('page');
-        $search = request()->get('search');
-        $id = request()->get('id');
-        $name = request()->get('name');
-        $config = request()->get('config');
-        $orderBy = request()->get('order');
-        $sort = request()->get('sort');
-
-        if (!in_array($orderBy, ['asc', 'desc'])) {
-            $orderBy = 'desc';
-        }
-
-        if (!$sort) {
-            $sort = $this->allowedSorts;
-        }
-        if (empty($search)) {
-            $search = '';
-        }
-        $search =urldecode($search);
-        $query = '  name ilike ' . "'%" . $name . "%'" ;
-
-        // if (!in_array($status, [ValueDefault::ACTIVE_STATUS, ValueDefault::INACTIVE_STATUS])) {
-        //     $status = ValueDefault::ACTIVE_STATUS;
-        // }
-      
-        return QueryBuilder::for($this->model)
-            ->whereRaw($query)
-            ->orderBy($sort, $orderBy)
-            ->forPage($page, $perPage)
-            ->paginate($perPage);
+        return $this->model->query()
+            ->select()
+            ->orderByDesc($this->defaultSort)
+            ->get();
     }
 
-   
 }

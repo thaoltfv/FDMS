@@ -1491,7 +1491,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                 }  */
 
-                $this->updateSelectComparisonFactor($certificateId);
+                // $this->updateSelectComparisonFactor($certificateId);
 
                 return $certificateId;
             } catch (Exception $exception) {
@@ -1508,8 +1508,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
      * @return int
      * @throws Throwable
      */
-    //public function updateCertificate($id, array $objects): int
-    public function updateCertificate($id, array $objects)
+    //public function updatePreCertificate($id, array $objects): int
+    public function updatePreCertificate($id, array $objects)
     {
         return DB::transaction(function () use ($id, $objects) {
             try {
@@ -2055,7 +2055,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                 }*/
 
-                $this->updateSelectComparisonFactor($certificateId);
+                // $this->updateSelectComparisonFactor($certificateId);
                 return $certificateId;
             } catch (Exception $exception) {
                 dd($exception);
@@ -2231,57 +2231,57 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
 
-    public function updateSelectComparisonFactor($certificateId): bool
-    {
-        $certificateHasAppraise = CertificateHasAppraise::query()->where('certificate_id', '=', $certificateId)->get();
-        $certificateComparisonFactor = CertificateComparisonFactor::query()->where('certificate_id', '=', $certificateId)->get();
-        foreach ($certificateHasAppraise as $appraise) {
-            $appraiseComparisonFactor = AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraise->appraise_id)->get();
-            foreach ($appraiseComparisonFactor as $comparisonFactorAppraise) {
-                $status = 0;
-                foreach ($certificateComparisonFactor as $comparisonFactor) {
-                    if ($comparisonFactor->comparison_factor == 'Pháp lý' && $comparisonFactorAppraise->type == 'phap_ly') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Hình dáng đất' && $comparisonFactorAppraise->type == 'hinh_dang_dat') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Giao thông' && $comparisonFactorAppraise->type == 'ket_cau_duong') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Kinh doanh' && $comparisonFactorAppraise->type == 'kinh_doanh') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Điều kiện hạ tầng' && $comparisonFactorAppraise->type == 'dieu_kien_ha_tang') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'An ninh, môi trường sống' && $comparisonFactorAppraise->type == 'an_ninh_moi_truong_song') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Phong thủy' && $comparisonFactorAppraise->type == 'phong_thuy') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Quy mô' && $comparisonFactorAppraise->type == 'quy_mo') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Chiều sâu khu đất' && $comparisonFactorAppraise->type == 'chieu_sau_khu_dat') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Chiều rộng mặt tiền' && $comparisonFactorAppraise->type == 'chieu_rong_mat_tien') {
-                        $status = 1;
-                    }
-                    if ($comparisonFactor->comparison_factor == 'Bề rộng đường' && $comparisonFactorAppraise->type == 'do_rong_duong') {
-                        $status = 1;
-                    }
+    // public function updateSelectComparisonFactor($certificateId): bool
+    // {
+    //     $certificateHasAppraise = CertificateHasAppraise::query()->where('certificate_id', '=', $certificateId)->get();
+    //     $certificateComparisonFactor = CertificateComparisonFactor::query()->where('certificate_id', '=', $certificateId)->get();
+    //     foreach ($certificateHasAppraise as $appraise) {
+    //         $appraiseComparisonFactor = AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraise->appraise_id)->get();
+    //         foreach ($appraiseComparisonFactor as $comparisonFactorAppraise) {
+    //             $status = 0;
+    //             foreach ($certificateComparisonFactor as $comparisonFactor) {
+    //                 if ($comparisonFactor->comparison_factor == 'Pháp lý' && $comparisonFactorAppraise->type == 'phap_ly') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Hình dáng đất' && $comparisonFactorAppraise->type == 'hinh_dang_dat') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Giao thông' && $comparisonFactorAppraise->type == 'ket_cau_duong') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Kinh doanh' && $comparisonFactorAppraise->type == 'kinh_doanh') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Điều kiện hạ tầng' && $comparisonFactorAppraise->type == 'dieu_kien_ha_tang') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'An ninh, môi trường sống' && $comparisonFactorAppraise->type == 'an_ninh_moi_truong_song') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Phong thủy' && $comparisonFactorAppraise->type == 'phong_thuy') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Quy mô' && $comparisonFactorAppraise->type == 'quy_mo') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Chiều sâu khu đất' && $comparisonFactorAppraise->type == 'chieu_sau_khu_dat') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Chiều rộng mặt tiền' && $comparisonFactorAppraise->type == 'chieu_rong_mat_tien') {
+    //                     $status = 1;
+    //                 }
+    //                 if ($comparisonFactor->comparison_factor == 'Bề rộng đường' && $comparisonFactorAppraise->type == 'do_rong_duong') {
+    //                     $status = 1;
+    //                 }
 
-                    $comparisonFactorAppraise->status = $status;
-                    $comparisonFactorId = QueryBuilder::for($comparisonFactorAppraise)
-                        ->updateOrInsert(['id' => $comparisonFactorAppraise['id']], $comparisonFactorAppraise->attributesToArray());
-                }
-            }
-        }
-        return true;
-    }
+    //                 $comparisonFactorAppraise->status = $status;
+    //                 $comparisonFactorId = QueryBuilder::for($comparisonFactorAppraise)
+    //                     ->updateOrInsert(['id' => $comparisonFactorAppraise['id']], $comparisonFactorAppraise->attributesToArray());
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
 
     public function updateTangibleComparisonFactor($id, array $objects): int
     {
@@ -3498,7 +3498,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
 
-    public function updateCertificate_v2(array $objects, int $certificateId)
+    public function updatePreCertificate_v2(array $objects, int $certificateId)
     {
         $result =  [];
 
@@ -3903,7 +3903,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
-    public function updateCertificateVersion ($certificateId, $object)
+    public function updatePreCertificateVersion ($certificateId, $object)
     {
         try {
             DB::beginTransaction();
@@ -4447,7 +4447,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
     }
-    public function updateCertificateV3(array $objects, int $certificateId)
+    public function updatePreCertificateV3(array $objects, int $certificateId)
     {
         $result =  [];
 
@@ -4627,7 +4627,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
-    public function updateCertificateGeneral(int $id, array $object)
+    public function updatePreCertificateGeneral(int $id, array $object)
     {
         $result = [];
         // # đang tắt khối block xác thực

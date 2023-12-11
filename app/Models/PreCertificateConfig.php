@@ -18,8 +18,4 @@ class PreCertificateConfig extends Model
         'config',
     ];
 
-    public function getFullInfoAttribute()
-    {
-        return "{$this->name} {$this->config} ";
-    }
 }
