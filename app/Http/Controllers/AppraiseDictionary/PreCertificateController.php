@@ -24,27 +24,35 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Storage;
 use App\Services\CommonService;
 
-
 class PreCertificateController extends Controller
 {
+
     private PreCertificateRepository $preCertificateRepository;
-    private UserRepository $userRepository;
-    private DictionaryRepository $dictionaryRepository;
+    public CompareAssetGeneralRepository $compareAssetGeneralRepository;
+    public UserRepository $userRepository;
+    public DictionaryRepository $dictionaryRepository;
+    public BuildingPriceRepository $buildingPriceRepository;
     private AppraiseAssetRepository $appraiseAssetRepository;
+    private AppraiserCompanyRepository $appraiserCompanyRepository;
 
     /**
-     * PreCertificateController constructor.
+     * ProvinceController constructor.
      */
-    public function __construct(
-        PreCertificateRepository $preCertificateRepository,
-        UserRepository $userRepository,
-        DictionaryRepository $dictionaryRepository,
-        AppraiseAssetRepository $appraiseAssetRepository,
-    ) {
+    public function __construct(PreCertificateRepository         $preCertificateRepository,
+                                CompareAssetGeneralRepository $compareAssetGeneralRepository,
+                                UserRepository                $userRepository,
+                                DictionaryRepository          $dictionaryRepository,
+                                BuildingPriceRepository       $buildingPriceRepository,
+                                AppraiseAssetRepository       $appraiseAssetRepository,
+                                AppraiserCompanyRepository    $appraiserCompanyRepository)
+    {
         $this->preCertificateRepository = $preCertificateRepository;
+        $this->compareAssetGeneralRepository = $compareAssetGeneralRepository;
         $this->userRepository = $userRepository;
         $this->dictionaryRepository = $dictionaryRepository;
+        $this->buildingPriceRepository = $buildingPriceRepository;
         $this->appraiseAssetRepository = $appraiseAssetRepository;
+        $this->appraiserCompanyRepository = $appraiserCompanyRepository;
     }
 
     /**
@@ -55,6 +63,7 @@ class PreCertificateController extends Controller
         try {
             return $this->respondWithCustomData($this->preCertificateRepository->findPaging());
         } catch (\Exception $exception) {
+            dd($exception);
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
@@ -84,6 +93,7 @@ class PreCertificateController extends Controller
         try {
             return $this->respondWithCustomData($this->preCertificateRepository->updateStatus($id, $request));
         } catch (\Exception $exception) {
+            dd($exception);
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
@@ -99,6 +109,7 @@ class PreCertificateController extends Controller
         try {
             return $this->respondWithCustomData($this->preCertificateRepository->otherDocumentUpload($id, $request));
         } catch (\Exception $exception) {
+            dd($exception);
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
@@ -114,6 +125,7 @@ class PreCertificateController extends Controller
         try {
             return $this->respondWithCustomData($this->preCertificateRepository->otherDocumentRemove($id, $request));
         } catch (\Exception $exception) {
+            dd($exception);
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
@@ -128,12 +140,13 @@ class PreCertificateController extends Controller
     {
         try {
             $item = $this->preCertificateRepository->otherDocumentDownload($id, $request);
-            if (isset($item->link)) {
+            if(isset($item->link)) {
                 return response()->streamDownload(function () use ($item) {
                     echo file_get_contents($item->link);
                 }, $item->name);
             }
         } catch (\Exception $exception) {
+            dd($exception);
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
@@ -148,7 +161,7 @@ class PreCertificateController extends Controller
     {
         try {
             $test = request()->get('test');
-            if (isset($test)) {
+            if(isset($test)) {
                 $result = $this->preCertificateRepository->findByIdTest($id);
             } else {
                 $result = $this->preCertificateRepository->findById($id);
@@ -157,32 +170,33 @@ class PreCertificateController extends Controller
             // CommonService::getPreCertificateAssetPriceTotal($result);
             return $this->respondWithCustomData($result);
         } catch (\Exception $exception) {
+            dd($exception);
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
         }
     }
 
-    // /**
-    //  * @param Request $request
-    //  * @return JsonResponse
-    //  */
-    // public function store(Request $request): JsonResponse
-    // {
-    //     try {
-    //         $result = $this->preCertificateRepository->create($request->toArray());
-    //         if (is_numeric($result)) {
-    //             return $this->respondWithCustomData($result);
-    //         } else {
-    //             $data = ['message' => $result, 'exception' => []];
-    //             return $this->respondWithErrorData($data);
-    //         }
-    //     } catch (\Exception $exception) {
-    //         Log::error($exception);
-    //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-    //         return $this->respondWithErrorData($data);
-    //     }
-    // }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $result = $this->preCertificateRepository->createPreCertificate($request->toArray());
+            if(is_numeric($result)) {
+                return $this->respondWithCustomData($result);
+            } else {
+                $data = ['message' => $result, 'exception' => []];
+                return $this->respondWithErrorData($data);
+            }
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 
     /**
      * @param $id
@@ -193,7 +207,7 @@ class PreCertificateController extends Controller
     {
         try {
             $result = $this->preCertificateRepository->update($id, $request->toArray());
-            if (is_numeric($result)) {
+            if(is_numeric($result)) {
                 return $this->respondWithCustomData($result);
             } else {
                 $data = ['message' => $result, 'exception' => []];
@@ -224,7 +238,7 @@ class PreCertificateController extends Controller
     // public function destroy($id): JsonResponse
     // {
     //     try {
-    //         return $this->respondWithCustomData($this->preCertificateRepository->delete($id));
+    //         return $this->respondWithCustomData($this->preCertificateRepository->deletePreCertificate($id));
     //     } catch (\Exception $exception) {
     //         Log::error($exception);
     //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
@@ -239,7 +253,7 @@ class PreCertificateController extends Controller
                 $this->appraiseAssetRepository,
                 $this->dictionaryRepository
             ))
-                ->appraiseAsset($request->toArray()));
+                ->AppraiseAsset($request->toArray()));
 
         } catch (\Exception $exception) {
             Log::error($exception);
@@ -248,5 +262,41 @@ class PreCertificateController extends Controller
         }
     }
 
-   
+    // public function print($id): JsonResponse
+    // {
+    //     try {
+    //         $format = 'docx';
+    //         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+    //         $appraise = $this->preCertificateRepository->findById($id);
+    //         $assets = [];
+    //         if ($appraise->assetGeneral) {
+    //             $ids = [];
+    //             foreach ($appraise->assetGeneral as $assetGeneral) {
+    //                 $ids[] = $assetGeneral->id;
+    //             }
+    //             $assets = $this->compareAssetGeneralRepository->findByIds(json_encode($ids));
+    //         }
+    //         return $this->respondWithCustomData((new PhuLuc1())->generateDocx($appraise, $company, $assets, $format));
+    //     } catch (\Exception $exception) {
+    //         Log::error($exception);
+    //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+    //         return $this->respondWithErrorData($data);
+    //     }
+    // }
+
+    // /**
+    //  * @param $id
+    //  * @return JsonResponse
+    //  */
+    // public function saleDocumentUpload($id, Request $request): JsonResponse
+    // {
+    //     try {
+    //         return $this->respondWithCustomData($this->preCertificateRepository->saleDocumentUpload($id, $request));
+    //     } catch (\Exception $exception) {
+    //         dd($exception);
+    //         Log::error($exception);
+    //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+    //         return $this->respondWithErrorData($data);
+    //     }
+    // }
 }

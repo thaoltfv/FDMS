@@ -88,6 +88,8 @@ use App\Models\CertificateAsset;
 use App\Models\MachineCertificateAsset;
 use App\Models\PersonalProperty;
 use App\Models\OtherCertificateAsset;
+use App\Models\PreCertificateConfig;
+use App\Models\PreCertificate;
 use App\Models\Project;
 use App\Models\RealEstate;
 use App\Models\TechnologicalLineCertificateAsset;
@@ -311,11 +313,11 @@ class RepositoryServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(PreCertificateRepository::class, function () {
-            return new EloquentPreCertificateRepository(new Certificate());
+            return new EloquentPreCertificateRepository(new PreCertificate());
         });
 
         $this->app->singleton(PreCertificateConfigRepository::class, function () {
-            return new EloquentPreCertificateConfigRepository(new Certificate());
+            return new EloquentPreCertificateConfigRepository(new PreCertificateConfig());
         });
 
         $this->app->singleton(ViewCertificateBrieftRepository::class, function () {

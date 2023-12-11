@@ -14,7 +14,6 @@ class EloquentPreCertificateConfigRepository extends EloquentRepository implemen
 {
     private string $defaultSort = 'name';
 
-    private string $allowedSorts = 'id';
 
     public function findAll()
     {
