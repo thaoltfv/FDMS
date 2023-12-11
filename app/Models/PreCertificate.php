@@ -41,7 +41,7 @@ class PreCertificate extends Model
 
         // Loại sơ bộ
         'pre_status_code',
-        'status_updated_at'
+        'status_updated_at',
 
         'appraise_purpose_id',
         'note',
@@ -88,7 +88,7 @@ class PreCertificate extends Model
 			    break;
             case 6:
                 return 'Hoàn Thành';
-                break;
+                
 		}
         return $statusText;
     }

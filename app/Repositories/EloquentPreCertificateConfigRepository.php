@@ -41,9 +41,9 @@ class EloquentPreCertificateConfigRepository extends EloquentRepository implemen
         $search =urldecode($search);
         $query = '  name ilike ' . "'%" . $name . "%'" ;
 
-        if (!in_array($status, [ValueDefault::ACTIVE_STATUS, ValueDefault::INACTIVE_STATUS])) {
-            $status = ValueDefault::ACTIVE_STATUS;
-        }
+        // if (!in_array($status, [ValueDefault::ACTIVE_STATUS, ValueDefault::INACTIVE_STATUS])) {
+        //     $status = ValueDefault::ACTIVE_STATUS;
+        // }
       
         return QueryBuilder::for($this->model)
             ->whereRaw($query)

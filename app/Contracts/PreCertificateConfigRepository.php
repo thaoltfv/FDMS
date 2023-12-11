@@ -6,8 +6,8 @@ interface PreCertificateConfigRepository extends BaseRepository
 {
     public function findPaging();
 
-    public function findAll();
+    // public function findAll();
 
-    public function findByName($name);
+    // public function findByName($name);
 
 }

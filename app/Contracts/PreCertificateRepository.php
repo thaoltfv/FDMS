@@ -6,7 +6,7 @@ interface PreCertificateRepository extends BaseRepository
 {
     public function updateStatus($id, $request);
 
-    public function transferToCertificate($id);
+    // public function transferToCertificate($id);
 
     public function findPaging();
 
@@ -18,19 +18,19 @@ interface PreCertificateRepository extends BaseRepository
 
     public function getComparisonFactor($id);
 
-    public function createPreCertificate(array $objects);
+    // public function createPreCertificate(array $objects);
 
-    public function updatePreCertificate($id, array $objects);
+    // public function updatePreCertificate($id, array $objects);
 
     public function updateTangibleComparisonFactor($id, array $objects);
 
-    public function deletePreCertificate($id);
+    // public function deletePreCertificate($id);
 
     public function findAllPreCertificate(array $request);
 
     public function findPaging_v2();
 
-    public function getPreCertificateWorkFlow();
+    // public function getPreCertificateWorkFlow();
 
     public function postGeneralInfomation(array $object , int $id = null);
 
@@ -40,11 +40,11 @@ interface PreCertificateRepository extends BaseRepository
 
     public function findAppraisePaging();
 
-    public function updatePreCertificate_v2(array $object , int $PreCertificateId);
+    // public function updatePreCertificate_v2(array $object , int $PreCertificateId);
 
-    public function getPreCertificate(int $id);
+    // public function getPreCertificate(int $id);
 
-    public function updatePreCertificateGeneral(int $id , array $object);
+    // public function updatePreCertificateGeneral(int $id , array $object);
 
     public function otherDocumentRemove($id, $request);
 
@@ -58,23 +58,23 @@ interface PreCertificateRepository extends BaseRepository
 
     public function updateAppraisersTeam(int $id , $request);
 
-    public function getFinishPreCertificateAssets();
+    // public function getFinishPreCertificateAssets();
 
-    public function getFinishPreCertificateApartment();
+    // public function getFinishPreCertificateApartment();
 
     public function getComparisonAppraise( array $ids);
 
-    public function exportPreCertificateBriefs();
+    // public function exportPreCertificateBriefs();
 
-    public function exportSelectedPreCertificateAssets();
+    // public function exportSelectedPreCertificateAssets();
 
-    public function updatePreCertificateV3(array $object , int $PreCertificateId);
+    // public function updatePreCertificateV3(array $object , int $PreCertificateId);
 
-    public function updatePreCertificateVersion(int $PreCertificateId, array $object);
+    // public function updatePreCertificateVersion(int $PreCertificateId, array $object);
 
-    public function getPreCertificateStatus(int $id);
+    // public function getPreCertificateStatus(int $id);
 
-    public function getPreCertificateAppraiseReportData($id);
+    // public function getPreCertificateAppraiseReportData($id);
 
     public function updateSubStatusFromConfig($object);
 
