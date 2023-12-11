@@ -4418,6 +4418,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'change_purpose_price' => $cpcmdsd,
                         'change_violate_price' => 0,
                     ];
+                    dd($appraiseAdapterData);
                     $appraiseAdatter = new AppraiseAdapter($appraiseAdapterData);
                     QueryBuilder::for($appraiseAdatter)
                     ->insert($appraiseAdatter->attributesToArray());
