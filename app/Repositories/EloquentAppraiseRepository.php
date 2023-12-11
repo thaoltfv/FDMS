@@ -609,13 +609,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result->appraiseAdapter[] = [
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset1->id,
-                    'percent' => intval($asset1->adjust_percent) + 100,
+                    'percent' => floatval($asset1->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset1->id),
                 ];
                 AppraiseAdapter::insert([
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset1->id,
-                    'percent' => intval($asset1->adjust_percent) + 100,
+                    'percent' => floatval($asset1->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset1->id),
                 ]);
             }
@@ -623,13 +623,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result->appraiseAdapter[] = [
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset2->id,
-                    'percent' => intval($asset2->adjust_percent) + 100,
+                    'percent' => floatval($asset2->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset2->id),
                 ];
                 AppraiseAdapter::insert([
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset2->id,
-                    'percent' => intval($asset2->adjust_percent) + 100,
+                    'percent' => floatval($asset2->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset2->id),
                 ]);
             }
@@ -637,13 +637,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result->appraiseAdapter[] = [
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset3->id,
-                    'percent' => intval($asset3->adjust_percent) + 100,
+                    'percent' => floatval($asset3->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset3->id),
                 ];
                 AppraiseAdapter::insert([
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset3->id,
-                    'percent' => intval($asset3->adjust_percent) + 100,
+                    'percent' => floatval($asset3->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset3->id),
                 ]);
             }
@@ -1013,21 +1013,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $result->appraiseAdapter[] = [
                 'appraise_id' => $asset->id,
                 'asset_general_id' => $asset1->id,
-                'percent' => intval($asset1->adjust_percent) + 100,
+                'percent' => floatval($asset1->adjust_percent) + 100,
             ];
         }
         if (!$isExistAsset2) {
             $result->appraiseAdapter[] = [
                 'appraise_id' => $asset->id,
                 'asset_general_id' => $asset2->id,
-                'percent' => intval($asset2->adjust_percent) + 100,
+                'percent' => floatval($asset2->adjust_percent) + 100,
             ];
         }
         if (!$isExistAsset3) {
             $result->appraiseAdapter[] = [
                 'appraise_id' => $asset->id,
                 'asset_general_id' => $asset3->id,
-                'percent' => intval($asset3->adjust_percent) + 100,
+                'percent' => floatval($asset3->adjust_percent) + 100,
             ];
         }
 
