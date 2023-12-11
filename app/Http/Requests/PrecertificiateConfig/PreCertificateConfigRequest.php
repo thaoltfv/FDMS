@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests\PreCertificateConfig;
+use App\Http\Requests\FormRequest;
 /**
  * @property integer id
  */
