@@ -4417,6 +4417,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'percent' => floatval($asset['adjust_percent'])+100,
                         'change_purpose_price' => $cpcmdsd,
                         'change_violate_price' => 0,
+                        'change_negotiated_price' => $asset['adjust_amount'],
                     ];
                     // dd($appraiseAdapterData);
                     $appraiseAdatter = new AppraiseAdapter($appraiseAdapterData);
