@@ -4493,9 +4493,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "muc_dich_chinh",
             "vi_tri"
         ];
-        // dd($asset);
+        dd($property);
         $description = CompareProperty::query()->where('asset_general_id', '=', $asset['id'])->first();
-        dd($description);
+        // dd($description);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
@@ -4736,6 +4736,20 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'muc_dich_chinh';
                 $name = 'Mục đích sử dụng đất chính';
+                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
+            }elseif($comparisonFactorTmp == 'vi_tri'){
+                $appraiseValue = 'false' ;
+                // $assetValue = 0;
+                $assetValue = $description->description;
+                // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
+                // $dictionary = $dictionaries['khoang_cach'];
+                // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
+                $type = 'vi_tri';
+                $name = 'Vị trí';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }
         }
