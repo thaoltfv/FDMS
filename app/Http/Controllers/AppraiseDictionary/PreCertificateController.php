@@ -289,17 +289,17 @@ class PreCertificateController extends Controller
     //  * @param $id
     //  * @return JsonResponse
     //  */
-    // public function saleDocumentUpload($id, Request $request): JsonResponse
-    // {
-    //     try {
-    //         return $this->respondWithCustomData($this->preCertificateRepository->saleDocumentUpload($id, $request));
-    //     } catch (\Exception $exception) {
-    //         dd($exception);
-    //         Log::error($exception);
-    //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-    //         return $this->respondWithErrorData($data);
-    //     }
-    // }
+    public function saleDocumentUpload($id, Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->preCertificateRepository->saleDocumentUpload($id, $request));
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 
     
     private array $permissionView =['VIEW_CERTIFICATE_BRIEF'];
@@ -362,7 +362,7 @@ class PreCertificateController extends Controller
             'appraise_purpose_id' => 'Mục đích thẩm định',
             'appraiser_sale_id' => 'Nhân viên kinh doanh',
             'business_manager_id' => 'Quản lý nghiệp vụ',
-            'appraiser_performance_id' => 'chuyên viên thực hiện',
+            'appraiser_perform_id' => 'chuyên viên thực hiện',
             'customer.name' => 'Họ tên đối tác',
             'customer.address' => 'Địa chỉ',
             'customer.phone' => 'Điện thoại',

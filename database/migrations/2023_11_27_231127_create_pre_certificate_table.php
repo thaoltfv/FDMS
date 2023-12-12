@@ -48,8 +48,8 @@ class CreatePreCertificateTable extends Migration
                 ->on('appraisers')
                 ->onDelete('cascade');
 
-            $table->integer('appraiser_performance_id')->nullable();
-            $table->foreign('appraiser_performance_id')
+            $table->integer('appraiser_perform_id')->nullable();
+            $table->foreign('appraiser_perform_id')
                 ->references('id')
                 ->on('appraisers')
                 ->onDelete('cascade');
@@ -178,6 +178,11 @@ class CreatePreCertificateTable extends Migration
     public function down()
     {
         Schema::dropIfExists('pre_certificates');
+        if (Schema::hasColumn('pre_certificates', 'appraiser_performance_id')){
+            Schema::table('pre_certificates', function (Blueprint $table) {
+                $table->dropColumn('appraiser_performance_id');
+            });
+        }
 
         // // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_09_085414_add_column_commission_fee_certificates_table.php
         // if (Schema::hasColumn('certificates', 'commission_fee')){
