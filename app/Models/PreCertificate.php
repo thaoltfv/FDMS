@@ -29,7 +29,8 @@ class PreCertificate extends Model
     ];
 
     protected $fillable = [
-        'certificate_id',
+        // 'certificate_id',
+        'status',
 
         'petitioner_name',
         'petitioner_phone',
@@ -40,8 +41,8 @@ class PreCertificate extends Model
         'customer_id',
 
         // Loại sơ bộ
-        'status',
-        'status_updated_at',
+        // 'status',
+        // 'status_updated_at',
 
         'appraise_purpose_id',
         'note',
@@ -64,6 +65,12 @@ class PreCertificate extends Model
         
         // Lý do hủy sơ bộ
         'cancel_reason',
+        
+        'branch_id',
+        'created_by',
+        'updated_at',
+        'status_updated_at',
+        'status_expired_at',
     ];
 
     public function getStatusTextAttribute()

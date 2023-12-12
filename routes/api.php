@@ -55,6 +55,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AppraiseDictionary\PreCertificateController;
 use App\Http\Controllers\PreCertificateConfig\PreCertificateConfigController;
+// use App\Http\Controllers\PreCertificateConfig\PreCertificateBriefController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -314,6 +315,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('/pre-certificate', PreCertificateController::class);
     
     Route::post('pre-certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
+    // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
+    Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
+    Route::get('pre-certificate/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
 
     Route::post('pre-certificate/other-document/upload/{id}', [PreCertificateController::class, 'otherDocumentUpload']);
 
