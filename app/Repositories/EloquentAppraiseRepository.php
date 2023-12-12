@@ -4494,7 +4494,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "vi_tri"
         ];
         // dd($asset);
-        $description = CompareProperty::query()->where('asset_general_id', '=', $$asset->id)->first();
+        $description = CompareProperty::query()->where('asset_general_id', '=', $asset['id'])->first();
         dd($description);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
