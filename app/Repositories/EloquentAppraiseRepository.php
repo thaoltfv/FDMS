@@ -4294,6 +4294,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $user = CommonService::getUser();
             $comparisonFactors =$objects['comparison_factor'];
             $dictionaries = $this->findAllAppraiseDictionaries();
+            dd($comparisonFactors,$dictionaries);
             // $appraiseData = $this->getAppraiseDataComparison($appraiseId);
             $appraise = $this->model->query()->where('id', $appraiseId)->first();
             $baseUBNDPrice = $this->getBaseUBNDPrice($appraiseId);
