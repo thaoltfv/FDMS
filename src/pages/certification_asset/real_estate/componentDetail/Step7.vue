@@ -1475,6 +1475,67 @@
                         <td><strong>{{formatNumber(adjustPriceData['dieu_kien_thanh_toan'][2])}}</strong></td>
                         </tr>
 <!-- Adjust Comparison END -->
+<!-- Adjust Comparison BEGIN -->
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'appraisalLocateRow' + index">
+                        <td rowspan="5">
+                            <div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('vi_tri')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
+                        </td>
+                        <td><strong>Vị trí</strong></td>
+                        <td v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'appraisalLocate' + index">{{formatSentenceCase(comparison_factor_appraise.appraise_title)}}</td>
+                        <td v-for="(asset, index) in appraises.asset_general" :key="'assetLand' + index"><span v-for="(comparison_factor, indexItem) in appraises.comparison_factor[index].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'vi_tri' +indexItem">{{formatSentenceCase(comparison_factor.asset_title)}}</span></td>
+                        </tr>
+
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'LocateRowC' + index">
+                        <td>Hệ số tương quan</td>
+                        <td>100%</td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputLocate' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'vi_tri' +index">
+								<InputPercent
+								:key="66678+key_render_111"
+								:disabled="!isEditStatus"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_coefficient"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
+                        </tr>
+
+                        <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'LocateRow' + index">
+                        <td>Tỷ lệ điều chỉnh</td>
+                        <td></td>
+                        <td v-for="(asset, indexAsset) in appraises.asset_general" :key="'inputLocate' + indexAsset">
+                            <div v-for="(comparison_factor, index) in appraises.comparison_factor[indexAsset].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'vi_tri' +index">
+                            <InputPercentNegative
+							:key="66678+key_render_1"
+																:disabled="true"
+                                class="label-none input_center"
+                                v-model="comparison_factor.adjust_percent"
+                                vid="number_legal"
+                                :text_center="true"
+                                @change="changeLegalRate($event, indexAsset, comparison_factor.type)"
+                            />
+                            </div>
+                        </td>
+                        </tr>
+
+                        <tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'LocateChangeRow' + index">
+                        <td>Mức điều chỉnh</td>
+                        <td></td>
+                        <td>{{formatNumber(parseFloat(priceVitri1).toFixed(0))}}</td>
+                        <td>{{formatNumber(parseFloat(priceVitri2).toFixed(0))}}</td>
+                        <td>{{formatNumber(parseFloat(priceVitri3).toFixed(0))}}</td>
+                        </tr>
+						<tr v-for="(comparison_factor_appraise, index) in appraises.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'vi_tri' && comparison_factor_appraise.status === 1)" :key="'LocateChangeRow2' + index">
+						<td><strong>Giá sau điều chỉnh</strong></td>
+                        <td></td>
+                        <td><strong>{{formatNumber(adjustPriceData['vi_tri'][0])}}</strong></td>
+                        <td><strong>{{formatNumber(adjustPriceData['vi_tri'][1])}}</strong></td>
+                        <td><strong>{{formatNumber(adjustPriceData['vi_tri'][2])}}</strong></td>
+                        </tr>
+<!-- Adjust Comparison END -->
 
 <!-- Adjust Comparison BEGIN -->
                         <tr v-if="showOtherFactor && data_other_comparison && data_other_comparison.length > 0"
@@ -2050,6 +2111,9 @@ export default {
 			priceDktt1: 0,
 			priceDktt2: 0,
 			priceDktt3: 0,
+			priceVitri1: 0,
+			priceVitri2: 0,
+			priceVitri3: 0,
 			priceQm1: 0,
 			priceQm2: 0,
 			priceQm3: 0,
@@ -2616,6 +2680,7 @@ export default {
 			// set config render data
 			this.appraises = {}
 			let appraise = JSON.parse(JSON.stringify(this.form))
+			// console.log('appraise',appraise)
 			let asset_generals = []
 			let full_address_appraise = ''
 			let arrayPropertyChoosing = []
@@ -5083,6 +5148,32 @@ export default {
 
 			// These field must be set = 0 before check
 			// Incase factor has been removed manualy it will not be updated if put these inside condition block
+			this.priceVitri1 = 0
+			this.priceVitri2 = 0
+			this.priceVitri3 = 0
+			if ((typeof comparisonFactor1['vi_tri'] !== 'undefined') && comparisonFactor1['vi_tri'].status === 1) {
+				let percentVitri1 = +comparisonFactor1['vi_tri'].adjust_percent || 0
+				let percentVitri2 = +comparisonFactor2['vi_tri'].adjust_percent || 0
+				let percentVitri3 = +comparisonFactor3['vi_tri'].adjust_percent || 0
+				// mức điều chỉnh của yếu tố ĐIỀU KIỆN THANH TOÁN
+				let price1 = this.roundPrice(percentVitri1 * this.totalPricePL1 / 100, 0)
+				let price2 = this.roundPrice(percentVitri2 * this.totalPricePL2 / 100, 0)
+				let price3 = this.roundPrice(percentVitri3 * this.totalPricePL3 / 100, 0)
+				this.priceVitri1 = price1
+				this.priceVitri2 = price2
+				this.priceVitri3 = price3
+				adjustPrice1 += price1
+				adjustPrice2 += price2
+				adjustPrice3 += price3
+				this.adjustPriceData['vi_tri'] = [adjustPrice1, adjustPrice2, adjustPrice3]
+
+				this.comparisonFactorChange1 += (percentVitri1 !== 0) ? 1 : 0
+				this.comparisonFactorChange2 += (percentVitri2 !== 0) ? 1 : 0
+				this.comparisonFactorChange3 += (percentVitri3 !== 0) ? 1 : 0
+			}
+
+			// These field must be set = 0 before check
+			// Incase factor has been removed manualy it will not be updated if put these inside condition block
 			this.priceGt1 = 0
 			this.priceGt2 = 0
 			this.priceGt3 = 0
@@ -5188,14 +5279,14 @@ export default {
 			})
 
 			// tổng giá trị điều chỉnh gộp
-			this.tldcg1 = Math.abs(this.pricePl1) + Math.abs(this.priceHdd1) + Math.abs(this.priceKcd1) + Math.abs(this.priceKd1) + Math.abs(this.priceDkht1) + Math.abs(this.pricePt1) + Math.abs(this.priceDktt1) + Math.abs(this.priceQm1) + Math.abs(this.priceCrmt1) + Math.abs(this.priceCskd1) + Math.abs(this.priceDrd1) + Math.abs(mgcd_price_other_abs[0])
-			this.tldcg2 = Math.abs(this.pricePl2) + Math.abs(this.priceHdd2) + Math.abs(this.priceKcd2) + Math.abs(this.priceKd2) + Math.abs(this.priceDkht2) + Math.abs(this.pricePt2) + Math.abs(this.priceDktt2) + Math.abs(this.priceQm2) + Math.abs(this.priceCrmt2) + Math.abs(this.priceCskd2) + Math.abs(this.priceDrd2) + Math.abs(mgcd_price_other_abs[1])
-			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.priceHdd3) + Math.abs(this.priceKcd3) + Math.abs(this.priceKd3) + Math.abs(this.priceDkht3) + Math.abs(this.pricePt3) + Math.abs(this.priceDktt3) + Math.abs(this.priceQm3) + Math.abs(this.priceCrmt3) + Math.abs(this.priceCskd3) + Math.abs(this.priceDrd3) + Math.abs(mgcd_price_other_abs[2])
+			this.tldcg1 = Math.abs(this.pricePl1) + Math.abs(this.priceHdd1) + Math.abs(this.priceKcd1) + Math.abs(this.priceKd1) + Math.abs(this.priceDkht1) + Math.abs(this.pricePt1) + Math.abs(this.priceDktt1) + Math.abs(this.priceQm1) + Math.abs(this.priceCrmt1) + Math.abs(this.priceCskd1) + Math.abs(this.priceDrd1) + Math.abs(mgcd_price_other_abs[0]) + Math.abs(this.priceVitri1)
+			this.tldcg2 = Math.abs(this.pricePl2) + Math.abs(this.priceHdd2) + Math.abs(this.priceKcd2) + Math.abs(this.priceKd2) + Math.abs(this.priceDkht2) + Math.abs(this.pricePt2) + Math.abs(this.priceDktt2) + Math.abs(this.priceQm2) + Math.abs(this.priceCrmt2) + Math.abs(this.priceCskd2) + Math.abs(this.priceDrd2) + Math.abs(mgcd_price_other_abs[1]) + Math.abs(this.priceVitri2)
+			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.priceHdd3) + Math.abs(this.priceKcd3) + Math.abs(this.priceKd3) + Math.abs(this.priceDkht3) + Math.abs(this.pricePt3) + Math.abs(this.priceDktt3) + Math.abs(this.priceQm3) + Math.abs(this.priceCrmt3) + Math.abs(this.priceCskd3) + Math.abs(this.priceDrd3) + Math.abs(mgcd_price_other_abs[2]) + Math.abs(this.priceVitri3)
 
 			// tổng giá trị điều chỉnh thuần
-			this.tldc1 = this.pricePl1 + this.priceHdd1 + this.priceKcd1 + this.priceKd1 + this.priceDkht1 + this.pricePt1 + this.priceDktt1 + this.priceQm1 + this.priceCrmt1 + this.priceCskd1 + this.priceDrd1 + this.priceGt1 + this.priceAnmts1 + this.priceQh1 + mgcd_price_other[0]
-			this.tldc2 = this.pricePl2 + this.priceHdd2 + this.priceKcd2 + this.priceKd2 + this.priceDkht2 + this.pricePt2 + this.priceDktt2 + this.priceQm2 + this.priceCrmt2 + this.priceCskd2 + this.priceDrd2 + this.priceGt2 + this.priceAnmts2 + this.priceQh2 + mgcd_price_other[1]
-			this.tldc3 = this.pricePl3 + this.priceHdd3 + this.priceKcd3 + this.priceKd3 + this.priceDkht3 + this.pricePt3 + this.priceDktt3 + this.priceQm3 + this.priceCrmt3 + this.priceCskd3 + this.priceDrd3 + this.priceGt3 + this.priceAnmts3 + this.priceQh3 + mgcd_price_other[2]
+			this.tldc1 = this.pricePl1 + this.priceHdd1 + this.priceKcd1 + this.priceKd1 + this.priceDkht1 + this.pricePt1 + this.priceDktt1 + this.priceQm1 + this.priceCrmt1 + this.priceCskd1 + this.priceDrd1 + this.priceGt1 + this.priceAnmts1 + this.priceQh1 + mgcd_price_other[0] + this.priceVitri1
+			this.tldc2 = this.pricePl2 + this.priceHdd2 + this.priceKcd2 + this.priceKd2 + this.priceDkht2 + this.pricePt2 + this.priceDktt2 + this.priceQm2 + this.priceCrmt2 + this.priceCskd2 + this.priceDrd2 + this.priceGt2 + this.priceAnmts2 + this.priceQh2 + mgcd_price_other[1] + this.priceVitri2
+			this.tldc3 = this.pricePl3 + this.priceHdd3 + this.priceKcd3 + this.priceKd3 + this.priceDkht3 + this.pricePt3 + this.priceDktt3 + this.priceQm3 + this.priceCrmt3 + this.priceCskd3 + this.priceDrd3 + this.priceGt3 + this.priceAnmts3 + this.priceQh3 + mgcd_price_other[2] + this.priceVitri3
 
 			// tính mức giá chỉ dẫn của TSSS
 			this.mgcd1 = Math.round(this.dgd1 + this.tldc1)
