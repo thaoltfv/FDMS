@@ -280,9 +280,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($id, $request) {
             try {
-                $certificateId = PreCertificateOtherDocuments::select('certificate_id')->where('id', $id)->get();
+                $preCertificateId = PreCertificateOtherDocuments::select('certificate_id')->where('id', $id)->get();
                 $item = PreCertificateOtherDocuments::where('id', $id)->delete();
-                $edited = PreCertificate::where('id', $certificateId[0]->certificate_id)->first();
+                $edited = PreCertificate::where('id', $preCertificateId[0]->certificate_id)->first();
                 $edited2 = PreCertificateOtherDocuments::where('id', $id)->get();
                 $item = PreCertificateOtherDocuments::where('id', $id)->delete();
                 # activity-log delete file
@@ -470,200 +470,69 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (!$result) {
             $result =  $this->model->query()
                 ->where('id', '=', $id)
-                ->with('appraiser')
-                ->with('appraiserManager')
-                ->with('appraiserConfirm')
-                ->with('appraiserControl')
+                ->with('businessManager')
                 ->with('appraiserSale')
                 ->with('appraiserPerform')
-                ->with('certificateApproach')
-                ->with('appraiseMethodUsed')
-                ->with('appraiseBasisProperty')
-                ->with('certificatePrinciple')
-                ->with('legalDocumentsOnValuation')
-                ->with('legalDocumentsOnConstruction')
-                ->with('legalDocumentsOnLand')
-                ->with('legalDocumentsOnLocal')
-                ->with('constructionCompany')
-                ->with('comparisonFactor')
                 ->with('createdBy')
                 ->with('appraisePurpose')
-                ->with('appraises')
 
-                ->with('appraises.province')
-                ->with('appraises.district')
-                ->with('appraises.ward')
-                ->with('appraises.street')
-                ->with('appraises.distance')
-                ->with('appraises.assetType')
-                ->with('appraises.pic.picType')
-                ->with('appraises.topographic')
-                ->with('appraises.appraiseApproach')
-                ->with('appraises.appraisePrinciple')
-                ->with('appraises.appraiseMethodUsed')
-                ->with('appraises.appraiseBasisProperty')
-                ->with('appraises.properties.propertyDetail')
-                ->with('appraises.properties.propertyTurningTime')
-                ->with('appraises.properties.propertyTurningTime.material')
-                ->with('appraises.properties.propertyDetail.landTypePurpose')
-                ->with('appraises.properties.propertyDetail.positionType')
-                ->with('appraises.properties.legal')
-                ->with('appraises.properties.zoning')
-                ->with('appraises.properties.landType')
-                ->with('appraises.properties.landShape')
-                ->with('appraises.properties.business')
-                ->with('appraises.properties.electricWater')
-                ->with('appraises.properties.socialSecurity')
-                ->with('appraises.properties.fengShui')
-                ->with('appraises.properties.paymenMethod')
-                ->with('appraises.properties.conditions')
-                ->with('appraises.properties.material')
-                ->with('appraises.tangibleAssets.buildingType')
-                ->with('appraises.tangibleAssets.buildingCategory')
-                ->with('appraises.tangibleAssets.rate')
-                ->with('appraises.tangibleAssets.structure')
-                ->with('appraises.tangibleAssets.crane')
-                ->with('appraises.tangibleAssets.aperture')
-                ->with('appraises.tangibleAssets.factoryType')
-                ->with('appraises.otherAssets')
-                //->with('appraises.constructionCompany.constructionCompany')
-                ->with('appraises.constructionCompany')
-                ->with('appraises.appraiseLaw.law')
-                ->with('appraises.appraiseLaw.lawDetails')
-                ->with('appraises.appraiseLaw.lawDetails.landTypePurpose')
-                ->with('appraises.appraiseLaw.landDetails')
-                //->with('appraises.assetGeneral')
-                ->with('appraises.appraiseHasAssets')
-                ->with('appraises.createdBy')
-                ->with('appraises.comparisonFactor')
-                ->with('appraises.appraiseAdapter')
-                ->with('appraises.comparisonTangibleFactor')
-                ->with('appraises.version')
-                /* ->with('appraises.assetGeneral.createdBy')
-                ->with('appraises.assetGeneral.province')
-                ->with('appraises.assetGeneral.district')
-                ->with('appraises.assetGeneral.ward')
-                ->with('appraises.assetGeneral.street')
-                ->with('appraises.assetGeneral.distance')
-                ->with('appraises.assetGeneral.assetType')
-                ->with('appraises.assetGeneral.source')
-                ->with('appraises.assetGeneral.transactionType')
-                ->with('appraises.assetGeneral.apartment')
-                ->with('appraises.assetGeneral.pic')
-                ->with('appraises.assetGeneral.version')
-                ->with('appraises.assetGeneral.topographicData')
-                ->with('appraises.assetGeneral.properties.propertyDetail')
-                ->with('appraises.assetGeneral.properties.comparePropertyTurningTime')
-                ->with('appraises.assetGeneral.properties.comparePropertyTurningTime.material')
-                ->with('appraises.assetGeneral.properties.propertyDetail.landTypePurposeData')
-                ->with('appraises.assetGeneral.properties.propertyDetail.positionType')
-                ->with('appraises.assetGeneral.properties.comparePropertyDoc')
-                ->with('appraises.assetGeneral.properties.pic')
-                ->with('appraises.assetGeneral.properties.legal')
-                ->with('appraises.assetGeneral.properties.zoning')
-                ->with('appraises.assetGeneral.properties.landType')
-                ->with('appraises.assetGeneral.properties.landShape')
-                ->with('appraises.assetGeneral.properties.business')
-                ->with('appraises.assetGeneral.properties.electricWater')
-                ->with('appraises.assetGeneral.properties.socialSecurity')
-                ->with('appraises.assetGeneral.properties.fengShui')
-                ->with('appraises.assetGeneral.properties.paymenMethod')
-                ->with('appraises.assetGeneral.properties.conditions')
-                ->with('appraises.assetGeneral.properties.material')
-                ->with('appraises.assetGeneral.tangibleAssets.buildingType')
-                ->with('appraises.assetGeneral.tangibleAssets.buildingCategory')
-                ->with('appraises.assetGeneral.tangibleAssets.compareProperty')
-                ->with('appraises.assetGeneral.tangibleAssets.pic')
-                ->with('appraises.assetGeneral.tangibleAssets.rate')
-                ->with('appraises.assetGeneral.tangibleAssets.structure')
-                ->with('appraises.assetGeneral.tangibleAssets.crane')
-                ->with('appraises.assetGeneral.tangibleAssets.aperture')
-                ->with('appraises.assetGeneral.tangibleAssets.factoryType')
-                ->with('appraises.assetGeneral.otherAssets.otherTypeAsset')
-                ->with('appraises.assetGeneral.otherAssets.pic')
-                ->with('appraises.assetGeneral.blockSpecification')
-                ->with('appraises.assetGeneral.blockSpecification.basicUtilities')
-                ->with('appraises.assetGeneral.blockSpecification.blockLists')
-                ->with('appraises.assetGeneral.roomDetails')
-                ->with('appraises.assetGeneral.roomDetails.roomFurnitureDetails')
-                ->with('appraises.assetGeneral.roomDetails.direction')
-                ->with('appraises.assetGeneral.roomDetails.furnitureQuality') */
-                ->with('appraises.assetUnitPrice')
-                ->with('appraises.assetUnitPrice.landTypeData')
-                ->with('appraises.assetUnitPrice.createdBy')
+                // ->with('appraises.province')
+                // ->with('appraises.district')
+                // ->with('appraises.ward')
+                // ->with('appraises.street')
+                // ->with('appraises.distance')
+                // ->with('appraises.assetType')
+                // ->with('appraises.pic.picType')
+                // ->with('appraises.topographic')
+                // ->with('appraises.appraiseApproach')
+                // ->with('appraises.appraisePrinciple')
+                // ->with('appraises.appraiseMethodUsed')
+                // ->with('appraises.appraiseBasisProperty')
+                // ->with('appraises.properties.propertyDetail')
+                // ->with('appraises.properties.propertyTurningTime')
+                // ->with('appraises.properties.propertyTurningTime.material')
+                // ->with('appraises.properties.propertyDetail.landTypePurpose')
+                // ->with('appraises.properties.propertyDetail.positionType')
+                // ->with('appraises.properties.legal')
+                // ->with('appraises.properties.zoning')
+                // ->with('appraises.properties.landType')
+                // ->with('appraises.properties.landShape')
+                // ->with('appraises.properties.business')
+                // ->with('appraises.properties.electricWater')
+                // ->with('appraises.properties.socialSecurity')
+                // ->with('appraises.properties.fengShui')
+                // ->with('appraises.properties.paymenMethod')
+                // ->with('appraises.properties.conditions')
+                // ->with('appraises.properties.material')
+                // ->with('appraises.tangibleAssets.buildingType')
+                // ->with('appraises.tangibleAssets.buildingCategory')
+                // ->with('appraises.tangibleAssets.rate')
+                // ->with('appraises.tangibleAssets.structure')
+                // ->with('appraises.tangibleAssets.crane')
+                // ->with('appraises.tangibleAssets.aperture')
+                // ->with('appraises.tangibleAssets.factoryType')
+                // ->with('appraises.otherAssets')
+                // ->with('appraises.constructionCompany')
+                // ->with('appraises.appraiseLaw.law')
+                // ->with('appraises.appraiseLaw.lawDetails')
+                // ->with('appraises.appraiseLaw.lawDetails.landTypePurpose')
+                // ->with('appraises.appraiseLaw.landDetails')
+                // ->with('appraises.appraiseHasAssets')
+                // ->with('appraises.createdBy')
+                // ->with('appraises.comparisonFactor')
+                // ->with('appraises.appraiseAdapter')
+                // ->with('appraises.comparisonTangibleFactor')
+                // ->with('appraises.version')
+                // ->with('appraises.assetUnitPrice')
+                // ->with('appraises.assetUnitPrice.landTypeData')
+                // ->with('appraises.assetUnitPrice.createdBy')
                 ->with('otherDocuments')
                 ->with('otherDocuments.createdBy')
-                ->with('assetPrice')
-                ->with('appraises.appraisalMethods')
+                // ->with('appraises.appraisalMethods')
                 ->first();
         }
 
-        foreach ($result->appraises as $stt => $asset) {
-            $result->appraises[$stt]->comparison_factor_custom = $this->getComparisonFactor($asset->id);
-            //$result->appraises[$stt]->construction_company_custom = $this->getConstructionCompany($id, $asset->id);
-            //$result->appraises[$stt]->construction_company_custom = $this->getConstructionCompany($id, $asset->id);
-            $eloquentBuildingPriceRepository = new EloquentBuildingPriceRepository(new BuildingPrice());
-            if (isset($asset->tangibleAssets[0])) {
-                $result->appraises[$stt]->building_price = $eloquentBuildingPriceRepository->getAverageBuildPriceV2($asset->tangibleAssets[0]);
-            } else {
-                $result->appraises[$stt]->building_price = 0;
-            }
-            $result->appraises[$stt]->append('asset_general');
-            $result->appraises[$stt]->assetGeneral = $result->appraises[$stt]->asset_general;
-            $asset->assetGeneral = $result->appraises[$stt]->asset_general;
-
-            $result->appraises[$stt]->append('layer_cutting_procedure');
-            $result->appraises[$stt]->append('layer_cutting_price');
-            $result->appraises[$stt]->append('unify_indicative_price_slug');
-            $result->appraises[$stt]->append('composite_land_remaning_slug');
-            $result->appraises[$stt]->append('composite_land_remaning_value');
-            $result->appraises[$stt]->append('planning_violation_price_slug');
-            $result->appraises[$stt]->append('planning_violation_price_value');
-
-            $asset1 = $asset->assetGeneral[0] ?? null;
-            $asset2 = $asset->assetGeneral[1] ?? null;
-            $asset3 = $asset->assetGeneral[2] ?? null;
-            $isExistAsset1 = false;
-            $isExistAsset2 = false;
-            $isExistAsset3 = false;
-            if(isset($asset1) && isset($asset2) && isset($asset3)){
-                foreach ($result->appraises[$stt]->appraiseAdapter as $item) {
-                    if ($item->asset_general_id == $asset1->id) {
-                        $isExistAsset1 = true;
-                    }
-                    if ($item->asset_general_id == $asset2->id) {
-                        $isExistAsset2 = true;
-                    }
-                    if ($item->asset_general_id == $asset3->id) {
-                        $isExistAsset3 = true;
-                    }
-                }
-                if (!$isExistAsset1) {
-                    $result->appraises[$stt]->appraiseAdapter[] = [
-                        'appraise_id' => $asset->id,
-                        'asset_general_id' => $asset1->id,
-                        'percent' => intval($asset1->adjust_percent) + 100,
-                    ];
-                }
-                if (!$isExistAsset2) {
-                    $result->appraises[$stt]->appraiseAdapter[] = [
-                        'appraise_id' => $asset->id,
-                        'asset_general_id' => $asset2->id,
-                        'percent' => intval($asset2->adjust_percent) + 100,
-                    ];
-                }
-                if (!$isExistAsset3) {
-                    $result->appraises[$stt]->appraiseAdapter[] = [
-                        'appraise_id' => $asset->id,
-                        'asset_general_id' => $asset3->id,
-                        'percent' => intval($asset3->adjust_percent) + 100,
-                    ];
-                }
-            }
-
-
-        }
-        $result->append('round_certificate_total');
+        // $result->append('round_certificate_total');
 
         //CommonService::getCertificateAssetPriceTotal($result);
 
@@ -681,220 +550,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
      */
     public function findByIdTest($id)
     {
-        $version = request()->get('version');
-        $result = null;
-        if ($version && !is_array($version)) {
-            $result = $this->findVersionById($id, $version);
-        }
-        if (!$result) {
-            $result =  $this->model->query()
-                ->where('id', '=', $id)
-                ->with('appraiser')
-                ->with('appraiserManager')
-                ->with('appraiserConfirm')
-                ->with('appraiserControl')
-                ->with('appraiserSale')
-                ->with('appraiserPerform')
-                ->with('certificateApproach')
-                ->with('appraiseMethodUsed')
-                ->with('appraiseBasisProperty')
-                ->with('certificatePrinciple')
-                ->with('legalDocumentsOnValuation')
-                ->with('legalDocumentsOnConstruction')
-                ->with('legalDocumentsOnLand')
-                ->with('legalDocumentsOnLocal')
-                ->with('constructionCompany')
-                ->with('comparisonFactor')
-                ->with('createdBy')
-                ->with('appraisePurpose')
-                ->with('appraises')
-
-                ->with('appraises.province')
-                ->with('appraises.district')
-                ->with('appraises.ward')
-                ->with('appraises.street')
-                ->with('appraises.distance')
-                ->with('appraises.assetType')
-                ->with('appraises.pic.picType')
-                ->with('appraises.topographic')
-                ->with('appraises.appraiseApproach')
-                ->with('appraises.appraisePrinciple')
-                ->with('appraises.appraiseMethodUsed')
-                ->with('appraises.appraiseBasisProperty')
-                ->with('appraises.properties.propertyDetail')
-                ->with('appraises.properties.propertyTurningTime')
-                ->with('appraises.properties.propertyTurningTime.material')
-                ->with('appraises.properties.propertyDetail.landTypePurpose')
-                ->with('appraises.properties.propertyDetail.positionType')
-                ->with('appraises.properties.legal')
-                ->with('appraises.properties.zoning')
-                ->with('appraises.properties.landType')
-                ->with('appraises.properties.landShape')
-                ->with('appraises.properties.business')
-                ->with('appraises.properties.electricWater')
-                ->with('appraises.properties.socialSecurity')
-                ->with('appraises.properties.fengShui')
-                ->with('appraises.properties.paymenMethod')
-                ->with('appraises.properties.conditions')
-                ->with('appraises.properties.material')
-                ->with('appraises.tangibleAssets.buildingType')
-                ->with('appraises.tangibleAssets.buildingCategory')
-                ->with('appraises.tangibleAssets.rate')
-                ->with('appraises.tangibleAssets.structure')
-                ->with('appraises.tangibleAssets.crane')
-                ->with('appraises.tangibleAssets.aperture')
-                ->with('appraises.tangibleAssets.factoryType')
-                ->with('appraises.otherAssets')
-                //->with('appraises.constructionCompany.constructionCompany')
-                ->with('appraises.constructionCompany')
-                ->with('appraises.appraiseLaw.law')
-                ->with('appraises.appraiseLaw.lawDetails')
-                ->with('appraises.appraiseLaw.lawDetails.landTypePurpose')
-                ->with('appraises.appraiseLaw.landDetails')
-                ->with('appraises.assetGeneral')
-                ->with('appraises.appraiseHasAssets')
-                ->with('appraises.createdBy')
-                ->with('appraises.comparisonFactor')
-                ->with('appraises.appraiseAdapter')
-                ->with('appraises.comparisonTangibleFactor')
-                ->with('appraises.version')
-                ->with('appraises.assetGeneral.createdBy')
-                ->with('appraises.assetGeneral.province')
-                ->with('appraises.assetGeneral.district')
-                ->with('appraises.assetGeneral.ward')
-                ->with('appraises.assetGeneral.street')
-                ->with('appraises.assetGeneral.distance')
-                ->with('appraises.assetGeneral.assetType')
-                ->with('appraises.assetGeneral.source')
-                ->with('appraises.assetGeneral.transactionType')
-                ->with('appraises.assetGeneral.apartment')
-                ->with('appraises.assetGeneral.pic')
-                ->with('appraises.assetGeneral.version')
-                ->with('appraises.assetGeneral.topographicData')
-                ->with('appraises.assetGeneral.properties.propertyDetail')
-                ->with('appraises.assetGeneral.properties.comparePropertyTurningTime')
-                ->with('appraises.assetGeneral.properties.comparePropertyTurningTime.material')
-                ->with('appraises.assetGeneral.properties.propertyDetail.landTypePurposeData')
-                ->with('appraises.assetGeneral.properties.propertyDetail.positionType')
-                ->with('appraises.assetGeneral.properties.comparePropertyDoc')
-                ->with('appraises.assetGeneral.properties.pic')
-                ->with('appraises.assetGeneral.properties.legal')
-                ->with('appraises.assetGeneral.properties.zoning')
-                ->with('appraises.assetGeneral.properties.landType')
-                ->with('appraises.assetGeneral.properties.landShape')
-                ->with('appraises.assetGeneral.properties.business')
-                ->with('appraises.assetGeneral.properties.electricWater')
-                ->with('appraises.assetGeneral.properties.socialSecurity')
-                ->with('appraises.assetGeneral.properties.fengShui')
-                ->with('appraises.assetGeneral.properties.paymenMethod')
-                ->with('appraises.assetGeneral.properties.conditions')
-                ->with('appraises.assetGeneral.properties.material')
-                ->with('appraises.assetGeneral.tangibleAssets.buildingType')
-                ->with('appraises.assetGeneral.tangibleAssets.buildingCategory')
-                ->with('appraises.assetGeneral.tangibleAssets.compareProperty')
-                ->with('appraises.assetGeneral.tangibleAssets.pic')
-                ->with('appraises.assetGeneral.tangibleAssets.rate')
-                ->with('appraises.assetGeneral.tangibleAssets.structure')
-                ->with('appraises.assetGeneral.tangibleAssets.crane')
-                ->with('appraises.assetGeneral.tangibleAssets.aperture')
-                ->with('appraises.assetGeneral.tangibleAssets.factoryType')
-                ->with('appraises.assetGeneral.otherAssets.otherTypeAsset')
-                ->with('appraises.assetGeneral.otherAssets.pic')
-                ->with('appraises.assetGeneral.blockSpecification')
-                ->with('appraises.assetGeneral.blockSpecification.basicUtilities')
-                ->with('appraises.assetGeneral.blockSpecification.blockLists')
-                ->with('appraises.assetGeneral.roomDetails')
-                ->with('appraises.assetGeneral.roomDetails.roomFurnitureDetails')
-                ->with('appraises.assetGeneral.roomDetails.direction')
-                ->with('appraises.assetGeneral.roomDetails.furnitureQuality')
-                ->with('appraises.assetUnitPrice')
-                ->with('appraises.assetUnitPrice.landTypeData')
-                ->with('appraises.assetUnitPrice.createdBy')
-                ->with('otherDocuments')
-                ->with('otherDocuments.createdBy')
-                ->with('assetPrice')
-                ->with('appraises.appraisalMethods')
-                ->first();
-        }
-
-        foreach ($result->appraises as $stt => $asset) {
-            $result->appraises[$stt]->comparison_factor_custom = $this->getComparisonFactor($asset->id);
-            //$result->appraises[$stt]->construction_company_custom = $this->getConstructionCompany($id, $asset->id);
-            $eloquentBuildingPriceRepository = new EloquentBuildingPriceRepository(new BuildingPrice());
-            if (isset($asset->tangibleAssets[0])) {
-                $result->appraises[$stt]->building_price = $eloquentBuildingPriceRepository->getAverageBuildPriceV2($asset->tangibleAssets[0]);
-            } else {
-                $result->appraises[$stt]->building_price = 0;
-            }
-
-            $result->appraises[$stt]->append('layer_cutting_procedure');
-            $result->appraises[$stt]->append('layer_cutting_price');
-            $result->appraises[$stt]->append('unify_indicative_price_slug');
-            $result->appraises[$stt]->append('composite_land_remaning_slug');
-            $result->appraises[$stt]->append('composite_land_remaning_value');
-            $result->appraises[$stt]->append('planning_violation_price_slug');
-            $result->appraises[$stt]->append('planning_violation_price_value');
-
-            $asset1 = $asset->assetGeneral[0] ?? null;
-            $asset2 = $asset->assetGeneral[1] ?? null;
-            $asset3 = $asset->assetGeneral[2] ?? null;
-            $isExistAsset1 = false;
-            $isExistAsset2 = false;
-            $isExistAsset3 = false;
-            foreach ($result->appraises[$stt]->appraiseAdapter as $item) {
-                if ($item->asset_general_id == $asset1->id) {
-                    $isExistAsset1 = true;
-                }
-                if ($item->asset_general_id == $asset2->id) {
-                    $isExistAsset2 = true;
-                }
-                if ($item->asset_general_id == $asset3->id) {
-                    $isExistAsset3 = true;
-                }
-            }
-            if (!$isExistAsset1) {
-                $result->appraises[$stt]->appraiseAdapter[] = [
-                    'appraise_id' => $asset->id,
-                    'asset_general_id' => $asset1->id,
-                    'percent' => intval($asset1->adjust_percent) + 100,
-                ];
-            }
-            if (!$isExistAsset2) {
-                $result->appraises[$stt]->appraiseAdapter[] = [
-                    'appraise_id' => $asset->id,
-                    'asset_general_id' => $asset2->id,
-                    'percent' => intval($asset2->adjust_percent) + 100,
-                ];
-            }
-            if (!$isExistAsset3) {
-                $result->appraises[$stt]->appraiseAdapter[] = [
-                    'appraise_id' => $asset->id,
-                    'asset_general_id' => $asset3->id,
-                    'percent' => intval($asset3->adjust_percent) + 100,
-                ];
-            }
-        }
-
-        $result->append('round_certificate_total');
-
-        //CommonService::getCertificateAssetPriceTotal($result);
-
-        /* $constructionCompanies = [];
-        foreach($result->constructionCompany as $constructionCompany) {
-            $constructionCompanies[$constructionCompany->appraise_id]['construction_company'][$constructionCompany->id] = $constructionCompany;
-        }
-        $result->construction_company_custom = $constructionCompanies;  */
-
-        return $result;
+        return ;
     }
 
     /**
      * @param $id
      * @return $objects
      */
-    public function getConstructionCompany($certificateId, $appraiseId): object
+    public function getConstructionCompany($preCertificateId, $appraiseId): object
     {
-        $items = CertificateAssetConstructionCompany::where('certificate_id', '=', $certificateId)
+        $items = CertificateAssetConstructionCompany::where('certificate_id', '=', $preCertificateId)
             ->where('appraise_id', '=', $appraiseId)
             ->get();
         $result = $items;
@@ -1081,419 +746,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
      * @return int
      * @throws Throwable
      */
-    public function createCertificate(array $objects)
+    public function createPreCertificate(array $objects)
     {
         return DB::transaction(function () use ($objects) {
             try {
-                if (isset($objects['appraises']) && !empty($objects['appraises'])) {
-                    foreach ($objects['appraises'] as $appraise) {
-                        $appraiseData = Appraise::where('id', $appraise['appraise_id'])->first();
-                        if (!isset($appraiseData)) continue;
-                        if ($appraiseData->status == 3) {
-                            $certificateAsset = CertificateAsset::where('appraise_id', $appraiseData->id)->orderBy('id', 'DESC')->first();
-                            $certificateHasAppraise = CertificateHasAppraise::where('appraise_id', $certificateAsset->id)->first();
-                            if (isset($certificateHasAppraise->certificate_id)) {
-                                return "Tài sản thẩm định đã được chọn trong hồ sơ thẩm định " . $certificateHasAppraise->certificate_id . ". Vui lòng kiểm tra lại.";
-                            }
-                        }
-                    }
-                    $objects["status"] = 2;
-                } else {
-                    $objects["status"] = 1;
-                }
+            
+                $objects["status"] = 1;
 
                 $objects['created_by'] = is_array($objects['created_by']) ? $objects['created_by']['id'] : $objects['created_by'];
 
-                $objects["document_description"] = isset($objects["document_description"]) ? $objects["document_description"] : "";
                 $objects["updated_at"] = date("Y-m-d H:i:s");
                 $preCertificate = new PreCertificate($objects);
-                $certificateId = QueryBuilder::for(PreCertificate::class)
+                $preCertificateId = QueryBuilder::for(PreCertificate::class)
                     ->insertGetId($preCertificate->attributesToArray());
-
-                $certificateAssetIds = [];
-                if (isset($objects['appraises']) && !empty($objects['appraises'])) {
-                    foreach ($objects['appraises'] as $appraise) {
-                        $appraise['certificate_id'] = $certificateId;
-                        $appraiseData = Appraise::where('id', $appraise['appraise_id'])->first();
-                        if (!isset($appraiseData)) continue;
-
-                        $appraiseData->appraise_id = $appraise['appraise_id'];
-                        $certificateAsset = new CertificateAsset($appraiseData->toArray());
-                        $certificateAssetId = QueryBuilder::for($certificateAsset)
-                            ->insertGetId($certificateAsset->attributesToArray());
-                        $certificateAssetIds[$appraise['appraise_id']] = $certificateAssetId;
-                        Appraise::where('id', $appraise['appraise_id'])->update(['status' => 3]); // 3 = locked
-
-                        $appraiseId = $appraise['appraise_id'];
-                        $appraise['appraise_id'] = $certificateAssetId;
-                        $appraise = new CertificateHasAppraise($appraise);
-                        $assetGeneralId = QueryBuilder::for($appraise)
-                            ->insertGetId($appraise->attributesToArray());
-
-                        $itemDatas = AppraiseHasAsset::where('appraise_id', $appraiseId)->get();
-                        //echo '<pre>';
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetHasAsset($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                $certificateAssetGeneralId = $item->asset_general_id;
-
-                                $appraiseComparisonFactors = AppraiseComparisonFactor::where('appraise_id', $appraiseId)
-                                    ->where('asset_general_id', $itemData->asset_general_id)
-                                    ->get();
-                                foreach ($appraiseComparisonFactors as $appraiseComparisonFactorData) {
-                                    if (isset($appraiseComparisonFactorData)) {
-                                        $appraiseComparisonFactorData->appraise_id = $certificateAssetId;
-                                        $appraiseComparisonFactorData->asset_general_id = $certificateAssetGeneralId;
-                                        $appraiseComparisonFactor = new CertificateAssetComparisonFactor($appraiseComparisonFactorData->toArray());
-                                        $appraiseComparisonFactorId = QueryBuilder::for($appraiseComparisonFactor)->insertGetId($appraiseComparisonFactor->attributesToArray());
-                                    }
-                                }
-
-                                $appraiseAdapters = AppraiseAdapter::where('appraise_id', $appraiseId)
-                                    ->where('asset_general_id', $itemData->asset_general_id)
-                                    ->get();
-                                foreach ($appraiseAdapters as $appraiseAdapterData) {
-                                    if (isset($appraiseAdapterData)) {
-                                        $appraiseAdapterData->appraise_id = $certificateAssetId;
-                                        $appraiseAdapterData->asset_general_id = $certificateAssetGeneralId;
-                                        $appraiseAdapter = new CertificateAssetAdapter($appraiseAdapterData->toArray());
-                                        $appraiseAdapterId = QueryBuilder::for($appraiseAdapter)->insertGetId($appraiseAdapter->attributesToArray());
-                                    }
-                                }
-                            }
-                        }
-
-                        $oldAppraiseLawIds = [];
-                        $oldCertificateAssetLawIds = [];
-                        $itemDatas = AppraiseLaw::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetLaw($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                $oldAppraiseLawIds[] = $itemData->id;
-                                $oldCertificateAssetLawIds[$itemData->id] = $itemId;
-                            }
-                        }
-                        foreach ($oldAppraiseLawIds as $oldAppraiseLawId) {
-                            $itemDatas = AppraiseLawDetail::where('appraise_law_id', $oldAppraiseLawId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_law_id = $oldCertificateAssetLawIds[$oldAppraiseLawId];
-                                    $item = new CertificateAssetLawDetail($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-                        }
-                        foreach ($oldAppraiseLawIds as $oldAppraiseLawId) {
-                            $itemDatas = AppraiseLawLandDetail::where('appraise_law_id', $oldAppraiseLawId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_law_id = $oldCertificateAssetLawIds[$oldAppraiseLawId];
-                                    $item = new CertificateAssetLawLandDetail($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-                        }
-
-                        $itemDatas = AppraiseLegalDocumentsOnConstruction::where('appraise_id', $appraiseId)->get();
-                        foreach  ($itemDatas as $itemData) {
-                            if  (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetLegalDocumentsOnConstruction($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseLegalDocumentsOnLand::where('appraise_id', $appraiseId)->get();
-                        foreach  ($itemDatas as $itemData) {
-                            if  (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetLegalDocumentsOnLand($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseLegalDocumentsOnLocal::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetLegalDocumentsOnLocal($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseLegalDocumentsOnValuation::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetLegalDocumentsOnValuation($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraisePic::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetPic($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $appraisePropertyDatas = AppraiseProperty::where('appraise_id', $appraiseId)->get();
-                        foreach ($appraisePropertyDatas as $appraisePropertyData) {
-                            if (isset($appraisePropertyData)) {
-                                $appraisePropertyData->appraise_id = $certificateAssetId;
-                                $property = new CertificateAssetProperty($appraisePropertyData->toArray());
-                                $propertyId = QueryBuilder::for($property)->insertGetId($property->attributesToArray());
-
-                                if (isset($appraisePropertyData->id)) {
-                                    $itemDatas = AppraisePropertyDetail::where('appraise_property_id', $appraisePropertyData->id)->get();
-                                    foreach ($itemDatas as $itemData) {
-                                        if (isset($itemData)) {
-                                            $itemData->appraise_property_id = $propertyId;
-                                            $item = new CertificateAssetPropertyDetail($itemData->toArray());
-                                            $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                        }
-                                    }
-
-                                    $itemDatas = AppraisePropertyTurningTime::where('appraise_property_id', $appraisePropertyData->id)->get();
-                                    foreach ($itemDatas as $itemData) {
-                                        if (isset($itemData)) {
-                                            $itemData->appraise_property_id = $propertyId;
-                                            $item = new CertificateAssetPropertyTurningTime($itemData->toArray());
-                                            $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        $appraiseUnitPriceDatas = AppraiseUnitPrice::where('appraise_id', $appraiseId)->get();
-                        CertificateAssetUnitPrice::where('certificate_id', $certificateId)
-                            ->where('appraise_id', $certificateAssetId)
-                            ->forceDelete();
-
-                        foreach ($appraiseUnitPriceDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->certificate_id = $certificateId;
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetUnitPrice($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $appraiseUnitAreaDatas = AppraiseUnitArea::where('appraise_id', $appraiseId)->get();
-                        CertificateAssetUnitArea::where('certificate_id', $certificateId)
-                            ->where('appraise_id', $certificateAssetId)
-                            ->forceDelete();
-
-                        foreach ($appraiseUnitAreaDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->certificate_id = $certificateId;
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetUnitArea($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseOtherAsset::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetOtherAsset($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseTangibleAsset::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetTangibleAsset($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseTangibleComparisonFactor::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetTangibleComparisonFactor($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseVersion::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetVersion($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetAppraisalMethods($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-
-                        $itemDatas = AppraisePrice::where('appraise_id', $appraiseId)->get();
-                        foreach ($itemDatas as $itemData) {
-                            if (isset($itemData)) {
-                                $itemData->appraise_id = $certificateAssetId;
-                                $item = new CertificateAssetPrice($itemData->toArray());
-                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                            }
-                        }
-                    }
-                }
-
-                if (isset($objects['comparison_factor'])) {
-                    foreach ($objects['comparison_factor'] as $appraise) {
-                        if (isset($certificateAssetIds[$appraise['id']])) {
-                            $this->comparisonFactor($certificateAssetIds[$appraise['id']], $appraise);
-                        }
-                    }
-                }
-
-                /* if (isset($objects['construction_company_Tem'])) {
-                    foreach ($objects['construction_company_Tem'] as $constructionCompanyData) {
-                        foreach ($constructionCompanyData['table'] as $constructionCompanyId) {
-                            $item = AppraisalConstructionCompany::where('id', $constructionCompanyId)->first();
-                            $dataConstructionCompany = [
-                                'certificate_id' => $certificateId,
-                                'appraise_id' => $certificateAssetIds[$constructionCompanyData["id"]],
-                                'company_id' => $constructionCompanyId,
-                                'name' => $item->name,
-                                'address' => $item->address,
-                                'phone_number' => $item->phone_number,
-                                'manager_name' => $item->manager_name,
-                                'unit_price_m2' => $item->unit_price_m2,
-                                'is_defaults' => $item->is_defaults,
-                            ];
-
-                            $dataConstructionCompany = new CertificateAssetConstructionCompany($dataConstructionCompany);
-                            $constructionCompanyId = QueryBuilder::for($dataConstructionCompany)
-                                ->insertGetId($dataConstructionCompany->attributesToArray());
-                        }
-                    }
-                } */
-                if (isset($objects['construction_company'])) {
-                    foreach ($objects['construction_company'] as $constructionCompanyData) {
-                        foreach ($constructionCompanyData['construction_company'] as $item) {
-                            $item = (object) $item;
-
-                            $dataConstructionCompany = [
-                                'certificate_id' => $certificateId,
-                                'appraise_id' => $certificateAssetIds[$constructionCompanyData["id"]],
-                                'company_id' => $item->construction_company_id,
-                                'name' => $item->name,
-                                'address' => $item->address,
-                                'phone_number' => $item->phone_number,
-                                'manager_name' => $item->manager_name,
-                                'unit_price_m2' => $item->unit_price_m2,
-                                'is_defaults' => $item->is_defaults,
-                            ];
-
-                            $dataConstructionCompany = new CertificateAssetConstructionCompany($dataConstructionCompany);
-                            $constructionCompanyId = QueryBuilder::for($dataConstructionCompany)
-                                ->insertGetId($dataConstructionCompany->attributesToArray());
-                        }
-                    }
-                }
-
-                if (isset($objects['certificate_approach'])) {
-                    foreach ($objects['certificate_approach'] as $certificateApproachData) {
-                        $certificateApproachData['certificate_id'] = $certificateId;
-                        $certificateApproachData = new CertificateApproach($certificateApproachData);
-                        $certificateApproachId = QueryBuilder::for($certificateApproachData)
-                            ->insertGetId($certificateApproachData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['certificate_method_used'])) {
-                    foreach ($objects['certificate_method_used'] as $certificateMethodUsedData) {
-                        $certificateMethodUsedData['certificate_id'] = $certificateId;
-                        $certificateMethodUsedData = new CertificateMethodUsed($certificateMethodUsedData);
-                        $certificateMethodUsedId = QueryBuilder::for($certificateMethodUsedData)
-                            ->insertGetId($certificateMethodUsedData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['certificate_basis_property'])) {
-                    foreach ($objects['certificate_basis_property'] as $certificateBasisPropertyData) {
-                        $certificateBasisPropertyData['certificate_id'] = $certificateId;
-                        $certificateBasisPropertyData = new CertificateBasisProperty($certificateBasisPropertyData);
-                        $certificateBasisPropertyId = QueryBuilder::for($certificateBasisPropertyData)
-                            ->insertGetId($certificateBasisPropertyData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['certificate_principle'])) {
-                    foreach ($objects['certificate_principle'] as $certificatePrincipleData) {
-                        $certificatePrincipleData['certificate_id'] = $certificateId;
-                        $certificatePrincipleData = new CertificatePrinciple($certificatePrincipleData);
-                        $certificatePrincipleId = QueryBuilder::for($certificatePrincipleData)
-                            ->insertGetId($certificatePrincipleData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['legal_documents_on_valuation'])) {
-                    foreach ($objects['legal_documents_on_valuation'] as $certificateDocumentsOnValuationData) {
-                        $certificateDocumentsOnValuationData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnValuationData = new CertificateLegalDocumentsOnValuation($certificateDocumentsOnValuationData);
-                        $certificateDocumentsOnValuationId = QueryBuilder::for($certificateDocumentsOnValuationData)
-                            ->insertGetId($certificateDocumentsOnValuationData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['legal_documents_on_construction'])) {
-                    foreach ($objects['legal_documents_on_construction'] as $certificateDocumentsOnConstructionData) {
-                        $certificateDocumentsOnConstructionData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnConstructionData = new CertificateLegalDocumentsOnConstruction($certificateDocumentsOnConstructionData);
-                        $certificateDocumentsOnConstructionId = QueryBuilder::for($certificateDocumentsOnConstructionData)
-                            ->insertGetId($certificateDocumentsOnConstructionData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['legal_documents_on_land'])) {
-                    foreach ($objects['legal_documents_on_land'] as $certificateDocumentsOnLandData) {
-                        $certificateDocumentsOnLandData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnLandData = new CertificateLegalDocumentsOnLand($certificateDocumentsOnLandData);
-                        $certificateDocumentsOnConstructionId = QueryBuilder::for($certificateDocumentsOnLandData)
-                            ->insertGetId($certificateDocumentsOnLandData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['legal_documents_on_local'])) {
-                    foreach ($objects['legal_documents_on_local'] as $certificateDocumentsOnLocalData) {
-                        $certificateDocumentsOnLocalData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnLocalData = new CertificateLegalDocumentsOnLocal($certificateDocumentsOnLocalData);
-                        $certificateDocumentsOnConstructionId = QueryBuilder::for($certificateDocumentsOnLocalData)
-                            ->insertGetId($certificateDocumentsOnLocalData->attributesToArray());
-                    }
-                }
-
-                /* if (isset($objects['comparison_factor'])) {
-                    foreach ($objects['comparison_factor'] as $comparisonFactor) {
-                        $comparisonFactor['certificate_id'] = $certificateId;
-                        $comparisonFactor = new CertificateComparisonFactor($comparisonFactor);
-                        $comparisonFactorId= QueryBuilder::for($comparisonFactor)
-                            ->insertGetId($comparisonFactor->attributesToArray());
-                    }
-                }  */
-
-                // $this->updateSelectComparisonFactor($certificateId);
-
-                return $certificateId;
+                return $preCertificateId;
             } catch (Exception $exception) {
                 dd($exception);
                 Log::error($exception);
@@ -1522,541 +788,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                 $objects['created_by'] = is_array($objects['created_by']) ? $objects['created_by']['id'] : $objects['created_by'];
 
-                if (isset($objects['appraises']) && !empty($objects['appraises'])) {
-                    foreach ($objects['appraises'] as $appraise) {
-                        if (!isset($oldCertificateAssetIds[$appraise['appraise_id']])) {
-                            $appraiseData = Appraise::where('id', $appraise['appraise_id'])->first();
-                            if (!isset($appraiseData)) continue;
-                            if ($appraiseData->status == 3) {
-                                $certificateAsset = CertificateAsset::where('appraise_id', $appraiseData->id)->orderBy('id', 'DESC')->first();
-                                $certificateHasAppraise = CertificateHasAppraise::where('appraise_id', $certificateAsset->id)->first();
-                                if (isset($certificateHasAppraise->certificate_id)) {
-                                    return "Tài sản thẩm định đã được chọn trong hồ sơ thẩm định " . $certificateHasAppraise->certificate_id . ". Vui lòng kiểm tra lại.";
-                                }
-                            }
-                        }
-                    }
-                    $objects["status"] = 2;
-                } else {
-                    $objects["status"] = 1;
-                }
-
-                $objects["document_description"] = isset($objects["document_description"]) ? $objects["document_description"] : "";
                 $objects["updated_at"] = date("Y-m-d H:i:s");
                 $preCertificate = new PreCertificate($objects);
-                $certificateId = $id;
+                $preCertificateId = $id;
                 $preCertificate->newQuery()->updateOrInsert(['id' => $id], $preCertificate->attributesToArray());
 
-                $certificateAssetIds = [];
-                if (isset($objects['appraises'])) {
-                    CertificateHasAppraise::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                    foreach ($objects['appraises'] as $appraise) {
-                        if (!isset($oldCertificateAssetIds[$appraise['appraise_id']])) {
-                            $appraiseData = Appraise::where('id', $appraise['appraise_id'])->first();
-                            if (!isset($appraiseData)) continue;
-                            $appraiseId = $appraise['appraise_id'];
-                            Appraise::where('id', $appraiseId)->update(['status' => 3]); // updateStatus : updateStatus : 3 = locked
-                            RealEstate::query()->whereHas('appraiises', function ($has) use ($appraiseId){
-                                $has->where('id', $appraiseId);
-                            })->update(['status' => 3]);
-                            $appraiseData->appraise_id = $appraise['appraise_id'];
-                            $certificateAsset = new CertificateAsset($appraiseData->toArray());
-                            $certificateAssetId = QueryBuilder::for($certificateAsset)
-                                ->insertGetId($certificateAsset->attributesToArray());
-
-                            $appraiseId = $appraise['appraise_id'];
-
-                            $appraise['certificate_id'] = $certificateId;
-                            $appraise['appraise_id'] = $certificateAssetId;
-                            $appraise['version'] = '2.0';
-                            $appraise = new CertificateHasAppraise($appraise);
-                            $assetGeneralId = QueryBuilder::for($appraise)
-                                ->insertGetId($appraise->attributesToArray());
-
-                            //echo '<pre>';
-                            $itemDatas = AppraiseHasAsset::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetHasAsset($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                    $certificateAssetGeneralId = $item->asset_general_id;
-
-                                    $appraiseComparisonFactors = AppraiseComparisonFactor::where('appraise_id', $appraiseId)
-                                        ->where('asset_general_id', $itemData->asset_general_id)
-                                        ->get();
-
-                                    foreach ($appraiseComparisonFactors as $appraiseComparisonFactorData) {
-                                        if (isset($appraiseComparisonFactorData)) {
-                                            $appraiseComparisonFactorData->appraise_id = $certificateAssetId;
-                                            $appraiseComparisonFactorData->asset_general_id = $certificateAssetGeneralId;
-                                            $appraiseComparisonFactor = new CertificateAssetComparisonFactor($appraiseComparisonFactorData->toArray());
-                                            $appraiseComparisonFactorId = QueryBuilder::for($appraiseComparisonFactor)->insertGetId($appraiseComparisonFactor->attributesToArray());
-                                        }
-                                    }
-
-                                    $appraiseAdapters = AppraiseAdapter::where('appraise_id', $appraiseId)
-                                        ->where('asset_general_id', $itemData->asset_general_id)
-                                        ->get();
-                                    foreach ($appraiseAdapters as $appraiseAdapterData) {
-                                        if (isset($appraiseAdapterData)) {
-                                            $appraiseAdapterData->appraise_id = $certificateAssetId;
-                                            $appraiseAdapterData->asset_general_id = $certificateAssetGeneralId;
-                                            $appraiseAdapter = new CertificateAssetAdapter($appraiseAdapterData->toArray());
-                                            $appraiseAdapterId = QueryBuilder::for($appraiseAdapter)->insertGetId($appraiseAdapter->attributesToArray());
-                                        }
-                                    }
-                                }
-                            }
-
-                            $oldAppraiseLawIds = [];
-                            $oldCertificateAssetLawIds = [];
-                            $itemDatas = AppraiseLaw::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetLaw($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                    $oldAppraiseLawIds[] = $itemData->id;
-                                    $oldCertificateAssetLawIds[$itemData->id] = $itemId;
-                                }
-                            }
-                            foreach ($oldAppraiseLawIds as $oldAppraiseLawId) {
-                                $itemDatas = AppraiseLawDetail::where('appraise_law_id', $oldAppraiseLawId)->get();
-                                foreach ($itemDatas as $itemData) {
-                                    if (isset($itemData)) {
-                                        $itemData->appraise_law_id = $oldCertificateAssetLawIds[$oldAppraiseLawId];
-                                        $item = new CertificateAssetLawDetail($itemData->toArray());
-                                        $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                    }
-                                }
-                            }
-                            foreach ($oldAppraiseLawIds as $oldAppraiseLawId) {
-                                $itemDatas = AppraiseLawLandDetail::where('appraise_law_id', $oldAppraiseLawId)->get();
-                                foreach ($itemDatas as $itemData) {
-                                    if (isset($itemData)) {
-                                        $itemData->appraise_law_id = $oldCertificateAssetLawIds[$oldAppraiseLawId];
-                                        $item = new CertificateAssetLawLandDetail($itemData->toArray());
-                                        $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                    }
-                                }
-                            }
-
-                            $appraiseUnitPriceDatas = AppraiseUnitPrice::where('appraise_id', $appraiseId)->get();
-                            CertificateAssetUnitPrice::where('certificate_id', $certificateId)
-                                ->where('appraise_id', $certificateAssetId)
-                                ->forceDelete();
-                            foreach ($appraiseUnitPriceDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->certificate_id = $certificateId;
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetUnitPrice($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $appraiseUnitPriceDatas = AppraiseUnitArea::where('appraise_id', $appraiseId)->get();
-                            CertificateAssetUnitArea::where('certificate_id', $certificateId)
-                                ->where('appraise_id', $certificateAssetId)
-                                ->forceDelete();
-                            foreach ($appraiseUnitPriceDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->certificate_id = $certificateId;
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetUnitArea($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseLegalDocumentsOnConstruction::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetLegalDocumentsOnConstruction($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseLegalDocumentsOnLand::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetLegalDocumentsOnLand($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseLegalDocumentsOnLocal::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetLegalDocumentsOnLocal($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseLegalDocumentsOnValuation::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetLegalDocumentsOnValuation($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraisePic::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetPic($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $appraisePropertyDatas = AppraiseProperty::where('appraise_id', $appraiseId)->get();
-                            foreach ($appraisePropertyDatas as $appraisePropertyData) {
-                                if (isset($appraisePropertyData)) {
-                                    $appraisePropertyData->appraise_id = $certificateAssetId;
-                                    $property = new CertificateAssetProperty($appraisePropertyData->toArray());
-                                    $propertyId = QueryBuilder::for($property)->insertGetId($property->attributesToArray());
-
-                                    if (isset($appraisePropertyData->id)) {
-                                        $itemDatas = AppraisePropertyDetail::where('appraise_property_id', $appraisePropertyData->id)->get();
-                                        foreach ($itemDatas as $itemData) {
-                                            if (isset($itemData)) {
-                                                $itemData->appraise_property_id = $propertyId;
-                                                $item = new CertificateAssetPropertyDetail($itemData->toArray());
-                                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                            }
-                                        }
-
-                                        $itemDatas = AppraisePropertyTurningTime::where('appraise_property_id', $appraisePropertyData->id)->get();
-                                        foreach ($itemDatas as $itemData) {
-                                            if (isset($itemData)) {
-                                                $itemData->appraise_property_id = $propertyId;
-                                                $item = new CertificateAssetPropertyTurningTime($itemData->toArray());
-                                                $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            $itemDatas = AppraiseOtherAsset::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetOtherAsset($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseTangibleAsset::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetTangibleAsset($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseTangibleComparisonFactor::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetTangibleComparisonFactor($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseVersion::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetVersion($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetAppraisalMethods($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $itemDatas = AppraisePrice::where('appraise_id', $appraiseId)->get();
-                            foreach ($itemDatas as $itemData) {
-                                if (isset($itemData)) {
-                                    $itemData->appraise_id = $certificateAssetId;
-                                    $item = new CertificateAssetPrice($itemData->toArray());
-                                    $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
-                                }
-                            }
-
-                            $certificateAssetIds[$appraiseId] = $certificateAssetId;
-                        } else {
-                            $certificateAssetId = $oldCertificateAssetIds[$appraise['appraise_id']];
-                            $appraiseTmp = $appraise;
-                            $appraiseTmp['certificate_id'] = $certificateId;
-                            $appraiseTmp['appraise_id'] = $certificateAssetId;
-                            $appraiseTmp['version'] = '2.0';
-                            $appraiseTmp = new CertificateHasAppraise($appraiseTmp);
-                            $assetGeneralId = QueryBuilder::for($appraiseTmp)
-                                ->insertGetId($appraiseTmp->attributesToArray());
-                            $certificateAssetIds[$appraise['appraise_id']] = $certificateAssetId;
-                        }
-                    }
-                    foreach ($oldAppraises as $appraiseTmp) {
-                        if (isset($appraiseTmp->appraise_id) && !isset($certificateAssetIds[$appraiseTmp->appraise_id])) {
-                            Appraise::where('id', $appraiseTmp->appraise_id)->update(['status' => 2]); // updateStatus : 3 = locked
-                        } else {
-                            Appraise::where('id', $appraiseTmp->appraise_id)->update(['status' => 3]); // updateStatus : 3 = locked
-                        }
-                    }
-                }
-
-                if (isset($objects['comparison_factor'])) {
-                    foreach ($objects['comparison_factor'] as $appraise) {
-                        if (isset($appraise["oldID"])) {
-                            $this->comparisonFactor($appraise['id'], $appraise);
-                        } else if (!isset($appraise["oldID"]) && isset($certificateAssetIds[$appraise['id']])) {
-                            $this->comparisonFactor($certificateAssetIds[$appraise['id']], $appraise);
-                        }
-                    }
-                }
-
-                /* if (isset($objects['construction_company_Tem'])) {
-                    CertificateAssetConstructionCompany::where('certificate_id', $certificateId)->delete();
-                    $constructionCompanies =
-                        CertificateAssetConstructionCompany::where('certificate_id', $certificateId)
-                            ->withTrashed()->get();
-                    foreach ($objects['construction_company_Tem'] as $constructionCompanyData) {
-                        if(isset($constructionCompanyData["id"])) {
-                            foreach ($constructionCompanyData['table'] as $constructionCompanyId) {
-                                if(isset($constructionCompanyData["oldID"])) {
-                                    $constructionCompany = $constructionCompanies->where('appraise_id', $constructionCompanyData["id"])
-                                        ->where('company_id', $constructionCompanyId)->first();
-
-                                    if(isset($constructionCompany)) {
-                                        $constructionCompany = $constructionCompany;
-                                        $constructionCompany->restore();
-                                    } else {
-                                        $item = AppraisalConstructionCompany::where('id', $constructionCompanyId)->first();
-                                        $dataConstructionCompany = [
-                                            'certificate_id' => $certificateId,
-                                            'appraise_id' => $constructionCompanyData["id"],
-                                            'company_id' => $constructionCompanyId,
-                                            'name' => $item->name,
-                                            'address' => $item->address,
-                                            'phone_number' => $item->phone_number,
-                                            'manager_name' => $item->manager_name,
-                                            'unit_price_m2' => $item->unit_price_m2,
-                                            'is_defaults' => $item->is_defaults,
-                                        ];
-
-                                        $dataConstructionCompany = new CertificateAssetConstructionCompany($dataConstructionCompany);
-                                        $constructionCompanyId = QueryBuilder::for($dataConstructionCompany)
-                                            ->insertGetId($dataConstructionCompany->attributesToArray());
-                                    }
-                                } else {
-                                    if(isset($certificateAssetIds[$constructionCompanyData["id"]])) {
-                                        $item = AppraisalConstructionCompany::where('id', $constructionCompanyId)->first();
-                                        $dataConstructionCompany = [
-                                            'certificate_id' => $certificateId,
-                                            'appraise_id' => $certificateAssetIds[$constructionCompanyData["id"]],
-                                            'company_id' => $constructionCompanyId,
-                                            'name' => $item->name,
-                                            'address' => $item->address,
-                                            'phone_number' => $item->phone_number,
-                                            'manager_name' => $item->manager_name,
-                                            'unit_price_m2' => $item->unit_price_m2,
-                                            'is_defaults' => $item->is_defaults,
-                                        ];
-
-                                        $dataConstructionCompany = new CertificateAssetConstructionCompany($dataConstructionCompany);
-                                        $constructionCompanyId = QueryBuilder::for($dataConstructionCompany)
-                                            ->insertGetId($dataConstructionCompany->attributesToArray());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } */
-
-                if (isset($objects['construction_company'])) {
-                    CertificateAssetConstructionCompany::where('certificate_id', $certificateId)->delete();
-
-                    foreach ($objects['construction_company'] as $constructionCompanyData) {
-                        if (isset($constructionCompanyData["id"]) && isset($constructionCompanyData["oldID"])) {
-                            $constructionCompanies = CertificateAssetConstructionCompany::withTrashed()
-                                ->where('certificate_id', $certificateId)
-                                ->where('appraise_id', $constructionCompanyData["id"])
-                                ->get();
-
-                            if (isset($constructionCompanies) && $constructionCompanies->count()) {
-                                foreach ($constructionCompanies as $constructionCompany) {
-                                    $constructionCompany->restore();
-                                }
-                            }
-                        } else if (isset($constructionCompanyData['construction_company'])) {
-                            $constructionCompanies = CertificateAssetConstructionCompany::withTrashed()
-                                ->where('certificate_id', $certificateId)
-                                ->where('appraise_id', $certificateAssetIds[$constructionCompanyData["id"]])
-                                ->get();
-                            if (isset($constructionCompanies) && $constructionCompanies->count()) {
-                                foreach ($constructionCompanies as $constructionCompany) {
-                                    $constructionCompany->restore();
-                                }
-                            } else {
-                                foreach ($constructionCompanyData['construction_company'] as $item) {
-                                    $item = (object) $item;
-                                    if (isset($certificateAssetIds[$constructionCompanyData["id"]])) {
-                                        $dataConstructionCompany = [
-                                            'certificate_id' => $certificateId,
-                                            'appraise_id' => $certificateAssetIds[$constructionCompanyData["id"]],
-                                            'company_id' => $item->construction_company_id,
-                                            'name' => $item->name,
-                                            'address' => $item->address,
-                                            'phone_number' => $item->phone_number,
-                                            'manager_name' => $item->manager_name,
-                                            'unit_price_m2' => $item->unit_price_m2,
-                                            'is_defaults' => $item->is_defaults,
-                                        ];
-
-                                        $dataConstructionCompany = new CertificateAssetConstructionCompany($dataConstructionCompany);
-                                        $constructionCompanyId = QueryBuilder::for($dataConstructionCompany)
-                                            ->insertGetId($dataConstructionCompany->attributesToArray());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                CertificateConstructionCompany::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['construction_company'])) {
-                    foreach ($objects['construction_company'] as $constructionCompanyData) {
-                        $constructionCompanyData['certificate_id'] = $certificateId;
-                        $constructionCompanyData = new CertificateConstructionCompany($constructionCompanyData);
-                        $constructionCompanyId = QueryBuilder::for($constructionCompanyData)
-                            ->insertGetId($constructionCompanyData->attributesToArray());
-                    }
-                }
-
-                CertificateApproach::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['certificate_approach'])) {
-                    foreach ($objects['certificate_approach'] as $certificateApproachData) {
-                        $certificateApproachData['certificate_id'] = $certificateId;
-                        $certificateApproachData = new CertificateApproach($certificateApproachData);
-                        $certificateApproachId = QueryBuilder::for($certificateApproachData)
-                            ->insertGetId($certificateApproachData->attributesToArray());
-                    }
-                }
-
-                CertificateMethodUsed::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['certificate_method_used'])) {
-                    foreach ($objects['certificate_method_used'] as $certificateMethodUsedData) {
-                        $certificateMethodUsedData['certificate_id'] = $certificateId;
-                        $certificateMethodUsedData = new CertificateMethodUsed($certificateMethodUsedData);
-                        $certificateMethodUsedId = QueryBuilder::for($certificateMethodUsedData)
-                            ->insertGetId($certificateMethodUsedData->attributesToArray());
-                    }
-                }
-
-                CertificateBasisProperty::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['certificate_basis_property'])) {
-                    foreach ($objects['certificate_basis_property'] as $certificateBasisPropertyData) {
-                        $certificateBasisPropertyData['certificate_id'] = $certificateId;
-                        $certificateBasisPropertyData = new CertificateBasisProperty($certificateBasisPropertyData);
-                        $certificateBasisPropertyId = QueryBuilder::for($certificateBasisPropertyData)
-                            ->insertGetId($certificateBasisPropertyData->attributesToArray());
-                    }
-                }
-
-                CertificatePrinciple::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['certificate_principle'])) {
-                    foreach ($objects['certificate_principle'] as $certificatePrincipleData) {
-                        $certificatePrincipleData['certificate_id'] = $certificateId;
-                        $certificatePrincipleData = new CertificatePrinciple($certificatePrincipleData);
-                        $certificatePrincipleId = QueryBuilder::for($certificatePrincipleData)
-                            ->insertGetId($certificatePrincipleData->attributesToArray());
-                    }
-                }
-
-                CertificateLegalDocumentsOnValuation::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['legal_documents_on_valuation'])) {
-                    foreach ($objects['legal_documents_on_valuation'] as $certificateDocumentsOnValuationData) {
-                        $certificateDocumentsOnValuationData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnValuationData = new CertificateLegalDocumentsOnValuation($certificateDocumentsOnValuationData);
-                        $certificateDocumentsOnValuationId = QueryBuilder::for($certificateDocumentsOnValuationData)
-                            ->insertGetId($certificateDocumentsOnValuationData->attributesToArray());
-                    }
-                }
-
-                CertificateLegalDocumentsOnConstruction::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['legal_documents_on_construction'])) {
-                    foreach ($objects['legal_documents_on_construction'] as $certificateDocumentsOnConstructionData) {
-                        $certificateDocumentsOnConstructionData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnConstructionData = new CertificateLegalDocumentsOnConstruction($certificateDocumentsOnConstructionData);
-                        $certificateDocumentsOnConstructionId = QueryBuilder::for($certificateDocumentsOnConstructionData)
-                            ->insertGetId($certificateDocumentsOnConstructionData->attributesToArray());
-                    }
-                }
-
-                CertificateLegalDocumentsOnLand::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['legal_documents_on_land'])) {
-                    foreach ($objects['legal_documents_on_land'] as $certificateDocumentsOnLandData) {
-                        $certificateDocumentsOnLandData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnLandData = new CertificateLegalDocumentsOnLand($certificateDocumentsOnLandData);
-                        $certificateDocumentsOnConstructionId = QueryBuilder::for($certificateDocumentsOnLandData)
-                            ->insertGetId($certificateDocumentsOnLandData->attributesToArray());
-                    }
-                }
-
-                CertificateLegalDocumentsOnLocal::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['legal_documents_on_local'])) {
-                    foreach ($objects['legal_documents_on_local'] as $certificateDocumentsOnLocalData) {
-                        $certificateDocumentsOnLocalData['certificate_id'] = $certificateId;
-                        $certificateDocumentsOnLocalData = new CertificateLegalDocumentsOnLocal($certificateDocumentsOnLocalData);
-                        $certificateDocumentsOnConstructionId = QueryBuilder::for($certificateDocumentsOnLocalData)
-                            ->insertGetId($certificateDocumentsOnLocalData->attributesToArray());
-                    }
-                }
-
-                if (isset($objects['delete_other_documents'])) {
-                    foreach ($objects['delete_other_documents'] as $otherDocument) {
-                        if (isset($otherDocument['id'])) {
-                            PreCertificateOtherDocuments::where('id', $otherDocument['id'])->delete();
-                        }
-                    }
-                }
-
-                /* CertificateComparisonFactor::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['comparison_factor'])) {
-                    foreach ($objects['comparison_factor'] as $comparisonFactor) {
-                        $comparisonFactor['certificate_id'] = $certificateId;
-                        $comparisonFactor = new CertificateComparisonFactor($comparisonFactor);
-                        $comparisonFactorId= QueryBuilder::for($comparisonFactor)
-                            ->insertGetId($comparisonFactor->attributesToArray());
-                    }
-                } */
-
-                /*
-                CertificateHasAppraise::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                if (isset($objects['appraises'])) {
-                    foreach ($objects['appraises'] as $appraise) {
-                        $appraise['certificate_id'] = $certificateId;
-                        $appraise = new CertificateHasAppraise($appraise);
-                        $assetGeneralId = QueryBuilder::for($appraise)
-                            ->insertGetId($appraise->attributesToArray());
-                    }
-                }*/
-
-                // $this->updateSelectComparisonFactor($certificateId);
-                return $certificateId;
+                return $preCertificateId;
             } catch (Exception $exception) {
                 dd($exception);
                 Log::error($exception);
@@ -2231,10 +968,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
 
-    // public function updateSelectComparisonFactor($certificateId): bool
+    // public function updateSelectComparisonFactor($preCertificateId): bool
     // {
-    //     $certificateHasAppraise = CertificateHasAppraise::query()->where('certificate_id', '=', $certificateId)->get();
-    //     $certificateComparisonFactor = CertificateComparisonFactor::query()->where('certificate_id', '=', $certificateId)->get();
+    //     $certificateHasAppraise = CertificateHasAppraise::query()->where('certificate_id', '=', $preCertificateId)->get();
+    //     $certificateComparisonFactor = CertificateComparisonFactor::query()->where('certificate_id', '=', $preCertificateId)->get();
     //     foreach ($certificateHasAppraise as $appraise) {
     //         $appraiseComparisonFactor = AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraise->appraise_id)->get();
     //         foreach ($appraiseComparisonFactor as $comparisonFactorAppraise) {
@@ -2893,14 +1630,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $data = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS . $id, 'exception' =>  ''];
                     return $data;
                 }
-                $certificateId = $id;
+                $preCertificateId = $id;
                 $status = $oldCertificate->status;
                 if (!isset($oldCertificate['created_by']))
                     $data['created_by'] = $user->id;
 
                 $certificateArr = new PreCertificate($data);
-                PreCertificate::where('id', $certificateId)->update($certificateArr->attributesToArray());
-                $edited = PreCertificate::where('id', $certificateId)->first();
+                PreCertificate::where('id', $preCertificateId)->update($certificateArr->attributesToArray());
+                $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $changeLog = $edited->fill($data);
                 $edited->save();
                 $this->CreateActivityLog($edited, $changeLog, 'update_data', 'cập nhật dữ liệu');
@@ -2914,16 +1651,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $certificateArr = new PreCertificate($data);
                 // dd($certificateArr);
                 $certificateCreate = PreCertificate::query()->create($certificateArr->attributesToArray());
-                $certificateId = $certificateCreate->id;
-                $this->saveMethod($certificateId);
+                $preCertificateId = $certificateCreate->id;
+                $this->saveMethod($preCertificateId);
                 # Activity Log "create if id = null"
-                $edited = PreCertificate::where('id', $certificateId)->first();
+                $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $this->CreateActivityLog($edited, $edited, 'create', 'tạo mới');
-                $this->updateDocumentDescription($certificateId);
+                $this->updateDocumentDescription($preCertificateId);
             }
             DB::commit();
             return [
-                'id' => $certificateId,
+                'id' => $preCertificateId,
                 'status' => $data['status'],
                 'sub_status' => $data['sub_status']
             ];
@@ -3126,8 +1863,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
-    private function updateAppraiseStatus($certificateId, $status, $subStatus) {
-        $preCertificate = $this->model->query()->with(['realEstate', 'personalProperties'])->where('id', $certificateId)->first(['id', 'status', 'sub_status']);
+    private function updateAppraiseStatus($preCertificateId, $status, $subStatus) {
+        $preCertificate = $this->model->query()->with(['realEstate', 'personalProperties'])->where('id', $preCertificateId)->first(['id', 'status', 'sub_status']);
         $realEstate = $preCertificate->realEstate;
         $personalProperties = $preCertificate->personalProperties;
         $updateData = [
@@ -3286,8 +2023,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
         $status = request()->get('status');
-        $certificateId = request()->get('certificate_id');
-        $preCertificate = PreCertificate::where('id', $certificateId)->first();
+        $preCertificateId = request()->get('certificate_id');
+        $preCertificate = PreCertificate::where('id', $preCertificateId)->first();
         $realEstateIds = [];
         $propertyIds = [];
         if ($page == 1) {
@@ -3321,7 +2058,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $paginated_data;
     }
 
-    private function saveDocumentLaw(int $certificateId, array $realEstateList, string $type)
+    private function saveDocumentLaw(int $preCertificateId, array $realEstateList, string $type)
     {
         if (isset($realEstateList)) {
             $provine = [];
@@ -3339,37 +2076,37 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             $provine[] = 'Tất cả';
             $lawDocument = AppraiseLawDocument::whereIn('provinces', $provine)->orderBy('position')->get();
-            CertificateLegalDocumentsOnValuation::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-            CertificateLegalDocumentsOnConstruction::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-            CertificateLegalDocumentsOnLand::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-            CertificateLegalDocumentsOnLocal::query()->where('certificate_id', '=', $certificateId)->forceDelete();
+            CertificateLegalDocumentsOnValuation::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
+            CertificateLegalDocumentsOnConstruction::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
+            CertificateLegalDocumentsOnLand::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
+            CertificateLegalDocumentsOnLocal::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
 
             if (isset($lawDocument)) {
                 foreach ($lawDocument as $law) {
                     if ($law['type'] == 'XAY_DUNG') {
                         $data = [];
-                        $data['certificate_id'] = $certificateId;
+                        $data['certificate_id'] = $preCertificateId;
                         $data['certificate_law_id'] = $law['id'];
                         $insertData = new CertificateLegalDocumentsOnConstruction($data);
                         QueryBuilder::for($insertData)
                             ->insert($insertData->attributesToArray());
                     } elseif ($law['type'] == 'DIA_PHUONG') {
                         $data = [];
-                        $data['certificate_id'] = $certificateId;
+                        $data['certificate_id'] = $preCertificateId;
                         $data['certificate_law_id'] = $law['id'];
                         $insertData = new CertificateLegalDocumentsOnLocal($data);
                         QueryBuilder::for($insertData)
                             ->insert($insertData->attributesToArray());
                     } elseif ($law['type'] == 'THAM_DINH_GIA') {
                         $data = [];
-                        $data['certificate_id'] = $certificateId;
+                        $data['certificate_id'] = $preCertificateId;
                         $data['certificate_law_id'] = $law['id'];
                         $insertData = new CertificateLegalDocumentsOnValuation($data);
                         QueryBuilder::for($insertData)
                             ->insert($insertData->attributesToArray());
                     } elseif ($law['type'] == 'DAT_DAI') {
                         $data = [];
-                        $data['certificate_id'] = $certificateId;
+                        $data['certificate_id'] = $preCertificateId;
                         $data['certificate_law_id'] = $law['id'];
                         $insertData = new CertificateLegalDocumentsOnLand($data);
                         QueryBuilder::for($insertData)
@@ -3390,46 +2127,46 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         // return $appraiseLawDocument;
     }
 
-    private function saveMethod(int $certificateId)
+    private function saveMethod(int $preCertificateId)
     {
-        if (isset($certificateId)) {
+        if (isset($preCertificateId)) {
             if (
-                CertificateMethodUsed::query()->where('certificate_id', '=', $certificateId)->doesntExist()
-                || CertificateBasisProperty::query()->where('certificate_id', '=', $certificateId)->doesntExist()
-                || CertificatePrinciple::query()->where('certificate_id', '=', $certificateId)->doesntExist()
-                || CertificateApproach::query()->where('certificate_id', '=', $certificateId)->doesntExist()
+                CertificateMethodUsed::query()->where('certificate_id', '=', $preCertificateId)->doesntExist()
+                || CertificateBasisProperty::query()->where('certificate_id', '=', $preCertificateId)->doesntExist()
+                || CertificatePrinciple::query()->where('certificate_id', '=', $preCertificateId)->doesntExist()
+                || CertificateApproach::query()->where('certificate_id', '=', $preCertificateId)->doesntExist()
             ) {
-                CertificateMethodUsed::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                CertificateBasisProperty::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                CertificatePrinciple::query()->where('certificate_id', '=', $certificateId)->forceDelete();
-                CertificateApproach::query()->where('certificate_id', '=', $certificateId)->forceDelete();
+                CertificateMethodUsed::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
+                CertificateBasisProperty::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
+                CertificatePrinciple::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
+                CertificateApproach::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
                 $otherDocument = AppraiseOtherInformation::where('is_defaults', true)->get();
                 if (isset($otherDocument)) {
                     foreach ($otherDocument as $other) {
                         if ($other['type'] == 'CO_SO_THAM_DINH') {
                             $data = [];
-                            $data['certificate_id'] = $certificateId;
+                            $data['certificate_id'] = $preCertificateId;
                             $data['certificate_basis_property_id'] = $other['id'];
                             $insertData = new CertificateBasisProperty($data);
                             QueryBuilder::for($insertData)
                                 ->insert($insertData->attributesToArray());
                         } elseif ($other['type'] == 'NGUYEN_TAC_THAM_DINH') {
                             $data = [];
-                            $data['certificate_id'] = $certificateId;
+                            $data['certificate_id'] = $preCertificateId;
                             $data['certificate_principle_id'] = $other['id'];
                             $insertData = new CertificatePrinciple($data);
                             QueryBuilder::for($insertData)
                                 ->insert($insertData->attributesToArray());
                         } elseif ($other['type'] == 'CACH_TIEP_CAN_CHI_PHI') {
                             $data = [];
-                            $data['certificate_id'] = $certificateId;
+                            $data['certificate_id'] = $preCertificateId;
                             $data['certificate_approach_id'] = $other['id'];
                             $insertData = new CertificateApproach($data);
                             QueryBuilder::for($insertData)
                                 ->insert($insertData->attributesToArray());
                         } elseif ($other['type'] == 'PHUONG_PHAP_THAM_DINH_SU_DUNG') {
                             $data = [];
-                            $data['certificate_id'] = $certificateId;
+                            $data['certificate_id'] = $preCertificateId;
                             $data['certificate_method_used_id'] = $other['id'];
                             $insertData = new CertificateMethodUsed($data);
                             QueryBuilder::for($insertData)
@@ -3441,31 +2178,31 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
 
-    private function updateDocumentDescription(int $certificateId)
+    private function updateDocumentDescription(int $preCertificateId)
     {
         // ApartmentAssetAppraisalBase
-        if (PreCertificate::where('id', $certificateId)->exists()) {
-            // $cert = PreCertificate::where('id', $certificateId)->first()->toArray();
+        if (PreCertificate::where('id', $preCertificateId)->exists()) {
+            // $cert = PreCertificate::where('id', $preCertificateId)->first()->toArray();
             // if ($cert['document_type'] && $cert['document_type'][0] == 'CC'){
-            //     $ccu =  RealEstate::where('certificate_id', $certificateId)->first()->toArray();
+            //     $ccu =  RealEstate::where('certificate_id', $preCertificateId)->first()->toArray();
             //     $apartment = ApartmentAsset::query()->where('real_estate_id', $ccu['id'])->first()->toArray();
             //     $apartmentId = $apartment['id'];
             //     $bases = ApartmentAssetAppraisalBase::query()->where('apartment_asset_id', $apartmentId)->first()->toArray();
-            //     PreCertificate::where('id', $certificateId)
+            //     PreCertificate::where('id', $preCertificateId)
             //     ->update(['document_description' => $bases['description']]);
             // } else {
-            //     PreCertificate::where('id', $certificateId)
+            //     PreCertificate::where('id', $preCertificateId)
             //     ->update(['document_description' => ValueDefault::CERTIFICATE_DESCRIPTION]);
             // }
-            PreCertificate::where('id', $certificateId)
+            PreCertificate::where('id', $preCertificateId)
                 ->update(['document_description' => ValueDefault::CERTIFICATE_DESCRIPTION]);
         }
     }
 
-    private function saveConstructionCompany(int $certificateId, int $certificateAppraiseId, int $appraiseId, int $justDelete = 0, int $appraise_tangible_id = null, int $certificate_tangbile_id = null)
+    private function saveConstructionCompany(int $preCertificateId, int $certificateAppraiseId, int $appraiseId, int $justDelete = 0, int $appraise_tangible_id = null, int $certificate_tangbile_id = null)
     {
         if ($justDelete == 1) {
-            CertificateAssetConstructionCompany::query()->where('certificate_id', $certificateId)->where('appraise_id', $certificateAppraiseId)->forceDelete();
+            CertificateAssetConstructionCompany::query()->where('certificate_id', $preCertificateId)->where('appraise_id', $certificateAppraiseId)->forceDelete();
             return;
         }
         if (isset($appraise_tangible_id)) {
@@ -3477,7 +2214,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $data = ConstructionCompany::where($where)->get();
         if (isset($data)) {
             foreach ($data as $item) {
-                $item['certificate_id'] = $certificateId;
+                $item['certificate_id'] = $preCertificateId;
                 $item['appraise_id'] = $certificateAppraiseId;
                 $item['company_id'] = $item['construction_company_id'];
                 $item['name'] = isset($item['name']) ? $item['name'] : '';
@@ -3498,20 +2235,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
 
-    public function updatePreCertificate_v2(array $objects, int $certificateId)
+    public function updatePreCertificate_v2(array $objects, int $preCertificateId)
     {
         $result =  [];
 
         DB::beginTransaction();
         try {
             // # khóa khối block xác thực
-            $check = $this->beforeSave($certificateId);
+            $check = $this->beforeSave($preCertificateId);
             if (isset($check)) {
                 return $check;
             }
 
-            if (PreCertificate::where('id', $certificateId)->where('status', 2)->exists()) {
-                $oldCertificate = PreCertificate::where('id', $certificateId)->first();
+            if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
+                $oldCertificate = PreCertificate::where('id', $preCertificateId)->first();
                 $documentType = $oldCertificate->document_type;
                 if (!isset($documentType))
                     $documentType = ['BDS'];
@@ -3528,13 +2265,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     foreach ($oldAppraises as $oldAppraise) {
                         $oldCertificateAssetIds[$oldAppraise->appraise_id] = $oldAppraise->id;
                     }
-                    // $this->saveMethod($certificateId);
-                    $this->saveDocumentLaw($certificateId, $objects['general_asset'], 'land');
-                    $this->saveMethod($certificateId);
-                    $this->updateDocumentDescription($certificateId);
+                    // $this->saveMethod($preCertificateId);
+                    $this->saveDocumentLaw($preCertificateId, $objects['general_asset'], 'land');
+                    $this->saveMethod($preCertificateId);
+                    $this->updateDocumentDescription($preCertificateId);
 
                     if (isset($objects['general_asset'])) {
-                        CertificateHasAppraise::query()->where('certificate_id', '=', $certificateId)->forceDelete();
+                        CertificateHasAppraise::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
 
                         foreach ($objects['general_asset'] as $appraise) {
                             if (!isset($oldCertificateAssetIds[$appraise['general_asset_id']])) {
@@ -3555,7 +2292,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 $certificateAssetId = QueryBuilder::for($certificateAsset)
                                     ->insertGetId($certificateAsset->attributesToArray());
 
-                                $appraise['certificate_id'] = $certificateId;
+                                $appraise['certificate_id'] = $preCertificateId;
                                 $appraise['appraise_id'] = $certificateAssetId;
                                 $appraise['version'] = '2.0';
                                 $appraise = new CertificateHasAppraise($appraise);
@@ -3633,12 +2370,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 }
 
                                 $appraiseUnitPriceDatas = AppraiseUnitPrice::where('appraise_id', $appraiseId)->get();
-                                CertificateAssetUnitPrice::where('certificate_id', $certificateId)
+                                CertificateAssetUnitPrice::where('certificate_id', $preCertificateId)
                                     ->where('appraise_id', $certificateAssetId)
                                     ->forceDelete();
                                 foreach ($appraiseUnitPriceDatas as $itemData) {
                                     if (isset($itemData)) {
-                                        $itemData->certificate_id = $certificateId;
+                                        $itemData->certificate_id = $preCertificateId;
                                         $itemData->appraise_id = $certificateAssetId;
                                         $item = new CertificateAssetUnitPrice($itemData->toArray());
                                         $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
@@ -3646,12 +2383,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 }
 
                                 $appraiseUnitPriceDatas = AppraiseUnitArea::where('appraise_id', $appraiseId)->get();
-                                CertificateAssetUnitArea::where('certificate_id', $certificateId)
+                                CertificateAssetUnitArea::where('certificate_id', $preCertificateId)
                                     ->where('appraise_id', $certificateAssetId)
                                     ->forceDelete();
                                 foreach ($appraiseUnitPriceDatas as $itemData) {
                                     if (isset($itemData)) {
-                                        $itemData->certificate_id = $certificateId;
+                                        $itemData->certificate_id = $preCertificateId;
                                         $itemData->appraise_id = $certificateAssetId;
                                         $item = new CertificateAssetUnitArea($itemData->toArray());
                                         $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
@@ -3757,7 +2494,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                                 QueryBuilder::for($item)->insert($item->attributesToArray());
                                             }
                                         }
-                                        $this->saveConstructionCompany($certificateId, $certificateAssetId, $oldAppraiseId, 0, $itemData->id, $itemId);
+                                        $this->saveConstructionCompany($preCertificateId, $certificateAssetId, $oldAppraiseId, 0, $itemData->id, $itemId);
                                     }
                                 }
 
@@ -3794,7 +2531,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 $certificateAssetId = $oldCertificateAssetIds[$appraise['general_asset_id']];
                                 $appraiseTmp = $appraise;
                                 $oldAppraiseId = $appraise['general_asset_id'];
-                                $appraiseTmp['certificate_id'] = $certificateId;
+                                $appraiseTmp['certificate_id'] = $preCertificateId;
                                 $appraiseTmp['appraise_id'] = $certificateAssetId;
                                 $appraiseTmp['version'] = '2.0';
                                 $appraiseTmp = new CertificateHasAppraise($appraiseTmp);
@@ -3805,7 +2542,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         }
                         foreach ($oldAppraises as $appraiseTmp) {
                             if (isset($appraiseTmp->appraise_id) && !isset($certificateAssetIds[$appraiseTmp->appraise_id])) {
-                                $this->saveConstructionCompany($certificateId, $appraiseTmp->id, $appraiseTmp->appraise_id, 1);
+                                $this->saveConstructionCompany($preCertificateId, $appraiseTmp->id, $appraiseTmp->appraise_id, 1);
                                 $appraiseId = $appraiseTmp->appraise_id;
                                 Appraise::where('id', $appraiseId)->update(['status' => 2]); // updateStatus : 3 = locked
                                 RealEstate::query()->whereHas('appraises', function ($has) use ($appraiseId){
@@ -3820,11 +2557,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         }
                     }
-                    CommonService::getCertificateAssetPriceTotal_v2($certificateId);
+                    CommonService::getCertificateAssetPriceTotal_v2($preCertificateId);
                 } else {
                     if (isset($objects['general_asset'])) {
                         $oldAppraises = $oldCertificate->personalProperties;
-                        CertificateHasPersonalProperty::query()->where('certificate_id', '=', $certificateId)->forceDelete();
+                        CertificateHasPersonalProperty::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
 
                         $oldCertificateAssetIds = [];
                         foreach ($oldAppraises as $oldAppraise) {
@@ -3850,7 +2587,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 $certificatePersonalProperty = CertificatePersonalProperty::query()->create($certificateAsset->attributesToArray());
                                 $certificateAssetId = $certificatePersonalProperty->id;
                                 $appraiseId = $appraise['general_asset_id'];
-                                $appraise['certificate_id'] = $certificateId;
+                                $appraise['certificate_id'] = $preCertificateId;
                                 $appraise['personal_property_id'] = $certificateAssetId;
                                 $appraise['version'] = '2.0';
                                 $appraise = new CertificateHasPersonalProperty($appraise);
@@ -3864,7 +2601,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 $certificateAssetId = $oldCertificateAssetIds[$appraise['general_asset_id']];
                                 $appraiseTmp = $appraise;
                                 $oldAppraiseId = $appraise['general_asset_id'];
-                                $appraiseTmp['certificate_id'] = $certificateId;
+                                $appraiseTmp['certificate_id'] = $preCertificateId;
                                 $appraiseTmp['personal_property_id'] = $certificateAssetId;
                                 $appraiseTmp['version'] = '2.0';
                                 $appraiseTmp = new CertificateHasPersonalProperty($appraiseTmp);
@@ -3883,9 +2620,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         }
                     }
-                    $this->updatePersonaltyPrice($certificateId);
+                    $this->updatePersonaltyPrice($preCertificateId);
                 }
-                $edited = PreCertificate::where('id', $certificateId)->first();
+                $edited = PreCertificate::where('id', $preCertificateId)->first();
 
                 // activity-log cập nhật thông tin chi tiết
                 $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin chi tiết');
@@ -3894,7 +2631,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 return $result;
             }
             DB::commit();
-            $result = $this->getCertificateAppraise($certificateId);
+            $result = $this->getCertificateAppraise($preCertificateId);
         } catch (exception $ex) {
             DB::rollBack();
             Log::error($ex);
@@ -3903,7 +2640,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
-    public function updatePreCertificateVersion ($certificateId, $object)
+    public function updatePreCertificateVersion ($preCertificateId, $object)
     {
         try {
             DB::beginTransaction();
@@ -3919,31 +2656,31 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $certificateRealEstate->update($realEstate->toArray());
                         // dd($realEstate->apartment);
                         if (!empty($realEstate->appraises)) {
-                            $this->insertAppraiseData($realEstateId, $certificateRealEstateId, $certificateId);
+                            $this->insertAppraiseData($realEstateId, $certificateRealEstateId, $preCertificateId);
                         }
                         if (!empty($realEstate->apartment)) {
-                            $this->insertApartmentData($realEstateId, $certificateRealEstateId, $certificateId);
+                            $this->insertApartmentData($realEstateId, $certificateRealEstateId, $preCertificateId);
                         }
                     }
                 }
             }
-            CommonService::getCertificateAssetPriceTotal_v2($certificateId);
-            // $this->updateTotalPrie($certificateId);
+            CommonService::getCertificateAssetPriceTotal_v2($preCertificateId);
+            // $this->updateTotalPrie($preCertificateId);
             DB::commit();
-            $preCertificate = $this->getCertificateAppraise($certificateId);
+            $preCertificate = $this->getCertificateAppraise($preCertificateId);
             return $preCertificate;
         } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => ''];
         }
     }
-    private function insertAppraiseData($realEstateId, int $certificateRealEstateId, int $certificateId)
+    private function insertAppraiseData($realEstateId, int $certificateRealEstateId, int $preCertificateId)
     {
         if (CertificateAsset::query()->where('real_estate_id', $certificateRealEstateId)->exists()) {
             CertificateAsset::query()->where('real_estate_id', $certificateRealEstateId)->forceDelete();
         }
-        if (CertificateHasAppraise::query()->where('certificate_id', $certificateId)->exists()) {
-            CertificateHasAppraise::query()->where('certificate_id', $certificateId)->forceDelete();
+        if (CertificateHasAppraise::query()->where('certificate_id', $preCertificateId)->exists()) {
+            CertificateHasAppraise::query()->where('certificate_id', $preCertificateId)->forceDelete();
         }
         $appraise = Appraise::query()->where('real_estate_id', $realEstateId)->first()->toArray();
         $appraiseId = $appraise['id'];
@@ -3953,7 +2690,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $appraiseData = new CertificateAsset($appraise);
         $certificateAppraise=  $appraiseData->newQuery()->create($appraiseData->attributesToArray());
         $certificateAssetId = $certificateAppraise->id;
-        $appraise['certificate_id'] = $certificateId;
+        $appraise['certificate_id'] = $preCertificateId;
         $appraise['appraise_id'] = $certificateAssetId;
         $appraise['version'] = '1.0';
         $appraiseData = new CertificateHasAppraise($appraise);
@@ -4030,12 +2767,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
 
         $appraiseUnitPriceDatas = AppraiseUnitPrice::where('appraise_id', $appraiseId)->get();
-        CertificateAssetUnitPrice::where('certificate_id', $certificateId)
+        CertificateAssetUnitPrice::where('certificate_id', $preCertificateId)
             ->where('appraise_id', $certificateAssetId)
             ->forceDelete();
         foreach ($appraiseUnitPriceDatas as $itemData) {
             if (isset($itemData)) {
-                $itemData->certificate_id = $certificateId;
+                $itemData->certificate_id = $preCertificateId;
                 $itemData->appraise_id = $certificateAssetId;
                 $item = new CertificateAssetUnitPrice($itemData->toArray());
                 $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
@@ -4043,12 +2780,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
 
         $appraiseUnitPriceDatas = AppraiseUnitArea::where('appraise_id', $appraiseId)->get();
-        CertificateAssetUnitArea::where('certificate_id', $certificateId)
+        CertificateAssetUnitArea::where('certificate_id', $preCertificateId)
             ->where('appraise_id', $certificateAssetId)
             ->forceDelete();
         foreach ($appraiseUnitPriceDatas as $itemData) {
             if (isset($itemData)) {
-                $itemData->certificate_id = $certificateId;
+                $itemData->certificate_id = $preCertificateId;
                 $itemData->appraise_id = $certificateAssetId;
                 $item = new CertificateAssetUnitArea($itemData->toArray());
                 $itemId = QueryBuilder::for($item)->insertGetId($item->attributesToArray());
@@ -4154,7 +2891,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         QueryBuilder::for($item)->insert($item->attributesToArray());
                     }
                 }
-                $this->saveConstructionCompany($certificateId, $certificateAssetId, $appraiseId, 0, $itemData->id, $itemId);
+                $this->saveConstructionCompany($preCertificateId, $certificateAssetId, $appraiseId, 0, $itemData->id, $itemId);
             }
         }
 
@@ -4186,21 +2923,21 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
     }
-    private function updateDetailRealEstateAppraise($certificateId, $realEstates, $realEstateAppraiseIds)
+    private function updateDetailRealEstateAppraise($preCertificateId, $realEstates, $realEstateAppraiseIds)
     {
         $oldRealEstates = $realEstates;
         // $appraiseRepo = new EloquentAppraiseRepository(new Appraise());
         CertificateHasRealEstate::query()
-            ->where('certificate_id' , $certificateId)
+            ->where('certificate_id' , $preCertificateId)
             ->whereHas('realEstates', function ($has) use ($realEstateAppraiseIds) {
                 $has->whereIn('real_estate_id', $realEstateAppraiseIds);
             })->forceDelete();
         foreach ($oldRealEstates as $realEstate) {
             $oldCertificateAssetIds[$realEstate->real_estate_id] = $realEstate->id;
         }
-        $this->saveDocumentLaw($certificateId, $realEstateAppraiseIds, 'land');
-        $this->saveMethod($certificateId);
-        $this->updateDocumentDescription($certificateId);
+        $this->saveDocumentLaw($preCertificateId, $realEstateAppraiseIds, 'land');
+        $this->saveMethod($preCertificateId);
+        $this->updateDocumentDescription($preCertificateId);
 
         foreach ($realEstateAppraiseIds as $realEstateId) {
             if (!isset($oldCertificateAssetIds[$realEstateId])) {
@@ -4210,17 +2947,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $assetData->real_estate_id = $realEstateId;
                 $certificateRealEstate = new CertificateRealEstate($assetData->toArray());
                 $certificateAssetId = CertificateRealEstate::query()->insertGetId($certificateRealEstate->attributesToArray());
-                $realEstateData['certificate_id'] = $certificateId;
+                $realEstateData['certificate_id'] = $preCertificateId;
                 $realEstateData['real_estate_id'] = $certificateAssetId;
                 $realEstateData['version'] = '1.0';
                 CertificateHasRealEstate::query()->create($realEstateData);
-                $this->insertAppraiseData($realEstateId, $certificateAssetId, $certificateId);
+                $this->insertAppraiseData($realEstateId, $certificateAssetId, $preCertificateId);
                 // $appraiseRepo->updateRealEstateStatus($realEstateId, 3);
-                $this->updateRealEstateCertificateId($realEstateId,$certificateId );
+                $this->updateRealEstateCertificateId($realEstateId,$preCertificateId );
             }  else {
                 $certificateAssetId = $oldCertificateAssetIds[$realEstateId];
                 $realEstate = [];
-                $realEstate['certificate_id'] = $certificateId;
+                $realEstate['certificate_id'] = $preCertificateId;
                 $realEstate['real_estate_id'] = $certificateAssetId;
                 $realEstate['version'] = '2.0';
                 CertificateHasRealEstate::query()->create($realEstate);
@@ -4237,13 +2974,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $realEstateId = $realEstate->id;
                 $certificateAsset = CertificateAsset::query()->where('real_estate_id', $realEstateId)->first();
                 if (isset($certificateAsset))
-                    $this->saveConstructionCompany($certificateId, $certificateAsset->id, $certificateAsset->appraise_id, 1);
+                    $this->saveConstructionCompany($preCertificateId, $certificateAsset->id, $certificateAsset->appraise_id, 1);
                 CertificateRealEstate::query()->where('real_estate_id', $diff)->forceDelete();
             }
         }
 
     }
-    private function insertApartmentData(int $realEstateId, int $certificateAssetId, int $certificateId)
+    private function insertApartmentData(int $realEstateId, int $certificateAssetId, int $preCertificateId)
     {
         if (CertificateApartment::query()->where('real_estate_id', $certificateAssetId)->exists()) {
             CertificateApartment::query()->where('real_estate_id', $certificateAssetId)->forceDelete();
@@ -4354,19 +3091,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $versionData = $versionArr->attributesToArray();
         CertificateApartmentVersion::query()->create($versionData);
     }
-    private function updateDetailRealEstateApartment($certificateId, $realEstates, $realEstateApartmentIds)
+    private function updateDetailRealEstateApartment($preCertificateId, $realEstates, $realEstateApartmentIds)
     {
         $oldRealEstates = $realEstates;
         // $apartmentRepo = new EloquentApartmentAssetRepository(new ApartmentAsset());
         CertificateHasRealEstate::query()
-            ->where('certificate_id' , $certificateId)
+            ->where('certificate_id' , $preCertificateId)
             ->whereHas('realEstates', function ($has) use ($realEstateApartmentIds) {
                 $has->whereIn('real_estate_id', $realEstateApartmentIds);
             })->forceDelete();
 
-        $this->saveDocumentLaw($certificateId, $realEstateApartmentIds, 'apartment');
-        $this->saveMethod($certificateId);
-        $this->updateDocumentDescription($certificateId);
+        $this->saveDocumentLaw($preCertificateId, $realEstateApartmentIds, 'apartment');
+        $this->saveMethod($preCertificateId);
+        $this->updateDocumentDescription($preCertificateId);
 
         foreach ($oldRealEstates as $realEstate) {
             $oldCertificateAssetIds[$realEstate->real_estate_id] = $realEstate->id;
@@ -4379,17 +3116,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $assetData->real_estate_id = $realEstateId;
                 $certificateRealEstate = new CertificateRealEstate($assetData->toArray());
                 $certificateAssetId = CertificateRealEstate::query()->insertGetId($certificateRealEstate->attributesToArray());
-                $realEstateData['certificate_id'] = $certificateId;
+                $realEstateData['certificate_id'] = $preCertificateId;
                 $realEstateData['real_estate_id'] = $certificateAssetId;
                 $realEstateData['version'] = '1.0';
                 CertificateHasRealEstate::query()->create($realEstateData);
-                $this->insertApartmentData($realEstateId, $certificateAssetId, $certificateId);
+                $this->insertApartmentData($realEstateId, $certificateAssetId, $preCertificateId);
                 // $apartmentRepo->updateStatus($realEstateId, 3);
-                $this->updateRealEstateCertificateId($realEstateId, $certificateId, false);
+                $this->updateRealEstateCertificateId($realEstateId, $preCertificateId, false);
             }  else {
                 $certificateAssetId = $oldCertificateAssetIds[$realEstateId];
                 $realEstate = [];
-                $realEstate['certificate_id'] = $certificateId;
+                $realEstate['certificate_id'] = $preCertificateId;
                 $realEstate['real_estate_id'] = $certificateAssetId;
                 $realEstate['version'] = '2.0';
                 CertificateHasRealEstate::query()->create($realEstate);
@@ -4405,9 +3142,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
     }
-    private function updateDetailPersonalProperty($certificateId, $oldPersonals, $personalIds)
+    private function updateDetailPersonalProperty($preCertificateId, $oldPersonals, $personalIds)
     {
-        CertificateHasPersonalProperty::query()->where('certificate_id', '=', $certificateId)->forceDelete();
+        CertificateHasPersonalProperty::query()->where('certificate_id', '=', $preCertificateId)->forceDelete();
         $oldCertificateAssetIds = [];
         foreach ($oldPersonals as $personal) {
             $oldCertificateAssetIds[$personal->personal_property_id] = $personal->id;
@@ -4421,17 +3158,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $certificatePersonal = new CertificatePersonalProperty($assetData->toArray());
                 $certificateAssetId = CertificatePersonalProperty::query()->insertGetId($certificatePersonal->attributesToArray());
 
-                $personalData['certificate_id'] = $certificateId;
+                $personalData['certificate_id'] = $preCertificateId;
                 $personalData['personal_property_id'] = $certificateAssetId;
                 $personalData['version'] = '1.0';
                 CertificateHasPersonalProperty::query()->create($personalData);
 
                 $this->UpdatePersonaltyData($personalId, $certificateAssetId, $assetData->assetType->acronym);
-                $this->updatePersonalPropertyCertificateId($personalId, $certificateId);
+                $this->updatePersonalPropertyCertificateId($personalId, $preCertificateId);
             }  else {
                 $certificateAssetId = $oldCertificateAssetIds[$personalId];
                 $personal = [];
-                $personal['certificate_id'] = $certificateId;
+                $personal['certificate_id'] = $preCertificateId;
                 $personal['personal_property_id'] = $certificateAssetId;
                 $personal['version'] = '2.0';
                 CertificateHasPersonalProperty::query()->create($personal);
@@ -4447,19 +3184,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
     }
-    public function updatePreCertificateV3(array $objects, int $certificateId)
+    public function updatePreCertificateV3(array $objects, int $preCertificateId)
     {
         $result =  [];
 
         DB::beginTransaction();
         try {
             // # khóa khối block xác thực
-            $check = $this->beforeSave($certificateId);
+            $check = $this->beforeSave($preCertificateId);
             if (isset($check)) {
                 return $check;
             }
             $chekcPrice = $objects['check_price'] ?? false;
-            if (PreCertificate::where('id', $certificateId)->where('status', 2)->exists()) {
+            if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
                 if (isset($objects['general_asset'])) {
                     $generalAsset = $objects['general_asset'];
                     $personalIds = [];
@@ -4501,18 +3238,18 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         }
                         if (count($personalIds) > 0) {
-                            $this->updateDetailPersonalProperty($certificateId, $oldPersonals??[], $personalIds);
+                            $this->updateDetailPersonalProperty($preCertificateId, $oldPersonals??[], $personalIds);
                         }
                         if (count($realEstateApartmentIds) > 0) {
-                            $this->updateDetailRealEstateApartment($certificateId, $oldRealEstateApartment??[], $realEstateApartmentIds);
+                            $this->updateDetailRealEstateApartment($preCertificateId, $oldRealEstateApartment??[], $realEstateApartmentIds);
                         }
                         if (count($realEstateAppraiseIds) > 0) {
-                            $this->updateDetailRealEstateAppraise($certificateId, $oldRealEstateAppraise??[], $realEstateAppraiseIds);
+                            $this->updateDetailRealEstateAppraise($preCertificateId, $oldRealEstateAppraise??[], $realEstateAppraiseIds);
                         }
                     }
-                    $this->removeAssetInCertificate($certificateId, $personalIds, $realEstateApartmentIds, $realEstateAppraiseIds);
+                    $this->removeAssetInCertificate($preCertificateId, $personalIds, $realEstateApartmentIds, $realEstateAppraiseIds);
                 }
-                $edited = PreCertificate::where('id', $certificateId)->first();
+                $edited = PreCertificate::where('id', $preCertificateId)->first();
                 // activity-log cập nhật thông tin chi tiết
                 $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin chi tiết');
             } else {
@@ -4520,7 +3257,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 return $result;
             }
             DB::commit();
-            $result = $this->updateDocumentType($certificateId);
+            $result = $this->updateDocumentType($preCertificateId);
         } catch (exception $ex) {
             DB::rollBack();
             Log::error($ex);
@@ -4528,9 +3265,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         return $result;
     }
-    private function removeAssetInCertificate($certificateId, $personalKeep = [], $realEstateApartmentKeep = [], $realEstateAppraiseKeep = [])
+    private function removeAssetInCertificate($preCertificateId, $personalKeep = [], $realEstateApartmentKeep = [], $realEstateAppraiseKeep = [])
     {
-        $oldCertificate = PreCertificate::where('id', $certificateId)->first();
+        $oldCertificate = PreCertificate::where('id', $preCertificateId)->first();
         $oldPersonals = $oldCertificate->personalProperties;
         $realEstates = $oldCertificate->realEstate;
         $oldRealEstateApartment = $realEstates->where('assetType.acronym','CC');
@@ -4547,7 +3284,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             // $personalRepo = new EloquentPersonalPropertiesRepository(new PersonalProperty());
             foreach ($personalDelete as $personalId) {
                 CertificateHasPersonalProperty::query()
-                    ->where('certificate_id',  $certificateId)
+                    ->where('certificate_id',  $preCertificateId)
                     ->whereHas('personalProperties', function ($has) use($personalId){
                         $has->where('personal_property_id', $personalId);
                     })
@@ -4561,7 +3298,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             // $apartmentRepo = new EloquentApartmentAssetRepository(new ApartmentAsset());
             foreach ($realEstateApartmentDelete as $realEstateId) {
                 CertificateHasRealEstate::query()
-                    ->where('certificate_id', '=', $certificateId)
+                    ->where('certificate_id', '=', $preCertificateId)
                     ->whereHas('realEstates', function ($has) use($realEstateId){
                         $has->where('real_estate_id', $realEstateId);
                     }) ->forceDelete();
@@ -4574,7 +3311,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             // $appraiseRepo = new EloquentAppraiseRepository(new Appraise());
             foreach ($realEstateAppraiseDelete as $realEstateId) {
                 CertificateHasRealEstate::query()
-                    ->where('certificate_id', '=', $certificateId)
+                    ->where('certificate_id', '=', $preCertificateId)
                     ->whereHas('realEstates', function ($has) use($realEstateId){
                         $has->where('real_estate_id', $realEstateId);
                     }) ->forceDelete();
@@ -4582,12 +3319,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 // Remove construction infomation in preCertificate
                 $certificateAsset = CertificateAsset::query()->where('real_estate_id', $realEstateId)->first();
                 if (isset($certificateAsset))
-                    $this->saveConstructionCompany($certificateId, $certificateAsset->id, $certificateAsset->appraise_id, 1);
+                    $this->saveConstructionCompany($preCertificateId, $certificateAsset->id, $certificateAsset->appraise_id, 1);
                 $this->updateRealEstateCertificateId($realEstateId);
             }
         }
-        CommonService::getCertificateAssetPriceTotal_v2($certificateId);
-        $this->updateTotalPrie($certificateId);
+        CommonService::getCertificateAssetPriceTotal_v2($preCertificateId);
+        $this->updateTotalPrie($preCertificateId);
     }
     private function getCertificateAppraise(int $id)
     {
@@ -5333,7 +4070,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
 
-    private function checkDuplicateData(array $object, int $certificateId = null)
+    private function checkDuplicateData(array $object, int $preCertificateId = null)
     {
         $result = null;
         // PreCertificate brief id must be checked with year.
@@ -5345,7 +4082,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $paramKeys = array_keys($paramList);
             foreach ($paramKeys as $key) {
                 if (isset($object[$key])) {
-                    if (PreCertificate::where($key, $object[$key])->where('id', '<>', $certificateId ?? -1)->exists()) {
+                    if (PreCertificate::where($key, $object[$key])->where('id', '<>', $preCertificateId ?? -1)->exists()) {
                         $result = ['message' => $paramList[$key] . ' đã tồn tại. Vui lòng nhập ' . $paramList[$key] . ' khác', 'exception' => ''];
                     }
                 }
@@ -5761,8 +4498,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         try {
             $other = PreCertificateOtherDocuments::query()->where('id', $id)->first();
-            $certificateId = $other->certificate_id;
-            $check = $this->checkAuthorizationCertificate($certificateId);
+            $preCertificateId = $other->certificate_id;
+            $check = $this->checkAuthorizationCertificate($preCertificateId);
             if (!empty($check))
                 return $check;
             $description = $other->description;
@@ -5774,7 +4511,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $name = $path . $fileName;
             Storage::disk(env('FILESYSTEM_DRIVER'))->delete($name);
             $other->delete();
-            $preCertificate = $this->model->query()->where('id', $certificateId)->with('otherDocuments')->first('id');
+            $preCertificate = $this->model->query()->where('id', $preCertificateId)->with('otherDocuments')->first('id');
             $this->CreateActivityLog($preCertificate, $preCertificate, 'upload_document', 'xóa file '. $logDescription);
             return $preCertificate->otherDocuments;
         } catch (Exception $ex) {

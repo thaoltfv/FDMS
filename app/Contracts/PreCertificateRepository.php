@@ -18,7 +18,7 @@ interface PreCertificateRepository extends BaseRepository
 
     public function getComparisonFactor($id);
 
-    // public function createPreCertificate(array $objects);
+    public function createPreCertificate(array $objects);
 
     // public function updatePreCertificate($id, array $objects);
 
