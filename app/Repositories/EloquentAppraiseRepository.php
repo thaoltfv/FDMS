@@ -4294,7 +4294,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $user = CommonService::getUser();
             $comparisonFactors =$objects['comparison_factor'];
             $dictionaries = $this->findAllAppraiseDictionaries();
-            dd($comparisonFactors,$dictionaries);
+            // dd($comparisonFactors,$dictionaries);
             // $appraiseData = $this->getAppraiseDataComparison($appraiseId);
             $appraise = $this->model->query()->where('id', $appraiseId)->first();
             $baseUBNDPrice = $this->getBaseUBNDPrice($appraiseId);
@@ -4490,8 +4490,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "dieu_kien_thanh_toan",
             "yeu_to_khac",
             "khoang_cach",
-            "muc_dich_chinh"
+            "muc_dich_chinh",
+            "vi_tri"
         ];
+        dd($asset);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
