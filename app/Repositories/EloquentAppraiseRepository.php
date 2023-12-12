@@ -4493,7 +4493,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "muc_dich_chinh",
             "vi_tri"
         ];
-        dd($property);
+        // dd($property);
         $description = CompareProperty::query()->where('asset_general_id', '=', $asset['id'])->first();
         // dd($description);
         // dd(json_encode($object));
@@ -4738,7 +4738,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $name = 'Mục đích sử dụng đất chính';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }elseif($comparisonFactorTmp == 'vi_tri'){
-                $appraiseValue = 'false' ;
+                $appraiseValue = isset($property->description) ? $property->description :'Không biết'; ;
                 // $assetValue = 0;
                 $assetValue = $description->description;
                 // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
