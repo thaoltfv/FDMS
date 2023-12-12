@@ -19,7 +19,7 @@ class EstimateAssetDefault
 
     public const GROUP_LAND_TYPE = [61,62,63,65];
 
-    public const COMPARATION_FACTORS = ['muc_dich_chinh','khoang_cach', 'phap_ly', 'quy_mo', 'chieu_rong_mat_tien', 'chieu_sau_khu_dat', 'hinh_dang_dat', 'ket_cau_duong', 'do_rong_duong', 'dieu_kien_ha_tang', 'kinh_doanh', 'an_ninh_moi_truong_song', 'phong_thuy', 'giao_thong', 'quy_hoach', 'dieu_kien_thanh_toan'];
+    public const COMPARATION_FACTORS = ['muc_dich_chinh','khoang_cach', 'phap_ly', 'quy_mo', 'chieu_rong_mat_tien', 'chieu_sau_khu_dat', 'hinh_dang_dat', 'ket_cau_duong', 'do_rong_duong', 'dieu_kien_ha_tang', 'kinh_doanh', 'an_ninh_moi_truong_song', 'phong_thuy', 'giao_thong', 'quy_hoach', 'dieu_kien_thanh_toan', 'vi_tri'];
     public const COMPARATION_FACTORS_V2 = ['muc_dich_chinh','khoang_cach', 'phap_ly', 'quy_mo', 'chieu_rong_mat_tien', 'chieu_sau_khu_dat', 'hinh_dang_dat', 'ket_cau_duong', 'do_rong_duong'];
     public const COMPARATION_FACTORS_APARTMENT = ['phap_ly', 'loai_can', 'dien_tich', 'tang', 'so_phong_wc', 'so_phong_ngu'];
 

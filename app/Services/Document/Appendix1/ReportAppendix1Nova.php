@@ -104,7 +104,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoExploreTime('', 'Thời điểm khảo sát', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
-        $data[] = $this->collectInfoAddressAppraise($stt++, 'Vị trí thửa đất', $asset);
+        $data[] = $this->collectInfoAddressAppraise($stt++, 'Địa chỉ thửa đất', $asset);
         $data[] = $this->collectInfoDistanceAppraise('', 'Khoảng cách TSSS đến TSTĐ', $asset);
         $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
         $data[] = $this->collectInfoAreaAppraise($stt, "Tổng diện tích ($this->m2)", $asset);
