@@ -4738,7 +4738,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $name = 'Mục đích sử dụng đất chính';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }elseif($comparisonFactorTmp == 'vi_tri'){
-                dd('vô đây');
+                // dd('vô đây');
                 $appraiseValue = isset($property->description) ? $property->description :'Không biết'; ;
                 // $assetValue = 0;
                 $assetValue = $description->description;
