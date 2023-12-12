@@ -4493,7 +4493,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "muc_dich_chinh",
             "vi_tri"
         ];
-        dd($asset);
+        // dd($asset);
+        $description = CompareProperty::query()->where('asset_general_id', '=', $$asset->id)->first();
+        dd($description);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
