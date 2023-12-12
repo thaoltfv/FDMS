@@ -54,7 +54,7 @@ class PreCertificate extends Model
         'business_manager_id',
 
         // chuyên viên thực hiện
-        'appraiser_performance_id',
+        'appraiser_perform_id',
 
         // tài liệu đính kèm
         // 'pre_certificate_file',    
