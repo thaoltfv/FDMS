@@ -42,7 +42,7 @@ interface PreCertificateRepository extends BaseRepository
 
     // public function updatePreCertificate_v2(array $object , int $PreCertificateId);
 
-    // public function getPreCertificate(int $id);
+    public function getPreCertificate(int $id);
 
     // public function updatePreCertificateGeneral(int $id , array $object);
 

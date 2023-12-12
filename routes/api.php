@@ -317,6 +317,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pre-certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
     // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
     Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
+    Route::get('pre-certificate/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
 
     Route::post('pre-certificate/other-document/upload/{id}', [PreCertificateController::class, 'otherDocumentUpload']);
 

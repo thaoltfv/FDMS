@@ -1724,7 +1724,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
-    public function getCertificate(int $id)
+    public function getPreCertificate(int $id)
     {
         $result = [];
         $check = $this->checkAuthorizationCertificate($id);
@@ -1732,71 +1732,50 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             return $check;
         $select = [
             'id',
+            'certificate_id',
             'petitioner_name',
             'petitioner_phone',
             'petitioner_identity_card',
             'petitioner_address',
-            'appraiser_id',
-            'appraiser_confirm_id',
-            'appraiser_manager_id',
-            'appraiser_control_id',
-            'appraise_purpose_id',
-            'document_num',
-            'document_date',
-            'appraise_date',
-            'service_fee',
-            'appraiser_sale_id',
-            'appraiser_perform_id',
-            'certificate_date',
-            'certificate_num',
             'customer_id',
-            'status',
-            'sub_status',
-            'commission_fee',
+            'appraise_purpose_id',
             'note',
-            'status_expired_at',
+            'appraiser_sale_id',
+            'business_manager_id',
+            'appraiser_performance_id',
+            'total_preliminary_value',
+            'cancel_reason',
+            'status_updated_at',
+            'created_at',
             'created_by',
-            'document_type',
+            'updated_at',
+            'updated_by',
+            'status',
+            'deleted_at',
+            'status_expired_at',
         ];
         $with = [
-            'appraiser:id,name,user_id',
-            'appraiserManager:id,name,user_id',
-            'appraiserControl:id,name,user_id',
-            'appraiserConfirm:id,name,user_id',
-            'appraiserControl:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
+            'businessManager:id,name,user_id',
             'appraisePurpose:id,name',
             'customer:id,name,phone,address',
             'otherDocuments',
-            'saleDocuments' => function ($q) {
-                $q->where('description', '=', 'other');
-            },
-            'personalProperties',
-            'realEstate',
-            'realEstate.appraises',
-            'realEstate.appraises.lastVersion',
-            'realEstate.appraises.appraiseHasAssets',
-            'realEstate.appraises.assetPrice',
-            'realEstate.apartment',
-            'realEstate.apartment.apartmentAssetProperties',
-            'realEstate.apartment.apartmentHasAssets',
-            'realEstate.apartment.lastVersion',
-            'realEstate.apartment.assetPrice',
+            'createdByAppraiser:id,name,user_id',
         ];
         $result = $this->model->query()
             ->with($with)
             ->where('id', $id)
             ->select($select)
             ->first();
-        $result->append(['status_text', 'general_asset']);
-        $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
-        if ($result['status'] == 5) {
-            $user = User::query()
-            ->where('id', '=', $result['created_by'])
-            ->first();
-            $result['image'] = $user->image;
-        }
+        $result->append(['status']);
+        // $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
+        // if ($result['status'] == 5) {
+        //     $user = User::query()
+        //     ->where('id', '=', $result['created_by'])
+        //     ->first();
+        //     $result['image'] = $user->image;
+        // }
         if ($result['status'] == 1) {
             $appraiser = Appraiser::query()
             ->where('id', '=', $result['appraiser_sale_id'])
@@ -1817,7 +1796,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         if ($result['status'] == 3 || $result['status'] == 4) {
             $appraiser = Appraiser::query()
-            ->where('id', '=', $result['appraiser_id'])
+            ->where('id', '=', $result['appraiser_perform_id'])
             ->first();
             $user = User::query()
             ->where('id', '=', $appraiser->user_id)
@@ -1826,7 +1805,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         if ($result['status'] == 6) {
             $appraiser = Appraiser::query()
-            ->where('id', '=', $result['appraiser_control_id'])
+            ->where('id', '=', $result['business_manager_id'])
             ->first();
             $user = User::query()
             ->where('id', '=', $appraiser->user_id)
@@ -1949,7 +1928,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $this->notifyChangeStatus($id, $status);
                 }
                 // $result = $this->getAppraisalTeam($id);
-                $result = $this->getCertificate($id);
+                $result = $this->getPreCertificate($id);
 
                 return $result;
             } catch (Exception $exception) {

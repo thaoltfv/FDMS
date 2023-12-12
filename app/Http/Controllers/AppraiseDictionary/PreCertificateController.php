@@ -307,6 +307,16 @@ class PreCertificateController extends Controller
     private array $permissionEdit =['EDIT_CERTIFICATE_BRIEF'];
     private array $permissionExport =['EXPORT_CERTIFICATE_BRIEF'];
 
+    public function getPreCertificate(int $id){
+        if(! CommonService::checkUserPermission($this->permissionView))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+
+        $result =  $this->preCertificateRepository->getPreCertificate($id);
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+        return $this->respondWithCustomData($result);
+    }
+
     public function findPaging(Request $request)
     {
         if(! CommonService::checkUserPermission($this->permissionView))
