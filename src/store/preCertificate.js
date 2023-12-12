@@ -18,7 +18,7 @@ export const usePreCertificateStore = defineStore(
 			note: null,
 			appraiser_sale_id: null,
 			business_manager_id: null,
-			appraiser_performance_id: null,
+			appraiser_perform_id: null,
 			total_preliminary_value: null,
 			cancel_reason: null,
 
@@ -104,7 +104,7 @@ export const usePreCertificateStore = defineStore(
 				note: null,
 				appraiser_sale_id: null,
 				business_manager_id: null,
-				appraiser_performance_id: null,
+				appraiser_perform_id: null,
 				total_preliminary_value: null,
 				cancel_reason: null,
 
