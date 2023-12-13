@@ -1725,7 +1725,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $check = $this->checkAuthorizationPreCertificate($id);
         if (!empty($check))
             return $check;
-        dd($check);
+        // dd($check);
         $select = [
             'id',
             'certificate_id',
@@ -1759,6 +1759,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'otherDocuments',
             'createdBy:id,name,user_id',
         ];
+        dd($this->model);
         $result = $this->model->query()
             ->with($with)
             ->where('id', $id)
