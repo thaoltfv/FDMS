@@ -1720,11 +1720,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     public function getPreCertificate(int $id)
     {
-        dd('vô tới đây');
+        // dd('vô tới đây');
         $result = [];
         $check = $this->checkAuthorizationPreCertificate($id);
         if (!empty($check))
             return $check;
+        dd($check);
         $select = [
             'id',
             'certificate_id',
