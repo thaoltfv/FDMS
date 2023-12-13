@@ -18,6 +18,7 @@ class ErrorMessage
     public const PERMISSION_ERROR ="Người dùng không có quyền sử dụng chức năng này, vui lòng liên hệ để hỗ trợ.";
 
     public const CERTIFICATE_NOTEXISTS = 'Không tồn tại hồ sơ thẩm định - HSTD ';
+    public const PRE_CERTIFICATE_NOTEXISTS = 'Không tồn tại hồ sơ thẩm định sơ bộ- HSTDSB ';
     public const CERTIFICATE_APPRAISERTEAM = 'Vui lòng chọn đầy đủ thông tin tổ thẩm định.';
     public const CERTIFICATE_APPROVE_CHECK_APPRAISE = 'Bạn không thể thực hiện do chưa có thông tin tài sản thẩm định. ';
     public const CERTIFICATE_CHOOSE_APPRAISE = 'HSTD không ở trạng thái Đang thẩm định.';

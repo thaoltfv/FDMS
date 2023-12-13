@@ -1648,7 +1648,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 # Activity Log "create if id = null"
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $this->CreateActivityLog($edited, $edited, 'create', 'tạo mới');
-                $this->updateDocumentDescription($preCertificateId);
+                // $this->updateDocumentDescription($preCertificateId);
             }
             DB::commit();
             return [
@@ -3512,7 +3512,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
             }
         } else {
-            $result = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS, 'exception' => ''];
+            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
         }
         return $result;
     }
@@ -4529,7 +4529,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             $result = $result->first();
             if (empty($result))
-                $check = ['message' => 'Bạn không có quyền ở HSTĐ '. $id , 'exception' => '', 'statusCode' => 403];
+                $check = ['message' => 'Bạn không có quyền ở HSTĐSB '. $id , 'exception' => '', 'statusCode' => 403];
         } else {
             $check = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
