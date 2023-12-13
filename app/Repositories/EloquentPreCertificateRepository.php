@@ -1577,10 +1577,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         DB::beginTransaction();
         try {
-            $check = $this->checkDuplicateData($objects, $id);
-            if (isset($check)) {
-                return $check;
-            }
+            // $check = $this->checkDuplicateData($objects, $id);
+            // if (isset($check)) {
+            //     return $check;
+            // }
             $user = CommonService::getUser();
             $customerId = null;
             if (!empty($objects['customer']['name'])) {
@@ -1727,7 +1727,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             return $check;
         $select = [
             'id',
-            'pre_certificate_id',
+            'certificate_id',
             'petitioner_name',
             'petitioner_phone',
             'petitioner_identity_card',
@@ -3343,10 +3343,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($check)) {
             return $check;
         }
-        $check = $this->checkDuplicateData($object, $id);
-        if (isset($check)) {
-            return $check;
-        }
+        // $check = $this->checkDuplicateData($object, $id);
+        // if (isset($check)) {
+        //     return $check;
+        // }
         if (PreCertificate::where('id', $id)->exists()) {
             PreCertificate::where('id', $id)->update([
                 'petitioner_name' => $object['petitioner_name'],
