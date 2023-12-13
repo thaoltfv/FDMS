@@ -1720,6 +1720,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     public function getPreCertificate(int $id)
     {
+        dd('vô tới đây');
         $result = [];
         $check = $this->checkAuthorizationPreCertificate($id);
         if (!empty($check))
@@ -1762,7 +1763,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             ->where('id', $id)
             ->select($select)
             ->first();
-        dd($result);
+        // dd($result);
         // $result->append(['status_text', 'general_asset']);
         // $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
         // if ($result['status'] == 5) {
