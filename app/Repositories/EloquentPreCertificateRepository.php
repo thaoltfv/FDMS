@@ -1720,10 +1720,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     public function getPreCertificate(int $id)
     {
+        // dd('vô tới đây');
         $result = [];
         $check = $this->checkAuthorizationPreCertificate($id);
         if (!empty($check))
             return $check;
+        // dd($check);
         $select = [
             'id',
             'certificate_id',
@@ -1755,13 +1757,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraisePurpose:id,name',
             'customer:id,name,phone,address',
             'otherDocuments',
-            'createdBy:id,name,user_id',
+            'createdBy:id,name',
         ];
+        // dd($this->model->query()->with($with)->where('id', $id)->select($select)->first());
         $result = $this->model->query()
             ->with($with)
             ->where('id', $id)
             ->select($select)
             ->first();
+        // dd($result);
         // $result->append(['status_text', 'general_asset']);
         // $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
         // if ($result['status'] == 5) {

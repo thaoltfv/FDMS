@@ -4294,6 +4294,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $user = CommonService::getUser();
             $comparisonFactors =$objects['comparison_factor'];
             $dictionaries = $this->findAllAppraiseDictionaries();
+            // dd($comparisonFactors,$dictionaries);
             // $appraiseData = $this->getAppraiseDataComparison($appraiseId);
             $appraise = $this->model->query()->where('id', $appraiseId)->first();
             $baseUBNDPrice = $this->getBaseUBNDPrice($appraiseId);
@@ -4489,8 +4490,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "dieu_kien_thanh_toan",
             "yeu_to_khac",
             "khoang_cach",
-            "muc_dich_chinh"
+            "muc_dich_chinh",
+            "vi_tri"
         ];
+        // dd($property);
+        $description = CompareProperty::query()->where('asset_general_id', '=', $asset['id'])->first();
+        // dd($description);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
@@ -4731,6 +4736,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'muc_dich_chinh';
                 $name = 'Mục đích sử dụng đất chính';
+                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
+            }elseif($comparisonFactorTmp == 'vi_tri'){
+                // dd('vô đây');
+                $appraiseValue = isset($property->description) ? $property->description :'Không biết'; ;
+                // $assetValue = 0;
+                $assetValue = $description->description;
+                // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
+                // $dictionary = $dictionaries['khoang_cach'];
+                // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
+                $type = 'vi_tri';
+                $name = 'Vị trí';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }
         }

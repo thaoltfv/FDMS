@@ -589,7 +589,7 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
-        $data[] = $this->collectInfoAddressAppraise($stt++, 'Vị trí thửa đất', $asset);
+        $data[] = $this->collectInfoAddressAppraise($stt++, 'Địa chỉ thửa đất', $asset);
         $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
         $data[] = $this->collectInfoAreaAppraise($stt, "Tổng diện tích ($this->m2)", $asset);
         $data[] = $this->collectInfoAppraiseSumArea("$stt.1", "Phù hợp QH", 'main_area');

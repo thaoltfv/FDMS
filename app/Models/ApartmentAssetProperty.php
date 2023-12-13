@@ -24,6 +24,7 @@ class ApartmentAssetProperty extends Model
         'legal_id' => 'integer',
         'furniture_quality_id' => 'integer',
         'utilities' => 'array',
+        'loai_can_ho_id' => 'integer',
     ];
     protected $fillable =[
         'apartment_asset_id',
@@ -40,7 +41,8 @@ class ApartmentAssetProperty extends Model
         'utilities',
         'handover_year',
         'apartment_name',
-        'full_name'
+        'full_name',
+        'loai_can_ho_id'
     ];
 
     protected $hidden =[
@@ -67,6 +69,11 @@ class ApartmentAssetProperty extends Model
     public function direction():BelongsTo
     {
         return $this->belongsTo(Dictionary::class, 'direction_id','id');
+    }
+
+    public function loaicanho():BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'loai_can_ho_id','id');
     }
 
     public function legal():BelongsTo
