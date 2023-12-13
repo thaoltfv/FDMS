@@ -1755,9 +1755,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'appraisePurpose:id,name',
-            // 'customer:id,name,phone,address',
+            'customer:id,name,phone,address',
             // 'otherDocuments',
-            // 'createdBy:id,name,user_id',
+            'createdBy:id,name,user_id',
         ];
         dd($this->model->query()->with($with)->where('id', $id)->select($select)->first());
         $result = $this->model->query()
