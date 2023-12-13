@@ -1751,7 +1751,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status_expired_at',
         ];
         $with = [
-            // 'appraiserSale:id,name,user_id',
+            'appraiserSale:id,name,user_id',
             // 'appraiserPerform:id,name,user_id',
             // 'appraiserBusinessManager:id,name,user_id',
             // 'appraisePurpose:id,name',
