@@ -1752,9 +1752,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         ];
         $with = [
             'appraiserSale:id,name,user_id',
-            // 'appraiserPerform:id,name,user_id',
-            // 'appraiserBusinessManager:id,name,user_id',
-            // 'appraisePurpose:id,name',
+            'appraiserPerform:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
+            'appraisePurpose:id,name',
             // 'customer:id,name,phone,address',
             // 'otherDocuments',
             // 'createdBy:id,name,user_id',
