@@ -1751,15 +1751,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status_expired_at',
         ];
         $with = [
-            'appraiserSale:id,name,user_id',
-            'appraiserPerform:id,name,user_id',
-            'appraiserBusinessManager:id,name,user_id',
-            'appraisePurpose:id,name',
-            'customer:id,name,phone,address',
-            'otherDocuments',
-            'createdBy:id,name,user_id',
+            // 'appraiserSale:id,name,user_id',
+            // 'appraiserPerform:id,name,user_id',
+            // 'appraiserBusinessManager:id,name,user_id',
+            // 'appraisePurpose:id,name',
+            // 'customer:id,name,phone,address',
+            // 'otherDocuments',
+            // 'createdBy:id,name,user_id',
         ];
-        dd($this->model->query()->with($with)->where('id', $id)->select($select));
+        dd($this->model->query()->with($with)->where('id', $id)->select($select)->first());
         $result = $this->model->query()
             ->with($with)
             ->where('id', $id)
