@@ -1762,6 +1762,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             ->where('id', $id)
             ->select($select)
             ->first();
+        dd($result);
         // $result->append(['status_text', 'general_asset']);
         // $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
         // if ($result['status'] == 5) {
