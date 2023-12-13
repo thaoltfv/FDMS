@@ -360,7 +360,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
 
                 $role = $user->roles->last();
-                if ($role->name == 'USER') {
+                if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -1056,7 +1056,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                 }
                 $role = $user->roles->last();
-                if (($role->name == 'USER') || (!empty($popup))) {
+                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -1178,7 +1178,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        if ($role->name == 'USER') {
+        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
@@ -1458,7 +1458,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        if ($role->name == 'USER') {
+        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
@@ -4515,7 +4515,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if ($role->name == 'USER') {
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
                 $result = $result->where(function ($query) use ($userId) {
                     $query = $query->whereHas('createdBy', function ($q) use ($userId) {
                         return $q->where('id', $userId);

@@ -767,7 +767,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if ($role->name == 'USER') {
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
                 $result = $result->where('created_by', $userId);
             }
             $result = $result->first();
