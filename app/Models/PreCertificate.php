@@ -130,7 +130,7 @@ class PreCertificate extends Model
 
 	public function otherDocuments(): HasMany
     {
-        return $this->hasMany(PreCertificateOtherDocuments::class, 'certificate_id');
+        return $this->hasMany(PreCertificateOtherDocuments::class, 'pre_certificate_id');
     }
 
     public function customer(): BelongsTo
