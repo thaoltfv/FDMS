@@ -1759,7 +1759,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'otherDocuments',
             'createdBy:id,name,user_id',
         ];
-        dd($this->model->query()->with($with)->where('id', $id)->select($select));
+        dd($this->model->query()->with($with)->where('id', $id)->select($select)->first());
         $result = $this->model->query()
             ->with($with)
             ->where('id', $id)
