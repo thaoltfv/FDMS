@@ -1644,7 +1644,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 // dd($certificateArr);
                 $certificateCreate = PreCertificate::query()->create($certificateArr->attributesToArray());
                 $preCertificateId = $certificateCreate->id;
-                $this->saveMethod($preCertificateId);
+                // $this->saveMethod($preCertificateId);
                 # Activity Log "create if id = null"
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $this->CreateActivityLog($edited, $edited, 'create', 'tạo mới');
@@ -1654,7 +1654,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             return [
                 'id' => $preCertificateId,
                 'status' => $data['status'],
-                'sub_status' => $data['sub_status']
             ];
         } catch (Exception $ex) {
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -1763,7 +1762,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             ->where('id', $id)
             ->select($select)
             ->first();
-        $result->append(['status']);
+        // $result->append(['status_text', 'general_asset']);
         // $result['checkVersion'] = AppraiseVersionService::checkVersionByCertificate($id);
         // if ($result['status'] == 5) {
         //     $user = User::query()
