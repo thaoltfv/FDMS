@@ -2,6 +2,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import PreCertificate from "@/models/PreCertificate";
+import PreCertificateConfig from "@/models/PreCertificateConfig";
 export const usePreCertificateStore = defineStore(
 	"preCertificate",
 	() => {
@@ -38,13 +39,19 @@ export const usePreCertificateStore = defineStore(
 			appraiser_sale: {
 				name: null,
 				id: null
-			}
+			},
+			pre_type: "Cơ bản"
 		});
 
 		const permission = ref({
 			allowDelete: true
 		});
 
+		const other = ref({
+			isSubmit: false,
+			toast: null,
+			router: null
+		});
 		const preCertificateOtherDocuments = ref([
 			{
 				pre_certificate_id: null,
@@ -62,7 +69,9 @@ export const usePreCertificateStore = defineStore(
 			appraiser_sales: [],
 			appraiser_performances: [],
 			appraiser_purposes: [],
-			customers: []
+			customers: [],
+			preTypes: null,
+			workflow: null
 		});
 		async function getCustomer() {
 			let res = await PreCertificate.getCustomer();
@@ -79,16 +88,66 @@ export const usePreCertificateStore = defineStore(
 
 			const resp2 = await PreCertificate.getAppraiseOthers();
 			lstData.value.appraiser_purposes = [...resp2.data.muc_dich_tham_dinh_gia];
+
+			const respconfig = await PreCertificateConfig.getConfig();
+			for (let index = 0; index < respconfig.data.length; index++) {
+				const element = respconfig.data[index];
+				if (element.name === "pre_types")
+					lstData.value.preTypes = element.config;
+
+				if (element.name === "workflow")
+					lstData.value.workflow = element.config;
+			}
 			getCustomer();
 		}
 
 		getStartData();
+		function updateRouteToast(router, toast) {
+			other.value.router = router;
+			other.value.toast = toast;
+		}
 		async function getPreCertificate(id) {
-			console.log("runhere23");
 			const getDataCertificate = await PreCertificate.getDetailPreCertificate(
 				id
 			);
 			dataPC.value = getDataCertificate.data;
+		}
+		async function createUpdatePreCertificateion(id = "") {
+			other.value.isSubmit = true;
+			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
+			if (!dataPC.id) dataPC.value.status = 1;
+			const res = await PreCertificate.createUpdatePreCertification(
+				dataPC.value,
+				id
+			);
+			if (res.data) {
+				dataPC.value.id = res.data.id;
+				other.value.toast.open({
+					message: "Lưu hồ sơ thẩm định thành công",
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+				await other.value.router
+					.push({
+						name: "certification_brief.detail",
+						query: { id: res.data.id }
+					})
+					.catch(_ => {});
+			} else if (res.error) {
+				other.value.toast.open({
+					message: `${res.error.message}`,
+					type: "error",
+					position: "top-right"
+				});
+			} else {
+				other.value.toast.open({
+					message: "Lưu thất bại",
+					type: "error",
+					position: "top-right"
+				});
+			}
+			other.value.isSubmit = false;
 		}
 		function resetData() {
 			data.value = {
@@ -99,7 +158,7 @@ export const usePreCertificateStore = defineStore(
 				petitioner_address: null,
 				petitioner_identity_card: null,
 				customer_id: null,
-				status: null,
+				status: 1,
 				appraise_purpose_id: null,
 				note: null,
 				appraiser_sale_id: null,
@@ -125,8 +184,10 @@ export const usePreCertificateStore = defineStore(
 				appraiser_sale: {
 					name: null,
 					id: null
-				}
+				},
+				pre_type: "Cơ bản"
 			};
+			other.value.isSubmit = false;
 		}
 
 		return {
@@ -134,9 +195,12 @@ export const usePreCertificateStore = defineStore(
 			lstData,
 			preCertificateOtherDocuments,
 			permission,
+			other,
 
 			resetData,
-			getPreCertificate
+			getPreCertificate,
+			createUpdatePreCertificateion,
+			updateRouteToast
 		};
 	},
 	{

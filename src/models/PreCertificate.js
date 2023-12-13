@@ -9,7 +9,15 @@ export default class Certificate extends Model {
 	static async getDetailPreCertificate(id = "") {
 		return new this().request({
 			method: "GET",
-			url: `pre_certification/certificate-infomation/${id}`,
+			url: `pre_certification/pre-certification-infomation/${id}`,
+			isStatic: true
+		});
+	}
+	static async createUpdatePreCertification(data, id = "") {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificate/pre-certification-brief/${id}`,
+			data: data,
 			isStatic: true
 		});
 	}

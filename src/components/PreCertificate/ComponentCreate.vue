@@ -61,6 +61,7 @@
 							label="Địa chỉ"
 							class="form-group-container input_certification_brief"
 						/>
+
 						<div class="row justify-content-between">
 							<InputCategory
 								v-model="dataPC.appraise_purpose_id"
@@ -98,46 +99,19 @@
 								v-model="dataPC.total_preliminary_value"
 								vid="service_fee"
 								:max="99999999999999"
-								label="Tổng phí dịch vụ"
+								label="Tổng giá trị sơ bộ"
 								class="form-group-container col-sm-12 col-md-12"
-								@change="changeServiceFee($event)"
 							/>
 						</div>
-						<!-- <div class="row justify-content-between">
-							<InputText
-								v-model="dataPC.document_num"
-								vid="document_num"
-								label="Số hợp đồng"
-								class="form-group-container col-sm-12 col-md-6"
-							/>
-							<InputDatePicker
-								v-model="dataPC.document_date"
-								vid="document_date"
-								label="Ngày hợp đồng"
-								:formatDate="'DD/MM/YYYY'"
-								@change="changeDocumentDate"
-								placeholder="Ngày / tháng / năm"
-								class="form-group-container col-sm-12 col-md-6"
-							/>
-						</div> -->
-						<!-- <div class="row justify-content-between">
-							<InputText
-								v-model="dataPC.certificate_num"
-								vid="certificate_num"
-								label="Số chứng thư"
-								class="form-group-container col-sm-12 col-md-6"
-							/>
-							<InputDatePicker
-								v-model="dataPC.certificate_date"
-								vid="certificate_date"
-								label="Ngày chứng thư"
-								placeholder="Ngày / tháng / năm"
-								class="form-group-container col-sm-12 col-md-6"
-								:formatDate="'DD/MM/YYYY'"
-								:date="disabledDate"
-								@change="changeCertificateDate"
-							/>
-						</div> -->
+						<InputCategory
+							v-model="pre_type_compute"
+							vid="pre_type"
+							label="Loại sơ bộ"
+							rules="required"
+							class="form-group-container "
+							:options="optionsPreTypes"
+						/>
+
 						<InputTextarea
 							:autosize="true"
 							:disableInput="false"
@@ -243,6 +217,7 @@
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsAppraiserPerformance"
 							/>
@@ -439,7 +414,15 @@ export default {
 				this.dataPC.business_manager_id = newValue;
 			}
 		},
-
+		pre_type_compute: {
+			get: function() {
+				return this.dataPC.pre_type;
+			},
+			set: function(newValue) {
+				console.log("new", newValue);
+				this.dataPC.pre_type = newValue.name;
+			}
+		},
 		appraiser_sale_compute: {
 			// getter
 			get: function() {
@@ -480,6 +463,13 @@ export default {
 			return {
 				data: this.lstData.appraiser_sales,
 				id: "id",
+				key: "name"
+			};
+		},
+		optionsPreTypes() {
+			return {
+				data: this.lstData.preTypes,
+				id: "code",
 				key: "name"
 			};
 		},

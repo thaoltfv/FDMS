@@ -5,4 +5,12 @@ export default class PreCertificateConfig extends Model {
 		const { params } = request;
 		return ["pre-certificate-config", ...params];
 	}
+	static async getConfig() {
+		let resp = await new this().request({
+			method: "GET",
+			url: `pre-certificate-config`,
+			isStatic: true
+		});
+		return resp;
+	}
 }

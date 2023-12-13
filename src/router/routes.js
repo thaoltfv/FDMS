@@ -1882,7 +1882,7 @@ export const routes = [
 			{
 				path: "/pre_certification/create",
 				name: "pre_certification.create",
-				component: page("pre_certification/create.vue"),
+				component: page("pre_certification/Create.vue"),
 				meta: {
 					title: "Tạo mới hồ sơ thẩm định sơ bộ",
 					permissions: [PERMISSIONS.ADD_PRE_CERTIFICATE],
