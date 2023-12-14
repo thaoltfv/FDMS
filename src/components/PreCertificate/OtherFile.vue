@@ -88,7 +88,7 @@ import { usePreCertificateStore } from "@/store/preCertificate";
 import Vue from "vue";
 import Icon from "buefy";
 import ModalDelete from "@/components/Modal/ModalDelete";
-
+import File from "@/models/File";
 Vue.use(Icon);
 export default {
 	props: {
@@ -111,9 +111,12 @@ export default {
 		const showCardDetailFile = ref(false);
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, preCertificateOtherDocuments, permission } = storeToRefs(
-			preCertificateStore
-		);
+		const {
+			dataPC,
+			preCertificateOtherDocuments,
+			permission,
+			other
+		} = storeToRefs(preCertificateStore);
 		const title = ref("Tài liệu đính kèm");
 		const lstFile = ref([]);
 
@@ -146,7 +149,7 @@ export default {
 					document.body.appendChild(link);
 					link.click();
 					window.URL.revokeObjectURL(link);
-					this.$toast.open({
+					other.value.toast.open({
 						message: `Tải xuống thành công`,
 						type: "success",
 						position: "top-right",
@@ -165,17 +168,17 @@ export default {
 			id_file_delete.value = file.id;
 		};
 		const handleDelete = async () => {
-			const res = await File.deleteFileCertificate(id_file_delete.value);
+			const res = await File.deleteFilePreCertificate(id_file_delete.value);
 			if (res.data) {
 				lstFile.value.splice(indexDelete.value, 1);
-				root.$toast.open({
+				other.value.toast.open({
 					message: "Xóa thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
 				});
 			} else if (res.error) {
-				root.$toast.open({
+				other.value.toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
@@ -191,8 +194,74 @@ export default {
 			title,
 			isMobile,
 			lstFile,
-			openModalDelete
+			openModalDelete,
+			handleDelete,
+			deleteOtherFile,
+			downloadOtherFile
 		};
+	},
+	methods: {
+		async onImageChange(e) {
+			const formData = new FormData();
+			let check = true;
+			let files = e.target.files;
+			if (!files.length) {
+				return;
+			}
+			for (let i = 0; i < e.target.files.length; i++) {
+				this.file = e.target.files[i];
+				if (
+					this.file.type === "image/png" ||
+					this.file.type === "image/jpeg" ||
+					this.file.type === "image/jpg" ||
+					this.file.type === "image/gif" ||
+					this.file.type ===
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+					this.file.type ===
+						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+					this.file.type === "application/pdf"
+				) {
+				} else {
+					check = false;
+					this.$toast.open({
+						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			}
+			if (check) {
+				if (files.length) {
+					for (let i = 0; i < files.length; i++) {
+						formData.append("files[" + i + "]", files[i]);
+						console.log("files", files);
+					}
+					let res = null;
+					// if (this.form.status === 1) {
+					// 	res = await File.saleUploadFileCertificate(formData, this.dataPC.id);
+					// } else {
+					// 	res = await File.uploadFileCertificate(formData, this.dataPC.id);
+					// }
+					this.dataPC.id = 16;
+					if (this.dataPC.id) {
+						res = await File.uploadFilePreCertificate(formData, 16, this.type);
+						if (res.data) {
+							// await this.$emit('handleChangeFile', res.data.data)
+							this.form.other_documents = res.data.data;
+							this.$toast.open({
+								message: "Thêm file thành công",
+								type: "success",
+								position: "top-right",
+								duration: 3000
+							});
+						}
+					} else {
+						this.dataPC.uploadFile = formData;
+					}
+				}
+			}
+		}
 	}
 };
 </script>

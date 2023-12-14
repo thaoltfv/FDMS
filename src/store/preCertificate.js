@@ -3,11 +3,12 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import PreCertificate from "@/models/PreCertificate";
 import PreCertificateConfig from "@/models/PreCertificateConfig";
+import e from "cors";
 export const usePreCertificateStore = defineStore(
 	"preCertificate",
 	() => {
 		const dataPC = ref({
-			id: null,
+			id: 16,
 			certificate_id: null,
 			petitioner_name: "Ông / Bà ",
 			petitioner_phone: null,
@@ -40,7 +41,8 @@ export const usePreCertificateStore = defineStore(
 				name: null,
 				id: null
 			},
-			pre_type: "Cơ bản"
+			pre_type: "Cơ bản",
+			uploadFile: null
 		});
 
 		const permission = ref({
@@ -122,6 +124,8 @@ export const usePreCertificateStore = defineStore(
 			);
 			if (res.data) {
 				dataPC.value.id = res.data.id;
+
+				await uploadFile();
 				other.value.toast.open({
 					message: "Lưu hồ sơ thẩm định thành công",
 					type: "success",
@@ -185,11 +189,37 @@ export const usePreCertificateStore = defineStore(
 					name: null,
 					id: null
 				},
-				pre_type: "Cơ bản"
+				pre_type: "Cơ bản",
+				uploadFile: null
 			};
 			other.value.isSubmit = false;
 		}
-
+		async function uploadFile() {
+			if (dataPc.value.uploadFile) {
+				const res = await File.uploadFilePreCertificate(
+					dataPc.value.uploadFile,
+					16
+				);
+				if (res.data) {
+					// await this.$emit('handleChangeFile', res.data.data)
+					preCertificateOtherDocuments.value = res.data.data;
+					other.value.toast.open({
+						message: "Thêm file thành công",
+						type: "success",
+						position: "top-right",
+						duration: 3000
+					});
+				} else {
+					other.value.toast.open({
+						message: "Thêm file thất bại",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			}
+			return;
+		}
 		return {
 			dataPC,
 			lstData,
@@ -200,7 +230,8 @@ export const usePreCertificateStore = defineStore(
 			resetData,
 			getPreCertificate,
 			createUpdatePreCertificateion,
-			updateRouteToast
+			updateRouteToast,
+			uploadFile
 		};
 	},
 	{
