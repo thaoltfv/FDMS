@@ -105,10 +105,10 @@ class PreCertificateController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function otherDocumentUpload($id, Request $request): JsonResponse
+    public function otherDocumentUpload($id,$typeDocument, Request $request,): JsonResponse
     {
         try {
-            return $this->respondWithCustomData($this->preCertificateRepository->otherDocumentUpload($id, $request));
+            return $this->respondWithCustomData($this->preCertificateRepository->otherDocumentUpload($id,$typeDocument, $request));
         } catch (\Exception $exception) {
             dd($exception);
             Log::error($exception);
@@ -349,9 +349,10 @@ class PreCertificateController extends Controller
             'customer.name' => 'nullable|string|max:255',
             'customer.address' => 'required_with:customer.name|nullable|string|max:255',
             'customer.phone' => 'required_with:customer.name|nullable|numeric',
-            'total_preliminary_value' => 'integer|max:2000000000|min:0',
+            'total_preliminary_value' => 'nullable|integer|max:2000000000|min:0',
             'note' => 'nullable|string',
             'cancel_reason' => 'nullable|string',
+            'pre_type' => 'nullable|string',
         ];
 
         $customAttributes = [
@@ -369,6 +370,7 @@ class PreCertificateController extends Controller
             'total_preliminary_value' => 'Tổng giá trị sơ bộ',
             'note' => 'Ghi chú',
             'cancel_reason' => 'Lý do hủy sơ bộ',
+            'pre_type' => 'Loại sơ bộ',
         ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {

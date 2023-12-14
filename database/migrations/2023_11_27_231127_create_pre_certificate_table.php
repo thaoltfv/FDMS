@@ -167,6 +167,7 @@ class CreatePreCertificateTable extends Migration
             // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2023_11_14_151641_add_petitioner_birthday_certificate.php
             // $table->date('petitioner_birthday')->nullable()->before('created_at');
 
+			$table->text('pre_type')->unsigned()->nullable()->before('created_at');
         });
     }
 

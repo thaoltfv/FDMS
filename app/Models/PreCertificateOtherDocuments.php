@@ -20,7 +20,7 @@ class PreCertificateOtherDocuments extends Model
     ];
 
     protected $fillable = [
-        'certificate_id',
+        'pre_certificate_id',
         'name',
         'link',
         'type',
