@@ -40,7 +40,6 @@ interface PreCertificateRepository extends BaseRepository
 
     public function findAppraisePaging();
 
-    // public function updatePreCertificate_v2(array $object , int $PreCertificateId);
 
     public function getPreCertificate(int $id);
 
@@ -50,7 +49,7 @@ interface PreCertificateRepository extends BaseRepository
 
     public function otherDocumentDownload($id, $request);
 
-    public function otherDocumentUpload($id, $request);
+    public function otherDocumentUpload($id, $typeDocument, $request);
 
     public function saleDocumentUpload($id, $request);
 
@@ -68,7 +67,6 @@ interface PreCertificateRepository extends BaseRepository
 
     // public function exportSelectedPreCertificateAssets();
 
-    // public function updatePreCertificateV3(array $object , int $PreCertificateId);
 
     // public function updatePreCertificateVersion(int $PreCertificateId, array $object);
 
