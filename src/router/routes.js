@@ -1919,6 +1919,47 @@ export const routes = [
 					],
 					gtm: "Trang chỉnh sửa HSTĐSB"
 				}
+			},
+			{
+				path: "",
+				name: "pre_certification.index",
+				component: page("pre_certification/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Hồ sơ thẩm định sơ bộ",
+					// fix_permission
+					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					breadcrumbs: [
+						{
+							title: "Hồ sơ thẩm định sơ bộ",
+							name: "pre_certification.index"
+						}
+					],
+					gtm: "Trang HSTĐ"
+				}
+			},
+
+			{
+				path: "/pre_certification/detail",
+				name: "pre_certification.detail",
+				component: page("pre_certification/Detail.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Chi tiết hồ sơ thẩm định sơ bộ",
+					// fix_permission
+					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					breadcrumbs: [
+						{
+							title: "Hồ sơ thẩm định sơ bộ",
+							name: "pre_certification.index"
+						},
+						{
+							title: "Chi tiết hồ sơ thẩm định sơ bộ",
+							name: "pre_certification.detail"
+						}
+					],
+					gtm: "Trang chi tiết HSTĐSB"
+				}
 			}
 		]
 	},

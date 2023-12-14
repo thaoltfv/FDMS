@@ -78,10 +78,10 @@ export default class Certificate extends Model {
 		} else resp = JSON.parse(resp);
 		return resp;
 	}
-	static async getPreCertificate(id) {
+	static async getPreCertificate() {
 		return new this().request({
 			method: "GET",
-			url: `pre-certificate/${id}`,
+			url: `pre-certificate/`,
 			isStatic: true
 		});
 	}
@@ -104,6 +104,16 @@ export default class Certificate extends Model {
 		return new this().request({
 			method: "DELETE",
 			url: `certification_brief/delete-document/${id}`,
+			isStatic: true
+		});
+	}
+
+	static async getListKanbanPreCertificate(search = "") {
+		let searchInput = { search_input: search };
+		return new this().request({
+			method: "GET",
+			url: `pre-certificate/pre-certificate-workflow`,
+			query: searchInput,
 			isStatic: true
 		});
 	}

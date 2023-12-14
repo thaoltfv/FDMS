@@ -81,16 +81,7 @@ export const usePreCertificateStore = defineStore(
 				lstData.value.customers = res.data;
 			}
 		}
-		async function getStartData() {
-			const resp = await PreCertificate.getAppraisers();
-			let dataAppraise = [...resp.data];
-			lstData.value.business_managers = dataAppraise;
-			lstData.value.appraiser_sales = dataAppraise;
-			lstData.value.appraiser_performances = dataAppraise;
-
-			const resp2 = await PreCertificate.getAppraiseOthers();
-			lstData.value.appraiser_purposes = [...resp2.data.muc_dich_tham_dinh_gia];
-
+		async function getConfig() {
 			const respconfig = await PreCertificateConfig.getConfig();
 			for (let index = 0; index < respconfig.data.length; index++) {
 				const element = respconfig.data[index];
@@ -100,6 +91,18 @@ export const usePreCertificateStore = defineStore(
 				if (element.name === "workflow")
 					lstData.value.workflow = element.config;
 			}
+			return lstData.value;
+		}
+		async function getStartData() {
+			const resp = await PreCertificate.getAppraisers();
+			let dataAppraise = [...resp.data];
+			lstData.value.business_managers = dataAppraise;
+			lstData.value.appraiser_sales = dataAppraise;
+			lstData.value.appraiser_performances = dataAppraise;
+
+			const resp2 = await PreCertificate.getAppraiseOthers();
+			lstData.value.appraiser_purposes = [...resp2.data.muc_dich_tham_dinh_gia];
+			getConfig();
 			getCustomer();
 		}
 
@@ -231,7 +234,8 @@ export const usePreCertificateStore = defineStore(
 			getPreCertificate,
 			createUpdatePreCertificateion,
 			updateRouteToast,
-			uploadFile
+			uploadFile,
+			getConfig
 		};
 	},
 	{
