@@ -7,6 +7,7 @@ interface PreCertificateRepository extends BaseRepository
     public function updateStatus($id, $request);
 
     // public function transferToCertificate($id);
+    public function getPreCertificateWorkFlow();
 
     public function findPaging();
 
