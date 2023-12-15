@@ -2667,6 +2667,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate:id,real_estate_id',
             'personalProperties:id,personal_property_id',
         ];
+        dd($this->model);
         DB::enableQueryLog();
         $result = $this->model->with($with)
             ->leftjoin('users', function ($join) {
