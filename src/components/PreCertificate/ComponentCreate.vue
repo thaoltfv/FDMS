@@ -341,6 +341,7 @@ export default {
 		const { dataPC, lstData, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
+		preCertificateStore.resetData();
 		const handleChangeAppraisePurpose = event => {
 			dataPC.value.appraise_purpose_id = event;
 		};
@@ -419,7 +420,6 @@ export default {
 				return this.dataPC.pre_type;
 			},
 			set: function(newValue) {
-				console.log("new", newValue);
 				this.dataPC.pre_type = newValue.name;
 			}
 		},

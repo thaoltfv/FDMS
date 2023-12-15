@@ -62,8 +62,16 @@
 						</div>
 						<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
 							<div class="mr-3">{{file.name}}</div> -->
+
 						<img
-							v-if="
+							v-if="file.isUpload === false"
+							style="cursor: pointer; width: 1rem;"
+							@click="deleteOtherFile(file, index)"
+							src="@/assets/icons/ic_delete_2.svg"
+							alt="tag_2"
+						/>
+						<img
+							v-else-if="
 								permission.allowDelete &&
 									(dataPC.status === 1 ||
 										dataPC.status === 2 ||
@@ -96,6 +104,9 @@ export default {
 			type: String
 		}
 	},
+	components: {
+		ModalDelete
+	},
 	setup(props) {
 		const checkMobile = () => {
 			if (
@@ -119,19 +130,14 @@ export default {
 		} = storeToRefs(preCertificateStore);
 		const title = ref("Tài liệu đính kèm");
 		const lstFile = ref([]);
-
 		if (props.type === "Appendix") {
 			title.value = "Tài liệu đính kèm";
-			lstFile.value = preCertificateOtherDocuments.value.filter(
-				file => file.type_document === "Appendix"
-			);
+			lstFile.value = preCertificateOtherDocuments.value.Appendix;
 		} else {
 			title.value = "File kèm kết quả sơ bộ";
-			lstFile.value = preCertificateOtherDocuments.value.filter(
-				file => file.type_document !== "Appendix"
-			);
+			lstFile.value = preCertificateOtherDocuments.value.Result;
 		}
-
+		showCardDetailFile.value = lstFile.value.length > 0 ? true : false;
 		const downloadOtherFile = file => {
 			if (this.exportAction) {
 				axios({
@@ -160,17 +166,25 @@ export default {
 		};
 
 		const openModalDelete = ref(false);
-		const indexDelete = ref("");
-		const id_file_delete = ref("");
+		const fileDelete = ref({ id: null, isUpload: false });
 		const deleteOtherFile = (file, index) => {
 			openModalDelete.value = true;
-			indexDelete.value = index;
-			id_file_delete.value = file.id;
+			fileDelete.value = { id: file.id, isUpload: file.isUpload, index };
 		};
 		const handleDelete = async () => {
-			const res = await File.deleteFilePreCertificate(id_file_delete.value);
+			if (fileDelete.value.isUpload === false) {
+				lstFile.value.splice(fileDelete.value.index, 1);
+				other.value.toast.open({
+					message: "Xóa thành công",
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+			const res = await File.deleteFilePreCertificate(fileDelete.value.id);
 			if (res.data) {
-				lstFile.value.splice(indexDelete.value, 1);
+				lstFile.value.splice(fileDelete.value.index, 1);
 				other.value.toast.open({
 					message: "Xóa thành công",
 					type: "success",
@@ -202,6 +216,7 @@ export default {
 	},
 	methods: {
 		async onImageChange(e) {
+			console.log("pre", this.preCertificateOtherDocuments, this.lstFile);
 			const formData = new FormData();
 			let check = true;
 			let files = e.target.files;
@@ -234,8 +249,8 @@ export default {
 			if (check) {
 				if (files.length) {
 					for (let i = 0; i < files.length; i++) {
+						files[i].isUpload = false;
 						formData.append("files[" + i + "]", files[i]);
-						console.log("files", files);
 					}
 					let res = null;
 					// if (this.form.status === 1) {
@@ -243,12 +258,17 @@ export default {
 					// } else {
 					// 	res = await File.uploadFileCertificate(formData, this.dataPC.id);
 					// }
-					this.dataPC.id = 16;
 					if (this.dataPC.id) {
-						res = await File.uploadFilePreCertificate(formData, 16, this.type);
+						res = await File.uploadFilePreCertificate(
+							formData,
+							this.dataPC.id,
+							this.type
+						);
 						if (res.data) {
 							// await this.$emit('handleChangeFile', res.data.data)
-							this.form.other_documents = res.data.data;
+							this.preCertificateOtherDocuments = res.data.data;
+							console.log("res", res.data.data);
+							this.lstFile = [...res.data.data];
 							this.$toast.open({
 								message: "Thêm file thành công",
 								type: "success",
@@ -257,6 +277,7 @@ export default {
 							});
 						}
 					} else {
+						this.lstFile = [...files];
 						this.dataPC.uploadFile = formData;
 					}
 				}

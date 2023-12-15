@@ -5,7 +5,13 @@
 	>
 		<div>
 			<div style="margin-bottom:60px">
-				<ComponentEdit :routeId="$route.query.id" />
+				<ValidationObserver
+					tag="div"
+					ref="step_1"
+					@submit.prevent="validateSubmitStep1"
+				>
+					<ComponentEdit :routeId="$route.query.id" />
+				</ValidationObserver>
 			</div>
 
 			<div
@@ -25,7 +31,7 @@
 						Trở lại
 					</button>
 					<button
-						:class="{ 'btn_loading disabled': isSubmit }"
+						:class="{ 'btn_loading disabled': other.isSubmit }"
 						class="btn btn-white btn-orange text-nowrap"
 						@click.prevent="validateSubmitStep1"
 						type="submit"
@@ -56,7 +62,7 @@
 						Trở lại
 					</button>
 					<button
-						:class="{ 'btn_loading disabled': isSubmit }"
+						:class="{ 'btn_loading disabled': other.isSubmit }"
 						class="btn btn-white btn-orange text-nowrap col-6"
 						@click.prevent="validateSubmitStep1"
 						type="submit"
@@ -77,8 +83,10 @@
 import ComponentEdit from "@/components/PreCertificate/ComponentEdit";
 import { ref } from "vue";
 
+import { storeToRefs } from "pinia";
+import { usePreCertificateStore } from "@/store/preCertificate";
 export default {
-	name: "Create",
+	name: "Edit",
 	components: {
 		ComponentEdit
 	},
@@ -96,7 +104,10 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 
-		return { isMobile };
+		const preCertificateStore = usePreCertificateStore();
+		const { other } = storeToRefs(preCertificateStore);
+		const step_1 = ref(null);
+		return { isMobile, other, preCertificateStore, step_1 };
 	},
 
 	data() {
@@ -105,10 +116,23 @@ export default {
 			isSubmit: false
 		};
 	},
-	methods: {},
+	methods: {
+		async validateSubmitStep1() {
+			const isValid = await this.step_1.validate();
+			if (isValid) {
+				await this.preCertificateStore.createUpdatePreCertificateion();
+			} else {
+				this.$toast.open({
+					message: "Vui lòng nhập đầy đủ các trường bắt buộc",
+					type: "error",
+					position: "top-right"
+				});
+			}
+		}
+	},
 
 	mounted() {
-		// // console.log(this.profile)
+		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
 	},
 	async beforeMount() {
 		// this.getAppraisers();

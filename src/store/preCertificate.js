@@ -3,12 +3,12 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import PreCertificate from "@/models/PreCertificate";
 import PreCertificateConfig from "@/models/PreCertificateConfig";
-import e from "cors";
+import File from "@/models/File";
 export const usePreCertificateStore = defineStore(
 	"preCertificate",
 	() => {
 		const dataPC = ref({
-			id: 16,
+			id: null,
 			certificate_id: null,
 			petitioner_name: "Ông / Bà ",
 			petitioner_phone: null,
@@ -41,7 +41,7 @@ export const usePreCertificateStore = defineStore(
 				name: null,
 				id: null
 			},
-			pre_type: "Cơ bản",
+			pre_type: "coban",
 			uploadFile: null
 		});
 
@@ -54,17 +54,21 @@ export const usePreCertificateStore = defineStore(
 			toast: null,
 			router: null
 		});
-		const preCertificateOtherDocuments = ref([
-			{
-				pre_certificate_id: null,
-				name: null,
-				link: null,
-				type: null,
-				size: null,
-				description: null,
-				type_document: null
-			}
-		]);
+		const preCertificateOtherDocuments = ref({
+			lstDocument: [
+				{
+					pre_certificate_id: null,
+					name: null,
+					link: null,
+					type: null,
+					size: null,
+					description: null,
+					type_document: null
+				}
+			],
+			Appendix: null,
+			Result: null
+		});
 
 		const lstData = ref({
 			business_managers: [],
@@ -85,6 +89,7 @@ export const usePreCertificateStore = defineStore(
 			const respconfig = await PreCertificateConfig.getConfig();
 			for (let index = 0; index < respconfig.data.length; index++) {
 				const element = respconfig.data[index];
+				element.config = JSON.parse(element.config);
 				if (element.name === "pre_types")
 					lstData.value.preTypes = element.config;
 
@@ -116,15 +121,55 @@ export const usePreCertificateStore = defineStore(
 				id
 			);
 			dataPC.value = getDataCertificate.data;
+			if (dataPC.value.other_documents) {
+				preCertificateOtherDocuments.value.lstDocument =
+					dataPC.value.other_documents;
+				preCertificateOtherDocuments.value.Appendix = dataPC.value.other_documents.filter(
+					file => file.type_document === "Appendix"
+				);
+				preCertificateOtherDocuments.value.Result = dataPC.value.other_documents.filter(
+					file => file.type_document === "Result"
+				);
+			}
+
+			if (!dataPC.value.customer) {
+				dataPC.value.customer = {
+					name: null,
+					address: null,
+					phone: null
+				};
+			}
+			if (!dataPC.value.business_manager) {
+				dataPC.value.business_manager = {
+					name: null,
+					id: null
+				};
+			}
+
+			if (!dataPC.value.appraiser_performance) {
+				dataPC.value.appraiser_performance = {
+					name: null,
+					id: null
+				};
+			}
+
+			if (!dataPC.value.appraiser_sale) {
+				dataPC.value.appraiser_sale = {
+					name: null,
+					id: null
+				};
+			}
 		}
 		async function createUpdatePreCertificateion(id = "") {
 			other.value.isSubmit = true;
 			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
 			if (!dataPC.id) dataPC.value.status = 1;
+			console.log("dataPc", dataPC.value);
 			const res = await PreCertificate.createUpdatePreCertification(
 				dataPC.value,
-				id
+				dataPC.value.id
 			);
+
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
@@ -157,7 +202,7 @@ export const usePreCertificateStore = defineStore(
 			other.value.isSubmit = false;
 		}
 		function resetData() {
-			data.value = {
+			dataPC.value = {
 				id: null,
 				certificate_id: null,
 				petitioner_name: "Ông / Bà ",
@@ -196,12 +241,27 @@ export const usePreCertificateStore = defineStore(
 				uploadFile: null
 			};
 			other.value.isSubmit = false;
+			preCertificateOtherDocuments.value = {
+				lstDocument: [
+					{
+						pre_certificate_id: null,
+						name: null,
+						link: null,
+						type: null,
+						size: null,
+						description: null,
+						type_document: null
+					}
+				],
+				Appendix: null,
+				Result: null
+			};
 		}
 		async function uploadFile() {
-			if (dataPc.value.uploadFile) {
+			if (dataPC.value.uploadFile) {
 				const res = await File.uploadFilePreCertificate(
-					dataPc.value.uploadFile,
-					16
+					dataPC.value.uploadFile,
+					dataPC.value.id
 				);
 				if (res.data) {
 					// await this.$emit('handleChangeFile', res.data.data)

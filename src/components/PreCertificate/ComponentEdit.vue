@@ -61,6 +61,7 @@
 							label="Địa chỉ"
 							class="form-group-container input_certification_brief"
 						/>
+
 						<div class="row justify-content-between">
 							<InputCategory
 								v-model="dataPC.appraise_purpose_id"
@@ -98,46 +99,42 @@
 								v-model="dataPC.total_preliminary_value"
 								vid="service_fee"
 								:max="99999999999999"
-								label="Tổng phí dịch vụ"
+								label="Tổng giá trị sơ bộ"
 								class="form-group-container col-sm-12 col-md-12"
-								@change="changeServiceFee($event)"
 							/>
 						</div>
-						<!-- <div class="row justify-content-between">
-							<InputText
-								v-model="dataPC.document_num"
-								vid="document_num"
-								label="Số hợp đồng"
+						<!-- <InputCategory
+							v-model="pre_type_compute"
+							vid="pre_type"
+							label="Loại sơ bộ"
+							rules="required"
+							class="form-group-container "
+							:options="optionsPreTypes"
+						/> -->
+
+						<InputCategoryPreTypes
+							v-model="dataPC.pre_type"
+							class="form-group-container "
+							vid="pre_type"
+							label="Loại sơ bộ"
+						/>
+						<!-- <InputCategory
+								v-model="appraiser_perform_compute"
+								vid="appraiser_perform_id"
+								label="Chuyên viên thực hiện"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
-							/>
-							<InputDatePicker
-								v-model="dataPC.document_date"
-								vid="document_date"
-								label="Ngày hợp đồng"
-								:formatDate="'DD/MM/YYYY'"
-								@change="changeDocumentDate"
-								placeholder="Ngày / tháng / năm"
-								class="form-group-container col-sm-12 col-md-6"
-							/>
-						</div> -->
-						<!-- <div class="row justify-content-between">
-							<InputText
-								v-model="dataPC.certificate_num"
-								vid="certificate_num"
-								label="Số chứng thư"
-								class="form-group-container col-sm-12 col-md-6"
-							/>
-							<InputDatePicker
-								v-model="dataPC.certificate_date"
-								vid="certificate_date"
-								label="Ngày chứng thư"
-								placeholder="Ngày / tháng / năm"
-								class="form-group-container col-sm-12 col-md-6"
-								:formatDate="'DD/MM/YYYY'"
-								:date="disabledDate"
-								@change="changeCertificateDate"
-							/>
-						</div> -->
+								:options="optionsAppraiserPerformance"
+							/> -->
+						<!-- <InputCategory
+							v-model="dataPC.pre_type"
+							class="form-group-container input_certification_brief  col-sm-12 col-md-12"
+							vid="pre_type"
+							label="Loại sơ bộ"
+							rules="required"
+							:options="optionsPreTypes"
+							@change="handleChangePreType"
+						/> -->
 						<InputTextarea
 							:autosize="true"
 							:disableInput="false"
@@ -243,6 +240,7 @@
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsAppraiserPerformance"
 							/>
@@ -261,12 +259,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-6" :style="isMobile ? { padding: '0' } : {}">
+		<div
+			v-if="dataPC.id"
+			class="col-6"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
 			<OtherFile type="Appendix" />
 		</div>
 
 		<div
-			v-if="dataPC.status >= 2"
+			v-if="dataPC.id && dataPC.status >= 2"
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
@@ -284,6 +286,7 @@ import InputCategoryMulti from "@/components/Form/InputCategoryMulti";
 import InputPercent from "@/components/Form/InputPercent";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
+import InputCategoryPreTypes from "./InputCategoryPreTypes";
 import InputCategorySearch from "@/components/Form/InputCategorySearch";
 import InputText from "@/components/Form/InputText";
 import InputTextarea from "@/components/Form/InputTextarea";
@@ -300,6 +303,7 @@ export default {
 	components: {
 		OtherFile,
 		InputCategory,
+		InputCategoryPreTypes,
 		InputCategorySearch,
 		InputText,
 		InputTextarea,
@@ -310,7 +314,6 @@ export default {
 		InputCategoryMulti,
 		InputTextPrefixCustomIcon
 	},
-
 	setup(props) {
 		const checkMobile = () => {
 			if (
@@ -369,7 +372,7 @@ export default {
 		});
 
 		const preCertificateStore = usePreCertificateStore();
-		console.log("pres", preCertificateStore);
+		preCertificateStore.resetData();
 		preCertificateStore.getPreCertificate(props.routeId);
 		const { dataPC, lstData, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
@@ -377,7 +380,9 @@ export default {
 		const handleChangeAppraisePurpose = event => {
 			dataPC.value.appraise_purpose_id = event;
 		};
-
+		const handleChangePreType = event => {
+			dataPC.value.pre_type = event;
+		};
 		const debounceSearchCustomer = debounce(function(e) {
 			if (e) {
 				// preCertificateStore.getCustomer(e);
@@ -448,7 +453,23 @@ export default {
 				this.dataPC.business_manager_id = newValue;
 			}
 		},
+		pre_type_compute: {
+			get: function() {
+				console.log(
+					"this.data",
+					this.dataPC.pre_type_id,
+					this.dataPC.pre_type,
+					this.dataPC,
+					this.lstData.preTypes
+				);
 
+				return this.dataPC.pre_type;
+			},
+			set: function(newValue) {
+				console.log("new", newValue);
+				this.dataPC.pre_type = newValue;
+			}
+		},
 		appraiser_sale_compute: {
 			// getter
 			get: function() {
@@ -489,6 +510,13 @@ export default {
 			return {
 				data: this.lstData.appraiser_sales,
 				id: "id",
+				key: "name"
+			};
+		},
+		optionsPreTypes() {
+			return {
+				data: this.lstData.preTypes,
+				id: "name",
 				key: "name"
 			};
 		},
