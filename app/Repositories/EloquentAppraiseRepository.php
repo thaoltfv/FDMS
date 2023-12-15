@@ -193,7 +193,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
 
                 $role = $user->roles->last();
-                if (($role->name == 'USER') || (!empty($popup))) {
+                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -3070,7 +3070,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     }
                 }
                 $role = $user->roles->last();
-                if (($role->name == 'USER') || (!empty($popup))) {
+                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -6476,7 +6476,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = RealEstate::query()->with(['createdBy','assetType']);
         // $result = $result->where('asset_type_id', 39);
         $role = $user->roles->last();
-        if(($role->name == 'USER')){
+        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
             $result= $result ->whereHas('createdBy', function ($has) use ($user) {
                 $has->where('id', $user->id);
             });
@@ -6613,7 +6613,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                              })
                 ->select($select)->distinct();
         $role = $user->roles->last();
-        if(($role->name == 'USER')){
+        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
             $result= $result ->whereHas('createdBy', function ($has) use ( $user) {
                 $has->where('id', $user->id);
             });
@@ -7360,7 +7360,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if ($role->name == 'USER') {
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
                 $result = $result->where('created_by', $userId);
             }
             $result = $result->first();

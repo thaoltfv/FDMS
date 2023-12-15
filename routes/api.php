@@ -316,21 +316,21 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::post('pre-certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
     // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
-    Route::get('pre-certificate/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
-    Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
-    Route::get('pre-certificate/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
+    Route::get('pre-certificates/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
+    Route::post('pre-certificates/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
+    Route::get('pre-certificates/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
 
-    Route::post('pre-certificate/other-document/upload/{id}/{typeDocument}', [PreCertificateController::class, 'otherDocumentUpload']);
+    Route::post('pre-certificates/other-document/upload/{id}/{typeDocument}', [PreCertificateController::class, 'otherDocumentUpload']);
 
-    Route::post('pre-certificate/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
+    Route::post('pre-certificates/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
 
-    Route::get('pre-certificate/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
+    Route::get('pre-certificates/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
 
-    Route::get('/pre-certificate', [PreCertificateController::class, 'findAll']);
+    Route::get('/pre-certificates', [PreCertificateController::class, 'findAll']);
 
     Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
 
-    Route::get('/pre-certificate-config', [PreCertificateConfigController::class, 'findAll']);
+    Route::get('/pre-certificate-configs', [PreCertificateConfigController::class, 'findAll']);
 
     Route::get('certificate-assets', [CertificateAssetController::class, 'findAll']);
 
