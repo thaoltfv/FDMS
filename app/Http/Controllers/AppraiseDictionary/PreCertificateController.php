@@ -105,7 +105,7 @@ class PreCertificateController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function otherDocumentUpload($id,$typeDocument, Request $request,): JsonResponse
+    public function otherDocumentUpload($id, $typeDocument, Request $request): JsonResponse
     {
         try {
             return $this->respondWithCustomData($this->preCertificateRepository->otherDocumentUpload($id,$typeDocument, $request));
@@ -465,5 +465,12 @@ class PreCertificateController extends Controller
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
         }
+    }
+    public function getPreCertificateWorkFlow(Request $request){
+
+        $HSTD =$this->preCertificateRepository->getPreCertificateWorkFlow();
+        $result = ['HSTD' => $HSTD];
+        // dd($HSTD);
+        return $this->respondWithCustomData($result);
     }
 }
