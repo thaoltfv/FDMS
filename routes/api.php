@@ -316,7 +316,7 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::post('pre-certificate/status/{id}', [PreCertificateController::class, 'updateStatus']);
     // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
-    Route::get('pre-certificate/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
+    // Route::get('pre-certificate/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
     Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
     Route::get('pre-certificate/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
 
@@ -384,6 +384,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/asset-generals/version/{id}', [CompareAssetGeneralController::class, 'findVersionById']);
 
     });
+
+    Route::get('pre-certificate/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
 
     Route::get('workflow/getworkflow', [WorkflowController::class, 'getWorkflow']);
     Route::get('workflow/certificate-workflow', [WorkflowController::class, 'getCertificateWorkFlow']);
