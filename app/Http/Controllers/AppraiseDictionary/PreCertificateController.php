@@ -468,6 +468,7 @@ class PreCertificateController extends Controller
     }
     public function getPreCertificateWorkFlow(Request $request){
 
+        dd($request);
         $HSTD =$this->preCertificateRepository->getPreCertificateWorkFlow();
         $result = ['HSTD' => $HSTD];
         // dd($HSTD);
