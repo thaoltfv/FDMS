@@ -213,7 +213,7 @@ import moment from "moment";
 import KanboardStatus from "@/components/PreCertificate/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
-const jsonConfig = require("../../../config/workflow.json");
+const jsonConfig = require("../../../config/pre_certificate_workflow.json");
 
 Vue.component("downloadExcel", JsonExcel);
 export default {
@@ -371,8 +371,7 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, lstData } = storeToRefs(preCertificateStore);
-
+		const { lstData } = storeToRefs(preCertificateStore);
 		return {
 			isMobile,
 			lstData,
@@ -1007,12 +1006,12 @@ export default {
 				const resp = await PreCertificate.getListKanbanPreCertificate(search);
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
+
 					if (this.principleConfig.length > 0) {
 						let dataTmp = [];
 						this.principleConfig.forEach(item => {
 							dataTmp = this.listCertificate.filter(
-								i =>
-									i.status === item.status && i.sub_status === item.sub_status
+								i => i.status === item.status
 							);
 							this.subStatusDataTmp[item.id] = dataTmp;
 						});
@@ -1155,7 +1154,14 @@ export default {
 	updated() {
 		this.changeHeight();
 	},
-	mounted() {
+	async mounted() {
+		if (!this.jsonConfig) {
+			if (this.lstData.workflow) {
+				this.jsonConfig = this.lstData.workflow;
+			} else {
+				this.jsonConfig = await this.preCertificateStore.getConfig();
+			}
+		}
 		if (this.jsonConfig && this.jsonConfig.principle) {
 			this.principleConfig = this.jsonConfig.principle.filter(
 				i => i.isActive === 1

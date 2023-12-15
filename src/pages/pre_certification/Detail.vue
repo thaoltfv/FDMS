@@ -330,7 +330,10 @@
 			</a-timeline>
 		</a-drawer>
 		<div
-			v-if="form.status !== 1 || form.general_asset.length > 0 ? true : false"
+			v-if="
+				form.status !== 1 ||
+					(form.general_asset && form.general_asset.length > 0 ? true : false)
+			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
@@ -498,16 +501,14 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument &&
-													downloadPreCertificate(idData)
+												isViewAutomationDocument && downloadCertificate(idData)
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument &&
-													downloadPreCertificate(idData)
+												isViewAutomationDocument && downloadCertificate(idData)
 											"
 										>
 											{{ filterDocumentName[0] || "Chứng thư thẩm định" }}
@@ -517,14 +518,14 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
-										<div @click="viewPreCertificate(idData)">
+										<div @click="viewCertificate(idData)">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
 												class="img_document_action"
 											/>
 										</div>
-										<!-- <div style="margin-left:10px" @click="downloadPreCertificate(idData)">
+										<!-- <div style="margin-left:10px" @click="downloadCertificate(idData)">
 											<img src="@/assets/icons/ic_download_2.svg" alt="download_2" class="img_document_action">
 										</div> -->
 									</div>
@@ -543,7 +544,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadReportPreCertificate(idData)
+													downloadReportCertificate(idData)
 											"
 										/>
 										<div
@@ -551,7 +552,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadReportPreCertificate(idData)
+													downloadReportCertificate(idData)
 											"
 										>
 											{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
@@ -561,14 +562,14 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
-										<div @click="viewReportPreCertificate(idData)">
+										<div @click="viewReportCertificate(idData)">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
 												class="img_document_action"
 											/>
 										</div>
-										<!-- <div style="margin-left:10px" @click="downloadReportPreCertificate(idData)">
+										<!-- <div style="margin-left:10px" @click="downloadReportCertificate(idData)">
 											<img src="@/assets/icons/ic_download_2.svg" alt="download_2" class="img_document_action">
 										</div> -->
 									</div>
@@ -770,11 +771,11 @@
 											class="img_input_download"
 											src="@/assets/icons/ic_document.svg"
 											alt="document"
-											:class="{ img_filter: !isPreCertificateReport }"
+											:class="{ img_filter: !isCertificateReport }"
 										/>
 										<div
 											class="title_input_content title_input_download cursor_pointer"
-											v-if="isPreCertificateReport"
+											v-if="isCertificateReport"
 											@click="downloadDocumentFile('certificate_report')"
 										>
 											{{ certificatReportName }}
@@ -786,7 +787,7 @@
 									</div>
 									<div
 										v-if="
-											isPreCertificateReport &&
+											isCertificateReport &&
 												(form.status === 1 ||
 													form.status === 2 ||
 													form.status === 3)
@@ -1302,7 +1303,7 @@
 			:checkVersion="checkVersion"
 			@handleFooterAccept="handleFooterAccept"
 			@handleEdit="handleEdit"
-			@handleCancelPreCertificate="handleCancelPreCertificate"
+			@handleCancelCertificate="handleCancelCertificate"
 			@onCancel="onCancel"
 			@viewDetailAppraise="viewDetailAppraise"
 			@viewAppraiseListVersion="viewAppraiseListVersion"
@@ -1342,7 +1343,7 @@
 						<img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel">Trở về
 					</button>
 					<b-dropdown class="btn_dropdown" right dropup>
-						<b-dropdown-item @click.prevent="handleCancelPreCertificate">
+						<b-dropdown-item @click.prevent="handleCancelCertificate">
 							<div class="div_item_dropdown">
 								<img style="height: 20px" class="img" src="@/assets/icons/ic_destroy.svg" alt="edit">
 									Hủy hồ sơ
@@ -1378,13 +1379,13 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
-		<ModalNotificationPreCertificateNote
+		<ModalNotificationCertificateNote
 			v-if="openNotification"
 			@cancel="handleCancel"
 			v-bind:notification="message"
 			@action="handleAction"
 		/>
-		<ModalNotificationPreCertificate
+		<ModalNotificationCertificate
 			v-if="openNotificationDenined"
 			@cancel="openNotificationDenined = false"
 			v-bind:notification="message"
@@ -1423,19 +1424,19 @@
 			@cancel="openSendAppraiser = false"
 			@updateAppraisal="updateSendAppraiser"
 		/>
-		<!-- <ModalNotificationPreCertificate
+		<!-- <ModalNotificationCertificate
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/> -->
-		<ModalNotificationPreCertificateNote
+		<ModalNotificationCertificateNote
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/>
-		<ModalNotificationPreCertificate
+		<ModalNotificationCertificate
 			v-if="isReUpload"
 			@cancel="isReUpload = false"
 			v-bind:notification="reUploadMessage"
@@ -1456,8 +1457,8 @@
 <script>
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
-import ModalNotificationPreCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationPreCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
+import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -1514,14 +1515,14 @@ export default {
 		ModalAppraisal,
 		ModalAppraiseInfomation,
 		"b-tooltip": BTooltip,
-		ModalNotificationPreCertificate,
+		ModalNotificationCertificate,
 		ModalViewDocument,
 		ModalDelete,
 		"b-dropdown-item": BDropdownItem,
 		"b-button-group": BButtonGroup,
 		"b-dropdown": BDropdown,
 		Footer,
-		ModalNotificationPreCertificateNote
+		ModalNotificationCertificateNote
 	},
 	data() {
 		return {
@@ -1630,7 +1631,7 @@ export default {
 		};
 	},
 	beforeRouteEnter: async (to, from, next) => {
-		await CertificationBrief.getDetailPreCertificateBrief(to.query["id"])
+		await CertificationBrief.getDetailCertificateBrief(to.query["id"])
 			.then(resp => {
 				if (resp.data) {
 					to.meta["detail"] = resp.data;
@@ -1749,7 +1750,7 @@ export default {
 		filterDocumentName() {
 			return this.documentName;
 		},
-		isPreCertificateReport() {
+		isCertificateReport() {
 			let report = this.getReport("certificate_report");
 			if (report) {
 				return true;
@@ -2025,7 +2026,7 @@ export default {
 		onCancel() {
 			return this.$router.push({ name: "certification_brief.index" });
 		},
-		handleCancelPreCertificate() {
+		handleCancelCertificate() {
 			this.openNotification = true;
 			this.cancel_certificate = true;
 			this.message = "Bạn có muốn hủy hồ sơ này?";
@@ -2170,7 +2171,7 @@ export default {
 			if (this.form.status === 2 && !this.cancel_certificate) {
 				// change status 2 --> 3
 				dataSend.status = 3;
-				const res = await CertificationBrief.updateStatusPreCertificate(
+				const res = await CertificationBrief.updateStatusCertificate(
 					this.idData,
 					dataSend
 				);
@@ -2194,7 +2195,7 @@ export default {
 			} else if (this.form.status === 3 && !this.cancel_certificate) {
 				// change status 3 --> 4
 				dataSend.status = 4;
-				const res = await CertificationBrief.updateStatusPreCertificate(
+				const res = await CertificationBrief.updateStatusCertificate(
 					this.idData,
 					dataSend
 				);
@@ -2218,7 +2219,7 @@ export default {
 			} else if (this.cancel_certificate) {
 				// change status 2 --> 5
 				dataSend.status = 5;
-				const res = await CertificationBrief.updateStatusPreCertificate(
+				const res = await CertificationBrief.updateStatusCertificate(
 					this.idData,
 					dataSend
 				);
@@ -2351,7 +2352,7 @@ export default {
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			};
-			const res = await CertificationBrief.updateStatusPreCertificate(
+			const res = await CertificationBrief.updateStatusCertificate(
 				this.idData,
 				dataSend
 			);
@@ -2404,7 +2405,7 @@ export default {
 			if (this.form.status === 3) {
 				// denined change status 3 ---> 2
 				dataSend.status = 2;
-				const res = await CertificationBrief.updateStatusPreCertificate(
+				const res = await CertificationBrief.updateStatusCertificate(
 					this.idData,
 					dataSend
 				);
@@ -2465,12 +2466,9 @@ export default {
 					}
 					let res = null;
 					if (this.form.status === 1) {
-						res = await File.saleUploadFilePreCertificate(
-							formData,
-							this.idData
-						);
+						res = await File.saleUploadFileCertificate(formData, this.idData);
 					} else {
-						res = await File.uploadFilePreCertificate(formData, this.idData);
+						res = await File.uploadFileCertificate(formData, this.idData);
 					}
 					console.log("res", res, formData);
 					if (res.data) {
@@ -2491,7 +2489,7 @@ export default {
 			let isReUpload = false;
 			switch (type) {
 				case "certificate_report":
-					if (this.isPreCertificateReport) {
+					if (this.isCertificateReport) {
 						message = "Chứng thư thẩm định";
 						isReUpload = true;
 					}
@@ -2580,8 +2578,8 @@ export default {
 				}
 			}
 		},
-		async viewPreCertificate() {
-			await PreCertificate.getPrintProof(this.idData).then(resp => {
+		async viewCertificate() {
+			await Certificate.getPrintProof(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2597,8 +2595,8 @@ export default {
 			this.title = "Tài liệu chứng thư thẩm định";
 			this.isShowPrint = true;
 		},
-		async downloadPreCertificate() {
-			await PreCertificate.getPrintProof(this.idData).then(resp => {
+		async downloadCertificate() {
+			await Certificate.getPrintProof(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2618,8 +2616,8 @@ export default {
 				}
 			});
 		},
-		async viewReportPreCertificate() {
-			await PreCertificate.getPrintReport(this.idData).then(resp => {
+		async viewReportCertificate() {
+			await Certificate.getPrintReport(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2635,8 +2633,8 @@ export default {
 			this.title = "Tài liệu báo cáo thẩm định";
 			this.isShowPrint = true;
 		},
-		async downloadReportPreCertificate() {
-			await PreCertificate.getPrintReport(this.idData).then(resp => {
+		async downloadReportCertificate() {
+			await Certificate.getPrintReport(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2741,7 +2739,7 @@ export default {
 			}
 		},
 		async viewAppendix1() {
-			await PreCertificate.getPrint(this.idData).then(resp => {
+			await Certificate.getPrint(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2751,7 +2749,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix1() {
-			await PreCertificate.getPrint(this.idData).then(resp => {
+			await Certificate.getPrint(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2772,7 +2770,7 @@ export default {
 			});
 		},
 		async viewAppendix2() {
-			await PreCertificate.getPrintAppendix(this.idData).then(resp => {
+			await Certificate.getPrintAppendix(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2782,7 +2780,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix2() {
-			await PreCertificate.getPrintAppendix(this.idData).then(resp => {
+			await Certificate.getPrintAppendix(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2803,7 +2801,7 @@ export default {
 			});
 		},
 		async viewAppendix3() {
-			await PreCertificate.getPrintImage(this.idData).then(resp => {
+			await Certificate.getPrintImage(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2820,7 +2818,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix3() {
-			await PreCertificate.getPrintImage(this.idData).then(resp => {
+			await Certificate.getPrintImage(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2872,7 +2870,7 @@ export default {
 			this.id_file_delete = file.id;
 		},
 		async handleDelete() {
-			const res = await File.deleteFilePreCertificate(this.id_file_delete);
+			const res = await File.deleteFileCertificate(this.id_file_delete);
 			if (res.data) {
 				this.form.other_documents.splice(this.indexDelete, 1);
 				// this.files = this.form.files
@@ -3022,7 +3020,7 @@ export default {
 			} else this.openMessage("Không tìm thấy file cần xóa.");
 		},
 		async deleteDocument() {
-			await PreCertificate.deleteDocument(this.id_file_delete).then(resp => {
+			await Certificate.deleteDocument(this.id_file_delete).then(resp => {
 				const file = resp;
 				if (file.data) {
 					this.form.other_documents = file.data;
@@ -3032,7 +3030,7 @@ export default {
 			});
 		},
 		async downloadDocument(file) {
-			await PreCertificate.downloadDocument(file.id).then(resp => {
+			await Certificate.downloadDocument(file.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");

@@ -9,14 +9,14 @@ export default class Certificate extends Model {
 	static async getDetailPreCertificate(id = "") {
 		return new this().request({
 			method: "GET",
-			url: `pre-certificate/pre-certification-infomation/${id}`,
+			url: `pre-certificates/pre-certification-infomation/${id}`,
 			isStatic: true
 		});
 	}
 	static async createUpdatePreCertification(data, id = "") {
 		return new this().request({
 			method: "POST",
-			url: `pre-certificate/pre-certification-brief/${id}`,
+			url: `pre-certificates/pre-certification-brief/${id}`,
 			data: data,
 			isStatic: true
 		});
@@ -81,7 +81,7 @@ export default class Certificate extends Model {
 	static async getPreCertificate() {
 		return new this().request({
 			method: "GET",
-			url: `pre-certificate/`,
+			url: `pre-certificates/`,
 			isStatic: true
 		});
 	}
@@ -112,7 +112,7 @@ export default class Certificate extends Model {
 		let searchInput = { search_input: search };
 		return new this().request({
 			method: "GET",
-			url: `pre-certificate/pre-certificate-workflow`,
+			url: `pre-certificates/pre-certificate-workflow`,
 			query: searchInput,
 			isStatic: true
 		});

@@ -96,7 +96,7 @@ export const usePreCertificateStore = defineStore(
 				if (element.name === "workflow")
 					lstData.value.workflow = element.config;
 			}
-			return lstData.value;
+			return lstData.value.workflow;
 		}
 		async function getStartData() {
 			const resp = await PreCertificate.getAppraisers();

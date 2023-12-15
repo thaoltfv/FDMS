@@ -8,7 +8,7 @@ export default class PreCertificateConfig extends Model {
 	static async getConfig() {
 		let resp = await new this().request({
 			method: "GET",
-			url: `pre-certificate-config`,
+			url: `pre-certificate-configs`,
 			isStatic: true
 		});
 		return resp;
