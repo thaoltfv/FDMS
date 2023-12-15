@@ -468,10 +468,9 @@ class PreCertificateController extends Controller
     }
     public function getPreCertificateWorkFlow(Request $request){
 
-        dd($request);
-        // $HSTD =$this->preCertificateRepository->getPreCertificateWorkFlow();
-        // $result = ['HSTD' => $HSTD];
+        $HSTD =$this->preCertificateRepository->getPreCertificateWorkFlow();
+        $result = ['HSTD' => $HSTD];
         // dd($HSTD);
-        // return $this->respondWithCustomData($result);
+        return $this->respondWithCustomData($result);
     }
 }
