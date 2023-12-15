@@ -145,5 +145,9 @@ export const DICTIONARIES = [{
 {
 	TYPE: 'LI_DO',
 	NAME: 'Lí do'
+},
+{
+	TYPE: 'LOAI_CAN_HO',
+	NAME: 'Loại căn hộ'
 }
 ]

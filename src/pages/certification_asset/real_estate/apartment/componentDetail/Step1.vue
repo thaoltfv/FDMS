@@ -246,8 +246,17 @@
                 vid="data.appraise_asset"
                 label="Tên căn hộ"
                 rules="required"
-                class="col-12 form-group-container"
+                class="col-12 col-lg-8 form-group-container"
                 :disabledInput="true"
+            />
+            <InputCategory
+              v-model='data.apartment_asset_properties.loai_can_ho_id'
+              vid="loai_can_ho_id"
+              label="Loại căn hộ"
+              rules="required"
+              class="col-12 col-lg-4 form-group-container"
+              :options="optionsLoaiCanHo"
+              :disabled="true"
             />
             <InputTextarea
               label="Mô tả"
@@ -680,6 +689,15 @@
                 class="col-6 form-group-container"
                 :disabledInput="true"
             />
+            <InputCategory
+              v-model='data.apartment_asset_properties.loai_can_ho_id'
+              vid="loai_can_ho_id"
+              label="Loại căn hộ"
+              rules="required"
+              class="col-6 form-group-container"
+              :options="optionsLoaiCanHo"
+              :disabled="true"
+            />
             <InputTextarea
               label="Mô tả"
               v-model="data.apartment_asset_properties.description"
@@ -887,7 +905,7 @@ Vue.use(Icon)
 export default {
 	name: 'Step1',
 	props: ['data', 'propertyTypes', 'provinces', 'districts', 'wards', 'streets', 'isEdit', 'full_address', 'projects', 'blocks', 'floors', 'apartments', 'furniture_list',
-		'basic_utilities', 'directions', 'imageDescriptions'],
+		'basic_utilities', 'directions', 'imageDescriptions', 'loai_can_ho'],
 	components: {
 		InputCategory,
 		InputText,
@@ -929,6 +947,13 @@ export default {
 				data: this.floors,
 				id: 'id',
 				key: 'name'
+			}
+		},
+    optionsLoaiCanHo () {
+			return {
+				data: this.loai_can_ho,
+				id: 'id',
+				key: 'description'
 			}
 		},
 		optionsApartments () {

@@ -227,7 +227,7 @@ export default {
 	},
 	created () {
 		const permission = this.$store.getters.currentPermissions
-		console.log('permission',permission)
+		console.log('permission', permission)
 		// fix_permission
 		permission.forEach((value) => {
 			if (value === 'ADD_ROLE') {
