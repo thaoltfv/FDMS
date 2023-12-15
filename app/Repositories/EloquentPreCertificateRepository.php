@@ -1330,54 +1330,54 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
-        $select = [
-            'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
-            'pre_certificates.updated_at', 'status_updated_at',
-            'business_manager_id', 
-            'appraiser_sale_id', 
-            'appraiser_perform_id', 
-            // 'users.image',
-            DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
-            DB::raw("case status
-                        when 1
-                            then 'Mới'
-                        when 2
-                            then 'Đang thẩm định'
-                        when 3
-                            then 'Đang duyệt'
-                        when 4
-                            then 'Hoàn thành'
-                        when 5
-                            then 'Huỷ'
-                        when 6
-                            then 'Đang kiểm soát'
-                    end as status_text
-                "),
-            'total_preliminary_value',
-            Db::raw("COALESCE(document_count,0) as document_count"),
-            'status_expired_at',
-            DB::raw("case status
-                        when 1
-                            then u1.image
-                        when 2
-                            then u2.image
-                        when 3
-                            then u2.image
-                        when 4
-                            then u1.image
-                        when 5
-                            then u2.image
-                        when 6
-                            then u1.image
-                    end as image
-                "),
-        ];
-        $with = [
-            'appraiserSale:id,name,user_id',
-            'appraiserPerform:id,name,user_id',
-            'appraiserBusinessManager:id,name,user_id',
-        ];
-        DB::enableQueryLog();
+        // $select = [
+        //     'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
+        //     'pre_certificates.updated_at', 'status_updated_at',
+        //     'business_manager_id', 
+        //     'appraiser_sale_id', 
+        //     'appraiser_perform_id', 
+        //     // 'users.image',
+        //     DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
+        //     DB::raw("case status
+        //                 when 1
+        //                     then 'Mới'
+        //                 when 2
+        //                     then 'Đang thẩm định'
+        //                 when 3
+        //                     then 'Đang duyệt'
+        //                 when 4
+        //                     then 'Hoàn thành'
+        //                 when 5
+        //                     then 'Huỷ'
+        //                 when 6
+        //                     then 'Đang kiểm soát'
+        //             end as status_text
+        //         "),
+        //     'total_preliminary_value',
+        //     Db::raw("COALESCE(document_count,0) as document_count"),
+        //     'status_expired_at',
+        //     DB::raw("case status
+        //                 when 1
+        //                     then u1.image
+        //                 when 2
+        //                     then u2.image
+        //                 when 3
+        //                     then u2.image
+        //                 when 4
+        //                     then u1.image
+        //                 when 5
+        //                     then u2.image
+        //                 when 6
+        //                     then u1.image
+        //             end as image
+        //         "),
+        // ];
+        // $with = [
+        //     'appraiserSale:id,name,user_id',
+        //     'appraiserPerform:id,name,user_id',
+        //     'appraiserBusinessManager:id,name,user_id',
+        // ];
+        // DB::enableQueryLog();
         dd($this->model);
         $result = $this->model->with($with)
             ->leftjoin('users', function ($join) {
