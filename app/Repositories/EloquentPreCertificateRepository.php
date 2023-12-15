@@ -1378,7 +1378,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserBusinessManager:id,name,user_id',
         ];
         DB::enableQueryLog();
-        dd($this->model->with($with)->select($select));
+        dd($this->model->with($with));
         $result = $this->model->with($with)
             ->leftjoin('users', function ($join) {
                 $join->on('pre_certificates.created_by', '=', 'users.id')
