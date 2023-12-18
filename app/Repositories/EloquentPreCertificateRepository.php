@@ -1540,7 +1540,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $preCertificateId = $id;
                 $status = $oldCertificate->status;
                 if (!isset($oldCertificate['created_by']))
-                    $data['created_by'] = $user->id->id;
+                {
+                    $data['created_by'] = $user->id;
+                }
+                else if(isset($oldCertificate['created_by']) && isset($oldCertificate['created_by']['id']))
+                {
+                    $data['created_by'] = $oldCertificate['created_by']['id'];
+                }
 
                 $certificateArr = new PreCertificate($data);
                 PreCertificate::where('id', $preCertificateId)->update($certificateArr->attributesToArray());
