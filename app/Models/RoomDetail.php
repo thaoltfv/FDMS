@@ -52,7 +52,7 @@ class RoomDetail extends Model
         return $this->belongsTo(Dictionary::class,'furniture_quality_id','id');
     }
 
-    public function loaiCanHo(): BelongsTo
+    public function loaicanho(): BelongsTo
     {
         return $this->belongsTo(Dictionary::class,'loai_can_ho_id','id');
     }
