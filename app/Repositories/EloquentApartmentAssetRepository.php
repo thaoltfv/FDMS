@@ -452,7 +452,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc', 'loai_can_ho'
         ];
         // dd($apartment['apartment_asset_properties']);
-        dd($comparison,$allComparisonFactor);
+        dd($comparison,$allComparisonFactor,$oldAssetGeneralId);
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
                 if(in_array($comparisonFactorTmp, $comparison)) {
