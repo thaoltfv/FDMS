@@ -468,7 +468,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 }
                 continue;
             }
-            dd('làm nè');
+            // dd('làm nè');
             if($comparisonFactorTmp == 'phap_ly'){
                 $apartmentValue = $apartment['apartment_asset_properties']['legal']['description']??'Không biết';
                 $assetValue = $asset['room_details'][0]['legal']['description']??'Không biết';
