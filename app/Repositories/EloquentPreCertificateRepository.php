@@ -1450,6 +1450,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             
             $data = $objects;
             // dd('note', $data);
+            $data['branch_id'] = $branch_id;
             $data['customer_id'] = $customerId;
             if (isset($id)) {
                 $check = $this->beforeSave($id);
@@ -1470,6 +1471,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 else if(isset($oldCertificate['created_by']) && isset($oldCertificate['created_by']->id))
                 {
                     $data['created_by'] = $oldCertificate['created_by']->id;
+                }
+                else
+                {
+                    $data['created_by'] = $oldCertificate->getRawOriginal('created_by');
                 }
 
                 $certificateArr = new PreCertificate($data);
@@ -1721,33 +1726,30 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
                 $currentStatus = $preCertificate->status;
-                $currentSubStatus = $preCertificate->sub_status;
-                $current = intval($currentStatus . $currentSubStatus);
-                $currentConfig = current(array_filter($request['status_config'], function ($val) use ($currentStatus, $currentSubStatus) {
-                    return $val['status'] == $currentStatus && $val['sub_status'] == $currentSubStatus;
+                $current = intval($currentStatus );
+                $currentConfig = current(array_filter($request['status_config'], function ($val) use ($currentStatus) {
+                    return $val['status'] == $currentStatus;
                 }));
                 $status = $request['status'];
-                $subStatus = $request['sub_status'];
-                $next = intval($status . $subStatus);
-                $nextConfig = current(array_filter($request['status_config'], function ($val) use ($status, $subStatus) {
-                    return $val['status'] == $status && $val['sub_status'] == $subStatus;
+                $next = intval($status);
+                $nextConfig = current(array_filter($request['status_config'], function ($val) use ($status) {
+                    return $val['status'] == $status;
                 }));
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
 
-                if (isset($status) && isset($subStatus)) {
-                    switch($status)  {
-                        case 1: //Move to first step in workflow -> remove all asset in preCertificate
-                            // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
-                            $this->removeAssetInCertificate($id);
-                            break;
-                        default:
-                            $this->updateAppraiseStatus($id, $status, $subStatus);
-                    }
+                if (isset($status)) {
+                    // switch($status)  {
+                    //     case 1: //Move to first step in workflow -> remove all asset in preCertificate
+                    //         // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
+                    //         $this->removeAssetInCertificate($id);
+                    //         break;
+                    //     default:
+                    //         $this->updateAppraiseStatus($id, $status);
+                    // }
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update([
                             'status' => $status,
-                            'sub_status' => $subStatus,
                             'status_updated_at' => date('Y-m-d H:i:s'),
                             'status_expired_at' => $status_expired_at,
                         ]);
@@ -2966,9 +2968,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $data = PreCertificate::where('id', $id)->get()->first();
             $appraiser = [];
             if (!empty($required)) {
-                // $ischeckPrice = $required['check_price'];
-                // $isCheckLegal =  $required['check_legal'];
-                // $isCheckVersion =  $required['check_version'];
                 $isCheckAppraiser =  $required['appraiser'];
                 $isCheckTotalPreliminaryValue =  $required['total_preliminary_value'];
 
@@ -3007,7 +3006,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 3:
-                         if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
+                        if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 4:
@@ -3322,10 +3321,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $users[] = $loginUser;
             // $users= $loginUser;
             $with = [
-                'appraiser:id,user_id,name',
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
-                'appraiserControl:id,user_id,name',
+                'appraiserBusinessManager:id,user_id,name',
                 'createdBy:id,name',
             ];
             $select = [
@@ -3334,7 +3332,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 'appraiser_id',
                 'appraiser_sale_id',
                 'appraiser_perform_id',
-                'appraiser_control_id',
+                'business_manager_id',
             ];
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
@@ -3347,37 +3345,33 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 if ($preCertificate->appraiserPerform->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($preCertificate->appraiserPerform->user_id);
                 }
-            if (isset($preCertificate->appraiser->user_id))
-                if ($preCertificate->appraiser->user_id != $loginUser->id && $preCertificate->appraiser->user_id != $preCertificate->appraiserPerform->user_id) {
-                    $users[] =  $eloquenUser->getUser($preCertificate->appraiser->user_id);
-                }
-            if (isset($preCertificate->appraiserControl->user_id))
-                if ($preCertificate->appraiserControl->user_id != $loginUser->id) {
-                    $users[] =  $eloquenUser->getUser($preCertificate->appraiserControl->user_id);
+            if (isset($preCertificate->appraiserBusinessManager->user_id))
+                if ($preCertificate->appraiserBusinessManager->user_id != $loginUser->id) {
+                    $users[] =  $eloquenUser->getUser($preCertificate->appraiserBusinessManager->user_id);
                 }
             switch ($status) {
                 case 2:
-                    $statusText = 'Đang thẩm định';
+                    $statusText = 'Định giá sơ bộ';
                     break;
                 case 3:
-                    $statusText = 'Đang duyệt';
+                    $statusText = 'Duyệt giá sơ bộ';
                     break;
                 case 4:
-                    $statusText = 'Đã hoàn thành';
+                    $statusText = 'Thương thảo';
                     break;
                 case 5:
                     $statusText = 'Đã hủy';
                     break;
                 case 6:
-                    $statusText = 'Đang kiểm soát';
+                    $statusText = 'Hoàn thành';
                     break;
                 default:
-                    $statusText = 'Mới';
+                    $statusText = 'Yêu cầu sơ bộ';
             }
 
             $data = [
-                'subject' => '[HSTD_' . $id . '] Chuyển sang trạng thái ' . $statusText,
-                'message' => 'HSTD_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
+                'subject' => '[HSTDSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
+                'message' => 'HSTDSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
                 'user' => $loginUser,
                 'id' => $id
             ];
