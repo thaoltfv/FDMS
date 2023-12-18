@@ -1115,62 +1115,40 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
         $select = [
-            'certificates.id',
-            'petitioner_name',
-            'document_num',
-            'appraise_date',
-            'document_date',
-            'certificate_date',
-            'certificate_num',
-            'status',
-            'certificates.created_at',
-            'appraise_purpose_id',
-            'created_by',
-            'appraiser_id',
-            'appraiser_perform_id',
-            'appraiser_control_id',
+           'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
+            'pre_certificates.updated_at', 'status_updated_at',
+            'business_manager_id', 
+            'appraiser_sale_id', 
+            'appraiser_perform_id', 
+            // 'users.image',
+            DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
-                    when 1
-                        then 'Mới'
-                    when 2
-                        then 'Đang thẩm định'
-                    when 3
-                        then 'Đang duyệt'
-                    when 4
-                        then 'Hoàn thành'
-                    when 5
-                        then 'Huỷ'
-                    when 6
-                        then 'Đang kiểm soát'
-                end as status_text
-            "),
-            Db::raw("cast(certificate_prices.value as bigint) as total_price"),
-            'commission_fee',
-            'document_type',
+                        when 1
+                            then 'Mới'
+                        when 2
+                            then 'Đang thẩm định'
+                        when 3
+                            then 'Đang duyệt'
+                        when 4
+                            then 'Hoàn thành'
+                        when 5
+                            then 'Huỷ'
+                        when 6
+                            then 'Đang kiểm soát'
+                    end as status_text
+                "),
+            'total_preliminary_value',
+            Db::raw("COALESCE(document_count,0) as document_count"),
             'status_expired_at',
-            'status_updated_at',
-            'sub_status'
         ];
         $with = [
-            'createdBy:id,name',
-            'appraiser:id,name',
-            // 'appraiserManager:id,name',
-            // 'appraiserConfirm:id,name',
-            // 'appraiserSale:id,name',
-            'appraiserPerform:id,name',
-            'appraisePurpose:id,name',
-            'appraiserControl:id,name',
+            'createdBy:id,name',   
+            'appraiserSale:id,name,user_id',
+            'appraiserPerform:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
 
-            // 'appraises:id,appraise_id',
-            // 'appraises.appraiseLaw:id,appraise_id',
-            // 'appraises.appraiseLaw.landDetails:id,appraise_law_id,doc_no,land_no',
-
-            // 'assetPrice' => function($query){
-            //     $query->where('slug','=','total_asset_price')
-            //         ->select(['id','pre_certificate_id','slug','value']);
-            // },
         ];
-        \DB::enableQueryLog();
+        DB::enableQueryLog();
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select);
@@ -1183,22 +1161,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
-                $query = $query->orwhereHas('appraiser', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-                $query = $query->orwhereHas('appraiserManager', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-                $query = $query->orwhereHas('appraiserConfirm', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
                 $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
-                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
+                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -1208,16 +1177,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
             switch ($filterSubstr) {
-                case '#':
-                    $result = $result->where(function ($q) use ($filterData) {
-                        $q->whereHas('realEstate', function ($has) use ($filterData) {
-                            $has->where('certificate_real_estates.real_estate_id', $filterData);
-                        });
-                        $q->orWhereHas('personalProperties', function ($has) use ($filterData) {
-                            $has->where('certificate_personal_properties.personal_property_id', $filterData);
-                        });
-                    });
-                    break;
                 case '!':
                     $result = $result->where(function ($q) use ($filterData) {
                         $q->where('certificate_num', $filterData)
@@ -1231,34 +1190,18 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         });
                     });
                     break;
-                case '&':
-                    // $data = explode('/',$filterData);
-                    // $doc_no = $data[0];
-                    // $land_no = isset($data[1]) ? $data[1] : -1;
-                    // if(intval($doc_no)>=0 ){
-                    //     // return ['message' => 'Sau "&" phải là "số tờ/số thửa". Vui lòng nhập đúng định dạng"', 'exception' => ''];
-                    //     $result=$result->where(function ($q) use ($doc_no,$land_no) {
-                    //         $q = $q->whereHas('appraises.appraiseLaw.landDetails',function($has) use($doc_no,$land_no){
-                    //             $has->where('doc_no', '=', $doc_no );
-                    //             if(intval($land_no) >=0)
-                    //                 $has=$has->Where('land_no','=',$land_no);
-                    //         });
-                    //     });
-                    // }
-                    break;
                 case '$':
                     if (floatval($filterData)) {
-                        // return ['message' => 'Sau "$" phải là số để tìm kiếm theo tổng giá trị', 'exception' => ''];
                         $fromValue = floatval($filterData) - floatval($filterData) * $betweenTotal;
                         $toValue = floatval($filterData) + floatval($filterData) * $betweenTotal;
                         $result = $result->where(function ($q) use ($fromValue, $toValue) {
-                            $q->whereBetween('value', [$fromValue, $toValue]);
+                            $q->whereBetween('total_preliminary_value', [$fromValue, $toValue]);
                         });
                     }
                     break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
-                        $q = $q->where('certificates.id', 'like', strval($filter));
+                        $q = $q->where('pre_certificates.id', 'like', strval($filter));
                         $q = $q->orwhere('petitioner_name', 'ILIKE', '%' . $filter . '%');
                     });
             }
@@ -1274,34 +1217,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result =  $result->orderBy('document_num', 'DESC');
                 else
                     $result =  $result->orderBy('document_num', 'ASC');
-            elseif ($sortField == 'document_date')
-                if ($sortOrder == 'descend')
-                    $result =  $result->orderBy('document_date', 'DESC');
-                else
-                    $result =  $result->orderBy('document_date', 'ASC');
-            elseif ($sortField == 'certificate_num')
-                if ($sortOrder == 'descend')
-                    $result =  $result->orderBy('certificate_num', 'DESC');
-                else
-                    $result =  $result->orderBy('certificate_num', 'ASC');
-            elseif ($sortField == 'certificate_date')
-                if ($sortOrder == 'descend')
-                    $result =  $result->orderBy('certificate_date', 'DESC');
-                else
-                    $result =  $result->orderBy('certificate_date', 'ASC');
             elseif ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
                     $result =  $result->orderBy('petitioner_name', 'DESC');
                 else
                     $result =  $result->orderBy('petitioner_name', 'ASC');
-            // elseif($sortField=='created_by.name')
-            //     if($sortOrder=='descend')
-            //         $result=  $result->orderBy('created_by', 'DESC');
-            //     else
-            //         $result=  $result->orderBy('created_by', 'ASC');
         }
 
-        $result = $result->orderByDesc('certificates.updated_at');
+        $result = $result->orderByDesc('pre_certificates.updated_at');
 
         $result = $result
             ->forPage($page, $perPage)
@@ -1373,6 +1296,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 "),
         ];
         $with = [
+            'createdBy:id,name',   
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
@@ -1543,9 +1467,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 {
                     $data['created_by'] = $user->id;
                 }
-                else if(isset($oldCertificate['created_by']) && isset($oldCertificate['created_by']['id']))
+                else if(isset($oldCertificate['created_by']) && isset($oldCertificate['created_by']->id))
                 {
-                    $data['created_by'] = $oldCertificate['created_by']['id'];
+                    $data['created_by'] = $oldCertificate['created_by']->id;
                 }
 
                 $certificateArr = new PreCertificate($data);

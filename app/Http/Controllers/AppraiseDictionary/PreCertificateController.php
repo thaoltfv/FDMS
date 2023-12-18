@@ -309,7 +309,7 @@ class PreCertificateController extends Controller
 
     public function getPreCertificate(int $id){
         if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
 
         $result =  $this->preCertificateRepository->getPreCertificate($id);
         if(isset($result['message']) && isset($result['exception']))
@@ -320,7 +320,7 @@ class PreCertificateController extends Controller
     public function findPaging(Request $request)
     {
         if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
         $result =  $this->preCertificateRepository->findPaging_v2();
         if(isset($result['message']) && isset($result['exception']))
                 return $this->respondWithErrorData( $result);
@@ -391,7 +391,7 @@ class PreCertificateController extends Controller
 
     public function getGeneralInfomation(int $id){
         if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW,'exception' =>''], 403);
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_VIEW,'exception' =>''], 403);
 
         $result =  $this->preCertificateRepository->getGeneralInfomation($id);
         return $this->respondWithCustomData($result);
