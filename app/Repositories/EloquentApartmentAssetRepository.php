@@ -470,8 +470,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }
             // dd('làm nè');
             if($comparisonFactorTmp == 'phap_ly'){
-                $apartmentValue = $apartment['apartment_asset_properties']['legal']['description']??'Không biết';
-                $assetValue = $asset['room_details'][0]['legal']['description']??'Không biết';
+                $apartmentValue = $apartment['apartment_asset_properties']['legal']['description']??'-';
+                $assetValue = $asset['room_details'][0]['legal']['description']??'-';
                 ////phap ly always true
                 $status = true;
                 // $dictionary = $dictionaries['phap_ly'];
@@ -479,8 +479,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $name = 'Pháp lý';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'loai_can'){
-                $apartmentValue = $apartment['apartment_asset_properties']['block']['rank']['description'] ?? 'Không biết';
-                $assetValue = $asset['apartment_specification']['rank']['description'] ?? 'Không biết';
+                $apartmentValue = $apartment['apartment_asset_properties']['block']['rank']['description'] ?? '-';
+                $assetValue = $asset['apartment_specification']['rank']['description'] ?? '-';
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
@@ -509,8 +509,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $name = 'Diện tích';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'tang'){
-                $apartmentValue = $apartment['apartment_asset_properties']['floor']['name'] ?? 'Không biết';
-                $assetValue = $asset['floor']['name'] ?? 'Không biết';
+                $apartmentValue = $apartment['apartment_asset_properties']['floor']['name'] ?? '-';
+                $assetValue = $asset['floor']['name'] ?? '-';
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
@@ -529,8 +529,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $name = 'Số phòng vệ sinh';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'loai_can_ho'){
-                $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'Không biết';
-                $assetValue = $asset['room_details'][0]['loaicanho']['description']??'Không biết';
+                $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'-';
+                $assetValue = $asset['room_details'][0]['loaicanho']['description']??'-';
                 // dd($apartment['apartment_asset_properties']);
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
