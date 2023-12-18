@@ -1540,7 +1540,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $preCertificateId = $id;
                 $status = $oldCertificate->status;
                 if (!isset($oldCertificate['created_by']))
-                    $data['created_by'] = $user->id;
+                    $data['created_by'] = $user->id->id;
 
                 $certificateArr = new PreCertificate($data);
                 PreCertificate::where('id', $preCertificateId)->update($certificateArr->attributesToArray());
@@ -1664,6 +1664,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status',
             'deleted_at',
             'status_expired_at',
+            'pre_type',
         ];
         $with = [
             'appraiserSale:id,name,user_id',
