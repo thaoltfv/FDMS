@@ -1837,6 +1837,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 ->with('roomDetails.direction')
                 ->with('roomDetails.furnitureQuality')
                 ->with('roomDetails.legal')
+                ->with('roomDetails.loaiCanHo')
                 ->with('project')
                 ->with('project.province:id,name')
                 ->with('project.district:id,name')
