@@ -103,19 +103,19 @@ export default class File extends Model {
 	static async downloadFilePreCertificate(id) {
 		return new this().makeRequest({
 			method: "GET",
-			url: `api/pre-certificate/other-document/download/${id}`
+			url: `api/pre-certificates/other-document/download/${id}`
 		});
 	}
 	static async deleteFilePreCertificate(id) {
 		return new this().makeRequest({
 			method: "POST",
-			url: `api/pre-certificate/other-document/remove/${id}`
+			url: `api/pre-certificates/other-document/remove/${id}`
 		});
 	}
 	static async uploadFilePreCertificate(data, id, typeDocument) {
 		return new this().makeRequest({
 			method: "POST",
-			url: `/api/pre-certificate/other-document/upload/${id}/${typeDocument}`,
+			url: `/api/pre-certificates/other-document/upload/${id}/${typeDocument}`,
 			data
 		});
 	}

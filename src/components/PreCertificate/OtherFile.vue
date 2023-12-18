@@ -9,10 +9,37 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
+		<ModalViewDocument
+			v-if="isShowPrint"
+			@cancel="isShowPrint = false"
+			:filePrint="filePrint"
+			title="Xem trước tập tin"
+		/>
 		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
-					<h3 class="title">{{ title }}</h3>
+					<div class="row d-flex justify-content-between align-items-center">
+						<h3 class="title">{{ title }}</h3>
+
+						<label for="image_property">
+							<font-awesome-icon
+								:style="{ color: 'orange', cursor: 'pointer' }"
+								icon="cloud-upload-alt"
+								size="2x"
+							/>
+						</label>
+						<input
+							class="btn-upload "
+							type="file"
+							ref="file"
+							id="image_property"
+							multiple
+							accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+							@change="onImageChange($event)"
+							style="display: none;"
+						/>
+					</div>
+
 					<img
 						class="img-dropdown"
 						:class="!showCardDetailFile ? 'img-dropdown__hide' : ''"
@@ -22,66 +49,58 @@
 					/>
 				</div>
 			</div>
-			<div class="card-body card-info" v-show="showCardDetailFile">
-				<div class="row">
-					<div class="col-12 mt-3">
-						<div
-							class="input_upload_file d-flex justify-content-center align-items-center"
-						>
-							<font-awesome-icon
-								:style="{ color: 'orange', position: 'absolute' }"
-								icon="cloud-upload-alt"
-								size="5x"
-							/>
-							<input
-								class="btn-upload"
-								type="file"
-								ref="file"
-								id="image_property"
-								multiple
-								accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
-								@change="onImageChange($event)"
-							/>
-						</div>
-					</div>
-				</div>
-				<div class="row mt-3">
-					<div v-for="(file, index) in lstFile" :key="index" class="d-flex">
-						<div
-							style="cursor: pointer;"
-							@click="downloadOtherFile(file)"
-							class="d-flex"
-						>
-							<img
-								class="mr-1"
-								style="width: 1rem;"
-								src="@/assets/icons/ic_taglink.svg"
-								alt="tag_2"
-							/>
-							<div class="mr-3">{{ file.name }}</div>
-						</div>
-						<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
-							<div class="mr-3">{{file.name}}</div> -->
 
-						<img
-							v-if="file.isUpload === false"
-							style="cursor: pointer; width: 1rem;"
-							@click="deleteOtherFile(file, index)"
-							src="@/assets/icons/ic_delete_2.svg"
-							alt="tag_2"
-						/>
-						<img
-							v-else-if="
-								permission.allowDelete &&
-									(dataPC.status === 1 ||
-										dataPC.status === 2 ||
-										dataPC.status === 3)
-							"
-							style="cursor: pointer; width: 1rem;"
-							@click="deleteOtherFile(file, index)"
-							src="@/assets/icons/ic_delete_2.svg"
-							alt="tag_2"
-						/>
+			<div class="card-body card-info" v-show="showCardDetailFile">
+				<div class="card-body card-info">
+					<div
+						class="row input_download_certificate mb-2"
+						v-for="(file, index) in lstFile"
+					>
+						<div :key="index" class="d-flex align-items-center col">
+							<!-- <img
+								class="img_input_download"
+								src="@/assets/icons/ic_document.svg"
+								alt="document"
+							/> -->
+							<div
+								class="title_input_content title_input_download cursor_pointer"
+							>
+								{{ file.name }}
+							</div>
+						</div>
+						<div
+							class="d-flex align-items-center justify-content-end col-1 pr-3"
+						>
+							<div>
+								<img
+									src="@/assets/icons/ic_search_3.svg"
+									alt="search"
+									class="img_document_action mr-3"
+									@click="getPreviewUrl(file)"
+								/>
+							</div>
+							<div>
+								<img
+									v-if="file.isUpload === false"
+									@click="deleteOtherFile(file, index)"
+									src="@/assets/icons/ic_delete_2.svg"
+									alt="tag_2"
+									class="img_document_action"
+								/>
+								<img
+									v-else-if="
+										permission.allowDelete &&
+											(dataPC.status === 1 ||
+												dataPC.status === 2 ||
+												dataPC.status === 3)
+									"
+									@click="deleteOtherFile(file, index)"
+									src="@/assets/icons/ic_delete_2.svg"
+									alt="tag_2"
+									class="img_document_action"
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -93,10 +112,13 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 
+// import ModalViewDocument from "@/pages/certification_brief/component/modals/ModalViewDocument";
+import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import Vue from "vue";
 import Icon from "buefy";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
+// import mammoth from "mammoth";
 Vue.use(Icon);
 export default {
 	props: {
@@ -105,7 +127,8 @@ export default {
 		}
 	},
 	components: {
-		ModalDelete
+		ModalDelete,
+		ModalViewDocument
 	},
 	setup(props) {
 		const checkMobile = () => {
@@ -200,6 +223,80 @@ export default {
 				});
 			}
 		};
+		const openFile = file => {
+			if (file.link) {
+				window.open(file.link, "_blank");
+			} else {
+				other.value.toast.open({
+					message: "Có lỗi xảy ra vui lòng thử lại",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+			}
+			// window.open(
+			// 	process.env.API_URL +
+			// 		"/api/certificate/other-document/download/" +
+			// 		file.id,
+			// 	"_blank"
+			// );
+		};
+		const isShowPrint = ref(false);
+		const filePrint = ref(null);
+		const getPreviewUrl = async file => {
+			console.log("file", file);
+			if (file.link) {
+				fetch(file.link)
+					.then(response => response.blob())
+					.then(blob => {
+						// let reader = new FileReader();
+						// reader.onload = event => {
+						// 	mammoth
+						// 		.convertToHtml({ arrayBuffer: event.target.result })
+						// 		.then(result => {
+						// 			filePrint.value = result.value;
+						// 			isShowPrint.value = true;
+						// 		})
+						// 		.catch(console.error);
+						// };
+						// reader.readAsArrayBuffer(blob);
+
+						if (
+							file.type === "png" ||
+							file.type === "jpeg" ||
+							file.type === "jpg" ||
+							file.type === "gif"
+						) {
+							filePrint.value = {
+								link: URL.createObjectURL(blob),
+								type: "image"
+							};
+						} else if (file.type === "pdf") {
+							filePrint.value = {
+								link: blob,
+								type: "pdf"
+							};
+						} else {
+							other.value.toast.open({
+								message: "Tạm thời chưa hỗ trợ xem trước loại file này",
+								type: "error",
+								position: "top-right",
+								duration: 3000
+							});
+						}
+						isShowPrint.value = true;
+					})
+					.catch(console.error);
+			} else {
+				other.value.toast.open({
+					message: "Có lỗi xảy ra vui lòng thử lại",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return null;
+			}
+		};
 		return {
 			showCardDetailFile,
 			dataPC,
@@ -209,14 +306,17 @@ export default {
 			isMobile,
 			lstFile,
 			openModalDelete,
+			isShowPrint,
+			filePrint,
 			handleDelete,
 			deleteOtherFile,
-			downloadOtherFile
+			downloadOtherFile,
+			openFile,
+			getPreviewUrl
 		};
 	},
 	methods: {
 		async onImageChange(e) {
-			console.log("pre", this.preCertificateOtherDocuments, this.lstFile);
 			const formData = new FormData();
 			let check = true;
 			let files = e.target.files;
@@ -236,6 +336,8 @@ export default {
 						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
 					this.file.type === "application/pdf"
 				) {
+					let link = URL.createObjectURL(this.file);
+					this.file.link = link;
 				} else {
 					check = false;
 					this.$toast.open({
@@ -247,6 +349,7 @@ export default {
 				}
 			}
 			if (check) {
+				this.showCardDetailFile = true;
 				if (files.length) {
 					for (let i = 0; i < files.length; i++) {
 						files[i].isUpload = false;
@@ -267,7 +370,6 @@ export default {
 						if (res.data) {
 							// await this.$emit('handleChangeFile', res.data.data)
 							this.preCertificateOtherDocuments = res.data.data;
-							console.log("res", res.data.data);
 							this.lstFile = [...res.data.data];
 							this.$toast.open({
 								message: "Thêm file thành công",
@@ -277,7 +379,7 @@ export default {
 							});
 						}
 					} else {
-						this.lstFile = [...files];
+						this.lstFile = [...this.lstFile, ...files];
 						this.dataPC.uploadFile = formData;
 					}
 				}

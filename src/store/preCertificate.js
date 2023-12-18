@@ -66,8 +66,8 @@ export const usePreCertificateStore = defineStore(
 					type_document: null
 				}
 			],
-			Appendix: null,
-			Result: null
+			Appendix: [],
+			Result: []
 		});
 
 		const lstData = ref({
@@ -253,8 +253,8 @@ export const usePreCertificateStore = defineStore(
 						type_document: null
 					}
 				],
-				Appendix: null,
-				Result: null
+				Appendix: [],
+				Result: []
 			};
 		}
 		async function uploadFile() {

@@ -12,20 +12,31 @@
 					</div>
 					<div class="contain-detail">
 						<iframe
-							:src="
-								'https://view.officeapps.live.com/op/embed.aspx?src=' +
-									filePrint
-							"
+							v-if="filePrint.type === 'pdf'"
+							:srcdoc="filePrint.link"
 							width="100%"
 							height="100%"
 							frameborder="0"
-							>This is an embedded
-							<a target="_blank" href="http://office.com">Microsoft Office</a>
-							document, powered by
-							<a target="_blank" href="http://office.com/webapps"
-								>Office Online</a
-							>.</iframe
+						/>
+						<div
+							class="contain-detail"
+							style="display: flex; justify-content: center;"
 						>
+							<iframe
+								v-if="filePrint.type === 'pdf'"
+								:srcdoc="filePrint.link"
+								width="100%"
+								height="100%"
+								frameborder="0"
+							/>
+							<img
+								v-else-if="filePrint.type === 'image'"
+								:src="filePrint.link"
+								height="60%"
+								width="60%"
+								alt="Loaded image"
+							/>
+						</div>
 					</div>
 					<div class="container-title container-title__footer">
 						<div class="d-flex justify-content-between justify-content-lg-end">
