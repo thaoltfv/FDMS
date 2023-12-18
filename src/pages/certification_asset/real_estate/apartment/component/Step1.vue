@@ -939,7 +939,7 @@ export default {
 				key: 'description'
 			}
 		},
-    optionsLoaiCanHo () {
+		optionsLoaiCanHo () {
 			return {
 				data: this.loai_can_ho,
 				id: 'id',
