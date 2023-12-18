@@ -452,7 +452,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc', 'loai_can_ho'
         ];
         // dd($apartment['apartment_asset_properties']);
-        dd($allComparisonFactor);
+        // dd($allComparisonFactor);
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
                 if(in_array($comparisonFactorTmp, $comparison)) {
@@ -526,7 +526,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }elseif($comparisonFactorTmp == 'loai_can_ho'){
                 $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'Không biết';
                 $assetValue = $asset['room_details'][0]['loaicanho']['description']??'Không biết';
-                // dd($apartmentValue,$assetValue);
+                dd($apartmentValue,$assetValue);
                 ////phap ly always true
                 $status = true;
                 // $dictionary = $dictionaries['phap_ly'];
