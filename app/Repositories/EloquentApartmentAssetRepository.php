@@ -282,6 +282,11 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                             continue;
                         }
                     }
+                    // add thêm để dự phòng trường hợp không qua được điều kiện trên
+                    if(ApartmentAssetHasAsset::where('apartment_asset_id',$id)->where('asset_general_id',$assetId)->exists()){
+                        $this->postComparisonFactor($dictionaries, $apartmentData->toArray() , $comparisons , $asset , $id, $assetId,$oldAssetGeneralId) ;
+                        continue;
+                    }
                     createNewAsset:
                     //create appraise has asset
                     $version = $asset['version'];
@@ -520,7 +525,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }elseif($comparisonFactorTmp == 'loai_can_ho'){
                 $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'Không biết';
                 $assetValue = $asset['room_details'][0]['loaicanho']['description']??'Không biết';
-                dd($apartmentValue,$assetValue);
+                // dd($apartmentValue,$assetValue);
                 ////phap ly always true
                 $status = true;
                 // $dictionary = $dictionaries['phap_ly'];
