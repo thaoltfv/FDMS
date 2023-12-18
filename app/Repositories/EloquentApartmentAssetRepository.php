@@ -531,7 +531,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }elseif($comparisonFactorTmp == 'loai_can_ho'){
                 $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'Không biết';
                 $assetValue = $asset['room_details'][0]['loaicanho']['description']??'Không biết';
-                dd($apartment['apartment_asset_properties']);
+                // dd($apartment['apartment_asset_properties']);
                 $status = false;
                 if(in_array($comparisonFactorTmp, $comparison)){
                     $status = true;
@@ -814,6 +814,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             'apartmentAssetProperties.furnitureQuality:id,description',
             'apartmentAssetProperties.legal:id,description',
             'apartmentAssetProperties.direction:id,description',
+            'apartmentAssetProperties.loaicanho:id,description',
             'assetType:id,description,acronym',
             'project',
             'province:id,name',
