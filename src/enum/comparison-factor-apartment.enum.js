@@ -7,8 +7,15 @@ export const COMPARISON_APARTMENT = [{
 },
 {
 	id: 2,
-	name: 'Loại căn',
+	name: 'Loại chung cư',
 	slug: 'loai_can',
+	disable: false,
+	visible: true
+},
+{
+	id: 7,
+	name: 'Loại căn hộ',
+	slug: 'loai_can_ho',
 	disable: false,
 	visible: true
 },

@@ -45,7 +45,7 @@
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{ formatSentenceCase(asset.transaction_type.description) }}</td>
 															</tr>
 															<tr>
-																<td>4</td>
+																<td>5</td>
 																<td>Tọa độ</td>
 																<td>
 																		<div>
@@ -68,7 +68,7 @@
 															</tr>
 															<tr>
 																<td>7</td>
-																<td>Loại căn hộ</td>
+																<td>Loại chung cư</td>
 																<td>{{data.apartment_asset_properties && data.apartment_asset_properties.rank  ? formatSentenceCase(data.apartment_asset_properties.rank.description) : "-"}}</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{asset.apartment_specification && asset.apartment_specification.rank ? formatSentenceCase(asset.apartment_specification.rank.description) : "-" }}</td>
 															</tr>
@@ -92,24 +92,30 @@
 															</tr>
 															<tr>
 																<td>11</td>
+																<td>Loại căn hộ</td>
+																<td>{{data.apartment_asset_properties  ? formatSentenceCase(data.apartment_asset_properties.loaicanho.description) : "-"}}</td>
+																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{asset.room_details && asset.room_details.length > 0 && asset.room_details[0].loaicanho ? formatSentenceCase(asset.room_details[0].loaicanho.description) : "-" }}</td>
+															</tr>
+															<tr>
+																<td>12</td>
 																<td>Số phòng ngủ</td>
 																<td>{{data.apartment_asset_properties  ? data.apartment_asset_properties.bedroom_num : "-"}}</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{asset.room_details && asset.room_details.length > 0 && asset.room_details[0].bedroom_num ? asset.room_details[0].bedroom_num : "-" }}</td>
 															</tr>
 															<tr>
-																<td>12</td>
+																<td>13</td>
 																<td>Số phòng WC</td>
 																<td>{{data.apartment_asset_properties  ? data.apartment_asset_properties.wc_num : "-"}}</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{asset.room_details && asset.room_details.length > 0 && asset.room_details[0].wc_num ? asset.room_details[0].wc_num : "-" }}</td>
 															</tr>
 															<tr>
-																<td>13</td>
+																<td>14</td>
 																<td>Tình trạng nội thất</td>
 																<td>{{data.apartment_asset_properties  ? formatSentenceCase(data.apartment_asset_properties.furniture_quality.description) : "-"}}</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{asset.room_details && asset.room_details.length > 0 && asset.room_details[0].furniture_quality ? formatSentenceCase(asset.room_details[0].furniture_quality.description) : "-" }}</td>
 															</tr>
 															<tr>
-																<td>14</td>
+																<td>15</td>
 																<td>Tiện ích</td>
 																<td>
 																	<div v-if="data.apartment_asset_properties && data.apartment_asset_properties.utility_description && data.apartment_asset_properties.utility_description.length > 0">
@@ -125,19 +131,19 @@
 																</td>
 															</tr>
 															<tr>
-																<td>15</td>
+																<td>16</td>
 																<td>Hướng chính</td>
 																<td>{{data.apartment_asset_properties  ? formatSentenceCase(data.apartment_asset_properties.direction.description) : "-"}}</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetType' + index">{{asset.room_details && asset.room_details.length > 0 && asset.room_details[0].direction ? formatSentenceCase(asset.room_details[0].direction.description) : "-" }}</td>
 															</tr>
 															<tr>
-																<td>16</td>
+																<td>17</td>
 																<td>Giá rao bán</td>
 																<td>-</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'totalAmount' + index">{{ formatNumber(asset.total_amount) }} đ</td>
 															</tr>
 															<tr>
-																<td>17</td>
+																<td>18</td>
 																<td><p>Tỷ lệ rao bán</p> <p>Số tiền thương lượng</p></td>
 																<td></td>
 																<td v-for="(asset, index) in form.apartment_adapter" :key="'adjustPercent' + index">
@@ -167,7 +173,7 @@
 																</td>
 															</tr>
 															<tr>
-																<td>18</td>
+																<td>19</td>
 																<td>Tổng giá trị tài sản ước tính</td>
 																<td></td>
 																<td>{{formatNumber(totalPriceEstimate1)}}đ</td>
@@ -175,7 +181,7 @@
 																<td>{{formatNumber(totalPriceEstimate3)}}đ</td>
 															</tr>
 															<tr>
-																<td>19</td>
+																<td>20</td>
 																<td>Đơn giá bình quân.</td>
 																<td></td>
 																<td>{{formatNumber(parseFloat(dgcc1).toFixed(0))}}đ</td>
@@ -291,27 +297,27 @@
 																<td><strong>{{formatNumber(parseFloat(totalPricePL3).toFixed(0))}}</strong></td>
 															</tr>
 
-															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaicanho' + index">
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaichungcu' + index">
 																<td rowspan="5">
 																	<div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('loai_can')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
 																</td>
-																<td><strong>Loại căn hộ</strong></td>
-																<td v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaicanho1' + index">
+																<td><strong>Loại chung cư</strong></td>
+																<td v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaichungcu1' + index">
 																	{{formatSentenceCase(comparison_factor_appraise.apartment_title)}}
 																</td>
 																<td v-for="(asset, index) in apartment.assets_general" :key="'assetLoaiCan' + index">
-																	<span v-for="(comparison_factor, indexItem) in apartment.comparison_factor[index].comparison_factor"  :key="'loaicanho2' +indexItem">
+																	<span v-for="(comparison_factor, indexItem) in apartment.comparison_factor[index].comparison_factor"  :key="'loaichungcu2' +indexItem">
 																		<span v-if="comparison_factor.type === 'loai_can'">
 																			{{formatSentenceCase(comparison_factor.asset_title)}}
 																		</span>
 																	</span>
 																</td>
 															</tr>
-															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaicanho3C' + index">
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaichungcu3C' + index">
 																<td>Hệ số tương quan</td>
                        											<td>100%</td>
 																<td v-for="(asset, indexAsset) in apartment.assets_general" :key="'inputLoaiCan' + indexAsset">
-																	<div v-for="(comparison_factor, index) in apartment.comparison_factor[indexAsset].comparison_factor"  :key="'loaicanho4C' +index">
+																	<div v-for="(comparison_factor, index) in apartment.comparison_factor[indexAsset].comparison_factor"  :key="'loaichungcu4C' +index">
 																		<div v-if="comparison_factor.type === 'loai_can'">
 																			<InputPercent
 																			:key="2234+key_render_111"
@@ -326,11 +332,11 @@
 																	</div>
 																</td>
 															</tr>
-															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaicanho3' + index">
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaichungcu3' + index">
 																<td>Tỷ lệ điều chỉnh</td>
 																<td></td>
 																<td v-for="(asset, indexAsset) in apartment.assets_general" :key="'inputLoaiCan' + indexAsset">
-																	<div v-for="(comparison_factor, index) in apartment.comparison_factor[indexAsset].comparison_factor"  :key="'loaicanho4' +index">
+																	<div v-for="(comparison_factor, index) in apartment.comparison_factor[indexAsset].comparison_factor"  :key="'loaichungcu4' +index">
 																		<div v-if="comparison_factor.type === 'loai_can'">
 																			<InputPercentNegative
 																			:key="2234+key_render_1"
@@ -345,19 +351,88 @@
 																	</div>
 																</td>
 															</tr>
-															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaicanho5' + index">
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaichungcu5' + index">
 																<td>Mức điều chỉnh</td>
 																<td></td>
 																<td>{{formatNumber(parseFloat(priceLch1).toFixed(0))}}</td>
 																<td>{{formatNumber(parseFloat(priceLch2).toFixed(0))}}</td>
 																<td>{{formatNumber(parseFloat(priceLch3).toFixed(0))}}</td>
 															</tr>
-															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaicanho6' + index">
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can' && comparison_factor_appraise.status === 1)" :key="'loaichungcu6' + index">
 																<td><strong>Giá sau điều chỉnh</strong></td>
 																<td></td>
 																<td><strong>{{formatNumber(adjustPriceData['loai_can'][0])}}</strong></td>
 																<td><strong>{{formatNumber(adjustPriceData['loai_can'][1])}}</strong></td>
 																<td><strong>{{formatNumber(adjustPriceData['loai_can'][2])}}</strong></td>
+															</tr>
+
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can_ho' && comparison_factor_appraise.status === 1)" :key="'loaicanho' + index">
+																<td rowspan="5">
+																	<div class="btn-delete" v-if="isEditStatus" type="button" @click="dialogDeleteComparisionDefault('loai_can_ho')"><img src="@/assets/icons/ic_delete_2.svg" alt="save"></div>
+																</td>
+																<td><strong>Loại căn hộ</strong></td>
+																<td v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can_ho' && comparison_factor_appraise.status === 1)" :key="'loaicanho1' + index">
+																	{{formatSentenceCase(comparison_factor_appraise.apartment_title)}}
+																</td>
+																<td v-for="(asset, index) in apartment.assets_general" :key="'assetLoaiCanHo' + index">
+																	<span v-for="(comparison_factor, indexItem) in apartment.comparison_factor[index].comparison_factor"  :key="'loaicanho2' +indexItem">
+																		<span v-if="comparison_factor.type === 'loai_can_ho'">
+																			{{formatSentenceCase(comparison_factor.asset_title)}}
+																		</span>
+																	</span>
+																</td>
+															</tr>
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can_ho' && comparison_factor_appraise.status === 1)" :key="'loaicanho3C' + index">
+																<td>Hệ số tương quan</td>
+                       											<td>100%</td>
+																<td v-for="(asset, indexAsset) in apartment.assets_general" :key="'inputLoaiCanHo' + indexAsset">
+																	<div v-for="(comparison_factor, index) in apartment.comparison_factor[indexAsset].comparison_factor"  :key="'loaicanho4C' +index">
+																		<div v-if="comparison_factor.type === 'loai_can_ho'">
+																			<InputPercent
+																			:key="2234+key_render_111"
+																				:disabled="!isEditStatus"
+																				class="label-none input_center"
+																				v-model="comparison_factor.adjust_coefficient"
+																				vid="number_legal"
+																				:text_center="true"
+																				@change="changeLegalCoefficient($event, indexAsset, comparison_factor.type)"
+																			/>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can_ho' && comparison_factor_appraise.status === 1)" :key="'loaicanho3' + index">
+																<td>Tỷ lệ điều chỉnh</td>
+																<td></td>
+																<td v-for="(asset, indexAsset) in apartment.assets_general" :key="'inputLoaiCanHo' + indexAsset">
+																	<div v-for="(comparison_factor, index) in apartment.comparison_factor[indexAsset].comparison_factor"  :key="'loaicanho4' +index">
+																		<div v-if="comparison_factor.type === 'loai_can_ho'">
+																			<InputPercentNegative
+																			:key="2234+key_render_1"
+																				:disabled="true"
+																				class="label-none input_center"
+																				v-model="comparison_factor.adjust_percent"
+																				vid="number_legal"
+																				:text_center="true"
+																				@change="changeLegalRate($event, indexAsset, comparison_factor.type)"
+																			/>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can_ho' && comparison_factor_appraise.status === 1)" :key="'loaicanho5' + index">
+																<td>Mức điều chỉnh</td>
+																<td></td>
+																<td>{{formatNumber(parseFloat(priceLcho1).toFixed(0))}}</td>
+																<td>{{formatNumber(parseFloat(priceLcho2).toFixed(0))}}</td>
+																<td>{{formatNumber(parseFloat(priceLcho3).toFixed(0))}}</td>
+															</tr>
+															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'loai_can_ho' && comparison_factor_appraise.status === 1)" :key="'loaicanho6' + index">
+																<td><strong>Giá sau điều chỉnh</strong></td>
+																<td></td>
+																<td><strong>{{formatNumber(adjustPriceData['loai_can_ho'][0])}}</strong></td>
+																<td><strong>{{formatNumber(adjustPriceData['loai_can_ho'][1])}}</strong></td>
+																<td><strong>{{formatNumber(adjustPriceData['loai_can_ho'][2])}}</strong></td>
 															</tr>
 
 															<tr v-for="(comparison_factor_appraise, index) in apartment.comparison_factor[0].comparison_factor.filter(comparison_factor_appraise => comparison_factor_appraise.type === 'dien_tich' && comparison_factor_appraise.status === 1)" :key="'dientich' + index">
@@ -1005,6 +1080,9 @@ export default {
 			priceLch1: 0,
 			priceLch2: 0,
 			priceLch3: 0,
+			priceLcho1: 0,
+			priceLcho2: 0,
+			priceLcho3: 0,
 			priceDt1: 0,
 			priceDt2: 0,
 			priceDt3: 0,
@@ -1795,6 +1873,33 @@ export default {
 
 			// These field must be set = 0 before check
 			// Incase factor has been removed manualy it will not be updated if put these inside condition block
+			this.priceLcho1 = 0
+			this.priceLcho2 = 0
+			this.priceLcho3 = 0
+			if ((typeof comparisonFactor1['loai_can_ho'] !== 'undefined') && comparisonFactor1['loai_can_ho'].status === 1) {
+				let percentLcho1 = +comparisonFactor1['loai_can_ho'].adjust_percent || 0
+				let percentLcho2 = +comparisonFactor2['loai_can_ho'].adjust_percent || 0
+				let percentLcho3 = +comparisonFactor3['loai_can_ho'].adjust_percent || 0
+
+				// mức điều chỉnh của yếu tố LOẠI CĂN HỘ
+				let price1 = this.roundPrice(percentLcho1 * this.totalPricePL1 / 100, 0)
+				let price2 = this.roundPrice(percentLcho2 * this.totalPricePL2 / 100, 0)
+				let price3 = this.roundPrice(percentLcho3 * this.totalPricePL3 / 100, 0)
+				this.priceLcho1 = price1
+				this.priceLcho2 = price2
+				this.priceLcho3 = price3
+				adjustPrice1 += price1
+				adjustPrice2 += price2
+				adjustPrice3 += price3
+				this.adjustPriceData['loai_can_ho'] = [adjustPrice1, adjustPrice2, adjustPrice3]
+
+				this.comparisonFactorChange1 += (percentLcho1 !== 0) ? 1 : 0
+				this.comparisonFactorChange2 += (percentLcho2 !== 0) ? 1 : 0
+				this.comparisonFactorChange3 += (percentLcho3 !== 0) ? 1 : 0
+			}
+
+			// These field must be set = 0 before check
+			// Incase factor has been removed manualy it will not be updated if put these inside condition block
 			this.priceDt1 = 0
 			this.priceDt2 = 0
 			this.priceDt3 = 0
@@ -1971,14 +2076,14 @@ export default {
 			})
 
 			// tổng giá trị điều chỉnh gộp
-			this.tldcg1 = Math.abs(this.pricePl1) + Math.abs(this.pricePn1) + Math.abs(this.priceLch1) + Math.abs(this.priceDt1) + Math.abs(this.priceSt1) + Math.abs(this.pricePWC1) + Math.abs(mgcd_price_other_abs[0])
-			this.tldcg2 = Math.abs(this.pricePl2) + Math.abs(this.pricePn2) + Math.abs(this.priceLch2) + Math.abs(this.priceDt2) + Math.abs(this.priceSt2) + Math.abs(this.pricePWC2) + Math.abs(mgcd_price_other_abs[1])
-			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.pricePn3) + Math.abs(this.priceLch3) + Math.abs(this.priceDt3) + Math.abs(this.priceSt3) + Math.abs(this.pricePWC3) + Math.abs(mgcd_price_other_abs[2])
+			this.tldcg1 = Math.abs(this.pricePl1) + Math.abs(this.pricePn1) + Math.abs(this.priceLch1) + Math.abs(this.priceLcho1) + Math.abs(this.priceDt1) + Math.abs(this.priceSt1) + Math.abs(this.pricePWC1) + Math.abs(mgcd_price_other_abs[0])
+			this.tldcg2 = Math.abs(this.pricePl2) + Math.abs(this.pricePn2) + Math.abs(this.priceLch2) + Math.abs(this.priceLcho1) + Math.abs(this.priceDt2) + Math.abs(this.priceSt2) + Math.abs(this.pricePWC2) + Math.abs(mgcd_price_other_abs[1])
+			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.pricePn3) + Math.abs(this.priceLch3) + Math.abs(this.priceLcho1) + Math.abs(this.priceDt3) + Math.abs(this.priceSt3) + Math.abs(this.pricePWC3) + Math.abs(mgcd_price_other_abs[2])
 
 			// tổng giá trị điều chỉnh thuần
-			this.tldc1 = this.pricePl1 + this.pricePn1 + this.priceLch1 + this.priceDt1 + this.priceSt1 + this.pricePWC1 + mgcd_price_other[0]
-			this.tldc2 = this.pricePl2 + this.pricePn2 + this.priceLch2 + this.priceDt2 + this.priceSt2 + this.pricePWC2 + mgcd_price_other[1]
-			this.tldc3 = this.pricePl3 + this.pricePn3 + this.priceLch3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
+			this.tldc1 = this.pricePl1 + this.pricePn1 + this.priceLch1 + this.priceLch1 + this.priceDt1 + this.priceSt1 + this.pricePWC1 + mgcd_price_other[0]
+			this.tldc2 = this.pricePl2 + this.pricePn2 + this.priceLch2 + this.priceLch2 + this.priceDt2 + this.priceSt2 + this.pricePWC2 + mgcd_price_other[1]
+			this.tldc3 = this.pricePl3 + this.pricePn3 + this.priceLch3 + this.priceLch3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
 
 			// tính mức giá chỉ dẫn của TSSS
 			this.mgcd1 = this.dgcc1 + this.tldc1
