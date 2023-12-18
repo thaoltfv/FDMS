@@ -520,6 +520,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }elseif($comparisonFactorTmp == 'loai_can_ho'){
                 $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'Không biết';
                 $assetValue = $asset['room_details'][0]['loaicanho']['description']??'Không biết';
+                dd($apartmentValue,$assetValue);
                 ////phap ly always true
                 $status = true;
                 // $dictionary = $dictionaries['phap_ly'];
