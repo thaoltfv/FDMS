@@ -136,7 +136,11 @@
 									>quản lý nghiệp vụ:</strong
 								>
 								<p>
-									{{ form.business_manager ? form.business_manager.name : "" }}
+									{{
+										form.appraiser_business_manager
+											? form.appraiser_business_manager.name
+											: ""
+									}}
 								</p>
 							</div>
 						</div>

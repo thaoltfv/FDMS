@@ -94,7 +94,7 @@
             /> -->
 					</div>
 					<div class="col-md-12 order-3 order-lg-2 col-lg-6">
-						<div class="row justify-content-between">
+						<!-- <div class="row justify-content-between">
 							<InputCurrency
 								v-model="dataPC.total_preliminary_value"
 								vid="service_fee"
@@ -102,14 +102,12 @@
 								label="Tổng giá trị sơ bộ"
 								class="form-group-container col-sm-12 col-md-12"
 							/>
-						</div>
-						<InputCategory
-							v-model="pre_type_compute"
+						</div> -->
+						<InputCategoryPreTypes
+							v-model="dataPC.pre_type"
+							class="form-group-container "
 							vid="pre_type"
 							label="Loại sơ bộ"
-							rules="required"
-							class="form-group-container "
-							:options="optionsPreTypes"
 						/>
 
 						<InputTextarea
@@ -265,6 +263,8 @@ import InputTextarea from "@/components/Form/InputTextarea";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
+import InputCategoryPreTypes from "./InputCategoryPreTypes";
+
 import OtherFile from "./OtherFile.vue";
 export default {
 	components: {
@@ -278,7 +278,8 @@ export default {
 		InputCurrency,
 		InputPercent,
 		InputCategoryMulti,
-		InputTextPrefixCustomIcon
+		InputTextPrefixCustomIcon,
+		InputCategoryPreTypes
 	},
 	setup() {
 		const checkMobile = () => {
@@ -406,7 +407,7 @@ export default {
 				if (this.lstData.business_managers.length > 0) {
 					return this.dataPC.business_manager_id;
 				} else {
-					return this.dataPC.business_manager.name;
+					return this.dataPC.appraiser_business_manager.name;
 				}
 			},
 			// setter

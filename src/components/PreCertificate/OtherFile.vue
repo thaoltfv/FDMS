@@ -244,8 +244,32 @@ export default {
 		const isShowPrint = ref(false);
 		const filePrint = ref(null);
 		const getPreviewUrl = async file => {
-			console.log("file", file);
-			if (file.link) {
+			if (file.isUpload === false) {
+				if (
+					file.type === "image/png" ||
+					file.type === "image/jpeg" ||
+					file.type === "image/jpg" ||
+					file.type === "image/gif"
+				) {
+					filePrint.value = {
+						link: file.link,
+						type: "image"
+					};
+				} else if (file.type === "application/pdf") {
+					filePrint.value = {
+						link: blob,
+						type: "pdf"
+					};
+				} else {
+					other.value.toast.open({
+						message: "Tạm thời chưa hỗ trợ xem trước loại file này",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+				isShowPrint.value = true;
+			} else if (file.link) {
 				fetch(file.link)
 					.then(response => response.blob())
 					.then(blob => {

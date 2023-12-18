@@ -1923,7 +1923,7 @@ export const routes = [
 			{
 				path: "",
 				name: "pre_certification.index",
-				component: page("pre_certification/Index.vue"),
+				component: page("pre_certification/Index2.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
 					title: "Hồ sơ thẩm định sơ bộ",

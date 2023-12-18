@@ -124,7 +124,7 @@
 					</draggable>
 				</div>
 			</div>
-			<ModalDetailCertificate
+			<ModalDetailPreCertificate
 				v-if="showDetailPopUp"
 				:idData="idData"
 				:edit="edit"
@@ -206,7 +206,7 @@ import { BCard, BRow, BCol, BFormGroup, BFormInput } from "bootstrap-vue";
 import draggable from "vuedraggable";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
-import ModalDetailCertificate from "@/components/PreCertificate/ModalDetailPreCertificate";
+import ModalDetailPreCertificate from "@/components/PreCertificate/ModalDetailPreCertificate";
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import PreCertificate from "@/models/PreCertificate";
 import moment from "moment";
@@ -310,7 +310,7 @@ export default {
 		DollarSignIcon,
 		HomeIcon,
 		ClockIcon,
-		ModalDetailCertificate,
+		ModalDetailPreCertificate,
 		ModalSendVerify,
 		ModalAppraisal,
 		KanboardStatus,
@@ -639,7 +639,7 @@ export default {
 				status: 4
 			};
 			// change status 3 --> 4
-			const res = await PreCertificate.updateStatusCertificate(
+			const res = await PreCertificate.updateStatusPreCertificate(
 				this.idDragger,
 				dataSend
 			);
@@ -686,7 +686,7 @@ export default {
 				status_config: this.jsonConfig.principle
 			};
 			// // console.log('data send', dataSend)
-			const res = await PreCertificate.updateStatusCertificate(
+			const res = await PreCertificate.updateStatusPreCertificate(
 				this.idDragger,
 				dataSend
 			);
@@ -723,7 +723,7 @@ export default {
 			this.isHandleAction = false;
 		},
 		async handleUpdateStatus(id, data, message) {
-			const res = await PreCertificate.updateStatusCertificate(id, data);
+			const res = await PreCertificate.updateStatusPreCertificate(id, data);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(i => i.id === id);
 				if (returnData) {
@@ -875,7 +875,7 @@ export default {
 		async updateDataWorkFlow(search) {
 			this.isLoading = true;
 			try {
-				const resp = await PreCertificate.getListKanbanCertificate(search);
+				const resp = await PreCertificate.getListKanbanPreCertificate(search);
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
 					this.listCertificateDraftTemp = resp.data.HSTD.filter(
@@ -939,7 +939,7 @@ export default {
 		async getDataWorkFlow(search = "") {
 			this.isLoading = true;
 			try {
-				const resp = await PreCertificate.getListKanbanCertificate(search);
+				const resp = await PreCertificate.getListKanbanPreCertificate(search);
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
 					this.listCertificateDraftTemp = resp.data.HSTD.filter(

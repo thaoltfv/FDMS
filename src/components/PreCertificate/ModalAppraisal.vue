@@ -120,6 +120,7 @@ import InputCategory from "@/components/Form/InputCategory";
 import InputNumberFormat from "@/components/Form/InputNumber";
 import Certificate from "@/models/Certificate";
 import CertificationBrief from "@/models/CertificationBrief";
+import PreCertificate from "@/models/PreCertificate";
 import InputDatePickerV2 from "@/components/Form/InputDatePickerV2";
 import moment from "moment";
 import AppraiserCompany from "@/models/AppraiserCompany";
@@ -170,7 +171,7 @@ export default {
 			return new Date(dateConvert.getTime() + minutes * 60000);
 		},
 		async getTimeStamp() {
-			let res = await CertificationBrief.getTimeStamp();
+			let res = await PreCertificate.getTimeStamp();
 			if (res.data) {
 				let statusObject = [];
 				if (this.data.status === 1) {
@@ -321,7 +322,7 @@ export default {
 					});
 				}
 			} else {
-				const res = await CertificationBrief.updateStatusCertificate(
+				const res = await PreCertificate.updateStatusCertificate(
 					this.idData,
 					data
 				);

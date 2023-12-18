@@ -4,7 +4,7 @@ import Model from "./Model.js";
 export default class Certificate extends Model {
 	buildUrl(request) {
 		const { params } = request;
-		return ["pre-certificate", ...params];
+		return ["pre-certificates/certificate-paging", ...params];
 	}
 	static async getDetailPreCertificate(id = "") {
 		return new this().request({
@@ -114,6 +114,44 @@ export default class Certificate extends Model {
 			method: "GET",
 			url: `pre-certificates/pre-certificate-workflow`,
 			query: searchInput,
+			isStatic: true
+		});
+	}
+
+	static async getTimeStamp() {
+		return new this().request({
+			method: "GET",
+			url: `certification_brief/processing-time`,
+			isStatic: true
+		});
+	}
+	static async updateStatusPreCertificate(id = "", data) {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificates/pre_certificate-update-status/${id}`,
+			data: data,
+			isStatic: true
+		});
+	}
+
+	static async exportDataCertificationBrief(data) {
+		// if (process.env.CLIENT_ENV === 'trial') {
+		// 	return {
+		// 		error: {message: 'Hiện tại chức năng này chưa được mở ở phiên bản dùng thử'}
+		// 	}
+		// }
+		const {
+			fromDate,
+			toDate,
+			appraiser_perform_id,
+			appraiser_id,
+			customer_id,
+			createdBy,
+			status
+		} = data;
+		return new this().request({
+			method: "GET",
+			url: `pre-certificates/brief-export?fromDate=${fromDate}&toDate=${toDate}&status=${status}&created_by=${createdBy}&appraiser_id=${appraiser_id}&appraiser_perform_id=${appraiser_perform_id}&customer_id=${customer_id}`,
 			isStatic: true
 		});
 	}
