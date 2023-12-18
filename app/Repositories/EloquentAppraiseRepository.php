@@ -889,6 +889,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 ->with('assetGeneral.roomDetails.roomFurnitureDetails')
                 ->with('assetGeneral.roomDetails.direction')
                 ->with('assetGeneral.roomDetails.furnitureQuality')
+                ->with('assetGeneral.roomDetails.loaicanho')
                 ->with('assetUnitPrice')
                 ->with('assetUnitPrice.landTypeData')
                 ->with('assetUnitPrice.createdBy')
@@ -7330,6 +7331,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'apartmentAssetProperties.direction',
             'apartmentAssetProperties.legal',
             'apartmentAssetProperties.furnitureQuality',
+            'apartmentAssetProperties.loaicanho',
             'apartmentAssetProperties.apartment',
             'certificate',
             'certificate.appraiserPerform:id,name',
