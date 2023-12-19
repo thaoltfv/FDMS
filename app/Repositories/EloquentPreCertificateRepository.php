@@ -1152,8 +1152,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select);
-        dd($result->toSql());
-        dd($result->forPage($page, $perPage)->paginate($perPage));
+        // dd($result->toSql());
+        // dd($result->forPage($page, $perPage)->paginate($perPage));
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
