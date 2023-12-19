@@ -326,7 +326,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $this->printNew1($section, $tangibleAssets);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
-        $table->addCell(1500, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(7500, ['gridSpan' => 10, 'valign' => 'center'])->addText('Phần kết cấu chính', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, $this->cellRowSpan)->addText('CLCL (%)', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addRow();
@@ -349,7 +349,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
-        $cell = $table->addCell(1500, $this->cellVCentered);
+        $cell = $table->addCell(2000, $this->cellVCentered);
         // $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
         $cell->addText('1-Σ H'.$ki.' x T'.$ki, null,  array('align' => 'left', 'keepNext' => true));
         $cell->addText("_______",null,array('align' => 'right', 'keepNext' => true));
