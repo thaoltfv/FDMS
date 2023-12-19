@@ -1148,7 +1148,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserBusinessManager:id,name,user_id',
         ];
         DB::enableQueryLog();
-        dd($this->model)->with($with)->select($select);
+        // dd($this->model)->with($with)->select($select);
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select);
@@ -1172,7 +1172,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 });
             });
         }
-
+        dd($result);
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
