@@ -1172,7 +1172,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 });
             });
         }
-        dd($result);
+        // dd($result);
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
@@ -1200,6 +1200,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
+        dd($result);
 
         if (!empty($status)) {
             $result = $result->whereIn('status', $status);
