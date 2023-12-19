@@ -79,6 +79,11 @@ class CertificateApartmentProperty extends Model
     {
         return $this->belongsTo(Dictionary::class, 'furniture_quality_id','id');
     }
+
+    public function loaicanho():BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'loai_can_ho_id','id');
+    }
     public function apartmentAsset():BelongsTo
     {
         return $this->belongsTo(CertificateApartment::class, 'apartment_asset_id', 'id');

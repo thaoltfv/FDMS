@@ -55,6 +55,20 @@ class ReportAppendix1Nova extends ReportAppendix1
         $address = $item->full_address;
         return $address;
     }
+
+    protected function collectInfoLoaiCanHo($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            (isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->loaicanho) && isset($asset->apartmentAssetProperties->loaicanho->description)) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->loaicanho->description) : '-',
+            (isset($this->asset1->room_details[0]) && isset($this->asset1->room_details[0]->loaicanho) && isset($this->asset1->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset1->room_details[0]->loaicanho->description) : '-',
+            (isset($this->asset2->room_details[0]) && isset($this->asset2->room_details[0]->loaicanho) && isset($this->asset2->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset2->room_details[0]->loaicanho->description) : '-',
+            (isset($this->asset3->room_details[0]) && isset($this->asset3->room_details[0]->loaicanho) && isset($this->asset3->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset3->room_details[0]->loaicanho->description) : '-',
+            false
+        ];
+        return $data;
+    }
     
     protected function collectInfomationApartmentData($asset)
     {
@@ -68,11 +82,12 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoExploreTime('', 'Thời điểm khảo sát', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
         $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
-        $data[] = $this->collectInfoRank($stt++, 'Loại căn hộ', $asset);
+        $data[] = $this->collectInfoRank($stt++, 'Loại chung cư', $asset);
         $data[] = $this->collectInfoAddress($stt++, 'Vị trí', $asset);
         $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
         $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
         $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
+        $data[] = $this->collectInfoLoaiCanHo($stt++, 'Loại căn hộ', $asset);
         $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
         $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
         $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);

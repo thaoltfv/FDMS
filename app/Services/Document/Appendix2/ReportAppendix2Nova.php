@@ -321,11 +321,12 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
+        $ki = '</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t xml:space="preserve">ki</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
         $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
         $this->printNew1($section, $tangibleAssets);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
-        $table->addCell(1500, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(7500, ['gridSpan' => 10, 'valign' => 'center'])->addText('Phần kết cấu chính', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, $this->cellRowSpan)->addText('CLCL (%)', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addRow();
@@ -338,18 +339,21 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(1500, $this->cellVCentered)->addText('H= Σ ph / Σ p', null,  $this->cellHCenteredKeepNext);
-
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $cell = $table->addCell(1750, $this->cellVCentered);
+        // $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
+        $cell->addText('1 - Σ H'.$ki.' x T'.$ki, null,  array('align' => 'left', 'keepNext' => true,'spaceBefore'=> 0,'spaceAfter'=> 0,'lineHeight'=>1.0));
+        $cell->addText("    _________",null,array('align' => 'center', 'keepNext' => true,'spaceBefore'=> 0, 'spaceAfter'=>0,'lineHeight'=>0.2));
+        $cell->addText('   Σ T'.$ki.'   ',null,array('align' => 'center', 'keepNext' => true,'spaceAfter'=>0,'spaceBefore'=> 10,'lineHeight'=>1.0));
         $stt = 1;
         $countTangible = count($tangibleAssets);
         foreach ($tangibleAssets as $tangibleAsset) {

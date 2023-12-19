@@ -1147,10 +1147,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserBusinessManager:id,name,user_id',
         ];
         DB::enableQueryLog();
+        // dd($this->model)->with($with)->select($select);
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select);
-
+        dd($result->toSql());
+        dd($result->forPage($page, $perPage)->paginate($perPage));
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
@@ -1170,7 +1172,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 });
             });
         }
-
+        // dd($result);
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
@@ -1198,11 +1200,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
+        // dd($result);
 
         if (!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
-
+        
         if (isset($sortField) && !isEmpty($sortField)) {
           if ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
@@ -1212,11 +1215,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
 
         $result = $result->orderByDesc('pre_certificates.updated_at');
-
+        // dd(DB::getQueryLog());
         $result = $result
             ->forPage($page, $perPage)
             ->paginate($perPage);
-
+        
         // foreach ($result as $stt => $item) {
         //     $result[$stt]->append('detail_list_id');
         //     // $result[$stt]->append('certificate_asset_price');
