@@ -352,7 +352,13 @@ class ReportAppendix2Nova extends ReportAppendix2
         $cell = $table->addCell(1500, $this->cellVCentered);
         $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
         $cell->addText('Σ H'.$ki.' x T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $cell->addLine(array('weight' => 1, 'width' => 60, 'height' => 0, 'color' => '38c172'),null,$this->cellHCenteredKeepNext);
+        $cell->addText(
+            "_____________",
+
+            ['name' => 'Arial', 'size' => 10 ,'bold' => true],
+
+            ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER,"space" => ["after" => 140]] 
+        );
         $cell->addText('Σ T'.$ki,null,$this->cellHCenteredKeepNext);
         $stt = 1;
         $countTangible = count($tangibleAssets);
