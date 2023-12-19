@@ -61,10 +61,10 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->furnitureQuality && $asset->apartmentAssetProperties->loaicanho->description) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->loaicanho->description) : '-',
-            ($this->asset1->room_details[0] && $this->asset1->room_details[0]->loaicanho && $this->asset1->room_details[0]->loaicanho->description) ? CommonService::mbUcfirst($this->asset1->room_details[0]->loaicanho->description) : '-',
-            ($this->asset2->room_details[0] && $this->asset2->room_details[0]->loaicanho && $this->asset2->room_details[0]->loaicanho->description) ? CommonService::mbUcfirst($this->asset2->room_details[0]->loaicanho->description) : '-',
-            ($this->asset3->room_details[0] && $this->asset3->room_details[0]->loaicanho && $this->asset3->room_details[0]->loaicanho->description) ? CommonService::mbUcfirst($this->asset3->room_details[0]->loaicanho->description) : '-',
+            (isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->loaicanho) && isset($asset->apartmentAssetProperties->loaicanho->description)) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->loaicanho->description) : '-',
+            (isset($this->asset1->room_details[0]) && isset($this->asset1->room_details[0]->loaicanho) && isset($this->asset1->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset1->room_details[0]->loaicanho->description) : '-',
+            (isset($this->asset2->room_details[0]) && isset($this->asset2->room_details[0]->loaicanho) && isset($this->asset2->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset2->room_details[0]->loaicanho->description) : '-',
+            (isset($this->asset3->room_details[0]) && isset($this->asset3->room_details[0]->loaicanho) && isset($this->asset3->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset3->room_details[0]->loaicanho->description) : '-',
             false
         ];
         return $data;
