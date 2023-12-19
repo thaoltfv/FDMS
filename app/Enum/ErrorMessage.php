@@ -29,6 +29,7 @@ class ErrorMessage
     public const CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTD ';
     public const PRE_CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTDSB ';
     public const CERTIFICATE_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách HSTD ';
+    public const PRE_CERTIFICATE_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách HSTDSB ';
 
     public const APPRAISE_AUTOMATIC_ASSET = 'Xin lỗi! Khu vực hiện tại chưa đủ dữ liệu để so sánh. Vui lòng chọn TSSS trên bản đồ.';
     public const APPRAISE_NOTEXISTS = 'Không tồn tại tài sản thẩm định - TSTD ';
