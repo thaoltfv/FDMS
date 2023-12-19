@@ -1138,7 +1138,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     end as status_text
                 "),
             'total_preliminary_value',
-            Db::raw("COALESCE(document_count,0) as document_count"),
+            // Db::raw("COALESCE(document_count,0) as document_count"),
             'status_expired_at',
         ];
         $with = [
