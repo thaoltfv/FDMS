@@ -27,9 +27,9 @@ class ReportAppendix2Nova extends ReportAppendix2
         }
     }
 
-    protected function printOriginalPriceDescription1($section, $dgxdSlug, $appraise)
+    protected function printOriginalPriceDescription1($section, $dgxdSlug, $realEstate)
     {
-        $section->addText(json_encode($appraise));
+        $section->addText(json_encode($realEstate));
         $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('Căn cứ vào Quyết định 22/2019/QĐ-UBND ngày 30/08/2019 của UBND TP Hồ Chí Minh về Ban hành bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn thành phố Hồ Chí Minh, công văn số 2189/SXD-KTXD ngày 22 tháng 02 năm 2021 và công văn số 4381/SXD-KTXD ngày 27/04/2022 và Công văn số 980/SXD-KTXD Ngày 17/01/2023 Về việc điều chỉnh, quy đổi về thời điểm tính toán đối với Bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn Thành phố Hồ Chí Minh');
@@ -425,7 +425,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             $dgxdSlug = $appraiseDgxd->slug_value;
         }
 
-        $this->printOriginalPriceDescription1($section, $dgxdSlug, $appraise);
+        $this->printOriginalPriceDescription1($section, $dgxdSlug, $realEstate);
         $this->printBuildingComapanyInfo($section, $tangibleAssets, $dgxdSlug);
         $this->printBuildingPriceChoosed($section, $dgxdSlug);
         $this->printRemainQualityDescription($section);
