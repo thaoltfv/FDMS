@@ -3,6 +3,7 @@
 namespace App\Services\Document\Appendix2;
 
 use App\Services\CommonService;
+use App\Models\Province;
 use App\Services\Document\DocumentInterface\Report;
 use Illuminate\Support\Carbon;
 use PhpOffice\PhpWord\Element\Section;
@@ -19,7 +20,10 @@ class ReportAppendix2Nova extends ReportAppendix2
     }
     protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
-        $section->addText(json_encode($this->data_tong));
+        // $section->addText(json_encode($this->data_tong));
+        $province_id = $this->data_tong->real_estate[0]->appraises->province_id;
+        $province_name = Province::query()->where('id', $province_id)->first()->name;
+        $section->addText($province_name);
         $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('Căn cứ vào Quyết định 22/2019/QĐ-UBND ngày 30/08/2019 của UBND TP Hồ Chí Minh về Ban hành bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn thành phố Hồ Chí Minh, công văn số 2189/SXD-KTXD ngày 22 tháng 02 năm 2021 và công văn số 4381/SXD-KTXD ngày 27/04/2022 và Công văn số 980/SXD-KTXD Ngày 17/01/2023 Về việc điều chỉnh, quy đổi về thời điểm tính toán đối với Bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn Thành phố Hồ Chí Minh');
