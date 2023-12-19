@@ -1374,12 +1374,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
             switch ($filterSubstr) {
-                case '!':
-                    $result = $result->where(function ($q) use ($filterData) {
-                        $q->where('certificate_num', $filterData)
-                            ->orWhere('document_num', $filterData);
-                    });
-                    break;
                 case '@':
                     $result = $result->where(function ($q) use ($filterData) {
                         $q = $q->whereHas('createdBy', function ($has) use ($filterData) {
