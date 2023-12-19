@@ -1119,7 +1119,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_certificates.updated_at', 'status_updated_at',
             'business_manager_id', 
             'appraiser_sale_id', 
-            'appraiser_perform_id', 
+            'appraiser_perform_id',
+            'appraise_purpose_id',
+            'created_at',
             // 'users.image',
             DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
@@ -1141,7 +1143,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status_expired_at',
         ];
         $with = [
-            'createdBy:id,name',   
+            'createdBy:id,name',
+            'appraisePurpose:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
