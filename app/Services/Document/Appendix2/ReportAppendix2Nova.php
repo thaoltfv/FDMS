@@ -321,6 +321,7 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
+        $ki = '</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t xml:space="preserve">ki</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
         $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
         $this->printNew1($section, $tangibleAssets);
         $table = $section->addTable($this->styleTable);
@@ -338,17 +339,17 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(1500, $this->cellVCentered)->addText('H= Σ ph / Σ p', null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1 - H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1 - H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1- H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1- H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1 - H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellVCentered)->addText('1 - Σ H'.$ki.' x T'.$ki.' / Σ T'.$ki, null,  $this->cellHCenteredKeepNext);
 
         $stt = 1;
         $countTangible = count($tangibleAssets);
