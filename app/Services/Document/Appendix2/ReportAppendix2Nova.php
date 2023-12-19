@@ -350,10 +350,10 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $cell = $table->addCell(1500, $this->cellVCentered);
-        $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
-        $cell->addText('Σ H'.$ki.' x T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $cell->addText("_____________",null,$this->cellHCenteredKeepNext);
-        $cell->addText('Σ T'.$ki,null,$this->cellHCenteredKeepNext);
+        // $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
+        $cell->addText('1 -    Σ H'.$ki.' x T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $cell->addText("      _____________",null,$this->cellHCenteredKeepNext);
+        $cell->addText('      Σ T'.$ki,null,$this->cellHCenteredKeepNext);
         $stt = 1;
         $countTangible = count($tangibleAssets);
         foreach ($tangibleAssets as $tangibleAsset) {
