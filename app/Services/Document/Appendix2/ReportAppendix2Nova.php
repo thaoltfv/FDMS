@@ -351,9 +351,9 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $cell = $table->addCell(1750, $this->cellVCentered);
         // $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
-        $cell->addText('1-Σ H'.$ki.' x T'.$ki, null,  array('align' => 'center', 'keepNext' => true,'spaceBefore'=> 0,'spaceAfter'=> 0,'lineHeight'=>1.0));
-        $cell->addText("_________",null,array('align' => 'center', 'keepNext' => true,'spaceBefore'=> 0, 'spaceAfter'=>0,'lineHeight'=>0.3));
-        $cell->addText('Σ T'.$ki.'   ',null,array('align' => 'center', 'keepNext' => true,'spaceAfter'=>0,'spaceBefore'=> 0,'lineHeight'=>1.0));
+        $cell->addText('1 -   Σ H'.$ki.' x T'.$ki, null,  array('align' => 'center', 'keepNext' => true,'spaceBefore'=> 0,'spaceAfter'=> 0,'lineHeight'=>1.0));
+        $cell->addText("  _________",null,array('align' => 'center', 'keepNext' => true,'spaceBefore'=> 0, 'spaceAfter'=>0,'lineHeight'=>0.2));
+        $cell->addText('  Σ T'.$ki.'   ',null,array('align' => 'center', 'keepNext' => true,'spaceAfter'=>0,'spaceBefore'=> 1,'lineHeight'=>1.0));
         $stt = 1;
         $countTangible = count($tangibleAssets);
         foreach ($tangibleAssets as $tangibleAsset) {
