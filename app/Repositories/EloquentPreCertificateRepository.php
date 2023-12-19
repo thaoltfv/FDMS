@@ -1200,12 +1200,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
-        dd($result);
+        // dd($result);
 
         if (!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
-
+        
         if (isset($sortField) && !isEmpty($sortField)) {
             if ($sortField == 'document_num')
                 if ($sortOrder == 'descend')
@@ -1224,7 +1224,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $result = $result
             ->forPage($page, $perPage)
             ->paginate($perPage);
-
+        dd($result);
         // foreach ($result as $stt => $item) {
         //     $result[$stt]->append('detail_list_id');
         //     // $result[$stt]->append('certificate_asset_price');
