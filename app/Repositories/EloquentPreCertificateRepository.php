@@ -1115,7 +1115,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
         $select = [
-           'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
+            'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
             'pre_certificates.updated_at', 'status_updated_at',
             'business_manager_id', 
             'appraiser_sale_id', 
@@ -1146,7 +1146,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
-
         ];
         DB::enableQueryLog();
         $result = QueryBuilder::for($this->model)
@@ -1177,12 +1176,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
             switch ($filterSubstr) {
-                case '!':
-                    $result = $result->where(function ($q) use ($filterData) {
-                        $q->where('certificate_num', $filterData)
-                            ->orWhere('document_num', $filterData);
-                    });
-                    break;
                 case '@':
                     $result = $result->where(function ($q) use ($filterData) {
                         $q = $q->whereHas('createdBy', function ($has) use ($filterData) {
@@ -1230,10 +1223,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             ->forPage($page, $perPage)
             ->paginate($perPage);
 
-        foreach ($result as $stt => $item) {
-            $result[$stt]->append('detail_list_id');
-            // $result[$stt]->append('certificate_asset_price');
-        }
+        // foreach ($result as $stt => $item) {
+        //     $result[$stt]->append('detail_list_id');
+        //     // $result[$stt]->append('certificate_asset_price');
+        // }
         return $result;
     }
 
