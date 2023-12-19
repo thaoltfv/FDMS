@@ -1124,21 +1124,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                         when 1
-                            then 'Mới'
+                            then 'Yêu cầu sơ bộ'
                         when 2
-                            then 'Đang thẩm định'
+                            then 'Định giá sơ bộ'
                         when 3
-                            then 'Đang duyệt'
+                            then 'Duyệt giá sơ bộ'
                         when 4
-                            then 'Hoàn thành'
+                            then 'Thương thảo'
                         when 5
-                            then 'Huỷ'
+                            then 'Hoàn thành'
                         when 6
-                            then 'Đang kiểm soát'
+                            then 'Hủy'
                     end as status_text
                 "),
             'total_preliminary_value',
-            Db::raw("COALESCE(document_count,0) as document_count"),
             'status_expired_at',
         ];
         $with = [
@@ -1205,12 +1204,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
 
         if (isset($sortField) && !isEmpty($sortField)) {
-            if ($sortField == 'document_num')
-                if ($sortOrder == 'descend')
-                    $result =  $result->orderBy('document_num', 'DESC');
-                else
-                    $result =  $result->orderBy('document_num', 'ASC');
-            elseif ($sortField == 'petitioner_name')
+          if ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
                     $result =  $result->orderBy('petitioner_name', 'DESC');
                 else
@@ -1255,18 +1249,18 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             // 'users.image',
             DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
-                        when 1
-                            then 'Mới'
+                       when 1
+                            then 'Yêu cầu sơ bộ'
                         when 2
-                            then 'Đang thẩm định'
+                            then 'Định giá sơ bộ'
                         when 3
-                            then 'Đang duyệt'
+                            then 'Duyệt giá sơ bộ'
                         when 4
-                            then 'Hoàn thành'
+                            then 'Thương thảo'
                         when 5
-                            then 'Huỷ'
+                            then 'Hoàn thành'
                         when 6
-                            then 'Đang kiểm soát'
+                            then 'Hủy'
                     end as status_text
                 "),
             'total_preliminary_value',
