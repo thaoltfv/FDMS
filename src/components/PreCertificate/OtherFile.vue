@@ -20,8 +20,7 @@
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="row d-flex justify-content-between align-items-center">
 						<h3 class="title">{{ title }}</h3>
-
-						<label for="image_property">
+						<label for="image_property" v-if="!from">
 							<font-awesome-icon
 								:style="{ color: 'orange', cursor: 'pointer' }"
 								icon="cloud-upload-alt"
@@ -29,6 +28,7 @@
 							/>
 						</label>
 						<input
+							v-if="!from"
 							class="btn-upload "
 							type="file"
 							ref="file"
@@ -81,7 +81,7 @@
 							</div>
 							<div>
 								<img
-									v-if="file.isUpload === false"
+									v-if="file.isUpload === false && !from"
 									@click="deleteOtherFile(file, index)"
 									src="@/assets/icons/ic_delete_2.svg"
 									alt="tag_2"
@@ -89,7 +89,8 @@
 								/>
 								<img
 									v-else-if="
-										permission.allowDelete &&
+										!from &&
+											permission.allowDelete &&
 											(dataPC.status === 1 ||
 												dataPC.status === 2 ||
 												dataPC.status === 3)
@@ -123,6 +124,9 @@ Vue.use(Icon);
 export default {
 	props: {
 		type: {
+			type: String
+		},
+		from: {
 			type: String
 		}
 	},
@@ -255,11 +259,13 @@ export default {
 						link: file.link,
 						type: "image"
 					};
+					isShowPrint.value = true;
 				} else if (file.type === "application/pdf") {
 					filePrint.value = {
 						link: blob,
 						type: "pdf"
 					};
+					isShowPrint.value = true;
 				} else {
 					other.value.toast.open({
 						message: "Tạm thời chưa hỗ trợ xem trước loại file này",
@@ -268,7 +274,6 @@ export default {
 						duration: 3000
 					});
 				}
-				isShowPrint.value = true;
 			} else if (file.link) {
 				fetch(file.link)
 					.then(response => response.blob())

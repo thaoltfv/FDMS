@@ -29,7 +29,7 @@ export const usePreCertificateStore = defineStore(
 				address: null,
 				phone: null
 			},
-			business_manager: {
+			appraiser_business_manager: {
 				name: null,
 				id: null
 			},
@@ -71,7 +71,7 @@ export const usePreCertificateStore = defineStore(
 		});
 
 		const lstData = ref({
-			business_managers: [],
+			appraiser_business_managers: [],
 			appraiser_sales: [],
 			appraiser_performances: [],
 			appraiser_purposes: [],
@@ -101,7 +101,7 @@ export const usePreCertificateStore = defineStore(
 		async function getStartData() {
 			const resp = await PreCertificate.getAppraisers();
 			let dataAppraise = [...resp.data];
-			lstData.value.business_managers = dataAppraise;
+			lstData.value.appraiser_business_managers = dataAppraise;
 			lstData.value.appraiser_sales = dataAppraise;
 			lstData.value.appraiser_performances = dataAppraise;
 
@@ -139,8 +139,8 @@ export const usePreCertificateStore = defineStore(
 					phone: null
 				};
 			}
-			if (!dataPC.value.business_manager) {
-				dataPC.value.business_manager = {
+			if (!dataPC.value.appraiser_business_manager) {
+				dataPC.value.appraiser_business_manager = {
 					name: null,
 					id: null
 				};
@@ -163,11 +163,10 @@ export const usePreCertificateStore = defineStore(
 		async function createUpdatePreCertificateion(id = "") {
 			other.value.isSubmit = true;
 			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
-			if (!dataPC.id) dataPC.value.status = 1;
-			console.log("dataPc", dataPC.value);
+			if (!dataPC.value.id) dataPC.value.status = 1;
 			const res = await PreCertificate.createUpdatePreCertification(
 				dataPC.value,
-				dataPC.value.id
+				dataPC.value.id || ""
 			);
 
 			if (res.data) {
@@ -182,8 +181,8 @@ export const usePreCertificateStore = defineStore(
 				});
 				await other.value.router
 					.push({
-						name: "certification_brief.detail",
-						query: { id: res.data.id }
+						name: "pre_certification.detail",
+						query: { id: `${res.data.id}` }
 					})
 					.catch(_ => {});
 			} else if (res.error) {
@@ -225,7 +224,7 @@ export const usePreCertificateStore = defineStore(
 					phone: null
 				},
 
-				business_manager: {
+				appraiser_business_manager: {
 					name: null,
 					id: null
 				},

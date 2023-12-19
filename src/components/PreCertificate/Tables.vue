@@ -902,7 +902,7 @@ export default {
 						.replace(".", ",") + " Tỷ"
 				);
 			} else if (num < 900) {
-				return num + " đ"; // if value < 1000, nothing to do
+				return num + " đ";
 			}
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
@@ -1008,7 +1008,6 @@ export default {
 			return moment(String(value)).format("DD/MM/YYYY");
 		},
 		formatNumber(num) {
-			// convert number to dot format
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
 				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {

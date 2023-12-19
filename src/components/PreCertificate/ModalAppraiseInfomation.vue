@@ -286,7 +286,6 @@ export default {
 			return moment(date).format("DD/MM/YYYY");
 		},
 		formatNumber(num) {
-			// convert number to dot format
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
 				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {

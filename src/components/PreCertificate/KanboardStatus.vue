@@ -241,7 +241,7 @@ export default {
 						.replace(".", ",") + " Tỷ"
 				);
 			} else if (num < 900) {
-				return num + " đ"; // if value < 1000, nothing to do
+				return num + " đ";
 			}
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}

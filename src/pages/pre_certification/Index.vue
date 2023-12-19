@@ -81,8 +81,8 @@
 								<div class="label_container d-flex">
 									<strong class="d-none d_inline mr-1">Tổng giá trị:</strong
 									><span style="font-weight: 500">{{
-										element.total_price
-											? `${formatPrice(element.total_price)}`
+										element.total_preliminary_value
+											? `${formatPrice(element.total_preliminary_value)}`
 											: "-"
 									}}</span>
 								</div>
@@ -213,8 +213,8 @@ import moment from "moment";
 import KanboardStatus from "@/components/PreCertificate/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
-const jsonConfig = require("../../../config/pre_certificate_workflow.json");
-
+// const jsonConfig = require("../../../config/pre_certificate_workflow.json");
+const jsonConfig = null;
 Vue.component("downloadExcel", JsonExcel);
 export default {
 	name: "Index",
@@ -1094,12 +1094,9 @@ export default {
 			this.key_dragg++;
 			this.countData += 10;
 		},
-		getConfigByStatus(status, sub_status) {
+		getConfigByStatus(status) {
 			return this.principleConfig.filter(
-				item =>
-					item.status === status &&
-					item.sub_status === sub_status &&
-					item.isActive === 1
+				item => item.status === status && item.isActive === 1
 			);
 		},
 		async getDetailCertificate(id) {
@@ -1162,8 +1159,11 @@ export default {
 				this.jsonConfig = await this.preCertificateStore.getConfig();
 			}
 		}
+		console.log("jsonfig", this.jsonConfig);
 		if (this.jsonConfig && this.jsonConfig.principle) {
-			this.principleConfig = this.jsonConfig.principle.filter(i => i.isActive);
+			this.principleConfig = this.jsonConfig.principle.filter(
+				i => i.isActive === 1
+			);
 		}
 		const listElm = document.querySelector("#infinite-list");
 		listElm.addEventListener("scroll", e => {

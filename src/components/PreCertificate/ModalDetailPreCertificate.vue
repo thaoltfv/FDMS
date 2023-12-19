@@ -465,7 +465,6 @@ export default {
 			return moment(date).format("DD/MM/YYYY");
 		},
 		formatNumber(num) {
-			// convert number to dot format
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
 				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
@@ -476,9 +475,9 @@ export default {
 		handleDetail(id) {
 			this.$router
 				.push({
-					name: "certification_brief.detail",
+					name: "pre_certification.detail",
 					query: {
-						id: id
+						id: id.toString()
 					}
 				})
 				.catch(_ => {});

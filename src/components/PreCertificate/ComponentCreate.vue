@@ -5,11 +5,7 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">
-							{{
-								this.$route.name === "certification_brief.edit"
-									? "Chỉnh sửa hồ sơ thẩm định sơ bộ"
-									: "Tạo mới hồ sơ thẩm định sơ bộ"
-							}}
+							Tạo mới hồ sơ thẩm định sơ bộ
 						</h3>
 						<div class="color_content card-status">
 							{{ dataPC && dataPC.id ? `HSTDSB_${dataPC.id}` : "HSTDSB" }} | Mới
@@ -404,7 +400,7 @@ export default {
 		business_manager_compute: {
 			// getter
 			get: function() {
-				if (this.lstData.business_managers.length > 0) {
+				if (this.lstData.appraiser_business_managers.length > 0) {
 					return this.dataPC.business_manager_id;
 				} else {
 					return this.dataPC.appraiser_business_manager.name;
@@ -448,7 +444,7 @@ export default {
 		},
 		optionsBusinessManager() {
 			return {
-				data: this.lstData.business_managers,
+				data: this.lstData.appraiser_business_managers,
 				id: "id",
 				key: "name"
 			};
