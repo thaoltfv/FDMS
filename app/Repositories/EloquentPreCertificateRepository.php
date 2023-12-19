@@ -1152,7 +1152,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select);
-
+        dd(DB::getQueryLog());
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
@@ -1220,7 +1220,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
 
         $result = $result->orderByDesc('pre_certificates.updated_at');
-        dd(DB::getQueryLog());
+        // dd(DB::getQueryLog());
         $result = $result
             ->forPage($page, $perPage)
             ->paginate($perPage);
