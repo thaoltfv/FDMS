@@ -260,17 +260,18 @@ export const usePreCertificateStore = defineStore(
 			if (dataPC.value.uploadFile) {
 				const res = await File.uploadFilePreCertificate(
 					dataPC.value.uploadFile,
-					dataPC.value.id
+					dataPC.value.id,
+					"Appendix"
 				);
 				if (res.data) {
 					// await this.$emit('handleChangeFile', res.data.data)
 					preCertificateOtherDocuments.value = res.data.data;
-					other.value.toast.open({
-						message: "Thêm file thành công",
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
+					// other.value.toast.open({
+					// 	message: "Thêm file thành công",
+					// 	type: "success",
+					// 	position: "top-right",
+					// 	duration: 3000
+					// });
 				} else {
 					other.value.toast.open({
 						message: "Thêm file thất bại",

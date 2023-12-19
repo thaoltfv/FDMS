@@ -775,10 +775,10 @@ export default {
 		returnData() {
 			this.principleConfig.forEach(item => {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(
-					i => i.status === item.status && i.sub_status === item.sub_status
+					i => i.status === item.status
 				);
 				this.subStatusDataTmp[item.id] = this.listCertificate.filter(
-					i => i.status === item.status && i.sub_status === item.sub_status
+					i => i.status === item.status
 				);
 			});
 			this.key_dragg++;

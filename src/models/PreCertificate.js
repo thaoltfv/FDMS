@@ -4,7 +4,7 @@ import Model from "./Model.js";
 export default class Certificate extends Model {
 	buildUrl(request) {
 		const { params } = request;
-		return ["pre-certificates/certificate-paging", ...params];
+		return ["pre-certificates/pre-certificate-paging", ...params];
 	}
 	static async getDetailPreCertificate(id = "") {
 		return new this().request({

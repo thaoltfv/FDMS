@@ -207,12 +207,12 @@ export default {
 			showFilter: false,
 			statusOptions: {
 				data: [
-					{ label: "Mới", value: "1", class: "bg-info" },
-					{ label: "Đang thẩm định", value: "2", class: "bg-primary" },
-					{ label: "Đang kiểm soát", value: "6", class: "bg-control" },
-					{ label: "Đang duyệt", value: "3", class: "bg-warning" },
-					{ label: "Hoàn thành", value: "4", class: "bg-success" },
-					{ label: "Hủy", value: "5", class: "bg-secondary" }
+					{ label: "Yêu cầu sơ bộ", value: "1", class: "bg-info" },
+					{ label: "Định giá sơ bộ", value: "2", class: "bg-primary" },
+					{ label: "Duyệt giá sơ bộ", value: "3", class: "bg-control" },
+					{ label: "Thương thảo", value: "4", class: "bg-warning" },
+					{ label: "Hoàn thành", value: "5", class: "bg-success" },
+					{ label: "Hủy", value: "6", class: "bg-secondary" }
 				],
 				value: "value",
 				label: "label"

@@ -32,10 +32,10 @@
 					>
 						<div v-if="status === 1" class="status-color bg-info" />
 						<div v-if="status === 2" class="status-color bg-primary" />
-						<div v-if="status === 3" class="status-color bg-warning" />
-						<div v-if="status === 4" class="status-color bg-success" />
-						<div v-if="status === 5" class="status-color bg-secondary" />
-						<div v-if="status === 6" class="status-color bg-control" />
+						<div v-if="status === 3" class="status-color bg-control" />
+						<div v-if="status === 4" class="status-color bg-warning" />
+						<div v-if="status === 5" class="status-color bg-success" />
+						<div v-if="status === 6" class="status-color bg-secondary" />
 						<b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />
@@ -84,7 +84,7 @@
 				</template>
 
 				<template
-					slot="total_asset_price"
+					slot="total_preliminary_value"
 					slot-scope="{ total_preliminary_value, appraise_purpose }"
 				>
 					<p class="text-main__blue">
@@ -103,26 +103,7 @@
 						{{ petitioner_name }}
 					</p>
 				</template>
-				<!-- <template slot="appraise_land_sum_area" slot-scope="appraise_land_sum_area">
-          <p class="text-none">
-            {{
-                appraise_land_sum_area ? formatNumber(appraise_land_sum_area) : 0
-            }}
-            m
-            <sup>2</sup>
-          </p>
-        </template> -->
-				<!-- <template slot="total_construction_area" slot-scope="total_construction_area">
-          <p class="text-none">
-            {{
-                total_construction_area
-                  ? formatNumber(total_construction_area)
-                  : 0
-            }}
-            m
-            <sup>2</sup>
-          </p>
-        </template> -->
+
 				<template slot="created_by" slot-scope="{ created_by, created_at }">
 					<p class="text-main">
 						{{ created_by ? created_by.name : " " }}
@@ -133,13 +114,13 @@
 				</template>
 				<template
 					slot="appraiser"
-					slot-scope="{ appraiser, appraiser_perform }"
+					slot-scope="{ appraiser_sale, appraiser_perform }"
 				>
 					<p class="text-main">
-						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
+						NVKD: {{ appraiser_sale ? appraiser_sale.name : "-" }}
 					</p>
 					<p class="text-secondary">
-						TĐV: {{ appraiser ? appraiser.name : "-" }}
+						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
 					</p>
 				</template>
 			</a-table>
@@ -190,7 +171,7 @@
 						:class="
 							`bg-${configColor(element)}-15 text-${configColor(element)}`
 						"
-						>HSTD_{{ element.id }}</span
+						>HSTDSB_{{ element.id }}</span
 					>
 					<img
 						v-if="checkDateExpired(element)"
@@ -220,7 +201,7 @@
 				<div class="property-content mb-2 d-flex color_content">
 					<img class="mr-2" src="@/assets/icons/ic_price.svg" alt="user" />
 					<div class="label_container d-flex">
-						<strong class="d_inline mr-1">Tổng giá trị:</strong
+						<strong class="d_inline mr-1">Tổng giá trị sơ bộ:</strong
 						><span style="font-weight: 500">{{
 							element.total_preliminary_value
 								? `${formatPrice(element.total_preliminary_value)}`
@@ -507,37 +488,11 @@ export default {
 		columns() {
 			let dataColumn = [
 				{
-					title: "Mã HSTD",
+					title: "Mã HSTDSB",
 					align: "left",
 					scopedSlots: { customRender: "id" },
 					dataIndex: "id",
 					// sorter: (a, b) => a.id - b.id,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
-				{
-					title: "Mã TSTĐ",
-					class: "optional-data",
-					align: "left",
-					scopedSlots: { customRender: "detail_appraise" },
-					// sorter: (a, b) => a.document_num - b.document_num,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
-				{
-					title: "Số hợp đồng",
-					align: "left",
-					scopedSlots: { customRender: "document_date" },
-					// sorter: (a, b) => a.document_num - b.document_num,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
-				{
-					title: "Số chứng thư",
-					class: "optional-data",
-					align: "left",
-					scopedSlots: { customRender: "certificate_date" },
-					// sorter: (a, b) => a.certificate_num.length - b.certificate_num.length,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
@@ -551,15 +506,15 @@ export default {
 					hiddenItem: false
 				},
 				{
-					title: "Tổng giá trị (VNĐ)",
+					title: "Tổng giá trị sơ bộ(VNĐ)",
 					align: "left",
-					scopedSlots: { customRender: "total_asset_price" },
+					scopedSlots: { customRender: "total_preliminary_value" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: "Tổ thẩm định",
+					title: "Tổ thực hiện",
 					align: "left",
 					scopedSlots: { customRender: "appraiser" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
