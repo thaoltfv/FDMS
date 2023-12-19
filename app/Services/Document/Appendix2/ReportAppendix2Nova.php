@@ -340,16 +340,16 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addRow(400, $this->cantSplit);
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('1 - H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('1 - H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('1- H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('1- H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('1 - H'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(1500, $this->cellVCentered)->addText('1 - Σ H'.$ki.' x T'.$ki.' / Σ T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(1500, $this->cellVCentered)->addText('1-ΣH'.$ki.'xT'.$ki.'/ΣT'.$ki, null,  $this->cellHCenteredKeepNext);
 
         $stt = 1;
         $countTangible = count($tangibleAssets);
