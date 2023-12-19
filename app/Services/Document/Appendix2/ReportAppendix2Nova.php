@@ -349,8 +349,10 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
         $table->addCell(750, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
-        $table->addCell(1500, $this->cellVCentered)->addText('1-ΣH'.$ki.'xT'.$ki.'/ΣT'.$ki, null,  $this->cellHCenteredKeepNext);
-
+        $cell = $table->addCell(1500, $this->cellVCentered);
+        $cell->addText('1-Σ H'.$ki.' x T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $cell->addLine(array('weight' => 1, 'width' => 100, 'height' => 0, 'color' => '38c172'));
+        $cell->addText('Σ T'.$ki,null,$this->cellHCenteredKeepNext);
         $stt = 1;
         $countTangible = count($tangibleAssets);
         foreach ($tangibleAssets as $tangibleAsset) {
