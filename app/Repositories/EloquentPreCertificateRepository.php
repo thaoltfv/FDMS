@@ -1148,7 +1148,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserBusinessManager:id,name,user_id',
         ];
         DB::enableQueryLog();
-        dd($this->model)->with($with);
+        dd($this->model)->with($with)->select($select);
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select);
