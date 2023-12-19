@@ -21,7 +21,7 @@ class ReportAppendix2Nova extends ReportAppendix2
     protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
         // $section->addText(json_encode($this->data_tong));
-        $province_id = $this->data_tong->real_estate[0]->appraises->province_id;
+        $province_id = $this->realEstates->appraises->province_id;
         $province_name = Province::query()->where('id', $province_id)->first()->name;
         $section->addText($province_name);
         $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
