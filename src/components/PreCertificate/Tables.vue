@@ -85,10 +85,14 @@
 
 				<template
 					slot="total_asset_price"
-					slot-scope="{ total_price, appraise_purpose }"
+					slot-scope="{ total_preliminary_value, appraise_purpose }"
 				>
 					<p class="text-main__blue">
-						{{ total_price ? formatNumber(total_price) + " đ" : "-" }}
+						{{
+							total_preliminary_value
+								? formatNumber(total_preliminary_value) + " đ"
+								: "-"
+						}}
 					</p>
 					<p class="text-secondary">
 						Mục đích: {{ appraise_purpose ? appraise_purpose.name : "-" }}
@@ -218,7 +222,9 @@
 					<div class="label_container d-flex">
 						<strong class="d_inline mr-1">Tổng giá trị:</strong
 						><span style="font-weight: 500">{{
-							element.total_price ? `${formatPrice(element.total_price)}` : "-"
+							element.total_preliminary_value
+								? `${formatPrice(element.total_preliminary_value)}`
+								: "-"
 						}}</span>
 					</div>
 				</div>

@@ -1163,9 +1163,7 @@ export default {
 			}
 		}
 		if (this.jsonConfig && this.jsonConfig.principle) {
-			this.principleConfig = this.jsonConfig.principle.filter(
-				i => i.isActive === 1
-			);
+			this.principleConfig = this.jsonConfig.principle.filter(i => i.isActive);
 		}
 		const listElm = document.querySelector("#infinite-list");
 		listElm.addEventListener("scroll", e => {
