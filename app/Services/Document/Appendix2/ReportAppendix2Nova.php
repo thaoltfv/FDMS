@@ -357,7 +357,7 @@ class ReportAppendix2Nova extends ReportAppendix2
 
             ['name' => 'Arial', 'size' => 10 ,'bold' => true],
 
-            ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER,"space" => ["after" => 140]] 
+            ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER,"space" => ["after" => 0]] 
         );
         $cell->addText('Σ T'.$ki,null,$this->cellHCenteredKeepNext);
         $stt = 1;
