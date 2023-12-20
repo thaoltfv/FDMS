@@ -20,7 +20,7 @@ class ReportAppendix2Nova extends ReportAppendix2
     }
     protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
-        dd($this->realEstates);
+        dd($this->realEstates[0]);
         // $section->addText(json_encode($this->data_tong));
         $province_id = $this->realEstates[0]->appraises->province_id;
         $province_name = Province::query()->where('id', $province_id)->first()->name;
