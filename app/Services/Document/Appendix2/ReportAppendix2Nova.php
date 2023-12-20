@@ -36,11 +36,10 @@ class ReportAppendix2Nova extends ReportAppendix2
         } else {
             $province_id = $this->realEstates->appraises->province_id;
             $province_name = Province::query()->where('id', $province_id)->first()->name;
-            $law_province = AppraiseLawDocument::query()->where(['type' => 'XAY_DUNG', 'provinces' => $province_name])->get()->toArray();
+            $law_province = AppraiseLawDocument::query()->where(['type' => 'XAY_DUNG', 'provinces' => $province_name])->get();
            
             foreach ($law_province as $law) {
-                // dd($law);
-                if ($law['provinces'] === $province_name) {
+                if ($law->provinces === $province_name) {
                     array_push($local_law,$law);
                 }
             }
