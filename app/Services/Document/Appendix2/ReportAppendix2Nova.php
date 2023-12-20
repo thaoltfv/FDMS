@@ -22,21 +22,27 @@ class ReportAppendix2Nova extends ReportAppendix2
     {
         // dd($this->realEstates[0]);
         // $section->addText(json_encode($this->data_tong));
+        $local_law = [];
         if (is_array($this->realEstates)){
             $province_id = $this->realEstates[0]->appraises->province_id;
+            $province_name = Province::query()->where('id', $province_id)->first()->name;
+            $law_province = json_decode($this->data_tong)->legal_documents_on_construction;
+            foreach ($law_province as $law) {
+                if ($law->provinces === $province_name) {
+                    array_push($local_law,$law);
+                }
+            }
         } else {
             $province_id = $this->realEstates->appraises->province_id;
-        }
-        $province_name = Province::query()->where('id', $province_id)->first()->name;
-        $law_province = json_decode($this->data_tong)->legal_documents_on_construction;
-        $local_law = [];
-        
-        
-        foreach ($law_province as $law) {
-            if ($law->provinces === $province_name) {
-                array_push($local_law,$law);
+            $province_name = Province::query()->where('id', $province_id)->first()->name;
+            $law_province = $this->data_tong->legal_documents_on_construction;
+            foreach ($law_province as $law) {
+                if ($law->provinces === $province_name) {
+                    array_push($local_law,$law);
+                }
             }
         }
+
         $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         if (isset($local_law) && count($local_law) > 0){
