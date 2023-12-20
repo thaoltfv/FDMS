@@ -39,8 +39,8 @@ class ReportAppendix2Nova extends ReportAppendix2
             $law_province = AppraiseLawDocument::query()->where(['type' => 'XAY_DUNG', 'provinces' => $province_name])->get()->toArray();
            
             foreach ($law_province as $law) {
-                dd($law);
-                if ($law->provinces === $province_name) {
+                // dd($law);
+                if ($law['provinces'] === $province_name) {
                     array_push($local_law,$law);
                 }
             }
