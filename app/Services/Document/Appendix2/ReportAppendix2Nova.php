@@ -4,6 +4,7 @@ namespace App\Services\Document\Appendix2;
 
 use App\Services\CommonService;
 use App\Models\Province;
+use App\Models\AppraiseLawDocument;
 use App\Services\Document\DocumentInterface\Report;
 use Illuminate\Support\Carbon;
 use PhpOffice\PhpWord\Element\Section;
@@ -35,8 +36,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         } else {
             $province_id = $this->realEstates->appraises->province_id;
             $province_name = Province::query()->where('id', $province_id)->first()->name;
-            dd($this->data_tong);
-            $law_province = $this->data_tong->legal_documents_on_construction;
+            $law_province = AppraiseLawDocument::query()->where(['type' => 'XAY_DUNG', 'provinces' => $province_name])->get()->toArray();
             foreach ($law_province as $law) {
                 if ($law->provinces === $province_name) {
                     array_push($local_law,$law);
