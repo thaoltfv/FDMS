@@ -22,7 +22,7 @@ class ReportAppendix2Nova extends ReportAppendix2
     {
         // dd($this->realEstates[0]);
         // $section->addText(json_encode($this->data_tong));
-        if (isset($this->realEstates) && count($this->realEstates) > 0){
+        if (is_array($this->realEstates)){
             $province_id = $this->realEstates[0]->appraises->province_id;
         } else {
             $province_id = $this->realEstates->appraises->province_id;
