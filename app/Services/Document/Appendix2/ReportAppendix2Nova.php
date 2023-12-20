@@ -41,18 +41,18 @@ class ReportAppendix2Nova extends ReportAppendix2
             $diengiai = 'Căn cứ vào ';
             foreach ($local_law as $local) {
                 if ($count === 0) {
-                    $diengiai = $diengiai.$local->type.' về '.$local->content;
+                    $diengiai = $diengiai.$local->document_type.' về '.$local->content;
                 } else {
-                    $diengiai = $diengiai.' và '.$local->type.' về '.$local->content.';';
+                    $diengiai = $diengiai.' và '.$local->document_type.' về '.$local->content.';';
                 }
                 $count++;
             }
             $diengiai = $diengiai.' Tổ thẩm định nhận thấy đơn giá xây dựng theo ';
             foreach ($local_law as $local) {
                 if ($count1 === 0) {
-                    $diengiai = $diengiai.$local->type.' về '.$local->content;
+                    $diengiai = $diengiai.$local->document_type.' về '.$local->content;
                 } else {
-                    $diengiai = $diengiai.' và '.$local->type.' về '.$local->content;
+                    $diengiai = $diengiai.' và '.$local->document_type.' về '.$local->content;
                 }
                 $count1++;
             }
