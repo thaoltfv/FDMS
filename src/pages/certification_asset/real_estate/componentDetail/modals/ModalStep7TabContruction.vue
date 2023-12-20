@@ -217,7 +217,7 @@
                       </tr>
                       <tr>
                         <th colspan="10">Phần kết cấu chính (%)</th>
-                        <th rowspan="2">CLCL</th>
+                        <th rowspan="2">CLCL(%)</th>
                       </tr>
                       <tr>
                         <th colspan="2">Móng, khung cột</th>
@@ -227,17 +227,22 @@
                         <th colspan="2">Mái</th>
                       </tr>
                       <tr>
-                        <th>p</th>
-                        <th>h</th>
-                        <th>p</th>
-                        <th>h</th>
-                        <th>p</th>
-                        <th>h</th>
-                        <th>p</th>
-                        <th>h</th>
-                        <th>p</th>
-                        <th>h</th>
-                        <th colspan="2">H= Σ ph / Σ p</th>
+                        <th>T<sub>ki</sub></th>
+                        <th>1 - H<sub>ki</sub></th>
+                        <th>T<sub>ki</sub></th>
+                        <th>1 - H<sub>ki</sub></th>
+                        <th>T<sub>ki</sub></th>
+                        <th>1 - H<sub>ki</sub></th>
+                        <th>T<sub>ki</sub></th>
+                        <th>1 - H<sub>ki</sub></th>
+                        <th>T<sub>ki</sub></th>
+                        <th>1 - H<sub>ki</sub></th>
+                        <th colspan="2">
+                          <div class="row">
+                            <div class="col-4" style="margin-top:15px; padding-right: 0;">1 - </div>
+                            <div class="col-8" style="padding-left: 0">Σ H<sub>ki</sub> x T<sub>ki</sub><hr style="margin: 0;height: 2px;"/> Σ T<sub>ki</sub></div>
+                          </div>
+                        </th>
                       </tr>
 
                     </thead>

@@ -29,13 +29,14 @@
 							<InputCategory
 								v-model="form.level"
 								placeholder="Cấp nhà"
-								rules="required"
+								
 								vid="level"
 								class="mb-3 col-12 col-md-6"
 								label="Cấp nhà"
 								:disabled="$route.name === 'building.edit'"
 								:options="optionLevel"
 								v-if="building === 'NHÀ Ở RIÊNG LẺ'"
+								hidden
 							/>
 							<InputCategory
 								v-model="form.structure"
@@ -51,13 +52,14 @@
 							<InputCategory
 								v-model="form.rate"
 								placeholder="Hạng nhà"
-								rules="required"
+								
 								vid="rate"
 								class="mb-3 col-12 col-md-6"
 								label="Hạng nhà"
 								:disabled="$route.name === 'building.edit'"
 								:options="optionRate"
 								v-if="building === 'NHÀ Ở RIÊNG LẺ' || building === 'BIỆT THỰ'"
+								hidden
 							/>
 							<InputCategory
 								v-model="form.crane"

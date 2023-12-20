@@ -361,7 +361,7 @@
 								<tr>
 									<th>Mã số</th>
 									<th>Loại</th>
-									<th>Cấp nhà</th>
+									<!-- <th>Cấp nhà</th> -->
 									<th>Chất lượng còn lại</th>
 									<th>Diện tích sàn (m <sup>2</sup>)</th>
 									<th>Đơn giá xây dựng (VND)</th>
@@ -392,7 +392,7 @@
 											@change="change_data_log('Loại CTXD')"
 										/>
 									</td>
-									<td>
+									<!-- <td>
 										<InputCategory
 											v-model="tangible.building_category_id"
 											vid="building_category_id"
@@ -402,7 +402,7 @@
 											:options="optionsHousing"
 											@change="change_data_log('Cấp nhà')"
 										/>
-									</td>
+									</td> -->
 									<td>
 										<InputPercent
 											v-model="tangible.remaining_quality"

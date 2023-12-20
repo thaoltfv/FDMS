@@ -46,6 +46,7 @@
                   disabled
                   :options="optionsBuildingCategories"
                   class="contain-input contain-input__info contain-input__property"
+                  hidden
                 />
               </td>
               <td>
