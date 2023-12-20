@@ -172,7 +172,7 @@ export const usePreCertificateStore = defineStore(
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
-				await uploadFile();
+				await uploadFileNewPreCertificate();
 				other.value.toast.open({
 					message: "Lưu hồ sơ thẩm định thành công",
 					type: "success",
@@ -256,10 +256,14 @@ export const usePreCertificateStore = defineStore(
 				Result: []
 			};
 		}
-		async function uploadFile() {
+		async function uploadFileNewPreCertificate() {
 			if (dataPC.value.uploadFile) {
+				const formData = new FormData();
+				for (let i = 0; i < dataPC.value.uploadFile.length; i++) {
+					formData.append("files[" + i + "]", dataPC.value.uploadFile[i]);
+				}
 				const res = await File.uploadFilePreCertificate(
-					dataPC.value.uploadFile,
+					formData,
 					dataPC.value.id,
 					"Appendix"
 				);
@@ -294,7 +298,6 @@ export const usePreCertificateStore = defineStore(
 			getPreCertificate,
 			createUpdatePreCertificateion,
 			updateRouteToast,
-			uploadFile,
 			getConfig
 		};
 	},

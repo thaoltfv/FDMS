@@ -101,7 +101,7 @@
 					>
 						<router-link
 							v-if="add"
-							:to="{ name: 'certification_brief.create' }"
+							:to="{ name: 'pre_certification.create' }"
 							class="btn text-nowrap index-screen-button ml-md-2"
 						>
 							<img

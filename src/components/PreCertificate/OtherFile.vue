@@ -385,11 +385,6 @@ export default {
 						formData.append("files[" + i + "]", files[i]);
 					}
 					let res = null;
-					// if (this.form.status === 1) {
-					// 	res = await File.saleUploadFileCertificate(formData, this.dataPC.id);
-					// } else {
-					// 	res = await File.uploadFileCertificate(formData, this.dataPC.id);
-					// }
 					if (this.dataPC.id) {
 						res = await File.uploadFilePreCertificate(
 							formData,
@@ -397,7 +392,6 @@ export default {
 							this.type
 						);
 						if (res.data) {
-							// await this.$emit('handleChangeFile', res.data.data)
 							this.preCertificateOtherDocuments = res.data.data;
 							this.lstFile = [...res.data.data];
 							this.$toast.open({
@@ -409,7 +403,7 @@ export default {
 						}
 					} else {
 						this.lstFile = [...this.lstFile, ...files];
-						this.dataPC.uploadFile = formData;
+						this.dataPC.uploadFile = this.lstFile;
 					}
 				}
 			}

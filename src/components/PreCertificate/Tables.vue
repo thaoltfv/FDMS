@@ -22,7 +22,7 @@
 							@click.prevent="handleDetail(id, property)"
 							class="link-detail"
 						>
-							{{ "HSTD_" + id }}
+							{{ "HSTDSB_" + id }}
 						</button>
 					</div>
 				</template>
@@ -977,7 +977,7 @@ export default {
 		async handleDetail(id) {
 			this.$router
 				.push({
-					name: "certification_brief.detail",
+					name: "pre_certification.detail",
 					query: {
 						id: id
 					}
