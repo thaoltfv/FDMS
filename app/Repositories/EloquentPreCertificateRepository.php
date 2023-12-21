@@ -1111,8 +1111,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $sortField = request()->get('sortField');
         $sortOrder = request()->get('sortOrder');
         $filter = request()->get('search');
-        $typeFilter= request()->get('type');
-        $dataFilter= request()->get('data');
+        $dataJson = request()->get('data');
+        $dataTemp = json_decode($dataJson);
+        $dataFilter = $dataTemp->data;
+        $typeFilter = $dataTemp->type;
         $status = request()->get('status');
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
