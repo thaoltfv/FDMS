@@ -1111,6 +1111,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $sortField = request()->get('sortField');
         $sortOrder = request()->get('sortOrder');
         $filter = request()->get('search');
+        $typeFilter= request()->get('type');
+        $dataFilter= request()->get('data');
         $status = request()->get('status');
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
@@ -1204,6 +1206,36 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
+        if (isset($dataFilter) && !empty($dataFilter)) {
+            switch ($typeFilter) {
+                case 'date':
+                    if (isset($dataFilter) && count($dataFilter) == 2) {
+                        $startDate = date('Y-m-d', strtotime($dataFilter[0]));
+                        $endDate = date('Y-m-d', strtotime($dataFilter[1]));
+                        $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                                        ->whereBetween('updated_at', [$startDate, $endDate]);
+                    } else if(isset($dataFilter) && count($dataFilter) == 1){
+                        $result = $result->where(function ($query) use ($dataFilter) {
+                            $query->whereDate('created_at', '=', date('Y-m-d', strtotime($dataFilter[0])))
+                                ->orwhereDate('updated_at', '=', date('Y-m-d', strtotime($dataFilter[0])));
+                                // where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
+                        });
+                    }
+                    break;
+                case 'status':
+                    $result = $result->whereIn('status', $dataFilter);
+                    break;
+                case 'officially':
+                    if ($dataFilter === 1) {
+                        $result = $result->whereNotNull('certificate_id');
+                    } else {
+                        $result = $result->whereNull('certificate_id');
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
         // dd($result);
 
         if (!empty($status)) {
@@ -1211,7 +1243,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         
         if (isset($sortField) && !isEmpty($sortField)) {
-          if ($sortField == 'petitioner_name')
+            if ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
                     $result =  $result->orderBy('petitioner_name', 'DESC');
                 else
