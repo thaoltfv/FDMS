@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isMobile()" class="main-wrapper-new">
+	<div v-if="!isMobile" class="main-wrapper-new">
 		<a-tabs @change="callback" default-active-key="2">
 			<a-tab-pane key="1">
 				<span slot="tab">
@@ -7,7 +7,8 @@
 				</span>
 				<div class="container-fluid appraise-container mt-3">
 					<Tables
-						:listCertificates="listCertificatesAll"
+						v-if="paginationAll"
+						:listCertificates="lstPreCertificate"
 						:isLoading="isLoading"
 						:pagination="paginationAll"
 						@handleChange="onPageChange"
@@ -145,7 +146,7 @@
 			style="margin-top: 0!important;"
 		>
 			<Tables
-				:listCertificates="listCertificatesAll"
+				:listCertificates="lstPreCertificate"
 				:isLoading="isLoading"
 				:pagination="paginationAll"
 				@handleChange="onPageChange"
@@ -160,6 +161,10 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { usePreCertificateStore } from "@/store/preCertificate";
+
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import ButtonCheckbox from "@/components/Form/ButtonCheckbox";
 import ModalExportPreCertificate from "@/components/PreCertificate/ModalExportPreCertificate";
@@ -181,16 +186,13 @@ export default {
 				slider: "#FAA831",
 				arrow: "#000000"
 			},
-			listCertificatesAll: [],
 			listCertificatesOpen: [],
 			listCertificatesLock: [],
 			listCertificatesClose: [],
 			list: [],
-			paginationAll: {},
 			paginationOpen: {},
 			paginationLock: {},
 			paginationClose: {},
-			filter: {},
 			search_kanban: "",
 			render_kanban: 1234543,
 			status: 0,
@@ -203,7 +205,6 @@ export default {
 			deleted: false,
 			accept: false,
 			export: false,
-			selectedStatus: [],
 			showFilter: false,
 			statusOptions: {
 				data: [
@@ -264,12 +265,12 @@ export default {
 			}
 		});
 
-		if (this.isMobile()) {
+		if (this.isMobile) {
 			this.selectedStatus = ["3"];
 		}
 	},
-	methods: {
-		isMobile() {
+	setup() {
+		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 					navigator.userAgent
@@ -279,7 +280,31 @@ export default {
 			} else {
 				return false;
 			}
-		},
+		};
+		const isMobile = ref(checkMobile());
+
+		const preCertificateStore = usePreCertificateStore();
+		preCertificateStore.resetData();
+		preCertificateStore.getPreCertificateAll();
+		const {
+			lstPreCertificate,
+			selectedStatus,
+			filter,
+			isLoading,
+			paginationAll
+		} = storeToRefs(preCertificateStore);
+		return {
+			isMobile,
+
+			filter,
+			lstPreCertificate,
+			selectedStatus,
+			isLoading,
+			paginationAll,
+			preCertificateStore
+		};
+	},
+	methods: {
 		callback(key) {
 			if (+key === 2) {
 				this.showFilter = false;
@@ -302,34 +327,16 @@ export default {
 				this.activeStatus = true;
 			}
 		},
+
 		async onFilterQuickSearchChange($event) {
 			this.search_kanban = { ...$event };
-			this.filter = { ...$event };
-			await this.getCertificateAll();
+			this.filter.search = $event.search;
+			await this.preCertificateStore.getPreCertificateAll();
 			this.render_kanban += 1;
 			// await this.$refs.kanban.getDataWorkFlow(this.search_kanban)
 		},
 		handleSearch() {
 			this.showModalSearch = true;
-		},
-		async getCertificateAll(params = {}) {
-			this.isLoading = true;
-			try {
-				const resp = await PreCertificate.paginate({
-					query: {
-						page: 1,
-						limit: 20,
-						...params,
-						...this.filter,
-						status: this.selectedStatus
-					}
-				});
-				this.listCertificatesAll = [...resp.data.data];
-				this.paginationAll = convertPagination(resp.data);
-				this.isLoading = false;
-			} catch (e) {
-				this.isLoading = false;
-			}
 		},
 		async onPageChange(pagination) {
 			this.perPage = pagination.pageSize;
@@ -338,12 +345,12 @@ export default {
 				limit: pagination.pageSize
 			};
 
-			await this.getCertificateAll(params);
+			await this.preCertificateStore.getPreCertificateAll(params);
 		},
 		onChangeStatus(value) {
 			this.selectedStatus = value;
 			// console.log('this.selectedStatus',this.selectedStatus)
-			this.getCertificateAll();
+			this.preCertificateStore.getPreCertificateAll();
 		},
 		async export30daysBefore() {
 			this.form.fromDate = await moment(
@@ -448,7 +455,6 @@ export default {
 	},
 
 	beforeMount() {
-		this.getCertificateAll();
 		this.getProfiles();
 	}
 };

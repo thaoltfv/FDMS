@@ -131,7 +131,6 @@
 				:add="add"
 				:user_id="user_id"
 				:appraiser_number="appraiser_number"
-				:jsonConfig="jsonConfig"
 				:profile="profile"
 				:data="detailData"
 				@cancel="showDetailPopUp = false"

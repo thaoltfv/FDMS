@@ -298,6 +298,11 @@
 			@action="handleChangeAccept"
 			@cancel="handleCancelAccept"
 		/>
+		<ModalVerifyToStage2
+			v-if="dialogVerifyToStage2"
+			:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
+			@action="dialogVerifyToStage2 = false"
+		/>
 	</div>
 </template>
 
@@ -307,6 +312,7 @@ import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import ModalAppraisal from "./ModalAppraisal";
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
+import ModalVerifyToStage2 from "./ModalVerifyToStage2";
 import InputText from "@/components/Form/InputText";
 import InputCategory from "@/components/Form/InputCategory";
 import FileUpload from "@/components/file/FileUpload";
@@ -331,7 +337,6 @@ export default {
 		"add",
 		"user_id",
 		"appraiser_number",
-		"jsonConfig",
 		"profile"
 	],
 	data() {
@@ -380,6 +385,7 @@ export default {
 		};
 	},
 	components: {
+		ModalVerifyToStage2,
 		FileUpload,
 		InputCategory,
 		InputText,
@@ -406,10 +412,10 @@ export default {
 			}
 		};
 		const isMobile = ref(checkMobile());
-
-		return {
-			isMobile
-		};
+		const preCertificateStore = usePreCertificateStore();
+		const dialogVerifyToStage2 = ref(false);
+		const { jsonConfig } = storeToRefs(preCertificateStore);
+		return { dialogVerifyToStage2, isMobile, jsonConfig };
 	},
 	computed: {
 		optionsAppraisalPurposes() {
@@ -430,6 +436,7 @@ export default {
 			if (this.isPermission) {
 				data = this.targetDescription;
 			}
+			console.log("data", data);
 			return data;
 		},
 		handleUpdateStatus(id) {
@@ -539,12 +546,9 @@ export default {
 			}
 		},
 		handleAction() {},
-		loadConfigByStatus(status, sub_status) {
+		loadConfigByStatus(status) {
 			return this.jsonConfig.principle.find(
-				item =>
-					item.status === status &&
-					item.sub_status === sub_status &&
-					item.isActive === 1
+				item => item.status === status && item.isActive === 1
 			);
 		},
 		loadConfigData(configData) {
@@ -557,7 +561,7 @@ export default {
 			if (configData.put_require && configData.put_require.length > 0) {
 				configData.put_require.forEach(i => {
 					if (
-						(i === "created_by" && this.form[i] === this.user.id) ||
+						(i === "created_by" && this.form[i].id === this.user.id) ||
 						(i !== "created_by" && this.form[i] === this.user.appraiser.id)
 					) {
 						check = true;
@@ -568,10 +572,7 @@ export default {
 		},
 		configStatus() {
 			this.user = this.profile.data.user;
-			let configData = this.loadConfigByStatus(
-				this.form.status,
-				this.form.sub_status
-			);
+			let configData = this.loadConfigByStatus(this.form.status);
 			if (configData) {
 				this.loadConfigData(configData);
 				this.isPermission = this.checkPermission(configData);

@@ -4,6 +4,8 @@ import { ref } from "vue";
 import PreCertificate from "@/models/PreCertificate";
 import PreCertificateConfig from "@/models/PreCertificateConfig";
 import File from "@/models/File";
+import { convertPagination } from "@/utils/filters";
+import moment from "moment";
 export const usePreCertificateStore = defineStore(
 	"preCertificate",
 	() => {
@@ -93,8 +95,10 @@ export const usePreCertificateStore = defineStore(
 				if (element.name === "pre_types")
 					lstData.value.preTypes = element.config;
 
-				if (element.name === "workflow")
+				if (element.name === "workflow") {
 					lstData.value.workflow = element.config;
+					jsonConfig.value = lstData.value.workflow;
+				}
 			}
 			return lstData.value.workflow;
 		}
@@ -172,7 +176,7 @@ export const usePreCertificateStore = defineStore(
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
-				await uploadFileNewPreCertificate();
+				await uploadFilePreCertificateFunction("Appendix");
 				other.value.toast.open({
 					message: "Lưu hồ sơ thẩm định thành công",
 					type: "success",
@@ -200,7 +204,88 @@ export const usePreCertificateStore = defineStore(
 			}
 			other.value.isSubmit = false;
 		}
+		const lstPreCertificate = ref([]);
+		const paginationAll = ref({});
+		const filter = ref({ search: "", data: { data: "", type: "" } });
+		const selectedStatus = ref([]);
+		const isLoading = ref(false);
+		async function getPreCertificateAll(params = {}) {
+			isLoading.value = true;
+			try {
+				// const params = {
+				// 	page: filter.page,
+				// 	limit: filter.limit
+				// };
+				console.log("params", filter.value, {
+					query: {
+						page: 1,
+						limit: 20,
+						...params,
+						...filter.value,
+						status: selectedStatus.value
+					}
+				});
+				const resp = await PreCertificate.paginate({
+					query: {
+						page: 1,
+						limit: 20,
+						...params,
+						...filter.value,
+						status: selectedStatus.value
+					}
+				});
+				lstPreCertificate.value = [...resp.data.data];
+				paginationAll.value = convertPagination(resp.data);
+				isLoading.value = false;
+			} catch (e) {
+				isLoading.value = false;
+			}
+		}
+		const jsonConfig = ref(null);
+		async function updateToStage2() {
+			dataPC.value.status = 2;
+			dataPC.value.status_expired_at = getExpireStatusDate(2);
+			const res = await PreCertificate.createUpdatePreCertification(
+				dataPC.value,
+				dataPC.value.id
+			);
+
+			if (res.data) {
+				dataPC.value.id = res.data.id;
+
+				await uploadFilePreCertificateFunction("Result");
+			} else if (res.error) {
+				other.value.toast.open({
+					message: `${res.error.message}`,
+					type: "error",
+					position: "top-right"
+				});
+			} else {
+				other.value.toast.open({
+					message: "Chuyển tiếp thất bại",
+					type: "error",
+					position: "top-right"
+				});
+			}
+			other.value.isSubmit = false;
+		}
+		function getExpireStatusDate(status) {
+			const config = jsonConfig.value.principle.find(
+				item => item.status === status && item.isActive === 1
+			);
+			let dateConvert = new Date();
+			let minutes = config.process_time ? config.process_time : 1440;
+			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
+			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
+			return status_expired_at;
+		}
 		function resetData() {
+			lstPreCertificate.value = [];
+			paginationAll.value = {};
+			filter.value = { search: "", data: { data: "", type: "" } };
+			selectedStatus.value = [];
+			isLoading.value = false;
+
 			dataPC.value = {
 				id: null,
 				certificate_id: null,
@@ -256,7 +341,7 @@ export const usePreCertificateStore = defineStore(
 				Result: []
 			};
 		}
-		async function uploadFileNewPreCertificate() {
+		async function uploadFilePreCertificateFunction(type) {
 			if (dataPC.value.uploadFile) {
 				const formData = new FormData();
 				for (let i = 0; i < dataPC.value.uploadFile.length; i++) {
@@ -265,11 +350,11 @@ export const usePreCertificateStore = defineStore(
 				const res = await File.uploadFilePreCertificate(
 					formData,
 					dataPC.value.id,
-					"Appendix"
+					type
 				);
 				if (res.data) {
 					// await this.$emit('handleChangeFile', res.data.data)
-					preCertificateOtherDocuments.value = res.data.data;
+					// preCertificateOtherDocuments.value = res.data.data;
 					// other.value.toast.open({
 					// 	message: "Thêm file thành công",
 					// 	type: "success",
@@ -287,18 +372,27 @@ export const usePreCertificateStore = defineStore(
 			}
 			return;
 		}
+
 		return {
 			dataPC,
 			lstData,
 			preCertificateOtherDocuments,
 			permission,
 			other,
+			lstPreCertificate,
+			paginationAll,
+			filter,
+			selectedStatus,
+			isLoading,
+			jsonConfig,
 
 			resetData,
 			getPreCertificate,
 			createUpdatePreCertificateion,
 			updateRouteToast,
-			getConfig
+			getConfig,
+			getPreCertificateAll,
+			updateToStage2
 		};
 	},
 	{

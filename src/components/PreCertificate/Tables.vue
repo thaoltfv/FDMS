@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isMobile()" class="table-wrapper">
+	<div v-if="!isMobile" class="table-wrapper">
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				bordered
@@ -9,13 +9,129 @@
 				:data-source="listCertificates"
 				:loading="isLoading"
 				:rowKey="record => record.id"
-				:filtered="false"
+				:filtered="true"
 				:row-class-name="
 					(_record, index) => (index % 2 === 1 ? 'table-striped' : null)
 				"
 				:pagination="false"
 			>
 				<!--Custom type table-->
+				<template
+					slot="filterDropdown"
+					slot-scope="{
+						filters,
+						setSelectedKeys,
+						selectedKeys,
+						confirm,
+						clearFilters
+					}"
+				>
+					<!-- Your custom filter design here -->
+					<div class="custom-filter-dropdown">
+						<a-select
+							v-model="selectedKeys"
+							@change="setSelectedKeys"
+							style="width: 100%; margin-bottom: 8px;"
+						>
+							<!-- Add an option for each filter option -->
+							<a-select-option
+								v-for="filter in filters"
+								:key="filter.value"
+								:value="filter.value"
+							>
+								{{ filter.text }}
+							</a-select-option>
+						</a-select>
+						<div style="margin-top: 8px; text-align: right;">
+							<a-button
+								@click="filterData(selectedKeys, 'status')"
+								type="primary"
+								size="small"
+								icon="search"
+							>
+								Tìm
+							</a-button>
+							<a-button @click="clearFilters" size="small">
+								Xóa
+							</a-button>
+						</div>
+					</div>
+				</template>
+				<template
+					slot="filterDropdownOfficially"
+					slot-scope="{
+						filters,
+						setSelectedKeys,
+						selectedKeys,
+						confirm,
+						clearFilters
+					}"
+				>
+					<!-- Your custom filter design here -->
+					<div class="custom-filter-dropdown">
+						<a-select
+							v-model="selectedKeys"
+							@change="setSelectedKeys"
+							style="width: 100%; margin-bottom: 8px;"
+						>
+							<!-- Add an option for each filter option -->
+							<a-select-option
+								v-for="filter in filters"
+								:key="filter.value"
+								:value="filter.value"
+							>
+								{{ filter.text }}
+							</a-select-option>
+						</a-select>
+						<div style="margin-top: 8px; text-align: right;">
+							<a-button
+								@click="filterData(selectedKeys, 'officially')"
+								type="primary"
+								size="small"
+								icon="search"
+							>
+								Tìm
+							</a-button>
+							<a-button @click="clearFilters" size="small">
+								Xóa
+							</a-button>
+						</div>
+					</div>
+				</template>
+				<template
+					slot="filterDropdownCreatedAt"
+					slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters }"
+				>
+					<div class="custom-filter-dropdown">
+						<div>
+							<span>Từ ngày:</span>
+							<a-date-picker
+								placeholder="Tìm ngày"
+								:value="selectedKeys[0] ? selectedKeys[0] : null"
+								@change="date => setSelectedKeys(date ? [date] : [])"
+							/>
+						</div>
+						<div>
+							<span>Đến ngày:</span>
+							<a-date-picker
+								placeholder="Tìm ngày"
+								:value="selectedKeys[1] ? selectedKeys[1] : null"
+								@change="date => setSelectedKeys(date ? date : [])"
+							/>
+						</div>
+						<a-button
+							type="primary"
+							size="small"
+							@click="filterData(selectedKeys, 'date')"
+							icon="search"
+						>
+							Tìm
+						</a-button>
+						<a-button size="small" @click="clearFilters">
+							Xóa
+						</a-button>
+					</div>
+				</template>
 				<template slot="id" slot-scope="id, property">
 					<div class="position-relative">
 						<button
@@ -43,11 +159,6 @@
 							<b-dropdown-item>Action</b-dropdown-item>
 						</b-dropdown>
 					</div>
-				</template>
-				<template slot="created_at" slot-scope="created_at">
-					<p class="public_date">
-						{{ formatDate(created_at) }}
-					</p>
 				</template>
 				<template
 					slot="certificate_date"
@@ -87,14 +198,14 @@
 					slot="total_preliminary_value"
 					slot-scope="{ total_preliminary_value, appraise_purpose }"
 				>
-					<p class="text-main__blue">
+					<p class="text-main__blue text-wrap ">
 						{{
 							total_preliminary_value
 								? formatNumber(total_preliminary_value) + " đ"
 								: "-"
 						}}
 					</p>
-					<p class="text-secondary">
+					<p class="text-secondary text-wrap ">
 						Mục đích: {{ appraise_purpose ? appraise_purpose.name : "-" }}
 					</p>
 				</template>
@@ -108,18 +219,23 @@
 					<p class="text-main">
 						{{ created_by ? created_by.name : " " }}
 					</p>
-					<p class="text-secondary">
+				</template>
+				<template slot="created_at" slot-scope="{ created_at, updated_at }">
+					<p class="text-main">
 						Ngày tạo: {{ created_at ? formatDate(created_at) : " " }}
+					</p>
+					<p class="text-secondary">
+						Ngày cập nhật: {{ updated_at ? formatDate(updated_at) : " " }}
 					</p>
 				</template>
 				<template
 					slot="appraiser"
 					slot-scope="{ appraiser_sale, appraiser_perform }"
 				>
-					<p class="text-main">
+					<p class="text-main ml-0 pl-0">
 						NVKD: {{ appraiser_sale ? appraiser_sale.name : "-" }}
 					</p>
-					<p class="text-secondary">
+					<p class="text-secondary ml-0 pl-0">
 						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
 					</p>
 				</template>
@@ -274,7 +390,6 @@
 			:add="add"
 			:user_id="user_id"
 			:appraiser_number="appraiser_number"
-			:jsonConfig="jsonConfig"
 			:profile="profile"
 			:data="detailData"
 			@cancel="showDetailPopUp = false"
@@ -324,6 +439,10 @@
 	</div>
 </template>
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { usePreCertificateStore } from "@/store/preCertificate";
+
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import {
 	BDropdown,
@@ -405,7 +524,6 @@ export default {
 			listCertificateLockTemp: [],
 			listCertificatesCloseTemp: [],
 			listCertificatesCanceledTemp: [],
-			filter: {},
 			status: "",
 			activeStatus: false,
 			showAppraisalDialog: false,
@@ -445,6 +563,29 @@ export default {
 			isCheckLegal: false,
 			isCheckVersion: false,
 			changeStatusRequire: {}
+		};
+	},
+	setup() {
+		const checkMobile = () => {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+		const isMobile = ref(checkMobile());
+
+		const preCertificateStore = usePreCertificateStore();
+		const { filter, selectedStatus } = storeToRefs(preCertificateStore);
+		return {
+			isMobile,
+			filter,
+			selectedStatus,
+			preCertificateStore
 		};
 	},
 	created() {
@@ -490,10 +631,18 @@ export default {
 				{
 					title: "Mã HSTDSB",
 					align: "left",
-					scopedSlots: { customRender: "id" },
+					scopedSlots: {
+						customRender: "id",
+						filterDropdown: "filterDropdownOfficially"
+					},
 					dataIndex: "id",
 					// sorter: (a, b) => a.id - b.id,
 					// sortDirections: ['descend', 'ascend'],
+
+					filters: [
+						{ text: "Chưa chuyển", value: 0 },
+						{ text: "Đã chuyển chính thức", value: 1 }
+					],
 					hiddenItem: false
 				},
 				{
@@ -511,6 +660,7 @@ export default {
 					scopedSlots: { customRender: "total_preliminary_value" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
 					// sortDirections: ['descend', 'ascend'],
+					width: "30dvw",
 					hiddenItem: false
 				},
 				{
@@ -531,19 +681,33 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Thời gian",
+					class: "optional-data",
+					align: "left",
+					scopedSlots: {
+						customRender: "created_at",
+						filterDropdown: "filterDropdownCreatedAt"
+					},
+
+					hiddenItem: false
+				},
+				{
 					title: "Trạng thái",
 					align: "center",
-					scopedSlots: { customRender: "status" },
+					scopedSlots: {
+						customRender: "status",
+						filterDropdown: "filterDropdown"
+					},
 					dataIndex: "status",
-					// filters: [
-					//   { text: 'Mới', value: 2 },
-					//   { text: 'Đang duyệt', value: 3 },
-					//   { text: 'Đã duyệt', value: 4 },
-					//   { text: 'Đã hủy', value: 5 }
-					// ],
-					// onFilter: (value, record) => record.status === value,
-					// sorter: (a, b) => a.status - b.status,
-					// sortDirections: ['descend', 'ascend'],
+					filters: [
+						{ text: "Yêu cầu sơ bộ", value: 1 },
+						{ text: "Định giá sơ bộ", value: 2 },
+						{ text: "Duyệt giá sơ bộ", value: 3 },
+						{ text: "Thương thảo", value: 4 },
+						{ text: "Hoàn thành", value: 5 },
+						{ text: "Hủy", value: 6 }
+					],
+					onFilter: (value, record) => record.status === value,
 					hiddenItem: false
 				}
 			];
@@ -564,6 +728,29 @@ export default {
 		}
 	},
 	methods: {
+		filterData(data, type) {
+			if (type === "status") {
+				this.selectedStatus = [data];
+			} else if (type === "date") {
+				const temp = [];
+				for (let i = 0; i < data.length; i++) {
+					if (data[i]) {
+						const date = moment(data[i]).format("YYYY-MM-DD");
+						temp.push(date);
+					}
+				}
+				this.filter.data = {
+					data: temp,
+					type: type
+				};
+			} else {
+				this.filter.data = {
+					data: data,
+					type: type
+				};
+			}
+			this.preCertificateStore.getPreCertificateAll();
+		},
 		handleCancelAccept2() {
 			this.isMoved = false;
 			this.isHandleAction = false;
@@ -991,17 +1178,6 @@ export default {
 		onPaginationChange(current) {
 			const pagination = { ...this.pagination, current: Number(current) };
 			this.handleTableChange(pagination);
-		},
-		isMobile() {
-			if (
-				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-					navigator.userAgent
-				)
-			) {
-				return true;
-			} else {
-				return false;
-			}
 		}
 	}
 };
@@ -1488,5 +1664,11 @@ export default {
 }
 .border_expired {
 	border-color: red !important;
+}
+.custom-filter-dropdown {
+	min-width: 200px;
+	padding: 8px;
+	background-color: white;
+	border: 1px solid #f3f2f7c7;
 }
 </style>
