@@ -167,7 +167,7 @@ class AppraiseOtherInformationEnum
 				"created_at" => "2022-12-20T10:22:46.000000Z",
 				"updated_at" => "2022-12-20T15:27:53.000000Z",
 				"deleted_at" => null,
-				"is_defaults" => true,
+				"is_defaults" => false,
                 "acronym" => array("BDS"),
             ],
 			[
@@ -179,7 +179,7 @@ class AppraiseOtherInformationEnum
 				"created_at" => "2022-12-20T10:22:46.000000Z",
 				"updated_at" => "2022-12-20T15:27:53.000000Z",
 				"deleted_at" => null,
-				"is_defaults" => false,
+				"is_defaults" => true,
                 "acronym" => array("BDS"),
 			]
         ]
