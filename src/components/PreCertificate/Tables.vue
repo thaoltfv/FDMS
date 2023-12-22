@@ -462,7 +462,7 @@ import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import ModalAppraisal from "./ModalAppraisal";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
-const jsonConfig = require("../../../../config/workflow.json");
+// const jsonConfig = require("../../../../config/workflow.json");
 export default {
 	name: "Tables",
 	props: ["listCertificates", "pagination", "isLoading"],
