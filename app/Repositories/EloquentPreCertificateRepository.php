@@ -217,7 +217,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         });
     }
-
+    
     /**
      * @return bool
      */
@@ -1273,7 +1273,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $query = request()->get('query');
         $page = request()->get('page');
         $limit = request()->get('limit');
-
+        
+        $dataJson = request()->get('data');
+        $dataTemp = json_decode($dataJson);
+        $dataFilter = $dataTemp->data;
+        $typeFilter = $dataTemp->type;
+        $status = request()->get('status');
         if (!empty($query)) {
             $query = json_decode($query);
         } else {
@@ -1425,7 +1430,42 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
+        if (isset($dataFilter) && !empty($dataFilter)) {
+            switch ($typeFilter) {
+                case 'date':
+                    if (isset($dataFilter) && count($dataFilter) == 2) {
+                        $startDate = date('Y-m-d', strtotime($dataFilter[0]));
+                        $endDate = date('Y-m-d', strtotime($dataFilter[1]));
+                        $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                                        ->whereBetween('updated_at', [$startDate, $endDate]);
+                    } else if(isset($dataFilter) && count($dataFilter) == 1){
+                        $result = $result->where(function ($query) use ($dataFilter) {
+                            $query->whereDate('created_at', '=', date('Y-m-d', strtotime($dataFilter[0])))
+                                ->orwhereDate('updated_at', '=', date('Y-m-d', strtotime($dataFilter[0])));
+                                // where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
+                        });
+                    }
+                    break;
+                case 'status':
+                    $result = $result->whereIn('status', $dataFilter);
+                    break;
+                case 'officially':
+                    if ($dataFilter === 1) {
+                        $result = $result->whereNotNull('certificate_id');
+                    } else {
+                        $result = $result->whereNull('certificate_id');
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        // dd($result);
 
+        if (!empty($status)) {
+            $result = $result->whereIn('status', $status);
+        }
+        
         $result = $result->orderByDesc('pre_certificates.updated_at');
         $result= $result->get();
      
@@ -1760,14 +1800,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
 
                 if (isset($status)) {
-                    // switch($status)  {
-                    //     case 1: //Move to first step in workflow -> remove all asset in preCertificate
-                    //         // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
-                    //         $this->removeAssetInCertificate($id);
-                    //         break;
-                    //     default:
-                    //         $this->updateAppraiseStatus($id, $status);
-                    // }
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update([
@@ -1786,6 +1818,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
                         $logDescription = 'cập nhật trạng thái '. $description;
+                        if($current == 1 && $next==2) {
+                            $this->otherDocumentUpload($id, 'Result', $request);
+                        }
                     }
                     $logName = 'update_status';
                     // activity-log Update status
@@ -3382,10 +3417,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $statusText = 'Thương thảo';
                     break;
                 case 5:
-                    $statusText = 'Đã hủy';
+                    $statusText = 'Hoàn thành';
                     break;
                 case 6:
-                    $statusText = 'Hoàn thành';
+                    $statusText = 'Đã hủy';
                     break;
                 default:
                     $statusText = 'Yêu cầu sơ bộ';
