@@ -90,7 +90,7 @@
 								<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
 								<div class="title_input_content title_input_download cursor_pointer"  @click="printPL1">Bảng điều chỉnh QSDĐ</div>
 							</div>
-							<div v-if="form.price_tangible_asset" class="d-flex align-items-center col">
+							<div class="d-flex align-items-center col">
 								<img class="img_input_download" src="@/assets/icons/ic_document.svg" alt="document"/>
 								<div class="title_input_content title_input_download cursor_pointer"  @click="printPL2">Bảng điều chỉnh CTXD</div>
 							</div>

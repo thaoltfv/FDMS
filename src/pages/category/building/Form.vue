@@ -29,7 +29,7 @@
 							<InputCategory
 								v-model="form.level"
 								placeholder="Cấp nhà"
-								
+
 								vid="level"
 								class="mb-3 col-12 col-md-6"
 								label="Cấp nhà"
@@ -52,7 +52,7 @@
 							<InputCategory
 								v-model="form.rate"
 								placeholder="Hạng nhà"
-								
+
 								vid="rate"
 								class="mb-3 col-12 col-md-6"
 								label="Hạng nhà"

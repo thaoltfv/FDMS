@@ -47,7 +47,7 @@
                       v-model="form.building_category_id"
                       vid="building_category_id"
                       label="Cấp nhà"
-                      
+
                       class="form-group-container"
                       :options="optionsHousing"
                       hidden
@@ -70,7 +70,7 @@
                       v-model="form.rate_id"
                       vid="rate_id"
                       label="Hạng nhà"
-                      
+
                       class="form-group-container"
                       :options="optionsRate"
                       hidden
@@ -153,7 +153,7 @@
                       label="Diện tích xây dựng"
                       :max="99999999"
                       :decimal="2"
-                      rules="required"
+                      
                       @change="changeArea($event)"
                   />
                 </div>

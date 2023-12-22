@@ -32,7 +32,7 @@
                     v-model="form.building_category_id"
                     vid="building_category_id"
                     label="Cấp nhà"
-                   
+
                     :options="optionsHousing"
                     @change="changeCategory"
                     hidden
@@ -53,7 +53,7 @@
                     v-model="form.rate_id"
                     vid="rate_id"
                     label="Hạng nhà"
-                    
+
                     :options="optionsRate"
                     @change="changeRate"
                     hidden
@@ -122,7 +122,7 @@
                     v-model="form.start_using_year"
                     vid="start_using_year"
                     label="Năm sử dụng"
-                    rules="required"
+                    
                     :options="optionYearBuild"
                   />
                 </div>
@@ -155,7 +155,7 @@
 										:key="keyRender"
                     label="Diện tích xây dựng"
 										:decimal="2"
-										rules="required"
+										
                     @change="changeArea($event)"
 									/>
                 </div>

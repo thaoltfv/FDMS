@@ -32,7 +32,7 @@
                     v-model="form.building_category_id"
                     vid="building_category_id"
                     label="Cấp nhà"
-                    
+
                     :options="optionsHousing"
                     @change="changeCategory"
                     hidden
@@ -53,7 +53,7 @@
                     v-model="form.rate_id"
                     vid="rate_id"
                     label="Hạng nhà"
-                    
+
                     :options="optionsRate"
                     @change="changeRate"
                     hidden
