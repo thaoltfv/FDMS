@@ -53,14 +53,17 @@
 								</div>
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
-										>Mục đích thẩm định:</strong
-									>
+										>Mục đích thẩm định:
+									</strong>
+									{{
+										dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
+									}}
+								</div>
+
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Loại sơ bộ:</strong>
 									<p>
-										{{
-											dataPC.appraise_purpose
-												? dataPC.appraise_purpose.name
-												: ""
-										}}
+										{{ dataPC.pre_type_string ? dataPC.pre_type_string : "" }}
 									</p>
 								</div>
 

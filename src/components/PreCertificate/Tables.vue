@@ -462,7 +462,6 @@ import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import ModalAppraisal from "./ModalAppraisal";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
-const jsonConfig = require("../../../../config/workflow.json");
 export default {
 	name: "Tables",
 	props: ["listCertificates", "pagination", "isLoading"],
@@ -546,7 +545,6 @@ export default {
 			user_id: "",
 			countData: 0,
 			isAccept: false,
-			jsonConfig: jsonConfig,
 			principleConfig: [],
 			subStatusData: {},
 			subStatusDataTmp: {},
@@ -580,8 +578,25 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const preCertificateStore = usePreCertificateStore();
-		const { filter, selectedStatus } = storeToRefs(preCertificateStore);
+		const { filter, selectedStatus, jsonConfig } = storeToRefs(
+			preCertificateStore
+		);
+		const principleConfig = ref([]);
+
+		const startSetup = async () => {
+			if (!jsonConfig.value) {
+				jsonConfig.value = await preCertificateStore.getConfig();
+			}
+			if (jsonConfig.value && jsonConfig.value.principle) {
+				principleConfig.value = jsonConfig.value.principle.filter(
+					i => i.isActive === 1
+				);
+			}
+		};
+		startSetup();
 		return {
+			jsonConfig,
+			principleConfig,
 			isMobile,
 			filter,
 			selectedStatus,
@@ -720,13 +735,7 @@ export default {
 		} else this.getDataWorkFlow2();
 		this.getProfiles();
 	},
-	mounted() {
-		if (this.jsonConfig && this.jsonConfig.principle) {
-			this.principleConfig = this.jsonConfig.principle.filter(
-				i => i.isActive === 1
-			);
-		}
-	},
+	mounted() {},
 	methods: {
 		filterData(data, type) {
 			if (type === "status") {

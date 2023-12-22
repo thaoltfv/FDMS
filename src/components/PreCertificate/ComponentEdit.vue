@@ -242,7 +242,28 @@
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
-			<OtherFile type="Result" />
+			<div class="card">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="row d-flex justify-content-between align-items-center">
+							<h3 class="title">Kết quả sơ bộ</h3>
+						</div>
+
+						<img
+							class="img-dropdown"
+							:class="!showCardDetailFileResult ? 'img-dropdown__hide' : ''"
+							src="@/assets/images/icon-btn-down.svg"
+							alt="dropdown"
+							@click="showCardDetailFileResult = !showCardDetailFileResult"
+						/>
+					</div>
+				</div>
+				<OtherFile
+					v-show="showCardDetailFileResult"
+					type="Result"
+					@action="showCardDetailFileResult = true"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -304,6 +325,7 @@ export default {
 			slider: "#FAA831",
 			arrow: "#000000"
 		});
+		const showCardDetailFileResult = ref(false);
 		const showCardDetailAppraise = ref(true);
 		const showCardDetailFile = ref(true);
 		const showCardDetailTraffic = ref(true);
@@ -384,6 +406,7 @@ export default {
 			lstData,
 			preCertificateOtherDocuments,
 			preCertificateStore,
+			showCardDetailFileResult,
 
 			handleChangeAppraisePurpose,
 			handleChangeCustomer,

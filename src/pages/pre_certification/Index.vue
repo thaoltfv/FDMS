@@ -183,6 +183,11 @@
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
 			/>
+			<ModalVerifyToStage2
+				v-if="dialogVerifyToStage2"
+				:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
+				@action="dialogVerifyToStage2 = false"
+			/>
 		</div>
 	</div>
 </template>
@@ -191,6 +196,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import ModalVerifyToStage2 from "@/components/PreCertificate/ModalVerifyToStage2";
 
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
@@ -213,7 +219,6 @@ import KanboardStatus from "@/components/PreCertificate/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
 // const jsonConfig = require("../../../config/pre_certificate_workflow.json");
-const jsonConfig = null;
 Vue.component("downloadExcel", JsonExcel);
 export default {
 	name: "Index",
@@ -277,8 +282,6 @@ export default {
 			user_id: "",
 			countData: 0,
 			isAccept: false,
-			jsonConfig: jsonConfig,
-			principleConfig: [],
 			subStatusData: {},
 			subStatusDataTmp: {},
 			next_status: "",
@@ -297,6 +300,7 @@ export default {
 		};
 	},
 	components: {
+		ModalVerifyToStage2,
 		draggable,
 		BCard,
 		FormWizard,
@@ -370,16 +374,42 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const preCertificateStore = usePreCertificateStore();
-		const { lstData } = storeToRefs(preCertificateStore);
+		const {
+			lstData,
+			dataPC,
+			jsonConfig,
+			preCertificateOtherDocuments,
+			filter
+		} = storeToRefs(preCertificateStore);
+
+		const dialogVerifyToStage2 = ref(false);
+		const principleConfig = ref([]);
+
+		const startSetup = async () => {
+			if (!jsonConfig.value) {
+				jsonConfig.value = await preCertificateStore.getConfig();
+			}
+			if (jsonConfig.value && jsonConfig.value.principle) {
+				principleConfig.value = jsonConfig.value.principle.filter(
+					i => i.isActive === 1
+				);
+			}
+		};
+		startSetup();
 		return {
+			filter,
+			dialogVerifyToStage2,
+			principleConfig,
+			jsonConfig,
 			isMobile,
 			lstData,
+			dataPC,
+			preCertificateOtherDocuments,
 			preCertificateStore
 		};
 	},
 	methods: {
 		getExpireDate(element) {
-			// // console.log('elemt', element)
 			let strExpire = "";
 			switch (element.status) {
 				case 1:
@@ -667,15 +697,12 @@ export default {
 		},
 		async handleChangeAccept2(note, reason_id) {
 			let dataSend = {
-				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
 				appraiser_id: this.elementDragger.appraiser_id,
-				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
-				appraiser_control_id: this.elementDragger.appraiser_control_id,
+				business_manager_id: this.elementDragger.business_manager_id,
+				appraiser_sale_id: this.elementDragger.appraiser_sale_id,
 				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
 				status: this.next_status,
-				sub_status: this.next_sub_status,
 				check_price: this.isCheckPrice,
-				check_legal: this.isCheckLegal,
 				check_version: this.isCheckVersion,
 				required: this.changeStatusRequire,
 				status_expired_at: this.getExpireStatusDate(),
@@ -684,7 +711,35 @@ export default {
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			};
-			// // console.log('data send', dataSend)
+			if (
+				this.dataPC.status === 1 &&
+				this.next_status === 2 &&
+				this.preCertificateOtherDocuments.Result.length > 0 &&
+				this.dataPC.total_preliminary_value > 0
+			) {
+				dataSend.total_preliminary_value = this.dataPC.total_preliminary_value;
+				// const resBoolean = await this.preCertificateStore.createUpdatePreCertificateion(
+				// 	true
+				// );
+				// if (!resBoolean) {
+				// 	await this.$toast.open({
+				// 		message: "Có lỗi xảy",
+				// 		type: "error",
+				// 		position: "top-right",
+				// 		duration: 3000
+				// 	});
+				// 	return;
+				// }
+			} else {
+				await this.$toast.open({
+					message: "Vui lòng bổ sung file kết quả sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+
 			const res = await PreCertificate.updateStatusPreCertificate(
 				this.idDragger,
 				dataSend
@@ -720,6 +775,7 @@ export default {
 			this.isMoved = false;
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
+			this.dialogVerifyToStage2 = false;
 		},
 		async handleUpdateStatus(id, data, message) {
 			const res = await PreCertificate.updateStatusPreCertificate(id, data);
@@ -871,134 +927,7 @@ export default {
 				item => item.status === 3
 			);
 		},
-		async updateDataWorkFlow(search) {
-			this.isLoading = true;
-			try {
-				const resp = await PreCertificate.getListKanbanPreCertificate(search);
-				if (resp.data) {
-					this.listCertificate = resp.data.HSTD;
-					this.listCertificateDraftTemp = resp.data.HSTD.filter(
-						item => item.status === 1
-					);
-					this.listCertificateOpenTemp = resp.data.HSTD.filter(
-						item => item.status === 2
-					);
-					this.listCertificateLockTemp = resp.data.HSTD.filter(
-						item => item.status === 3
-					);
-					this.listCertificatesCloseTemp = resp.data.HSTD.filter(
-						item => item.status === 4
-					);
-					this.listCertificatesCanceledTemp = resp.data.HSTD.filter(
-						item => item.status === 5
-					);
-					this.listCertificateDraft = [];
-					this.listCertificateOpen = [];
-					this.listCertificateLock = [];
-					this.listCertificatesClose = [];
-					this.listCertificatesCanceled = [];
-					this.listCertificateTemp = [];
-					let count = (this.countData = 0);
-					for (var i = count, j = count; i < j + 10; i++) {
-						this.listCertificateDraftTemp[i] &&
-							this.countData < this.listCertificateDraftTemp.length &&
-							this.listCertificateDraft.push(
-								this.listCertificateDraftTemp[i]
-							) &&
-							this.listCertificateTemp.push(this.listCertificateDraftTemp[i]);
-						this.listCertificateOpenTemp[i] &&
-							this.countData < this.listCertificateOpenTemp.length &&
-							this.listCertificateOpen.push(this.listCertificateOpenTemp[i]) &&
-							this.listCertificateTemp.push(this.listCertificateOpenTemp[i]);
-						this.listCertificateLockTemp[i] &&
-							this.countData < this.listCertificateLockTemp.length &&
-							this.listCertificateLock.push(this.listCertificateLockTemp[i]) &&
-							this.listCertificateTemp.push(this.listCertificateLockTemp[i]);
-						this.listCertificatesCloseTemp[i] &&
-							this.countData < this.listCertificatesCloseTemp.length &&
-							this.listCertificatesClose.push(
-								this.listCertificatesCloseTemp[i]
-							) &&
-							this.listCertificateTemp.push(this.listCertificatesCloseTemp[i]);
-						this.listCertificatesCanceledTemp[i] &&
-							this.countData < this.listCertificatesCanceledTemp.length &&
-							this.listCertificatesCanceled.push(
-								this.listCertificatesCanceledTemp[i]
-							) &&
-							this.listCertificateTemp.push(
-								this.listCertificatesCanceledTemp[i]
-							);
-						this.countData++;
-					}
-				}
-			} catch (e) {
-				this.isLoading = false;
-			}
-		},
-		async getDataWorkFlow(search = "") {
-			this.isLoading = true;
-			try {
-				const resp = await PreCertificate.getListKanbanPreCertificate(search);
-				if (resp.data) {
-					this.listCertificate = resp.data.HSTD;
-					this.listCertificateDraftTemp = resp.data.HSTD.filter(
-						item => item.status === 1
-					);
-					this.listCertificateOpenTemp = resp.data.HSTD.filter(
-						item => item.status === 2
-					);
-					this.listCertificateLockTemp = resp.data.HSTD.filter(
-						item => item.status === 3
-					);
-					this.listCertificatesCloseTemp = resp.data.HSTD.filter(
-						item => item.status === 4
-					);
-					this.listCertificatesCanceledTemp = resp.data.HSTD.filter(
-						item => item.status === 5
-					);
-					this.listCertificateDraft = [];
-					this.listCertificateOpen = [];
-					this.listCertificateLock = [];
-					this.listCertificatesClose = [];
-					this.listCertificatesCanceled = [];
-					this.listCertificateTemp = [];
-					let count = this.countData;
-					for (var i = count, j = count; i < j + 10; i++) {
-						this.listCertificateDraftTemp[i] &&
-							this.countData < this.listCertificateDraftTemp.length &&
-							this.listCertificateDraft.push(
-								this.listCertificateDraftTemp[i]
-							) &&
-							this.listCertificateTemp.push(this.listCertificateDraftTemp[i]);
-						this.listCertificateOpenTemp[i] &&
-							this.countData < this.listCertificateOpenTemp.length &&
-							this.listCertificateOpen.push(this.listCertificateOpenTemp[i]) &&
-							this.listCertificateTemp.push(this.listCertificateOpenTemp[i]);
-						this.listCertificateLockTemp[i] &&
-							this.countData < this.listCertificateLockTemp.length &&
-							this.listCertificateLock.push(this.listCertificateLockTemp[i]) &&
-							this.listCertificateTemp.push(this.listCertificateLockTemp[i]);
-						this.listCertificatesCloseTemp[i] &&
-							this.countData < this.listCertificatesCloseTemp.length &&
-							this.listCertificatesClose.push(
-								this.listCertificatesCloseTemp[i]
-							) &&
-							this.listCertificateTemp.push(this.listCertificatesCloseTemp[i]);
-						this.listCertificatesCanceledTemp[i] &&
-							this.countData < this.listCertificatesCanceledTemp.length &&
-							this.listCertificatesCanceled.push(
-								this.listCertificatesCanceledTemp[i]
-							) &&
-							this.listCertificateTemp.push(
-								this.listCertificatesCanceledTemp[i]
-							);
-						this.countData++;
-					}
-				}
-			} catch (e) {
-				this.isLoading = false;
-			}
-		},
+
 		async getDataWorkFlow2(search = "") {
 			this.isLoading = true;
 			try {
@@ -1099,11 +1028,14 @@ export default {
 			);
 		},
 		async getDetailCertificate(id) {
-			const res = await PreCertificate.getDetailPreCertificate(id);
-			if (res.data) {
-				this.detailData = await res.data;
+			// const res = await PreCertificate.getDetailPreCertificate(id);
+			const temp = await this.preCertificateStore.getPreCertificate(id);
+			console.log("temp", temp);
+			if (temp) {
+				this.detailData = await temp;
 				this.showDetailPopUp = true;
 				this.idDragger = id;
+				this.dataPC = this.detailData;
 			} else {
 				await this.$toast.open({
 					message: "Lấy dữ liệu thất bại",
@@ -1120,13 +1052,15 @@ export default {
 				this.config = config;
 				check = this.checkRequired(config.require, this.detailData);
 			}
-			// // console.log(check)
 			if (check) {
 				this.next_status = config.status;
 				this.next_sub_status = config.sub_status;
 				this.confirm_message = target.description;
-				this.isHandleAction = true;
+				if (this.next_status == 2) {
+					this.dialogVerifyToStage2 = true;
+				} else this.isHandleAction = true;
 			}
+			console.log("target", target, check, config, this.elementDragger);
 		},
 		handleFooterReject(status, subStatus, text) {
 			this.next_status = status;
@@ -1151,19 +1085,23 @@ export default {
 		this.changeHeight();
 	},
 	async mounted() {
-		if (!this.jsonConfig) {
-			if (this.lstData.workflow) {
-				this.jsonConfig = this.lstData.workflow;
-			} else {
-				this.jsonConfig = await this.preCertificateStore.getConfig();
-			}
-		}
-		console.log("jsonfig", this.jsonConfig);
-		if (this.jsonConfig && this.jsonConfig.principle) {
-			this.principleConfig = this.jsonConfig.principle.filter(
-				i => i.isActive === 1
-			);
-		}
+		// if (!this.jsonConfig) {
+		// 	if (this.lstData.workflow) {
+		// 		this.jsonConfig = this.lstData.workflow;
+		// 	} else {
+		// 		this.jsonConfig = await this.preCertificateStore.getConfig();
+		// 	}
+		// }
+		// console.log("jsonfig", this.jsonConfig);
+		// if (this.jsonConfig && this.jsonConfig.principle) {
+		// 	this.principleConfig = this.jsonConfig.principle.filter(
+		// 		i => i.isActive === 1
+		// 	);
+		// }
+		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
+		if (this.search_kanban) {
+			this.getDataWorkFlow2(this.search_kanban.search);
+		} else this.getDataWorkFlow2();
 		const listElm = document.querySelector("#infinite-list");
 		listElm.addEventListener("scroll", e => {
 			if (
@@ -1176,9 +1114,6 @@ export default {
 		});
 	},
 	beforeMount() {
-		if (this.search_kanban) {
-			this.getDataWorkFlow2(this.search_kanban.search);
-		} else this.getDataWorkFlow2();
 		this.getProfiles();
 	}
 };

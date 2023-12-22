@@ -1,9 +1,5 @@
 <template>
-	<div
-		v-if="dataPC.status === 1 || dataPC.status === 2"
-		class="col-12"
-		:style="isMobile ? { padding: '0' } : {}"
-	>
+	<div class="col-12" :style="isMobile ? { padding: '0' } : {}">
 		<ModalDelete
 			v-if="openModalDelete"
 			@cancel="openModalDelete = false"
@@ -15,26 +11,37 @@
 			:filePrint="filePrint"
 			title="Xem trước tập tin"
 		/>
-		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
+		<div
+			v-if="type === 'Appendix'"
+			class="card"
+			:style="isMobile ? { 'margin-bottom': '150px' } : {}"
+		>
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="row d-flex justify-content-between align-items-center">
-						<h3 class="title">{{ title }}</h3>
-						<label for="image_property" v-if="!from">
-							<font-awesome-icon
-								:style="{ color: 'orange', cursor: 'pointer' }"
-								icon="cloud-upload-alt"
-								size="2x"
-							/>
-						</label>
+						<h3 class="title">
+							{{ title }}
+							<label :for="'image_property' + type" v-if="!from" class="ml-2">
+								<font-awesome-icon
+									:style="{ color: 'orange', cursor: 'pointer' }"
+									icon="cloud-upload-alt"
+									size="1x"
+								/>
+							</label>
+						</h3>
+
 						<input
 							v-if="!from"
 							class="btn-upload "
 							type="file"
-							ref="file"
-							id="image_property"
+							:ref="'file' + type"
+							:id="'image_property' + type"
 							multiple
-							accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+							:accept="
+								type === 'Appendix'
+									? 'image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf'
+									: '.doc, .docx, .xlsx, .xls, application/pdf'
+							"
 							@change="onImageChange($event)"
 							style="display: none;"
 						/>
@@ -106,12 +113,101 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="card-body card-info" v-if="type === 'Result'">
+			<div class="row">
+				<InputCurrency
+					v-model="dataPC.total_preliminary_value"
+					vid="service_fee"
+					:max="99999999999999"
+					label="Tổng giá trị sơ bộ"
+					class="col-sm-6 col-md-6"
+					style="margin-left:-10px;"
+				/>
+			</div>
+			<div class="row ">
+				<div class="title" style="margin-left:-10px;">
+					File kèm kết quả sơ bộ
+					<label class="ml-2" for="image_property" v-if="!from">
+						<font-awesome-icon
+							:style="{ color: 'orange', cursor: 'pointer' }"
+							icon="cloud-upload-alt"
+							size="1x"
+						/>
+					</label>
+				</div>
+
+				<input
+					v-if="!from"
+					class="btn-upload "
+					type="file"
+					ref="file"
+					id="image_property"
+					multiple
+					:accept="
+						type === 'Appendix'
+							? 'image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf'
+							: '.doc, .docx, .xlsx, .xls, application/pdf'
+					"
+					@change="onImageChange($event)"
+					style="display: none;"
+				/>
+			</div>
+			<div
+				class="row input_download_certificate mb-2"
+				v-for="(file, index) in lstFile"
+			>
+				<div :key="index" class="d-flex align-items-center col">
+					<!-- <img
+								class="img_input_download"
+								src="@/assets/icons/ic_document.svg"
+								alt="document"
+							/> -->
+					<div class="title_input_content title_input_download cursor_pointer">
+						{{ file.name }}
+					</div>
+				</div>
+				<div class="d-flex align-items-center justify-content-end col-1 pr-3">
+					<div>
+						<img
+							src="@/assets/icons/ic_search_3.svg"
+							alt="search"
+							class="img_document_action mr-3"
+							@click="getPreviewUrl(file)"
+						/>
+					</div>
+					<div>
+						<img
+							v-if="file.isUpload === false && !from"
+							@click="deleteOtherFile(file, index)"
+							src="@/assets/icons/ic_delete_2.svg"
+							alt="tag_2"
+							class="img_document_action"
+						/>
+						<img
+							v-else-if="
+								!from &&
+									permission.allowDelete &&
+									(dataPC.status === 1 ||
+										dataPC.status === 2 ||
+										dataPC.status === 3)
+							"
+							@click="deleteOtherFile(file, index)"
+							src="@/assets/icons/ic_delete_2.svg"
+							alt="tag_2"
+							class="img_document_action"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import InputCurrency from "@/components/Form/InputCurrency";
 
 // import ModalViewDocument from "@/pages/certification_brief/component/modals/ModalViewDocument";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
@@ -131,10 +227,11 @@ export default {
 		}
 	},
 	components: {
+		InputCurrency,
 		ModalDelete,
 		ModalViewDocument
 	},
-	setup(props) {
+	setup(props, context) {
 		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -161,8 +258,12 @@ export default {
 			title.value = "Tài liệu đính kèm";
 			lstFile.value = preCertificateOtherDocuments.value.Appendix;
 		} else {
-			title.value = "File kèm kết quả sơ bộ";
+			title.value = "Kết quả sơ bộ";
 			lstFile.value = preCertificateOtherDocuments.value.Result;
+		}
+
+		if (lstFile.value.length > 0 && props.type === "Result") {
+			context.emit("action");
 		}
 		showCardDetailFile.value = lstFile.value.length > 0 ? true : false;
 		const downloadOtherFile = file => {
@@ -346,6 +447,7 @@ export default {
 	},
 	methods: {
 		async onImageChange(e) {
+			console.log("type", this.type);
 			const formData = new FormData();
 			let check = true;
 			let files = e.target.files;

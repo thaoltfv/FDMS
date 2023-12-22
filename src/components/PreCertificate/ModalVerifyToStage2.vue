@@ -19,6 +19,21 @@
 			<div class="card-body">
 				<p style="font-size: 18px" v-html="notification"></p>
 
+				<div>
+					<OtherFile
+						style="margin-left:-20px; margin-top:-30px;"
+						type="Result"
+					/>
+
+					<InputTextarea
+						rows="2"
+						:autosize="true"
+						:maxLength="1000"
+						v-model="dataPC.status_note"
+						label="Ghi chú"
+						class="form-group-container mb-3"
+					/>
+				</div>
 				<div class="btn__group">
 					<button
 						class="btn btn-white font-weight-normal font-weight-bold"
@@ -37,63 +52,76 @@
 </template>
 
 <script>
+import OtherFile from "./OtherFile.vue";
+import InputTextarea from "@/components/Form/InputTextarea";
+import InputCurrency from "@/components/Form/InputTextarea";
+
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 export default {
 	name: "ModalVerifyToStage2",
-
+	components: {
+		OtherFile,
+		InputTextarea,
+		InputCurrency
+	},
 	props: ["notification"],
+	computed: {
+		optionsReasons() {
+			return {
+				data: this.reasons,
+				id: "id",
+				key: "description"
+			};
+		}
+	},
 	methods: {
 		handleAction(event) {
 			this.$emit("action", event);
 		}
 	},
-	setup(context) {
+	setup() {
+		const checkMobile = () => {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
 		const { dataPC, other, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
 		const verifyToStage2Function = async () => {
-			if (
-				dataPC.value.status === 1 &&
-				dataPC.value.total_preliminary_value > 0 &&
-				preCertificateOtherDocuments.value.result.length > 0
-			) {
-				other.value.isSubmit = true;
-				const res = await preCertificateStore.updateToStage2();
-				if (res) {
-					other.value.$toast.open({
-						message: `Chuyển tiếp thành công`,
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
-					context.emit("action");
-				} else {
-					other.value.$toast.open({
-						message: `Vui lòng kiểm tra lại thông tin`,
-						type: "error",
-						position: "top-right",
-						duration: 3000
-					});
-					other.value.isSubmit = false;
-				}
+			if (preCertificateOtherDocuments.value.Result.length > 0) {
 			} else {
-				other.value.$toast.open({
-					message: `Vui lòng kiểm tra lại thông tin`,
+				await other.value.toast.open({
+					message: "Vui lòng bổ sung file kết quả sơ bộ",
 					type: "error",
 					position: "top-right",
 					duration: 3000
 				});
+				return;
 			}
+			if (dataPC.value.total_preliminary_value > 0) {
+			} else {
+				await other.value.toast.open({
+					message: "Vui lòng bổ sung Tổng giá trị sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+			await preCertificateStore.updateToStage2();
 		};
-		return {
-			dialogVerifyToStage2,
-			isMobile,
-			jsonConfig,
-			verifyToStage2Function
-		};
+		return { dataPC, isMobile, verifyToStage2Function };
 	}
 };
 </script>

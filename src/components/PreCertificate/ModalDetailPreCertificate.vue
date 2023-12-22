@@ -29,33 +29,42 @@
 					<div class="detail_certificate_1 col-12 mb-2">
 						<div class="col-12 d-flex mb-2 justify-content-between">
 							<span class="content_id content_id_primary class_p">{{
-								`HSTĐSB ${form.id}`
+								`HSTĐSB ${dataPC.id}`
 							}}</span>
 						</div>
 						<div class="d-flex container_content justify-content-between">
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Khách hàng:</strong>
-								<p>{{ form.petitioner_name }}</p>
+								<p>{{ dataPC.petitioner_name }}</p>
 							</div>
 						</div>
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Địa chỉ:</strong>
-							<p>{{ form.petitioner_address }}</p>
+							<p>{{ dataPC.petitioner_address }}</p>
 						</div>
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline"
 								>MST/CMND/CCCD/Passport:</strong
 							>
-							<p>{{ form.petitioner_identity_card }}</p>
+							<p>{{ dataPC.petitioner_identity_card }}</p>
 						</div>
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Điện thoại:</strong>
-							<p>{{ form.petitioner_phone }}</p>
+							<p>{{ dataPC.petitioner_phone }}</p>
 						</div>
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Mục đích thẩm định:</strong>
 							<p>
-								{{ form.appraise_purpose ? form.appraise_purpose.name : "" }}
+								{{
+									dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
+								}}
+							</p>
+						</div>
+
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Loại sơ bộ:</strong>
+							<p>
+								{{ dataPC.pre_type_string ? dataPC.pre_type_string : "" }}
 							</p>
 						</div>
 
@@ -63,8 +72,8 @@
 							<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
 							<p>
 								{{
-									form.total_preliminary_value
-										? formatNumber(form.total_preliminary_value)
+									dataPC.total_preliminary_value
+										? formatNumber(dataPC.total_preliminary_value)
 										: 0
 								}}đ
 							</p>
@@ -73,23 +82,23 @@
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Ghi chú:</strong
 							><span id="note" class="text-left">{{
-								form.note && form.note.length > 25
-									? form.note.substring(25, 0) + "..."
-									: form.note
+								dataPC.note && dataPC.note.length > 25
+									? dataPC.note.substring(25, 0) + "..."
+									: dataPC.note
 							}}</span>
 							<b-tooltip target="note" placement="top-right">{{
-								form.note
+								dataPC.note
 							}}</b-tooltip>
 						</div>
-						<div v-if="form.cancel_reason" class="d-flex container_content">
+						<div v-if="dataPC.cancel_reason" class="d-flex container_content">
 							<strong class="margin_content_inline">Lý do hủy sơ bộ:</strong
 							><span id="note" class="text-left">{{
-								form.cancel_reason && form.cancel_reason.length > 25
-									? form.cancel_reason.substring(25, 0) + "..."
-									: form.nocancel_reasonte
+								dataPC.cancel_reason && dataPC.cancel_reason.length > 25
+									? dataPC.cancel_reason.substring(25, 0) + "..."
+									: dataPC.nocancel_reasonte
 							}}</span>
 							<b-tooltip target="note" placement="top-right">{{
-								form.cancel_reason
+								dataPC.cancel_reason
 							}}</b-tooltip>
 						</div>
 					</div>
@@ -97,15 +106,15 @@
 						<div class="detail_certificate_2">
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Đối tác:</strong>
-								<p>{{ form.customer ? form.customer.name : "" }}</p>
+								<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
 							</div>
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Địa chỉ:</strong>
-								<p>{{ form.customer ? form.customer.address : "" }}</p>
+								<p>{{ dataPC.customer ? dataPC.customer.address : "" }}</p>
 							</div>
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Liên hệ:</strong>
-								<p>{{ form.customer ? form.customer.phone : "" }}</p>
+								<p>{{ dataPC.customer ? dataPC.customer.phone : "" }}</p>
 							</div>
 						</div>
 					</div>
@@ -117,7 +126,9 @@
 										>Nhân viên kinh doanh:</strong
 									>
 									<p>
-										{{ form.appraiser_sale ? form.appraiser_sale.name : "" }}
+										{{
+											dataPC.appraiser_sale ? dataPC.appraiser_sale.name : ""
+										}}
 									</p>
 								</div>
 							</div>
@@ -127,7 +138,9 @@
 								>
 								<p>
 									{{
-										form.appraiser_perform ? form.appraiser_perform.name : ""
+										dataPC.appraiser_perform
+											? dataPC.appraiser_perform.name
+											: ""
 									}}
 								</p>
 							</div>
@@ -137,8 +150,8 @@
 								>
 								<p>
 									{{
-										form.appraiser_business_manager
-											? form.appraiser_business_manager.name
+										dataPC.appraiser_business_manager
+											? dataPC.appraiser_business_manager.name
 											: ""
 									}}
 								</p>
@@ -399,7 +412,7 @@ export default {
 		"b-button-group": BButtonGroup,
 		"b-dropdown": BDropdown
 	},
-	setup() {
+	setup(props) {
 		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -414,8 +427,8 @@ export default {
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
 		const dialogVerifyToStage2 = ref(false);
-		const { jsonConfig } = storeToRefs(preCertificateStore);
-		return { dialogVerifyToStage2, isMobile, jsonConfig };
+		const { jsonConfig, dataPC } = storeToRefs(preCertificateStore);
+		return { dataPC, dialogVerifyToStage2, isMobile, jsonConfig };
 	},
 	computed: {
 		optionsAppraisalPurposes() {
@@ -440,19 +453,12 @@ export default {
 			return data;
 		},
 		handleUpdateStatus(id) {
+			console.log("here");
 			if (
-				this.form.status === 1 &&
-				(this.user_id === this.form.appraiser_sale.user_id ||
-					this.$store.getters.profile.data.user.id === this.form.created_by)
+				this.dataPC.status === 2 &&
+				this.user_id === this.dataPC.appraiser_perform.user_id
 			) {
-				this.showAppraisalDialog = true;
-			} else if (
-				this.form.status === 2 &&
-				this.user_id === this.form.appraiser_perform.user_id
-			) {
-				this.showVerifyCertificate = true;
-			} else if (this.form.status === 3 && this.appraiser_number) {
-				this.showAcceptCertificate = true;
+				this.dialogVerifyToStage2 = true;
 			}
 		},
 		handleCancelAppraisal() {
@@ -511,11 +517,11 @@ export default {
 		},
 		async handleChangeAccept() {
 			let dataSend = {
-				appraiser_confirm_id: this.form.appraiser_confirm_id,
-				appraiser_id: this.form.appraiser_id,
-				appraiser_manager_id: this.form.appraiser_manager_id,
-				appraiser_control_id: this.form.appraiser_control_id,
-				appraiser_perform_id: this.form.appraiser_perform_id,
+				appraiser_confirm_id: this.dataPC.appraiser_confirm_id,
+				appraiser_id: this.dataPC.appraiser_id,
+				appraiser_manager_id: this.dataPC.appraiser_manager_id,
+				appraiser_control_id: this.dataPC.appraiser_control_id,
+				appraiser_perform_id: this.dataPC.appraiser_perform_id,
 				status: this.targetConfig.status,
 				sub_status: this.targetConfig.sub_status,
 				check_price: this.targetConfig.require.check_price,
@@ -572,7 +578,7 @@ export default {
 		},
 		configStatus() {
 			this.user = this.profile.data.user;
-			let configData = this.loadConfigByStatus(this.form.status);
+			let configData = this.loadConfigByStatus(this.dataPC.status);
 			if (configData) {
 				this.loadConfigData(configData);
 				this.isPermission = this.checkPermission(configData);
