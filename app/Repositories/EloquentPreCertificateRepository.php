@@ -1274,10 +1274,18 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $page = request()->get('page');
         $limit = request()->get('limit');
         
-        $dataJson = request()->get('data');
-        $dataTemp = json_decode($dataJson);
-        $dataFilter = $dataTemp->data;
-        $typeFilter = $dataTemp->type;
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            $dataFilter = $dataTemp->data;
+            $typeFilter = $dataTemp->type;
+        } else {
+            $dataJson = null;
+            $dataTemp = null;
+            $dataFilter = null;
+            $typeFilter = null;
+        }
+
         $status = request()->get('status');
         if (!empty($query)) {
             $query = json_decode($query);
