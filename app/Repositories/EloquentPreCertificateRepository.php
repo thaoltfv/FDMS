@@ -1787,6 +1787,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     public function updateStatus_v2($id, $request)
     {
         return DB::transaction(function () use ($id, $request) {
+                $count = 1;
             try {
                 $result = [];
                 // # đang tắt khối block xác thực
@@ -1795,21 +1796,32 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 //     return $check;
                 // }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
+                $count = 2;
                 $currentStatus = $preCertificate->status;
-                $current = intval($currentStatus );
+                $count = 3;
+                $current = intval($currentStatus);
+                $count = 4;
                 $currentConfig = current(array_filter($request['status_config'], function ($val) use ($currentStatus) {
                     return $val['status'] == $currentStatus;
                 }));
+                $count = 5;
                 $status = $request['status'];
+                $count = 6;
                 $next = intval($status);
+                $count = 7;
                 $nextConfig = current(array_filter($request['status_config'], function ($val) use ($status) {
                     return $val['status'] == $status;
                 }));
+                $count = 8;
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
+                $count = 9;
                 $total_preliminary_value = isset($request['total_preliminary_value']) ? $request['total_preliminary_value'] : null;
+                $count = 10;
 
                 if (isset($status)) {
+                $count = 11;
                     if (isset($total_preliminary_value)) {
+                $count = 12;
                         $result = $this->model->query()
                             ->where('id', '=', $id)
                             ->update([
@@ -1819,6 +1831,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 'total_preliminary_value' => $total_preliminary_value,
                             ]);
                     } else {
+                $count = 13;
                         $result = $this->model->query()
                             ->where('id', '=', $id)
                             ->update([
@@ -1828,33 +1841,47 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             ]);
                     }
                     
+                $count = 14;
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
+                $count = 15;
                     if ($current > $next) {
+                $count = 16;
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
+                $count = 17;
                         $logDescription = 'từ chối ' .  $description;
+                $count = 18;
                     }
                     else {
+                $count = 19;
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
+                $count = 20;
                         $logDescription = 'cập nhật trạng thái '. $description;
                     }
+                $count = 21;
                     $logName = 'update_status';
+                $count = 22;
                     // activity-log Update status
                     $note = $request['status_note'] ?? '';
+                $count = 23;
                     $reason_id = $request['status_reason_id'] ?? null;
+                $count = 24;
                     $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
+                $count = 25;
 
                     $this->notifyChangeStatus($id, $status);
+                $count = 26;
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
+                $count = 27;
 
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
-                throw $exception;
+                throw $count;
             }
         });
     }
