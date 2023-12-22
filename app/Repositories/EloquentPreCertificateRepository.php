@@ -1782,10 +1782,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             try {
                 $result = [];
                 // # đang tắt khối block xác thực
-                $check = $this->beforeUpdateStatus($id);
-                if (isset($check)) {
-                    return $check;
-                }
+                // $check = $this->beforeUpdateStatus($id);
+                // if (isset($check)) {
+                //     return $check;
+                // }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
                 $currentStatus = $preCertificate->status;
                 $current = intval($currentStatus );
@@ -3055,11 +3055,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
                 }
-                if ($isCheckTotalPreliminaryValue) {
-                    if (empty($data->total_preliminary_value)) {
-                        return ['message' => 'Chưa có tổng giá trị sơ bộ.' , 'exception' => ''];
-                    }
-                }
             }
             //Check role and permision
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
@@ -3090,7 +3085,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
             }
         } else {
-            $result = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS, 'exception' => ''];
+            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
         }
         return $result;
     }
