@@ -217,7 +217,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         });
     }
-
+    
     /**
      * @return bool
      */
@@ -1273,7 +1273,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $query = request()->get('query');
         $page = request()->get('page');
         $limit = request()->get('limit');
-
+        
+        $dataJson = request()->get('data');
+        $dataTemp = json_decode($dataJson);
+        $dataFilter = $dataTemp->data;
+        $typeFilter = $dataTemp->type;
+        $status = request()->get('status');
         if (!empty($query)) {
             $query = json_decode($query);
         } else {
@@ -1425,7 +1430,42 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
+        if (isset($dataFilter) && !empty($dataFilter)) {
+            switch ($typeFilter) {
+                case 'date':
+                    if (isset($dataFilter) && count($dataFilter) == 2) {
+                        $startDate = date('Y-m-d', strtotime($dataFilter[0]));
+                        $endDate = date('Y-m-d', strtotime($dataFilter[1]));
+                        $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                                        ->whereBetween('updated_at', [$startDate, $endDate]);
+                    } else if(isset($dataFilter) && count($dataFilter) == 1){
+                        $result = $result->where(function ($query) use ($dataFilter) {
+                            $query->whereDate('created_at', '=', date('Y-m-d', strtotime($dataFilter[0])))
+                                ->orwhereDate('updated_at', '=', date('Y-m-d', strtotime($dataFilter[0])));
+                                // where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
+                        });
+                    }
+                    break;
+                case 'status':
+                    $result = $result->whereIn('status', $dataFilter);
+                    break;
+                case 'officially':
+                    if ($dataFilter === 1) {
+                        $result = $result->whereNotNull('certificate_id');
+                    } else {
+                        $result = $result->whereNull('certificate_id');
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        // dd($result);
 
+        if (!empty($status)) {
+            $result = $result->whereIn('status', $status);
+        }
+        
         $result = $result->orderByDesc('pre_certificates.updated_at');
         $result= $result->get();
      
@@ -1742,10 +1782,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             try {
                 $result = [];
                 // # đang tắt khối block xác thực
-                $check = $this->beforeUpdateStatus($id);
-                if (isset($check)) {
-                    return $check;
-                }
+                // $check = $this->beforeUpdateStatus($id);
+                // if (isset($check)) {
+                //     return $check;
+                // }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
                 $currentStatus = $preCertificate->status;
                 $current = intval($currentStatus );
@@ -1758,23 +1798,28 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     return $val['status'] == $status;
                 }));
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
+                $total_preliminary_value = isset($request['total_preliminary_value']) ? $request['total_preliminary_value'] : null;
 
                 if (isset($status)) {
-                    // switch($status)  {
-                    //     case 1: //Move to first step in workflow -> remove all asset in preCertificate
-                    //         // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
-                    //         $this->removeAssetInCertificate($id);
-                    //         break;
-                    //     default:
-                    //         $this->updateAppraiseStatus($id, $status);
-                    // }
-                    $result = $this->model->query()
-                        ->where('id', '=', $id)
-                        ->update([
-                            'status' => $status,
-                            'status_updated_at' => date('Y-m-d H:i:s'),
-                            'status_expired_at' => $status_expired_at,
-                        ]);
+                    if (isset($total_preliminary_value)) {
+                        $result = $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update([
+                                'status' => $status,
+                                'status_updated_at' => date('Y-m-d H:i:s'),
+                                'status_expired_at' => $status_expired_at,
+                                'total_preliminary_value' => $total_preliminary_value,
+                            ]);
+                    } else {
+                        $result = $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update([
+                                'status' => $status,
+                                'status_updated_at' => date('Y-m-d H:i:s'),
+                                'status_expired_at' => $status_expired_at,
+                            ]);
+                    }
+                    
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
@@ -1805,7 +1850,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         });
     }
-
+    
     private function sqlRealEstate($realEstateIds, $assetTypeIds, $where , $perPage, $page = 1)
     {
         $select = [
@@ -3010,11 +3055,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
                 }
-                if ($isCheckTotalPreliminaryValue) {
-                    if (empty($data->total_preliminary_value)) {
-                        return ['message' => 'Chưa có tổng giá trị sơ bộ.' , 'exception' => ''];
-                    }
-                }
             }
             //Check role and permision
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
@@ -3045,7 +3085,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
             }
         } else {
-            $result = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS, 'exception' => ''];
+            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
         }
         return $result;
     }
@@ -3382,10 +3422,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $statusText = 'Thương thảo';
                     break;
                 case 5:
-                    $statusText = 'Đã hủy';
+                    $statusText = 'Hoàn thành';
                     break;
                 case 6:
-                    $statusText = 'Hoàn thành';
+                    $statusText = 'Đã hủy';
                     break;
                 default:
                     $statusText = 'Yêu cầu sơ bộ';
