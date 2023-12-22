@@ -153,7 +153,7 @@
                       label="Diện tích xây dựng"
                       :max="99999999"
                       :decimal="2"
-                      
+
                       @change="changeArea($event)"
                   />
                 </div>

@@ -122,7 +122,7 @@
                     v-model="form.start_using_year"
                     vid="start_using_year"
                     label="Năm sử dụng"
-                    
+
                     :options="optionYearBuild"
                   />
                 </div>
@@ -155,7 +155,7 @@
 										:key="keyRender"
                     label="Diện tích xây dựng"
 										:decimal="2"
-										
+
                     @change="changeArea($event)"
 									/>
                 </div>
