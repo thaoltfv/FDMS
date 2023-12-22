@@ -1798,15 +1798,28 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     return $val['status'] == $status;
                 }));
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
+                $total_preliminary_value = isset($request['total_preliminary_value']) ? $request['total_preliminary_value'] : null;
 
                 if (isset($status)) {
-                    $result = $this->model->query()
-                        ->where('id', '=', $id)
-                        ->update([
-                            'status' => $status,
-                            'status_updated_at' => date('Y-m-d H:i:s'),
-                            'status_expired_at' => $status_expired_at,
-                        ]);
+                    if (isset($total_preliminary_value)) {
+                        $result = $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update([
+                                'status' => $status,
+                                'status_updated_at' => date('Y-m-d H:i:s'),
+                                'status_expired_at' => $status_expired_at,
+                                'total_preliminary_value' => $total_preliminary_value,
+                            ]);
+                    } else {
+                        $result = $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update([
+                                'status' => $status,
+                                'status_updated_at' => date('Y-m-d H:i:s'),
+                                'status_expired_at' => $status_expired_at,
+                            ]);
+                    }
+                    
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
@@ -1837,7 +1850,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         });
     }
-
+    
     private function sqlRealEstate($realEstateIds, $assetTypeIds, $where , $perPage, $page = 1)
     {
         $select = [
