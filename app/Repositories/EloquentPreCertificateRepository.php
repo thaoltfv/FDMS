@@ -1818,9 +1818,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
                         $logDescription = 'cập nhật trạng thái '. $description;
-                        if($current == 1 && $next==2) {
-                            $this->otherDocumentUpload($id, 'Result', $request);
-                        }
                     }
                     $logName = 'update_status';
                     // activity-log Update status
