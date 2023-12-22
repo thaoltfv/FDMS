@@ -1881,7 +1881,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
-                throw $count;
+                throw new Exception('An error occurred at count: ' . $count);
             }
         });
     }
