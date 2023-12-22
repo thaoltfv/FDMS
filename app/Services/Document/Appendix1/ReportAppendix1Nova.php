@@ -249,7 +249,11 @@ class ReportAppendix1Nova extends ReportAppendix1
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, $this->cellVCentered)->addText('1', ['bold' => false], $this->cellHCentered);
-        $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sử dụng đất', $this->styleBold, $this->cellHCentered);
+        if ($this->isApartment) {
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sở hữu căn hộ', $this->styleBold, $this->cellHCentered);
+        } else {
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sử dụng đất', $this->styleBold, $this->cellHCentered);
+        }
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('-', $this->styleBold, $this->cellHCentered);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset1']['avg_price'], $this->countDecimals($this->assetPrice['asset1']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset2']['avg_price'], $this->countDecimals($this->assetPrice['asset2']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
