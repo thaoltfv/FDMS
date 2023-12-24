@@ -54,7 +54,7 @@ class EloquentPersonalPropertiesRepository extends EloquentRepository implements
 
         $user = CommonService::getUser();
         $role = $user->roles->last();
-        if(($role->name == 'USER')){
+        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
             $result= $result->where('created_by', $user->id);
         }
         if(isset($status)){

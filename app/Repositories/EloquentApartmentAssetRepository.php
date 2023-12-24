@@ -282,6 +282,11 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                             continue;
                         }
                     }
+                    // add thêm để dự phòng trường hợp không qua được điều kiện trên
+                    if(ApartmentAssetHasAsset::where('apartment_asset_id',$id)->where('asset_general_id',$assetId)->exists()){
+                        $this->postComparisonFactor($dictionaries, $apartmentData->toArray() , $comparisons , $asset , $id, $assetId,$oldAssetGeneralId) ;
+                        continue;
+                    }
                     createNewAsset:
                     //create appraise has asset
                     $version = $asset['version'];
@@ -365,14 +370,22 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $otherComparisons = $objects['other_comparison'];
             $deleteComparisons = $objects['delete_other_comparison'];
             $roundTotal = $objects['round_total'];
+            if (isset($objects['apartment_asset_price'])){
+                $apartment_asset_price = $objects['apartment_asset_price'];
+            }
+            
             $adapters = $objects['apartment_adapter'];
             if (isset($roundTotal)){
                 $slug = 'round_total';
                 $this->updateOrCreatePrice($id, $slug, $roundTotal);
             }
+            if (isset($apartment_asset_price)){
+                $slug = 'apartment_asset_price';
+                $this->updateOrCreatePrice($id, $slug, $apartment_asset_price);
+            }
             if (isset($adapters)){
                 foreach ($adapters as $adapter){
-                    ApartmentAssetAdapter::query()->where('id', $adapter['id'])->update(['percent' => $adapter['percent']]);
+                    ApartmentAssetAdapter::query()->where('id', $adapter['id'])->update(['percent' => $adapter['percent'],'change_negotiated_price' => $adapter['change_negotiated_price']]);
                 }
             }
             if (isset($comparisons)){
@@ -436,9 +449,10 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     private function postComparisonFactor(array $dictionaries, array $apartment ,array $comparison, array $asset , int $id,int $assetGeneralId, int  $oldAssetGeneralId = null  )
     {
         $allComparisonFactor = [
-            'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc'
+            'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc', 'loai_can_ho'
         ];
         // dd($apartment['apartment_asset_properties']);
+        // dd($comparison,$allComparisonFactor,$oldAssetGeneralId);
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
                 if(in_array($comparisonFactorTmp, $comparison)) {
@@ -454,10 +468,10 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 }
                 continue;
             }
-
+            // dd('làm nè');
             if($comparisonFactorTmp == 'phap_ly'){
-                $apartmentValue = $apartment['apartment_asset_properties']['legal']['description']??'Không biết';
-                $assetValue = $asset['room_details'][0]['legal']['description']??'Không biết';
+                $apartmentValue = $apartment['apartment_asset_properties']['legal']['description']??'-';
+                $assetValue = $asset['room_details'][0]['legal']['description']??'-';
                 ////phap ly always true
                 $status = true;
                 // $dictionary = $dictionaries['phap_ly'];
@@ -465,49 +479,65 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $name = 'Pháp lý';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'loai_can'){
-                $apartmentValue = $apartment['apartment_asset_properties']['block']['rank']['description'] ?? 'Không biết';
-                $assetValue = $asset['apartment_specification']['rank']['description'] ?? 'Không biết';
-                ////phap ly always true
-                $status = true;
-                // $dictionary = $dictionaries['loai_can'];
+                $apartmentValue = $apartment['apartment_asset_properties']['block']['rank']['description'] ?? '-';
+                $assetValue = $asset['apartment_specification']['rank']['description'] ?? '-';
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
                 $type = 'loai_can';
-                $name = 'Loại căn hộ';
+                $name = 'Loại chung cư';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'so_phong_ngu'){
                 $apartmentValue = $apartment['apartment_asset_properties']['bedroom_num'] ?? 0;
                 $assetValue = $asset['room_details'][0]['bedroom_num'] ?? 0;
-                ////phap ly always true
-                $status = true;
-                // $dictionary = $dictionaries['loai_can'];
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
                 $type = 'so_phong_ngu';
                 $name = 'Số phòng ngủ';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'dien_tich'){
                 $apartmentValue = $apartment['apartment_asset_properties']['area'] ?? 0;
                 $assetValue = $asset['room_details'][0]['area'] ?? 0;
-                ////phap ly always true
-                $status = true;
-                // $dictionary = $dictionaries['loai_can'];
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
                 $type = 'dien_tich';
                 $name = 'Diện tích';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'tang'){
-                $apartmentValue = $apartment['apartment_asset_properties']['floor']['name'] ?? 'Không biết';
-                $assetValue = $asset['floor']['name'] ?? 'Không biết';
-                ////phap ly always true
-                $status = true;
-                // $dictionary = $dictionaries['loai_can'];
+                $apartmentValue = $apartment['apartment_asset_properties']['floor']['name'] ?? '-';
+                $assetValue = $asset['floor']['name'] ?? '-';
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
                 $type = 'tang';
                 $name = 'Tầng';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }elseif($comparisonFactorTmp == 'so_phong_wc'){
                 $apartmentValue = $apartment['apartment_asset_properties']['wc_num'] ?? 0;
                 $assetValue = $asset['room_details'][0]['wc_num'] ?? 0;
-                ////phap ly always true
-                $status = true;
-                // $dictionary = $dictionaries['loai_can'];
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
                 $type = 'so_phong_wc';
                 $name = 'Số phòng vệ sinh';
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
+            }elseif($comparisonFactorTmp == 'loai_can_ho'){
+                $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'-';
+                $assetValue = $asset['room_details'][0]['loaicanho']['description']??'-';
+                // dd($apartment['apartment_asset_properties']);
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
+                $type = 'loai_can_ho';
+                $name = 'Loại căn hộ';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
             }
         }
@@ -654,32 +684,34 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $data[$asset->id]['not_legal_rate'] = $notLegalRate;
                 $data[$asset->id]['price'] = $price;
             }
-            $apartmentPrice = 0;
-            if(isset($methods)){
-                $method = $methods['thong_nhat_muc_gia_chi_dan']??null;
-                if(isset($method)){
-                    switch($method['slug_value']){
-                        case 'thap-nhat':
-                            $apartmentPrice = $min;
-                            break;
-                        case 'cao-nhat':
-                            $apartmentPrice = $max;
-                            break;
-                        default:
-                            $apartmentPrice = $total/3;
-                    }
-                    $slug = 'apartment_asset_price';
-                    $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
-                }
-            }
+            // $apartmentPrice = 0;
+            // if(isset($methods)){
+            //     $method = $methods['thong_nhat_muc_gia_chi_dan']??null;
+            //     if(isset($method)){
+            //         switch($method['slug_value']){
+            //             case 'thap-nhat':
+            //                 $apartmentPrice = $min;
+            //                 break;
+            //             case 'cao-nhat':
+            //                 $apartmentPrice = $max;
+            //                 break;
+            //             default:
+            //                 $apartmentPrice = $total/3;
+            //         }
+            //         $slug = 'apartment_asset_price';
+            //         $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
+            //     }
+            // }
             $slug = 'apartment_area';
             $this->updateOrCreatePrice($id, $slug, $apartmentArea??0);
             //total
             $roundTotal = 0;
             $otherPrice = 0;
+            $apartmentPrice  =  0;
             if(isset($assetPrice)){
                 $priceRound = $assetPrice->where('slug', 'round_total')->first();
                 $roundTotal = $priceRound->value??0;
+                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first()->value??0;
             }
             if(isset($otherAssets)){
                 $otherPrice = $otherAssets->sum('total_price');
@@ -757,7 +789,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if ($role->name == 'USER') {
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
                 $result = $result->where('created_by', $userId);
             }
             $result = $result->first();
@@ -782,6 +814,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             'apartmentAssetProperties.furnitureQuality:id,description',
             'apartmentAssetProperties.legal:id,description',
             'apartmentAssetProperties.direction:id,description',
+            'apartmentAssetProperties.loaicanho:id,description',
             'assetType:id,description,acronym',
             'project',
             'province:id,name',

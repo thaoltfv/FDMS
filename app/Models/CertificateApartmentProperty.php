@@ -23,6 +23,7 @@ class CertificateApartmentProperty extends Model
         'legal_id' => 'integer',
         'furniture_quality_id' => 'integer',
         'utilities' => 'array',
+        'loai_can_ho_id' => 'integer',
     ];
     protected $fillable =[
         'apartment_asset_id',
@@ -39,7 +40,8 @@ class CertificateApartmentProperty extends Model
         'utilities',
         'handover_year',
         'apartment_name',
-        'full_name'
+        'full_name',
+        'loai_can_ho_id'
     ];
 
     protected $hidden =[
@@ -76,6 +78,11 @@ class CertificateApartmentProperty extends Model
     public function furnitureQuality():BelongsTo
     {
         return $this->belongsTo(Dictionary::class, 'furniture_quality_id','id');
+    }
+
+    public function loaicanho():BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'loai_can_ho_id','id');
     }
     public function apartmentAsset():BelongsTo
     {

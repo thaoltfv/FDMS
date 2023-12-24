@@ -164,7 +164,8 @@ class Report implements ReportInterface
             $this->certificateNumberPrefix = $documentConfig->where('slug', 'certificatte_number_prefix')->first()->value ?: '';
             $this->documentNumberSuffix = $documentConfig->where('slug', 'document_number_suffix')->first()->value ?: '';
             $this->documentNumberPrefix = $documentConfig->where('slug', 'document_number_prefix')->first()->value ?: '';
-            $this->contractCodeSuffix = $documentConfig->where('slug', 'contract_code_suffix')->first()->value ?: '';
+            // $this->contractCodeSuffix = $documentConfig->where('slug', 'contract_code_suffix')->first()->value ?: '';
+            $this->contractCodeSuffix =  '';
             $this->contractCodePrefix = $documentConfig->where('slug', 'contract_code_prefix')->first()->value ?: '';
             $this->documentWatermask = $documentConfig->where('slug', 'print_watermask')->first()->value ?: '';
 

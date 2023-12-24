@@ -16,6 +16,8 @@ class ReportAppendix2 extends Report
     protected $realEstates = [];
     protected $isTangibleAsset = false;
     protected $total = [];
+
+    protected $data_tong = [];
     #footer, reportname, path
     public function getFooterString($data)
     {
@@ -50,6 +52,7 @@ class ReportAppendix2 extends Report
     protected function setProperties($data)
     {
         $this->isOnlyAsset = (!is_countable($data->realEstate) || count($data->realEstate) == 1);
+        $this->data_tong = $data;
         $this->realEstates = $data->realEstate;
         $this->isTangibleAsset = in_array('DCN', $data->document_type);
         $this->styleTable = [

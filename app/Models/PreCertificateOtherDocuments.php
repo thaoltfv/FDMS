@@ -11,26 +11,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Province
  * @package App\Models
  */
-class CertificateAssetComparisonFactor extends Model
+class PreCertificateOtherDocuments extends Model
 {
-    protected $table = 'certificate_asset_comparison_factor';
     use SoftDeletes;
-
+    protected $table = 'pre_certificate_other_documents';
     protected $casts = [
         'id' => 'integer',
     ];
 
     protected $fillable = [
-        'appraise_id',
-        'asset_general_id',
-        'status',
-        'type',
-        'appraise_title',
-        'asset_title',
-        'description',
-        'adjust_percent',
+        'pre_certificate_id',
         'name',
-        'position',
-        'adjust_coefficient'
+        'link',
+        'type',
+        'size',
+        'description',
+        'created_by',
+        'type_document'
     ];
+	
+	public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }

@@ -55,7 +55,60 @@ class ReportAppendix1Nova extends ReportAppendix1
         $address = $item->full_address;
         return $address;
     }
+
+    protected function collectInfoLoaiCanHo($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            (isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->loaicanho) && isset($asset->apartmentAssetProperties->loaicanho->description)) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->loaicanho->description) : '-',
+            (isset($this->asset1->room_details[0]) && isset($this->asset1->room_details[0]->loaicanho) && isset($this->asset1->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset1->room_details[0]->loaicanho->description) : '-',
+            (isset($this->asset2->room_details[0]) && isset($this->asset2->room_details[0]->loaicanho) && isset($this->asset2->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset2->room_details[0]->loaicanho->description) : '-',
+            (isset($this->asset3->room_details[0]) && isset($this->asset3->room_details[0]->loaicanho) && isset($this->asset3->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset3->room_details[0]->loaicanho->description) : '-',
+            false
+        ];
+        return $data;
+    }
     
+    protected function collectInfomationApartmentData($asset)
+    {
+        $data = [];
+        $stt = 1;
+        $data[] = $this->collectInfoSource($stt++, 'Nguồn tin thu thập', $asset);
+        $data[] = $this->collectInfoSourceByApartment('', 'Hình thức thu thập', $asset);
+        $data[] = $this->collectInfoSourceNoteApartment('', 'Ghi chú', $asset);
+        $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
+        $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
+        $data[] = $this->collectInfoExploreTime('', 'Thời điểm khảo sát', $asset);
+        $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
+        $data[] = $this->collectInfoProjectName($stt++, 'Chung cư', $asset);
+        $data[] = $this->collectInfoRank($stt++, 'Loại chung cư', $asset);
+        $data[] = $this->collectInfoAddress($stt++, 'Vị trí', $asset);
+        $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
+        $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
+        $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
+        $data[] = $this->collectInfoLoaiCanHo($stt++, 'Loại căn hộ', $asset);
+        $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
+        $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
+        $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
+        $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
+        $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
+        // yếu tố khác
+        $others = $this->collectInfoOtherFactor($asset);
+        foreach ($others as $other) {
+            $other[0] = $stt++;
+            $data[] = $other;
+        }
+        // giá trị tài sản
+        $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
+        $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
+        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
+        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
+
+        return $data;
+    }
     protected function collectInfomationAppraiseData($asset)
     {
         $data = [];
@@ -66,7 +119,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoExploreTime('', 'Thời điểm khảo sát', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
-        $data[] = $this->collectInfoAddressAppraise($stt++, 'Vị trí thửa đất', $asset);
+        $data[] = $this->collectInfoAddressAppraise($stt++, 'Địa chỉ thửa đất', $asset);
         $data[] = $this->collectInfoDistanceAppraise('', 'Khoảng cách TSSS đến TSTĐ', $asset);
         $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
         $data[] = $this->collectInfoAreaAppraise($stt, "Tổng diện tích ($this->m2)", $asset);
@@ -107,6 +160,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         // // giá trị tài sản
         $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
         $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
         $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
         $data[] = $this->collectInfoAppraiseViolatePrice($stt++, 'Giá trị phần diện tích vi phạm QH (đ)', $asset);
         if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
@@ -119,6 +173,20 @@ class ReportAppendix1Nova extends ReportAppendix1
             $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
         }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/'. $this->m2 .')', $asset);
+        return $data;
+    }
+
+    protected function collectInfoSellingNegotiatedPrice($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            number_format($this->assetPrice['asset1']['change_negotiated_price'] ? $this->assetPrice['asset1']['change_negotiated_price'] : 0, 0, ',', '.'),
+            number_format($this->assetPrice['asset2']['change_negotiated_price'] ? $this->assetPrice['asset2']['change_negotiated_price'] : 0, 0, ',', '.'),
+            number_format($this->assetPrice['asset3']['change_negotiated_price'] ? $this->assetPrice['asset3']['change_negotiated_price'] : 0, 0, ',', '.'),
+            false
+        ];
         return $data;
     }
 
@@ -181,13 +249,18 @@ class ReportAppendix1Nova extends ReportAppendix1
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, $this->cellVCentered)->addText('1', ['bold' => false], $this->cellHCentered);
-        $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sử dụng đất', $this->styleBold, $this->cellHCentered);
+        if ($this->isApartment) {
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sở hữu căn hộ', $this->styleBold, $this->cellHCentered);
+        } else {
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText('Đơn giá quyền sử dụng đất', $this->styleBold, $this->cellHCentered);
+        }
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('-', $this->styleBold, $this->cellHCentered);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset1']['avg_price'], $this->countDecimals($this->assetPrice['asset1']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset2']['avg_price'], $this->countDecimals($this->assetPrice['asset2']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($this->assetPrice['asset3']['avg_price'], $this->countDecimals($this->assetPrice['asset3']['avg_price']), ',', '.'), $this->styleBold, $this->cellHCentered);
         $compares = $this->comparisonFactor1;
         $alphas = range('A', 'Z');
+        $coefficientTitle = 'Hệ số tương quan';
         $rateTitle = 'Tỷ lệ điều chỉnh';
         $adjustTitle = 'Mức điều chỉnh';
         $priceAfterAdjust = 'Giá sau điều chỉnh';
@@ -211,6 +284,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                     else
                         $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                 }
+                $this->addCompareRowExt1($table,  $coefficientTitle, '', '100', $compare1->adjust_coefficient, $compare2->adjust_coefficient, $compare3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $compare1->adjust_percent, $compare2->adjust_percent, $compare3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $compare1->adjust_price, $compare2->adjust_price, $compare3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $compare1->total_price, $compare2->total_price, $compare3->total_price);
@@ -230,6 +304,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                 } else {
                     $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
                 }
+                $this->addCompareRowExt1($table,  $coefficientTitle, '', '100', $other1->adjust_coefficient, $other2->adjust_coefficient, $other3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);

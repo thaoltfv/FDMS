@@ -32,6 +32,7 @@ class AppraiseComparisonFactor extends Model
         'adjust_percent',
         'name',
         'position',
+        'adjust_coefficient'
     ];
 
     // protected $appends = [

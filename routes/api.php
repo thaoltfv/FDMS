@@ -53,6 +53,9 @@ use App\Http\Controllers\Report\CertificateAssetReportController;
 use App\Http\Controllers\Workflow\WorkflowController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AppraiseDictionary\PreCertificateController;
+use App\Http\Controllers\PreCertificateConfig\PreCertificateConfigController;
+// use App\Http\Controllers\PreCertificateConfig\PreCertificateBriefController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -296,6 +299,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('/certificate', CertificateController::class);
 
+
     Route::post('appraise/status/{id}', [AppraiseController::class, 'updateStatus']);
 
     Route::post('certificate/status/{id}', [CertificateController::class, 'updateStatus']);
@@ -307,6 +311,30 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certificate/other-document/download/{id}', [CertificateController::class, 'otherDocumentDownload']);
 
     Route::get('/certificates', [CertificateController::class, 'findAll']);
+
+    Route::apiResource('/pre-certificate', PreCertificateController::class);
+    
+    Route::post('pre-certificates/status/{id}', [PreCertificateController::class, 'updateStatus']);
+    Route::get('pre-certificates/pre-certificate-paging', [PreCertificateController::class, 'findPaging']);
+
+    // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
+    // Route::get('pre-certificates/brief-export', [PreCertificateController::class, 'exportCertificateBriefs']);
+    Route::get('pre-certificates/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
+    Route::post('pre-certificates/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
+    Route::get('pre-certificates/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
+
+    Route::post('pre-certificates/pre-certificate-update-status/{id}', [PreCertificateController::class, 'updateStatus']);
+    Route::post('pre-certificates/other-document/upload/{id}/{typeDocument}', [PreCertificateController::class, 'otherDocumentUpload']);
+
+    Route::post('pre-certificates/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
+
+    Route::get('pre-certificates/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
+
+    Route::get('/pre-certificates', [PreCertificateController::class, 'findAll']);
+
+    Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
+
+    Route::get('/pre-certificate-configs', [PreCertificateConfigController::class, 'findAll']);
 
     Route::get('certificate-assets', [CertificateAssetController::class, 'findAll']);
 

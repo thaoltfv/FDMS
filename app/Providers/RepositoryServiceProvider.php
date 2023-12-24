@@ -18,6 +18,8 @@ use App\Contracts\BlockListRepository;
 use App\Contracts\BranchRepository;
 use App\Contracts\BuildingPriceRepository;
 use App\Contracts\CertificateRepository;
+use App\Contracts\PreCertificateRepository;
+use App\Contracts\PreCertificateConfigRepository;
 use App\Contracts\CompareAssetGeneralRepository;
 use App\Contracts\CompareAssetVersionRepository;
 use App\Contracts\CompareGeneralPicRepository;
@@ -86,6 +88,8 @@ use App\Models\CertificateAsset;
 use App\Models\MachineCertificateAsset;
 use App\Models\PersonalProperty;
 use App\Models\OtherCertificateAsset;
+use App\Models\PreCertificateConfig;
+use App\Models\PreCertificate;
 use App\Models\Project;
 use App\Models\RealEstate;
 use App\Models\TechnologicalLineCertificateAsset;
@@ -137,6 +141,8 @@ use App\Repositories\EloquentRealEstateRepository;
 use App\Repositories\EloquentTechnologyCertificateAssetRepository;
 use App\Repositories\EloquentVerhicleCertificateAssetRepository;
 use App\Repositories\EloquentViewCertificateBriefRepository;
+use App\Repositories\EloquentPreCertificateRepository;
+use App\Repositories\EloquentPreCertificateConfigRepository;
 use App\Services\Document\Certificate\ReportCertificate;
 use App\Services\Document\Certificate\ReportCertificateInterface;
 use App\Services\Document\DocumentInterface\Report;
@@ -304,6 +310,14 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->singleton(CertificateRepository::class, function () {
             return new EloquentCertificateRepository(new Certificate());
+        });
+
+        $this->app->singleton(PreCertificateRepository::class, function () {
+            return new EloquentPreCertificateRepository(new PreCertificate());
+        });
+
+        $this->app->singleton(PreCertificateConfigRepository::class, function () {
+            return new EloquentPreCertificateConfigRepository(new PreCertificateConfig());
         });
 
         $this->app->singleton(ViewCertificateBrieftRepository::class, function () {

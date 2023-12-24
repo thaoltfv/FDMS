@@ -20,6 +20,7 @@ class AppraiseAdapter extends Model
         'id' => 'integer',
         'change_purpose_price' => 'float',
         'change_violate_price' => 'float',
+        'change_negotiated_price' => 'float'
     ];
 
     protected $fillable = [
@@ -28,6 +29,7 @@ class AppraiseAdapter extends Model
         'percent',
         'change_purpose_price',
         'change_violate_price',
+        'change_negotiated_price'
     ];
 
 }

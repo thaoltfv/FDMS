@@ -18,14 +18,18 @@ class ErrorMessage
     public const PERMISSION_ERROR ="Người dùng không có quyền sử dụng chức năng này, vui lòng liên hệ để hỗ trợ.";
 
     public const CERTIFICATE_NOTEXISTS = 'Không tồn tại hồ sơ thẩm định - HSTD ';
+    public const PRE_CERTIFICATE_NOTEXISTS = 'Không tồn tại hồ sơ thẩm định sơ bộ- HSTDSB ';
     public const CERTIFICATE_APPRAISERTEAM = 'Vui lòng chọn đầy đủ thông tin tổ thẩm định.';
     public const CERTIFICATE_APPROVE_CHECK_APPRAISE = 'Bạn không thể thực hiện do chưa có thông tin tài sản thẩm định. ';
     public const CERTIFICATE_CHOOSE_APPRAISE = 'HSTD không ở trạng thái Đang thẩm định.';
     public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa phiếu có trạng thái ';
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
+    public const PRE_CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTDSB ';
     public const CERTIFICATE_CHECK_ADD = 'Bạn không có quyền tạo mới HSTD ';
     public const CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTD ';
+    public const PRE_CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTDSB ';
     public const CERTIFICATE_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách HSTD ';
+    public const PRE_CERTIFICATE_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách HSTDSB ';
 
     public const APPRAISE_AUTOMATIC_ASSET = 'Xin lỗi! Khu vực hiện tại chưa đủ dữ liệu để so sánh. Vui lòng chọn TSSS trên bản đồ.';
     public const APPRAISE_NOTEXISTS = 'Không tồn tại tài sản thẩm định - TSTD ';

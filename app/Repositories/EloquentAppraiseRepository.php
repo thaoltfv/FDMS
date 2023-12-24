@@ -193,7 +193,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
 
                 $role = $user->roles->last();
-                if (($role->name == 'USER') || (!empty($popup))) {
+                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -609,13 +609,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result->appraiseAdapter[] = [
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset1->id,
-                    'percent' => intval($asset1->adjust_percent) + 100,
+                    'percent' => floatval($asset1->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset1->id),
                 ];
                 AppraiseAdapter::insert([
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset1->id,
-                    'percent' => intval($asset1->adjust_percent) + 100,
+                    'percent' => floatval($asset1->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset1->id),
                 ]);
             }
@@ -623,13 +623,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result->appraiseAdapter[] = [
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset2->id,
-                    'percent' => intval($asset2->adjust_percent) + 100,
+                    'percent' => floatval($asset2->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset2->id),
                 ];
                 AppraiseAdapter::insert([
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset2->id,
-                    'percent' => intval($asset2->adjust_percent) + 100,
+                    'percent' => floatval($asset2->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset2->id),
                 ]);
             }
@@ -637,13 +637,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result->appraiseAdapter[] = [
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset3->id,
-                    'percent' => intval($asset3->adjust_percent) + 100,
+                    'percent' => floatval($asset3->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset3->id),
                 ];
                 AppraiseAdapter::insert([
                     'appraise_id' => $asset->id,
                     'asset_general_id' => $asset3->id,
-                    'percent' => intval($asset3->adjust_percent) + 100,
+                    'percent' => floatval($asset3->adjust_percent) + 100,
                     'change_purpose_price' => CommonService::getCPCDMDSD($asset->id, $asset3->id),
                 ]);
             }
@@ -889,6 +889,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 ->with('assetGeneral.roomDetails.roomFurnitureDetails')
                 ->with('assetGeneral.roomDetails.direction')
                 ->with('assetGeneral.roomDetails.furnitureQuality')
+                ->with('assetGeneral.roomDetails.loaicanho')
                 ->with('assetUnitPrice')
                 ->with('assetUnitPrice.landTypeData')
                 ->with('assetUnitPrice.createdBy')
@@ -1013,21 +1014,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $result->appraiseAdapter[] = [
                 'appraise_id' => $asset->id,
                 'asset_general_id' => $asset1->id,
-                'percent' => intval($asset1->adjust_percent) + 100,
+                'percent' => floatval($asset1->adjust_percent) + 100,
             ];
         }
         if (!$isExistAsset2) {
             $result->appraiseAdapter[] = [
                 'appraise_id' => $asset->id,
                 'asset_general_id' => $asset2->id,
-                'percent' => intval($asset2->adjust_percent) + 100,
+                'percent' => floatval($asset2->adjust_percent) + 100,
             ];
         }
         if (!$isExistAsset3) {
             $result->appraiseAdapter[] = [
                 'appraise_id' => $asset->id,
                 'asset_general_id' => $asset3->id,
-                'percent' => intval($asset3->adjust_percent) + 100,
+                'percent' => floatval($asset3->adjust_percent) + 100,
             ];
         }
 
@@ -3070,7 +3071,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     }
                 }
                 $role = $user->roles->last();
-                if (($role->name == 'USER') || (!empty($popup))) {
+                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -4294,6 +4295,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $user = CommonService::getUser();
             $comparisonFactors =$objects['comparison_factor'];
             $dictionaries = $this->findAllAppraiseDictionaries();
+            // dd($comparisonFactors,$dictionaries);
             // $appraiseData = $this->getAppraiseDataComparison($appraiseId);
             $appraise = $this->model->query()->where('id', $appraiseId)->first();
             $baseUBNDPrice = $this->getBaseUBNDPrice($appraiseId);
@@ -4414,10 +4416,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $appraiseAdapterData = [
                         'appraise_id' => $appraiseId,
                         'asset_general_id' => $asset_general_id,
-                        'percent' => intval($asset['adjust_percent'])+100,
+                        'percent' => floatval($asset['adjust_percent'])+100,
                         'change_purpose_price' => $cpcmdsd,
                         'change_violate_price' => 0,
+                        'change_negotiated_price' => $asset['adjust_amount'],
                     ];
+                    // dd($appraiseAdapterData);
                     $appraiseAdatter = new AppraiseAdapter($appraiseAdapterData);
                     QueryBuilder::for($appraiseAdatter)
                     ->insert($appraiseAdatter->attributesToArray());
@@ -4487,8 +4491,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             "dieu_kien_thanh_toan",
             "yeu_to_khac",
             "khoang_cach",
-            "muc_dich_chinh"
+            "muc_dich_chinh",
+            "vi_tri"
         ];
+        // dd($property);
+        $description = CompareProperty::query()->where('asset_general_id', '=', $asset['id'])->first();
+        // dd($description);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
             if(isset($oldAssetGeneralId)){
@@ -4729,6 +4737,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'muc_dich_chinh';
                 $name = 'Mục đích sử dụng đất chính';
+                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
+            }elseif($comparisonFactorTmp == 'vi_tri'){
+                // dd('vô đây');
+                $appraiseValue = isset($property->description) ? $property->description :'Không biết'; ;
+                // $assetValue = 0;
+                $assetValue = $description->description;
+                // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
+                $status = false;
+                if(in_array($comparisonFactorTmp, $comparison)){
+                    $status = true;
+                }
+                // $dictionary = $dictionaries['khoang_cach'];
+                // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
+                $type = 'vi_tri';
+                $name = 'Vị trí';
                 $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
             }
         }
@@ -5995,6 +6018,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     if(isset($appraiseAdapter)) {
                         AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6004,6 +6028,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'appraise_id' => $item['appraise_id'],
                             'asset_general_id' => $item['asset_general_id'],
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6231,6 +6256,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     if(isset($appraiseAdapter)) {
                         AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6240,6 +6266,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'appraise_id' => $item['appraise_id'],
                             'asset_general_id' => $item['asset_general_id'],
                             'percent' => $item['percent'],
+                            'change_negotiated_price' => $item['change_negotiated_price'],
                             'change_purpose_price' => $item['change_purpose_price'],
                             'change_violate_price' => isset($item['change_violate_price']) ? $item['change_violate_price'] : 0,
                         ]);
@@ -6450,7 +6477,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = RealEstate::query()->with(['createdBy','assetType']);
         // $result = $result->where('asset_type_id', 39);
         $role = $user->roles->last();
-        if(($role->name == 'USER')){
+        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
             $result= $result ->whereHas('createdBy', function ($has) use ($user) {
                 $has->where('id', $user->id);
             });
@@ -6587,7 +6614,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                              })
                 ->select($select)->distinct();
         $role = $user->roles->last();
-        if(($role->name == 'USER')){
+        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
             $result= $result ->whereHas('createdBy', function ($has) use ( $user) {
                 $has->where('id', $user->id);
             });
@@ -7304,6 +7331,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'apartmentAssetProperties.direction',
             'apartmentAssetProperties.legal',
             'apartmentAssetProperties.furnitureQuality',
+            'apartmentAssetProperties.loaicanho',
             'apartmentAssetProperties.apartment',
             'certificate',
             'certificate.appraiserPerform:id,name',
@@ -7334,7 +7362,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if ($role->name == 'USER') {
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
                 $result = $result->where('created_by', $userId);
             }
             $result = $result->first();

@@ -34,6 +34,7 @@ class RoomDetail extends Model
         'unit_price',
         'description',
         'legal_id',
+        'loai_can_ho_id'
     ];
 
     public function blockLists(): BelongsTo
@@ -49,6 +50,11 @@ class RoomDetail extends Model
     public function furnitureQuality(): BelongsTo
     {
         return $this->belongsTo(Dictionary::class,'furniture_quality_id','id');
+    }
+
+    public function loaicanho(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class,'loai_can_ho_id','id');
     }
 
     public function roomFurnitureDetails(): HasMany

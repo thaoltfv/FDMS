@@ -210,7 +210,7 @@ class ApartmentAssetController extends Controller
             'map_img' => 'Hình bản đồ',
             'assets_general.*.id' => 'Id tài sản so sánh',
             'assets_general.*.version' => 'Version tài sản so sánh',
-            'map_img' => 'Hình bản đồ',
+            // 'map_img' => 'Hình bản đồ',
             ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {

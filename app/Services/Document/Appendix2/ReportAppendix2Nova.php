@@ -3,6 +3,8 @@
 namespace App\Services\Document\Appendix2;
 
 use App\Services\CommonService;
+use App\Models\Province;
+use App\Models\AppraiseLawDocument;
 use App\Services\Document\DocumentInterface\Report;
 use Illuminate\Support\Carbon;
 use PhpOffice\PhpWord\Element\Section;
@@ -19,11 +21,61 @@ class ReportAppendix2Nova extends ReportAppendix2
     }
     protected function printOriginalPriceDescription($section, $dgxdSlug)
     {
+        // dd($this->realEstates[0]);
+        // $section->addText(json_encode($this->data_tong));
+        $local_law = [];
+        if (is_array($this->realEstates)){
+            $province_id = $this->realEstates[0]->appraises->province_id;
+            $province_name = Province::query()->where('id', $province_id)->first()->name;
+            $law_province = json_decode($this->data_tong)->legal_documents_on_construction;
+            foreach ($law_province as $law) {
+                if ($law->provinces === $province_name) {
+                    array_push($local_law,$law);
+                }
+            }
+        } else {
+            $province_id = $this->realEstates->appraises->province_id;
+            $province_name = Province::query()->where('id', $province_id)->first()->name;
+            $law_province = AppraiseLawDocument::query()->where(['type' => 'XAY_DUNG', 'provinces' => $province_name])->get()->toArray();
+            // dd($law_province);
+            foreach ($law_province as $law) {
+                if ($law['provinces'] === $province_name) {
+                    array_push($local_law,(object) $law);
+                }
+            }
+        }
+
         $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
-        $textRun->addText('Căn cứ vào Quyết định 22/2019/QĐ-UBND ngày 30/08/2019 của UBND TP Hồ Chí Minh về Ban hành bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn thành phố Hồ Chí Minh, công văn số 2189/SXD-KTXD ngày 22 tháng 02 năm 2021 và công văn số 4381/SXD-KTXD ngày 27/04/2022 và Công văn số 980/SXD-KTXD Ngày 17/01/2023 Về việc điều chỉnh, quy đổi về thời điểm tính toán đối với Bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn Thành phố Hồ Chí Minh');
-        if ($dgxdSlug === 'dg-uoc-tinh') {
-            $textRun->addText(' và căn cứ vào tình hình giá thị trường xây dựng nhà ở trên địa bàn TP.HCM. ' . $this->acronym . ' đề xuất đơn giá xây mới cho CTXD của BĐS thẩm định giá (giá CTXD đã bao gồm yếu tố lợi nhuận của nhà đầu tư)');
+        if (isset($local_law) && count($local_law) > 0){
+            // $section->addText(json_encode($local_law));
+            $count = 0;
+            $count1 = 0;
+            $diengiai = 'Căn cứ vào ';
+            foreach ($local_law as $local) {
+                if ($count === 0) {
+                    $diengiai = $diengiai.$local->document_type.' '.$local->date.' về '.$local->content;
+                } else {
+                    $diengiai = $diengiai.' và '.$local->document_type.' '.$local->date.' về '.$local->content;
+                }
+                $count++;
+            }
+            $diengiai = $diengiai.'; Tổ thẩm định nhận thấy đơn giá xây dựng theo ';
+            foreach ($local_law as $local) {
+                if ($count1 === 0) {
+                    $diengiai = $diengiai.$local->document_type.' '.$local->date.' về '.$local->content;
+                } else {
+                    $diengiai = $diengiai.' và '.$local->document_type.' '.$local->date.' về '.$local->content;
+                }
+                $count1++;
+            }
+            $diengiai = $diengiai.' là phù hợp với kết cấu công trình của tài sản thẩm định và đã bao gồm yếu tố lợi nhuận của nhà đầu tư. Tổ thẩm định ước tính đơn giá xây dựng mới của tài sản như sau:';
+            $textRun->addText($diengiai);
+        } else {
+            $textRun->addText('Căn cứ vào Quyết định 22/2019/QĐ-UBND ngày 30/08/2019 của UBND TP Hồ Chí Minh về Ban hành bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn thành phố Hồ Chí Minh, công văn số 2189/SXD-KTXD ngày 22 tháng 02 năm 2021 và công văn số 4381/SXD-KTXD ngày 27/04/2022 và Công văn số 980/SXD-KTXD Ngày 17/01/2023 Về việc điều chỉnh, quy đổi về thời điểm tính toán đối với Bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn Thành phố Hồ Chí Minh');
+            if ($dgxdSlug === 'dg-uoc-tinh') {
+                $textRun->addText(' và căn cứ vào tình hình giá thị trường xây dựng nhà ở trên địa bàn TP.HCM. ' . $this->acronym . ' đề xuất đơn giá xây mới cho CTXD của BĐS thẩm định giá (giá CTXD đã bao gồm yếu tố lợi nhuận của nhà đầu tư)');
+            }
         }
     }
     protected function printBuildingComapanyInfo($section, $tangibleAssets, $dgxdSlug)
@@ -321,11 +373,12 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
+        $ki = '</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t xml:space="preserve">ki</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
         $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);     
         $this->printNew1($section, $tangibleAssets);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
-        $table->addCell(1500, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+        $table->addCell(1000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(7500, ['gridSpan' => 10, 'valign' => 'center'])->addText('Phần kết cấu chính', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addCell(1500, $this->cellRowSpan)->addText('CLCL (%)', ['bold' => true], $this->cellHCenteredKeepNext);
         $table->addRow();
@@ -338,18 +391,21 @@ class ReportAppendix2Nova extends ReportAppendix2
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(1500, $this->cellRowContinue)->addText(null, null, ['keepNext' => true]);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('p', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(750, $this->cellVCentered)->addText('h', null,  $this->cellHCenteredKeepNext);
-        $table->addCell(1500, $this->cellVCentered)->addText('H= Σ ph / Σ p', null,  $this->cellHCenteredKeepNext);
-
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('T'.$ki, null,  $this->cellHCenteredKeepNext);
+        $table->addCell(775, $this->cellVCentered)->addText('1-H'.$ki, null,  $this->cellHCenteredKeepNext);
+        $cell = $table->addCell(1750, $this->cellVCentered);
+        // $cell->addText('1 - ', null,  $this->cellHCenteredKeepNext);
+        $cell->addText('1 - Σ H'.$ki.' x T'.$ki, null,  array('align' => 'left', 'keepNext' => true,'spaceBefore'=> 0,'spaceAfter'=> 0,'lineHeight'=>1.0));
+        $cell->addText("    _________",null,array('align' => 'center', 'keepNext' => true,'spaceBefore'=> 0, 'spaceAfter'=>0,'lineHeight'=>0.2));
+        $cell->addText('   Σ T'.$ki.'   ',null,array('align' => 'center', 'keepNext' => true,'spaceAfter'=>0,'spaceBefore'=> 10,'lineHeight'=>1.0));
         $stt = 1;
         $countTangible = count($tangibleAssets);
         foreach ($tangibleAssets as $tangibleAsset) {

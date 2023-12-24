@@ -140,7 +140,7 @@ class ReportAppendix1 extends Report
             $this->adapter1 = $asset->appraiseAdapter->where('asset_general_id', $this->asset1->id)->first();
             $this->adapter2 = $asset->appraiseAdapter->where('asset_general_id', $this->asset2->id)->first();
             $this->adapter3 = $asset->appraiseAdapter->where('asset_general_id', $this->asset3->id)->first();
-
+            // dd($this->adapter1,$this->adapter2,$this->adapter3);
             $this->getAllLandType($asset);
             $this->adapters = $asset->appraiseAdapter;
             $this->landType['asset1'] = $this->getAssetLandType($this->asset1, $asset);
@@ -261,6 +261,7 @@ class ReportAppendix1 extends Report
         $purposePrice = 0;
         $violatePrice = 0;
         $adjustPercent = floatval($adapter->percent);
+        $change_negotiated_price = floatval($adapter->change_negotiated_price);
         // dd($adjustPercent);
         $area_chinh_cuoicung = 0;
         $area_phu_ve_chinh = 0;
@@ -329,6 +330,7 @@ class ReportAppendix1 extends Report
             'area_phu_ve_chinh' => $area_phu_ve_chinh,
             'area_chinh_cuoicung' => $area_chinh_cuoicung,
             'ti_le_dat' => isset($item->method_value) ? $item->method_value : 0,
+            'change_negotiated_price' => $change_negotiated_price
         ];
         return $result;
     }
@@ -587,7 +589,7 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoTransactionType($stt++, 'Loại giao dịch', $asset);
         $data[] = $this->collectInfoTransactionTime('', 'Thời điểm giao dịch', $asset);
         $data[] = $this->collectInfoCoordinate($stt++, 'Tọa độ', $asset);
-        $data[] = $this->collectInfoAddressAppraise($stt++, 'Vị trí thửa đất', $asset);
+        $data[] = $this->collectInfoAddressAppraise($stt++, 'Địa chỉ thửa đất', $asset);
         $data[] = $this->collectInfoLegal($stt++, 'Pháp lý', $asset);
         $data[] = $this->collectInfoAreaAppraise($stt, "Tổng diện tích ($this->m2)", $asset);
         $data[] = $this->collectInfoAppraiseSumArea("$stt.1", "Phù hợp QH", 'main_area');
@@ -1533,9 +1535,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            $this->assetPrice['asset1']['percent'] . '%',
-            $this->assetPrice['asset2']['percent'] . '%',
-            $this->assetPrice['asset3']['percent'] . '%',
+            number_format($this->assetPrice['asset1']['percent'], 2, ',', '.') . '%',
+            number_format($this->assetPrice['asset2']['percent'], 2, ',', '.') . '%',
+            number_format($this->assetPrice['asset3']['percent'], 2, ',', '.') . '%',
             false
         ];
         return $data;
