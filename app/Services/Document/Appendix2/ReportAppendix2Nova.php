@@ -24,8 +24,8 @@ class ReportAppendix2Nova extends ReportAppendix2
         // dd($this->realEstates[0]);
         // $section->addText(json_encode($this->data_tong));
         $local_law = [];
-        dd(isset($this->realEstates[0]));
-        if (!is_object($this->realEstates)){
+        // dd(isset($this->realEstates[0]));
+        if (isset($this->realEstates[0])){
             $province_id = $this->realEstates[0]->appraises->province_id;
             $province_name = Province::query()->where('id', $province_id)->first()->name;
             $law_province = json_decode($this->data_tong)->legal_documents_on_construction;
@@ -35,7 +35,7 @@ class ReportAppendix2Nova extends ReportAppendix2
                 }
             }
         } else {
-            dd($this->realEstates);
+            // dd($this->realEstates);
             $province_id = $this->realEstates->appraises->province_id;
             $province_name = Province::query()->where('id', $province_id)->first()->name;
             $law_province = AppraiseLawDocument::query()->where(['type' => 'XAY_DUNG', 'provinces' => $province_name])->get()->toArray();
