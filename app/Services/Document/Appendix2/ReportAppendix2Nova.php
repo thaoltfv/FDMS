@@ -24,8 +24,8 @@ class ReportAppendix2Nova extends ReportAppendix2
         // dd($this->realEstates[0]);
         // $section->addText(json_encode($this->data_tong));
         $local_law = [];
-        dd(is_array($this->realEstates));
-        if (is_array($this->realEstates)){
+        dd(is_object($this->realEstates));
+        if (!is_object($this->realEstates)){
             $province_id = $this->realEstates[0]->appraises->province_id;
             $province_name = Province::query()->where('id', $province_id)->first()->name;
             $law_province = json_decode($this->data_tong)->legal_documents_on_construction;
