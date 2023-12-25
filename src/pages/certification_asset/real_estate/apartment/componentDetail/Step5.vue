@@ -761,7 +761,7 @@
 																						v-model="rate_asset.adjust_coefficient"
 																						vid="number_legal"
 																						:text_center="true"
-																						@change="changeOtherCoefficient($event, indexAsset, comparison_factor.type)"
+																						@change="changeOtherCoefficient($event, rate_asset)"
 																					/>
 																				</div>
 																			</td>
@@ -1510,6 +1510,7 @@ export default {
 			await this.form.assets_general.forEach(asset => {
 				// tạo data gửi
 				this.other_comparison.push({
+					adjust_coefficient: 100,
 					adjust_percent: 0,
 					apartment_asset_id: data.id,
 					apartment_title: 'Không biết',
