@@ -3426,7 +3426,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $select = [
                 'id',
                 'created_by',
-                'appraiser_id',
                 'appraiser_sale_id',
                 'appraiser_perform_id',
                 'business_manager_id',

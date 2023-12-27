@@ -69,6 +69,20 @@ class ReportAppendix1Nova extends ReportAppendix1
         ];
         return $data;
     }
+
+    protected function collectInfoSellingPriceRate_new($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            '-',
+            number_format(100 - $this->assetPrice['asset1']['percent'], 2, ',', '.') . '%',
+            number_format(100 - $this->assetPrice['asset2']['percent'], 2, ',', '.') . '%',
+            number_format(100 - $this->assetPrice['asset3']['percent'], 2, ',', '.') . '%',
+            false
+        ];
+        return $data;
+    }
     
     protected function collectInfomationApartmentData($asset)
     {
@@ -102,9 +116,11 @@ class ReportAppendix1Nova extends ReportAppendix1
         }
         // giá trị tài sản
         $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
-        $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
-        $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
-        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
+        // $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        // $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
+        $data[] = $this->collectInfoSellingPriceRate_new($stt++, 'Tỷ lệ thương lượng', $asset);
+        // $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính', $asset);
+        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Giá rao bán sau thương lượng (đ)', $asset);
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, "Đơn giá bình quân (đ/$this->m2)", $asset);
 
         return $data;
@@ -159,9 +175,11 @@ class ReportAppendix1Nova extends ReportAppendix1
         }
         // // giá trị tài sản
         $data[] = $this->collectInfoSellingAppraisePrice($stt++, 'Giá rao bán (đ)', $asset);
-        $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
-        $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
-        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
+        // $data[] = $this->collectInfoSellingPriceRate($stt++, 'Tỷ lệ rao bán', $asset);
+        // $data[] = $this->collectInfoSellingNegotiatedPrice('', 'Số tiền thương lượng', $asset);
+        $data[] = $this->collectInfoSellingPriceRate_new($stt++, 'Tỷ lệ thương lượng', $asset);
+        // $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Tổng giá trị tài sản ước tính (đ)', $asset);
+        $data[] = $this->collectInfoAppraiseTotalEstimatePrice($stt++, 'Giá rao bán sau thương lượng (đ)', $asset);
         $data[] = $this->collectInfoAppraiseViolatePrice($stt++, 'Giá trị phần diện tích vi phạm QH (đ)', $asset);
         if ($method->slug_value !== 'theo-ty-le-gia-dat-co-so-chinh') {
             $data[] = $this->collectInfoAppraiseChangePurposePrice($stt++, 'Tiền nộp thuế quy đổi chuyển mục đích sử dụng đất (đ)', $asset);
