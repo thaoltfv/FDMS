@@ -494,7 +494,12 @@ export default {
 							this.type
 						);
 						if (res.data) {
-							this.preCertificateOtherDocuments = res.data.data;
+							this.preCertificateOtherDocuments[this.type] = res.data.data;
+							console.log(
+								"this.preCertificateOtherDocuments[this.type]",
+								this.preCertificateOtherDocuments[this.type],
+								this.type
+							);
 							this.lstFile = [...res.data.data];
 							this.$toast.open({
 								message: "Thêm file thành công",

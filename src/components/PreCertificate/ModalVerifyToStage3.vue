@@ -42,7 +42,7 @@
 					/>
 					<button
 						class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
-						@click.prevent="verifyToStage2Function"
+						@click.prevent="verifyToStage3Function"
 						v-text="$t('popup_btn_yes')"
 					/>
 				</div>
@@ -60,7 +60,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 export default {
-	name: "ModalVerifyToStage2",
+	name: "ModalVerifyToStage3",
 	components: {
 		OtherFile,
 		InputTextarea,
@@ -77,8 +77,34 @@ export default {
 		}
 	},
 	methods: {
-		handleAction(event) {
-			this.$emit("action", event);
+		handleAction() {
+			this.$emit("action");
+		},
+		async verifyToStage3Function() {
+			if (this.preCertificateOtherDocuments.Result.length > 0) {
+			} else {
+				await this.$toast.open({
+					message: "Vui lòng bổ sung file kết quả sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+			if (this.dataPC.total_preliminary_value > 0) {
+			} else {
+				await this.$toast.open({
+					message: "Vui lòng bổ sung Tổng giá trị sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+			const boolResult = await this.preCertificateStore.updateToStage3();
+			if (boolResult) {
+				this.handleAction();
+			}
 		}
 	},
 	setup() {
@@ -95,33 +121,16 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, other, preCertificateOtherDocuments } = storeToRefs(
+		const { dataPC, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
-		const verifyToStage2Function = async () => {
-			if (preCertificateOtherDocuments.value.Result.length > 0) {
-			} else {
-				await other.value.toast.open({
-					message: "Vui lòng bổ sung file kết quả sơ bộ",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				return;
-			}
-			if (dataPC.value.total_preliminary_value > 0) {
-			} else {
-				await other.value.toast.open({
-					message: "Vui lòng bổ sung Tổng giá trị sơ bộ",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				return;
-			}
-			await preCertificateStore.updateToStage2();
+
+		return {
+			dataPC,
+			isMobile,
+			preCertificateOtherDocuments,
+			preCertificateStore
 		};
-		return { dataPC, isMobile, verifyToStage2Function };
 	}
 };
 </script>

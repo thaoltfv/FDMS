@@ -63,7 +63,7 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Loại sơ bộ:</strong>
 									<p>
-										{{ dataPC.pre_type_string ? dataPC.pre_type_string : "" }}
+										{{ dataPC.pre_type ? dataPC.pre_type : "" }}
 									</p>
 								</div>
 
@@ -281,11 +281,32 @@
 			<OtherFile :type="'Appendix'" :from="'Detail'" />
 		</div>
 		<div
-			v-if="dataPC.id && dataPC.status > 1"
+			v-if="dataPC.id && dataPC.status >= 2"
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
-			<OtherFile :type="'Result'" :from="'Detail'" />
+			<div class="card">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="row d-flex justify-content-between align-items-center">
+							<h3 class="title">Kết quả sơ bộ</h3>
+						</div>
+
+						<img
+							class="img-dropdown"
+							:class="!showCardDetailFileResult ? 'img-dropdown__hide' : ''"
+							src="@/assets/images/icon-btn-down.svg"
+							alt="dropdown"
+							@click="showCardDetailFileResult = !showCardDetailFileResult"
+						/>
+					</div>
+				</div>
+				<OtherFile
+					v-show="showCardDetailFileResult"
+					type="Result"
+					@action="showCardDetailFileResult = true"
+				/>
+			</div>
 		</div>
 		<Footer
 			v-if="jsonConfig && dataPC"
@@ -631,18 +652,24 @@ export default {
 			preCertificateStore
 		);
 		const start = async () => {
+			if (!lstData.value.workflow) {
+				await preCertificateStore.getConfig();
+			}
 			await preCertificateStore.resetData();
 			await preCertificateStore.getPreCertificate(props.routeId);
 		};
 		start();
 		const checkVersion2 = ref([]);
+		const showCardDetailFileResult = ref(false);
 		return {
 			isMobile,
 			dataPC,
 			lstData,
 			preCertificateOtherDocuments,
 			preCertificateStore,
-			checkVersion2
+			checkVersion2,
+
+			showCardDetailFileResult
 		};
 	},
 

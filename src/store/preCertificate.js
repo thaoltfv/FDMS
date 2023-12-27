@@ -163,13 +163,6 @@ export const usePreCertificateStore = defineStore(
 					id: null
 				};
 			}
-			if (dataPC.value.pre_type && lstData.value.preTypes) {
-				for (let index = 0; index < lstData.value.preTypes.length; index++) {
-					const element = lstData.value.preTypes[index];
-					if (element.value === dataPC.value.pre_type)
-						dataPC.value.pre_type_string = element.label;
-				}
-			}
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(id = "") {
@@ -241,9 +234,9 @@ export const usePreCertificateStore = defineStore(
 			}
 		}
 		const jsonConfig = ref(null);
-		async function updateToStage2() {
-			dataPC.value.status = 2;
-			dataPC.value.status_expired_at = await getExpireStatusDate(2);
+		async function updateToStage3() {
+			dataPC.value.status = 3;
+			dataPC.value.status_expired_at = await getExpireStatusDate(3);
 			let dataSend = {
 				// appraiser_id: this.elementDragger.appraiser_id,
 				// business_manager_id: this.elementDragger.business_manager_id,
@@ -253,26 +246,33 @@ export const usePreCertificateStore = defineStore(
 				// check_version: this.isCheckVersion,
 				// required: this.changeStatusRequire,
 
-				appraiser_id: null,
 				business_manager_id: null,
 				appraiser_perform_id: null,
 				appraiser_sale_id: null,
 				check_price: null,
 				check_version: null,
-				required: null,
+				required: {
+					appraise_item_list: false,
+					appraiser: true,
+					check_legal: true,
+					check_price: true,
+					check_version: true
+				},
 				status: 2,
 				status_expired_at: dataPC.value.status_expired_at,
 				status_note: dataPC.value.status_note,
 				status_reason_id: "",
 				status_description: "Định giá sơ bộ",
-				status_config: jsonConfig.value.principle
+				status_config: jsonConfig.value.principle,
+				total_preliminary_value: dataPC.value.total_preliminary_value
 			};
 			const res = await PreCertificate.updateStatusPreCertificate(
 				dataPC.value.id,
 				dataSend
 			);
-
+			let error = false;
 			if (res.data) {
+				error = true;
 				other.value.toast.open({
 					message: `Định giá sơ bộ thành công`,
 					type: "success",
@@ -292,6 +292,7 @@ export const usePreCertificateStore = defineStore(
 				});
 			}
 			other.value.isSubmit = false;
+			return error;
 		}
 		async function updateStatus() {
 			dataPC.value.status_expired_at = getExpireStatusDate(dataPC.value.status);
@@ -301,7 +302,6 @@ export const usePreCertificateStore = defineStore(
 			);
 
 			if (res.data) {
-				console.log("res.data", res.data);
 				return res.data;
 			} else if (res.error) {
 				other.value.toast.open({
@@ -441,7 +441,7 @@ export const usePreCertificateStore = defineStore(
 			updateRouteToast,
 			getConfig,
 			getPreCertificateAll,
-			updateToStage2,
+			updateToStage3,
 			updateStatus
 		};
 	},

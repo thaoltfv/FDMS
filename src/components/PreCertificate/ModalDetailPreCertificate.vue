@@ -64,7 +64,7 @@
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Loại sơ bộ:</strong>
 							<p>
-								{{ dataPC.pre_type_string ? dataPC.pre_type_string : "" }}
+								{{ dataPC.pre_type ? dataPC.pre_type : "" }}
 							</p>
 						</div>
 
@@ -307,14 +307,14 @@
 		/>
 		<ModalSendVerify
 			v-if="showAcceptCertificate"
-			:notification="`Bạn có muốn muốn '${targetMessage}' hồ sơ này`"
+			:notification="`Bạn có muốn '${targetMessage}' hồ sơ này`"
 			@action="handleChangeAccept"
 			@cancel="handleCancelAccept"
 		/>
-		<ModalVerifyToStage2
-			v-if="dialogVerifyToStage2"
-			:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
-			@action="dialogVerifyToStage2 = false"
+		<ModalVerifyToStage3
+			v-if="dialogVerifyToStage3"
+			:notification="`Bạn có muốn 'Định giá sơ bộ' hồ sơ này`"
+			@action="dialogVerifyToStage3 = false"
 		/>
 	</div>
 </template>
@@ -325,7 +325,7 @@ import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import ModalAppraisal from "./ModalAppraisal";
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
-import ModalVerifyToStage2 from "./ModalVerifyToStage2";
+import ModalVerifyToStage3 from "./ModalVerifyToStage3";
 import InputText from "@/components/Form/InputText";
 import InputCategory from "@/components/Form/InputCategory";
 import FileUpload from "@/components/file/FileUpload";
@@ -398,7 +398,7 @@ export default {
 		};
 	},
 	components: {
-		ModalVerifyToStage2,
+		ModalVerifyToStage3,
 		FileUpload,
 		InputCategory,
 		InputText,
@@ -426,9 +426,9 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const dialogVerifyToStage2 = ref(false);
+		const dialogVerifyToStage3 = ref(false);
 		const { jsonConfig, dataPC } = storeToRefs(preCertificateStore);
-		return { dataPC, dialogVerifyToStage2, isMobile, jsonConfig };
+		return { dataPC, dialogVerifyToStage3, isMobile, jsonConfig };
 	},
 	computed: {
 		optionsAppraisalPurposes() {
@@ -453,12 +453,11 @@ export default {
 			return data;
 		},
 		handleUpdateStatus(id) {
-			console.log("here");
 			if (
-				this.dataPC.status === 2 &&
+				this.dataPC.status === 3 &&
 				this.user_id === this.dataPC.appraiser_perform.user_id
 			) {
-				this.dialogVerifyToStage2 = true;
+				this.dialogVerifyToStage3 = true;
 			}
 		},
 		handleCancelAppraisal() {

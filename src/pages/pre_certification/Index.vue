@@ -183,10 +183,10 @@
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
 			/>
-			<ModalVerifyToStage2
-				v-if="dialogVerifyToStage2"
+			<ModalVerifyToStage3
+				v-if="dialogVerifyToStage3"
 				:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
-				@action="dialogVerifyToStage2 = false"
+				@action="dialogVerifyToStage3 = false"
 			/>
 		</div>
 	</div>
@@ -196,7 +196,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import ModalVerifyToStage2 from "@/components/PreCertificate/ModalVerifyToStage2";
+import ModalVerifyToStage3 from "@/components/PreCertificate/ModalVerifyToStage3";
 
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
@@ -246,7 +246,6 @@ export default {
 			key_render_appraisal: 321000,
 			render_lock: 1234,
 			render_open: 5678,
-			listCertificate: [],
 			listCertificateDraft: [],
 			listCertificateOpen: [],
 			listCertificateLock: [],
@@ -280,17 +279,12 @@ export default {
 			checkRole: false,
 			profile: {},
 			user_id: "",
-			countData: 0,
 			isAccept: false,
-			subStatusData: {},
-			subStatusDataTmp: {},
 			next_status: "",
 			next_sub_status: "",
 			confirm_message: "",
 			isMoved: false,
 			config: {},
-			subStatusDataReturn: [],
-			key_dragg: 1,
 			detailData: [],
 			isHandleAction: false,
 			isCheckPrice: false,
@@ -300,7 +294,7 @@ export default {
 		};
 	},
 	components: {
-		ModalVerifyToStage2,
+		ModalVerifyToStage3,
 		draggable,
 		BCard,
 		FormWizard,
@@ -359,7 +353,7 @@ export default {
 			};
 		}
 	},
-	setup() {
+	setup(props) {
 		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -382,9 +376,55 @@ export default {
 			filter
 		} = storeToRefs(preCertificateStore);
 
-		const dialogVerifyToStage2 = ref(false);
+		const dialogVerifyToStage3 = ref(false);
 		const principleConfig = ref([]);
 
+		const countData = ref(0);
+		const subStatusDataReturn = ref([]);
+		const subStatusData = ref({});
+		const key_dragg = ref(1);
+		const pushSubStatusData = () => {
+			let count = countData.value ? countData.value : 0;
+			let tmp = subStatusDataTmp.value;
+			let config = principleConfig.value;
+			let data = [];
+			let dataReturn = subStatusDataReturn.value;
+			config.forEach(item => {
+				data = subStatusData.value[item.id] ? subStatusData.value[item.id] : [];
+				if (tmp[item.id] && tmp[item.id].length > count) {
+					for (var i = count; i < count + 10; i++) {
+						tmp[item.id][i] &&
+							data.push(tmp[item.id][i]) &&
+							dataReturn.push(tmp[item.id][i]);
+					}
+				}
+				subStatusData.value[item.id] = data;
+			});
+
+			key_dragg.value++;
+			countData.value += 10;
+		};
+		const listCertificate = ref([]);
+		const subStatusDataTmp = ref({});
+		const getDataWorkFlow2 = async (search = "") => {
+			try {
+				const resp = await PreCertificate.getListKanbanPreCertificate(search);
+				if (resp.data) {
+					listCertificate.value = resp.data.HSTD;
+
+					if (principleConfig.value.length > 0) {
+						let dataTmp = [];
+						principleConfig.value.forEach(item => {
+							dataTmp = listCertificate.value.filter(
+								i => i.status === item.status
+							);
+							subStatusDataTmp.value[item.id] = dataTmp;
+						});
+						pushSubStatusData();
+					}
+				}
+			} catch (e) {}
+		};
 		const startSetup = async () => {
 			if (!jsonConfig.value) {
 				jsonConfig.value = await preCertificateStore.getConfig();
@@ -394,18 +434,32 @@ export default {
 					i => i.isActive === 1
 				);
 			}
+			if (props.search_kanban) {
+				getDataWorkFlow2(props.search_kanban.search);
+			} else getDataWorkFlow2();
 		};
 		startSetup();
+
 		return {
 			filter,
-			dialogVerifyToStage2,
+			dialogVerifyToStage3,
 			principleConfig,
 			jsonConfig,
 			isMobile,
 			lstData,
 			dataPC,
 			preCertificateOtherDocuments,
-			preCertificateStore
+			preCertificateStore,
+
+			key_dragg,
+			listCertificate,
+			subStatusDataTmp,
+			countData,
+			subStatusDataReturn,
+			subStatusData,
+
+			getDataWorkFlow2,
+			pushSubStatusData
 		};
 	},
 	methods: {
@@ -562,17 +616,15 @@ export default {
 						this.openMessage("Chưa có thông tin tổ thẩm định");
 					}
 				}
-				if (check && require.appraise_item_list) {
-					check = this.checkItemList(data);
-					if (!check) {
-						this.openMessage("Chưa có chi tiết tài sản thẩm định");
-					}
-				}
 			}
 			return check;
 		},
 		checkAppraiser(data) {
-			if (data.appraiser_perform_id && data.appraiser_id) {
+			if (
+				data.appraiser_perform_id &&
+				data.appraiser_sale_id &&
+				data.business_manager_id
+			) {
 				return true;
 			} else {
 				return false;
@@ -775,7 +827,7 @@ export default {
 			this.isMoved = false;
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
-			this.dialogVerifyToStage2 = false;
+			this.dialogVerifyToStage3 = false;
 		},
 		async handleUpdateStatus(id, data, message) {
 			const res = await PreCertificate.updateStatusPreCertificate(id, data);
@@ -928,28 +980,6 @@ export default {
 			);
 		},
 
-		async getDataWorkFlow2(search = "") {
-			this.isLoading = true;
-			try {
-				const resp = await PreCertificate.getListKanbanPreCertificate(search);
-				if (resp.data) {
-					this.listCertificate = resp.data.HSTD;
-
-					if (this.principleConfig.length > 0) {
-						let dataTmp = [];
-						this.principleConfig.forEach(item => {
-							dataTmp = this.listCertificate.filter(
-								i => i.status === item.status
-							);
-							this.subStatusDataTmp[item.id] = dataTmp;
-						});
-						this.pushSubStatusData();
-					}
-				}
-			} catch (e) {
-				this.isLoading = false;
-			}
-		},
 		handleChange(value) {
 			this.total_amount = value;
 		},
@@ -998,37 +1028,13 @@ export default {
 				this.pushSubStatusData();
 			}, 200);
 		},
-		pushSubStatusData() {
-			let count = this.countData ? this.countData : 0;
-			let tmp = this.subStatusDataTmp;
-			let config = this.principleConfig;
-			let data = [];
-			let dataReturn = this.subStatusDataReturn;
-			config.forEach(item => {
-				data = this.subStatusData[item.id] ? this.subStatusData[item.id] : [];
-				if (tmp[item.id] && tmp[item.id].length > count) {
-					for (var i = count; i < count + 10; i++) {
-						tmp[item.id][i] &&
-							data.push(tmp[item.id][i]) &&
-							dataReturn.push(tmp[item.id][i]);
-					}
-				}
-				// data.sort(function (a, b) {
-				// if (a.updated_at > b.updated_at) { return a }
-				// })
-				this.subStatusData[item.id] = data;
-			});
 
-			this.key_dragg++;
-			this.countData += 10;
-		},
 		getConfigByStatus(status) {
 			return this.principleConfig.filter(
 				item => item.status === status && item.isActive === 1
 			);
 		},
 		async getDetailCertificate(id) {
-			// const res = await PreCertificate.getDetailPreCertificate(id);
 			const temp = await this.preCertificateStore.getPreCertificate(id);
 			console.log("temp", temp);
 			if (temp) {
@@ -1054,10 +1060,9 @@ export default {
 			}
 			if (check) {
 				this.next_status = config.status;
-				this.next_sub_status = config.sub_status;
 				this.confirm_message = target.description;
-				if (this.next_status == 2) {
-					this.dialogVerifyToStage2 = true;
+				if (this.next_status == 3) {
+					this.dialogVerifyToStage3 = true;
 				} else this.isHandleAction = true;
 			}
 			console.log("target", target, check, config, this.elementDragger);
@@ -1099,9 +1104,7 @@ export default {
 		// 	);
 		// }
 		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
-		if (this.search_kanban) {
-			this.getDataWorkFlow2(this.search_kanban.search);
-		} else this.getDataWorkFlow2();
+
 		const listElm = document.querySelector("#infinite-list");
 		listElm.addEventListener("scroll", e => {
 			if (
