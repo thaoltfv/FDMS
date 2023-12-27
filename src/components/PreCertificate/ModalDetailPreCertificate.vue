@@ -53,13 +53,24 @@
 							<p>{{ dataPC.petitioner_phone }}</p>
 						</div>
 						<div class="d-flex container_content">
+									<strong class="margin_content_inline">Mục đích thẩm định:</strong
+									><span id="appraise_purpose" class="text-left">{{
+											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 25
+											? dataPC.appraise_purpose.name.substring(70, 0) + "..."
+											: dataPC.appraise_purpose
+									}}</span>
+									<b-tooltip target="appraise_purpose" placement="top-right">{{
+										dataPC.appraise_purpose.name
+									}}</b-tooltip>
+						</div>
+						<!-- <div class="d-flex container_content">
 							<strong class="margin_content_inline">Mục đích thẩm định:</strong>
 							<p>
 								{{
 									dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
 								}}
 							</p>
-						</div>
+						</div> -->
 
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Loại sơ bộ:</strong>
