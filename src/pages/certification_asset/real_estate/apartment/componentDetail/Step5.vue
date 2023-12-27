@@ -2082,9 +2082,9 @@ export default {
 			this.tldcg3 = Math.abs(this.pricePl3) + Math.abs(this.pricePn3) + Math.abs(this.priceLch3) + Math.abs(this.priceLcho1) + Math.abs(this.priceDt3) + Math.abs(this.priceSt3) + Math.abs(this.pricePWC3) + Math.abs(mgcd_price_other_abs[2])
 
 			// tổng giá trị điều chỉnh thuần
-			this.tldc1 = this.pricePl1 + this.pricePn1 + this.priceLch1 + this.priceLch1 + this.priceDt1 + this.priceSt1 + this.pricePWC1 + mgcd_price_other[0]
-			this.tldc2 = this.pricePl2 + this.pricePn2 + this.priceLch2 + this.priceLch2 + this.priceDt2 + this.priceSt2 + this.pricePWC2 + mgcd_price_other[1]
-			this.tldc3 = this.pricePl3 + this.pricePn3 + this.priceLch3 + this.priceLch3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
+			this.tldc1 = this.pricePl1 + this.pricePn1 + this.priceLch1 + this.priceLcho1 + this.priceDt1 + this.priceSt1 + this.pricePWC1 + mgcd_price_other[0]
+			this.tldc2 = this.pricePl2 + this.pricePn2 + this.priceLch2 + this.priceLcho2 + this.priceDt2 + this.priceSt2 + this.pricePWC2 + mgcd_price_other[1]
+			this.tldc3 = this.pricePl3 + this.pricePn3 + this.priceLch3 + this.priceLcho3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
 
 			// tính mức giá chỉ dẫn của TSSS
 			this.mgcd1 = this.dgcc1 + this.tldc1
