@@ -117,123 +117,126 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-12 col-lg-6">
-			<div class="card">
-				<div class="card-title">
-					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">Đối tác</h3>
-						<img
-							class="img-dropdown"
-							:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
-							src="@/assets/images/icon-btn-down.svg"
-							alt="dropdown"
-							@click="showCardDetailTraffic = !showCardDetailTraffic"
-						/>
-					</div>
-				</div>
-				<div class="card-body card-info" v-show="showCardDetailTraffic">
-					<div class="d-flex-column">
-						<InputCategorySearch
-							vid="appraiser"
-							class="form-group-container"
-							label="Tìm đối tác"
-							@change="handleChangeCustomer"
-							@search="debounceSearchCustomer"
-							:options="optionsCustomer"
-						/>
-						<InputTextPrefixCustom
-							id="customer_name"
-							placeholder="Ông / Bà"
-							v-model="dataPC.customer.name"
-							vid="customer_name"
-							:iconUser="true"
-							:showIcon="true"
-							label="Họ tên đối tác"
-							class="form-group-container input_certification_brief"
-						/>
-						<InputTextPrefixCustom
-							id="customer_address"
-							placeholder="Nhập địa chỉ của khách hàng"
-							v-model="dataPC.customer.address"
-							vid="customer_address"
-							:iconLocation="true"
-							:showIcon="true"
-							label="Địa chỉ"
-							class="form-group-container input_certification_brief"
-						/>
-						<InputTextPrefixCustom
-							id="customer_phone"
-							placeholder="Nhập số điện thoại"
-							v-model="dataPC.customer.phone"
-							class="form-group-container input_certification_brief"
-							vid="customer_phone"
-							:iconPhone="true"
-							:showIcon="true"
-							label="Điện thoại"
-						/>
-					</div>
-				</div>
-			</div>
+		<div class="col-6" :style="isMobile ? { padding: '0' } : {}">
+			<OtherFile type="Appendix" />
 		</div>
-		<div class="col-md-12 col-lg-6">
+		<div class="col-6">
 			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tổ thẩm định</h3>
 						<img
-							class="img-dropdown"
-							:class="
-								!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''
-							"
-							src="@/assets/images/icon-btn-down.svg"
-							alt="dropdown"
-							@click="
-								showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial
-							"
-						/>
-					</div>
-				</div>
-				<div
-					class="card-body card-info"
-					v-show="showCardDetailEconomicAndSocial"
-				>
-					<div class="d-flex-column">
-						<div class="row justify-content-between">
-							<InputCategory
-								v-model="appraiser_sale_compute"
-								vid="appraiser_sale_id"
-								label="Nhân viên kinh doanh"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsAppraiserSales"
-							/>
-							<InputCategory
-								v-model="appraiser_perform_compute"
-								vid="appraiser_perform_id"
-								label="Chuyên viên thực hiện"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsAppraiserPerformance"
+								class="img-dropdown"
+								:class="
+									!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''
+								"
+								src="@/assets/images/icon-btn-down.svg"
+								alt="dropdown"
+								@click="
+									showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial
+								"
 							/>
 						</div>
-						<div class="row justify-content-between">
-							<InputCategory
-								v-model="business_manager_compute"
-								vid="business_manager_id"
-								label="Quản lý nghiệp vụ"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsBusinessManager"
-							/>
+					</div>
+					<div
+						class="card-body card-info"
+						v-show="showCardDetailEconomicAndSocial"
+					>
+						<div class="d-flex-column">
+							<div class="row justify-content-between">
+								<InputCategory
+									v-model="appraiser_sale_compute"
+									vid="appraiser_sale_id"
+									label="Nhân viên kinh doanh"
+									rules="required"
+									class="form-group-container col-sm-12 col-md-6"
+									:options="optionsAppraiserSales"
+								/>
+								<InputCategory
+									v-model="appraiser_perform_compute"
+									vid="appraiser_perform_id"
+									label="Chuyên viên thực hiện"
+									rules="required"
+									class="form-group-container col-sm-12 col-md-6"
+									:options="optionsAppraiserPerformance"
+								/>
+							</div>
+							<div class="row justify-content-between">
+								<InputCategory
+									v-model="business_manager_compute"
+									vid="business_manager_id"
+									label="Quản lý nghiệp vụ"
+									rules="required"
+									class="form-group-container col-sm-12 col-md-6"
+									:options="optionsBusinessManager"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="card">
+						<div class="card-title">
+							<div class="d-flex justify-content-between align-items-center">
+								<h3 class="title">Đối tác</h3>
+								<img
+									class="img-dropdown"
+									:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
+									src="@/assets/images/icon-btn-down.svg"
+									alt="dropdown"
+									@click="showCardDetailTraffic = !showCardDetailTraffic"
+								/>
+							</div>
+						</div>
+						<div class="card-body card-info" v-show="showCardDetailTraffic">
+							<div class="d-flex-column">
+								<InputCategorySearch
+									vid="appraiser"
+									class="form-group-container"
+									label="Tìm đối tác"
+									@change="handleChangeCustomer"
+									@search="debounceSearchCustomer"
+									:options="optionsCustomer"
+								/>
+								<div class="row">
+										<div class="col-lg-6">
+											<InputTextPrefixCustom
+											id="customer_name"
+											placeholder="Ông / Bà"
+											v-model="dataPC.customer.name"
+											vid="customer_name"
+											:iconUser="true"
+											:showIcon="true"
+											label="Họ tên đối tác"
+											class="form-group-container input_certification_brief"
+											/>
+										</div>
+										<div class="col-lg-6">
+											<InputTextPrefixCustom
+												id="customer_phone"
+												placeholder="Nhập số điện thoại"
+												v-model="dataPC.customer.phone"
+												class="form-group-container input_certification_brief"
+												vid="customer_phone"
+												:iconPhone="true"
+												:showIcon="true"
+												label="Điện thoại"
+											/>
+										</div>
+								</div>
+								<InputTextPrefixCustom
+									id="customer_address"
+									placeholder="Nhập địa chỉ của khách hàng"
+									v-model="dataPC.customer.address"
+									vid="customer_address"
+									:iconLocation="true"
+									:showIcon="true"
+									label="Địa chỉ"
+									class="form-group-container input_certification_brief"
+								/>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-6" :style="isMobile ? { padding: '0' } : {}">
-			<OtherFile type="Appendix" />
-		</div>
-
 		<div
 			v-if="dataPC.status >= 2"
 			class="col-6"

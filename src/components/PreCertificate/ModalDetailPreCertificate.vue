@@ -55,9 +55,9 @@
 						<div class="d-flex container_content">
 									<strong class="margin_content_inline">Mục đích thẩm định:</strong
 									><span id="appraise_purpose" class="text-left">{{
-											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 25
+											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 70
 											? dataPC.appraise_purpose.name.substring(70, 0) + "..."
-											: dataPC.appraise_purpose
+											: dataPC.appraise_purpose.name
 									}}</span>
 									<b-tooltip target="appraise_purpose" placement="top-right">{{
 										dataPC.appraise_purpose.name
