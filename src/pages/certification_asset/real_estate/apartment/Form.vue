@@ -35,6 +35,7 @@
 			:floors="floors"
 			:apartments="apartments"
 			:directions="directions"
+			:loai_can_ho="loai_can_ho"
 			:furniture_list="furniture_list"
 			:basic_utilities="basic_utilities"
 			:imageDescriptions="imageDescriptions"
@@ -325,6 +326,7 @@ export default {
 			businesses: [],
 			conditions: [],
 			socialSecurities: [],
+			loai_can_ho: [],
 			fengshuies: [],
 			zones: [],
 			landShapes: [],
@@ -1492,6 +1494,7 @@ export default {
 					this.topographic = resp.data.dia_hinh
 					this.landShapes = resp.data.hinh_dang_dat
 					this.socialSecurities = resp.data.an_ninh_moi_truong_song
+					this.loai_can_ho = resp.data.loai_can_ho
 					let basic_utilities = resp.data.tien_ich_co_ban
 					this.basic_utilities = basic_utilities.filter(item => item.acronym !== null)
 					this.directions = resp.data.huong_can_ho

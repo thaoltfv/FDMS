@@ -301,6 +301,10 @@
           </div>
           <div class="d-grid">
             <div class="content-detail">
+              <p class="content-title">Loại căn hộ:</p>
+              <p class="content-name">{{this.form.room_details[0].loai_can_ho !== undefined && this.form.room_details[0].loai_can_ho !== null ? this.form.room_details[0].loai_can_ho.description : ''}}</p>
+            </div>
+            <div class="content-detail">
               <p class="content-title">Hướng chính:</p>
               <p class="content-name">{{this.form.room_details[0].direction !== undefined && this.form.room_details[0].direction !== null ? this.form.room_details[0].direction.description : ''}}</p>
             </div>

@@ -149,6 +149,7 @@
 							:apartments="apartments"
 							:directions="directions"
 							:furniture_list="furniture_list"
+							:loai_can_ho="loai_can_ho"
 							:basic_utilities="basic_utilities"
 							:imageDescriptions="imageDescriptions"
 							@getDistrict="changeProvince"
@@ -742,6 +743,7 @@ export default {
 			basic_utilities: [],
 			directions: [],
 			furniture_list: [],
+			loai_can_ho: [],
 			provinceName: null,
 			districtName: null,
 			wardName: null,
@@ -1787,6 +1789,7 @@ export default {
 					})
 					// const res = await WareHouse.getInterior()
 					this.furniture_list = resp.data.chat_luong_noi_that
+					this.loai_can_ho = resp.data.loai_can_ho
 					this.furniture_list.forEach(item => {
 						item.description = this.formatSentenceCase(item.description)
 					})

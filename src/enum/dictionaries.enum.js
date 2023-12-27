@@ -31,6 +31,10 @@ export const DICTIONARIES = [{
 	NAME: 'Pháp lý'
 },
 {
+	TYPE: 'VI_TRI',
+	NAME: 'Vị trí'
+},
+{
 	TYPE: 'LOAI_GIAO_DICH',
 	NAME: 'Loại giao dịch'
 },
@@ -141,5 +145,9 @@ export const DICTIONARIES = [{
 {
 	TYPE: 'LI_DO',
 	NAME: 'Lí do'
+},
+{
+	TYPE: 'LOAI_CAN_HO',
+	NAME: 'Loại căn hộ'
 }
 ]

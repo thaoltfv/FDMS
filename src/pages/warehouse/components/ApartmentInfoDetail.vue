@@ -16,6 +16,14 @@
             rules="required"
             class="col-12 col-lg-4 form-group-container"
           />
+          <InputCategory
+              v-model='room_details.loai_can_ho_id'
+              vid="loai_can_ho_id"
+              label="Loại căn hộ"
+              rules="required"
+              class="col-12 col-lg-4 form-group-container"
+              :options="optionsLoaiCanHo"
+            />
           <InputArea
             v-model="room_details.area"
             vid="area"
@@ -68,6 +76,15 @@
             class="col-12 col-lg-4 form-group-container"
             :options="optionFurniture"
           />
+          <!-- <InputCategory
+            v-model='room_details.furniture_quality_id'
+            vid="furniture_quality_id"
+            label="Tình trạng nội thất"
+            rules="required"
+            class="col-12 col-lg-4 form-group-container"
+            :options="optionFurniture"
+          /> -->
+          <div class="col-12 col-lg-4 form-group-container"></div>
           <InputTextarea
             label="Mô tả"
             v-model="room_details.description"
@@ -92,7 +109,7 @@ import InputTextarea from '@/components/Form/InputTextarea'
 import ModalDeleteIndex from '@/components/Modal/ModalDeleteIndex'
 export default {
 	name: 'ApartmentInfoDetail',
-	props: ['room_details', 'apartment_id', 'apartments', 'directions', 'furniture_list', 'apartment_specification'],
+	props: ['room_details', 'apartment_id', 'apartments', 'directions', 'furniture_list', 'apartment_specification', 'loai_can_ho'],
 	components: {
 		InputCategory,
 		InputText,
@@ -126,6 +143,13 @@ export default {
 		}
 	},
 	computed: {
+		optionsLoaiCanHo () {
+			return {
+				data: this.loai_can_ho,
+				id: 'id',
+				key: 'description'
+			}
+		},
 		optionDirection () {
 			return {
 				data: this.directions,

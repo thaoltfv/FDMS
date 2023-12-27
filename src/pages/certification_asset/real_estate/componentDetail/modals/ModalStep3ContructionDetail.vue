@@ -50,11 +50,12 @@
                         v-model="form.building_category_id"
                         vid="building_category_id"
                         label="Cấp nhà"
-                        rules="required"
+
                         :disabled="true"
                         class="form-group-container"
                         :options="optionsHousing"
                         @change="changeCategoryBuilding"
+                        hidden
                     />
                   </div>
                   <!-- v-if="building === 'BIỆT THỰ'" -->
@@ -75,10 +76,11 @@
                         v-model="form.rate_id"
                         vid="rate_id"
                         label="Hạng nhà"
-                        rules="required"
+
                         :disabled="true"
                         class="form-group-container"
                         :options="optionsRate"
+                        hidden
                     />
                   </div>
                   <!-- v-if="building === 'NHÀ XƯỞNG (KHO)'" -->
@@ -165,7 +167,7 @@
                         label="Diện tích xây dựng"
                         :max="99999999"
                         :decimal="2"
-                        rules="required"
+
                         :disabled="true"
                         @change="changeArea($event)"
                     />

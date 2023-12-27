@@ -96,6 +96,13 @@ export const COMPARISON = [{
 	slug: 'dieu_kien_thanh_toan',
 	disable: true,
 	visible: false
+},
+{
+	id: 15,
+	name: 'Vị trí',
+	slug: 'vi_tri',
+	disable: false,
+	visible: true
 }
 	// {
 	//   id: 15,

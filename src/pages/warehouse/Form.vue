@@ -257,6 +257,7 @@
 					:apartment_id="form.apartment_id"
 					:apartments="apartments"
 					:directions="directions"
+					:loai_can_ho="loai_can_ho"
 					:furniture_list="furniture_list"
 					@changeAparment="changeAparment"
 					@changeWCNum="changeWCNum"
@@ -360,7 +361,7 @@
 								<tr>
 									<th>Mã số</th>
 									<th>Loại</th>
-									<th>Cấp nhà</th>
+									<!-- <th>Cấp nhà</th> -->
 									<th>Chất lượng còn lại</th>
 									<th>Diện tích sàn (m <sup>2</sup>)</th>
 									<th>Đơn giá xây dựng (VND)</th>
@@ -391,7 +392,7 @@
 											@change="change_data_log('Loại CTXD')"
 										/>
 									</td>
-									<td>
+									<!-- <td>
 										<InputCategory
 											v-model="tangible.building_category_id"
 											vid="building_category_id"
@@ -401,7 +402,7 @@
 											:options="optionsHousing"
 											@change="change_data_log('Cấp nhà')"
 										/>
-									</td>
+									</td> -->
 									<td>
 										<InputPercent
 											v-model="tangible.remaining_quality"
@@ -927,6 +928,7 @@ export default {
 			basic_utilities: [],
 			directions: [],
 			furniture_list: [],
+			loai_can_ho: [],
 			unit: '',
 			isSubmit: false,
 			isEditTangible: false,
@@ -2172,6 +2174,7 @@ export default {
 				let basic_utilities = [...res.data.tien_ich_co_ban]
 				this.basic_utilities = basic_utilities.filter(item => item.acronym !== null)
 				this.directions = [...res.data.huong_can_ho]
+				this.loai_can_ho = [...res.data.loai_can_ho]
 				let propertyTypesTem = [...res.data.loai_tai_san]
 				let propertyTypesBDS = []
 				propertyTypesBDS = await propertyTypesTem.filter(item => item.dictionary_acronym === 'BDS')

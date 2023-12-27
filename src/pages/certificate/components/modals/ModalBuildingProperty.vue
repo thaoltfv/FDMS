@@ -32,9 +32,10 @@
                     v-model="form.building_category_id"
                     vid="building_category_id"
                     label="Cấp nhà"
-                    rules="required"
+
                     :options="optionsHousing"
                     @change="changeCategory"
+                    hidden
                   />
                 </div>
                 <div class="col-12 col-lg-6 input-contain" v-if="building === 'BIỆT THỰ'">
@@ -52,9 +53,10 @@
                     v-model="form.rate_id"
                     vid="rate_id"
                     label="Hạng nhà"
-                    rules="required"
+
                     :options="optionsRate"
                     @change="changeRate"
+                    hidden
                   />
                 </div>
                 <div class="col-12 col-lg-6 input-contain" v-if="building === 'NHÀ XƯỞNG (KHO)'">
