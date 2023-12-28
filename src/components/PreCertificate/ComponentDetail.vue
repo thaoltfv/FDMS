@@ -278,7 +278,7 @@
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
-			<OtherFile :type="'Appendix'" :from="'Detail'" />
+			<OtherFile :type="'Appendix'" :from-component="'Detail'" />
 		</div>
 		<div
 			v-if="dataPC.id && dataPC.status >= 2"
@@ -304,6 +304,7 @@
 				<OtherFile
 					v-show="showCardDetailFileResult"
 					type="Result"
+					:from-component="'Detail'"
 					@action="showCardDetailFileResult = true"
 				/>
 			</div>
@@ -396,7 +397,7 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
-		<ModalNotificationCertificateNote
+		<ModalNotificationPreCertificateNote
 			v-if="openNotification"
 			@cancel="handleCancel"
 			v-bind:notification="message"
@@ -447,7 +448,7 @@
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/> -->
-		<ModalNotificationCertificateNote
+		<ModalNotificationPreCertificateNote
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
@@ -464,6 +465,12 @@
 			@cancel="deleteUploadDocument = false"
 			@action="deleteDocument"
 		/>
+
+		<ModalVerifyToStage3
+			v-if="dialogVerifyToStage3"
+			:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
+			@action="dialogVerifyToStage3 = false"
+		/>
 	</div>
 </template>
 <style lang="scss">
@@ -475,11 +482,12 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import ModalVerifyToStage3 from "@/components/PreCertificate/ModalVerifyToStage3";
 
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -550,7 +558,8 @@ export default {
 		"b-button-group": BButtonGroup,
 		"b-dropdown": BDropdown,
 		Footer,
-		ModalNotificationCertificateNote
+		ModalNotificationPreCertificateNote,
+		ModalVerifyToStage3
 	},
 	data() {
 		return {
@@ -648,11 +657,12 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, lstData, preCertificateOtherDocuments } = storeToRefs(
+		const dialogVerifyToStage3 = ref(false);
+		const { dataPC, lstDataConfig, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
 		const start = async () => {
-			if (!lstData.value.workflow) {
+			if (!lstDataConfig.value.workflow) {
 				await preCertificateStore.getConfig();
 			}
 			await preCertificateStore.resetData();
@@ -662,9 +672,10 @@ export default {
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(false);
 		return {
+			dialogVerifyToStage3,
 			isMobile,
 			dataPC,
-			lstData,
+			lstDataConfig,
 			preCertificateOtherDocuments,
 			preCertificateStore,
 			checkVersion2,
@@ -1291,18 +1302,6 @@ export default {
 				this.isCheckVersion = require.check_version
 					? require.check_version
 					: false;
-				if (require.appraiser) {
-					check = this.checkAppraiser();
-					if (!check) {
-						return "Chưa có thông tin tổ thẩm định";
-					}
-				}
-				if (check && require.appraise_item_list) {
-					check = this.checkItemList();
-					if (!check) {
-						return "Chưa có chi tiết tài sản thẩm định";
-					}
-				}
 			}
 			return message;
 		},
@@ -1318,8 +1317,11 @@ export default {
 				}
 				if (message === "") {
 					this.targetStatus = config.status;
+					this.dataPC.status = config.status;
 					this.message = target.description;
-					this.isHandleAction = true;
+					if (this.targetStatus == 3) {
+						this.dialogVerifyToStage3 = true;
+					} else this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
 				}
@@ -1337,43 +1339,10 @@ export default {
 			return status_expired_at;
 		},
 		async handleAction2(note, reason_id) {
-			const {
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_manager_id,
-				appraiser_perform,
-				appraiser_confirm,
-				appraiser_manager,
-				appraiser,
-				appraiser_control,
-				appraiser_control_id
-			} = this.dataPC;
-			let dataSend = {
-				appraiser_perform,
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_confirm,
-				appraiser_manager_id,
-				appraiser_manager,
-				appraiser_control,
-				appraiser_control_id,
-				appraiser,
-				status: this.targetStatus,
-				check_price: this.isCheckPrice,
-				check_version: this.isCheckVersion,
-				check_legal: this.isCheckLegal,
-				required: this.changeStatusRequire,
-				status_expired_at: this.getExpireStatusDate(),
-				status_note: note,
-				status_reason_id: reason_id,
-				status_description: this.message,
-				status_config: this.jsonConfig.principle
-			};
-			const res = await PreCertificate.updateStatusPreCertificate(
+			const res = await this.preCertificateStore.updateStatus(
 				this.dataPC.id,
-				dataSend
+				note,
+				reason_id
 			);
 			if (res.data) {
 				this.dataPC.status = this.targetStatus;
@@ -1948,11 +1917,7 @@ export default {
 		},
 		checkDiffVersion() {
 			let message = "";
-			if (
-				this.config.check_version &&
-				this.config.check_version &&
-				this.checkVersion.length > 0
-			) {
+			if (this.config.check_version && this.checkVersion.length > 0) {
 				message =
 					"Sai version. Bạn cần cập nhật lại version trước khi chuyển trạng thái.";
 			}
@@ -2077,8 +2042,8 @@ export default {
 	},
 	async mounted() {
 		if (!this.jsonConfig) {
-			if (this.lstData.workflow) {
-				this.jsonConfig = this.lstData.workflow;
+			if (this.lstDataConfig.workflow) {
+				this.jsonConfig = this.lstDataConfig.workflow;
 			} else {
 				this.jsonConfig = await this.preCertificateStore.getConfig();
 			}

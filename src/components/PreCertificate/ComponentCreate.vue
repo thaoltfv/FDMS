@@ -335,7 +335,7 @@ export default {
 		});
 
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, lstData, preCertificateOtherDocuments } = storeToRefs(
+		const { dataPC, lstDataConfig, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
 		preCertificateStore.resetData();
@@ -350,7 +350,7 @@ export default {
 		}, 400);
 
 		const handleChangeCustomer = async event => {
-			let bindCustomer = await lstData.value.customers.filter(
+			let bindCustomer = await lstDataConfig.value.customers.filter(
 				item => item.id === event
 			);
 			if (bindCustomer && bindCustomer.length > 0) {
@@ -371,7 +371,7 @@ export default {
 			customers_step_1,
 			form,
 			dataPC,
-			lstData,
+			lstDataConfig,
 			preCertificateOtherDocuments,
 
 			handleChangeAppraisePurpose,
@@ -383,7 +383,7 @@ export default {
 		appraiser_perform_compute: {
 			// getter
 			get: function() {
-				if (this.lstData.appraiser_performances.length > 0) {
+				if (this.lstDataConfig.appraiser_performances.length > 0) {
 					// // console.log('vô đây trước 1')
 					return this.dataPC.appraiser_perform_id;
 				} else {
@@ -400,7 +400,7 @@ export default {
 		business_manager_compute: {
 			// getter
 			get: function() {
-				if (this.lstData.appraiser_business_managers.length > 0) {
+				if (this.lstDataConfig.appraiser_business_managers.length > 0) {
 					return this.dataPC.business_manager_id;
 				} else {
 					return this.dataPC.appraiser_business_manager.name;
@@ -423,7 +423,7 @@ export default {
 		appraiser_sale_compute: {
 			// getter
 			get: function() {
-				if (this.lstData.appraiser_sales.length > 0) {
+				if (this.lstDataConfig.appraiser_sales.length > 0) {
 					return this.dataPC.appraiser_sale_id;
 				} else {
 					return this.dataPC.appraiser_sale.name;
@@ -437,42 +437,42 @@ export default {
 		},
 		optionsAppraisalPurposes() {
 			return {
-				data: this.lstData.appraiser_purposes,
+				data: this.lstDataConfig.appraiser_purposes,
 				id: "id",
 				key: "name"
 			};
 		},
 		optionsBusinessManager() {
 			return {
-				data: this.lstData.appraiser_business_managers,
+				data: this.lstDataConfig.appraiser_business_managers,
 				id: "id",
 				key: "name"
 			};
 		},
 		optionsAppraiserPerformance() {
 			return {
-				data: this.lstData.appraiser_performances,
+				data: this.lstDataConfig.appraiser_performances,
 				id: "id",
 				key: "name"
 			};
 		},
 		optionsAppraiserSales() {
 			return {
-				data: this.lstData.appraiser_sales,
+				data: this.lstDataConfig.appraiser_sales,
 				id: "id",
 				key: "name"
 			};
 		},
 		optionsPreTypes() {
 			return {
-				data: this.lstData.preTypes,
+				data: this.lstDataConfig.preTypes,
 				id: "code",
 				key: "name"
 			};
 		},
 		optionsCustomer() {
 			return {
-				data: this.lstData.customers,
+				data: this.lstDataConfig.customers,
 				id: "id",
 				key: "full_info"
 			};

@@ -72,7 +72,7 @@ export const usePreCertificateStore = defineStore(
 			Result: []
 		});
 
-		const lstData = ref({
+		const lstDataConfig = ref({
 			appraiser_business_managers: [],
 			appraiser_sales: [],
 			appraiser_performances: [],
@@ -84,7 +84,7 @@ export const usePreCertificateStore = defineStore(
 		async function getCustomer() {
 			let res = await PreCertificate.getCustomer();
 			if (res.data) {
-				lstData.value.customers = res.data;
+				lstDataConfig.value.customers = res.data;
 			}
 		}
 		async function getConfig() {
@@ -93,24 +93,26 @@ export const usePreCertificateStore = defineStore(
 				const element = respconfig.data[index];
 				element.config = JSON.parse(element.config);
 				if (element.name === "pre_types")
-					lstData.value.preTypes = element.config;
+					lstDataConfig.value.preTypes = element.config;
 
 				if (element.name === "workflow") {
-					lstData.value.workflow = element.config;
-					jsonConfig.value = lstData.value.workflow;
+					lstDataConfig.value.workflow = element.config;
+					jsonConfig.value = lstDataConfig.value.workflow;
 				}
 			}
-			return lstData.value.workflow;
+			return lstDataConfig.value.workflow;
 		}
 		async function getStartData() {
 			const resp = await PreCertificate.getAppraisers();
 			let dataAppraise = [...resp.data];
-			lstData.value.appraiser_business_managers = dataAppraise;
-			lstData.value.appraiser_sales = dataAppraise;
-			lstData.value.appraiser_performances = dataAppraise;
+			lstDataConfig.value.appraiser_business_managers = dataAppraise;
+			lstDataConfig.value.appraiser_sales = dataAppraise;
+			lstDataConfig.value.appraiser_performances = dataAppraise;
 
 			const resp2 = await PreCertificate.getAppraiseOthers();
-			lstData.value.appraiser_purposes = [...resp2.data.muc_dich_tham_dinh_gia];
+			lstDataConfig.value.appraiser_purposes = [
+				...resp2.data.muc_dich_tham_dinh_gia
+			];
 			getConfig();
 			getCustomer();
 		}
@@ -233,10 +235,15 @@ export const usePreCertificateStore = defineStore(
 				isLoading.value = false;
 			}
 		}
+
 		const jsonConfig = ref(null);
 		async function updateToStage3() {
 			dataPC.value.status = 3;
-			dataPC.value.status_expired_at = await getExpireStatusDate(3);
+			const config = jsonConfig.value.principle.find(
+				item => item.status === dataPC.value.status && item.isActive === 1
+			);
+			dataPC.value.status_expired_at = await getExpireStatusDate(config);
+
 			let dataSend = {
 				// appraiser_id: this.elementDragger.appraiser_id,
 				// business_manager_id: this.elementDragger.business_manager_id,
@@ -258,7 +265,7 @@ export const usePreCertificateStore = defineStore(
 					check_price: true,
 					check_version: true
 				},
-				status: 2,
+				status: dataPC.value.status,
 				status_expired_at: dataPC.value.status_expired_at,
 				status_note: dataPC.value.status_note,
 				status_reason_id: "",
@@ -270,9 +277,9 @@ export const usePreCertificateStore = defineStore(
 				dataPC.value.id,
 				dataSend
 			);
-			let error = false;
+			let error = true;
 			if (res.data) {
-				error = true;
+				error = false;
 				other.value.toast.open({
 					message: `Định giá sơ bộ thành công`,
 					type: "success",
@@ -294,34 +301,37 @@ export const usePreCertificateStore = defineStore(
 			other.value.isSubmit = false;
 			return error;
 		}
-		async function updateStatus() {
-			dataPC.value.status_expired_at = getExpireStatusDate(dataPC.value.status);
-			const res = await PreCertificate.updateStatusPreCertificate(
-				dataPC.value.id,
-				dataPC.value
-			);
 
-			if (res.data) {
-				return res.data;
-			} else if (res.error) {
-				other.value.toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right"
-				});
-			} else {
-				other.value.toast.open({
-					message: "Chuyển tiếp thất bại",
-					type: "error",
-					position: "top-right"
-				});
-			}
-			other.value.isSubmit = false;
-		}
-		function getExpireStatusDate(status) {
+		async function updateStatus(id, note, reason_id) {
 			const config = jsonConfig.value.principle.find(
-				item => item.status === status && item.isActive === 1
+				item => item.status === dataPC.value.status && item.isActive === 1
 			);
+			dataPC.value.status_expired_at = await getExpireStatusDate(config);
+			let dataSend = {
+				business_manager_id: null,
+				appraiser_perform_id: null,
+				appraiser_sale_id: null,
+				check_price: null,
+				check_version: null,
+				required: {
+					appraise_item_list: false,
+					appraiser: true,
+					check_legal: false,
+					check_price: false,
+					check_version: false
+				},
+				status: dataPC.value.status,
+				status_expired_at: dataPC.value.status_expired_at,
+				status_note: note,
+				status_reason_id: reason_id,
+				status_description: config.description,
+				status_config: jsonConfig.value.principle
+			};
+			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
+
+			return res;
+		}
+		function getExpireStatusDate(config) {
 			let dateConvert = new Date();
 			let minutes = config.process_time ? config.process_time : 1440;
 			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
@@ -424,7 +434,7 @@ export const usePreCertificateStore = defineStore(
 
 		return {
 			dataPC,
-			lstData,
+			lstDataConfig,
 			preCertificateOtherDocuments,
 			permission,
 			other,

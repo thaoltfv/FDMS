@@ -21,7 +21,7 @@
 					<div class="row d-flex justify-content-between align-items-center">
 						<h3 class="title">
 							{{ title }}
-							<label :for="'image_property' + type" v-if="!from" class="ml-2">
+							<label :for="'image_property' + type" class="ml-2">
 								<font-awesome-icon
 									:style="{ color: 'orange', cursor: 'pointer' }"
 									icon="cloud-upload-alt"
@@ -31,7 +31,6 @@
 						</h3>
 
 						<input
-							v-if="!from"
 							class="btn-upload "
 							type="file"
 							:ref="'file' + type"
@@ -88,20 +87,14 @@
 							</div>
 							<div>
 								<img
-									v-if="file.isUpload === false && !from"
+									v-if="file.isUpload === false"
 									@click="deleteOtherFile(file, index)"
 									src="@/assets/icons/ic_delete_2.svg"
 									alt="tag_2"
 									class="img_document_action"
 								/>
 								<img
-									v-else-if="
-										!from &&
-											permission.allowDelete &&
-											(dataPC.status === 1 ||
-												dataPC.status === 2 ||
-												dataPC.status === 3)
-									"
+									v-else-if="permission.allowDelete"
 									@click="deleteOtherFile(file, index)"
 									src="@/assets/icons/ic_delete_2.svg"
 									alt="tag_2"
@@ -117,6 +110,7 @@
 		<div class="card-body card-info" v-if="type === 'Result'">
 			<div class="row">
 				<InputCurrency
+					v-if="!fromComponent"
 					v-model="dataPC.total_preliminary_value"
 					vid="service_fee"
 					:max="99999999999999"
@@ -124,11 +118,25 @@
 					class="col-sm-6 col-md-6"
 					style="margin-left:-10px;"
 				/>
+				<div
+					v-else
+					class="d-flex container_content"
+					style="margin-left:-10px;margin-bottom: -25px;"
+				>
+					<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
+					<p>
+						{{
+							dataPC.total_preliminary_value
+								? formatNumber(dataPC.total_preliminary_value)
+								: 0
+						}}đ
+					</p>
+				</div>
 			</div>
 			<div class="row ">
 				<div class="title" style="margin-left:-10px;">
 					File kèm kết quả sơ bộ
-					<label class="ml-2" for="image_property" v-if="!from">
+					<label class="ml-2" for="image_property">
 						<font-awesome-icon
 							:style="{ color: 'orange', cursor: 'pointer' }"
 							icon="cloud-upload-alt"
@@ -138,7 +146,6 @@
 				</div>
 
 				<input
-					v-if="!from"
 					class="btn-upload "
 					type="file"
 					ref="file"
@@ -178,7 +185,7 @@
 					</div>
 					<div>
 						<img
-							v-if="file.isUpload === false && !from"
+							v-if="file.isUpload === false"
 							@click="deleteOtherFile(file, index)"
 							src="@/assets/icons/ic_delete_2.svg"
 							alt="tag_2"
@@ -186,8 +193,7 @@
 						/>
 						<img
 							v-else-if="
-								!from &&
-									permission.allowDelete &&
+								permission.allowDelete &&
 									(dataPC.status === 1 ||
 										dataPC.status === 2 ||
 										dataPC.status === 3)
@@ -222,7 +228,7 @@ export default {
 		type: {
 			type: String
 		},
-		from: {
+		fromComponent: {
 			type: String
 		}
 	},
@@ -446,8 +452,15 @@ export default {
 		};
 	},
 	methods: {
+		formatNumber(num) {
+			if (num) {
+				let formatedNum = num.toString().replace(".", ",");
+				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+				});
+			}
+		},
 		async onImageChange(e) {
-			console.log("type", this.type);
 			const formData = new FormData();
 			let check = true;
 			let files = e.target.files;
@@ -495,12 +508,14 @@ export default {
 						);
 						if (res.data) {
 							this.preCertificateOtherDocuments[this.type] = res.data.data;
-							console.log(
-								"this.preCertificateOtherDocuments[this.type]",
-								this.preCertificateOtherDocuments[this.type],
-								this.type
-							);
-							this.lstFile = [...res.data.data];
+							const tempList = [];
+							for (let index = 0; index < res.data.data.length; index++) {
+								const element = res.data.data[index];
+								if (element.type_document === this.type) {
+									tempList.push(element);
+								}
+							}
+							this.lstFile = [...tempList];
 							this.$toast.open({
 								message: "Thêm file thành công",
 								type: "success",

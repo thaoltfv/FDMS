@@ -137,47 +137,21 @@
 				@action="handleUpdateStatus"
 				@handleFooterAccept="handleFooterAccept"
 			/>
-			<ModalAppraisal
-				:key="key_render_appraisal"
-				v-if="showAppraisalDialog"
-				:data="elementDragger"
-				:idData="idDragger"
-				:status="status"
-				requiredAppraiserPerform="required"
-				:requiredAppraiser="null"
-				@cancel="handleCancelAppraisal"
-				@updateAppraisal="updateAppraisal"
-			/>
-			<ModalAppraisal
-				:key="key_render_appraisal"
-				v-if="showVerifyCertificate"
-				:data="elementDragger"
-				:idData="idDragger"
-				:status="status"
-				requiredAppraiserPerform="required"
-				requiredAppraiser="required"
-				@cancel="handleCancelVerify"
-				@updateAppraisal="handleChangeVerify"
-			/>
+
 			<ModalSendVerify
 				v-if="showAcceptCertificate"
 				notification="Bạn có muốn muốn duyệt hồ sơ này"
 				@action="handleChangeAccept"
 				@cancel="handleCancelAccept"
 			/>
-			<!-- <ModalSendVerify
-      v-if="isMoved"
-      :notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
-      @action="handleChangeAccept2"
-      @cancel="handleCancelAccept2"
-    /> -->
-			<ModalNotificationCertificateNote
+
+			<ModalNotificationPreCertificateNote
 				v-if="isMoved"
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
 			/>
-			<ModalNotificationCertificateNote
+			<ModalNotificationPreCertificateNote
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
@@ -186,7 +160,7 @@
 			<ModalVerifyToStage3
 				v-if="dialogVerifyToStage3"
 				:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
-				@action="dialogVerifyToStage3 = false"
+				@action="handleActionStage3"
 			/>
 		</div>
 	</div>
@@ -200,7 +174,6 @@ import ModalVerifyToStage3 from "@/components/PreCertificate/ModalVerifyToStage3
 
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
-import ModalAppraisal from "@/components/PreCertificate/ModalAppraisal";
 import {
 	UserIcon,
 	DollarSignIcon,
@@ -217,7 +190,7 @@ import PreCertificate from "@/models/PreCertificate";
 import moment from "moment";
 import KanboardStatus from "@/components/PreCertificate/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
 // const jsonConfig = require("../../../config/pre_certificate_workflow.json");
 Vue.component("downloadExcel", JsonExcel);
 export default {
@@ -309,10 +282,9 @@ export default {
 		ClockIcon,
 		ModalDetailPreCertificate,
 		ModalSendVerify,
-		ModalAppraisal,
 		KanboardStatus,
 		ModalNotificationCertificate,
-		ModalNotificationCertificateNote
+		ModalNotificationPreCertificateNote
 	},
 	created() {
 		// fix_permission
@@ -369,7 +341,7 @@ export default {
 
 		const preCertificateStore = usePreCertificateStore();
 		const {
-			lstData,
+			lstDataConfig,
 			dataPC,
 			jsonConfig,
 			preCertificateOtherDocuments,
@@ -404,18 +376,20 @@ export default {
 			key_dragg.value++;
 			countData.value += 10;
 		};
-		const listCertificate = ref([]);
+		const lstPreCertificate = ref([]);
 		const subStatusDataTmp = ref({});
 		const getDataWorkFlow2 = async (search = "") => {
+			console.log("here");
 			try {
 				const resp = await PreCertificate.getListKanbanPreCertificate(search);
 				if (resp.data) {
-					listCertificate.value = resp.data.HSTD;
+					lstPreCertificate.value = resp.data.HSTD;
 
 					if (principleConfig.value.length > 0) {
 						let dataTmp = [];
+						console.log("herere");
 						principleConfig.value.forEach(item => {
-							dataTmp = listCertificate.value.filter(
+							dataTmp = lstPreCertificate.value.filter(
 								i => i.status === item.status
 							);
 							subStatusDataTmp.value[item.id] = dataTmp;
@@ -426,7 +400,7 @@ export default {
 			} catch (e) {}
 		};
 		const startSetup = async () => {
-			if (!jsonConfig.value) {
+			if (jsonConfig.value === null) {
 				jsonConfig.value = await preCertificateStore.getConfig();
 			}
 			if (jsonConfig.value && jsonConfig.value.principle) {
@@ -446,13 +420,13 @@ export default {
 			principleConfig,
 			jsonConfig,
 			isMobile,
-			lstData,
+			lstDataConfig,
 			dataPC,
 			preCertificateOtherDocuments,
 			preCertificateStore,
 
 			key_dragg,
-			listCertificate,
+			lstPreCertificate,
 			subStatusDataTmp,
 			countData,
 			subStatusDataReturn,
@@ -463,6 +437,15 @@ export default {
 		};
 	},
 	methods: {
+		async handleActionStage3() {
+			if (this.search_kanban) {
+				await this.getDataWorkFlow2(this.search_kanban.search);
+			} else await this.getDataWorkFlow2();
+			this.isMoved = false;
+			this.showDetailPopUp = false;
+			this.isHandleAction = false;
+			this.dialogVerifyToStage3 = false;
+		},
 		getExpireDate(element) {
 			let strExpire = "";
 			switch (element.status) {
@@ -610,12 +593,6 @@ export default {
 				this.isCheckVersion = require.check_version
 					? require.check_version
 					: false;
-				if (require.appraiser) {
-					check = this.checkAppraiser(data);
-					if (!check) {
-						this.openMessage("Chưa có thông tin tổ thẩm định");
-					}
-				}
 			}
 			return check;
 		},
@@ -748,53 +725,11 @@ export default {
 			this.showAcceptCertificate = await false;
 		},
 		async handleChangeAccept2(note, reason_id) {
-			let dataSend = {
-				appraiser_id: this.elementDragger.appraiser_id,
-				business_manager_id: this.elementDragger.business_manager_id,
-				appraiser_sale_id: this.elementDragger.appraiser_sale_id,
-				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
-				status: this.next_status,
-				check_price: this.isCheckPrice,
-				check_version: this.isCheckVersion,
-				required: this.changeStatusRequire,
-				status_expired_at: this.getExpireStatusDate(),
-				status_note: note,
-				status_reason_id: reason_id,
-				status_description: this.message,
-				status_config: this.jsonConfig.principle
-			};
-			if (
-				this.dataPC.status === 1 &&
-				this.next_status === 2 &&
-				this.preCertificateOtherDocuments.Result.length > 0 &&
-				this.dataPC.total_preliminary_value > 0
-			) {
-				dataSend.total_preliminary_value = this.dataPC.total_preliminary_value;
-				// const resBoolean = await this.preCertificateStore.createUpdatePreCertificateion(
-				// 	true
-				// );
-				// if (!resBoolean) {
-				// 	await this.$toast.open({
-				// 		message: "Có lỗi xảy",
-				// 		type: "error",
-				// 		position: "top-right",
-				// 		duration: 3000
-				// 	});
-				// 	return;
-				// }
-			} else {
-				await this.$toast.open({
-					message: "Vui lòng bổ sung file kết quả sơ bộ",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				return;
-			}
-
-			const res = await PreCertificate.updateStatusPreCertificate(
+			console.log("runherehandleChangeAccept2");
+			const res = await this.preCertificateStore.updateStatus(
 				this.idDragger,
-				dataSend
+				note,
+				reason_id
 			);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(
@@ -830,6 +765,7 @@ export default {
 			this.dialogVerifyToStage3 = false;
 		},
 		async handleUpdateStatus(id, data, message) {
+			console.log("runhere2");
 			const res = await PreCertificate.updateStatusPreCertificate(id, data);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(i => i.id === id);
@@ -884,7 +820,7 @@ export default {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(
 					i => i.status === item.status
 				);
-				this.subStatusDataTmp[item.id] = this.listCertificate.filter(
+				this.subStatusDataTmp[item.id] = this.lstPreCertificate.filter(
 					i => i.status === item.status
 				);
 			});
@@ -1060,12 +996,12 @@ export default {
 			}
 			if (check) {
 				this.next_status = config.status;
+				this.dataPC.status = config.status;
 				this.confirm_message = target.description;
 				if (this.next_status == 3) {
 					this.dialogVerifyToStage3 = true;
 				} else this.isHandleAction = true;
 			}
-			console.log("target", target, check, config, this.elementDragger);
 		},
 		handleFooterReject(status, subStatus, text) {
 			this.next_status = status;
@@ -1091,8 +1027,8 @@ export default {
 	},
 	async mounted() {
 		// if (!this.jsonConfig) {
-		// 	if (this.lstData.workflow) {
-		// 		this.jsonConfig = this.lstData.workflow;
+		// 	if (this.lstDataConfig.workflow) {
+		// 		this.jsonConfig = this.lstDataConfig.workflow;
 		// 	} else {
 		// 		this.jsonConfig = await this.preCertificateStore.getConfig();
 		// 	}

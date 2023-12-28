@@ -102,7 +102,7 @@ export default {
 				return;
 			}
 			const boolResult = await this.preCertificateStore.updateToStage3();
-			if (boolResult) {
+			if (!boolResult) {
 				this.handleAction();
 			}
 		}

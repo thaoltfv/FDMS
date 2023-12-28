@@ -283,38 +283,12 @@
 				</div>
 			</div>
 		</div>
-		<ModalAppraisal
-			:key="key_render_appraisal"
-			v-if="showAppraisalDialog"
-			:data="form"
-			:idData="idData"
-			:status="2"
-			requiredAppraiserPerform="required"
-			:requiredAppraiser="null"
-			@cancel="handleCancelAppraisal"
-			@updateAppraisal="updateAppraisal"
-		/>
-		<ModalAppraisal
-			:key="key_render_appraisal"
-			v-if="showVerifyCertificate"
-			:data="form"
-			:idData="idData"
-			:status="3"
-			requiredAppraiserPerform="required"
-			requiredAppraiser="required"
-			@cancel="handleCancelVerify"
-			@updateAppraisal="handleChangeVerify"
-		/>
+
 		<ModalSendVerify
 			v-if="showAcceptCertificate"
 			:notification="`Bạn có muốn '${targetMessage}' hồ sơ này`"
 			@action="handleChangeAccept"
 			@cancel="handleCancelAccept"
-		/>
-		<ModalVerifyToStage3
-			v-if="dialogVerifyToStage3"
-			:notification="`Bạn có muốn 'Định giá sơ bộ' hồ sơ này`"
-			@action="dialogVerifyToStage3 = false"
 		/>
 	</div>
 </template>
@@ -323,9 +297,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import ModalAppraisal from "./ModalAppraisal";
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
-import ModalVerifyToStage3 from "./ModalVerifyToStage3";
 import InputText from "@/components/Form/InputText";
 import InputCategory from "@/components/Form/InputCategory";
 import FileUpload from "@/components/file/FileUpload";
@@ -333,7 +305,6 @@ import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCurrency from "@/components/Form/InputCurrency";
 import moment from "moment";
-import PreCertificate from "@/models/PreCertificate";
 import {
 	BTooltip,
 	BDropdown,
@@ -398,14 +369,12 @@ export default {
 		};
 	},
 	components: {
-		ModalVerifyToStage3,
 		FileUpload,
 		InputCategory,
 		InputText,
 		InputTextPrefixCustom,
 		InputDatePicker,
 		InputCurrency,
-		ModalAppraisal,
 		ModalSendVerify,
 		"b-tooltip": BTooltip,
 		"b-dropdown-item": BDropdownItem,
@@ -426,9 +395,8 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const dialogVerifyToStage3 = ref(false);
 		const { jsonConfig, dataPC } = storeToRefs(preCertificateStore);
-		return { dataPC, dialogVerifyToStage3, isMobile, jsonConfig };
+		return { dataPC, isMobile, jsonConfig };
 	},
 	computed: {
 		optionsAppraisalPurposes() {
@@ -449,25 +417,7 @@ export default {
 			if (this.isPermission) {
 				data = this.targetDescription;
 			}
-			console.log("data", data);
 			return data;
-		},
-		handleUpdateStatus(id) {
-			if (
-				this.dataPC.status === 3 &&
-				this.user_id === this.dataPC.appraiser_perform.user_id
-			) {
-				this.dialogVerifyToStage3 = true;
-			}
-		},
-		handleCancelAppraisal() {
-			this.showAppraisalDialog = false;
-		},
-		updateAppraisal() {
-			this.$emit("action", this.idData, 2);
-		},
-		handleChangeVerify() {
-			this.$emit("action", this.idData, 3);
 		},
 		handleCancelVerify() {
 			this.showVerifyCertificate = false;
@@ -502,6 +452,7 @@ export default {
 			this.targetConfig = this.jsonConfig.principle.find(
 				i => i.id === target.id
 			);
+			console.log("here");
 			this.targetMessage = target.description;
 			if (this.targetConfig) {
 				this.showAcceptCertificate = true;
@@ -515,6 +466,7 @@ export default {
 			return status_expired_at;
 		},
 		async handleChangeAccept() {
+			console.log("runhere");
 			let dataSend = {
 				appraiser_confirm_id: this.dataPC.appraiser_confirm_id,
 				appraiser_id: this.dataPC.appraiser_id,
@@ -532,25 +484,18 @@ export default {
 		handleCancelAccept() {
 			this.showAcceptCertificate = false;
 		},
-		async validateAppraiseInformation() {
-			const isValid = await this.$refs.appraise_information.validate();
-			if (isValid) {
-				this.handleAction();
-			}
-		},
-		async getDetailCertificate() {
-			const res = await PreCertificate.getDetailCertificateBrief(this.idData);
-			if (res.data) {
-				this.form = res.data;
-			} else {
-				await this.$toast.open({
-					message: "Lấy dữ liệu thất bại",
-					type: "error",
-					position: "top-right"
-				});
-			}
-		},
-		handleAction() {},
+		// async getDetailCertificate() {
+		// 	const res = await PreCertificate.getDetailCertificateBrief(this.idData);
+		// 	if (res.data) {
+		// 		this.form = res.data;
+		// 	} else {
+		// 		await this.$toast.open({
+		// 			message: "Lấy dữ liệu thất bại",
+		// 			type: "error",
+		// 			position: "top-right"
+		// 		});
+		// 	}
+		// },
 		loadConfigByStatus(status) {
 			return this.jsonConfig.principle.find(
 				item => item.status === status && item.isActive === 1
