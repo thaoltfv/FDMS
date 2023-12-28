@@ -326,56 +326,6 @@
 			@viewDetailAppraise="viewDetailAppraise"
 			@viewAppraiseListVersion="viewAppraiseListVersion"
 		/>
-		<!--
-		<div class="btn-footer d-md-flex d-block justify-content-end align-items-center">
-			<button v-if="dataPC.status === 3 && dataPC.appraises.length > 0 ? true : false " class="btn btn-white" @click.prevent="viewDetailAppraise">
-				<img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit">
-				Cross check
-			</button>
-			<button v-if="dataPC.status === 3 && dataPC.appraiser && accept && (appraiser_number && user_id === dataPC.appraiser.user_id ) ? true : false "  class="btn btn-white btn-orange" @click.prevent="handleAccept">
-					<img class="img" src="@/assets/icons/ic_done.svg" alt="edit">
-					Đồng ý phê duyệt
-			</button>
-
-			<button v-if="dataPC.status === 3 && dataPC.appraiser && accept && (appraiser_number && user_id === dataPC.appraiser.user_id) ? true : false " class="btn btn-white" @click.prevent="handleDenined">
-					<img class="img" src="@/assets/icons/ic_cancel-1.svg" alt="edit">
-					Từ chối phê duyệt
-			</button>
-
-			<button v-if="dataPC.status === 2 && dataPC.appraiser_perform && (user_id === dataPC.appraiser_perform.user_id) ? true : false " class="btn btn-white btn-orange" @click.prevent="handleSendRequire">
-					<img class="img" src="@/assets/icons/ic_done.svg" alt="edit">
-					Gửi phê duyệt
-			</button>
-
-			<button v-if="dataPC.status === 1 && dataPC.appraiser_sale && (user_id === dataPC.appraiser_sale.user_id || checkRole) ? true : false " class="btn btn-white btn-orange" @click.prevent="handleSendAppraiser">
-					<img class="img" src="@/assets/icons/ic_done.svg" alt="edit">
-					Gửi thẩm định
-			</button>
-
-			<button v-if="dataPC.status === 1 && dataPC.appraiser_sale && (user_id === dataPC.appraiser_sale.user_id || checkRole) ? true : false " class="btn btn-white" @click.prevent="handleEdit(dataPC.id)">
-				<img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
-				Chỉnh sửa
-			</button>
-			<b-button-group  class="btn_group" v-if="(dataPC.status === 1 || dataPC.status === 2)">
-					<button style="margin-right: 2px" class="btn btn-white" @click="onCancel" type="button">
-						<img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel">Trở về
-					</button>
-					<b-dropdown class="btn_dropdown" right dropup>
-						<b-dropdown-item @click.prevent="handleCancelCertificate">
-							<div class="div_item_dropdown">
-								<img style="height: 20px" class="img" src="@/assets/icons/ic_destroy.svg" alt="edit">
-									Hủy hồ sơ
-							</div>
-						</b-dropdown-item>
-					</b-dropdown>
-			</b-button-group>
-				//// trở về
-				<button v-if="(dataPC.status !== 1 && dataPC.status !== 2)" class="btn btn-white" @click="onCancel" type="button">
-					<img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel">Trở về
-				</button>
-		</div> -->
-
-		<!-- <ModalCustomer v-if="showCustomerDialog"/> -->
 		<ModalAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
@@ -1317,9 +1267,15 @@ export default {
 				}
 				if (message === "") {
 					this.targetStatus = config.status;
-					this.dataPC.status = config.status;
+					this.dataPC.target_status = config.status;
 					this.message = target.description;
-					if (this.targetStatus == 3) {
+					if (
+						this.dataPC.status < this.targetStatus &&
+						this.targetStatus == 3 &&
+						this.preCertificateOtherDocuments.Result &&
+						this.preCertificateOtherDocuments.Result.length > 0 &&
+						this.dataPC.total_preliminary_value > 0
+					) {
 						this.dialogVerifyToStage3 = true;
 					} else this.isHandleAction = true;
 				} else {

@@ -192,12 +192,7 @@
 							class="img_document_action"
 						/>
 						<img
-							v-else-if="
-								permission.allowDelete &&
-									(dataPC.status === 1 ||
-										dataPC.status === 2 ||
-										dataPC.status === 3)
-							"
+							v-else-if="permission.allowDelete"
 							@click="deleteOtherFile(file, index)"
 							src="@/assets/icons/ic_delete_2.svg"
 							alt="tag_2"

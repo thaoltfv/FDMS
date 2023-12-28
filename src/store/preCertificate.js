@@ -238,9 +238,10 @@ export const usePreCertificateStore = defineStore(
 
 		const jsonConfig = ref(null);
 		async function updateToStage3() {
-			dataPC.value.status = 3;
+			dataPC.value.target_status = 3;
 			const config = jsonConfig.value.principle.find(
-				item => item.status === dataPC.value.status && item.isActive === 1
+				item =>
+					item.status === dataPC.value.target_status && item.isActive === 1
 			);
 			dataPC.value.status_expired_at = await getExpireStatusDate(config);
 
@@ -265,7 +266,7 @@ export const usePreCertificateStore = defineStore(
 					check_price: true,
 					check_version: true
 				},
-				status: dataPC.value.status,
+				status: dataPC.value.target_status,
 				status_expired_at: dataPC.value.status_expired_at,
 				status_note: dataPC.value.status_note,
 				status_reason_id: "",
@@ -304,7 +305,8 @@ export const usePreCertificateStore = defineStore(
 
 		async function updateStatus(id, note, reason_id) {
 			const config = jsonConfig.value.principle.find(
-				item => item.status === dataPC.value.status && item.isActive === 1
+				item =>
+					item.status === dataPC.value.target_status && item.isActive === 1
 			);
 			dataPC.value.status_expired_at = await getExpireStatusDate(config);
 			let dataSend = {
@@ -320,7 +322,7 @@ export const usePreCertificateStore = defineStore(
 					check_price: false,
 					check_version: false
 				},
-				status: dataPC.value.status,
+				status: dataPC.value.target_status,
 				status_expired_at: dataPC.value.status_expired_at,
 				status_note: note,
 				status_reason_id: reason_id,

@@ -254,7 +254,6 @@ export default {
 			user_id: "",
 			isAccept: false,
 			next_status: "",
-			next_sub_status: "",
 			confirm_message: "",
 			isMoved: false,
 			config: {},
@@ -378,16 +377,20 @@ export default {
 		};
 		const lstPreCertificate = ref([]);
 		const subStatusDataTmp = ref({});
-		const getDataWorkFlow2 = async (search = "") => {
-			console.log("here");
+		const getDataWorkFlow2 = async (isRefresh = false, search = "") => {
 			try {
 				const resp = await PreCertificate.getListKanbanPreCertificate(search);
 				if (resp.data) {
 					lstPreCertificate.value = resp.data.HSTD;
-
+					if (isRefresh) {
+						subStatusDataReturn.value = [];
+						subStatusDataTmp.value = [];
+						subStatusData.value = [];
+						countData.value = 0;
+						key_dragg.value = 1;
+					}
 					if (principleConfig.value.length > 0) {
 						let dataTmp = [];
-						console.log("herere");
 						principleConfig.value.forEach(item => {
 							dataTmp = lstPreCertificate.value.filter(
 								i => i.status === item.status
@@ -409,7 +412,7 @@ export default {
 				);
 			}
 			if (props.search_kanban) {
-				getDataWorkFlow2(props.search_kanban.search);
+				getDataWorkFlow2(false, props.search_kanban.search);
 			} else getDataWorkFlow2();
 		};
 		startSetup();
@@ -439,8 +442,8 @@ export default {
 	methods: {
 		async handleActionStage3() {
 			if (this.search_kanban) {
-				await this.getDataWorkFlow2(this.search_kanban.search);
-			} else await this.getDataWorkFlow2();
+				await this.getDataWorkFlow2(true, this.search_kanban.search, isRefresh);
+			} else await this.getDataWorkFlow2(true);
 			this.isMoved = false;
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
@@ -448,24 +451,19 @@ export default {
 		},
 		getExpireDate(element) {
 			let strExpire = "";
+			console.log("elemnet.status", element.status);
 			switch (element.status) {
-				case 1:
-				case 2:
-				case 3:
-					strExpire = element.status_expired_at
-						? this.updateDate(element.status_expired_at, new Date())
-						: "Đã hết hạn";
-					break;
 				case 6:
-					strExpire = element.status_expired_at
-						? this.updateDate(element.status_expired_at, new Date())
-						: "Đã hết hạn";
+					strExpire = "Đã hủy";
 					break;
-				case 4:
+				case 5:
 					strExpire = "Đã hoàn thành";
 					break;
 				default:
-					strExpire = "Đã hủy";
+					strExpire = element.status_expired_at
+						? this.updateDate(element.status_expired_at, new Date())
+						: "Đã hết hạn";
+					break;
 			}
 			return strExpire;
 		},
@@ -551,6 +549,7 @@ export default {
 			return check;
 		},
 		changedDraggable(evt) {
+			console.log("drag", evt);
 			let targetId = parseInt(evt.to.id);
 			let check = false;
 			let targetConfig = this.principleConfig.find(i => i.id === targetId);
@@ -562,13 +561,32 @@ export default {
 				: "";
 			check = this.checkRequired(targetConfig.require, this.elementDragger);
 			if (check) {
-				this.isMoved = check;
 				this.next_status = targetConfig.status;
-				this.next_sub_status = targetConfig.sub_status;
+				this.dataPC.target_status = targetConfig.status;
 				this.confirm_message = message;
+
+				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+					const checkStage = this.checkDataBeforeChangeToStage3();
+					if (!checkStage) {
+						this.dialogVerifyToStage3 = true;
+						check = false;
+					}
+				}
+				this.isMoved = check;
 			} else {
 				this.returnData();
 				this.key_dragg++;
+			}
+		},
+		checkDataBeforeChangeToStage3() {
+			if (
+				this.preCertificateOtherDocuments.Result &&
+				this.preCertificateOtherDocuments.Result.length > 0 &&
+				this.dataPC.total_preliminary_value > 0
+			) {
+				return true;
+			} else {
+				return false;
 			}
 		},
 		openMessage(
@@ -725,31 +743,36 @@ export default {
 			this.showAcceptCertificate = await false;
 		},
 		async handleChangeAccept2(note, reason_id) {
-			console.log("runherehandleChangeAccept2");
 			const res = await this.preCertificateStore.updateStatus(
 				this.idDragger,
 				note,
 				reason_id
 			);
 			if (res.data) {
-				let returnData = this.subStatusDataReturn.find(
-					i => i.id === this.idDragger
-				);
-				if (returnData) {
-					returnData.status = this.next_status;
-					returnData.sub_status = this.next_sub_status;
-					returnData.status_expired_at = res.data.status_expired_at;
-					returnData.updated_at = res.data.updated_at;
-					returnData.image = res.data.image;
-				}
-				this.returnData();
+				// let returnData = this.subStatusDataReturn.find(
+				// 	i => i.id === this.idDragger
+				// );
+				// if (returnData) {
+				// 	returnData.status = this.next_status;
+				// 	returnData.status_expired_at = res.data.status_expired_at;
+				// 	returnData.updated_at = res.data.updated_at;
+				// 	returnData.image = res.data.image;
+				// }
+				// this.returnData();
+				if (this.search_kanban) {
+					await this.getDataWorkFlow2(
+						true,
+						this.search_kanban.search,
+						isRefresh
+					);
+				} else await this.getDataWorkFlow2(true);
 				await this.$toast.open({
 					message: this.confirm_message + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
 				});
-				this.key_dragg++;
+				// this.key_dragg++;
 			} else {
 				await this.$toast.open({
 					message: `${res.error.message}`,
@@ -765,7 +788,7 @@ export default {
 			this.dialogVerifyToStage3 = false;
 		},
 		async handleUpdateStatus(id, data, message) {
-			console.log("runhere2");
+			console.log("hahandleUpdateStatusndle");
 			const res = await PreCertificate.updateStatusPreCertificate(id, data);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(i => i.id === id);
@@ -972,7 +995,6 @@ export default {
 		},
 		async getDetailCertificate(id) {
 			const temp = await this.preCertificateStore.getPreCertificate(id);
-			console.log("temp", temp);
 			if (temp) {
 				this.detailData = await temp;
 				this.showDetailPopUp = true;
@@ -987,6 +1009,7 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
+			console.log("handleFooterAccept");
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
@@ -996,16 +1019,22 @@ export default {
 			}
 			if (check) {
 				this.next_status = config.status;
-				this.dataPC.status = config.status;
+				this.dataPC.target_status = config.status;
 				this.confirm_message = target.description;
-				if (this.next_status == 3) {
-					this.dialogVerifyToStage3 = true;
-				} else this.isHandleAction = true;
+				if (this.dataPC.status == 2 && this.next_status == 3) {
+					if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+						const checkStage = this.checkDataBeforeChangeToStage3();
+						if (!checkStage) {
+							this.dialogVerifyToStage3 = true;
+							check = false;
+						}
+					}
+				}
+				this.isHandleAction = check;
 			}
 		},
 		handleFooterReject(status, subStatus, text) {
 			this.next_status = status;
-			this.next_sub_status = subStatus;
 			this.confirm_message = text;
 			this.isHandleAction = true;
 		},
@@ -1026,19 +1055,6 @@ export default {
 		this.changeHeight();
 	},
 	async mounted() {
-		// if (!this.jsonConfig) {
-		// 	if (this.lstDataConfig.workflow) {
-		// 		this.jsonConfig = this.lstDataConfig.workflow;
-		// 	} else {
-		// 		this.jsonConfig = await this.preCertificateStore.getConfig();
-		// 	}
-		// }
-		// console.log("jsonfig", this.jsonConfig);
-		// if (this.jsonConfig && this.jsonConfig.principle) {
-		// 	this.principleConfig = this.jsonConfig.principle.filter(
-		// 		i => i.isActive === 1
-		// 	);
-		// }
 		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
 
 		const listElm = document.querySelector("#infinite-list");
