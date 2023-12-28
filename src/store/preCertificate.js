@@ -281,6 +281,7 @@ export const usePreCertificateStore = defineStore(
 			let error = true;
 			if (res.data) {
 				error = false;
+				dataPC.value.status = 3;
 				other.value.toast.open({
 					message: `Định giá sơ bộ thành công`,
 					type: "success",

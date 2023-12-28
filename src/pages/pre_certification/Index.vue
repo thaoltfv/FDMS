@@ -451,7 +451,6 @@ export default {
 		},
 		getExpireDate(element) {
 			let strExpire = "";
-			console.log("elemnet.status", element.status);
 			switch (element.status) {
 				case 6:
 					strExpire = "Đã hủy";
@@ -545,11 +544,11 @@ export default {
 			}
 			this.elementDragger = draggerElement;
 			this.idDragger = draggerElement.id;
+			this.dataPC = draggerElement;
 			this.config = config;
 			return check;
 		},
 		changedDraggable(evt) {
-			console.log("drag", evt);
 			let targetId = parseInt(evt.to.id);
 			let check = false;
 			let targetConfig = this.principleConfig.find(i => i.id === targetId);
