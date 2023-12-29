@@ -1000,7 +1000,6 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
-			console.log("handleFooterAccept");
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;

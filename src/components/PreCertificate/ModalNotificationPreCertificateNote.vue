@@ -24,16 +24,22 @@
 				></h5>
 				<div>
 					<InputCategory
-						v-if="
-							notification == 'Bạn có muốn hủy hồ sơ này?' ||
-								notification == `Bạn có muốn 'Từ chối' hồ sơ này?`
-						"
+						v-if="notification == `Bạn có muốn 'Từ chối' hồ sơ này?`"
 						v-model="reason_id"
 						vid="reason_id"
 						label="Lí do"
 						class="mb-3"
 						:options="optionsReasons"
 					/>
+					<InputCategory
+						v-if="notification == `Bạn có muốn 'Hủy' hồ sơ này?`"
+						v-model="reason_id"
+						vid="reason_id"
+						label="Lí do hủy sơ bộ"
+						class="mb-3"
+						:options="optionsReasonsCancelPC"
+					/>
+
 					<InputTextarea
 						:rows="rows"
 						:autosize="false"
@@ -90,7 +96,8 @@ export default {
 			note: "",
 			rows: 3,
 			reason_id: null,
-			reasons: []
+			reasons: [],
+			reasonCancelPC: []
 		};
 	},
 	props: ["notification"],
@@ -98,6 +105,13 @@ export default {
 		optionsReasons() {
 			return {
 				data: this.reasons,
+				id: "id",
+				key: "description"
+			};
+		},
+		optionsReasonsCancelPC() {
+			return {
+				data: this.reasonCancelPC,
 				id: "id",
 				key: "description"
 			};
@@ -127,15 +141,14 @@ export default {
 			this.$emit("cancel", event);
 		},
 		async getDictionary() {
-			// let resp = this.$store.getters.dictionaries
-			// // console.log('vô đây', resp)
-			// if (resp && resp.length === 0) {
-			// // console.log('vô đây nè', resp)
-			const resp = await WareHouse.getDictionaries();
-			// store.commit(types.SET_DICTIONARIES, {...resp})
-			// }
-			this.reasons = resp.data.li_do;
-			// console.log('vô đây cuối', this.reasons )
+			if (
+				this.notification == `Bạn có muốn 'Từ chối' hồ sơ này?` ||
+				this.notification == `Bạn có muốn 'Hủy' hồ sơ này?`
+			) {
+				const resp = await WareHouse.getDictionaries();
+				this.reasons = resp.data.li_do;
+				this.reasonCancelPC = resp.data.li_do_huy_so_bo;
+			}
 		}
 	}
 };

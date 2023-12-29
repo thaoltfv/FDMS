@@ -294,6 +294,7 @@ export const usePreCertificateStore = defineStore(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
+			console.log("note", note, reason_id);
 			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
 			let dataSend = {
 				business_manager_id: null,
@@ -315,11 +316,16 @@ export const usePreCertificateStore = defineStore(
 				status_description: config.description,
 				status_config: jsonConfig.value.principle
 			};
-			if (dataPC.value.status == 2 && dataPC.value.target_status == 1) {
+			if (
+				(dataPC.value.status == 2 || dataPC.value.status == 6) &&
+				dataPC.value.target_status == 1
+			) {
 				await rejectFromStage2ToStage1();
 				dataSend.total_preliminary_value = 0;
 			}
-
+			if (dataPC.value.target_status == 6 && reason_id) {
+				dataSend.cancel_reason = reason_id;
+			}
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
 
 			return res;

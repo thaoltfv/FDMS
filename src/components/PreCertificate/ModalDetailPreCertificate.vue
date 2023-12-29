@@ -448,16 +448,7 @@ export default {
 		handleCancel(event) {
 			this.$emit("cancel", event);
 		},
-		handleTarget(target) {
-			this.targetConfig = this.jsonConfig.principle.find(
-				i => i.id === target.id
-			);
-			console.log("here");
-			this.targetMessage = target.description;
-			if (this.targetConfig) {
-				this.showAcceptCertificate = true;
-			}
-		},
+
 		getExpireStatusDate(config) {
 			let dateConvert = new Date();
 			let minutes = config.process_time ? config.process_time : 1440;
