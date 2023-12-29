@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import PreCertificate from "@/models/PreCertificate";
 import PreCertificateConfig from "@/models/PreCertificateConfig";
+import WareHouse from "@/models/WareHouse";
 import File from "@/models/File";
 import { convertPagination } from "@/utils/filters";
 import moment from "moment";
@@ -80,7 +81,8 @@ export const usePreCertificateStore = defineStore(
 			appraiser_purposes: [],
 			customers: [],
 			preTypes: null,
-			workflow: null
+			workflow: null,
+			cancelPCReasons: []
 		});
 		async function getCustomer() {
 			let res = await PreCertificate.getCustomer();
@@ -111,11 +113,19 @@ export const usePreCertificateStore = defineStore(
 			lstDataConfig.value.appraiser_performances = dataAppraise;
 			return;
 		}
+		async function getLstDictionaries() {
+			const resp = await WareHouse.getDictionaries();
+			if (resp.data) {
+				lstDataConfig.value.cancelPCReasons = resp.data.li_do_huy_so_bo;
+			}
+			return;
+		}
 		async function getStartData(
 			isGetLstAppraisers = true,
 			isGetAppraiseOthers = true,
 			isGetConfig = true,
-			isGetCustomer = true
+			isGetCustomer = true,
+			isGetDistionaries = false
 		) {
 			if (isGetLstAppraisers) await getLstAppraisers();
 			if (isGetAppraiseOthers) {
@@ -126,6 +136,7 @@ export const usePreCertificateStore = defineStore(
 			}
 			if (isGetConfig) await getConfig();
 			if (isGetCustomer) await getCustomer();
+			if (isGetCustomer) await getLstDictionaries();
 		}
 
 		getStartData();
@@ -138,6 +149,7 @@ export const usePreCertificateStore = defineStore(
 				id
 			);
 			dataPC.value = getDataCertificate.data;
+
 			if (dataPC.value.other_documents) {
 				preCertificateOtherDocuments.value.lstDocument =
 					dataPC.value.other_documents;
@@ -175,6 +187,16 @@ export const usePreCertificateStore = defineStore(
 					name: null,
 					id: null
 				};
+			}
+			if (dataPC.value.status == 6 && dataPC.value.cancel_reason) {
+				if (lstDataConfig.value.cancelPCReasons.length == 0)
+					await getLstDictionaries();
+
+				const reason = lstDataConfig.value.cancelPCReasons.find(
+					reason => `${reason.id}` === dataPC.value.cancel_reason
+				);
+				dataPC.value.cancel_reason_string = reason ? reason.description : "";
+				console.log("reason", dataPC.value.cancel_reason_string);
 			}
 			return dataPC.value;
 		}
@@ -294,7 +316,6 @@ export const usePreCertificateStore = defineStore(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			console.log("note", note, reason_id);
 			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
 			let dataSend = {
 				business_manager_id: null,
@@ -326,6 +347,9 @@ export const usePreCertificateStore = defineStore(
 			if (dataPC.value.target_status == 6 && reason_id) {
 				dataSend.cancel_reason = reason_id;
 			}
+			// if (dataPC.value.target_status == 1 && dataPC.value.status == 6) {
+			// 	dataSend.cancel_reason = null;
+			// }
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
 
 			return res;

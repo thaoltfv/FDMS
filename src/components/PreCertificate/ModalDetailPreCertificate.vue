@@ -90,16 +90,14 @@
 								dataPC.note
 							}}</b-tooltip>
 						</div>
-						<div v-if="dataPC.cancel_reason" class="d-flex container_content">
-							<strong class="margin_content_inline">Lý do hủy sơ bộ:</strong
-							><span id="note" class="text-left">{{
-								dataPC.cancel_reason && dataPC.cancel_reason.length > 25
-									? dataPC.cancel_reason.substring(25, 0) + "..."
-									: dataPC.nocancel_reasonte
-							}}</span>
-							<b-tooltip target="note" placement="top-right">{{
-								dataPC.cancel_reason
-							}}</b-tooltip>
+						<div
+							v-if="dataPC.cancel_reason_string"
+							class="d-flex container_content"
+						>
+							<strong class="margin_content_inline">Lý do hủy sơ bộ:</strong>
+							<p>
+								{{ dataPC.cancel_reason_string }}
+							</p>
 						</div>
 					</div>
 					<div class="col-12 mb-2">

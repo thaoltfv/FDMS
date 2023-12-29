@@ -91,6 +91,18 @@
 										dataPC.note
 									}}</b-tooltip>
 								</div>
+
+								<div
+									v-if="dataPC.cancel_reason_string"
+									class="d-flex container_content"
+								>
+									<strong class="margin_content_inline"
+										>Lý do hủy sơ bộ:</strong
+									>
+									<p>
+										{{ dataPC.cancel_reason_string }}
+									</p>
+								</div>
 							</div>
 						</div>
 						<div class="col-md-12 col-lg-6 mt-1">
@@ -577,7 +589,7 @@ export default {
 				jsonConfig.value = await preCertificateStore.getConfig();
 			}
 			await preCertificateStore.resetData();
-			await preCertificateStore.getPreCertificate(props.routeId);
+			dataPC.value = await preCertificateStore.getPreCertificate(props.routeId);
 			await changeEditStatus();
 		};
 
@@ -612,6 +624,7 @@ export default {
 		}
 		this.user_id = profile.data.user.id;
 		this.profile = profile;
+		console.log("this", this.dataPC);
 		if (profile.data.user.id === this.dataPC.created_by) {
 			this.checkRole = true;
 		}
@@ -637,7 +650,6 @@ export default {
 				this.exportAction = true;
 			}
 		});
-		this.getDictionary();
 	},
 	computed: {
 		columnAssets() {
@@ -811,17 +823,7 @@ export default {
 			let text = phrase.toLowerCase();
 			return text.charAt(0).toUpperCase() + text.slice(1);
 		},
-		async getDictionary() {
-			let resp = this.$store.getters.dictionaries;
-			if (resp && resp.length === 0) {
-				resp = await WareHouse.getDictionaries();
-				store.commit(types.SET_DICTIONARIES, { ...resp });
-			}
-			this.typeAppraiseProperty = [...resp.data.loai_tai_san];
-			this.typeAppraiseProperty.forEach(item => {
-				item.description = this.formatSentenceCase(item.description);
-			});
-		},
+
 		checkNoticeMessage() {
 			if (
 				this.dataPC.general_asset.length === 0 &&

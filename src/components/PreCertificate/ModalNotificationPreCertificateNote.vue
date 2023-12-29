@@ -137,6 +137,18 @@ export default {
 		},
 
 		handleAction(event, note, reason_id) {
+			if (
+				this.notification == `Bạn có muốn 'Hủy' hồ sơ này?` &&
+				!this.reason_id
+			) {
+				this.$toast.open({
+					message: "Vui lòng chọn lý do hủy sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 			this.$emit("action", event, note, reason_id);
 			this.$emit("cancel", event);
 		},
