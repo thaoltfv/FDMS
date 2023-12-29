@@ -259,7 +259,7 @@ export const usePreCertificateStore = defineStore(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			dataPC.value.status_expired_at = await getExpireStatusDate(config);
+			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
 
 			let dataSend = {
 				// appraiser_id: this.elementDragger.appraiser_id,
@@ -283,7 +283,7 @@ export const usePreCertificateStore = defineStore(
 					check_version: true
 				},
 				status: dataPC.value.target_status,
-				status_expired_at: dataPC.value.status_expired_at,
+				status_expired_at: dataPC.value.status_expired_at_string,
 				status_note: dataPC.value.status_note,
 				status_reason_id: "",
 				status_description: "Định giá sơ bộ",
@@ -325,7 +325,7 @@ export const usePreCertificateStore = defineStore(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			dataPC.value.status_expired_at = await getExpireStatusDate(config);
+			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
 			let dataSend = {
 				business_manager_id: null,
 				appraiser_perform_id: null,
@@ -340,7 +340,7 @@ export const usePreCertificateStore = defineStore(
 					check_version: false
 				},
 				status: dataPC.value.target_status,
-				status_expired_at: dataPC.value.status_expired_at,
+				status_expired_at: dataPC.value.status_expired_at_string,
 				status_note: note,
 				status_reason_id: reason_id,
 				status_description: config.description,

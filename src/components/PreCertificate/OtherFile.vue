@@ -316,6 +316,11 @@ export default {
 			const res = await File.deleteFilePreCertificate(fileDelete.value.id);
 			if (res.data) {
 				lstFile.value.splice(fileDelete.value.index, 1);
+				preCertificateOtherDocuments.value[
+					props.type
+				] = preCertificateOtherDocuments.value[props.type].filter(
+					item => item.id !== fileDelete.value.id
+				);
 				other.value.toast.open({
 					message: "Xóa thành công",
 					type: "success",
