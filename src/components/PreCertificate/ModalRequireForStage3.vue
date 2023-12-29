@@ -1,50 +1,44 @@
 <template>
 	<div class="modal-delete d-flex justify-content-center align-items-center">
 		<div class="card">
-			<div
-				class="card-header d-flex justify-content-between align-items-center py-3"
-			>
-				<h3 class="font-weight-bold mb-0">
-					<!--          {{$t('btn_delete')}}-->
-					Thông báo
-				</h3>
-
-				<img
-					@click="handleAction"
-					src="../../assets/images/icon-btn-back.svg"
-					alt="icon"
-				/>
+			<div class="container-title">
+				<div class="d-flex justify-content-between">
+					<h2 class="title">
+						Kết quả sơ bộ
+					</h2>
+					<img
+						height="35px"
+						@click="handleCancel"
+						class="cancel"
+						src="@/assets/icons/ic_cancel_2.svg"
+						alt=""
+					/>
+				</div>
 			</div>
-
 			<div class="card-body">
 				<p style="font-size: 18px" v-html="notification"></p>
 
 				<div>
 					<OtherFile
+						:key="key_render_require_for_stage3"
 						style="margin-left:-20px; margin-top:-30px;"
 						type="Result"
-					/>
-
-					<InputTextarea
-						rows="2"
-						:autosize="true"
-						:maxLength="1000"
-						v-model="dataPC.status_note"
-						label="Ghi chú"
-						class="form-group-container mb-3"
+						@action="key_render_require_for_stage3++"
 					/>
 				</div>
 				<div class="btn__group">
 					<button
 						class="btn btn-white font-weight-normal font-weight-bold"
-						@click.prevent="handleAction"
-						v-text="$t('popup_btn_no')"
-					/>
+						@click.prevent="handleCancel"
+					>
+						Trở lại
+					</button>
 					<button
-						class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
+						class="btn btn-white btn-orange font-weight-bold ml-2"
 						@click.prevent="verifyToStage3Function"
-						v-text="$t('popup_btn_yes')"
-					/>
+					>
+						Lưu
+					</button>
 				</div>
 			</div>
 		</div>
@@ -77,8 +71,8 @@ export default {
 		}
 	},
 	methods: {
-		handleAction() {
-			this.$emit("action");
+		handleCancel() {
+			this.$emit("cancel");
 		},
 		async verifyToStage3Function() {
 			if (this.preCertificateOtherDocuments.Result.length > 0) {
@@ -101,9 +95,30 @@ export default {
 				});
 				return;
 			}
-			const boolResult = await this.preCertificateStore.updateToStage3();
-			if (!boolResult) {
-				this.handleAction();
+			const res = await this.preCertificateStore.createUpdatePreCertificateion(
+				this.dataPC.id,
+				true
+			);
+			if (res.data) {
+				await this.$toast.open({
+					message: "Lưu thông tin kết quả sơ bộ thành công",
+					type: "success",
+					position: "top-right"
+				});
+				await this.$emit("cancel");
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+			} else {
+				await this.$toast.open({
+					message: "Lưu thất bại",
+					type: "error",
+					position: "top-right"
+				});
 			}
 		}
 	},
@@ -124,8 +139,9 @@ export default {
 		const { dataPC, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
-
+		const key_render_require_for_stage3 = ref(0);
 		return {
+			key_render_require_for_stage3,
 			dataPC,
 			isMobile,
 			preCertificateOtherDocuments,

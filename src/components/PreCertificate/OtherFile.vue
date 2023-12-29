@@ -47,6 +47,7 @@
 					</div>
 
 					<img
+						v-if="!fromComponent"
 						class="img-dropdown"
 						:class="!showCardDetailFile ? 'img-dropdown__hide' : ''"
 						src="@/assets/images/icon-btn-down.svg"
@@ -163,6 +164,7 @@
 			<div
 				class="row input_download_certificate mb-2"
 				v-for="(file, index) in lstFile"
+				:key="index"
 			>
 				<div :key="index" class="d-flex align-items-center col">
 					<!-- <img
@@ -502,7 +504,6 @@ export default {
 							this.type
 						);
 						if (res.data) {
-							this.preCertificateOtherDocuments[this.type] = res.data.data;
 							const tempList = [];
 							for (let index = 0; index < res.data.data.length; index++) {
 								const element = res.data.data[index];
@@ -510,7 +511,19 @@ export default {
 									tempList.push(element);
 								}
 							}
+
+							this.preCertificateOtherDocuments[this.type] = [...tempList];
 							this.lstFile = [...tempList];
+							if (this.fromComponent) {
+								await this.$emit("action");
+							}
+							console.log(
+								"this",
+								this.lstFile,
+								this.type,
+								res.data.data,
+								tempList
+							);
 							this.$toast.open({
 								message: "Thêm file thành công",
 								type: "success",

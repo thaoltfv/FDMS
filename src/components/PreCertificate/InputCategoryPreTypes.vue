@@ -13,10 +13,10 @@
 				<a-select-option value="">
 					{{ $t("select_option_empty") }}
 				</a-select-option>
-				<a-select-option value="coban">
+				<a-select-option value="Cơ bản">
 					{{ $t("Cơ bản") }}
 				</a-select-option>
-				<a-select-option value="nangcao">
+				<a-select-option value="Nâng cao">
 					{{ $t("Nâng cao") }}
 				</a-select-option>
 			</a-select>

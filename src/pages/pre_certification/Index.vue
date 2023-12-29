@@ -157,11 +157,6 @@
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
 			/>
-			<ModalVerifyToStage3
-				v-if="dialogVerifyToStage3"
-				:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
-				@action="handleActionStage3"
-			/>
 		</div>
 	</div>
 </template>
@@ -170,7 +165,6 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import ModalVerifyToStage3 from "@/components/PreCertificate/ModalVerifyToStage3";
 
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
@@ -266,7 +260,6 @@ export default {
 		};
 	},
 	components: {
-		ModalVerifyToStage3,
 		draggable,
 		BCard,
 		FormWizard,
@@ -347,7 +340,6 @@ export default {
 			filter
 		} = storeToRefs(preCertificateStore);
 
-		const dialogVerifyToStage3 = ref(false);
 		const principleConfig = ref([]);
 
 		const countData = ref(0);
@@ -419,7 +411,6 @@ export default {
 
 		return {
 			filter,
-			dialogVerifyToStage3,
 			principleConfig,
 			jsonConfig,
 			isMobile,
@@ -447,7 +438,6 @@ export default {
 			this.isMoved = false;
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
-			this.dialogVerifyToStage3 = false;
 		},
 		getExpireDate(element) {
 			let strExpire = "";
@@ -567,8 +557,11 @@ export default {
 				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
 					const checkStage = this.checkDataBeforeChangeToStage3();
 					if (!checkStage) {
-						this.dialogVerifyToStage3 = true;
-						check = false;
+						this.openMessage(
+							"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+							"error"
+						);
+						return;
 					}
 				}
 				this.isMoved = check;
@@ -784,7 +777,6 @@ export default {
 			this.isMoved = false;
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
-			this.dialogVerifyToStage3 = false;
 		},
 		async handleUpdateStatus(id, data, message) {
 			console.log("hahandleUpdateStatusndle");
@@ -1024,8 +1016,11 @@ export default {
 					if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
 						const checkStage = this.checkDataBeforeChangeToStage3();
 						if (!checkStage) {
-							this.dialogVerifyToStage3 = true;
-							check = false;
+							this.openMessage(
+								"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+								"error"
+							);
+							return;
 						}
 					}
 				}

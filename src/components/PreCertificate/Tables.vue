@@ -408,7 +408,7 @@
 			:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
 			@action="handleChangeAccept2"
 		/>
-		<ModalAppraisal
+		<ModalPCAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
 			:data="elementDragger"
@@ -419,7 +419,7 @@
 			@cancel="handleCancelAppraisal"
 			@updateAppraisal="updateAppraisal"
 		/>
-		<ModalAppraisal
+		<ModalPCAppraisal
 			:key="key_render_appraisal"
 			v-if="showVerifyCertificate"
 			:data="elementDragger"
@@ -459,14 +459,14 @@ import Certificate from "@/models/Certificate";
 import ModalDetailPreCertificate from "./ModalDetailPreCertificate";
 import PreCertificate from "@/models/PreCertificate.js";
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
-import ModalAppraisal from "./ModalAppraisal";
+import ModalPCAppraisal from "./ModalPCAppraisal";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
 export default {
 	name: "Tables",
 	props: ["listCertificates", "pagination", "isLoading"],
 	components: {
-		ModalAppraisal,
+		ModalPCAppraisal,
 		ModalNotificationCertificate,
 		ModalNotificationCertificateNote,
 		ModalDetailPreCertificate,

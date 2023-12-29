@@ -102,19 +102,29 @@ export const usePreCertificateStore = defineStore(
 			}
 			return lstDataConfig.value.workflow;
 		}
-		async function getStartData() {
+		async function getLstAppraisers() {
 			const resp = await PreCertificate.getAppraisers();
 			let dataAppraise = [...resp.data];
 			lstDataConfig.value.appraiser_business_managers = dataAppraise;
 			lstDataConfig.value.appraiser_sales = dataAppraise;
 			lstDataConfig.value.appraiser_performances = dataAppraise;
-
-			const resp2 = await PreCertificate.getAppraiseOthers();
-			lstDataConfig.value.appraiser_purposes = [
-				...resp2.data.muc_dich_tham_dinh_gia
-			];
-			getConfig();
-			getCustomer();
+			return;
+		}
+		async function getStartData(
+			isGetLstAppraisers = true,
+			isGetAppraiseOthers = true,
+			isGetConfig = true,
+			isGetCustomer = true
+		) {
+			if (isGetLstAppraisers) await getLstAppraisers();
+			if (isGetAppraiseOthers) {
+				const resp2 = await PreCertificate.getAppraiseOthers();
+				lstDataConfig.value.appraiser_purposes = [
+					...resp2.data.muc_dich_tham_dinh_gia
+				];
+			}
+			if (isGetConfig) await getConfig();
+			if (isGetCustomer) await getCustomer();
 		}
 
 		getStartData();
@@ -167,15 +177,21 @@ export const usePreCertificateStore = defineStore(
 			}
 			return dataPC.value;
 		}
-		async function createUpdatePreCertificateion(id = "") {
+		async function createUpdatePreCertificateion(
+			id = "",
+			isReturn = false,
+			assignObject = null
+		) {
 			other.value.isSubmit = true;
 			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
 			if (!dataPC.value.id) dataPC.value.status = 1;
 			const res = await PreCertificate.createUpdatePreCertification(
-				dataPC.value,
+				assignObject ? assignObject : dataPC.value,
 				dataPC.value.id || ""
 			);
-
+			if (isReturn) {
+				return res;
+			}
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
@@ -455,7 +471,9 @@ export const usePreCertificateStore = defineStore(
 			getConfig,
 			getPreCertificateAll,
 			updateToStage3,
-			updateStatus
+			updateStatus,
+			getLstAppraisers,
+			getStartData
 		};
 	},
 	{

@@ -448,18 +448,9 @@ export default {
 		},
 		pre_type_compute: {
 			get: function() {
-				console.log(
-					"this.data",
-					this.dataPC.pre_type_id,
-					this.dataPC.pre_type,
-					this.dataPC,
-					this.lstDataConfig.preTypes
-				);
-
 				return this.dataPC.pre_type;
 			},
 			set: function(newValue) {
-				console.log("new", newValue);
 				this.dataPC.pre_type = newValue;
 			}
 		},

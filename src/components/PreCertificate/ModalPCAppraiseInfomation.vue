@@ -28,7 +28,7 @@
 								<InputTextPrefixCustom
 									id="petitioner_name"
 									placeholder="Ông / Bà"
-									v-model="form.petitioner_name"
+									v-model="dataForm.petitioner_name"
 									vid="petitioner_name"
 									:iconUser="true"
 									:showIcon="true"
@@ -37,19 +37,12 @@
 									class="form-group-container input_certification_brief"
 								/>
 							</div>
-							<div class="col-6">
-								<InputText
-									v-model="form.document_num"
-									vid="document_num"
-									label="Số hợp đồng"
-									class="form-group-container"
-								/>
-							</div>
+
 							<div class="col-6">
 								<InputTextPrefixCustom
 									id="petitioner_address"
 									placeholder="Nhập địa chỉ của khách hàng"
-									v-model="form.petitioner_address"
+									v-model="dataForm.petitioner_address"
 									vid="petitioner_address"
 									:iconLocation="true"
 									:showIcon="true"
@@ -57,22 +50,12 @@
 									class="form-group-container input_certification_brief"
 								/>
 							</div>
-							<div class="col-6">
-								<InputDatePicker
-									v-model="form.document_date"
-									vid="document_date"
-									label="Ngày hợp đồng"
-									:formatDate="'DD/MM/YYYY'"
-									@change="changeDocumentDate"
-									placeholder="Ngày / tháng / năm"
-									class="form-group-container"
-								/>
-							</div>
+
 							<div class="col-6">
 								<InputTextPrefixCustomIcon
 									id="petitioner_identity_card"
 									placeholder="Nhập MST/CMND/CCCD/Passport"
-									v-model="form.petitioner_identity_card"
+									v-model="dataForm.petitioner_identity_card"
 									class="form-group-container input_certification_brief"
 									vid="petitioner_identity_card"
 									icon="ic_id_card_2"
@@ -80,35 +63,12 @@
 									label="MST/CMND/CCCD/Passport"
 								/>
 							</div>
-							<div class="col-6">
-								<div class="row justify-content-around">
-									<InputCurrency
-										v-model="form.service_fee"
-										vid="service_fee"
-										:max="99999999999999"
-										label="Tổng phí dịch vụ"
-										rules="required"
-										class="w-50 form-group-container input_left"
-										style="padding-left: 0px"
-										@change="changeServiceFee($event)"
-									/>
-									<InputPercent
-										v-model="form.commission_fee"
-										label="Chiết khấu"
-										vid="commission_fee"
-										:max="100"
-										:decimal="0"
-										rules="required"
-										class="w-50 form-group-container input_right"
-										@change="changeCommissionFee($event)"
-									/>
-								</div>
-							</div>
+
 							<div class="col-6">
 								<InputTextPrefixCustom
 									id="petitioner_phone"
 									placeholder="Nhập số điện thoại"
-									v-model="form.petitioner_phone"
+									v-model="dataForm.petitioner_phone"
 									class="form-group-container input_certification_brief"
 									vid="petitioner_phone"
 									:iconPhone="true"
@@ -118,7 +78,7 @@
 							</div>
 							<div class="col-6">
 								<InputCategory
-									v-model="form.appraise_purpose_id"
+									v-model="dataForm.appraise_purpose_id"
 									class="form-group-container"
 									vid="appraise_purpose_id"
 									label="Mục đích thẩm định"
@@ -127,58 +87,25 @@
 									@change="handleChangeAppraisePurpose"
 								/>
 							</div>
+
 							<div class="col-6">
-								<InputText
-									v-model="form.certificate_num"
-									vid="certificate_num"
-									label="Số chứng thư"
-									class="form-group-container"
+								<InputCategoryPreTypes
+									v-model="dataForm.pre_type"
+									class="form-group-container "
+									vid="pre_type"
+									label="Loại sơ bộ"
 								/>
 							</div>
-							<div class="col-6">
-								<InputDatePicker
-									v-model="form.appraise_date"
-									vid="appraise_date"
-									label="Thời điểm thẩm định"
-									placeholder="Ngày / tháng / năm"
-									rules="required"
-									:formatDate="'DD/MM/YYYY'"
-									class="form-group-container"
-									@change="changeAppraiseDate"
-								/>
-							</div>
-							<div class="col-6">
-								<InputDatePicker
-									v-model="form.certificate_date"
-									vid="certificate_date"
-									label="Ngày chứng thư"
-									placeholder="Ngày / tháng / năm"
-									class="form-group-container"
-									:formatDate="'DD/MM/YYYY'"
-									:date="disabledDate"
-									@change="changeCertificateDate"
-								/>
-							</div>
+
 							<div class="col-6">
 								<InputTextarea
 									:autosize="true"
-									v-model="form.note"
+									v-model="dataForm.note"
 									vid="note"
 									label="Ghi chú"
 									class="form-group-container"
 								/>
 							</div>
-							<!-- <div class="col-6">
-                 <InputCategoryMulti
-                    v-model="form.document_type"
-                    :maxTagCount="3"
-                    class="form-group-container input_certification_brief"
-                    vid="document_type"
-                    label="Loại thẩm định"
-                    rules="required"
-                    :options="optionsTypeAppraiser"
-                  />
-                </div> -->
 						</div>
 						<div
 							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
@@ -219,69 +146,77 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { usePreCertificateStore } from "@/store/preCertificate";
+import InputCategoryPreTypes from "./InputCategoryPreTypes";
+import _ from "lodash";
+
 import InputText from "@/components/Form/InputText";
 import InputCategory from "@/components/Form/InputCategory";
-import FileUpload from "@/components/file/FileUpload";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
-import InputDatePicker from "@/components/Form/InputDatePicker";
-import InputCurrency from "@/components/Form/InputCurrency";
-import InputPercent from "@/components/Form/InputPercent";
-import Certificate from "@/models/Certificate";
 import moment from "moment";
-import CertificateBrief from "@/models/CertificationBrief";
-import InputCategoryMulti from "@/components/Form/InputCategoryMulti";
 import InputTextarea from "@/components/Form/InputTextarea";
 
 export default {
-	name: "ModalAppraiseInformation",
-	props: ["data", "idData", "typeAppraiseProperty"],
-	data() {
-		return {
-			isOneItem: false,
-			isTwoItem: false,
-			isThreeItem: false,
-			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
-			appraisalPurposes: []
-		};
-	},
+	name: "ModalPCAppraiseInformation",
+
 	components: {
-		FileUpload,
 		InputCategory,
 		InputText,
 		InputTextPrefixCustom,
-		InputDatePicker,
-		InputCurrency,
-		InputPercent,
 		InputTextPrefixCustomIcon,
-		InputCategoryMulti,
-		InputTextarea
+		InputTextarea,
+		InputCategoryPreTypes
+	},
+	setup() {
+		const preCertificateStore = usePreCertificateStore();
+		const { dataPC, lstDataConfig } = storeToRefs(preCertificateStore);
+		const dataForm = ref(_.cloneDeep(dataPC.value));
+
+		const getStartData = async () => {
+			if (!lstDataConfig.value.appraiser_purposes) {
+				await preCertificateStore.getStartData(false, true, true, false);
+			}
+		};
+		getStartData();
+		const handleChangeAppraisePurpose = event => {
+			dataForm.value.appraise_purpose_id = event;
+		};
+		return {
+			dataForm,
+			lstDataConfig,
+			preCertificateStore,
+			handleChangeAppraisePurpose
+		};
 	},
 	computed: {
+		pre_type_compute: {
+			get: function() {
+				return this.dataForm.pre_type;
+			},
+			set: function(newValue) {
+				this.dataForm.pre_type = newValue.name;
+			}
+		},
 		optionsAppraisalPurposes() {
 			return {
-				data: this.appraisalPurposes,
+				data: this.lstDataConfig.appraiser_purposes,
 				id: "id",
 				key: "name"
 			};
 		},
-		optionsTypeAppraiser() {
+		optionsPreTypes() {
 			return {
-				data: this.typeAppraiseProperty,
-				id: "acronym",
-				key: "description"
+				data: this.lstDataConfig.preTypes,
+				id: "code",
+				key: "name"
 			};
 		}
 	},
-	created() {
-		this.getAppraiseOthers();
-	},
+	created() {},
 	methods: {
-		async getAppraiseOthers() {
-			const resp = await Certificate.getAppraiseOthers();
-			// console.log('resp', resp)
-			this.appraisalPurposes = [...resp.data.muc_dich_tham_dinh_gia];
-		},
 		formatDate(date) {
 			return moment(date).format("DD/MM/YYYY");
 		},
@@ -293,63 +228,21 @@ export default {
 				});
 			}
 		},
-		async getDataEdit() {
-			// console.log('vào đây nè')
-			this.form.document_date = this.data.document_date
-				? moment(this.data.document_date).format("DD/MM/YYYY")
-				: "";
-			this.form.certificate_date = this.data.certificate_date
-				? moment(this.data.certificate_date).format("DD/MM/YYYY")
-				: "";
-			this.form.appraise_date = this.data.appraise_date
-				? moment(this.data.appraise_date).format("DD/MM/YYYY")
-				: "";
-			this.form.appraise_purpose_id = this.data.appraise_purpose_id;
-			this.form.note = this.data.note;
-		},
+
 		disabledDate(current) {
 			if (
-				this.form.document_date !== "" &&
-				this.form.document_date !== undefined &&
-				this.form.document_date !== null
+				this.dataForm.document_date !== "" &&
+				this.dataForm.document_date !== undefined &&
+				this.dataForm.document_date !== null
 			) {
-				let dateDoc = (" " + this.form.document_date).slice(1);
+				let dateDoc = (" " + this.dataForm.document_date).slice(1);
 				dateDoc = moment(dateDoc, "DD/MM/YYYY").format("YYYY-MM-DD");
 				return current <= moment(dateDoc);
 			} else {
 				return current >= moment().endOf("day");
 			}
 		},
-		changeDocumentDate(event) {
-			this.form.document_date = event;
-			if (event && event !== "") {
-				if (
-					moment(this.form.document_date).endOf("day") <
-					moment(this.form.certificate_date)
-				) {
-					this.form.certificate_date = "";
-				}
-			} else {
-				this.form.document_date = "";
-			}
-			this.form.appraise_date = this.form.document_date;
-		},
-		changeServiceFee(event) {
-			this.form.service_fee = event;
-		},
-		changeCommissionFee(event) {
-			this.form.commission_fee = event;
-		},
-		changeAppraiseDate(event) {
-			this.form.appraise_date = event;
-		},
-		changeCertificateDate(event) {
-			this.form.certificate_date = event;
-		},
-		handleChangeAppraisePurpose(event) {
-			// this.form.appraise_purpose_id = event
-			this.form.appraise_purpose_id = event;
-		},
+
 		handleCancel(event) {
 			this.$emit("cancel", event);
 		},
@@ -359,71 +252,19 @@ export default {
 				this.handleAction();
 			}
 		},
-		checkDocumentType(documentType, asset) {
-			let listItem = [];
-			let item = [];
-			let message = "";
-			// if (documentType.length === 0) {
-			// 	return 'Bạn chưa chọn loại thẩm định'
-			// }
-			// if (asset.length > 0) {
-			// 	documentType.forEach(type => {
-			// 		item = asset.filter(i => i.asset_type.acronym === type)
-			// 		listItem = listItem.concat(item)
-			// 	})
-			// 	if (listItem.length < asset.length) {
-			// 		return 'Không được thay đổi loại thẩm định khi đã chọn tài sản'
-			// 	}
-			// }
-			return message;
-		},
 		async handleAction() {
-			// console.log('Lưu nè')
-			let form = this.form;
-			// console.log('this.form', form)
-			let message = this.checkDocumentType(
-				form.document_type,
-				form.general_asset
+			const res = await this.preCertificateStore.createUpdatePreCertificateion(
+				this.dataForm.id,
+				true,
+				this.dataForm
 			);
-			if (message !== "") {
-				this.$toast.open({
-					message: message,
-					type: "error",
-					position: "top-right"
-				});
-				return;
-			}
-			const data = {
-				petitioner_name: form.petitioner_name,
-				document_num: form.document_num,
-				petitioner_address: form.petitioner_address,
-				document_date: form.document_date,
-				petitioner_phone: form.petitioner_phone,
-				service_fee: form.service_fee,
-				appraise_purpose_id: form.appraise_purpose_id,
-				certificate_num: form.certificate_num,
-				certificate_date: form.certificate_date,
-				appraise_date: form.appraise_date,
-				commission_fee: form.commission_fee,
-				petitioner_identity_card: form.petitioner_identity_card,
-				document_type: form.document_type,
-				note: form.note
-			};
-			// console.log('data',data)
-			const res = await CertificateBrief.updateDetailCertificate(
-				this.idData,
-				data
-			);
-			// console.log('res',res)
-			// console.log('this.idData', this.idData)
 			if (res.data) {
 				this.$toast.open({
 					message: "Lưu thông tin hồ sơ thẩm định thành công",
 					type: "success",
 					position: "top-right"
 				});
-				// console.log('res.data', res.data)
-				this.$emit("updateAppraiseInformation", res.data);
+				this.$emit("updateAppraiseInformation");
 				this.$emit("cancel");
 			} else if (res.error) {
 				this.$toast.open({
@@ -440,9 +281,7 @@ export default {
 			}
 		}
 	},
-	beforeMount() {
-		this.getDataEdit();
-	}
+	beforeMount() {}
 };
 </script>
 

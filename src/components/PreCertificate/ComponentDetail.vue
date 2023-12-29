@@ -291,14 +291,20 @@
 						<div class="row d-flex justify-content-between align-items-center">
 							<h3 class="title">Kết quả sơ bộ</h3>
 						</div>
-
-						<img
+						<div
+							v-if="editPreResult && edit"
+							@click="dialogRequireForStage3 = true"
+							class="btn-edit "
+						>
+							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+						</div>
+						<!-- <img
 							class="img-dropdown"
 							:class="!showCardDetailFileResult ? 'img-dropdown__hide' : ''"
 							src="@/assets/images/icon-btn-down.svg"
 							alt="dropdown"
 							@click="showCardDetailFileResult = !showCardDetailFileResult"
-						/>
+						/> -->
 					</div>
 				</div>
 				<OtherFile
@@ -326,24 +332,15 @@
 			@viewDetailAppraise="viewDetailAppraise"
 			@viewAppraiseListVersion="viewAppraiseListVersion"
 		/>
-		<ModalAppraisal
+		<ModalPCAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
-			:data="dataPC"
-			:idData="dataPC.id"
-			:status="status"
-			:requiredAppraiserPerform="null"
-			:requiredAppraiser="null"
-			:ModalEdit="true"
 			@cancel="showAppraisalDialog = false"
 			@updateAppraisal="updateAppraisal"
 		/>
 
-		<ModalAppraiseInfomation
+		<ModalPCAppraiseInfomation
 			v-if="showAppraiseInformationDialog"
-			:data="dataPC"
-			:idData="dataPC.id"
-			:typeAppraiseProperty="typeAppraiseProperty"
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
@@ -370,28 +367,6 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
-		<ModalAppraisal
-			:key="key_render_appraisal"
-			v-if="openSendRequire"
-			:data="dataPC"
-			:idData="dataPC.id"
-			:status="3"
-			:requiredAppraiserPerform="null"
-			:requiredAppraiser="null"
-			@cancel="openSendRequire = false"
-			@updateAppraisal="updateSendRequired"
-		/>
-		<ModalAppraisal
-			:key="key_render_appraisal"
-			v-if="openSendAppraiser"
-			:data="dataPC"
-			:idData="dataPC.id"
-			:status="2"
-			:requiredAppraiserPerform="null"
-			:requiredAppraiser="null"
-			@cancel="openSendAppraiser = false"
-			@updateAppraisal="updateSendAppraiser"
-		/>
 		<!-- <ModalNotificationCertificate
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
@@ -415,11 +390,10 @@
 			@cancel="deleteUploadDocument = false"
 			@action="deleteDocument"
 		/>
-
-		<ModalVerifyToStage3
-			v-if="dialogVerifyToStage3"
+		<ModalRequireForStage3
+			v-if="dialogRequireForStage3"
 			:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
-			@action="dialogVerifyToStage3 = false"
+			@cancel="dialogRequireForStage3 = false"
 		/>
 	</div>
 </template>
@@ -432,7 +406,6 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import ModalVerifyToStage3 from "@/components/PreCertificate/ModalVerifyToStage3";
 
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
@@ -457,8 +430,9 @@ import WareHouse from "@/models/WareHouse";
 import { Timeline, Drawer } from "ant-design-vue";
 import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
-import ModalAppraisal from "@/components/PreCertificate/ModalAppraisal";
-import ModalAppraiseInfomation from "@/components/PreCertificate/ModalAppraiseInfomation";
+import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
+import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
+import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
@@ -498,8 +472,8 @@ export default {
 		Drawer,
 		InputLengthArea,
 		ModalCustomer,
-		ModalAppraisal,
-		ModalAppraiseInfomation,
+		ModalPCAppraisal,
+		ModalPCAppraiseInfomation,
 		"b-tooltip": BTooltip,
 		ModalNotificationCertificate,
 		ModalViewDocument,
@@ -509,7 +483,7 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalNotificationPreCertificateNote,
-		ModalVerifyToStage3
+		ModalRequireForStage3
 	},
 	data() {
 		return {
@@ -607,10 +581,11 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const dialogVerifyToStage3 = ref(false);
 		const { dataPC, lstDataConfig, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
+		const dialogRequireForStage3 = ref(false);
+		const editPreResult = ref(false);
 		const start = async () => {
 			if (!lstDataConfig.value.workflow) {
 				await preCertificateStore.getConfig();
@@ -620,9 +595,10 @@ export default {
 		};
 		start();
 		const checkVersion2 = ref([]);
-		const showCardDetailFileResult = ref(false);
+		const showCardDetailFileResult = ref(true);
 		return {
-			dialogVerifyToStage3,
+			editPreResult,
+			dialogRequireForStage3,
 			isMobile,
 			dataPC,
 			lstDataConfig,
@@ -1072,55 +1048,15 @@ export default {
 				duration: 3000
 			});
 		},
-		updateAppraiseInformation(dataAppraiseInformation) {
-			this.dataPC.appraise_date = dataAppraiseInformation.appraise_date;
-			this.dataPC.appraise_purpose_id =
-				dataAppraiseInformation.appraise_purpose_id;
-			this.dataPC.appraise_purpose = dataAppraiseInformation.appraise_purpose;
-			this.dataPC.certificate_date = dataAppraiseInformation.certificate_date;
-			this.dataPC.certificate_num = dataAppraiseInformation.certificate_num;
-			this.dataPC.document_date = dataAppraiseInformation.document_date;
-			this.dataPC.document_num = dataAppraiseInformation.document_num;
-			this.dataPC.petitioner_address =
-				dataAppraiseInformation.petitioner_address;
-			this.dataPC.petitioner_name = dataAppraiseInformation.petitioner_name;
-			this.dataPC.petitioner_phone = dataAppraiseInformation.petitioner_phone;
-			this.dataPC.service_fee = dataAppraiseInformation.service_fee;
-			this.dataPC.commission_fee = dataAppraiseInformation.commission_fee;
-			this.dataPC.petitioner_identity_card =
-				dataAppraiseInformation.petitioner_identity_card;
-			this.dataPC.document_type = dataAppraiseInformation.document_type;
-			this.dataPC.note = dataAppraiseInformation.note;
+		async updateAppraiseInformation() {
+			await this.preCertificateStore.getPreCertificate(this.routeId);
 		},
-		updateAppraisal(dataAppraisal) {
-			this.dataPC.appraiser_perform = dataAppraisal.appraiser_perform;
-			this.dataPC.appraiser_perform_id = dataAppraisal.appraiser_perform_id;
-			this.dataPC.appraiser_confirm_id = dataAppraisal.appraiser_confirm_id;
-			this.dataPC.appraiser_confirm = dataAppraisal.appraiser_confirm;
-			this.dataPC.appraiser_manager_id = dataAppraisal.appraiser_manager_id;
-			this.dataPC.appraiser_manager = dataAppraisal.appraiser_manager;
-			this.dataPC.appraiser_control_id = dataAppraisal.appraiser_control_id;
-			this.dataPC.appraiser_control = dataAppraisal.appraiser_control;
-			this.dataPC.appraiser = dataAppraisal.appraiser;
-			this.dataPC.appraiser_id = dataAppraisal.appraiser_id;
+		async updateAppraisal() {
+			await this.preCertificateStore.getPreCertificate(this.routeId);
 			this.key_render_appraisal += 1;
-			this.dataPC.status = this.status;
 			this.showAppraisalDialog = false;
 		},
-		updateAppraises(data) {
-			this.dataPC.appraises = data.general_asset;
-			this.dataPC.general_asset = data.general_asset;
-			this.dataPC.document_type = data.document_type;
-			this.dataPC.real_estate = data.real_estate;
-			this.getTotalPrice();
-		},
-		async updateAppraiseVersion(data) {
-			this.isShowAppraiseListVersion = false;
-			this.checkVersion = [];
-			this.checkVersion2 = [];
-			this.dataPC.general_asset = data.general_asset;
-			this.getTotalPrice();
-		},
+
 		async handleAction(note, reason_id) {
 			const {
 				appraiser_id,
@@ -1269,15 +1205,25 @@ export default {
 					this.targetStatus = config.status;
 					this.dataPC.target_status = config.status;
 					this.message = target.description;
+
 					if (
 						this.dataPC.status < this.targetStatus &&
-						this.targetStatus == 3 &&
-						this.preCertificateOtherDocuments.Result &&
-						this.preCertificateOtherDocuments.Result.length > 0 &&
-						this.dataPC.total_preliminary_value > 0
+						this.targetStatus == 3
 					) {
-						this.dialogVerifyToStage3 = true;
-					} else this.isHandleAction = true;
+						if (
+							!this.preCertificateOtherDocuments.Result ||
+							this.preCertificateOtherDocuments.Result.length === 0 ||
+							this.dataPC.total_preliminary_value === 0 ||
+							this.dataPC.total_preliminary_value === null ||
+							this.dataPC.total_preliminary_value === undefined
+						) {
+							this.openMessage(
+								"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ"
+							);
+							return;
+						}
+					}
+					this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
 				}
@@ -1848,6 +1794,7 @@ export default {
 			);
 			if (dataJson && dataJson.length > 0) {
 				this.config = dataJson[0];
+				console.log("this.", dataJson[0]);
 				this.editAppraiser = dataJson[0].edit.appraiser
 					? dataJson[0].edit.appraiser
 					: false;
@@ -1855,6 +1802,9 @@ export default {
 					? dataJson[0].edit.appraise_item_list
 					: false;
 				this.editInfo = dataJson[0].edit.info ? dataJson[0].edit.info : false;
+				this.editPreResult = dataJson[0].edit.pre_result
+					? dataJson[0].edit.pre_result
+					: false;
 				this.printConfig = dataJson[0].print;
 			}
 		},
