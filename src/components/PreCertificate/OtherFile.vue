@@ -63,12 +63,18 @@
 						class="row input_download_certificate mb-2"
 						v-for="(file, index) in lstFile"
 					>
-						<div :key="index" class="d-flex align-items-center col">
-							<!-- <img
-								class="img_input_download"
-								src="@/assets/icons/ic_document.svg"
-								alt="document"
-							/> -->
+						<div
+							:key="index"
+							class="d-flex align-items-center col"
+							@click="downloadOtherFile(file)"
+						>
+							<img
+								v-if="!file.isUpload"
+								class="mr-1"
+								style="width: 1rem;"
+								src="@/assets/icons/ic_taglink.svg"
+								alt="tag_2"
+							/>
 							<div
 								class="title_input_content title_input_download cursor_pointer"
 							>
@@ -166,12 +172,18 @@
 				v-for="(file, index) in lstFile"
 				:key="index"
 			>
-				<div :key="index" class="d-flex align-items-center col">
-					<!-- <img
-								class="img_input_download"
-								src="@/assets/icons/ic_document.svg"
-								alt="document"
-							/> -->
+				<div
+					:key="index"
+					class="d-flex align-items-center col"
+					@click="downloadOtherFile(file)"
+				>
+					<img
+						v-if="!file.isUpload"
+						class="mr-1"
+						style="width: 1rem;"
+						src="@/assets/icons/ic_taglink.svg"
+						alt="tag_2"
+					/>
 					<div class="title_input_content title_input_download cursor_pointer">
 						{{ file.name }}
 					</div>
@@ -218,7 +230,9 @@ import Vue from "vue";
 import Icon from "buefy";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
+import PreCertificate from "@/models/PreCertificate";
 // import mammoth from "mammoth";
+import axios from "@/plugins/axios";
 Vue.use(Icon);
 export default {
 	props: {
@@ -269,12 +283,12 @@ export default {
 			context.emit("action");
 		}
 		showCardDetailFile.value = lstFile.value.length > 0 ? true : false;
-		const downloadOtherFile = file => {
-			if (this.exportAction) {
+		const downloadOtherFile = async file => {
+			if (permission.value.allowExport && !file.isUpload) {
 				axios({
 					url:
 						process.env.API_URL +
-						"/api/certificate/other-document/download/" +
+						"/api/pre-certificates/other-document/download/" +
 						file.id,
 					method: "GET",
 					responseType: "blob"

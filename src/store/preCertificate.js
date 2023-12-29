@@ -48,7 +48,8 @@ export const usePreCertificateStore = defineStore(
 		});
 
 		const permission = ref({
-			allowDelete: true
+			allowDelete: true,
+			allowExport: true
 		});
 
 		const other = ref({
