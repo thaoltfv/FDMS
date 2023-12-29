@@ -253,71 +253,39 @@ export const usePreCertificateStore = defineStore(
 		}
 
 		const jsonConfig = ref(null);
-		async function updateToStage3() {
-			dataPC.value.target_status = 3;
-			const config = jsonConfig.value.principle.find(
-				item =>
-					item.status === dataPC.value.target_status && item.isActive === 1
-			);
-			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
-
-			let dataSend = {
-				// appraiser_id: this.elementDragger.appraiser_id,
-				// business_manager_id: this.elementDragger.business_manager_id,
-				// appraiser_sale_id: this.elementDragger.appraiser_sale_id,
-				// appraiser_perform_id: this.elementDragger.appraiser_perform_id,
-				// check_price: this.isCheckPrice,
-				// check_version: this.isCheckVersion,
-				// required: this.changeStatusRequire,
-
-				business_manager_id: null,
-				appraiser_perform_id: null,
-				appraiser_sale_id: null,
-				check_price: null,
-				check_version: null,
-				required: {
-					appraise_item_list: false,
-					appraiser: true,
-					check_legal: true,
-					check_price: true,
-					check_version: true
-				},
-				status: dataPC.value.target_status,
-				status_expired_at: dataPC.value.status_expired_at_string,
-				status_note: dataPC.value.status_note,
-				status_reason_id: "",
-				status_description: "Định giá sơ bộ",
-				status_config: jsonConfig.value.principle,
-				total_preliminary_value: dataPC.value.total_preliminary_value
-			};
-			const res = await PreCertificate.updateStatusPreCertificate(
-				dataPC.value.id,
-				dataSend
-			);
-			let error = true;
-			if (res.data) {
-				error = false;
-				dataPC.value.status = 3;
-				other.value.toast.open({
-					message: `Định giá sơ bộ thành công`,
-					type: "success",
-					position: "top-right"
-				});
-			} else if (res.error) {
-				other.value.toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right"
-				});
-			} else {
-				other.value.toast.open({
-					message: "Chuyển tiếp thất bại",
-					type: "error",
-					position: "top-right"
-				});
+		async function rejectFromStage2ToStage1() {
+			for (
+				let index = 0;
+				index < preCertificateOtherDocuments.value.Result.length;
+				index++
+			) {
+				const element = preCertificateOtherDocuments.value.Result[index];
+				const res = await File.deleteFilePreCertificate(element.id);
+				if (res.data) {
+					// other.value.toast.open({
+					// 	message: "Xóa thành công",
+					// 	type: "success",
+					// 	position: "top-right",
+					// 	duration: 3000
+					// });
+				} else if (res.error) {
+					other.value.toast.open({
+						message: res.error.message,
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				} else {
+					other.value.toast.open({
+						message: "Có lỗi xảy ra trong lúc xóa file",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
 			}
-			other.value.isSubmit = false;
-			return error;
+
+			return;
 		}
 
 		async function updateStatus(id, note, reason_id) {
@@ -346,6 +314,11 @@ export const usePreCertificateStore = defineStore(
 				status_description: config.description,
 				status_config: jsonConfig.value.principle
 			};
+			if (dataPC.value.status == 2 && dataPC.value.target_status == 1) {
+				await rejectFromStage2ToStage1();
+			}
+			dataSend.total_preliminary_value = 0;
+
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
 
 			return res;
@@ -470,7 +443,7 @@ export const usePreCertificateStore = defineStore(
 			updateRouteToast,
 			getConfig,
 			getPreCertificateAll,
-			updateToStage3,
+			rejectFromStage2ToStage1,
 			updateStatus,
 			getLstAppraisers,
 			getStartData

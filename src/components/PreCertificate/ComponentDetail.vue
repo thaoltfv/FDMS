@@ -326,9 +326,7 @@
 			:checkVersion="checkVersion"
 			@handleFooterAccept="handleFooterAccept"
 			@handleEdit="handleEdit"
-			@handleCancelCertificate="handleCancelCertificate"
 			@onCancel="onCancel"
-			@viewDetailAppraise="viewDetailAppraise"
 			@viewAppraiseListVersion="viewAppraiseListVersion"
 		/>
 		<ModalPCAppraisal
@@ -343,18 +341,7 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
-		<ModalNotificationPreCertificateNote
-			v-if="openNotification"
-			@cancel="handleCancel"
-			v-bind:notification="message"
-			@action="handleAction"
-		/>
-		<ModalNotificationCertificate
-			v-if="openNotificationDenined"
-			@cancel="openNotificationDenined = false"
-			v-bind:notification="message"
-			@action="handleActionDenined"
-		/>
+
 		<ModalViewDocument
 			v-if="isShowPrint"
 			@cancel="isShowPrint = false"
@@ -366,24 +353,13 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
-		<!-- <ModalNotificationCertificate
-			v-if="isHandleAction"
-			@cancel="isHandleAction = false"
-			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
-			@action="handleAction2"
-		/> -->
 		<ModalNotificationPreCertificateNote
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/>
-		<ModalNotificationCertificate
-			v-if="isReUpload"
-			@cancel="isReUpload = false"
-			v-bind:notification="reUploadMessage"
-			@action="openFile"
-		/>
+
 		<ModalDelete
 			v-if="deleteUploadDocument"
 			@cancel="deleteUploadDocument = false"
@@ -511,7 +487,6 @@ export default {
 			file: "",
 			documentAppraise: [],
 			message: "",
-			openNotification: false,
 			cancel_certificate: false,
 			openNotificationDenined: false,
 			filePrint: "",
@@ -552,8 +527,6 @@ export default {
 			isCheckLegal: false,
 			changeStatusRequire: {},
 			isApartment: false,
-			isReUpload: false,
-			reUploadMessage: "",
 			reportType: "",
 			deleteUploadDocument: false,
 			documentName: [
@@ -803,10 +776,7 @@ export default {
 			);
 			return report;
 		},
-		openFile() {
-			const id = "upload_" + this.reportType;
-			document.getElementById(id).click();
-		},
+
 		loadColor(item) {
 			let color = "";
 			if (item.log_name == "update_status") {
@@ -902,32 +872,7 @@ export default {
 			}
 			window.open(routeData.href, "_blank");
 		},
-		async viewDetailAppraise() {
-			let ids = [];
-			await this.dataPC.real_estate.forEach(item => {
-				ids.push(item.real_estate_id);
-			});
-			const res = await CertificationBrief.getAppraiseCompare(ids);
-			if (res.data) {
-				if (res.data[0].message) {
-					return this.$toast.open({
-						message: res.data[0].message,
-						type: "error",
-						position: "top-right",
-						duration: 5000
-					});
-				}
-				this.dataDetailAppraise = res.data;
-				this.showDetailAppraise = true;
-			} else if (res.error) {
-				return this.$toast.open({
-					message: res.error.message,
-					type: "error",
-					position: "top-right",
-					duration: 5000
-				});
-			}
-		},
+
 		async getHistoryTimeLine() {
 			const res = await CertificationBrief.getHistoryTimeline(this.dataPC.id);
 			if (res.data) {
@@ -983,50 +928,7 @@ export default {
 		onCancel() {
 			return this.$router.push({ name: "pre_certification.index" });
 		},
-		handleCancelCertificate() {
-			this.openNotification = true;
-			this.cancel_certificate = true;
-			this.message = "Bạn có muốn hủy hồ sơ này?";
-		},
-		handleAccept() {
-			this.openNotification = true;
-			this.cancel_certificate = false;
-			this.message = "Bạn có muốn duyệt hồ sơ này?";
-		},
-		handleDenined() {
-			this.openNotificationDenined = true;
-			this.cancel_certificate = false;
-			this.message = "Bạn có muốn từ chối hồ sơ này";
-		},
-		handleSendRequire() {
-			if (this.dataPC.general_asset && this.dataPC.general_asset.length > 0) {
-				this.openSendRequire = true;
-				this.key_render_appraisal += 1;
-			} else {
-				this.$toast.open({
-					message: "Vui lòng chọn tài sản thẩm định",
-					type: "error",
-					position: "top-right"
-				});
-			}
-		},
-		updateSendRequired() {
-			this.$router.push({ name: "pre_certification.index" }).catch(_ => {});
-		},
-		handleSendAppraiser() {
-			this.openSendAppraiser = true;
-			this.key_render_appraisal += 1;
-			this.status = 2;
-		},
-		updateSendAppraiser() {
-			this.$router.push({ name: "pre_certification.index" }).catch(_ => {});
-		},
-		handleCancel() {
-			this.openNotification = false;
-			if (this.cancel_certificate) {
-				this.cancel_certificate = false;
-			}
-		},
+
 		handleShowAppraisal() {
 			// console.log('-----------',this.dataPC)
 			this.key_render_appraisal += 1;
@@ -1056,110 +958,6 @@ export default {
 			this.showAppraisalDialog = false;
 		},
 
-		async handleAction(note, reason_id) {
-			const {
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_manager_id,
-				appraiser_perform,
-				appraiser_confirm,
-				appraiser_manager,
-				appraiser,
-				appraiser_control,
-				appraiser_control_id
-			} = this.dataPC;
-			let dataSend = {
-				appraiser_perform,
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_confirm,
-				appraiser_manager_id,
-				appraiser_manager,
-				appraiser_control,
-				appraiser_control_id,
-				appraiser,
-				status: 1,
-				status_config: this.jsonConfig.principle,
-				status_note: note,
-				status_reason_id: reason_id
-			};
-			if (this.dataPC.status === 2 && !this.cancel_certificate) {
-				// change status 2 --> 3
-				dataSend.status = 3;
-				const res = await PreCertificate.updateStatusPreCertificate(
-					this.dataPC.id,
-					dataSend
-				);
-				if (res.data) {
-					this.$toast.open({
-						message: "Gửi phê duyệt thành công",
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
-					this.dataPC.status = 3;
-				} else if (res.error) {
-					this.$toast.open({
-						message: res.error.message,
-						type: "error",
-						position: "top-right",
-						duration: 5000
-					});
-				}
-				this.openNotification = false;
-			} else if (this.dataPC.status === 3 && !this.cancel_certificate) {
-				// change status 3 --> 4
-				dataSend.status = 4;
-				const res = await PreCertificate.updateStatusPreCertificate(
-					this.dataPC.id,
-					dataSend
-				);
-				if (res.data) {
-					this.$toast.open({
-						message: "Xác nhận hồ sơ thành công",
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
-					this.dataPC.status = 4;
-				} else if (res.error) {
-					this.$toast.open({
-						message: res.error.message,
-						type: "error",
-						position: "top-right",
-						duration: 5000
-					});
-				}
-				this.openNotification = false;
-			} else if (this.cancel_certificate) {
-				// change status 2 --> 5
-				dataSend.status = 5;
-				const res = await PreCertificate.updateStatusPreCertificate(
-					this.dataPC.id,
-					dataSend
-				);
-				if (res.data) {
-					this.$toast.open({
-						message: "Hủy hồ sơ thành công",
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
-					this.dataPC.status = 5;
-				} else if (res.error) {
-					this.$toast.open({
-						message: res.error.message,
-						type: "error",
-						position: "top-right",
-						duration: 5000
-					});
-				}
-				this.openNotification = false;
-				this.cancel_certificate = false;
-			}
-		},
 		checkAppraiser() {
 			if (this.dataPC.appraiser_perform_id && this.dataPC.appraiser_id) {
 				return true;
@@ -1222,6 +1020,8 @@ export default {
 							return;
 						}
 					}
+
+					console.log("here");
 					this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
@@ -1246,7 +1046,9 @@ export default {
 				reason_id
 			);
 			if (res.data) {
-				this.dataPC.status = this.targetStatus;
+				// this.dataPC.status = this.targetStatus;
+				await this.preCertificateStore.getPreCertificate(this.routeId);
+
 				this.changeEditStatus();
 				this.$toast.open({
 					message: this.message + " thành công",
@@ -1375,57 +1177,7 @@ export default {
 				}
 			}
 		},
-		checkFileUpload(type) {
-			let message = "";
-			let isReUpload = false;
-			switch (type) {
-				case "certificate_report":
-					if (this.isCertificateReport) {
-						message = "Chứng thư thẩm định";
-						isReUpload = true;
-					}
-					break;
-				case "appraisal_report":
-					if (this.isAppraisalReport) {
-						message = "Báo cáo thẩm định";
-						isReUpload = true;
-					}
-					break;
-				case "appendix1_report":
-					if (this.isAppendix1Report) {
-						message = "Bảng điều chỉnh QSDĐ";
-						isReUpload = true;
-					}
-					break;
-				case "appendix2_report":
-					if (this.isAppendix2Report) {
-						message = "Bảng điều chỉnh CTXD";
-						isReUpload = true;
-					}
-					break;
-				case "appendix3_report":
-					if (this.isAppendix3Report) {
-						message = "Hình ảnh hiện trạng";
-						isReUpload = true;
-					}
-					break;
-				case "comparision_asset_report":
-					if (this.isComparisionAssetReport) {
-						message = "Phiếu thu thập TSSS";
-						isReUpload = true;
-					}
-					break;
-			}
-			this.reportType = type;
-			if (isReUpload) {
-				this.isReUpload = isReUpload;
-				this.reUploadMessage = isReUpload
-					? message + " đã có, bạn có muốn upload " + message + " mới ?"
-					: "";
-			} else {
-				this.openFile();
-			}
-		},
+
 		async onUploadDocument(type, e) {
 			const formData = new FormData();
 			let check = true;
@@ -1793,7 +1545,6 @@ export default {
 			);
 			if (dataJson && dataJson.length > 0) {
 				this.config = dataJson[0];
-				console.log("this.", dataJson[0]);
 				this.editAppraiser = dataJson[0].edit.appraiser
 					? dataJson[0].edit.appraiser
 					: false;

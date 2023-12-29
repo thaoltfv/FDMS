@@ -334,6 +334,13 @@ export default {
 					position: "top-right",
 					duration: 3000
 				});
+			} else {
+				other.value.toast.open({
+					message: "Có lỗi xảy ra trong lúc xóa file",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
 			}
 		};
 		const openFile = file => {
@@ -369,13 +376,15 @@ export default {
 						type: "image"
 					};
 					isShowPrint.value = true;
-				} else if (file.type === "application/pdf") {
-					filePrint.value = {
-						link: blob,
-						type: "pdf"
-					};
-					isShowPrint.value = true;
-				} else {
+				}
+				//  else if (file.type === "application/pdf") {
+				// 	filePrint.value = {
+				// 		link: blob,
+				// 		type: "pdf"
+				// 	};
+				// 	isShowPrint.value = true;
+				// }
+				else {
 					other.value.toast.open({
 						message: "Tạm thời chưa hỗ trợ xem trước loại file này",
 						type: "error",
@@ -409,12 +418,14 @@ export default {
 								link: URL.createObjectURL(blob),
 								type: "image"
 							};
-						} else if (file.type === "pdf") {
-							filePrint.value = {
-								link: blob,
-								type: "pdf"
-							};
-						} else {
+						}
+						//  else if (file.type === "pdf") {
+						// 	filePrint.value = {
+						// 		link: blob,
+						// 		type: "pdf"
+						// 	};
+						// }
+						else {
 							other.value.toast.open({
 								message: "Tạm thời chưa hỗ trợ xem trước loại file này",
 								type: "error",
