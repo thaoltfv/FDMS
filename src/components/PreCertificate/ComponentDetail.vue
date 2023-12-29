@@ -421,8 +421,6 @@ import Footer from "@/components/PreCertificate/FooterDetail.vue";
 
 import store from "@/store";
 import * as types from "@/store/mutation-types";
-// const jsonConfig = require("../../../config/pre_certificate_workflow.json");
-const jsonConfig = null;
 Vue.use(Icon);
 export default {
 	props: {
@@ -510,15 +508,9 @@ export default {
 			isCheckRealEstate: true,
 			isCheckConstruction: false,
 			isViewAutomationDocument: true,
-			jsonConfig: jsonConfig,
 			targetStatus: "",
 			isHandleAction: false,
-			editAppraiser: false,
-			editItemList: false,
-			editInfo: false,
-			printConfig: false,
 			profile: {},
-			config: {},
 			checkVersion: true,
 			typeAppraiseProperty: [],
 			isShowAppraiseListVersion: false,
@@ -553,22 +545,50 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, lstDataConfig, preCertificateOtherDocuments } = storeToRefs(
-			preCertificateStore
-		);
+		const {
+			dataPC,
+			lstDataConfig,
+			preCertificateOtherDocuments,
+			jsonConfig
+		} = storeToRefs(preCertificateStore);
 		const dialogRequireForStage3 = ref(false);
+		const config = ref({});
+		const editInfo = ref(false);
+		const editAppraiser = ref(false);
 		const editPreResult = ref(false);
+		const changeEditStatus = () => {
+			let dataJson = jsonConfig.value.principle.filter(
+				item => item.status === dataPC.value.status && item.isActive === 1
+			);
+			if (dataJson && dataJson.length > 0) {
+				config.value = dataJson[0];
+				editAppraiser.value = dataJson[0].edit.appraiser
+					? dataJson[0].edit.appraiser
+					: false;
+
+				editInfo.value = dataJson[0].edit.info ? dataJson[0].edit.info : false;
+				editPreResult.value = dataJson[0].edit.pre_result
+					? dataJson[0].edit.pre_result
+					: false;
+			}
+		};
 		const start = async () => {
-			if (!lstDataConfig.value.workflow) {
-				await preCertificateStore.getConfig();
+			if (!jsonConfig.value) {
+				jsonConfig.value = await preCertificateStore.getConfig();
 			}
 			await preCertificateStore.resetData();
 			await preCertificateStore.getPreCertificate(props.routeId);
+			await changeEditStatus();
 		};
+
 		start();
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
 		return {
+			jsonConfig,
+			config,
+			editAppraiser,
+			editInfo,
 			editPreResult,
 			dialogRequireForStage3,
 			isMobile,
@@ -578,7 +598,8 @@ export default {
 			preCertificateStore,
 			checkVersion2,
 
-			showCardDetailFileResult
+			showCardDetailFileResult,
+			changeEditStatus
 		};
 	},
 
@@ -1539,25 +1560,7 @@ export default {
 			});
 			this.total_price_appraise = total_price;
 		},
-		changeEditStatus() {
-			let dataJson = this.jsonConfig.principle.filter(
-				item => item.status === this.dataPC.status && item.isActive === 1
-			);
-			if (dataJson && dataJson.length > 0) {
-				this.config = dataJson[0];
-				this.editAppraiser = dataJson[0].edit.appraiser
-					? dataJson[0].edit.appraiser
-					: false;
-				this.editItemList = dataJson[0].edit.appraise_item_list
-					? dataJson[0].edit.appraise_item_list
-					: false;
-				this.editInfo = dataJson[0].edit.info ? dataJson[0].edit.info : false;
-				this.editPreResult = dataJson[0].edit.pre_result
-					? dataJson[0].edit.pre_result
-					: false;
-				this.printConfig = dataJson[0].print;
-			}
-		},
+
 		openMessage(
 			message,
 			type = "error",
@@ -1697,14 +1700,6 @@ export default {
 		this.setDocumentViewStatus();
 	},
 	async mounted() {
-		if (!this.jsonConfig) {
-			if (this.lstDataConfig.workflow) {
-				this.jsonConfig = this.lstDataConfig.workflow;
-			} else {
-				this.jsonConfig = await this.preCertificateStore.getConfig();
-			}
-		}
-		this.changeEditStatus();
 		this.checkVersion = this.checkVersion2;
 	},
 	watch: {
