@@ -67,7 +67,7 @@
 									</p>
 								</div>
 
-								<div class="d-flex container_content">
+								<!-- <div class="d-flex container_content">
 									<strong class="margin_content_inline"
 										>Tổng giá trị sơ bộ:</strong
 									>
@@ -78,7 +78,7 @@
 												: 0
 										}}đ
 									</p>
-								</div>
+								</div> -->
 
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Ghi chú:</strong
@@ -1010,9 +1010,9 @@ export default {
 						if (
 							!this.preCertificateOtherDocuments.Result ||
 							this.preCertificateOtherDocuments.Result.length === 0 ||
-							this.dataPC.total_preliminary_value === 0 ||
-							this.dataPC.total_preliminary_value === null ||
-							this.dataPC.total_preliminary_value === undefined
+							this.dataPC.total_preliminary_value == 0 ||
+							this.dataPC.total_preliminary_value == null ||
+							this.dataPC.total_preliminary_value == undefined
 						) {
 							this.openMessage(
 								"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ"

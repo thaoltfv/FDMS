@@ -317,8 +317,8 @@ export const usePreCertificateStore = defineStore(
 			};
 			if (dataPC.value.status == 2 && dataPC.value.target_status == 1) {
 				await rejectFromStage2ToStage1();
+				dataSend.total_preliminary_value = 0;
 			}
-			dataSend.total_preliminary_value = 0;
 
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
 

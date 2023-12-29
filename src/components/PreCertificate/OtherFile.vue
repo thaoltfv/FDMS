@@ -21,7 +21,11 @@
 					<div class="row d-flex justify-content-between align-items-center">
 						<h3 class="title">
 							{{ title }}
-							<label :for="'image_property' + type" class="ml-2">
+							<label
+								v-if="dataPC.status == 1 || dataPC.status == 2"
+								:for="'image_property' + type"
+								class="ml-2"
+							>
 								<font-awesome-icon
 									:style="{ color: 'orange', cursor: 'pointer' }"
 									icon="cloud-upload-alt"
@@ -101,7 +105,10 @@
 									class="img_document_action"
 								/>
 								<img
-									v-else-if="permission.allowDelete"
+									v-else-if="
+										permission.allowDelete &&
+											(dataPC.status == 1 || dataPC.status == 2)
+									"
 									@click="deleteOtherFile(file, index)"
 									src="@/assets/icons/ic_delete_2.svg"
 									alt="tag_2"
@@ -143,7 +150,7 @@
 			<div class="row ">
 				<div class="title" style="margin-left:-10px;">
 					File kèm kết quả sơ bộ
-					<label class="ml-2" for="image_property">
+					<label v-if="dataPC.status == 2" class="ml-2" for="image_property">
 						<font-awesome-icon
 							:style="{ color: 'orange', cursor: 'pointer' }"
 							icon="cloud-upload-alt"
@@ -206,7 +213,7 @@
 							class="img_document_action"
 						/>
 						<img
-							v-else-if="permission.allowDelete"
+							v-else-if="permission.allowDelete && dataPC.status == 2"
 							@click="deleteOtherFile(file, index)"
 							src="@/assets/icons/ic_delete_2.svg"
 							alt="tag_2"
