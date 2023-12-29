@@ -82,7 +82,6 @@ import InputText from "@/components/Form/InputText";
 import InputCategory from "@/components/Form/InputCategory";
 import InputNumberFormat from "@/components/Form/InputNumber";
 import InputDatePickerV2 from "@/components/Form/InputDatePickerV2";
-import moment from "moment";
 export default {
 	name: "ModalAppraisal",
 

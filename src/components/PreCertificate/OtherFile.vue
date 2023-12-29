@@ -514,16 +514,7 @@ export default {
 
 							this.preCertificateOtherDocuments[this.type] = [...tempList];
 							this.lstFile = [...tempList];
-							if (this.fromComponent) {
-								await this.$emit("action");
-							}
-							console.log(
-								"this",
-								this.lstFile,
-								this.type,
-								res.data.data,
-								tempList
-							);
+
 							this.$toast.open({
 								message: "Thêm file thành công",
 								type: "success",

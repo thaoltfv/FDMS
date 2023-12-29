@@ -16,15 +16,8 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<p style="font-size: 18px" v-html="notification"></p>
-
-				<div>
-					<OtherFile
-						:key="key_render_require_for_stage3"
-						style="margin-left:-20px; margin-top:-30px;"
-						type="Result"
-						@action="key_render_require_for_stage3++"
-					/>
+				<div class="row col-12">
+					<OtherFile style="margin-left:-20px;" type="Result" />
 				</div>
 				<div class="btn__group">
 					<button
@@ -60,16 +53,7 @@ export default {
 		InputTextarea,
 		InputCurrency
 	},
-	props: ["notification"],
-	computed: {
-		optionsReasons() {
-			return {
-				data: this.reasons,
-				id: "id",
-				key: "description"
-			};
-		}
-	},
+	computed: {},
 	methods: {
 		handleCancel() {
 			this.$emit("cancel");
@@ -139,9 +123,7 @@ export default {
 		const { dataPC, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
-		const key_render_require_for_stage3 = ref(0);
 		return {
-			key_render_require_for_stage3,
 			dataPC,
 			isMobile,
 			preCertificateOtherDocuments,
@@ -154,7 +136,7 @@ export default {
 <style lang="scss" scoped>
 .modal-delete {
 	position: fixed;
-	z-index: 10002;
+	z-index: 300;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -165,7 +147,7 @@ export default {
 		padding: 20px;
 	}
 	.card {
-		max-width: 600px;
+		max-width: 500px;
 		width: 100%;
 		margin-bottom: 0;
 		&-header {
@@ -178,28 +160,78 @@ export default {
 			}
 		}
 		&-body {
-			text-align: center;
-			padding: 40px;
-			p {
-				color: #333333;
-				margin-bottom: 40px;
-			}
-
+			padding: 0px 15px 15px;
+			border-top: 1px solid #e8e8e8;
 			.btn__group {
+				text-align: right;
 				.btn {
-					max-width: 150px;
+					max-width: fit-content;
 					width: 100%;
-					margin: 0 10px;
+					margin: 14px 0 0;
 				}
 			}
 		}
 	}
 }
+.container-title {
+	// margin: -35px -95px auto;
+	// padding: 35px 95px 0;
+	// padding: 15px 50px 10px 95px;
+	// box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	padding-left: 1rem;
+
+	.title {
+		color: #007ec6;
+		font-weight: 600;
+		margin-top: 20px;
+		margin-bottom: 15px;
+		font-size: 1.2rem;
+		@media (max-width: 767px) {
+			font-size: 1.125rem;
+		}
+	}
+	// &__footer{
+	//   margin: auto -95px -35px;
+	//   padding: 20px 95px 20px;
+	//   @media (max-width: 767px) {
+	//     .btn-white{
+	//       margin-bottom: 20px;
+	//     }
+	//   }
+	// }
+}
+.title {
+	font-weight: 500;
+	font-size: 1.125rem;
+	text-align: left;
+	margin-bottom: 7px;
+}
 .btn {
 	&-orange {
 		background: #faa831;
 		color: #ffffff;
-		font-weight: bold !important;
+		font-weight: 700 !important;
 	}
+	&-white {
+		min-width: auto;
+	}
+}
+.form-group-container {
+	margin-top: 10px;
+}
+.property_content {
+	font-weight: 600;
+}
+.input_checkbox {
+	margin-right: 10px;
+}
+.color-black {
+	color: #333333;
+}
+.border_disable {
+	border-color: #d9d9d9 !important;
+}
+.form-group-container {
+	margin-top: 10px;
 }
 </style>

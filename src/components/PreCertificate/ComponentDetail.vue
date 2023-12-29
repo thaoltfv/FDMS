@@ -308,10 +308,9 @@
 					</div>
 				</div>
 				<OtherFile
-					v-show="showCardDetailFileResult"
+					v-if="showCardDetailFileResult && !dialogRequireForStage3"
 					type="Result"
 					:from-component="'Detail'"
-					@action="showCardDetailFileResult = true"
 				/>
 			</div>
 		</div>
