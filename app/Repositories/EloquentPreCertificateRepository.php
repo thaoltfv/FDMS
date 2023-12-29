@@ -1807,9 +1807,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }));
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
                 $total_preliminary_value = isset($request['total_preliminary_value']) ? $request['total_preliminary_value'] : null;
+                $cancel_reason = isset($request['cancel_reason']) ? $request['cancel_reason'] : null;
 
                 if (isset($status)) {
-                    if (isset($total_preliminary_value)) {
+                    if (isset($cancel_reason)) {
+                        $result = $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update([
+                                'status' => $status,
+                                'status_updated_at' => date('Y-m-d H:i:s'),
+                                'status_expired_at' => $status_expired_at,
+                                'cancel_reason' => $cancel_reason,
+                            ]);
+                    } else if (isset($total_preliminary_value)) {
                         $result = $this->model->query()
                             ->where('id', '=', $id)
                             ->update([
