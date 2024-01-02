@@ -293,68 +293,28 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $tempFilePath = storage_path('app/public');
                 // Lưu file tạm thời
                 $file->move($tempFilePath, 'temp.docx');
-                // dd($tempFilePath);
-                // $templateContent = file_get_contents($tempFilePath.'/temp.docx');
-                // Lưu nội dung vào cơ sở dữ liệu
-                // dd($templateContent);
-                // Sử dụng thư viện để đọc file .doc
-                $phpWord = new PhpWord();
-                $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
-                // Chuyển đổi nó thành đối tượng PHPWord
-                // $phpWord = IOFactory::load($templateContent, 'Word2007');
-                // dd($phpWord);
-                // Lấy nội dung từ template
-                // $sections = $phpWord->getSections();
-                // dd($sections);
-                // $content = '';
+                // Đường dẫn đến mẫu DOCX
+                $templatePath = $tempFilePath.'temp.docx';
 
-                // Truyền thêm tham số vào template
-                $params = [
-                    'placeholder1' => 'Value1',
-                    'placeholder2' => 'Value2',
-                    // Thêm các tham số khác tùy thuộc vào nhu cầu của bạn
+                // Khởi tạo TemplateProcessor với mẫu DOCX
+                $templateProcessor = new TemplateProcessor($templatePath);
+
+                // Dữ liệu thực tế để thay thế placeholder
+                $data = [
+                    'name' => 'John Doe',
+                    'address' => '123 Main Street',
                 ];
 
-                // foreach ($sections as $section) {
-                //     foreach ($section->getElements() as $element) {
-                //         if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
-                //             // Xử lý TextRun
-                //             foreach ($element->getElements() as $text) {
-                //                 $content .= $text->getText();
-                //             }
-                //         } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
-                //             // Xử lý Text
-                //             $content .= $element->getText();
-                //         }
-                //     }
-                // }
-                foreach ($phpWord->getSections() as $section) {
-                    // $header = $section->getHeaders();
-                    // $footer = $section->getFooters();
-                    // dd($header,$footer);
-                    foreach ($section->getElements() as $element) {
-                        // Đối với TextRun, Text, hoặc các loại phần tử khác, bạn cần xử lý tương tự
-                        if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
-                            foreach ($element->getElements() as $text) {
-                                $text->setText(strtr($text->getText(), $params));
-                            }
-                        } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
-                            $element->setText(strtr($element->getText(), $params));
-                        }
-                    }
+                // Thay thế giá trị placeholder trong mẫu bằng dữ liệu thực tế
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
                 }
 
-                // Khởi tạo TemplateProcessor
-                // $templateProcessor = new TemplateProcessor($tempFilePath.'/temp.docx');
-                // dd($templateProcessor->s);
-                // $templateProcessor->setValues($params);
-                
-                // Xuất ra tệp mới
-                $newDocxPath = $tempFilePath.'/new_temp.docx';
-                // $templateProcessor->saveAs($newDocxPath);
-                $phpWord->save($newDocxPath);
-                // Xử lý nội dung theo nhu cầu của bạn
-                // ...
+                // Lưu tệp DOCX sau khi thực hiện thay thế
+                $outputPath = $tempFilePath.'output.docx';
+                $templateProcessor->saveAs($outputPath);
+
+                echo 'File DOCX created successfully!';
 
                 // Xóa tệp tạm thời
                 unlink($tempFilePath.'/temp.docx');
