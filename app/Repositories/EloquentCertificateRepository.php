@@ -284,7 +284,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $result = [];
                 $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
                 $files = $request->file('files');
-                dd($files);
+                // dd($files);
                 $user = CommonService::getUser();
 
                 if (isset($files) && !empty($files)) {
