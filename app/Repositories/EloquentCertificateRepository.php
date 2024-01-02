@@ -294,7 +294,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // Lưu file tạm thời
                 $file->move($tempFilePath, '/temp.docx');
                 // Đường dẫn đến mẫu DOCX
-                $templatePath = $tempFilePath.'temp.docx';
+                $templatePath = $tempFilePath.'/temp.docx';
 
                 // Khởi tạo TemplateProcessor với mẫu DOCX
                 $templateProcessor = new TemplateProcessor($templatePath);
