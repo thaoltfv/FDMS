@@ -289,12 +289,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                 // Lưu dữ liệu binary vào một tệp tạm thời
                 $tempFilePath = storage_path('app/public/temp.docx');
+                dd($tempFilePath);
                 file_put_contents($tempFilePath, base64_decode($file));
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
                 $phpWord = IOFactory::load($tempFilePath);
 
-                dd($tempFilePath, $phpWord);
+                // dd($tempFilePath, $phpWord);
 
                 // Xử lý nội dung theo nhu cầu của bạn
                 // ...
