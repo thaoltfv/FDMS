@@ -293,10 +293,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $tempFilePath = storage_path('app/public');
                 // Lưu file tạm thời
                 $file->move($tempFilePath, 'temp.docx');
+                $zip = new \ZipArchive;
+                if ($zip->open($tempFilePath.'/temp.docx') === true) {
+                    $xmlContent = $zip->getFromName('word/temp.xml');
+                    $zip->close();
+                    dd($xmlContent);
+                }
                 // dd($tempFilePath);
-                $templateContent = file_get_contents($tempFilePath.'/temp.docx');
+                // $templateContent = file_get_contents($tempFilePath.'/temp.docx');
                 // Lưu nội dung vào cơ sở dữ liệu
-                dd($templateContent);
+                // dd($templateContent);
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
                 $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
