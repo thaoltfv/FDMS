@@ -164,6 +164,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -176,6 +177,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     private string $defaultSort = 'id';
 
     private string $allowedSorts = 'id';
+    
 
     /**
      * @return bool
@@ -292,6 +294,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // Lưu file tạm thời
                 $file->move($tempFilePath, 'temp.docx');
                 // dd($tempFilePath);
+                $templateContent = file_get_contents($tempFilePath.'/temp.docx');
+                // Lưu nội dung vào cơ sở dữ liệu
+                dd($templateContent);
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
                 $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
