@@ -297,16 +297,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $phpWord = new PhpWord();
                         $phpWord = IOFactory::load($tempFilePath);
 
-                        // Lấy nội dung từ template
-                        $sections = $phpWord->getSections();
-                        $content = '';
-                        dd($sections);
-
-                        foreach ($sections as $section) {
-                            foreach ($section->getElements() as $element) {
-                                $content .= $element->getText();
-                            }
-                        }
+                        dd($phpWord);
 
                         // Xử lý nội dung theo nhu cầu của bạn
                         // ...
