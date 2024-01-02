@@ -162,6 +162,7 @@ use App\Services\AppraiseVersionService;
 use App\Services\CommonService;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use PhpOffice\PhpWord\PhpWord;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -265,6 +266,50 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $result = CertificateOtherDocuments::where('certificate_id', $id)
                     ->with('createdBy')
                     ->get();
+                return $result;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function testDocumentUpload($request)
+    {
+        return DB::transaction(function () use ($request) {
+            try {
+                $result = [];
+                $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+                $files = $request->file('files');
+
+                $user = CommonService::getUser();
+
+                if (isset($files) && !empty($files)) {
+                    foreach ($files as $file) {
+                        // Sử dụng thư viện để đọc file .doc
+                        $phpWord = new PhpWord();
+                        $phpWord->load($file);
+
+                        // Lấy nội dung từ template
+                        $sections = $phpWord->getSections();
+                        $content = '';
+
+                        foreach ($sections as $section) {
+                            foreach ($section->getElements() as $element) {
+                                $content .= $element->getText();
+                            }
+                        }
+
+                        // Xử lý nội dung theo nhu cầu của bạn
+                        // ...
+
+                        return response()->json(['content' => $content]);
+                    }
+                }
+
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);

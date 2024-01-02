@@ -306,6 +306,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('certificate/other-document/upload/{id}', [CertificateController::class, 'otherDocumentUpload']);
 
+    //test
+
+    Route::post('certificate/test-document/upload', [CertificateController::class, 'testDocumentUpload']);
+
+    //test
+
     Route::post('certificate/other-document/remove/{id}', [CertificateController::class, 'otherDocumentRemove']);
 
     Route::get('certificate/other-document/download/{id}', [CertificateController::class, 'otherDocumentDownload']);
