@@ -284,32 +284,27 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             try {
                 $result = [];
                 $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-                $files = $request->file('files');
+                $file = $request->file('files');
                 // dd($files);
                 $user = CommonService::getUser();
 
-                if (isset($files) && !empty($files)) {
-                    foreach ($files as $file) {
-                        // Lưu dữ liệu binary vào một tệp tạm thời
-                        $tempFilePath = storage_path(env('STORAGE_OTHERS') . '/' . 'comparison_brief/' . $now->year . '/' . $now->month . '/temp.docx');
-                        file_put_contents($tempFilePath, base64_decode($file));
-                        // Sử dụng thư viện để đọc file .doc
-                        $phpWord = new PhpWord();
-                        $phpWord = IOFactory::load($tempFilePath);
+                // Lưu dữ liệu binary vào một tệp tạm thời
+                $tempFilePath = storage_path('/temp.docx');
+                file_put_contents($tempFilePath, base64_decode($file));
+                // Sử dụng thư viện để đọc file .doc
+                $phpWord = new PhpWord();
+                $phpWord = IOFactory::load($tempFilePath);
 
-                        dd($phpWord);
+                dd($tempFilePath, $phpWord);
 
-                        // Xử lý nội dung theo nhu cầu của bạn
-                        // ...
+                // Xử lý nội dung theo nhu cầu của bạn
+                // ...
 
-                        // Xóa tệp tạm thời
-                        unlink($tempFilePath);
+                // Xóa tệp tạm thời
+                unlink($tempFilePath);
 
-                        return response()->json(['content' => $content]);
-                    }
-                }
+                return ;
 
-                return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
                 throw $exception;
