@@ -303,7 +303,15 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                 foreach ($sections as $section) {
                     foreach ($section->getElements() as $element) {
-                        $content .= $element->getText();
+                        if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                            // Xử lý TextRun
+                            foreach ($element->getElements() as $text) {
+                                $content .= $text->getText();
+                            }
+                        } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
+                            // Xử lý Text
+                            $content .= $element->getText();
+                        }
                     }
                 }
                 // Xử lý nội dung theo nhu cầu của bạn
