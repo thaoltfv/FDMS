@@ -293,45 +293,63 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $tempFilePath = storage_path('app/public');
                 // Lưu file tạm thời
                 $file->move($tempFilePath, 'temp.docx');
-                $zip = new \ZipArchive;
-                if ($zip->open($tempFilePath.'/temp.docx') === true) {
-                    $xmlContent = $zip->getFromName('word/temp.xml');
-                    $zip->close();
-                    dd($xmlContent);
-                }
                 // dd($tempFilePath);
-                // $templateContent = file_get_contents($tempFilePath.'/temp.docx');
+                $templateContent = file_get_contents($tempFilePath.'/temp.docx');
                 // Lưu nội dung vào cơ sở dữ liệu
                 // dd($templateContent);
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
-                $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
+                // $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
+                // Chuyển đổi nó thành đối tượng PHPWord
+                $phpWord = IOFactory::load($templateContent, 'Word2007');
                 // dd($phpWord);
                 // Lấy nội dung từ template
-                $sections = $phpWord->getSections();
+                // $sections = $phpWord->getSections();
                 // dd($sections);
-                $content = '';
+                // $content = '';
 
-                foreach ($sections as $section) {
+                // Truyền thêm tham số vào template
+                $params = [
+                    'params_1' => 'Dữ liệu số 1',
+                    'params_2' => 'Dữ liệu số 2',
+                ];
+
+                // foreach ($sections as $section) {
+                //     foreach ($section->getElements() as $element) {
+                //         if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                //             // Xử lý TextRun
+                //             foreach ($element->getElements() as $text) {
+                //                 $content .= $text->getText();
+                //             }
+                //         } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
+                //             // Xử lý Text
+                //             $content .= $element->getText();
+                //         }
+                //     }
+                // }
+                foreach ($phpWord->getSections() as $section) {
                     foreach ($section->getElements() as $element) {
+                        // Đối với TextRun, Text, hoặc các loại phần tử khác, bạn cần xử lý tương tự
                         if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
-                            // Xử lý TextRun
                             foreach ($element->getElements() as $text) {
-                                $content .= $text->getText();
+                                $text->setText(strtr($text->getText(), $params));
                             }
                         } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
-                            // Xử lý Text
-                            $content .= $element->getText();
+                            $element->setText(strtr($element->getText(), $params));
                         }
                     }
                 }
+                
+                // Xuất ra tệp mới
+                $newDocxPath = $tempFilePath.'/new_temp.docx';
+                $phpWord->save($newDocxPath);
                 // Xử lý nội dung theo nhu cầu của bạn
                 // ...
 
                 // Xóa tệp tạm thời
                 unlink($tempFilePath.'/temp.docx');
 
-                return response()->json(['content' => $content]);;
+                return ;
 
             } catch (Exception $exception) {
                 Log::error($exception);
