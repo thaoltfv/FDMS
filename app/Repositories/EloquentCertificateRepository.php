@@ -310,8 +310,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                 // Truyền thêm tham số vào template
                 $params = [
-                    'params1' => 'Dữ liệu số 1',
-                    'params2' => 'Dữ liệu số 2',
+                    'placeholder1' => 'Value1',
+                    'placeholder2' => 'Value2',
+                    // Thêm các tham số khác tùy thuộc vào nhu cầu của bạn
                 ];
 
                 // foreach ($sections as $section) {
