@@ -298,7 +298,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // dd($phpWord);
                 // Lấy nội dung từ template
                 $sections = $phpWord->getSections();
-                dd($sections);
+                // dd($sections);
                 $content = '';
 
                 foreach ($sections as $section) {
@@ -312,7 +312,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // Xóa tệp tạm thời
                 unlink($tempFilePath);
 
-                return ;
+                return response()->json(['content' => $content]);;
 
             } catch (Exception $exception) {
                 Log::error($exception);
