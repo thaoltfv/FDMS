@@ -292,7 +292,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // Lưu dữ liệu binary vào một tệp tạm thời
                 $tempFilePath = storage_path('app/public');
                 // Lưu file tạm thời
-                $file->move($tempFilePath, 'temp.docx');
+                $file->move($tempFilePath, '/temp.docx');
                 // Đường dẫn đến mẫu DOCX
                 $templatePath = $tempFilePath.'temp.docx';
 
@@ -311,7 +311,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 }
 
                 // Lưu tệp DOCX sau khi thực hiện thay thế
-                $outputPath = $tempFilePath.'output.docx';
+                $outputPath = $tempFilePath.'/output.docx';
                 $templateProcessor->saveAs($outputPath);
 
                 echo 'File DOCX created successfully!';
