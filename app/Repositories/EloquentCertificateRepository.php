@@ -291,7 +291,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if (isset($files) && !empty($files)) {
                     foreach ($files as $file) {
                         // Lưu dữ liệu binary vào một tệp tạm thời
-                        $tempFilePath = storage_path('app/temp.docx');
+                        $tempFilePath = storage_path(env('STORAGE_OTHERS') . '/' . 'comparison_brief/' . $now->year . '/' . $now->month . '/temp.docx');
                         file_put_contents($tempFilePath, base64_decode($file));
                         // Sử dụng thư viện để đọc file .doc
                         $phpWord = new PhpWord();
@@ -310,6 +310,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                         // Xử lý nội dung theo nhu cầu của bạn
                         // ...
+
+                        // Xóa tệp tạm thời
+                        unlink($tempFilePath);
 
                         return response()->json(['content' => $content]);
                     }
