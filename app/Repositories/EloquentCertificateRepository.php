@@ -163,6 +163,7 @@ use App\Services\CommonService;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -289,17 +290,17 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                 if (isset($files) && !empty($files)) {
                     foreach ($files as $file) {
-
                         // Lưu dữ liệu binary vào một tệp tạm thời
                         $tempFilePath = storage_path('app/temp.docx');
                         file_put_contents($tempFilePath, base64_decode($file));
                         // Sử dụng thư viện để đọc file .doc
                         $phpWord = new PhpWord();
-                        $phpWord->load($tempFilePath);
+                        $phpWord = IOFactory::load($tempFilePath);
 
                         // Lấy nội dung từ template
                         $sections = $phpWord->getSections();
                         $content = '';
+                        dd($sections);
 
                         foreach ($sections as $section) {
                             foreach ($section->getElements() as $element) {
