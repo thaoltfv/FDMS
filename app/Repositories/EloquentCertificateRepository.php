@@ -318,7 +318,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // ...
 
                 // Xóa tệp tạm thời
-                unlink($tempFilePath);
+                unlink($tempFilePath.'/temp.docx');
 
                 return response()->json(['content' => $content]);;
 
