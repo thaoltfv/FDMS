@@ -346,6 +346,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                 // Khởi tạo TemplateProcessor
                 $templateProcessor = new TemplateProcessor($tempFilePath.'/temp.docx');
+                dd($templateProcessor);
                 $templateProcessor->setValues($params);
                 
                 // Xuất ra tệp mới
