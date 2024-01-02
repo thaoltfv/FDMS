@@ -290,7 +290,11 @@
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
-			<OtherFile :type="'Appendix'" :from-component="'Detail'" />
+			<OtherFile
+				:type="'Appendix'"
+				:allow-edit="allowEditFile.appendix"
+				:from-component="'Detail'"
+			/>
 		</div>
 		<div
 			v-if="dataPC.id && dataPC.status >= 2"
@@ -304,24 +308,18 @@
 							<h3 class="title">Kết quả sơ bộ</h3>
 						</div>
 						<div
-							v-if="editPreResult && edit"
+							v-if="allowEditFile.result && edit"
 							@click="dialogRequireForStage3 = true"
 							class="btn-edit "
 						>
 							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
 						</div>
-						<!-- <img
-							class="img-dropdown"
-							:class="!showCardDetailFileResult ? 'img-dropdown__hide' : ''"
-							src="@/assets/images/icon-btn-down.svg"
-							alt="dropdown"
-							@click="showCardDetailFileResult = !showCardDetailFileResult"
-						/> -->
 					</div>
 				</div>
 				<OtherFile
 					v-if="showCardDetailFileResult && !dialogRequireForStage3"
 					type="Result"
+					:allow-edit="false"
 					:from-component="'Detail'"
 				/>
 			</div>
@@ -567,7 +565,7 @@ export default {
 		const config = ref({});
 		const editInfo = ref(false);
 		const editAppraiser = ref(false);
-		const editPreResult = ref(false);
+		const allowEditFile = ref({ appendix: false, result: false });
 		const changeEditStatus = () => {
 			let dataJson = jsonConfig.value.principle.filter(
 				item => item.status === dataPC.value.status && item.isActive === 1
@@ -579,8 +577,12 @@ export default {
 					: false;
 
 				editInfo.value = dataJson[0].edit.info ? dataJson[0].edit.info : false;
-				editPreResult.value = dataJson[0].edit.pre_result
-					? dataJson[0].edit.pre_result
+
+				allowEditFile.value.appendix = dataJson[0].edit.file_appendix
+					? dataJson[0].edit.file_appendix
+					: false;
+				allowEditFile.value.result = dataJson[0].edit.file_result
+					? dataJson[0].edit.file_result
 					: false;
 			}
 		};
@@ -597,11 +599,11 @@ export default {
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
 		return {
+			allowEditFile,
 			jsonConfig,
 			config,
 			editAppraiser,
 			editInfo,
-			editPreResult,
 			dialogRequireForStage3,
 			isMobile,
 			dataPC,
@@ -624,7 +626,6 @@ export default {
 		}
 		this.user_id = profile.data.user.id;
 		this.profile = profile;
-		console.log("this", this.dataPC);
 		if (profile.data.user.id === this.dataPC.created_by) {
 			this.checkRole = true;
 		}

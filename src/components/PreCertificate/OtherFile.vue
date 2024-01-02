@@ -22,7 +22,7 @@
 						<h3 class="title">
 							{{ title }}
 							<label
-								v-if="dataPC.status == 1 || dataPC.status == 2"
+								v-if="allowEdit"
 								:for="'image_property' + type"
 								class="ml-2"
 							>
@@ -35,6 +35,7 @@
 						</h3>
 
 						<input
+							v-if="allowEdit"
 							class="btn-upload "
 							type="file"
 							:ref="'file' + type"
@@ -105,10 +106,7 @@
 									class="img_document_action"
 								/>
 								<img
-									v-else-if="
-										permission.allowDelete &&
-											(dataPC.status == 1 || dataPC.status == 2)
-									"
+									v-else-if="permission.allowDelete && allowEdit"
 									@click="deleteOtherFile(file, index)"
 									src="@/assets/icons/ic_delete_2.svg"
 									alt="tag_2"
@@ -124,7 +122,7 @@
 		<div class="card-body card-info" v-if="type === 'Result'">
 			<div class="row">
 				<InputCurrency
-					v-if="!fromComponent"
+					v-if="allowEdit"
 					v-model="dataPC.total_preliminary_value"
 					vid="service_fee"
 					:max="99999999999999"
@@ -150,7 +148,7 @@
 			<div class="row ">
 				<div class="title" style="margin-left:-10px;">
 					File kèm kết quả sơ bộ
-					<label v-if="dataPC.status == 2" class="ml-2" for="image_property">
+					<label v-if="allowEdit" class="ml-2" for="image_property">
 						<font-awesome-icon
 							:style="{ color: 'orange', cursor: 'pointer' }"
 							icon="cloud-upload-alt"
@@ -160,6 +158,7 @@
 				</div>
 
 				<input
+					v-if="allowEdit"
 					class="btn-upload "
 					type="file"
 					ref="file"
@@ -175,7 +174,7 @@
 				/>
 			</div>
 			<div
-				class="row input_download_certificate mb-2"
+				class="row input_download_certificate mb-2 mt-2"
 				v-for="(file, index) in lstFile"
 				:key="index"
 			>
@@ -213,7 +212,7 @@
 							class="img_document_action"
 						/>
 						<img
-							v-else-if="permission.allowDelete && dataPC.status == 2"
+							v-else-if="permission.allowDelete && allowEdit"
 							@click="deleteOtherFile(file, index)"
 							src="@/assets/icons/ic_delete_2.svg"
 							alt="tag_2"
@@ -231,20 +230,21 @@ import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import InputCurrency from "@/components/Form/InputCurrency";
 
-// import ModalViewDocument from "@/pages/certification_brief/component/modals/ModalViewDocument";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import Vue from "vue";
 import Icon from "buefy";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
-import PreCertificate from "@/models/PreCertificate";
-// import mammoth from "mammoth";
 import axios from "@/plugins/axios";
 Vue.use(Icon);
 export default {
 	props: {
 		type: {
 			type: String
+		},
+		allowEdit: {
+			type: String,
+			default: true
 		},
 		fromComponent: {
 			type: String

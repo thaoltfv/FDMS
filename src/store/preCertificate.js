@@ -148,56 +148,54 @@ export const usePreCertificateStore = defineStore(
 			const getDataCertificate = await PreCertificate.getDetailPreCertificate(
 				id
 			);
-			dataPC.value = getDataCertificate.data;
-
-			if (dataPC.value.other_documents) {
-				preCertificateOtherDocuments.value.lstDocument =
-					dataPC.value.other_documents;
-				preCertificateOtherDocuments.value.Appendix = dataPC.value.other_documents.filter(
+			const temp = getDataCertificate.data;
+			if (temp.other_documents) {
+				preCertificateOtherDocuments.value.lstDocument = temp.other_documents;
+				preCertificateOtherDocuments.value.Appendix = temp.other_documents.filter(
 					file => file.type_document === "Appendix"
 				);
-				preCertificateOtherDocuments.value.Result = dataPC.value.other_documents.filter(
+				preCertificateOtherDocuments.value.Result = temp.other_documents.filter(
 					file => file.type_document === "Result"
 				);
 			}
 
-			if (!dataPC.value.customer) {
-				dataPC.value.customer = {
+			if (!temp.customer) {
+				temp.customer = {
 					name: null,
 					address: null,
 					phone: null
 				};
 			}
-			if (!dataPC.value.appraiser_business_manager) {
-				dataPC.value.appraiser_business_manager = {
+			if (!temp.appraiser_business_manager) {
+				temp.appraiser_business_manager = {
 					name: null,
 					id: null
 				};
 			}
 
-			if (!dataPC.value.appraiser_performance) {
-				dataPC.value.appraiser_performance = {
+			if (!temp.appraiser_performance) {
+				temp.appraiser_performance = {
 					name: null,
 					id: null
 				};
 			}
 
-			if (!dataPC.value.appraiser_sale) {
-				dataPC.value.appraiser_sale = {
+			if (!temp.appraiser_sale) {
+				temp.appraiser_sale = {
 					name: null,
 					id: null
 				};
 			}
-			if (dataPC.value.status == 6 && dataPC.value.cancel_reason) {
+			if (temp.status == 6 && temp.cancel_reason) {
 				if (lstDataConfig.value.cancelPCReasons.length == 0)
 					await getLstDictionaries();
 
 				const reason = lstDataConfig.value.cancelPCReasons.find(
-					reason => `${reason.id}` === dataPC.value.cancel_reason
+					reason => `${reason.id}` === temp.cancel_reason
 				);
-				dataPC.value.cancel_reason_string = reason ? reason.description : "";
-				console.log("reason", dataPC.value.cancel_reason_string);
+				temp.cancel_reason_string = reason ? reason.description : "";
 			}
+			dataPC.value = temp;
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(
