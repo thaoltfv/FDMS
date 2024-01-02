@@ -307,7 +307,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // $sections = $phpWord->getSections();
                 // dd($sections);
                 // $content = '';
-
+                // Lấy Header và Footer
+                $header = $phpWord->getHeader();
+                $footer = $phpWord->getFooter();
+                dd($header,$footer);
                 // Truyền thêm tham số vào template
                 $params = [
                     'params_1' => 'Dữ liệu số 1',
