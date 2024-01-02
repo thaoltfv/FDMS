@@ -292,21 +292,24 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // Lưu file tạm thời
                 $file->move($tempFilePath, 'temp.docx');
 
-                // Giải nén file .docx
-                $zip = new \ZipArchive();
-                $zip->open($tempFilePath . '/temp.docx');
-
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
-                $phpWord = IOFactory::load($tempFilePath);
+                $phpWord = $phpWord->TemplateProcessor($tempFilePath);
 
-                dd($tempFilePath, $phpWord);
+                // Lấy nội dung từ template
+                $sections = $phpWord->getSections();
+                dd($sections);
+                $content = '';
 
+                foreach ($sections as $section) {
+                    foreach ($section->getElements() as $element) {
+                        $content .= $element->getText();
+                    }
+                }
                 // Xử lý nội dung theo nhu cầu của bạn
                 // ...
 
                 // Xóa tệp tạm thời
-                $zip->close();
                 unlink($tempFilePath);
 
                 return ;
