@@ -298,8 +298,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // Lưu nội dung vào cơ sở dữ liệu
                 // dd($templateContent);
                 // Sử dụng thư viện để đọc file .doc
-                // $phpWord = new PhpWord();
-                // $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
+                $phpWord = new PhpWord();
+                $phpWord = IOFactory::load($tempFilePath.'/temp.docx');
                 // Chuyển đổi nó thành đối tượng PHPWord
                 // $phpWord = IOFactory::load($templateContent, 'Word2007');
                 // dd($phpWord);
@@ -328,32 +328,31 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 //         }
                 //     }
                 // }
-                // foreach ($phpWord->getSections() as $section) {
-                //     $header = $section->getHeaders();
-                //     $footer = $section->getFooters();
-                //     dd($header,$footer);
-                //     foreach ($section->getElements() as $element) {
-                //         // Đối với TextRun, Text, hoặc các loại phần tử khác, bạn cần xử lý tương tự
-                //         if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
-                //             foreach ($element->getElements() as $text) {
-                //                 $text->setText(strtr($text->getText(), $params));
-                //             }
-                //         } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
-                //             $element->setText(strtr($element->getText(), $params));
-                //         }
-                //     }
-                // }
+                foreach ($phpWord->getSections() as $section) {
+                    // $header = $section->getHeaders();
+                    // $footer = $section->getFooters();
+                    // dd($header,$footer);
+                    foreach ($section->getElements() as $element) {
+                        // Đối với TextRun, Text, hoặc các loại phần tử khác, bạn cần xử lý tương tự
+                        if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                            foreach ($element->getElements() as $text) {
+                                $text->setText(strtr($text->getText(), $params));
+                            }
+                        } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
+                            $element->setText(strtr($element->getText(), $params));
+                        }
+                    }
+                }
 
                 // Khởi tạo TemplateProcessor
-                $templateProcessor = new TemplateProcessor($tempFilePath.'/temp.docx');
+                // $templateProcessor = new TemplateProcessor($tempFilePath.'/temp.docx');
                 // dd($templateProcessor->s);
-                $templateProcessor->setValues($params);
-                $templateProcessor->setValue('placeholder1','Value1');
-                $templateProcessor->setValue('placeholder2','Value2');
+                // $templateProcessor->setValues($params);
                 
                 // Xuất ra tệp mới
                 $newDocxPath = $tempFilePath.'/new_temp.docx';
-                $templateProcessor->saveAs($newDocxPath);
+                // $templateProcessor->saveAs($newDocxPath);
+                $phpWord->save($newDocxPath);
                 // Xử lý nội dung theo nhu cầu của bạn
                 // ...
 
