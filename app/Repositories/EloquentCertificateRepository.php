@@ -307,10 +307,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 // $sections = $phpWord->getSections();
                 // dd($sections);
                 // $content = '';
-                // Lấy Header và Footer
-                $header = $phpWord->getHeader();
-                $footer = $phpWord->getFooter();
-                dd($header,$footer);
+
                 // Truyền thêm tham số vào template
                 $params = [
                     'params_1' => 'Dữ liệu số 1',
@@ -331,6 +328,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 //     }
                 // }
                 foreach ($phpWord->getSections() as $section) {
+                    $header = $section->getHeaders();
+                    $footer = $section->getFooters();
+                    dd($header,$footer);
                     foreach ($section->getElements() as $element) {
                         // Đối với TextRun, Text, hoặc các loại phần tử khác, bạn cần xử lý tương tự
                         if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
