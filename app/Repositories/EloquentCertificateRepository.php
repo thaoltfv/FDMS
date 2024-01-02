@@ -294,11 +294,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
-                $phpWord->load($tempFilePath);
+                $phpWord = IOFactory::load($tempFilePath);
 
                 // Lấy nội dung từ template
                 $sections = $phpWord->getSections();
-                dd($sections);
+                // dd($sections);
                 $content = '';
 
                 foreach ($sections as $section) {
