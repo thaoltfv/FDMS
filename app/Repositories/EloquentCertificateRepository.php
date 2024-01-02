@@ -291,7 +291,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $tempFilePath = storage_path('app/public');
                 // Lưu file tạm thời
                 $file->move($tempFilePath, 'temp.docx');
-
+                dd($tempFilePath);
                 // Sử dụng thư viện để đọc file .doc
                 $phpWord = new PhpWord();
                 $phpWord = IOFactory::load($tempFilePath);
