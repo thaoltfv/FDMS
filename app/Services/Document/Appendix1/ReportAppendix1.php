@@ -268,7 +268,12 @@ class ReportAppendix1 extends Report
         //
         $avgPrice = 0;
         //
-        $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
+        if ($change_negotiated_price) {
+            $totalEstimateAmount = round($totalAmount + $change_negotiated_price);
+        } else {
+            $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
+        }
+        
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
             $avgPrice = round($estimateAmount / $mainArea);
