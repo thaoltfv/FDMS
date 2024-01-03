@@ -247,10 +247,50 @@ export const usePreCertificateStore = defineStore(
 		const lstPreCertificate = ref([]);
 		const paginationAll = ref({});
 		const filter = ref({ search: "", data: { data: "", type: "" } });
+		const filterKanban = ref({
+			search: "",
+			selectedOfficialTransferStatus: [],
+			selectedStatus: [],
+			status: [],
+			ots: null,
+			timeFilter: {
+				from: null,
+				to: null
+			}
+		});
 		const selectedStatus = ref([]);
 		const isLoading = ref(false);
-		async function getPreCertificateAll(params = {}) {
+		async function getPreCertificateAll() {
 			isLoading.value = true;
+			const tempstatus = [];
+			for (
+				let index = 0;
+				index < filterKanban.value.selectedStatus.length;
+				index++
+			) {
+				const element = filterKanban.value.selectedStatus[index];
+				if (element) tempstatus.push(index + 1);
+			}
+			const temp = {
+				search: filter.value.search,
+				data: {
+					status: tempstatus,
+					ots: filterKanban.value.ots,
+					timeFilter: {
+						from: filterKanban.value.timeFilter.from,
+						to: filterKanban.value.timeFilter.to
+					}
+				}
+			};
+			console.log(
+				"query",
+				{
+					page: 1,
+					limit: 20,
+					...temp
+				},
+				filterKanban.value.selectedOfficialTransferStatus
+			);
 			try {
 				// const params = {
 				// 	page: filter.page,
@@ -260,11 +300,10 @@ export const usePreCertificateStore = defineStore(
 					query: {
 						page: 1,
 						limit: 20,
-						...params,
-						...filter.value,
-						status: selectedStatus.value
+						...temp
 					}
 				});
+
 				lstPreCertificate.value = [...resp.data.data];
 				paginationAll.value = convertPagination(resp.data);
 				isLoading.value = false;
@@ -365,7 +404,17 @@ export const usePreCertificateStore = defineStore(
 			filter.value = { search: "", data: { data: "", type: "" } };
 			selectedStatus.value = [];
 			isLoading.value = false;
-
+			filterKanban.value = {
+				search: "",
+				selectedOfficialTransferStatus: [],
+				selectedStatus: [],
+				status: [],
+				ots: null,
+				timeFilter: {
+					from: null,
+					to: null
+				}
+			};
 			dataPC.value = {
 				id: null,
 				certificate_id: null,
@@ -465,6 +514,7 @@ export const usePreCertificateStore = defineStore(
 			selectedStatus,
 			isLoading,
 			jsonConfig,
+			filterKanban,
 
 			resetData,
 			getPreCertificate,

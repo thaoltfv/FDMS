@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!isMobile" class="main-wrapper-new">
-		<a-tabs @change="callback" default-active-key="2">
+		<a-tabs @change="callback" default-active-key="2" style="height: 100%;">
 			<a-tab-pane key="1">
 				<span slot="tab">
 					<img src="@/assets/icons/ic_table.svg" alt="table" />
@@ -42,6 +42,11 @@
 						<div
 							class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
 						>
+							<DropdownFilter
+								style=" position: relative; /* or absolute, or fixed */
+  z-index: 1001;"
+								class="mr-5"
+							/>
 							<Search @filter-changed="onFilterQuickSearchChange($event)" />
 							<router-link
 								v-if="add"
@@ -170,6 +175,7 @@ import ButtonCheckbox from "@/components/Form/ButtonCheckbox";
 import ModalExportPreCertificate from "@/components/PreCertificate/ModalExportPreCertificate";
 import PreCertificate from "@/models/PreCertificate.js";
 import Search from "@/components/PreCertificate/Search";
+import DropdownFilter from "@/components/PreCertificate/DropdownFilter";
 import Tables from "@/components/PreCertificate/Tables.vue";
 import Board from "./Index.vue";
 import { convertPagination } from "@/utils/filters";
@@ -230,6 +236,7 @@ export default {
 		};
 	},
 	components: {
+		DropdownFilter,
 		Search,
 		Tables,
 		ButtonCheckbox,
@@ -467,6 +474,7 @@ export default {
 	border-radius: 5px;
 	margin: 12px;
 	padding: 22px 12px;
+	height: 100vh;
 
 	.index-screen-button {
 		img {

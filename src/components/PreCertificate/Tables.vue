@@ -714,14 +714,10 @@ export default {
 						filterDropdown: "filterDropdown"
 					},
 					dataIndex: "status",
-					filters: [
-						{ text: "Yêu cầu sơ bộ", value: 1 },
-						{ text: "Định giá sơ bộ", value: 2 },
-						{ text: "Duyệt giá sơ bộ", value: 3 },
-						{ text: "Thương thảo", value: 4 },
-						{ text: "Hoàn thành", value: 5 },
-						{ text: "Hủy", value: 6 }
-					],
+					filters:
+						this.jsonConfig && this.jsonConfig.filterStatus
+							? this.jsonConfig.filterStatus
+							: [],
 					onFilter: (value, record) => record.status === value,
 					hiddenItem: false
 				}

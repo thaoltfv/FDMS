@@ -371,7 +371,24 @@ export default {
 		const subStatusDataTmp = ref({});
 		const getDataWorkFlow2 = async (isRefresh = false, search = "") => {
 			try {
-				const resp = await PreCertificate.getListKanbanPreCertificate(search);
+				// const temp = {
+				// 	page: 1,
+				// 	limit: 20,
+				// 	...filter.value,
+				// 	status: selectedStatus.value
+				// };
+				const resp = await PreCertificate.getListFilterKanbanPreCertificate(
+					search
+				);
+				// {
+				// 	query: {
+				// 		page: 1,
+				// 		limit: 20,
+				// 		...params,
+				// 		...filter.value,
+				// 		status: selectedStatus.value
+				// 	}
+				// }
 				if (resp.data) {
 					lstPreCertificate.value = resp.data.HSTD;
 					if (isRefresh) {
