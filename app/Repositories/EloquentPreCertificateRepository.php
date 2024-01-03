@@ -1226,7 +1226,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         
         // dd($result);
 
-       if (isset($dataTemp) && !empty($dataTemp)) {
             if (isset($timeFilterFrom) && isset($timeFilterTo)) {
                 $startDate = date('Y-m-d', strtotime($timeFilterFrom));
                 $endDate = date('Y-m-d', strtotime($timeFilterTo));
@@ -1252,7 +1251,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result = $result->whereNull('certificate_id');
                 }
             }
-        }
         if (isset($sortField) && !isEmpty($sortField)) {
             if ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
@@ -1447,8 +1445,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
-        if (isset($dataTemp) && !empty($dataTemp)) {
-            if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
                 $startDate = date('Y-m-d', strtotime($timeFilterFrom));
                 $endDate = date('Y-m-d', strtotime($timeFilterTo));
                 $result = $result->whereBetween('created_at', [$startDate, $endDate])
@@ -1473,7 +1470,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result = $result->whereNull('certificate_id');
                 }
             }
-        }
         $result = $result->orderByDesc('pre_certificates.updated_at');
         $result= $result->get();
      
