@@ -1111,13 +1111,28 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $sortField = request()->get('sortField');
         $sortOrder = request()->get('sortOrder');
         $filter = request()->get('search');
-        $dataJson = request()->get('data');
-        $dataTemp = json_decode($dataJson);
-        $dataFilter = $dataTemp->data;
-        $typeFilter = $dataTemp->type;
-        $status = request()->get('status');
-        $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
+        $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
+        
+        $selectedStatus = null;
+        $selectedOfficialTransferStatus = null;
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
+        $dataTemp = null;
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            $selectedStatus = $dataTemp->status;
+            $selectedOfficialTransferStatus = $dataTemp->ots;
+            if (isset($dataTemp) && isset($dataTemp->timeFilter) ) {
+                if ( isset($dataTemp->timeFilter->from)) {
+                    $timeFilterFrom = $dataTemp->timeFilter->from;
+                }
+                if (isset($dataTemp->timeFilter->to)) {
+                    $timeFilterTo = $dataTemp->timeFilter->to;
+                }
+            }     
+        }
         $select = [
             'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
             'pre_certificates.updated_at', 'status_updated_at',
@@ -1208,42 +1223,34 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
-        if (isset($dataFilter) && !empty($dataFilter)) {
-            switch ($typeFilter) {
-                case 'date':
-                    if (isset($dataFilter) && count($dataFilter) == 2) {
-                        $startDate = date('Y-m-d', strtotime($dataFilter[0]));
-                        $endDate = date('Y-m-d', strtotime($dataFilter[1]));
-                        $result = $result->whereBetween('created_at', [$startDate, $endDate])
-                                        ->whereBetween('updated_at', [$startDate, $endDate]);
-                    } else if(isset($dataFilter) && count($dataFilter) == 1){
-                        $result = $result->where(function ($query) use ($dataFilter) {
-                            $query->whereDate('created_at', '=', date('Y-m-d', strtotime($dataFilter[0])))
-                                ->orwhereDate('updated_at', '=', date('Y-m-d', strtotime($dataFilter[0])));
-                                // where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
-                        });
-                    }
-                    break;
-                case 'status':
-                    $result = $result->whereIn('status', $dataFilter);
-                    break;
-                case 'officially':
-                    if ($dataFilter === 1) {
-                        $result = $result->whereNotNull('certificate_id');
-                    } else {
-                        $result = $result->whereNull('certificate_id');
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+        
         // dd($result);
 
-        if (!empty($status)) {
-            $result = $result->whereIn('status', $status);
-        }
-        
+            if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+                $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+                $endDate = date('Y-m-d', strtotime($timeFilterTo));
+                $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                                ->whereBetween('updated_at', [$startDate, $endDate]);
+            }   elseif (isset($timeFilterFrom)) {
+                    $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+                    $result = $result->where('created_at', '>=', $startDate)
+                                    ->where('updated_at', '>=', $startDate);
+            } elseif (isset($timeFilterTo)) {
+                    $endDate = date('Y-m-d', strtotime($timeFilterTo));
+                    $result = $result->where('created_at', '<=', $endDate)
+                                ->where('updated_at', '<=', $endDate);
+            }
+                    
+            if (isset($selectedStatus) && !empty($selectedStatus)) {
+                $result = $result->whereIn('status', $selectedStatus);
+            }
+            if (isset($selectedOfficialTransferStatus)) {
+                if ($selectedOfficialTransferStatus === 1) {
+                    $result = $result->whereNotNull('certificate_id');
+                } elseif ($selectedOfficialTransferStatus === 0) {
+                    $result = $result->whereNull('certificate_id');
+                }
+            }
         if (isset($sortField) && !isEmpty($sortField)) {
             if ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
@@ -1269,24 +1276,30 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         $user = CommonService::getUser();
 
-        $filter = request()->get('search_input');
+        $filter = request()->get('search');
         $query = request()->get('query');
         $page = request()->get('page');
         $limit = request()->get('limit');
-        
+
+        $selectedStatus = null;
+        $selectedOfficialTransferStatus = null;
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
+        $dataTemp = null;
         if (request()->has('data')) {
             $dataJson = request()->get('data');
             $dataTemp = json_decode($dataJson);
-            $dataFilter = $dataTemp->data;
-            $typeFilter = $dataTemp->type;
-        } else {
-            $dataJson = null;
-            $dataTemp = null;
-            $dataFilter = null;
-            $typeFilter = null;
+            $selectedStatus = $dataTemp->status;
+            $selectedOfficialTransferStatus = $dataTemp->ots;
+            if (isset($dataTemp) && isset($dataTemp->timeFilter) ) {
+                if ( isset($dataTemp->timeFilter->from)) {
+                    $timeFilterFrom = $dataTemp->timeFilter->from;
+                }
+                if (isset($dataTemp->timeFilter->to)) {
+                    $timeFilterTo = $dataTemp->timeFilter->to;
+                }
+            }     
         }
-
-        $status = request()->get('status');
         if (!empty($query)) {
             $query = json_decode($query);
         } else {
@@ -1405,12 +1418,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             });
         }
 
-        if (isset($query->public_date_from) && !empty($query->public_date_from)) {
-            $result =  $result->where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
-        }
-        if (isset($query->public_date_to) && !empty($query->public_date_to)) {
-            $result = $result->where('updated_at', '<=', date('Y-m-d', strtotime($query->public_date_to)) . ' 00:00:00');
-        }
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
             $filterData = substr($filter, 1);
@@ -1438,42 +1445,31 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
-        if (isset($dataFilter) && !empty($dataFilter)) {
-            switch ($typeFilter) {
-                case 'date':
-                    if (isset($dataFilter) && count($dataFilter) == 2) {
-                        $startDate = date('Y-m-d', strtotime($dataFilter[0]));
-                        $endDate = date('Y-m-d', strtotime($dataFilter[1]));
-                        $result = $result->whereBetween('created_at', [$startDate, $endDate])
-                                        ->whereBetween('updated_at', [$startDate, $endDate]);
-                    } else if(isset($dataFilter) && count($dataFilter) == 1){
-                        $result = $result->where(function ($query) use ($dataFilter) {
-                            $query->whereDate('created_at', '=', date('Y-m-d', strtotime($dataFilter[0])))
-                                ->orwhereDate('updated_at', '=', date('Y-m-d', strtotime($dataFilter[0])));
-                                // where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
-                        });
-                    }
-                    break;
-                case 'status':
-                    $result = $result->whereIn('status', $dataFilter);
-                    break;
-                case 'officially':
-                    if ($dataFilter === 1) {
-                        $result = $result->whereNotNull('certificate_id');
-                    } else {
-                        $result = $result->whereNull('certificate_id');
-                    }
-                    break;
-                default:
-                    break;
+         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+                $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+                $endDate = date('Y-m-d', strtotime($timeFilterTo));
+                $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                                ->whereBetween('updated_at', [$startDate, $endDate]);
+            }   elseif (isset($timeFilterFrom)) {
+                    $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+                    $result = $result->where('created_at', '>=', $startDate)
+                                    ->where('updated_at', '>=', $startDate);
+            } elseif (isset($timeFilterTo)) {
+                    $endDate = date('Y-m-d', strtotime($timeFilterTo));
+                    $result = $result->where('created_at', '<=', $endDate)
+                                ->where('updated_at', '<=', $endDate);
             }
-        }
-        // dd($result);
-
-        if (!empty($status)) {
-            $result = $result->whereIn('status', $status);
-        }
-        
+                    
+            if (isset($selectedStatus) && !empty($selectedStatus)) {
+                $result = $result->whereIn('status', $selectedStatus);
+            }
+            if (isset($selectedOfficialTransferStatus)) {
+                if ($selectedOfficialTransferStatus === 1) {
+                    $result = $result->whereNotNull('certificate_id');
+                } elseif ($selectedOfficialTransferStatus === 0) {
+                    $result = $result->whereNull('certificate_id');
+                }
+            }
         $result = $result->orderByDesc('pre_certificates.updated_at');
         $result= $result->get();
      
