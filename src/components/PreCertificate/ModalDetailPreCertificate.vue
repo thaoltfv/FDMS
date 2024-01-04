@@ -455,7 +455,6 @@ export default {
 			return status_expired_at;
 		},
 		async handleChangeAccept() {
-			console.log("runhere");
 			let dataSend = {
 				appraiser_confirm_id: this.dataPC.appraiser_confirm_id,
 				appraiser_id: this.dataPC.appraiser_id,

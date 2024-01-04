@@ -243,7 +243,7 @@ export default {
 			type: String
 		},
 		allowEdit: {
-			type: String,
+			type: Boolean,
 			default: true
 		},
 		fromComponent: {

@@ -367,30 +367,14 @@ export default {
 			key_dragg.value++;
 			countData.value += 10;
 		};
-		const lstPreCertificate = ref([]);
+		const lstPreCertificateKanban = ref([]);
 		const subStatusDataTmp = ref({});
 		const getDataWorkFlow2 = async (isRefresh = false, search = "") => {
 			try {
-				// const temp = {
-				// 	page: 1,
-				// 	limit: 20,
-				// 	...filter.value,
-				// 	status: selectedStatus.value
-				// };
-				const resp = await PreCertificate.getListFilterKanbanPreCertificate(
-					search
-				);
-				// {
-				// 	query: {
-				// 		page: 1,
-				// 		limit: 20,
-				// 		...params,
-				// 		...filter.value,
-				// 		status: selectedStatus.value
-				// 	}
-				// }
+				const resp = await preCertificateStore.getPreCertificateAll("kanban");
+
 				if (resp.data) {
-					lstPreCertificate.value = resp.data.HSTD;
+					lstPreCertificateKanban.value = resp.data.HSTD;
 					if (isRefresh) {
 						subStatusDataReturn.value = [];
 						subStatusDataTmp.value = [];
@@ -401,7 +385,7 @@ export default {
 					if (principleConfig.value.length > 0) {
 						let dataTmp = [];
 						principleConfig.value.forEach(item => {
-							dataTmp = lstPreCertificate.value.filter(
+							dataTmp = lstPreCertificateKanban.value.filter(
 								i => i.status === item.status
 							);
 							subStatusDataTmp.value[item.id] = dataTmp;
@@ -437,7 +421,7 @@ export default {
 			preCertificateStore,
 
 			key_dragg,
-			lstPreCertificate,
+			lstPreCertificateKanban,
 			subStatusDataTmp,
 			countData,
 			subStatusDataReturn,
@@ -588,6 +572,13 @@ export default {
 			}
 		},
 		checkDataBeforeChangeToStage3() {
+			console.log(
+				this.preCertificateOtherDocuments.Result.length,
+				this.dataPC.total_preliminary_value,
+				this.preCertificateOtherDocuments.Result &&
+					this.preCertificateOtherDocuments.Result.length > 0 &&
+					this.dataPC.total_preliminary_value > 0
+			);
 			if (
 				this.preCertificateOtherDocuments.Result &&
 				this.preCertificateOtherDocuments.Result.length > 0 &&
@@ -751,12 +742,19 @@ export default {
 			}
 			this.showAcceptCertificate = await false;
 		},
+
 		async handleChangeAccept2(note, reason_id) {
-			const res = await this.preCertificateStore.updateStatus(
-				this.idDragger,
-				note,
-				reason_id
-			);
+			let res = null;
+			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
+				res = await PreCertificate.updateToOfficalPreCertificate(id, note);
+			} else {
+				res = await this.preCertificateStore.updateStatus(
+					this.idDragger,
+					note,
+					reason_id
+				);
+			}
+
 			if (res.data) {
 				// let returnData = this.subStatusDataReturn.find(
 				// 	i => i.id === this.idDragger
@@ -796,7 +794,6 @@ export default {
 			this.isHandleAction = false;
 		},
 		async handleUpdateStatus(id, data, message) {
-			console.log("hahandleUpdateStatusndle");
 			const res = await PreCertificate.updateStatusPreCertificate(id, data);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(i => i.id === id);
@@ -851,7 +848,7 @@ export default {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(
 					i => i.status === item.status
 				);
-				this.subStatusDataTmp[item.id] = this.lstPreCertificate.filter(
+				this.subStatusDataTmp[item.id] = this.lstPreCertificateKanban.filter(
 					i => i.status === item.status
 				);
 			});
@@ -1017,6 +1014,9 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
+			// if (target.code && target.code === "chuyen_chinh_thuc") {
+			// 	return;
+			// }
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
@@ -1027,6 +1027,7 @@ export default {
 			if (check) {
 				this.next_status = config.status;
 				this.dataPC.target_status = config.status;
+				this.dataPC.target_code = target.code;
 				this.confirm_message = target.description;
 				if (this.dataPC.status == 2 && this.next_status == 3) {
 					if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {

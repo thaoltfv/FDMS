@@ -125,26 +125,12 @@ export default {
 		startSetup();
 		const checkedValues = ref([]);
 
-		const searchFunction = async () => {
-			if (
-				filterKanban.value.selectedOfficialTransferStatus[0] == true &&
-				filterKanban.value.selectedOfficialTransferStatus[1] == true
-			) {
-				filterKanban.value.ots = null;
-			} else if (filterKanban.value.selectedOfficialTransferStatus[0] == true) {
-				filterKanban.value.ots = 0;
-			} else if (filterKanban.value.selectedOfficialTransferStatus[1] == true) {
-				filterKanban.value.ots = 1;
-			}
-			await preCertificateStore.getPreCertificateAll();
-		};
 		return {
 			filterKanban,
 			checkedValues,
 			jsonConfig,
 			filter,
-			preCertificateStore,
-			searchFunction
+			preCertificateStore
 		};
 	},
 
@@ -161,6 +147,20 @@ export default {
 			if (!this.filterKanban.timeFilter.from) return false;
 			let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
 			return current && current < endOfDay;
+		},
+		async searchFunction() {
+			if (
+				this.filterKanban.selectedOfficialTransferStatus[0] == true &&
+				this.filterKanban.selectedOfficialTransferStatus[1] == true
+			) {
+				this.filterKanban.ots = null;
+			} else if (this.filterKanban.selectedOfficialTransferStatus[0] == true) {
+				this.filterKanban.ots = 0;
+			} else if (this.filterKanban.selectedOfficialTransferStatus[1] == true) {
+				this.filterKanban.ots = 1;
+			}
+			await this.preCertificateStore.getPreCertificateAll();
+			this.$emit("notifi-kanban");
 		},
 		closeMe() {
 			this.isCloseable = true;

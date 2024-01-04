@@ -15,8 +15,7 @@
 				"
 				:pagination="false"
 			>
-				<!--Custom type table-->
-				<template
+				<!-- <template
 					slot="filterDropdown"
 					slot-scope="{
 						filters,
@@ -26,14 +25,12 @@
 						clearFilters
 					}"
 				>
-					<!-- Your custom filter design here -->
 					<div class="custom-filter-dropdown">
 						<a-select
 							v-model="selectedKeys"
 							@change="setSelectedKeys"
 							style="width: 100%; margin-bottom: 8px;"
 						>
-							<!-- Add an option for each filter option -->
 							<a-select-option
 								v-for="filter in filters"
 								:key="filter.value"
@@ -67,14 +64,12 @@
 						clearFilters
 					}"
 				>
-					<!-- Your custom filter design here -->
 					<div class="custom-filter-dropdown">
 						<a-select
 							v-model="selectedKeys"
 							@change="setSelectedKeys"
 							style="width: 100%; margin-bottom: 8px;"
 						>
-							<!-- Add an option for each filter option -->
 							<a-select-option
 								v-for="filter in filters"
 								:key="filter.value"
@@ -131,7 +126,7 @@
 							Xóa
 						</a-button>
 					</div>
-				</template>
+				</template> -->
 				<template slot="id" slot-scope="id, property">
 					<div class="position-relative">
 						<button
@@ -644,20 +639,18 @@ export default {
 		columns() {
 			let dataColumn = [
 				{
-					title: "Mã HSTDSB",
+					title: "Mã HSTĐSB",
 					align: "left",
-					scopedSlots: {
-						customRender: "id",
-						filterDropdown: "filterDropdownOfficially"
-					},
-					dataIndex: "id",
-					// sorter: (a, b) => a.id - b.id,
-					// sortDirections: ['descend', 'ascend'],
 
-					filters: [
-						{ text: "Chưa chuyển", value: 0 },
-						{ text: "Đã chuyển chính thức", value: 1 }
-					],
+					dataIndex: "id",
+					scopedSlots: {
+						customRender: "id"
+						// filterDropdown: "filterDropdownOfficially"
+					},
+					// filters: [
+					// 	{ text: "Chưa chuyển", value: 0 },
+					// 	{ text: "Đã chuyển chính thức", value: 1 }
+					// ],
 					hiddenItem: false
 				},
 				{
@@ -700,8 +693,8 @@ export default {
 					class: "optional-data",
 					align: "left",
 					scopedSlots: {
-						customRender: "created_at",
-						filterDropdown: "filterDropdownCreatedAt"
+						customRender: "created_at"
+						// filterDropdown: "filterDropdownCreatedAt"
 					},
 
 					hiddenItem: false
@@ -709,16 +702,17 @@ export default {
 				{
 					title: "Trạng thái",
 					align: "center",
-					scopedSlots: {
-						customRender: "status",
-						filterDropdown: "filterDropdown"
-					},
+
 					dataIndex: "status",
-					filters:
-						this.jsonConfig && this.jsonConfig.filterStatus
-							? this.jsonConfig.filterStatus
-							: [],
-					onFilter: (value, record) => record.status === value,
+					scopedSlots: {
+						customRender: "status"
+						// 	filterDropdown: "filterDropdown"
+					},
+					// filters:
+					// 	this.jsonConfig && this.jsonConfig.filterStatus
+					// 		? this.jsonConfig.filterStatus
+					// 		: [],
+					// onFilter: (value, record) => record.status === value,
 					hiddenItem: false
 				}
 			];

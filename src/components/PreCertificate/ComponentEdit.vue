@@ -418,16 +418,13 @@ export default {
 			// getter
 			get: function() {
 				if (this.lstDataConfig.appraiser_performances.length > 0) {
-					// // console.log('vô đây trước 1')
 					return this.dataPC.appraiser_perform_id;
 				} else {
-					// // console.log('vô đây trước 2')
 					return this.dataPC.appraiser_performance.name;
 				}
 			},
 			// setter
 			set: function(newValue) {
-				// // console.log('newwww', newValue)
 				this.dataPC.appraiser_perform_id = newValue;
 			}
 		},
@@ -442,7 +439,6 @@ export default {
 			},
 			// setter
 			set: function(newValue) {
-				// // console.log('newwww', newValue)
 				this.dataPC.business_manager_id = newValue;
 			}
 		},
@@ -465,7 +461,6 @@ export default {
 			},
 			// setter
 			set: function(newValue) {
-				// // console.log('newwww', newValue)
 				this.dataPC.appraiser_sale_id = newValue;
 			}
 		},

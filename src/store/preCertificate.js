@@ -244,7 +244,8 @@ export const usePreCertificateStore = defineStore(
 			}
 			other.value.isSubmit = false;
 		}
-		const lstPreCertificate = ref([]);
+		const lstPreCertificateKanban = ref([]);
+		const lstPreCertificateTable = ref([]);
 		const paginationAll = ref({});
 		const filter = ref({ search: "", data: { data: "", type: "" } });
 		const filterKanban = ref({
@@ -260,7 +261,7 @@ export const usePreCertificateStore = defineStore(
 		});
 		const selectedStatus = ref([]);
 		const isLoading = ref(false);
-		async function getPreCertificateAll() {
+		async function getPreCertificateAll(type = "table") {
 			isLoading.value = true;
 			const tempstatus = [];
 			for (
@@ -282,31 +283,26 @@ export const usePreCertificateStore = defineStore(
 					}
 				}
 			};
-			console.log(
-				"query",
-				{
-					page: 1,
-					limit: 20,
-					...temp
-				},
-				filterKanban.value.selectedOfficialTransferStatus
-			);
 			try {
-				// const params = {
-				// 	page: filter.page,
-				// 	limit: filter.limit
-				// };
-				const resp = await PreCertificate.paginate({
-					query: {
-						page: 1,
-						limit: 20,
-						...temp
-					}
-				});
+				if (type == "kanban") {
+					const respkanban = await PreCertificate.getListFilterKanbanPreCertificate(
+						temp
+					);
+					isLoading.value = false;
+					return respkanban;
+				} else {
+					const resp = await PreCertificate.paginate({
+						query: {
+							page: 1,
+							limit: 20,
+							...temp
+						}
+					});
 
-				lstPreCertificate.value = [...resp.data.data];
-				paginationAll.value = convertPagination(resp.data);
-				isLoading.value = false;
+					lstPreCertificateTable.value = [...resp.data.data];
+					paginationAll.value = convertPagination(resp.data);
+					isLoading.value = false;
+				}
 			} catch (e) {
 				isLoading.value = false;
 			}
@@ -399,7 +395,8 @@ export const usePreCertificateStore = defineStore(
 			return status_expired_at;
 		}
 		function resetData() {
-			lstPreCertificate.value = [];
+			lstPreCertificateTable.value = [];
+			lstPreCertificateKanban.value = [];
 			paginationAll.value = {};
 			filter.value = { search: "", data: { data: "", type: "" } };
 			selectedStatus.value = [];
@@ -508,7 +505,8 @@ export const usePreCertificateStore = defineStore(
 			preCertificateOtherDocuments,
 			permission,
 			other,
-			lstPreCertificate,
+			lstPreCertificateTable,
+			lstPreCertificateKanban,
 			paginationAll,
 			filter,
 			selectedStatus,

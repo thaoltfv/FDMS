@@ -1025,6 +1025,7 @@ export default {
 				if (message === "") {
 					this.targetStatus = config.status;
 					this.dataPC.target_status = config.status;
+					this.dataPC.target_code= target.code;
 					this.message = target.description;
 
 					if (
@@ -1045,7 +1046,6 @@ export default {
 						}
 					}
 
-					console.log("here");
 					this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
@@ -1064,11 +1064,17 @@ export default {
 			return status_expired_at;
 		},
 		async handleAction2(note, reason_id) {
-			const res = await this.preCertificateStore.updateStatus(
-				this.dataPC.id,
-				note,
-				reason_id
-			);
+			let res = null;
+			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
+				res = await PreCertificate.updateToOfficalPreCertificate(id, note);
+			} else {
+				const res = await this.preCertificateStore.updateStatus(
+					this.dataPC.id,
+					note,
+					reason_id
+				);
+			}
+
 			if (res.data) {
 				// this.dataPC.status = this.targetStatus;
 				await this.preCertificateStore.getPreCertificate(this.routeId);

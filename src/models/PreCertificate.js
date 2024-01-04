@@ -118,12 +118,12 @@ export default class Certificate extends Model {
 		});
 	}
 	static async getListFilterKanbanPreCertificate(search) {
-		const { params } = search;
-		console.log("params", params);
 		return new this().request({
 			method: "GET",
 			url: `pre-certificates/pre-certificate-workflow`,
-			...params
+			query: {
+				...search
+			}
 		});
 	}
 
@@ -139,6 +139,14 @@ export default class Certificate extends Model {
 			method: "POST",
 			url: `pre-certificates/pre-certificate-update-status/${id}`,
 			data: data,
+			isStatic: true
+		});
+	}
+
+	static async updateToOfficalPreCertificate(id = "") {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificates/pre-certificate-update-offical/${id}/${note}`,
 			isStatic: true
 		});
 	}

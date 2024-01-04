@@ -8,7 +8,7 @@
 				<div class="container-fluid appraise-container mt-3">
 					<Tables
 						v-if="paginationAll"
-						:listCertificates="lstPreCertificate"
+						:listCertificates="lstPreCertificateTable"
 						:isLoading="isLoading"
 						:pagination="paginationAll"
 						@handleChange="onPageChange"
@@ -31,22 +31,10 @@
 					<div
 						class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
 					>
-						<div class="col-12 col-md-6 col-xl-8">
-							<button-checkbox
-								v-show="showFilter"
-								:options="statusOptions"
-								:value="selectedStatus"
-								@change="onChangeStatus"
-							/>
-						</div>
 						<div
 							class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
 						>
-							<DropdownFilter
-								style=" position: relative; /* or absolute, or fixed */
-  z-index: 1001;"
-								class="mr-5"
-							/>
+							<DropdownFilter class="mr-5" @notifi-kanban="notifiKanban()" />
 							<Search @filter-changed="onFilterQuickSearchChange($event)" />
 							<router-link
 								v-if="add"
@@ -151,7 +139,7 @@
 			style="margin-top: 0!important;"
 		>
 			<Tables
-				:listCertificates="lstPreCertificate"
+				:listCertificates="lstPreCertificateTable"
 				:isLoading="isLoading"
 				:pagination="paginationAll"
 				@handleChange="onPageChange"
@@ -294,7 +282,7 @@ export default {
 		preCertificateStore.resetData();
 		preCertificateStore.getPreCertificateAll();
 		const {
-			lstPreCertificate,
+			lstPreCertificateTable,
 			selectedStatus,
 			filter,
 			isLoading,
@@ -304,7 +292,7 @@ export default {
 			isMobile,
 
 			filter,
-			lstPreCertificate,
+			lstPreCertificateTable,
 			selectedStatus,
 			isLoading,
 			paginationAll,
@@ -342,6 +330,9 @@ export default {
 			this.render_kanban += 1;
 			// await this.$refs.kanban.getDataWorkFlow(this.search_kanban)
 		},
+		async notifiKanban() {
+			this.render_kanban += 1;
+		},
 		handleSearch() {
 			this.showModalSearch = true;
 		},
@@ -356,7 +347,6 @@ export default {
 		},
 		onChangeStatus(value) {
 			this.selectedStatus = value;
-			// console.log('this.selectedStatus',this.selectedStatus)
 			this.preCertificateStore.getPreCertificateAll();
 		},
 		async export30daysBefore() {
