@@ -103,16 +103,19 @@ class CommonService
 		// 	$round = pow(10, abs($round));
 		// 	$result = floor($total / $round) * $round;
 		// }
+		$total = intval($total);
+		$round = intval($round);
 		if ($round > 0) {
 			$round = pow(10, $round);
 			$check_var = 5*$round/10;
 			$devide_value = (float) $total / (float) $round;
-			$check_part = $devide_value - floor($devide_value);
+			$check_part = ($devide_value - floor($devide_value))*$round;
 			if ($check_part > $check_var) {
 				$result = ceil($total / $round) * $round;
 			} else if ($check_part < $check_var) {
 				$result = floor($total / $round) * $round;
 			} else $result = round($total, 0);
+			// dd($total,$round,$check_var,$devide_value,$check_part,$result);
 		} else {
 			$result = round($total, 0);
 		}
