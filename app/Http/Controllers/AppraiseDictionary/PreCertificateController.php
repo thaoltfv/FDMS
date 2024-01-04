@@ -423,7 +423,17 @@ class PreCertificateController extends Controller
         }
 
     }
+     public function updateToOffical(int $id, String $note )
+    {
+        if(! CommonService::checkUserPermission($this->permissionAdd))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE_TO_OFFICAL ,'exception' =>''], 403);
 
+            $result = $this->preCertificateRepository->updateToOffical($id , $note);
+            if(isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData( $result);
+
+            return $this->respondWithCustomData($result);
+    }
 
     public function uploadDocument($id, $description, Request $request): JsonResponse
     {

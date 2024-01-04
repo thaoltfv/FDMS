@@ -25,6 +25,7 @@ class ErrorMessage
     public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa phiếu có trạng thái ';
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
     public const PRE_CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTDSB ';
+    public const PRE_CERTIFICATE_CHECK_UPDATE_TO_OFFICAL = 'Bạn không có quyền sang trạng thái chính thức ';
     public const CERTIFICATE_CHECK_ADD = 'Bạn không có quyền tạo mới HSTD ';
     public const CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTD ';
     public const PRE_CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTDSB ';
