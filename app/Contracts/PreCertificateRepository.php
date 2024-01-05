@@ -38,7 +38,7 @@ interface PreCertificateRepository extends BaseRepository
     public function getGeneralInfomation(int $id);
 
     public function updateStatus_v2($id, $request);
-    public function updateToOffical($id, $note);
+    public function updateToOffical($id, $request);
 
     public function findAppraisePaging();
 
