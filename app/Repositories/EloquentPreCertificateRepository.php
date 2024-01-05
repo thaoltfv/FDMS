@@ -1863,7 +1863,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 8;
                 foreach ($preCertificateKey as $key) {
                     if (in_array($key, $certificateKey)) {
-                        $certificate->$key = $preCertificate->$key;
+                        $certificate->$key = $preCertificate[$key];
                     }
                 }
             $count = 9;
@@ -1872,6 +1872,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $certificate['created_by'] = $user->id;
                 $certificate["updated_at"] = date("Y-m-d H:i:s");
                 $certificate["document_description"] = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
+            $count = 19;
 
                 $certificateId = QueryBuilder::for(Certificate::class)
                     ->insertGetId($certificate->attributesToArray());
