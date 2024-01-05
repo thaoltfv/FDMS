@@ -1797,19 +1797,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $array = 'unkow';
                 }
             $count = 2;
-                if ($preCertificate->certificate_id) {
-                     return [
-                        'error' => true,
-                        'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
-                    ];
-                }
+             if (isset($preCertificate['certificate_id'])) {
+                return [
+                    'error' => true,
+                    'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
+                ];
+            }
             $count = 3;
-                if($preCertificate->status != 5){
-                     return [
+            if($preCertificate['status'] != 5){
+                return [
                     'error' => true,
                     'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
                 ];
-                }
+            }
             $count = 4;
                 $preCertificateKey = [
                     'certificate_id',
@@ -1869,9 +1869,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 7;
                 $certificate = new Certificate();
             $count = 8;
-                foreach ($preCertificateKey as $key) {
-                    if (in_array($key, $certificateKey)) {
-                        $certificate->$key = $preCertificate->$key;
+               foreach ($preCertificateKey as $key) {
+                    if (in_array($key, $certificateKey) && isset($preCertificate[$key])) {
+                        $certificate->$key = $preCertificate[$key];
                     }
                 }
             $count = 9;
@@ -1889,7 +1889,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 10;
                 if ($certificateId) {
                 $count = 12;
-                $preCertificateModel = PreCertificate::find($preCertificate->id);
+                $preCertificateModel = PreCertificate::find($preCertificate['id']);
                 $count = 13;
                     if ($preCertificateModel) {
                 $count = 21;
@@ -1898,9 +1898,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $preCertificateModel->save();
                     }
                 $count = 14;
-                    foreach ($preCertificate->other_documents as $document) {
-                        if ($document->type_document == 'Appendix') {
-                            
+                    foreach ($preCertificate['other_documents'] as $document) {
+                        if ($document['type_document'] == 'Appendix') {
                             $item = [
                                 'certificate_id' => $certificateId,
                                 'name' => $document->name,
@@ -1918,7 +1917,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                 }
             $count = 17;
-                $logDescription = 'chuyển chính thức ' . $preCertificate->id;
+                $logDescription = 'chuyển chính thức ' . $preCertificate['id'];
             $count = 18;
                 $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $request['note']);
                     return [
