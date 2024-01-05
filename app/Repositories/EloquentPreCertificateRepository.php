@@ -1782,9 +1782,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
     }
-    public function updateToOffical($id, $note)
+    public function updateToOffical($id, $request)
     {
-        return DB::transaction(function () use ($id, $note) {
+        return DB::transaction(function () use ($id, $request) {
             $count = 1;
             try {
                 $preCertificate = $this->getPreCertificate($id);
@@ -1880,9 +1880,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 10;
                 if ($certificateId) {
                 $count = 12;
-                    $preCertificate->certificate_id = $certificateId;
+                     $preCertificate['certificate_id'] = $certificateId;
+                $count = 20;
+                     $preCertificateModel = new PreCertificate($preCertificate);
                 $count = 13;
-                    $preCertificate->save();
+                    $preCertificateModel->save();
 
                 $count = 14;
                     foreach ($preCertificate->other_documents as $document) {
@@ -1907,7 +1909,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 17;
                 $logDescription = 'chuyển chính thức ' . $preCertificate->id;
             $count = 18;
-                $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $note);
+                $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $request['note']);
                     return [
                         'error' => false,
                         'data' => $certificateId,
