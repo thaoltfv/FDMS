@@ -785,7 +785,7 @@ export default {
 		async updateToOffical(note) {
 			const res = await PreCertificate.updateToOfficalPreCertificate(
 				this.dataPC.id,
-				note
+				{ note }
 			);
 			if (res.data && res.data.error === false) {
 				if (this.search_kanban) {

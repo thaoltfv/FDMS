@@ -143,10 +143,11 @@ export default class Certificate extends Model {
 		});
 	}
 
-	static async updateToOfficalPreCertificate(id = "", note = "") {
+	static async updateToOfficalPreCertificate(id = "", data) {
 		return new this().request({
 			method: "POST",
-			url: `pre-certificates/pre-certificate-update-offical/${id}/${note}`,
+			url: `pre-certificates/pre-certificate-update-offical/${id}`,
+			data: data,
 			isStatic: true
 		});
 	}
