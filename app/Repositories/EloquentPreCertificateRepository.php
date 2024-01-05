@@ -1787,10 +1787,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return DB::transaction(function () use ($id, $note) {
             try {
                 $preCertificate = $this->getPreCertificate($id);
-                if ($preCertificate->certificate_id) {
+                if ($preCertificate->certificate) {
                     return response()->json([
                         'error' => true,
                         'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
+                    ], 400);
+                }
+                if($preCertificate->certificate != 5){
+                    return response()->json([
+                        'error' => true,
+                        'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
                     ], 400);
                 }
                 $preCertificateKey = [
