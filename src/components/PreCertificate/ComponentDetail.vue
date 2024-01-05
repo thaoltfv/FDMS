@@ -325,7 +325,7 @@
 			</div>
 		</div>
 		<Footer
-			v-if="jsonConfig && dataPC"
+			v-if="jsonConfig && dataPC && dataPC.id"
 			:style="isMobile ? { bottom: '60px' } : {}"
 			:key="dataPC.status"
 			:form="dataPC"
@@ -334,6 +334,7 @@
 			:profile="profile"
 			:idData="dataPC.id"
 			:checkVersion="checkVersion"
+			:certificateId="dataPC.certificate_id"
 			@handleFooterAccept="handleFooterAccept"
 			@handleEdit="handleEdit"
 			@onCancel="onCancel"
@@ -1082,20 +1083,49 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		async handleAction2(note, reason_id) {
-			let res = null;
-			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
-				res = await PreCertificate.updateToOfficalPreCertificate(
-					this.dataPC.id,
-					note
-				);
+		async updateToOffical(note) {
+			const res = await PreCertificate.updateToOfficalPreCertificate(
+				this.dataPC.id,
+				note
+			);
+			if (res.data && res.data.error === false) {
+				if (this.search_kanban) {
+					await this.getDataWorkFlow2(
+						true,
+						this.search_kanban.search,
+						isRefresh
+					);
+				} else await this.getDataWorkFlow2(true);
+				await this.$toast.open({
+					message: this.confirm_message + " thành công",
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+				// this.key_dragg++;
 			} else {
-				res = await this.preCertificateStore.updateStatus(
-					this.dataPC.id,
-					note,
-					reason_id
-				);
+				await this.$toast.open({
+					message: `${res.data.message}`,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				this.handleCancelAccept2();
 			}
+			this.isMoved = false;
+			this.showDetailPopUp = false;
+			this.isHandleAction = false;
+		},
+		async handleAction2(note, reason_id) {
+			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
+				this.updateToOffical(note);
+				return;
+			}
+			const res = await this.preCertificateStore.updateStatus(
+				this.dataPC.id,
+				note,
+				reason_id
+			);
 
 			if (res.data) {
 				// this.dataPC.status = this.targetStatus;

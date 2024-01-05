@@ -744,31 +744,17 @@ export default {
 		},
 
 		async handleChangeAccept2(note, reason_id) {
-			let res = null;
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
-				res = await PreCertificate.updateToOfficalPreCertificate(
-					this.dataPC.id,
-					note
-				);
-			} else {
-				res = await this.preCertificateStore.updateStatus(
-					this.idDragger,
-					note,
-					reason_id
-				);
+				this.updateToOffical(note);
+				return;
 			}
+			const res = await this.preCertificateStore.updateStatus(
+				this.idDragger,
+				note,
+				reason_id
+			);
 
 			if (res.data) {
-				// let returnData = this.subStatusDataReturn.find(
-				// 	i => i.id === this.idDragger
-				// );
-				// if (returnData) {
-				// 	returnData.status = this.next_status;
-				// 	returnData.status_expired_at = res.data.status_expired_at;
-				// 	returnData.updated_at = res.data.updated_at;
-				// 	returnData.image = res.data.image;
-				// }
-				// this.returnData();
 				if (this.search_kanban) {
 					await this.getDataWorkFlow2(
 						true,
@@ -786,6 +772,39 @@ export default {
 			} else {
 				await this.$toast.open({
 					message: `${res.error.message}`,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				this.handleCancelAccept2();
+			}
+			this.isMoved = false;
+			this.showDetailPopUp = false;
+			this.isHandleAction = false;
+		},
+		async updateToOffical(note) {
+			const res = await PreCertificate.updateToOfficalPreCertificate(
+				this.dataPC.id,
+				note
+			);
+			if (res.data && res.data.error === false) {
+				if (this.search_kanban) {
+					await this.getDataWorkFlow2(
+						true,
+						this.search_kanban.search,
+						isRefresh
+					);
+				} else await this.getDataWorkFlow2(true);
+				await this.$toast.open({
+					message: this.confirm_message + " thành công",
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+				// this.key_dragg++;
+			} else {
+				await this.$toast.open({
+					message: `${res.data.message}`,
 					type: "error",
 					position: "top-right",
 					duration: 3000

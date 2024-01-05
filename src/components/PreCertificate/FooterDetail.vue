@@ -50,6 +50,7 @@
 			Cross check
 		</button>
 		<button
+			v-if="!certificateId"
 			v-for="(target, index) in getTargetDescription()"
 			:key="index"
 			class="btn "
@@ -81,7 +82,7 @@
 				<img class="img" src="@/assets/icons/ic_cancel.svg" alt="cancel" />Trở
 				về
 			</button>
-			<b-dropdown
+			<!-- <b-dropdown
 				v-if="isCancel && isPermission"
 				class="btn_dropdown"
 				right
@@ -98,7 +99,7 @@
 						Hủy hồ sơ
 					</div>
 				</b-dropdown-item>
-			</b-dropdown>
+			</b-dropdown> -->
 		</b-button-group>
 	</div>
 	<div v-else class="btn-footer row" style="margin: 0;padding-top: 0;">
@@ -163,6 +164,7 @@
 					</div>
 				</b-dropdown-item>
 				<b-dropdown-item
+					v-if="!certificateId"
 					style="margin-right:0;width: 150px;padding: 0;"
 					v-for="(target, index) in getTargetDescription()"
 					:key="index"
@@ -215,7 +217,15 @@ import {
 
 export default {
 	name: "FooterDetail",
-	props: ["form", "status", "jsonConfig", "profile", "idData", "checkVersion"],
+	props: [
+		"form",
+		"status",
+		"jsonConfig",
+		"profile",
+		"idData",
+		"checkVersion",
+		"certificateId"
+	],
 	components: {
 		"b-tooltip": BTooltip,
 		"b-dropdown-item": BDropdownItem,
@@ -285,20 +295,11 @@ export default {
 		checkPermission(configData) {
 			let check = false;
 
-			if (
-				configData.put_require_roles &&
-				this.user.roles &&
-				configData.put_require_roles.includes(this.user.roles[0].name)
-			) {
-				return true;
-			}
 			if (configData.put_require && configData.put_require.length > 0) {
-				configData.put_require.forEach(key_required => {
+				configData.put_require.forEach(i => {
 					if (
-						(key_required === "created_by" &&
-							this.form[key_required] === this.user.id) ||
-						(key_required !== "created_by" &&
-							this.form[key_required] === this.user.appraiser.id)
+						(i === "created_by" && this.form[i].id === this.user.id) ||
+						(i !== "created_by" && this.form[i] === this.user.appraiser.id)
 					) {
 						check = true;
 					}
