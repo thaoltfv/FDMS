@@ -1786,8 +1786,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($id, $request) {
             $count = 1;
+            $array = 'array';
             try {
                 $preCertificate = $this->getPreCertificate($id);
+                if (is_array($preCertificate)) {
+                $array = 'array';
+                } elseif (is_object($preCertificate)) {
+                $array = 'object';
+                } else {
+                $array = 'unkow';
+                }
             $count = 2;
                 if ($preCertificate->certificate_id) {
                      return [
@@ -1863,15 +1871,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 8;
                 foreach ($preCertificateKey as $key) {
                     if (in_array($key, $certificateKey)) {
-                        $certificate->$key = $preCertificate[$key];
+                        $certificate->$key = $preCertificate->$key;
                     }
                 }
             $count = 9;
-                $certificate["status"] = 1;
-                $certificate["sub_status"] = 1;
-                $certificate['created_by'] = $user->id;
-                $certificate["updated_at"] = date("Y-m-d H:i:s");
-                $certificate["document_description"] = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
+                $certificate->status = 1;
+                $certificate->sub_status = 1;
+                $certificate->created_by = $user->id;
+                $certificate->updated_at = date("Y-m-d H:i:s");
+                $certificate->document_description = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
+
             $count = 19;
 
                 $certificateId = QueryBuilder::for(Certificate::class)
@@ -1880,12 +1889,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $count = 10;
                 if ($certificateId) {
                 $count = 12;
-                     $preCertificate['certificate_id'] = $certificateId;
-                $count = 20;
-                     $preCertificateModel = new PreCertificate($preCertificate);
+                $preCertificateModel = PreCertificate::find($preCertificate->id);
                 $count = 13;
-                    $preCertificateModel->save();
-
+                    if ($preCertificateModel) {
+                $count = 21;
+                        $preCertificateModel->certificate_id = $certificateId;
+                $count = 22;
+                        $preCertificateModel->save();
+                    }
                 $count = 14;
                     foreach ($preCertificate->other_documents as $document) {
                         if ($document->type_document == 'Appendix') {
@@ -1916,7 +1927,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ];
             } catch (Exception $exception) {
                 Log::error($exception);
-                throw new Exception('Error occurred at count: ' . $count, 0, $exception);
+                throw new Exception('Error occurred at count: ' . $count . ' Array: ' . print_r($array, true), 0, $exception);
             }
         });
     }
