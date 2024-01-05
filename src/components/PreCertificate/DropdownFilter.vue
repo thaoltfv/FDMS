@@ -149,16 +149,6 @@ export default {
 			return current && current < endOfDay;
 		},
 		async searchFunction() {
-			if (
-				this.filterKanban.selectedOfficialTransferStatus[0] == true &&
-				this.filterKanban.selectedOfficialTransferStatus[1] == true
-			) {
-				this.filterKanban.ots = null;
-			} else if (this.filterKanban.selectedOfficialTransferStatus[0] == true) {
-				this.filterKanban.ots = 0;
-			} else if (this.filterKanban.selectedOfficialTransferStatus[1] == true) {
-				this.filterKanban.ots = 1;
-			}
 			await this.preCertificateStore.getPreCertificateAll();
 			this.$emit("notifi-kanban");
 		},

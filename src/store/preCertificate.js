@@ -264,6 +264,17 @@ export const usePreCertificateStore = defineStore(
 		async function getPreCertificateAll(type = "table") {
 			isLoading.value = true;
 			const tempstatus = [];
+			let tempots = [];
+			if (
+				this.filterKanban.selectedOfficialTransferStatus[0] == true &&
+				this.filterKanban.selectedOfficialTransferStatus[1] == true
+			) {
+				tempots = null;
+			} else if (this.filterKanban.selectedOfficialTransferStatus[0] == true) {
+				tempots = 0;
+			} else if (this.filterKanban.selectedOfficialTransferStatus[1] == true) {
+				tempots = 1;
+			}
 			for (
 				let index = 0;
 				index < filterKanban.value.selectedStatus.length;
@@ -276,7 +287,7 @@ export const usePreCertificateStore = defineStore(
 				search: filter.value.search,
 				data: {
 					status: tempstatus,
-					ots: filterKanban.value.ots,
+					ots: tempots,
 					timeFilter: {
 						from: filterKanban.value.timeFilter.from,
 						to: filterKanban.value.timeFilter.to
