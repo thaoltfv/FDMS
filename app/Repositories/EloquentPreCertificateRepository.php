@@ -1886,6 +1886,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $note);
                     return [
                         'error' => false,
+                        'data' => $certificateId,
                     ];
             } catch (Exception $exception) {
                 Log::error($exception);
