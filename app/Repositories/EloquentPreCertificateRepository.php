@@ -1786,16 +1786,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($id, $request) {
             $count = 1;
-            $array = 'array';
+            $type = 'Collection';
+            $length = 0;
+            $preCertificateString = '';
             try {
                 $preCertificate = $this->getPreCertificate($id);
-                if (is_array($preCertificate)) {
-                $array = 'array';
-                } elseif (is_object($preCertificate)) {
-                $array = 'object';
-                } else {
-                $array = 'unkow';
-                }
+                 $preCertificateString = json_encode($preCertificate);
             $count = 2;
                 if ($preCertificate->certificate_id) {
                      return [
@@ -1898,11 +1894,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $preCertificateModel->save();
                     }
                 $count = 14;
+                if ($preCertificate->other_documents instanceof \Illuminate\Database\Eloquent\Collection) {
+                $count = 26;
+                    $type = 'Collection';
+                $count = 27;
+                    $length = $preCertificate->other_documents->count();
+                $count = 28;
+                } else {
+                $count = 29;
+                    $type = gettype($preCertificate->other_documents);
+                $count = 30;
+                    $length = count($preCertificate->other_documents);
+                $count = 31;
+                }
                   if ($preCertificate->other_documents !== null) {
                 $count = 23;
                     foreach ($preCertificate->other_documents as $document) {
                 $count = 24;
-                            if ($document->type_document == 'Appendix') {
+                            if ($document->type_document == 'Appendix' && $document->deleted_at === null) {
                 $count = 25;
                                 $item = [
                                     'certificate_id' => $certificateId,
@@ -1931,7 +1940,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ];
             } catch (Exception $exception) {
                 Log::error($exception);
-                throw new Exception('Error occurred at count: ' . $count . ' Array: ' . print_r($array, true), 0, $exception);
+                 throw new Exception('Error occurred at count: ' . $count . '. Type of other_documents: ' . $type . '. Length of other_documents: ' . $length . '. PreCertificate: ' . $preCertificateString, 0, $exception);
+
             }
         });
     }
