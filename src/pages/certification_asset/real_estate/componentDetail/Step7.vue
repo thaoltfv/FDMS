@@ -2137,6 +2137,9 @@ export default {
 			tldc1: 0,
 			tldc2: 0,
 			tldc3: 0,
+			tldcg1: 0,
+			tldcg2: 0,
+			tldcg3: 0,
 			baseUnitPrice: 0,
 			baseAcronym: '',
 			pricePl1: 0,
@@ -5536,9 +5539,9 @@ export default {
 				return value
 			}
 			// console.log('dsdsds',value.toFixed(0).length,roundPrice)
-			if (roundPrice >= value.toFixed(0).length) {
-				roundPrice = value.toFixed(0).length - 1
-			}
+			// if (roundPrice >= value.toFixed(0).length) {
+			// 	roundPrice = value.toFixed(0).length - 1
+			// }
 			let value_round = Math.round(value)
 			if (roundPrice && roundPrice > 0) {
 				let round_new = Math.pow(10, roundPrice)

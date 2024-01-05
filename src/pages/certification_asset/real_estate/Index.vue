@@ -204,12 +204,15 @@ export default {
 			selectedStatus: [],
 			statusOptions: {
 				data: [
-					{ label: 'Mới', value: '1', class: 'bg-info' },
-					{ label: 'Đang thực hiện', value: '2', class: 'bg-primary' },
-					{ label: 'Đang kiểm soát', value: '6', class: 'bg-control' },
-					{ label: 'Đang duyệt', value: '3', class: 'bg-warning' },
-					{ label: 'Hoàn thành', value: '4', class: 'bg-success' },
-					{ label: 'Hủy', value: '5', class: 'bg-secondary' }
+					// { label: 'Tiếp nhận hồ sơ', value: '1', class: 'bg-info' },
+					// { label: 'Thẩm định', value: '2', class: 'bg-primary' },
+					// { label: 'Kiểm soát', value: '6', class: 'bg-control' },
+					// { label: 'Duyệt giá', value: '3', class: 'bg-warning' },
+					// { label: 'Duyệt phát hành', value: '7', class: 'bg-warning' },
+					// { label: 'In hồ sơ', value: '8', class: 'bg-warning' },
+					// { label: 'Bàn giao khách hàng', value: '9', class: 'bg-warning' },
+					// { label: 'Hoàn thành', value: '4', class: 'bg-success' },
+					// { label: 'Hủy', value: '5', class: 'bg-secondary' }
 				],
 				value: 'value',
 				label: 'label'

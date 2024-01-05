@@ -10,12 +10,15 @@
 						<h3 class="title">Thông tin chung</h3>
 						<div class=" color_content card-status">
 							{{ idData ? `HSTD_${idData}` : "HSTD" }} |
-							<span v-if="form.status === 1">Bản nháp</span>
-							<span v-if="form.status === 2">Đang thẩm định</span>
-							<span v-if="form.status === 6">Đang kiểm soát</span>
-							<span v-if="form.status === 3">Đang duyệt</span>
-							<span v-if="form.status === 4">Đã duyệt</span>
-							<span v-if="form.status === 5">Đã hủy</span>
+							<span v-if="form.status === 1">Tiếp nhận hồ sơ</span>
+							<span v-if="form.status === 2">Thẩm định</span>
+							<span v-if="form.status === 6">Kiểm soát</span>
+							<span v-if="form.status === 3">Duyệt giá</span>
+							<span v-if="form.status === 7">Duyệt phát hành</span>
+							<span v-if="form.status === 8">In hồ sơ</span>
+							<span v-if="form.status === 9">Bàn giao khách hàng</span>
+							<span v-if="form.status === 4">Hoàn thành</span>
+							<span v-if="form.status === 5">Hủy</span>
 						</div>
 					</div>
 				</div>
@@ -2485,7 +2488,6 @@ export default {
 				if (files.length) {
 					for (let i = 0; i < files.length; i++) {
 						formData.append("files[" + i + "]", files[i]);
-						console.log("files", files);
 					}
 					let res = null;
 					if (this.form.status === 1) {
@@ -2493,7 +2495,6 @@ export default {
 					} else {
 						res = await File.uploadFileCertificate(formData, this.idData);
 					}
-					console.log("res", res, formData);
 					if (res.data) {
 						// await this.$emit('handleChangeFile', res.data.data)
 						this.form.other_documents = res.data.data;
