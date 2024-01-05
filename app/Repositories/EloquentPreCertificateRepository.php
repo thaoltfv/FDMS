@@ -1894,42 +1894,72 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $preCertificateModel->save();
                     }
                 $count = 14;
-                if ($preCertificate->other_documents instanceof \Illuminate\Database\Eloquent\Collection) {
-                $count = 26;
-                    $type = 'Collection';
+                // if (is_array($preCertificate->other_documents)) {
+                //     $count = 26;
+                //     $type = 'Array';
+                //     $count = 27;
+                //     $length = count($preCertificate->other_documents);
+                //     $count = 28;
+                // } else {
+                //     $count = 29;
+                //     $type = gettype($preCertificate->other_documents);
+                //     $count = 30;
+                //     $length = 0;
+                //     $count = 31;
+                // }
+                
+                $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
+                                                        ->whereNull('deleted_at')
+                                                        ->get();
                 $count = 27;
-                    $length = $preCertificate->other_documents->count();
+                    $length = $documents->count();
                 $count = 28;
-                } else {
-                $count = 29;
-                    $type = gettype($preCertificate->other_documents);
-                $count = 30;
-                    $length = count($preCertificate->other_documents);
-                $count = 31;
-                }
-                  if ($preCertificate->other_documents !== null) {
+                if ($documents->count() > 0) {
                 $count = 23;
-                    foreach ($preCertificate->other_documents as $document) {
+                    foreach ($documents as $document) {
                 $count = 24;
-                            if ($document->type_document == 'Appendix' && $document->deleted_at === null) {
+                        if ($document->type_document == 'Appendix') {
                 $count = 25;
-                                $item = [
-                                    'certificate_id' => $certificateId,
-                                    'name' => $document->name,
-                                    'link' => $document->link,
-                                    'type' => $document->type,
-                                    'size' => $document->size,
-                                    'description' => 'appendix',
-                                    'created_by' => $user->id,
-                                ];
-                    $count = 15;
-                                $item = new CertificateOtherDocuments($item);
-                    $count = 16;
-                                QueryBuilder::for($item)->insert($item->attributesToArray());
-                            }
+                            $item = [
+                                'certificate_id' => $certificateId,
+                                'name' => $document->name,
+                                'link' => $document->link,
+                                'type' => $document->type,
+                                'size' => $document->size,
+                                'description' => 'appendix',
+                                'created_by' => $user->id,
+                            ];
+                $count = 26;
+                            $item = new CertificateOtherDocuments($item);
+                $count = 27;
+                            QueryBuilder::for($item)->insert($item->attributesToArray());
                         }
                     }
                 }
+            }
+                //   if ($preCertificate->other_documents !== null) {
+                // $count = 23;
+                //     foreach ($preCertificate->other_documents as $document) {
+                // $count = 24;
+                //             if ($document->type_document == 'Appendix' && $document->deleted_at === null) {
+                // $count = 25;
+                //                 $item = [
+                //                     'certificate_id' => $certificateId,
+                //                     'name' => $document->name,
+                //                     'link' => $document->link,
+                //                     'type' => $document->type,
+                //                     'size' => $document->size,
+                //                     'description' => 'appendix',
+                //                     'created_by' => $user->id,
+                //                 ];
+                //     $count = 15;
+                //                 $item = new CertificateOtherDocuments($item);
+                //     $count = 16;
+                //                 QueryBuilder::for($item)->insert($item->attributesToArray());
+                //             }
+                //         }
+                //     }
+                // }
             $count = 17;
                 $logDescription = 'chuyển chính thức ' . $preCertificate->id;
             $count = 18;
