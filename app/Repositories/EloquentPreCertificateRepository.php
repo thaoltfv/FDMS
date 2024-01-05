@@ -6,6 +6,8 @@ use App;
 use App\Contracts\PreCertificateRepository;
 use App\Enum\CompareMaterData;
 use App\Enum\ErrorMessage;
+use App\Models\Certificate;
+use App\Models\CertificateOtherDocuments;
 use App\Models\PreCertificate;
 use App\Models\Customer;
 use App\Models\CertificateApproach;
@@ -1779,6 +1781,117 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $personalRepository->updateStatus($item->personal_property_id, $status, $subStatus);
             }
         }
+    }
+    public function updateToOffical($id, $note)
+    {
+        return DB::transaction(function () use ($id, $note) {
+            try {
+                $preCertificate = $this->getPreCertificate($id);
+                if ($preCertificate->certificate) {
+                    return response()->json([
+                        'error' => true,
+                        'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
+                    ], 400);
+                }
+                if($preCertificate->certificate != 5){
+                    return response()->json([
+                        'error' => true,
+                        'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
+                    ], 400);
+                }
+                $preCertificateKey = [
+                    'certificate_id',
+                    'petitioner_name',
+                    'petitioner_phone',
+                    'petitioner_identity_card',
+                    'petitioner_address',
+                    'customer_id',
+                    'appraise_purpose_id',
+                    'note',
+                    'appraiser_sale_id',
+                    'business_manager_id',
+                    'appraiser_perform_id',
+                    'total_preliminary_value',
+                    'cancel_reason',
+                    'status_updated_at',
+                    'created_at',
+                    'created_by',
+                    'updated_at',
+                    'updated_by',
+                    'status',
+                    'deleted_at',
+                    'status_expired_at',
+                    'pre_type',
+                ];
+                $certificateKey = [
+                    'petitioner_name',
+                    'petitioner_phone',
+                    'petitioner_identity_card',
+                    'petitioner_address',
+                    'appraiser_id',
+                    'appraiser_confirm_id',
+                    'appraiser_manager_id',
+                    'appraiser_control_id',
+                    'appraise_purpose_id',
+                    'document_num',
+                    'document_date',
+                    'appraise_date',
+                    'service_fee',
+                    'appraiser_sale_id',
+                    'appraiser_perform_id',
+                    'certificate_date',
+                    'certificate_num',
+                    'customer_id',
+                    'status',
+                    'sub_status',
+                    'commission_fee',
+                    'note',
+                    'status_expired_at',
+                    'created_by',
+                    'document_type',
+                ];
+
+                $user = CommonService::getUser();
+                $certificate = new Certificate();
+                foreach ($preCertificateKey as $key) {
+                    if (in_array($key, $certificateKey)) {
+                        $certificate->$key = $preCertificate->$key;
+                    }
+                }
+                $certificate["status"] = 1;
+                $certificate["sub_status"] = 1;
+                $certificate['created_by'] = $user->id;
+                $certificate["updated_at"] = date("Y-m-d H:i:s");
+                $certificate["document_description"] = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
+
+                $certificateId = QueryBuilder::for(Certificate::class)
+                    ->insertGetId($certificate->attributesToArray());
+                if ($certificateId) {
+                    foreach ($preCertificate->other_documents as $document) {
+                        $item = [
+                            'certificate_id' => $certificateId,
+                            'name' => $document->name,
+                            'link' => $document->link,
+                            'type' => $document->type,
+                            'size' => $document->size,
+                            'description' => 'appendix',
+                            'created_by' => $user->id,
+                        ];
+
+                        $item = new CertificateOtherDocuments($item);
+                        QueryBuilder::for($item)->insert($item->attributesToArray());
+                    }
+                }
+                $logDescription = 'chuyển chính thức ' . $preCertificate->id;
+                $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $note);
+                return response()->json([
+                        'error' => false,
+                    ], 200);;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
     }
     public function updateStatus_v2($id, $request)
     {
