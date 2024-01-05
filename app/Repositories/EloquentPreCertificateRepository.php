@@ -1878,29 +1878,34 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
             $count = 10;
                 if ($certificateId) {
+                $count = 12;
                     $preCertificate->certificate_id = $certificateId;
+                $count = 13;
                     $preCertificate->save();
 
+                $count = 14;
                     foreach ($preCertificate->other_documents as $document) {
-                        $item = [
-                            'certificate_id' => $certificateId,
-                            'name' => $document->name,
-                            'link' => $document->link,
-                            'type' => $document->type,
-                            'size' => $document->size,
-                            'description' => 'appendix',
-                            'created_by' => $user->id,
-                        ];
-
-            $count = 11;
-                        $item = new CertificateOtherDocuments($item);
-            $count = 12;
-                        QueryBuilder::for($item)->insert($item->attributesToArray());
+                        if ($document->type_document == 'Appendix') {
+                            
+                            $item = [
+                                'certificate_id' => $certificateId,
+                                'name' => $document->name,
+                                'link' => $document->link,
+                                'type' => $document->type,
+                                'size' => $document->size,
+                                'description' => 'appendix',
+                                'created_by' => $user->id,
+                            ];
+                $count = 15;
+                            $item = new CertificateOtherDocuments($item);
+                $count = 16;
+                            QueryBuilder::for($item)->insert($item->attributesToArray());
+                        }
                     }
                 }
-            $count = 13;
+            $count = 17;
                 $logDescription = 'chuyển chính thức ' . $preCertificate->id;
-            $count = 14;
+            $count = 18;
                 $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $note);
                     return [
                         'error' => false,
