@@ -746,7 +746,10 @@ export default {
 		async handleChangeAccept2(note, reason_id) {
 			let res = null;
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
-				res = await PreCertificate.updateToOfficalPreCertificate(id, note);
+				res = await PreCertificate.updateToOfficalPreCertificate(
+					this.dataPC.id,
+					note
+				);
 			} else {
 				res = await this.preCertificateStore.updateStatus(
 					this.idDragger,
@@ -1014,9 +1017,21 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
-			// if (target.code && target.code === "chuyen_chinh_thuc") {
-			// 	return;
-			// }
+			if (target.code && target.code === "chuyen_chinh_thuc") {
+				const checkStage = this.checkDataBeforeChangeToStage3();
+				if (!checkStage) {
+					this.openMessage(
+						"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+						"error"
+					);
+					return;
+				}
+				this.dataPC.target_code = target.code;
+				this.confirm_message = target.description;
+				this.isHandleAction = true;
+
+				return;
+			}
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
@@ -1029,16 +1044,14 @@ export default {
 				this.dataPC.target_status = config.status;
 				this.dataPC.target_code = target.code;
 				this.confirm_message = target.description;
-				if (this.dataPC.status == 2 && this.next_status == 3) {
-					if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
-						const checkStage = this.checkDataBeforeChangeToStage3();
-						if (!checkStage) {
-							this.openMessage(
-								"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
-								"error"
-							);
-							return;
-						}
+				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+					const checkStage = this.checkDataBeforeChangeToStage3();
+					if (!checkStage) {
+						this.openMessage(
+							"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+							"error"
+						);
+						return;
 					}
 				}
 				this.isHandleAction = check;

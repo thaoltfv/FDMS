@@ -1013,6 +1013,25 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			if (target.code && target.code === "chuyen_chinh_thuc") {
+				if (
+					!this.preCertificateOtherDocuments.Result ||
+					this.preCertificateOtherDocuments.Result.length === 0 ||
+					this.dataPC.total_preliminary_value == 0 ||
+					this.dataPC.total_preliminary_value == null ||
+					this.dataPC.total_preliminary_value == undefined
+				) {
+					this.openMessage(
+						"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+						"error"
+					);
+					return;
+				}
+				this.dataPC.target_code = target.code;
+				this.message = target.description;
+				this.isHandleAction = true;
+				return;
+			}
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
 			if (config) {
@@ -1025,7 +1044,7 @@ export default {
 				if (message === "") {
 					this.targetStatus = config.status;
 					this.dataPC.target_status = config.status;
-					this.dataPC.target_code= target.code;
+					this.dataPC.target_code = target.code;
 					this.message = target.description;
 
 					if (
@@ -1066,9 +1085,12 @@ export default {
 		async handleAction2(note, reason_id) {
 			let res = null;
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
-				res = await PreCertificate.updateToOfficalPreCertificate(id, note);
+				res = await PreCertificate.updateToOfficalPreCertificate(
+					this.dataPC.id,
+					note
+				);
 			} else {
-				const res = await this.preCertificateStore.updateStatus(
+				res = await this.preCertificateStore.updateStatus(
 					this.dataPC.id,
 					note,
 					reason_id
