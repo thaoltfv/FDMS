@@ -1788,16 +1788,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             try {
                 $preCertificate = $this->getPreCertificate($id);
                 if ($preCertificate->certificate) {
-                    return response()->json([
+                     return [
                         'error' => true,
                         'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
-                    ], 400);
+                    ];
                 }
                 if($preCertificate->certificate != 5){
-                    return response()->json([
-                        'error' => true,
-                        'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
-                    ], 400);
+                     return [
+                    'error' => true,
+                    'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
+                ];
                 }
                 $preCertificateKey = [
                     'certificate_id',
@@ -1884,9 +1884,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 $logDescription = 'chuyển chính thức ' . $preCertificate->id;
                 $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $note);
-                return response()->json([
+                    return [
                         'error' => false,
-                    ], 200);;
+                    ];
             } catch (Exception $exception) {
                 Log::error($exception);
                 throw $exception;
