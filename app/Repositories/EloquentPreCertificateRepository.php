@@ -1785,20 +1785,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     public function updateToOffical($id, $note)
     {
         return DB::transaction(function () use ($id, $note) {
+            $count = 1;
             try {
                 $preCertificate = $this->getPreCertificate($id);
-                if ($preCertificate->certificate) {
-                    return response()->json([
+            $count = 2;
+                if ($preCertificate->certificate_id) {
+                     return [
                         'error' => true,
                         'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
-                    ], 400);
+                    ];
                 }
-                if($preCertificate->certificate != 5){
-                    return response()->json([
-                        'error' => true,
-                        'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
-                    ], 400);
+            $count = 3;
+                if($preCertificate->certificate_id != 5){
+                     return [
+                    'error' => true,
+                    'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
+                ];
                 }
+            $count = 4;
                 $preCertificateKey = [
                     'certificate_id',
                     'petitioner_name',
@@ -1823,6 +1827,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'status_expired_at',
                     'pre_type',
                 ];
+            $count = 5;
                 $certificateKey = [
                     'petitioner_name',
                     'petitioner_phone',
@@ -1851,13 +1856,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'document_type',
                 ];
 
+            $count = 6;
                 $user = CommonService::getUser();
+            $count = 7;
                 $certificate = new Certificate();
+            $count = 8;
                 foreach ($preCertificateKey as $key) {
                     if (in_array($key, $certificateKey)) {
                         $certificate->$key = $preCertificate->$key;
                     }
                 }
+            $count = 9;
                 $certificate["status"] = 1;
                 $certificate["sub_status"] = 1;
                 $certificate['created_by'] = $user->id;
@@ -1866,7 +1875,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                 $certificateId = QueryBuilder::for(Certificate::class)
                     ->insertGetId($certificate->attributesToArray());
+
+            $count = 10;
                 if ($certificateId) {
+                    $preCertificate->certificate_id = $certificateId;
+                    $preCertificate->save();
+
                     foreach ($preCertificate->other_documents as $document) {
                         $item = [
                             'certificate_id' => $certificateId,
@@ -1878,18 +1892,23 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             'created_by' => $user->id,
                         ];
 
+            $count = 11;
                         $item = new CertificateOtherDocuments($item);
+            $count = 12;
                         QueryBuilder::for($item)->insert($item->attributesToArray());
                     }
                 }
+            $count = 13;
                 $logDescription = 'chuyển chính thức ' . $preCertificate->id;
+            $count = 14;
                 $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $note);
-                return response()->json([
+                    return [
                         'error' => false,
-                    ], 200);;
+                        'data' => $certificateId,
+                    ];
             } catch (Exception $exception) {
                 Log::error($exception);
-                throw $exception;
+                throw new Exception('Error occurred at count: ' . $count, 0, $exception);
             }
         });
     }
