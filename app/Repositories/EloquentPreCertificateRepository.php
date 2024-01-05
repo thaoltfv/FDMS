@@ -1796,7 +1796,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ];
                 }
             $count = 3;
-                if($preCertificate->certificate_id != 5){
+                if($preCertificate->status != 5){
                      return [
                     'error' => true,
                     'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
