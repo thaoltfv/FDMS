@@ -1144,7 +1144,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraise_purpose_id',
             'pre_certificates.created_at',
             // 'users.image',
-            DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
+            DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                         when 1
                             then 'Yêu cầu sơ bộ'
@@ -1316,7 +1316,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_sale_id', 
             'appraiser_perform_id', 
             // 'users.image',
-            DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
+            DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                        when 1
                             then 'Yêu cầu sơ bộ'
@@ -3640,8 +3640,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
 
             $data = [
-                'subject' => '[HSTDSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
-                'message' => 'HSTDSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
+                'subject' => '[YCSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
+                'message' => 'YCSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
                 'user' => $loginUser,
                 'id' => $id
             ];
