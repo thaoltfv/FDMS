@@ -133,7 +133,7 @@
 							@click.prevent="handleDetail(id, property)"
 							class="link-detail"
 						>
-							{{ "HSTDSB_" + id }}
+							{{ "YCSB_" + id }}
 						</button>
 					</div>
 				</template>
@@ -282,7 +282,7 @@
 						:class="
 							`bg-${configColor(element)}-15 text-${configColor(element)}`
 						"
-						>HSTDSB_{{ element.id }}</span
+						>YCSB_{{ element.id }}</span
 					>
 					<img
 						v-if="checkDateExpired(element)"

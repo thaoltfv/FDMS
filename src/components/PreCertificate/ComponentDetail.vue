@@ -9,7 +9,7 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
 						<div class=" color_content card-status">
-							{{ dataPC.id ? `HSTDSB_${dataPC.id}` : "HSTDSB" }} |
+							{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 							<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
 							<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
 							<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>

@@ -8,7 +8,7 @@
 							Tạo mới hồ sơ thẩm định sơ bộ
 						</h3>
 						<div class="color_content card-status">
-							{{ dataPC && dataPC.id ? `HSTDSB_${dataPC.id}` : "HSTDSB" }} | Mới
+							{{ dataPC && dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} | Mới
 						</div>
 					</div>
 				</div>
