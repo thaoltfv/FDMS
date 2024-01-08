@@ -31,7 +31,7 @@ class ExportCertificateBriefs
         }
         $downloadDate = $now->format('dmY');
         $downloadTime = $now->format('Hi');
-        $fileName = 'HSTĐ' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
         $border = (new BorderBuilder())
             ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
             ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
@@ -255,7 +255,7 @@ class ExportCertificateBriefs
         }
         $downloadDate = $now->format('dmY');
         $downloadTime = $now->format('Hi');
-        $fileName = 'HSTĐ' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
         $border = (new BorderBuilder())
             ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
             ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
