@@ -29,7 +29,7 @@
 					<div class="detail_certificate_1 col-12 mb-2">
 						<div class="col-12 d-flex mb-2 justify-content-between">
 							<span class="content_id content_id_primary class_p">{{
-								`HSTĐSB ${dataPC.id}`
+								`YCSB ${dataPC.id}`
 							}}</span>
 						</div>
 						<div class="d-flex container_content justify-content-between">
