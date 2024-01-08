@@ -31,6 +31,22 @@ class ActivityController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+    public function getPreCertificateWithId($id)
+    {
+        try {
+            $dataQuery = Activity::where('subject_type', 'App\Models\PreCertificate')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
+            if(!isset($dataQuery))
+            {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+                return $this->respondWithErrorData($data);
+            }
+            return $this->respondWithCustomData($dataQuery, 200);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => $exception->getMessage(), 'exception' => $exception];
+            return $this->respondWithErrorData($data);
+        }
+    }
 
     public function getAppraiseWithId($id)
     {

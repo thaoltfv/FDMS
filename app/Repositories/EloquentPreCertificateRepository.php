@@ -1144,7 +1144,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraise_purpose_id',
             'pre_certificates.created_at',
             // 'users.image',
-            DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
+            DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                         when 1
                             then 'Yêu cầu sơ bộ'
@@ -1316,7 +1316,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_sale_id', 
             'appraiser_perform_id', 
             // 'users.image',
-            DB::raw("concat('HSTDSB_', pre_certificates.id) AS slug"),
+            DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                        when 1
                             then 'Yêu cầu sơ bộ'
@@ -1785,28 +1785,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     public function updateToOffical($id, $request)
     {
         return DB::transaction(function () use ($id, $request) {
-            $count = 1;
-            $type = 'Collection';
-            $length = 0;
-            $preCertificateString = '';
             try {
                 $preCertificate = $this->getPreCertificate($id);
-                 $preCertificateString = json_encode($preCertificate);
-            $count = 2;
                 if ($preCertificate->certificate_id) {
                      return [
                         'error' => true,
                         'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
                     ];
                 }
-            $count = 3;
                 if($preCertificate->status != 5){
                      return [
                     'error' => true,
                     'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
                 ];
                 }
-            $count = 4;
                 $preCertificateKey = [
                     'certificate_id',
                     'petitioner_name',
@@ -1831,7 +1823,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'status_expired_at',
                     'pre_type',
                 ];
-            $count = 5;
                 $certificateKey = [
                     'petitioner_name',
                     'petitioner_phone',
@@ -1860,109 +1851,52 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'document_type',
                 ];
 
-            $count = 6;
                 $user = CommonService::getUser();
-            $count = 7;
                 $certificate = new Certificate();
-            $count = 8;
                 foreach ($preCertificateKey as $key) {
                     if (in_array($key, $certificateKey)) {
                         $certificate->$key = $preCertificate->$key;
                     }
                 }
-            $count = 9;
                 $certificate->status = 1;
                 $certificate->sub_status = 1;
                 $certificate->created_by = $user->id;
                 $certificate->updated_at = date("Y-m-d H:i:s");
                 $certificate->document_description = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
 
-            $count = 19;
-
                 $certificateId = QueryBuilder::for(Certificate::class)
                     ->insertGetId($certificate->attributesToArray());
 
-            $count = 10;
                 if ($certificateId) {
-                $count = 12;
-                $preCertificateModel = PreCertificate::find($preCertificate->id);
-                $count = 13;
+                    $preCertificateModel = PreCertificate::find($preCertificate->id);
                     if ($preCertificateModel) {
-                $count = 21;
                         $preCertificateModel->certificate_id = $certificateId;
-                $count = 22;
                         $preCertificateModel->save();
                     }
-                $count = 14;
-                // if (is_array($preCertificate->other_documents)) {
-                //     $count = 26;
-                //     $type = 'Array';
-                //     $count = 27;
-                //     $length = count($preCertificate->other_documents);
-                //     $count = 28;
-                // } else {
-                //     $count = 29;
-                //     $type = gettype($preCertificate->other_documents);
-                //     $count = 30;
-                //     $length = 0;
-                //     $count = 31;
-                // }
                 
-                $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
+                    $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
                                                         ->whereNull('deleted_at')
                                                         ->get();
-                $count = 27;
                     $length = $documents->count();
-                $count = 28;
-                if ($documents->count() > 0) {
-                $count = 23;
-                    foreach ($documents as $document) {
-                $count = 24;
-                        if ($document->type_document == 'Appendix') {
-                $count = 25;
-                            $item = [
-                                'certificate_id' => $certificateId,
-                                'name' => $document->name,
-                                'link' => $document->link,
-                                'type' => $document->type,
-                                'size' => $document->size,
-                                'description' => 'appendix',
-                                'created_by' => $user->id,
-                            ];
-                $count = 26;
-                            $item = new CertificateOtherDocuments($item);
-                $count = 27;
-                            QueryBuilder::for($item)->insert($item->attributesToArray());
+                    if ($documents->count() > 0) {
+                        foreach ($documents as $document) {
+                            if ($document->type_document == 'Appendix') {
+                                $item = [
+                                    'certificate_id' => $certificateId,
+                                    'name' => $document->name,
+                                    'link' => $document->link,
+                                    'type' => $document->type,
+                                    'size' => $document->size,
+                                    'description' => 'appendix',
+                                    'created_by' => $user->id,
+                                ];
+                                $item = new CertificateOtherDocuments($item);
+                                QueryBuilder::for($item)->insert($item->attributesToArray());
+                            }
                         }
                     }
                 }
-            }
-                //   if ($preCertificate->other_documents !== null) {
-                // $count = 23;
-                //     foreach ($preCertificate->other_documents as $document) {
-                // $count = 24;
-                //             if ($document->type_document == 'Appendix' && $document->deleted_at === null) {
-                // $count = 25;
-                //                 $item = [
-                //                     'certificate_id' => $certificateId,
-                //                     'name' => $document->name,
-                //                     'link' => $document->link,
-                //                     'type' => $document->type,
-                //                     'size' => $document->size,
-                //                     'description' => 'appendix',
-                //                     'created_by' => $user->id,
-                //                 ];
-                //     $count = 15;
-                //                 $item = new CertificateOtherDocuments($item);
-                //     $count = 16;
-                //                 QueryBuilder::for($item)->insert($item->attributesToArray());
-                //             }
-                //         }
-                //     }
-                // }
-            $count = 17;
                 $logDescription = 'chuyển chính thức ' . $preCertificate->id;
-            $count = 18;
                 $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $request['note']);
                     return [
                         'error' => false,
@@ -1970,7 +1904,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ];
             } catch (Exception $exception) {
                 Log::error($exception);
-                 throw new Exception('Error occurred at count: ' . $count . '. Type of other_documents: ' . $type . '. Length of other_documents: ' . $length . '. PreCertificate: ' . $preCertificateString, 0, $exception);
+                throw $exception;
 
             }
         });
@@ -3640,8 +3574,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
 
             $data = [
-                'subject' => '[HSTDSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
-                'message' => 'HSTDSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
+                'subject' => '[YCSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
+                'message' => 'YCSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
                 'user' => $loginUser,
                 'id' => $id
             ];
