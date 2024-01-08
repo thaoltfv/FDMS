@@ -52,9 +52,11 @@
 									<p>{{ dataPC.petitioner_address }}</p>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Mục đích thẩm định:</strong
+									<strong class="margin_content_inline"
+										>Mục đích thẩm định:</strong
 									><span id="appraise_purpose" class="text-left">{{
-											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 60
+										dataPC.appraise_purpose &&
+										dataPC.appraise_purpose.name.length > 60
 											? dataPC.appraise_purpose.name.substring(60, 0) + "..."
 											: dataPC.appraise_purpose.name
 									}}</span>
@@ -378,7 +380,11 @@
 		<ModalNotificationPreCertificateNote
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
-			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
+			:notification="
+				message == 'Từ chối' || message == 'Khôi phục'
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${message}'`
+			"
 			@action="handleAction2"
 		/>
 
@@ -389,7 +395,9 @@
 		/>
 		<ModalRequireForStage3
 			v-if="dialogRequireForStage3"
-			:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
+			:notification="
+				`Bạn có muốn chuyển yêu cầu này sang trạng thái 'Định giá sơ bộ'?`
+			"
 			@cancel="dialogRequireForStage3 = false"
 		/>
 	</div>
@@ -1144,7 +1152,10 @@ export default {
 
 				this.changeEditStatus();
 				this.$toast.open({
-					message: this.message + " thành công",
+					message:
+						this.message == "Từ chối" || this.message == "Khôi phục"
+							? this.message + " thành công"
+							: "Chuyển trạng thái " + `'${this.message}'` + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -1159,58 +1170,7 @@ export default {
 			}
 			this.isHandleAction = false;
 		},
-		async handleActionDenined() {
-			const {
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_manager_id,
-				appraiser_perform,
-				appraiser_confirm,
-				appraiser_manager,
-				appraiser,
-				appraiser_control,
-				appraiser_control_id
-			} = this.dataPC;
-			let dataSend = {
-				appraiser_perform,
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_confirm,
-				appraiser_manager_id,
-				appraiser_manager,
-				appraiser_control,
-				appraiser_control_id,
-				appraiser,
-				status: 0
-			};
-			if (this.dataPC.status === 3) {
-				// denined change status 3 ---> 2
-				dataSend.status = 2;
-				const res = await PreCertificate.updateStatusPreCertificate(
-					this.dataPC.id,
-					dataSend
-				);
-				if (res.data) {
-					this.$toast.open({
-						message: "Từ chối phê duyệt thành công",
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
-					this.dataPC.status = 2;
-				} else if (res.error) {
-					this.$toast.open({
-						message: res.error.message,
-						type: "error",
-						position: "top-right",
-						duration: 5000
-					});
-				}
-				this.openNotificationDenined = false;
-			}
-		},
+
 		async onImageChange(e) {
 			const formData = new FormData();
 			let check = true;
