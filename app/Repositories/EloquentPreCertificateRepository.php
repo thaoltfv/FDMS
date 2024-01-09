@@ -1448,6 +1448,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     private function checkAuthorizationPreCertificate ($id)
     {
         $check = null;
+        dd($this->model->query());
+        dd($this->model->query()->where('id', $id));
+        dd($this->model->query()->where('id', $id)->exists());
         if ($this->model->query()->where('id', $id)->exists()) {
             $user = CommonService::getUser();
             $role = $user->roles->last();

@@ -71,7 +71,6 @@ class PreCertificate extends Model
         'updated_at',
         'status_updated_at',
         'status_expired_at',
-        'pre_type',
 
         'commission_fee',
         'pre_date',
