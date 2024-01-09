@@ -71,7 +71,14 @@ class PreCertificate extends Model
         'updated_at',
         'status_updated_at',
         'status_expired_at',
-        'pre_type'
+        'pre_type',
+
+        'commission_fee',
+        'pre_time',
+        'pre_asset_name',
+        'pre_type_id',
+        'total_service_fee'
+
     ];
 
     public function getStatusTextAttribute()
@@ -133,11 +140,14 @@ class PreCertificate extends Model
     {
         return $this->hasMany(PreCertificateOtherDocuments::class, 'pre_certificate_id');
     }
-
+    
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-
+    public function payments(): HasMany
+    {
+        return $this->hasMany(PreCertificatePayments::class, 'pre_certificate_id');
+    }
 }
