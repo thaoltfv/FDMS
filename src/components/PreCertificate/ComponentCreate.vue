@@ -5,7 +5,7 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">
-							Tạo mới hồ sơ thẩm định sơ bộ
+							Tạo mới yêu cầu sơ bộ
 						</h3>
 						<div class="color_content card-status">
 							{{ dataPC && dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} | Mới

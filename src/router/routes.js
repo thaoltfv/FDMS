@@ -1885,15 +1885,15 @@ export const routes = [
 				component: page("pre_certification/Create.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Tạo mới hồ sơ thẩm định sơ bộ",
+					title: "Tạo mới yêu cầu sơ bộ",
 					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Tạo mới hồ sơ thẩm định sơ bộ",
+							title: "Tạo mới yêu cầu sơ bộ",
 							name: "pre_certification.create"
 						}
 					],
@@ -1907,15 +1907,15 @@ export const routes = [
 				beforeEnter: ResolveGuard([AuthGuard]),
 				props: true,
 				meta: {
-					title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
+					title: "Chỉnh sửa yêu cầu sơ bộ",
 					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
+							title: "Chỉnh sửa yêu cầu sơ bộ",
 							name: "pre_certification.create"
 						}
 					],
@@ -1928,16 +1928,16 @@ export const routes = [
 				component: page("pre_certification/Index2.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Hồ sơ thẩm định sơ bộ",
+					title: "Yêu cầu sơ bộ",
 					// fix_permission
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						}
 					],
-					gtm: "Trang HSTĐ"
+					gtm: "Trang YCSB"
 				}
 			},
 
@@ -1947,16 +1947,16 @@ export const routes = [
 				component: page("pre_certification/Detail.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Chi tiết hồ sơ thẩm định sơ bộ",
+					title: "Chi tiết yêu cầu sơ bộ",
 					// fix_permission
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Chi tiết hồ sơ thẩm định sơ bộ",
+							title: "Chi tiết yêu cầu sơ bộ",
 							name: "pre_certification.detail"
 						}
 					],
