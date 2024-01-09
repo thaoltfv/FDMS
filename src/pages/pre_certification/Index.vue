@@ -138,23 +138,24 @@
 				@handleFooterAccept="handleFooterAccept"
 			/>
 
-			<ModalSendVerify
-				v-if="showAcceptCertificate"
-				notification="Bạn có muốn muốn duyệt hồ sơ này"
-				@action="handleChangeAccept"
-				@cancel="handleCancelAccept"
-			/>
-
 			<ModalNotificationPreCertificateNote
 				v-if="isMoved"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' || confirm_message == 'Khôi phục'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+				"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
 			/>
 			<ModalNotificationPreCertificateNote
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' || confirm_message == 'Khôi phục'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+				"
 				@action="handleChangeAccept2"
 			/>
 		</div>
@@ -238,7 +239,6 @@ export default {
 			export: false,
 			showDetailPopUp: false,
 			showVerifyCertificate: false,
-			showAcceptCertificate: false,
 			idDraft: "",
 			elementDragger: "",
 			position_profile: "",
@@ -551,20 +551,21 @@ export default {
 				: "";
 			check = this.checkRequired(targetConfig.require, this.elementDragger);
 			if (check) {
-				this.next_status = targetConfig.status;
-				this.dataPC.target_status = targetConfig.status;
-				this.confirm_message = message;
-
-				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+				if (targetConfig.status === 3 && this.dataPC.status === 2) {
 					const checkStage = this.checkDataBeforeChangeToStage3();
 					if (!checkStage) {
 						this.openMessage(
 							"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
 							"error"
 						);
+						this.returnData();
 						return;
 					}
 				}
+				this.next_status = targetConfig.status;
+				this.dataPC.target_status = targetConfig.status;
+				this.confirm_message = message;
+
 				this.isMoved = check;
 			} else {
 				this.returnData();
@@ -702,46 +703,6 @@ export default {
 				this.elementDragger = event.draggedContext.element;
 			} else return false;
 		},
-		handleRemoveStatusVerify() {
-			this.showAcceptCertificate = true;
-		},
-		async handleChangeAccept() {
-			let dataSend = {
-				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
-				appraiser_id: this.elementDragger.appraiser_id,
-				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
-				appraiser_control_id: this.elementDragger.appraiser_control_id,
-				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
-				status: 4
-			};
-			// change status 3 --> 4
-			const res = await PreCertificate.updateStatusPreCertificate(
-				this.idDragger,
-				dataSend
-			);
-			if (res.data) {
-				await this.$toast.open({
-					message: "Xác nhận hồ sơ thành công",
-					type: "success",
-					position: "top-right",
-					duration: 3000
-				});
-				this.listCertificateTemp.forEach(item => {
-					if (item.id === this.idDragger) {
-						item.status = 4;
-					}
-				});
-			} else {
-				await this.$toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				this.handleCancelAccept();
-			}
-			this.showAcceptCertificate = await false;
-		},
 
 		async handleChangeAccept2(note, reason_id) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
@@ -763,7 +724,13 @@ export default {
 					);
 				} else await this.getDataWorkFlow2(true);
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message:
+						this.confirm_message == "Từ chối" ||
+						this.confirm_message == "Khôi phục"
+							? this.confirm_message + " thành công"
+							: "Chuyển trạng thái " +
+							  `'${this.confirm_message}'` +
+							  " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -850,15 +817,7 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		handleCancelAccept() {
-			this.showAcceptCertificate = false;
-			this.listCertificateLock = this.listCertificateTemp.filter(
-				item => item.status === 3
-			);
-			this.listCertificatesClose = this.listCertificateTemp.filter(
-				item => item.status === 4
-			);
-		},
+
 		handleCancelAccept2() {
 			this.isMoved = false;
 			this.isHandleAction = false;
@@ -1059,11 +1018,7 @@ export default {
 				check = this.checkRequired(config.require, this.detailData);
 			}
 			if (check) {
-				this.next_status = config.status;
-				this.dataPC.target_status = config.status;
-				this.dataPC.target_code = target.code;
-				this.confirm_message = target.description;
-				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+				if (config.status === 3 && this.dataPC.status === 2) {
 					const checkStage = this.checkDataBeforeChangeToStage3();
 					if (!checkStage) {
 						this.openMessage(
@@ -1073,6 +1028,10 @@ export default {
 						return;
 					}
 				}
+				this.next_status = config.status;
+				this.dataPC.target_status = config.status;
+				this.dataPC.target_code = target.code;
+				this.confirm_message = target.description;
 				this.isHandleAction = check;
 			}
 		},

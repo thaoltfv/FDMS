@@ -1883,9 +1883,10 @@ export const routes = [
 				path: "/pre_certification/create",
 				name: "pre_certification.create",
 				component: page("pre_certification/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
 					title: "Tạo mới hồ sơ thẩm định sơ bộ",
-					permissions: [PERMISSIONS.ADD_PRE_CERTIFICATE],
+					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
 							title: "Hồ sơ thẩm định sơ bộ",
@@ -1903,10 +1904,11 @@ export const routes = [
 				path: "/pre_certification/edit",
 				name: "pre_certification.edit",
 				component: page("pre_certification/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
 				props: true,
 				meta: {
 					title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
-					permissions: [PERMISSIONS.EDIT_PRE_CERTIFICATE],
+					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
 							title: "Hồ sơ thẩm định sơ bộ",
@@ -2011,7 +2013,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.404" }],
-					gtm: "Trang lõi 404"
+					gtm: "Trang lỗi 404"
 				}
 			},
 			{
@@ -2022,7 +2024,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.409" }],
-					gtm: "Trang lõi 409"
+					gtm: "Trang lỗi 409"
 				}
 			},
 			{
@@ -2033,7 +2035,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.429" }],
-					gtm: "Trang lõi 429"
+					gtm: "Trang lỗi 429"
 				}
 			},
 			{
@@ -2044,7 +2046,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.500" }],
-					gtm: "Trang lõi 500"
+					gtm: "Trang lỗi 500"
 				}
 			},
 			{
@@ -2055,7 +2057,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.503" }],
-					gtm: "Trang lõi 503"
+					gtm: "Trang lỗi 503"
 				}
 			}
 		]
@@ -2066,7 +2068,7 @@ export const routes = [
 		path: "*",
 		component: page("error/Error404.vue"),
 		meta: {
-			gtm: "Trang lõi 404"
+			gtm: "Trang lỗi 404"
 		}
 	},
 
@@ -2085,7 +2087,7 @@ export const routes = [
 					breadcrumbs: [
 						//   { title: 'Bất động sản' }
 					],
-					gtm: "Trang lõi không tìm thấy trang"
+					gtm: "Trang lỗi không tìm thấy trang"
 				}
 			}
 		]

@@ -126,7 +126,13 @@ export default class Certificate extends Model {
 			}
 		});
 	}
-
+	static async getHistoryTimeline(id) {
+		return new this().request({
+			method: "GET",
+			url: `activity/get-pre-certificate/${id}`,
+			isStatic: true
+		});
+	}
 	static async getTimeStamp() {
 		return new this().request({
 			method: "GET",

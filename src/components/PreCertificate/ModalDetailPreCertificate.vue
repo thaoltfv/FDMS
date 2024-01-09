@@ -53,15 +53,16 @@
 							<p>{{ dataPC.petitioner_phone }}</p>
 						</div>
 						<div class="d-flex container_content">
-									<strong class="margin_content_inline">Mục đích thẩm định:</strong
-									><span id="appraise_purpose" class="text-left">{{
-											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 70
-											? dataPC.appraise_purpose.name.substring(70, 0) + "..."
-											: dataPC.appraise_purpose.name
-									}}</span>
-									<b-tooltip target="appraise_purpose" placement="top-right">{{
-										dataPC.appraise_purpose.name
-									}}</b-tooltip>
+							<strong class="margin_content_inline">Mục đích thẩm định:</strong
+							><span id="appraise_purpose" class="text-left">{{
+								dataPC.appraise_purpose &&
+								dataPC.appraise_purpose.name.length > 70
+									? dataPC.appraise_purpose.name.substring(70, 0) + "..."
+									: dataPC.appraise_purpose.name
+							}}</span>
+							<b-tooltip target="appraise_purpose" placement="top-right">{{
+								dataPC.appraise_purpose.name
+							}}</b-tooltip>
 						</div>
 						<!-- <div class="d-flex container_content">
 							<strong class="margin_content_inline">Mục đích thẩm định:</strong>
@@ -181,6 +182,7 @@
 						</div>
 						<div class="button-contain">
 							<button
+								v-if="!dataPC.certificate_id"
 								v-for="(target, index) in getTargetDescription()"
 								:key="index"
 								class="btn "
