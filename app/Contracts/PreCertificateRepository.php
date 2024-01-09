@@ -23,6 +23,7 @@ interface PreCertificateRepository extends BaseRepository
 
 
     public function updateStatus_v2($id, $request);
+    public function updatePayments($id, $request);
     public function updateToOffical($id, $request);
 
 

@@ -225,8 +225,8 @@ class PreCertificateController extends Controller
             'petitioner_phone' => 'nullable|numeric',
             'petitioner_address' => 'nullable|string',
             'petitioner_identity_card' => 'nullable|string',
-            'appraise_purpose_id' => 'nullable',
-            'appraiser_sale_id' => 'nullable',
+            'appraise_purpose_id' => 'required',
+            'appraiser_sale_id' => 'required',
             'business_manager_id' => 'nullable',
             'appraiser_perform_id' => 'nullable',
             'customer'=>'array|sometimes',
@@ -236,7 +236,11 @@ class PreCertificateController extends Controller
             'total_preliminary_value' => 'nullable|integer|min:0',
             'note' => 'nullable|string',
             'cancel_reason' => 'nullable|string',
-            'pre_type' => 'nullable|string',
+            'commission_fee' => 'numeric',
+            'pre_date' => 'required|string|max:255',
+            'pre_asset_name' => 'string|max:255',
+            'total_service_fee' => 'nullable|integer|min:0',
+            'pre_type_id' => 'required',
         ];
 
         $customAttributes = [
@@ -254,7 +258,11 @@ class PreCertificateController extends Controller
             'total_preliminary_value' => 'Tổng giá trị sơ bộ',
             'note' => 'Ghi chú',
             'cancel_reason' => 'Lý do hủy sơ bộ',
-            'pre_type' => 'Loại sơ bộ',
+            'pre_type_id' => 'Loại sơ bộ',
+            'commission_fee' => 'Chiết khấu',
+            'pre_date' => 'Ngày sơ bộ',
+            'total_service_fee' => 'Tổng phí dịch vụ',
+            'pre_asset_name' => 'Tên tài sản sơ bộ',
         ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
@@ -290,6 +298,34 @@ class PreCertificateController extends Controller
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->preCertificateRepository->updateStatus_v2($id , $request->toArray());
+            if(isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData( $result);
+
+            return $this->respondWithCustomData($result);
+        } else {
+            //TODO Handle your error
+            $data = ['message' => $validator->errors()->all(), 'exception' => null];
+            return $this->respondWithErrorData( $data);
+        }
+
+    }
+    public function updatePayments(int $id, Request $request )
+    {
+        if(! CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+
+        $rules = [
+            'pay_date' => 'required|string|max:255',
+            'amount' => 'integer|min:1',
+        ];
+        $customAttributes = [
+            'pay_date' => 'Ngày thanh toán',
+            'amount' => 'Giá trị thanh toán',
+        ];
+        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+        if ($validator->passes()) {
+            //TODO Handle your data
+            $result = $this->preCertificateRepository->updatePayments($id , $request->toArray());
             if(isset($result['message']) && isset($result['exception']))
                 return $this->respondWithErrorData( $result);
 

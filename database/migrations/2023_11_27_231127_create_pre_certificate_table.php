@@ -171,7 +171,7 @@ class CreatePreCertificateTable extends Migration
 		    $table->integer('total_service_fee')->unsigned()->default(0)->before('created_at');
 		    $table->float('commission_fee')->unsigned()->default(0)->before('created_at');
 			$table->text('pre_asset_name')->unsigned()->nullable()->before('created_at');
-			$table->date('pre_time')->nullable()->before('created_at');
+			$table->date('pre_date')->nullable()->before('created_at');
         });
     }
 

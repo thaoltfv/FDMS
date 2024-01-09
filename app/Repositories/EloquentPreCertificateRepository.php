@@ -12,6 +12,7 @@ use App\Models\PreCertificate;
 use App\Models\Customer;
 use App\Models\Appraise;
 use App\Models\PreCertificateOtherDocuments;
+use App\Models\PreCertificatePayments;
 use App\Notifications\BroadcastNotification;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -821,7 +822,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'deleted_at',
             'status_expired_at',
             'commission_fee',
-            'pre_time',
+            'pre_date',
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
@@ -834,7 +835,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'customer:id,name,phone,address',
             'otherDocuments',
             'createdBy:id,name',
-            'payments',
+            'payments'
         ];
         $result = $this->model->query()
             ->with($with)
@@ -1094,9 +1095,56 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         });
     }
     
+     public function updatePayments($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $preCertificate = $this->model->query()->where('id', $id)->first();
+                
+                if ($preCertificate) {
+                    return [
+                        'error' => true,
+                        'message' => 'Không có YCSB này, vui lòng kiểm tra lại'
+                    ];
+                }
+                $user = CommonService::getUser();
+                foreach ($request as $item) {
+                    try {
+                        $item['created_by'] = $user->id;
+                        $item['pre_certificate_id'] = $id;
+                        if (isset($item['id'])) {
+                            PreCertificatePayments::create($item);
+                        } else if(isset($item['id']) && isset($item['is_deleted'])) {
+                            $payment = PreCertificatePayments::find($id);
+                            if ($payment) {
+                                $payment->delete();
+                            } else {
+                                return [
+                                    'error' => true,
+                                    'message' => "Không thể xóa được, vui lòng kiểm tra lại"
+                                ];
+                            }
+                        } else {
+                            PreCertificatePayments::where('id', $item['id'])->update($item);
+                        }
+                    } catch (\Exception $e) {
+                        $message = 'Thêm mới thất bại';
+                        if(isset($item['id'])){
+                            $message = 'Cập nhật thất bại';
+                        }
+                        return [
+                            'error' => true,
+                            'message' => $message . $e->getMessage()
+                        ];
+                    }
+                }
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
 
-  
-   
+            }
+        });
+    }
     
     private function beforeSave(int $id)
     {

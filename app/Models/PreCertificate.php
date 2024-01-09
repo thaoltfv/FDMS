@@ -74,7 +74,7 @@ class PreCertificate extends Model
         'pre_type',
 
         'commission_fee',
-        'pre_time',
+        'pre_date',
         'pre_asset_name',
         'pre_type_id',
         'total_service_fee'
