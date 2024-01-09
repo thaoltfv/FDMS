@@ -79,17 +79,19 @@
 					style="width:100%;margin-top:10px; display: flex; justify-content: space-between;"
 				>
 					<b-button
-						style=" margin-left:35px;width:50px"
+							variant="outline-danger"
+							style=" margin-left:35px;width:50px"
+							
+							@click="closeMe"
+							>Thoát</b-button
+						>
+					<b-button
+						style=" width:50px"
 						variant="outline-primary"
 						@click="searchFunction"
 						>Tìm</b-button
 					>
-					<b-button
-						variant="outline-danger"
-						style=" width:50px"
-						@click="closeMe"
-						>Thoát</b-button
-					>
+
 				</div>
 			</template>
 		</b-dropdown>

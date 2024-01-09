@@ -13,7 +13,7 @@ navigations = [
 		id: "pre_certification",
 		type: "item",
 		icon: "nav_hstd",
-		title: "Hồ sơ thẩm định sơ bộ",
+		title: "Yêu cầu sơ bộ",
 		routeName: "pre_certification.index",
 		customImage: true
 	},
