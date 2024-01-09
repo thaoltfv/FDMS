@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePreCertificateOtherDocumentsTable extends Migration
+class CreatePreCertificatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreatePreCertificateOtherDocumentsTable extends Migration
      */
     public function up()
     {
-		Schema::create('pre_certificate_other_documents', function (Blueprint $table) {
+		Schema::create('pre_certificate_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('pre_certificate_id');
             $table->foreign('pre_certificate_id')
                 ->references('id')
                 ->on('pre_certificates')
                 ->onDelete('cascade');
-            $table->string('name')->nullable();
-            $table->string('link')->nullable();
-            $table->string('type')->nullable();
-            $table->string('size')->nullable();
-            $table->string('description')->nullable();
+			$table->date('pre_date')->nullable();
+		    $table->integer('amount')->unsigned()->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->string('type_document')->nullable();
             $table->softDeletes();
         });
     }
@@ -39,6 +35,6 @@ class CreatePreCertificateOtherDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pre_certificate_other_documents');
+        Schema::dropIfExists('pre_certificate_payments');
     }
 }

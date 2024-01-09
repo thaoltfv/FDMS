@@ -2,21 +2,11 @@
 
 namespace App\Http\Controllers\AppraiseDictionary;
 
-use App\Contracts\AppraiseAssetRepository;
-use App\Contracts\AppraiserCompanyRepository;
-use App\Contracts\AppraiseRepository;
-use App\Contracts\BuildingPriceRepository;
 use App\Contracts\PreCertificateRepository;
-use App\Contracts\CompareAssetGeneralRepository;
 use App\Contracts\DictionaryRepository;
 use App\Contracts\UserRepository;
 use App\Enum\ErrorMessage;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Appraise\CreateAppraiseRequest;
-use App\Http\Requests\Appraise\UpdateAppraiseRequest;
-use App\Services\AppraiseAsset\AppraiseAsset;
-use App\Services\Document\PhuLuc1;
-use App\Services\Document\AssetReport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,47 +19,21 @@ class PreCertificateController extends Controller
 {
 
     private PreCertificateRepository $preCertificateRepository;
-    public CompareAssetGeneralRepository $compareAssetGeneralRepository;
     public UserRepository $userRepository;
     public DictionaryRepository $dictionaryRepository;
-    public BuildingPriceRepository $buildingPriceRepository;
-    private AppraiseAssetRepository $appraiseAssetRepository;
-    private AppraiserCompanyRepository $appraiserCompanyRepository;
 
     /**
      * ProvinceController constructor.
      */
     public function __construct(PreCertificateRepository         $preCertificateRepository,
-                                CompareAssetGeneralRepository $compareAssetGeneralRepository,
                                 UserRepository                $userRepository,
-                                DictionaryRepository          $dictionaryRepository,
-                                BuildingPriceRepository       $buildingPriceRepository,
-                                AppraiseAssetRepository       $appraiseAssetRepository,
-                                AppraiserCompanyRepository    $appraiserCompanyRepository)
+                                DictionaryRepository          $dictionaryRepository,)
     {
         $this->preCertificateRepository = $preCertificateRepository;
-        $this->compareAssetGeneralRepository = $compareAssetGeneralRepository;
         $this->userRepository = $userRepository;
-        $this->dictionaryRepository = $dictionaryRepository;
-        $this->buildingPriceRepository = $buildingPriceRepository;
-        $this->appraiseAssetRepository = $appraiseAssetRepository;
-        $this->appraiserCompanyRepository = $appraiserCompanyRepository;
+        $this->dictionaryRepository = $dictionaryRepository;;
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function index(): JsonResponse
-    {
-        try {
-            return $this->respondWithCustomData($this->preCertificateRepository->findPaging());
-        } catch (\Exception $exception) {
-            dd($exception);
-            Log::error($exception);
-            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-            return $this->respondWithErrorData($data);
-        }
-    }
 
     /**
      * @return JsonResponse
@@ -221,87 +185,7 @@ class PreCertificateController extends Controller
         }
     }
 
-    public function updateTangibleComparisonFactor($id, Request $request): JsonResponse
-    {
-        try {
-            return $this->respondWithCustomData($this->preCertificateRepository->updateTangibleComparisonFactor($id, $request->toArray()));
-        } catch (\Exception $exception) {
-            Log::error($exception);
-            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-            return $this->respondWithErrorData($data);
-        }
-    }
 
-    // /**
-    //  * @param $id
-    //  * @return JsonResponse
-    //  */
-    // public function destroy($id): JsonResponse
-    // {
-    //     try {
-    //         return $this->respondWithCustomData($this->preCertificateRepository->deletePreCertificate($id));
-    //     } catch (\Exception $exception) {
-    //         Log::error($exception);
-    //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-    //         return $this->respondWithErrorData($data);
-    //     }
-    // }
-
-    public function appraiseAsset(Request $request): JsonResponse
-    {
-        try {
-            return $this->respondWithCustomData((new AppraiseAsset(
-                $this->appraiseAssetRepository,
-                $this->dictionaryRepository
-            ))
-                ->AppraiseAsset($request->toArray()));
-
-        } catch (\Exception $exception) {
-            Log::error($exception);
-            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-            return $this->respondWithErrorData($data);
-        }
-    }
-
-    // public function print($id): JsonResponse
-    // {
-    //     try {
-    //         $format = 'docx';
-    //         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-    //         $appraise = $this->preCertificateRepository->findById($id);
-    //         $assets = [];
-    //         if ($appraise->assetGeneral) {
-    //             $ids = [];
-    //             foreach ($appraise->assetGeneral as $assetGeneral) {
-    //                 $ids[] = $assetGeneral->id;
-    //             }
-    //             $assets = $this->compareAssetGeneralRepository->findByIds(json_encode($ids));
-    //         }
-    //         return $this->respondWithCustomData((new PhuLuc1())->generateDocx($appraise, $company, $assets, $format));
-    //     } catch (\Exception $exception) {
-    //         Log::error($exception);
-    //         $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-    //         return $this->respondWithErrorData($data);
-    //     }
-    // }
-
-    // /**
-    //  * @param $id
-    //  * @return JsonResponse
-    //  */
-    public function saleDocumentUpload($id, Request $request): JsonResponse
-    {
-        try {
-            return $this->respondWithCustomData($this->preCertificateRepository->saleDocumentUpload($id, $request));
-        } catch (\Exception $exception) {
-            dd($exception);
-            Log::error($exception);
-            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-            return $this->respondWithErrorData($data);
-        }
-    }
-
-    
     private array $permissionView =['VIEW_CERTIFICATE_BRIEF'];
     private array $permissionAdd =['ADD_CERTIFICATE_BRIEF'];
     private array $permissionEdit =['EDIT_CERTIFICATE_BRIEF'];
@@ -341,18 +225,22 @@ class PreCertificateController extends Controller
             'petitioner_phone' => 'nullable|numeric',
             'petitioner_address' => 'nullable|string',
             'petitioner_identity_card' => 'nullable|string',
-            'appraise_purpose_id' => 'nullable',
-            'appraiser_sale_id' => 'nullable',
+            'appraise_purpose_id' => 'required',
+            'appraiser_sale_id' => 'required',
             'business_manager_id' => 'nullable',
             'appraiser_perform_id' => 'nullable',
             'customer'=>'array|sometimes',
             'customer.name' => 'nullable|string|max:255',
             'customer.address' => 'required_with:customer.name|nullable|string|max:255',
             'customer.phone' => 'required_with:customer.name|nullable|numeric',
-            'total_preliminary_value' => 'nullable|integer|max:2000000000|min:0',
+            'total_preliminary_value' => 'nullable|integer|min:0',
             'note' => 'nullable|string',
             'cancel_reason' => 'nullable|string',
-            'pre_type' => 'nullable|string',
+            'commission_fee' => 'numeric',
+            'pre_date' => 'required|string|max:255',
+            'pre_asset_name' => 'string|max:255',
+            'total_service_fee' => 'nullable|integer|min:0',
+            'pre_type_id' => 'required',
         ];
 
         $customAttributes = [
@@ -370,7 +258,11 @@ class PreCertificateController extends Controller
             'total_preliminary_value' => 'Tổng giá trị sơ bộ',
             'note' => 'Ghi chú',
             'cancel_reason' => 'Lý do hủy sơ bộ',
-            'pre_type' => 'Loại sơ bộ',
+            'pre_type_id' => 'Loại sơ bộ',
+            'commission_fee' => 'Chiết khấu',
+            'pre_date' => 'Ngày sơ bộ',
+            'total_service_fee' => 'Tổng phí dịch vụ',
+            'pre_asset_name' => 'Tên tài sản sơ bộ',
         ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
@@ -389,13 +281,7 @@ class PreCertificateController extends Controller
     }
     #endregion
 
-    public function getGeneralInfomation(int $id){
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_VIEW,'exception' =>''], 403);
-
-        $result =  $this->preCertificateRepository->getGeneralInfomation($id);
-        return $this->respondWithCustomData($result);
-    }
+    
 
     public function updateStatus(int $id, Request $request )
     {
@@ -423,6 +309,34 @@ class PreCertificateController extends Controller
         }
 
     }
+    public function updatePayments(int $id, Request $request )
+    {
+        if(! CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+
+        $rules = [
+            'pay_date' => 'required|string|max:255',
+            'amount' => 'integer|min:1',
+        ];
+        $customAttributes = [
+            'pay_date' => 'Ngày thanh toán',
+            'amount' => 'Giá trị thanh toán',
+        ];
+        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+        if ($validator->passes()) {
+            //TODO Handle your data
+            $result = $this->preCertificateRepository->updatePayments($id , $request->toArray());
+            if(isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData( $result);
+
+            return $this->respondWithCustomData($result);
+        } else {
+            //TODO Handle your error
+            $data = ['message' => $validator->errors()->all(), 'exception' => null];
+            return $this->respondWithErrorData( $data);
+        }
+
+    }
      public function updateToOffical(int $id, Request $request )
     {
         if(! CommonService::checkUserPermission($this->permissionAdd))
@@ -435,16 +349,6 @@ class PreCertificateController extends Controller
             return $this->respondWithCustomData($result);
     }
 
-    public function uploadDocument($id, $description, Request $request): JsonResponse
-    {
-        try {
-            return $this->respondWithCustomData($this->preCertificateRepository->uploadDocument($id, $description, $request));
-        } catch (\Exception $exception) {
-            Log::error($exception);
-            $data = ['message' => $exception->getMessage(), 'exception' => $exception->getMessage()];
-            return $this->respondWithErrorData($data);
-        }
-    }
 
     public function downloadDocument($id, Request $request)
     {
@@ -462,20 +366,7 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-    public function deleteDocument($id)
-    {
-        try {
-            $result = $this->preCertificateRepository->deleteDocument($id);
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
-            return $this->respondWithCustomData($result);
-        } catch (\Exception $exception) {
-            dd($exception);
-            Log::error($exception);
-            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
-            return $this->respondWithErrorData($data);
-        }
-    }
+   
     public function getPreCertificateWorkFlow(Request $request){
 
         $HSTD =$this->preCertificateRepository->getPreCertificateWorkFlow();
