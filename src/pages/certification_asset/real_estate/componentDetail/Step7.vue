@@ -5292,9 +5292,15 @@ export default {
 			this.tldc3 = this.pricePl3 + this.priceHdd3 + this.priceKcd3 + this.priceKd3 + this.priceDkht3 + this.pricePt3 + this.priceDktt3 + this.priceQm3 + this.priceCrmt3 + this.priceCskd3 + this.priceDrd3 + this.priceGt3 + this.priceAnmts3 + this.priceQh3 + mgcd_price_other[2] + this.priceVitri3
 
 			// tính mức giá chỉ dẫn của TSSS
-			this.mgcd1 = Math.round(this.dgd1 + this.tldc1)
-			this.mgcd2 = Math.round(this.dgd2 + this.tldc2)
-			this.mgcd3 = Math.round(this.dgd3 + this.tldc3)
+			// this.mgcd1 = Math.round(this.dgd1 + this.tldc1)
+			// this.mgcd2 = Math.round(this.dgd2 + this.tldc2)
+			// this.mgcd3 = Math.round(this.dgd3 + this.tldc3)
+			this.mgcd1 = this.roundPrice(this.dgd1) + this.roundPrice(this.tldc1)
+			this.mgcd2 = this.roundPrice(this.dgd2) + this.roundPrice(this.tldc2)
+			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3)
+			console.log('adjustpricedata',this.adjustPriceData)
+			console.log('price_other',this.price_other_comparison)
+			console.log('this.mgcd1',this.mgcd1,this.mgcd2,this.mgcd3)
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true

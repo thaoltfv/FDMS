@@ -2087,9 +2087,12 @@ export default {
 			this.tldc3 = this.pricePl3 + this.pricePn3 + this.priceLch3 + this.priceLcho3 + this.priceDt3 + this.priceSt3 + this.pricePWC3 + mgcd_price_other[2]
 
 			// tính mức giá chỉ dẫn của TSSS
-			this.mgcd1 = this.dgcc1 + this.tldc1
-			this.mgcd2 = this.dgcc2 + this.tldc2
-			this.mgcd3 = this.dgcc3 + this.tldc3
+			this.mgcd1 = this.roundPrice(this.dgcc1) + this.roundPrice(this.tldc1)
+			this.mgcd2 = this.roundPrice(this.dgcc2) + this.roundPrice(this.tldc2)
+			this.mgcd3 = this.roundPrice(this.dgcc3) + this.roundPrice(this.tldc3)
+			console.log('adjustpricedata',this.adjustPriceData)
+			console.log('price_other',this.price_other_comparison)
+			console.log('this.mgcd1',this.mgcd1,this.mgcd2,this.mgcd3)
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true
