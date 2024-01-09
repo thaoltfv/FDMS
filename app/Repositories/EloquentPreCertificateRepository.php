@@ -794,12 +794,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     public function getPreCertificate(int $id)
     {
-        dd('vô tới đây');
         $result = [];
         $check = $this->checkAuthorizationPreCertificate($id);
         if (!empty($check))
             return $check;
-        dd($check);
         $select = [
             'id',
             'certificate_id',
@@ -839,13 +837,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'createdBy:id,name',
             'payments'
         ];
-        dd($this->model->query()->with($with)->where('id', $id)->select($select)->first());
         $result = $this->model->query()
             ->with($with)
             ->where('id', $id)
             ->select($select)
             ->first();
-        dd($result);
         if ($result['status'] == 1) {
             $appraiser = Appraiser::query()
             ->where('id', '=', $result['appraiser_sale_id'])
@@ -1448,10 +1444,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     private function checkAuthorizationPreCertificate ($id)
     {
         $check = null;
-        dd('vô checkAuthorizationPreCertificate');
-        dd($this->model->query());
-        dd($this->model->query()->where('id', $id));
-        dd($this->model->query()->where('id', $id)->exists());
         if ($this->model->query()->where('id', $id)->exists()) {
             $user = CommonService::getUser();
             $role = $user->roles->last();
