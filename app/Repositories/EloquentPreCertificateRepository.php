@@ -1448,6 +1448,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     private function checkAuthorizationPreCertificate ($id)
     {
         $check = null;
+        dd('vô checkAuthorizationPreCertificate');
         dd($this->model->query());
         dd($this->model->query()->where('id', $id));
         dd($this->model->query()->where('id', $id)->exists());
@@ -1476,7 +1477,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (empty($result))
                 $check = ['message' => 'Bạn không có quyền ở YCSB '. $id , 'exception' => '', 'statusCode' => 403];
         } else {
-            $check = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
+            $check = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
         return $check;
     }
