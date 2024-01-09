@@ -1111,7 +1111,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 foreach ($request as $item) {
                     try {
                         $item['created_by'] = $user->id;
-                        $item['pre_certificate_id'] = $id;
+                        $item['pre_certificate_id'] = $item['pre_certificate_id'] ?? $id;
                         if (isset($item['id'])) {
                             PreCertificatePayments::create($item);
                         } else if(isset($item['id']) && isset($item['is_deleted'])) {
@@ -1125,6 +1125,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 ];
                             }
                         } else {
+                            $item['updated_by'] = $user->id;
                             PreCertificatePayments::where('id', $item['id'])->update($item);
                         }
                     } catch (\Exception $e) {
