@@ -27,7 +27,7 @@ class PreCertificateController extends Controller
      */
     public function __construct(PreCertificateRepository         $preCertificateRepository,
                                 UserRepository                $userRepository,
-                                DictionaryRepository          $dictionaryRepository,)
+                                DictionaryRepository          $dictionaryRepository)
     {
         $this->preCertificateRepository = $preCertificateRepository;
         $this->userRepository = $userRepository;
