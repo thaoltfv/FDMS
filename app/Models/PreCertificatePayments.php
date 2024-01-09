@@ -22,6 +22,7 @@ class PreCertificatePayments extends Model
     protected $fillable = [
         'pre_certificate_id',
         'pay_date',
+        'created_by',
         'amount',
     ];
 	
