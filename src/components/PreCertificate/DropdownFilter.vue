@@ -37,7 +37,7 @@
 					<a-sub-menu key="status">
 						<span slot="title">
 							<!-- <a-icon type="appstore" /> -->
-							<span>Trạng thái HSTĐSB</span></span
+							<span>Trạng thái YCSB</span></span
 						>
 						<a-menu-item
 							v-if="jsonConfig.filterStatus"

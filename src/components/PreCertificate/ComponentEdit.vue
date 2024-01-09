@@ -203,18 +203,18 @@
 						<div class="row">
 							<div class="col-lg-6">
 								<InputTextPrefixCustom
-								id="customer_name"
-								placeholder="Ông / Bà"
-								v-model="dataPC.customer.name"
-								vid="customer_name"
-								:iconUser="true"
-								:showIcon="true"
-								label="Họ tên đối tác"
-								class="form-group-container input_certification_brief"
-							/>
+									id="customer_name"
+									placeholder="Ông / Bà"
+									v-model="dataPC.customer.name"
+									vid="customer_name"
+									:iconUser="true"
+									:showIcon="true"
+									label="Họ tên đối tác"
+									class="form-group-container input_certification_brief"
+								/>
 							</div>
 							<div class="col-lg-6">
-									<InputTextPrefixCustom
+								<InputTextPrefixCustom
 									id="customer_phone"
 									placeholder="Nhập số điện thoại"
 									v-model="dataPC.customer.phone"

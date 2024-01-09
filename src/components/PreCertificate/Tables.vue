@@ -639,7 +639,7 @@ export default {
 		columns() {
 			let dataColumn = [
 				{
-					title: "Mã HSTĐSB",
+					title: "Mã YCSB",
 					align: "left",
 
 					dataIndex: "id",
