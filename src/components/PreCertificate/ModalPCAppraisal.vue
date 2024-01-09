@@ -21,14 +21,14 @@
 					ref="appraisal"
 					@submit.prevent="validateAppraisal"
 				>
-					<div class="row">
+					<div class="row" style="margin-left: 10px;margin-right: 10px;">
 						<div class="col-12">
 							<InputCategory
 								v-model="appraiser_sale_compute"
 								vid="appraiser_sale_id"
 								label="Nhân viên kinh doanh"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-12"
 								:options="optionsAppraiserSales"
 							/>
 						</div>
@@ -38,7 +38,7 @@
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-12"
 								:options="optionsAppraiserPerformance"
 							/>
 						</div>
@@ -48,7 +48,7 @@
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-12"
 								:options="optionsBusinessManager"
 							/>
 						</div>
@@ -273,6 +273,7 @@ export default {
 	padding-left: 1rem;
 
 	.title {
+		margin-left: 10px;
 		color: #007ec6;
 		font-weight: 600;
 		margin-top: 20px;
