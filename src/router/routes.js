@@ -1897,7 +1897,7 @@ export const routes = [
 							name: "pre_certification.create"
 						}
 					],
-					gtm: "Trang tạo mới HSTĐSB"
+					gtm: "Trang tạo mới YCSB"
 				}
 			},
 			{
@@ -1919,7 +1919,7 @@ export const routes = [
 							name: "pre_certification.create"
 						}
 					],
-					gtm: "Trang chỉnh sửa HSTĐSB"
+					gtm: "Trang chỉnh sửa YCSB"
 				}
 			},
 			{
@@ -1960,7 +1960,7 @@ export const routes = [
 							name: "pre_certification.detail"
 						}
 					],
-					gtm: "Trang chi tiết HSTĐSB"
+					gtm: "Trang chi tiết YCSB"
 				}
 			}
 		]
