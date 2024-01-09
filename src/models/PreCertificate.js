@@ -21,6 +21,14 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async updatePayments(data, id = "") {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificates/pre-certification-update-payments/${id}`,
+			data: data,
+			isStatic: true
+		});
+	}
 	static async getAppraiseLaws() {
 		let resp = localStorage.getItem("appraise-laws");
 		if (isEmpty(resp)) {

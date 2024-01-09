@@ -5,7 +5,7 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">
-							Tạo mới hồ sơ thẩm định sơ bộ
+							Tạo mới yêu cầu sơ bộ
 						</h3>
 						<div class="color_content card-status">
 							{{ dataPC && dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} | Mới
@@ -79,102 +79,62 @@
 								@change="changeAppraiseDate"
 							/> -->
 						</div>
-						<!-- <InputCategoryMulti
-              v-model="dataPC.document_type"
-              :maxTagCount="1"
-              class="form-group-container input_certification_brief"
-              vid="document_type"
-              label="Loại thẩm định"
-              rules="required"
-              :options="optionsTypeAppraiser"
-            /> -->
 					</div>
-					<div class="col-md-12 order-3 order-lg-2 col-lg-6">
-						<!-- <div class="row justify-content-between">
+					<div class="col-md-12 order-3 order-lg-2 col-lg-6 ">
+						<div class="row justify-content-between">
 							<InputCurrency
-								v-model="dataPC.total_preliminary_value"
-								vid="service_fee"
+								v-model="dataPC.total_service_fee"
+								vid="total_service_fee"
 								:max="99999999999999"
-								label="Tổng giá trị sơ bộ"
-								class="form-group-container col-sm-12 col-md-12"
+								label="Tổng phí dịch vụ"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="dataPC.total_service_fee = $event"
 							/>
-						</div> -->
-						<InputCategoryPreTypes
-							v-model="dataPC.pre_type"
-							class="form-group-container "
-							vid="pre_type"
-							label="Loại sơ bộ"
-						/>
-
-						<InputTextarea
-							:autosize="true"
-							:disableInput="false"
-							v-model="dataPC.note"
-							label="Ghi chú"
-							class="form-group-container"
-						/>
+							<InputPercent
+								v-model="dataPC.commission_fee"
+								label="Chiết khấu"
+								vid="test"
+								:max="100"
+								:decimal="0"
+								rules="required"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="dataPC.commission_fee = $event"
+							/>
+						</div>
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="dataPC.pre_type_id"
+								vid="pre_type_id"
+								label="Loại sơ bộ"
+								class="form-group-container col-sm-12 col-md-6"
+								:options="optionsPreTypes"
+							/>
+							<InputDatePicker
+								v-model="dataPC.pre_date"
+								vid="ộ"
+								label="Thời điểm sơ bộ"
+								placeholder="Ngày / tháng / năm"
+								rules="required"
+								:formatDate="'DD/MM/YYYY'"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="dataPC.pre_date = $event"
+							/>
+						</div>
+						<div>
+							<InputTextarea
+								:rows="4"
+								:disableInput="false"
+								v-model="dataPC.pre_asset_name"
+								label="Tên tài sản sơ bộ"
+								class="form-group-container"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-6" :style="isMobile ? { padding: '0' } : {}">
-			<OtherFile type="Appendix" />
 		</div>
 		<div class="col-6">
 			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
-				<div class="card-title">
-					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">Tổ thẩm định</h3>
-						<img
-							class="img-dropdown"
-							:class="
-								!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''
-							"
-							src="@/assets/images/icon-btn-down.svg"
-							alt="dropdown"
-							@click="
-								showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial
-							"
-						/>
-					</div>
-				</div>
-				<div
-					class="card-body card-info"
-					v-show="showCardDetailEconomicAndSocial"
-				>
-					<div class="d-flex-column">
-						<div class="row justify-content-between">
-							<InputCategory
-								v-model="appraiser_sale_compute"
-								vid="appraiser_sale_id"
-								label="Nhân viên kinh doanh"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsAppraiserSales"
-							/>
-							<InputCategory
-								v-model="appraiser_perform_compute"
-								vid="appraiser_perform_id"
-								label="Chuyên viên thực hiện"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsAppraiserPerformance"
-							/>
-						</div>
-						<div class="row justify-content-between">
-							<InputCategory
-								v-model="business_manager_compute"
-								vid="business_manager_id"
-								label="Quản lý nghiệp vụ"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsBusinessManager"
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Đối tác</h3>
@@ -237,12 +197,64 @@
 				</div>
 			</div>
 		</div>
-		<div
-			v-if="dataPC.status >= 2"
-			class="col-6"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<OtherFile type="Result" />
+		<div class="col-6">
+			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<h3 class="title">Tổ thẩm định</h3>
+						<img
+							class="img-dropdown"
+							:class="
+								!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''
+							"
+							src="@/assets/images/icon-btn-down.svg"
+							alt="dropdown"
+							@click="
+								showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial
+							"
+						/>
+					</div>
+				</div>
+				<div
+					class="card-body card-info"
+					v-show="showCardDetailEconomicAndSocial"
+				>
+					<div class="d-flex-column">
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="appraiser_sale_compute"
+								vid="appraiser_sale_id"
+								label="Nhân viên kinh doanh"
+								rules="required"
+								class="form-group-container col-12"
+								:options="optionsAppraiserSales"
+							/>
+							<InputCategory
+								v-model="appraiser_perform_compute"
+								vid="appraiser_perform_id"
+								label="Chuyên viên thực hiện"
+								rules="required"
+								class="form-group-container col-12"
+								:options="optionsAppraiserPerformance"
+							/>
+						</div>
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="business_manager_compute"
+								vid="business_manager_id"
+								label="Quản lý nghiệp vụ"
+								rules="required"
+								class="form-group-container col-12"
+								:options="optionsBusinessManager"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12" :style="isMobile ? { padding: '0' } : {}">
+			<OtherFile type="Appendix" />
 		</div>
 	</div>
 </template>
@@ -415,14 +427,6 @@ export default {
 				this.dataPC.business_manager_id = newValue;
 			}
 		},
-		pre_type_compute: {
-			get: function() {
-				return this.dataPC.pre_type;
-			},
-			set: function(newValue) {
-				this.dataPC.pre_type = newValue.name;
-			}
-		},
 		appraiser_sale_compute: {
 			// getter
 			get: function() {
@@ -445,6 +449,13 @@ export default {
 				key: "name"
 			};
 		},
+		optionsPreTypes() {
+			return {
+				data: this.lstDataConfig.preTypes,
+				id: "id",
+				key: "description"
+			};
+		},
 		optionsBusinessManager() {
 			return {
 				data: this.lstDataConfig.appraiser_business_managers,
@@ -463,13 +474,6 @@ export default {
 			return {
 				data: this.lstDataConfig.appraiser_sales,
 				id: "id",
-				key: "name"
-			};
-		},
-		optionsPreTypes() {
-			return {
-				data: this.lstDataConfig.preTypes,
-				id: "code",
 				key: "name"
 			};
 		},
