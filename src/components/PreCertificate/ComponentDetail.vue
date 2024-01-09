@@ -76,7 +76,7 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Loại sơ bộ:</strong>
 									<p>
-										{{ dataPC.pre_type ? dataPC.pre_type : "" }}
+										{{ dataPC.pre_type_string ? dataPC.pre_type_string : "" }}
 									</p>
 								</div>
 

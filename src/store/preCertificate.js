@@ -44,8 +44,21 @@ export const usePreCertificateStore = defineStore(
 				name: null,
 				id: null
 			},
-			pre_type: "coban",
-			uploadFile: null
+			pre_type_id: null,
+			commission_fee: 0,
+			pre_date: null,
+			pre_asset_name: null,
+			total_service_fee: 0,
+
+			uploadFile: null,
+
+			payments: [
+				{
+					id: null,
+					amount: 0,
+					pay_date: null
+				}
+			]
 		});
 
 		const permission = ref({
@@ -95,8 +108,8 @@ export const usePreCertificateStore = defineStore(
 			for (let index = 0; index < respconfig.data.length; index++) {
 				const element = respconfig.data[index];
 				element.config = JSON.parse(element.config);
-				if (element.name === "pre_types")
-					lstDataConfig.value.preTypes = element.config;
+				// if (element.name === "pre_types")
+				// 	lstDataConfig.value.preTypes = element.config;
 
 				if (element.name === "workflow") {
 					lstDataConfig.value.workflow = element.config;
@@ -117,6 +130,7 @@ export const usePreCertificateStore = defineStore(
 			const resp = await WareHouse.getDictionaries();
 			if (resp.data) {
 				lstDataConfig.value.cancelPCReasons = resp.data.li_do_huy_so_bo;
+				lstDataConfig.value.preTypes = resp.data.loai_so_bo;
 			}
 			return;
 		}
@@ -125,7 +139,7 @@ export const usePreCertificateStore = defineStore(
 			isGetAppraiseOthers = true,
 			isGetConfig = true,
 			isGetCustomer = true,
-			isGetDistionaries = false
+			isGetDistionaries = true
 		) {
 			if (isGetLstAppraisers) await getLstAppraisers();
 			if (isGetAppraiseOthers) {
@@ -136,7 +150,7 @@ export const usePreCertificateStore = defineStore(
 			}
 			if (isGetConfig) await getConfig();
 			if (isGetCustomer) await getCustomer();
-			if (isGetCustomer) await getLstDictionaries();
+			if (isGetDistionaries) await getLstDictionaries();
 		}
 
 		getStartData();
@@ -204,6 +218,19 @@ export const usePreCertificateStore = defineStore(
 			assignObject = null
 		) {
 			other.value.isSubmit = true;
+			console.log(
+				"dataPC.pre_date",
+				dataPC.value.pre_date,
+				moment(dataPC.value.pre_date).format("YYYY-MM-DD"),
+				moment(dataPC.value.pre_date, "DD/MM/YYYY", true).isValid()
+			);
+
+			if (moment(dataPC.value.pre_date, "DD/MM/YYYY", true).isValid()) {
+				dataPC.value.pre_date = moment(
+					dataPC.value.pre_date,
+					"DD-MM-YYYY"
+				).format("YYYY-MM-DD");
+			}
 			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
 			if (!dataPC.value.id) dataPC.value.status = 1;
 			const res = await PreCertificate.createUpdatePreCertification(
@@ -405,6 +432,39 @@ export const usePreCertificateStore = defineStore(
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		}
+
+		async function updatePaymentFunction(isReturn = false) {
+			other.value.isSubmit = true;
+
+			const res = await PreCertificate.updatePayments(
+				dataPC.value.payments,
+				dataPC.value.id
+			);
+			if (isReturn) {
+				return res;
+			}
+			if (res.data && res.data.error === false) {
+				other.value.toast.open({
+					message: "Lưu thông tin thanh toán thành công",
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+			} else if (res.error) {
+				other.value.toast.open({
+					message: `${res.error.message}`,
+					type: "error",
+					position: "top-right"
+				});
+			} else {
+				other.value.toast.open({
+					message: "Lưu thất bại",
+					type: "error",
+					position: "top-right"
+				});
+			}
+			other.value.isSubmit = false;
+		}
 		function resetData() {
 			lstPreCertificateTable.value = [];
 			lstPreCertificateKanban.value = [];
@@ -458,7 +518,12 @@ export const usePreCertificateStore = defineStore(
 					name: null,
 					id: null
 				},
-				pre_type: "Cơ bản",
+
+				pre_type_id: null,
+				commission_fee: 0,
+				pre_date: null,
+				pre_asset_name: null,
+				total_service_fee: 0,
 				uploadFile: null
 			};
 			other.value.isSubmit = false;
