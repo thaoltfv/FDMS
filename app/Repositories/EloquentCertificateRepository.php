@@ -162,6 +162,9 @@ use App\Services\AppraiseVersionService;
 use App\Services\CommonService;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -174,6 +177,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     private string $defaultSort = 'id';
 
     private string $allowedSorts = 'id';
+    
 
     /**
      * @return bool
@@ -266,6 +270,57 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->with('createdBy')
                     ->get();
                 return $result;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function testDocumentUpload($request)
+    {
+        return DB::transaction(function () use ($request) {
+            try {
+                $result = [];
+                $file = $request->file('files');
+                // dd($files);
+                $user = CommonService::getUser();
+
+                // Lưu dữ liệu binary vào một tệp tạm thời
+                $tempFilePath = storage_path('app/public');
+                // Lưu file tạm thời
+                $file->move($tempFilePath, '/temp.docx');
+                // Đường dẫn đến mẫu DOCX
+                $templatePath = $tempFilePath.'/temp.docx';
+
+                // Khởi tạo TemplateProcessor với mẫu DOCX
+                $templateProcessor = new TemplateProcessor($templatePath);
+
+                // Dữ liệu thực tế để thay thế placeholder
+                $data = [
+                    'name' => 'John Doe',
+                    'address' => '123 Main Street',
+                ];
+
+                // Thay thế giá trị placeholder trong mẫu bằng dữ liệu thực tế
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                }
+
+                // Lưu tệp DOCX sau khi thực hiện thay thế
+                $outputPath = $tempFilePath.'/output.docx';
+                $templateProcessor->saveAs($outputPath);
+
+                echo 'File DOCX created successfully!';
+
+                // Xóa tệp tạm thời
+                unlink($tempFilePath.'/temp.docx');
+
+                return ;
+
             } catch (Exception $exception) {
                 Log::error($exception);
                 throw $exception;

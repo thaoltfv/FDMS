@@ -120,6 +120,22 @@ class CertificateController extends Controller
      * @param $id
      * @return JsonResponse
      */
+    public function testDocumentUpload(Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->certificateRepository->testDocumentUpload($request));
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
     public function otherDocumentRemove($id, Request $request): JsonResponse
     {
         try {

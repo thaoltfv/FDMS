@@ -10,6 +10,7 @@ use App\Models\CertificateApartment;
 use App\Models\CertificateApartmentAppraisalBase;
 use App\Models\Appraise;
 use App\Models\Street;
+use PhpOffice\PhpWord\PhpWord;
 
 class ReportAppraisalNova extends ReportAppraisal
 {
@@ -1129,6 +1130,28 @@ class ReportAppraisalNova extends ReportAppraisal
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($realEstate->real_estate_id)), null, ['align' => 'left']);
+        }
+    }
+    protected function nationalName(PhpWord $phpWord, $data)
+    {
+        if ($this->isPrintNational) {
+            $section = $phpWord->addSection($this->styleNationalSection);
+            $table1 = $section->addTable($this->tableBasicStyle);
+            $table1->addRow(1000);
+            // $cell11 = $table1->addCell(Converter::cmToTwip(1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $imgName = env('STORAGE_IMAGES','images').'/'.'company_logo.png';
+            // $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
+            $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
+            $cell12->addImage(storage_path('app/public/'.$imgName), $this->styleImageHeader1);
+            // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $cell13 = $table1->addCell(Converter::inchToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
+            $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
+            $cell13->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], $this->styleAlignCenter);
+            $cell13->addText("-----o0o-----", ['bold' => true], $this->styleAlignCenter);
+            $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
+            $indentRight = $this->marginRightContent - $this->marginRightNational;
+            $this->printFooter($section, $data, $indentLeft, $indentRight);
         }
     }
 }

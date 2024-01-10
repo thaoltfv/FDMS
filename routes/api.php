@@ -306,6 +306,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('certificate/other-document/upload/{id}', [CertificateController::class, 'otherDocumentUpload']);
 
+    //test
+
+    Route::post('certificate/test-document/upload', [CertificateController::class, 'testDocumentUpload']);
+
+    //test
+
     Route::post('certificate/other-document/remove/{id}', [CertificateController::class, 'otherDocumentRemove']);
 
     Route::get('certificate/other-document/download/{id}', [CertificateController::class, 'otherDocumentDownload']);
@@ -322,8 +328,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pre-certificates/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
     Route::post('pre-certificates/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
     Route::get('pre-certificates/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
-
+    Route::get('activity/get-pre-certificate/{id}', [ActivityController::class, 'getPreCertificateWithId']);
     Route::post('pre-certificates/pre-certificate-update-status/{id}', [PreCertificateController::class, 'updateStatus']);
+    Route::post('pre-certificates/pre-certificate-update-offical/{id}', [PreCertificateController::class, 'updateToOffical']);
+    Route::post('pre-certificates/pre-certificate-update-payment/{id}', [PreCertificateController::class, 'updatePayments']);
     Route::post('pre-certificates/other-document/upload/{id}/{typeDocument}', [PreCertificateController::class, 'otherDocumentUpload']);
 
     Route::post('pre-certificates/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
