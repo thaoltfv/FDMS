@@ -66,6 +66,13 @@ class Report implements ReportInterface
             'rule' => 'single',
         ],
     ];
+    protected $styleImageHeader1 = [
+        'align' => 'center',
+        'height' => 33,
+        'space' => [
+            'line' => 1000,
+        ],
+    ];
 
     protected $styleImageFooter = [
         'width' => 488,

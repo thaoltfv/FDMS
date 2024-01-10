@@ -1143,7 +1143,7 @@ class ReportAppraisalNova extends ReportAppraisal
             // $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
             $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
-            $cell12->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
+            $cell12->addImage(storage_path('app/public/'.$imgName), $this->styleImageHeader1);
             // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell13 = $table1->addCell(Converter::inchToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
