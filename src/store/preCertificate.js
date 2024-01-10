@@ -93,7 +93,7 @@ export const usePreCertificateStore = defineStore(
 			appraiser_performances: [],
 			appraiser_purposes: [],
 			customers: [],
-			preTypes: null,
+			preTypes: [],
 			workflow: null,
 			cancelPCReasons: []
 		});
@@ -200,14 +200,42 @@ export const usePreCertificateStore = defineStore(
 					id: null
 				};
 			}
+			if (lstDataConfig.value.preTypes.length == 0) await getLstDictionaries();
+			const pre_type = lstDataConfig.value.preTypes.find(
+				pre_type => pre_type.id === temp.pre_type_id
+			);
+			temp.pre_type = pre_type ? pre_type : { id: null, description: null };
 			if (temp.status == 6 && temp.cancel_reason) {
-				if (lstDataConfig.value.cancelPCReasons.length == 0)
-					await getLstDictionaries();
-
 				const reason = lstDataConfig.value.cancelPCReasons.find(
 					reason => `${reason.id}` === temp.cancel_reason
 				);
 				temp.cancel_reason_string = reason ? reason.description : "";
+			}
+			if (temp.payments.length === 0) {
+				temp.payments = [
+					{
+						id: null,
+						amount: 0,
+						pay_date: null
+					}
+				];
+				temp.paymentsOriginal = [
+					{
+						id: null,
+						amount: 0,
+						pay_date: null
+					}
+				];
+			} else {
+				temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
+			}
+
+			temp.debtRemain = temp.total_service_fee;
+			temp.amountPaid = 0;
+			for (let index = 0; index < temp.payments.length; index++) {
+				const element = temp.payments[index];
+				temp.amountPaid += element.amount;
+				temp.debtRemain -= element.amount;
 			}
 			dataPC.value = temp;
 			return dataPC.value;
@@ -218,13 +246,6 @@ export const usePreCertificateStore = defineStore(
 			assignObject = null
 		) {
 			other.value.isSubmit = true;
-			console.log(
-				"dataPC.pre_date",
-				dataPC.value.pre_date,
-				moment(dataPC.value.pre_date).format("YYYY-MM-DD"),
-				moment(dataPC.value.pre_date, "DD/MM/YYYY", true).isValid()
-			);
-
 			if (moment(dataPC.value.pre_date, "DD/MM/YYYY", true).isValid()) {
 				dataPC.value.pre_date = moment(
 					dataPC.value.pre_date,
@@ -243,6 +264,22 @@ export const usePreCertificateStore = defineStore(
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
+				if (dataPC.value.payments.length > 0) {
+					for (let index = 0; index < dataPC.value.payments.length; index++) {
+						const element = dataPC.value.payments[index];
+						if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
+							element.pay_date = moment(element.pay_date, "DD-MM-YYYY").format(
+								"YYYY-MM-DD"
+							);
+						}
+					}
+					console.log("dataPC.value.payments", dataPC.value.payments);
+					let difference = dataPC.value.payments.filter(
+						payment => !dataPC.value.paymentsOriginal.includes(payment)
+					);
+					const res = await updatePaymentFunction(difference, true);
+					console.log("resupdatePaymentFunction", res);
+				}
 				await uploadFilePreCertificateFunction("Appendix");
 				other.value.toast.open({
 					message: "Lưu hồ sơ thẩm định thành công",
@@ -433,13 +470,10 @@ export const usePreCertificateStore = defineStore(
 			return status_expired_at;
 		}
 
-		async function updatePaymentFunction(isReturn = false) {
+		async function updatePaymentFunction(data, isReturn = false) {
 			other.value.isSubmit = true;
 
-			const res = await PreCertificate.updatePayments(
-				dataPC.value.payments,
-				dataPC.value.id
-			);
+			const res = await PreCertificate.updatePayments(data, dataPC.value.id);
 			if (isReturn) {
 				return res;
 			}
@@ -599,7 +633,8 @@ export const usePreCertificateStore = defineStore(
 			rejectFromStage2ToStage1,
 			updateStatus,
 			getLstAppraisers,
-			getStartData
+			getStartData,
+			updatePaymentFunction
 		};
 	},
 	{

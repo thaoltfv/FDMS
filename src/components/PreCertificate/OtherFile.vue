@@ -19,7 +19,7 @@
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="row d-flex justify-content-between align-items-center">
-						<h3 class="title">
+						<h3 class="title ml-1">
 							{{ title }}
 							<label
 								v-if="allowEdit"
@@ -63,63 +63,72 @@
 			</div>
 
 			<div class="card-body card-info" v-show="showCardDetailFile">
-				<div class="card-body card-info">
+				<div class="card-body card-info row">
 					<div
-						class="row input_download_certificate mb-2"
+						class="mb-4 col-3 "
 						v-for="(file, index) in lstFile"
+						:key="index"
 					>
 						<div
-							:key="index"
-							class="d-flex align-items-center col"
-							@click="downloadOtherFile(file)"
+							class="row input_download_certificate mx-1  d-flex justify-content-between"
 						>
-							<img
-								v-if="!file.isUpload"
-								class="mr-1"
-								style="width: 1rem;"
-								src="@/assets/icons/ic_taglink.svg"
-								alt="tag_2"
-							/>
 							<div
-								class="title_input_content title_input_download cursor_pointer"
+								class="d-flex align-items-center"
+								@click="downloadOtherFile(file)"
 							>
-								{{ file.name }}
-							</div>
-						</div>
-						<div
-							class="d-flex align-items-center justify-content-end col-1 pr-3"
-						>
-							<div>
 								<img
-									src="@/assets/icons/ic_search_3.svg"
-									alt="search"
-									class="img_document_action mr-3"
-									@click="getPreviewUrl(file)"
-								/>
-							</div>
-							<div>
-								<img
-									v-if="file.isUpload === false"
-									@click="deleteOtherFile(file, index)"
-									src="@/assets/icons/ic_delete_2.svg"
+									v-if="!file.isUpload"
+									class="mr-1"
+									style="width: 1rem;"
+									src="@/assets/icons/ic_taglink.svg"
 									alt="tag_2"
-									class="img_document_action"
 								/>
-								<img
-									v-else-if="permission.allowDelete && allowEdit"
-									@click="deleteOtherFile(file, index)"
-									src="@/assets/icons/ic_delete_2.svg"
-									alt="tag_2"
-									class="img_document_action"
-								/>
+								<div
+									class="title_input_content title_input_download cursor_pointer"
+								>
+									{{
+										file.name
+											? file.name.length > 25
+												? file.name.substring(25, 0) + "..."
+												: file.name
+											: ""
+									}}
+								</div>
+							</div>
+							<div
+								class="d-flex align-items-center justify-content-end col-1 pr-3"
+							>
+								<div>
+									<img
+										src="@/assets/icons/ic_search_3.svg"
+										alt="search"
+										class="img_document_action mr-3"
+										@click="getPreviewUrl(file)"
+									/>
+								</div>
+								<div>
+									<img
+										v-if="file.isUpload === false"
+										@click="deleteOtherFile(file, index)"
+										src="@/assets/icons/ic_delete_2.svg"
+										alt="tag_2"
+										class="img_document_action"
+									/>
+									<img
+										v-else-if="permission.allowDelete && allowEdit"
+										@click="deleteOtherFile(file, index)"
+										src="@/assets/icons/ic_delete_2.svg"
+										alt="tag_2"
+										class="img_document_action"
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="card-body card-info" v-if="type === 'Result'">
+		<div class="card-body card-info" v-if="type === 'Result' && !fromComponent">
 			<div class="row">
 				<InputCurrency
 					v-if="allowEdit"
@@ -127,14 +136,10 @@
 					vid="service_fee"
 					:max="99999999999999"
 					label="Tổng giá trị sơ bộ"
-					class="col-sm-6 col-md-6"
+					class="col-sm-12 col-md-12"
 					style="margin-left:-10px;"
 				/>
-				<div
-					v-else
-					class="d-flex container_content"
-					style="margin-left:-10px;margin-bottom: -25px;"
-				>
+				<div v-else class="d-flex container_content" style="margin-left:-10px;">
 					<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
 					<p>
 						{{
@@ -146,8 +151,12 @@
 				</div>
 			</div>
 			<div class="row ">
-				<div class="title" style="margin-left:-10px;">
-					File kèm kết quả sơ bộ
+				<div
+					class="title"
+					style="margin-left:-10px;"
+					:style="!allowEdit ? { 'margin-top': '-1px' } : {}"
+				>
+					<strong class="margin_content_inline">File kèm kết quả sơ bộ:</strong>
 					<label v-if="allowEdit" class="ml-2" for="image_property">
 						<font-awesome-icon
 							:style="{ color: 'orange', cursor: 'pointer' }"
@@ -175,6 +184,111 @@
 			</div>
 			<div
 				class="row input_download_certificate mb-2 mt-2"
+				v-for="(file, index) in lstFile"
+				:key="index"
+			>
+				<div
+					:key="index"
+					class="d-flex align-items-center col"
+					@click="downloadOtherFile(file)"
+				>
+					<img
+						v-if="!file.isUpload"
+						class="mr-1"
+						style="width: 1rem;"
+						src="@/assets/icons/ic_taglink.svg"
+						alt="tag_2"
+					/>
+					<div class="title_input_content title_input_download cursor_pointer">
+						{{ file.name }}
+					</div>
+				</div>
+				<div class="d-flex align-items-center justify-content-end col-1 pr-3">
+					<div>
+						<img
+							src="@/assets/icons/ic_search_3.svg"
+							alt="search"
+							class="img_document_action mr-3"
+							@click="getPreviewUrl(file)"
+						/>
+					</div>
+					<div>
+						<img
+							v-if="file.isUpload === false"
+							@click="deleteOtherFile(file, index)"
+							src="@/assets/icons/ic_delete_2.svg"
+							alt="tag_2"
+							class="img_document_action"
+						/>
+						<img
+							v-else-if="permission.allowDelete && allowEdit"
+							@click="deleteOtherFile(file, index)"
+							src="@/assets/icons/ic_delete_2.svg"
+							alt="tag_2"
+							class="img_document_action"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="" v-if="type === 'Result' && fromComponent">
+			<div class="row">
+				<InputCurrency
+					v-if="allowEdit"
+					v-model="dataPC.total_preliminary_value"
+					vid="service_fee"
+					:max="99999999999999"
+					label="Tổng giá trị sơ bộ"
+					class="col-12"
+					style="margin-left:-10px;margin-bottom: 10px;"
+				/>
+				<div
+					v-else
+					class="d-flex container_content"
+					style="margin-left:-10px;margin-bottom: -25px;"
+				>
+					<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
+					<p>
+						{{
+							dataPC.total_preliminary_value
+								? formatNumber(dataPC.total_preliminary_value)
+								: 0
+						}}đ
+					</p>
+				</div>
+			</div>
+			<div class="row d-flex justify-content-between">
+				<strong class="margin_content_inline">File kèm kết quả sơ bộ:</strong>
+				<label
+					style="padding: 1px;padding-left:5px;padding-right: 5px;border: 1px solid #b6d5f3;"
+					v-if="allowEdit"
+					for="image_property"
+				>
+					<font-awesome-icon
+						:style="{ color: '#00507c', cursor: 'pointer' }"
+						icon="cloud-upload-alt"
+						size="1x"
+					/>
+				</label>
+
+				<input
+					v-if="allowEdit"
+					class="btn-upload "
+					type="file"
+					ref="file"
+					id="image_property"
+					multiple
+					:accept="
+						type === 'Appendix'
+							? 'image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf'
+							: '.doc, .docx, .xlsx, .xls, application/pdf'
+					"
+					@change="onImageChange($event)"
+					style="display: none;"
+				/>
+			</div>
+			<div
+				class="row input_download_pre_certificate mb-2 mt-2"
 				v-for="(file, index) in lstFile"
 				:key="index"
 			>
@@ -829,6 +943,14 @@ export default {
 	height: 3.85rem;
 	padding: 0.85rem 0px;
 }
+.input_download_pre_certificate {
+	position: relative;
+	border: 1px solid #b6d5f3;
+	border-radius: 5px;
+	height: 3.85rem;
+	padding: 0.85rem 0px;
+}
+
 .title_input_download {
 	color: #00507c;
 	font-weight: 600;
