@@ -54,54 +54,63 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
 										>Mục đích thẩm định:</strong
-									><span id="appraise_purpose" class="text-left">{{
-										dataPC.appraise_purpose &&
-										dataPC.appraise_purpose.name.length > 60
-											? dataPC.appraise_purpose.name.substring(60, 0) + "..."
-											: dataPC.appraise_purpose.name
+									><span class="text-left">{{
+										dataPC.appraise_purpose
+											? dataPC.appraise_purpose.name.length > 60
+												? dataPC.appraise_purpose.name.substring(60, 0) + "..."
+												: dataPC.appraise_purpose.name
+											: ""
 									}}</span>
-									<b-tooltip target="appraise_purpose" placement="top-right">{{
-										dataPC.appraise_purpose.name
-									}}</b-tooltip>
+									<b-tooltip
+										v-if="dataPC.appraise_purpose"
+										target="appraise_purpose"
+										placement="top-right"
+										>{{ dataPC.appraise_purpose.name }}</b-tooltip
+									>
 								</div>
-								<!-- <div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Mục đích thẩm định:
-									</strong>
-									{{
-										dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
-									}}
-								</div> -->
 
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Loại sơ bộ:</strong>
 									<p>
-										{{ dataPC.pre_type_string ? dataPC.pre_type_string : "" }}
+										{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
 									</p>
 								</div>
-
-								<!-- <div class="d-flex container_content">
+								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
-										>Tổng giá trị sơ bộ:</strong
+										>Thời điểm sơ bộ:</strong
+									>
+									<p>
+										{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+									</p>
+								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline"
+										>Tổng phí dịch vụ:</strong
 									>
 									<p>
 										{{
-											dataPC.total_preliminary_value
-												? formatNumber(dataPC.total_preliminary_value)
+											dataPC.total_service_fee
+												? formatNumber(dataPC.total_service_fee)
 												: 0
 										}}đ
 									</p>
-								</div> -->
-
+									<strong class="margin_content_inline ml-5"
+										>Chiết khấu:</strong
+									>
+									<p>
+										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
+									</p>
+								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong
+									<strong class="margin_content_inline"
+										>Tên tài sản sơ bộ:</strong
 									><span id="note" class="text-left">{{
-										dataPC.note && dataPC.note.length > 25
-											? dataPC.note.substring(25, 0) + "..."
-											: dataPC.note
+										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
+											? dataPC.pre_asset_name.substring(25, 0) + "..."
+											: dataPC.pre_asset_name
 									}}</span>
 									<b-tooltip target="note" placement="top-right">{{
-										dataPC.note
+										dataPC.pre_asset_name
 									}}</b-tooltip>
 								</div>
 
@@ -299,17 +308,6 @@
 			</a-timeline>
 		</a-drawer>
 		<div
-			v-if="dataPC.id"
-			class="col-6"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<OtherFile
-				:type="'Appendix'"
-				:allow-edit="allowEditFile.appendix"
-				:from-component="'Detail'"
-			/>
-		</div>
-		<div
 			v-if="dataPC.id && dataPC.status >= 2"
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
@@ -330,13 +328,82 @@
 					</div>
 				</div>
 				<OtherFile
+					class="ml-1"
 					v-if="showCardDetailFileResult && !dialogRequireForStage3"
 					type="Result"
 					:allow-edit="false"
-					:from-component="'Detail'"
 				/>
 			</div>
 		</div>
+		<div
+			v-if="dataPC.id && dataPC.status >= 2"
+			class="col-6"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
+			<div class="card">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="row d-flex justify-content-between align-items-center">
+							<h3 class="title">Thông tin thanh toán</h3>
+						</div>
+						<div
+							v-if="allowEditFile.result && edit"
+							@click="dialogRequireForStage3 = true"
+							class="btn-edit "
+						>
+							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card-body card-info">
+						<div
+							class="row mb-1"
+							v-if="dataPC.payments"
+							v-for="(payment, index) in dataPC.payments"
+							:key="index"
+						>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Ngày thanh toán:</strong>
+								<p>
+									{{ payment.pay_date ? formatDate(dataPC.pay_date) : "" }}
+								</p>
+							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline"
+									>Tổng giá trị thanh toán:</strong
+								>
+								<p>{{ payment.amount ? formatNumber(payment.amount) : 0 }}đ</p>
+							</div>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Đã thanh toán:</strong>
+							<p>
+								{{ dataPC.amountPaid ? formatNumber(dataPC.amountPaid) : 0 }}đ
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Còn nợ:</strong>
+							<p>
+								{{ dataPC.debtRemain ? formatNumber(dataPC.debtRemain) : 0 }}đ
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			v-if="dataPC.id"
+			class="col-12"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
+			<OtherFile
+				:type="'Appendix'"
+				:allow-edit="allowEditFile.appendix"
+				:from-component="'Detail'"
+			/>
+		</div>
+
 		<Footer
 			v-if="jsonConfig && dataPC && dataPC.id"
 			:style="isMobile ? { bottom: '60px' } : {}"

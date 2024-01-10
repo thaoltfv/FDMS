@@ -24,7 +24,7 @@ export default class Certificate extends Model {
 	static async updatePayments(data, id = "") {
 		return new this().request({
 			method: "POST",
-			url: `pre-certificates/pre-certification-update-payments/${id}`,
+			url: `pre-certificates/pre-certificate-update-payment/${id}`,
 			data: data,
 			isStatic: true
 		});

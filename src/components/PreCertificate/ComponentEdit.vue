@@ -71,14 +71,16 @@
 					<div class="col-md-12 order-3 order-lg-2 col-lg-6">
 						<div class="row justify-content-between">
 							<InputCurrency
+								:key="keyRender"
 								v-model="dataPC.total_service_fee"
 								vid="total_service_fee"
 								:max="99999999999999"
 								label="Tổng phí dịch vụ"
 								class="form-group-container col-sm-12 col-md-6"
-								@change="dataPC.total_service_fee = $event"
+								@change="paidCompute($event, null, true)"
 							/>
 							<InputPercent
+								:key="keyRender"
 								v-model="dataPC.commission_fee"
 								label="Chiết khấu"
 								vid="test"
@@ -89,6 +91,7 @@
 								@change="dataPC.commission_fee = $event"
 							/>
 						</div>
+
 						<div class="row justify-content-between">
 							<InputCategory
 								v-model="dataPC.pre_type_id"
@@ -99,7 +102,7 @@
 							/>
 							<InputDatePicker
 								v-model="dataPC.pre_date"
-								vid="ộ"
+								vid="pre_date"
 								label="Thời điểm sơ bộ"
 								placeholder="Ngày / tháng / năm"
 								rules="required"
@@ -268,9 +271,93 @@
 				/>
 			</div>
 		</div>
+		<div v-if="dataPC.id && dataPC.status >= 2" class="col-6">
+			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<h3 class="title">Thông tin thanh toán</h3>
+						<img
+							class="img-dropdown"
+							:class="!showCardDetailPayments ? 'img-dropdown__hide' : ''"
+							src="@/assets/images/icon-btn-down.svg"
+							alt="dropdown"
+							@click="showCardDetailPayments = !showCardDetailPayments"
+						/>
+					</div>
+				</div>
+				<div class="card-body card-info" v-show="showCardDetailPayments">
+					<div class="d-flex-column">
+						<div
+							class="row "
+							v-for="(payment, index) in dataPC.payments"
+							:key="index"
+							v-if="!payment.is_deleted"
+						>
+							<div class="row justify-content-between col-10">
+								<InputDatePicker
+									v-model="payment.pay_date"
+									vid="pay_date"
+									label="Ngày thanh toán"
+									placeholder="Ngày / tháng / năm"
+									rules="required"
+									:formatDate="'DD/MM/YYYY'"
+									class="form-group-container col-sm-12 col-md-6"
+									@change="payment.pay_date = $event"
+								/>
+								<InputCurrency
+									v-model="payment.amount"
+									vid="amount"
+									:max="99999999999999"
+									label="Giá trị thanh toán"
+									class="form-group-container col-sm-12 col-md-6"
+									@change="paidCompute($event, payment)"
+								/>
+							</div>
+							<div class="mt-5 col-2 d-flex  justify-content-between">
+								<span
+									style="font-style: italic; color: orange; cursor: pointer"
+									@click="addPayment"
+									>+Thêm</span
+								>
+								<span
+									v-if="dataPC.payments.length > 1"
+									style="font-style: italic; color: red; cursor: pointer"
+									@click="removePayment(index, payment)"
+								>
+									-Xóa
+								</span>
+							</div>
+						</div>
+
+						<div class="row justify-content-between mt-4">
+							<strong class="margin_content_inline">Đã thanh toán:</strong>
+							<InputCurrency
+								:key="keyRender"
+								v-model="dataPC.paid"
+								vid="amount"
+								:disabled="true"
+								:max="99999999999999"
+								class="form-group-container col-6 mt-n1"
+							/>
+						</div>
+						<div class="row justify-content-between mt-4">
+							<strong class="margin_content_inline">Còn nợ:</strong>
+							<InputCurrency
+								:key="keyRender"
+								v-model="dataPC.debtRemain"
+								vid="amount"
+								:disabled="true"
+								:max="99999999999999"
+								class="form-group-container col-6 mt-n1"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div
 			v-if="dataPC.id"
-			class="col-6"
+			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
 			<OtherFile type="Appendix" />
@@ -335,11 +422,12 @@ export default {
 			slider: "#FAA831",
 			arrow: "#000000"
 		});
-		const showCardDetailFileResult = ref(false);
+		const showCardDetailFileResult = ref(true);
 		const showCardDetailAppraise = ref(true);
 		const showCardDetailFile = ref(true);
 		const showCardDetailTraffic = ref(true);
 		const showCardDetailEconomicAndSocial = ref(true);
+		const showCardDetailPayments = ref(true);
 		const showCardDetailImage = ref(true);
 		const customers_step_1 = ref(null);
 		const form = ref({
@@ -373,12 +461,18 @@ export default {
 			sub_status: 1
 		});
 
+		const keyRender = ref(0);
 		const preCertificateStore = usePreCertificateStore();
-		preCertificateStore.resetData();
-		preCertificateStore.getPreCertificate(props.routeId);
+
 		const { dataPC, lstDataConfig, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
+		const getStartData = async () => {
+			preCertificateStore.resetData();
+			dataPC.value = await preCertificateStore.getPreCertificate(props.routeId);
+			keyRender.value++;
+		};
+		getStartData();
 		const handleChangeAppraisePurpose = event => {
 			dataPC.value.appraise_purpose_id = event;
 		};
@@ -399,13 +493,50 @@ export default {
 				dataPC.value.customer.phone = bindCustomer[0].phone;
 			}
 		};
+		const paidCompute = (event, payment, booltotal_service_fee = false) => {
+			if (!booltotal_service_fee) payment.amount = event;
+			if (booltotal_service_fee) dataPC.value.total_service_fee = event;
+			let debt_remain = dataPC.value.total_service_fee;
+			let paid = 0;
+			for (let index = 0; index < dataPC.value.payments.length; index++) {
+				const element = dataPC.value.payments[index];
+				if (element.is_deleted) continue;
+				debt_remain -= element.amount;
+				paid += element.amount;
+			}
+			dataPC.value.debtRemain = debt_remain;
+			dataPC.value.paid = paid;
+			console.log(
+				"dataPC.value.payments",
+				dataPC.value.total_service_fee,
+				event,
+				payment,
+				booltotal_service_fee,
+				dataPC.value
+			);
+			keyRender.value++;
+		};
+
+		const addPayment = () => {
+			dataPC.value.payments.push({
+				pre_date: null,
+				amount: 0
+			});
+		};
+		const removePayment = (index, payment) => {
+			if (!payment.id) dataPC.value.payments.splice(index, 1);
+			else payment.is_deleted = true;
+		};
+
 		return {
+			keyRender,
 			isMobile,
 			theme,
 			showCardDetailAppraise,
 			showCardDetailFile,
 			showCardDetailTraffic,
 			showCardDetailEconomicAndSocial,
+			showCardDetailPayments,
 			showCardDetailImage,
 			customers_step_1,
 			form,
@@ -417,7 +548,10 @@ export default {
 
 			handleChangeAppraisePurpose,
 			handleChangeCustomer,
-			debounceSearchCustomer
+			debounceSearchCustomer,
+			paidCompute,
+			addPayment,
+			removePayment
 		};
 	},
 	computed: {
