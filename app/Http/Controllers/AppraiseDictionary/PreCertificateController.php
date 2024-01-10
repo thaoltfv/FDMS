@@ -315,8 +315,8 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
 
         $rules = [
-            'pay_date' => 'required|string|max:255',
-            'amount' => 'integer|min:1',
+            '*.pay_date' => 'required|string|max:255',
+            '*.amount' => 'integer|min:1',
         ];
         $customAttributes = [
             'pay_date' => 'Ngày thanh toán',
