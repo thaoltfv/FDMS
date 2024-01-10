@@ -1098,14 +1098,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($id, $request) {
             try {
-                $preCertificate = $this->model->query()->where('id', $id)->first();
-                
-                if ($preCertificate) {
-                    return [
-                        'error' => true,
-                        'message' => 'Không có YCSB này, vui lòng kiểm tra lại'
-                    ];
-                }
                 $user = CommonService::getUser();
                 foreach ($request as $item) {
                     try {
@@ -1124,7 +1116,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         } else {
                             $item['created_by'] = $user->id;
-                            $item['pre_certificate_id'] = $item['pre_certificate_id'] ?? $id;
+                            $item['pre_certificate_id'] = $id;
                             PreCertificatePayments::create($item);
                         }
                     } catch (\Exception $e) {
