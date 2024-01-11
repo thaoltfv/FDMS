@@ -1101,11 +1101,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $user = CommonService::getUser();
                 foreach ($request as $item) {
                     try {
-                        if (isset($item['id'])) {
-                            $item['updated_by'] = $user->id;
-                            PreCertificatePayments::where('id', $item['id'])->update($item);
-                        } else if(isset($item['id']) && isset($item['is_deleted'])) {
-                            $payment = PreCertificatePayments::find($id);
+                        if (isset($item['id']) && isset($item['is_deleted'])) {
+                            $payment = PreCertificatePayments::find($item['id']);
                             if ($payment) {
                                 $payment->delete();
                             } else {
@@ -1114,6 +1111,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                     'message' => "Không thể xóa được, vui lòng kiểm tra lại"
                                 ];
                             }
+                        } else if (isset($item['id'])) {
+                            $item['updated_by'] = $user->id;
+                            PreCertificatePayments::where('id', $item['id'])->update($item);
                         } else {
                             $item['created_by'] = $user->id;
                             $item['pre_certificate_id'] = $id;
