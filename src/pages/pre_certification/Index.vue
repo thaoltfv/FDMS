@@ -42,7 +42,7 @@
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
 								<span
-									@click="handleDetailCertificate(element.id)"
+									@click="handleDetailPreCertificate(element.id)"
 									class="content_id"
 									:class="`bg-${config.css.color}-15 text-${config.css.color}`"
 									>{{ element.slug }}</span
@@ -120,6 +120,22 @@
 									"
 								/>
 							</div>
+							<div
+								v-if="element.certificate_id"
+								class="property-content d-flex justify-content-between mt-2 mb-0"
+							>
+								<span
+									@click="handleDetailCertificate(element.certificate_id)"
+									class="content_certificate_id"
+								>
+									<font-awesome-icon
+										icon="angle-right"
+										class="item-icon arrow"
+									/>
+
+									{{ "HSTD_" + element.certificate_id }}</span
+								>
+							</div>
 						</b-card>
 					</draggable>
 				</div>
@@ -183,7 +199,6 @@ import ModalDetailPreCertificate from "@/components/PreCertificate/ModalDetailPr
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import PreCertificate from "@/models/PreCertificate";
 import moment from "moment";
-import KanboardStatus from "@/components/PreCertificate/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
 // const jsonConfig = require("../../../config/pre_certificate_workflow.json");
@@ -274,7 +289,6 @@ export default {
 		ClockIcon,
 		ModalDetailPreCertificate,
 		ModalSendVerify,
-		KanboardStatus,
 		ModalNotificationCertificate,
 		ModalNotificationPreCertificateNote
 	},
@@ -835,10 +849,20 @@ export default {
 			});
 			this.key_dragg++;
 		},
+		handleDetailCertificate(id) {
+			this.$router
+				.push({
+					name: "certification.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
+		},
 		checkMoveVerify() {
 			return true;
 		},
-		handleDetailCertificate(id) {
+		handleDetailPreCertificate(id) {
 			this.idData = id;
 			this.getDetailCertificate(id);
 		},
@@ -1162,6 +1186,15 @@ export default {
 		color: #ffffff;
 		background-color: #26bf7f;
 	}
+}
+
+.content_certificate_id {
+	border-radius: 5px;
+	padding: 0px 3px;
+	font-weight: 500;
+	color: #017ec6;
+	cursor: pointer;
+	border: 1px solid #a7d9fb;
 }
 .img_user {
 	border-radius: 50%;

@@ -20,12 +20,12 @@
 				<div class="contain-detail">
 					<div class="d-flex-column">
 						<div
-							class="row "
+							class="row"
 							v-for="(payment, index) in dataForm.payments"
 							:key="index"
 							v-if="!payment.is_deleted"
 						>
-							<div class="row justify-content-between col-10">
+							<div class="row justify-content-between col-10 ml-n2">
 								<InputDatePicker
 									v-model="payment.pay_date"
 									vid="pay_date"

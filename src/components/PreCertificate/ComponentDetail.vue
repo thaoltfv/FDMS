@@ -1009,13 +1009,10 @@ export default {
 							let result = resp.data.li_do.filter(
 								item => item.id === e.properties.reason_id
 							);
-							// console.log('répóne',result)
 							e.reason_description = result[0].description;
 						}
 					}
 				}
-
-				// console.log('timeline', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,
@@ -1054,7 +1051,6 @@ export default {
 		},
 
 		handleShowAppraisal() {
-			// console.log('-----------',this.dataPC)
 			this.key_render_appraisal += 1;
 			this.status = this.dataPC.status;
 			this.showAppraisalDialog = true;
@@ -1191,15 +1187,10 @@ export default {
 				{ note }
 			);
 			if (res.data && res.data.error === false) {
-				if (this.search_kanban) {
-					await this.getDataWorkFlow2(
-						true,
-						this.search_kanban.search,
-						isRefresh
-					);
-				} else await this.getDataWorkFlow2(true);
+				await this.preCertificateStore.getPreCertificate(this.routeId);
+				this.changeEditStatus();
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message: this.message + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -1288,7 +1279,6 @@ export default {
 				if (files.length) {
 					for (let i = 0; i < files.length; i++) {
 						formData.append("files[" + i + "]", files[i]);
-						console.log("files", files);
 					}
 					let res = null;
 					if (this.dataPC.status === 1) {
@@ -1299,7 +1289,6 @@ export default {
 					} else {
 						res = await File.uploadFileCertificate(formData, this.dataPC.id);
 					}
-					console.log("res", res, formData);
 					if (res.data) {
 						// await this.$emit('handleChangeFile', res.data.data)
 						this.dataPC.other_documents = res.data.data;
@@ -1474,7 +1463,6 @@ export default {
 		},
 		async downloadAssetDocument() {
 			let arrayAsset = [];
-			// console.log(this.dataPC.real_estate)
 			if (this.dataPC.real_estate && this.dataPC.real_estate.length > 0) {
 				await this.dataPC.real_estate.forEach(item => {
 					if (
@@ -1701,7 +1689,6 @@ export default {
 			this.isShowAppraiseListVersion = true;
 		},
 		setDocumentViewStatus() {
-			// console.log('this.dataPC.document_type',this.dataPC.document_type)
 			let isExportAutomatic = true;
 			let isCheckRealEstate = true;
 			let isCheckConstruction = false;
