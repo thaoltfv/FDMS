@@ -525,6 +525,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'business_manager_id', 
             'appraiser_sale_id', 
             'appraiser_perform_id', 
+            'certificate_id',
             // 'users.image',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
