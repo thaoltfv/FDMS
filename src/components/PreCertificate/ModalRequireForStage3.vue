@@ -8,7 +8,7 @@
 			</div>
 			<div class="card-body">
 				<div class="row col-12" style="margin-top: 10px;margin-left:0px">
-					<OtherFile type="Result" form-component="DialogUpdateStatus" />
+					<OtherFile type="Result" fromComponent="DialogUpdateStatus" />
 				</div>
 				<div class="btn__group">
 					<button

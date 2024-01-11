@@ -320,7 +320,12 @@
 									>+Thêm</span
 								>
 								<span
-									v-if="dataPC.payments.length > 1"
+									v-if="
+										dataForm.payments.filter(
+											payment =>
+												payment.is_deleted === undefined || !payment.is_deleted
+										).length > 1
+									"
 									style="font-style: italic; color: red; cursor: pointer"
 									@click="removePayment(index, payment)"
 								>
@@ -493,27 +498,27 @@ export default {
 				dataPC.value.customer.phone = bindCustomer[0].phone;
 			}
 		};
-		const paidCompute = (event, payment, booltotal_service_fee = false) => {
-			if (!booltotal_service_fee) payment.amount = event;
-			if (booltotal_service_fee) dataPC.value.total_service_fee = event;
-			let debt_remain = dataPC.value.total_service_fee;
+		const paidCompute = (
+			event,
+			payment,
+			booltotal_service_fee = false,
+			runCompute = false
+		) => {
+			if (!runCompute) {
+				if (!booltotal_service_fee) payment.amount = event;
+				if (booltotal_service_fee) dataForm.value.total_service_fee = event;
+			}
+			let debt_remain = dataForm.value.total_service_fee;
 			let paid = 0;
-			for (let index = 0; index < dataPC.value.payments.length; index++) {
-				const element = dataPC.value.payments[index];
+			for (let index = 0; index < dataForm.value.payments.length; index++) {
+				const element = dataForm.value.payments[index];
 				if (element.is_deleted) continue;
 				debt_remain -= element.amount;
-				paid += element.amount;
+				paid += parseFloat(element.amount);
 			}
-			dataPC.value.debtRemain = debt_remain;
-			dataPC.value.paid = paid;
-			console.log(
-				"dataPC.value.payments",
-				dataPC.value.total_service_fee,
-				event,
-				payment,
-				booltotal_service_fee,
-				dataPC.value
-			);
+			dataForm.value.debtRemain = debt_remain;
+			dataForm.value.paid = paid;
+
 			keyRender.value++;
 		};
 
@@ -524,10 +529,12 @@ export default {
 			});
 		};
 		const removePayment = (index, payment) => {
-			if (!payment.id) dataPC.value.payments.splice(index, 1);
-			else payment.is_deleted = true;
+			if (!payment.id) dataForm.value.payments.splice(index, 1);
+			else {
+				Vue.set(payment, "is_deleted", true);
+			}
+			paidCompute(0, 0, false, true);
 		};
-
 		return {
 			keyRender,
 			isMobile,

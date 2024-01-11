@@ -348,7 +348,7 @@
 						</div>
 						<div
 							v-if="allowEditFile.result && edit"
-							@click="dialogRequireForStage3 = true"
+							@click="showCardPCPayments = true"
 							class="btn-edit "
 						>
 							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
@@ -356,9 +356,9 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="card-body card-info">
+					<div class="card-body card-info ml-2">
 						<div
-							class="row mb-1"
+							class="row mb-1 "
 							v-if="dataPC.payments"
 							v-for="(payment, index) in dataPC.payments"
 							:key="index"
@@ -366,7 +366,7 @@
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Ngày thanh toán:</strong>
 								<p>
-									{{ payment.pay_date ? formatDate(dataPC.pay_date) : "" }}
+									{{ payment.pay_date ? formatDate(payment.pay_date) : "" }}
 								</p>
 							</div>
 							<div class="d-flex container_content">
@@ -431,6 +431,11 @@
 			v-if="showAppraiseInformationDialog"
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
+		/>
+		<ModalPCPayments
+			v-if="showCardPCPayments"
+			@cancel="showCardPCPayments = false"
+			@updatePayments="updatePayments"
 		/>
 
 		<ModalViewDocument
@@ -504,6 +509,7 @@ import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
+import ModalPCPayments from "@/components/PreCertificate/ModalPCPayments";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
 import File from "@/models/File";
@@ -527,6 +533,7 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		ModalPCPayments,
 		OtherFile,
 		InputCategory,
 		InputCategorySearch,
@@ -652,6 +659,7 @@ export default {
 		const config = ref({});
 		const editInfo = ref(false);
 		const editAppraiser = ref(false);
+		const editPayments = ref(false);
 		const allowEditFile = ref({ appendix: false, result: false });
 		const changeEditStatus = () => {
 			let dataJson = jsonConfig.value.principle.filter(
@@ -664,7 +672,9 @@ export default {
 					: false;
 
 				editInfo.value = dataJson[0].edit.info ? dataJson[0].edit.info : false;
-
+				editPayments.value = dataJson[0].edit.payments
+					? dataJson[0].edit.payments
+					: false;
 				allowEditFile.value.appendix = dataJson[0].edit.file_appendix
 					? dataJson[0].edit.file_appendix
 					: false;
@@ -685,12 +695,15 @@ export default {
 		start();
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
+		const showCardPCPayments = ref(false);
 		return {
+			showCardPCPayments,
 			allowEditFile,
 			jsonConfig,
 			config,
 			editAppraiser,
 			editInfo,
+			editPayments,
 			dialogRequireForStage3,
 			isMobile,
 			dataPC,
@@ -1059,6 +1072,9 @@ export default {
 				position: "top-right",
 				duration: 3000
 			});
+		},
+		async updatePayments() {
+			await this.preCertificateStore.getPreCertificate(this.routeId);
 		},
 		async updateAppraiseInformation() {
 			await this.preCertificateStore.getPreCertificate(this.routeId);
