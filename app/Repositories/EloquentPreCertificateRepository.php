@@ -961,6 +961,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $certificate->status = 1;
                 $certificate->sub_status = 1;
                 $certificate->created_by = $user->id;
+                $certificate->pre_certificate_id = $id;
                 $certificate->updated_at = date("Y-m-d H:i:s");
                 $certificate->document_description = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
 
@@ -977,7 +978,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
                                                         ->whereNull('deleted_at')
                                                         ->get();
-                    $length = $documents->count();
                     if ($documents->count() > 0) {
                         foreach ($documents as $document) {
                             if ($document->type_document == 'Appendix') {
