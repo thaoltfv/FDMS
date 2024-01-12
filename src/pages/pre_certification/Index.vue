@@ -367,13 +367,9 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const preCertificateStore = usePreCertificateStore();
-		const {
-			lstDataConfig,
-			dataPC,
-			jsonConfig,
-			preCertificateOtherDocuments,
-			filter
-		} = storeToRefs(preCertificateStore);
+		const { lstDataConfig, dataPC, jsonConfig, filter } = storeToRefs(
+			preCertificateStore
+		);
 
 		const principleConfig = ref([]);
 
@@ -452,7 +448,6 @@ export default {
 			isMobile,
 			lstDataConfig,
 			dataPC,
-			preCertificateOtherDocuments,
 			preCertificateStore,
 
 			key_dragg,
@@ -608,17 +603,16 @@ export default {
 			}
 		},
 		checkDataBeforeChangeToStage3() {
-			console.log(
-				this.preCertificateOtherDocuments.Result.length,
-				this.dataPC.total_preliminary_value,
-				this.preCertificateOtherDocuments.Result &&
-					this.preCertificateOtherDocuments.Result.length > 0 &&
-					this.dataPC.total_preliminary_value > 0
-			);
+			let resultDocumentsLength = 0;
+			if (this.dataPC.other_documents) {
+				let resultDocuments = this.dataPC.other_documents.filter(
+					doc => doc.type_document === "Result"
+				);
+				resultDocumentsLength = resultDocuments.length;
+			}
 			if (
-				this.preCertificateOtherDocuments.Result &&
-				this.preCertificateOtherDocuments.Result.length > 0 &&
-				this.dataPC.total_preliminary_value > 0
+				this.dataPC.total_preliminary_value > 0 &&
+				resultDocumentsLength > 0
 			) {
 				return true;
 			} else {
