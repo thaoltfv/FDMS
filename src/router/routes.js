@@ -1937,7 +1937,7 @@ export const routes = [
 							name: "pre_certification.index"
 						}
 					],
-					gtm: "Trang HSTĐ"
+					gtm: "Trang YCSB"
 				}
 			},
 
@@ -1952,7 +1952,7 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
