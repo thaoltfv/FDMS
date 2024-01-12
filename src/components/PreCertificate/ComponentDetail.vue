@@ -1015,7 +1015,7 @@ export default {
 		},
 
 		async getHistoryTimeLine() {
-			const res = await CertificationBrief.getHistoryTimeline(this.dataPC.id);
+			const res = await PreCertificate.getHistoryTimeline(this.dataPC.id);
 			if (res.data) {
 				const resp = await WareHouse.getDictionaries();
 				if (resp) {
@@ -1023,9 +1023,17 @@ export default {
 					for (let i = 0; i < this.historyList.length; i++) {
 						let e = this.historyList[i];
 						if (e.properties.reason_id) {
-							let result = resp.data.li_do.filter(
-								item => item.id === e.properties.reason_id
-							);
+							let result = null;
+							if (e.description.includes("Hủy")) {
+								result = resp.data.li_do_huy_so_bo.filter(
+									item => item.id === e.properties.reason_id
+								);
+							} else {
+								result = resp.data.li_do.filter(
+									item => item.id === e.properties.reason_id
+								);
+							}
+
 							e.reason_description = result[0].description;
 						}
 					}
