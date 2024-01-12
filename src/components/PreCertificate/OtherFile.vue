@@ -88,8 +88,8 @@
 								>
 									{{
 										file.name
-											? file.name.length > 25
-												? file.name.substring(25, 0) + "..."
+											? file.name.length > 20
+												? file.name.substring(20, 0) + "..."
 												: file.name
 											: ""
 									}}

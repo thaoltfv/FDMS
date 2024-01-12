@@ -240,6 +240,7 @@ export const usePreCertificateStore = defineStore(
 			}
 			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			dataPC.value = temp;
+			console.log(dataPC.value);
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(

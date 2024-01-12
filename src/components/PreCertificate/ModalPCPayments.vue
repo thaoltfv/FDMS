@@ -1,131 +1,134 @@
 <template>
-	<div>
-		<div
-			class="modal-detail d-flex justify-content-center align-items-center"
-			@click.self="handleCancel"
-		>
-			<div class="card">
-				<div class="container-title">
-					<div class="d-flex justify-content-between">
-						<h2 class="title">Thông tin thanh toán</h2>
-						<img
-							height="35px"
-							@click="handleCancel"
-							class="cancel"
-							src="@/assets/icons/ic_cancel_2.svg"
-							alt=""
+	<div
+		class="modal-detail d-flex justify-content-center align-items-center"
+		@click.self="handleCancel"
+	>
+		<div class="card">
+			<div class="container-title">
+				<div class="d-flex justify-content-between" style="margin-left:20px;">
+					<h2 class="title">Thông tin thanh toán</h2>
+					<img
+						height="35px"
+						@click="handleCancel"
+						class="cancel"
+						src="@/assets/icons/ic_cancel_2.svg"
+						alt=""
+					/>
+				</div>
+			</div>
+			<div class="contain-detail">
+				<div class="d-flex-column">
+					<div
+						class="row"
+						v-for="(payment, index) in dataForm.payments"
+						:key="index"
+						v-if="!payment.is_deleted"
+					>
+						<div class="row justify-content-between col-10">
+							<InputDatePicker
+								v-model="payment.pay_date"
+								vid="pay_date"
+								label="Ngày thanh toán"
+								placeholder="Ngày / tháng / năm"
+								rules="required"
+								:formatDate="'DD/MM/YYYY'"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="payment.pay_date = $event"
+							/>
+							<InputCurrency
+								v-model="payment.amount"
+								vid="amount"
+								:max="99999999999999"
+								label="Giá trị thanh toán"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="paidCompute($event, payment)"
+							/>
+						</div>
+						<div class="mt-5 col-2 d-flex  justify-content-between">
+							<span
+								style="font-style: italic; color: orange; cursor: pointer"
+								@click="addPayment"
+								>+Thêm</span
+							>
+							<span
+								v-if="
+									dataForm.payments.filter(
+										payment =>
+											payment.is_deleted === undefined || !payment.is_deleted
+									).length > 1
+								"
+								style="font-style: italic; color: red; cursor: pointer"
+								@click="removePayment(index, payment)"
+							>
+								-Xóa
+							</span>
+						</div>
+					</div>
+
+					<div class="row justify-content-between mt-4 mx-2">
+						<strong style="margin-left:13px;" class="margin_content_inline"
+							>Đã thanh toán:</strong
+						>
+						<InputCurrency
+							:key="keyRender"
+							v-model="dataForm.paid"
+							vid="amount"
+							:disabled="true"
+							:max="99999999999999"
+							class="form-group-container col-6 mt-n1"
 						/>
 					</div>
-				</div>
-				<div class="contain-detail">
-					<div class="d-flex-column">
-						<div
-							class="row"
-							v-for="(payment, index) in dataForm.payments"
-							:key="index"
-							v-if="!payment.is_deleted"
+					<div class="row justify-content-between mt-4">
+						<strong style="margin-left:13px;" class="margin_content_inline"
+							>Còn nợ:</strong
 						>
-							<div class="row justify-content-between col-10 ml-n2">
-								<InputDatePicker
-									v-model="payment.pay_date"
-									vid="pay_date"
-									label="Ngày thanh toán"
-									placeholder="Ngày / tháng / năm"
-									rules="required"
-									:formatDate="'DD/MM/YYYY'"
-									class="form-group-container col-sm-12 col-md-6"
-									@change="payment.pay_date = $event"
+						<InputCurrency
+							:key="keyRender"
+							v-model="dataForm.debtRemain"
+							vid="amount"
+							:disabled="true"
+							:max="99999999999999"
+							class="form-group-container col-6 mt-n1"
+						/>
+					</div>
+					<div
+						class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
+					>
+						<div class="d-lg-flex d-block button-contain">
+							<button
+								class="btn btn-white btn-action-modal"
+								type="button"
+								@click="handleCancel"
+							>
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Trở lại
+							</button>
+							<button
+								class="btn btn-orange btn-action-modal"
+								type="submit"
+								@click="handleAction"
+								style="margin-right: 12px"
+							>
+								<img
+									src="@/assets/icons/ic_save.svg"
+									style="margin-right: 12px"
+									alt="save"
 								/>
-								<InputCurrency
-									v-model="payment.amount"
-									vid="amount"
-									:max="99999999999999"
-									label="Giá trị thanh toán"
-									class="form-group-container col-sm-12 col-md-6"
-									@change="paidCompute($event, payment)"
-								/>
-							</div>
-							<div class="mt-5 col-2 d-flex  justify-content-between">
-								<span
-									style="font-style: italic; color: orange; cursor: pointer"
-									@click="addPayment"
-									>+Thêm</span
-								>
-								<span
-									v-if="
-										dataForm.payments.filter(
-											payment =>
-												payment.is_deleted === undefined || !payment.is_deleted
-										).length > 1
-									"
-									style="font-style: italic; color: red; cursor: pointer"
-									@click="removePayment(index, payment)"
-								>
-									-Xóa
-								</span>
-							</div>
-						</div>
-
-						<div class="row justify-content-between mt-4">
-							<strong class="margin_content_inline">Đã thanh toán:</strong>
-							<InputCurrency
-								:key="keyRender"
-								v-model="dataForm.paid"
-								vid="amount"
-								:disabled="true"
-								:max="99999999999999"
-								class="form-group-container col-6 mt-n1"
-							/>
-						</div>
-						<div class="row justify-content-between mt-4">
-							<strong class="margin_content_inline">Còn nợ:</strong>
-							<InputCurrency
-								:key="keyRender"
-								v-model="dataForm.debtRemain"
-								vid="amount"
-								:disabled="true"
-								:max="99999999999999"
-								class="form-group-container col-6 mt-n1"
-							/>
-						</div>
-						<div
-							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
-						>
-							<div class="d-lg-flex d-block button-contain">
-								<button
-									class="btn btn-white btn-action-modal"
-									type="button"
-									@click="handleCancel"
-								>
-									<img
-										src="@/assets/icons/ic_cancel.svg"
-										style="margin-right: 12px"
-										alt="save"
-									/>Trở lại
-								</button>
-								<button
-									class="btn btn-orange btn-action-modal"
-									type="submit"
-									@click="handleAction"
-								>
-									<img
-										src="@/assets/icons/ic_save.svg"
-										style="margin-right: 12px"
-										alt="save"
-									/>
-									Lưu
-								</button>
-							</div>
+								Lưu
+							</button>
 						</div>
 					</div>
 				</div>
-				<!-- <div class="container-title container-title__footer">
+			</div>
+			<!-- <div class="container-title container-title__footer">
             <div class="d-flex justify-content-between justify-content-lg-end">
               <button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
               <button class="btn btn-orange btn-action-modal" type="button" @click="handleAction"> <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"> Lưu</button>
             </div>
           </div> -->
-			</div>
 		</div>
 	</div>
 </template>
@@ -135,7 +138,6 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import _ from "lodash";
-
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import moment from "moment";
@@ -149,7 +151,7 @@ export default {
 	},
 	setup() {
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC } = storeToRefs(preCertificateStore);
+		const { dataPC, other } = storeToRefs(preCertificateStore);
 		const dataForm = ref(_.cloneDeep(dataPC.value));
 		const keyRender = ref(0);
 
@@ -173,6 +175,15 @@ export default {
 			}
 			dataForm.value.debtRemain = debt_remain;
 			dataForm.value.paid = paid;
+			if (debt_remain < 0) {
+				other.value.toast.open({
+					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 
 			keyRender.value++;
 		};
@@ -219,6 +230,15 @@ export default {
 		},
 
 		async handleAction() {
+			if (this.dataForm.debtRemain < 0) {
+				this.$toast.open({
+					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 			const res = await await this.preCertificateStore.updatePaymentFunction(
 				this.dataForm.payments,
 				this.dataForm.id
@@ -269,11 +289,12 @@ export default {
 		border-radius: 5px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		max-width: 1300px;
-		width: 100%;
+		// width: 50%;
+		width: 945px;
 		max-height: 90vh;
 		margin-bottom: 0;
 		// padding: 35px 50px;
-		padding: 25px 50px 25px;
+		padding: 25px 50px 25px 37px;
 		@media (max-width: 787px) {
 			padding: 20px 10px;
 		}
@@ -307,10 +328,20 @@ export default {
 	.contain-detail {
 		overflow-y: auto;
 		overflow-x: hidden;
-		border-top: 1px solid #e8e8e8;
 		padding-top: 15px;
+		position: relative;
 		&::-webkit-scrollbar {
 			width: 2px;
+		}
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 1px; /* Make this the same as your border */
+			width: 100%;
+			background: #e8e8e8; /* Make this the same as your border color */
+			margin-left: 20px;
 		}
 	}
 	&-title {
