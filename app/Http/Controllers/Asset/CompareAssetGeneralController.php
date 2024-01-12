@@ -242,7 +242,7 @@ class CompareAssetGeneralController extends Controller
                 // config(['image.driver' => 'imagick']);
                 // Lưu tệp PNG tạm thời
                 $pngPath = $image->storeAs('temp', 'temporary.png', 'public');
-
+                dd($pngPath,public_path($pngPath));
                 // Đường dẫn đến tệp PNG tạm thời
                 $temporaryPngPath = public_path($pngPath);
 
