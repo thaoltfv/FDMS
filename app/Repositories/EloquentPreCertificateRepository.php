@@ -568,6 +568,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'cancelReason',
+            'otherDocuments',
             'preType'
         ];
         DB::enableQueryLog();
@@ -1063,19 +1064,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 'total_preliminary_value' => $total_preliminary_value,
                             ]);
                     } else {
+                        $updateArray = [
+                            'status' => $status,
+                            'status_updated_at' => date('Y-m-d H:i:s'),
+                            'status_expired_at' => $status_expired_at,
+                        ];
+                        if ($status == 1 && $preCertificate->cancel_reason != null) {
+                            $updateArray['cancel_reason'] = null;
+                        }
                         $result = $this->model->query()
-                            ->where('id', '=', $id)
-                            ->update([
-                                'status' => $status,
-                                'status_updated_at' => date('Y-m-d H:i:s'),
-                                'status_expired_at' => $status_expired_at,
-                            ]);
+                                ->where('id', '=', $id)
+                                ->update($updateArray);
                     }
-                    if ($status == 1 && $preCertificate->cancel_reason != null) {
-                        $preCertificate->cancel_reason = null;
-                        $preCertificate->save();
-                    }
-
+                    
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
                     if ($current > $next) {
