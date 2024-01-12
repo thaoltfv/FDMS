@@ -266,7 +266,7 @@ export const usePreCertificateStore = defineStore(
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
-				if (dataPC.value.payments.length > 0) {
+				if (dataPC.value.payments && dataPC.value.payments.length > 0) {
 					for (let index = 0; index < dataPC.value.payments.length; index++) {
 						const element = dataPC.value.payments[index];
 						if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
