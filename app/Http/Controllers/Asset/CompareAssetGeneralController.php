@@ -252,13 +252,14 @@ class CompareAssetGeneralController extends Controller
                 $image = Image::make($temporaryPngPath);
                 $image->save($temporaryJpgPath, 80, 'jpg');
 
-                //upload lên s3
-                // Storage::put($path . Uuid::uuid4()->toString() . '.jpg', file_get_contents($temporaryJpgPath));
+                // Upload tệp JPG lên S3
+                $s3Path = $path . Uuid::uuid4()->toString() . '.png';
+                Storage::put($s3Path, file_get_contents($temporaryJpgPath), 'public');
             
-                // $fileUrl = Storage::url($name);
+                $fileUrl = Storage::url($s3Path);
                 // Xóa tệp PNG và JPG tạm thời
-                // unlink($temporaryPngPath);
-                // unlink($temporaryJpgPath);
+                unlink($temporaryPngPath);
+                unlink($temporaryJpgPath);
             } else {
                 Storage::put($name, file_get_contents($image));
             
