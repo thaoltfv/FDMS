@@ -238,7 +238,7 @@ class CompareAssetGeneralController extends Controller
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
             try {
-                Image::make($image)->throwException();
+                Image::make($image)->report();
                 if ($image->getClientOriginalExtension() == 'png') {
                     // Thay đổi driver Intervention Image sang Imagick
                     // config(['image.driver' => 'imagick']);
