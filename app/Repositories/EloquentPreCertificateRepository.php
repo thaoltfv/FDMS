@@ -1071,7 +1071,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                 'status_expired_at' => $status_expired_at,
                             ]);
                     }
-                    
+                    if ($status == 1 && $preCertificate->cancel_reason != null) {
+                        $preCertificate->cancel_reason = null;
+                        $preCertificate->save();
+                    }
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
