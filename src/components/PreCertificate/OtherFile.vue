@@ -257,8 +257,10 @@
 					</p>
 				</div>
 			</div>
-			<div class="row d-flex justify-content-between">
-				<strong class="margin_content_inline">File kèm kết quả sơ bộ:</strong>
+			<div class="row d-flex justify-content-between" style=";margin-top:5px">
+				<strong class="margin_content_inline" style="margin-left:-10px"
+					>File kèm kết quả sơ bộ:</strong
+				>
 				<label
 					style="padding: 1px;padding-left:5px;padding-right: 5px;border: 1px solid #b6d5f3;"
 					v-if="allowEdit"
@@ -370,6 +372,7 @@ export default {
 		ModalViewDocument
 	},
 	setup(props, context) {
+		console.log("props", props);
 		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(

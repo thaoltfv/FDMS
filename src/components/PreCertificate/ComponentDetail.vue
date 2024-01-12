@@ -348,7 +348,7 @@
 						</div>
 						<div
 							v-if="allowEditFile.result && edit"
-							@click="dialogRequireForStage3 = true"
+							@click="showCardPCPayments = true"
 							class="btn-edit "
 						>
 							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
@@ -356,9 +356,9 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="card-body card-info">
+					<div class="card-body card-info ml-2">
 						<div
-							class="row mb-1"
+							class="row mb-1 "
 							v-if="dataPC.payments"
 							v-for="(payment, index) in dataPC.payments"
 							:key="index"
@@ -366,7 +366,7 @@
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Ngày thanh toán:</strong>
 								<p>
-									{{ payment.pay_date ? formatDate(dataPC.pay_date) : "" }}
+									{{ payment.pay_date ? formatDate(payment.pay_date) : "" }}
 								</p>
 							</div>
 							<div class="d-flex container_content">
@@ -431,6 +431,11 @@
 			v-if="showAppraiseInformationDialog"
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
+		/>
+		<ModalPCPayments
+			v-if="showCardPCPayments"
+			@cancel="showCardPCPayments = false"
+			@updatePayments="updatePayments"
 		/>
 
 		<ModalViewDocument
@@ -504,6 +509,7 @@ import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
+import ModalPCPayments from "@/components/PreCertificate/ModalPCPayments";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
 import File from "@/models/File";
@@ -527,6 +533,7 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		ModalPCPayments,
 		OtherFile,
 		InputCategory,
 		InputCategorySearch,
@@ -652,6 +659,7 @@ export default {
 		const config = ref({});
 		const editInfo = ref(false);
 		const editAppraiser = ref(false);
+		const editPayments = ref(false);
 		const allowEditFile = ref({ appendix: false, result: false });
 		const changeEditStatus = () => {
 			let dataJson = jsonConfig.value.principle.filter(
@@ -664,7 +672,9 @@ export default {
 					: false;
 
 				editInfo.value = dataJson[0].edit.info ? dataJson[0].edit.info : false;
-
+				editPayments.value = dataJson[0].edit.payments
+					? dataJson[0].edit.payments
+					: false;
 				allowEditFile.value.appendix = dataJson[0].edit.file_appendix
 					? dataJson[0].edit.file_appendix
 					: false;
@@ -685,12 +695,15 @@ export default {
 		start();
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
+		const showCardPCPayments = ref(false);
 		return {
+			showCardPCPayments,
 			allowEditFile,
 			jsonConfig,
 			config,
 			editAppraiser,
 			editInfo,
+			editPayments,
 			dialogRequireForStage3,
 			isMobile,
 			dataPC,
@@ -996,13 +1009,10 @@ export default {
 							let result = resp.data.li_do.filter(
 								item => item.id === e.properties.reason_id
 							);
-							// console.log('répóne',result)
 							e.reason_description = result[0].description;
 						}
 					}
 				}
-
-				// console.log('timeline', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,
@@ -1041,7 +1051,6 @@ export default {
 		},
 
 		handleShowAppraisal() {
-			// console.log('-----------',this.dataPC)
 			this.key_render_appraisal += 1;
 			this.status = this.dataPC.status;
 			this.showAppraisalDialog = true;
@@ -1059,6 +1068,9 @@ export default {
 				position: "top-right",
 				duration: 3000
 			});
+		},
+		async updatePayments() {
+			await this.preCertificateStore.getPreCertificate(this.routeId);
 		},
 		async updateAppraiseInformation() {
 			await this.preCertificateStore.getPreCertificate(this.routeId);
@@ -1175,15 +1187,10 @@ export default {
 				{ note }
 			);
 			if (res.data && res.data.error === false) {
-				if (this.search_kanban) {
-					await this.getDataWorkFlow2(
-						true,
-						this.search_kanban.search,
-						isRefresh
-					);
-				} else await this.getDataWorkFlow2(true);
+				await this.preCertificateStore.getPreCertificate(this.routeId);
+				this.changeEditStatus();
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message: this.message + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -1272,7 +1279,6 @@ export default {
 				if (files.length) {
 					for (let i = 0; i < files.length; i++) {
 						formData.append("files[" + i + "]", files[i]);
-						console.log("files", files);
 					}
 					let res = null;
 					if (this.dataPC.status === 1) {
@@ -1283,7 +1289,6 @@ export default {
 					} else {
 						res = await File.uploadFileCertificate(formData, this.dataPC.id);
 					}
-					console.log("res", res, formData);
 					if (res.data) {
 						// await this.$emit('handleChangeFile', res.data.data)
 						this.dataPC.other_documents = res.data.data;
@@ -1458,7 +1463,6 @@ export default {
 		},
 		async downloadAssetDocument() {
 			let arrayAsset = [];
-			// console.log(this.dataPC.real_estate)
 			if (this.dataPC.real_estate && this.dataPC.real_estate.length > 0) {
 				await this.dataPC.real_estate.forEach(item => {
 					if (
@@ -1685,7 +1689,6 @@ export default {
 			this.isShowAppraiseListVersion = true;
 		},
 		setDocumentViewStatus() {
-			// console.log('this.dataPC.document_type',this.dataPC.document_type)
 			let isExportAutomatic = true;
 			let isCheckRealEstate = true;
 			let isCheckConstruction = false;

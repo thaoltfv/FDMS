@@ -226,18 +226,20 @@ export const usePreCertificateStore = defineStore(
 						pay_date: null
 					}
 				];
-			} else {
-				temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			}
 
 			temp.debtRemain = temp.total_service_fee;
 			temp.amountPaid = 0;
 			for (let index = 0; index < temp.payments.length; index++) {
 				const element = temp.payments[index];
-				temp.amountPaid += element.amount;
+				element.pay_date = moment(element.pay_date).format("DD/MM/YYYY");
+				temp.amountPaid = temp.amountPaid + parseFloat(element.amount);
+				console.log("element.amount", temp.amountPaid, element.amount);
 				temp.debtRemain -= element.amount;
 			}
+			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			dataPC.value = temp;
+			console.log("temp", temp);
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(
@@ -273,12 +275,10 @@ export const usePreCertificateStore = defineStore(
 							);
 						}
 					}
-					console.log("dataPC.value.payments", dataPC.value.payments);
 					let difference = dataPC.value.payments.filter(
 						payment => !dataPC.value.paymentsOriginal.includes(payment)
 					);
 					const res = await updatePaymentFunction(difference, true);
-					console.log("resupdatePaymentFunction", res);
 				}
 				await uploadFilePreCertificateFunction("Appendix");
 				other.value.toast.open({

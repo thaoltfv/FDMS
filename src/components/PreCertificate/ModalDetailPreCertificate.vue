@@ -81,6 +81,27 @@
 						</div>
 
 						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Thời điểm sơ bộ:</strong>
+							<p>
+								{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Tổng phí dịch vụ:</strong>
+							<p>
+								{{
+									dataPC.total_service_fee
+										? formatNumber(dataPC.total_service_fee)
+										: 0
+								}}đ
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Chiết khấu:</strong>
+							<p>{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%</p>
+						</div>
+
+						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
 							<p>
 								{{
@@ -90,16 +111,15 @@
 								}}đ
 							</p>
 						</div>
-
 						<div class="d-flex container_content">
-							<strong class="margin_content_inline">Ghi chú:</strong
+							<strong class="margin_content_inline">Tên tài sản sơ bộ:</strong
 							><span id="note" class="text-left">{{
-								dataPC.note && dataPC.note.length > 25
-									? dataPC.note.substring(25, 0) + "..."
-									: dataPC.note
+								dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
+									? dataPC.pre_asset_name.substring(25, 0) + "..."
+									: dataPC.pre_asset_name
 							}}</span>
 							<b-tooltip target="note" placement="top-right">{{
-								dataPC.note
+								dataPC.pre_asset_name
 							}}</b-tooltip>
 						</div>
 						<div
