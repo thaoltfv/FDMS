@@ -238,6 +238,8 @@ class CompareAssetGeneralController extends Controller
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
             if ($image->getClientOriginalExtension() == 'png') {
+                // Thay đổi driver Intervention Image sang Imagick
+                config(['image.driver' => 'imagick']);
                 // Lưu tệp PNG tạm thời
                 $pngPath = $image->storeAs('temp', 'temporary.png', 'public');
 
