@@ -237,7 +237,6 @@ class CompareAssetGeneralController extends Controller
         try {
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             if ($image->getClientOriginalExtension() == 'png') {
                 // Lưu tệp PNG tạm thời
                 $pngPath = $image->storeAs('temp', 'temporary.png', 'public');
@@ -253,14 +252,15 @@ class CompareAssetGeneralController extends Controller
                 $image->save($temporaryJpgPath, 80, 'jpg');
 
                 // Upload tệp JPG lên S3
-                $s3Path = $path . Uuid::uuid4()->toString() . '.png';
-                Storage::put($s3Path, file_get_contents($temporaryJpgPath), 'public');
+                $s3Path = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+                Storage::put($s3Path, file_get_contents($temporaryJpgPath));
             
                 $fileUrl = Storage::url($s3Path);
                 // Xóa tệp PNG và JPG tạm thời
                 unlink($temporaryPngPath);
                 unlink($temporaryJpgPath);
             } else {
+                $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
                 Storage::put($name, file_get_contents($image));
             
                 $fileUrl = Storage::url($name);
