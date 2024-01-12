@@ -372,7 +372,6 @@ export default {
 		ModalViewDocument
 	},
 	setup(props, context) {
-		console.log("props", props);
 		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(

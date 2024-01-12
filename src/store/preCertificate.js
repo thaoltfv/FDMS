@@ -232,14 +232,14 @@ export const usePreCertificateStore = defineStore(
 			temp.amountPaid = 0;
 			for (let index = 0; index < temp.payments.length; index++) {
 				const element = temp.payments[index];
-				element.pay_date = moment(element.pay_date).format("DD/MM/YYYY");
+				element.pay_date = element.pay_date
+					? moment(element.pay_date).format("DD/MM/YYYY")
+					: "";
 				temp.amountPaid = temp.amountPaid + parseFloat(element.amount);
-				console.log("element.amount", temp.amountPaid, element.amount);
 				temp.debtRemain -= element.amount;
 			}
 			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			dataPC.value = temp;
-			console.log("temp", temp);
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(

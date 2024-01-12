@@ -12,7 +12,7 @@ navigations = [
 	{
 		id: "pre_certification",
 		type: "item",
-		icon: "nav_hstd",
+		icon: "nav_ycsb",
 		title: "Yêu cầu sơ bộ",
 		routeName: "pre_certification.index",
 		customImage: true
@@ -58,7 +58,7 @@ navigations = [
 	{
 		id: "quyhoach",
 		type: "item",
-		icon: "nav_bdg",
+		icon: "nav_bddc",
 		title: "Bản đồ địa chính",
 		routeName: "map_dia_chinh",
 		exact: true,
