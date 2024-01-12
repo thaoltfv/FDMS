@@ -35,7 +35,7 @@
 								/>
 								{{ `YCSB_${form.pre_certificate_id}` }}
 								<b-tooltip target="pre_certificate_id" placement="top-right">{{
-									`Nhấn để xem chi tiết YCSB_${form.pre_certificate_id}`
+									`Được chuyển tiếp từ: YCSB_${form.pre_certificate_id}`
 								}}</b-tooltip>
 							</div>
 						</div>
@@ -3229,7 +3229,7 @@ export default {
 	font-weight: 600;
 	padding: 10px;
 	font-size: 16px !important;
-color: darkgray;
+	color: darkgray;
 	cursor: pointer;
 	@media (max-width: 768px) {
 		margin-bottom: 10px;

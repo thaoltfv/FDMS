@@ -64,7 +64,7 @@
 											:target="`${element.certificate_id + element.id}`"
 											placement="top-right"
 											>{{
-												`Nhấn để xem chi tiết HTSD_${element.certificate_id}`
+												`YCSB đã được chuyển chính thức: HTSD_${element.certificate_id}`
 											}}</b-tooltip
 										>
 									</span>

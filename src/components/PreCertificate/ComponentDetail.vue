@@ -32,7 +32,7 @@
 								/>
 								{{ `HTSD_${dataPC.certificate_id}` }}
 								<b-tooltip target="certificate_id" placement="top-right">{{
-									`Nhấn để xem chi tiết HTSD_${dataPC.certificate_id}`
+									`YCSB đã được chuyển chính thức: HTSD_${dataPC.certificate_id}`
 								}}</b-tooltip>
 							</div>
 						</div>
@@ -385,7 +385,7 @@
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Ngày thanh toán:</strong>
 								<p>
-									{{ payment.pay_date ? formatDate(payment.pay_date) : "" }}
+									{{ payment.pay_date ? payment.pay_date : "" }}
 								</p>
 							</div>
 							<div class="d-flex container_content">

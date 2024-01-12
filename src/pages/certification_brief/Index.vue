@@ -66,7 +66,7 @@
 											:target="`${element.pre_certificate_id + element.id}`"
 											placement="top-right"
 											>{{
-												`Nhấn để xem chi tiết YCSB_${element.pre_certificate_id}`
+												`Được chuyển tiếp từ: YCSB_${element.pre_certificate_id}`
 											}}</b-tooltip
 										>
 									</span>
