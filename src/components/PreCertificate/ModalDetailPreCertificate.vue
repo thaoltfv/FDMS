@@ -27,10 +27,22 @@
 					:style="isMobile ? { 'padding-top': '0' } : {}"
 				>
 					<div class="detail_certificate_1 col-12 mb-2">
-						<div class="col-12 d-flex mb-2 justify-content-between">
+						<div class="col-12 d-flex mb-2 row">
 							<span class="content_id content_id_primary class_p">{{
-								`YCSB ${dataPC.id}`
+								`YCSB_${dataPC.id}`
 							}}</span>
+							<span
+								v-if="dataPC.certificate_id"
+								@click="handleDetailCertificate(dataPC.certificate_id)"
+								class=" card-status-certificate ml-2"
+								id="certificate_id"
+							>
+								<icon-base name="nav_hstd" class="item-icon svg-inline--fa" />
+								{{ `HTSD_${dataPC.certificate_id}` }}
+								<b-tooltip target="certificate_id" placement="top-right">{{
+									`Nhấn để xem chi tiết HTSD_${dataPC.certificate_id}`
+								}}</b-tooltip>
+							</span>
 						</div>
 						<div class="d-flex container_content justify-content-between">
 							<div class="d-flex container_content">
@@ -342,6 +354,7 @@ import {
 	BDropdownItem,
 	BButtonGroup
 } from "bootstrap-vue";
+import IconBase from "./../IconBase.vue";
 
 export default {
 	name: "ModalAppraiseInformation",
@@ -400,6 +413,7 @@ export default {
 		};
 	},
 	components: {
+		IconBase,
 		FileUpload,
 		InputCategory,
 		InputText,
@@ -443,6 +457,16 @@ export default {
 		// this.getDetailCertificate()
 	},
 	methods: {
+		handleDetailCertificate(id) {
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
+		},
 		getTargetDescription() {
 			let data = [];
 			if (this.isPermission) {
@@ -968,6 +992,13 @@ export default {
 	@media (max-width: 767px) {
 		margin-top: 10px;
 	}
+}
+.card-status-certificate {
+	border-radius: 5px;
+	padding: 2px 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	color: darkgray;
+	cursor: pointer;
 }
 .btn_group {
 	@media (max-width: 767px) {

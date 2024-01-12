@@ -41,12 +41,36 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<span
-									@click="handleDetailCertificate(element.id)"
-									class="content_id"
-									:class="`bg-${config.css.color}-15 text-${config.css.color}`"
-									>{{ element.slug }}</span
-								>
+								<div class="row ml-0">
+									<span
+										@click="handleDetailCertificate(element.id)"
+										class="content_id"
+										:class="
+											`bg-${config.css.color}-15 text-${config.css.color}`
+										"
+										>{{ element.slug }}</span
+									>
+									<span
+										v-if="element.pre_certificate_id"
+										@click="
+											handleDetailPreCertificate(element.pre_certificate_id)
+										"
+										class=" card-status-certificate ml-2"
+										:id="`${element.pre_certificate_id + element.id}`"
+									>
+										<icon-base
+											name="nav_ycsb"
+											class="item-icon svg-inline--fa"
+										/>
+										<b-tooltip
+											:target="`${element.pre_certificate_id + element.id}`"
+											placement="top-right"
+											>{{
+												`Nhấn để xem chi tiết YCSB_${element.pre_certificate_id}`
+											}}</b-tooltip
+										>
+									</span>
+								</div>
 								<img
 									v-if="checkDateExpired(element)"
 									class="mr-2 icon_expired"
@@ -119,21 +143,6 @@
 											: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
 									"
 								/>
-							</div>
-							<div
-								v-if="element.pre_certificate_id"
-								class="property-content  mt-2 mb-0"
-							>
-								<strong class="d-none d_inline mr-1">Source:</strong
-								><span
-									@click="
-										handleDetailPreCertificate(element.pre_certificate_id)
-									"
-									class="content_id"
-									:class="`bg-secondary-15 text-secondary`"
-									style="font-weight: bold;"
-									>{{ "YCSB_" + element.pre_certificate_id }}</span
-								>
 							</div>
 						</b-card>
 					</draggable>
@@ -213,7 +222,14 @@ import {
 	HomeIcon,
 	ClockIcon
 } from "vue-feather-icons";
-import { BCard, BRow, BCol, BFormGroup, BFormInput } from "bootstrap-vue";
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput,
+	BTooltip
+} from "bootstrap-vue";
 import draggable from "vuedraggable";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
@@ -224,6 +240,7 @@ import moment from "moment";
 import KanboardStatus from "./component/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import IconBase from "@/components/IconBase.vue";
 const jsonConfig = require("../../../config/workflow.json");
 
 Vue.component("downloadExcel", JsonExcel);
@@ -309,6 +326,8 @@ export default {
 		};
 	},
 	components: {
+		IconBase,
+		"b-tooltip": BTooltip,
 		draggable,
 		BCard,
 		FormWizard,
@@ -1251,6 +1270,13 @@ export default {
 .badgePrimary {
 	background-color: rgba(115, 103, 240, 0.12);
 	color: #7367f0 !important;
+}
+.card-status-certificate {
+	border-radius: 5px;
+	padding: 0px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	color: darkgray;
+	cursor: pointer;
 }
 .content_id {
 	border-radius: 5px;
