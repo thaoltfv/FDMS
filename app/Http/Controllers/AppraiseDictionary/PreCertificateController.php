@@ -318,14 +318,23 @@ class PreCertificateController extends Controller
             '*.pay_date' => 'required|string|max:255',
             '*.amount' => 'integer|min:1',
         ];
-        $customAttributes = [
-            'pay_date' => 'Ngày thanh toán',
-            'amount' => 'Giá trị thanh toán',
-        ];
-        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+
+        $data = $request->toArray();
+        $messages = [];
+        foreach ($data as $index => $item) {
+            $messages[$index . '.pay_date.required'] = 'tại dòng ' . ($index + 1) . ': ngày thanh toán là bắt buộc';
+            $messages[$index . '.pay_date.string'] = 'tại dòng ' . ($index + 1) . ': ngày thanh toán phải là chuỗi';
+            $messages[$index . '.pay_date.max'] = 'tại dòng ' . ($index + 1) . ': ngày thanh toán không được vượt quá 255 ký tự';
+            $messages[$index . '.amount.required'] = 'tại dòng ' . ($index + 1) . ': số tiền là bắt buộc';
+            $messages[$index . '.amount.integer'] = 'tại dòng ' . ($index + 1) . ': số tiền phải là số nguyên';
+            $messages[$index . '.amount.min'] = 'tại dòng ' . ($index + 1) . ': số tiền phải lớn hơn 0';
+        }
+
+        $validator = Validator::make($data, $rules, $messages);
+
         if ($validator->passes()) {
             //TODO Handle your data
-            $result = $this->preCertificateRepository->updatePayments($id , $request->toArray());
+            $result = $this->preCertificateRepository->updatePayments($id , $data);
             if(isset($result['message']) && isset($result['exception']))
                 return $this->respondWithErrorData( $result);
 
@@ -335,7 +344,6 @@ class PreCertificateController extends Controller
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
             return $this->respondWithErrorData( $data);
         }
-
     }
      public function updateToOffical(int $id, Request $request )
     {
