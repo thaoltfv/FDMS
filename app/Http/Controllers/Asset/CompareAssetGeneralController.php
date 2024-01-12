@@ -235,58 +235,60 @@ class CompareAssetGeneralController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         try {
-            $image = $request->file('image');
-            $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            if ($image->getClientOriginalExtension() == 'png') {
-                // Thay đổi driver Intervention Image sang Imagick
-                // config(['image.driver' => 'imagick']);
+            $images = $request->file('image');
+            foreach ($images as $image) {
+                $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+                if ($image->getClientOriginalExtension() == 'png') {
+                    // Thay đổi driver Intervention Image sang Imagick
+                    // config(['image.driver' => 'imagick']);
 
-                // Chuyển đổi tệp PNG thành WebP
-                $webpImage = Image::make($image)->encode('webp');
+                    // Chuyển đổi tệp PNG thành WebP
+                    $webpImage = Image::make($image)->encode('webp');
 
-                // Lưu tệp WebP vào thư mục tạm thời
-                $tempWebpPath = storage_path('app/public/temporary.webp');
-                $webpImage->save($tempWebpPath);
+                    // Lưu tệp WebP vào thư mục tạm thời
+                    $tempWebpPath = storage_path('app/public/temporary.webp');
+                    $webpImage->save($tempWebpPath);
 
-                // Upload tệp WebP lên S3
-                $s3Path = $path . Uuid::uuid4()->toString() . '.webp';
-                Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
-                $fileUrl = Storage::url($s3Path);
+                    // Upload tệp WebP lên S3
+                    $s3Path = $path . Uuid::uuid4()->toString() . '.webp';
+                    Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
+                    $fileUrl = Storage::url($s3Path);
 
-                // Xóa tệp tạm thời nếu cần
-                unlink($tempWebpPath);
+                    // Xóa tệp tạm thời nếu cần
+                    unlink($tempWebpPath);
 
-            } else {
-                $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
-                Storage::put($name, file_get_contents($image));
-            
-                $fileUrl = Storage::url($name);
+                } else {
+                    $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+                    Storage::put($name, file_get_contents($image));
+                
+                    $fileUrl = Storage::url($name);
+                }
             }
-            // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
-            // dd(Storage::disk('s3'));
-    
-            //test s3
-            // Storage::disk('spaces')->put($name, 'public');
-            // $fileUrl = Storage::disk('spaces')->url($name);
+                // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+                // dd(Storage::disk('s3'));
+        
+                //test s3
+                // Storage::disk('spaces')->put($name, 'public');
+                // $fileUrl = Storage::disk('spaces')->url($name);
 
-            // test firebase
+                // test firebase
 
-            // $image = $request->file('image');
-            // $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            // $name = $firebase_storage_path . Uuid::uuid4()->toString();
-            // $localfolder = public_path('firebase-temp-uploads') .'/';  
-            // $extension = $image->getClientOriginalExtension();  
-            // $file      = $name. '.' . $extension;  
-            // $storage = app('firebase.storage');
-            // if ($image->move($localfolder, $file)) {  
-            //     $uploadedfile = fopen($localfolder.$file, 'r');  
-            //     $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
-            //     //will remove from local laravel folder  
-            //     unlink($localfolder . $file);  
-            //     Session::flash('message', 'Succesfully Uploaded');
-            //     $expiresAt = new \DateTime('tomorrow');
-            //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
-            // } 
+                // $image = $request->file('image');
+                // $firebase_storage_path = env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
+                // $name = $firebase_storage_path . Uuid::uuid4()->toString();
+                // $localfolder = public_path('firebase-temp-uploads') .'/';  
+                // $extension = $image->getClientOriginalExtension();  
+                // $file      = $name. '.' . $extension;  
+                // $storage = app('firebase.storage');
+                // if ($image->move($localfolder, $file)) {  
+                //     $uploadedfile = fopen($localfolder.$file, 'r');  
+                //     $storage->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);  
+                //     //will remove from local laravel folder  
+                //     unlink($localfolder . $file);  
+                //     Session::flash('message', 'Succesfully Uploaded');
+                //     $expiresAt = new \DateTime('tomorrow');
+                //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
+                // } 
             return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
         } catch (\Exception $exception) {
             Log::error($exception);
