@@ -35,6 +35,7 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Google\Cloud\Firestore\FirestoreClient;
 use Kreait\Firebase\Factory;
 use Session;
+use Intervention\Image\Facades\Image;
 
 
 class CompareAssetGeneralController extends Controller
@@ -237,12 +238,35 @@ class CompareAssetGeneralController extends Controller
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
             $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+            if ($image->getClientOriginalExtension() == 'png') {
+                // Lưu tệp PNG tạm thời
+                $pngPath = $image->storeAs('temp', 'temporary.png', 'public');
+
+                // Đường dẫn đến tệp PNG tạm thời
+                $temporaryPngPath = storage_path('app/public/' . $pngPath);
+
+                // Đường dẫn đến tệp JPG đích
+                $jpgPath = str_replace('.png', '.jpg', $pngPath);
+                $temporaryJpgPath = storage_path('app/public/temp/' . $jpgPath);
+                // Đọc tệp PNG và chuyển đổi thành JPG
+                $image = Image::make($temporaryPngPath);
+                $image->save($temporaryJpgPath, 80, 'jpg');
+
+                //upload lên s3
+                Storage::put($name, file_get_contents($image));
+            
+                $fileUrl = Storage::url($name);
+                // Xóa tệp PNG và JPG tạm thời
+                unlink($temporaryPngPath);
+                unlink($temporaryJpgPath);
+            } else {
+                Storage::put($name, file_get_contents($image));
+            
+                $fileUrl = Storage::url($name);
+            }
             // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // dd(Storage::disk('s3'));
-            Storage::put($name, file_get_contents($image));
-            
-            $fileUrl = Storage::url($name);
-
+    
             //test s3
             // Storage::disk('spaces')->put($name, 'public');
             // $fileUrl = Storage::disk('spaces')->url($name);
