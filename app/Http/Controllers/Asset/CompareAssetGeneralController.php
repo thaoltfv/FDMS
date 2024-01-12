@@ -257,7 +257,7 @@ class CompareAssetGeneralController extends Controller
                     // Xử lý lỗi khi chuyển đổi
                     dd($image->getError());
                 } else {
-                    dd(public_path('storage/'.$jpgPath));
+                    // dd(public_path('storage/'.$jpgPath));
                     // Upload tệp JPG lên S3
                     $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
                     Storage::put($s3Path, file_get_contents(public_path('storage/'.$jpgPath)));
