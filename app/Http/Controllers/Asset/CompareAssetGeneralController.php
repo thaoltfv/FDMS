@@ -240,40 +240,21 @@ class CompareAssetGeneralController extends Controller
             if ($image->getClientOriginalExtension() == 'png') {
                 // Thay đổi driver Intervention Image sang Imagick
                 // config(['image.driver' => 'imagick']);
-                // Lưu tệp PNG tạm thời
-                // Lưu dữ liệu binary vào một tệp tạm thời
-                $tempFilePath = storage_path('app/public');
-                // Lưu file tạm thời
-                $image->move($tempFilePath, '/temp.png');
-                // Đường dẫn đến mẫu DOCX
-                $pngPath = $tempFilePath.'/temp.png';
 
-                // dd($pngPath,public_path($pngPath));
-                // Đường dẫn đến tệp PNG tạm thời
-                // $temporaryPngPath = public_path('storage/'.$pngPath);
+                // Chuyển đổi tệp PNG thành WebP
+                $webpImage = Image::make($image)->encode('webp');
 
-                // Đường dẫn đến tệp JPG đích
-                $jpgPath = str_replace('.png', '.jpg', $pngPath);
-                // $temporaryJpgPath = public_path('storage/'.$jpgPath);
-                // Đọc tệp PNG và chuyển đổi thành JPG
-                $image = Image::make($pngPath)->encode('jpg', 80);
-                $result = $image->save($jpgPath);
+                // Lưu tệp WebP vào thư mục tạm thời
+                $tempWebpPath = storage_path('app/public/temporary.webp');
+                $webpImage->save($tempWebpPath);
 
-                if ($result === false) {
-                    // Xử lý lỗi khi chuyển đổi
-                    dd($image->getError());
-                } else {
-                    // dd($jpgPath);
-                    // Upload tệp JPG lên S3
-                    $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
-                    Storage::put($s3Path, file_get_contents($jpgPath));
-                
-                    $fileUrl = Storage::url($s3Path);
-                }
+                // Upload tệp WebP lên S3
+                $s3Path = $path . Uuid::uuid4()->toString() . '.webp';
+                Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
 
-                // Xóa tệp PNG và JPG tạm thời
-                unlink($pngPath);
-                unlink($jpgPath);
+                // Xóa tệp tạm thời nếu cần
+                unlink($tempWebpPath);
+
             } else {
                 $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
                 Storage::put($name, file_get_contents($image));
