@@ -237,32 +237,39 @@ class CompareAssetGeneralController extends Controller
         try {
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            if ($image->getClientOriginalExtension() == 'png') {
-                // Thay đổi driver Intervention Image sang Imagick
-                // config(['image.driver' => 'imagick']);
+            try {
+                Image::make($image)->throwException();
+                if ($image->getClientOriginalExtension() == 'png') {
+                    // Thay đổi driver Intervention Image sang Imagick
+                    // config(['image.driver' => 'imagick']);
 
-                // Chuyển đổi tệp PNG thành WebP
-                $webpImage = Image::make($image)->encode('jpg');
+                    // Chuyển đổi tệp PNG thành WebP
+                    $webpImage = Image::make($image)->encode('jpg');
 
-                // Lưu tệp WebP vào thư mục tạm thời
-                $tempWebpPath = storage_path('app/public/temporary.jpg');
-                $webpImage->save($tempWebpPath);
+                    // Lưu tệp WebP vào thư mục tạm thời
+                    $tempWebpPath = storage_path('app/public/temporary.jpg');
+                    $webpImage->save($tempWebpPath);
 
-                // Upload tệp WebP lên S3
-                $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
-                Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
-                $fileUrl = Storage::url($s3Path);
-                $extension = 'jpg';
+                    // Upload tệp WebP lên S3
+                    $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
+                    Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
+                    $fileUrl = Storage::url($s3Path);
+                    $extension = 'jpg';
 
-                // Xóa tệp tạm thời nếu cần
-                // unlink($tempWebpPath);
+                    // Xóa tệp tạm thời nếu cần
+                    // unlink($tempWebpPath);
 
-            } else {
-                $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
-                Storage::put($name, file_get_contents($image));
-            
-                $fileUrl = Storage::url($name);
-                $extension = $image->extension();
+                } else {
+                    $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+                    Storage::put($name, file_get_contents($image));
+                
+                    $fileUrl = Storage::url($name);
+                    $extension = $image->extension();
+                }
+            }   catch (\Exception $e) {
+                // Lỗi xảy ra khi xử lý hình ảnh, hình ảnh không hợp lệ
+                Log::error($e);
+                $data = ['message' => 'Hình ảnh bị lỗi, vui lòng upload ảnh khác', 'exception' => $e];
             }
             // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // dd(Storage::disk('s3'));
