@@ -242,13 +242,13 @@ class CompareAssetGeneralController extends Controller
                 // config(['image.driver' => 'imagick']);
                 // Lưu tệp PNG tạm thời
                 $pngPath = $image->storeAs('temp', 'temporary.png', 'public');
-                dd($pngPath,public_path($pngPath));
+                // dd($pngPath,public_path($pngPath));
                 // Đường dẫn đến tệp PNG tạm thời
-                $temporaryPngPath = public_path($pngPath);
+                $temporaryPngPath = public_path('storage/'.$pngPath);
 
                 // Đường dẫn đến tệp JPG đích
                 $jpgPath = str_replace('.png', '.jpg', $pngPath);
-                $temporaryJpgPath = public_path($jpgPath);
+                $temporaryJpgPath = public_path('storage/'.$jpgPath);
                 // Đọc tệp PNG và chuyển đổi thành JPG
                 $image = Image::make($temporaryPngPath)->encode('jpg', 80);
                 $result = $image->save($temporaryJpgPath);
@@ -257,10 +257,10 @@ class CompareAssetGeneralController extends Controller
                     // Xử lý lỗi khi chuyển đổi
                     dd($image->getError());
                 } else {
-                    dd(public_path($jpgPath));
+                    dd(public_path('storage/'.$jpgPath));
                     // Upload tệp JPG lên S3
                     $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
-                    Storage::put($s3Path, file_get_contents(public_path($jpgPath)));
+                    Storage::put($s3Path, file_get_contents(public_path('storage/'.$jpgPath)));
                 
                     $fileUrl = Storage::url($s3Path);
                 }
