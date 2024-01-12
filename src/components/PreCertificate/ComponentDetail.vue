@@ -453,7 +453,7 @@
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
-				message == 'Từ chối' || message == 'Khôi phục'
+				message == 'Từ chối' || message == 'Khôi phục' || message == 'Hủy'
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${message}'`
 			"
@@ -1227,7 +1227,9 @@ export default {
 				this.changeEditStatus();
 				this.$toast.open({
 					message:
-						this.message == "Từ chối" || this.message == "Khôi phục"
+						this.message == "Từ chối" ||
+						this.message == "Khôi phục" ||
+						this.message == "Hủy"
 							? this.message + " thành công"
 							: "Chuyển trạng thái " + `'${this.message}'` + " thành công",
 					type: "success",

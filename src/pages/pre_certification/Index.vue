@@ -128,11 +128,11 @@
 									@click="handleDetailCertificate(element.certificate_id)"
 									class="content_certificate_id"
 								>
-									<font-awesome-icon
-										icon="angle-right"
-										class="item-icon arrow"
+									<img
+										class="mr-1 mt-n1 icon_expired"
+										src="@/assets/icons/ic_arrow_direct.svg"
+										alt="ic_arrow_direct"
 									/>
-
 									{{ "HSTD_" + element.certificate_id }}</span
 								>
 							</div>
@@ -157,7 +157,9 @@
 			<ModalNotificationPreCertificateNote
 				v-if="isMoved"
 				:notification="
-					confirm_message == 'Từ chối' || confirm_message == 'Khôi phục'
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
 				"
@@ -168,7 +170,9 @@
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
 				:notification="
-					confirm_message == 'Từ chối' || confirm_message == 'Khôi phục'
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
 				"
@@ -740,6 +744,7 @@ export default {
 				await this.$toast.open({
 					message:
 						this.confirm_message == "Từ chối" ||
+						this.confirm_message == "Hủy" ||
 						this.confirm_message == "Khôi phục"
 							? this.confirm_message + " thành công"
 							: "Chuyển trạng thái " +
@@ -1191,8 +1196,8 @@ export default {
 .content_certificate_id {
 	border-radius: 5px;
 	padding: 0px 3px;
-	font-weight: 500;
-	color: #017ec6;
+	font-weight: bold;
+	color: #007ec6;
 	cursor: pointer;
 	border: 1px solid #a7d9fb;
 }
