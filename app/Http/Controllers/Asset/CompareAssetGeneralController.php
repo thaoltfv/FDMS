@@ -241,23 +241,29 @@ class CompareAssetGeneralController extends Controller
                 // Thay đổi driver Intervention Image sang Imagick
                 // config(['image.driver' => 'imagick']);
                 // Lưu tệp PNG tạm thời
-                $pngPath = $image->storeAs('temp', 'temporary.png', 'public');
+                // Lưu dữ liệu binary vào một tệp tạm thời
+                $tempFilePath = storage_path('app/public');
+                // Lưu file tạm thời
+                $image->move($tempFilePath, '/temp.png');
+                // Đường dẫn đến mẫu DOCX
+                $pngPath = $tempFilePath.'/temp.png';
+
                 // dd($pngPath,public_path($pngPath));
                 // Đường dẫn đến tệp PNG tạm thời
-                $temporaryPngPath = public_path('storage/'.$pngPath);
+                // $temporaryPngPath = public_path('storage/'.$pngPath);
 
                 // Đường dẫn đến tệp JPG đích
                 $jpgPath = str_replace('.png', '.jpg', $pngPath);
-                $temporaryJpgPath = public_path('storage/'.$jpgPath);
+                // $temporaryJpgPath = public_path('storage/'.$jpgPath);
                 // Đọc tệp PNG và chuyển đổi thành JPG
-                $image = Image::make($temporaryPngPath)->encode('jpg', 80);
-                $result = $image->save($temporaryJpgPath);
+                $image = Image::make($pngPath)->encode('jpg', 80);
+                $result = $image->save($jpgPath);
 
                 if ($result === false) {
                     // Xử lý lỗi khi chuyển đổi
                     dd($image->getError());
                 } else {
-                    // dd(realpath(public_path('storage/'.$jpgPath)));
+                    dd(realpath(public_path('storage/'.$jpgPath)));
                     // Upload tệp JPG lên S3
                     $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
                     Storage::put($s3Path, Storage::disk('public')->get(realpath(public_path('storage/'.$jpgPath))));
