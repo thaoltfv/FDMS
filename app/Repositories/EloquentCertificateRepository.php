@@ -3081,6 +3081,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             'created_by',
             'document_type',
+            'pre_certificate_id',
         ];
         $with = [
             'appraiser:id,name,user_id',

@@ -567,6 +567,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'cancelReason',
+            'preType'
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
@@ -836,7 +838,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'customer:id,name,phone,address',
             'otherDocuments',
             'createdBy:id,name',
-            'payments'
+            'payments',
+            'cancelReason',
+            'preType'
         ];
         $result = $this->model->query()
             ->with($with)
@@ -1023,7 +1027,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $preCertificate = $this->model->query()->where('id', $id)->first();
 
                 if (isset($preCertificate->certificate_id)) {
-                    $result = ['message' => ErrorMessage::PRE_CERTIFICATE_HAVE_CERTIFICATE, 'exception' => ''];
+                    return  ['message' => ErrorMessage::PRE_CERTIFICATE_HAVE_CERTIFICATE, 'exception' => ''];
                 }
                 $currentStatus = $preCertificate->status;
                 $current = intval($currentStatus);
@@ -1075,6 +1079,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
+                        if ($logDescription == "từ chối Hủy") {
+                            $logDescription = "Khôi phục YCSB";
+                        }
                     }
                     else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';

@@ -150,4 +150,15 @@ class PreCertificate extends Model
     {
         return $this->hasMany(PreCertificatePayments::class, 'pre_certificate_id');
     }
+
+    public function preType(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'pre_type_id', 'id');
+    }
+
+     public function cancelReason(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'cancel_reason', 'id');
+    }
+
 }
