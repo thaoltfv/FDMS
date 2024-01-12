@@ -1021,6 +1021,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 //     return $check;
                 // }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
+
+                if (isset($preCertificate->certificate_id)) {
+                    $result = ['message' => ErrorMessage::PRE_CERTIFICATE_HAVE_CERTIFICATE, 'exception' => ''];
+                }
                 $currentStatus = $preCertificate->status;
                 $current = intval($currentStatus);
                 $currentConfig = current(array_filter($request['status_config'], function ($val) use ($currentStatus) {
