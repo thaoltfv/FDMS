@@ -252,6 +252,7 @@ class CompareAssetGeneralController extends Controller
                 $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
                 Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
                 $fileUrl = Storage::url($s3Path);
+                $extension = 'jpg';
 
                 // Xóa tệp tạm thời nếu cần
                 // unlink($tempWebpPath);
@@ -261,6 +262,7 @@ class CompareAssetGeneralController extends Controller
                 Storage::put($name, file_get_contents($image));
             
                 $fileUrl = Storage::url($name);
+                $extension = $image->extension();
             }
             // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // dd(Storage::disk('s3'));
@@ -287,7 +289,7 @@ class CompareAssetGeneralController extends Controller
             //     $expiresAt = new \DateTime('tomorrow');
             //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
             // } 
-            return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
+            return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $extension]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
