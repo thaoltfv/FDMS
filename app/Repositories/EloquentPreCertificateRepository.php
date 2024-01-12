@@ -1075,6 +1075,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
+                        if ($logDescription == "từ chối Hủy") {
+                            $logDescription = "Khôi phục YCSB";
+                        }
                     }
                     else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
