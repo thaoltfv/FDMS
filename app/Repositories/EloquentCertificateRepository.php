@@ -2660,6 +2660,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
             'appraiser_sale_id', 'appraiser_control_id',
+            'pre_certificate_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
