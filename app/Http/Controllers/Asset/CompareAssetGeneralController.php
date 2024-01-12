@@ -242,14 +242,14 @@ class CompareAssetGeneralController extends Controller
                 // config(['image.driver' => 'imagick']);
 
                 // Chuyển đổi tệp PNG thành WebP
-                $webpImage = Image::make($image)->encode('webp');
+                $webpImage = Image::make($image)->encode('jpg');
 
                 // Lưu tệp WebP vào thư mục tạm thời
-                $tempWebpPath = storage_path('app/public/temporary.webp');
+                $tempWebpPath = storage_path('app/public/temporary.jpg');
                 $webpImage->save($tempWebpPath);
 
                 // Upload tệp WebP lên S3
-                $s3Path = $path . Uuid::uuid4()->toString() . '.webp';
+                $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
                 Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
                 $fileUrl = Storage::url($s3Path);
 
