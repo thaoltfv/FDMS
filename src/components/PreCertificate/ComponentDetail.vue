@@ -366,7 +366,7 @@
 							<h3 class="title">Thông tin thanh toán</h3>
 						</div>
 						<div
-							v-if="allowEditFile.result && edit"
+							v-if="editPayments && edit"
 							@click="handleshowCardPCPayments"
 							class="btn-edit "
 						>
@@ -701,6 +701,7 @@ export default {
 					? dataJson[0].edit.file_result
 					: false;
 			}
+			console.log("dataJson", dataJson, editPayments.value);
 		};
 		const start = async () => {
 			if (!jsonConfig.value) {
