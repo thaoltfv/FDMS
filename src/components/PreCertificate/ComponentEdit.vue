@@ -4,9 +4,9 @@
 			<div class="card">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">Chỉnh sửa hồ sơ thẩm định sơ bộ</h3>
+						<h3 class="title">Chỉnh sửa yêu cầu sơ bộ</h3>
 						<div class="color_content card-status">
-							{{ dataPC && dataPC.id ? `HSTDSB_${dataPC.id}` : "HSTDSB" }} | Mới
+							{{ dataPC && dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} | Mới
 						</div>
 					</div>
 				</div>
@@ -66,62 +66,127 @@
 								:options="optionsAppraisalPurposes"
 								@change="handleChangeAppraisePurpose"
 							/>
-							<!-- <InputDatePicker
-								v-model="dataPC.appraise_date"
-								vid="appraise_date"
-								label="Thời điểm thẩm định"
+						</div>
+					</div>
+					<div class="col-md-12 order-3 order-lg-2 col-lg-6">
+						<div class="row justify-content-between">
+							<InputCurrency
+								:key="keyRender"
+								v-model="dataPC.total_service_fee"
+								vid="total_service_fee"
+								:max="99999999999999"
+								label="Tổng phí dịch vụ"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="paidCompute($event, null, true)"
+							/>
+							<InputPercent
+								:key="keyRender"
+								v-model="dataPC.commission_fee"
+								label="Chiết khấu"
+								vid="test"
+								:max="100"
+								:decimal="0"
+								rules="required"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="dataPC.commission_fee = $event"
+							/>
+						</div>
+
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="dataPC.pre_type_id"
+								vid="pre_type_id"
+								label="Loại sơ bộ"
+								class="form-group-container col-sm-12 col-md-6"
+								:options="optionsPreTypes"
+							/>
+							<InputDatePicker
+								v-model="dataPC.pre_date"
+								vid="pre_date"
+								label="Thời điểm sơ bộ"
 								placeholder="Ngày / tháng / năm"
 								rules="required"
 								:formatDate="'DD/MM/YYYY'"
 								class="form-group-container col-sm-12 col-md-6"
-								@change="changeAppraiseDate"
-							/> -->
-						</div>
-						<!-- <InputCategoryMulti
-              v-model="dataPC.document_type"
-              :maxTagCount="1"
-              class="form-group-container input_certification_brief"
-              vid="document_type"
-              label="Loại thẩm định"
-              rules="required"
-              :options="optionsTypeAppraiser"
-            /> -->
-					</div>
-					<div class="col-md-12 order-3 order-lg-2 col-lg-6">
-						<!-- <div class="row justify-content-between">
-							<InputCurrency
-								v-model="dataPC.total_preliminary_value"
-								vid="service_fee"
-								:max="99999999999999"
-								label="Tổng giá trị sơ bộ"
-								class="form-group-container col-sm-12 col-md-12"
+								@change="dataPC.pre_date = $event"
 							/>
-						</div> -->
-
-						<InputCategoryPreTypes
-							v-model="dataPC.pre_type"
-							class="form-group-container "
-							vid="pre_type"
-							label="Loại sơ bộ"
-						/>
-
-						<InputTextarea
-							:autosize="true"
-							:disableInput="false"
-							v-model="dataPC.note"
-							label="Ghi chú"
-							class="form-group-container"
-						/>
+						</div>
+						<div>
+							<InputTextarea
+								:rows="4"
+								:disableInput="false"
+								v-model="dataPC.pre_asset_name"
+								label="Tên tài sản sơ bộ"
+								class="form-group-container"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div
-			v-if="dataPC.id"
-			class="col-6"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<OtherFile type="Appendix" />
+		<div class="col-6">
+			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<h3 class="title">Đối tác</h3>
+						<img
+							class="img-dropdown"
+							:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
+							src="@/assets/images/icon-btn-down.svg"
+							alt="dropdown"
+							@click="showCardDetailTraffic = !showCardDetailTraffic"
+						/>
+					</div>
+				</div>
+				<div class="card-body card-info" v-show="showCardDetailTraffic">
+					<div class="d-flex-column">
+						<InputCategorySearch
+							vid="appraiser"
+							class="form-group-container"
+							label="Tìm đối tác"
+							@change="handleChangeCustomer"
+							@search="debounceSearchCustomer"
+							:options="optionsCustomer"
+						/>
+						<div class="row">
+							<div class="col-lg-6">
+								<InputTextPrefixCustom
+									id="customer_name"
+									placeholder="Ông / Bà"
+									v-model="dataPC.customer.name"
+									vid="customer_name"
+									:iconUser="true"
+									:showIcon="true"
+									label="Họ tên đối tác"
+									class="form-group-container input_certification_brief"
+								/>
+							</div>
+							<div class="col-lg-6">
+								<InputTextPrefixCustom
+									id="customer_phone"
+									placeholder="Nhập số điện thoại"
+									v-model="dataPC.customer.phone"
+									class="form-group-container input_certification_brief"
+									vid="customer_phone"
+									:iconPhone="true"
+									:showIcon="true"
+									label="Điện thoại"
+								/>
+							</div>
+						</div>
+						<InputTextPrefixCustom
+							id="customer_address"
+							placeholder="Nhập địa chỉ của khách hàng"
+							v-model="dataPC.customer.address"
+							vid="customer_address"
+							:iconLocation="true"
+							:showIcon="true"
+							label="Địa chỉ"
+							class="form-group-container input_certification_brief"
+						/>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="col-6">
 			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
@@ -152,7 +217,7 @@
 								vid="appraiser_sale_id"
 								label="Nhân viên kinh doanh"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-12"
 								:options="optionsAppraiserSales"
 							/>
 							<InputCategory
@@ -160,7 +225,7 @@
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-12"
 								:options="optionsAppraiserPerformance"
 							/>
 						</div>
@@ -170,72 +235,10 @@
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-12"
 								:options="optionsBusinessManager"
 							/>
 						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card">
-				<div class="card-title">
-					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">Đối tác</h3>
-						<img
-							class="img-dropdown"
-							:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
-							src="@/assets/images/icon-btn-down.svg"
-							alt="dropdown"
-							@click="showCardDetailTraffic = !showCardDetailTraffic"
-						/>
-					</div>
-				</div>
-				<div class="card-body card-info" v-show="showCardDetailTraffic">
-					<div class="d-flex-column">
-						<InputCategorySearch
-							vid="appraiser"
-							class="form-group-container"
-							label="Tìm đối tác"
-							@change="handleChangeCustomer"
-							@search="debounceSearchCustomer"
-							:options="optionsCustomer"
-						/>
-						<div class="row">
-							<div class="col-lg-6">
-								<InputTextPrefixCustom
-								id="customer_name"
-								placeholder="Ông / Bà"
-								v-model="dataPC.customer.name"
-								vid="customer_name"
-								:iconUser="true"
-								:showIcon="true"
-								label="Họ tên đối tác"
-								class="form-group-container input_certification_brief"
-							/>
-							</div>
-							<div class="col-lg-6">
-									<InputTextPrefixCustom
-									id="customer_phone"
-									placeholder="Nhập số điện thoại"
-									v-model="dataPC.customer.phone"
-									class="form-group-container input_certification_brief"
-									vid="customer_phone"
-									:iconPhone="true"
-									:showIcon="true"
-									label="Điện thoại"
-								/>
-							</div>
-						</div>
-						<InputTextPrefixCustom
-							id="customer_address"
-							placeholder="Nhập địa chỉ của khách hàng"
-							v-model="dataPC.customer.address"
-							vid="customer_address"
-							:iconLocation="true"
-							:showIcon="true"
-							label="Địa chỉ"
-							class="form-group-container input_certification_brief"
-						/>
 					</div>
 				</div>
 			</div>
@@ -267,6 +270,102 @@
 					@action="showCardDetailFileResult = true"
 				/>
 			</div>
+		</div>
+		<div v-if="dataPC.id && dataPC.status >= 2" class="col-6">
+			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<h3 class="title">Thông tin thanh toán</h3>
+						<img
+							class="img-dropdown"
+							:class="!showCardDetailPayments ? 'img-dropdown__hide' : ''"
+							src="@/assets/images/icon-btn-down.svg"
+							alt="dropdown"
+							@click="showCardDetailPayments = !showCardDetailPayments"
+						/>
+					</div>
+				</div>
+				<div class="card-body card-info" v-show="showCardDetailPayments">
+					<div class="d-flex-column">
+						<div
+							class="row "
+							v-for="(payment, index) in dataPC.payments"
+							:key="index"
+							v-if="!payment.is_deleted"
+						>
+							<div class="row justify-content-between col-10">
+								<InputDatePicker
+									v-model="payment.pay_date"
+									vid="pay_date"
+									label="Ngày thanh toán"
+									placeholder="Ngày / tháng / năm"
+									rules="required"
+									:formatDate="'DD/MM/YYYY'"
+									class="form-group-container col-sm-12 col-md-6"
+									@change="payment.pay_date = $event"
+								/>
+								<InputCurrency
+									v-model="payment.amount"
+									vid="amount"
+									:max="99999999999999"
+									label="Giá trị thanh toán"
+									class="form-group-container col-sm-12 col-md-6"
+									@change="paidCompute($event, payment)"
+								/>
+							</div>
+							<div class="mt-5 col-2 d-flex  justify-content-between">
+								<span
+									style="font-style: italic; color: orange; cursor: pointer"
+									@click="addPayment"
+									>+Thêm</span
+								>
+								<span
+									v-if="
+										dataForm.payments.filter(
+											payment =>
+												payment.is_deleted === undefined || !payment.is_deleted
+										).length > 1
+									"
+									style="font-style: italic; color: red; cursor: pointer"
+									@click="removePayment(index, payment)"
+								>
+									-Xóa
+								</span>
+							</div>
+						</div>
+
+						<div class="row justify-content-between mt-4">
+							<strong class="margin_content_inline">Đã thanh toán:</strong>
+							<InputCurrency
+								:key="keyRender"
+								v-model="dataPC.paid"
+								vid="amount"
+								:disabled="true"
+								:max="99999999999999"
+								class="form-group-container col-6 mt-n1"
+							/>
+						</div>
+						<div class="row justify-content-between mt-4">
+							<strong class="margin_content_inline">Còn nợ:</strong>
+							<InputCurrency
+								:key="keyRender"
+								v-model="dataPC.debtRemain"
+								vid="amount"
+								:disabled="true"
+								:max="99999999999999"
+								class="form-group-container col-6 mt-n1"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			v-if="dataPC.id"
+			class="col-12"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
+			<OtherFile type="Appendix" />
 		</div>
 	</div>
 </template>
@@ -328,11 +427,12 @@ export default {
 			slider: "#FAA831",
 			arrow: "#000000"
 		});
-		const showCardDetailFileResult = ref(false);
+		const showCardDetailFileResult = ref(true);
 		const showCardDetailAppraise = ref(true);
 		const showCardDetailFile = ref(true);
 		const showCardDetailTraffic = ref(true);
 		const showCardDetailEconomicAndSocial = ref(true);
+		const showCardDetailPayments = ref(true);
 		const showCardDetailImage = ref(true);
 		const customers_step_1 = ref(null);
 		const form = ref({
@@ -366,17 +466,20 @@ export default {
 			sub_status: 1
 		});
 
+		const keyRender = ref(0);
 		const preCertificateStore = usePreCertificateStore();
-		preCertificateStore.resetData();
-		preCertificateStore.getPreCertificate(props.routeId);
+
 		const { dataPC, lstDataConfig, preCertificateOtherDocuments } = storeToRefs(
 			preCertificateStore
 		);
+		const getStartData = async () => {
+			preCertificateStore.resetData();
+			dataPC.value = await preCertificateStore.getPreCertificate(props.routeId);
+			keyRender.value++;
+		};
+		getStartData();
 		const handleChangeAppraisePurpose = event => {
 			dataPC.value.appraise_purpose_id = event;
-		};
-		const handleChangePreType = event => {
-			dataPC.value.pre_type = event;
 		};
 		const debounceSearchCustomer = debounce(function(e) {
 			if (e) {
@@ -395,13 +498,52 @@ export default {
 				dataPC.value.customer.phone = bindCustomer[0].phone;
 			}
 		};
+		const paidCompute = (
+			event,
+			payment,
+			booltotal_service_fee = false,
+			runCompute = false
+		) => {
+			if (!runCompute) {
+				if (!booltotal_service_fee) payment.amount = event;
+				if (booltotal_service_fee) dataForm.value.total_service_fee = event;
+			}
+			let debt_remain = dataForm.value.total_service_fee;
+			let paid = 0;
+			for (let index = 0; index < dataForm.value.payments.length; index++) {
+				const element = dataForm.value.payments[index];
+				if (element.is_deleted) continue;
+				debt_remain -= element.amount;
+				paid += parseFloat(element.amount);
+			}
+			dataForm.value.debtRemain = debt_remain;
+			dataForm.value.paid = paid;
+
+			keyRender.value++;
+		};
+
+		const addPayment = () => {
+			dataPC.value.payments.push({
+				pre_date: null,
+				amount: 0
+			});
+		};
+		const removePayment = (index, payment) => {
+			if (!payment.id) dataForm.value.payments.splice(index, 1);
+			else {
+				Vue.set(payment, "is_deleted", true);
+			}
+			paidCompute(0, 0, false, true);
+		};
 		return {
+			keyRender,
 			isMobile,
 			theme,
 			showCardDetailAppraise,
 			showCardDetailFile,
 			showCardDetailTraffic,
 			showCardDetailEconomicAndSocial,
+			showCardDetailPayments,
 			showCardDetailImage,
 			customers_step_1,
 			form,
@@ -413,7 +555,10 @@ export default {
 
 			handleChangeAppraisePurpose,
 			handleChangeCustomer,
-			debounceSearchCustomer
+			debounceSearchCustomer,
+			paidCompute,
+			addPayment,
+			removePayment
 		};
 	},
 	computed: {
@@ -443,14 +588,6 @@ export default {
 			// setter
 			set: function(newValue) {
 				this.dataPC.business_manager_id = newValue;
-			}
-		},
-		pre_type_compute: {
-			get: function() {
-				return this.dataPC.pre_type;
-			},
-			set: function(newValue) {
-				this.dataPC.pre_type = newValue;
 			}
 		},
 		appraiser_sale_compute: {
@@ -498,8 +635,8 @@ export default {
 		optionsPreTypes() {
 			return {
 				data: this.lstDataConfig.preTypes,
-				id: "name",
-				key: "name"
+				id: "id",
+				key: "description"
 			};
 		},
 		optionsCustomer() {

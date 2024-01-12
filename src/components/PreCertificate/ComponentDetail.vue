@@ -8,14 +8,33 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class=" color_content card-status">
-							{{ dataPC.id ? `HSTDSB_${dataPC.id}` : "HSTDSB" }} |
-							<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
-							<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
-							<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
-							<span v-if="dataPC.status === 4">Thương thảo</span>
-							<span v-if="dataPC.status === 5">Hoàn thành</span>
-							<span v-if="dataPC.status === 6">Hủy</span>
+						<div class="row">
+							<div class=" color_content card-status-pre-certificate">
+								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
+								<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
+								<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
+								<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
+								<span v-if="dataPC.status === 4">Thương thảo</span>
+								<span v-if="dataPC.status === 5">Hoàn thành</span>
+								<span v-if="dataPC.status === 6">Hủy</span>
+							</div>
+							<div
+								v-if="dataPC.certificate_id"
+								@click="handleDetailCertificate(dataPC.certificate_id)"
+								class=" card-status-certificate ml-3"
+								id="certificate_id"
+							>
+								<icon-base
+									name="nav_hstd"
+									width="20px"
+									height="20px"
+									class="item-icon svg-inline--fa"
+								/>
+								{{ `HTSD_${dataPC.certificate_id}` }}
+								<b-tooltip target="certificate_id" placement="top-right">{{
+									`Nhấn để xem chi tiết HTSD_${dataPC.certificate_id}`
+								}}</b-tooltip>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -52,54 +71,65 @@
 									<p>{{ dataPC.petitioner_address }}</p>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Mục đích thẩm định:</strong
-									><span id="appraise_purpose" class="text-left">{{
-											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 60
-											? dataPC.appraise_purpose.name.substring(60, 0) + "..."
-											: dataPC.appraise_purpose.name
-									}}</span>
-									<b-tooltip target="appraise_purpose" placement="top-right">{{
-										dataPC.appraise_purpose.name
-									}}</b-tooltip>
-								</div>
-								<!-- <div class="d-flex container_content">
 									<strong class="margin_content_inline"
-										>Mục đích thẩm định:
-									</strong>
-									{{
-										dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
-									}}
-								</div> -->
+										>Mục đích thẩm định:</strong
+									><span id="appraise_purpose" class="text-left">{{
+										dataPC.appraise_purpose
+											? dataPC.appraise_purpose.name.length > 60
+												? dataPC.appraise_purpose.name.substring(60, 0) + "..."
+												: dataPC.appraise_purpose.name
+											: ""
+									}}</span>
+									<b-tooltip
+										v-if="dataPC.appraise_purpose"
+										target="appraise_purpose"
+										placement="top-right"
+										>{{ dataPC.appraise_purpose.name }}</b-tooltip
+									>
+								</div>
 
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Loại sơ bộ:</strong>
 									<p>
-										{{ dataPC.pre_type ? dataPC.pre_type : "" }}
+										{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
 									</p>
 								</div>
-
-								<!-- <div class="d-flex container_content">
+								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
-										>Tổng giá trị sơ bộ:</strong
+										>Thời điểm sơ bộ:</strong
+									>
+									<p>
+										{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+									</p>
+								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline"
+										>Tổng phí dịch vụ:</strong
 									>
 									<p>
 										{{
-											dataPC.total_preliminary_value
-												? formatNumber(dataPC.total_preliminary_value)
+											dataPC.total_service_fee
+												? formatNumber(dataPC.total_service_fee)
 												: 0
 										}}đ
 									</p>
-								</div> -->
-
+									<strong class="margin_content_inline ml-5"
+										>Chiết khấu:</strong
+									>
+									<p>
+										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
+									</p>
+								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong
-									><span id="note" class="text-left">{{
-										dataPC.note && dataPC.note.length > 25
-											? dataPC.note.substring(25, 0) + "..."
-											: dataPC.note
+									<strong class="margin_content_inline"
+										>Tên tài sản sơ bộ:</strong
+									><span id="pre_asset_name" class="text-left">{{
+										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
+											? dataPC.pre_asset_name.substring(25, 0) + "..."
+											: dataPC.pre_asset_name
 									}}</span>
-									<b-tooltip target="note" placement="top-right">{{
-										dataPC.note
+									<b-tooltip target="pre_asset_name" placement="top-right">{{
+										dataPC.pre_asset_name
 									}}</b-tooltip>
 								</div>
 
@@ -297,17 +327,6 @@
 			</a-timeline>
 		</a-drawer>
 		<div
-			v-if="dataPC.id"
-			class="col-6"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<OtherFile
-				:type="'Appendix'"
-				:allow-edit="allowEditFile.appendix"
-				:from-component="'Detail'"
-			/>
-		</div>
-		<div
 			v-if="dataPC.id && dataPC.status >= 2"
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
@@ -328,13 +347,82 @@
 					</div>
 				</div>
 				<OtherFile
+					class="ml-1"
 					v-if="showCardDetailFileResult && !dialogRequireForStage3"
 					type="Result"
 					:allow-edit="false"
-					:from-component="'Detail'"
 				/>
 			</div>
 		</div>
+		<div
+			v-if="dataPC.id && dataPC.status >= 2"
+			class="col-6"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
+			<div class="card">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="row d-flex justify-content-between align-items-center">
+							<h3 class="title">Thông tin thanh toán</h3>
+						</div>
+						<div
+							v-if="allowEditFile.result && edit"
+							@click="handleshowCardPCPayments"
+							class="btn-edit "
+						>
+							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card-body card-info ml-2">
+						<div
+							class="row mb-1 "
+							v-if="dataPC.payments"
+							v-for="(payment, index) in dataPC.payments"
+							:key="index"
+						>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Ngày thanh toán:</strong>
+								<p>
+									{{ payment.pay_date ? formatDate(payment.pay_date) : "" }}
+								</p>
+							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline"
+									>Tổng giá trị thanh toán:</strong
+								>
+								<p>{{ payment.amount ? formatNumber(payment.amount) : 0 }}đ</p>
+							</div>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Đã thanh toán:</strong>
+							<p>
+								{{ dataPC.amountPaid ? formatNumber(dataPC.amountPaid) : 0 }}đ
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Còn nợ:</strong>
+							<p>
+								{{ dataPC.debtRemain ? formatNumber(dataPC.debtRemain) : 0 }}đ
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			v-if="dataPC.id"
+			class="col-12"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
+			<OtherFile
+				:type="'Appendix'"
+				:allow-edit="allowEditFile.appendix"
+				:from-component="'Detail'"
+			/>
+		</div>
+
 		<Footer
 			v-if="jsonConfig && dataPC && dataPC.id"
 			:style="isMobile ? { bottom: '60px' } : {}"
@@ -363,6 +451,11 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
+		<ModalPCPayments
+			v-if="showCardPCPayments"
+			@cancel="showCardPCPayments = false"
+			@updatePayments="updatePayments"
+		/>
 
 		<ModalViewDocument
 			v-if="isShowPrint"
@@ -378,7 +471,11 @@
 		<ModalNotificationPreCertificateNote
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
-			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
+			:notification="
+				message == 'Từ chối' || message == 'Khôi phục' || message == 'Hủy'
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${message}'`
+			"
 			@action="handleAction2"
 		/>
 
@@ -389,7 +486,9 @@
 		/>
 		<ModalRequireForStage3
 			v-if="dialogRequireForStage3"
-			:notification="`Bạn có muốn muốn 'Định giá sơ bộ' hồ sơ này`"
+			:notification="
+				`Bạn có muốn chuyển yêu cầu này sang trạng thái 'Định giá sơ bộ'?`
+			"
 			@cancel="dialogRequireForStage3 = false"
 		/>
 	</div>
@@ -429,6 +528,7 @@ import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
+import ModalPCPayments from "@/components/PreCertificate/ModalPCPayments";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
 import File from "@/models/File";
@@ -440,9 +540,8 @@ import {
 	BButtonGroup
 } from "bootstrap-vue";
 import Footer from "@/components/PreCertificate/FooterDetail.vue";
+import IconBase from "./../IconBase.vue";
 
-import store from "@/store";
-import * as types from "@/store/mutation-types";
 Vue.use(Icon);
 export default {
 	props: {
@@ -452,6 +551,8 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		IconBase,
+		ModalPCPayments,
 		OtherFile,
 		InputCategory,
 		InputCategorySearch,
@@ -577,6 +678,7 @@ export default {
 		const config = ref({});
 		const editInfo = ref(false);
 		const editAppraiser = ref(false);
+		const editPayments = ref(false);
 		const allowEditFile = ref({ appendix: false, result: false });
 		const changeEditStatus = () => {
 			let dataJson = jsonConfig.value.principle.filter(
@@ -589,7 +691,9 @@ export default {
 					: false;
 
 				editInfo.value = dataJson[0].edit.info ? dataJson[0].edit.info : false;
-
+				editPayments.value = dataJson[0].edit.payments
+					? dataJson[0].edit.payments
+					: false;
 				allowEditFile.value.appendix = dataJson[0].edit.file_appendix
 					? dataJson[0].edit.file_appendix
 					: false;
@@ -610,12 +714,16 @@ export default {
 		start();
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
+		const showCardPCPayments = ref(false);
+
 		return {
+			showCardPCPayments,
 			allowEditFile,
 			jsonConfig,
 			config,
 			editAppraiser,
 			editInfo,
+			editPayments,
 			dialogRequireForStage3,
 			isMobile,
 			dataPC,
@@ -816,6 +924,22 @@ export default {
 		}
 	},
 	methods: {
+		handleshowCardPCPayments() {
+			console.log(
+				this.dataPC.total_service_fee,
+				"this.dataPC.total_service_fee",
+				this.dataPC.total_service_fee > 0
+			);
+			if (this.dataPC.total_service_fee > 0) this.showCardPCPayments = true;
+			else {
+				this.$toast.open({
+					message: "Vui lòng bổ sung tổng phí dịch vụ",
+					type: "error",
+					position: "top-right",
+					duration: 5000
+				});
+			}
+		},
 		getReport(type) {
 			let report = this.dataPC.other_documents.find(
 				i => i.description === type
@@ -908,9 +1032,18 @@ export default {
 			}
 			window.open(routeData.href, "_blank");
 		},
-
+		handleDetailCertificate(id) {
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
+		},
 		async getHistoryTimeLine() {
-			const res = await CertificationBrief.getHistoryTimeline(this.dataPC.id);
+			const res = await PreCertificate.getHistoryTimeline(this.dataPC.id);
 			if (res.data) {
 				const resp = await WareHouse.getDictionaries();
 				if (resp) {
@@ -918,16 +1051,21 @@ export default {
 					for (let i = 0; i < this.historyList.length; i++) {
 						let e = this.historyList[i];
 						if (e.properties.reason_id) {
-							let result = resp.data.li_do.filter(
-								item => item.id === e.properties.reason_id
-							);
-							// console.log('répóne',result)
+							let result = null;
+							if (e.description.includes("Hủy")) {
+								result = resp.data.li_do_huy_so_bo.filter(
+									item => item.id === e.properties.reason_id
+								);
+							} else {
+								result = resp.data.li_do.filter(
+									item => item.id === e.properties.reason_id
+								);
+							}
+
 							e.reason_description = result[0].description;
 						}
 					}
 				}
-
-				// console.log('timeline', this.historyList)
 			} else if (res.error) {
 				return this.$toast.open({
 					message: res.error.message,
@@ -966,7 +1104,6 @@ export default {
 		},
 
 		handleShowAppraisal() {
-			// console.log('-----------',this.dataPC)
 			this.key_render_appraisal += 1;
 			this.status = this.dataPC.status;
 			this.showAppraisalDialog = true;
@@ -984,6 +1121,9 @@ export default {
 				position: "top-right",
 				duration: 3000
 			});
+		},
+		async updatePayments() {
+			await this.preCertificateStore.getPreCertificate(this.routeId);
 		},
 		async updateAppraiseInformation() {
 			await this.preCertificateStore.getPreCertificate(this.routeId);
@@ -1100,15 +1240,10 @@ export default {
 				{ note }
 			);
 			if (res.data && res.data.error === false) {
-				if (this.search_kanban) {
-					await this.getDataWorkFlow2(
-						true,
-						this.search_kanban.search,
-						isRefresh
-					);
-				} else await this.getDataWorkFlow2(true);
+				await this.preCertificateStore.getPreCertificate(this.routeId);
+				this.changeEditStatus();
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message: this.message + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -1144,7 +1279,12 @@ export default {
 
 				this.changeEditStatus();
 				this.$toast.open({
-					message: this.message + " thành công",
+					message:
+						this.message == "Từ chối" ||
+						this.message == "Khôi phục" ||
+						this.message == "Hủy"
+							? this.message + " thành công"
+							: "Chuyển trạng thái " + `'${this.message}'` + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -1159,58 +1299,7 @@ export default {
 			}
 			this.isHandleAction = false;
 		},
-		async handleActionDenined() {
-			const {
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_manager_id,
-				appraiser_perform,
-				appraiser_confirm,
-				appraiser_manager,
-				appraiser,
-				appraiser_control,
-				appraiser_control_id
-			} = this.dataPC;
-			let dataSend = {
-				appraiser_perform,
-				appraiser_id,
-				appraiser_perform_id,
-				appraiser_confirm_id,
-				appraiser_confirm,
-				appraiser_manager_id,
-				appraiser_manager,
-				appraiser_control,
-				appraiser_control_id,
-				appraiser,
-				status: 0
-			};
-			if (this.dataPC.status === 3) {
-				// denined change status 3 ---> 2
-				dataSend.status = 2;
-				const res = await PreCertificate.updateStatusPreCertificate(
-					this.dataPC.id,
-					dataSend
-				);
-				if (res.data) {
-					this.$toast.open({
-						message: "Từ chối phê duyệt thành công",
-						type: "success",
-						position: "top-right",
-						duration: 3000
-					});
-					this.dataPC.status = 2;
-				} else if (res.error) {
-					this.$toast.open({
-						message: res.error.message,
-						type: "error",
-						position: "top-right",
-						duration: 5000
-					});
-				}
-				this.openNotificationDenined = false;
-			}
-		},
+
 		async onImageChange(e) {
 			const formData = new FormData();
 			let check = true;
@@ -1245,7 +1334,6 @@ export default {
 				if (files.length) {
 					for (let i = 0; i < files.length; i++) {
 						formData.append("files[" + i + "]", files[i]);
-						console.log("files", files);
 					}
 					let res = null;
 					if (this.dataPC.status === 1) {
@@ -1256,7 +1344,6 @@ export default {
 					} else {
 						res = await File.uploadFileCertificate(formData, this.dataPC.id);
 					}
-					console.log("res", res, formData);
 					if (res.data) {
 						// await this.$emit('handleChangeFile', res.data.data)
 						this.dataPC.other_documents = res.data.data;
@@ -1431,7 +1518,6 @@ export default {
 		},
 		async downloadAssetDocument() {
 			let arrayAsset = [];
-			// console.log(this.dataPC.real_estate)
 			if (this.dataPC.real_estate && this.dataPC.real_estate.length > 0) {
 				await this.dataPC.real_estate.forEach(item => {
 					if (
@@ -1658,7 +1744,6 @@ export default {
 			this.isShowAppraiseListVersion = true;
 		},
 		setDocumentViewStatus() {
-			// console.log('this.dataPC.document_type',this.dataPC.document_type)
 			let isExportAutomatic = true;
 			let isCheckRealEstate = true;
 			let isCheckConstruction = false;
@@ -1851,7 +1936,23 @@ export default {
 		padding: 0;
 	}
 }
-.card-status {
+.card-status-pre-certificate {
+	border-radius: 5px;
+	background: #ffffff;
+	margin-bottom: 10px;
+	font-weight: 600;
+	padding: 10px;
+	font-size: 16px !important;
+	border: 1px solid #000000;
+	@media (max-width: 768px) {
+		margin-bottom: 10px;
+	}
+
+	@media (max-width: 418px) {
+		margin-bottom: 10px;
+	}
+}
+.card-status-certificate {
 	border-radius: 5px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 	background: #ffffff;
@@ -1859,6 +1960,8 @@ export default {
 	font-weight: 600;
 	padding: 10px;
 	font-size: 16px !important;
+	color: darkgray;
+	cursor: pointer;
 
 	@media (max-width: 768px) {
 		margin-bottom: 10px;

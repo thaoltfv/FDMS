@@ -1,175 +1,134 @@
 <template>
-	<div>
-		<div
-			class="modal-detail d-flex justify-content-center align-items-center"
-			@click.self="handleCancel"
-		>
-			<div class="card">
-				<div class="container-title">
-					<div class="d-flex justify-content-between">
-						<h2 class="title">Thông tin chung</h2>
-						<img
-							height="35px"
-							@click="handleCancel"
-							class="cancel"
-							src="@/assets/icons/ic_cancel_2.svg"
-							alt=""
-						/>
-					</div>
+	<div
+		class="modal-detail d-flex justify-content-center align-items-center"
+		@click.self="handleCancel"
+	>
+		<div class="card">
+			<div class="container-title">
+				<div class="d-flex justify-content-between" style="margin-left:20px;">
+					<h2 class="title">Thông tin thanh toán</h2>
+					<img
+						height="35px"
+						@click="handleCancel"
+						class="cancel"
+						src="@/assets/icons/ic_cancel_2.svg"
+						alt=""
+					/>
 				</div>
-				<div class="contain-detail">
-					<ValidationObserver
-						tag="form"
-						ref="appraise_information"
-						@submit.prevent="validateAppraiseInformation"
+			</div>
+			<div class="contain-detail">
+				<div class="d-flex-column">
+					<div
+						class="row"
+						v-for="(payment, index) in dataForm.payments"
+						:key="index"
+						v-if="!payment.is_deleted"
 					>
-						<div class="row">
-							<div class="col-6">
-								<InputTextPrefixCustom
-									id="petitioner_name"
-									placeholder="Ông / Bà"
-									v-model="dataForm.petitioner_name"
-									vid="petitioner_name"
-									:iconUser="true"
-									:showIcon="true"
-									label="Tên khách hàng yêu cầu (trên chứng thư)"
-									rules="required"
-									class="form-group-container input_certification_brief"
-								/>
-							</div>
-
-							<div class="col-6">
-								<InputTextPrefixCustom
-									id="petitioner_address"
-									placeholder="Nhập địa chỉ của khách hàng"
-									v-model="dataForm.petitioner_address"
-									vid="petitioner_address"
-									:iconLocation="true"
-									:showIcon="true"
-									label="Địa chỉ"
-									class="form-group-container input_certification_brief"
-								/>
-							</div>
-
-							<div class="col-6">
-								<InputTextPrefixCustomIcon
-									id="petitioner_identity_card"
-									placeholder="Nhập MST/CMND/CCCD/Passport"
-									v-model="dataForm.petitioner_identity_card"
-									class="form-group-container input_certification_brief"
-									vid="petitioner_identity_card"
-									icon="ic_id_card_2"
-									:showCustomIcon="true"
-									label="MST/CMND/CCCD/Passport"
-								/>
-							</div>
-
-							<div class="col-6">
-								<InputTextPrefixCustom
-									id="petitioner_phone"
-									placeholder="Nhập số điện thoại"
-									v-model="dataForm.petitioner_phone"
-									class="form-group-container input_certification_brief"
-									vid="petitioner_phone"
-									:iconPhone="true"
-									:showIcon="true"
-									label="Điện thoại"
-								/>
-							</div>
-							<div class="col-6">
-								<InputCategory
-									v-model="dataForm.appraise_purpose_id"
-									class="form-group-container"
-									vid="appraise_purpose_id"
-									label="Mục đích thẩm định"
-									rules="required"
-									:options="optionsAppraisalPurposes"
-									@change="handleChangeAppraisePurpose"
-								/>
-							</div>
-						</div>
-						<div class="row justify-content-between">
-							<InputCurrency
-								v-model="dataForm.total_service_fee"
-								vid="total_service_fee"
-								:max="99999999999999"
-								label="Tổng phí dịch vụ"
-								class="form-group-container col-sm-12 col-md-6"
-								@change="dataForm.total_service_fee = $event"
-							/>
-							<InputPercent
-								v-model="dataForm.commission_fee"
-								label="Chiết khấu"
-								vid="test"
-								:max="100"
-								:decimal="0"
-								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
-								@change="dataForm.commission_fee = $event"
-							/>
-						</div>
-						<div class="row justify-content-between">
-							<InputCategory
-								v-model="dataForm.pre_type_id"
-								vid="pre_type_id"
-								label="Loại sơ bộ"
-								class="form-group-container col-sm-12 col-md-6"
-								:options="optionsPreTypes"
-							/>
+						<div class="row justify-content-between col-10">
 							<InputDatePicker
-								v-model="dataForm.pre_date"
-								vid="pre_date"
-								label="Thời điểm sơ bộ"
+								v-model="payment.pay_date"
+								vid="pay_date"
+								label="Ngày thanh toán"
 								placeholder="Ngày / tháng / năm"
 								rules="required"
 								:formatDate="'DD/MM/YYYY'"
 								class="form-group-container col-sm-12 col-md-6"
-								@change="dataForm.pre_date = $event"
+								@change="payment.pay_date = $event"
+							/>
+							<InputCurrency
+								v-model="payment.amount"
+								vid="amount"
+								:max="99999999999999"
+								label="Giá trị thanh toán"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="paidCompute($event, payment)"
 							/>
 						</div>
-						<div class="row ">
-							<InputTextarea
-								:rows="3"
-								:disableInput="false"
-								v-model="dataForm.pre_asset_name"
-								label="Tên tài sản sơ bộ"
-								class="form-group-container col-12"
-							/>
+						<div class="mt-5 col-2 d-flex  justify-content-between">
+							<span
+								style="font-style: italic; color: orange; cursor: pointer"
+								@click="addPayment"
+								>+Thêm</span
+							>
+							<span
+								v-if="
+									dataForm.payments.filter(
+										payment =>
+											payment.is_deleted === undefined || !payment.is_deleted
+									).length > 1
+								"
+								style="font-style: italic; color: red; cursor: pointer"
+								@click="removePayment(index, payment)"
+							>
+								-Xóa
+							</span>
 						</div>
-						<div
-							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
+					</div>
+
+					<div class="row justify-content-between mt-4 mx-2">
+						<strong style="margin-left:13px;" class="margin_content_inline"
+							>Đã thanh toán:</strong
 						>
-							<div class="d-lg-flex d-block button-contain">
-								<button
-									class="btn btn-white btn-action-modal"
-									type="button"
-									@click="handleCancel"
-								>
-									<img
-										src="@/assets/icons/ic_cancel.svg"
-										style="margin-right: 12px"
-										alt="save"
-									/>Trở lại
-								</button>
-								<button class="btn btn-orange btn-action-modal" type="submit">
-									<img
-										src="@/assets/icons/ic_save.svg"
-										style="margin-right: 12px"
-										alt="save"
-									/>
-									Lưu
-								</button>
-							</div>
+						<InputCurrency
+							:key="keyRender"
+							v-model="dataForm.paid"
+							vid="amount"
+							:disabled="true"
+							:max="99999999999999"
+							class="form-group-container col-6 mt-n1"
+						/>
+					</div>
+					<div class="row justify-content-between mt-4">
+						<strong style="margin-left:13px;" class="margin_content_inline"
+							>Còn nợ:</strong
+						>
+						<InputCurrency
+							:key="keyRender"
+							v-model="dataForm.debtRemain"
+							vid="amount"
+							:disabled="true"
+							:max="99999999999999"
+							class="form-group-container col-6 mt-n1"
+						/>
+					</div>
+					<div
+						class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
+					>
+						<div class="d-lg-flex d-block button-contain">
+							<button
+								class="btn btn-white btn-action-modal"
+								type="button"
+								@click="handleCancel"
+							>
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Trở lại
+							</button>
+							<button
+								class="btn btn-orange btn-action-modal"
+								type="submit"
+								@click="handleAction"
+								style="margin-right: 12px"
+							>
+								<img
+									src="@/assets/icons/ic_save.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>
+								Lưu
+							</button>
 						</div>
-					</ValidationObserver>
+					</div>
 				</div>
-				<!-- <div class="container-title container-title__footer">
+			</div>
+			<!-- <div class="container-title container-title__footer">
             <div class="d-flex justify-content-between justify-content-lg-end">
               <button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
               <button class="btn btn-orange btn-action-modal" type="button" @click="handleAction"> <img src="@/assets/icons/ic_save.svg" style="margin-right: 12px" alt="save"> Lưu</button>
             </div>
           </div> -->
-			</div>
 		</div>
 	</div>
 </template>
@@ -178,78 +137,80 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import InputCategoryPreTypes from "./InputCategoryPreTypes";
 import _ from "lodash";
-
-import InputText from "@/components/Form/InputText";
-import InputCategory from "@/components/Form/InputCategory";
-import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
-import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import moment from "moment";
-import InputTextarea from "@/components/Form/InputTextarea";
-import InputPercent from "@/components/Form/InputPercent";
 
 export default {
 	name: "ModalPCAppraiseInformation",
 
 	components: {
-		InputCategory,
-		InputText,
-		InputTextPrefixCustom,
-		InputTextPrefixCustomIcon,
-		InputTextarea,
-		InputCategoryPreTypes,
 		InputDatePicker,
-		InputCurrency,
-		InputPercent
+		InputCurrency
 	},
 	setup() {
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, lstDataConfig } = storeToRefs(preCertificateStore);
+		const { dataPC, other } = storeToRefs(preCertificateStore);
 		const dataForm = ref(_.cloneDeep(dataPC.value));
+		const keyRender = ref(0);
 
-		const getStartData = async () => {
-			if (!lstDataConfig.value.appraiser_purposes) {
-				await preCertificateStore.getStartData(false, true, true, false);
+		const paidCompute = (
+			event,
+			payment,
+			booltotal_service_fee = false,
+			runCompute = false
+		) => {
+			if (!runCompute) {
+				if (!booltotal_service_fee) payment.amount = event;
+				if (booltotal_service_fee) dataForm.value.total_service_fee = event;
 			}
+			let debt_remain = dataForm.value.total_service_fee;
+			let paid = 0;
+			for (let index = 0; index < dataForm.value.payments.length; index++) {
+				const element = dataForm.value.payments[index];
+				if (element.is_deleted) continue;
+				debt_remain -= element.amount;
+				paid += parseFloat(element.amount);
+			}
+			dataForm.value.debtRemain = debt_remain;
+			dataForm.value.paid = paid;
+			if (debt_remain < 0) {
+				other.value.toast.open({
+					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+
+			keyRender.value++;
 		};
-		getStartData();
-		const handleChangeAppraisePurpose = event => {
-			dataForm.value.appraise_purpose_id = event;
+
+		const addPayment = () => {
+			dataForm.value.payments.push({
+				pre_date: null,
+				amount: 0
+			});
+		};
+		const removePayment = (index, payment) => {
+			if (!payment.id) dataForm.value.payments.splice(index, 1);
+			else {
+				Vue.set(payment, "is_deleted", true);
+			}
+			paidCompute(0, 0, false, true);
 		};
 		return {
+			keyRender,
 			dataForm,
-			lstDataConfig,
 			preCertificateStore,
-			handleChangeAppraisePurpose
+			addPayment,
+			removePayment,
+			paidCompute
 		};
 	},
-	computed: {
-		pre_type_compute: {
-			get: function() {
-				return this.dataForm.pre_type;
-			},
-			set: function(newValue) {
-				this.dataForm.pre_type = newValue.name;
-			}
-		},
-		optionsAppraisalPurposes() {
-			return {
-				data: this.lstDataConfig.appraiser_purposes,
-				id: "id",
-				key: "name"
-			};
-		},
-		optionsPreTypes() {
-			return {
-				data: this.lstDataConfig.preTypes,
-				id: "id",
-				key: "description"
-			};
-		}
-	},
+	computed: {},
 	created() {},
 	methods: {
 		formatDate(date) {
@@ -264,42 +225,44 @@ export default {
 			}
 		},
 
-		disabledDate(current) {
-			if (
-				this.dataForm.document_date !== "" &&
-				this.dataForm.document_date !== undefined &&
-				this.dataForm.document_date !== null
-			) {
-				let dateDoc = (" " + this.dataForm.document_date).slice(1);
-				dateDoc = moment(dateDoc, "DD/MM/YYYY").format("YYYY-MM-DD");
-				return current <= moment(dateDoc);
-			} else {
-				return current >= moment().endOf("day");
-			}
-		},
-
 		handleCancel(event) {
 			this.$emit("cancel", event);
 		},
-		async validateAppraiseInformation() {
-			const isValid = await this.$refs.appraise_information.validate();
-			if (isValid) {
-				this.handleAction();
-			}
-		},
 		async handleAction() {
-			const res = await this.preCertificateStore.createUpdatePreCertificateion(
-				this.dataForm.id,
-				true,
-				this.dataForm
-			);
-			if (res.data) {
+			if (this.dataForm.debtRemain < 0) {
 				this.$toast.open({
-					message: "Lưu thông tin hồ sơ thẩm định thành công",
+					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+
+			for (let index = 0; index < this.dataForm.payments.length; index++) {
+				const element = this.dataForm.payments[index];
+				if (!element.pay_date || !element.amount || element.amount <= 0) {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập đầy đủ thông tin thanh toán và số tiền phải lớn hơn 0",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+					return;
+				}
+			}
+			const res = await this.preCertificateStore.updatePaymentFunction(
+				this.dataForm.payments,
+				this.dataForm.id
+			);
+			if (res.data === null) {
+				this.$toast.open({
+					message: "Lưu thông tin thanh toán thành công",
 					type: "success",
 					position: "top-right"
 				});
-				this.$emit("updateAppraiseInformation");
+				this.$emit("updatePayments");
 				this.$emit("cancel");
 			} else if (res.error) {
 				this.$toast.open({
@@ -339,11 +302,12 @@ export default {
 		border-radius: 5px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		max-width: 1300px;
-		width: 100%;
+		// width: 50%;
+		width: 945px;
 		max-height: 90vh;
 		margin-bottom: 0;
 		// padding: 35px 50px;
-		padding: 25px 50px 25px;
+		padding: 25px 50px 25px 37px;
 		@media (max-width: 787px) {
 			padding: 20px 10px;
 		}
@@ -377,10 +341,20 @@ export default {
 	.contain-detail {
 		overflow-y: auto;
 		overflow-x: hidden;
-		border-top: 1px solid #e8e8e8;
 		padding-top: 15px;
+		position: relative;
 		&::-webkit-scrollbar {
 			width: 2px;
+		}
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 1px; /* Make this the same as your border */
+			width: 100%;
+			background: #e8e8e8; /* Make this the same as your border color */
+			margin-left: 20px;
 		}
 	}
 	&-title {

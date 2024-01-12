@@ -21,6 +21,14 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async updatePayments(data, id = "") {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificates/pre-certificate-update-payment/${id}`,
+			data: data,
+			isStatic: true
+		});
+	}
 	static async getAppraiseLaws() {
 		let resp = localStorage.getItem("appraise-laws");
 		if (isEmpty(resp)) {
@@ -126,7 +134,13 @@ export default class Certificate extends Model {
 			}
 		});
 	}
-
+	static async getHistoryTimeline(id) {
+		return new this().request({
+			method: "GET",
+			url: `activity/get-pre-certificate/${id}`,
+			isStatic: true
+		});
+	}
 	static async getTimeStamp() {
 		return new this().request({
 			method: "GET",

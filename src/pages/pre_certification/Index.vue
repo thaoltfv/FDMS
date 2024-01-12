@@ -41,12 +41,34 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<span
-									@click="handleDetailCertificate(element.id)"
-									class="content_id"
-									:class="`bg-${config.css.color}-15 text-${config.css.color}`"
-									>{{ element.slug }}</span
-								>
+								<div class="row ml-0">
+									<span
+										@click="handleDetailPreCertificate(element.id)"
+										class="content_id"
+										:class="
+											`bg-${config.css.color}-15 text-${config.css.color}`
+										"
+										>{{ element.slug }}</span
+									>
+									<span
+										v-if="element.certificate_id"
+										@click="handleDetailCertificate(element.certificate_id)"
+										class=" card-status-certificate ml-2"
+										:id="`${element.certificate_id + element.id}`"
+									>
+										<icon-base
+											name="nav_hstd"
+											class="item-icon svg-inline--fa"
+										/>
+										<b-tooltip
+											:target="`${element.certificate_id + element.id}`"
+											placement="top-right"
+											>{{
+												`Nhấn để xem chi tiết HTSD_${element.certificate_id}`
+											}}</b-tooltip
+										>
+									</span>
+								</div>
 								<img
 									v-if="checkDateExpired(element)"
 									class="mr-2 icon_expired"
@@ -138,23 +160,28 @@
 				@handleFooterAccept="handleFooterAccept"
 			/>
 
-			<ModalSendVerify
-				v-if="showAcceptCertificate"
-				notification="Bạn có muốn muốn duyệt hồ sơ này"
-				@action="handleChangeAccept"
-				@cancel="handleCancelAccept"
-			/>
-
 			<ModalNotificationPreCertificateNote
 				v-if="isMoved"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+				"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
 			/>
 			<ModalNotificationPreCertificateNote
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+				"
 				@action="handleChangeAccept2"
 			/>
 		</div>
@@ -174,7 +201,14 @@ import {
 	HomeIcon,
 	ClockIcon
 } from "vue-feather-icons";
-import { BCard, BRow, BCol, BFormGroup, BFormInput } from "bootstrap-vue";
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput,
+	BTooltip
+} from "bootstrap-vue";
 import draggable from "vuedraggable";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
@@ -182,9 +216,10 @@ import ModalDetailPreCertificate from "@/components/PreCertificate/ModalDetailPr
 import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import PreCertificate from "@/models/PreCertificate";
 import moment from "moment";
-import KanboardStatus from "@/components/PreCertificate/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
+import IconBase from "@/components/IconBase.vue";
+
 // const jsonConfig = require("../../../config/pre_certificate_workflow.json");
 Vue.component("downloadExcel", JsonExcel);
 export default {
@@ -238,7 +273,6 @@ export default {
 			export: false,
 			showDetailPopUp: false,
 			showVerifyCertificate: false,
-			showAcceptCertificate: false,
 			idDraft: "",
 			elementDragger: "",
 			position_profile: "",
@@ -260,6 +294,8 @@ export default {
 		};
 	},
 	components: {
+		IconBase,
+		"b-tooltip": BTooltip,
 		draggable,
 		BCard,
 		FormWizard,
@@ -274,7 +310,6 @@ export default {
 		ClockIcon,
 		ModalDetailPreCertificate,
 		ModalSendVerify,
-		KanboardStatus,
 		ModalNotificationCertificate,
 		ModalNotificationPreCertificateNote
 	},
@@ -551,20 +586,21 @@ export default {
 				: "";
 			check = this.checkRequired(targetConfig.require, this.elementDragger);
 			if (check) {
-				this.next_status = targetConfig.status;
-				this.dataPC.target_status = targetConfig.status;
-				this.confirm_message = message;
-
-				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+				if (targetConfig.status === 3 && this.dataPC.status === 2) {
 					const checkStage = this.checkDataBeforeChangeToStage3();
 					if (!checkStage) {
 						this.openMessage(
 							"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
 							"error"
 						);
+						this.returnData();
 						return;
 					}
 				}
+				this.next_status = targetConfig.status;
+				this.dataPC.target_status = targetConfig.status;
+				this.confirm_message = message;
+
 				this.isMoved = check;
 			} else {
 				this.returnData();
@@ -702,46 +738,6 @@ export default {
 				this.elementDragger = event.draggedContext.element;
 			} else return false;
 		},
-		handleRemoveStatusVerify() {
-			this.showAcceptCertificate = true;
-		},
-		async handleChangeAccept() {
-			let dataSend = {
-				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
-				appraiser_id: this.elementDragger.appraiser_id,
-				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
-				appraiser_control_id: this.elementDragger.appraiser_control_id,
-				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
-				status: 4
-			};
-			// change status 3 --> 4
-			const res = await PreCertificate.updateStatusPreCertificate(
-				this.idDragger,
-				dataSend
-			);
-			if (res.data) {
-				await this.$toast.open({
-					message: "Xác nhận hồ sơ thành công",
-					type: "success",
-					position: "top-right",
-					duration: 3000
-				});
-				this.listCertificateTemp.forEach(item => {
-					if (item.id === this.idDragger) {
-						item.status = 4;
-					}
-				});
-			} else {
-				await this.$toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				this.handleCancelAccept();
-			}
-			this.showAcceptCertificate = await false;
-		},
 
 		async handleChangeAccept2(note, reason_id) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
@@ -763,7 +759,14 @@ export default {
 					);
 				} else await this.getDataWorkFlow2(true);
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message:
+						this.confirm_message == "Từ chối" ||
+						this.confirm_message == "Hủy" ||
+						this.confirm_message == "Khôi phục"
+							? this.confirm_message + " thành công"
+							: "Chuyển trạng thái " +
+							  `'${this.confirm_message}'` +
+							  " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -850,15 +853,7 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		handleCancelAccept() {
-			this.showAcceptCertificate = false;
-			this.listCertificateLock = this.listCertificateTemp.filter(
-				item => item.status === 3
-			);
-			this.listCertificatesClose = this.listCertificateTemp.filter(
-				item => item.status === 4
-			);
-		},
+
 		handleCancelAccept2() {
 			this.isMoved = false;
 			this.isHandleAction = false;
@@ -876,10 +871,20 @@ export default {
 			});
 			this.key_dragg++;
 		},
+		handleDetailCertificate(id) {
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
+		},
 		checkMoveVerify() {
 			return true;
 		},
-		handleDetailCertificate(id) {
+		handleDetailPreCertificate(id) {
 			this.idData = id;
 			this.getDetailCertificate(id);
 		},
@@ -1059,11 +1064,7 @@ export default {
 				check = this.checkRequired(config.require, this.detailData);
 			}
 			if (check) {
-				this.next_status = config.status;
-				this.dataPC.target_status = config.status;
-				this.dataPC.target_code = target.code;
-				this.confirm_message = target.description;
-				if (this.dataPC.target_status === 3 && this.dataPC.status === 2) {
+				if (config.status === 3 && this.dataPC.status === 2) {
 					const checkStage = this.checkDataBeforeChangeToStage3();
 					if (!checkStage) {
 						this.openMessage(
@@ -1073,6 +1074,10 @@ export default {
 						return;
 					}
 				}
+				this.next_status = config.status;
+				this.dataPC.target_status = config.status;
+				this.dataPC.target_code = target.code;
+				this.confirm_message = target.description;
 				this.isHandleAction = check;
 			}
 		},
@@ -1203,6 +1208,15 @@ export default {
 		color: #ffffff;
 		background-color: #26bf7f;
 	}
+}
+
+.content_certificate_id {
+	border-radius: 5px;
+	padding: 0px 3px;
+	font-weight: bold;
+	color: #007ec6;
+	cursor: pointer;
+	border: 1px solid #a7d9fb;
 }
 .img_user {
 	border-radius: 50%;
@@ -1342,6 +1356,13 @@ export default {
 	margin-inline-end: 1rem;
 	width: 1rem;
 	justify-content: end;
+}
+.card-status-certificate {
+	border-radius: 5px;
+	padding: 0px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	color: darkgray;
+	cursor: pointer;
 }
 .container_card_success {
 	background: white;

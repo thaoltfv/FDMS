@@ -153,6 +153,10 @@ export const DICTIONARIES = [
 		NAME: "Lí do hủy sơ bộ"
 	},
 	{
+		TYPE: "LOAI_SO_BO",
+		NAME: "Loại sơ bộ"
+	},
+	{
 		TYPE: "LOAI_CAN_HO",
 		NAME: "Loại căn hộ"
 	}

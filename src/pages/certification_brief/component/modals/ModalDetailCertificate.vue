@@ -1,228 +1,414 @@
 <template>
 	<div>
-			<div
-				class="modal-detail d-flex justify-content-center align-items-center"
-				@click.self="handleCancel">
-				<div class="card" :style="isMobile() ? {'margin-top':'-55px'} : {}">
-					<div class="container-title" :style="isMobile() ? {'padding-bottom':'0', 'margin-bottom':'0'} : {}">
-						<div class="d-flex justify-content-between">
-							<h2 class="title">Thông tin chung</h2>
-							<img height="35px" @click="handleCancel" class="cancel" src="../../../../assets/icons/ic_cancel_2.svg" alt="">
+		<div
+			class="modal-detail d-flex justify-content-center align-items-center"
+			@click.self="handleCancel"
+		>
+			<div class="card" :style="isMobile() ? { 'margin-top': '-55px' } : {}">
+				<div
+					class="container-title"
+					:style="
+						isMobile() ? { 'padding-bottom': '0', 'margin-bottom': '0' } : {}
+					"
+				>
+					<div class="d-flex justify-content-between">
+						<h2 class="title">Thông tin chung</h2>
+						<img
+							height="35px"
+							@click="handleCancel"
+							class="cancel"
+							src="../../../../assets/icons/ic_cancel_2.svg"
+							alt=""
+						/>
+					</div>
+				</div>
+				<div
+					class="contain-detail"
+					:style="isMobile() ? { 'padding-top': '0' } : {}"
+				>
+					<div class="detail_certificate_1 col-12 mb-2">
+						<div class="col-12 d-flex mb-2 row">
+							<span class="content_id content_id_primary class_p">{{
+								`HSTĐ ${idData}`
+							}}</span>
+							<span
+								v-if="form.pre_certificate_id"
+								@click="handleDetailPreCertificate(form.pre_certificate_id)"
+								class=" card-status-certificate ml-2"
+								id="pre_certificate_id"
+							>
+								<icon-base name="nav_ycsb" class="item-icon svg-inline--fa" />
+								{{ `YCSB_${form.pre_certificate_id}` }}
+								<b-tooltip target="pre_certificate_id" placement="top-right">{{
+									`Nhấn để xem chi tiết YCSB_${form.pre_certificate_id}`
+								}}</b-tooltip>
+							</span>
+						</div>
+						<div class="d-flex container_content justify-content-between">
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Khách hàng:</strong>
+								<p>{{ form.petitioner_name }}</p>
+							</div>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Địa chỉ:</strong>
+							<p>{{ form.petitioner_address }}</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline"
+								>MST/CMND/CCCD/Passport:</strong
+							>
+							<p>{{ form.petitioner_identity_card }}</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Điện thoại:</strong>
+							<p>{{ form.petitioner_phone }}</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Mục đích thẩm định:</strong>
+							<p>
+								{{ form.appraise_purpose ? form.appraise_purpose.name : "" }}
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline"
+								>Thời điểm thẩm định:</strong
+							>
+							<p>
+								{{ form.appraise_date ? formatDate(form.appraise_date) : "" }}
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Hợp đồng:</strong>
+							<p class="margin_content_inline">Số: {{ form.document_num }}</p>
+							<p>
+								Ngày:
+								{{ form.document_date ? formatDate(form.document_date) : "" }}
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Chứng thư:</strong>
+							<p class="margin_content_inline">
+								Số: {{ form.certificate_num }}
+							</p>
+							<p>
+								Ngày:
+								{{
+									form.certificate_date ? formatDate(form.certificate_date) : ""
+								}}
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Tổng phí dịch vụ:</strong>
+							<p>
+								{{ form.service_fee ? formatNumber(form.service_fee) : 0 }}đ
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Chiết khấu:</strong>
+							<p>{{ form.commission_fee ? form.commission_fee : 0 }}%</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Ghi chú:</strong
+							><span id="note" class="text-left">{{
+								form.note && form.note.length > 25
+									? form.note.substring(25, 0) + "..."
+									: form.note
+							}}</span>
+							<b-tooltip target="note" placement="top-right">{{
+								form.note
+							}}</b-tooltip>
 						</div>
 					</div>
-					<div class="contain-detail" :style="isMobile() ? {'padding-top':'0'} : {}">
-
-						<div class="detail_certificate_1 col-12 mb-2">
-							<div class="col-12 d-flex mb-2 justify-content-between">
-								<span class="content_id content_id_primary class_p">{{`HSTĐ ${idData}`}}</span>
+					<div class="col-12 mb-2">
+						<div class="detail_certificate_2">
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Đối tác:</strong>
+								<p>{{ form.customer ? form.customer.name : "" }}</p>
 							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Địa chỉ:</strong>
+								<p>{{ form.customer ? form.customer.address : "" }}</p>
+							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Liên hệ:</strong>
+								<p>{{ form.customer ? form.customer.phone : "" }}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 mb-2">
+						<div class="detail_certificate_2">
 							<div class="d-flex container_content justify-content-between">
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Khách hàng:</strong><p>{{form.petitioner_name}}</p>
+								<div class="d-flex">
+									<strong class="margin_content_inline"
+										>Nhân viên kinh doanh:</strong
+									>
+									<p>
+										{{ form.appraiser_sale ? form.appraiser_sale.name : "" }}
+									</p>
 								</div>
 							</div>
 							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Địa chỉ:</strong> <p>{{form.petitioner_address}}</p>
+								<strong class="margin_content_inline"
+									>Chuyên viên thực hiện:</strong
+								>
+								<p>
+									{{
+										form.appraiser_perform ? form.appraiser_perform.name : ""
+									}}
+								</p>
 							</div>
 							<div class="d-flex container_content">
-								<strong class="margin_content_inline">MST/CMND/CCCD/Passport:</strong> <p>{{form.petitioner_identity_card}}</p>
+								<strong class="margin_content_inline">Kiểm soát viên:</strong>
+								<p>
+									{{
+										form.appraiser_control ? form.appraiser_control.name : ""
+									}}
+								</p>
 							</div>
 							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Điện thoại:</strong> <p>{{form.petitioner_phone}}</p>
+								<strong class="margin_content_inline">Thẩm định viên:</strong>
+								<p>{{ form.appraiser ? form.appraiser.name : "" }}</p>
 							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Mục đích thẩm định:</strong> <p>{{ form.appraise_purpose ? form.appraise_purpose.name : ''}}</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Thời điểm thẩm định:</strong> <p>{{ form.appraise_date ? formatDate(form.appraise_date) : ''}}</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Hợp đồng:</strong> <p class="margin_content_inline">Số: {{form.document_num}}</p> <p>Ngày: {{form.document_date ? formatDate(form.document_date) : ''}}</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Chứng thư:</strong> <p class="margin_content_inline">Số: {{form.certificate_num}}</p> <p>Ngày: {{form.certificate_date ? formatDate(form.certificate_date) : ''}}</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Tổng phí dịch vụ:</strong> <p>{{form.service_fee ? formatNumber(form.service_fee) : 0}}đ</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Chiết khấu:</strong> <p>{{form.commission_fee ? form.commission_fee : 0}}%</p>
-							</div>
-							<div class="d-flex container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong><span  id="note" class="text-left">{{ form.note && form.note.length > 25 ? form.note.substring(25,0)+'...' : form.note}}</span>
-									<b-tooltip target="note" placement="top-right">{{ form.note }}</b-tooltip>
-							</div>
-						</div>
-						<div class="col-12 mb-2">
-							<div class="detail_certificate_2">
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Đối tác:</strong><p>{{form.customer ? form.customer.name : ''}}</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Địa chỉ:</strong><p>{{form.customer ? form.customer.address : ''}}</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Liên hệ:</strong><p>{{form.customer ? form.customer.phone : ''}}</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-12 mb-2">
-							<div class="detail_certificate_2">
-								<div class="d-flex container_content justify-content-between">
-									<div class="d-flex">
-										<strong class="margin_content_inline">Nhân viên kinh doanh:</strong><p>{{form.appraiser_sale ? form.appraiser_sale.name : ''}}</p>
-									</div>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Chuyên viên thực hiện:</strong ><p>{{form.appraiser_perform ? form.appraiser_perform.name : ''}}</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Kiểm soát viên:</strong ><p>{{form.appraiser_control ? form.appraiser_control.name : ''}}</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Thẩm định viên:</strong ><p>{{form.appraiser ? form.appraiser.name : ''}}</p>
-								</div>
 
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Đại diện theo pháp luật:</strong><p>{{ form.appraiser_manager ? form.appraiser_manager.name : ''}}</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Đại diện ủy quyền:</strong><p>{{form.appraiser_confirm ? form.appraiser_confirm.name : ''}}</p>
-								</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline"
+									>Đại diện theo pháp luật:</strong
+								>
+								<p>
+									{{
+										form.appraiser_manager ? form.appraiser_manager.name : ""
+									}}
+								</p>
+							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline"
+									>Đại diện ủy quyền:</strong
+								>
+								<p>
+									{{
+										form.appraiser_confirm ? form.appraiser_confirm.name : ""
+									}}
+								</p>
 							</div>
 						</div>
-						<div v-if="!isMobile()" class=" d-flex justify-content-between align-items-center m-2">
-							<div style="cursor:pointer" @click="handleDetail(idData)" class="btn-edit">
-								<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
-								<span class="color_content content_btn_edit">Xem chi tiết</span>
-							</div>
-							<div class="button-contain">
-								<button v-for="(target, index) in getTargetDescription()" :key="index" class="btn " :class="target.css" @click="handleFooterAccept(target)">
-									<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit">{{target.description}}
+					</div>
+					<div
+						v-if="!isMobile()"
+						class=" d-flex justify-content-between align-items-center m-2"
+					>
+						<div
+							style="cursor:pointer"
+							@click="handleDetail(idData)"
+							class="btn-edit"
+						>
+							<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
+							<span class="color_content content_btn_edit">Xem chi tiết</span>
+						</div>
+						<div class="button-contain">
+							<button
+								v-for="(target, index) in getTargetDescription()"
+								:key="index"
+								class="btn "
+								:class="target.css"
+								@click="handleFooterAccept(target)"
+							>
+								<img
+									class="img"
+									:src="require(`@/assets/icons/${target.img}`)"
+									alt="edit"
+								/>{{ target.description }}
+							</button>
+							<button
+								class="btn btn-white btn-action-modal"
+								type="button"
+								@click="handleCancel"
+							>
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Trở lại
+							</button>
+						</div>
+					</div>
+					<div v-else class="row" style="padding: 0;">
+						<div
+							style="cursor:pointer"
+							@click="handleDetail(idData)"
+							class="btn-edit col-12"
+						>
+							<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
+							<span class="color_content content_btn_edit">Xem chi tiết</span>
+						</div>
+						<div class="button-contain row">
+							<div class="col-6">
+								<button
+									class="btn btn-white"
+									type="button"
+									@click="handleCancel"
+									style="width: fit-content;"
+								>
+									<img
+										src="@/assets/icons/ic_cancel.svg"
+										style="margin-right: 12px"
+										alt="save"
+									/>
+									<span style="font-size: 15px;">Trở lại</span>
 								</button>
-								<button class="btn btn-white btn-action-modal" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">Trở lại</button>
 							</div>
-						</div>
-						<div v-else class="row" style="padding: 0;">
-							<div style="cursor:pointer" @click="handleDetail(idData)" class="btn-edit col-12">
-								<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
-								<span class="color_content content_btn_edit">Xem chi tiết</span>
-							</div>
-							<div class="button-contain row">
-								<div class="col-6" >
-									<button class="btn btn-white" type="button" @click="handleCancel" style="width: fit-content;"><img src="@/assets/icons/ic_cancel.svg"  style="margin-right: 12px" alt="save">
-										<span style="font-size: 15px;">Trở lại</span>
-									</button>
-								</div>
-								<div class="col-6" style="text-align: right;">
-									<!-- <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+							<div class="col-6" style="text-align: right;">
+								<!-- <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
 										<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
 										<span style="font-size: 15px;">{{target.description}}</span>
 									</button> -->
-									<!-- <button style="margin-right: 2px" class="btn btn-white" type="button">
+								<!-- <button style="margin-right: 2px" class="btn btn-white" type="button">
 										<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
 									</button> -->
-									<!-- <b-button-group  class="btn_group" > -->
-										<b-dropdown v-if="getTargetDescription().length > 0" class="btn_dropdown" no-caret right dropup style="margin-top: 5px;">
-											<template #button-content>
-												<button style="margin-right: 2px" class="btn btn-white" type="button">
-													<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
-												</button>
-											</template>
-											<b-dropdown-item style="margin-right:0;width: 150px;padding: 0;" v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
-												<div class="div_item_dropdown">
-													<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
-													<span style="font-size: 15px;">{{target.description}}</span>
-													<!-- {{target.description}} -->
-												</div>
-											</b-dropdown-item>
-										</b-dropdown>
-									<!-- </b-button-group> -->
-								</div>
-
-								<!-- <div class="col-3" style="padding: 0"></div>
-								<div class="col-3" style="padding: 0"></div> -->
+								<!-- <b-button-group  class="btn_group" > -->
+								<b-dropdown
+									v-if="getTargetDescription().length > 0"
+									class="btn_dropdown"
+									no-caret
+									right
+									dropup
+									style="margin-top: 5px;"
+								>
+									<template #button-content>
+										<button
+											style="margin-right: 2px"
+											class="btn btn-white"
+											type="button"
+										>
+											<img
+												class="img"
+												src="@/assets/icons/ic_more.svg"
+												alt="cancel"
+											/>Hành động
+										</button>
+									</template>
+									<b-dropdown-item
+										style="margin-right:0;width: 150px;padding: 0;"
+										v-for="(target, index) in getTargetDescription()"
+										:key="index"
+										class="btn"
+										:class="target.css"
+										@click="handleFooterAccept(target)"
+									>
+										<div class="div_item_dropdown">
+											<img
+												class="img"
+												:src="require(`@/assets/icons/${target.img}`)"
+												alt="edit"
+											/>
+											<span style="font-size: 15px;">{{
+												target.description
+											}}</span>
+											<!-- {{target.description}} -->
+										</div>
+									</b-dropdown-item>
+								</b-dropdown>
+								<!-- </b-button-group> -->
 							</div>
+
+							<!-- <div class="col-3" style="padding: 0"></div>
+								<div class="col-3" style="padding: 0"></div> -->
 						</div>
 					</div>
 				</div>
 			</div>
-			<ModalAppraisal
-				:key="key_render_appraisal"
-				v-if="showAppraisalDialog"
-				:data="form"
-				:idData="idData"
-				:status="2"
-				requiredAppraiserPerform="required"
-				:requiredAppraiser="null"
-				@cancel="handleCancelAppraisal"
-				@updateAppraisal="updateAppraisal"
-			/>
-			<ModalAppraisal
-				:key="key_render_appraisal"
-				v-if="showVerifyCertificate"
-				:data="form"
-				:idData="idData"
-				:status="3"
-				requiredAppraiserPerform="required"
-				requiredAppraiser="required"
-				@cancel="handleCancelVerify"
-				@updateAppraisal="handleChangeVerify"
-			/>
-			<ModalSendVerify
-				v-if="showAcceptCertificate"
-				:notification="`Bạn có muốn muốn '${targetMessage}' hồ sơ này`"
-				@action="handleChangeAccept"
-				@cancel="handleCancelAccept"
-			/>
+		</div>
+		<ModalAppraisal
+			:key="key_render_appraisal"
+			v-if="showAppraisalDialog"
+			:data="form"
+			:idData="idData"
+			:status="2"
+			requiredAppraiserPerform="required"
+			:requiredAppraiser="null"
+			@cancel="handleCancelAppraisal"
+			@updateAppraisal="updateAppraisal"
+		/>
+		<ModalAppraisal
+			:key="key_render_appraisal"
+			v-if="showVerifyCertificate"
+			:data="form"
+			:idData="idData"
+			:status="3"
+			requiredAppraiserPerform="required"
+			requiredAppraiser="required"
+			@cancel="handleCancelVerify"
+			@updateAppraisal="handleChangeVerify"
+		/>
+		<ModalSendVerify
+			v-if="showAcceptCertificate"
+			:notification="`Bạn có muốn muốn '${targetMessage}' hồ sơ này`"
+			@action="handleChangeAccept"
+			@cancel="handleCancelAccept"
+		/>
 	</div>
 </template>
 
 <script>
-import ModalAppraisal from './ModalAppraisal'
-import ModalSendVerify from '@/components/Modal/ModalSendVerify'
-import InputText from '@/components/Form/InputText'
-import InputCategory from '@/components/Form/InputCategory'
-import FileUpload from '@/components/file/FileUpload'
-import InputTextPrefixCustom from '@/components/Form/InputTextPrefixCustom'
-import InputDatePicker from '@/components/Form/InputDatePicker'
-import InputCurrency from '@/components/Form/InputCurrency'
-import moment from 'moment'
-import CertificationBrief from '@/models/CertificationBrief'
-import {BTooltip, BDropdown, BDropdownItem, BButtonGroup} from 'bootstrap-vue'
+import ModalAppraisal from "./ModalAppraisal";
+import ModalSendVerify from "@/components/Modal/ModalSendVerify";
+import InputText from "@/components/Form/InputText";
+import InputCategory from "@/components/Form/InputCategory";
+import FileUpload from "@/components/file/FileUpload";
+import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
+import InputDatePicker from "@/components/Form/InputDatePicker";
+import InputCurrency from "@/components/Form/InputCurrency";
+import moment from "moment";
+import CertificationBrief from "@/models/CertificationBrief";
+import {
+	BTooltip,
+	BDropdown,
+	BDropdownItem,
+	BButtonGroup
+} from "bootstrap-vue";
+import IconBase from "@/components/IconBase.vue";
 
 export default {
-	name: 'ModalAppraiseInformation',
-	props: ['data', 'idData', 'edit', 'add', 'user_id', 'appraiser_number', 'jsonConfig', 'profile'],
-	data () {
+	name: "ModalAppraiseInformation",
+	props: [
+		"data",
+		"idData",
+		"edit",
+		"add",
+		"user_id",
+		"appraiser_number",
+		"jsonConfig",
+		"profile"
+	],
+	data() {
 		return {
 			isOneItem: false,
 			isTwoItem: false,
 			isThreeItem: false,
 			form: {
-				petitioner_name: '',
-				appraise_purpose: '',
-				appraiser_confirm: '',
-				appraiser_manager: '',
-				appraiser_control: '',
-				appraiser_perform: '',
-				customer: '',
-				petitioner_address: '',
-				petitioner_phone: '',
-				appraise_date: '',
-				appraise_purpose_id: '',
-				certificate_date: '',
-				document_date: '',
-				document_num: '',
-				certificate_num: '',
-				date_certificate: '',
-				service_fee: '',
-				phone: '',
-				address: '',
-				petitioner_identity_card: '',
+				petitioner_name: "",
+				appraise_purpose: "",
+				appraiser_confirm: "",
+				appraiser_manager: "",
+				appraiser_control: "",
+				appraiser_perform: "",
+				customer: "",
+				petitioner_address: "",
+				petitioner_phone: "",
+				appraise_date: "",
+				appraise_purpose_id: "",
+				certificate_date: "",
+				document_date: "",
+				document_num: "",
+				certificate_num: "",
+				date_certificate: "",
+				service_fee: "",
+				phone: "",
+				address: "",
+				petitioner_identity_card: "",
 				status: 1,
 				sub_status: 1,
-				note: ''
+				note: ""
 			},
 			appraisalPurposes: [],
 			showAppraisalDialog: false,
@@ -230,16 +416,17 @@ export default {
 			showAcceptCertificate: false,
 			key_render_appraisal: 20000000,
 			isPermission: false,
-			user: '',
-			config: '',
-			configData: '',
-			requireData: '',
+			user: "",
+			config: "",
+			configData: "",
+			requireData: "",
 			targetDescription: [],
 			targetConfig: {},
-			targetMessage: ''
-		}
+			targetMessage: ""
+		};
 	},
 	components: {
+		IconBase,
 		FileUpload,
 		InputCategory,
 		InputText,
@@ -248,93 +435,114 @@ export default {
 		InputCurrency,
 		ModalAppraisal,
 		ModalSendVerify,
-		'b-tooltip': BTooltip,
-		'b-dropdown-item': BDropdownItem,
-		'b-button-group': BButtonGroup,
-		'b-dropdown': BDropdown
+		"b-tooltip": BTooltip,
+		"b-dropdown-item": BDropdownItem,
+		"b-button-group": BButtonGroup,
+		"b-dropdown": BDropdown
 	},
 	computed: {
-		optionsAppraisalPurposes () {
+		optionsAppraisalPurposes() {
 			return {
 				data: this.appraisalPurposes,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		}
 	},
-	created () {
+	created() {
 		// this.getAppraiseOthers()
 		// this.getDetailCertificate()
 	},
 	methods: {
-		getTargetDescription () {
-			let data = []
+		getTargetDescription() {
+			let data = [];
 			if (this.isPermission) {
-				data = this.targetDescription
+				data = this.targetDescription;
 			}
-			return data
+			return data;
 		},
-		handleUpdateStatus (id) {
-			if (this.form.status === 1 && (this.user_id === this.form.appraiser_sale.user_id || this.$store.getters.profile.data.user.id === this.form.created_by)) {
-				this.showAppraisalDialog = true
-			} else if ((this.form.status === 2 && this.user_id === this.form.appraiser_perform.user_id)) {
-				this.showVerifyCertificate = true
-			} else if ((this.form.status === 3 && this.appraiser_number)) {
-				this.showAcceptCertificate = true
+		handleUpdateStatus(id) {
+			if (
+				this.form.status === 1 &&
+				(this.user_id === this.form.appraiser_sale.user_id ||
+					this.$store.getters.profile.data.user.id === this.form.created_by)
+			) {
+				this.showAppraisalDialog = true;
+			} else if (
+				this.form.status === 2 &&
+				this.user_id === this.form.appraiser_perform.user_id
+			) {
+				this.showVerifyCertificate = true;
+			} else if (this.form.status === 3 && this.appraiser_number) {
+				this.showAcceptCertificate = true;
 			}
 		},
-		handleCancelAppraisal () {
-			this.showAppraisalDialog = false
+		handleDetailPreCertificate(id) {
+			this.$router
+				.push({
+					name: "pre_certification.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
 		},
-		updateAppraisal () {
-			this.$emit('action', this.idData, 2)
+		handleCancelAppraisal() {
+			this.showAppraisalDialog = false;
 		},
-		handleChangeVerify () {
-			this.$emit('action', this.idData, 3)
+		updateAppraisal() {
+			this.$emit("action", this.idData, 2);
 		},
-		handleCancelVerify () {
-			this.showVerifyCertificate = false
+		handleChangeVerify() {
+			this.$emit("action", this.idData, 3);
+		},
+		handleCancelVerify() {
+			this.showVerifyCertificate = false;
 		},
 
-		formatDate (date) {
-			return moment(date).format('DD/MM/YYYY')
+		formatDate(date) {
+			return moment(date).format("DD/MM/YYYY");
 		},
-		formatNumber (num) {
+		formatNumber(num) {
 			// convert number to dot format
 			if (num) {
-				let formatedNum = num.toString().replace('.', ',')
-				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
-					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
-				})
+				let formatedNum = num.toString().replace(".", ",");
+				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+				});
 			}
 		},
-		handleDetail (id) {
-			this.$router.push({
-				name: 'certification_brief.detail',
-				query: {
-					id: id
-				}
-			}).catch(_ => {})
+		handleDetail(id) {
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id
+					}
+				})
+				.catch(_ => {});
 		},
 
-		handleCancel (event) {
-			this.$emit('cancel', event)
+		handleCancel(event) {
+			this.$emit("cancel", event);
 		},
-		handleTarget (target) {
-			this.targetConfig = this.jsonConfig.principle.find(i => i.id === target.id)
-			this.targetMessage = target.description
+		handleTarget(target) {
+			this.targetConfig = this.jsonConfig.principle.find(
+				i => i.id === target.id
+			);
+			this.targetMessage = target.description;
 			if (this.targetConfig) {
-				this.showAcceptCertificate = true
+				this.showAcceptCertificate = true;
 			}
 		},
-		getExpireStatusDate (config) {
-			let dateConvert = new Date()
-			let minutes = config.process_time ? config.process_time : 1440
-			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000)
-			let status_expired_at = moment(dateConverted).format('DD-MM-YYYY HH:mm')
-			return status_expired_at
+		getExpireStatusDate(config) {
+			let dateConvert = new Date();
+			let minutes = config.process_time ? config.process_time : 1440;
+			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
+			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
+			return status_expired_at;
 		},
-		async handleChangeAccept () {
+		async handleChangeAccept() {
 			let dataSend = {
 				appraiser_confirm_id: this.form.appraiser_confirm_id,
 				appraiser_id: this.form.appraiser_id,
@@ -345,93 +553,107 @@ export default {
 				sub_status: this.targetConfig.sub_status,
 				check_price: this.targetConfig.require.check_price,
 				status_expired_at: this.getExpireStatusDate(this.targetConfig)
-			}
-			this.$emit('action', this.idData, dataSend, this.targetMessage)
-			this.handleCancelAccept()
+			};
+			this.$emit("action", this.idData, dataSend, this.targetMessage);
+			this.handleCancelAccept();
 		},
-		handleCancelAccept () {
-			this.showAcceptCertificate = false
+		handleCancelAccept() {
+			this.showAcceptCertificate = false;
 		},
-		async validateAppraiseInformation () {
-			const isValid = await this.$refs.appraise_information.validate()
+		async validateAppraiseInformation() {
+			const isValid = await this.$refs.appraise_information.validate();
 			if (isValid) {
-				this.handleAction()
+				this.handleAction();
 			}
 		},
-		async getDetailCertificate () {
-			const res = await CertificationBrief.getDetailCertificateBrief(this.idData)
+		async getDetailCertificate() {
+			const res = await CertificationBrief.getDetailCertificateBrief(
+				this.idData
+			);
 			if (res.data) {
-				this.form = res.data
+				this.form = res.data;
 			} else {
 				await this.$toast.open({
-					message: 'Lấy dữ liệu thất bại',
-					type: 'error',
-					position: 'top-right'
-				})
+					message: "Lấy dữ liệu thất bại",
+					type: "error",
+					position: "top-right"
+				});
 			}
 		},
-		handleAction () {
-
+		handleAction() {},
+		loadConfigByStatus(status, sub_status) {
+			return this.jsonConfig.principle.find(
+				item =>
+					item.status === status &&
+					item.sub_status === sub_status &&
+					item.isActive === 1
+			);
 		},
-		loadConfigByStatus (status, sub_status) {
-			return this.jsonConfig.principle.find(item => item.status === status && item.sub_status === sub_status && item.isActive === 1)
+		loadConfigData(configData) {
+			this.config = configData;
+			this.requireData = configData.require;
+			this.targetDescription = configData.target_description;
 		},
-		loadConfigData (configData) {
-			this.config = configData
-			this.requireData = configData.require
-			this.targetDescription = configData.target_description
-		},
-		checkPermission (configData) {
-			let check = false
+		checkPermission(configData) {
+			let check = false;
 			if (configData.put_require && configData.put_require.length > 0) {
 				configData.put_require.forEach(i => {
-					if ((i === 'created_by' && this.form[i] === this.user.id) || (i !== 'created_by' && this.form[i] === this.user.appraiser.id)) {
-						check = true
+					if (
+						(i === "created_by" && this.form[i] === this.user.id) ||
+						(i !== "created_by" && this.form[i] === this.user.appraiser.id)
+					) {
+						check = true;
 					}
-				})
+				});
 			}
-			return check
+			return check;
 		},
-		configStatus () {
-			this.user = this.profile.data.user
-			let configData = this.loadConfigByStatus(this.form.status, this.form.sub_status)
+		configStatus() {
+			this.user = this.profile.data.user;
+			let configData = this.loadConfigByStatus(
+				this.form.status,
+				this.form.sub_status
+			);
 			if (configData) {
-				this.loadConfigData(configData)
-				this.isPermission = this.checkPermission(configData)
+				this.loadConfigData(configData);
+				this.isPermission = this.checkPermission(configData);
 			}
 		},
-		handleFooterAccept (target) {
-			this.$emit('handleFooterAccept', target)
+		handleFooterAccept(target) {
+			this.$emit("handleFooterAccept", target);
 		},
-		isMobile () {
-			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-				return true
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
 			} else {
-				return false
+				return false;
 			}
 		}
 	},
-	beforeMount () {
-	},
-	mounted () {
-		this.form = this.data
-		this.configStatus()
+	beforeMount() {},
+	mounted() {
+		this.form = this.data;
+		this.configStatus();
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>
-		/deep/ .dropdown-item {
-		min-width: unset!important;
-		// padding: 0!important;
-	}
-	/deep/ .dropdown-menu.show {
-		background: transparent!important;
-		box-shadow: none!important;
-		text-align: right;
-		margin-right: 0;
-	}
-.title{
+/deep/ .dropdown-item {
+	min-width: unset !important;
+	// padding: 0!important;
+}
+/deep/ .dropdown-menu.show {
+	background: transparent !important;
+	box-shadow: none !important;
+	text-align: right;
+	margin-right: 0;
+}
+.title {
 	font-size: 1.125rem;
 	font-weight: 700;
 	margin-bottom: 15px;
@@ -444,7 +666,7 @@ export default {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(0,0,0,.6);
+	background: rgba(0, 0, 0, 0.6);
 	.card {
 		border-radius: 5px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
@@ -458,7 +680,7 @@ export default {
 			padding: 20px 10px;
 		}
 		&-header {
-			border-bottom: 1px solid #DDDDDD;
+			border-bottom: 1px solid #dddddd;
 			h3 {
 				color: #333333;
 			}
@@ -483,172 +705,171 @@ export default {
 		}
 	}
 }
-.card{
-	.contain-detail{
+.card {
+	.contain-detail {
 		overflow-y: auto;
 		overflow-x: hidden;
-		border-top: 1px solid #E8E8E8;
+		border-top: 1px solid #e8e8e8;
 		padding-top: 10px;
-		&::-webkit-scrollbar{
+		&::-webkit-scrollbar {
 			width: 2px;
 		}
 	}
-	&-title{
-		background: #F3F2F7;
+	&-title {
+		background: #f3f2f7;
 		padding: 16px 20px;
 		margin-bottom: 0;
-		.title{
+		.title {
 			font-size: 1.125rem;
 			font-weight: 600;
 			margin-bottom: 0;
 		}
 	}
-	&-table{
+	&-table {
 		border-radius: 5px;
-		background: #FFFFFF;
+		background: #ffffff;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		width: 99%;
 		margin: 50px auto 50px;
 	}
-	&-body{
+	&-body {
 		padding: 35px 30px 40px;
 	}
-	&-info{
-		.title{
+	&-info {
+		.title {
 			font-size: 1.125rem;
 			font-weight: 700;
 			margin-top: 28px;
 		}
 	}
-	&-land{
+	&-land {
 		position: relative;
 		padding: 0;
 	}
 }
-.img{
+.img {
 	margin-right: 13px;
 }
 .content_btn_edit {
 	min-width: 70px;
 	font-weight: 600;
 	margin-left: 5px;
-	color: #617F9E;
+	color: #617f9e;
 }
-.card{
+.card {
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);;
-	background: #FFFFFF;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffffff;
 	margin-bottom: 75px;
-	&-title{
-		background: #F3F2F7;
+	&-title {
+		background: #f3f2f7;
 		padding: 16px 20px;
 		margin-bottom: 0;
-		.title{
+		.title {
 			font-size: 1.125rem;
 			font-weight: 600;
 			margin-bottom: 0;
 		}
 	}
-	&-body{
+	&-body {
 		padding: 35px 30px 40px;
 	}
-	&-info{
-		.title{
+	&-info {
+		.title {
 			font-size: 1.125rem;
 			font-weight: 700;
 			margin-top: 28px;
 		}
 	}
-	&-land{
+	&-land {
 		position: relative;
 		padding: 0;
 	}
 }
-.card__order{
+.card__order {
 	max-width: 50%;
 	margin-bottom: 1.25rem;
 	@media (max-width: 767px) {
 		max-width: 100%;
 	}
 }
-.btn{
-	&-white{
+.btn {
+	&-white {
 		max-height: none;
 
 		line-height: 19.07px;
 		margin-right: 15px;
-		&:last-child{
+		&:last-child {
 			margin-right: 0;
 		}
 	}
-	&-contain{
+	&-contain {
 		margin-bottom: 55px;
 	}
 }
-.d-grid{
+.d-grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 8.9%;
 	&:first-child {
 		margin-top: 0;
 	}
-	&__checkbox{
+	&__checkbox {
 		grid-template-columns: 1fr 1fr;
 	}
 	@media (max-width: 767px) {
 		grid-template-columns: 1fr;
 	}
 }
-.content{
-	&-detail{
+.content {
+	&-detail {
 	}
-	&-title{
+	&-title {
 		color: #555555;
 		margin-bottom: 5px;
 
 		font-weight: 500;
 	}
-	&-name{
+	&-name {
 		font-size: 1.125rem;
 		color: #000000;
 		margin-bottom: 15px;
 		font-weight: 600;
 		@media (max-width: 767px) {
-
 		}
-		&__code{
-			color: #FAA831;
+		&__code {
+			color: #faa831;
 		}
 	}
 }
-.contain-table{
+.contain-table {
 	@media (max-width: 767px) {
 		overflow-y: hidden;
 		overflow-x: auto;
 	}
-	.table-property{
+	.table-property {
 		width: 100%;
 	}
 }
-.table-property{
+.table-property {
 	width: 100%;
 	font-weight: 500;
 	color: #000000;
 	text-align: center;
-	thead{
-		th{
+	thead {
+		th {
 			padding: 12px 5px;
 			font-weight: 500;
 		}
 	}
-	tbody{
-		td{
-			border: 1px solid #E5E5E5;
-			&:first-child{
+	tbody {
+		td {
+			border: 1px solid #e5e5e5;
+			&:first-child {
 				border-left: none;
-				width: 180px
+				width: 180px;
 			}
-			&:last-child{
+			&:last-child {
 				border-right: none;
 			}
 			box-sizing: border-box;
@@ -656,16 +877,16 @@ export default {
 		}
 	}
 }
-.img-content{
+.img-content {
 	color: #000000;
 
 	font-weight: 600;
-	span{
+	span {
 		font-weight: 500;
 		margin-left: 10px;
 	}
 }
-.input-code{
+.input-code {
 	color: #000000;
 	border-radius: 5px;
 	width: 180px;
@@ -677,27 +898,27 @@ export default {
 	justify-content: center;
 	cursor: pointer;
 }
-.img-dropdown{
+.img-dropdown {
 	cursor: pointer;
 	width: 18px;
-	&__hide{
+	&__hide {
 		transform: rotate(90deg);
-		transition: .3s;
+		transition: 0.3s;
 	}
 }
 .img-contain {
 	aspect-ratio: 1/1;
 	overflow: hidden;
-	img{
+	img {
 		height: 100%;
 		cursor: pointer;
 		object-fit: cover;
 	}
-	&__table{
+	&__table {
 		margin: auto;
 		max-width: 50px;
 		max-height: 50px;
-		img{
+		img {
 			object-fit: cover;
 			object-position: top;
 			cursor: pointer;
@@ -708,53 +929,53 @@ export default {
 		}
 	}
 }
-.container-title{
+.container-title {
 	margin: -35px -95px auto;
 	// padding: 35px 95px 0;
 	padding: 15px 50px 10px 95px;
 	// box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 
-	.title{
-		color:#007EC6;
-		margin-top:20px;
+	.title {
+		color: #007ec6;
+		margin-top: 20px;
 		font-size: 1.2rem;
 		@media (max-width: 767px) {
 			font-size: 1.125rem;
 		}
 	}
-	&__footer{
+	&__footer {
 		margin: auto -95px -35px;
 		padding: 20px 95px 20px;
 		@media (max-width: 767px) {
-			.btn-white{
+			.btn-white {
 				margin-bottom: 20px;
 			}
 		}
 	}
 }
-.container-img{
-	padding: .75rem 0;
+.container-img {
+	padding: 0.75rem 0;
 	border: 1px solid #0b0d10;
 }
 .traffic-light {
 	color: black;
 	padding: 0 5px;
-	background: rgba(252,194,114,0.53);
+	background: rgba(252, 194, 114, 0.53);
 	width: fit-content;
 }
-.input-switch__detail{
+.input-switch__detail {
 	margin-bottom: 25px;
 }
 .container-table {
-		border-radius: 5px;
-		border: 1px solid #F3F2F7;
+	border-radius: 5px;
+	border: 1px solid #f3f2f7;
 }
 .heigh_div {
 	min-height: 35px;
-	border-bottom: 1px solid #E8E8E8;
+	border-bottom: 1px solid #e8e8e8;
 }
 .header_title {
-	background: #007EC6;
+	background: #007ec6;
 	color: #f5f5f5;
 	font-weight: 600;
 	padding-left: 1.2rem;
@@ -769,10 +990,10 @@ export default {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
 	font-weight: 600;
-	color:#617F9E;
+	color: #617f9e;
 }
-.header_title_detail{
-	color: #3D4D65 !important;
+.header_title_detail {
+	color: #3d4d65 !important;
 	background-color: rgba(222, 230, 238, 0.5);
 }
 .main_title {
@@ -785,23 +1006,30 @@ export default {
 	margin-left: unset !important;
 }
 .detail_certification_brief {
-		padding: 0 1rem;
-		margin-bottom: 80px;
+	padding: 0 1rem;
+	margin-bottom: 80px;
 }
 .detail_certificate_1 {
 	padding: 0.75rem;
 	border-radius: 5px;
-	border: 1px solid #B5E5FF;
-	background-color: #EEF9FF;
+	border: 1px solid #b5e5ff;
+	background-color: #eef9ff;
+}
+.card-status-certificate {
+	border-radius: 5px;
+	padding: 2px 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	color: darkgray;
+	cursor: pointer;
 }
 .detail_certificate_2 {
 	padding: 0.75rem;
 	border-radius: 5px;
-	border: 1px solid #E8E8E8;
-	background-color: #F6F7FB;
+	border: 1px solid #e8e8e8;
+	background-color: #f6f7fb;
 }
-.margin_content_inline{
-	margin-right: 10px
+.margin_content_inline {
+	margin-right: 10px;
 }
 .container_content {
 	min-height: 20px;
@@ -811,33 +1039,32 @@ export default {
 }
 
 .content_id {
-		border-radius: 5px;
-		padding: 2px 5px;
-		font-weight: 500;
-		// padding-left: 0.8rem;
-		cursor: pointer;
-		&_primary {
-		color: #007EC6;
-		border: 1px solid #007EC6;
-		}
+	border-radius: 5px;
+	padding: 2px 5px;
+	font-weight: 500;
+	// padding-left: 0.8rem;
+	cursor: pointer;
+	&_primary {
+		color: #007ec6;
+		border: 1px solid #007ec6;
+	}
 }
 .btn_dropdown {
-		border:white;
-		border-radius: 5px;
-		height: 35px;
-		@media (max-width: 767px) {
-			margin-top: 10px;
-		}
+	border: white;
+	border-radius: 5px;
+	height: 35px;
+	@media (max-width: 767px) {
+		margin-top: 10px;
 	}
+}
 .btn_group {
-		@media (max-width: 767px) {
-			width: 100%;
-		}
-		/deep/ .btn-secondary {
-			background-image: none;
-			border-color: none !important;
-			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
-		}
+	@media (max-width: 767px) {
+		width: 100%;
 	}
-
+	/deep/ .btn-secondary {
+		background-image: none;
+		border-color: none !important;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+	}
+}
 </style>

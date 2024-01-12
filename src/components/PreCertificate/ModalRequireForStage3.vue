@@ -1,23 +1,14 @@
 <template>
-	<div class="modal-delete d-flex justify-content-center align-items-center">
-		<div class="card">
+	<div class=" modal-delete d-flex justify-content-center align-items-center">
+		<div class="card px-3 pb-1">
 			<div class="container-title">
-				<div class="d-flex justify-content-between">
-					<h2 class="title">
-						Kết quả sơ bộ
-					</h2>
-					<img
-						height="35px"
-						@click="handleCancel"
-						class="cancel"
-						src="@/assets/icons/ic_cancel_2.svg"
-						alt=""
-					/>
-				</div>
+				<h2 class="title ml-3" style="">
+					Kết quả sơ bộ
+				</h2>
 			</div>
 			<div class="card-body">
-				<div class="row col-12">
-					<OtherFile style="margin-left:-20px;" type="Result" />
+				<div class="row col-12" style="margin-top: 10px;margin-left:0px">
+					<OtherFile type="Result" fromComponent="DialogUpdateStatus" />
 				</div>
 				<div class="btn__group">
 					<button
@@ -147,7 +138,7 @@ export default {
 		padding: 20px;
 	}
 	.card {
-		max-width: 500px;
+		max-width: 450px;
 		width: 100%;
 		margin-bottom: 0;
 		&-header {
@@ -178,7 +169,6 @@ export default {
 	// padding: 35px 95px 0;
 	// padding: 15px 50px 10px 95px;
 	// box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	padding-left: 1rem;
 
 	.title {
 		color: #007ec6;

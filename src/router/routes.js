@@ -1883,41 +1883,43 @@ export const routes = [
 				path: "/pre_certification/create",
 				name: "pre_certification.create",
 				component: page("pre_certification/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Tạo mới hồ sơ thẩm định sơ bộ",
-					permissions: [PERMISSIONS.ADD_PRE_CERTIFICATE],
+					title: "Tạo mới yêu cầu sơ bộ",
+					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Tạo mới hồ sơ thẩm định sơ bộ",
+							title: "Tạo mới yêu cầu sơ bộ",
 							name: "pre_certification.create"
 						}
 					],
-					gtm: "Trang tạo mới HSTĐSB"
+					gtm: "Trang tạo mới YCSB"
 				}
 			},
 			{
 				path: "/pre_certification/edit",
 				name: "pre_certification.edit",
 				component: page("pre_certification/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
 				props: true,
 				meta: {
-					title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
-					permissions: [PERMISSIONS.EDIT_PRE_CERTIFICATE],
+					title: "Chỉnh sửa yêu cầu sơ bộ",
+					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Chỉnh sửa hồ sơ thẩm định sơ bộ",
+							title: "Chỉnh sửa yêu cầu sơ bộ",
 							name: "pre_certification.create"
 						}
 					],
-					gtm: "Trang chỉnh sửa HSTĐSB"
+					gtm: "Trang chỉnh sửa YCSB"
 				}
 			},
 			{
@@ -1926,16 +1928,16 @@ export const routes = [
 				component: page("pre_certification/Index2.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Hồ sơ thẩm định sơ bộ",
+					title: "Yêu cầu sơ bộ",
 					// fix_permission
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						}
 					],
-					gtm: "Trang HSTĐ"
+					gtm: "Trang YCSB"
 				}
 			},
 
@@ -1945,20 +1947,20 @@ export const routes = [
 				component: page("pre_certification/Detail.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Chi tiết hồ sơ thẩm định sơ bộ",
+					title: "Chi tiết yêu cầu sơ bộ",
 					// fix_permission
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Hồ sơ thẩm định sơ bộ",
+							title: "Yêu cầu sơ bộ",
 							name: "pre_certification.index"
 						},
 						{
-							title: "Chi tiết hồ sơ thẩm định sơ bộ",
+							title: "Chi tiết yêu cầu sơ bộ",
 							name: "pre_certification.detail"
 						}
 					],
-					gtm: "Trang chi tiết HSTĐSB"
+					gtm: "Trang chi tiết YCSB"
 				}
 			}
 		]
@@ -2011,7 +2013,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.404" }],
-					gtm: "Trang lõi 404"
+					gtm: "Trang lỗi 404"
 				}
 			},
 			{
@@ -2022,7 +2024,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.409" }],
-					gtm: "Trang lõi 409"
+					gtm: "Trang lỗi 409"
 				}
 			},
 			{
@@ -2033,7 +2035,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.429" }],
-					gtm: "Trang lõi 429"
+					gtm: "Trang lỗi 429"
 				}
 			},
 			{
@@ -2044,7 +2046,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.500" }],
-					gtm: "Trang lõi 500"
+					gtm: "Trang lỗi 500"
 				}
 			},
 			{
@@ -2055,7 +2057,7 @@ export const routes = [
 					title: "",
 					// permissions: PERMISSIONS.ALL,
 					breadcrumbs: [{ title: "error", name: "error.503" }],
-					gtm: "Trang lõi 503"
+					gtm: "Trang lỗi 503"
 				}
 			}
 		]
@@ -2066,7 +2068,7 @@ export const routes = [
 		path: "*",
 		component: page("error/Error404.vue"),
 		meta: {
-			gtm: "Trang lõi 404"
+			gtm: "Trang lỗi 404"
 		}
 	},
 
@@ -2085,7 +2087,7 @@ export const routes = [
 					breadcrumbs: [
 						//   { title: 'Bất động sản' }
 					],
-					gtm: "Trang lõi không tìm thấy trang"
+					gtm: "Trang lỗi không tìm thấy trang"
 				}
 			}
 		]

@@ -27,10 +27,22 @@
 					:style="isMobile ? { 'padding-top': '0' } : {}"
 				>
 					<div class="detail_certificate_1 col-12 mb-2">
-						<div class="col-12 d-flex mb-2 justify-content-between">
+						<div class="col-12 d-flex mb-2 row">
 							<span class="content_id content_id_primary class_p">{{
-								`HSTĐSB ${dataPC.id}`
+								`YCSB_${dataPC.id}`
 							}}</span>
+							<span
+								v-if="dataPC.certificate_id"
+								@click="handleDetailCertificate(dataPC.certificate_id)"
+								class=" card-status-certificate ml-2"
+								id="certificate_id"
+							>
+								<icon-base name="nav_hstd" class="item-icon svg-inline--fa" />
+								{{ `HTSD_${dataPC.certificate_id}` }}
+								<b-tooltip target="certificate_id" placement="top-right">{{
+									`Nhấn để xem chi tiết HTSD_${dataPC.certificate_id}`
+								}}</b-tooltip>
+							</span>
 						</div>
 						<div class="d-flex container_content justify-content-between">
 							<div class="d-flex container_content">
@@ -53,15 +65,16 @@
 							<p>{{ dataPC.petitioner_phone }}</p>
 						</div>
 						<div class="d-flex container_content">
-									<strong class="margin_content_inline">Mục đích thẩm định:</strong
-									><span id="appraise_purpose" class="text-left">{{
-											 dataPC.appraise_purpose && dataPC.appraise_purpose.name.length > 70
-											? dataPC.appraise_purpose.name.substring(70, 0) + "..."
-											: dataPC.appraise_purpose.name
-									}}</span>
-									<b-tooltip target="appraise_purpose" placement="top-right">{{
-										dataPC.appraise_purpose.name
-									}}</b-tooltip>
+							<strong class="margin_content_inline">Mục đích thẩm định:</strong
+							><span id="appraise_purpose" class="text-left">{{
+								dataPC.appraise_purpose &&
+								dataPC.appraise_purpose.name.length > 70
+									? dataPC.appraise_purpose.name.substring(70, 0) + "..."
+									: dataPC.appraise_purpose.name
+							}}</span>
+							<b-tooltip target="appraise_purpose" placement="top-right">{{
+								dataPC.appraise_purpose.name
+							}}</b-tooltip>
 						</div>
 						<!-- <div class="d-flex container_content">
 							<strong class="margin_content_inline">Mục đích thẩm định:</strong>
@@ -75,8 +88,29 @@
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Loại sơ bộ:</strong>
 							<p>
-								{{ dataPC.pre_type ? dataPC.pre_type : "" }}
+								{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
 							</p>
+						</div>
+
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Thời điểm sơ bộ:</strong>
+							<p>
+								{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Tổng phí dịch vụ:</strong>
+							<p>
+								{{
+									dataPC.total_service_fee
+										? formatNumber(dataPC.total_service_fee)
+										: 0
+								}}đ
+							</p>
+						</div>
+						<div class="d-flex container_content">
+							<strong class="margin_content_inline">Chiết khấu:</strong>
+							<p>{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%</p>
 						</div>
 
 						<div class="d-flex container_content">
@@ -89,16 +123,15 @@
 								}}đ
 							</p>
 						</div>
-
 						<div class="d-flex container_content">
-							<strong class="margin_content_inline">Ghi chú:</strong
+							<strong class="margin_content_inline">Tên tài sản sơ bộ:</strong
 							><span id="note" class="text-left">{{
-								dataPC.note && dataPC.note.length > 25
-									? dataPC.note.substring(25, 0) + "..."
-									: dataPC.note
+								dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
+									? dataPC.pre_asset_name.substring(25, 0) + "..."
+									: dataPC.pre_asset_name
 							}}</span>
 							<b-tooltip target="note" placement="top-right">{{
-								dataPC.note
+								dataPC.pre_asset_name
 							}}</b-tooltip>
 						</div>
 						<div
@@ -181,6 +214,7 @@
 						</div>
 						<div class="button-contain">
 							<button
+								v-if="!dataPC.certificate_id"
 								v-for="(target, index) in getTargetDescription()"
 								:key="index"
 								class="btn "
@@ -320,6 +354,7 @@ import {
 	BDropdownItem,
 	BButtonGroup
 } from "bootstrap-vue";
+import IconBase from "./../IconBase.vue";
 
 export default {
 	name: "ModalAppraiseInformation",
@@ -378,6 +413,7 @@ export default {
 		};
 	},
 	components: {
+		IconBase,
 		FileUpload,
 		InputCategory,
 		InputText,
@@ -421,6 +457,16 @@ export default {
 		// this.getDetailCertificate()
 	},
 	methods: {
+		handleDetailCertificate(id) {
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
+		},
 		getTargetDescription() {
 			let data = [];
 			if (this.isPermission) {
@@ -946,6 +992,13 @@ export default {
 	@media (max-width: 767px) {
 		margin-top: 10px;
 	}
+}
+.card-status-certificate {
+	border-radius: 5px;
+	padding: 2px 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	color: darkgray;
+	cursor: pointer;
 }
 .btn_group {
 	@media (max-width: 767px) {

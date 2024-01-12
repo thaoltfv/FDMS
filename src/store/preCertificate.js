@@ -44,8 +44,21 @@ export const usePreCertificateStore = defineStore(
 				name: null,
 				id: null
 			},
-			pre_type: "coban",
-			uploadFile: null
+			pre_type_id: null,
+			commission_fee: 0,
+			pre_date: null,
+			pre_asset_name: null,
+			total_service_fee: 0,
+
+			uploadFile: null,
+
+			payments: [
+				{
+					id: null,
+					amount: 0,
+					pay_date: null
+				}
+			]
 		});
 
 		const permission = ref({
@@ -80,7 +93,7 @@ export const usePreCertificateStore = defineStore(
 			appraiser_performances: [],
 			appraiser_purposes: [],
 			customers: [],
-			preTypes: null,
+			preTypes: [],
 			workflow: null,
 			cancelPCReasons: []
 		});
@@ -95,8 +108,8 @@ export const usePreCertificateStore = defineStore(
 			for (let index = 0; index < respconfig.data.length; index++) {
 				const element = respconfig.data[index];
 				element.config = JSON.parse(element.config);
-				if (element.name === "pre_types")
-					lstDataConfig.value.preTypes = element.config;
+				// if (element.name === "pre_types")
+				// 	lstDataConfig.value.preTypes = element.config;
 
 				if (element.name === "workflow") {
 					lstDataConfig.value.workflow = element.config;
@@ -117,6 +130,7 @@ export const usePreCertificateStore = defineStore(
 			const resp = await WareHouse.getDictionaries();
 			if (resp.data) {
 				lstDataConfig.value.cancelPCReasons = resp.data.li_do_huy_so_bo;
+				lstDataConfig.value.preTypes = resp.data.loai_so_bo;
 			}
 			return;
 		}
@@ -125,7 +139,7 @@ export const usePreCertificateStore = defineStore(
 			isGetAppraiseOthers = true,
 			isGetConfig = true,
 			isGetCustomer = true,
-			isGetDistionaries = false
+			isGetDistionaries = true
 		) {
 			if (isGetLstAppraisers) await getLstAppraisers();
 			if (isGetAppraiseOthers) {
@@ -136,7 +150,7 @@ export const usePreCertificateStore = defineStore(
 			}
 			if (isGetConfig) await getConfig();
 			if (isGetCustomer) await getCustomer();
-			if (isGetCustomer) await getLstDictionaries();
+			if (isGetDistionaries) await getLstDictionaries();
 		}
 
 		getStartData();
@@ -186,16 +200,47 @@ export const usePreCertificateStore = defineStore(
 					id: null
 				};
 			}
+			if (lstDataConfig.value.preTypes.length == 0) await getLstDictionaries();
+			const pre_type = lstDataConfig.value.preTypes.find(
+				pre_type => pre_type.id === temp.pre_type_id
+			);
+			temp.pre_type = pre_type ? pre_type : { id: null, description: null };
 			if (temp.status == 6 && temp.cancel_reason) {
-				if (lstDataConfig.value.cancelPCReasons.length == 0)
-					await getLstDictionaries();
-
 				const reason = lstDataConfig.value.cancelPCReasons.find(
 					reason => `${reason.id}` === temp.cancel_reason
 				);
 				temp.cancel_reason_string = reason ? reason.description : "";
 			}
+			if (temp.payments.length === 0) {
+				temp.payments = [
+					{
+						id: null,
+						amount: 0,
+						pay_date: null
+					}
+				];
+				temp.paymentsOriginal = [
+					{
+						id: null,
+						amount: 0,
+						pay_date: null
+					}
+				];
+			}
+
+			temp.debtRemain = temp.total_service_fee;
+			temp.amountPaid = 0;
+			for (let index = 0; index < temp.payments.length; index++) {
+				const element = temp.payments[index];
+				element.pay_date = element.pay_date
+					? moment(element.pay_date).format("DD/MM/YYYY")
+					: "";
+				temp.amountPaid = temp.amountPaid + parseFloat(element.amount);
+				temp.debtRemain -= element.amount;
+			}
+			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			dataPC.value = temp;
+			console.log(dataPC.value);
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(
@@ -204,6 +249,12 @@ export const usePreCertificateStore = defineStore(
 			assignObject = null
 		) {
 			other.value.isSubmit = true;
+			if (moment(dataPC.value.pre_date, "DD/MM/YYYY", true).isValid()) {
+				dataPC.value.pre_date = moment(
+					dataPC.value.pre_date,
+					"DD-MM-YYYY"
+				).format("YYYY-MM-DD");
+			}
 			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
 			if (!dataPC.value.id) dataPC.value.status = 1;
 			const res = await PreCertificate.createUpdatePreCertification(
@@ -216,6 +267,20 @@ export const usePreCertificateStore = defineStore(
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
+				if (dataPC.value.payments && dataPC.value.payments.length > 0) {
+					for (let index = 0; index < dataPC.value.payments.length; index++) {
+						const element = dataPC.value.payments[index];
+						if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
+							element.pay_date = moment(element.pay_date, "DD-MM-YYYY").format(
+								"YYYY-MM-DD"
+							);
+						}
+					}
+					let difference = dataPC.value.payments.filter(
+						payment => !dataPC.value.paymentsOriginal.includes(payment)
+					);
+					const res = await updatePaymentFunction(difference, true);
+				}
 				await uploadFilePreCertificateFunction("Appendix");
 				other.value.toast.open({
 					message: "Lưu hồ sơ thẩm định thành công",
@@ -405,6 +470,36 @@ export const usePreCertificateStore = defineStore(
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		}
+
+		async function updatePaymentFunction(data, isReturn = false) {
+			other.value.isSubmit = true;
+
+			const res = await PreCertificate.updatePayments(data, dataPC.value.id);
+			if (isReturn) {
+				return res;
+			}
+			if (res.data && res.data.error === false) {
+				other.value.toast.open({
+					message: "Lưu thông tin thanh toán thành công",
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+			} else if (res.error) {
+				other.value.toast.open({
+					message: `${res.error.message}`,
+					type: "error",
+					position: "top-right"
+				});
+			} else {
+				other.value.toast.open({
+					message: "Lưu thất bại",
+					type: "error",
+					position: "top-right"
+				});
+			}
+			other.value.isSubmit = false;
+		}
 		function resetData() {
 			lstPreCertificateTable.value = [];
 			lstPreCertificateKanban.value = [];
@@ -458,7 +553,12 @@ export const usePreCertificateStore = defineStore(
 					name: null,
 					id: null
 				},
-				pre_type: "Cơ bản",
+
+				pre_type_id: null,
+				commission_fee: 0,
+				pre_date: null,
+				pre_asset_name: null,
+				total_service_fee: 0,
 				uploadFile: null
 			};
 			other.value.isSubmit = false;
@@ -534,7 +634,8 @@ export const usePreCertificateStore = defineStore(
 			rejectFromStage2ToStage1,
 			updateStatus,
 			getLstAppraisers,
-			getStartData
+			getStartData,
+			updatePaymentFunction
 		};
 	},
 	{
