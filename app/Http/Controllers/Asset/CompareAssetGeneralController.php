@@ -247,7 +247,7 @@ class CompareAssetGeneralController extends Controller
 
                 // Đường dẫn đến tệp JPG đích
                 $jpgPath = str_replace('.png', '.jpg', $pngPath);
-                $temporaryJpgPath = storage_path('app/public/temp/' . $jpgPath);
+                $temporaryJpgPath = storage_path('app/public/' . $jpgPath);
                 // Đọc tệp PNG và chuyển đổi thành JPG
                 $image = Image::make($temporaryPngPath);
                 $image->save($temporaryJpgPath, 80, 'jpg');
