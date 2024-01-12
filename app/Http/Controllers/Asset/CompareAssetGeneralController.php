@@ -251,6 +251,7 @@ class CompareAssetGeneralController extends Controller
                 // Upload tệp WebP lên S3
                 $s3Path = $path . Uuid::uuid4()->toString() . '.webp';
                 Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
+                $fileUrl = Storage::url($s3Path);
 
                 // Xóa tệp tạm thời nếu cần
                 unlink($tempWebpPath);
