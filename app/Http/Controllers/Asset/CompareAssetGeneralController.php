@@ -253,7 +253,7 @@ class CompareAssetGeneralController extends Controller
                 $image->save($temporaryJpgPath, 80, 'jpg');
 
                 //upload lên s3
-                Storage::put($name, file_get_contents($image));
+                Storage::put($path . Uuid::uuid4()->toString() . '.jpg', $temporaryJpgPath);
             
                 $fileUrl = Storage::url($name);
                 // Xóa tệp PNG và JPG tạm thời
