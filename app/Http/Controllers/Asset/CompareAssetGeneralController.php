@@ -257,8 +257,8 @@ class CompareAssetGeneralController extends Controller
             
                 // $fileUrl = Storage::url($name);
                 // Xóa tệp PNG và JPG tạm thời
-                unlink($temporaryPngPath);
-                unlink($temporaryJpgPath);
+                // unlink($temporaryPngPath);
+                // unlink($temporaryJpgPath);
             } else {
                 Storage::put($name, file_get_contents($image));
             
