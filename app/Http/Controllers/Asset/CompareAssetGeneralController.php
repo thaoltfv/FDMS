@@ -250,14 +250,21 @@ class CompareAssetGeneralController extends Controller
                 $jpgPath = str_replace('.png', '.jpg', $pngPath);
                 $temporaryJpgPath = storage_path('app/public/' . $jpgPath);
                 // Đọc tệp PNG và chuyển đổi thành JPG
-                $image = Image::make($temporaryPngPath);
-                $image->save($temporaryJpgPath, 80, 'jpg');
+                $image = Image::make($temporaryPngPath)->encode('jpg', 80);
+                $result = $image->save($temporaryJpgPath);
 
-                // Upload tệp JPG lên S3
-                $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
-                Storage::put($s3Path, Storage::disk('public')->get($temporaryJpgPath));
-            
-                $fileUrl = Storage::url($s3Path);
+                if ($result === false) {
+                    // Xử lý lỗi khi chuyển đổi
+                    dd($image->getError());
+                } else {
+                    dd($temporaryJpgPath);
+                    // Upload tệp JPG lên S3
+                    $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
+                    Storage::put($s3Path, Storage::disk('public')->get($temporaryJpgPath));
+                
+                    $fileUrl = Storage::url($s3Path);
+                }
+
                 // Xóa tệp PNG và JPG tạm thời
                 unlink($temporaryPngPath);
                 unlink($temporaryJpgPath);
