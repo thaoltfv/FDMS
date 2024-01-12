@@ -228,7 +228,6 @@ export default {
 		handleCancel(event) {
 			this.$emit("cancel", event);
 		},
-
 		async handleAction() {
 			if (this.dataForm.debtRemain < 0) {
 				this.$toast.open({
@@ -239,7 +238,21 @@ export default {
 				});
 				return;
 			}
-			const res = await await this.preCertificateStore.updatePaymentFunction(
+
+			for (let index = 0; index < this.dataForm.payments.length; index++) {
+				const element = this.dataForm.payments[index];
+				if (!element.pay_date || !element.amount || element.amount <= 0) {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập đầy đủ thông tin thanh toán và số tiền phải lớn hơn 0",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+					return;
+				}
+			}
+			const res = await this.preCertificateStore.updatePaymentFunction(
 				this.dataForm.payments,
 				this.dataForm.id
 			);
