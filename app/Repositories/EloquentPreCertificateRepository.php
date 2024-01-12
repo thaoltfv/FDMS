@@ -567,6 +567,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'cancelReason',
+            'preType'
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
@@ -836,7 +838,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'customer:id,name,phone,address',
             'otherDocuments',
             'createdBy:id,name',
-            'payments'
+            'payments',
+            'cancelReason',
+            'preType'
         ];
         $result = $this->model->query()
             ->with($with)
