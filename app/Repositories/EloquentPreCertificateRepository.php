@@ -525,6 +525,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'business_manager_id', 
             'appraiser_sale_id', 
             'appraiser_perform_id', 
+            'certificate_id',
             // 'users.image',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
@@ -961,6 +962,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $certificate->status = 1;
                 $certificate->sub_status = 1;
                 $certificate->created_by = $user->id;
+                $certificate->pre_certificate_id = $id;
                 $certificate->updated_at = date("Y-m-d H:i:s");
                 $certificate->document_description = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
 
@@ -977,7 +979,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
                                                         ->whereNull('deleted_at')
                                                         ->get();
-                    $length = $documents->count();
                     if ($documents->count() > 0) {
                         foreach ($documents as $document) {
                             if ($document->type_document == 'Appendix') {
@@ -1020,6 +1021,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 //     return $check;
                 // }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
+
+                if (isset($preCertificate->certificate_id)) {
+                    $result = ['message' => ErrorMessage::PRE_CERTIFICATE_HAVE_CERTIFICATE, 'exception' => ''];
+                }
                 $currentStatus = $preCertificate->status;
                 $current = intval($currentStatus);
                 $currentConfig = current(array_filter($request['status_config'], function ($val) use ($currentStatus) {
@@ -1098,23 +1103,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($id, $request) {
             try {
-                $preCertificate = $this->model->query()->where('id', $id)->first();
-                
-                if ($preCertificate) {
-                    return [
-                        'error' => true,
-                        'message' => 'Không có YCSB này, vui lòng kiểm tra lại'
-                    ];
-                }
                 $user = CommonService::getUser();
                 foreach ($request as $item) {
                     try {
-                        $item['created_by'] = $user->id;
-                        $item['pre_certificate_id'] = $item['pre_certificate_id'] ?? $id;
-                        if (isset($item['id'])) {
-                            PreCertificatePayments::create($item);
-                        } else if(isset($item['id']) && isset($item['is_deleted'])) {
-                            $payment = PreCertificatePayments::find($id);
+                        if (isset($item['id']) && isset($item['is_deleted'])) {
+                            $payment = PreCertificatePayments::find($item['id']);
                             if ($payment) {
                                 $payment->delete();
                             } else {
@@ -1123,9 +1116,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                     'message' => "Không thể xóa được, vui lòng kiểm tra lại"
                                 ];
                             }
-                        } else {
+                        } else if (isset($item['id'])) {
                             $item['updated_by'] = $user->id;
                             PreCertificatePayments::where('id', $item['id'])->update($item);
+                        } else {
+                            $item['created_by'] = $user->id;
+                            $item['pre_certificate_id'] = $id;
+                            PreCertificatePayments::create($item);
                         }
                     } catch (\Exception $e) {
                         $message = 'Thêm mới thất bại';
