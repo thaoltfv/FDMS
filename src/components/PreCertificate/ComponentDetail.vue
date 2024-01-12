@@ -348,7 +348,7 @@
 						</div>
 						<div
 							v-if="allowEditFile.result && edit"
-							@click="showCardPCPayments = true"
+							@click="handleshowCardPCPayments"
 							class="btn-edit "
 						>
 							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
@@ -696,6 +696,7 @@ export default {
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
 		const showCardPCPayments = ref(false);
+
 		return {
 			showCardPCPayments,
 			allowEditFile,
@@ -904,6 +905,22 @@ export default {
 		}
 	},
 	methods: {
+		handleshowCardPCPayments() {
+			console.log(
+				this.dataPC.total_service_fee,
+				"this.dataPC.total_service_fee",
+				this.dataPC.total_service_fee > 0
+			);
+			if (this.dataPC.total_service_fee > 0) this.showCardPCPayments = true;
+			else {
+				this.$toast.open({
+					message: "Vui lòng bổ sung tổng phí dịch vụ",
+					type: "error",
+					position: "top-right",
+					duration: 5000
+				});
+			}
+		},
 		getReport(type) {
 			let report = this.dataPC.other_documents.find(
 				i => i.description === type
