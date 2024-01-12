@@ -8,14 +8,33 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class=" color_content card-status">
-							{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
-							<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
-							<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
-							<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
-							<span v-if="dataPC.status === 4">Thương thảo</span>
-							<span v-if="dataPC.status === 5">Hoàn thành</span>
-							<span v-if="dataPC.status === 6">Hủy</span>
+						<div class="row">
+							<div class=" color_content card-status-pre-certificate">
+								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
+								<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
+								<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
+								<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
+								<span v-if="dataPC.status === 4">Thương thảo</span>
+								<span v-if="dataPC.status === 5">Hoàn thành</span>
+								<span v-if="dataPC.status === 6">Hủy</span>
+							</div>
+							<div
+								v-if="dataPC.certificate_id"
+								@click="handleDetailCertificate(dataPC.certificate_id)"
+								class=" card-status-certificate ml-3"
+								id="certificate_id"
+							>
+								<icon-base
+									name="nav_hstd"
+									width="20px"
+									height="20px"
+									class="item-icon svg-inline--fa"
+								/>
+								{{ `HTSD_${dataPC.certificate_id}` }}
+								<b-tooltip target="certificate_id" placement="top-right">{{
+									`Nhấn để xem chi tiết HTSD_${dataPC.certificate_id}`
+								}}</b-tooltip>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -54,7 +73,7 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
 										>Mục đích thẩm định:</strong
-									><span class="text-left">{{
+									><span id="appraise_purpose" class="text-left">{{
 										dataPC.appraise_purpose
 											? dataPC.appraise_purpose.name.length > 60
 												? dataPC.appraise_purpose.name.substring(60, 0) + "..."
@@ -104,12 +123,12 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
 										>Tên tài sản sơ bộ:</strong
-									><span id="note" class="text-left">{{
+									><span id="pre_asset_name" class="text-left">{{
 										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
 											? dataPC.pre_asset_name.substring(25, 0) + "..."
 											: dataPC.pre_asset_name
 									}}</span>
-									<b-tooltip target="note" placement="top-right">{{
+									<b-tooltip target="pre_asset_name" placement="top-right">{{
 										dataPC.pre_asset_name
 									}}</b-tooltip>
 								</div>
@@ -521,9 +540,8 @@ import {
 	BButtonGroup
 } from "bootstrap-vue";
 import Footer from "@/components/PreCertificate/FooterDetail.vue";
+import IconBase from "./../IconBase.vue";
 
-import store from "@/store";
-import * as types from "@/store/mutation-types";
 Vue.use(Icon);
 export default {
 	props: {
@@ -533,6 +551,7 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		IconBase,
 		ModalPCPayments,
 		OtherFile,
 		InputCategory,
@@ -1013,7 +1032,16 @@ export default {
 			}
 			window.open(routeData.href, "_blank");
 		},
-
+		handleDetailCertificate(id) {
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
+		},
 		async getHistoryTimeLine() {
 			const res = await PreCertificate.getHistoryTimeline(this.dataPC.id);
 			if (res.data) {
@@ -1908,7 +1936,23 @@ export default {
 		padding: 0;
 	}
 }
-.card-status {
+.card-status-pre-certificate {
+	border-radius: 5px;
+	background: #ffffff;
+	margin-bottom: 10px;
+	font-weight: 600;
+	padding: 10px;
+	font-size: 16px !important;
+	border: 1px solid #000000;
+	@media (max-width: 768px) {
+		margin-bottom: 10px;
+	}
+
+	@media (max-width: 418px) {
+		margin-bottom: 10px;
+	}
+}
+.card-status-certificate {
 	border-radius: 5px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 	background: #ffffff;
@@ -1916,6 +1960,8 @@ export default {
 	font-weight: 600;
 	padding: 10px;
 	font-size: 16px !important;
+	color: darkgray;
+	cursor: pointer;
 
 	@media (max-width: 768px) {
 		margin-bottom: 10px;

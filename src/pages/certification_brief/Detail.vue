@@ -8,17 +8,36 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class=" color_content card-status">
-							{{ idData ? `HSTD_${idData}` : "HSTD" }} |
-							<span v-if="form.status === 1">Tiếp nhận hồ sơ</span>
-							<span v-if="form.status === 2">Thẩm định</span>
-							<span v-if="form.status === 6">Kiểm soát</span>
-							<span v-if="form.status === 3">Duyệt giá</span>
-							<span v-if="form.status === 7">Duyệt phát hành</span>
-							<span v-if="form.status === 8">In hồ sơ</span>
-							<span v-if="form.status === 9">Bàn giao khách hàng</span>
-							<span v-if="form.status === 4">Hoàn thành</span>
-							<span v-if="form.status === 5">Hủy</span>
+						<div class="row">
+							<div class=" color_content card-status">
+								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
+								<span v-if="form.status === 1">Tiếp nhận hồ sơ</span>
+								<span v-if="form.status === 2">Thẩm định</span>
+								<span v-if="form.status === 6">Kiểm soát</span>
+								<span v-if="form.status === 3">Duyệt giá</span>
+								<span v-if="form.status === 7">Duyệt phát hành</span>
+								<span v-if="form.status === 8">In hồ sơ</span>
+								<span v-if="form.status === 9">Bàn giao khách hàng</span>
+								<span v-if="form.status === 4">Hoàn thành</span>
+								<span v-if="form.status === 5">Hủy</span>
+							</div>
+							<div
+								v-if="form.pre_certificate_id"
+								@click="handleDetailPreCertificate(form.pre_certificate_id)"
+								class=" card-status-certificate ml-3"
+								id="pre_certificate_id"
+							>
+								<icon-base
+									name="nav_ycsb"
+									width="20px"
+									height="20px"
+									class="item-icon svg-inline--fa"
+								/>
+								{{ `YCSB_${form.pre_certificate_id}` }}
+								<b-tooltip target="pre_certificate_id" placement="top-right">{{
+									`Nhấn để xem chi tiết YCSB_${form.pre_certificate_id}`
+								}}</b-tooltip>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1516,11 +1535,13 @@ import store from "@/store";
 import * as types from "@/store/mutation-types";
 import ModalAppraiseListVersion from "./component/modals/ModalAppraiseListVersion";
 const jsonConfig = require("../../../config/workflow.json");
+import IconBase from "@/components/IconBase.vue";
 
 Vue.use(Icon);
 export default {
 	name: "detail_certification_brief",
 	components: {
+		IconBase,
 		InputCategory,
 		InputCategorySearch,
 		InputText,
@@ -1903,14 +1924,14 @@ export default {
 			if (
 				this.form.general_asset.length === 0 &&
 				this.form.appraiser_perform &&
-					this.user_id !== this.form.appraiser_perform.user_id
+				this.user_id !== this.form.appraiser_perform.user_id
 			) {
 				return true;
 			} else if (
 				this.form.general_asset.length === 0 &&
 				this.form.status === 5 &&
 				this.form.appraiser_perform &&
-					this.user_id === this.form.appraiser_perform.user_id
+				this.user_id === this.form.appraiser_perform.user_id
 			) {
 				return true;
 			} else return false;
@@ -2285,6 +2306,16 @@ export default {
 			} else {
 				return false;
 			}
+		},
+		handleDetailPreCertificate(id) {
+			this.$router
+				.push({
+					name: "pre_certification.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
 		},
 		checkRequired(require, data) {
 			let message = "";
@@ -3175,13 +3206,12 @@ export default {
 }
 .card-status {
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 	background: #ffffff;
 	margin-bottom: 10px;
 	font-weight: 600;
 	padding: 10px;
 	font-size: 16px !important;
-
+	border: 1px solid #000000;
 	@media (max-width: 768px) {
 		margin-bottom: 10px;
 	}
@@ -3191,6 +3221,24 @@ export default {
 	}
 }
 
+.card-status-certificate {
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffffff;
+	margin-bottom: 10px;
+	font-weight: 600;
+	padding: 10px;
+	font-size: 16px !important;
+color: darkgray;
+	cursor: pointer;
+	@media (max-width: 768px) {
+		margin-bottom: 10px;
+	}
+
+	@media (max-width: 418px) {
+		margin-bottom: 10px;
+	}
+}
 .form-group-container {
 	margin-top: 10px;
 }

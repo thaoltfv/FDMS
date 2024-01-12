@@ -41,12 +41,34 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<span
-									@click="handleDetailPreCertificate(element.id)"
-									class="content_id"
-									:class="`bg-${config.css.color}-15 text-${config.css.color}`"
-									>{{ element.slug }}</span
-								>
+								<div class="row ml-0">
+									<span
+										@click="handleDetailPreCertificate(element.id)"
+										class="content_id"
+										:class="
+											`bg-${config.css.color}-15 text-${config.css.color}`
+										"
+										>{{ element.slug }}</span
+									>
+									<span
+										v-if="element.certificate_id"
+										@click="handleDetailCertificate(element.certificate_id)"
+										class=" card-status-certificate ml-2"
+										:id="`${element.certificate_id + element.id}`"
+									>
+										<icon-base
+											name="nav_hstd"
+											class="item-icon svg-inline--fa"
+										/>
+										<b-tooltip
+											:target="`${element.certificate_id + element.id}`"
+											placement="top-right"
+											>{{
+												`Nhấn để xem chi tiết HTSD_${element.certificate_id}`
+											}}</b-tooltip
+										>
+									</span>
+								</div>
 								<img
 									v-if="checkDateExpired(element)"
 									class="mr-2 icon_expired"
@@ -120,22 +142,6 @@
 									"
 								/>
 							</div>
-							<div
-								v-if="element.certificate_id"
-								class="property-content d-flex justify-content-between mt-2 mb-0"
-							>
-								<span
-									@click="handleDetailCertificate(element.certificate_id)"
-									class="content_certificate_id"
-								>
-									<img
-										class="mr-1 mt-n1 icon_expired"
-										src="@/assets/icons/ic_arrow_direct.svg"
-										alt="ic_arrow_direct"
-									/>
-									{{ "HSTD_" + element.certificate_id }}</span
-								>
-							</div>
 						</b-card>
 					</draggable>
 				</div>
@@ -195,7 +201,14 @@ import {
 	HomeIcon,
 	ClockIcon
 } from "vue-feather-icons";
-import { BCard, BRow, BCol, BFormGroup, BFormInput } from "bootstrap-vue";
+import {
+	BCard,
+	BRow,
+	BCol,
+	BFormGroup,
+	BFormInput,
+	BTooltip
+} from "bootstrap-vue";
 import draggable from "vuedraggable";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
@@ -205,6 +218,8 @@ import PreCertificate from "@/models/PreCertificate";
 import moment from "moment";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
+import IconBase from "@/components/IconBase.vue";
+
 // const jsonConfig = require("../../../config/pre_certificate_workflow.json");
 Vue.component("downloadExcel", JsonExcel);
 export default {
@@ -279,6 +294,8 @@ export default {
 		};
 	},
 	components: {
+		IconBase,
+		"b-tooltip": BTooltip,
 		draggable,
 		BCard,
 		FormWizard,
@@ -857,7 +874,7 @@ export default {
 		handleDetailCertificate(id) {
 			this.$router
 				.push({
-					name: "certification.detail",
+					name: "certification_brief.detail",
 					query: {
 						id: id.toString()
 					}
@@ -1339,6 +1356,13 @@ export default {
 	margin-inline-end: 1rem;
 	width: 1rem;
 	justify-content: end;
+}
+.card-status-certificate {
+	border-radius: 5px;
+	padding: 0px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	color: darkgray;
+	cursor: pointer;
 }
 .container_card_success {
 	background: white;
