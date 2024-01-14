@@ -127,15 +127,7 @@
 								@change="dataForm.pre_date = $event"
 							/>
 						</div>
-						<div class="row ">
-							<InputTextarea
-								:rows="3"
-								:disableInput="false"
-								v-model="dataForm.pre_asset_name"
-								label="Tên tài sản sơ bộ"
-								class="form-group-container col-12"
-							/>
-						</div>
+
 						<div
 							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
 						>
@@ -188,7 +180,6 @@ import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIc
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import moment from "moment";
-import InputTextarea from "@/components/Form/InputTextarea";
 import InputPercent from "@/components/Form/InputPercent";
 
 export default {
@@ -199,7 +190,6 @@ export default {
 		InputText,
 		InputTextPrefixCustom,
 		InputTextPrefixCustomIcon,
-		InputTextarea,
 		InputCategoryPreTypes,
 		InputDatePicker,
 		InputCurrency,

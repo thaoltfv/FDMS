@@ -63,7 +63,7 @@
 			</div>
 
 			<div class="card-body card-info" v-show="showCardDetailFile">
-				<div class="card-body card-info row">
+				<div class="ml-n3 mt-2 row">
 					<div
 						class="mb-4 col-3 "
 						v-for="(file, index) in lstFile"
@@ -129,34 +129,13 @@
 			</div>
 		</div>
 		<div class="card-body card-info" v-if="type === 'Result' && !fromComponent">
-			<div class="row">
-				<InputCurrency
-					v-if="allowEdit"
-					v-model="dataPC.total_preliminary_value"
-					vid="service_fee"
-					:max="99999999999999"
-					label="Tổng giá trị sơ bộ"
-					class="col-sm-12 col-md-12"
-					style="margin-left:-10px;"
-				/>
-				<div v-else class="d-flex container_content" style="margin-left:-10px;">
-					<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
-					<p>
-						{{
-							dataPC.total_preliminary_value
-								? formatNumber(dataPC.total_preliminary_value)
-								: 0
-						}}đ
-					</p>
-				</div>
-			</div>
 			<div class="row ">
 				<div
 					class="title"
 					style="margin-left:-10px;"
 					:style="!allowEdit ? { 'margin-top': '-1px' } : {}"
 				>
-					<strong class="margin_content_inline">File kèm kết quả sơ bộ:</strong>
+					<strong class="margin_content_inline">File kèm kết quả:</strong>
 					<label v-if="allowEdit" class="ml-2" for="image_property">
 						<font-awesome-icon
 							:style="{ color: 'orange', cursor: 'pointer' }"
@@ -182,60 +161,66 @@
 					style="display: none;"
 				/>
 			</div>
-			<div
-				class="row input_download_certificate mb-2 mt-2"
-				v-for="(file, index) in lstFile"
-				:key="index"
-			>
-				<div
-					:key="index"
-					class="d-flex align-items-center col"
-					@click="downloadOtherFile(file)"
-				>
-					<img
-						v-if="!file.isUpload"
-						class="mr-1"
-						style="width: 1rem;"
-						src="@/assets/icons/ic_taglink.svg"
-						alt="tag_2"
-					/>
-					<div class="title_input_content title_input_download cursor_pointer">
-						{{ file.name }}
-					</div>
-				</div>
-				<div class="d-flex align-items-center justify-content-end col-1 pr-3">
-					<div>
-						<img
-							src="@/assets/icons/ic_search_3.svg"
-							alt="search"
-							class="img_document_action mr-3"
-							@click="getPreviewUrl(file)"
-						/>
-					</div>
-					<div>
-						<img
-							v-if="file.isUpload === false"
-							@click="deleteOtherFile(file, index)"
-							src="@/assets/icons/ic_delete_2.svg"
-							alt="tag_2"
-							class="img_document_action"
-						/>
-						<img
-							v-else-if="permission.allowDelete && allowEdit"
-							@click="deleteOtherFile(file, index)"
-							src="@/assets/icons/ic_delete_2.svg"
-							alt="tag_2"
-							class="img_document_action"
-						/>
+			<div class="ml-n4 mt-2 row">
+				<div class="mb-4 col-3 " v-for="(file, index) in lstFile" :key="index">
+					<div
+						class="row input_download_certificate mx-1  d-flex justify-content-between"
+					>
+						<div
+							:key="index"
+							class="d-flex align-items-center "
+							@click="downloadOtherFile(file)"
+						>
+							<img
+								v-if="!file.isUpload"
+								class="mr-1"
+								style="width: 1rem;"
+								src="@/assets/icons/ic_taglink.svg"
+								alt="tag_2"
+							/>
+							<div
+								class="title_input_content title_input_download cursor_pointer"
+							>
+								{{ file.name }}
+							</div>
+						</div>
+						<div
+							class="d-flex align-items-center justify-content-end col-1 pr-3"
+						>
+							<div>
+								<img
+									src="@/assets/icons/ic_search_3.svg"
+									alt="search"
+									class="img_document_action mr-3"
+									@click="getPreviewUrl(file)"
+								/>
+							</div>
+							<div>
+								<img
+									v-if="file.isUpload === false"
+									@click="deleteOtherFile(file, index)"
+									src="@/assets/icons/ic_delete_2.svg"
+									alt="tag_2"
+									class="img_document_action"
+								/>
+								<img
+									v-else-if="permission.allowDelete && allowEdit"
+									@click="deleteOtherFile(file, index)"
+									src="@/assets/icons/ic_delete_2.svg"
+									alt="tag_2"
+									class="img_document_action"
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="" v-if="type === 'Result' && fromComponent">
-			<div class="row">
+			<div class="row" style="margin-right:-32px">
 				<InputCurrency
 					v-if="allowEdit"
-					v-model="dataPC.total_preliminary_value"
+					v-model="dataForm.total_preliminary_value"
 					vid="service_fee"
 					:max="99999999999999"
 					label="Tổng giá trị sơ bộ"
@@ -250,12 +235,22 @@
 					<strong class="margin_content_inline">Tổng giá trị sơ bộ:</strong>
 					<p>
 						{{
-							dataPC.total_preliminary_value
-								? formatNumber(dataPC.total_preliminary_value)
+							dataForm.total_preliminary_value
+								? formatNumber(dataForm.total_preliminary_value)
 								: 0
 						}}đ
 					</p>
 				</div>
+			</div>
+			<div class="row" style="margin-right:-32px">
+				<InputTextarea
+					:rows="3"
+					:disableInput="false"
+					v-model="dataForm.pre_asset_name"
+					label="Tên tài sản sơ bộ"
+					class="form-group-container col-12"
+					style="margin-left:-10px;margin-bottom: 10px;"
+				/>
 			</div>
 			<div class="row d-flex justify-content-between" style=";margin-top:5px">
 				<strong class="margin_content_inline" style="margin-left:-10px"
@@ -345,10 +340,12 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import InputCurrency from "@/components/Form/InputCurrency";
+import InputTextarea from "@/components/Form/InputTextarea";
 
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import Vue from "vue";
 import Icon from "buefy";
+import _ from "lodash";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
@@ -368,6 +365,7 @@ export default {
 	},
 	components: {
 		InputCurrency,
+		InputTextarea,
 		ModalDelete,
 		ModalViewDocument
 	},
@@ -392,6 +390,7 @@ export default {
 			permission,
 			other
 		} = storeToRefs(preCertificateStore);
+		const dataForm = ref(_.cloneDeep(dataPC.value));
 		const title = ref("Tài liệu đính kèm");
 		const lstFile = ref([]);
 		if (props.type === "Appendix") {
@@ -584,8 +583,8 @@ export default {
 			}
 		};
 		return {
+			dataForm,
 			showCardDetailFile,
-			dataPC,
 			preCertificateOtherDocuments,
 			permission,
 			title,
@@ -650,10 +649,10 @@ export default {
 						formData.append("files[" + i + "]", files[i]);
 					}
 					let res = null;
-					if (this.dataPC.id) {
+					if (this.dataForm.id) {
 						res = await File.uploadFilePreCertificate(
 							formData,
-							this.dataPC.id,
+							this.dataForm.id,
 							this.type
 						);
 						if (res.data) {
@@ -677,7 +676,7 @@ export default {
 						}
 					} else {
 						this.lstFile = [...this.lstFile, ...files];
-						this.dataPC.uploadFile = this.lstFile;
+						this.dataForm.uploadFile = this.lstFile;
 					}
 				}
 			}
