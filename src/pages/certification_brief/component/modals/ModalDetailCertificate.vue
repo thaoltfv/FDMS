@@ -39,7 +39,7 @@
 							>
 								<icon-base name="nav_ycsb" class="item-icon svg-inline--fa" />
 								{{ `YCSB_${form.pre_certificate_id}` }}
-								<b-tooltip target="pre_certificate_id" placement="top-right">{{
+								<b-tooltip target="pre_certificate_id" placement="right">{{
 									`Được chuyển tiếp từ: YCSB_${form.pre_certificate_id}`
 								}}</b-tooltip>
 							</span>

@@ -39,7 +39,7 @@
 							>
 								<icon-base name="nav_hstd" class="item-icon svg-inline--fa" />
 								{{ `HTSD_${dataPC.certificate_id}` }}
-								<b-tooltip target="certificate_id" placement="top-right">{{
+								<b-tooltip target="certificate_id" placement="right">{{
 									`YCSB đã được chuyển chính thức: HTSD_${dataPC.certificate_id}`
 								}}</b-tooltip>
 							</span>

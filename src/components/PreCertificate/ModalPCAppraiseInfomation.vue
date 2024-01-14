@@ -82,6 +82,7 @@
 									class="form-group-container"
 									vid="appraise_purpose_id"
 									label="Mục đích thẩm định"
+									:requiredIcon="true"
 									rules="required"
 									:options="optionsAppraisalPurposes"
 									@change="handleChangeAppraisePurpose"
@@ -113,6 +114,8 @@
 								v-model="dataForm.pre_type_id"
 								vid="pre_type_id"
 								label="Loại sơ bộ"
+								:requiredIcon="true"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsPreTypes"
 							/>
@@ -170,7 +173,6 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import InputCategoryPreTypes from "./InputCategoryPreTypes";
 import _ from "lodash";
 
 import InputText from "@/components/Form/InputText";
@@ -190,7 +192,6 @@ export default {
 		InputText,
 		InputTextPrefixCustom,
 		InputTextPrefixCustomIcon,
-		InputCategoryPreTypes,
 		InputDatePicker,
 		InputCurrency,
 		InputPercent

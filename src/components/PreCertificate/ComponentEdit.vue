@@ -19,6 +19,7 @@
 							vid="petitioner_name"
 							:iconUser="true"
 							:showIcon="true"
+							:requiredIcon="true"
 							label="Tên khách hàng yêu cầu (trên chứng thư)"
 							rules="required"
 							class="form-group-container input_certification_brief"
@@ -61,6 +62,7 @@
 								v-model="dataPC.appraise_purpose_id"
 								class="form-group-container input_certification_brief  col-sm-12 col-md-12"
 								vid="appraise_purpose_id"
+								:requiredIcon="true"
 								label="Mục đích thẩm định"
 								rules="required"
 								:options="optionsAppraisalPurposes"
@@ -96,6 +98,8 @@
 							<InputCategory
 								v-model="dataPC.pre_type_id"
 								vid="pre_type_id"
+								:requiredIcon="true"
+								rules="required"
 								label="Loại sơ bộ"
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsPreTypes"
@@ -105,6 +109,7 @@
 								vid="pre_date"
 								label="Thời điểm sơ bộ"
 								placeholder="Ngày / tháng / năm"
+								:requiredIcon="true"
 								rules="required"
 								:formatDate="'DD/MM/YYYY'"
 								class="form-group-container col-sm-12 col-md-6"
@@ -117,6 +122,7 @@
 								:disableInput="false"
 								v-model="dataPC.pre_asset_name"
 								label="Tên tài sản sơ bộ"
+								:requiredIcon="true"
 								class="form-group-container"
 							/>
 						</div>
@@ -217,6 +223,7 @@
 								vid="appraiser_sale_id"
 								label="Nhân viên kinh doanh"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsAppraiserSales"
 							/>
@@ -225,6 +232,7 @@
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsAppraiserPerformance"
 							/>
@@ -235,6 +243,7 @@
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsBusinessManager"
 							/>
@@ -271,7 +280,7 @@
 				/>
 			</div>
 		</div>
-		<div v-if="dataPC.id && dataPC.status >= 2" class="col-6">
+		<!-- <div v-if="dataPC.id && dataPC.status >= 2" class="col-6">
 			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
@@ -359,7 +368,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div
 			v-if="dataPC.id"
 			class="col-12"
@@ -379,7 +388,6 @@ import InputCategoryMulti from "@/components/Form/InputCategoryMulti";
 import InputPercent from "@/components/Form/InputPercent";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
-import InputCategoryPreTypes from "./InputCategoryPreTypes";
 import InputCategorySearch from "@/components/Form/InputCategorySearch";
 import InputText from "@/components/Form/InputText";
 import InputTextarea from "@/components/Form/InputTextarea";
@@ -396,7 +404,6 @@ export default {
 	components: {
 		OtherFile,
 		InputCategory,
-		InputCategoryPreTypes,
 		InputCategorySearch,
 		InputText,
 		InputTextarea,
