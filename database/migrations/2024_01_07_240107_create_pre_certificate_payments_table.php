@@ -20,6 +20,11 @@ class CreatePreCertificatePaymentsTable extends Migration
                 ->references('id')
                 ->on('pre_certificates')
                 ->onDelete('cascade');
+            $table->integer('certificate_id');
+            $table->foreign('certificate_id')
+                ->references('id')
+                ->on('certificates') 
+                ->onDelete('cascade'); 
 			$table->date('pre_date')->nullable();
 		    $table->integer('amount')->unsigned()->default(0);
             $table->timestamp('created_at')->useCurrent();
