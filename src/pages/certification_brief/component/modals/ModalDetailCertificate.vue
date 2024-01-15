@@ -40,7 +40,7 @@
 								<icon-base name="nav_ycsb" class="item-icon svg-inline--fa" />
 								{{ `YCSB_${form.pre_certificate_id}` }}
 								<b-tooltip target="pre_certificate_id" placement="right">{{
-									`Được chuyển tiếp từ: YCSB_${form.pre_certificate_id}`
+									`Được chuyển tiếp từ YCSB_${form.pre_certificate_id}`
 								}}</b-tooltip>
 							</span>
 						</div>
@@ -478,14 +478,14 @@ export default {
 			}
 		},
 		handleDetailPreCertificate(id) {
-			this.$router
-				.push({
-					name: "pre_certification.detail",
-					query: {
-						id: id.toString()
-					}
-				})
-				.catch(_ => {});
+			let url = this.$router.resolve({
+				name: "pre_certification.detail",
+				query: {
+					id: id.toString()
+				}
+			}).href;
+
+			window.open(url, "_blank");
 		},
 		handleCancelAppraisal() {
 			this.showAppraisalDialog = false;

@@ -32,7 +32,7 @@
 								/>
 								{{ `HTSD_${dataPC.certificate_id}` }}
 								<b-tooltip target="certificate_id" placement="top-right">{{
-									`YCSB đã được chuyển chính thức: HTSD_${dataPC.certificate_id}`
+									`Đã chuyển chính thức HTSD_${dataPC.certificate_id}`
 								}}</b-tooltip>
 							</div>
 						</div>
@@ -120,7 +120,21 @@
 										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
 									</p>
 								</div>
-
+								<div
+									v-if="dataPC.status === 1"
+									class="d-flex container_content"
+								>
+									<strong class="margin_content_inline"
+										>Tên tài sản sơ bộ:</strong
+									><span id="pre_asset_name" class="text-left">{{
+										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
+											? dataPC.pre_asset_name.substring(25, 0) + "..."
+											: dataPC.pre_asset_name
+									}}</span>
+									<b-tooltip target="pre_asset_name" placement="top-right">{{
+										dataPC.pre_asset_name
+									}}</b-tooltip>
+								</div>
 								<div
 									v-if="dataPC.cancel_reason_string"
 									class="d-flex container_content"
@@ -932,14 +946,14 @@ export default {
 			window.open(routeData.href, "_blank");
 		},
 		handleDetailCertificate(id) {
-			this.$router
-				.push({
-					name: "certification_brief.detail",
-					query: {
-						id: id.toString()
-					}
-				})
-				.catch(_ => {});
+			let url = this.$router.resolve({
+				name: "certification_brief.detail",
+				query: {
+					id: id.toString()
+				}
+			}).href;
+
+			window.open(url, "_blank");
 		},
 		async getHistoryTimeLine() {
 			const res = await PreCertificate.getHistoryTimeline(this.dataPC.id);
