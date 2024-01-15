@@ -66,7 +66,7 @@
 											:target="`${element.pre_certificate_id + element.id}`"
 											placement="right"
 											>{{
-												`Được chuyển tiếp từ: YCSB_${element.pre_certificate_id}`
+												`Được chuyển tiếp từ YCSB_${element.pre_certificate_id}`
 											}}</b-tooltip
 										>
 									</span>
@@ -807,14 +807,14 @@ export default {
 			return true;
 		},
 		handleDetailPreCertificate(id) {
-			this.$router
-				.push({
-					name: "pre_certification.detail",
-					query: {
-						id: id.toString()
-					}
-				})
-				.catch(_ => {});
+			let url = this.$router.resolve({
+				name: "pre_certification.detail",
+				query: {
+					id: id.toString()
+				}
+			}).href;
+
+			window.open(url, "_blank");
 		},
 		handleDetailCertificate(id) {
 			this.idData = id;

@@ -224,6 +224,16 @@
 		</div>
 		<div class="" v-if="type === 'Result' && fromComponent">
 			<div class="row" style="margin-right:-32px">
+				<InputTextarea
+					:rows="3"
+					:disableInput="false"
+					v-model="dataForm.pre_asset_name"
+					label="Tên tài sản sơ bộ"
+					class="form-group-container col-12"
+					style="margin-left:-10px;margin-bottom: 10px;"
+				/>
+			</div>
+			<div class="row" style="margin-right:-32px">
 				<InputCurrency
 					v-if="allowEdit"
 					v-model="dataForm.total_preliminary_value"
@@ -248,16 +258,7 @@
 					</p>
 				</div>
 			</div>
-			<div class="row" style="margin-right:-32px">
-				<InputTextarea
-					:rows="3"
-					:disableInput="false"
-					v-model="dataForm.pre_asset_name"
-					label="Tên tài sản sơ bộ"
-					class="form-group-container col-12"
-					style="margin-left:-10px;margin-bottom: 10px;"
-				/>
-			</div>
+
 			<div class="row d-flex justify-content-between" style=";margin-top:5px">
 				<strong class="margin_content_inline" style="margin-left:-10px"
 					>File kèm kết quả sơ bộ:</strong
