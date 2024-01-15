@@ -71,7 +71,7 @@
 						>
 						<InputCurrency
 							:key="keyRender"
-							v-model="dataForm.paid"
+							v-model="dataForm.amountPaid"
 							vid="amount"
 							:disabled="true"
 							:max="99999999999999"
@@ -174,7 +174,7 @@ export default {
 				paid += parseFloat(element.amount);
 			}
 			dataForm.value.debtRemain = debt_remain;
-			dataForm.value.paid = paid;
+			dataForm.value.amountPaid = paid;
 			if (debt_remain < 0) {
 				other.value.toast.open({
 					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",

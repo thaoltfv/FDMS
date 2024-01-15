@@ -257,8 +257,10 @@ export const usePreCertificateStore = defineStore(
 			}
 			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
 			if (!dataPC.value.id) dataPC.value.status = 1;
+			const tempUpdate = assignObject ? assignObject : dataPC.value;
+			if (tempUpdate.cancel_reason) delete tempUpdate.cancel_reason;
 			const res = await PreCertificate.createUpdatePreCertification(
-				assignObject ? assignObject : dataPC.value,
+				tempUpdate,
 				dataPC.value.id || ""
 			);
 			if (isReturn) {

@@ -32,7 +32,7 @@
 								/>
 								{{ `HTSD_${dataPC.certificate_id}` }}
 								<b-tooltip target="certificate_id" placement="top-right">{{
-									`Nhấn để xem chi tiết HTSD_${dataPC.certificate_id}`
+									`YCSB đã được chuyển chính thức: HTSD_${dataPC.certificate_id}`
 								}}</b-tooltip>
 							</div>
 						</div>
@@ -113,24 +113,12 @@
 												: 0
 										}}đ
 									</p>
-									<strong class="margin_content_inline ml-5"
-										>Chiết khấu:</strong
-									>
+								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline ">Chiết khấu:</strong>
 									<p>
 										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
 									</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Tên tài sản sơ bộ:</strong
-									><span id="pre_asset_name" class="text-left">{{
-										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
-											? dataPC.pre_asset_name.substring(25, 0) + "..."
-											: dataPC.pre_asset_name
-									}}</span>
-									<b-tooltip target="pre_asset_name" placement="top-right">{{
-										dataPC.pre_asset_name
-									}}</b-tooltip>
 								</div>
 
 								<div
@@ -328,7 +316,7 @@
 		</a-drawer>
 		<div
 			v-if="dataPC.id && dataPC.status >= 2"
-			class="col-6"
+			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
 			<div class="card">
@@ -346,15 +334,46 @@
 						</div>
 					</div>
 				</div>
+				<div class="card-body card-info">
+					<div class="row">
+						<div class="col-12 mt-2 table-wrapper">
+							<a-table
+								bordered
+								:columns="dataColumn"
+								:data-source="computedResultPreCertificate"
+								table-layout="top"
+								class="table_appraise_list"
+								:rowKey="record => record.id"
+							>
+								<template slot="asset" slot-scope="asset">
+									<p :id="asset.id" class="text-none mb-0">{{ asset.name }}</p>
+								</template>
+								<template
+									slot="total_preliminary_value"
+									slot-scope="total_preliminary_value"
+								>
+									<p class="text-none mb-0">
+										{{
+											total_preliminary_value
+												? formatNumber(total_preliminary_value)
+												: 0
+										}}
+										đ
+									</p>
+								</template>
+							</a-table>
+						</div>
+					</div>
+				</div>
 				<OtherFile
-					class="ml-1"
+					class="ml-2 mt-n3"
 					v-if="showCardDetailFileResult && !dialogRequireForStage3"
 					type="Result"
 					:allow-edit="false"
 				/>
 			</div>
 		</div>
-		<div
+		<!-- <div
 			v-if="dataPC.id && dataPC.status >= 2"
 			class="col-6"
 			:style="isMobile ? { padding: '0' } : {}"
@@ -366,7 +385,7 @@
 							<h3 class="title">Thông tin thanh toán</h3>
 						</div>
 						<div
-							v-if="allowEditFile.result && edit"
+							v-if="editPayments && edit"
 							@click="handleshowCardPCPayments"
 							class="btn-edit "
 						>
@@ -385,7 +404,7 @@
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Ngày thanh toán:</strong>
 								<p>
-									{{ payment.pay_date ? formatDate(payment.pay_date) : "" }}
+									{{ payment.pay_date ? payment.pay_date : "" }}
 								</p>
 							</div>
 							<div class="d-flex container_content">
@@ -410,7 +429,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div
 			v-if="dataPC.id"
 			class="col-12"
@@ -583,6 +602,22 @@ export default {
 	},
 	data() {
 		return {
+			dataColumn: [
+				{
+					title: "Tên tài sản sơ bộ",
+					align: "left",
+					scopedSlots: { customRender: "asset" },
+					hiddenItem: false
+				},
+
+				{
+					title: "Tổng giá trị",
+					align: "right",
+					scopedSlots: { customRender: "total_preliminary_value" },
+					dataIndex: "total_preliminary_value",
+					hiddenItem: false
+				}
+			],
 			theme: {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
@@ -701,6 +736,7 @@ export default {
 					? dataJson[0].edit.file_result
 					: false;
 			}
+			console.log("dataJson", dataJson, editPayments.value);
 		};
 		const start = async () => {
 			if (!jsonConfig.value) {
@@ -773,154 +809,17 @@ export default {
 		});
 	},
 	computed: {
-		columnAssets() {
-			let dataColumn = [
+		computedResultPreCertificate() {
+			console.log(
+				"this.dataPC.total_preliminary_value",
+				this.dataPC.total_preliminary_value
+			);
+			return [
 				{
-					title: "Mã TSTĐ",
-					align: "left",
-					scopedSlots: { customRender: "data" },
-					hiddenItem: false
-				},
-				{
-					title: "Version",
-					align: "center",
-					scopedSlots: { customRender: "version" },
-					dataIndex: "version",
-					hiddenItem: false
-				},
-				{
-					title: "Loại tài sản",
-					align: "left",
-					dataIndex: "asset_type.description",
-					hiddenItem: false
-				},
-				{
-					title: "Tên tài sản",
-					align: "left",
-					scopedSlots: { customRender: "asset" },
-					hiddenItem: false
-				},
-				// {
-				// 	title: 'Loại đất',
-				// 	align: 'left',
-				// 	scopedSlots: {customRender: 'land'},
-				// 	hiddenItem: this.isCheckRealEstate
-				// },
-				{
-					title: "Tổng diện tích",
-					align: "right",
-					scopedSlots: { customRender: "area" },
-					dataIndex: "total_area",
-					hiddenItem: !this.isCheckRealEstate
-				},
-				{
-					title: "Tổng giá trị",
-					align: "right",
-					scopedSlots: { customRender: "price" },
-					dataIndex: "total_price",
-					hiddenItem: false
+					name: this.dataPC.pre_asset_name,
+					total_preliminary_value: this.dataPC.total_preliminary_value
 				}
-				// {
-				// 	title: 'Ngày tạo',
-				// 	align: 'right',
-				// 	scopedSlots: {customRender: 'created_at'},
-				// 	dataIndex: 'created_at',
-				// 	hiddenItem: false
-				// }
 			];
-			return dataColumn.filter(item => item.hiddenItem === false);
-		},
-		filterDocumentName() {
-			return this.documentName;
-		},
-		isCertificateReport() {
-			let report = this.getReport("certificate_report");
-			if (report) {
-				return true;
-			}
-			return false;
-		},
-		isAppraisalReport() {
-			let report = this.getReport("appraisal_report");
-			if (report) {
-				return true;
-			}
-			return false;
-		},
-		isAppendix1Report() {
-			let report = this.getReport("appendix1_report");
-			if (report) {
-				return true;
-			}
-			return false;
-		},
-		isAppendix2Report() {
-			let report = this.getReport("appendix2_report");
-			if (report) {
-				return true;
-			}
-			return false;
-		},
-		isAppendix3Report() {
-			let report = this.getReport("appendix3_report");
-			if (report) {
-				return true;
-			}
-			return false;
-		},
-		isComparisionAssetReport() {
-			let report = this.getReport("comparision_asset_report");
-			if (report) {
-				return true;
-			}
-			return false;
-		},
-		certificatReportName() {
-			let report = this.getReport("certificate_report");
-			if (report) {
-				return report.name;
-			}
-			return "Chứng thư thẩm định";
-		},
-		appraisalReportName() {
-			let report = this.getReport("appraisal_report");
-			if (report) {
-				return report.name;
-			}
-			return "Báo cáo thẩm định";
-		},
-		appendix1ReportName() {
-			let report = this.getReport("appendix1_report");
-			if (report) {
-				return report.name;
-			}
-			return "Bảng điều chỉnh QSDĐ";
-		},
-		appendix2ReportName() {
-			let report = this.getReport("appendix2_report");
-			if (report) {
-				return report.name;
-			}
-			return "Bảng điều chỉnh CTXD";
-		},
-		appendix3ReportName() {
-			let report = this.getReport("appendix3_report");
-			if (report) {
-				return report.name;
-			}
-			return "Hình ảnh hiện trạng";
-		},
-		comparisionAssetReportName() {
-			let report = this.getReport("comparision_asset_report");
-			if (report) {
-				return report.name;
-			}
-			return "Phiếu thu thập TSSS";
-		},
-		getHistoryTextColor() {
-			return this.historyList.map(item => {
-				return this.loadColor(item);
-			});
 		}
 	},
 	methods: {

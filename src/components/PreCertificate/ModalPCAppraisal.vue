@@ -28,6 +28,7 @@
 								vid="appraiser_sale_id"
 								label="Nhân viên kinh doanh"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsAppraiserSales"
 							/>
@@ -38,6 +39,7 @@
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsAppraiserPerformance"
 							/>
@@ -48,6 +50,7 @@
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsBusinessManager"
 							/>

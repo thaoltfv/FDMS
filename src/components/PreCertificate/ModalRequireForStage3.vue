@@ -8,7 +8,11 @@
 			</div>
 			<div class="card-body">
 				<div class="row col-12" style="margin-top: 10px;margin-left:0px">
-					<OtherFile type="Result" fromComponent="DialogUpdateStatus" />
+					<OtherFile
+						ref="OtherFileComponent"
+						type="Result"
+						fromComponent="DialogUpdateStatus"
+					/>
 				</div>
 				<div class="btn__group">
 					<button
@@ -72,9 +76,11 @@ export default {
 			}
 			const res = await this.preCertificateStore.createUpdatePreCertificateion(
 				this.dataPC.id,
-				true
+				true,
+				this.$refs.OtherFileComponent.dataForm
 			);
 			if (res.data) {
+				await this.preCertificateStore.getPreCertificate(this.dataPC.id);
 				await this.$toast.open({
 					message: "Lưu thông tin kết quả sơ bộ thành công",
 					type: "success",

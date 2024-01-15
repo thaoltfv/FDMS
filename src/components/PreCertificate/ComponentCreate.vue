@@ -22,6 +22,7 @@
 							:iconUser="true"
 							:showIcon="true"
 							label="Tên khách hàng yêu cầu (trên chứng thư)"
+							:requiredIcon="true"
 							rules="required"
 							class="form-group-container input_certification_brief"
 						/>
@@ -65,6 +66,7 @@
 								vid="appraise_purpose_id"
 								label="Mục đích thẩm định"
 								rules="required"
+								:requiredIcon="true"
 								:options="optionsAppraisalPurposes"
 								@change="handleChangeAppraisePurpose"
 							/>
@@ -106,15 +108,19 @@
 								v-model="dataPC.pre_type_id"
 								vid="pre_type_id"
 								label="Loại sơ bộ"
+								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsPreTypes"
 							/>
+
 							<InputDatePicker
 								v-model="dataPC.pre_date"
 								vid="ộ"
 								label="Thời điểm sơ bộ"
 								placeholder="Ngày / tháng / năm"
 								rules="required"
+								:requiredIcon="true"
 								:formatDate="'DD/MM/YYYY'"
 								class="form-group-container col-sm-12 col-md-6"
 								@change="dataPC.pre_date = $event"
@@ -126,6 +132,8 @@
 								:disableInput="false"
 								v-model="dataPC.pre_asset_name"
 								label="Tên tài sản sơ bộ"
+								rules="required"
+								:requiredIcon="true"
 								class="form-group-container"
 							/>
 						</div>
@@ -226,6 +234,7 @@
 								vid="appraiser_sale_id"
 								label="Nhân viên kinh doanh"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsAppraiserSales"
 							/>
@@ -234,6 +243,7 @@
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsAppraiserPerformance"
 							/>
@@ -244,6 +254,7 @@
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
 								rules="required"
+								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsBusinessManager"
 							/>
@@ -274,7 +285,6 @@ import InputTextarea from "@/components/Form/InputTextarea";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
-import InputCategoryPreTypes from "./InputCategoryPreTypes";
 
 import OtherFile from "./OtherFile.vue";
 export default {
@@ -289,8 +299,7 @@ export default {
 		InputCurrency,
 		InputPercent,
 		InputCategoryMulti,
-		InputTextPrefixCustomIcon,
-		InputCategoryPreTypes
+		InputTextPrefixCustomIcon
 	},
 	setup() {
 		const checkMobile = () => {
