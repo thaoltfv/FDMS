@@ -35,7 +35,7 @@
 								/>
 								{{ `YCSB_${form.pre_certificate_id}` }}
 								<b-tooltip target="pre_certificate_id" placement="top-right">{{
-									`Được chuyển tiếp từ: YCSB_${form.pre_certificate_id}`
+									`Được chuyển tiếp từ YCSB_${form.pre_certificate_id}`
 								}}</b-tooltip>
 							</div>
 						</div>
@@ -2308,14 +2308,14 @@ export default {
 			}
 		},
 		handleDetailPreCertificate(id) {
-			this.$router
-				.push({
-					name: "pre_certification.detail",
-					query: {
-						id: id.toString()
-					}
-				})
-				.catch(_ => {});
+			let url = this.$router.resolve({
+				name: "pre_certification.detail",
+				query: {
+					id: id.toString()
+				}
+			}).href;
+
+			window.open(url, "_blank");
 		},
 		checkRequired(require, data) {
 			let message = "";

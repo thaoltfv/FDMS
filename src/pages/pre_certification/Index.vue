@@ -64,7 +64,7 @@
 											:target="`${element.certificate_id + element.id}`"
 											placement="right"
 											>{{
-												`Được chuyển chính thức: HTSD_${element.certificate_id}`
+												`Đã chuyển chính thức HTSD_${element.certificate_id}`
 											}}</b-tooltip
 										>
 									</span>
@@ -866,14 +866,14 @@ export default {
 			this.key_dragg++;
 		},
 		handleDetailCertificate(id) {
-			this.$router
-				.push({
-					name: "certification_brief.detail",
-					query: {
-						id: id.toString()
-					}
-				})
-				.catch(_ => {});
+			let url = this.$router.resolve({
+				name: "certification_brief.detail",
+				query: {
+					id: id.toString()
+				}
+			}).href;
+
+			window.open(url, "_blank");
 		},
 		checkMoveVerify() {
 			return true;
