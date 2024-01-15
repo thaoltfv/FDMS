@@ -829,10 +829,6 @@ export default {
 			});
 		},
 		computedResultPreCertificate() {
-			console.log(
-				"this.dataPC.total_preliminary_value",
-				this.dataPC.total_preliminary_value
-			);
 			return [
 				{
 					name: this.dataPC.pre_asset_name,
