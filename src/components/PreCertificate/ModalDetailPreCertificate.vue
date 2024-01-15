@@ -188,7 +188,7 @@
 							</div>
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline"
-									>quản lý nghiệp vụ:</strong
+									>Quản lý nghiệp vụ:</strong
 								>
 								<p>
 									{{
