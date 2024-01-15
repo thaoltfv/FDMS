@@ -231,6 +231,8 @@
 					label="Tên tài sản sơ bộ"
 					class="form-group-container col-12"
 					style="margin-left:-10px;margin-bottom: 10px;"
+					:requiredIcon="true"
+					rules="required"
 				/>
 			</div>
 			<div class="row" style="margin-right:-32px">
@@ -242,6 +244,8 @@
 					label="Tổng giá trị sơ bộ"
 					class="col-12"
 					style="margin-left:-10px;margin-bottom: 10px;"
+					:requiredIcon="true"
+					rules="required"
 				/>
 				<div
 					v-else
@@ -261,8 +265,9 @@
 
 			<div class="row d-flex justify-content-between" style=";margin-top:5px">
 				<strong class="margin_content_inline" style="margin-left:-10px"
-					>File kèm kết quả sơ bộ:</strong
+					>File kèm kết quả sơ bộ:<b class="ml-1 text-red">*</b></strong
 				>
+
 				<label
 					style="padding: 1px;padding-left:5px;padding-right: 5px;border: 1px solid #b6d5f3;"
 					v-if="allowEdit"
