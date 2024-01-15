@@ -124,6 +124,7 @@
 								label="Tên tài sản sơ bộ"
 								:requiredIcon="true"
 								class="form-group-container"
+								rules="required"
 							/>
 						</div>
 					</div>
