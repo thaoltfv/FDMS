@@ -55,10 +55,9 @@ export default {
 		},
 		async verifyToStage3Function() {
 			const tempUpdate = this.$refs.OtherFileComponent.dataForm;
-			if (this.preCertificateOtherDocuments.Result.length > 0) {
-			} else {
+			if (!tempUpdate.pre_asset_name) {
 				await this.$toast.open({
-					message: "Vui lòng bổ sung file kết quả sơ bộ",
+					message: "Vui lòng bổ sung Tên tài sản sơ bộ",
 					type: "error",
 					position: "top-right",
 					duration: 3000
@@ -75,6 +74,17 @@ export default {
 				});
 				return;
 			}
+			if (this.preCertificateOtherDocuments.Result.length > 0) {
+			} else {
+				await this.$toast.open({
+					message: "Vui lòng bổ sung file kết quả sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
+
 			const res = await this.preCertificateStore.createUpdatePreCertificateion(
 				tempUpdate.id,
 				true,
