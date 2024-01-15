@@ -1,87 +1,100 @@
 <template>
-  <ValidationProvider tag="div"
-                      :name="label ? label : nonLabel"
-                      :vid="vid"
-                      :rules="rules"
-                      v-slot="{ errors }">
-    <label v-if="label" class="form-label font-weight-bold position-relative d-flex align-items-start color_content">
-      {{ $t(label) }}
-      <span v-if="required" class="required">{{$t('required')}}</span>
+	<ValidationProvider
+		tag="div"
+		:name="label ? label : nonLabel"
+		:vid="vid"
+		:rules="rules"
+		v-slot="{ errors }"
+	>
+		<label
+			v-if="label"
+			class="form-label font-weight-bold position-relative d-flex align-items-start color_content"
+		>
+			{{ $t(label) }} <b v-if="requiredIcon" class="ml-1 text-red">*</b>
+			<span v-if="required" class="required">{{ $t("required") }}</span>
 
-      <a-popconfirm
-        v-if="popover"
-        :title="$t('popover_select_area')"
-        :ok-text="$t('yes')"
-        :cancel-text="$t('no')"
-        placement="topRight"
-        @confirm="handleConfirm"
-        @cancel="handleCancel">
-        <p ref="btnPopover" class="text-popover">Trigger</p>
-      </a-popconfirm>
-    </label>
+			<a-popconfirm
+				v-if="popover"
+				:title="$t('popover_select_area')"
+				:ok-text="$t('yes')"
+				:cancel-text="$t('no')"
+				placement="topRight"
+				@confirm="handleConfirm"
+				@cancel="handleCancel"
+			>
+				<p ref="btnPopover" class="text-popover">Trigger</p>
+			</a-popconfirm>
+		</label>
 
-    <div class="color_content" :class="{'has__error': errors[0]}">
-      <a-select
-        class="color_content"
-        show-search
-        style="width: 100%"
-        :value="value === '' ? undefined : value"
-        :filter-option="filterOption"
-        :disabled="disabled"
-        @popupScroll="scrollOption($event)"
-        :placeholder="placeholder"
-        option-filter-prop="children"
-        @change="handleChange">
-        <a-select-option value="" :disabled="false" >
-          {{$t('select_option_empty')}}
-        </a-select-option>
+		<div class="color_content" :class="{ has__error: errors[0] }">
+			<a-select
+				class="color_content"
+				show-search
+				style="width: 100%"
+				:value="value === '' ? undefined : value"
+				:filter-option="filterOption"
+				:disabled="disabled"
+				@popupScroll="scrollOption($event)"
+				:placeholder="placeholder"
+				option-filter-prop="children"
+				@change="handleChange"
+			>
+				<a-select-option value="" :disabled="false">
+					{{ $t("select_option_empty") }}
+				</a-select-option>
 
-        <a-select-option v-for="(item, index) in options.data"
-                         :key="index"
-                         :value="item[options.id]"
-                         :disabled="item[options.disabled]? item[options.disabled] : false"
-        >
-          {{ item[options.code] ? item[options.code] + '：' : '' }}{{ item[options.key] }}
-        </a-select-option>
-      </a-select>
+				<a-select-option
+					v-for="(item, index) in options.data"
+					:key="index"
+					:value="item[options.id]"
+					:disabled="item[options.disabled] ? item[options.disabled] : false"
+				>
+					{{ item[options.code] ? item[options.code] + "：" : ""
+					}}{{ item[options.key] }}
+				</a-select-option>
+			</a-select>
 
-      <!--Message Error-->
-      <span v-if="errors[0]" class="errors">{{ errors[0] }}</span>
-    </div>
-  </ValidationProvider>
+			<!--Message Error-->
+			<span v-if="errors[0]" class="errors">{{ errors[0] }}</span>
+		</div>
+	</ValidationProvider>
 </template>
 
 <script>
 export default {
-	name: 'InputCategory',
+	name: "InputCategory",
 
 	model: {
-		prop: 'value',
-		event: 'change'
+		prop: "value",
+		event: "change"
 	},
 
 	props: {
+		requiredIcon: {
+			type: Boolean,
+			default: false
+		},
 		label: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		nonLabel: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		rules: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		vid: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		value: {
 			type: [String, Number],
-			default: ''
+			default: ""
 		},
 
 		options: {
@@ -109,59 +122,61 @@ export default {
 		},
 		placeholder: {
 			type: String,
-			default: ''
+			default: ""
 		}
 	},
 
 	methods: {
-		handleChange (value) {
-			this.$emit('change', value)
+		handleChange(value) {
+			this.$emit("change", value);
 
 			if (this.filterRole) {
-				this.$emit('handle-filter-role')
+				this.$emit("handle-filter-role");
 			}
 
 			if (this.popover) {
 				setTimeout(() => {
-					this.$refs.btnPopover.click()
-				}, 500)
+					this.$refs.btnPopover.click();
+				}, 500);
 			}
 		},
 
-		filterOption (input, option) {
+		filterOption(input, option) {
 			return (
-				option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase().trim()) >= 0
-			)
+				option.componentOptions.children[0].text
+					.toLowerCase()
+					.indexOf(input.toLowerCase().trim()) >= 0
+			);
 		},
 
-		scrollOption (e) {
-			this.$emit('scrollChange', e)
+		scrollOption(e) {
+			this.$emit("scrollChange", e);
 		},
 
-		handleConfirm (e) {
-			this.$emit('popoverConfirm', e)
+		handleConfirm(e) {
+			this.$emit("popoverConfirm", e);
 		},
 
-		handleCancel (e) {
-			this.$emit('popoverCancel', e)
+		handleCancel(e) {
+			this.$emit("popoverCancel", e);
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>
-  .text-popover {
-    opacity: 0;
-    padding: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    border: none;
-    background: none;
-    color: transparent;
-    user-select: none;
-    margin: 0;
-    width: 0;
-    height: 0;
-  }
+.text-popover {
+	opacity: 0;
+	padding: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	border: none;
+	background: none;
+	color: transparent;
+	user-select: none;
+	margin: 0;
+	width: 0;
+	height: 0;
+}
 </style>

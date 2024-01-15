@@ -82,6 +82,7 @@
 									class="form-group-container"
 									vid="appraise_purpose_id"
 									label="Mục đích thẩm định"
+									:requiredIcon="true"
 									rules="required"
 									:options="optionsAppraisalPurposes"
 									@change="handleChangeAppraisePurpose"
@@ -113,6 +114,8 @@
 								v-model="dataForm.pre_type_id"
 								vid="pre_type_id"
 								label="Loại sơ bộ"
+								:requiredIcon="true"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsPreTypes"
 							/>
@@ -124,18 +127,10 @@
 								rules="required"
 								:formatDate="'DD/MM/YYYY'"
 								class="form-group-container col-sm-12 col-md-6"
-								@change="dataForm.pre_date = $event"
+								@change="handleChangeTime"
 							/>
 						</div>
-						<div class="row ">
-							<InputTextarea
-								:rows="3"
-								:disableInput="false"
-								v-model="dataForm.pre_asset_name"
-								label="Tên tài sản sơ bộ"
-								class="form-group-container col-12"
-							/>
-						</div>
+
 						<div
 							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
 						>
@@ -178,7 +173,6 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
-import InputCategoryPreTypes from "./InputCategoryPreTypes";
 import _ from "lodash";
 
 import InputText from "@/components/Form/InputText";
@@ -188,7 +182,6 @@ import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIc
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import moment from "moment";
-import InputTextarea from "@/components/Form/InputTextarea";
 import InputPercent from "@/components/Form/InputPercent";
 
 export default {
@@ -199,8 +192,6 @@ export default {
 		InputText,
 		InputTextPrefixCustom,
 		InputTextPrefixCustomIcon,
-		InputTextarea,
-		InputCategoryPreTypes,
 		InputDatePicker,
 		InputCurrency,
 		InputPercent
@@ -219,11 +210,16 @@ export default {
 		const handleChangeAppraisePurpose = event => {
 			dataForm.value.appraise_purpose_id = event;
 		};
+		const handleChangeTime = event => {
+			dataForm.value.pre_date = event;
+		};
+		handleChangeTime(moment(dataForm.value.pre_date).format("DD/MM/YYYY"));
 		return {
 			dataForm,
 			lstDataConfig,
 			preCertificateStore,
-			handleChangeAppraisePurpose
+			handleChangeAppraisePurpose,
+			handleChangeTime
 		};
 	},
 	computed: {
