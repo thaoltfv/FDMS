@@ -54,6 +54,7 @@ export default {
 			this.$emit("cancel");
 		},
 		async verifyToStage3Function() {
+			const tempUpdate = this.$refs.OtherFileComponent.dataForm;
 			if (this.preCertificateOtherDocuments.Result.length > 0) {
 			} else {
 				await this.$toast.open({
@@ -64,7 +65,7 @@ export default {
 				});
 				return;
 			}
-			if (this.dataPC.total_preliminary_value > 0) {
+			if (tempUpdate.total_preliminary_value > 0) {
 			} else {
 				await this.$toast.open({
 					message: "Vui lòng bổ sung Tổng giá trị sơ bộ",
@@ -75,12 +76,12 @@ export default {
 				return;
 			}
 			const res = await this.preCertificateStore.createUpdatePreCertificateion(
-				this.dataPC.id,
+				tempUpdate.id,
 				true,
-				this.$refs.OtherFileComponent.dataForm
+				tempUpdate
 			);
 			if (res.data) {
-				await this.preCertificateStore.getPreCertificate(this.dataPC.id);
+				await this.preCertificateStore.getPreCertificate(tempUpdate.id);
 				await this.$toast.open({
 					message: "Lưu thông tin kết quả sơ bộ thành công",
 					type: "success",

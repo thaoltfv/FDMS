@@ -232,9 +232,7 @@ export const usePreCertificateStore = defineStore(
 			temp.amountPaid = 0;
 			for (let index = 0; index < temp.payments.length; index++) {
 				const element = temp.payments[index];
-				element.pay_date = element.pay_date
-					? moment(element.pay_date).format("DD/MM/YYYY")
-					: "";
+				element.pay_date = element.pay_date ? moment(element.pay_date) : "";
 				temp.amountPaid = temp.amountPaid + parseFloat(element.amount);
 				temp.debtRemain -= element.amount;
 			}
@@ -248,20 +246,18 @@ export const usePreCertificateStore = defineStore(
 			isReturn = false,
 			assignObject = null
 		) {
-			other.value.isSubmit = true;
-			if (moment(dataPC.value.pre_date, "DD/MM/YYYY", true).isValid()) {
-				dataPC.value.pre_date = moment(
-					dataPC.value.pre_date,
-					"DD-MM-YYYY"
-				).format("YYYY-MM-DD");
-			}
-			// dataPC.value.pre_certificate_other_documents = preCertificateOtherDocuments.value;
-			if (!dataPC.value.id) dataPC.value.status = 1;
 			const tempUpdate = assignObject ? assignObject : dataPC.value;
+			other.value.isSubmit = true;
+			if (moment(tempUpdate.pre_date, "DD/MM/YYYY", true).isValid()) {
+				tempUpdate.pre_date = moment(tempUpdate.pre_date, "DD-MM-YYYY").format(
+					"YYYY-MM-DD"
+				);
+			}
+			if (!tempUpdate.id) tempUpdate.status = 1;
 			if (tempUpdate.cancel_reason) delete tempUpdate.cancel_reason;
 			const res = await PreCertificate.createUpdatePreCertification(
 				tempUpdate,
-				dataPC.value.id || ""
+				tempUpdate.id || ""
 			);
 			if (isReturn) {
 				return res;
