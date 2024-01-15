@@ -971,10 +971,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $certificate->updated_at = date("Y-m-d H:i:s");
                 $certificate->document_description = 'Các hồ sơ, tài liệu về tài sản do khách hàng cung cấp là đầy đủ và tin cậy';
 
+                $PROCESSING_TIME = CertificateDictionary::where(['type' => 'PROCESSING_TIME', 'acronym' => 'MOI'])->get('description')->first();
+                $minutes = intval($PROCESSING_TIME->description);
+                $status_expired_at = \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addMinutes($minutes)->format('Y-m-d H:i');
+                $certificate->status_expired_at = $status_expired_at;
+
                 $certificateId = QueryBuilder::for(Certificate::class)
                     ->insertGetId($certificate->attributesToArray());
 
                 if ($certificateId) {
+                    
                     $preCertificateModel = PreCertificate::find($preCertificate->id);
                     if ($preCertificateModel) {
                         $preCertificateModel->certificate_id = $certificateId;
@@ -1001,9 +1007,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         }
                     }
+
+                    $edited = Certificate::where('id', $certificateId)->first();
+                    $this->CreateActivityLog($edited, $edited, 'create', 'Chuyển chính thức từ YCSB_' . $id);
+
                 }
-                $logDescription = 'chuyển chính thức ' . $preCertificate->id;
-                $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $request['note']);
+                // $logDescription = 'chuyển chính thức ' . $preCertificate->id;
+                // $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $request['note']);
                     return [
                         'error' => false,
                         'data' => $certificateId,
