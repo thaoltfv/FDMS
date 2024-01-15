@@ -927,7 +927,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'updated_by',
                     'status',
                     'deleted_at',
-                    'status_expired_at',
+                    'commission_fee',
                 ];
                 $certificateKey = [
                     'petitioner_name',
@@ -952,7 +952,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'sub_status',
                     'commission_fee',
                     'note',
-                    'status_expired_at',
                     'created_by',
                     'document_type',
                 ];
@@ -966,6 +965,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 $certificate->status = 1;
                 $certificate->sub_status = 1;
+                $certificate->service_fee = $preCertificate->total_service_fee;
                 $certificate->created_by = $user->id;
                 $certificate->pre_certificate_id = $id;
                 $certificate->updated_at = date("Y-m-d H:i:s");

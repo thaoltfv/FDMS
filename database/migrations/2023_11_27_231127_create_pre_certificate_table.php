@@ -27,7 +27,6 @@ class CreatePreCertificateTable extends Migration
             $table->string('petitioner_phone')->nullable();
             $table->string('petitioner_address')->nullable();
             // $table->string('address')->nullable();
-            $table->string('note')->nullable();
             $table->string('cancel_reason')->nullable();
 
             $table->integer('certificate_id')->nullable();
