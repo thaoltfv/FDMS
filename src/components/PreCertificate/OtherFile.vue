@@ -181,7 +181,13 @@
 							<div
 								class="title_input_content title_input_download cursor_pointer"
 							>
-								{{ file.name }}
+								{{
+									file.name
+										? file.name.length > 20
+											? file.name.substring(20, 0) + "..."
+											: file.name
+										: ""
+								}}
 							</div>
 						</div>
 						<div
@@ -302,7 +308,13 @@
 						alt="tag_2"
 					/>
 					<div class="title_input_content title_input_download cursor_pointer">
-						{{ file.name }}
+						{{
+							file.name
+								? file.name.length > 20
+									? file.name.substring(20, 0) + "..."
+									: file.name
+								: ""
+						}}
 					</div>
 				</div>
 				<div class="d-flex align-items-center justify-content-end col-1 pr-3">
@@ -583,6 +595,7 @@ export default {
 			}
 		};
 		return {
+			dataPC,
 			dataForm,
 			showCardDetailFile,
 			preCertificateOtherDocuments,
@@ -649,10 +662,10 @@ export default {
 						formData.append("files[" + i + "]", files[i]);
 					}
 					let res = null;
-					if (this.dataForm.id) {
+					if (this.dataPC.id) {
 						res = await File.uploadFilePreCertificate(
 							formData,
-							this.dataForm.id,
+							this.dataPC.id,
 							this.type
 						);
 						if (res.data) {
@@ -676,7 +689,7 @@ export default {
 						}
 					} else {
 						this.lstFile = [...this.lstFile, ...files];
-						this.dataForm.uploadFile = this.lstFile;
+						this.dataPC.uploadFile = this.lstFile;
 					}
 				}
 			}

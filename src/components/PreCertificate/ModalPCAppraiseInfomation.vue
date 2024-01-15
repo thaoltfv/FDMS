@@ -127,7 +127,7 @@
 								rules="required"
 								:formatDate="'DD/MM/YYYY'"
 								class="form-group-container col-sm-12 col-md-6"
-								@change="dataForm.pre_date = $event"
+								@change="handleChangeTime"
 							/>
 						</div>
 
@@ -210,11 +210,16 @@ export default {
 		const handleChangeAppraisePurpose = event => {
 			dataForm.value.appraise_purpose_id = event;
 		};
+		const handleChangeTime = event => {
+			dataForm.value.pre_date = event;
+		};
+		handleChangeTime(moment(dataForm.value.pre_date).format("DD/MM/YYYY"));
 		return {
 			dataForm,
 			lstDataConfig,
 			preCertificateStore,
-			handleChangeAppraisePurpose
+			handleChangeAppraisePurpose,
+			handleChangeTime
 		};
 	},
 	computed: {
