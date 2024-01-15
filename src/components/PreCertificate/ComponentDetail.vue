@@ -823,6 +823,11 @@ export default {
 		});
 	},
 	computed: {
+		getHistoryTextColor() {
+			return this.historyList.map(item => {
+				return this.loadColor(item);
+			});
+		},
 		computedResultPreCertificate() {
 			console.log(
 				"this.dataPC.total_preliminary_value",
