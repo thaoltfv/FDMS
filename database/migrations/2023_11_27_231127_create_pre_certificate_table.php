@@ -13,165 +13,78 @@ class CreatePreCertificateTable extends Migration
      */
     public function up()
     {
-        Schema::create('pre_certificates', function (Blueprint $table) {
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2021_12_08_231456_create_certificate_table.php
-            $table->increments('id');
-            // $table->integer('pre_status');
-            $table->integer('status');
-            // $table->integer('ticket_num')->nullable();
-			// $table->string('document_num')->nullable();
-			// $table->date('document_date')->nullable();
-            // $table->string('certificate_num')->nullable();
-            // $table->date('certificate_date')->nullable();
-            $table->string('petitioner_name')->nullable();
-            $table->string('petitioner_phone')->nullable();
-            $table->string('petitioner_address')->nullable();
-            // $table->string('address')->nullable();
-            $table->string('cancel_reason')->nullable();
+         if (!Schema::hasTable('pre_certificates')) {
+            Schema::create('pre_certificates', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('certificate_id')->nullable();
+                $table->foreign('certificate_id')
+                    ->references('id')
+                    ->on('certificates')
+                    ->onDelete('cascade');
+                $table->text('petitioner_name')->nullable();
+                $table->text('petitioner_phone')->nullable();
+                $table->text('petitioner_address')->nullable();
+                $table->text('petitioner_identity_card')->nullable();
+                $table->integer('customer_id')->nullable();
+                $table->foreign('customer_id')
+                    ->references('id')
+                    ->on('customers')
+                    ->onDelete('cascade');
+                $table->integer('appraise_purpose_id');
+                $table->foreign('appraise_purpose_id')
+                    ->references('id')
+                    ->on('appraise_other_information')
+                    ->onDelete('cascade');
+                $table->text('note')->unsigned()->nullable();
 
-            $table->integer('certificate_id')->nullable();
-            $table->foreign('certificate_id')
-                ->references('id')
-                ->on('certificates')
-                ->onDelete('cascade');
 
-            $table->integer('appraiser_sale_id')->nullable();
-            $table->foreign('appraiser_sale_id')
-                ->references('id')
-                ->on('appraisers')
-                ->onDelete('cascade');
 
-            $table->integer('appraiser_manager_id')->nullable();
-            $table->foreign('appraiser_manager_id')
-                ->references('id')
-                ->on('appraisers')
-                ->onDelete('cascade');
+                $table->integer('appraiser_sale_id')->nullable();
+                $table->foreign('appraiser_sale_id')
+                    ->references('id')
+                    ->on('appraisers')
+                    ->onDelete('cascade');
 
-            $table->integer('appraiser_perform_id')->nullable();
-            $table->foreign('appraiser_perform_id')
-                ->references('id')
-                ->on('appraisers')
-                ->onDelete('cascade');
+                $table->integer('business_manager_id')->nullable();
+                $table->foreign('business_manager_id')
+                    ->references('id')
+                    ->on('appraisers')
+                    ->onDelete('cascade');
 
-            $table->integer('appraise_purpose_id');
-            $table->foreign('appraise_purpose_id')
-                ->references('id')
-                ->on('appraise_other_information')
-                ->onDelete('cascade');
+                $table->integer('appraiser_perform_id')->nullable();
+                $table->foreign('appraiser_perform_id')
+                    ->references('id')
+                    ->on('appraisers')
+                    ->onDelete('cascade');
+                $table->bigInteger('total_preliminary_value')->unsigned()->nullable()->before('created_at');
+                $table->text('cancel_reason')->nullable();
+                $table->timestamp('status_updated_at')->useCurrent();
+                $table->integer('status');
+                $table->timestamp('created_at')->useCurrent();
+                $table->uuid('created_by')->nullable();
+                $table->foreign('created_by')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+                $table->timestamp('updated_at')->useCurrent();
+                $table->uuid('updated_by')->nullable();
+                $table->foreign('updated_by')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+                $table->softDeletes();
+                $table->dateTime('status_expired_at')->nullable()->before('created_at');
 
-            // $table->text('document_description');
+                $table->text('address')->nullable();
+                $table->integer('branch_id')->unsigned()->nullable();
 
-            $table->uuid('created_by')->nullable();
-            $table->foreign('created_by')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
-            $table->softDeletes();
-            $table->date('appraise_date')->nullable();
-
-            // path 2022_07_27_062805_update_cerificate_second_table.php
-		    $table->integer('total_preliminary_value')->unsigned()->default(0)->before('created_at');
-			// $table->string('appraiser_sale_id')->nullable()->before('created_at');
-			// $table->string('appraiser_perform_id')->nullable()->before('created_at');
-			
-            // path H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_01_085158_update_cerificate_third_table.php
-            $table->integer('customer_id')->nullable()->before('created_at');
-        
-            // path H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_02_023642_update_cerificate_fourth_table.php
-			// $table->string('appraiser_sale_id')->change();
-			// $table->string('appraiser_perform_id')->change();
-			// $table->text('document_description')->nullable()->change();
-            
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_02_035246_update_cerificate_firth_table.php
-		    $table->timestamp('status_updated_at')->useCurrent();
-           
-            //H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_04_085208_change_string_to_integer_certificate_table.php
-            // $table->integer('appraiser_sale_id')->nullable();
-            // $table->integer('appraiser_perform_id')->nullable();
-
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_09_085414_add_column_commission_fee_certificates_table.php
-		    // $table->float('commission_fee')->unsigned()->default(0)->before('created_at');
-
-            //H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_15_092548_add_column_note_in_certificates_table.php
-			$table->text('note')->unsigned()->nullable()->before('created_at');
-			// $table->integer('duration_time')->unsigned()->nullable()->before('created_at');
-        
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_08_17_030949_add_column_status_expired_at_certificates_table.php
-			$table->dateTime('status_expired_at')->nullable()->before('created_at');
-        
-            //H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_09_29_093528_add_column_detail_type_certificates_table.php
-			// $table->json('document_type')->nullable()->before('created_at');
-        
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_10_19_094922_add_column_branch_id_certificates_table.php
-            $table->integer('branch_id')->unsigned()->nullable();
-        
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_10_31_064649_add_column_identity_card_to_certificates_table.php
-            $table->string('petitioner_identity_card')->nullable();
-
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_11_25_014156_add_sub_status_to_certificates_table.php
-            // $table->integer('sub_status')->default(1);
-       
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2022_12_02_100659_update_certificate_service_fee.php
-            // DB::statement("DROP MATERIALIZED VIEW IF EXISTS view_certificate_briefs");
-
-            // DB::statement("
-            // create MATERIALIZED VIEW view_certificate_briefs
-            //     AS
-            //         select t1.id, t1.created_at, t1.updated_at, t1.status,
-            //             case t1.status
-            //                 when 1 then 'Mới'
-            //                 when 2 then 'Đang thẩm định'
-            //                 when 3 then 'Đang duyệt'
-            //                 when 4 then 'Hoàn thành'
-            //                 else 'Hủy'
-            //             end as status_text,
-            //             t1.status_expired_at,
-            //             t1.status_updated_at,
-            //             coalesce(t2.description) as expire_time,
-            //             coalesce(t1.appraiser_id,-1) as appraiser_id,
-            //             coalesce(t3.name,'unknown') as appraiser_name,
-            //             coalesce(t1.appraiser_sale_id,-1) as appraiser_sale_id,
-            //             coalesce(t4.name,'unknown') as appraiser_sale_name,
-            //             coalesce(t1.appraiser_perform_id,-1) as appraiser_perform_id,
-            //             coalesce(t5.name,'unknown') as appraiser_perform_name,
-            //             coalesce(t1.branch_id,coalesce(t6.branch_id,-1)) as branch_id,
-            //             coalesce(t7.name,coalesce(t8.name, 'unknown')) as branch_name,
-            //             coalesce(t1.service_fee, 0) as service_fee
-            //         from pre_certificates t1
-            //             left outer join (select tt1.id , tt2.description
-            //                             from pre_certificates tt1 inner join certificate_dictionaries tt2 on tt2.type ='PROCESSING_TIME'
-            //                             and (case tt1.status
-            //                                     when 1 then 'MOI'
-            //                                     when 2 then 'DANG-THAM-DINH'
-            //                                     when 3 then 'DANG-DUYET'
-            //                                     end ) = tt2.acronym and tt2.status =1
-            //                             and tt1.deleted_at is null
-            //                             ) t2 on t1.id = t2.id
-            //             left outer join appraisers t3 on t1.appraiser_id = t3.id
-            //             left outer join appraisers t4 on t1.appraiser_sale_id = t4.id
-            //             left outer join appraisers t5 on t1.appraiser_perform_id = t5.id
-            //             left outer join appraisers t6 on t1.created_by = t6.user_id
-            //             left outer join branches t7 on t1.branch_id = t7.id
-            //             left outer join branches t8 on t6.branch_id = t8.id
-
-            //         where t1.deleted_at is null
-            // ");
-
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2023_02_22_083213_change_customer_id_null_certificates_table.php
-            $table->integer('customer_id')->nullable()->change();
-
-            // H:\works\fastvalue\F-Value-Pro-Backend\database\migrations\2023_11_14_151641_add_petitioner_birthday_certificate.php
-            // $table->date('petitioner_birthday')->nullable()->before('created_at');
-
-			$table->integer('pre_type_id')->unsigned()->nullable()->before('created_at');
-		    $table->integer('total_service_fee')->unsigned()->default(0)->before('created_at');
-		    $table->float('commission_fee')->unsigned()->default(0)->before('created_at');
-			$table->text('pre_asset_name')->unsigned()->nullable()->before('created_at');
-			$table->date('pre_date')->nullable()->before('created_at');
-        });
+                $table->float('commission_fee')->unsigned()->default(0)->before('created_at');
+                $table->date('pre_date')->nullable()->before('created_at');
+                $table->text('pre_asset_name')->unsigned()->nullable()->before('created_at');
+                $table->bigInteger('total_service_fee')->unsigned()->default(0)->before('created_at');
+                $table->integer('pre_type_id')->unsigned()->nullable()->before('created_at');
+            });
+        }
     }
 
     /**
