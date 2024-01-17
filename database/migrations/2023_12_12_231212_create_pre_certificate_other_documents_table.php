@@ -20,14 +20,19 @@ class CreatePreCertificateOtherDocumentsTable extends Migration
                 ->references('id')
                 ->on('pre_certificates')
                 ->onDelete('cascade');
-            $table->string('name')->nullable();
-            $table->string('link')->nullable();
-            $table->string('type')->nullable();
-            $table->string('size')->nullable();
-            $table->string('description')->nullable();
+            $table->text('name')->nullable();
+            $table->text('link')->nullable();
+            $table->text('type')->nullable();
+            $table->text('size')->nullable();
+            $table->text('description')->nullable();
             $table->timestamp('created_at')->useCurrent();
+            $table->uuid('created_by')->nullable();
+                $table->foreign('created_by')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
             $table->timestamp('updated_at')->useCurrent();
-            $table->string('type_document')->nullable();
+            $table->text('type_document')->nullable();
             $table->softDeletes();
         });
     }
