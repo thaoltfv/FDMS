@@ -56,7 +56,8 @@ export const usePreCertificateStore = defineStore(
 				{
 					id: null,
 					amount: 0,
-					pay_date: null
+					pay_date: null,
+					for_payment_of: ""
 				}
 			]
 		});
@@ -216,14 +217,16 @@ export const usePreCertificateStore = defineStore(
 					{
 						id: null,
 						amount: 0,
-						pay_date: null
+						pay_date: null,
+						for_payment_of: ""
 					}
 				];
 				temp.paymentsOriginal = [
 					{
 						id: null,
 						amount: 0,
-						pay_date: null
+						pay_date: null,
+						for_payment_of: ""
 					}
 				];
 			}
@@ -471,6 +474,14 @@ export const usePreCertificateStore = defineStore(
 
 		async function updatePaymentFunction(data, isReturn = false) {
 			other.value.isSubmit = true;
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
+					element.pay_date = moment(element.pay_date, "DD/MM/YYYY").format(
+						"YYYY-MM-DD"
+					);
+				}
+			}
 
 			const res = await PreCertificate.updatePayments(data, dataPC.value.id);
 			if (isReturn) {

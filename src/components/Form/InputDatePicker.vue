@@ -7,7 +7,8 @@
 		v-slot="{ errors }"
 	>
 		<label class="form-label font-weight-bold">
-			{{ $t(label) }} <b v-if="requiredIcon" class="ml-1 text-red">*</b>
+			{{ showLabel ? $t(label) : "" }}
+			<b v-if="requiredIcon" class="ml-1 text-red">*</b>
 			<span v-if="required" class="required">{{ $t("required") }}</span>
 		</label>
 
@@ -58,6 +59,10 @@ export default {
 	},
 
 	props: {
+		showLabel: {
+			type: Boolean,
+			default: true
+		},
 		requiredIcon: {
 			type: Boolean,
 			default: false

@@ -225,6 +225,7 @@
 				</div>
 			</div>
 		</div>
+		<PaymentHistories @updatePayments="updatePayments" />
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -484,12 +485,6 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
-		<ModalPCPayments
-			v-if="showCardPCPayments"
-			@cancel="showCardPCPayments = false"
-			@updatePayments="updatePayments"
-		/>
-
 		<ModalViewDocument
 			v-if="isShowPrint"
 			@cancel="isShowPrint = false"
@@ -560,8 +555,8 @@ import { Timeline, Drawer } from "ant-design-vue";
 import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
+import PaymentHistories from "@/components/PreCertificate/PaymentHistories";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
-import ModalPCPayments from "@/components/PreCertificate/ModalPCPayments";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
 import File from "@/models/File";
@@ -584,8 +579,8 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		PaymentHistories,
 		IconBase,
-		ModalPCPayments,
 		OtherFile,
 		InputCategory,
 		InputCategorySearch,
@@ -2048,7 +2043,7 @@ export default {
 	&-history {
 		position: fixed;
 		right: 0;
-		top: 170px;
+		top: 210px;
 		z-index: 100;
 		border-radius: 5px 0 0 5px;
 		padding: 0.5rem 0.3rem;
