@@ -20,7 +20,7 @@
 				<ValidationObserver
 					tag="form"
 					ref="paymentsForm"
-					@submit.prevent="validateAppraiseInformation"
+					@submit.prevent="validatePayment"
 				>
 					<div class="col-12">
 						<div class="row justify-content-between">
@@ -319,7 +319,7 @@ export default {
 				});
 			}
 		},
-		async validateAppraiseInformation() {
+		async validatePayment() {
 			const isValid = await this.$refs.paymentsForm.validate();
 			if (isValid) {
 				this.handleAction();
@@ -338,10 +338,10 @@ export default {
 
 			for (let index = 0; index < this.dataForm.payments.length; index++) {
 				const element = this.dataForm.payments[index];
-				if (!element.pay_date || !element.amount || element.amount <= 0) {
+				if (!element.pay_date || element.amount < 0) {
 					this.$toast.open({
 						message:
-							"Vui lòng nhập đầy đủ thông tin thanh toán và số tiền phải lớn hơn 0",
+							"Vui lòng nhập đầy đủ thông tin thanh toán và số tiền phải lớn hơn hoặc bằng 0",
 						type: "error",
 						position: "top-right",
 						duration: 3000
