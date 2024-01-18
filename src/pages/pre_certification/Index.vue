@@ -325,25 +325,35 @@ export default {
 		this.user_id = profile.data.user.id;
 		const permission = this.$store.getters.currentPermissions;
 		permission.forEach(value => {
-			if (value === PERMISSIONS.VIEW_CERTIFICATE_BRIEF) {
+			if (value === PERMISSIONS.VIEW_PRE_CERTIFICATE) {
 				this.view = true;
 			}
-			if (value === PERMISSIONS.ADD_CERTIFICATE_BRIEF) {
+			if (value === PERMISSIONS.ADD_PRE_CERTIFICATE) {
 				this.add = true;
 			}
-			if (value === PERMISSIONS.EDIT_CERTIFICATE_BRIEF) {
+			if (value === PERMISSIONS.EDIT_PRE_CERTIFICATE) {
 				this.edit = true;
 			}
-			if (value === PERMISSIONS.DELETE_CERTIFICATE_BRIEF) {
+			if (value === PERMISSIONS.DELETE_PRE_CERTIFICATE) {
 				this.deleted = true;
 			}
-			if (value === PERMISSIONS.ACCEPT_CERTIFICATE_BRIEF) {
+			if (value === PERMISSIONS.ACCEPT_PRE_CERTIFICATE) {
 				this.accept = true;
 			}
-			if (value === PERMISSIONS.EXPORT_CERTIFICATE_BRIEF) {
+			if (value === PERMISSIONS.EXPORT_PRE_CERTIFICATE) {
 				this.export = true;
 			}
 		});
+
+		if (!this.view) {
+			this.$router.push({ name: "page-not-found" });
+			this.$toast.open({
+				message: "Bạn ko có quyền xem yêu cầu sơ bộ",
+				type: "error",
+				position: "top-right",
+				duration: 5000
+			});
+		}
 	},
 	computed: {
 		updateDate() {

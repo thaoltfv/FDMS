@@ -62,11 +62,28 @@ export const usePreCertificateStore = defineStore(
 			]
 		});
 
-		const permission = ref({
-			allowDelete: true,
-			allowExport: true
+		const vueStoree = ref({
+			currentPermissions: null,
+			profile: null,
+			user: null
 		});
 
+		function updateVueStore(profile, user, currentPermissions) {
+			vueStoree.value.profile = profile;
+			vueStoree.value.user = user;
+			vueStoree.value.currentPermissions = currentPermissions;
+		}
+
+		const permission = ref({
+			allowDelete: true,
+			allowExport: true,
+			editPayments: false,
+			edit: false
+		});
+		function updatePermission(data) {
+			permission.value.editPayments = data.editPayments;
+			permission.value.edit = data.edit;
+		}
 		const other = ref({
 			isSubmit: false,
 			toast: null,
@@ -620,6 +637,7 @@ export const usePreCertificateStore = defineStore(
 		}
 
 		return {
+			vueStoree,
 			dataPC,
 			lstDataConfig,
 			preCertificateOtherDocuments,
@@ -644,7 +662,9 @@ export const usePreCertificateStore = defineStore(
 			updateStatus,
 			getLstAppraisers,
 			getStartData,
-			updatePaymentFunction
+			updatePaymentFunction,
+			updateVueStore,
+			updatePermission
 		};
 	},
 	{

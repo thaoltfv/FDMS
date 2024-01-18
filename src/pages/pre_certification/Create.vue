@@ -130,7 +130,23 @@ export default {
 			}
 		}
 	},
-
+	created() {
+		const permission = this.$store.getters.currentPermissions;
+		permission.forEach(value => {
+			if (value === "ADD_PRE_CERTIFICATE") {
+				this.add = true;
+			}
+		});
+		if (!this.add) {
+			this.$router.push({ name: "page-not-found" });
+			this.$toast.open({
+				message: "Bạn ko có quyền tạo yêu cầu sơ bộ",
+				type: "error",
+				position: "top-right",
+				duration: 5000
+			});
+		}
+	},
 	mounted() {
 		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
 	},

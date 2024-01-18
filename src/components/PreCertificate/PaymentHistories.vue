@@ -58,7 +58,7 @@
 								<InputTextPrefixCustom
 									v-model="payment.for_payment_of"
 									id="petitioner_name"
-									vid="petitioner_name"
+									:vid="'petitioner_name' + index"
 									:disabled="permissionNotAllowEdit"
 									label="Nội dung"
 									:showLabel="false"
@@ -69,7 +69,7 @@
 							<div style="width:175px">
 								<InputDatePicker
 									v-model="payment.pay_date"
-									vid="pay_date"
+									:vid="'pay_date' + index"
 									label="Ngày thanh toán"
 									:showLabel="false"
 									placeholder="Ngày / tháng / năm"
@@ -87,7 +87,7 @@
 								>
 									<InputCurrency
 										v-model="payment.amount"
-										vid="amount"
+										:vid="'amount' + index"
 										:max="99999999999999"
 										rules="required"
 										:disabled="permissionNotAllowEdit"
@@ -188,13 +188,17 @@ export default {
 	},
 	setup() {
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, other } = storeToRefs(preCertificateStore);
+		const { dataPC, other, permission } = storeToRefs(preCertificateStore);
 		const drawer = ref(false);
 		const openModalDelete = ref(false);
 		const paymentDelete = ref({ id: null, isUpload: false });
 		const dataForm = ref(_.cloneDeep(dataPC.value));
 
+		const permissionNotAllowEdit = ref(false);
 		const showDrawer = async () => {
+			permissionNotAllowEdit.value = !(
+				permission.value.editPayments && permission.value.edit
+			);
 			const temp = await preCertificateStore.getPreCertificate(dataPC.value.id);
 			dataForm.value = ref(_.cloneDeep(temp));
 			drawer.value = true;
@@ -202,7 +206,6 @@ export default {
 		const closeDrawer = () => {
 			drawer.value = false;
 		};
-		const permissionNotAllowEdit = ref(false);
 		const keyRender = ref(0);
 		const paidCompute = (
 			event,
@@ -274,42 +277,7 @@ export default {
 			deletePaymentDialog
 		};
 	},
-	created() {
-		const profile = this.$store.getters.profile;
-		if (profile.data.user) {
-			this.position_profile =
-				profile.data.user.appraiser.appraise_position.acronym;
-			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
-		}
-		this.user_id = profile.data.user.id;
-		this.profile = profile;
-		if (profile.data.user.id === this.dataForm.created_by) {
-			this.checkRole = true;
-		}
-		const permission = this.$store.getters.currentPermissions;
-		// fix_permission
-		permission.forEach(value => {
-			if (value === "VIEW_CERTIFICATE_BRIEF") {
-				this.view = true;
-			}
-			if (value === "ADD_CERTIFICATE_BRIEF") {
-				this.add = true;
-			}
-			if (value === "EDIT_CERTIFICATE_BRIEF") {
-				this.edit = true;
-				this.permissionNotAllowEdit = false;
-			}
-			if (value === "DELETE_CERTIFICATE_BRIEF") {
-				this.deleted = true;
-			}
-			if (value === "ACCEPT_CERTIFICATE_BRIEF") {
-				this.accept = true;
-			}
-			if (value === "EXPORT_CERTIFICATE_BRIEF") {
-				this.exportAction = true;
-			}
-		});
-	},
+	created() {},
 	methods: {
 		formatNumber(num) {
 			if (num) {
