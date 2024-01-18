@@ -316,7 +316,7 @@ class PreCertificateController extends Controller
 
         $rules = [
             '*.pay_date' => 'required|string|max:255',
-            '*.amount' => 'integer|min:1',
+            '*.amount' => 'integer|min:0',
         ];
 
         $data = $request->toArray();
@@ -327,7 +327,7 @@ class PreCertificateController extends Controller
             $messages[$index . '.pay_date.max'] = 'tại dòng ' . ($index + 1) . ': ngày thanh toán không được vượt quá 255 ký tự';
             $messages[$index . '.amount.required'] = 'tại dòng ' . ($index + 1) . ': số tiền là bắt buộc';
             $messages[$index . '.amount.integer'] = 'tại dòng ' . ($index + 1) . ': số tiền phải là số nguyên';
-            $messages[$index . '.amount.min'] = 'tại dòng ' . ($index + 1) . ': số tiền phải lớn hơn 0';
+            $messages[$index . '.amount.min'] = 'tại dòng ' . ($index + 1) . ': số tiền phải lớn hơn hoặc bằng 0';
         }
 
         $validator = Validator::make($data, $rules, $messages);
