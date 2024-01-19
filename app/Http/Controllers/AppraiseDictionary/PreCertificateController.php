@@ -186,10 +186,10 @@ class PreCertificateController extends Controller
     }
 
 
-    private array $permissionView =['VIEW_CERTIFICATE_BRIEF'];
-    private array $permissionAdd =['ADD_CERTIFICATE_BRIEF'];
-    private array $permissionEdit =['EDIT_CERTIFICATE_BRIEF'];
-    private array $permissionExport =['EXPORT_CERTIFICATE_BRIEF'];
+    private array $permissionView =['VIEW_PRE_CERTIFICATE'];
+    private array $permissionAdd =['ADD_PRE_CERTIFICATE'];
+    private array $permissionEdit =['EDIT_PRE_CERTIFICATE'];
+    private array $permissionExport =['EXPORT_PRE_CERTIFICATE'];
 
     public function getPreCertificate(int $id){
         if(! CommonService::checkUserPermission($this->permissionView))
