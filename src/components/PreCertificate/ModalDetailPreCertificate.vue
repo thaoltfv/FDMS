@@ -553,6 +553,13 @@ export default {
 		},
 		checkPermission(configData) {
 			let check = false;
+			if (
+				configData.put_require_roles &&
+				this.user.roles &&
+				configData.put_require_roles.includes(this.user.roles[0].name)
+			) {
+				return true;
+			}
 			if (configData.put_require && configData.put_require.length > 0) {
 				configData.put_require.forEach(i => {
 					if (

@@ -56,16 +56,34 @@ export const usePreCertificateStore = defineStore(
 				{
 					id: null,
 					amount: 0,
-					pay_date: null
+					pay_date: null,
+					for_payment_of: ""
 				}
 			]
 		});
 
-		const permission = ref({
-			allowDelete: true,
-			allowExport: true
+		const vueStoree = ref({
+			currentPermissions: null,
+			profile: null,
+			user: null
 		});
 
+		function updateVueStore(profile, user, currentPermissions) {
+			vueStoree.value.profile = profile;
+			vueStoree.value.user = user;
+			vueStoree.value.currentPermissions = currentPermissions;
+		}
+
+		const permission = ref({
+			allowDelete: true,
+			allowExport: true,
+			editPayments: false,
+			edit: false
+		});
+		function updatePermission(data) {
+			permission.value.editPayments = data.editPayments;
+			permission.value.edit = data.edit;
+		}
 		const other = ref({
 			isSubmit: false,
 			toast: null,
@@ -216,14 +234,16 @@ export const usePreCertificateStore = defineStore(
 					{
 						id: null,
 						amount: 0,
-						pay_date: null
+						pay_date: null,
+						for_payment_of: ""
 					}
 				];
 				temp.paymentsOriginal = [
 					{
 						id: null,
 						amount: 0,
-						pay_date: null
+						pay_date: null,
+						for_payment_of: ""
 					}
 				];
 			}
@@ -423,7 +443,9 @@ export const usePreCertificateStore = defineStore(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
+			dataPC.value.status_expired_at_string = config.process_time
+				? await getExpireStatusDate(config)
+				: null;
 			let dataSend = {
 				business_manager_id: null,
 				appraiser_perform_id: null,
@@ -471,6 +493,14 @@ export const usePreCertificateStore = defineStore(
 
 		async function updatePaymentFunction(data, isReturn = false) {
 			other.value.isSubmit = true;
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
+					element.pay_date = moment(element.pay_date, "DD/MM/YYYY").format(
+						"YYYY-MM-DD"
+					);
+				}
+			}
 
 			const res = await PreCertificate.updatePayments(data, dataPC.value.id);
 			if (isReturn) {
@@ -609,6 +639,7 @@ export const usePreCertificateStore = defineStore(
 		}
 
 		return {
+			vueStoree,
 			dataPC,
 			lstDataConfig,
 			preCertificateOtherDocuments,
@@ -633,7 +664,9 @@ export const usePreCertificateStore = defineStore(
 			updateStatus,
 			getLstAppraisers,
 			getStartData,
-			updatePaymentFunction
+			updatePaymentFunction,
+			updateVueStore,
+			updatePermission
 		};
 	},
 	{

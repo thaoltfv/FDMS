@@ -131,6 +131,23 @@ export default {
 		}
 	},
 
+	created() {
+		const permission = this.$store.getters.currentPermissions;
+		permission.forEach(value => {
+			if (value === "EDIT_PRE_CERTIFICATE") {
+				this.edit = true;
+			}
+		});
+		if (!this.edit) {
+			this.$router.push({ name: "page-not-found" });
+			this.$toast.open({
+				message: "Bạn ko có quyền chỉnh sửa yêu cầu sơ bộ",
+				type: "error",
+				position: "top-right",
+				duration: 5000
+			});
+		}
+	},
 	mounted() {
 		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
 	},
