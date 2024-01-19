@@ -687,6 +687,12 @@ export default {
 			this.showAcceptCertificate = await false;
 		},
 		async handleChangeAccept2(note, reason_id) {
+			const config = this.jsonConfig.principle.find(
+				item => item.status === this.next_status && item.isActive === 1
+			);
+			let status_expired_at_temp = config.process_time
+				? this.getExpireStatusDate(config)
+				: null;
 			let dataSend = {
 				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
 				appraiser_id: this.elementDragger.appraiser_id,
@@ -699,7 +705,7 @@ export default {
 				check_legal: this.isCheckLegal,
 				check_version: this.isCheckVersion,
 				required: this.changeStatusRequire,
-				status_expired_at: this.getExpireStatusDate(),
+				status_expired_at: status_expired_at_temp,
 				status_note: note,
 				status_reason_id: reason_id,
 				status_description: this.message,
@@ -770,9 +776,10 @@ export default {
 			}
 			this.showDetailPopUp = false;
 		},
-		getExpireStatusDate() {
+		getExpireStatusDate(config) {
+			const configTemp = config ? config : this.config;
 			let dateConvert = new Date();
-			let minutes = this.config.process_time ? this.config.process_time : 1440;
+			let minutes = configTemp.process_time ? configTemp.process_time : 1440;
 			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;

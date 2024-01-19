@@ -443,7 +443,9 @@ export const usePreCertificateStore = defineStore(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
+			dataPC.value.status_expired_at_string = config.process_time
+				? await getExpireStatusDate(config)
+				: null;
 			let dataSend = {
 				business_manager_id: null,
 				appraiser_perform_id: null,

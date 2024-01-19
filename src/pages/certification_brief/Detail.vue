@@ -2366,14 +2366,21 @@ export default {
 				);
 			}
 		},
-		getExpireStatusDate() {
+		getExpireStatusDate(config) {
+			const configTemp = config ? config : this.config;
 			let dateConvert = new Date();
-			let minutes = this.config.process_time ? this.config.process_time : 1440;
+			let minutes = configTemp.process_time ? configTemp.process_time : 1440;
 			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
 		async handleAction2(note, reason_id) {
+			const config = this.jsonConfig.principle.find(
+				item => item.status === this.targetStatus && item.isActive === 1
+			);
+			let status_expired_at_temp = config.process_time
+				? this.getExpireStatusDate(config)
+				: null;
 			const {
 				appraiser_id,
 				appraiser_perform_id,
@@ -2403,7 +2410,7 @@ export default {
 				check_version: this.isCheckVersion,
 				check_legal: this.isCheckLegal,
 				required: this.changeStatusRequire,
-				status_expired_at: this.getExpireStatusDate(),
+				status_expired_at: status_expired_at_temp,
 				status_note: note,
 				status_reason_id: reason_id,
 				status_description: this.message,

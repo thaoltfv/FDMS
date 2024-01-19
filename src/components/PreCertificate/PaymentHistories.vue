@@ -1,7 +1,11 @@
 <template>
 	<div class="btn-history-payment" style="">
 		<button class="btn btn-orange btn-history-payment" @click="showDrawer">
-			<img src="@/assets/icons/ic_payment_history.svg" alt="history" />
+			<img
+				src="@/assets/icons/ic_payment_history.svg"
+				class="mt-n1"
+				alt="history"
+			/>
 		</button>
 		<a-drawer
 			width="700"

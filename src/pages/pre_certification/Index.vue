@@ -33,7 +33,7 @@
 					>
 						<b-card
 							:class="{
-								border_expired: checkDateExpired(element),
+								border_expired: checkDateExpired(element).statusExpire,
 								['border-' + config.css.color]: true
 							}"
 							class="card_container mb-3"
@@ -70,7 +70,7 @@
 									</span>
 								</div>
 								<img
-									v-if="checkDateExpired(element)"
+									v-if="checkDateExpired(element).statusExpire"
 									class="mr-2 icon_expired"
 									src="@/assets/icons/ic_expire_calender.svg"
 									alt="ic_expire_calender"
@@ -117,9 +117,13 @@
 								/>
 								<div class="label_container d-flex">
 									<strong class="d-none d_inline mr-1">Thời hạn:</strong
-									><span style="font-weight: 500">{{
-										getExpireDate(element)
-									}}</span>
+									><span
+										style="font-weight: 500"
+										:class="{
+											'text-orange': checkDateExpired(element).inExpiringState
+										}"
+										>{{ getExpireDate(element) }}</span
+									>
 								</div>
 							</div>
 							<div class="property-content d-flex justify-content-between mb-0">
@@ -498,23 +502,31 @@ export default {
 			return strExpire;
 		},
 		checkDateExpired(element) {
-			let check = false;
-			switch (element.status) {
-				case 1:
-				case 2:
-				case 3:
-					if (element.status_expired_at) {
-						if (
-							this.updateDate(element.status_expired_at, this.now).includes(
-								"Đã hết hạn"
-							)
-						) {
-							check = true;
-						}
-					} else {
-						check = true;
+			const check = {
+				statusExpire: false,
+				inExpiringState: false
+			};
+
+			if (element.status_expired_at) {
+				const config = this.jsonConfig.principle.find(
+					item => item.status === element.status && item.isActive === 1
+				);
+				if (config.expire_in) {
+					const expireDate = new Date(element.status_expired_at);
+					const now = new Date();
+					const diffTime = Math.abs(expireDate - now);
+					const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+					if (diffMinutes <= config.expire_in) {
+						check.inExpiringState = true;
 					}
-					break;
+				}
+				if (
+					this.updateDate(element.status_expired_at, this.now).includes(
+						"Đã hết hạn"
+					)
+				) {
+					check.statusExpire = true;
+				}
 			}
 			return check;
 		},
