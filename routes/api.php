@@ -343,6 +343,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
 
     Route::get('/pre-certificate-configs', [PreCertificateConfigController::class, 'findAll']);
+    Route::get('pre-certificate-configs/find-config/{name}', [PreCertificateConfigController::class, 'findByName']);
+    Route::post('pre-certificate-configs/update-config/{name}', [PreCertificateConfigController::class, 'updateConfig']);
 
     Route::get('certificate-assets', [CertificateAssetController::class, 'findAll']);
 
