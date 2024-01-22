@@ -63,7 +63,7 @@
 									v-model="payment.for_payment_of"
 									id="petitioner_name"
 									:vid="'petitioner_name' + index"
-									:disabled="permissionNotAllowEdit"
+									:disabledInput="permissionNotAllowEdit"
 									label="Nội dung"
 									:showLabel="false"
 									rules="required"

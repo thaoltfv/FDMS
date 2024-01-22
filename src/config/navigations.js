@@ -133,6 +133,12 @@ navigations = [
 				title: "Quản lý dữ liệu khác",
 				routeName: "dictionary.index",
 				exact: true
+			},
+			{
+				id: "workFlowConfig",
+				title: "Thời gian thực hiện",
+				routeName: "pre_certificate_config.index",
+				exact: true
 			}
 		],
 		customImage: true

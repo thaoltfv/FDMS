@@ -12,6 +12,7 @@ import {
 	Button,
 	Select,
 	Input,
+	InputNumber,
 	Switch,
 	DatePicker,
 	Modal,
@@ -38,6 +39,7 @@ Vue.use(Icon);
 Vue.use(Button);
 Vue.use(Select);
 Vue.use(Input);
+Vue.use(InputNumber);
 Vue.use(Switch);
 Vue.use(DatePicker);
 Vue.use(Modal);
