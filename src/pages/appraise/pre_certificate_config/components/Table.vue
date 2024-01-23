@@ -22,38 +22,107 @@
 					<template slot="process_time" slot-scope="text, record, index">
 						<a-form-item class="mb-0" v-if="record.editable">
 							<div class="row">
-								<InputText
+								<InputCurrency
 									v-model="record.day_process"
-									class="label-none input-error col-3"
-									:max-length="3"
-									type="number"
+									:vid="'day_process' + record.id"
+									:max="99999999999999"
+									label=""
+									:showLabel="false"
+									class="col-3"
+									:sufix="false"
+									@change="record.day_process = $event"
 								/>
 								Ngày
 
-								<InputText
+								<InputCurrency
 									v-model="record.hour_process"
-									class="label-none input-error col-3"
-									:max-length="3"
-									type="number"
+									:vid="'hour_process' + record.id"
+									:max="99999999999999"
+									label=""
+									:showLabel="false"
+									class="col-3"
+									:sufix="false"
+									@change="record.hour_process = $event"
 								/>
 								Giờ
-								<InputText
+
+								<InputCurrency
 									v-model="record.minute_process"
-									class="label-none input-error col-3"
-									:max-length="3"
-									type="number"
+									:vid="'minute_process' + record.id"
+									:max="99999999999999"
+									label=""
+									:showLabel="false"
+									class="col-3"
+									:sufix="false"
+									@change="record.minute_process = $event"
 								/>
 								Phút
 							</div>
 						</a-form-item>
 						<p v-else class="mb-0">
 							{{
-								`${record.day_process +
-									" ngày " +
-									record.hour_process +
-									" giờ " +
-									record.minute_process +
-									" phút"}`
+								record.process_time
+									? `${record.day_process +
+											" ngày " +
+											record.hour_process +
+											" giờ " +
+											record.minute_process +
+											" phút"}`
+									: ""
+							}}
+						</p>
+					</template>
+
+					<template slot="expire_in" slot-scope="text, record, index">
+						<a-form-item class="mb-0" v-if="record.editable">
+							<div class="row">
+								<InputCurrency
+									v-model="record.day_expire"
+									:vid="'day_expire' + record.id"
+									:max="99999999999999"
+									label=""
+									:showLabel="false"
+									class="col-3"
+									:sufix="false"
+									@change="record.day_expire = $event"
+								/>
+								Ngày
+
+								<InputCurrency
+									v-model="record.hour_expire"
+									:vid="'hour_expire' + record.id"
+									:max="99999999999999"
+									label=""
+									:showLabel="false"
+									class="col-3"
+									:sufix="false"
+									@change="record.hour_expire = $event"
+								/>
+								Giờ
+
+								<InputCurrency
+									v-model="record.minute_expire"
+									:vid="'minute_expire' + record.id"
+									:max="99999999999999"
+									label=""
+									:showLabel="false"
+									class="col-3"
+									:sufix="false"
+									@change="record.minute_expire = $event"
+								/>
+								Phút
+							</div>
+						</a-form-item>
+						<p v-else class="mb-0">
+							{{
+								record.expire_in
+									? `${record.day_expire +
+											" ngày " +
+											record.hour_expire +
+											" giờ " +
+											record.minute_expire +
+											" phút"}`
+									: ""
 							}}
 						</p>
 					</template>
@@ -109,10 +178,8 @@ import { Form, Input, Select } from "ant-design-vue";
 import ModalCancel from "@/components/Modal/ModalCancel";
 import ModalNotification from "@/components/Modal/ModalNotification";
 import ModalDelete from "@/components/Modal/ModalDelete";
-import InputNumberFormat from "@/components/Form/InputNumber";
-import Appraise from "@/models/Appraise";
-import { storeToRefs } from "pinia";
 import { useWorkFlowConfig } from "@/store/workFlowConfig";
+import InputCurrency from "@/components/Form/InputCurrency.vue";
 export default {
 	name: "Table",
 	props: ["lstConfig", "type"],
@@ -121,12 +188,12 @@ export default {
 		ModalDelete,
 		ModalCancel,
 		InputText,
-		InputNumberFormat,
 		"a-form": Form,
 		"a-form-item": Form.Item,
 		"a-input": Input,
 		"a-select": Select,
-		"a-select-option": Select.Option
+		"a-select-option": Select.Option,
+		InputCurrency
 	},
 	data() {
 		return {
@@ -245,19 +312,31 @@ export default {
 		async handleSubmitForm(event) {
 			event.preventDefault();
 			let newData = [...this.localLstConfig];
-
+			const lstString = [
+				"day_process",
+				"hour_process",
+				"minute_process",
+				"day_expire",
+				"hour_expire",
+				"minute_expire"
+			];
 			for (let index = 0; index < newData.length; index++) {
 				const item = newData[index];
+				lstString.forEach(itemLstString => {
+					if (!(item[itemLstString] > 0)) {
+						item[itemLstString] = 0;
+					}
+				});
 				const totalMinutes =
 					item.day_process * 24 * 60 +
 					item.hour_process * 60 +
-					item.minute_process;
+					item.minute_process * 1;
 				item.process_time = totalMinutes;
 
 				const totalMinutes2 =
 					item.day_expire * 24 * 60 +
 					item.hour_expire * 60 +
-					item.minute_expire;
+					item.minute_expire * 1;
 				item.expire_in = totalMinutes2;
 
 				if (item.expire_in > item.process_time) {

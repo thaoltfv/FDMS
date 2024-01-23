@@ -224,10 +224,7 @@ export const usePreCertificateStore = defineStore(
 			);
 			temp.pre_type = pre_type ? pre_type : { id: null, description: null };
 			if (temp.status == 6 && temp.cancel_reason) {
-				const reason = lstDataConfig.value.cancelPCReasons.find(
-					reason => `${reason.id}` === temp.cancel_reason
-				);
-				temp.cancel_reason_string = reason ? reason.description : "";
+				temp.cancel_reason_string = temp.cancel_reason.description || "";
 			}
 			if (temp.payments.length === 0) {
 				temp.payments = [
@@ -258,7 +255,6 @@ export const usePreCertificateStore = defineStore(
 			}
 			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			dataPC.value = temp;
-			console.log(dataPC.value);
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(
@@ -404,12 +400,19 @@ export const usePreCertificateStore = defineStore(
 
 		const jsonConfig = ref(null);
 		async function rejectFromStage2ToStage1() {
-			for (
-				let index = 0;
-				index < preCertificateOtherDocuments.value.Result.length;
-				index++
+			let tempLength = [];
+			if (
+				preCertificateOtherDocuments.value.Result.length === 0 &&
+				dataPC.value.other_documents
 			) {
-				const element = preCertificateOtherDocuments.value.Result[index];
+				tempLength = dataPC.value.other_documents.filter(
+					file => file.type_document === "Result"
+				);
+			} else {
+				tempLength = preCertificateOtherDocuments.value.Result;
+			}
+			for (let index = 0; index < tempLength.length; index++) {
+				const element = tempLength[index];
 				const res = await File.deleteFilePreCertificate(element.id);
 				if (res.data) {
 					// other.value.toast.open({

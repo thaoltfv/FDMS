@@ -6,49 +6,52 @@ export const useWorkFlowConfig = defineStore("workFlowConfig", () => {
 	const configs = ref({ hstdConfig: {}, ycsbConfig: {} });
 	async function getConfig() {
 		const respconfig = await PreCertificateConfig.getConfig();
-		for (let index = 0; index < respconfig.data.length; index++) {
-			const element = respconfig.data[index];
+
+		respconfig.data.forEach(element => {
 			element.config = JSON.parse(element.config);
-			for (let index = 0; index < element.config.principle.length; index++) {
-				const elementx = element.config.principle[index];
-				if (elementx.process_time) {
-					let totalMinutes = elementx.process_time;
-					let days = Math.floor(totalMinutes / (60 * 24));
-					totalMinutes %= 60 * 24;
-					let hours = Math.floor(totalMinutes / 60);
-					let minutes = totalMinutes % 60;
+			element.config.principle.forEach(elementx => {
+				const { process_time, expire_in } = elementx;
 
-					elementx.day_process = days;
-					elementx.hour_process = hours;
-					elementx.minute_process = minutes;
+				const calculateTime = time => {
+					const days = Math.floor(time / (60 * 24));
+					const hours = Math.floor((time % (60 * 24)) / 60);
+					const minutes = time % 60;
 
-					elementx.day_process_original = days;
-					elementx.hour_process_original = hours;
-					elementx.minute_process_original = minutes;
-				}
-				if (element.expire_in) {
-					let totalMinutes2 = elementx.expire_in;
-					let days2 = Math.floor(totalMinutes2 / (60 * 24));
-					totalMinutes2 %= 60 * 24;
-					let hours2 = Math.floor(totalMinutes2 / 60);
-					let minutes2 = totalMinutes2 % 60;
+					return { days, hours, minutes };
+				};
 
-					elementx.day_expire = days2;
-					elementx.hour_expire = hours2;
-					elementx.minute_expire = minutes2;
+				elementx.day_process = process_time
+					? calculateTime(process_time).days
+					: 0;
+				elementx.hour_process = process_time
+					? calculateTime(process_time).hours
+					: 0;
+				elementx.minute_process = process_time
+					? calculateTime(process_time).minutes
+					: 0;
 
-					elementx.day_expire_original = days2;
-					elementx.hour_expire_original = hours2;
-					elementx.minute_expire_original = minutes2;
-				}
-			}
+				elementx.day_process_original = elementx.day_process;
+				elementx.hour_process_original = elementx.hour_process;
+				elementx.minute_process_original = elementx.minute_process;
+
+				elementx.day_expire = expire_in ? calculateTime(expire_in).days : 0;
+				elementx.hour_expire = expire_in ? calculateTime(expire_in).hours : 0;
+				elementx.minute_expire = expire_in
+					? calculateTime(expire_in).minutes
+					: 0;
+
+				elementx.day_expire_original = elementx.day_expire;
+				elementx.hour_expire_original = elementx.hour_expire;
+				elementx.minute_expire_original = elementx.minute_expire;
+			});
 
 			if (element.name === "workflowHSTD") {
 				configs.value.hstdConfig = element.config;
 			} else {
 				configs.value.ycsbConfig = element.config;
 			}
-		}
+		});
+
 		return configs.value;
 	}
 	async function getConfigByName(name) {
@@ -75,7 +78,7 @@ export const useWorkFlowConfig = defineStore("workFlowConfig", () => {
 			}
 		});
 		console.log("data", name, data, tempConfig.principle);
-		const res = await PreCertificateConfig.updateConfig(name, data);
+		const res = await PreCertificateConfig.updateConfig(name, tempConfig);
 		return res;
 		if (res.data) {
 			console.log("update thành công");

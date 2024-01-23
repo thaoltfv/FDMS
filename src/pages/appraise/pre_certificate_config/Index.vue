@@ -5,6 +5,7 @@
 				<TabItem name="YCSB">
 					<Table
 						v-if="configs && configs.ycsbConfig && configs.ycsbConfig.principle"
+						:key="keyRefresh"
 						:lstConfig="configs.ycsbConfig.principle"
 						type="workflow"
 						@resfreshData="startFunction"
@@ -14,6 +15,7 @@
 					<Table
 						v-if="configs && configs.hstdConfig && configs.hstdConfig.principle"
 						:lstConfig="configs.hstdConfig.principle"
+						:key="keyRefresh"
 						type="workflowHSTD"
 						@resfreshData="startFunction"
 					/>
@@ -47,17 +49,13 @@ export default {
 	setup() {
 		const workFlowConfigStore = useWorkFlowConfig();
 		const { configs } = storeToRefs(workFlowConfigStore);
-
+		const keyRefresh = ref(0);
 		const startFunction = async () => {
 			await workFlowConfigStore.getConfig();
-			console.log("config", configs);
+			keyRefresh.value++;
 		};
 		startFunction();
-		return {
-			configs,
-			workFlowConfigStore,
-			startFunction
-		};
+		return { keyRefresh, configs, workFlowConfigStore, startFunction };
 	},
 	methods: {},
 	beforeMount() {}
