@@ -268,7 +268,9 @@ export default {
 		}
 	},
 	created() {
-		this.localLstConfig = this.lstConfig;
+		if (this.lstConfig) {
+			this.localLstConfig = this.lstConfig.filter(i => i.isActive === 1);
+		}
 		const permission = this.$store.getters.currentPermissions;
 		// fix_permission
 		permission.forEach(value => {
