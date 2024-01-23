@@ -355,7 +355,7 @@ export default {
 				this.$toast
 			);
 			if (resp.data) {
-				this.message = "Cập nhật workflow thành công.";
+				this.message = "Cập nhật thời gian thành công.";
 				await this.$emit("resfreshData");
 				this.openNotification = true;
 				this.editingKey = "";

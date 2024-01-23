@@ -2,8 +2,10 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import PreCertificateConfig from "@/models/PreCertificateConfig";
+import { usePreCertificateStore } from "@/store/preCertificate";
 export const useWorkFlowConfig = defineStore("workFlowConfig", () => {
 	const configs = ref({ hstdConfig: {}, ycsbConfig: {} });
+	const preCertificateStore = usePreCertificateStore();
 	async function getConfig() {
 		const respconfig = await PreCertificateConfig.getConfig();
 
@@ -49,6 +51,7 @@ export const useWorkFlowConfig = defineStore("workFlowConfig", () => {
 				configs.value.hstdConfig = element.config;
 			} else {
 				configs.value.ycsbConfig = element.config;
+				preCertificateStore.functionUpdateWorkflow(element.config);
 			}
 		});
 

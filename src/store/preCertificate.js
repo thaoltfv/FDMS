@@ -136,6 +136,10 @@ export const usePreCertificateStore = defineStore(
 			}
 			return lstDataConfig.value.workflow;
 		}
+		async function functionUpdateWorkflow(data) {
+			jsonConfig.value = data;
+			lstDataConfig.value.workflow = data;
+		}
 		async function getLstAppraisers() {
 			const resp = await PreCertificate.getAppraisers();
 			let dataAppraise = [...resp.data];
@@ -669,7 +673,8 @@ export const usePreCertificateStore = defineStore(
 			getStartData,
 			updatePaymentFunction,
 			updateVueStore,
-			updatePermission
+			updatePermission,
+			functionUpdateWorkflow
 		};
 	},
 	{
