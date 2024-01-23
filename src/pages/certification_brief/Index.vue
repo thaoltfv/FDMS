@@ -213,6 +213,10 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
+
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
 import ModalAppraisal from "./component/modals/ModalAppraisal";
@@ -241,7 +245,6 @@ import KanboardStatus from "./component/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
 import IconBase from "@/components/IconBase.vue";
-const jsonConfig = require("../../../config/workflow.json");
 
 Vue.component("downloadExcel", JsonExcel);
 export default {
@@ -306,8 +309,6 @@ export default {
 			user_id: "",
 			countData: 0,
 			isAccept: false,
-			jsonConfig: jsonConfig,
-			principleConfig: [],
 			subStatusData: {},
 			subStatusDataTmp: {},
 			next_status: "",
@@ -346,6 +347,23 @@ export default {
 		KanboardStatus,
 		ModalNotificationCertificate,
 		ModalNotificationCertificateNote
+	},
+	setup() {
+		const workFlowConfigStore = useWorkFlowConfig();
+		const { configs } = storeToRefs(workFlowConfigStore);
+		const jsonConfig = ref({});
+		const principleConfig = ref([]);
+		const startFunction = async () => {
+			await workFlowConfigStore.getConfigByName("workflowHSTD");
+			jsonConfig.value = configs.value.hstdConfig;
+			if (jsonConfig.value && jsonConfig.value.principle) {
+				principleConfig.value = jsonConfig.value.principle.filter(
+					i => i.isActive === 1
+				);
+			}
+		};
+		startFunction();
+		return { jsonConfig, principleConfig };
 	},
 	created() {
 		// fix_permission
@@ -1192,11 +1210,6 @@ export default {
 		this.changeHeight();
 	},
 	mounted() {
-		if (this.jsonConfig && this.jsonConfig.principle) {
-			this.principleConfig = this.jsonConfig.principle.filter(
-				i => i.isActive === 1
-			);
-		}
 		const listElm = document.querySelector("#infinite-list");
 		listElm.addEventListener("scroll", e => {
 			if (

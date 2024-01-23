@@ -1311,6 +1311,7 @@
 			</div>
 		</div>
 		<Footer
+			v-if="jsonConfig"
 			:style="isMobile() ? { bottom: '60px' } : {}"
 			:key="form.status + '_' + form.sub_status"
 			:form="form"
@@ -1494,6 +1495,10 @@
 @import "../../../node_modules/leaflet/dist/leaflet.css";
 </style>
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
+
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
@@ -1534,7 +1539,6 @@ import Footer from "./component/FooterDetail.vue";
 import store from "@/store";
 import * as types from "@/store/mutation-types";
 import ModalAppraiseListVersion from "./component/modals/ModalAppraiseListVersion";
-const jsonConfig = require("../../../config/workflow.json");
 import IconBase from "@/components/IconBase.vue";
 
 Vue.use(Icon);
@@ -1645,7 +1649,6 @@ export default {
 			isCheckRealEstate: true,
 			isCheckConstruction: false,
 			isViewAutomationDocument: true,
-			jsonConfig: jsonConfig,
 			targetStatus: "",
 			targetSubStatus: "",
 			isHandleAction: false,
@@ -1676,6 +1679,17 @@ export default {
 				"Phiếu thu thập TSSS"
 			]
 		};
+	},
+	setup() {
+		const workFlowConfigStore = useWorkFlowConfig();
+		const { configs } = storeToRefs(workFlowConfigStore);
+		const jsonConfig = ref({});
+		const startFunction = async () => {
+			await workFlowConfigStore.getConfigByName("workflowHSTD");
+			jsonConfig.value = configs.value.hstdConfig;
+		};
+		startFunction();
+		return { jsonConfig };
 	},
 	beforeRouteEnter: async (to, from, next) => {
 		await CertificationBrief.getDetailCertificateBrief(to.query["id"])
