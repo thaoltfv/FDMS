@@ -248,6 +248,14 @@
 				</div>
 			</div>
 		</div>
+		<PaymentCertificateHistories
+			v-if="form"
+			:key="keyRender"
+			@getDetail="getDetail"
+			:form="form"
+			:permissionNotAllowEdit="!(editPayment && edit)"
+			:toast="$toast"
+		/>
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -1498,6 +1506,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useWorkFlowConfig } from "@/store/workFlowConfig";
+import PaymentCertificateHistories from "@/components/PreCertificate/PaymentCertificateHistories";
 
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
@@ -1545,6 +1554,7 @@ Vue.use(Icon);
 export default {
 	name: "detail_certification_brief",
 	components: {
+		PaymentCertificateHistories,
 		IconBase,
 		InputCategory,
 		InputCategorySearch,
@@ -1655,6 +1665,7 @@ export default {
 			editAppraiser: false,
 			editItemList: false,
 			editInfo: false,
+			editPayment: false,
 			printConfig: false,
 			profile: {},
 			config: {},
@@ -1682,14 +1693,10 @@ export default {
 	},
 	setup() {
 		const workFlowConfigStore = useWorkFlowConfig();
-		const { configs } = storeToRefs(workFlowConfigStore);
-		const jsonConfig = ref({});
-		const startFunction = async () => {
-			await workFlowConfigStore.getConfigByName("workflowHSTD");
-			jsonConfig.value = configs.value.hstdConfig;
-		};
-		startFunction();
-		return { jsonConfig };
+		const jsonConfig = ref(null);
+
+		const keyRender = ref(0);
+		return { jsonConfig, workFlowConfigStore, keyRender };
 	},
 	beforeRouteEnter: async (to, from, next) => {
 		await CertificationBrief.getDetailCertificateBrief(to.query["id"])
@@ -1902,6 +1909,30 @@ export default {
 		}
 	},
 	methods: {
+		async getDetail() {
+			await CertificationBrief.getDetailCertificateBrief(this.form.id)
+				.then(resp => {
+					if (resp.data) {
+						this.form = Object.assign(this.form, { ...resp.data });
+						this.keyRender++;
+					} else if (resp.error && resp.error.statusCode) {
+						this.$toast.open({
+							message: resp.error.statusCode,
+							type: "error",
+							position: "top-right",
+							duration: 5000
+						});
+					}
+				})
+				.catch(err => {
+					this.$toast.open({
+						message: err,
+						type: "error",
+						position: "top-right",
+						duration: 5000
+					});
+				});
+		},
 		getReport(type) {
 			let report = this.form.other_documents.find(i => i.description === type);
 			return report;
@@ -2988,6 +3019,9 @@ export default {
 					? dataJson[0].edit.appraise_item_list
 					: false;
 				this.editInfo = dataJson[0].edit.info ? dataJson[0].edit.info : false;
+				this.editPayment = dataJson[0].edit.payments
+					? dataJson[0].edit.payments
+					: false;
 				this.printConfig = dataJson[0].print;
 			}
 		},
@@ -3144,7 +3178,11 @@ export default {
 		}
 		this.setDocumentViewStatus();
 	},
-	mounted() {
+	async mounted() {
+		const config = await this.workFlowConfigStore.getConfigByName(
+			"workflowHSTD"
+		);
+		this.jsonConfig = config.hstdConfig;
 		this.changeEditStatus();
 		this.checkVersion = this.form.checkVersion;
 	},
@@ -3422,7 +3460,7 @@ export default {
 	&-history {
 		position: fixed;
 		right: 0;
-		top: 170px;
+		top: 210px;
 		z-index: 100;
 		border-radius: 5px 0 0 5px;
 		padding: 0.5rem 0.3rem;

@@ -503,7 +503,6 @@ export const usePreCertificateStore = defineStore(
 
 			const updatedPayments = data.map(element => {
 				const updatedElement = { ...element };
-				updatedElement.pre_certificate_id = dataPC.value.id;
 				if (moment(updatedElement.pay_date, "DD/MM/YYYY", true).isValid()) {
 					updatedElement.pay_date = moment(
 						updatedElement.pay_date,
