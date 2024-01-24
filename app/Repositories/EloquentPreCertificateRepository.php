@@ -986,7 +986,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $preCertificateModel->certificate_id = $certificateId;
                         $preCertificateModel->save();
                     }
-                
+                    $preCertificatePayments = PreCertificatePayments::where('pre_certificate_id',$preCertificate->id)->get();
+
+                    foreach ($preCertificatePayments as $payment) {
+                        $payment->certificate_id = $certificateId;
+                        $payment->save();
+                    }
+
                     $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
                                                         ->whereNull('deleted_at')
                                                         ->get();
@@ -1120,7 +1126,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         });
     }
     
-     public function updatePayments($id, $request)
+    public function updatePayments($id, $request)
     {
         return DB::transaction(function () use ($id, $request) {
             try {
@@ -1142,7 +1148,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             PreCertificatePayments::where('id', $item['id'])->update($item);
                         } else {
                             $item['created_by'] = $user->id;
-                            $item['pre_certificate_id'] = $id;
                             PreCertificatePayments::create($item);
                         }
                     } catch (\Exception $e) {
