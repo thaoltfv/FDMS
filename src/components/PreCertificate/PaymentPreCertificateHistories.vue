@@ -197,6 +197,7 @@ export default {
 		const openModalDelete = ref(false);
 		const paymentDelete = ref({ id: null, isUpload: false });
 		const dataForm = ref(_.cloneDeep(dataPC.value));
+		const dataOriginal = ref(null);
 
 		const permissionNotAllowEdit = ref(false);
 		const showDrawer = async () => {
@@ -205,6 +206,7 @@ export default {
 			);
 			const temp = await preCertificateStore.getPreCertificate(dataPC.value.id);
 			dataForm.value = ref(_.cloneDeep(temp));
+			dataOriginal.value = ref(_.cloneDeep(dataForm.value.payments));
 			drawer.value = true;
 		};
 		const closeDrawer = () => {
@@ -272,6 +274,7 @@ export default {
 			drawer,
 			dataForm,
 			preCertificateStore,
+			dataOriginal,
 
 			showDrawer,
 			closeDrawer,
@@ -307,13 +310,26 @@ export default {
 				});
 				return;
 			}
-
-			for (let index = 0; index < this.dataForm.payments.length; index++) {
-				const element = this.dataForm.payments[index];
+			const temp = _.differenceWith(
+				this.dataForm.payments,
+				this.dataOriginal,
+				_.isEqual
+			);
+			for (let index = 0; index < temp.length; index++) {
+				const element = temp[index];
 				if (!element.pay_date || element.amount < 0) {
 					this.$toast.open({
 						message:
 							"Vui lòng nhập đầy đủ thông tin thanh toán và số tiền phải lớn hơn hoặc bằng 0",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+					return;
+				}
+				if (!this.dataForm.id) {
+					this.$toast.open({
+						message: "Có lỗi xảy ra vui lòng thử lại sau",
 						type: "error",
 						position: "top-right",
 						duration: 3000
@@ -325,8 +341,17 @@ export default {
 					element.certificate_id = this.dataForm.certificate_id;
 				}
 			}
+			if (temp && temp.length === 0) {
+				this.$toast.open({
+					message: "Không có thay đổi nào để cập nhật thông tin thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 			const res = await this.preCertificateStore.updatePaymentFunction(
-				this.dataForm.payments,
+				temp,
 				true
 			);
 			if (res.data === null) {

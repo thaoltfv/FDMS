@@ -1914,7 +1914,7 @@ export default {
 				.then(resp => {
 					if (resp.data) {
 						this.form = Object.assign(this.form, { ...resp.data });
-						this.keyRender++;
+						// this.keyRender++;
 					} else if (resp.error && resp.error.statusCode) {
 						this.$toast.open({
 							message: resp.error.statusCode,

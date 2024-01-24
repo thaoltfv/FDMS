@@ -171,7 +171,6 @@
 </template>
 <script>
 import { ref } from "vue";
-import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import _ from "lodash";
 import InputCurrency from "@/components/Form/InputCurrency";
@@ -210,14 +209,13 @@ export default {
 		const drawer = ref(false);
 		const openModalDelete = ref(false);
 		const paymentDelete = ref({ id: null, isUpload: false });
-		const dataForm = ref(_.cloneDeep(props.form));
-
+		const dataForm = ref(props.form);
+		const dataOriginal = ref(null);
 		const showDrawer = async () => {
 			await CertificationBrief.getDetailCertificateBrief(props.form.id)
 				.then(resp => {
-					console.log("resp", resp);
 					if (resp.data) {
-						dataForm.value = Object.assign(dataForm.value, { ...resp.data });
+						dataForm.value = ref(_.cloneDeep({ ...resp.data }));
 						if (dataForm.value.payments.length === 0) {
 							dataForm.value.payments.push({
 								id: null,
@@ -241,6 +239,7 @@ export default {
 								dataForm.value.amountPaid + parseFloat(element.amount);
 							dataForm.value.debtRemain -= element.amount;
 						}
+						dataOriginal.value = ref(_.cloneDeep(dataForm.value.payments));
 						drawer.value = true;
 					} else if (resp.error && resp.error.statusCode) {
 						props.toast.open({
@@ -304,7 +303,7 @@ export default {
 			dataForm.value.debtRemain = debt_remain;
 			dataForm.value.amountPaid = paid;
 			if (debt_remain < 0) {
-				other.value.toast.open({
+				props.toast.open({
 					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
 					type: "error",
 					position: "top-right",
@@ -320,6 +319,7 @@ export default {
 				pre_date: null,
 				amount: 0
 			});
+			keyRender.value++;
 		};
 		const deletePaymentDialog = (payment, index) => {
 			openModalDelete.value = true;
@@ -343,6 +343,7 @@ export default {
 			drawer,
 			dataForm,
 			preCertificateStore,
+			dataOriginal,
 
 			showDrawer,
 			closeDrawer,
@@ -378,9 +379,13 @@ export default {
 				});
 				return;
 			}
-
-			for (let index = 0; index < this.dataForm.payments.length; index++) {
-				const element = this.dataForm.payments[index];
+			const temp = _.differenceWith(
+				this.dataForm.payments,
+				this.dataOriginal,
+				_.isEqual
+			);
+			for (let index = 0; index < temp.length; index++) {
+				const element = temp[index];
 				if (!element.pay_date || element.amount < 0) {
 					this.$toast.open({
 						message:
@@ -403,9 +408,17 @@ export default {
 				element.pre_certificate_id = this.dataForm.pre_certificate_id || null;
 				element.certificate_id = this.dataForm.id;
 			}
-
+			if (temp && temp.length === 0) {
+				this.$toast.open({
+					message: "Không có thay đổi nào để cập nhật thông tin thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 			const res = await this.preCertificateStore.updatePaymentFunction(
-				this.dataForm.payments,
+				temp,
 				true
 			);
 			if (res.data === null) {
