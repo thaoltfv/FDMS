@@ -3109,7 +3109,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.apartment.apartmentHasAssets',
             'realEstate.apartment.lastVersion',
             'realEstate.apartment.assetPrice',
-            'payments:id,pay_date,amount,for_mayment_of,pre_certificate_id,certificate_id',
+            'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
         ];
         $result = $this->model->query()
             ->with($with)
