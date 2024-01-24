@@ -339,4 +339,9 @@ class Certificate extends Model
     {
         return $this->belongsToMany(CertificateRealEstate::class, CertificateHasRealEstate::class,'certificate_id', 'real_estate_id')->orderBy('real_estate_id');
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(PreCertificatePayments::class, 'certificate_id');
+    }
 }
