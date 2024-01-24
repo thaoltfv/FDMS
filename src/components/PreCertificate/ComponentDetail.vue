@@ -11,12 +11,7 @@
 						<div class="row">
 							<div class=" color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
-								<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
-								<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
-								<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
-								<span v-if="dataPC.status === 4">Thương thảo</span>
-								<span v-if="dataPC.status === 5">Hoàn thành</span>
-								<span v-if="dataPC.status === 6">Hủy</span>
+								<span>{{ statusDescription }}</span>
 							</div>
 							<div
 								v-if="dataPC.certificate_id"
@@ -877,6 +872,16 @@ export default {
 
 	created() {},
 	computed: {
+		statusDescription() {
+			if (this.jsonConfig) {
+				const status = this.jsonConfig.principle.find(
+					i => i.status === this.dataPC.status
+				);
+				return status ? status.description : "";
+			}
+
+			return "";
+		},
 		getHistoryTextColor() {
 			return this.historyList.map(item => {
 				return this.loadColor(item);

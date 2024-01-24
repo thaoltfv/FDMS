@@ -11,15 +11,7 @@
 						<div class="row">
 							<div class=" color_content card-status">
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
-								<span v-if="form.status === 1">Tiếp nhận hồ sơ</span>
-								<span v-if="form.status === 2">Thẩm định</span>
-								<span v-if="form.status === 6">Kiểm soát</span>
-								<span v-if="form.status === 3">Duyệt giá</span>
-								<span v-if="form.status === 7">Duyệt phát hành</span>
-								<span v-if="form.status === 8">In hồ sơ</span>
-								<span v-if="form.status === 9">Bàn giao khách hàng</span>
-								<span v-if="form.status === 4">Hoàn thành</span>
-								<span v-if="form.status === 5">Hủy</span>
+								<span>{{ statusDescription }}</span>
 							</div>
 							<div
 								v-if="form.pre_certificate_id"
@@ -1758,6 +1750,19 @@ export default {
 		this.getDictionary();
 	},
 	computed: {
+		statusDescription() {
+			if (this.jsonConfig) {
+				const status = this.jsonConfig.principle.find(
+					i =>
+						i.status === this.form.status &&
+						i.sub_status === this.form.sub_status
+				);
+				return status ? status.description : "";
+			}
+
+			return "";
+		},
+
 		columnAssets() {
 			let dataColumn = [
 				{
