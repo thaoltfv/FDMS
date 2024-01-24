@@ -166,6 +166,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
 
+use App\Models\PreCertificatePayments;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -3108,6 +3109,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.apartment.apartmentHasAssets',
             'realEstate.apartment.lastVersion',
             'realEstate.apartment.assetPrice',
+            'payments:id,pay_date,amount,for_mayment_of,pre_certificate_id,certificate_id',
         ];
         $result = $this->model->query()
             ->with($with)

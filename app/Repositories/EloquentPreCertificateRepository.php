@@ -661,19 +661,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
-         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+        if (isset($timeFilterFrom) && isset($timeFilterTo)) {
                 $startDate = date('Y-m-d', strtotime($timeFilterFrom));
                 $endDate = date('Y-m-d', strtotime($timeFilterTo));
-                $result = $result->whereBetween('created_at', [$startDate, $endDate])
-                                ->whereBetween('updated_at', [$startDate, $endDate]);
-            }   elseif (isset($timeFilterFrom)) {
-                    $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-                    $result = $result->where('created_at', '>=', $startDate)
-                                    ->where('updated_at', '>=', $startDate);
+                $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
+                                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
+            } elseif (isset($timeFilterFrom)) {
+                $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+                $result = $result->where('pre_certificates.created_at', '>=', $startDate)
+                                ->where('pre_certificates.updated_at', '>=', $startDate);
             } elseif (isset($timeFilterTo)) {
-                    $endDate = date('Y-m-d', strtotime($timeFilterTo));
-                    $result = $result->where('created_at', '<=', $endDate)
-                                ->where('updated_at', '<=', $endDate);
+                $endDate = date('Y-m-d', strtotime($timeFilterTo));
+                $result = $result->where('pre_certificates.created_at', '<=', $endDate)
+                                ->where('pre_certificates.updated_at', '<=', $endDate);
             }
                     
             if (isset($selectedStatus) && !empty($selectedStatus)) {
@@ -986,7 +986,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $preCertificateModel->certificate_id = $certificateId;
                         $preCertificateModel->save();
                     }
-                
+                    $preCertificatePayments = PreCertificatePayments::where('pre_certificate_id',$preCertificate->id)->get();
+
+                    foreach ($preCertificatePayments as $payment) {
+                        $payment->certificate_id = $certificateId;
+                        $payment->save();
+                    }
+
                     $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
                                                         ->whereNull('deleted_at')
                                                         ->get();
@@ -1120,7 +1126,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         });
     }
     
-     public function updatePayments($id, $request)
+    public function updatePayments($id, $request)
     {
         return DB::transaction(function () use ($id, $request) {
             try {
@@ -1142,7 +1148,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             PreCertificatePayments::where('id', $item['id'])->update($item);
                         } else {
                             $item['created_by'] = $user->id;
-                            $item['pre_certificate_id'] = $id;
                             PreCertificatePayments::create($item);
                         }
                     } catch (\Exception $e) {

@@ -24,7 +24,8 @@ class PreCertificatePayments extends Model
         'pay_date',
         'created_by',
         'amount',
-        'for_payment_of'
+        'for_payment_of',
+        'certificate_id'
     ];
 	
 	public function createdBy(): BelongsTo
