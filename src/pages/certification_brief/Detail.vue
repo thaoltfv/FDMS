@@ -1506,7 +1506,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useWorkFlowConfig } from "@/store/workFlowConfig";
-import PaymentCertificateHistories from "@/components/PreCertificate/PaymentCertificateHistories";
+import PaymentCertificateHistories from "./component/PaymentCertificateHistories";
 
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
