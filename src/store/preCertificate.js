@@ -500,19 +500,25 @@ export const usePreCertificateStore = defineStore(
 
 		async function updatePaymentFunction(data, isReturn = false) {
 			other.value.isSubmit = true;
-			for (let index = 0; index < data.length; index++) {
-				const element = data[index];
-				if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
-					element.pay_date = moment(element.pay_date, "DD/MM/YYYY").format(
-						"YYYY-MM-DD"
-					);
-				}
-			}
 
-			const res = await PreCertificate.updatePayments(data, dataPC.value.id);
+			const updatedPayments = data.map(element => {
+				const updatedElement = { ...element };
+				updatedElement.pre_certificate_id = dataPC.value.id;
+				if (moment(updatedElement.pay_date, "DD/MM/YYYY", true).isValid()) {
+					updatedElement.pay_date = moment(
+						updatedElement.pay_date,
+						"DD/MM/YYYY"
+					).format("YYYY-MM-DD");
+				}
+				return updatedElement;
+			});
+
+			const res = await PreCertificate.updatePayments(updatedPayments, 9999);
+
 			if (isReturn) {
 				return res;
 			}
+
 			if (res.data && res.data.error === false) {
 				other.value.toast.open({
 					message: "Lưu thông tin thanh toán thành công",
@@ -533,6 +539,7 @@ export const usePreCertificateStore = defineStore(
 					position: "top-right"
 				});
 			}
+
 			other.value.isSubmit = false;
 		}
 		function resetData() {

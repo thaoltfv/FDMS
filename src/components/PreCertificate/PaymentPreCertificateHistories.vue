@@ -320,10 +320,14 @@ export default {
 					});
 					return;
 				}
+				element.pre_certificate_id = this.dataForm.id;
+				if (this.dataForm.certificate_id) {
+					element.certificate_id = this.dataForm.certificate_id;
+				}
 			}
 			const res = await this.preCertificateStore.updatePaymentFunction(
 				this.dataForm.payments,
-				this.dataForm.id
+				true
 			);
 			if (res.data === null) {
 				this.$toast.open({
@@ -332,7 +336,7 @@ export default {
 					position: "top-right"
 				});
 				this.$emit("updatePayments");
-				this.drawer = false;
+				// this.drawer = false;
 			} else if (res.error) {
 				this.$toast.open({
 					message: `${res.error.message}`,

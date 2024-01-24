@@ -225,7 +225,7 @@
 				</div>
 			</div>
 		</div>
-		<PaymentHistories @updatePayments="updatePayments" />
+		<PaymentPreCertificateHistories @updatePayments="updatePayments" />
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -554,7 +554,7 @@ import { Timeline, Drawer } from "ant-design-vue";
 import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
-import PaymentHistories from "@/components/PreCertificate/PaymentHistories";
+import PaymentPreCertificateHistories from "@/components/PreCertificate/PaymentPreCertificateHistories";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
@@ -578,7 +578,7 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
-		PaymentHistories,
+		PaymentPreCertificateHistories,
 		IconBase,
 		OtherFile,
 		InputCategory,
