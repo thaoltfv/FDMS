@@ -229,6 +229,34 @@ export default {
 	},
 	computed: {
 		columns() {
+			let column = [
+				{
+					title: "Thời gian thực hiện",
+					align: "left",
+					scopedSlots: { customRender: "process_time" },
+					dataIndex: "process_time",
+					width: "60%"
+				}
+			];
+			if (this.type !== "workflowHSTD") {
+				column = [
+					{
+						title: "Thời gian thực hiện",
+						align: "left",
+						scopedSlots: { customRender: "process_time" },
+						dataIndex: "process_time",
+						width: "30%"
+					},
+
+					{
+						title: "Thời gian trước khi warning",
+						align: "left",
+						scopedSlots: { customRender: "expire_in" },
+						dataIndex: "expire_in",
+						width: "30%"
+					}
+				];
+			}
 			return [
 				{
 					title: "TT",
@@ -243,21 +271,8 @@ export default {
 					dataIndex: "description",
 					width: "28%"
 				},
-				{
-					title: "Thời gian thực hiện",
-					align: "left",
-					scopedSlots: { customRender: "process_time" },
-					dataIndex: "process_time",
-					width: "30%"
-				},
 
-				{
-					title: "Thời gian trước khi warning",
-					align: "left",
-					scopedSlots: { customRender: "expire_in" },
-					dataIndex: "expire_in",
-					width: "30%"
-				},
+				...column,
 				{
 					title: "",
 					scopedSlots: { customRender: "action" },

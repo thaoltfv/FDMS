@@ -526,6 +526,7 @@ export default {
 					)
 				) {
 					check.statusExpire = true;
+					check.inExpiringState = false;
 				}
 			}
 			return check;
