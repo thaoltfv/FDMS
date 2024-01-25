@@ -15,62 +15,23 @@
 			<template v-slot:default>
 				<a-menu
 					:default-selected-keys="['1']"
+					:default-open-keys="['status']"
 					mode="inline"
 					style="width:320px"
 				>
-					<a-sub-menu key="ots">
-						<span slot="title">
-							<!-- <a-icon type="mail" /> -->
-							<span>Trạng thái chuyển chính thức</span></span
-						>
-						<a-menu-item
-							v-if="jsonConfig.filterOTS"
-							v-for="(option, index) in jsonConfig.filterOTS"
-							:key="index"
-						>
-							<a-checkbox
-								v-model="filterKanban.selectedOfficialTransferStatus[index]"
-								>{{ option.text }}</a-checkbox
-							>
-						</a-menu-item>
-					</a-sub-menu>
 					<a-sub-menu key="status">
 						<span slot="title">
 							<!-- <a-icon type="appstore" /> -->
-							<span>Trạng thái YCSB</span></span
+							<span>{{ title || "" }}</span></span
 						>
 						<a-menu-item
-							v-if="lstFilterStatus"
+							v-if="lstFilterStatus && lstFilterStatus.length > 0"
 							v-for="(option, index) in lstFilterStatus"
 							:key="index"
 						>
 							<a-checkbox v-model="option.checked" :value="option.value">{{
 								option.text
 							}}</a-checkbox>
-						</a-menu-item>
-					</a-sub-menu>
-					<a-sub-menu key="time">
-						<span slot="title">
-							<!-- <a-icon type="setting" /> -->
-							<span>Thời gian</span></span
-						>
-						<a-menu-item>
-							<div class="row" style="width:250px">
-								<a-date-picker
-									placeholder="Từ ngày"
-									v-model="filterKanban.timeFilter.from"
-									format="DD-MM-YYYY"
-								></a-date-picker>
-							</div> </a-menu-item
-						><a-menu-item>
-							<div class="row" style="width:250px">
-								<a-date-picker
-									placeholder="Đến ngày"
-									v-model="filterKanban.timeFilter.to"
-									:disabledDate="disabledToDate"
-									format="DD-MM-YYYY"
-								></a-date-picker>
-							</div>
 						</a-menu-item>
 					</a-sub-menu>
 				</a-menu>
@@ -98,8 +59,7 @@
 <script>
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
-import { usePreCertificateStore } from "@/store/preCertificate";
-import moment from "moment";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
 import { BDropdown, BDropdownItem, BButton } from "bootstrap-vue";
 export default {
 	components: {
@@ -107,21 +67,23 @@ export default {
 		"b-dropdown-item": BDropdownItem,
 		"b-button": BButton
 	},
-
+	props: {
+		title: String
+	},
 	data() {
 		return { isCloseable: false };
 	},
 	setup() {
-		const preCertificateStore = usePreCertificateStore();
-		const { filter, jsonConfig, filterKanban } = storeToRefs(
-			preCertificateStore
-		);
+		const workFlowConfigStore = useWorkFlowConfig();
+		const { configs } = storeToRefs(workFlowConfigStore);
+		const jsonConfig = ref({});
+		const filter = ref([]);
 		const lstFilterStatus = ref([]);
-
-		const startSetup = async () => {
-			if (!jsonConfig.value) {
-				jsonConfig.value = await preCertificateStore.getConfig();
-			}
+		const lstStatusChosen = ref([]);
+		const startFunction = async () => {
+			if (!configs.value.hstdConfig)
+				await workFlowConfigStore.getConfigByName("workflowHSTD");
+			jsonConfig.value = configs.value.hstdConfig;
 			if (jsonConfig.value && jsonConfig.value.principle) {
 				lstFilterStatus.value = jsonConfig.value.principle
 					.filter(element => element.isActive === 1)
@@ -132,16 +94,16 @@ export default {
 					}));
 			}
 		};
-		startSetup();
+		startFunction();
+
 		const checkedValues = ref([]);
 
 		return {
-			filterKanban,
 			checkedValues,
 			jsonConfig,
 			filter,
-			preCertificateStore,
-			lstFilterStatus
+			lstFilterStatus,
+			lstStatusChosen
 		};
 	},
 
@@ -153,18 +115,12 @@ export default {
 				this.$refs.dropdown.hide();
 			}
 		},
-		disabledToDate(current) {
-			// Disable dates before the "from" date
-			if (!this.filterKanban.timeFilter.from) return false;
-			let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
-			return current && current < endOfDay;
-		},
 		async searchFunction() {
-			this.filterKanban.selectedStatus = this.lstFilterStatus
+			let result = this.lstFilterStatus
 				.filter(option => option.checked === true)
-				.map(option => option.value);
-			await this.preCertificateStore.getPreCertificateAll();
-			this.$emit("notifi-kanban");
+				.map(option => String(option.value));
+
+			this.$emit("search", result);
 		},
 		closeMe() {
 			this.isCloseable = true;

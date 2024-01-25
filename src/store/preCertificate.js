@@ -346,7 +346,6 @@ export const usePreCertificateStore = defineStore(
 		const isLoading = ref(false);
 		async function getPreCertificateAll(type = "table") {
 			isLoading.value = true;
-			const tempstatus = [];
 			let tempots = [];
 			if (
 				this.filterKanban.selectedOfficialTransferStatus[0] == true &&
@@ -358,18 +357,11 @@ export const usePreCertificateStore = defineStore(
 			} else if (this.filterKanban.selectedOfficialTransferStatus[1] == true) {
 				tempots = 1;
 			}
-			for (
-				let index = 0;
-				index < filterKanban.value.selectedStatus.length;
-				index++
-			) {
-				const element = filterKanban.value.selectedStatus[index];
-				if (element) tempstatus.push(index + 1);
-			}
+
 			const temp = {
 				search: filter.value.search,
 				data: {
-					status: tempstatus,
+					status: filterKanban.value.selectedStatus,
 					ots: tempots,
 					timeFilter: {
 						from: filterKanban.value.timeFilter.from,

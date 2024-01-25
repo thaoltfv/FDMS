@@ -6,7 +6,7 @@ import { usePreCertificateStore } from "@/store/preCertificate";
 export const useWorkFlowConfig = defineStore(
 	"workFlowConfig",
 	() => {
-		const configs = ref({ hstdConfig: {}, ycsbConfig: {} });
+		const configs = ref({ hstdConfig: null, ycsbConfig: null });
 		const preCertificateStore = usePreCertificateStore();
 		async function getConfig() {
 			const respconfig = await PreCertificateConfig.getConfig();
