@@ -2647,6 +2647,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $query = request()->get('query');
         $page = request()->get('page');
         $limit = request()->get('limit');
+        $status = request()->get('status');
 
         if (!empty($query)) {
             $query = json_decode($query);
@@ -2810,7 +2811,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 });
             });
         }
-
+        if (!empty($status)) {
+            $result = $result->whereIn('status', $status);
+        }
         if (isset($query->public_date_from) && !empty($query->public_date_from)) {
             $result =  $result->where('updated_at', '>=', date('Y-m-d', strtotime($query->public_date_from)) . ' 00:00:00');
         }
