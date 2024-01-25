@@ -8,7 +8,7 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class="row">
+						<div class="row" style="display: flex;align-items: center;">
 							<div class=" color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
@@ -16,8 +16,8 @@
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
-								class=" card-status-certificate ml-3"
 								id="certificate_id"
+								class="ml-3 mr-4 arrowBox arrow-right"
 							>
 								<icon-base
 									name="nav_hstd"
@@ -2097,6 +2097,30 @@ export default {
 	p {
 		margin-bottom: unset !important;
 	}
+}
+
+.arrowBox {
+	margin-top: -10px;
+	position: relative;
+	background: #fbaf1c;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 600;
+	font-size: 16px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 5px 0 0;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	right: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-left: 11px solid #fbaf1c;
 }
 
 .btn {

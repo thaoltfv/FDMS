@@ -41,7 +41,7 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<div class="row ml-0">
+								<div class=" ml-0">
 									<span
 										@click="handleDetailCertificate(element.id)"
 										class="content_id"
@@ -50,12 +50,14 @@
 										"
 										>{{ element.slug }}</span
 									>
-									<span
+								</div>
+								<div class="row">
+									<div
 										v-if="element.pre_certificate_id"
 										@click="
 											handleDetailPreCertificate(element.pre_certificate_id)
 										"
-										class=" card-status-certificate ml-2"
+										class="arrowBox arrow-right "
 										:id="`${element.pre_certificate_id + element.id}`"
 									>
 										<icon-base
@@ -69,14 +71,16 @@
 												`Được chuyển tiếp từ YCSB_${element.pre_certificate_id}`
 											}}</b-tooltip
 										>
-									</span>
+									</div>
+									<div>
+										<img
+											v-if="checkDateExpired(element)"
+											class="mr-2 icon_expired"
+											src="@/assets/icons/ic_expire_calender.svg"
+											alt="ic_expire_calender"
+										/>
+									</div>
 								</div>
-								<img
-									v-if="checkDateExpired(element)"
-									class="mr-2 icon_expired"
-									src="@/assets/icons/ic_expire_calender.svg"
-									alt="ic_expire_calender"
-								/>
 							</div>
 							<div class="property-content mb-2 d-flex color_content">
 								<div class="label_container d-flex">
@@ -1359,6 +1363,31 @@ export default {
 		border: 1px solid #26bf7f;
 		background-color: #eafff6;
 	}
+}
+
+.arrowBox {
+	position: relative;
+	background: #007ec6;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 600;
+	font-size: 16px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 2px 0 0;
+	margin-right: -5px;
+	margin-top: 1px;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	left: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-right: 11px solid #007ec6;
 }
 .container_kanban {
 	height: fit-content;

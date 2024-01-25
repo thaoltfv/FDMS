@@ -8,16 +8,16 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class="row">
+						<div class="row" style="display: flex;align-items: center;">
 							<div class=" color_content card-status">
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
 							<div
 								v-if="form.pre_certificate_id"
-								@click="handleDetailPreCertificate(form.pre_certificate_id)"
-								class=" card-status-certificate ml-3"
 								id="pre_certificate_id"
+								@click="handleDetailPreCertificate(form.pre_certificate_id)"
+								class=" mr-4 arrowBox arrow-right"
 							>
 								<icon-base
 									name="nav_ycsb"
@@ -3284,25 +3284,31 @@ export default {
 		margin-bottom: 10px;
 	}
 }
-
-.card-status-certificate {
-	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	background: #ffffff;
-	margin-bottom: 10px;
+.arrowBox {
+	margin-top: -10px;
+	position: relative;
+	background: #007ec6;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
 	font-weight: 600;
-	padding: 10px;
 	font-size: 16px !important;
-	color: darkgray;
+	display: inline-block;
 	cursor: pointer;
-	@media (max-width: 768px) {
-		margin-bottom: 10px;
-	}
-
-	@media (max-width: 418px) {
-		margin-bottom: 10px;
-	}
+	padding: 0 10px 0 0;
+	margin-left: 30px;
 }
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	left: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-right: 11px solid #007ec6;
+}
+
 .form-group-container {
 	margin-top: 10px;
 }

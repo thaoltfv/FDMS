@@ -27,14 +27,14 @@
 					:style="isMobile ? { 'padding-top': '0' } : {}"
 				>
 					<div class="detail_certificate_1 col-12 mb-2">
-						<div class="col-12 d-flex mb-2 row">
+						<div class="col-12 d-flex mb-2 row  justify-content-between">
 							<span class="content_id content_id_primary class_p">{{
 								`YCSB_${dataPC.id}`
 							}}</span>
 							<span
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
-								class=" card-status-certificate ml-2"
+								class=" arrowBox arrow-right "
 								id="certificate_id"
 							>
 								<icon-base name="nav_hstd" class="item-icon svg-inline--fa" />
@@ -951,6 +951,31 @@ export default {
 	padding-bottom: 0.5rem;
 	font-weight: 600;
 }
+
+.arrowBox {
+	position: relative;
+	background: #fbaf1c;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 400;
+	font-size: 13px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 5px 0 0;
+	margin-right: 5px;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	right: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-left: 11px solid #fbaf1c;
+}
+
 .row {
 	margin-right: unset !important;
 	margin-left: unset !important;
@@ -999,13 +1024,6 @@ export default {
 	@media (max-width: 767px) {
 		margin-top: 10px;
 	}
-}
-.card-status-certificate {
-	border-radius: 5px;
-	padding: 2px 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	color: darkgray;
-	cursor: pointer;
 }
 .btn_group {
 	@media (max-width: 767px) {
