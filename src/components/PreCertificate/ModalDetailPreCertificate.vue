@@ -37,7 +37,7 @@
 								class=" arrowBox arrow-right "
 								id="certificate_id"
 							>
-								<icon-base name="nav_hstd" class="item-icon svg-inline--fa" />
+								<icon-base name="nav_hstd_2" class="item-icon svg-inline--fa" />
 								{{ `HTSD_${dataPC.certificate_id}` }}
 								<b-tooltip target="certificate_id" placement="right">{{
 									`Đã chuyển chính thức HTSD_${dataPC.certificate_id}`

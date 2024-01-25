@@ -20,7 +20,7 @@
 								class="ml-3 mr-4 arrowBox arrow-right"
 							>
 								<icon-base
-									name="nav_hstd"
+									name="nav_hstd_2"
 									width="20px"
 									height="20px"
 									class="item-icon svg-inline--fa"

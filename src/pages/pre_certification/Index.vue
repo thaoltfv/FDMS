@@ -59,7 +59,7 @@
 										:id="`${element.certificate_id + element.id}`"
 									>
 										<icon-base
-											name="nav_hstd"
+											name="nav_hstd_2"
 											class="item-icon svg-inline--fa"
 										/>
 										<b-tooltip
