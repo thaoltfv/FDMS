@@ -998,7 +998,10 @@ export default {
 		async getDataWorkFlow(search = "") {
 			this.isLoading = true;
 			try {
-				const resp = await CertificationBrief.getListKanbanCertificate(search);
+				const resp = await CertificationBrief.getListKanbanCertificate(
+					search,
+					this.search_kanban ? this.search_kanban.status : null
+				);
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
 					this.listCertificateDraftTemp = resp.data.HSTD.filter(
@@ -1062,7 +1065,10 @@ export default {
 		async getDataWorkFlow2(search = "") {
 			this.isLoading = true;
 			try {
-				const resp = await CertificationBrief.getListKanbanCertificate(search);
+				const resp = await CertificationBrief.getListKanbanCertificate(
+					search,
+					this.search_kanban ? this.search_kanban.status : null
+				);
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
 					if (this.principleConfig.length > 0) {

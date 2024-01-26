@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!isMobile()" class="main-wrapper-new">
-		<a-tabs @change="callback" default-active-key="2">
+		<a-tabs @change="callback" default-active-key="2" style="height: 100%;">
 			<a-tab-pane key="1">
 				<span slot="tab">
 					<img src="@/assets/icons/ic_table.svg" alt="table" />
@@ -348,7 +348,13 @@ export default {
 		},
 		onChangeStatus(value) {
 			this.selectedStatus = value;
+			if (this.search_kanban) {
+				this.search_kanban.status = value;
+			} else {
+				this.search_kanban = { status: value };
+			}
 			this.getCertificateAll();
+			this.render_kanban += 1;
 		},
 		async export30daysBefore() {
 			this.form.fromDate = await moment(
@@ -472,6 +478,7 @@ export default {
 	border-radius: 5px;
 	margin: 12px;
 	padding: 22px 12px;
+	height: 100vh;
 
 	.index-screen-button {
 		img {
