@@ -567,13 +567,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
-            'cancelReason',
+            'cancelReason:id,description',
             'otherDocuments',
-            'preType'
+            'preType:id,description',
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
-            ->leftjoin('users', function ($join) {
+        ->whereHas('otherDocuments', function ($query) {
+            $query->whereNull('is_deleted');
+        })    
+        ->leftjoin('users', function ($join) {
                 $join->on('pre_certificates.created_by', '=', 'users.id')
                     ->select(['id', 'image'])
                     ->limit(1);
@@ -928,6 +931,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'status',
                     'deleted_at',
                     'commission_fee',
+                    'pre_type_id',
                 ];
                 $certificateKey = [
                     'petitioner_name',
@@ -954,6 +958,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'note',
                     'created_by',
                     'document_type',
+                    'total_preliminary_value',
+                    'pre_type_id',
                 ];
 
                 $user = CommonService::getUser();
@@ -998,7 +1004,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                                         ->get();
                     if ($documents->count() > 0) {
                         foreach ($documents as $document) {
-                            if ($document->type_document == 'Appendix') {
                                 $item = [
                                     'certificate_id' => $certificateId,
                                     'name' => $document->name,
@@ -1007,10 +1012,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                     'size' => $document->size,
                                     'description' => 'appendix',
                                     'created_by' => $user->id,
+                                    'type_document' => $document->type_document, 
                                 ];
+
                                 $item = new CertificateOtherDocuments($item);
                                 QueryBuilder::for($item)->insert($item->attributesToArray());
-                            }
                         }
                     }
 
@@ -1061,37 +1067,27 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $cancel_reason = isset($request['cancel_reason']) ? $request['cancel_reason'] : null;
 
                 if (isset($status)) {
+                    $updateArray = [
+                        'status' => $status,
+                        'status_updated_at' => date('Y-m-d H:i:s'),
+                        'status_expired_at' => $status_expired_at,
+                    ];
+
                     if (isset($cancel_reason)) {
-                        $result = $this->model->query()
-                            ->where('id', '=', $id)
-                            ->update([
-                                'status' => $status,
-                                'status_updated_at' => date('Y-m-d H:i:s'),
-                                'status_expired_at' => $status_expired_at,
-                                'cancel_reason' => $cancel_reason,
-                            ]);
+                        $updateArray['cancel_reason'] = $cancel_reason;
                     } else if (isset($total_preliminary_value)) {
-                        $result = $this->model->query()
-                            ->where('id', '=', $id)
-                            ->update([
-                                'status' => $status,
-                                'status_updated_at' => date('Y-m-d H:i:s'),
-                                'status_expired_at' => $status_expired_at,
-                                'total_preliminary_value' => $total_preliminary_value,
-                            ]);
-                    } else {
-                        $updateArray = [
-                            'status' => $status,
-                            'status_updated_at' => date('Y-m-d H:i:s'),
-                            'status_expired_at' => $status_expired_at,
-                        ];
-                        if ($status == 1 && $preCertificate->cancel_reason != null) {
-                            $updateArray['cancel_reason'] = null;
-                        }
-                        $result = $this->model->query()
-                                ->where('id', '=', $id)
-                                ->update($updateArray);
+                        $updateArray['total_preliminary_value'] = $total_preliminary_value;
+                    } else if ($status == 1 && $preCertificate->cancel_reason != null) {
+                        $updateArray['cancel_reason'] = null;
                     }
+                    if (isset($request['appraiser_sale_id'])) {
+                        $updateArray['appraiser_sale_id'] = $request['appraiser_sale_id'];
+                    } else if (isset($request['appraiser_perform_id'])) {
+                        $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
+                    }
+                    $result = $this->model->query()
+                        ->where('id', '=', $id)
+                        ->update($updateArray);
                     
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
