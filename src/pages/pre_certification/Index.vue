@@ -164,11 +164,10 @@
 				:profile="profile"
 				:data="detailData"
 				@cancel="showDetailPopUp = false"
-				@action="handleUpdateStatus"
 				@handleFooterAccept="handleFooterAccept"
 			/>
 
-			<ModalNotificationPreCertificateNote
+			<ModalNotificationWithAssign
 				v-if="isMoved"
 				:notification="
 					confirm_message == 'Từ chối' ||
@@ -179,8 +178,9 @@
 				"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
+				:appraiser="appraiserChangeStage"
 			/>
-			<ModalNotificationPreCertificateNote
+			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
 				:notification="
@@ -191,6 +191,7 @@
 						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
 				"
 				@action="handleChangeAccept2"
+				:appraiser="appraiserChangeStage"
 			/>
 		</div>
 	</div>
@@ -200,6 +201,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
@@ -302,6 +304,7 @@ export default {
 		};
 	},
 	components: {
+		ModalNotificationWithAssign,
 		IconBase,
 		"b-tooltip": BTooltip,
 		draggable,
@@ -459,7 +462,9 @@ export default {
 		};
 		startSetup();
 
+		const appraiserChangeStage = ref(null);
 		return {
+			appraiserChangeStage,
 			filter,
 			principleConfig,
 			jsonConfig,
@@ -597,6 +602,7 @@ export default {
 			return check;
 		},
 		changedDraggable(evt) {
+			this.appraiserChangeStage = null;
 			let targetId = parseInt(evt.to.id);
 			let check = false;
 			let targetConfig = this.principleConfig.find(i => i.id === targetId);
@@ -619,6 +625,12 @@ export default {
 						return;
 					}
 				}
+				if (targetConfig.re_assign)
+					this.appraiserChangeStage = {
+						id: this.dataPC[targetConfig.re_assign],
+						type: targetConfig.re_assign
+					};
+
 				this.next_status = targetConfig.status;
 				this.dataPC.target_status = targetConfig.status;
 				this.confirm_message = message;
@@ -760,7 +772,7 @@ export default {
 			} else return false;
 		},
 
-		async handleChangeAccept2(note, reason_id) {
+		async handleChangeAccept2(note, reason_id, tempAppraiser) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -768,7 +780,8 @@ export default {
 			const res = await this.preCertificateStore.updateStatus(
 				this.idDragger,
 				note,
-				reason_id
+				reason_id,
+				tempAppraiser
 			);
 
 			if (res.data) {
@@ -839,34 +852,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleUpdateStatus(id, data, message) {
-			const res = await PreCertificate.updateStatusPreCertificate(id, data);
-			if (res.data) {
-				let returnData = this.subStatusDataReturn.find(i => i.id === id);
-				if (returnData) {
-					returnData.status = data.status;
-					returnData.sub_status = data.sub_status;
-					returnData.image = res.data.image;
-				}
-				this.returnData();
-				await this.$toast.open({
-					message: message + " thành công",
-					type: "success",
-					position: "top-right",
-					duration: 3000
-				});
-				this.key_dragg++;
-			} else {
-				await this.$toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				this.showDetailPopUp = false;
-			}
-			this.showDetailPopUp = false;
-		},
+
 		getExpireStatusDate() {
 			let dateConvert = new Date();
 			let minutes = this.config.process_time ? this.config.process_time : 1440;
@@ -1062,6 +1048,7 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				const checkStage = this.checkDataBeforeChangeToStage3();
 				if (!checkStage) {
@@ -1095,6 +1082,11 @@ export default {
 						return;
 					}
 				}
+				if (config.re_assign)
+					this.appraiserChangeStage = {
+						id: this.dataPC[config.re_assign],
+						type: config.re_assign
+					};
 				this.next_status = config.status;
 				this.dataPC.target_status = config.status;
 				this.dataPC.target_code = target.code;

@@ -222,11 +222,6 @@ export const usePreCertificateStore = defineStore(
 					id: null
 				};
 			}
-			if (lstDataConfig.value.preTypes.length == 0) await getLstDictionaries();
-			const pre_type = lstDataConfig.value.preTypes.find(
-				pre_type => pre_type.id === temp.pre_type_id
-			);
-			temp.pre_type = pre_type ? pre_type : { id: null, description: null };
 			if (temp.status == 6 && temp.cancel_reason) {
 				temp.cancel_reason_string = temp.cancel_reason.description || "";
 			}
@@ -437,7 +432,7 @@ export const usePreCertificateStore = defineStore(
 			return;
 		}
 
-		async function updateStatus(id, note, reason_id) {
+		async function updateStatus(id, note, reason_id, appraiser = null) {
 			const config = jsonConfig.value.principle.find(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
@@ -465,6 +460,9 @@ export const usePreCertificateStore = defineStore(
 				status_description: config.description,
 				status_config: jsonConfig.value.principle
 			};
+			if (appraiser) {
+				dataSend[appraiser.type] = appraiser.id;
+			}
 			if (
 				(dataPC.value.status == 2 || dataPC.value.status == 6) &&
 				dataPC.value.target_status == 1
@@ -475,9 +473,6 @@ export const usePreCertificateStore = defineStore(
 			if (dataPC.value.target_status == 6 && reason_id) {
 				dataSend.cancel_reason = reason_id;
 			}
-			// if (dataPC.value.target_status == 1 && dataPC.value.status == 6) {
-			// 	dataSend.cancel_reason = null;
-			// }
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
 
 			return res;

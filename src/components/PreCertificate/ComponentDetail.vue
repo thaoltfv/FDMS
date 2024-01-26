@@ -491,7 +491,7 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
-		<ModalNotificationPreCertificateNote
+		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
@@ -499,6 +499,7 @@
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${message}'`
 			"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
 
@@ -530,6 +531,7 @@ import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -573,6 +575,7 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		ModalNotificationWithAssign,
 		PaymentPreCertificateHistories,
 		IconBase,
 		OtherFile,
@@ -839,8 +842,9 @@ export default {
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
 		const showCardPCPayments = ref(false);
-
+		const appraiserChangeStage = ref(null);
 		return {
+			appraiserChangeStage,
 			showCardPCPayments,
 			allowEditFile,
 			jsonConfig,
@@ -1134,6 +1138,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				if (
 					!this.preCertificateOtherDocuments.Result ||
@@ -1185,7 +1190,11 @@ export default {
 							return;
 						}
 					}
-
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.dataPC[config.re_assign],
+							type: config.re_assign
+						};
 					this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
@@ -1231,7 +1240,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleAction2(note, reason_id) {
+		async handleAction2(note, reason_id, tempAppraiser) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -1239,7 +1248,8 @@ export default {
 			const res = await this.preCertificateStore.updateStatus(
 				this.dataPC.id,
 				note,
-				reason_id
+				reason_id,
+				tempAppraiser
 			);
 
 			if (res.data) {
