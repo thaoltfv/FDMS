@@ -1407,10 +1407,11 @@
 			@updateAppraises="updateAppraises"
 			@cancel="showAppraiseListDialog = false"
 		/>
-		<ModalNotificationCertificateNote
+		<ModalNotificationWithAssign
 			v-if="openNotification"
 			@cancel="handleCancel"
 			v-bind:notification="message"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction"
 		/>
 		<ModalNotificationCertificate
@@ -1463,10 +1464,11 @@
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/> -->
-		<ModalNotificationCertificateNote
+		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
 		<ModalAppraiseListVersion
@@ -1503,7 +1505,7 @@ import PaymentCertificateHistories from "./component/PaymentCertificateHistories
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -1575,7 +1577,7 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalAppraiseListVersion,
-		ModalNotificationCertificateNote
+		ModalNotificationWithAssign
 	},
 	data() {
 		return {
@@ -1688,7 +1690,13 @@ export default {
 		const jsonConfig = ref(null);
 
 		const keyRender = ref(0);
-		return { jsonConfig, workFlowConfigStore, keyRender };
+		const appraiserChangeStage = ref(null);
+		return {
+			appraiserChangeStage,
+			jsonConfig,
+			workFlowConfigStore,
+			keyRender
+		};
 	},
 	beforeRouteEnter: async (to, from, next) => {
 		await CertificationBrief.getDetailCertificateBrief(to.query["id"])
@@ -2393,6 +2401,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
 			if (config) {
@@ -2403,6 +2412,11 @@ export default {
 					message = this.checkRequired(require, this.data);
 				}
 				if (message === "") {
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.form[config.re_assign],
+							type: config.re_assign
+						};
 					this.targetStatus = config.status;
 					this.targetSubStatus = config.sub_status;
 					this.message = target.description;
@@ -2424,7 +2438,7 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		async handleAction2(note, reason_id) {
+		async handleAction2(note, reason_id, tempAppraiser) {
 			const config = this.jsonConfig.principle.find(
 				item => item.status === this.targetStatus && item.isActive === 1
 			);
@@ -2441,7 +2455,8 @@ export default {
 				appraiser_manager,
 				appraiser,
 				appraiser_control,
-				appraiser_control_id
+				appraiser_control_id,
+				administrative_id
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -2466,6 +2481,10 @@ export default {
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			};
+
+			if (tempAppraiser) {
+				dataSend[tempAppraiser.type] = tempAppraiser.id;
+			}
 			const res = await CertificationBrief.updateStatusCertificate(
 				this.idData,
 				dataSend

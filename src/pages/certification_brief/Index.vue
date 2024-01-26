@@ -188,28 +188,18 @@
 				@cancel="handleCancelVerify"
 				@updateAppraisal="handleChangeVerify"
 			/>
-			<ModalSendVerify
-				v-if="showAcceptCertificate"
-				notification="Bạn có muốn muốn duyệt hồ sơ này"
-				@action="handleChangeAccept"
-				@cancel="handleCancelAccept"
-			/>
-			<!-- <ModalSendVerify
-      v-if="isMoved"
-      :notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
-      @action="handleChangeAccept2"
-      @cancel="handleCancelAccept2"
-    /> -->
-			<ModalNotificationCertificateNote
+			<ModalNotificationWithAssign
 				v-if="isMoved"
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
+				:appraiser="appraiserChangeStage"
 				@cancel="handleCancelAccept2"
 			/>
-			<ModalNotificationCertificateNote
+			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
 				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
 			/>
 		</div>
@@ -247,7 +237,7 @@ import CertificationBrief from "@/models/CertificationBrief";
 import moment from "moment";
 import KanboardStatus from "./component/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 import IconBase from "@/components/IconBase.vue";
 
 Vue.component("downloadExcel", JsonExcel);
@@ -303,7 +293,6 @@ export default {
 			export: false,
 			showDetailPopUp: false,
 			showVerifyCertificate: false,
-			showAcceptCertificate: false,
 			idDraft: "",
 			elementDragger: "",
 			position_profile: "",
@@ -350,7 +339,7 @@ export default {
 		ModalAppraisal,
 		KanboardStatus,
 		ModalNotificationCertificate,
-		ModalNotificationCertificateNote
+		ModalNotificationWithAssign
 	},
 	setup() {
 		const workFlowConfigStore = useWorkFlowConfig();
@@ -367,7 +356,12 @@ export default {
 			}
 		};
 		startFunction();
-		return { jsonConfig, principleConfig };
+		const appraiserChangeStage = ref(null);
+		return {
+			appraiserChangeStage,
+			jsonConfig,
+			principleConfig
+		};
 	},
 	created() {
 		// fix_permission
@@ -527,6 +521,7 @@ export default {
 			return check;
 		},
 		changedDraggable(evt) {
+			this.appraiserChangeStage = null;
 			let targetId = parseInt(evt.to.id);
 			let check = false;
 			let targetConfig = this.principleConfig.find(i => i.id === targetId);
@@ -538,6 +533,11 @@ export default {
 				: "";
 			check = this.checkRequired(targetConfig.require, this.elementDragger);
 			if (check) {
+				if (targetConfig.re_assign)
+					this.appraiserChangeStage = {
+						id: this.elementDragger[targetConfig.re_assign],
+						type: targetConfig.re_assign
+					};
 				this.isMoved = check;
 				this.next_status = targetConfig.status;
 				this.next_sub_status = targetConfig.sub_status;
@@ -668,47 +668,8 @@ export default {
 				this.elementDragger = event.draggedContext.element;
 			} else return false;
 		},
-		handleRemoveStatusVerify() {
-			this.showAcceptCertificate = true;
-		},
-		async handleChangeAccept() {
-			let dataSend = {
-				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
-				appraiser_id: this.elementDragger.appraiser_id,
-				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
-				appraiser_control_id: this.elementDragger.appraiser_control_id,
-				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
-				status: 4
-			};
-			// change status 3 --> 4
-			const res = await CertificationBrief.updateStatusCertificate(
-				this.idDragger,
-				dataSend
-			);
-			if (res.data) {
-				await this.$toast.open({
-					message: "Xác nhận hồ sơ thành công",
-					type: "success",
-					position: "top-right",
-					duration: 3000
-				});
-				this.listCertificateTemp.forEach(item => {
-					if (item.id === this.idDragger) {
-						item.status = 4;
-					}
-				});
-			} else {
-				await this.$toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				this.handleCancelAccept();
-			}
-			this.showAcceptCertificate = await false;
-		},
-		async handleChangeAccept2(note, reason_id) {
+
+		async handleChangeAccept2(note, reason_id, tempAppraiser) {
 			const config = this.jsonConfig.principle.find(
 				item => item.status === this.next_status && item.isActive === 1
 			);
@@ -721,6 +682,7 @@ export default {
 				appraiser_manager_id: this.elementDragger.appraiser_manager_id,
 				appraiser_control_id: this.elementDragger.appraiser_control_id,
 				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
+				administrative_id: this.elementDragger.administrative_id,
 				status: this.next_status,
 				sub_status: this.next_sub_status,
 				check_price: this.isCheckPrice,
@@ -733,7 +695,10 @@ export default {
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			};
-			// // console.log('data send', dataSend)
+			if (tempAppraiser) {
+				dataSend[tempAppraiser.type] = tempAppraiser.id;
+			}
+			// console.log('data send', dataSend)
 			const res = await CertificationBrief.updateStatusCertificate(
 				this.idDragger,
 				dataSend
@@ -805,15 +770,6 @@ export default {
 			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
-		},
-		handleCancelAccept() {
-			this.showAcceptCertificate = false;
-			this.listCertificateLock = this.listCertificateTemp.filter(
-				item => item.status === 3
-			);
-			this.listCertificatesClose = this.listCertificateTemp.filter(
-				item => item.status === 4
-			);
 		},
 		handleCancelAccept2() {
 			this.isMoved = false;
@@ -1182,6 +1138,7 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
@@ -1191,6 +1148,11 @@ export default {
 			}
 			// // console.log(check)
 			if (check) {
+				if (config.re_assign)
+					this.appraiserChangeStage = {
+						id: this.elementDragger[config.re_assign],
+						type: config.re_assign
+					};
 				this.next_status = config.status;
 				this.next_sub_status = config.sub_status;
 				this.confirm_message = target.description;
