@@ -3086,6 +3086,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'created_by',
             'document_type',
             'pre_certificate_id',
+            'total_preliminary_value',
+            'pre_type_id',
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3113,6 +3115,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.apartment.lastVersion',
             'realEstate.apartment.assetPrice',
             'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
+            'preType:id,description',
         ];
         $result = $this->model->query()
             ->with($with)

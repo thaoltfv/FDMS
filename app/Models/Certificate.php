@@ -166,7 +166,12 @@ class Certificate extends Model
     {
         return $this->belongsTo(AppraiseOtherInformation::class, 'appraise_purpose_id');
     }
-
+    
+    public function preType(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'pre_type_id', 'id');
+    }
+    
     public function appraises(): belongsToMany
     {
         return $this->belongsToMany(CertificateAsset::class,'certificate_has_appraises','certificate_id','appraise_id');
