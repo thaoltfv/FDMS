@@ -568,14 +568,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'cancelReason:id,description',
-            'otherDocuments',
+            'otherDocuments' => function ($query) {
+                $query->whereNull('deleted_at');
+            },
             'preType:id,description',
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
-        ->whereHas('otherDocuments', function ($query) {
-            $query->whereNull('deleted_at');
-        })    
         ->leftjoin('users', function ($join) {
                 $join->on('pre_certificates.created_by', '=', 'users.id')
                     ->select(['id', 'image'])
@@ -840,11 +839,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserBusinessManager:id,name,user_id',
             'appraisePurpose:id,name',
             'customer:id,name,phone,address',
-            'otherDocuments',
+            'otherDocuments' => function ($query) {
+                $query->whereNull('deleted_at');
+            },
             'createdBy:id,name',
             'payments',
-            'cancelReason',
-            'preType'
+            'cancelReason:id,description',
+            'preType:id,description',
         ];
         $result = $this->model->query()
             ->with($with)
