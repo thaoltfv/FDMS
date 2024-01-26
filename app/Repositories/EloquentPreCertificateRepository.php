@@ -574,7 +574,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         DB::enableQueryLog();
         $result = $this->model->with($with)
         ->whereHas('otherDocuments', function ($query) {
-            $query->whereNull('is_deleted');
+            $query->whereNull('deleted_at');
         })    
         ->leftjoin('users', function ($join) {
                 $join->on('pre_certificates.created_by', '=', 'users.id')
