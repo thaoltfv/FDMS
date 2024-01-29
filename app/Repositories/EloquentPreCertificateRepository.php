@@ -233,8 +233,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($id, $objects) {
             try {
-                $oldCertificate = PreCertificate::where('id', $id)->first();
-                $oldAppraises = $oldCertificate->appraises;
+                $oldPreCertificate = PreCertificate::where('id', $id)->first();
+                $oldAppraises = $oldPreCertificate->appraises;
                 $oldCertificateAssetIds = [];
                 foreach ($oldAppraises as $oldAppraise) {
                     $oldCertificateAssetIds[$oldAppraise->appraise_id] = $oldAppraise->id;
@@ -741,32 +741,49 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 if (isset($check)) {
                     return $check;
                 }
-                $oldCertificate = PreCertificate::where('id', '=', $id)->first();
-                if (!isset($oldCertificate)) {
+                $oldPreCertificate = PreCertificate::where('id', '=', $id)->first();
+                if (!isset($oldPreCertificate)) {
                     $data = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS . $id, 'exception' =>  ''];
                     return $data;
                 }
                 $preCertificateId = $id;
-                $status = $oldCertificate->status;
-                if (!isset($oldCertificate['created_by']))
+                $status = $oldPreCertificate->status;
+                if (!isset($oldPreCertificate['created_by']))
                 {
                     $data['created_by'] = $user->id;
                 }
-                else if(isset($oldCertificate['created_by']) && isset($oldCertificate['created_by']->id))
+                else if(isset($oldPreCertificate['created_by']) && isset($oldPreCertificate['created_by']->id))
                 {
-                    $data['created_by'] = $oldCertificate['created_by']->id;
+                    $data['created_by'] = $oldPreCertificate['created_by']->id;
                 }
                 else
                 {
-                    $data['created_by'] = $oldCertificate->getRawOriginal('created_by');
+                    $data['created_by'] = $oldPreCertificate->getRawOriginal('created_by');
                 }
 
-                $certificateArr = new PreCertificate($data);
-                PreCertificate::where('id', $preCertificateId)->update($certificateArr->attributesToArray());
+                $assignTo = [];
+                if ($oldPreCertificate && $oldPreCertificate->appraiser_sale_id && $oldPreCertificate->appraiser_sale_id != $data['appraiser_sale_id']) {
+                    $assignTo[] = 'appraiserSale';
+                }
+                if ($oldPreCertificate && $oldPreCertificate->appraiser_perform_id && $oldPreCertificate->appraiser_perform_id != $data['appraiser_perform_id']) {
+                    $assignTo[] = 'appraiserPerform';
+                }
+                if ($oldPreCertificate && $oldPreCertificate->business_manager_id && $oldPreCertificate->business_manager_id != $data['business_manager_id']) {
+                    $assignTo[] = 'appraiserBusinessManager';
+                }
+
+                
+                PreCertificate::where('id', $preCertificateId)->update($data);
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
-                $changeLog = $edited->fill($data);
+                $edited->fill($data);
                 $edited->save();
+                $changeLog = $edited->getChanges();
                 $this->CreateActivityLog($edited, $changeLog, 'update_data', 'cập nhật dữ liệu');
+
+                if (!empty($assignTo)) {
+                    $this->notifyReAssign($preCertificateId, $status, $assignTo);
+                }
+
             } else {
                 $data['created_by'] = $user->id;
                 // $curDate = \Carbon\Carbon::now('Asia/Ho_Chi_Minh');
@@ -776,12 +793,27 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $data['status_expired_at'] = $status_expired_at;
                 $certificateArr = new PreCertificate($data);
                 // dd($certificateArr);
-                $certificateCreate = PreCertificate::query()->create($certificateArr->attributesToArray());
-                $preCertificateId = $certificateCreate->id;
+                $preCertificateCreate = PreCertificate::query()->create($certificateArr->attributesToArray());
+                $preCertificateId = $preCertificateCreate->id;
                 // $this->saveMethod($preCertificateId);
                 # Activity Log "create if id = null"
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $this->CreateActivityLog($edited, $edited, 'create', 'tạo mới');
+                
+                $assignTo = [];
+                if ($edited && $edited->appraiser_sale_id) {
+                    $assignTo[] = 'appraiserSale';
+                }
+                if ($edited && $edited->appraiser_perform_id) {
+                    $assignTo[] = 'appraiserPerform';
+                }
+                if ($edited && $edited->business_manager_id) {
+                    $assignTo[] = 'appraiserBusinessManager';
+                }
+                
+                if (!empty($assignTo)) {
+                    $this->notifyReAssign($preCertificateId, $preCertificateCreate->status, $assignTo);
+                }
                 // $this->updateDocumentDescription($preCertificateId);
             }
             DB::commit();
@@ -1074,6 +1106,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         'status_expired_at' => $status_expired_at,
                     ];
 
+                    $assignTo = [];
                     if (isset($cancel_reason)) {
                         $updateArray['cancel_reason'] = $cancel_reason;
                     } else if (isset($total_preliminary_value)) {
@@ -1083,9 +1116,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                     if (isset($request['appraiser_sale_id'])) {
                         $updateArray['appraiser_sale_id'] = $request['appraiser_sale_id'];
-                    } else if (isset($request['appraiser_perform_id'])) {
-                        $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
+                        $assignTo[] = 'appraiserSale';
                     }
+                    if (isset($request['appraiser_perform_id'])) {
+                        $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
+                        $assignTo[] = 'appraiserPerform';
+                    }
+
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
@@ -1111,6 +1148,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
 
                     $this->notifyChangeStatus($id, $status);
+                    if (!empty($assignTo)) {
+                        $this->notifyReAssign($id, $status, $assignTo);
+                    }
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
@@ -1335,6 +1375,77 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             ];
 
             CommonService::callNotification($users, $data);
+        }
+    }
+    private function notifyReAssign(int $id, int $status, $assignTo)
+    {
+        if (PreCertificate::where('id', $id)->exists()) {
+            $loginUser = CommonService::getUser();
+            $with = [
+                'appraiserSale:id,user_id,name',
+                'appraiserPerform:id,user_id,name',
+                'appraiserBusinessManager:id,user_id,name',
+                'createdBy:id,name',
+            ];
+            $select = [
+                'id',
+                'created_by',
+                'status',
+                'appraiser_sale_id',
+                'appraiser_perform_id',
+                'business_manager_id',
+            ];
+            switch ($status) {
+                case 2:
+                    $statusText = 'Định giá sơ bộ';
+                    break;
+                case 3:
+                    $statusText = 'Duyệt giá sơ bộ';
+                    break;
+                case 4:
+                    $statusText = 'Thương thảo';
+                    break;
+                case 5:
+                    $statusText = 'Hoàn thành';
+                    break;
+                case 6:
+                    $statusText = 'Đã hủy';
+                    break;
+                default:
+                    $statusText = 'Yêu cầu sơ bộ';
+            }
+            $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
+            $eloquenUser = new EloquentUserRepository(new User());
+            foreach ($assignTo as $assign) {
+                $user = null;
+                if (isset($preCertificate[$assign]) && isset($preCertificate[$assign]->user_id)) {
+                    if ($preCertificate[$assign]->user_id != $loginUser->id) {
+                        $user = $eloquenUser->getUser($preCertificate[$assign]->user_id);
+                    }
+                }
+
+                switch ($assign) {
+                    case 'appraiserSale':
+                        $typeAssign = 'Nhân viên kinh doanh';
+                        break;
+                    case 'appraiserPerform':
+                        $typeAssign = 'Chuyên viên thẩm định';
+                        break;
+                    case 'appraiserBusinessManager':
+                        $typeAssign = 'Quản lý nghiệp vụ';
+                        break;
+                }
+
+                $data = [
+                    'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
+                    'message' => 'YCSB_' . $id .' '. $preCertificate[$assign]->user_id.' bạn được' . $loginUser->name . ' phân công làm ' . $typeAssign . '.',
+                    'user' => $loginUser,
+                    'id' => $id
+                ];
+                if ($user) {
+                    CommonService::callNotification([$user], $data);
+                }
+            }
         }
     }
     private function checkDuplicateData(array $object, int $preCertificateId = null)
