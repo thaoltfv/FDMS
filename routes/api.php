@@ -324,7 +324,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pre-certificates/pre-certificate-paging', [PreCertificateController::class, 'findPaging']);
 
     // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
-    // Route::get('pre-certificates/brief-export', [PreCertificateController::class, 'exportCertificateBriefs']);
+    Route::get('pre-certificates/pre-export', [PreCertificateController::class, 'exportPreCertificate']);
+  //  Route::get('pre-certificates/pre-customize-export', [CertificateBriefController::class, 'exportCustomizePreCertificate']);
+
     Route::get('pre-certificates/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
     Route::post('pre-certificates/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
     Route::get('pre-certificates/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);

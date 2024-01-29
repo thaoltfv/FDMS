@@ -1005,6 +1005,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                                         ->get();
                     if ($documents->count() > 0) {
                         foreach ($documents as $document) {
+                            if ($document->type_document == 'Appendix') {
                                 $item = [
                                     'certificate_id' => $certificateId,
                                     'name' => $document->name,
@@ -1013,11 +1014,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                     'size' => $document->size,
                                     'description' => 'appendix',
                                     'created_by' => $user->id,
-                                    'type_document' => $document->type_document, 
                                 ];
-
                                 $item = new CertificateOtherDocuments($item);
                                 QueryBuilder::for($item)->insert($item->attributesToArray());
+                            }
                         }
                     }
 
@@ -1359,7 +1359,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     }
     #endregion
 
-    public function exportCertificateBriefs()
+    public function exportPreCertificate()
     {
         $status = request()->get('status');
         $fromDate = request()->get('fromDate');
@@ -1374,8 +1374,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $diff = $toDate->diff($fromDate);
-            if ($diff->days > 93) {
-                return ['message' => 'Chỉ được tìm kiếm tối đa 3 tháng.', 'exception' => ''];
+            if ($diff->days > 186) {
+                return ['message' => 'Chỉ được tìm kiếm tối đa 6 tháng.', 'exception' => ''];
             }
         } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
@@ -1389,32 +1389,29 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $users = explode(',', $users);
         }
         $select = [
-            'certificates.id',
+            'pre_certificates.id',
             'petitioner_name',
-            'document_num',
-            'appraise_date',
-            'document_date',
-            'certificate_date',
-            'certificate_num',
+            'pre_date',
             'status',
-            'certificates.created_at',
+            'pre_certificates.created_at',
             'appraise_purpose_id',
             'created_by',
             'appraiser_id',
             'appraiser_perform_id',
             'appraiser_sale_id',
             DB::raw("case status
-                    when 1
-                        then 'Mới'
-                    when 2
-                        then 'Đang thẩm định'
-                    when 3
-                        then 'Đang duyệt'
-                    when 4
-                        then 'Hoàn thành'
-                    when 6
-                        then 'Đang kiểm soát'
-                    else 'Huỷ'
+                when 1
+                    then 'Yêu cầu sơ bộ'
+                when 2
+                    then 'Định giá sơ bộ'
+                when 3
+                    then 'Duyệt giá sơ bộ'
+                when 4
+                    then 'Thương thảo'
+                when 5
+                    then 'Hoàn thành'
+                when 6
+                    then 'Hủy'
                 end as status_text"),
             'commission_fee',
         ];
@@ -1426,9 +1423,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name',
-            'assetPrice' => function ($q) {
-                $q->where('slug', '=', 'total_asset_price');
-            },
+            // 'assetPrice' => function ($q) {
+            //     $q->where('slug', '=', 'total_asset_price');
+            // },
         ];
         $result = PreCertificate::with($with)
             ->select($select);
