@@ -166,6 +166,8 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
 
+use App\Mail\JustTesting;
+use Illuminate\Support\Facades\Mail;
 use App\Models\PreCertificatePayments;
 
 use function PHPUnit\Framework\isEmpty;
@@ -2666,28 +2668,26 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
-                        when 1
-                            then 'Mới'
-                        when 2
-                            then 'Đang thẩm định'
-                        when 3
-                            then 'Đang duyệt'
-                        when 4
-                            then 'Hoàn thành'
-                        when 5
-                            then 'Huỷ'
-                        when 6
-                            then 'Đang kiểm soát'
-                        when 7
-                            then 'Duyệt phát hành'
-                            break;
-                        when 8
-                            then 'In hồ sơ'
-                            break;
-                        when 9
-                            then 'Bàn giao khách hàng'
-                    end as status_text
-                "),
+                when 1
+                    then 'Mới'
+                when 2
+                    then 'Đang thẩm định'
+                when 3
+                    then 'Đang duyệt'
+                when 4
+                    then 'Hoàn thành'
+                when 5
+                    then 'Huỷ'
+                when 6
+                    then 'Đang kiểm soát'
+                when 7
+                    then 'Duyệt phát hành'
+                when 8
+                    then 'In hồ sơ'
+                when 9
+                    then 'Bàn giao khách hàng'
+            end as status_text
+            "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
             Db::raw("COALESCE(document_count,0) as document_count"),
@@ -4758,20 +4758,24 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
         return $result;
     }
-
     private function updateAppraisalTeam(int $id, array $object = null)
     {
         if (isset($object)) {
-            Certificate::where('id', $id)->update([
+            $updateArray = [
                 'appraiser_id' => $object['appraiser_id'],
                 'appraiser_manager_id' => $object['appraiser_manager_id'],
                 'appraiser_confirm_id' => $object['appraiser_confirm_id'],
                 'appraiser_perform_id' => $object['appraiser_perform_id'],
                 'appraiser_control_id' => $object['appraiser_control_id'],
-            ]);
+            ];
+
+            if (isset($object['administrative_id'])) {
+                $updateArray['administrative_id'] = $object['administrative_id'];
+            }
+
+            Certificate::where('id', $id)->update($updateArray);
         }
     }
-
     private function getAppraisalTeam(int $id)
     {
         $result = [];
@@ -4786,7 +4790,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_sale_id',
                 'status_expired_at',
                 'updated_at',
-                'status'
+                'status',
+                'administrative_id'
             ];
             $with = [
                 'appraiser:id,name,user_id',
@@ -4794,6 +4799,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserManager:id,name,user_id',
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
+                'administrative:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
             if ($result['status'] == 5) {
@@ -5021,6 +5027,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $appraiser['appraiser_confirm_id'] =  request()->get('appraiser_confirm_id');
                     $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
                     $appraiser['appraiser_control_id'] =  request()->get('appraiser_control_id');
+                    if (request()->get('administrative_id')) {
+                        $appraiser['administrative_id'] = request()->get('administrative_id');
+                    }
                     if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
@@ -5079,6 +5088,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 || (isset($data->appraiserConfirm) && $data->appraiserConfirm->user_id == $user->id)
                 || (isset($data->appraiserSale) && $data->appraiserSale->user_id == $user->id)
                 || (isset($data->appraiserPerform) && $data->appraiserPerform->user_id == $user->id)
+                || (isset($data->administrative) && $data->administrative->user_id == $user->id)
                 || (isset($data->createdBy) && $data->createdBy->id == $user->id))
             ) {
                 $this->updateAppraisalTeam($id, $request);
@@ -5420,9 +5430,21 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ];
 
             CommonService::callNotification($users, $data);
+            $this->sendEmail($users, $data);
         }
     }
+    private function sendEmail($users, $data){
+        $usersString = json_encode($users);
+        $dataString = json_encode($data);
+        $emailReceive = 'clonebds1@gmail.com';
+        $subject = '[HSTD - 218] Chuyển sang trạng thái thẩm địnhsdsdv';
+        $markdown = 'emails.notifications.update';
+        $name = 'Lê Phi Longx';
+        $message = $usersString . $dataString;
+        $link = '#';
 
+        Mail::send(new JustTesting($emailReceive, $subject, $markdown, $name, $message, $link));
+    }
     private function checkDuplicateData(array $object, int $certificateId = null)
     {
         $result = null;
