@@ -3,18 +3,12 @@
 namespace App\Notifications;
 
 use Carbon\Carbon;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BroadcastNotification extends Notification implements ShouldQueue
+class BroadcastNotification extends Notification
 {
-    use Queueable;
-
-    public $timeout = 15; // Timeout seconds
-
     public $object;
     /**
      * Create a new notification instance.
@@ -24,7 +18,6 @@ class BroadcastNotification extends Notification implements ShouldQueue
     public function __construct($object)
     {
         $this->object = $object;
-        $this->onQueue('notifications');
     }
 
     /**
@@ -68,6 +61,16 @@ class BroadcastNotification extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return (array)$this->object;
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return [
+            'subject' => $this->object->subject,
+            'message' => $this->object->message,
+            'user' => $this->object->user,
+            'id' => $this->object->id,
+        ];
     }
 
     /**
