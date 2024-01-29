@@ -1440,7 +1440,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                     $data = [
                         'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
-                        'message' => 'YCSB_' . $id .' '. $preCertificate[$assign]->name.' bạn được' . $loginUser->name . ' phân công làm ' . $typeAssign . '.',
+                        'message' => $preCertificate[$assign]->name.' bạn được ' . $loginUser->name . ' phân công làm ' . $typeAssign . 'cho YCSB_' . $id .'.',
                         'user' => $loginUser,
                         'id' => $id
                     ];
