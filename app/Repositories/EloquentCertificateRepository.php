@@ -4756,21 +4756,24 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
         return $result;
     }
-
     private function updateAppraisalTeam(int $id, array $object = null)
     {
         if (isset($object)) {
-            Certificate::where('id', $id)->update([
+            $updateArray = [
                 'appraiser_id' => $object['appraiser_id'],
                 'appraiser_manager_id' => $object['appraiser_manager_id'],
                 'appraiser_confirm_id' => $object['appraiser_confirm_id'],
                 'appraiser_perform_id' => $object['appraiser_perform_id'],
                 'appraiser_control_id' => $object['appraiser_control_id'],
-                'administrative_id' => $object['administrative_id'],
-            ]);
+            ];
+
+            if (isset($object['administrative_id'])) {
+                $updateArray['administrative_id'] = $object['administrative_id'];
+            }
+
+            Certificate::where('id', $id)->update($updateArray);
         }
     }
-
     private function getAppraisalTeam(int $id)
     {
         $result = [];
@@ -5022,6 +5025,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $appraiser['appraiser_confirm_id'] =  request()->get('appraiser_confirm_id');
                     $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
                     $appraiser['appraiser_control_id'] =  request()->get('appraiser_control_id');
+                    if (request()->get('administrative_id')) {
+                        $appraiser['administrative_id'] = request()->get('administrative_id');
+                    }
                     if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
