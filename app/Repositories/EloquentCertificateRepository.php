@@ -5430,7 +5430,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ];
 
             CommonService::callNotification($users, $data);
-            $this->sendEmail($users, $data);
+            // $this->sendEmail($users, $data);
         }
     }
     private function sendEmail($users, $data){
