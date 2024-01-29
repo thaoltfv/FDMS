@@ -2661,7 +2661,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'certificates.updated_at', 'status_updated_at',
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
-            'appraiser_sale_id', 'appraiser_control_id',
+            'appraiser_sale_id', 'appraiser_control_id','administrative_id',
             'pre_certificate_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
@@ -2678,6 +2678,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then 'Huỷ'
                         when 6
                             then 'Đang kiểm soát'
+                        when 7
+                            then 'Duyệt phát hành'
+                            break;
+                        when 8
+                            then 'In hồ sơ'
+                            break;
+                        when 9
+                            then 'Bàn giao khách hàng'
                     end as status_text
                 "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2724,6 +2732,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // 'appraises.appraiseLaw.landDetails:id,appraise_law_id,doc_no',
             'realEstate:id,real_estate_id',
             'personalProperties:id,personal_property_id',
+            'administrative:id,name,user_id',
         ];
         // dd($this->model);
         DB::enableQueryLog();
@@ -3088,6 +3097,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'pre_certificate_id',
             'total_preliminary_value',
             'pre_type_id',
+            'administrative_id',
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3116,6 +3126,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.apartment.assetPrice',
             'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
             'preType:id,description',
+            'administrative:id,name,user_id',
         ];
         $result = $this->model->query()
             ->with($with)
@@ -3253,14 +3264,26 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         default:
                             $this->updateAppraiseStatus($id, $status, $subStatus);
                     }
-                    $result = $this->model->query()
-                        ->where('id', '=', $id)
-                        ->update([
+                    $updateArray =[
                             'status' => $status,
                             'sub_status' => $subStatus,
                             'status_updated_at' => date('Y-m-d H:i:s'),
                             'status_expired_at' => $status_expired_at,
-                        ]);
+                    ];
+
+                    if (isset($request['appraiser_sale_id'])) {
+                        $updateArray['appraiser_sale_id'] = $request['appraiser_sale_id'];
+                    } else if (isset($request['appraiser_perform_id'])) {
+                        $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
+                    } else if (isset($request['appraiser_control_id'])) {
+                        $updateArray['appraiser_control_id'] = $request['appraiser_control_id'];
+                    } else if (isset($request['administrative_id'])) {
+                        $updateArray['administrative_id'] = $request['administrative_id'];
+                    }
+
+                    $result = $this->model->query()
+                        ->where('id', '=', $id)
+                        ->update($updateArray);
 
                     # Chuyển status từ số sang text
                     $edited = Certificate::where('id', $id)->first();
