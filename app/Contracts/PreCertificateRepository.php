@@ -19,6 +19,9 @@ interface PreCertificateRepository extends BaseRepository
 
     public function findPaging_v2();
 
+    public function exportPreCertificate();
+   // public function exportCustomizePreCertificate();
+
     public function postGeneralInfomation(array $object , int $id = null);
 
 

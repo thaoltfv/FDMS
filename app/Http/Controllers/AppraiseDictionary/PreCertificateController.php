@@ -7,6 +7,7 @@ use App\Contracts\DictionaryRepository;
 use App\Contracts\UserRepository;
 use App\Enum\ErrorMessage;
 use App\Http\Controllers\Controller;
+use App\Services\Excel\ExportPreCertificate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -382,4 +383,28 @@ class PreCertificateController extends Controller
         // dd($HSTD);
         return $this->respondWithCustomData($result);
     }
+    public function exportPreCertificate(Request $request)
+    {
+        if(! CommonService::checkUserPermission($this->permissionExport))
+            return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
+
+        $result =  $this->preCertificateRepository->exportPreCertificate();
+        if(isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData( $result);
+            // return $this->respondWithCustomData($result);
+
+        return $this->respondWithCustomData((new ExportPreCertificate())->exportPre($result));
+    }
+    // public function exportCustomizePreCertificate(Request $request)
+    // {
+    //     if(! CommonService::checkUserPermission($this->permissionExport))
+    //         return $this->respondWithErrorData( ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
+
+    //     $result =  $this->preCertificateRepository->exportSelectedCertificateAssets();
+    //     if(isset($result['message']) && isset($result['exception']))
+    //         return $this->respondWithErrorData( $result);
+    //         // return $this->respondWithCustomData($result);
+
+    //     return $this->respondWithCustomData((new ExportPreCertificate())->exportCustomizePreCertificate($result));
+    // }
 }
