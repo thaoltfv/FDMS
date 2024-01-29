@@ -2666,28 +2666,26 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
-                        when 1
-                            then 'Mới'
-                        when 2
-                            then 'Đang thẩm định'
-                        when 3
-                            then 'Đang duyệt'
-                        when 4
-                            then 'Hoàn thành'
-                        when 5
-                            then 'Huỷ'
-                        when 6
-                            then 'Đang kiểm soát'
-                        when 7
-                            then 'Duyệt phát hành'
-                            break;
-                        when 8
-                            then 'In hồ sơ'
-                            break;
-                        when 9
-                            then 'Bàn giao khách hàng'
-                    end as status_text
-                "),
+                when 1
+                    then 'Mới'
+                when 2
+                    then 'Đang thẩm định'
+                when 3
+                    then 'Đang duyệt'
+                when 4
+                    then 'Hoàn thành'
+                when 5
+                    then 'Huỷ'
+                when 6
+                    then 'Đang kiểm soát'
+                when 7
+                    then 'Duyệt phát hành'
+                when 8
+                    then 'In hồ sơ'
+                when 9
+                    then 'Bàn giao khách hàng'
+            end as status_text
+            "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
             Db::raw("COALESCE(document_count,0) as document_count"),
@@ -4768,6 +4766,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_confirm_id' => $object['appraiser_confirm_id'],
                 'appraiser_perform_id' => $object['appraiser_perform_id'],
                 'appraiser_control_id' => $object['appraiser_control_id'],
+                'administrative_id' => $object['administrative_id'],
             ]);
         }
     }
@@ -4786,7 +4785,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_sale_id',
                 'status_expired_at',
                 'updated_at',
-                'status'
+                'status',
+                'administrative_id'
             ];
             $with = [
                 'appraiser:id,name,user_id',
@@ -4794,6 +4794,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserManager:id,name,user_id',
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
+                'administrative:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
             if ($result['status'] == 5) {
@@ -5079,6 +5080,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 || (isset($data->appraiserConfirm) && $data->appraiserConfirm->user_id == $user->id)
                 || (isset($data->appraiserSale) && $data->appraiserSale->user_id == $user->id)
                 || (isset($data->appraiserPerform) && $data->appraiserPerform->user_id == $user->id)
+                || (isset($data->administrative) && $data->administrative->user_id == $user->id)
                 || (isset($data->createdBy) && $data->createdBy->id == $user->id))
             ) {
                 $this->updateAppraisalTeam($id, $request);
