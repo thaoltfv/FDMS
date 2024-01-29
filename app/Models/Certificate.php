@@ -60,7 +60,8 @@ class Certificate extends Model
         'sub_status',
         'status_updated_at',
         'status_expired_at',
-        'note'
+        'note',
+        'administrative_id'
     ];
 
     public function getStatusTextAttribute()
@@ -85,6 +86,15 @@ class Certificate extends Model
                 break;
 			case 5:
 				$statusText = "Huỷ";
+			    break;
+            case 7:
+				$statusText = "Duyệt phát hành";
+			    break;
+            case 8:
+				$statusText = "In hồ sơ";
+			    break;
+            case 9:
+				$statusText = "Bàn giao khách hàng";
 			    break;
 		}
         return $statusText;
@@ -171,7 +181,11 @@ class Certificate extends Model
     {
         return $this->belongsTo(Dictionary::class, 'pre_type_id', 'id');
     }
-    
+    public function administrative(): BelongsTo
+    {
+     
+        return $this->belongsTo(Appraiser::class, 'administrative_id', 'id');
+    }
     public function appraises(): belongsToMany
     {
         return $this->belongsToMany(CertificateAsset::class,'certificate_has_appraises','certificate_id','appraise_id');

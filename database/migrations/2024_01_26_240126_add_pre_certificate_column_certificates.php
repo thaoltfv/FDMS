@@ -23,6 +23,11 @@ class addPreCertificateColumnCertificates extends Migration
                 $table->integer('pre_type_id')->nullable();
             });
         }
+        if (!Schema::hasColumn('certificates', 'administrative_id')) {
+            Schema::table('certificates', function (Blueprint $table) {
+                $table->integer('administrative_id')->nullable();
+            });
+        }
     }
 
     /**
@@ -40,6 +45,11 @@ class addPreCertificateColumnCertificates extends Migration
         if (!Schema::hasColumn('certificates', 'pre_type_id')) {
             Schema::table('certificates', function (Blueprint $table) {
                 $table->dropColumn('pre_type_id');
+            });
+        }
+        if (!Schema::hasColumn('certificates', 'administrative_id')) {
+            Schema::table('certificates', function (Blueprint $table) {
+                $table->dropColumn('administrative_id');
             });
         }
     }
