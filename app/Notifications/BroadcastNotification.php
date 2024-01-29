@@ -38,7 +38,7 @@ class BroadcastNotification extends Notification implements ShouldQueue
         return [
             'database',
             'mail',
-            'broadcast',
+            // 'broadcast',
         ];
     }
 

@@ -166,6 +166,8 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
 
+use App\Mail\JustTesting;
+use Illuminate\Support\Facades\Mail;
 use App\Models\PreCertificatePayments;
 
 use function PHPUnit\Framework\isEmpty;
@@ -5428,9 +5430,21 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ];
 
             CommonService::callNotification($users, $data);
+            $this->sendEmail($users, $data);
         }
     }
+    private function sendEmail($users, $data){
+        $usersString = json_encode($users);
+        $dataString = json_encode($data);
+        $emailReceive = 'clonebds1@gmail.com';
+        $subject = '[HSTD - 218] Chuyển sang trạng thái thẩm địnhsdsdv';
+        $markdown = 'emails.notifications.update';
+        $name = 'Lê Phi Longx';
+        $message = $usersString . $dataString;
+        $link = '#';
 
+        Mail::send(new JustTesting($emailReceive, $subject, $markdown, $name, $message, $link));
+    }
     private function checkDuplicateData(array $object, int $certificateId = null)
     {
         $result = null;
