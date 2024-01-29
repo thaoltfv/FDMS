@@ -11,7 +11,8 @@
 			class="form-label font-weight-bold d-flex justify-content-between align-items-center color_content"
 		>
 			<div class="d-flex align-items-start">
-				{{ $t(label) }} <b v-if="requiredIcon" class="ml-1 text-red">*</b>
+				{{ showLabel ? $t(label) : "" }}
+				<b v-if="requiredIcon" class="ml-1 text-red">*</b>
 				<span v-if="required" class="required">{{ $t("required") }}</span>
 			</div>
 			<span v-if="rules.includes('max:')" class="character-count">
@@ -59,6 +60,10 @@ export default {
 	},
 	components: {},
 	props: {
+		showLabel: {
+			type: Boolean,
+			default: true
+		},
 		requiredIcon: {
 			type: Boolean,
 			default: false

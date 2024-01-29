@@ -56,16 +56,34 @@ export const usePreCertificateStore = defineStore(
 				{
 					id: null,
 					amount: 0,
-					pay_date: null
+					pay_date: null,
+					for_payment_of: ""
 				}
 			]
 		});
 
-		const permission = ref({
-			allowDelete: true,
-			allowExport: true
+		const vueStoree = ref({
+			currentPermissions: null,
+			profile: null,
+			user: null
 		});
 
+		function updateVueStore(profile, user, currentPermissions) {
+			vueStoree.value.profile = profile;
+			vueStoree.value.user = user;
+			vueStoree.value.currentPermissions = currentPermissions;
+		}
+
+		const permission = ref({
+			allowDelete: true,
+			allowExport: true,
+			editPayments: false,
+			edit: false
+		});
+		function updatePermission(data) {
+			permission.value.editPayments = data.editPayments;
+			permission.value.edit = data.edit;
+		}
 		const other = ref({
 			isSubmit: false,
 			toast: null,
@@ -117,6 +135,10 @@ export const usePreCertificateStore = defineStore(
 				}
 			}
 			return lstDataConfig.value.workflow;
+		}
+		async function functionUpdateWorkflow(data) {
+			jsonConfig.value = data;
+			lstDataConfig.value.workflow = data;
 		}
 		async function getLstAppraisers() {
 			const resp = await PreCertificate.getAppraisers();
@@ -200,30 +222,24 @@ export const usePreCertificateStore = defineStore(
 					id: null
 				};
 			}
-			if (lstDataConfig.value.preTypes.length == 0) await getLstDictionaries();
-			const pre_type = lstDataConfig.value.preTypes.find(
-				pre_type => pre_type.id === temp.pre_type_id
-			);
-			temp.pre_type = pre_type ? pre_type : { id: null, description: null };
 			if (temp.status == 6 && temp.cancel_reason) {
-				const reason = lstDataConfig.value.cancelPCReasons.find(
-					reason => `${reason.id}` === temp.cancel_reason
-				);
-				temp.cancel_reason_string = reason ? reason.description : "";
+				temp.cancel_reason_string = temp.cancel_reason.description || "";
 			}
 			if (temp.payments.length === 0) {
 				temp.payments = [
 					{
 						id: null,
 						amount: 0,
-						pay_date: null
+						pay_date: null,
+						for_payment_of: ""
 					}
 				];
 				temp.paymentsOriginal = [
 					{
 						id: null,
 						amount: 0,
-						pay_date: null
+						pay_date: null,
+						for_payment_of: ""
 					}
 				];
 			}
@@ -238,7 +254,6 @@ export const usePreCertificateStore = defineStore(
 			}
 			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
 			dataPC.value = temp;
-			console.log(dataPC.value);
 			return dataPC.value;
 		}
 		async function createUpdatePreCertificateion(
@@ -326,7 +341,6 @@ export const usePreCertificateStore = defineStore(
 		const isLoading = ref(false);
 		async function getPreCertificateAll(type = "table") {
 			isLoading.value = true;
-			const tempstatus = [];
 			let tempots = [];
 			if (
 				this.filterKanban.selectedOfficialTransferStatus[0] == true &&
@@ -338,18 +352,11 @@ export const usePreCertificateStore = defineStore(
 			} else if (this.filterKanban.selectedOfficialTransferStatus[1] == true) {
 				tempots = 1;
 			}
-			for (
-				let index = 0;
-				index < filterKanban.value.selectedStatus.length;
-				index++
-			) {
-				const element = filterKanban.value.selectedStatus[index];
-				if (element) tempstatus.push(index + 1);
-			}
+
 			const temp = {
 				search: filter.value.search,
 				data: {
-					status: tempstatus,
+					status: filterKanban.value.selectedStatus,
 					ots: tempots,
 					timeFilter: {
 						from: filterKanban.value.timeFilter.from,
@@ -384,12 +391,19 @@ export const usePreCertificateStore = defineStore(
 
 		const jsonConfig = ref(null);
 		async function rejectFromStage2ToStage1() {
-			for (
-				let index = 0;
-				index < preCertificateOtherDocuments.value.Result.length;
-				index++
+			let tempLength = [];
+			if (
+				preCertificateOtherDocuments.value.Result.length === 0 &&
+				dataPC.value.other_documents
 			) {
-				const element = preCertificateOtherDocuments.value.Result[index];
+				tempLength = dataPC.value.other_documents.filter(
+					file => file.type_document === "Result"
+				);
+			} else {
+				tempLength = preCertificateOtherDocuments.value.Result;
+			}
+			for (let index = 0; index < tempLength.length; index++) {
+				const element = tempLength[index];
 				const res = await File.deleteFilePreCertificate(element.id);
 				if (res.data) {
 					// other.value.toast.open({
@@ -418,12 +432,14 @@ export const usePreCertificateStore = defineStore(
 			return;
 		}
 
-		async function updateStatus(id, note, reason_id) {
+		async function updateStatus(id, note, reason_id, appraiser = null) {
 			const config = jsonConfig.value.principle.find(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			dataPC.value.status_expired_at_string = await getExpireStatusDate(config);
+			dataPC.value.status_expired_at_string = config.process_time
+				? await getExpireStatusDate(config)
+				: null;
 			let dataSend = {
 				business_manager_id: null,
 				appraiser_perform_id: null,
@@ -444,6 +460,9 @@ export const usePreCertificateStore = defineStore(
 				status_description: config.description,
 				status_config: jsonConfig.value.principle
 			};
+			if (appraiser) {
+				dataSend[appraiser.type] = appraiser.id;
+			}
 			if (
 				(dataPC.value.status == 2 || dataPC.value.status == 6) &&
 				dataPC.value.target_status == 1
@@ -454,9 +473,6 @@ export const usePreCertificateStore = defineStore(
 			if (dataPC.value.target_status == 6 && reason_id) {
 				dataSend.cancel_reason = reason_id;
 			}
-			// if (dataPC.value.target_status == 1 && dataPC.value.status == 6) {
-			// 	dataSend.cancel_reason = null;
-			// }
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);
 
 			return res;
@@ -472,10 +488,23 @@ export const usePreCertificateStore = defineStore(
 		async function updatePaymentFunction(data, isReturn = false) {
 			other.value.isSubmit = true;
 
-			const res = await PreCertificate.updatePayments(data, dataPC.value.id);
+			const updatedPayments = data.map(element => {
+				const updatedElement = { ...element };
+				if (moment(updatedElement.pay_date, "DD/MM/YYYY", true).isValid()) {
+					updatedElement.pay_date = moment(
+						updatedElement.pay_date,
+						"DD/MM/YYYY"
+					).format("YYYY-MM-DD");
+				}
+				return updatedElement;
+			});
+
+			const res = await PreCertificate.updatePayments(updatedPayments, 9999);
+
 			if (isReturn) {
 				return res;
 			}
+
 			if (res.data && res.data.error === false) {
 				other.value.toast.open({
 					message: "Lưu thông tin thanh toán thành công",
@@ -496,6 +525,7 @@ export const usePreCertificateStore = defineStore(
 					position: "top-right"
 				});
 			}
+
 			other.value.isSubmit = false;
 		}
 		function resetData() {
@@ -609,6 +639,7 @@ export const usePreCertificateStore = defineStore(
 		}
 
 		return {
+			vueStoree,
 			dataPC,
 			lstDataConfig,
 			preCertificateOtherDocuments,
@@ -633,7 +664,10 @@ export const usePreCertificateStore = defineStore(
 			updateStatus,
 			getLstAppraisers,
 			getStartData,
-			updatePaymentFunction
+			updatePaymentFunction,
+			updateVueStore,
+			updatePermission,
+			functionUpdateWorkflow
 		};
 	},
 	{

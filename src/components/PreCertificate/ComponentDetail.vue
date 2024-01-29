@@ -8,24 +8,19 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class="row">
+						<div class="row" style="display: flex;align-items: center;">
 							<div class=" color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
-								<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
-								<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
-								<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
-								<span v-if="dataPC.status === 4">Thương thảo</span>
-								<span v-if="dataPC.status === 5">Hoàn thành</span>
-								<span v-if="dataPC.status === 6">Hủy</span>
+								<span>{{ statusDescription }}</span>
 							</div>
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
-								class=" card-status-certificate ml-3"
 								id="certificate_id"
+								class="ml-3 mr-4 arrowBox arrow-right"
 							>
 								<icon-base
-									name="nav_hstd"
+									name="nav_hstd_2"
 									width="20px"
 									height="20px"
 									class="item-icon svg-inline--fa"
@@ -225,6 +220,7 @@
 				</div>
 			</div>
 		</div>
+		<PaymentPreCertificateHistories @updatePayments="updatePayments" />
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -457,7 +453,7 @@
 		</div>
 
 		<Footer
-			v-if="jsonConfig && dataPC && dataPC.id"
+			v-if="jsonConfig && profile && dataPC && dataPC.id"
 			:style="isMobile ? { bottom: '60px' } : {}"
 			:key="dataPC.status"
 			:form="dataPC"
@@ -484,12 +480,6 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
-		<ModalPCPayments
-			v-if="showCardPCPayments"
-			@cancel="showCardPCPayments = false"
-			@updatePayments="updatePayments"
-		/>
-
 		<ModalViewDocument
 			v-if="isShowPrint"
 			@cancel="isShowPrint = false"
@@ -501,7 +491,7 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
-		<ModalNotificationPreCertificateNote
+		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
@@ -509,6 +499,7 @@
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${message}'`
 			"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
 
@@ -540,6 +531,7 @@ import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -553,15 +545,14 @@ import { Tabs, TabItem } from "vue-material-tabs";
 import Vue from "vue";
 import Icon from "buefy";
 import InputLengthArea from "@/components/Form/InputLengthArea.vue";
-import CertificationBrief from "@/models/CertificationBrief";
 import PreCertificate from "@/models/PreCertificate";
 import WareHouse from "@/models/WareHouse";
 import { Timeline, Drawer } from "ant-design-vue";
 import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
+import PaymentPreCertificateHistories from "@/components/PreCertificate/PaymentPreCertificateHistories";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
-import ModalPCPayments from "@/components/PreCertificate/ModalPCPayments";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
 import File from "@/models/File";
@@ -584,8 +575,9 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		ModalNotificationWithAssign,
+		PaymentPreCertificateHistories,
 		IconBase,
-		ModalPCPayments,
 		OtherFile,
 		InputCategory,
 		InputCategorySearch,
@@ -664,25 +656,16 @@ export default {
 			title: "",
 			indexDelete: "",
 			id_file_delete: "",
-			position_profile: "",
-			view: false,
-			add: false,
-			edit: false,
-			deleted: false,
-			accept: false,
-			exportAction: false,
-			checkRole: false,
+
 			showDetailAppraise: false,
 			dataDetailAppraise: [],
 			appraiser_number: "",
-			user_id: "",
 			historyList: [],
 			isCheckRealEstate: true,
 			isCheckConstruction: false,
 			isViewAutomationDocument: true,
 			targetStatus: "",
 			isHandleAction: false,
-			profile: {},
 			checkVersion: true,
 			typeAppraiseProperty: [],
 			isShowAppraiseListVersion: false,
@@ -721,7 +704,9 @@ export default {
 			dataPC,
 			lstDataConfig,
 			preCertificateOtherDocuments,
-			jsonConfig
+			jsonConfig,
+			vueStoree,
+			other
 		} = storeToRefs(preCertificateStore);
 		const dialogRequireForStage3 = ref(false);
 		const config = ref({});
@@ -729,35 +714,127 @@ export default {
 		const editAppraiser = ref(false);
 		const editPayments = ref(false);
 		const allowEditFile = ref({ appendix: false, result: false });
-		const changeEditStatus = () => {
+		const changeEditStatus = async () => {
 			let dataJson = jsonConfig.value.principle.filter(
 				item => item.status === dataPC.value.status && item.isActive === 1
 			);
 			if (dataJson && dataJson.length > 0) {
 				config.value = dataJson[0];
-				editAppraiser.value = dataJson[0].edit.appraiser
-					? dataJson[0].edit.appraiser
-					: false;
 
-				editInfo.value = dataJson[0].edit.info ? dataJson[0].edit.info : false;
-				editPayments.value = dataJson[0].edit.payments
-					? dataJson[0].edit.payments
-					: false;
-				allowEditFile.value.appendix = dataJson[0].edit.file_appendix
-					? dataJson[0].edit.file_appendix
-					: false;
-				allowEditFile.value.result = dataJson[0].edit.file_result
-					? dataJson[0].edit.file_result
-					: false;
+				const checkPermissionObject = {
+					form: false,
+					info: false,
+					file_appendix: false,
+					file_result: false,
+					payments: false,
+					appraiser: false
+				};
+				for (const key of Object.keys(checkPermissionObject)) {
+					checkPermissionObject[key] = await checkPermssionRequire(key);
+				}
+
+				editAppraiser.value =
+					checkPermissionObject.appraiser && dataJson[0].edit.appraiser
+						? dataJson[0].edit.appraiser
+						: false;
+
+				editInfo.value =
+					checkPermissionObject.info && dataJson[0].edit.info
+						? dataJson[0].edit.info
+						: false;
+				editPayments.value =
+					checkPermissionObject.payments && dataJson[0].edit.payments
+						? dataJson[0].edit.payments
+						: false;
+				allowEditFile.value.appendix =
+					checkPermissionObject.file_appendix && dataJson[0].edit.file_appendix
+						? dataJson[0].edit.file_appendix
+						: false;
+				allowEditFile.value.result =
+					checkPermissionObject.file_result && dataJson[0].edit.file_result
+						? dataJson[0].edit.file_result
+						: false;
+
+				const tempPermission = {
+					edit: edit.value,
+					editPayments: editPayments.value
+				};
+				preCertificateStore.updatePermission(tempPermission);
 			}
-			console.log("dataJson", dataJson, editPayments.value);
+		};
+
+		const checkPermssionRequire = key => {
+			const permissionAllowEdit = jsonConfig.value.permissionAllowEdit;
+			const user = vueStoree.value.user;
+			if (permissionAllowEdit[key]) {
+				for (let index = 0; index < permissionAllowEdit[key].length; index++) {
+					const element = permissionAllowEdit[key][index];
+					if (
+						(element === "created_by" && dataPC.value.created_by === user.id) ||
+						(element !== "created_by" &&
+							dataPC.value[element] === user.appraiser.id)
+					) {
+						return true;
+					}
+				}
+			}
+			return false;
+		};
+		const profile = ref(null);
+		const view = ref(false);
+		const add = ref(false);
+		const edit = ref(false);
+		const deleted = ref(false);
+		const accept = ref(false);
+		const checkRole = ref(false);
+		const exportAction = ref(false);
+		const user_id = ref("");
+
+		const permissionFunction = async () => {
+			profile.value = vueStoree.value.profile;
+			user_id.value = vueStoree.value.user.id;
+			if (user_id.value === dataPC.value.created_by) {
+				checkRole.value = true;
+			}
+			const permission = vueStoree.value.currentPermissions;
+			permission.forEach(value => {
+				if (value === "VIEW_PRE_CERTIFICATE") {
+					view.value = true;
+				}
+				if (value === "ADD_PRE_CERTIFICATE") {
+					add.value = true;
+				}
+				if (value === "EDIT_PRE_CERTIFICATE") {
+					edit.value = true;
+				}
+				if (value === "DELETE_PRE_CERTIFICATE") {
+					deleted.value = true;
+				}
+				if (value === "ACCEPT_PRE_CERTIFICATE") {
+					accept.value = true;
+				}
+				if (value === "EXPORT_PRE_CERTIFICATE") {
+					exportAction.value = true;
+				}
+			});
+			if (!view.value) {
+				other.value.router.push({ name: "page-not-found" });
+				other.value.toast.open({
+					message: "Bạn ko có quyền xem yêu cầu sơ bộ",
+					type: "error",
+					position: "top-right",
+					duration: 5000
+				});
+			}
 		};
 		const start = async () => {
 			if (!jsonConfig.value) {
 				jsonConfig.value = await preCertificateStore.getConfig();
 			}
 			await preCertificateStore.resetData();
+
 			dataPC.value = await preCertificateStore.getPreCertificate(props.routeId);
+			await permissionFunction();
 			await changeEditStatus();
 		};
 
@@ -765,8 +842,9 @@ export default {
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
 		const showCardPCPayments = ref(false);
-
+		const appraiserChangeStage = ref(null);
 		return {
+			appraiserChangeStage,
 			showCardPCPayments,
 			allowEditFile,
 			jsonConfig,
@@ -781,48 +859,33 @@ export default {
 			preCertificateOtherDocuments,
 			preCertificateStore,
 			checkVersion2,
+			profile,
+			view,
+			add,
+			edit,
+			deleted,
+			accept,
+			checkRole,
+			exportAction,
+			user_id,
 
 			showCardDetailFileResult,
 			changeEditStatus
 		};
 	},
 
-	created() {
-		const profile = this.$store.getters.profile;
-		if (profile.data.user) {
-			this.position_profile =
-				profile.data.user.appraiser.appraise_position.acronym;
-			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
-		}
-		this.user_id = profile.data.user.id;
-		this.profile = profile;
-		if (profile.data.user.id === this.dataPC.created_by) {
-			this.checkRole = true;
-		}
-		const permission = this.$store.getters.currentPermissions;
-		// fix_permission
-		permission.forEach(value => {
-			if (value === "VIEW_CERTIFICATE_BRIEF") {
-				this.view = true;
-			}
-			if (value === "ADD_CERTIFICATE_BRIEF") {
-				this.add = true;
-			}
-			if (value === "EDIT_CERTIFICATE_BRIEF") {
-				this.edit = true;
-			}
-			if (value === "DELETE_CERTIFICATE_BRIEF") {
-				this.deleted = true;
-			}
-			if (value === "ACCEPT_CERTIFICATE_BRIEF") {
-				this.accept = true;
-			}
-			if (value === "EXPORT_CERTIFICATE_BRIEF") {
-				this.exportAction = true;
-			}
-		});
-	},
+	created() {},
 	computed: {
+		statusDescription() {
+			if (this.jsonConfig) {
+				const status = this.jsonConfig.principle.find(
+					i => i.status === this.dataPC.status
+				);
+				return status ? status.description : "";
+			}
+
+			return "";
+		},
 		getHistoryTextColor() {
 			return this.historyList.map(item => {
 				return this.loadColor(item);
@@ -839,11 +902,6 @@ export default {
 	},
 	methods: {
 		handleshowCardPCPayments() {
-			console.log(
-				this.dataPC.total_service_fee,
-				"this.dataPC.total_service_fee",
-				this.dataPC.total_service_fee > 0
-			);
 			if (this.dataPC.total_service_fee > 0) this.showCardPCPayments = true;
 			else {
 				this.$toast.open({
@@ -1044,6 +1102,7 @@ export default {
 		},
 		async updateAppraisal() {
 			await this.preCertificateStore.getPreCertificate(this.routeId);
+			await this.changeEditStatus();
 			this.key_render_appraisal += 1;
 			this.showAppraisalDialog = false;
 		},
@@ -1079,6 +1138,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				if (
 					!this.preCertificateOtherDocuments.Result ||
@@ -1130,7 +1190,11 @@ export default {
 							return;
 						}
 					}
-
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.dataPC[config.re_assign],
+							type: config.re_assign
+						};
 					this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
@@ -1176,7 +1240,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleAction2(note, reason_id) {
+		async handleAction2(note, reason_id, tempAppraiser) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -1184,7 +1248,8 @@ export default {
 			const res = await this.preCertificateStore.updateStatus(
 				this.dataPC.id,
 				note,
-				reason_id
+				reason_id,
+				tempAppraiser
 			);
 
 			if (res.data) {
@@ -2044,11 +2109,35 @@ export default {
 	}
 }
 
+.arrowBox {
+	margin-top: -10px;
+	position: relative;
+	background: #fbaf1c;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 600;
+	font-size: 16px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 5px 0 0;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	right: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-left: 11px solid #fbaf1c;
+}
+
 .btn {
 	&-history {
 		position: fixed;
 		right: 0;
-		top: 170px;
+		top: 210px;
 		z-index: 100;
 		border-radius: 5px 0 0 5px;
 		padding: 0.5rem 0.3rem;

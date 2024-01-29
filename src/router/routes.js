@@ -1013,6 +1013,24 @@ export const routes = [
 		path: "/appraise",
 		component: Resource,
 		children: [
+			{
+				path: "pre_certificate_config",
+				name: "pre_certificate_config.index",
+				component: page("appraise/pre_certificate_config/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Thời gian thực hiện",
+					// fix_permission
+					permissions: [PERMISSIONS.VIEW_CATEGORY],
+					breadcrumbs: [
+						{
+							title: "Thời gian thực hiện",
+							name: "pre_certificate_config.index"
+						}
+					]
+				},
+				gtm: "Trang Thời gian thực hiện"
+			},
 			// element
 			{
 				path: "element",
@@ -1886,7 +1904,7 @@ export const routes = [
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
 					title: "Tạo mới yêu cầu sơ bộ",
-					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.ADD_PRE_CERTIFICATE],
 					breadcrumbs: [
 						{
 							title: "Yêu cầu sơ bộ",
@@ -1908,7 +1926,7 @@ export const routes = [
 				props: true,
 				meta: {
 					title: "Chỉnh sửa yêu cầu sơ bộ",
-					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.EDIT_PRE_CERTIFICATE],
 					breadcrumbs: [
 						{
 							title: "Yêu cầu sơ bộ",
@@ -1930,7 +1948,7 @@ export const routes = [
 				meta: {
 					title: "Yêu cầu sơ bộ",
 					// fix_permission
-					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.VIEW_PRE_CERTIFICATE],
 					breadcrumbs: [
 						{
 							title: "Yêu cầu sơ bộ",
@@ -1949,7 +1967,7 @@ export const routes = [
 				meta: {
 					title: "Chi tiết yêu cầu sơ bộ",
 					// fix_permission
-					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.VIEW_PRE_CERTIFICATE],
 					breadcrumbs: [
 						{
 							title: "Yêu cầu sơ bộ",

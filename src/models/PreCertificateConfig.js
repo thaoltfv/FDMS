@@ -13,4 +13,19 @@ export default class PreCertificateConfig extends Model {
 		});
 		return resp;
 	}
+	static async findByName(name) {
+		return new this().request({
+			method: "GET",
+			url: `pre-certificate-configs/find-config/${name}`,
+			isStatic: true
+		});
+	}
+	static async updateConfig(name, data) {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificate-configs/update-config/${name}`,
+			data: data,
+			isStatic: true
+		});
+	}
 }
