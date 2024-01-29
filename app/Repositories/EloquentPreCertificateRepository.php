@@ -772,8 +772,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $assignTo[] = 'appraiserBusinessManager';
                 }
 
-                
-                PreCertificate::where('id', $preCertificateId)->update($data);
+                $certificateArr = new PreCertificate($data);
+                PreCertificate::where('id', $preCertificateId)->update($certificateArr->attributesToArray());
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $edited->fill($data);
                 $edited->save();
