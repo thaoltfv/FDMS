@@ -1005,6 +1005,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                                         ->get();
                     if ($documents->count() > 0) {
                         foreach ($documents as $document) {
+                            if ($document->type_document == 'Appendix') {
                                 $item = [
                                     'certificate_id' => $certificateId,
                                     'name' => $document->name,
@@ -1013,11 +1014,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                                     'size' => $document->size,
                                     'description' => 'appendix',
                                     'created_by' => $user->id,
-                                    'type_document' => $document->type_document, 
                                 ];
-
                                 $item = new CertificateOtherDocuments($item);
                                 QueryBuilder::for($item)->insert($item->attributesToArray());
+                            }
                         }
                     }
 

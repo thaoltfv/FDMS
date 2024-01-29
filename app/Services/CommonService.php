@@ -1720,7 +1720,9 @@ class CommonService
 	public static function callNotification($users, $data)
 	{
 		$broadcast = new BroadcastNotification((object)$data);
+		\Log::info('Sending notification...');
 		Notification::send($users, $broadcast);
+		\Log::info('Notification sent.');
 	}
 
 	public static function convertStatusText($status)
