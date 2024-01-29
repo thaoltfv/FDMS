@@ -1373,6 +1373,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 'user' => $loginUser,
                 'id' => $id
             ];
+            $users = array_unique($users, SORT_REGULAR);
 
             CommonService::callNotification($users, $data);
         }
@@ -1416,33 +1417,33 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
+            $processedUserIds = []; // Array to store processed user_ids
             foreach ($assignTo as $assign) {
                 $user = null;
                 if (isset($preCertificate[$assign]) && isset($preCertificate[$assign]->user_id)) {
-                    if ($preCertificate[$assign]->user_id != $loginUser->id) {
+                    if ($preCertificate[$assign]->user_id != $loginUser->id && !in_array($preCertificate[$assign]->user_id, $processedUserIds)) {
                         $user = $eloquenUser->getUser($preCertificate[$assign]->user_id);
+                        $processedUserIds[] = $preCertificate[$assign]->user_id; // Add user_id to processedUserIds array
                     }
-                }
 
-                switch ($assign) {
-                    case 'appraiserSale':
-                        $typeAssign = 'Nhân viên kinh doanh';
-                        break;
-                    case 'appraiserPerform':
-                        $typeAssign = 'Chuyên viên thẩm định';
-                        break;
-                    case 'appraiserBusinessManager':
-                        $typeAssign = 'Quản lý nghiệp vụ';
-                        break;
-                }
+                    switch ($assign) {
+                        case 'appraiserSale':
+                            $typeAssign = 'Nhân viên kinh doanh';
+                            break;
+                        case 'appraiserPerform':
+                            $typeAssign = 'Chuyên viên thẩm định';
+                            break;
+                        case 'appraiserBusinessManager':
+                            $typeAssign = 'Quản lý nghiệp vụ';
+                            break;
+                    }
 
-                $data = [
-                    'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
-                    'message' => 'YCSB_' . $id .' '. $preCertificate[$assign]->user_id.' bạn được' . $loginUser->name . ' phân công làm ' . $typeAssign . '.',
-                    'user' => $loginUser,
-                    'id' => $id
-                ];
-                if ($user) {
+                    $data = [
+                        'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
+                        'message' => 'YCSB_' . $id .' '. $preCertificate[$assign]->name.' bạn được' . $loginUser->name . ' phân công làm ' . $typeAssign . '.',
+                        'user' => $loginUser,
+                        'id' => $id
+                    ];
                     CommonService::callNotification([$user], $data);
                 }
             }
