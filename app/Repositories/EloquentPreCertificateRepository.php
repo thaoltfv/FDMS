@@ -1423,27 +1423,27 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     if ($preCertificate[$assign]->user_id != $loginUser->id && !in_array($preCertificate[$assign]->user_id, $processedUserIds)) {
                         $user = $eloquenUser->getUser($preCertificate[$assign]->user_id);
                         $processedUserIds[] = $preCertificate[$assign]->user_id; // Add user_id to processedUserIds array
-                    }
 
-                    switch ($assign) {
-                        case 'appraiserSale':
-                            $typeAssign = 'Nhân viên kinh doanh';
-                            break;
-                        case 'appraiserPerform':
-                            $typeAssign = 'Chuyên viên thẩm định';
-                            break;
-                        case 'appraiserBusinessManager':
-                            $typeAssign = 'Quản lý nghiệp vụ';
-                            break;
-                    }
+                        switch ($assign) {
+                            case 'appraiserSale':
+                                $typeAssign = 'Nhân viên kinh doanh';
+                                break;
+                            case 'appraiserPerform':
+                                $typeAssign = 'Chuyên viên thẩm định';
+                                break;
+                            case 'appraiserBusinessManager':
+                                $typeAssign = 'Quản lý nghiệp vụ';
+                                break;
+                        }
 
-                    $data = [
-                        'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
-                        'message' => $preCertificate[$assign]->name.' bạn được ' . $loginUser->name . ' phân công làm ' . $typeAssign . 'cho YCSB_' . $id .'.',
-                        'user' => $loginUser,
-                        'id' => $id
-                    ];
-                    CommonService::callNotification([$user], $data);
+                        $data = [
+                            'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
+                            'message' => $preCertificate[$assign]->name.' bạn được ' . $loginUser->name . ' phân công làm ' . $typeAssign . 'cho YCSB_' . $id .'.',
+                            'user' => $loginUser,
+                            'id' => $id
+                        ];
+                        CommonService::callNotification([$user], $data);
+                    }
                 }
             }
         }
