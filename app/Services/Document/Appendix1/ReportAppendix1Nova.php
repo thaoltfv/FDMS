@@ -102,7 +102,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
         $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
         $data[] = $this->collectInfoLoaiCanHo($stt++, 'Loại căn hộ', $asset);
-        $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoArea($stt++, "Diện tích ($this->m2)", $asset);
         $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
         $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
         $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
