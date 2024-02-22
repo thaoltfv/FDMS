@@ -8,24 +8,16 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class="row">
+						<div class="row" style="display: flex;align-items: center;">
 							<div class=" color_content card-status">
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
-								<span v-if="form.status === 1">Tiếp nhận hồ sơ</span>
-								<span v-if="form.status === 2">Thẩm định</span>
-								<span v-if="form.status === 6">Kiểm soát</span>
-								<span v-if="form.status === 3">Duyệt giá</span>
-								<span v-if="form.status === 7">Duyệt phát hành</span>
-								<span v-if="form.status === 8">In hồ sơ</span>
-								<span v-if="form.status === 9">Bàn giao khách hàng</span>
-								<span v-if="form.status === 4">Hoàn thành</span>
-								<span v-if="form.status === 5">Hủy</span>
+								<span>{{ statusDescription }}</span>
 							</div>
 							<div
 								v-if="form.pre_certificate_id"
-								@click="handleDetailPreCertificate(form.pre_certificate_id)"
-								class=" card-status-certificate ml-3"
 								id="pre_certificate_id"
+								@click="handleDetailPreCertificate(form.pre_certificate_id)"
+								class=" mr-4 arrowBox arrow-right"
 							>
 								<icon-base
 									name="nav_ycsb"
@@ -218,6 +210,17 @@
 
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
+												>Hành chính viên:</strong
+											>
+											<p>
+												{{
+													form.administrative ? form.administrative.name : ""
+												}}
+											</p>
+										</div>
+
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
 												>Đại diện theo pháp luật:</strong
 											>
 											<p>
@@ -248,6 +251,14 @@
 				</div>
 			</div>
 		</div>
+		<PaymentCertificateHistories
+			v-if="form"
+			:key="keyRender"
+			@getDetail="getDetail"
+			:form="form"
+			:permissionNotAllowEdit="!(editPayment && edit)"
+			:toast="$toast"
+		/>
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -1311,6 +1322,7 @@
 			</div>
 		</div>
 		<Footer
+			v-if="jsonConfig"
 			:style="isMobile() ? { bottom: '60px' } : {}"
 			:key="form.status + '_' + form.sub_status"
 			:form="form"
@@ -1406,10 +1418,11 @@
 			@updateAppraises="updateAppraises"
 			@cancel="showAppraiseListDialog = false"
 		/>
-		<ModalNotificationCertificateNote
+		<ModalNotificationWithAssign
 			v-if="openNotification"
 			@cancel="handleCancel"
 			v-bind:notification="message"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction"
 		/>
 		<ModalNotificationCertificate
@@ -1462,10 +1475,11 @@
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/> -->
-		<ModalNotificationCertificateNote
+		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
 		<ModalAppraiseListVersion
@@ -1494,10 +1508,15 @@
 @import "../../../node_modules/leaflet/dist/leaflet.css";
 </style>
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
+import PaymentCertificateHistories from "./component/PaymentCertificateHistories";
+
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -1534,13 +1553,13 @@ import Footer from "./component/FooterDetail.vue";
 import store from "@/store";
 import * as types from "@/store/mutation-types";
 import ModalAppraiseListVersion from "./component/modals/ModalAppraiseListVersion";
-const jsonConfig = require("../../../config/workflow.json");
 import IconBase from "@/components/IconBase.vue";
 
 Vue.use(Icon);
 export default {
 	name: "detail_certification_brief",
 	components: {
+		PaymentCertificateHistories,
 		IconBase,
 		InputCategory,
 		InputCategorySearch,
@@ -1569,7 +1588,7 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalAppraiseListVersion,
-		ModalNotificationCertificateNote
+		ModalNotificationWithAssign
 	},
 	data() {
 		return {
@@ -1645,13 +1664,13 @@ export default {
 			isCheckRealEstate: true,
 			isCheckConstruction: false,
 			isViewAutomationDocument: true,
-			jsonConfig: jsonConfig,
 			targetStatus: "",
 			targetSubStatus: "",
 			isHandleAction: false,
 			editAppraiser: false,
 			editItemList: false,
 			editInfo: false,
+			editPayment: false,
 			printConfig: false,
 			profile: {},
 			config: {},
@@ -1675,6 +1694,19 @@ export default {
 				"Hình ảnh hiện trạng",
 				"Phiếu thu thập TSSS"
 			]
+		};
+	},
+	setup() {
+		const workFlowConfigStore = useWorkFlowConfig();
+		const jsonConfig = ref(null);
+
+		const keyRender = ref(0);
+		const appraiserChangeStage = ref(null);
+		return {
+			appraiserChangeStage,
+			jsonConfig,
+			workFlowConfigStore,
+			keyRender
 		};
 	},
 	beforeRouteEnter: async (to, from, next) => {
@@ -1737,6 +1769,19 @@ export default {
 		this.getDictionary();
 	},
 	computed: {
+		statusDescription() {
+			if (this.jsonConfig) {
+				const status = this.jsonConfig.principle.find(
+					i =>
+						i.status === this.form.status &&
+						i.sub_status === this.form.sub_status
+				);
+				return status ? status.description : "";
+			}
+
+			return "";
+		},
+
 		columnAssets() {
 			let dataColumn = [
 				{
@@ -1888,6 +1933,30 @@ export default {
 		}
 	},
 	methods: {
+		async getDetail() {
+			await CertificationBrief.getDetailCertificateBrief(this.form.id)
+				.then(resp => {
+					if (resp.data) {
+						this.form = Object.assign(this.form, { ...resp.data });
+						// this.keyRender++;
+					} else if (resp.error && resp.error.statusCode) {
+						this.$toast.open({
+							message: resp.error.statusCode,
+							type: "error",
+							position: "top-right",
+							duration: 5000
+						});
+					}
+				})
+				.catch(err => {
+					this.$toast.open({
+						message: err,
+						type: "error",
+						position: "top-right",
+						duration: 5000
+					});
+				});
+		},
 		getReport(type) {
 			let report = this.form.other_documents.find(i => i.description === type);
 			return report;
@@ -2167,6 +2236,8 @@ export default {
 			this.form.appraiser_control = dataAppraisal.appraiser_control;
 			this.form.appraiser = dataAppraisal.appraiser;
 			this.form.appraiser_id = dataAppraisal.appraiser_id;
+			this.form.administrative = dataAppraisal.administrative;
+			this.form.administrative_id = dataAppraisal.administrative_id;
 			this.key_render_appraisal += 1;
 			this.form.status = this.status;
 			this.showAppraisalDialog = false;
@@ -2343,6 +2414,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
 			if (config) {
@@ -2353,6 +2425,11 @@ export default {
 					message = this.checkRequired(require, this.data);
 				}
 				if (message === "") {
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.form[config.re_assign],
+							type: config.re_assign
+						};
 					this.targetStatus = config.status;
 					this.targetSubStatus = config.sub_status;
 					this.message = target.description;
@@ -2374,7 +2451,7 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		async handleAction2(note, reason_id) {
+		async handleAction2(note, reason_id, tempAppraiser) {
 			const config = this.jsonConfig.principle.find(
 				item => item.status === this.targetStatus && item.isActive === 1
 			);
@@ -2391,7 +2468,9 @@ export default {
 				appraiser_manager,
 				appraiser,
 				appraiser_control,
-				appraiser_control_id
+				appraiser_control_id,
+				administrative_id,
+				administrative
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -2404,6 +2483,8 @@ export default {
 				appraiser_control,
 				appraiser_control_id,
 				appraiser,
+				administrative_id,
+				administrative,
 				status: this.targetStatus,
 				sub_status: this.targetSubStatus,
 				check_price: this.isCheckPrice,
@@ -2416,14 +2497,19 @@ export default {
 				status_description: this.message,
 				status_config: this.jsonConfig.principle
 			};
+
+			if (tempAppraiser) {
+				dataSend[tempAppraiser.type] = tempAppraiser.id;
+			}
 			const res = await CertificationBrief.updateStatusCertificate(
 				this.idData,
 				dataSend
 			);
 			if (res.data) {
-				this.form.status = this.targetStatus;
-				this.form.sub_status = this.targetSubStatus;
-				this.changeEditStatus();
+				// this.form.status = this.targetStatus;
+				// this.form.sub_status = this.targetSubStatus;
+				// this.changeEditStatus();
+				await this.getDetail();
 				this.$toast.open({
 					message: this.message + " thành công",
 					type: "success",
@@ -2974,6 +3060,9 @@ export default {
 					? dataJson[0].edit.appraise_item_list
 					: false;
 				this.editInfo = dataJson[0].edit.info ? dataJson[0].edit.info : false;
+				this.editPayment = dataJson[0].edit.payments
+					? dataJson[0].edit.payments
+					: false;
 				this.printConfig = dataJson[0].print;
 			}
 		},
@@ -3130,7 +3219,11 @@ export default {
 		}
 		this.setDocumentViewStatus();
 	},
-	mounted() {
+	async mounted() {
+		const config = await this.workFlowConfigStore.getConfigByName(
+			"workflowHSTD"
+		);
+		this.jsonConfig = config.hstdConfig;
 		this.changeEditStatus();
 		this.checkVersion = this.form.checkVersion;
 	},
@@ -3227,25 +3320,31 @@ export default {
 		margin-bottom: 10px;
 	}
 }
-
-.card-status-certificate {
-	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	background: #ffffff;
-	margin-bottom: 10px;
+.arrowBox {
+	margin-top: -10px;
+	position: relative;
+	background: #007ec6;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
 	font-weight: 600;
-	padding: 10px;
 	font-size: 16px !important;
-	color: darkgray;
+	display: inline-block;
 	cursor: pointer;
-	@media (max-width: 768px) {
-		margin-bottom: 10px;
-	}
-
-	@media (max-width: 418px) {
-		margin-bottom: 10px;
-	}
+	padding: 0 10px 0 0;
+	margin-left: 30px;
 }
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	left: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-right: 11px solid #007ec6;
+}
+
 .form-group-container {
 	margin-top: 10px;
 }
@@ -3408,7 +3507,7 @@ export default {
 	&-history {
 		position: fixed;
 		right: 0;
-		top: 170px;
+		top: 210px;
 		z-index: 100;
 		border-radius: 5px 0 0 5px;
 		padding: 0.5rem 0.3rem;

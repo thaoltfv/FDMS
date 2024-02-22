@@ -27,14 +27,14 @@
 					:style="isMobile() ? { 'padding-top': '0' } : {}"
 				>
 					<div class="detail_certificate_1 col-12 mb-2">
-						<div class="col-12 d-flex mb-2 row">
+						<div class="col-12 d-flex mb-2 row justify-content-between">
 							<span class="content_id content_id_primary class_p">{{
 								`HSTĐ ${idData}`
 							}}</span>
 							<span
 								v-if="form.pre_certificate_id"
 								@click="handleDetailPreCertificate(form.pre_certificate_id)"
-								class=" card-status-certificate ml-2"
+								class="  arrowBox arrow-right"
 								id="pre_certificate_id"
 							>
 								<icon-base name="nav_ycsb" class="item-icon svg-inline--fa" />
@@ -169,6 +169,11 @@
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Thẩm định viên:</strong>
 								<p>{{ form.appraiser ? form.appraiser.name : "" }}</p>
+							</div>
+
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Hành chính viên:</strong>
+								<p>{{ form.administrative ? form.administrative.name : "" }}</p>
 							</div>
 
 							<div class="d-flex container_content">
@@ -953,6 +958,28 @@ export default {
 		}
 	}
 }
+.arrowBox {
+	position: relative;
+	background: #007ec6;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 400;
+	font-size: 13px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 10px 0 0;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	left: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-right: 11px solid #007ec6;
+}
 .container-img {
 	padding: 0.75rem 0;
 	border: 1px solid #0b0d10;
@@ -1014,13 +1041,6 @@ export default {
 	border-radius: 5px;
 	border: 1px solid #b5e5ff;
 	background-color: #eef9ff;
-}
-.card-status-certificate {
-	border-radius: 5px;
-	padding: 2px 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	color: darkgray;
-	cursor: pointer;
 }
 .detail_certificate_2 {
 	padding: 0.75rem;

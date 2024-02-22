@@ -92,7 +92,63 @@
 			/>
 		</g>
 	</svg>
-
+	<svg
+		v-else-if="name === 'nav_hstd_2'"
+		xmlns="http://www.w3.org/2000/svg"
+		:width="width"
+		:height="height"
+		viewBox="0 0 28 28"
+		fill="none"
+	>
+		<path
+			d="M18 6H10C9.46957 6 8.96086 6.21071 8.58579 6.58579C8.21071 6.96086 8 7.46957 8 8V24C8 24.5304 8.21071 25.0391 8.58579 25.4142C8.96086 25.7893 9.46957 26 10 26H22C22.5304 26 23.0391 25.7893 23.4142 25.4142C23.7893 25.0391 24 24.5304 24 24V12L18 6Z"
+			fill="white"
+			stroke="#FBAF1C"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path d="M18 6V12H24" fill="white" />
+		<path
+			d="M18 6V12H24"
+			stroke="#FBAF1C"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M20 17H12"
+			stroke="#FBAF1C"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M20 21H12"
+			stroke="#FBAF1C"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M14 13H13H12"
+			stroke="#FBAF1C"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M4 2L4 19"
+			stroke="white"
+			stroke-width="2"
+			stroke-linecap="round"
+		/>
+		<path
+			d="M4 2L18 2"
+			stroke="white"
+			stroke-width="2"
+			stroke-linecap="round"
+		/>
+	</svg>
 	<svg
 		:width="width"
 		:height="height"

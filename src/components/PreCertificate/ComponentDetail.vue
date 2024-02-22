@@ -8,24 +8,19 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class="row">
+						<div class="row" style="display: flex;align-items: center;">
 							<div class=" color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
-								<span v-if="dataPC.status === 1">Yêu cầu sơ bộ</span>
-								<span v-if="dataPC.status === 2">Định giá sơ bộ</span>
-								<span v-if="dataPC.status === 3">Duyệt giá sơ bộ</span>
-								<span v-if="dataPC.status === 4">Thương thảo</span>
-								<span v-if="dataPC.status === 5">Hoàn thành</span>
-								<span v-if="dataPC.status === 6">Hủy</span>
+								<span>{{ statusDescription }}</span>
 							</div>
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
-								class=" card-status-certificate ml-3"
 								id="certificate_id"
+								class="ml-3 mr-4 arrowBox arrow-right"
 							>
 								<icon-base
-									name="nav_hstd"
+									name="nav_hstd_2"
 									width="20px"
 									height="20px"
 									class="item-icon svg-inline--fa"
@@ -225,7 +220,7 @@
 				</div>
 			</div>
 		</div>
-		<PaymentHistories @updatePayments="updatePayments" />
+		<PaymentPreCertificateHistories @updatePayments="updatePayments" />
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -496,7 +491,7 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
-		<ModalNotificationPreCertificateNote
+		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
@@ -504,6 +499,7 @@
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${message}'`
 			"
+			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
 
@@ -535,6 +531,7 @@ import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -554,7 +551,7 @@ import { Timeline, Drawer } from "ant-design-vue";
 import moment from "moment";
 import ModalCustomer from "@/components/PreCertificate/ModalCustomer";
 import ModalPCAppraisal from "@/components/PreCertificate/ModalPCAppraisal";
-import PaymentHistories from "@/components/PreCertificate/PaymentHistories";
+import PaymentPreCertificateHistories from "@/components/PreCertificate/PaymentPreCertificateHistories";
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
@@ -578,7 +575,8 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
-		PaymentHistories,
+		ModalNotificationWithAssign,
+		PaymentPreCertificateHistories,
 		IconBase,
 		OtherFile,
 		InputCategory,
@@ -844,8 +842,9 @@ export default {
 		const checkVersion2 = ref([]);
 		const showCardDetailFileResult = ref(true);
 		const showCardPCPayments = ref(false);
-
+		const appraiserChangeStage = ref(null);
 		return {
+			appraiserChangeStage,
 			showCardPCPayments,
 			allowEditFile,
 			jsonConfig,
@@ -877,6 +876,16 @@ export default {
 
 	created() {},
 	computed: {
+		statusDescription() {
+			if (this.jsonConfig) {
+				const status = this.jsonConfig.principle.find(
+					i => i.status === this.dataPC.status
+				);
+				return status ? status.description : "";
+			}
+
+			return "";
+		},
 		getHistoryTextColor() {
 			return this.historyList.map(item => {
 				return this.loadColor(item);
@@ -1129,6 +1138,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				if (
 					!this.preCertificateOtherDocuments.Result ||
@@ -1180,7 +1190,11 @@ export default {
 							return;
 						}
 					}
-
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.dataPC[config.re_assign],
+							type: config.re_assign
+						};
 					this.isHandleAction = true;
 				} else {
 					this.openMessage(message);
@@ -1226,7 +1240,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleAction2(note, reason_id) {
+		async handleAction2(note, reason_id, tempAppraiser) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -1234,7 +1248,8 @@ export default {
 			const res = await this.preCertificateStore.updateStatus(
 				this.dataPC.id,
 				note,
-				reason_id
+				reason_id,
+				tempAppraiser
 			);
 
 			if (res.data) {
@@ -2092,6 +2107,30 @@ export default {
 	p {
 		margin-bottom: unset !important;
 	}
+}
+
+.arrowBox {
+	margin-top: -10px;
+	position: relative;
+	background: #fbaf1c;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 600;
+	font-size: 16px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 5px 0 0;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	right: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-left: 11px solid #fbaf1c;
 }
 
 .btn {

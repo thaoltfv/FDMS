@@ -27,17 +27,17 @@
 					:style="isMobile ? { 'padding-top': '0' } : {}"
 				>
 					<div class="detail_certificate_1 col-12 mb-2">
-						<div class="col-12 d-flex mb-2 row">
+						<div class="col-12 d-flex mb-2 row  justify-content-between">
 							<span class="content_id content_id_primary class_p">{{
 								`YCSB_${dataPC.id}`
 							}}</span>
 							<span
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
-								class=" card-status-certificate ml-2"
+								class=" arrowBox arrow-right "
 								id="certificate_id"
 							>
-								<icon-base name="nav_hstd" class="item-icon svg-inline--fa" />
+								<icon-base name="nav_hstd_2" class="item-icon svg-inline--fa" />
 								{{ `HTSD_${dataPC.certificate_id}` }}
 								<b-tooltip target="certificate_id" placement="right">{{
 									`Đã chuyển chính thức HTSD_${dataPC.certificate_id}`
@@ -326,13 +326,6 @@
 				</div>
 			</div>
 		</div>
-
-		<ModalSendVerify
-			v-if="showAcceptCertificate"
-			:notification="`Bạn có muốn '${targetMessage}' hồ sơ này`"
-			@action="handleChangeAccept"
-			@cancel="handleCancelAccept"
-		/>
 	</div>
 </template>
 
@@ -400,7 +393,6 @@ export default {
 			appraisalPurposes: [],
 			showAppraisalDialog: false,
 			showVerifyCertificate: false,
-			showAcceptCertificate: false,
 			key_render_appraisal: 20000000,
 			isPermission: false,
 			user: "",
@@ -511,36 +503,6 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		async handleChangeAccept() {
-			let dataSend = {
-				appraiser_confirm_id: this.dataPC.appraiser_confirm_id,
-				appraiser_id: this.dataPC.appraiser_id,
-				appraiser_manager_id: this.dataPC.appraiser_manager_id,
-				appraiser_control_id: this.dataPC.appraiser_control_id,
-				appraiser_perform_id: this.dataPC.appraiser_perform_id,
-				status: this.targetConfig.status,
-				sub_status: this.targetConfig.sub_status,
-				check_price: this.targetConfig.require.check_price,
-				status_expired_at: this.getExpireStatusDate(this.targetConfig)
-			};
-			this.$emit("action", this.idData, dataSend, this.targetMessage);
-			this.handleCancelAccept();
-		},
-		handleCancelAccept() {
-			this.showAcceptCertificate = false;
-		},
-		// async getDetailCertificate() {
-		// 	const res = await PreCertificate.getDetailCertificateBrief(this.idData);
-		// 	if (res.data) {
-		// 		this.form = res.data;
-		// 	} else {
-		// 		await this.$toast.open({
-		// 			message: "Lấy dữ liệu thất bại",
-		// 			type: "error",
-		// 			position: "top-right"
-		// 		});
-		// 	}
-		// },
 		loadConfigByStatus(status) {
 			return this.jsonConfig.principle.find(
 				item => item.status === status && item.isActive === 1
@@ -951,6 +913,31 @@ export default {
 	padding-bottom: 0.5rem;
 	font-weight: 600;
 }
+
+.arrowBox {
+	position: relative;
+	background: #fbaf1c;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 400;
+	font-size: 13px !important;
+	display: inline-block;
+	cursor: pointer;
+	padding: 0 5px 0 0;
+	margin-right: 5px;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	right: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-left: 11px solid #fbaf1c;
+}
+
 .row {
 	margin-right: unset !important;
 	margin-left: unset !important;
@@ -999,13 +986,6 @@ export default {
 	@media (max-width: 767px) {
 		margin-top: 10px;
 	}
-}
-.card-status-certificate {
-	border-radius: 5px;
-	padding: 2px 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	color: darkgray;
-	cursor: pointer;
 }
 .btn_group {
 	@media (max-width: 767px) {

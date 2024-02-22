@@ -41,7 +41,7 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<div class="row ml-0">
+								<div class=" ml-0">
 									<span
 										@click="handleDetailPreCertificate(element.id)"
 										class="content_id"
@@ -50,14 +50,16 @@
 										"
 										>{{ element.slug }}</span
 									>
-									<span
+								</div>
+								<div class="row">
+									<div
 										v-if="element.certificate_id"
 										@click="handleDetailCertificate(element.certificate_id)"
-										class=" card-status-certificate ml-2"
+										class="arrowBox arrow-right mr-2"
 										:id="`${element.certificate_id + element.id}`"
 									>
 										<icon-base
-											name="nav_hstd"
+											name="nav_hstd_2"
 											class="item-icon svg-inline--fa"
 										/>
 										<b-tooltip
@@ -67,14 +69,16 @@
 												`Đã chuyển chính thức HTSD_${element.certificate_id}`
 											}}</b-tooltip
 										>
-									</span>
+									</div>
+									<div>
+										<img
+											v-if="checkDateExpired(element).statusExpire"
+											class="mr-2 icon_expired"
+											src="@/assets/icons/ic_expire_calender.svg"
+											alt="ic_expire_calender"
+										/>
+									</div>
 								</div>
-								<img
-									v-if="checkDateExpired(element).statusExpire"
-									class="mr-2 icon_expired"
-									src="@/assets/icons/ic_expire_calender.svg"
-									alt="ic_expire_calender"
-								/>
 							</div>
 							<div class="property-content mb-2 d-flex color_content">
 								<div class="label_container d-flex">
@@ -160,11 +164,10 @@
 				:profile="profile"
 				:data="detailData"
 				@cancel="showDetailPopUp = false"
-				@action="handleUpdateStatus"
 				@handleFooterAccept="handleFooterAccept"
 			/>
 
-			<ModalNotificationPreCertificateNote
+			<ModalNotificationWithAssign
 				v-if="isMoved"
 				:notification="
 					confirm_message == 'Từ chối' ||
@@ -175,8 +178,9 @@
 				"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
+				:appraiser="appraiserChangeStage"
 			/>
-			<ModalNotificationPreCertificateNote
+			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
 				:notification="
@@ -187,6 +191,7 @@
 						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
 				"
 				@action="handleChangeAccept2"
+				:appraiser="appraiserChangeStage"
 			/>
 		</div>
 	</div>
@@ -196,6 +201,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
 
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import { FormWizard, TabContent } from "vue-form-wizard";
@@ -298,6 +304,7 @@ export default {
 		};
 	},
 	components: {
+		ModalNotificationWithAssign,
 		IconBase,
 		"b-tooltip": BTooltip,
 		draggable,
@@ -455,7 +462,9 @@ export default {
 		};
 		startSetup();
 
+		const appraiserChangeStage = ref(null);
 		return {
+			appraiserChangeStage,
 			filter,
 			principleConfig,
 			jsonConfig,
@@ -526,6 +535,7 @@ export default {
 					)
 				) {
 					check.statusExpire = true;
+					check.inExpiringState = false;
 				}
 			}
 			return check;
@@ -592,6 +602,7 @@ export default {
 			return check;
 		},
 		changedDraggable(evt) {
+			this.appraiserChangeStage = null;
 			let targetId = parseInt(evt.to.id);
 			let check = false;
 			let targetConfig = this.principleConfig.find(i => i.id === targetId);
@@ -614,6 +625,12 @@ export default {
 						return;
 					}
 				}
+				if (targetConfig.re_assign)
+					this.appraiserChangeStage = {
+						id: this.dataPC[targetConfig.re_assign],
+						type: targetConfig.re_assign
+					};
+
 				this.next_status = targetConfig.status;
 				this.dataPC.target_status = targetConfig.status;
 				this.confirm_message = message;
@@ -755,7 +772,7 @@ export default {
 			} else return false;
 		},
 
-		async handleChangeAccept2(note, reason_id) {
+		async handleChangeAccept2(note, reason_id, tempAppraiser) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -763,7 +780,8 @@ export default {
 			const res = await this.preCertificateStore.updateStatus(
 				this.idDragger,
 				note,
-				reason_id
+				reason_id,
+				tempAppraiser
 			);
 
 			if (res.data) {
@@ -834,34 +852,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleUpdateStatus(id, data, message) {
-			const res = await PreCertificate.updateStatusPreCertificate(id, data);
-			if (res.data) {
-				let returnData = this.subStatusDataReturn.find(i => i.id === id);
-				if (returnData) {
-					returnData.status = data.status;
-					returnData.sub_status = data.sub_status;
-					returnData.image = res.data.image;
-				}
-				this.returnData();
-				await this.$toast.open({
-					message: message + " thành công",
-					type: "success",
-					position: "top-right",
-					duration: 3000
-				});
-				this.key_dragg++;
-			} else {
-				await this.$toast.open({
-					message: `${res.error.message}`,
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				this.showDetailPopUp = false;
-			}
-			this.showDetailPopUp = false;
-		},
+
 		getExpireStatusDate() {
 			let dateConvert = new Date();
 			let minutes = this.config.process_time ? this.config.process_time : 1440;
@@ -1057,6 +1048,7 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
+			this.appraiserChangeStage = null;
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				const checkStage = this.checkDataBeforeChangeToStage3();
 				if (!checkStage) {
@@ -1090,6 +1082,11 @@ export default {
 						return;
 					}
 				}
+				if (config.re_assign)
+					this.appraiserChangeStage = {
+						id: this.dataPC[config.re_assign],
+						type: config.re_assign
+					};
 				this.next_status = config.status;
 				this.dataPC.target_status = config.status;
 				this.dataPC.target_code = target.code;
@@ -1373,12 +1370,29 @@ export default {
 	width: 1rem;
 	justify-content: end;
 }
-.card-status-certificate {
-	border-radius: 5px;
-	padding: 0px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-	color: darkgray;
+.arrowBox {
+	position: relative;
+	background: #fbaf1c;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	color: #fff;
+	font-weight: 600;
+	font-size: 16px !important;
+	display: inline-block;
 	cursor: pointer;
+	padding: 0px;
+	margin-right: -5px;
+	margin-top: 1px;
+}
+.arrow-right:after {
+	content: "";
+	position: absolute;
+	right: -11px;
+	top: 0;
+	border-top: 11px solid transparent;
+	border-bottom: 11px solid transparent;
+	border-left: 11px solid #fbaf1c;
 }
 .container_card_success {
 	background: white;
