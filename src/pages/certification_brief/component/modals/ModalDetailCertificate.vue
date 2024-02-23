@@ -172,6 +172,11 @@
 							</div>
 
 							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Hành chính viên:</strong>
+								<p>{{ form.administrative ? form.administrative.name : "" }}</p>
+							</div>
+
+							<div class="d-flex container_content">
 								<strong class="margin_content_inline"
 									>Đại diện theo pháp luật:</strong
 								>

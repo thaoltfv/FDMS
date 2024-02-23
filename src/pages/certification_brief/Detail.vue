@@ -210,6 +210,17 @@
 
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
+												>Hành chính viên:</strong
+											>
+											<p>
+												{{
+													form.administrative ? form.administrative.name : ""
+												}}
+											</p>
+										</div>
+
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
 												>Đại diện theo pháp luật:</strong
 											>
 											<p>
@@ -2225,6 +2236,8 @@ export default {
 			this.form.appraiser_control = dataAppraisal.appraiser_control;
 			this.form.appraiser = dataAppraisal.appraiser;
 			this.form.appraiser_id = dataAppraisal.appraiser_id;
+			this.form.administrative = dataAppraisal.administrative;
+			this.form.administrative_id = dataAppraisal.administrative_id;
 			this.key_render_appraisal += 1;
 			this.form.status = this.status;
 			this.showAppraisalDialog = false;
@@ -2456,7 +2469,8 @@ export default {
 				appraiser,
 				appraiser_control,
 				appraiser_control_id,
-				administrative_id
+				administrative_id,
+				administrative
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -2469,6 +2483,8 @@ export default {
 				appraiser_control,
 				appraiser_control_id,
 				appraiser,
+				administrative_id,
+				administrative,
 				status: this.targetStatus,
 				sub_status: this.targetSubStatus,
 				check_price: this.isCheckPrice,
@@ -2490,9 +2506,10 @@ export default {
 				dataSend
 			);
 			if (res.data) {
-				this.form.status = this.targetStatus;
-				this.form.sub_status = this.targetSubStatus;
-				this.changeEditStatus();
+				// this.form.status = this.targetStatus;
+				// this.form.sub_status = this.targetSubStatus;
+				// this.changeEditStatus();
+				await this.getDetail();
 				this.$toast.open({
 					message: this.message + " thành công",
 					type: "success",

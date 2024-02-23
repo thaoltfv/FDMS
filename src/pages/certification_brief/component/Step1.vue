@@ -289,14 +289,24 @@
                 </p>
               </div>
             </div> -->
-						<InputCategory
-							v-model="appraiser_manager_compute"
-							vid="appraiser_manager_id"
-							label="Đại diện theo pháp luật"
-							class="form-group-container"
-							@change="handleChangeAppraiserManager"
-							:options="optionsAppraiserManager"
-						/>
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="administrative_compute"
+								vid="administrative_id"
+								label="Hành chính viên"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="handleChangeAppraiser"
+								:options="optionsAdministratives"
+							/>
+							<InputCategory
+								v-model="appraiser_manager_compute"
+								vid="appraiser_manager_id"
+								label="Đại diện theo pháp luật"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="handleChangeAppraiserManager"
+								:options="optionsAppraiserManager"
+							/>
+						</div>
 						<InputCategory
 							v-model="appraiser_confirm_compute"
 							vid="appraiser_confirm_id"
@@ -355,6 +365,7 @@ export default {
 		"signAppraisers",
 		"appraisersManager",
 		"appraisersControl",
+		"administratives",
 		"customers",
 		"idData",
 		"render_price_fee",
@@ -418,6 +429,21 @@ export default {
 			set: function(newValue) {
 				// // console.log('newwww', newValue)
 				this.data.appraiser_control_id = newValue;
+			}
+		},
+		administrative_compute: {
+			// getter
+			get: function() {
+				if (this.appraisersControl.length > 0) {
+					return this.data.administrative_id;
+				} else {
+					return this.data.administrative.name;
+				}
+			},
+			// setter
+			set: function(newValue) {
+				// // console.log('newwww', newValue)
+				this.data.administrative_id = newValue;
 			}
 		},
 		appraiser_compute: {
@@ -497,6 +523,13 @@ export default {
 		optionsAppraiserControl() {
 			return {
 				data: this.appraisersControl,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsAdministratives() {
+			return {
+				data: this.administratives,
 				id: "id",
 				key: "name"
 			};

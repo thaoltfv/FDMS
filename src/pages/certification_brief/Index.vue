@@ -355,12 +355,12 @@ export default {
 				);
 			}
 		};
-		startFunction();
 		const appraiserChangeStage = ref(null);
 		return {
 			appraiserChangeStage,
 			jsonConfig,
-			principleConfig
+			principleConfig,
+			startFunction
 		};
 	},
 	created() {
@@ -1193,7 +1193,8 @@ export default {
 			}
 		});
 	},
-	beforeMount() {
+	async beforeMount() {
+		await this.startFunction();
 		if (this.search_kanban) {
 			this.getDataWorkFlow2(this.search_kanban.search);
 		} else this.getDataWorkFlow2();
