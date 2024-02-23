@@ -53,14 +53,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     /**
      * @return bool
      */
-    
-    
+
+
     /**
      * @return bool
      */
     public function otherDocumentUpload($id, $typeDocument, $request)
     {
-        return DB::transaction(function () use ($id,$typeDocument, $request) {
+        return DB::transaction(function () use ($id, $typeDocument, $request) {
             try {
                 $result = [];
                 $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
@@ -150,7 +150,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         });
     }
 
-  
+
     /**
      * @return Builder[]|Collection
      */
@@ -192,7 +192,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
      */
     public function findByIdTest($id)
     {
-        return ;
+        return;
     }
 
     /**
@@ -204,7 +204,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         return DB::transaction(function () use ($objects) {
             try {
-            
+
                 $objects["status"] = 1;
 
                 $objects['created_by'] = is_array($objects['created_by']) ? $objects['created_by']['id'] : $objects['created_by'];
@@ -325,7 +325,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $filter = request()->get('search');
 
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
-        
+
         $selectedStatus = null;
         $selectedOfficialTransferStatus = null;
         $timeFilterFrom = null;
@@ -336,20 +336,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $dataTemp = json_decode($dataJson);
             $selectedStatus = $dataTemp->status;
             $selectedOfficialTransferStatus = $dataTemp->ots;
-            if (isset($dataTemp) && isset($dataTemp->timeFilter) ) {
-                if ( isset($dataTemp->timeFilter->from)) {
+            if (isset($dataTemp) && isset($dataTemp->timeFilter)) {
+                if (isset($dataTemp->timeFilter->from)) {
                     $timeFilterFrom = $dataTemp->timeFilter->from;
                 }
                 if (isset($dataTemp->timeFilter->to)) {
                     $timeFilterTo = $dataTemp->timeFilter->to;
                 }
-            }     
+            }
         }
         $select = [
             'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
             'pre_certificates.updated_at', 'status_updated_at',
-            'business_manager_id', 
-            'appraiser_sale_id', 
+            'business_manager_id',
+            'appraiser_sale_id',
             'appraiser_perform_id',
             'appraise_purpose_id',
             'pre_certificates.created_at',
@@ -435,34 +435,34 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     });
             }
         }
-        
+
         // dd($result);
 
-            if (isset($timeFilterFrom) && isset($timeFilterTo)) {
-                $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-                $endDate = date('Y-m-d', strtotime($timeFilterTo));
-                $result = $result->whereBetween('created_at', [$startDate, $endDate])
-                                ->whereBetween('updated_at', [$startDate, $endDate]);
-            }   elseif (isset($timeFilterFrom)) {
-                    $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-                    $result = $result->where('created_at', '>=', $startDate)
-                                    ->where('updated_at', '>=', $startDate);
-            } elseif (isset($timeFilterTo)) {
-                    $endDate = date('Y-m-d', strtotime($timeFilterTo));
-                    $result = $result->where('created_at', '<=', $endDate)
-                                ->where('updated_at', '<=', $endDate);
+        if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                ->whereBetween('updated_at', [$startDate, $endDate]);
+        } elseif (isset($timeFilterFrom)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $result = $result->where('created_at', '>=', $startDate)
+                ->where('updated_at', '>=', $startDate);
+        } elseif (isset($timeFilterTo)) {
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->where('created_at', '<=', $endDate)
+                ->where('updated_at', '<=', $endDate);
+        }
+
+        if (isset($selectedStatus) && !empty($selectedStatus)) {
+            $result = $result->whereIn('status', $selectedStatus);
+        }
+        if (isset($selectedOfficialTransferStatus)) {
+            if ($selectedOfficialTransferStatus === 1) {
+                $result = $result->whereNotNull('certificate_id');
+            } elseif ($selectedOfficialTransferStatus === 0) {
+                $result = $result->whereNull('certificate_id');
             }
-                    
-            if (isset($selectedStatus) && !empty($selectedStatus)) {
-                $result = $result->whereIn('status', $selectedStatus);
-            }
-            if (isset($selectedOfficialTransferStatus)) {
-                if ($selectedOfficialTransferStatus === 1) {
-                    $result = $result->whereNotNull('certificate_id');
-                } elseif ($selectedOfficialTransferStatus === 0) {
-                    $result = $result->whereNull('certificate_id');
-                }
-            }
+        }
         if (isset($sortField) && !isEmpty($sortField)) {
             if ($sortField == 'petitioner_name')
                 if ($sortOrder == 'descend')
@@ -476,7 +476,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $result = $result
             ->forPage($page, $perPage)
             ->paginate($perPage);
-        
+
         // foreach ($result as $stt => $item) {
         //     $result[$stt]->append('detail_list_id');
         //     // $result[$stt]->append('certificate_asset_price');
@@ -503,14 +503,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $dataTemp = json_decode($dataJson);
             $selectedStatus = $dataTemp->status;
             $selectedOfficialTransferStatus = $dataTemp->ots;
-            if (isset($dataTemp) && isset($dataTemp->timeFilter) ) {
-                if ( isset($dataTemp->timeFilter->from)) {
+            if (isset($dataTemp) && isset($dataTemp->timeFilter)) {
+                if (isset($dataTemp->timeFilter->from)) {
                     $timeFilterFrom = $dataTemp->timeFilter->from;
                 }
                 if (isset($dataTemp->timeFilter->to)) {
                     $timeFilterTo = $dataTemp->timeFilter->to;
                 }
-            }     
+            }
         }
         if (!empty($query)) {
             $query = json_decode($query);
@@ -522,9 +522,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $select = [
             'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
             'pre_certificates.updated_at', 'status_updated_at',
-            'business_manager_id', 
-            'appraiser_sale_id', 
-            'appraiser_perform_id', 
+            'business_manager_id',
+            'appraiser_sale_id',
+            'appraiser_perform_id',
             'certificate_id',
             // 'users.image',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
@@ -563,7 +563,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 "),
         ];
         $with = [
-            'createdBy:id,name',   
+            'createdBy:id,name',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
@@ -575,7 +575,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
-        ->leftjoin('users', function ($join) {
+            ->leftjoin('users', function ($join) {
                 $join->on('pre_certificates.created_by', '=', 'users.id')
                     ->select(['id', 'image'])
                     ->limit(1);
@@ -664,33 +664,33 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
-                $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-                $endDate = date('Y-m-d', strtotime($timeFilterTo));
-                $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
-                                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
-            } elseif (isset($timeFilterFrom)) {
-                $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-                $result = $result->where('pre_certificates.created_at', '>=', $startDate)
-                                ->where('pre_certificates.updated_at', '>=', $startDate);
-            } elseif (isset($timeFilterTo)) {
-                $endDate = date('Y-m-d', strtotime($timeFilterTo));
-                $result = $result->where('pre_certificates.created_at', '<=', $endDate)
-                                ->where('pre_certificates.updated_at', '<=', $endDate);
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
+                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
+        } elseif (isset($timeFilterFrom)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $result = $result->where('pre_certificates.created_at', '>=', $startDate)
+                ->where('pre_certificates.updated_at', '>=', $startDate);
+        } elseif (isset($timeFilterTo)) {
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->where('pre_certificates.created_at', '<=', $endDate)
+                ->where('pre_certificates.updated_at', '<=', $endDate);
+        }
+
+        if (isset($selectedStatus) && !empty($selectedStatus)) {
+            $result = $result->whereIn('status', $selectedStatus);
+        }
+        if (isset($selectedOfficialTransferStatus)) {
+            if ($selectedOfficialTransferStatus === 1) {
+                $result = $result->whereNotNull('certificate_id');
+            } elseif ($selectedOfficialTransferStatus === 0) {
+                $result = $result->whereNull('certificate_id');
             }
-                    
-            if (isset($selectedStatus) && !empty($selectedStatus)) {
-                $result = $result->whereIn('status', $selectedStatus);
-            }
-            if (isset($selectedOfficialTransferStatus)) {
-                if ($selectedOfficialTransferStatus === 1) {
-                    $result = $result->whereNotNull('certificate_id');
-                } elseif ($selectedOfficialTransferStatus === 0) {
-                    $result = $result->whereNull('certificate_id');
-                }
-            }
+        }
         $result = $result->orderByDesc('pre_certificates.updated_at');
-        $result= $result->get();
-     
+        $result = $result->get();
+
         return $result;
     }
 
@@ -708,9 +708,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $customerId = null;
             if (!empty($objects['customer']['name'])) {
                 $customer = Customer::whereName($objects['customer']['name'])
-                ->whereAddress($objects['customer']['address'])
-                ->wherePhone($objects['customer']['phone'])
-                ->first();
+                    ->whereAddress($objects['customer']['address'])
+                    ->wherePhone($objects['customer']['phone'])
+                    ->first();
                 if (isset($customer)) {
                     $customerId = $customer->id;
                 } else {
@@ -726,12 +726,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
 
             $branch_id = null;
-            if (isset( $objects['appraiser_sale_id'])) {
+            if (isset($objects['appraiser_sale_id'])) {
                 $branch_id = Appraiser::query()->where('id', $objects['appraiser_sale_id'])->first()->branch_id;
             } else {
                 $branch_id = Appraiser::query()->where('user_id', $user->id)->first()->branch_id;
             }
-            
+
             $data = $objects;
             // dd('note', $data);
             $data['branch_id'] = $branch_id;
@@ -748,16 +748,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 $preCertificateId = $id;
                 $status = $oldPreCertificate->status;
-                if (!isset($oldPreCertificate['created_by']))
-                {
+                if (!isset($oldPreCertificate['created_by'])) {
                     $data['created_by'] = $user->id;
-                }
-                else if(isset($oldPreCertificate['created_by']) && isset($oldPreCertificate['created_by']->id))
-                {
+                } else if (isset($oldPreCertificate['created_by']) && isset($oldPreCertificate['created_by']->id)) {
                     $data['created_by'] = $oldPreCertificate['created_by']->id;
-                }
-                else
-                {
+                } else {
                     $data['created_by'] = $oldPreCertificate->getRawOriginal('created_by');
                 }
 
@@ -782,7 +777,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($preCertificateId, $status, $assignTo);
                 }
-
             } else {
                 $data['created_by'] = $user->id;
                 // $curDate = \Carbon\Carbon::now('Asia/Ho_Chi_Minh');
@@ -798,7 +792,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 # Activity Log "create if id = null"
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 $this->CreateActivityLog($edited, $edited, 'create', 'tạo mới');
-                
+
                 $assignTo = [];
                 if ($edited && $edited->appraiser_sale_id) {
                     $assignTo[] = 'appraiserSale';
@@ -809,7 +803,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 if ($edited && $edited->business_manager_id) {
                     $assignTo[] = 'appraiserBusinessManager';
                 }
-                
+
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($preCertificateId, $preCertificateCreate->status, $assignTo);
                 }
@@ -885,38 +879,38 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             ->first();
         if ($result['status'] == 1) {
             $appraiser = Appraiser::query()
-            ->where('id', '=', $result['appraiser_sale_id'])
-            ->first();
+                ->where('id', '=', $result['appraiser_sale_id'])
+                ->first();
             $user = User::query()
-            ->where('id', '=', $appraiser->user_id)
-            ->first();
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
             $result['image'] = $user->image;
         }
         if ($result['status'] == 2) {
             $appraiser = Appraiser::query()
-            ->where('id', '=', $result['appraiser_perform_id'])
-            ->first();
+                ->where('id', '=', $result['appraiser_perform_id'])
+                ->first();
             $user = User::query()
-            ->where('id', '=', $appraiser->user_id)
-            ->first();
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
             $result['image'] = $user->image;
         }
         if ($result['status'] == 3 || $result['status'] == 4) {
             $appraiser = Appraiser::query()
-            ->where('id', '=', $result['appraiser_perform_id'])
-            ->first();
+                ->where('id', '=', $result['appraiser_perform_id'])
+                ->first();
             $user = User::query()
-            ->where('id', '=', $appraiser->user_id)
-            ->first();
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
             $result['image'] = $user->image;
         }
         if ($result['status'] == 6) {
             $appraiser = Appraiser::query()
-            ->where('id', '=', $result['business_manager_id'])
-            ->first();
+                ->where('id', '=', $result['business_manager_id'])
+                ->first();
             $user = User::query()
-            ->where('id', '=', $appraiser->user_id)
-            ->first();
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
             $result['image'] = $user->image;
         }
 
@@ -930,16 +924,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             try {
                 $preCertificate = $this->getPreCertificate($id);
                 if ($preCertificate->certificate_id) {
-                     return [
+                    return [
                         'error' => true,
                         'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
                     ];
                 }
-                if($preCertificate->status != 5){
-                     return [
-                    'error' => true,
-                    'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
-                ];
+                if ($preCertificate->status != 5) {
+                    return [
+                        'error' => true,
+                        'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
+                    ];
                 }
                 $preCertificateKey = [
                     'certificate_id',
@@ -1018,13 +1012,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ->insertGetId($certificate->attributesToArray());
 
                 if ($certificateId) {
-                    
+
                     $preCertificateModel = PreCertificate::find($preCertificate->id);
                     if ($preCertificateModel) {
                         $preCertificateModel->certificate_id = $certificateId;
                         $preCertificateModel->save();
                     }
-                    $preCertificatePayments = PreCertificatePayments::where('pre_certificate_id',$preCertificate->id)->get();
+                    $preCertificatePayments = PreCertificatePayments::where('pre_certificate_id', $preCertificate->id)->get();
 
                     foreach ($preCertificatePayments as $payment) {
                         $payment->certificate_id = $certificateId;
@@ -1032,8 +1026,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
 
                     $documents = PreCertificateOtherDocuments::where('pre_certificate_id', $preCertificate->id)
-                                                        ->whereNull('deleted_at')
-                                                        ->get();
+                        ->whereNull('deleted_at')
+                        ->get();
                     if ($documents->count() > 0) {
                         foreach ($documents as $document) {
                             if ($document->type_document == 'Appendix') {
@@ -1054,18 +1048,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                     $edited = Certificate::where('id', $certificateId)->first();
                     $this->CreateActivityLog($edited, $edited, 'create', 'Chuyển chính thức từ YCSB_' . $id);
-
                 }
                 // $logDescription = 'chuyển chính thức ' . $preCertificate->id;
                 // $this->CreateActivityLog($certificate, $certificate, 'chuyen_chinh_thuc', $logDescription, $request['note']);
-                    return [
-                        'error' => false,
-                        'data' => $certificateId,
-                    ];
+                return [
+                    'error' => false,
+                    'data' => $certificateId,
+                ];
             } catch (Exception $exception) {
                 Log::error($exception);
                 throw $exception;
-
             }
         });
     }
@@ -1125,7 +1117,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
-                    
+
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
                     if ($current > $next) {
@@ -1135,10 +1127,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         if ($logDescription == "từ chối Hủy") {
                             $logDescription = "Khôi phục YCSB";
                         }
-                    }
-                    else {
+                    } else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
-                        $logDescription = 'cập nhật trạng thái '. $description;
+                        $logDescription = 'cập nhật trạng thái ' . $description;
                     }
                     $logName = 'update_status';
                     // activity-log Update status
@@ -1147,13 +1138,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
 
                     $this->notifyChangeStatus($id, $status);
-                    if (!empty($assignTo)) {
-                        $this->notifyReAssign($id, $status, $assignTo);
-                    }
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
-
+                if (!empty($assignTo)) {
+                    $this->notifyReAssign($id, $status, $assignTo, $result);
+                }
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -1161,7 +1151,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         });
     }
-    
+
     public function updatePayments($id, $request)
     {
         return DB::transaction(function () use ($id, $request) {
@@ -1188,7 +1178,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         }
                     } catch (\Exception $e) {
                         $message = 'Thêm mới thất bại';
-                        if(isset($item['id'])){
+                        if (isset($item['id'])) {
                             $message = 'Cập nhật thất bại';
                         }
                         return [
@@ -1200,11 +1190,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             } catch (Exception $exception) {
                 Log::error($exception);
                 throw $exception;
-
             }
         });
     }
-    
+
     private function beforeSave(int $id)
     {
         $result = null;
@@ -1267,7 +1256,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $isCheckAppraiser =  $required['appraiser'];
                 $isCheckTotalPreliminaryValue =  $required['total_preliminary_value'];
 
-        
+
                 if ($isCheckAppraiser) {
                     $appraiser['appraiser_sale_id'] =  request()->get('appraiser_sale_id');
                     $appraiser['business_manager_id'] =  request()->get('business_manager_id');
@@ -1293,7 +1282,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 4:
-                        if (!( $data->appraiserSale->user_id == $user->id))
+                        if (!($data->appraiserSale->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 6:
@@ -1311,7 +1300,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
-   
+
     private function notifyChangeStatus(int $id, int $status)
     {
         if (PreCertificate::where('id', $id)->exists()) {
@@ -1377,10 +1366,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             CommonService::callNotification($users, $data);
         }
     }
-    private function notifyReAssign(int $id, int $status, $assignTo)
+    private function notifyReAssign(int $id, int $status, $assignTo, $preCertificate = null)
     {
-        if (PreCertificate::where('id', $id)->exists()) {
-            $loginUser = CommonService::getUser();
+        $loginUser = CommonService::getUser();
+        if (!$preCertificate) {
             $with = [
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
@@ -1415,35 +1404,36 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $statusText = 'Yêu cầu sơ bộ';
             }
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
-            $eloquenUser = new EloquentUserRepository(new User());
-            $processedUserIds = []; // Array to store processed user_ids
-            foreach ($assignTo as $assign) {
-                $user = null;
-                if (isset($preCertificate[$assign]) && isset($preCertificate[$assign]->user_id)) {
-                    if ($preCertificate[$assign]->user_id != $loginUser->id && !in_array($preCertificate[$assign]->user_id, $processedUserIds)) {
-                        $user = $eloquenUser->getUser($preCertificate[$assign]->user_id);
-                        $processedUserIds[] = $preCertificate[$assign]->user_id; // Add user_id to processedUserIds array
+        }
 
-                        switch ($assign) {
-                            case 'appraiserSale':
-                                $typeAssign = 'Nhân viên kinh doanh';
-                                break;
-                            case 'appraiserPerform':
-                                $typeAssign = 'Chuyên viên thẩm định';
-                                break;
-                            case 'appraiserBusinessManager':
-                                $typeAssign = 'Quản lý nghiệp vụ';
-                                break;
-                        }
+        $eloquenUser = new EloquentUserRepository(new User());
+        $processedUserIds = []; // Array to store processed user_ids
+        foreach ($assignTo as $assign) {
+            $user = null;
+            if (isset($preCertificate[$assign]) && isset($preCertificate[$assign]->user_id)) {
+                if ($preCertificate[$assign]->user_id != $loginUser->id && !in_array($preCertificate[$assign]->user_id, $processedUserIds)) {
+                    $user = $eloquenUser->getUser($preCertificate[$assign]->user_id);
+                    $processedUserIds[] = $preCertificate[$assign]->user_id; // Add user_id to processedUserIds array
 
-                        $data = [
-                            'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
-                            'message' => $preCertificate[$assign]->name.' bạn được ' . $loginUser->name . ' phân công làm ' . $typeAssign . 'cho YCSB_' . $id .'.',
-                            'user' => $loginUser,
-                            'id' => $id
-                        ];
-                        CommonService::callNotification([$user], $data);
+                    switch ($assign) {
+                        case 'appraiserSale':
+                            $typeAssign = 'Nhân viên kinh doanh';
+                            break;
+                        case 'appraiserPerform':
+                            $typeAssign = 'Chuyên viên thẩm định';
+                            break;
+                        case 'appraiserBusinessManager':
+                            $typeAssign = 'Quản lý nghiệp vụ';
+                            break;
                     }
+
+                    $data = [
+                        'subject' => '[YCSB_' . $id . '] trạng thái ' . $statusText,
+                        'message' => $preCertificate[$assign]->name . ' bạn được ' . $loginUser->name . ' phân công làm ' . $typeAssign . 'cho YCSB_' . $id . '.',
+                        'user' => $loginUser,
+                        'id' => $id
+                    ];
+                    CommonService::callNotification([$user], $data);
                 }
             }
         }
@@ -1569,7 +1559,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     }
 
 
-    private function checkAuthorizationPreCertificate ($id)
+    private function checkAuthorizationPreCertificate($id)
     {
         $check = null;
         if ($this->model->query()->where('id', $id)->exists()) {
@@ -1595,7 +1585,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             $result = $result->first();
             if (empty($result))
-                $check = ['message' => 'Bạn không có quyền ở YCSB '. $id , 'exception' => '', 'statusCode' => 403];
+                $check = ['message' => 'Bạn không có quyền ở YCSB ' . $id, 'exception' => '', 'statusCode' => 403];
         } else {
             $check = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
