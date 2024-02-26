@@ -1131,9 +1131,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
-                Log::info(
-                    'runbeforenotify'
-                );
+                \Log::info('runbeforenotify', ['assignTo' => $assignTo, 'status' =>  !empty($assignTo)]);
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($id, $status, $assignTo, $result);
                 }
