@@ -1323,12 +1323,8 @@ class CommonService
 			return true;
 		} else {
 			foreach ($permissions as $permission) {
-
 				if ($user->can($permission)) {
-					Log::info('User ID: ' . $user->id . ' has permission: ' . $permission);
 					return true;
-				} else {
-					Log::info('User ID: ' . $user->id . ' does not have permission: ' . $permission);
 				}
 			}
 		}
@@ -1589,7 +1585,6 @@ class CommonService
 			$diff = round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0);
 
 			if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
-				Log::info($diff);
 				$appraise->checkAdjustRate = true;
 			}
 		}

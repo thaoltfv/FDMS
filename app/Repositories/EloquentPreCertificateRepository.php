@@ -1260,7 +1260,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             //Check role and permision
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
-                Log::info($data);
                 switch ($data['status']) {
                     case 1:
                         if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
