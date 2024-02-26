@@ -23,42 +23,41 @@ class CertificateBriefController extends Controller
     private CertificateRepository $certificateRepository;
     private UserRepository $userRepository;
 
-    private array $permissionView =['VIEW_CERTIFICATE_BRIEF'];
-    private array $permissionAdd =['ADD_CERTIFICATE_BRIEF'];
-    private array $permissionEdit =['EDIT_CERTIFICATE_BRIEF'];
-    private array $permissionExport =['EXPORT_CERTIFICATE_BRIEF'];
+    private array $permissionView = ['VIEW_CERTIFICATE_BRIEF'];
+    private array $permissionAdd = ['ADD_CERTIFICATE_BRIEF'];
+    private array $permissionEdit = ['EDIT_CERTIFICATE_BRIEF'];
+    private array $permissionExport = ['EXPORT_CERTIFICATE_BRIEF'];
 
     #region Contruct
     public function __construct(
         CertificateRepository $certificateRepository,
         UserRepository $userRepository
 
-    )
-    {
+    ) {
         $this->certificateRepository = $certificateRepository;
         $this->userRepository = $userRepository;
-
     }
     #endregion
 
     public function findPaging(Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionView))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
         $result =  $this->certificateRepository->findPaging_v2();
-        if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
 
     #step 1 insert - update
-    public function postGeneralInfomation(Request $request, int $id = null){
-        if(! isset($id)){
-            if(! CommonService::checkUserPermission($this->permissionAdd))
-                return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_ADD ,'exception' =>''], 403);
-        }else{
-            if(! CommonService::checkUserPermission($this->permissionEdit))
-                return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+    public function postGeneralInfomation(Request $request, int $id = null)
+    {
+        if (!isset($id)) {
+            if (!CommonService::checkUserPermission($this->permissionAdd))
+                return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_ADD, 'exception' => ''], 403);
+        } else {
+            if (!CommonService::checkUserPermission($this->permissionEdit))
+                return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
         }
         $rules = [
             'petitioner_name' => 'string|max:255',
@@ -76,7 +75,7 @@ class CertificateBriefController extends Controller
             'appraise_date' => 'required|string|max:255',
             //'document_date' => 'string|max:255',
             //'certificate_date' => 'string|max:255',
-            'customer'=>'array|sometimes',
+            'customer' => 'array|sometimes',
             'customer.name' => 'nullable|string|max:255',
             'customer.address' => 'required_with:customer.name|nullable|string|max:255',
             'customer.phone' => 'required_with:customer.name|nullable|numeric',
@@ -111,31 +110,32 @@ class CertificateBriefController extends Controller
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->certificateRepository->postGeneralInfomation($request->toArray(), $id);
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
 
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
-
     }
     #endregion
 
-    public function getGeneralInfomation(int $id){
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW,'exception' =>''], 403);
+    public function getGeneralInfomation(int $id)
+    {
+        if (!CommonService::checkUserPermission($this->permissionView))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
 
         $result =  $this->certificateRepository->getGeneralInfomation($id);
         return $this->respondWithCustomData($result);
     }
 
-    public function updateStatus(int $id, Request $request )
+    public function updateStatus(int $id, Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionEdit))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+        Log::info('Request data: ', $request->all());
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
 
         $rules = [
             'status' => 'integer|required|between:1,10',
@@ -146,33 +146,33 @@ class CertificateBriefController extends Controller
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
-            $result = $this->certificateRepository->updateStatus_v2($id , $request->toArray());
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            $result = $this->certificateRepository->updateStatus_v2($id, $request->toArray());
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
 
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
-
     }
 
-    public function findAppraisePaging(){
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+    public function findAppraisePaging()
+    {
+        if (!CommonService::checkUserPermission($this->permissionView))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
 
         $result =  $this->certificateRepository->findAppraisePaging();
-        if(isset($result['message']) && isset($result['exception']))
-            return $this->respondWithErrorData( $result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
 
-    public function updateCertificateV3(Request $request, int $certificateId )
+    public function updateCertificateV3(Request $request, int $certificateId)
     {
-        if(! CommonService::checkUserPermission($this->permissionEdit))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
 
         $rules = [
             'appraises' => 'array|sometimes',
@@ -185,33 +185,33 @@ class CertificateBriefController extends Controller
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
-            $result = $this->certificateRepository->updateCertificateV3($request->toArray(),$certificateId);
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            $result = $this->certificateRepository->updateCertificateV3($request->toArray(), $certificateId);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
-
     }
 
-    public function getCertificate(int $id){
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+    public function getCertificate(int $id)
+    {
+        if (!CommonService::checkUserPermission($this->permissionView))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
 
         $result =  $this->certificateRepository->getCertificate($id);
-        if(isset($result['message']) && isset($result['exception']))
-            return $this->respondWithErrorData( $result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
 
-    public function updateCertificateGeneral(int $id , Request $request )
+    public function updateCertificateGeneral(int $id, Request $request)
     {
         $rules = [
             'petitioner_name' => 'nullable|string',
-            'petitioner_phone'=> 'nullable|string',
+            'petitioner_phone' => 'nullable|string',
             'petitioner_address' => 'nullable|string',
             'appraise_purpose_id' => 'nullable|integer',
             'appraise_date' => 'nullable|string',
@@ -240,82 +240,80 @@ class CertificateBriefController extends Controller
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->certificateRepository->updateCertificateGeneral($id, $request->toArray());
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
-
     }
 
-    public function getProcessingTime(){
+    public function getProcessingTime()
+    {
         $result =  $this->certificateRepository->getProcessingTime();
         return $this->respondWithCustomData($result);
     }
 
-    public function updateAppraisersTeam(int $id , Request $request )
+    public function updateAppraisersTeam(int $id, Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionEdit))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
 
-        $rules = [
-        ];
+        $rules = [];
 
-        $customAttributes = [
-        ];
+        $customAttributes = [];
 
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->certificateRepository->updateAppraisersTeam($id, $request->toArray());
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
-
     }
-    public function getComparisonAppraise(Request $request){
+    public function getComparisonAppraise(Request $request)
+    {
         $result =  $this->certificateRepository->getComparisonAppraise($request->toArray());
         return $this->respondWithCustomData($result);
     }
 
     public function exportCertificateBriefs(Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionExport))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionExport))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT, 'exception' => ''], 403);
 
         $result =  $this->certificateRepository->exportCertificateBriefs();
-        if(isset($result['message']) && isset($result['exception']))
-            return $this->respondWithErrorData( $result);
-            // return $this->respondWithCustomData($result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        // return $this->respondWithCustomData($result);
 
         return $this->respondWithCustomData((new ExportCertificateBriefs())->exportBrieft($result));
     }
 
     public function exportCustomizeCertificateBriefs(Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionExport))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionExport))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_EXPORT, 'exception' => ''], 403);
 
         $result =  $this->certificateRepository->exportSelectedCertificateAssets();
-        if(isset($result['message']) && isset($result['exception']))
-            return $this->respondWithErrorData( $result);
-            // return $this->respondWithCustomData($result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        // return $this->respondWithCustomData($result);
 
         return $this->respondWithCustomData((new ExportCertificateBriefs())->exportCustomizeBrieft($result));
     }
 
-    public function updateCertificateVersion(Request $request, int $certificateId )
+    public function updateCertificateVersion(Request $request, int $certificateId)
     {
-        if(! CommonService::checkUserPermission($this->permissionEdit))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
 
         $rules = [
             // 'appraises' => 'array|sometimes',
@@ -330,25 +328,24 @@ class CertificateBriefController extends Controller
             //TODO Handle your data
             $result = $this->certificateRepository->updateCertificateVersion($certificateId, $request->toArray());
             // $result = AppraiseVersionService::updateCertificateVersion($certificateId, $request->toArray());
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
-
     }
     public function getVersionAppraises(Request $request)
     {
-        if(! CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData( ['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW ,'exception' =>''], 403);
+        if (!CommonService::checkUserPermission($this->permissionView))
+            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
 
         $result =  AppraiseVersionService::getVersionAppraises($request->toArray());
-        if(isset($result['message']) && isset($result['exception']))
-            return $this->respondWithErrorData( $result);
-            // return $this->respondWithCustomData($result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        // return $this->respondWithCustomData($result);
 
         return $this->respondWithCustomData((new ExportCertificateBriefs())->exportAsset($result));
     }
@@ -356,8 +353,8 @@ class CertificateBriefController extends Controller
     public function getCertificateStatus(int $id)
     {
         $result =  $this->certificateRepository->getCertificateStatus($id);
-        if(isset($result['message']) && isset($result['exception']))
-            return $this->respondWithErrorData( $result);
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
         return $this->respondWithCustomData((new ExportCertificateBriefs())->exportAsset($result));
     }
     public function updateSubStatusFromConfig(Request $request)
@@ -378,13 +375,13 @@ class CertificateBriefController extends Controller
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->certificateRepository->updateSubStatusFromConfig($request->toArray());
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
     }
 
@@ -403,7 +400,7 @@ class CertificateBriefController extends Controller
     {
         try {
             $item = $this->certificateRepository->otherDocumentDownload($id, $request);
-            if(isset($item->link)) {
+            if (isset($item->link)) {
                 return $this->respondWithCustomData(['file_name' => $item->name, 'url' => $item->link]);
             } else {
                 return $this->respondWithErrorData(['message' => 'Không tìm thấy link tải', 'exception' => '']);
@@ -419,8 +416,8 @@ class CertificateBriefController extends Controller
     {
         try {
             $result = $this->certificateRepository->deleteDocument($id);
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } catch (\Exception $exception) {
             dd($exception);
