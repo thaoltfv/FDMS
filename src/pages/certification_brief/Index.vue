@@ -190,7 +190,7 @@
 			/>
 			<ModalNotificationWithAssign
 				v-if="isMoved"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="`Bạn có muốn1 '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 				@cancel="handleCancelAccept2"
@@ -198,7 +198,7 @@
 			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="confirm_message === 'Từ chối' ? `Bạn có muốn 'Từ chối' hồ sơ này?` : getNotificationMessage()"
 				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
 			/>
@@ -438,6 +438,27 @@ export default {
 					strExpire = "Đã hủy";
 			}
 			return strExpire;
+		},
+		getNotificationMessage() {
+			console.log('vào hàm này');
+			console.log('this.next_status',this.next_status)
+			console.log('status',this.status) // Sử dụng this.form.status thay vì status
+			switch (this.next_status - 1) { // Sử dụng this.form.status thay vì status
+				case 1:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Thẩm định' ?";
+				case 2:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Duyệt giá' ?";
+				case 6:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Duyệt phát hành' ?";
+				case 7:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'In hồ sơ' ?";
+				case 8:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Bàn giao khách hàng' ?";
+				case 3:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Hoàn thành' ?";
+				default:
+					return "";
+			}
 		},
 		checkDateExpired(element) {
 			let check = false;
