@@ -1722,21 +1722,8 @@ class CommonService
 	}
 	public static function registerShutdowncallNotification($users, $data)
 	{
-		ignore_user_abort(true);
-		set_time_limit(0);
-		$start = microtime(true);
 		$broadcast = new BroadcastNotification((object)$data);
-		$mid = microtime(true);
-		$executionTimemid = $mid - $start;
-		\Log::info(
-			'Execution time of function: callNotificationMid' . $executionTimemid . ' seconds.'
-		);
 		Notification::send($users, $broadcast);
-		$end = microtime(true);
-
-		$executionTime = $end - $start;
-
-		\Log::info('Execution time of function: callNotification' . $executionTime . ' seconds.');
 	}
 	public static function convertStatusText($status)
 	{
