@@ -133,7 +133,6 @@ class CertificateBriefController extends Controller
 
     public function updateStatus(int $id, Request $request)
     {
-        Log::info(!CommonService::checkUserPermission($this->permissionEdit) . 'Requexxxst data: ', $request->all());
         if (!CommonService::checkUserPermission($this->permissionEdit))
             return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
 
@@ -147,6 +146,7 @@ class CertificateBriefController extends Controller
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->certificateRepository->updateStatus_v2($id, $request->toArray());
+            Log::info('Request data: ', $result);
             if (isset($result['message']) && isset($result['exception']))
                 return $this->respondWithErrorData($result);
 
