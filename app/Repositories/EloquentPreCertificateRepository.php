@@ -1135,14 +1135,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 if (isset($status)) {
                     $this->notifyChangeStatus($id, $status, $result);
                 }
-                \Log::info(
-                    'runbeforenotify',
-                    ['assignTo' => $assignTo, 'status' =>  !empty($assignTo)]
-                );
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($id, $status, $assignTo, $result);
                 }
-                Log::info('runafternotify');
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -1302,7 +1297,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     private function notifyChangeStatus(int $id, int $status, $preCertificate = null)
     {
-        $start = microtime(true);
         $loginUser = CommonService::getUser();
         $users[] = $loginUser;
         if (!$preCertificate) {
@@ -1362,19 +1356,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'id' => $id
         ];
         $users = array_unique($users, SORT_REGULAR);
-        $end = microtime(true);
-
-        $executionTime = $end - $start;
-
-        \Log::info('Execution time of function: ' . $executionTime . ' seconds.');
 
         CommonService::callNotification($users, $data);
     }
     private function notifyReAssign(int $id, int $status, $assignTo, $preCertificate = null)
     { // Allow the script to execute in the background
-        Log::info(
-            'startnotify'
-        );
         $loginUser = CommonService::getUser();
         switch ($status) {
             case 2:
@@ -1413,9 +1399,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
         }
-        Log::info(
-            'midnotify'
-        );
         $eloquenUser = new EloquentUserRepository(new User());
         $processedUserIds = []; // Array to store processed user_ids
         foreach ($assignTo as $assign) {
@@ -1447,9 +1430,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
             }
         }
-        Log::info(
-            'endnotify'
-        );
     }
     private function checkDuplicateData(array $object, int $preCertificateId = null)
     {
