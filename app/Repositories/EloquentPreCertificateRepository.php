@@ -1302,6 +1302,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     private function notifyChangeStatus(int $id, int $status, $preCertificate = null)
     {
+        $start = microtime(true);
         $loginUser = CommonService::getUser();
         $users[] = $loginUser;
         if (!$preCertificate) {
@@ -1324,15 +1325,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         if (isset($preCertificate->appraiserSale->user_id))
             if ($preCertificate->appraiserSale->user_id != $loginUser->id) {
-                $users[] = $preCertificate->appraiserSale;
+                $users[] =  $eloquenUser->getUser($preCertificate->appraiserSale->user_id);
             }
         if (isset($preCertificate->appraiserPerform->user_id))
             if ($preCertificate->appraiserPerform->user_id != $loginUser->id) {
-                $users[] = $preCertificate->appraiserPerform;
+                $users[] =  $eloquenUser->getUser($preCertificate->appraiserPerform->user_id);
             }
         if (isset($preCertificate->appraiserBusinessManager->user_id))
             if ($preCertificate->appraiserBusinessManager->user_id != $loginUser->id) {
-                $users[] =  $preCertificate->appraiserBusinessManager;
+                $users[] =  $eloquenUser->getUser($preCertificate->appraiserBusinessManager->user_id);
             }
         switch ($status) {
             case 2:
@@ -1361,6 +1362,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'id' => $id
         ];
         $users = array_unique($users, SORT_REGULAR);
+        $end = microtime(true);
+
+        $executionTime = $end - $start;
+
+        \Log::info('Execution time of function: ' . $executionTime . ' seconds.');
 
         CommonService::callNotification($users, $data);
     }
