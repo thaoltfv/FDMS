@@ -146,7 +146,6 @@ class CertificateBriefController extends Controller
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->certificateRepository->updateStatus_v2($id, $request->toArray());
-            Log::info('Request data: ', $result);
             if (isset($result['message']) && isset($result['exception']))
                 return $this->respondWithErrorData($result);
 
