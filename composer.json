@@ -12,7 +12,6 @@
   ],
   "license": "MIT",
   "require": {
-    "plesk/ext-laravel-integration": "*",
     "php": "^7.4",
     "ext-bcmath": "*",
     "ext-intl": "*",
