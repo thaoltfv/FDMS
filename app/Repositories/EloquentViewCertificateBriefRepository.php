@@ -540,7 +540,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         Log::info('Data Raw: ', $dataRaw);
         Log::info('monthPluck: ', $monthPluck);
         Log::info('year: ', $year);
-        Log::info('$this->model: ', $this->model);
+        Log::info('$this->model: ' . json_encode($this->model));
         Log::info('result: ', $result);
         return $result;
     }
