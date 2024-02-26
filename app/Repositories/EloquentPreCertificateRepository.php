@@ -441,16 +441,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('created_at', [$startDate, $endDate])
-                ->whereBetween('updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
+                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('created_at', '>=', $startDate)
-                ->where('updated_at', '>=', $startDate);
+            $result = $result->where('pre_certificates.created_at', '>=', $startDate)
+                ->where('pre_certificates.updated_at', '>=', $startDate);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('created_at', '<=', $endDate)
-                ->where('updated_at', '<=', $endDate);
+            $result = $result->where('pre_certificates.created_at', '<=', $endDate)
+                ->where('pre_certificates.updated_at', '<=', $endDate);
         }
 
         if (isset($selectedStatus) && !empty($selectedStatus)) {
@@ -845,7 +845,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'total_preliminary_value',
             'cancel_reason',
             'status_updated_at',
-            'created_at',
+            'pre_certificates.created_at',
             'created_by',
             'updated_at',
             'updated_by',
@@ -886,7 +886,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 2) {
+        if ($result['status'] == 2 || $result['status'] == 4) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['appraiser_perform_id'])
                 ->first();
@@ -895,16 +895,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 3 || $result['status'] == 4) {
-            $appraiser = Appraiser::query()
-                ->where('id', '=', $result['appraiser_perform_id'])
-                ->first();
-            $user = User::query()
-                ->where('id', '=', $appraiser->user_id)
-                ->first();
-            $result['image'] = $user->image;
-        }
-        if ($result['status'] == 6) {
+        if ($result['status'] == 3 || $result['status'] == 6 || $result['status'] == 5) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['business_manager_id'])
                 ->first();
@@ -913,7 +904,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 ->first();
             $result['image'] = $user->image;
         }
-
         return $result;
     }
 
@@ -1475,7 +1465,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $users = request()->get('created_by');
-        $appraiser = request()->get('appraiser_id');
+        $businessManager = request()->get('business_manager_id');
         $appraiserSale = request()->get('appraiser_sale_id');
         $appraiserConfirm = request()->get('appraiser_confirm_id');
         $customer = request()->get('customer_id');
@@ -1506,7 +1496,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_certificates.created_at',
             'appraise_purpose_id',
             'created_by',
-            'appraiser_id',
+            'business_manager_id',
             'appraiser_perform_id',
             'appraiser_sale_id',
             DB::raw("case status
@@ -1548,10 +1538,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         if (isset($fromDate) && isset($toDate)) {
             // $result=$result->whereRaw("to_char('created_at' ,'YYYY-MM-dd') between '". $fromDate->format('Y-m-d') ."' and '". $toDate->format('Y-m-d')."'");
-            $result = $result->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'");
+            $result = $result->whereRaw("to_char(pre_certificates.created_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'");
         }
-        if (isset($appraiser)) {
-            $result = $result->where('appraiser_id', $appraiser);
+        if (isset($businessManager)) {
+            $result = $result->where('business_manager_id', $businessManager);
         }
         if (isset($appraiserSale)) {
             $result = $result->where('appraiser_sale_id', $appraiserSale);
