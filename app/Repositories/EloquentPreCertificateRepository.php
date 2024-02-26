@@ -1324,15 +1324,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         if (isset($preCertificate->appraiserSale->user_id))
             if ($preCertificate->appraiserSale->user_id != $loginUser->id) {
-                $users[] =  $eloquenUser->getUser($preCertificate->appraiserSale->user_id);
+                $users[] = $preCertificate->appraiserSale;
             }
         if (isset($preCertificate->appraiserPerform->user_id))
             if ($preCertificate->appraiserPerform->user_id != $loginUser->id) {
-                $users[] =  $eloquenUser->getUser($preCertificate->appraiserPerform->user_id);
+                $users[] = $preCertificate->appraiserPerform;
             }
         if (isset($preCertificate->appraiserBusinessManager->user_id))
             if ($preCertificate->appraiserBusinessManager->user_id != $loginUser->id) {
-                $users[] =  $eloquenUser->getUser($preCertificate->appraiserBusinessManager->user_id);
+                $users[] =  $preCertificate->appraiserBusinessManager;
             }
         switch ($status) {
             case 2:
