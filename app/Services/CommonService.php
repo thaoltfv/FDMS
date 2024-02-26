@@ -1717,6 +1717,8 @@ class CommonService
 
 	public static function callNotification($users, $data)
 	{
+		ignore_user_abort(true);
+		set_time_limit(0);
 		$start = microtime(true);
 		$broadcast = new BroadcastNotification((object)$data);
 		$mid = microtime(true);
