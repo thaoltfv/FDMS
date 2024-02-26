@@ -1369,6 +1369,25 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         ignore_user_abort(true);
         set_time_limit(0);
         $loginUser = CommonService::getUser();
+        switch ($status) {
+            case 2:
+                $statusText = 'Định giá sơ bộ';
+                break;
+            case 3:
+                $statusText = 'Duyệt giá sơ bộ';
+                break;
+            case 4:
+                $statusText = 'Thương thảo';
+                break;
+            case 5:
+                $statusText = 'Hoàn thành';
+                break;
+            case 6:
+                $statusText = 'Đã hủy';
+                break;
+            default:
+                $statusText = 'Yêu cầu sơ bộ';
+        }
         if (!$preCertificate) {
             $with = [
                 'appraiserSale:id,user_id,name',
@@ -1384,25 +1403,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 'appraiser_perform_id',
                 'business_manager_id',
             ];
-            switch ($status) {
-                case 2:
-                    $statusText = 'Định giá sơ bộ';
-                    break;
-                case 3:
-                    $statusText = 'Duyệt giá sơ bộ';
-                    break;
-                case 4:
-                    $statusText = 'Thương thảo';
-                    break;
-                case 5:
-                    $statusText = 'Hoàn thành';
-                    break;
-                case 6:
-                    $statusText = 'Đã hủy';
-                    break;
-                default:
-                    $statusText = 'Yêu cầu sơ bộ';
-            }
+
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
         }
         Log::info(
