@@ -1129,12 +1129,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $note = $request['status_note'] ?? '';
                     $reason_id = $request['status_reason_id'] ?? null;
                     $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
-
-                    $this->notifyChangeStatus($id, $status);
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
-                \Log::info('runbeforenotify', ['assignTo' => $assignTo, 'status' =>  !empty($assignTo)]);
+                if (isset($status)) {
+                    $this->notifyChangeStatus($id, $status, $result);
+                }
+                \Log::info(
+                    'runbeforenotify',
+                    ['assignTo' => $assignTo, 'status' =>  !empty($assignTo)]
+                );
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($id, $status, $assignTo, $result);
                 }
@@ -1296,12 +1300,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     }
 
 
-    private function notifyChangeStatus(int $id, int $status)
+    private function notifyChangeStatus(int $id, int $status, $preCertificate = null)
     {
-        if (PreCertificate::where('id', $id)->exists()) {
-            $loginUser = CommonService::getUser();
-            $users[] = $loginUser;
-            // $users= $loginUser;
+        $loginUser = CommonService::getUser();
+        $users[] = $loginUser;
+        if (!$preCertificate) {
             $with = [
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
@@ -1316,58 +1319,56 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 'business_manager_id',
             ];
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
-            $eloquenUser = new EloquentUserRepository(new User());
-
-            if (isset($preCertificate->appraiserSale->user_id))
-                if ($preCertificate->appraiserSale->user_id != $loginUser->id) {
-                    $users[] =  $eloquenUser->getUser($preCertificate->appraiserSale->user_id);
-                }
-            if (isset($preCertificate->appraiserPerform->user_id))
-                if ($preCertificate->appraiserPerform->user_id != $loginUser->id) {
-                    $users[] =  $eloquenUser->getUser($preCertificate->appraiserPerform->user_id);
-                }
-            if (isset($preCertificate->appraiserBusinessManager->user_id))
-                if ($preCertificate->appraiserBusinessManager->user_id != $loginUser->id) {
-                    $users[] =  $eloquenUser->getUser($preCertificate->appraiserBusinessManager->user_id);
-                }
-            switch ($status) {
-                case 2:
-                    $statusText = 'Định giá sơ bộ';
-                    break;
-                case 3:
-                    $statusText = 'Duyệt giá sơ bộ';
-                    break;
-                case 4:
-                    $statusText = 'Thương thảo';
-                    break;
-                case 5:
-                    $statusText = 'Hoàn thành';
-                    break;
-                case 6:
-                    $statusText = 'Đã hủy';
-                    break;
-                default:
-                    $statusText = 'Yêu cầu sơ bộ';
-            }
-
-            $data = [
-                'subject' => '[YCSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
-                'message' => 'YCSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
-                'user' => $loginUser,
-                'id' => $id
-            ];
-            $users = array_unique($users, SORT_REGULAR);
-
-            CommonService::callNotification($users, $data);
         }
+        $eloquenUser = new EloquentUserRepository(new User());
+
+        if (isset($preCertificate->appraiserSale->user_id))
+            if ($preCertificate->appraiserSale->user_id != $loginUser->id) {
+                $users[] =  $eloquenUser->getUser($preCertificate->appraiserSale->user_id);
+            }
+        if (isset($preCertificate->appraiserPerform->user_id))
+            if ($preCertificate->appraiserPerform->user_id != $loginUser->id) {
+                $users[] =  $eloquenUser->getUser($preCertificate->appraiserPerform->user_id);
+            }
+        if (isset($preCertificate->appraiserBusinessManager->user_id))
+            if ($preCertificate->appraiserBusinessManager->user_id != $loginUser->id) {
+                $users[] =  $eloquenUser->getUser($preCertificate->appraiserBusinessManager->user_id);
+            }
+        switch ($status) {
+            case 2:
+                $statusText = 'Định giá sơ bộ';
+                break;
+            case 3:
+                $statusText = 'Duyệt giá sơ bộ';
+                break;
+            case 4:
+                $statusText = 'Thương thảo';
+                break;
+            case 5:
+                $statusText = 'Hoàn thành';
+                break;
+            case 6:
+                $statusText = 'Đã hủy';
+                break;
+            default:
+                $statusText = 'Yêu cầu sơ bộ';
+        }
+
+        $data = [
+            'subject' => '[YCSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
+            'message' => 'YCSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
+            'user' => $loginUser,
+            'id' => $id
+        ];
+        $users = array_unique($users, SORT_REGULAR);
+
+        CommonService::callNotification($users, $data);
     }
     private function notifyReAssign(int $id, int $status, $assignTo, $preCertificate = null)
     { // Allow the script to execute in the background
         Log::info(
             'startnotify'
         );
-        ignore_user_abort(true);
-        set_time_limit(0);
         $loginUser = CommonService::getUser();
         switch ($status) {
             case 2:
