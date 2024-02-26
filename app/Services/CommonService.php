@@ -1719,6 +1719,11 @@ class CommonService
 	{
 		$start = microtime(true);
 		$broadcast = new BroadcastNotification((object)$data);
+		$mid = microtime(true);
+		$executionTimemid = $mid - $start;
+		\Log::info(
+			'Execution time of function: callNotificationMid' . $executionTimemid . ' seconds.'
+		);
 		Notification::send($users, $broadcast);
 		$end = microtime(true);
 
