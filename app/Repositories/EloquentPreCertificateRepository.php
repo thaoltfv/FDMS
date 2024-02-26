@@ -1103,7 +1103,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
                         $assignTo[] = 'appraiserPerform';
                     }
-
+                    if (isset($request['business_manager_id'])) {
+                        $updateArray['business_manager_id'] = $request['business_manager_id'];
+                        $assignTo[] = 'appraiserBusinessManager';
+                    }
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
