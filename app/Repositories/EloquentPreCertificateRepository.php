@@ -1130,7 +1130,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $reason_id = $request['status_reason_id'] ?? null;
                     $this->CreateActivityLog($edited, $edited, $logName, $logDescription, $note, $reason_id);
 
-                    // $this->notifyChangeStatus($id, $status);
+                    $this->notifyChangeStatus($id, $status);
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
