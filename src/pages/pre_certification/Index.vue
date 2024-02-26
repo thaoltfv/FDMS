@@ -76,6 +76,7 @@
 											class="mr-2 icon_expired"
 											src="@/assets/icons/ic_expire_calender.svg"
 											alt="ic_expire_calender"
+											hidden
 										/>
 									</div>
 								</div>
@@ -121,7 +122,11 @@
 								/>
 								<div class="label_container d-flex">
 									<strong class="d-none d_inline mr-1">Thời hạn:</strong
-									><span
+									>
+									<span v-if="getExpireDate(element).includes('Đã hết')" style="font-weight: 500; color: red;">
+										{{ getExpireDate(element) }}
+									</span>
+									<span  v-else
 										style="font-weight: 500"
 										:class="{
 											'text-orange': checkDateExpired(element).inExpiringState
@@ -1402,6 +1407,6 @@ export default {
 	}
 }
 .border_expired {
-	border-color: red !important;
+	// border-color: red !important;
 }
 </style>
