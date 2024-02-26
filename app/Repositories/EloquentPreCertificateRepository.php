@@ -1130,18 +1130,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
-                Log::info(
-                    'startnotify'
-                );
                 if (isset($status)) {
                     $this->notifyChangeStatus($id, $status, $result);
                 }
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($id, $status, $assignTo, $result);
                 }
-                Log::info(
-                    'endnotify'
-                );
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -1266,6 +1260,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             //Check role and permision
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+                Log::info($data);
                 switch ($data['status']) {
                     case 1:
                         if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
@@ -1276,7 +1271,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 3:
-                        if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
+                        if (!($data->appraiser && $data->appraiser->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 4:
