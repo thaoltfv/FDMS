@@ -383,63 +383,6 @@
 				/>
 			</div>
 		</div>
-		<!-- <div
-			v-if="dataPC.id && dataPC.status >= 2"
-			class="col-6"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<div class="card">
-				<div class="card-title">
-					<div class="d-flex justify-content-between align-items-center">
-						<div class="row d-flex justify-content-between align-items-center">
-							<h3 class="title">Thông tin thanh toán</h3>
-						</div>
-						<div
-							v-if="editPayments && edit"
-							@click="handleshowCardPCPayments"
-							class="btn-edit "
-						>
-							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="card-body card-info ml-2">
-						<div
-							class="row mb-1 "
-							v-if="dataPC.payments"
-							v-for="(payment, index) in dataPC.payments"
-							:key="index"
-						>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline">Ngày thanh toán:</strong>
-								<p>
-									{{ payment.pay_date ? payment.pay_date : "" }}
-								</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline"
-									>Tổng giá trị thanh toán:</strong
-								>
-								<p>{{ payment.amount ? formatNumber(payment.amount) : 0 }}đ</p>
-							</div>
-						</div>
-						<div class="d-flex container_content">
-							<strong class="margin_content_inline">Đã thanh toán:</strong>
-							<p>
-								{{ dataPC.amountPaid ? formatNumber(dataPC.amountPaid) : 0 }}đ
-							</p>
-						</div>
-						<div class="d-flex container_content">
-							<strong class="margin_content_inline">Còn nợ:</strong>
-							<p>
-								{{ dataPC.debtRemain ? formatNumber(dataPC.debtRemain) : 0 }}đ
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		<div
 			v-if="dataPC.id"
 			class="col-12"

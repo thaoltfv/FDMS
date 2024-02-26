@@ -287,11 +287,6 @@
 					ref="file"
 					id="image_property"
 					multiple
-					:accept="
-						type === 'Appendix'
-							? 'image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf'
-							: '.doc, .docx, .xlsx, .xls, application/pdf'
-					"
 					@change="onImageChange($event)"
 					style="display: none;"
 				/>
