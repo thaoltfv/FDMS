@@ -1367,7 +1367,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
     }
     private function notifyReAssign(int $id, int $status, $assignTo, $preCertificate = null)
-    {
+    { // Allow the script to execute in the background
+        ignore_user_abort(true);
+        set_time_limit(0);
         $loginUser = CommonService::getUser();
         if (!$preCertificate) {
             $with = [
