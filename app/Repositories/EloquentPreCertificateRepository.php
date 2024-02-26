@@ -1362,6 +1362,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     }
     private function notifyReAssign(int $id, int $status, $assignTo, $preCertificate = null)
     { // Allow the script to execute in the background
+        Log::info(
+            'startnotify'
+        );
         ignore_user_abort(true);
         set_time_limit(0);
         $loginUser = CommonService::getUser();
@@ -1401,7 +1404,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
             $preCertificate = PreCertificate::with($with)->where('id', $id)->get($select)->first();
         }
-
+        Log::info(
+            'midnotify'
+        );
         $eloquenUser = new EloquentUserRepository(new User());
         $processedUserIds = []; // Array to store processed user_ids
         foreach ($assignTo as $assign) {
@@ -1434,7 +1439,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
         Log::info(
-            'notify'
+            'endnotify'
         );
     }
     private function checkDuplicateData(array $object, int $preCertificateId = null)
