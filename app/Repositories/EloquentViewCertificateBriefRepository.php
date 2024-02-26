@@ -542,7 +542,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         Log::info('year: ', $year);
         Log::info('$this->model: ' . json_encode($this->model));
         Log::info('result: ', $result);
-        $database = $this->model->getConnectionName();
+        $database = $this->model->getTable();
         Log::info('Database: ' . $database);
         return $result;
     }
