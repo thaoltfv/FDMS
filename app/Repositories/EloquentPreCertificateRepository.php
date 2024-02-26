@@ -1141,9 +1141,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
+                Log::info(
+                    'runbeforenotify'
+                );
                 if (!empty($assignTo)) {
                     $this->notifyReAssign($id, $status, $assignTo, $result);
                 }
+                Log::info('runafternotify');
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -1439,6 +1443,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
             }
         }
+        Log::info(
+            'notify'
+        );
     }
     private function checkDuplicateData(array $object, int $preCertificateId = null)
     {
