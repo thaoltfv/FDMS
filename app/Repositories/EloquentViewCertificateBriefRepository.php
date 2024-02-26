@@ -504,9 +504,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->orderBy('year')
             ->orderBy('status')
             ->get()->toArray();
-        Log::info('Data Raw: ', $dataRaw);
-        Log::info('monthPluck: ', $monthPluck);
-        Log::info('year: ', $year);
         $data = [];
         $stt = 0;
         foreach ($monthPluck as $month) {
@@ -539,6 +536,12 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             $stt++;
         }
         $result = array_merge(['label' => $label], ['data' => $result]);
+
+        Log::info('Data Raw: ', $dataRaw);
+        Log::info('monthPluck: ', $monthPluck);
+        Log::info('year: ', $year);
+        Log::info('$this->model: ', $this->model);
+        Log::info('result: ', $result);
         return $result;
     }
 
