@@ -63,30 +63,31 @@ class ExportPreCertificate
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
                     $totalDebt = 0;
-
+                    $status_text = '?';
                     switch ($data->status) {
                         case 1:
-                            $data->status_text = 'Yêu cầu sơ bộ';
+                            $status_text = 'Yêu cầu sơ bộ';
                             break;
                         case 2:
-                            $data->status_text = 'Định giá sơ bộ';
+                            $status_text = 'Định giá sơ bộ';
                             break;
                         case 3:
-                            $data->status_text = 'Duyệt giá sơ bộ';
+                            $status_text = 'Duyệt giá sơ bộ';
                             break;
                         case 4:
-                            $data->status_text = 'Thương thảo';
+                            $status_text = 'Thương thảo';
                             break;
                         case 5:
-                            $data->status_text = 'Hoàn thành';
+                            $status_text = 'Hoàn thành';
                             break;
                         case 6:
-                            $data->status_text = 'Hủy';
+                            $status_text = 'Hủy';
                             break;
                     }
                     Log::info($data->id);
                     Log::info($data->status);
                     Log::info($data->status_text);
+                    Log::info($status_text);
                     foreach ($data->payments as $item) {
                         $totalDebt += $item->amount;
                     }
