@@ -45,22 +45,30 @@ class MigrationComparationAssetToElastic extends Command
             $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
             // $compareAssetGeneralRepository->createIndex();
             // $compareAssetGeneralRepository->createVersionIndex();
-			$compareAssetGenerals = CompareAssetGeneral::select('id')->whereMigrateStatus('TSS')->whereStatus(1)->orderby('id')->get();
-            $nb = count($compareAssetGenerals);
-
-            $interval = intval($nb * 2 / 100);
-            $prePost = $interval;
-
-            $this->output->progressStart($nb);
-			foreach($compareAssetGenerals as $index => $item) {
-                if ($index > $prePost) {
-                    $prePost += $interval;
+			// Lấy tất cả ID của tài sản so sánh cần di chuyển
+            $compareAssetGeneralIds = CompareAssetGeneral::select('id')
+            ->whereMigrateStatus('TSS')
+            ->whereStatus(1)
+            ->orderBy('id')
+            ->pluck('id');
+    
+        $nb = count($compareAssetGeneralIds);
+        $interval = intval(ceil($nb / 50)); // Điều chỉnh khoảng thời gian dựa trên kích thước lô mong muốn
+    
+        $this->output->progressStart($nb);
+        foreach ($compareAssetGeneralIds->chunk(50) as $chunk) { // Xử lý theo lô 50
+            foreach ($chunk as $index => $itemId) {
+                if ($index > 0 && $index % $interval === 0) { // Cập nhật tiến trình sau mỗi `$interval` mục
                     $this->output->progressAdvance($interval);
                 }
-                $rows = $compareAssetGeneralRepository->findById($item->id);
+    
+                // Lấy và lập chỉ mục dữ liệu tài sản so sánh
+                $rows = $compareAssetGeneralRepository->findById($itemId);
                 $compareAssetGeneralRepository->indexData($rows);
-                usleep(10);
-			}
+    
+                usleep(10); // Trễ ngắn giữa các mục xử lý (tùy chọn)
+            }
+        }
             $this->output->progressFinish();
             Log::info('Migration estates in Donava is end!');
         } catch (\Exception $e) {
