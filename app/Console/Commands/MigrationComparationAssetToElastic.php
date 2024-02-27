@@ -48,7 +48,7 @@ class MigrationComparationAssetToElastic extends Command
 			// Lấy tất cả ID của tài sản so sánh cần di chuyển
             $compareAssetGeneralIds = CompareAssetGeneral::select('id')
             ->whereMigrateStatus('TSS')
-            ->whereStatus(1)
+            // ->whereStatus(1)
             ->whereIsSyncedEls(0)
             ->orderBy('id')
             ->pluck('id');
