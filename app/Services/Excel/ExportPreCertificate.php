@@ -6,6 +6,7 @@ use App\Enum\ValueDefault;
 use App\Http\ResponseTrait;
 use App\Services\CommonService;
 use Box\Spout\Common\Entity\Style\Border;
+use Illuminate\Support\Facades\Log;
 use Box\Spout\Common\Entity\Style\Color;
 use Box\Spout\Writer\Common\Creator\Style\BorderBuilder;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
@@ -62,6 +63,9 @@ class ExportPreCertificate
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
                     $totalDebt = 0;
+                    Log::info($data->id);
+                    Log::info($data->status);
+                    Log::info($data->status_text);
                     switch ($data->status) {
                         case 1:
                             $data->status_text = 'Yêu cầu sơ bộ';
