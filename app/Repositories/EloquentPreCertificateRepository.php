@@ -1459,7 +1459,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $users = request()->get('created_by');
         $businessManager = request()->get('business_manager_id');
         $appraiserSale = request()->get('appraiser_sale_id');
-        $appraiserConfirm = request()->get('appraiser_confirm_id');
+        $appraiserPerform = request()->get('appraiser_perform_id');
         $customer = request()->get('customer_id');
 
         if (isset($fromDate) && isset($toDate)) {
@@ -1509,9 +1509,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         ];
         $with = [
             'createdBy:id,name',
-            'appraiser:id,name,user_id',
-            // 'appraiserManager:id,name,user_id',
-            // 'appraiserConfirm:id,name,user_id',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name',
@@ -1538,8 +1535,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($appraiserSale)) {
             $result = $result->where('appraiser_sale_id', $appraiserSale);
         }
-        if (isset($appraiserConfirm)) {
-            $result = $result->where('appraiser_comfirm_id', $appraiserConfirm);
+        if (isset($appraiserPerform)) {
+            $result = $result->where('appraiser_perform_id', $appraiserPerform);
         }
         if (isset($customer)) {
             $result = $result->where('customer_id', $customer);

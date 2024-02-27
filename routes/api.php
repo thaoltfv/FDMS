@@ -94,7 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('users/change-password', [UserController::class, 'changeUserPassword']);
 
     Route::post('users/reset-password/{id}', [UserController::class, 'resetUserPasswordNew']);
-    
+
     Route::post('users/deactive-user/{id}', [UserController::class, 'deactiveUser']);
 
     Route::post('users/active-user/{id}', [UserController::class, 'activeUser']);
@@ -319,13 +319,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/certificates', [CertificateController::class, 'findAll']);
 
     Route::apiResource('/pre-certificate', PreCertificateController::class);
-    
+
     Route::post('pre-certificates/status/{id}', [PreCertificateController::class, 'updateStatus']);
     Route::get('pre-certificates/pre-certificate-paging', [PreCertificateController::class, 'findPaging']);
 
     // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
     Route::get('pre-certificates/pre-export', [PreCertificateController::class, 'exportPreCertificate']);
-  //  Route::get('pre-certificates/pre-customize-export', [CertificateBriefController::class, 'exportCustomizePreCertificate']);
+    //  Route::get('pre-certificates/pre-customize-export', [CertificateBriefController::class, 'exportCustomizePreCertificate']);
 
     Route::get('pre-certificates/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
     Route::post('pre-certificates/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
@@ -398,7 +398,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/asset-generals/create-index', [CompareAssetGeneralController::class, 'createIndex']);
 
         Route::get('/asset-generals/version/{id}', [CompareAssetGeneralController::class, 'findVersionById']);
-
     });
 
     Route::get('workflow/getworkflow', [WorkflowController::class, 'getWorkflow']);
@@ -516,26 +515,26 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('technology-certificate/step4/{id}', [TechnologicalLineCertificateAssetController::class, 'postStep4']);
     Route::get('technology-certificate/all-step/{id}', [TechnologicalLineCertificateAssetController::class, 'getAll']);
 
-    Route::get('province-all', [ProvinceController::class,'getAllProvince']);
-    Route::get('project', [ProjectController::class,'index']);
-    Route::get('projects', [ProjectController::class,'getAll']);
+    Route::get('province-all', [ProvinceController::class, 'getAllProvince']);
+    Route::get('project', [ProjectController::class, 'index']);
+    Route::get('projects', [ProjectController::class, 'getAll']);
     // Route::get('apartment/', [ProjectController::class,'getAll']);
 
-    Route::get('project/{id}', [ProjectController::class,'getProjectById']);
-    Route::post('project', [ProjectController::class,'createProject']);
-    Route::post('project/{id}', [ProjectController::class,'updateProject']);
-    Route::post('block/{project_id}', [ProjectController::class,'updateOrCreateBlock']);
-    Route::post('floor/{block_id}', [ProjectController::class,'updateOrCreateFloor']);
-    Route::post('apartment/{floor_id}', [ProjectController::class,'updateOrCreateApartment']);
+    Route::get('project/{id}', [ProjectController::class, 'getProjectById']);
+    Route::post('project', [ProjectController::class, 'createProject']);
+    Route::post('project/{id}', [ProjectController::class, 'updateProject']);
+    Route::post('block/{project_id}', [ProjectController::class, 'updateOrCreateBlock']);
+    Route::post('floor/{block_id}', [ProjectController::class, 'updateOrCreateFloor']);
+    Route::post('apartment/{floor_id}', [ProjectController::class, 'updateOrCreateApartment']);
     // Route::post('project/update-status/{id}', [ProjectController::class,'updateStatus']);
-    Route::get('project/active/{id}', [ProjectController::class,'getProjectActiveById']);
-    Route::get('projects/active', [ProjectController::class,'getAllActive']);
-    Route::get('apartment-by-floor/{foor_id}', [ProjectController::class,'getApartmentByFloorId']);
+    Route::get('project/active/{id}', [ProjectController::class, 'getProjectActiveById']);
+    Route::get('projects/active', [ProjectController::class, 'getAllActive']);
+    Route::get('apartment-by-floor/{foor_id}', [ProjectController::class, 'getApartmentByFloorId']);
 
-    Route::post('project/update-status/id={id}&status={status}', [ProjectController::class,'updateStatusProject']);
-    Route::post('block/update-status/id={id}&status={status}', [ProjectController::class,'updateStatusBlock']);
-    Route::post('floor/update-status/id={id}&status={status}', [ProjectController::class,'updateStatusFloor']);
-    Route::post('apartment/update-status/id={id}&status={status}', [ProjectController::class,'updateStatusApartment']);
+    Route::post('project/update-status/id={id}&status={status}', [ProjectController::class, 'updateStatusProject']);
+    Route::post('block/update-status/id={id}&status={status}', [ProjectController::class, 'updateStatusBlock']);
+    Route::post('floor/update-status/id={id}&status={status}', [ProjectController::class, 'updateStatusFloor']);
+    Route::post('apartment/update-status/id={id}&status={status}', [ProjectController::class, 'updateStatusApartment']);
 
     // Route::get('get-all-certificate', [ActivityController::class, 'getAllCertificate']);
     Route::get('activity/get-certificate/{id}', [ActivityController::class, 'getCertificateWithId']);
@@ -554,20 +553,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('report/certificate-brieft/bar-chart-cancel-byMonth', [CertificateBriefReportController::class, 'countBriefCancelByMonth']);
 
     //Apartment Asset
-    Route::post('apartment-asset/step1/{id?}', [ApartmentAssetController::class,'postApartmentAsset']);
-    Route::post('apartment-asset/step2/{id}', [ApartmentAssetController::class,'postApartmentAssetLaw']);
-    Route::post('apartment-asset/step3/{id}', [ApartmentAssetController::class,'postApartmentAssetAppraisal']);
-    Route::post('apartment-asset/step4/{id}', [ApartmentAssetController::class,'postAparmentAssetHasAsset']);
-    Route::post('apartment-asset/apartment-version-by-id', [ApartmentAssetController::class,'getApartmentVersionById']);
-    Route::post('apartment-asset/step5-other-asset/{id}', [ApartmentAssetController::class,'postAparmentOtherAsset']);
-    Route::post('apartment-asset/step5-comparison-factor/{id}', [ApartmentAssetController::class,'updateComparisonFactor']);
-    Route::post('apartment-asset/step5-update-round-total/{id}', [ApartmentAssetController::class,'updateRoundTotal']);
+    Route::post('apartment-asset/step1/{id?}', [ApartmentAssetController::class, 'postApartmentAsset']);
+    Route::post('apartment-asset/step2/{id}', [ApartmentAssetController::class, 'postApartmentAssetLaw']);
+    Route::post('apartment-asset/step3/{id}', [ApartmentAssetController::class, 'postApartmentAssetAppraisal']);
+    Route::post('apartment-asset/step4/{id}', [ApartmentAssetController::class, 'postAparmentAssetHasAsset']);
+    Route::post('apartment-asset/apartment-version-by-id', [ApartmentAssetController::class, 'getApartmentVersionById']);
+    Route::post('apartment-asset/step5-other-asset/{id}', [ApartmentAssetController::class, 'postAparmentOtherAsset']);
+    Route::post('apartment-asset/step5-comparison-factor/{id}', [ApartmentAssetController::class, 'updateComparisonFactor']);
+    Route::post('apartment-asset/step5-update-round-total/{id}', [ApartmentAssetController::class, 'updateRoundTotal']);
 
     // Route::post('apartment-asset/step5/{id}', [ApartmentAssetController::class,'postAparmentAssetHasAsset']);
 
-    Route::get('apartment-asset/all-step/{id}', [ApartmentAssetController::class,'show']);
+    Route::get('apartment-asset/all-step/{id}', [ApartmentAssetController::class, 'show']);
     // Route::get('apartment-asset', [ApartmentAssetController::class,'index']);
-    Route::get('apartment-asset/automatic-asset/{id}', [ApartmentAssetController::class,'getAutomaticAsset']);
+    Route::get('apartment-asset/automatic-asset/{id}', [ApartmentAssetController::class, 'getAutomaticAsset']);
 
     // Route::get('apartment-asset/{id}', [ApartmentAssetController::class,'show']);
 
@@ -577,11 +576,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('activity/get-other-certificate-asset/{id}', [ActivityController::class, 'getOtherCertificateAssetWithId']);
 
     // Route::get('real-estate', [ApartmentAssetController::class,'indexRealEstates']);
-    Route::get('real-estate', [RealEstateController::class,'index']);
+    Route::get('real-estate', [RealEstateController::class, 'index']);
 
-    Route::post('certification_asset/estimate_asset_price/{id}', [CertificateAssetsController::class,'updateEstimateAssetPrice']);
+    Route::post('certification_asset/estimate_asset_price/{id}', [CertificateAssetsController::class, 'updateEstimateAssetPrice']);
 
-    Route::get('certification_asset/check/{id}', [CertificateAssetsController::class,'checkAppraise']);
+    Route::get('certification_asset/check/{id}', [CertificateAssetsController::class, 'checkAppraise']);
 
     Route::post('certification_brief/certificate-update-appraise-version/{id}', [CertificateBriefController::class, 'updateCertificateVersion']);
     Route::get('asset-generals/appraise-detail/{id}', [CertificateAssetsController::class, 'getAppraiseDetail']);
@@ -601,9 +600,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('certification_brief/upload-document/{id}/{description}', [CertificateBriefController::class, 'uploadDocument']);
     Route::get('certification_brief/download-document/{id}', [CertificateBriefController::class, 'downloadDocument']);
     Route::get('activity/get-apartment-history/{id}', [ActivityController::class, 'getApartmentAssetWithId']);
-    Route::post('real_estate/estimate_asset_price/{id}', [CertificateAssetsController::class,'updateEstimateAssetPrice']);
-    Route::post('apartment-asset/estimate_asset_price/{id}', [ApartmentAssetController::class,'updateEstimateAssetPrice']);
-    Route::delete('certification_brief/delete-document/{id}', [CertificateBriefController::class,'deleteDocument']);
+    Route::post('real_estate/estimate_asset_price/{id}', [CertificateAssetsController::class, 'updateEstimateAssetPrice']);
+    Route::post('apartment-asset/estimate_asset_price/{id}', [ApartmentAssetController::class, 'updateEstimateAssetPrice']);
+    Route::delete('certification_brief/delete-document/{id}', [CertificateBriefController::class, 'deleteDocument']);
 
-    Route::get('projects/get-project-by-district', [ProjectController::class,'getProjectByDistrictId']);
+    Route::get('projects/get-project-by-district', [ProjectController::class, 'getProjectByDistrictId']);
 });
