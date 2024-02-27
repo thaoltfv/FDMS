@@ -64,7 +64,7 @@ class ExportPreCertificate
                     $totalDebt = 0;
 
                     foreach ($data as $item) {
-                        $totalDebt += $item->payment_amount;
+                        $totalDebt += $item->amount;
                     }
                     $totalRemain = $data->total_service_fee - $totalDebt;
                     return [
