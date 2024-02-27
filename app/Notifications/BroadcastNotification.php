@@ -45,10 +45,10 @@ class BroadcastNotification extends Notification
     {
         return (new MailMessage)
             ->subject($this->object->subject ? $this->object->subject : '[HSTD] Đã chuyển trạng thái')
-            ->markdown('emails.notifications.update',[
-              'name' => $notifiable->name ? $notifiable->name : '',
-              'message' => $this->object->message ? $this->object->message : '',
-              'link' => ''
+            ->markdown('emails.notifications.update', [
+                'name' => $notifiable->name ? $notifiable->name : '',
+                'message' => $this->object->message ? $this->object->message : '',
+                'link' => ''
             ]);
     }
 
