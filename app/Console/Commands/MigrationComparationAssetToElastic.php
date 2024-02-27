@@ -65,7 +65,8 @@ class MigrationComparationAssetToElastic extends Command
                 // Lấy và lập chỉ mục dữ liệu tài sản so sánh
                 $rows = $compareAssetGeneralRepository->findById($itemId);
                 $compareAssetGeneralRepository->indexData($rows);
-    
+                // Giải phóng bộ nhớ
+                unset($rows);
                 usleep(10); // Trễ ngắn giữa các mục xử lý (tùy chọn)
             }
         }
