@@ -49,14 +49,15 @@ class MigrationComparationAssetToElastic extends Command
             $compareAssetGeneralIds = CompareAssetGeneral::select('id')
             ->whereMigrateStatus('TSS')
             ->whereStatus(1)
+            ->whereIsSyncedEls(0)
             ->orderBy('id')
             ->pluck('id');
     
         $nb = count($compareAssetGeneralIds);
-        $interval = intval(ceil($nb / 10)); // Điều chỉnh khoảng thời gian dựa trên kích thước lô mong muốn
+        $interval = intval(ceil($nb / 50)); // Điều chỉnh khoảng thời gian dựa trên kích thước lô mong muốn
     
         $this->output->progressStart($nb);
-        foreach ($compareAssetGeneralIds->chunk(10) as $chunk) { // Xử lý theo lô 50
+        foreach ($compareAssetGeneralIds->chunk(50) as $chunk) { // Xử lý theo lô 50
             foreach ($chunk as $index => $itemId) {
                 if ($index > 0 && $index % $interval === 0) { // Cập nhật tiến trình sau mỗi `$interval` mục
                     $this->output->progressAdvance($interval);
@@ -65,8 +66,10 @@ class MigrationComparationAssetToElastic extends Command
                 // Lấy và lập chỉ mục dữ liệu tài sản so sánh
                 $rows = $compareAssetGeneralRepository->findById($itemId);
                 $compareAssetGeneralRepository->indexData($rows);
+                CompareAssetGeneral::query()->where('id', $itemId)->update(['is_synced_els' => 1]);
                 // Giải phóng bộ nhớ
                 unset($rows);
+
                 usleep(10); // Trễ ngắn giữa các mục xử lý (tùy chọn)
             }
         }
