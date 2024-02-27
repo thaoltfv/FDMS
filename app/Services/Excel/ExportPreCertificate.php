@@ -84,17 +84,13 @@ class ExportPreCertificate
                             $status_text = 'Hủy';
                             break;
                     }
-                    Log::info($data->id);
-                    Log::info($data->status);
-                    Log::info($data->status_text);
-                    Log::info($status_text);
                     foreach ($data->payments as $item) {
                         $totalDebt += $item->amount;
                     }
                     $totalRemain = $data->total_service_fee - $totalDebt;
                     return [
                         'Mã YCSB' => 'YCSB_' . $data->id,
-                        'Giai đoạn' =>  $data->status_text,
+                        'Giai đoạn' =>  $status_text,
                         'Khách hàng' => $data->petitioner_name,
                         'MST(CMND)' => $data->petitioner_identity_card,
                         'Địa chỉ' => $data->petitioner_address,
