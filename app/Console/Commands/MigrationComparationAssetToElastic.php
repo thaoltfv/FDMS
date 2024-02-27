@@ -53,10 +53,10 @@ class MigrationComparationAssetToElastic extends Command
             ->pluck('id');
     
         $nb = count($compareAssetGeneralIds);
-        $interval = intval(ceil($nb / 50)); // Điều chỉnh khoảng thời gian dựa trên kích thước lô mong muốn
+        $interval = intval(ceil($nb / 10)); // Điều chỉnh khoảng thời gian dựa trên kích thước lô mong muốn
     
         $this->output->progressStart($nb);
-        foreach ($compareAssetGeneralIds->chunk(50) as $chunk) { // Xử lý theo lô 50
+        foreach ($compareAssetGeneralIds->chunk(10) as $chunk) { // Xử lý theo lô 50
             foreach ($chunk as $index => $itemId) {
                 if ($index > 0 && $index % $interval === 0) { // Cập nhật tiến trình sau mỗi `$interval` mục
                     $this->output->progressAdvance($interval);
