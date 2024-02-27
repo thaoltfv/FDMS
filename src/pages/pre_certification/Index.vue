@@ -487,7 +487,7 @@ export default {
 	methods: {
 		async handleActionStage3() {
 			if (this.search_kanban) {
-				await this.getDataWorkFlow2(true, this.search_kanban.search, isRefresh);
+				await this.getDataWorkFlow2(true, this.search_kanban.search);
 			} else await this.getDataWorkFlow2(true);
 			this.isMoved = false;
 			this.showDetailPopUp = false;
@@ -786,11 +786,7 @@ export default {
 
 			if (res.data) {
 				if (this.search_kanban) {
-					await this.getDataWorkFlow2(
-						true,
-						this.search_kanban.search,
-						isRefresh
-					);
+					await this.getDataWorkFlow2(true, this.search_kanban.search);
 				} else await this.getDataWorkFlow2(true);
 				await this.$toast.open({
 					message:
@@ -826,11 +822,7 @@ export default {
 			);
 			if (res.data && res.data.error === false) {
 				if (this.search_kanban) {
-					await this.getDataWorkFlow2(
-						true,
-						this.search_kanban.search,
-						isRefresh
-					);
+					await this.getDataWorkFlow2(true, this.search_kanban.search);
 				} else await this.getDataWorkFlow2(true);
 				await this.$toast.open({
 					message: this.confirm_message + " thành công",
