@@ -1716,8 +1716,8 @@ class CommonService
 
 	public static function callNotification($users, $data)
 	{
-		$broadcast = new BroadcastNotification((object)$data);
-		Notification::send($users, $broadcast);
+		register_shutdown_function([self::class, 'registerShutdowncallNotification'], $users, $data);
+		return;
 	}
 	public static function registerShutdowncallNotification($users, $data)
 	{
