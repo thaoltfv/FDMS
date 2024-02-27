@@ -1508,6 +1508,21 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
+            DB::raw("case status
+                        when 1
+                            then 'Yêu cầu sơ bộ'
+                        when 2
+                            then 'Định giá sơ bộ'
+                        when 3
+                            then 'Duyệt giá sơ bộ'
+                        when 4
+                            then 'Thương thảo'
+                        when 5
+                            then 'Hoàn thành'
+                        when 6
+                            then 'Hủy'
+                    end as status_text
+                "),
         ];
         $with = [
             'appraiserSale:id,name,user_id',
