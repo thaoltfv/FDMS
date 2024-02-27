@@ -462,7 +462,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $fromDate = '1/1/' . $fromYear;
         $toDate = '31/12/' . $toYear;
 
-        $status = [4];
+        $status = [5];
         $year = [$fromYear, $toYear];
         $statusOutput = ['old', 'new'];
 

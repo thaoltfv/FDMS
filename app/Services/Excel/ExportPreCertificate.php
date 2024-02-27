@@ -6,7 +6,6 @@ use App\Enum\ValueDefault;
 use App\Http\ResponseTrait;
 use App\Services\CommonService;
 use Box\Spout\Common\Entity\Style\Border;
-use Illuminate\Support\Facades\Log;
 use Box\Spout\Common\Entity\Style\Color;
 use Box\Spout\Writer\Common\Creator\Style\BorderBuilder;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
