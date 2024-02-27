@@ -74,7 +74,7 @@ class ExportPreCertificate
                         'MST(CMND)' => $data->petitioner_identity_card,
                         'Địa chỉ' => $data->petitioner_address,
                         'Mục đích thẩm định' => $data->appraisePurpose->name ?? '',
-                        'Loại sơ bộ' => $data->preType->name ?? '',
+                        'Loại sơ bộ' => $data->preType->description ?? '',
                         'Tên tài sản sơ bộ' => $data->pre_asset_name,
                         'Tổng giá trị sơ bộ' => $data->total_preliminary_value,
                         'Đối tác' => $data->customer->name ?? '',
@@ -89,7 +89,7 @@ class ExportPreCertificate
                         'QL Nghiệp vụ' => $data->appraiserBusinessManager->name ?? '',
                         'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
                         'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d'),
-                        'Mã HSTĐ' => 'HSTD_' . $data->certificate_id,
+                        'Mã HSTĐ' => $data->certificate_id ? 'HSTD_' . $data->certificate_id : '$data->certificate_id',
                     ];
                 }
             );
