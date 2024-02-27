@@ -43,8 +43,8 @@ class MigrationComparationAssetToElastic extends Command
         Log::info("Migration estates in Donava is start!");
         try {
             $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
-            // $compareAssetGeneralRepository->createIndex();
-            // $compareAssetGeneralRepository->createVersionIndex();
+            $compareAssetGeneralRepository->createIndex();
+            $compareAssetGeneralRepository->createVersionIndex();
 			// Lấy tất cả ID của tài sản so sánh cần di chuyển
             $compareAssetGeneralIds = CompareAssetGeneral::select('id')
             ->whereMigrateStatus('TSS')
