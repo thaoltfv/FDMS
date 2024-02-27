@@ -53,19 +53,20 @@ class ExportPreCertificate
             ->setFontSize(11)
             ->setBorder($border)
             ->build();
-        $totalDebt = 0;
 
-        foreach ($data as $item) {
-            $totalDebt += $item->payment_amount;
-        }
-        $totalRemain = $data->total_service_fee - $totalDebt;
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
-                function ($data) use ($totalDebt, $totalRemain) {
+                function ($data) {
+                    $totalDebt = 0;
+
+                    foreach ($data as $item) {
+                        $totalDebt += $item->payment_amount;
+                    }
+                    $totalRemain = $data->total_service_fee - $totalDebt;
                     return [
                         'Mã YCSB' => 'YCSB_' . $data->id,
                         'Giai đoạn' =>  $data->status_text,
