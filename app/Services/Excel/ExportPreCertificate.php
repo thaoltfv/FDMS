@@ -63,9 +63,7 @@ class ExportPreCertificate
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
                     $totalDebt = 0;
-                    Log::info($data->id);
-                    Log::info($data->status);
-                    Log::info($data->status_text);
+
                     switch ($data->status) {
                         case 1:
                             $data->status_text = 'Yêu cầu sơ bộ';
@@ -86,6 +84,9 @@ class ExportPreCertificate
                             $data->status_text = 'Hủy';
                             break;
                     }
+                    Log::info($data->id);
+                    Log::info($data->status);
+                    Log::info($data->status_text);
                     foreach ($data->payments as $item) {
                         $totalDebt += $item->amount;
                     }
