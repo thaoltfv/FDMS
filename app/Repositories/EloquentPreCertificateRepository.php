@@ -1561,7 +1561,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $result = $result->where('customer_id', $customer);
         }
         $result = $result->get();
-
+        Log::info($result);
         return $result;
     }
 
