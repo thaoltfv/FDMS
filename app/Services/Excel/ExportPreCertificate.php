@@ -28,7 +28,7 @@ class ExportPreCertificate
     {
         // $data = CommonService::exportCertificateAssets();
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'pre_certification/' . $now->format('Y') . '/' . $now->format('m') . '/';
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
@@ -88,8 +88,8 @@ class ExportPreCertificate
                         'CV nghiệp vụ' =>  $data->appraiserPerform->name ?? '',
                         'QL Nghiệp vụ' => $data->appraiserBusinessManager->name ?? '',
                         'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
-                        'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d'),
-                        'Mã HSTĐ' => $data->certificate_id ? 'HSTD_' . $data->certificate_id : '$data->certificate_id',
+                        'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('d-m-Y'),
+                        'Mã HSTĐ' => $data->certificate_id ? 'HSTD_' . $data->certificate_id : '',
                     ];
                 }
             );
