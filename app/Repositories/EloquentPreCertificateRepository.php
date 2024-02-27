@@ -1461,14 +1461,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $appraiserSale = request()->get('appraiser_sale_id');
         $appraiserPerform = request()->get('appraiser_perform_id');
         $customer = request()->get('customer_id');
-        Log::info($status);
-        Log::info($fromDate);
-        Log::info($toDate);
-        Log::info($users);
-        Log::info($businessManager);
-        Log::info($appraiserSale);
-        Log::info($appraiserPerform);
-        Log::info($customer);
         if (isset($fromDate) && isset($toDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
@@ -1515,20 +1507,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
-            DB::raw("case status
-                        when 1
-                            then 'Yêu cầu sơ bộ'
-                        when 2
-                            then 'Định giá sơ bộ'
-                        when 3
-                            then 'Duyệt giá sơ bộ'
-                        when 4
-                            then 'Thương thảo'
-                        when 5
-                            then 'Hoàn thành'
-                        when 6
-                            then 'Hủy'
-                    end as status_text
+            DB::raw(" CASE status
+                WHEN 1 THEN 'Yêu cầu sơ bộ'
+                WHEN 2 THEN 'Định giá sơ bộ'
+                WHEN 3 THEN 'Duyệt giá sơ bộ'
+                WHEN 4 THEN 'Thương thảo'
+                WHEN 5 THEN 'Hoàn thành'
+                WHEN 6 THEN 'Hủy'
+            END AS status_text
                 "),
         ];
         $with = [
