@@ -1461,7 +1461,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $appraiserSale = request()->get('appraiser_sale_id');
         $appraiserPerform = request()->get('appraiser_perform_id');
         $customer = request()->get('customer_id');
-
+        Log::info($status);
+        Log::info($fromDate);
+        Log::info($toDate);
+        Log::info($users);
+        Log::info($businessManager);
+        Log::info($appraiserSale);
+        Log::info($appraiserPerform);
+        Log::info($customer);
         if (isset($fromDate) && isset($toDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
