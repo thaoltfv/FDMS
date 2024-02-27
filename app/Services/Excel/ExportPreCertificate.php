@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Excel;
 
 use App\Enum\ValueDefault;
@@ -23,16 +24,17 @@ use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter\Column;
 class ExportPreCertificate
 {
     use ResponseTrait;
-    public function exportPre($data){
+    public function exportPre($data)
+    {
         // $data = CommonService::exportCertificateAssets();
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
-        if(!File::exists(storage_path('app/public/'. $path))){
-            File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        if (!File::exists(storage_path('app/public/' . $path))) {
+            File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
         $downloadDate = $now->format('dmY');
         $downloadTime = $now->format('Hi');
-        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate . '.xlsx';
         $border = (new BorderBuilder())
             ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
             ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
@@ -41,62 +43,68 @@ class ExportPreCertificate
             ->build();
 
         $header_style = (new StyleBuilder())
-                            ->setFontName('Times New Roman')
-                            ->setFontBold()
-                            ->setBorder($border)
-                            ->build();
+            ->setFontName('Times New Roman')
+            ->setFontBold()
+            ->setBorder($border)
+            ->build();
 
         $rows_style = (new StyleBuilder())
-                        ->setFontName('Times New Roman')
-                        ->setFontSize(11)
-                        ->setBorder($border)
-                        ->build();
+            ->setFontName('Times New Roman')
+            ->setFontSize(11)
+            ->setBorder($border)
+            ->build();
+        $totalDebt = 0;
+
+        foreach ($data as $item) {
+            $totalDebt += $item->payment_amount;
+        }
+        $totalRemain = $data->total_service_fee - $totalDebt;
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
-            ->export(storage_path('app/public/'. $path. '/'. $fileName ) ,function($data){
-                return [
-                    'Mã YCSB' => 'YCSB_'. $data->id,
-                    'Giai đoạn' =>  $data->status_text,
-                    'Khách hàng' => $data->petitioner_name,
-                    'MST(CMND)' => $data->petitioner_identity_card,
-                    'Địa chỉ' => $data->petitioner_address,
-                    'Mục đích thẩm định' => $data->appraise_purpose_id,
-                    'Loại sơ bộ' => $data->appraise_purpose_id,
-                    'Tên tài sản sơ bộ' => $data->pre_asset_name,
-                    'Tổng giá trị sơ bộ' => $data->total_preliminary_value,
-                    'Đối tác'=> $data->$data->customer,
-                    'Địa chỉ'=> $data->address,
-                    'Liên hệ' => $data->$data->customer,
-                    'Tổng phí dịch vụ' => $data->total_service_fee,
-                    'Chiết khấu' => $data->commission_fee,
-                    'Đã thanh toán' => $data->amountPaid,
-                    'Còn nợ' => $data->debtRemain,
-                    'NV Kinh doanh' => isset($data->appraiserSale->name) ? $data->appraiserSale->name : '',
-                    'CV nghiệp vụ' => $data->appraiserPerform->name??'',
-                    'QL Nghiệp vụ' => $data->appraiserPerform->name??'',
-                    'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
-                    'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d')  ,
-                    // 'Ngày hoàn thành'
-                    // 'Chuyển chính thức'
-                    // 'Ngày chuyển chính thức'
-                    'Mã HSTĐ' =>'HSTD_'. $data->certificate_id,
-                ];}
+            ->export(
+                storage_path('app/public/' . $path . '/' . $fileName),
+                function ($data) use ($totalDebt, $totalRemain) {
+                    return [
+                        'Mã YCSB' => 'YCSB_' . $data->id,
+                        'Giai đoạn' =>  $data->status_text,
+                        'Khách hàng' => $data->petitioner_name,
+                        'MST(CMND)' => $data->petitioner_identity_card,
+                        'Địa chỉ' => $data->petitioner_address,
+                        'Mục đích thẩm định' => $data->appraisePurpose->name ?? '',
+                        'Loại sơ bộ' => $data->preType->name ?? '',
+                        'Tên tài sản sơ bộ' => $data->pre_asset_name,
+                        'Tổng giá trị sơ bộ' => $data->total_preliminary_value,
+                        'Đối tác' => $data->customer->name ?? '',
+                        'Địa chỉ' => $data->customer->address ?? '',
+                        'Liên hệ' =>  $data->customer->phone ?? '',
+                        'Tổng phí dịch vụ' => $data->total_service_fee,
+                        'Chiết khấu' => $data->commission_fee,
+                        'Đã thanh toán' => $totalDebt,
+                        'Còn nợ' => $totalRemain,
+                        'NV Kinh doanh' => $data->appraiserSale->name ?? '',
+                        'CV nghiệp vụ' =>  $data->appraiserPerform->name ?? '',
+                        'QL Nghiệp vụ' => $data->appraiserBusinessManager->name ?? '',
+                        'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
+                        'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d'),
+                        'Mã HSTĐ' => 'HSTD_' . $data->certificate_id,
+                    ];
+                }
             );
 
         $this->formatColumn($path, $fileName);
 
         $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName );
+        $data['url'] = Storage::disk('public')->url($path . '/' . $fileName);
         $data['file_name'] = $fileName;
         return $data;
     }
     private function formatColumn($path, $fileName)
     {
-        $reader= new Xlsx();
-        $spreadSheet= new Spreadsheet();
-        $spreadSheet= $reader->load(storage_path('app/public/'. $path. $fileName));
+        $reader = new Xlsx();
+        $spreadSheet = new Spreadsheet();
+        $spreadSheet = $reader->load(storage_path('app/public/' . $path . $fileName));
         $spreadSheet->setActiveSheetIndex(0);
         $activeSheet = $spreadSheet->getActiveSheet();
 
@@ -117,7 +125,7 @@ class ExportPreCertificate
             }
         }
         $objWriter = IOFactory::createWriter($spreadSheet, 'Xlsx');
-        $objWriter->save(storage_path('app/public/'. $path. '/'. $fileName ));
+        $objWriter->save(storage_path('app/public/' . $path . '/' . $fileName));
 
         //Cleanup
         $spreadSheet->disconnectWorksheets();

@@ -1481,40 +1481,44 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $users = explode(',', $users);
         }
         $select = [
-            'pre_certificates.id',
+            'id',
+            'certificate_id',
             'petitioner_name',
-            'pre_date',
-            'status',
-            'pre_certificates.created_at',
+            'petitioner_phone',
+            'petitioner_identity_card',
+            'petitioner_address',
+            'customer_id',
             'appraise_purpose_id',
-            'created_by',
+            'note',
+            'appraiser_sale_id',
             'business_manager_id',
             'appraiser_perform_id',
-            'appraiser_sale_id',
-            DB::raw("case status
-                when 1
-                    then 'Yêu cầu sơ bộ'
-                when 2
-                    then 'Định giá sơ bộ'
-                when 3
-                    then 'Duyệt giá sơ bộ'
-                when 4
-                    then 'Thương thảo'
-                when 5
-                    then 'Hoàn thành'
-                when 6
-                    then 'Hủy'
-                end as status_text"),
+            'total_preliminary_value',
+            'cancel_reason',
+            'status_updated_at',
+            'pre_certificates.created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+            'status',
+            'deleted_at',
+            'status_expired_at',
             'commission_fee',
+            'pre_date',
+            'pre_asset_name',
+            'total_service_fee',
+            'pre_type_id',
         ];
         $with = [
-            'createdBy:id,name',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
             'appraisePurpose:id,name',
-            // 'assetPrice' => function ($q) {
-            //     $q->where('slug', '=', 'total_asset_price');
-            // },
+            'customer:id,name,phone,address',
+            'createdBy:id,name',
+            'payments',
+            'cancelReason:id,description',
+            'preType:id,description',
         ];
         $result = PreCertificate::with($with)
             ->select($select);
