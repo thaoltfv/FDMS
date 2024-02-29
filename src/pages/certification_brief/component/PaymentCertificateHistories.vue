@@ -112,6 +112,7 @@
 							</div>
 						</div>
 						<div
+							v-if="!permissionNotAllowEdit"
 							class=" d-lg-flex d-block justify-content-end align-items-center "
 						>
 							<div class="d-lg-flex d-block button-contain">
@@ -427,6 +428,7 @@ export default {
 					type: "success",
 					position: "top-right"
 				});
+				await this.showDrawer();
 				this.$emit("getDetail");
 				// this.drawer = false;
 			} else if (res.error) {
