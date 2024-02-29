@@ -78,6 +78,7 @@
 											class="mr-2 icon_expired"
 											src="@/assets/icons/ic_expire_calender.svg"
 											alt="ic_expire_calender"
+											hidden
 										/>
 									</div>
 								</div>
@@ -122,11 +123,15 @@
 									alt="user"
 								/>
 								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Thời hạn:</strong
-									><span style="font-weight: 500">{{
-										getExpireDate(element)
-									}}</span>
+									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
+									<span v-if="getExpireDate(element).includes('Đã hết')" style="font-weight: 500; color: red;">
+										{{ getExpireDate(element) }}
+									</span>
+									<span v-else style="font-weight: 500;">
+										{{ getExpireDate(element) }}
+									</span>
 								</div>
+
 							</div>
 							<div class="property-content d-flex justify-content-between mb-0">
 								<div class="label_container d-flex">
@@ -190,7 +195,7 @@
 			/>
 			<ModalNotificationWithAssign
 				v-if="isMoved"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="`Bạn có muốn1 '${confirm_message}' hồ sơ này?`"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 				@cancel="handleCancelAccept2"
@@ -198,7 +203,7 @@
 			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="confirm_message === 'Từ chối' ? `Bạn có muốn 'Từ chối' hồ sơ này?` : getNotificationMessage()"
 				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
 			/>
@@ -346,6 +351,7 @@ export default {
 		const { configs } = storeToRefs(workFlowConfigStore);
 		const jsonConfig = ref({});
 		const principleConfig = ref([]);
+		console.log('principleConfig',principleConfig)
 		const startFunction = async () => {
 			await workFlowConfigStore.getConfigByName("workflowHSTD");
 			jsonConfig.value = configs.value.hstdConfig;
@@ -437,7 +443,25 @@ export default {
 				default:
 					strExpire = "Đã hủy";
 			}
-			return strExpire;
+			return strExpire;		
+		},
+		getNotificationMessage() {
+			switch (this.next_status - 1) {
+				case 1:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Thẩm định' ?";
+				case 2:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Duyệt giá' ?";
+				case 6:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Duyệt phát hành' ?";
+				case 7:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'In hồ sơ' ?";
+				case 8:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Bàn giao khách hàng' ?";
+				case 3:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Hoàn thành' ?";
+				default:
+					return "";
+			}
 		},
 		checkDateExpired(element) {
 			let check = false;
@@ -1469,6 +1493,6 @@ export default {
 	}
 }
 .border_expired {
-	border-color: red !important;
+	// border-color: red !important;
 }
 </style>
