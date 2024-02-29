@@ -43,7 +43,7 @@
 										<p>{{ form.petitioner_name }}</p>
 									</div>
 									<div
-										v-if="editInfo && edit"
+										v-if="edit && (editInfo || editDocument)"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit "
 									>
@@ -1406,6 +1406,7 @@
 			v-if="showAppraiseInformationDialog"
 			:data="form"
 			:idData="idData"
+			:editDocument="editDocument"
 			:typeAppraiseProperty="typeAppraiseProperty"
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
@@ -1670,6 +1671,7 @@ export default {
 			editAppraiser: false,
 			editItemList: false,
 			editInfo: false,
+			editDocument: false,
 			editPayment: false,
 			printConfig: false,
 			profile: {},
@@ -3080,10 +3082,15 @@ export default {
 					? dataJson[0].edit.appraise_item_list
 					: false;
 				this.editInfo = dataJson[0].edit.info ? dataJson[0].edit.info : false;
+				this.editDocument = dataJson[0].edit.documentNum
+					? dataJson[0].edit.documentNum
+					: false;
 				this.editPayment = dataJson[0].edit.payments
 					? dataJson[0].edit.payments
 					: false;
 				this.printConfig = dataJson[0].print;
+
+				console.log("this.editAppraiser", this.editInfo, this.editDocument);
 			}
 		},
 		openMessage(

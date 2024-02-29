@@ -120,6 +120,7 @@
 							<InputText
 								v-model="data.document_num"
 								vid="document_num"
+								:disabledInput="true"
 								label="Số hợp đồng"
 								class="form-group-container col-sm-12 col-md-6"
 							/>
@@ -137,6 +138,7 @@
 							<InputText
 								v-model="data.certificate_num"
 								vid="certificate_num"
+								:disabledInput="true"
 								label="Số chứng thư"
 								class="form-group-container col-sm-12 col-md-6"
 							/>

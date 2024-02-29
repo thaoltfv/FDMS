@@ -360,6 +360,7 @@ export default {
 					type: "success",
 					position: "top-right"
 				});
+				await this.showDrawer();
 				this.$emit("updatePayments");
 				// this.drawer = false;
 			} else if (res.error) {

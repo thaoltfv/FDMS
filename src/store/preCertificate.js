@@ -7,6 +7,7 @@ import WareHouse from "@/models/WareHouse";
 import File from "@/models/File";
 import { convertPagination } from "@/utils/filters";
 import moment from "moment";
+import _ from "lodash";
 export const usePreCertificateStore = defineStore(
 	"preCertificate",
 	() => {
@@ -261,7 +262,8 @@ export const usePreCertificateStore = defineStore(
 			isReturn = false,
 			assignObject = null
 		) {
-			const tempUpdate = assignObject ? assignObject : dataPC.value;
+			const tempASSign = assignObject ? assignObject : dataPC.value;
+			const tempUpdate = _.cloneDeep(tempASSign);
 			other.value.isSubmit = true;
 			if (moment(tempUpdate.pre_date, "DD/MM/YYYY", true).isValid()) {
 				tempUpdate.pre_date = moment(tempUpdate.pre_date, "DD-MM-YYYY").format(
