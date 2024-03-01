@@ -190,7 +190,14 @@
 			/>
 			<ModalNotificationWithAssign
 				v-if="isMoved"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+				"
+				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 				@cancel="handleCancelAccept2"
@@ -198,7 +205,14 @@
 			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
-				:notification="`Bạn có muốn '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+				"
+				:status_text="confirm_message"
 				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
 			/>

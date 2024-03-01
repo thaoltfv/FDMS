@@ -249,7 +249,7 @@ export default {
 					},
 
 					{
-						title: "Thời gian trước khi warning",
+						title: "Cảnh báo đến hạn",
 						align: "left",
 						scopedSlots: { customRender: "expire_in" },
 						dataIndex: "expire_in",

@@ -11,7 +11,7 @@
 						@resfreshData="startFunction"
 					/>
 				</TabItem>
-				<TabItem name="HSTDSB">
+				<TabItem name="HSTĐ">
 					<Table
 						v-if="configs && configs.hstdConfig && configs.hstdConfig.principle"
 						:lstConfig="configs.hstdConfig.principle"

@@ -19,7 +19,11 @@
 			<div class="card-body">
 				<h5
 					style="font-size: 18px"
-					v-html="notification"
+					v-html="
+						`${notification}${
+							status_text ? '<br>&quot;' + status_text + '&quot;' : ''
+						}`
+					"
 					class="padding-bottom : 5px"
 				></h5>
 				<div>
@@ -111,7 +115,7 @@ export default {
 			reasonCancelPC: []
 		};
 	},
-	props: ["notification", "appraiser"],
+	props: ["notification", "appraiser", "status_text"],
 	setup(props) {
 		const preCertificateStore = usePreCertificateStore();
 		const { lstDataConfig, jsonConfig } = storeToRefs(preCertificateStore);

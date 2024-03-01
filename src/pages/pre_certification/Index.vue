@@ -173,9 +173,10 @@
 					confirm_message == 'Từ chối' ||
 					confirm_message == 'Khôi phục' ||
 					confirm_message == 'Hủy'
-						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
-						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+						? `Bạn có muốn '${confirm_message}' yêu cầu này?`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 				"
+				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
 				:appraiser="appraiserChangeStage"
@@ -188,8 +189,9 @@
 					confirm_message == 'Khôi phục' ||
 					confirm_message == 'Hủy'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
-						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 				"
+				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 			/>

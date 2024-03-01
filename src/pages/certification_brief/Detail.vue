@@ -1422,7 +1422,12 @@
 		<ModalNotificationWithAssign
 			v-if="openNotification"
 			@cancel="handleCancel"
-			v-bind:notification="message"
+			:notification="
+				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+			"
+			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction"
 		/>
@@ -1479,10 +1484,16 @@
 		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
-			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
+			:notification="
+				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+			"
+			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
+
 		<ModalAppraiseListVersion
 			v-if="isShowAppraiseListVersion"
 			:data="checkVersion"
@@ -2147,17 +2158,17 @@ export default {
 		handleCancelCertificate() {
 			this.openNotification = true;
 			this.cancel_certificate = true;
-			this.message = "Bạn có muốn hủy hồ sơ này?";
+			this.message = "Hủy";
 		},
 		handleAccept() {
 			this.openNotification = true;
 			this.cancel_certificate = false;
-			this.message = "Bạn có muốn duyệt hồ sơ này?";
+			this.message = "Duyệt";
 		},
 		handleDenined() {
 			this.openNotificationDenined = true;
 			this.cancel_certificate = false;
-			this.message = "Bạn có muốn từ chối hồ sơ này";
+			this.message = "Từ chối";
 		},
 		handleSendRequire() {
 			if (this.form.general_asset && this.form.general_asset.length > 0) {
