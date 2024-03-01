@@ -1970,6 +1970,28 @@ export default {
 					});
 				});
 		},
+		getNotificationMessage() {
+			console.log("vào hàm này");
+			console.log("status", this.form.status); // Sử dụng this.form.status thay vì status
+			switch (
+				this.form.status // Sử dụng this.form.status thay vì status
+			) {
+				case 1:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Thẩm định' ?";
+				case 2:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Duyệt giá' ?";
+				case 3:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Duyệt phát hành' ?";
+				case 7:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'In hồ sơ' ?";
+				case 8:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Bàn giao khách hàng' ?";
+				case 9:
+					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Hoàn thành' ?";
+				default:
+					return "";
+			}
+		},
 		getReport(type) {
 			let report = this.form.other_documents.find(i => i.description === type);
 			return report;

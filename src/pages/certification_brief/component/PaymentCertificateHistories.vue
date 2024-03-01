@@ -179,6 +179,7 @@ import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import CertificationBrief from "@/models/CertificationBrief";
+import moment from 'moment'
 export default {
 	name: "PaymentHistories",
 	props: {
