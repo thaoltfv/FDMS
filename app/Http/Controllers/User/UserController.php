@@ -97,7 +97,18 @@ class UserController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-
+    public function getUnreadNotifications($id): JsonResponse
+    {
+        try {
+            $user = $this->userRepository->getUser($id);
+            $unreadNotificationsCount = $user->unreadNotifications->count();
+            return $this->respondWithCustomData(['unreadNotifications' => $unreadNotificationsCount]);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
     /**
      * @param $id
      * @return JsonResponse

@@ -2702,6 +2702,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then users.image
                         when 6
                             then u4.image
+                        when 7
+                            then u5.image
+                        when 8
+                            then u5.image
+                        when 9
+                            then u1.image
                     end as image
                 "),
             'sub_status',
@@ -2785,6 +2791,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $j->on('control.user_id', '=', 'u4.id');
                     })
                     ->select('u4.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as administrative', function ($join) {
+                $join->on('administrative.id', '=', 'certificates.administrative_id')
+                    ->join('users as u5', function ($j) {
+                        $j->on('administrative.user_id', '=', 'u5.id');
+                    })
+                    ->select('u5.image')
                     ->limit(1);
             })
             ->select($select);
