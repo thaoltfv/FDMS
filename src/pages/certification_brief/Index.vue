@@ -367,7 +367,6 @@ export default {
 		const { configs } = storeToRefs(workFlowConfigStore);
 		const jsonConfig = ref({});
 		const principleConfig = ref([]);
-		console.log("principleConfig", principleConfig);
 		const startFunction = async () => {
 			await workFlowConfigStore.getConfigByName("workflowHSTD");
 			jsonConfig.value = configs.value.hstdConfig;

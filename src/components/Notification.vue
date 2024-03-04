@@ -92,7 +92,8 @@ export default {
 			visibleNotification: false,
 			notifications: [],
 			notificationShow: [],
-			limit: 10
+			limit: 10,
+			unreadNotificationCount: null
 		};
 	},
 	computed: {
@@ -100,12 +101,25 @@ export default {
 			if (store.getters.profile !== null) {
 				return store.getters.profile.data.user;
 			}
-		},
-		unreadNotificationCount() {
-			return store.getters.unreadNotification;
 		}
+		// unreadNotificationCount() {
+		// 	return store.getters.unreadNotification;
+		// },
+	},
+
+	mounted() {
+		this.unreadNotificationCount = store.getters.unreadNotification;
+		setInterval(() => {
+			if (this.unreadNotificationCount) {
+				this.getNoti();
+			}
+		}, 30000); // 10 seconds
 	},
 	methods: {
+		async getNoti() {
+			const profile = await Notification.getUnreadCount(this.currentUser.id);
+			this.unreadNotificationCount = profile.data.unreadNotifications;
+		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");
 		},
