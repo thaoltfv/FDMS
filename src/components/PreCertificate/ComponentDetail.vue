@@ -442,6 +442,7 @@
 					? `Bạn có muốn '${message}' yêu cầu này?`
 					: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 			"
+			workflowName="ycsbConfig"
 			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction2"

@@ -1427,6 +1427,7 @@
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
+			workflowName="hstdConfig"
 			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction"
@@ -1489,6 +1490,7 @@
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
+			workflowName="hstdConfig"
 			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction2"

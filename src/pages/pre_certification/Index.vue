@@ -184,6 +184,7 @@
 						? `Bạn có muốn '${confirm_message}' yêu cầu này?`
 						: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 				"
+				workflowName="ycsbConfig"
 				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
@@ -199,6 +200,7 @@
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 				"
+				workflowName="ycsbConfig"
 				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"

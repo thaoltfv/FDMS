@@ -105,6 +105,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
 import InputTextarea from "@/components/Form/InputTextarea";
 import InputCategory from "@/components/Form/InputCategory";
 import WareHouse from "@/models/WareHouse";
@@ -120,10 +121,12 @@ export default {
 			reasonCancelPC: []
 		};
 	},
-	props: ["notification", "appraiser", "status_text"],
+	props: ["notification", "appraiser", "status_text", "workflowName"],
 	setup(props) {
 		const preCertificateStore = usePreCertificateStore();
-		const { lstDataConfig, jsonConfig } = storeToRefs(preCertificateStore);
+		const { lstDataConfig } = storeToRefs(preCertificateStore);
+		const configStore = useWorkFlowConfig();
+		const { configs } = storeToRefs(configStore);
 		const chosenAppraiser = ref(null);
 		const chosenAppraiserOriginal = ref(null);
 		const labelAppraiser = ref(null);
@@ -139,10 +142,11 @@ export default {
 					false
 				);
 			}
-			if (!jsonConfig.value) {
-				await preCertificateStore.getConfig();
+			if (!configs.value[props.workflowName]) {
+				await configStore.getConfig();
 			}
-			labelAppraiser.value = jsonConfig.value.appraiser[props.appraiser.type];
+			labelAppraiser.value =
+				configs.value[props.workflowName].appraiser[props.appraiser.type];
 		};
 		if (props.appraiser) getStart();
 		return {

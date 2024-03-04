@@ -205,6 +205,7 @@
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 				"
 				:status_text="confirm_message"
+				workflowName="hstdConfig"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 				@cancel="handleCancelAccept2"
@@ -219,6 +220,7 @@
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 				"
+				workflowName="hstdConfig"
 				:status_text="confirm_message"
 				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
