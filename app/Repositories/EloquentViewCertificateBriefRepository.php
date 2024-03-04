@@ -537,13 +537,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         }
         $result = array_merge(['label' => $label], ['data' => $result]);
 
-        Log::info('Data Raw: ', $dataRaw);
-        Log::info('monthPluck: ', $monthPluck);
-        Log::info('year: ', $year);
-        Log::info('$this->model: ' . json_encode($this->model));
-        Log::info('result: ', $result);
         $database = $this->model->getTable();
-        Log::info('Database: ' . $database);
         return $result;
     }
 
