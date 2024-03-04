@@ -121,12 +121,15 @@
 									alt="user"
 								/>
 								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Thời hạn:</strong
+									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
+									<span
+										v-if="getExpireDate(element).includes('Đã hết')"
+										style="font-weight: 500; color: red;"
 									>
-									<span v-if="getExpireDate(element).includes('Đã hết')" style="font-weight: 500; color: red;">
 										{{ getExpireDate(element) }}
 									</span>
-									<span  v-else
+									<span
+										v-else
 										style="font-weight: 500"
 										:class="{
 											'text-orange': checkDateExpired(element).inExpiringState
@@ -528,11 +531,10 @@ export default {
 					item => item.status === element.status && item.isActive === 1
 				);
 				if (config.expire_in) {
-					const expireDate = new Date(element.status_expired_at);
 					const now = new Date();
-					const diffTime = Math.abs(expireDate - now);
-					const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-					if (diffMinutes <= config.expire_in) {
+					const futureTime = new Date(now.getTime() + config.expire_in * 60000); // config.expire_in is assumed to be in minutes
+
+					if (futureTime >= new Date(element.status_expired_at)) {
 						check.inExpiringState = true;
 					}
 				}

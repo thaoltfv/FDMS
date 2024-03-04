@@ -21,7 +21,12 @@
 					style="font-size: 18px"
 					v-html="
 						`${notification}${
-							status_text ? '<br>&quot;' + status_text + '&quot;' : ''
+							status_text &&
+							status_text != 'Khôi phục' &&
+							status_text != 'Hủy' &&
+							status_text != 'Từ chối'
+								? '<br>&quot;' + status_text + '&quot;'
+								: ''
 						}`
 					"
 					class="padding-bottom : 5px"
