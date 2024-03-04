@@ -1355,13 +1355,17 @@ class CommonService
 		$realEstate = RealEstate::find($realEstateID);
 		if ($realEstate->appraises) {
 			$price = self::checkAppraisePrice($realEstate->appraises);
-
+			Log::info('checkValidAppraise: ' . $price);
 			if (isset($price)) {
 				$message = $price;
 			}
 			$comparison = self::checkAppraiseAdjust($realEstate->appraises->id);
-
+			Log::info('checkValidAppraise: ' . $comparison);
 			if (isset($comparison)) {
+				Log::info('checkAdjustRate: ' .
+					$comparison['checkAdjustRate']);
+				Log::info('checkMaxAvg: ' .
+					$comparison['checkMaxAvg']);
 				if ($comparison['checkAdjustRate'] == true) {
 					$message[] = 'Mức độ chênh lệch với mức giá trung bình của các mức giá chỉ dẫn lớn hơn ' . ValueDefault::MAXIMUM_AVERAGE_RATE . '%';
 				}
@@ -1369,18 +1373,21 @@ class CommonService
 					$message[] = 'Mức độ chênh lệch của mức giá sau điều chỉnh với mức giá chỉ dẫn lớn hơn ' . ValueDefault::TOTAL_ADJUST_RATE . '%';
 				}
 			}
+			Log::info('checkValidAppraise: ' . print_r($message, true));
 			if (!empty($message)) {
 				$result['message'] = 'TSTĐ_' . $realEstateID . ': ' . implode(', ', $message);
 				$result['exception'] = '';
 			}
 		} else if ($realEstate->apartment) {
 			$price = self::checkApartmentPrice($realEstate->apartment);
+			Log::info('checkValidAppraise: ' . $price);
 
 			if (isset($price)) {
 				$message = $price;
 			}
 
 			$comparison = self::checkApartmentAdjust($realEstate->apartment->id);
+			Log::info('checkValidAppraise: ' . $comparison);
 
 			if (isset($comparison)) {
 				if ($comparison['checkAdjustRate'] == true) {
@@ -1389,7 +1396,14 @@ class CommonService
 				if ($comparison['checkMaxAvg'] == true) {
 					$message[] = 'Mức độ chênh lệch của mức giá sau điều chỉnh với mức giá chỉ dẫn lớn hơn ' . ValueDefault::TOTAL_ADJUST_RATE . '%';
 				}
+				Log::info('checkAdjustRate: ' .
+					$comparison['checkAdjustRate']);
+				Log::info('checkMaxAvg: ' .
+					$comparison['checkMaxAvg']);
 			}
+			Log::info(
+				'checkValidAppraise: ' . print_r($message, true)
+			);
 			if (!empty($message)) {
 				$result['message'] = 'TSTĐ_' . $realEstateID . ': ' . implode(', ', $message);
 				$result['exception'] = '';
