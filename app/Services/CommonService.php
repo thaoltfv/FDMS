@@ -1543,6 +1543,9 @@ class CommonService
 		foreach ($data as $item) {
 			$diff = round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0);
 
+			Log::info('item[indicative_price]: ' . $item['indicative_price']);
+			Log::info('avg_adjust_price: ' . $avg_adjust_price);
+			Log::info('diff: ' . $diff);
 			if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
 				$appraise->checkAdjustRate = true;
 			}
