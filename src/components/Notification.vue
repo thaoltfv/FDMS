@@ -62,7 +62,7 @@
 				</a>
 			</div>
 		</div>
-		<a-badge :count="unreadNotificationCount">
+		<a-badge :count="unreadNotificationCount || unreadNotificationCountCompute">
 			<font-awesome-icon
 				@click="handleGetNotifications"
 				class="fa-lg"
@@ -101,18 +101,16 @@ export default {
 			if (store.getters.profile !== null) {
 				return store.getters.profile.data.user;
 			}
+		},
+		unreadNotificationCountCompute() {
+			return store.getters.unreadNotification;
 		}
-		// unreadNotificationCount() {
-		// 	return store.getters.unreadNotification;
-		// },
 	},
 
-	mounted() {
+	created() {
 		this.unreadNotificationCount = store.getters.unreadNotification;
 		setInterval(() => {
-			if (this.unreadNotificationCount) {
-				this.getNoti();
-			}
+			this.getNoti();
 		}, 30000); // 10 seconds
 	},
 	methods: {
