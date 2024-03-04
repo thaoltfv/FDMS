@@ -1485,7 +1485,6 @@ class CommonService
 		$assets = $appraise->appraiseHasAssets;
 		$compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
 		$sumPrice = 0;
-		$lastItem = end($assets);
 		foreach ($assets as $asset) {
 			$asset_general_id = $asset->asset_general_id;
 			$data[$asset_general_id]['asset_general_id'] = $asset_general_id;
@@ -1527,9 +1526,7 @@ class CommonService
 			//Price after ajust by legal factor
 			$legalAmount = round($average_price *  $legalRate / 100, 0);
 			$averate_price_legal = $average_price + $legalAmount;
-			if ($asset === $lastItem) {
-				Log::info('Last item in comparisonFactor: ' . print_r($asset, true));
-			}
+			Log::info('Last item in comparisonFactor: ' . print_r($asset, true));
 			//Price after ajust by other factor
 			$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
 			$indicative_amount = $averate_price_legal + $diffRateAmount;
