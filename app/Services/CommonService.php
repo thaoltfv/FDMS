@@ -1530,6 +1530,9 @@ class CommonService
 			//Price after ajust by other factor
 			$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
 			$indicative_amount = $averate_price_legal + $diffRateAmount;
+			Log::info('averate_price_legal]: ' . $averate_price_legal);
+			Log::info('diffRateAmount]: ' . $diffRateAmount);
+			Log::info('indicative_amount]: ' . $indicative_amount);
 			$data[$asset_general_id]['indicative_price'] = $indicative_amount;
 
 			if ($diffRateTotal + $legalRate > ValueDefault::TOTAL_ADJUST_RATE) {
