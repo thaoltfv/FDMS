@@ -62,7 +62,7 @@
 				</a>
 			</div>
 		</div>
-		<a-badge :count="unreadNotificationCount || unreadNotificationCountCompute">
+		<a-badge :count="unreadNotificationCountCompute">
 			<font-awesome-icon
 				@click="handleGetNotifications"
 				class="fa-lg"
@@ -108,15 +108,58 @@ export default {
 	},
 
 	created() {
-		this.unreadNotificationCount = store.getters.unreadNotification;
-		setInterval(() => {
-			this.getNoti();
-		}, 30000); // 10 seconds
+		if (!localStorage.getItem("tabId")) {
+			localStorage.setItem("tabId", Math.random().toString());
+		}
+
+		this.tabId = localStorage.getItem("tabId");
+
+		this.intervalId = setInterval(() => {
+			if (localStorage.getItem("tabId") === this.tabId) {
+				// this.getNoti();
+				console.log("call get noti 2");
+			} else {
+				console.log("not get noti 2");
+			}
+
+			localStorage.setItem("tabId", this.tabId);
+		}, 5000);
+
+		window.addEventListener("storage", this.handleStorageEvent);
+	},
+	beforeDestroy() {
+		if (localStorage.getItem("tabId") === this.tabId) {
+			localStorage.removeItem("tabId");
+		}
+		clearInterval(this.intervalId);
+		window.removeEventListener("storage", this.handleStorageEvent);
 	},
 	methods: {
+		handleStorageEvent(event) {
+			if (
+				event.key === "tabId" &&
+				localStorage.getItem("tabId") !== this.tabId
+			) {
+				clearInterval(this.intervalId);
+				this.tabId = Math.random().toString();
+				localStorage.setItem("tabId", this.tabId);
+				this.intervalId = setInterval(() => {
+					if (localStorage.getItem("tabId") === this.tabId) {
+						// this.getNoti();
+						console.log("call get noti");
+					} else {
+						console.log("not get noti");
+					}
+					localStorage.setItem("tabId", this.tabId);
+				}, 5000);
+			}
+		},
 		async getNoti() {
 			const profile = await Notification.getUnreadCount(this.currentUser.id);
-			this.unreadNotificationCount = profile.data.unreadNotifications;
+			store.commit(
+				SET_UNREAD_NOTIFICATION,
+				profile.data.unreadNotifications + 1
+			);
 		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");
