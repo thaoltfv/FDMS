@@ -61,7 +61,7 @@
 				class="img"
 				:src="require(`@/assets/icons/${target.img}`)"
 				alt="edit"
-			/>{{ target.description }}
+			/>{{ target.btnDescription || target.description }}
 		</button>
 
 		<button
@@ -178,7 +178,9 @@
 							:src="require(`@/assets/icons/${target.img}`)"
 							alt="edit"
 						/>
-						<span style="font-size: 13px;">{{ target.description }}</span>
+						<span style="font-size: 13px;">{{
+							target.btnDescription || target.description
+						}}</span>
 						<!-- {{target.description}} -->
 					</div>
 				</b-dropdown-item>
