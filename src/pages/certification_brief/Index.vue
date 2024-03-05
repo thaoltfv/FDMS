@@ -124,14 +124,16 @@
 								/>
 								<div class="label_container d-flex">
 									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
-									<span v-if="getExpireDate(element).includes('Đã hết')" style="font-weight: 500; color: red;">
+									<span
+										v-if="getExpireDate(element).includes('Đã hết')"
+										style="font-weight: 500; color: red;"
+									>
 										{{ getExpireDate(element) }}
 									</span>
 									<span v-else style="font-weight: 500;">
 										{{ getExpireDate(element) }}
 									</span>
 								</div>
-
 							</div>
 							<div class="property-content d-flex justify-content-between mb-0">
 								<div class="label_container d-flex">
@@ -195,7 +197,15 @@
 			/>
 			<ModalNotificationWithAssign
 				v-if="isMoved"
-				:notification="`Bạn có muốn1 '${confirm_message}' hồ sơ này?`"
+				:notification="
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+				"
+				:status_text="confirm_message"
+				workflowName="hstdConfig"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 				@cancel="handleCancelAccept2"
@@ -203,7 +213,15 @@
 			<ModalNotificationWithAssign
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
-				:notification="confirm_message === 'Từ chối' ? `Bạn có muốn 'Từ chối' hồ sơ này?` : getNotificationMessage()"
+				:notification="
+					confirm_message == 'Từ chối' ||
+					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Hủy'
+						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
+						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+				"
+				workflowName="hstdConfig"
+				:status_text="confirm_message"
 				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
 			/>
@@ -351,7 +369,6 @@ export default {
 		const { configs } = storeToRefs(workFlowConfigStore);
 		const jsonConfig = ref({});
 		const principleConfig = ref([]);
-		console.log('principleConfig',principleConfig)
 		const startFunction = async () => {
 			await workFlowConfigStore.getConfigByName("workflowHSTD");
 			jsonConfig.value = configs.value.hstdConfig;
@@ -443,7 +460,7 @@ export default {
 				default:
 					strExpire = "Đã hủy";
 			}
-			return strExpire;		
+			return strExpire;
 		},
 		getNotificationMessage() {
 			switch (this.next_status - 1) {

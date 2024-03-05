@@ -1,37 +1,44 @@
-import Model from './Model.js'
+import Model from "./Model.js";
 
 export default class Notification extends Model {
-	buildUrl (request) {
-		const { params } = request
-		return ['notification', ...params]
+	buildUrl(request) {
+		const { params } = request;
+		return ["notification", ...params];
 	}
-	static async deleteNotification (id) {
+	static async deleteNotification(id) {
 		return new this().request({
-			method: 'DELETE',
+			method: "DELETE",
 			url: `notification/${id}`,
 			isStatic: true
-		})
+		});
 	}
-	static async getAll (userId) {
+	static async getUnreadCount(userId) {
 		return new this().request({
-			method: 'GET',
+			method: "GET",
+			url: `user/${userId}/unread-notifications`,
+			isStatic: true
+		});
+	}
+	static async getAll(userId) {
+		return new this().request({
+			method: "GET",
 			url: `notifications/${userId}`,
 			isStatic: true
-		})
+		});
 	}
-	static async markAsRead (data) {
+	static async markAsRead(data) {
 		return new this().request({
-			method: 'POST',
+			method: "POST",
 			url: `notification`,
 			data,
 			isStatic: true
-		})
+		});
 	}
-	static async markAllAsRead () {
+	static async markAllAsRead() {
 		return new this().request({
-			method: 'POST',
+			method: "POST",
 			url: `notification/all`,
 			isStatic: true
-		})
+		});
 	}
 }

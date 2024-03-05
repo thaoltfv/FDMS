@@ -1422,7 +1422,13 @@
 		<ModalNotificationWithAssign
 			v-if="openNotification"
 			@cancel="handleCancel"
-			v-bind:notification="message"
+			:notification="
+				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+			"
+			workflowName="hstdConfig"
+			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction"
 		/>
@@ -1479,10 +1485,17 @@
 		<ModalNotificationWithAssign
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
-			:notification="message === 'Từ chối' ? `Bạn có muốn 'Từ chối' hồ sơ này?` : getNotificationMessage()"
+			:notification="
+				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+			"
+			workflowName="hstdConfig"
+			:status_text="message"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
+
 		<ModalAppraiseListVersion
 			v-if="isShowAppraiseListVersion"
 			:data="checkVersion"
@@ -1960,9 +1973,11 @@ export default {
 				});
 		},
 		getNotificationMessage() {
-			console.log('vào hàm này');
-			console.log('status', this.form.status); // Sử dụng this.form.status thay vì status
-			switch (this.form.status) { // Sử dụng this.form.status thay vì status
+			console.log("vào hàm này");
+			console.log("status", this.form.status); // Sử dụng this.form.status thay vì status
+			switch (
+				this.form.status // Sử dụng this.form.status thay vì status
+			) {
 				case 1:
 					return "Bạn có muốn chuyển hồ sơ này sang trạng thái 'Thẩm định' ?";
 				case 2:
@@ -2167,17 +2182,17 @@ export default {
 		handleCancelCertificate() {
 			this.openNotification = true;
 			this.cancel_certificate = true;
-			this.message = "Bạn có muốn hủy hồ sơ này?";
+			this.message = "Hủy";
 		},
 		handleAccept() {
 			this.openNotification = true;
 			this.cancel_certificate = false;
-			this.message = "Bạn có muốn duyệt hồ sơ này?";
+			this.message = "Duyệt";
 		},
 		handleDenined() {
 			this.openNotificationDenined = true;
 			this.cancel_certificate = false;
-			this.message = "Bạn có muốn từ chối hồ sơ này";
+			this.message = "Từ chối";
 		},
 		handleSendRequire() {
 			if (this.form.general_asset && this.form.general_asset.length > 0) {

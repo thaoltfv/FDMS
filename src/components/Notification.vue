@@ -62,7 +62,7 @@
 				</a>
 			</div>
 		</div>
-		<a-badge :count="unreadNotificationCount">
+		<a-badge :count="unreadNotificationCount || unreadNotificationCountCompute">
 			<font-awesome-icon
 				@click="handleGetNotifications"
 				class="fa-lg"
@@ -92,7 +92,8 @@ export default {
 			visibleNotification: false,
 			notifications: [],
 			notificationShow: [],
-			limit: 10
+			limit: 10,
+			unreadNotificationCount: null
 		};
 	},
 	computed: {
@@ -101,11 +102,22 @@ export default {
 				return store.getters.profile.data.user;
 			}
 		},
-		unreadNotificationCount() {
+		unreadNotificationCountCompute() {
 			return store.getters.unreadNotification;
 		}
 	},
+
+	created() {
+		this.unreadNotificationCount = store.getters.unreadNotification;
+		setInterval(() => {
+			this.getNoti();
+		}, 30000); // 10 seconds
+	},
 	methods: {
+		async getNoti() {
+			const profile = await Notification.getUnreadCount(this.currentUser.id);
+			this.unreadNotificationCount = profile.data.unreadNotifications;
+		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");
 		},

@@ -121,12 +121,15 @@
 									alt="user"
 								/>
 								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Thời hạn:</strong
+									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
+									<span
+										v-if="getExpireDate(element).includes('Đã hết')"
+										style="font-weight: 500; color: red;"
 									>
-									<span v-if="getExpireDate(element).includes('Đã hết')" style="font-weight: 500; color: red;">
 										{{ getExpireDate(element) }}
 									</span>
-									<span  v-else
+									<span
+										v-else
 										style="font-weight: 500"
 										:class="{
 											'text-orange': checkDateExpired(element).inExpiringState
@@ -178,9 +181,11 @@
 					confirm_message == 'Từ chối' ||
 					confirm_message == 'Khôi phục' ||
 					confirm_message == 'Hủy'
-						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
-						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+						? `Bạn có muốn '${confirm_message}' yêu cầu này?`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 				"
+				workflowName="ycsbConfig"
+				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
 				:appraiser="appraiserChangeStage"
@@ -193,8 +198,10 @@
 					confirm_message == 'Khôi phục' ||
 					confirm_message == 'Hủy'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
-						: `Bạn có muốn chuyển yêu cầu này sang trạng thái '${confirm_message}'`
+						: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
 				"
+				workflowName="ycsbConfig"
+				:status_text="confirm_message"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 			/>
@@ -526,11 +533,10 @@ export default {
 					item => item.status === element.status && item.isActive === 1
 				);
 				if (config.expire_in) {
-					const expireDate = new Date(element.status_expired_at);
 					const now = new Date();
-					const diffTime = Math.abs(expireDate - now);
-					const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-					if (diffMinutes <= config.expire_in) {
+					const futureTime = new Date(now.getTime() + config.expire_in * 60000); // config.expire_in is assumed to be in minutes
+
+					if (futureTime >= new Date(element.status_expired_at)) {
 						check.inExpiringState = true;
 					}
 				}
