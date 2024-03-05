@@ -225,7 +225,7 @@
 									class="img"
 									:src="require(`@/assets/icons/${target.img}`)"
 									alt="edit"
-								/>{{ target.description }}
+								/>{{ target.btnDescription || target.description }}
 							</button>
 							<button
 								class="btn btn-white btn-action-modal"
@@ -310,7 +310,7 @@
 												alt="edit"
 											/>
 											<span style="font-size: 15px;">{{
-												target.description
+												target.btnDescription || target.description
 											}}</span>
 											<!-- {{target.description}} -->
 										</div>
