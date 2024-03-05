@@ -7,6 +7,7 @@ export const useWorkFlowConfig = defineStore(
 	"workFlowConfig",
 	() => {
 		const configs = ref({ hstdConfig: null, ycsbConfig: null });
+		const notiCount = ref(0);
 		const preCertificateStore = usePreCertificateStore();
 		async function getConfig() {
 			const respconfig = await PreCertificateConfig.getConfig();
@@ -72,6 +73,7 @@ export const useWorkFlowConfig = defineStore(
 			}
 			return configs.value;
 		}
+
 		async function updateConfig(name, data, toast) {
 			const response = await PreCertificateConfig.findByName(name);
 			const tempConfig = JSON.parse(response.data[0].config);
@@ -113,12 +115,17 @@ export const useWorkFlowConfig = defineStore(
 				});
 			}
 		}
+		function setNoti(noti) {
+			notiCount.value = noti;
+		}
 		return {
 			configs,
+			notiCount,
 
 			getConfig,
 			getConfigByName,
-			updateConfig
+			updateConfig,
+			setNoti
 		};
 	},
 	{

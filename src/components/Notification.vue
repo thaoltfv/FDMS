@@ -62,7 +62,7 @@
 				</a>
 			</div>
 		</div>
-		<a-badge :count="unreadNotificationCountCompute">
+		<a-badge :key="notiCount" :count="unreadNotificationCountCompute">
 			<font-awesome-icon
 				@click="handleGetNotifications"
 				class="fa-lg"
@@ -80,6 +80,8 @@ import { BListGroup, BListGroupItem } from "bootstrap-vue";
 import { Badge } from "ant-design-vue";
 import { SET_UNREAD_NOTIFICATION } from "@/store/mutation-types";
 
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
 export default {
 	name: "Notification",
 	components: {
@@ -97,6 +99,21 @@ export default {
 			channel: null
 		};
 	},
+	setup() {
+		const workFlowConfig = useWorkFlowConfig();
+		workFlowConfig.setNoti(store.getters.unreadNotification);
+		const { notiCount } = storeToRefs(workFlowConfig);
+		console.log("notiCount", notiCount.value, store.getters.unreadNotification);
+		return { notiCount, workFlowConfig };
+	},
+	watch: {
+		notiCount: {
+			handler(newValue) {
+				localStorage.setItem("unreadNotifications", newValue);
+			},
+			immediate: true
+		}
+	},
 	computed: {
 		currentUser() {
 			if (store.getters.profile !== null) {
@@ -104,7 +121,8 @@ export default {
 			}
 		},
 		unreadNotificationCountCompute() {
-			return store.getters.unreadNotification;
+			console.log("notiCount2", this.notiCount);
+			return this.notiCount;
 		}
 	},
 
@@ -144,7 +162,8 @@ export default {
 		startPolling() {
 			this.intervalId = setInterval(() => {
 				this.getNoti();
-			}, 30000);
+				console.log("callnoti");
+			}, 5000);
 		},
 
 		stopPolling() {
@@ -153,15 +172,21 @@ export default {
 		},
 		async getNoti() {
 			const profile = await Notification.getUnreadCount(this.currentUser.id);
-			store.commit(
-				SET_UNREAD_NOTIFICATION,
-				profile.data.unreadNotifications + 1
+			// store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
+			this.notiCount = profile.data.unreadNotifications;
+			this.workFlowConfig.setNoti(profile.data.unreadNotifications);
+			console.log(
+				"unreadNotifications",
+				profile.data.unreadNotifications,
+				store.getters.unreadNotification,
+				this.notiCount
 			);
 		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");
 		},
 		async handleGetNotifications() {
+			console.log("this.noti", this.notiCount);
 			try {
 				const resp = await Notification.getAll(this.currentUser.id);
 				this.notifications = resp.data.notifications;
