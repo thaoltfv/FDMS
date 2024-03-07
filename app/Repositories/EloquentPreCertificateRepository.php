@@ -1353,15 +1353,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'user' => $loginUser,
             'id' => $id
         ];
-        $users = array_map(function ($user) {
-            return serialize($user);
-        }, $users);
-
-        $users = array_unique($users);
-
-        $users = array_map(function ($user) {
-            return unserialize($user);
-        }, $users);
+        $users = array_unique($users, SORT_REGULAR);
 
         CommonService::callNotification($users, $data);
     }
