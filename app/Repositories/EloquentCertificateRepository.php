@@ -3161,7 +3161,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 1) {
+        if ($result['status'] == 1 || $result['status'] == 4 || $result['status'] == 9) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['appraiser_sale_id'])
                 ->first();
@@ -3179,7 +3179,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 3 || $result['status'] == 4) {
+        if ($result['status'] == 3) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['appraiser_id'])
                 ->first();
@@ -3188,9 +3188,19 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 6) {
+        if ($result['status'] == 7) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['appraiser_control_id'])
+                ->first();
+            $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+            $result['image'] = $user->image;
+        }
+
+        if ($result['status'] == 8) {
+            $appraiser = Appraiser::query()
+                ->where('id', '=', $result['administrative_id'])
                 ->first();
             $user = User::query()
                 ->where('id', '=', $appraiser->user_id)
