@@ -27,6 +27,7 @@ class ErrorMessage
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
     public const PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB có trạng thái ';
     public const PRE_CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB ';
+    public const PAYMENT_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa thông tin thanh toán';
     public const PRE_CERTIFICATE_CHECK_UPDATE_TO_OFFICAL = 'Bạn không có quyền sang trạng thái chính thức ';
     public const CERTIFICATE_CHECK_ADD = 'Bạn không có quyền tạo mới HSTD ';
     public const CERTIFICATE_CHECK_VIEW = 'Bạn không có quyền xem thông tin HSTD ';
