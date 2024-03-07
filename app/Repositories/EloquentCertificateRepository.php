@@ -2447,20 +2447,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_id',
             'appraiser_perform_id',
             'appraiser_control_id',
+            'administrative_id',
             DB::raw("case status
                     when 1
-                        then 'Mới'
-                    when 2
-                        then 'Đang thẩm định'
-                    when 3
-                        then 'Đang duyệt'
-                    when 4
-                        then 'Hoàn thành'
-                    when 5
-                        then 'Huỷ'
-                    when 6
-                        then 'Đang kiểm soát'
-                end as status_text
+                    then 'Mới'
+                when 2
+                    then 'Thẩm định'
+                when 3
+                    then 'Duyệt giá'
+                when 4
+                    then 'Hoàn thành'
+                when 5
+                    then 'Huỷ'
+                when 7
+                    then 'Duyệt phát hành'
+                when 8
+                    then 'In hồ sơ'
+                when 9
+                    then 'Bàn giao khách hàng'
+            end as status_text
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
@@ -2478,6 +2483,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserPerform:id,name',
             'appraisePurpose:id,name',
             'appraiserControl:id,name',
+            'administrative:id,name,user_id',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
@@ -2523,6 +2529,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('administrative', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -2668,15 +2677,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 when 1
                     then 'Mới'
                 when 2
-                    then 'Đang thẩm định'
+                    then 'Thẩm định'
                 when 3
-                    then 'Đang duyệt'
+                    then 'Duyệt giá'
                 when 4
                     then 'Hoàn thành'
                 when 5
                     then 'Huỷ'
-                when 6
-                    then 'Đang kiểm soát'
                 when 7
                     then 'Duyệt phát hành'
                 when 8
@@ -2700,14 +2707,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then u1.image
                         when 5
                             then users.image
-                        when 6
-                            then u4.image
                         when 7
-                            then u5.image
+                            then u4.image
                         when 8
                             then u5.image
+                            
                         when 9
-                            then u1.image
+                            then u2.image
                     end as image
                 "),
             'sub_status',
@@ -2793,14 +2799,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->select('u4.image')
                     ->limit(1);
             })
-            ->leftjoin('appraisers as administrative', function ($join) {
-                $join->on('administrative.id', '=', 'certificates.administrative_id')
-                    ->join('users as u5', function ($j) {
-                        $j->on('administrative.user_id', '=', 'u5.id');
-                    })
-                    ->select('u5.image')
-                    ->limit(1);
-            })
             ->select($select);
 
         //// command tạm - sẽ xử lý phân quyền sau
@@ -2827,6 +2825,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('administrative', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
