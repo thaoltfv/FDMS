@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\Log;
 
 class EloquentRoleRepository extends EloquentRepository implements RoleRepository
 {
@@ -26,8 +27,7 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
         'updated_at',
     ];
 
-    private array $allowedFilters = [
-    ];
+    private array $allowedFilters = [];
 
     private array $allowedSorts = [
         'updated_at',
@@ -61,10 +61,10 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
         if (empty($search)) {
             $search = '';
         }
-        $query = 'name like '."'%".$search."%'";
+        $query = 'name like ' . "'%" . $search . "%'";
         return QueryBuilder::for($this->model)
             ->whereRaw($query)
-            ->where('name','<>',RoleDefault::ROOT_ADMIN['role'])
+            ->where('name', '<>', RoleDefault::ROOT_ADMIN['role'])
             ->orderBy($this->defaultSort)
             ->forPage($page, $perPage)
             ->paginate($perPage);
@@ -75,7 +75,7 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
      */
     public function findAll()
     {
-        return $this->model->query() ->select()->where('name','<>',RoleDefault::ROOT_ADMIN['role'])->orderBy($this->defaultSort)->get();
+        return $this->model->query()->select()->where('name', '<>', RoleDefault::ROOT_ADMIN['role'])->orderBy($this->defaultSort)->get();
     }
 
     /**
@@ -95,9 +95,9 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
      */
     public function findRoleByName(string $roleName)
     {
-        return $this->model->query() ->select()
+        return $this->model->query()->select()
             ->where('name', '=', $roleName)
-            ->where('name','<>',RoleDefault::ROOT_ADMIN['role'])
+            ->where('name', '<>', RoleDefault::ROOT_ADMIN['role'])
             ->first();
     }
 
@@ -113,7 +113,8 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
                 'name' => $objects['name'],
                 'guard_name' => 'api',
                 'role_name' => $objects['role_name']
-            ]);
+            ]
+        );
         $role = $this->model->query()->find($roleId);
         $role->givePermissionTo($objects['permissions']);
         return $role;
@@ -126,15 +127,16 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
      */
     public function updateRole($id, array $objects)
     {
-        DB::transaction(function () use($id, $objects) {
+        DB::transaction(function () use ($id, $objects) {
+            Log::info('runhere');
             $roleUpdate = $this->model->query()
                 ->where('id', '=', $id)
-                ->update(['name'=> $objects['name'],'role_name' => $objects['role_name']]);
-            $role = $this->model->query()->where('id','=',$id)->first();
+                ->update(['name' => $objects['name'], 'role_name' => $objects['role_name']]);
+            Log::info('runhere2');
+            $role = $this->model->query()->where('id', '=', $id)->first();
             $role->syncPermissions($objects['permissions']);
             return $role;
         });
-
     }
 
     /**
