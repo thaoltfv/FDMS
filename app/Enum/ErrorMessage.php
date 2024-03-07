@@ -6,25 +6,26 @@ namespace App\Enum;
 
 class ErrorMessage
 {
-    public const LOGIN_ERROR ="Email hoặc mật khẩu không chính xác";
-    public const CREATE_ASSET_ERROR ="Dữ liệu đầu của bạn chưa chính xác, vui lòng liên hệ để hỗ trợ.";
-    public const UPLOAD_IMAGE_ERROR ="Lưu trữ hình ảnh không thành công, vui lòng liên hệ để hỗ trợ.";
-    public const UPLOAD_NOT_SUPPORT_FILE ="Tập tin không được hỗ trợ, vui lòng chỉ lưu trữ hình ảnh.";
-    public const SYSTEM_ERROR ="Hệ thống xảy ra lỗi, vui lòng liên hệ để được hỗ trợ.";
-    public const CHANGE_PASSWORD_ERROR ="Xác nhận mật khẩu không chính xác.";
-    public const DUPLICATE_PROVINCE ="Tỉnh/Thành đã tồn tại.";
-    public const DUPLICATE_DISTRICT ="Quận/Huyện đã tồn tại.";
-    public const DUPLICATE_WARD ="Xã/Phường đã tồn tại.";
-    public const PERMISSION_ERROR ="Người dùng không có quyền sử dụng chức năng này, vui lòng liên hệ để hỗ trợ.";
+    public const LOGIN_ERROR = "Email hoặc mật khẩu không chính xác";
+    public const CREATE_ASSET_ERROR = "Dữ liệu đầu của bạn chưa chính xác, vui lòng liên hệ để hỗ trợ.";
+    public const UPLOAD_IMAGE_ERROR = "Lưu trữ hình ảnh không thành công, vui lòng liên hệ để hỗ trợ.";
+    public const UPLOAD_NOT_SUPPORT_FILE = "Tập tin không được hỗ trợ, vui lòng chỉ lưu trữ hình ảnh.";
+    public const SYSTEM_ERROR = "Hệ thống xảy ra lỗi, vui lòng liên hệ để được hỗ trợ.";
+    public const CHANGE_PASSWORD_ERROR = "Xác nhận mật khẩu không chính xác.";
+    public const DUPLICATE_PROVINCE = "Tỉnh/Thành đã tồn tại.";
+    public const DUPLICATE_DISTRICT = "Quận/Huyện đã tồn tại.";
+    public const DUPLICATE_WARD = "Xã/Phường đã tồn tại.";
+    public const PERMISSION_ERROR = "Người dùng không có quyền sử dụng chức năng này, vui lòng liên hệ để hỗ trợ.";
 
     public const CERTIFICATE_NOTEXISTS = 'Không tồn tại hồ sơ thẩm định - HSTD ';
-    public const PRE_CERTIFICATE_NOTEXISTS = 'Không tồn tại hồ sơ thẩm định sơ bộ - YCSB ';
+    public const PRE_CERTIFICATE_NOTEXISTS = 'Không tồn tại yêu cầu sơ bộ - YCSB ';
     public const PRE_CERTIFICATE_HAVE_CERTIFICATE = 'YCSB đã được chuyển sang trạng thái chính thức. Vui lòng kiểm tra lại.';
     public const CERTIFICATE_APPRAISERTEAM = 'Vui lòng chọn đầy đủ thông tin tổ thẩm định.';
     public const CERTIFICATE_APPROVE_CHECK_APPRAISE = 'Bạn không thể thực hiện do chưa có thông tin tài sản thẩm định. ';
     public const CERTIFICATE_CHOOSE_APPRAISE = 'HSTD không ở trạng thái Đang thẩm định.';
     public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa phiếu có trạng thái ';
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
+    public const PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB có trạng thái ';
     public const PRE_CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB ';
     public const PRE_CERTIFICATE_CHECK_UPDATE_TO_OFFICAL = 'Bạn không có quyền sang trạng thái chính thức ';
     public const CERTIFICATE_CHECK_ADD = 'Bạn không có quyền tạo mới HSTD ';
@@ -51,5 +52,4 @@ class ErrorMessage
     public const PERSONAL_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách Động sản ';
     public const COMPAREASSET_NOTEXISTS = 'Không tồn tại tài sản so sánh - TSSS ';
     public const LOG_ACTIVITY_NOT_FOUND = 'Không tìm thấy lịch sử được ghi lại';
-
 }

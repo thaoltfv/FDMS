@@ -1055,10 +1055,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             try {
                 $result = [];
                 // # đang tắt khối block xác thực
-                // $check = $this->beforeUpdateStatus($id);
-                // if (isset($check)) {
-                //     return $check;
-                // }
+                $check = $this->beforeUpdateStatus($id);
+                if (isset($check)) {
+                    return $check;
+                }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
 
                 if (isset($preCertificate->certificate_id)) {
@@ -1262,27 +1262,25 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
+                    case 4:
+                    case 5:
                         if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 3:
-                        if (!($data->appraiser && $data->appraiser->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
-                        break;
-                    case 4:
-                        if (!($data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
+                        if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 6:
-                        if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
+                        if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền khôi phục.', 'exception' => ''];
                         break;
                     default:
-                        $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
+                        $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
                         break;
                 }
             }
