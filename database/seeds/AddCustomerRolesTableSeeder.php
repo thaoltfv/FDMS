@@ -21,6 +21,8 @@ class AddCustomerRolesTableSeeder extends Seeder
             Permission::create(['name' => $permission . '_' . $screen, 'guard_name' => 'api']);
         }
         $guestRole = Role::query()->where(['name' => RoleDefault::USER['role'], 'guard_name' => 'api', 'role_name' => RoleDefault::USER['name']])->first();
+        Log::info('guestRole: ', ['result' => $guestRole->toArray()]);
+        return;
         foreach (PermissionsDefault::PERMISSIONS as $permission) {
             $screen = ScreensDefault::ACCOUNTING_SCREEN;
 
