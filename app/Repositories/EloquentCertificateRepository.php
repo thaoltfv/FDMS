@@ -2799,6 +2799,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     ->select('u4.image')
                     ->limit(1);
             })
+            ->leftjoin('appraisers as administrative', function ($join) {
+                $join->on('administrative.id', '=', 'certificates.administrative_id')
+                    ->join('users as u5', function ($j) {
+                        $j->on('administrative.user_id', '=', 'u5.id');
+                    })
+                    ->select('u5.image')
+                    ->limit(1);
+            })
             ->select($select);
 
         //// command tạm - sẽ xử lý phân quyền sau
