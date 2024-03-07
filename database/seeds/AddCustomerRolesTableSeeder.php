@@ -35,15 +35,15 @@ class AddCustomerRolesTableSeeder extends Seeder
             $screen = ScreensDefault::PAYMENT_SCREEN;
             $rootAdminRole->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
         }
-        $superAdminRole = Role::query()->where(['name' => RoleDefault::SUPER_ADMIN['role'], 'guard_name' => 'api', 'role_name' => RoleDefault::SUPER_ADMIN['name']])->first();
-        foreach (PermissionsDefault::PERMISSIONS as $permission) {
-            $screen = ScreensDefault::PAYMENT_SCREEN;
-            $superAdminRole->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
-        }
-        $subAdminRole = Role::query()->where(['name' => RoleDefault::SUB_ADMIN['role'], 'guard_name' => 'api', 'role_name' => RoleDefault::SUB_ADMIN['name']])->first();
-        foreach (PermissionsDefault::PERMISSIONS as $permission) {
-            $screen = ScreensDefault::PAYMENT_SCREEN;
-            $subAdminRole->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
-        }
+        // $superAdminRole = Role::query()->where(['name' => RoleDefault::SUPER_ADMIN['role'], 'guard_name' => 'api', 'role_name' => RoleDefault::SUPER_ADMIN['name']])->first();
+        // foreach (PermissionsDefault::PERMISSIONS as $permission) {
+        //     $screen = ScreensDefault::PAYMENT_SCREEN;
+        //     $superAdminRole->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
+        // }
+        // $subAdminRole = Role::query()->where(['name' => RoleDefault::SUB_ADMIN['role'], 'guard_name' => 'api', 'role_name' => RoleDefault::SUB_ADMIN['name']])->first();
+        // foreach (PermissionsDefault::PERMISSIONS as $permission) {
+        //     $screen = ScreensDefault::PAYMENT_SCREEN;
+        //     $subAdminRole->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
+        // }
     }
 }
