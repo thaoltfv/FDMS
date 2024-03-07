@@ -1130,12 +1130,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 }
                 // $result = $this->getAppraisalTeam($id);
                 $result = $this->getPreCertificate($id);
-                // if (isset($status)) {
-                //     $this->notifyChangeStatus($id, $status, $result);
-                // }
-                // if (!empty($assignTo)) {
-                //     $this->notifyReAssign($id, $status, $assignTo, $result);
-                // }
+                if (isset($status)) {
+                    $this->notifyChangeStatus($id, $status, $result);
+                }
+                if (!empty($assignTo)) {
+                    $this->notifyReAssign($id, $status, $assignTo, $result);
+                }
                 return $result;
             } catch (Exception $exception) {
                 Log::error($exception);
@@ -1353,7 +1353,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'user' => $loginUser,
             'id' => $id
         ];
-        $users = array_unique($users, SORT_REGULAR);
+        $users = array_map(function ($user) {
+            return serialize($user);
+        }, $users);
+
+        $users = array_unique($users);
+
+        $users = array_map(function ($user) {
+            return unserialize($user);
+        }, $users);
 
         CommonService::callNotification($users, $data);
     }
