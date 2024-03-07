@@ -134,6 +134,14 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
                 ->update(['name' => $objects['name'], 'role_name' => $objects['role_name']]);
             Log::info('runhere2');
             $role = $this->model->query()->where('id', '=', $id)->first();
+            Log::info(
+                'runhere3',
+                [$role]
+            );
+            Log::info(
+                'runhere4',
+                [$objects['permissions']]
+            );
             $role->syncPermissions($objects['permissions']);
             return $role;
         });
