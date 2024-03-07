@@ -1244,20 +1244,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $user = CommonService::getUser();
             $data = PreCertificate::where('id', $id)->get()->first();
             $appraiser = [];
-            if (!empty($required)) {
-                $isCheckAppraiser =  $required['appraiser'];
-                // $isCheckTotalPreliminaryValue =  $required['total_preliminary_value'];
+            // if (!empty($required)) {
+            //     $isCheckAppraiser =  $required['appraiser'];
+            //     // $isCheckTotalPreliminaryValue =  $required['total_preliminary_value'];
 
 
-                if ($isCheckAppraiser) {
-                    $appraiser['appraiser_sale_id'] =  request()->get('appraiser_sale_id');
-                    $appraiser['business_manager_id'] =  request()->get('business_manager_id');
-                    $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
-                    if (empty($appraiser['appraiser_sale_id']) || empty($appraiser['business_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
-                        return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
-                    }
-                }
-            }
+            //     if ($isCheckAppraiser) {
+            //         $appraiser['appraiser_sale_id'] =  request()->get('appraiser_sale_id');
+            //         $appraiser['business_manager_id'] =  request()->get('business_manager_id');
+            //         $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
+            //         if (empty($appraiser['appraiser_sale_id']) || empty($appraiser['business_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
+            //             return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
+            //         }
+            //     }
+            // }
             //Check role and permision
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
