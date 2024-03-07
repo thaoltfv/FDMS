@@ -352,7 +352,7 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-    private array $permissionAddCERTIFICATE = ['ADD_CERTIFICATE'];
+    private array $permissionAddCERTIFICATE = ['ADD_CERTIFICATE_BRIEF'];
     public function updateToOffical(int $id, Request $request)
     {
         if (!CommonService::checkUserPermission($this->permissionAddCERTIFICATE))
