@@ -563,6 +563,9 @@ export default {
 					if (screen.name == "PRE_CERTIFICATE") {
 						screen.name_vietsub = "YÊU CẦU SƠ BỘ";
 					}
+					if (screen.name == "ACCOUNTING") {
+						screen.name_vietsub = "THANH TOÁN";
+					}
 					if (this.permissions.length > 0) {
 						this.permissions.forEach(permission => {
 							const perScreen = permission.name.split(/^([A-Z]+)/g);
