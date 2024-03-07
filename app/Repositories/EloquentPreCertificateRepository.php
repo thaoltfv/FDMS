@@ -1246,7 +1246,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $appraiser = [];
             if (!empty($required)) {
                 $isCheckAppraiser =  $required['appraiser'];
-                $isCheckTotalPreliminaryValue =  $required['total_preliminary_value'];
+                // $isCheckTotalPreliminaryValue =  $required['total_preliminary_value'];
 
 
                 if ($isCheckAppraiser) {
