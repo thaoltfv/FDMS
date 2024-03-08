@@ -616,6 +616,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
+        $role->getAllPermissions();
+
         Log::info($role->toArray());
         // dd($role->name);
         if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
