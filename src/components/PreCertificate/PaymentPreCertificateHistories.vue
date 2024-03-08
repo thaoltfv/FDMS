@@ -205,21 +205,22 @@ export default {
 		const permissionNotAllowEdit = ref(false);
 		const showDrawer = async () => {
 			const user = vueStoree.value.user;
-			console.log("user", user.roles);
-			permissionNotAllowEdit.value = !(
-				permission.value.editPayments && permission.value.edit
-			);
+			permissionNotAllowEdit.value = false;
 			let haveViewPermission = false;
-			if (permissionNotAllowEdit.value && user.roles) {
+			if (user.roles && user.roles[0]) {
 				if (
-					user.roles.includes("ADMIN") ||
-					user.roles.includes("ROOT_ADMIN") ||
-					user.roles.includes("SUB_ADMIN")
+					user.roles[0].name === "ROOT_ADMIN" ||
+					user.roles[0].name === "SUB_ADMIN"
 				) {
-					permissionNotAllowEdit.value = true;
-				} else if (user.roles.permissions) {
-					for (let index = 0; index < user.roles.permissions.length; index++) {
-						const element = user.roles.permissions[index];
+					permissionNotAllowEdit.value = false;
+					haveViewPermission = true;
+				} else if (user.roles[0].permissions) {
+					for (
+						let index = 0;
+						index < user.roles[0].permissions.length;
+						index++
+					) {
+						const element = user.roles[0].permissions[index];
 						if (element.name === "VIEW_ACCOUNTING") {
 							haveViewPermission = true;
 						}
@@ -227,10 +228,13 @@ export default {
 							element.name === "EDIT_ACCOUNTING" ||
 							element.name === "ADD_ACCOUNTING"
 						) {
-							permissionNotAllowEdit.value = true;
+							permissionNotAllowEdit.value = false;
 							break;
 						}
 					}
+				}
+				if (!permission.value.editPayments) {
+					permissionNotAllowEdit.value = true;
 				}
 			}
 			if (!haveViewPermission) {

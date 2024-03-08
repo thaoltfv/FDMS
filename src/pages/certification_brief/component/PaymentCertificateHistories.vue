@@ -56,14 +56,14 @@
 							:key="index"
 							v-if="!payment.is_deleted"
 							:class="index === 0 ? '' : 'row-payment'"
-							:style="permissionNotAllowEdit ? '' : 'margin-right:-35px'"
+							:style="permissionNotAllowEditHere ? '' : 'margin-right:-35px'"
 						>
 							<div style="width:275px">
 								<InputTextPrefixCustom
 									v-model="payment.for_payment_of"
 									id="petitioner_name"
 									:vid="'petitioner_name' + index"
-									:disabledInput="permissionNotAllowEdit"
+									:disabledInput="permissionNotAllowEditHere"
 									label="Nội dung"
 									:showLabel="false"
 									rules="required"
@@ -78,7 +78,7 @@
 									:showLabel="false"
 									placeholder="Ngày / tháng / năm"
 									rules="required"
-									:disabled="permissionNotAllowEdit"
+									:disabled="permissionNotAllowEditHere"
 									:formatDate="'DD/MM/YYYY'"
 									class="form-group-container col-sm-12 col-md-12 mt-n2"
 									@change="payment.pay_date = $event"
@@ -87,21 +87,23 @@
 							<div class="row">
 								<div
 									style="width:175px;"
-									:style="permissionNotAllowEdit ? '' : 'margin-right:-15px'"
+									:style="
+										permissionNotAllowEditHere ? '' : 'margin-right:-15px'
+									"
 								>
 									<InputCurrency
 										v-model="payment.amount"
 										:vid="'amount' + index"
 										:max="99999999999999"
 										rules="required"
-										:disabled="permissionNotAllowEdit"
+										:disabled="permissionNotAllowEditHere"
 										label="Giá trị thanh toán"
 										:showLabel="false"
 										class="form-group-container col-sm-12 col-md-12 mt-n2"
 										@change="paidCompute($event, payment)"
 									/>
 								</div>
-								<div v-if="!permissionNotAllowEdit">
+								<div v-if="!permissionNotAllowEditHere">
 									<img
 										@click="deletePaymentDialog(payment, index)"
 										src="@/assets/icons/ic_delete_2.svg"
@@ -112,7 +114,7 @@
 							</div>
 						</div>
 						<div
-							v-if="!permissionNotAllowEdit"
+							v-if="!permissionNotAllowEditHere"
 							class=" d-lg-flex d-block justify-content-end align-items-center "
 						>
 							<div class="d-lg-flex d-block button-contain">
@@ -150,7 +152,7 @@
 						</div>
 
 						<div
-							v-if="!permissionNotAllowEdit"
+							v-if="!permissionNotAllowEditHere"
 							class="row-payment d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
 						>
 							<div class="d-lg-flex d-block button-contain">
@@ -179,7 +181,7 @@ import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import CertificationBrief from "@/models/CertificationBrief";
-import moment from 'moment'
+import moment from "moment";
 export default {
 	name: "PaymentHistories",
 	props: {
@@ -192,6 +194,10 @@ export default {
 			default: false
 		},
 		toast: {
+			type: Object,
+			default: () => ({})
+		},
+		user: {
 			type: Object,
 			default: () => ({})
 		}
@@ -213,7 +219,48 @@ export default {
 		const paymentDelete = ref({ id: null, isUpload: false });
 		const dataForm = ref(props.form);
 		const dataOriginal = ref(null);
+		const permissionNotAllowEditHere = ref(
+			props.permissionNotAllowEdit || false
+		);
 		const showDrawer = async () => {
+			const user = props.user;
+			let haveViewPermission = false;
+			permissionNotAllowEditHere.value = props.permissionNotAllowEdit || false;
+
+			if (user.roles && user.roles[0]) {
+				if (
+					user.roles[0].name === "ROOT_ADMIN" ||
+					user.roles[0].name === "SUB_ADMIN"
+				) {
+					permissionNotAllowEditHere.value = false;
+					haveViewPermission = true;
+				} else if (user.roles[0].permissions) {
+					user.roles[0].permissions.forEach(value => {
+						if (value.name === "VIEW_ACCOUNTING") {
+							haveViewPermission = true;
+						}
+						if (
+							value.name === "EDIT_ACCOUNTING" ||
+							value.name === "ADD_ACCOUNTING"
+						) {
+							permissionNotAllowEditHere.value = false;
+						}
+					});
+				}
+				if (props.permissionNotAllowEdit) {
+					permissionNotAllowEditHere.value = true;
+				}
+			}
+			if (!haveViewPermission) {
+				drawer.value = false;
+				props.toast.open({
+					message: "Bạn không có quyền xem lịch sử thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 			await CertificationBrief.getDetailCertificateBrief(props.form.id)
 				.then(resp => {
 					if (resp.data) {
@@ -340,6 +387,7 @@ export default {
 			paidCompute(0, 0, false, true);
 		};
 		return {
+			permissionNotAllowEditHere,
 			openModalDelete,
 			keyRender,
 			drawer,

@@ -675,7 +675,10 @@ export default {
 					appraiser: false
 				};
 				for (const key of Object.keys(checkPermissionObject)) {
-					checkPermissionObject[key] = await checkPermssionRequire(key);
+					checkPermissionObject[key] = await checkPermissionRequire(
+						key,
+						config.value
+					);
 				}
 
 				editAppraiser.value =
@@ -708,16 +711,23 @@ export default {
 			}
 		};
 
-		const checkPermssionRequire = key => {
+		const checkPermissionRequire = (key, config) => {
 			const permissionAllowEdit = jsonConfig.value.permissionAllowEdit;
 			const user = vueStoree.value.user;
+			if (
+				config.put_require_roles &&
+				user.roles &&
+				config.put_require_roles.includes(user.roles[0].name)
+			) {
+				return true;
+			}
 			if (permissionAllowEdit[key]) {
 				for (let index = 0; index < permissionAllowEdit[key].length; index++) {
 					const element = permissionAllowEdit[key][index];
 					if (
-						(element === "created_by" && dataPC.value.created_by === user.id) ||
-						(element !== "created_by" &&
-							dataPC.value[element] === user.appraiser.id)
+						// (element === "created_by" && dataPC.value.created_by === user.id) ||
+						element !== "created_by" &&
+						dataPC.value[element] === user.appraiser.id
 					) {
 						return true;
 					}

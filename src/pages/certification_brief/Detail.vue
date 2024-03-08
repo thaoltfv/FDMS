@@ -256,7 +256,8 @@
 			:key="keyRender"
 			@getDetail="getDetail"
 			:form="form"
-			:permissionNotAllowEdit="!(editPayment && edit)"
+			:permissionNotAllowEdit="!editPayment"
+			:user="user"
 			:toast="$toast"
 		/>
 		<div class="btn-history">
@@ -1612,6 +1613,7 @@ export default {
 				slider: "#FAA831",
 				arrow: "#000000"
 			},
+			user: {},
 			idData: "",
 			status: 1,
 			sub_status: 1,
@@ -1750,6 +1752,7 @@ export default {
 			}
 		}
 		if (profile.data.user) {
+			this.user = profile.data.user;
 			this.position_profile =
 				profile.data.user.appraiser.appraise_position.acronym;
 			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
@@ -1973,8 +1976,6 @@ export default {
 				});
 		},
 		getNotificationMessage() {
-			console.log("vào hàm này");
-			console.log("status", this.form.status); // Sử dụng this.form.status thay vì status
 			switch (
 				this.form.status // Sử dụng this.form.status thay vì status
 			) {
@@ -3104,8 +3105,6 @@ export default {
 					? dataJson[0].edit.payments
 					: false;
 				this.printConfig = dataJson[0].print;
-
-				console.log("this.editAppraiser", this.editInfo, this.editDocument);
 			}
 		},
 		openMessage(
