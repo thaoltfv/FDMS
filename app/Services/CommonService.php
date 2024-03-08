@@ -1526,7 +1526,13 @@ class CommonService
 			//Price after ajust by legal factor
 			$legalAmount = round($average_price *  $legalRate / 100, 0);
 			$averate_price_legal = $average_price + $legalAmount;
-			Log::info('Last item in comparisonFactor: ' . print_r($asset, true));
+			Log::info('calculate_price: ' . $average_price);
+			Log::info('violateArea: ' . $violateArea);
+			Log::info('totalArea: ' . $totalArea);
+			Log::info('average_price: ' . $average_price);
+			Log::info('legalRate: ' . $legalRate);
+			Log::info('averate_price_legal: ' . $averate_price_legal);
+			Log::info('legalAmount: ' . $legalAmount);
 			//Price after ajust by other factor
 			$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
 			$indicative_amount = $averate_price_legal + $diffRateAmount;
