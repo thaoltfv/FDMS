@@ -390,7 +390,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
+        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
@@ -616,23 +616,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
-        $permissions = $role->getAllPermissions();
-
-        if ($permissions->contains('name', 'VIEW_ACCOUNTING')) {
-            Log::info('permission have viewaccount');
-            // The 'view_account' permission exists
-        } else {
-            Log::info('permission dont have viewaccount');
-        }
-        if ($user->hasPermissionTo('VIEW_ACCOUNTING')) {
-            Log::info('user have viewaccount');
-            // The 'view_account' permission exists
-        } else {
-            Log::info('user dont have viewaccount');
-        }
-        Log::info($role->toArray());
+        // $permissionViewAccount = false;
+        // if ($user->hasPermissionTo('VIEW_ACCOUNTING')) {
+        //     $permissionViewAccount = true;
+        // }
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
+        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
