@@ -621,11 +621,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if ($permissions->contains('name', 'VIEW_ACCOUNTING')) {
             Log::info('permission have viewaccount');
             // The 'view_account' permission exists
+        } else {
+            Log::info('permission dont have viewaccount');
         }
-
         if ($user->hasPermissionTo('VIEW_ACCOUNTING')) {
             Log::info('user have viewaccount');
             // The 'view_account' permission exists
+        } else {
+            Log::info('user dont have viewaccount');
         }
         Log::info($role->toArray());
         // dd($role->name);
