@@ -95,7 +95,6 @@
 									/>
 									<div class="d-flex">
 										<span style="font-weight: 500"
-											><strong class="d-none d_inline mr-1">Khách hàng:</strong
 											>{{ element.petitioner_name }}</span
 										>
 									</div>
@@ -108,8 +107,7 @@
 									alt="user"
 								/>
 								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Tổng giá trị:</strong
-									><span style="font-weight: 500">{{
+									<span style="font-weight: 500">{{
 										element.total_price
 											? `${formatPrice(element.total_price)}`
 											: "-"
@@ -123,7 +121,6 @@
 									alt="user"
 								/>
 								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
 									<span
 										v-if="getExpireDate(element).includes('Đã hết')"
 										style="font-weight: 500; color: red;"
