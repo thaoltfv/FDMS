@@ -1514,6 +1514,12 @@ class CommonService
 			//Price after ajust by legal factor
 			$legalAmount = round($average_price *  $legalRate / 100, 0);
 			$averate_price_legal = $average_price + $legalAmount;
+			Log::info('percent: ' . $percent);
+			Log::info('total_amount: ' . $total_amount);
+			Log::info('estimate_amount: ' . $estimate_amount);
+			Log::info('purposePrice: ' . $purposePrice);
+			Log::info('construction_amount: ' . $construction_amount);
+			Log::info('violatePrice: ' . $violatePrice);
 			Log::info('calculate_price: ' . $average_price);
 			Log::info('violateArea: ' . $violateArea);
 			Log::info('totalArea: ' . $totalArea);
