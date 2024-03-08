@@ -1196,8 +1196,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $data = PreCertificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên Sale mới có quyền chỉnh sửa.', 'exception' => ''];
+                        if (!($data->appraiserSale->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform->user_id == $user->id))
@@ -1264,8 +1264,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     case 1:
                     case 4:
                     case 5:
-                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
+                        if (!($data->appraiserSale->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
