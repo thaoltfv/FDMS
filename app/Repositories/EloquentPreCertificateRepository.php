@@ -616,8 +616,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
-        $role->getAllPermissions();
+        $permissions = $role->getAllPermissions();
 
+        if ($permissions->contains('name', 'VIEW_ACCOUNTING')) {
+            Log::info('permission have viewaccount');
+            // The 'view_account' permission exists
+        }
+
+        if ($user->hasPermissionTo('VIEW_ACCOUNTING')) {
+            Log::info('user have viewaccount');
+            // The 'view_account' permission exists
+        }
         Log::info($role->toArray());
         // dd($role->name);
         if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
