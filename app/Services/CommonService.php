@@ -1360,6 +1360,7 @@ class CommonService
 				$message = $price;
 			}
 			$comparison = self::checkAppraiseAdjust($realEstate->appraises->id);
+
 			if (isset($comparison)) {
 				if ($comparison['checkAdjustRate'] == true) {
 					$message[] = 'Mức độ chênh lệch với mức giá trung bình của các mức giá chỉ dẫn lớn hơn ' . ValueDefault::MAXIMUM_AVERAGE_RATE . '%';
@@ -1514,25 +1515,10 @@ class CommonService
 			//Price after ajust by legal factor
 			$legalAmount = round($average_price *  $legalRate / 100, 0);
 			$averate_price_legal = $average_price + $legalAmount;
-			Log::info('percent: ' . $percent);
-			Log::info('total_amount: ' . $total_amount);
-			Log::info('estimate_amount: ' . $estimate_amount);
-			Log::info('purposePrice: ' . $purposePrice);
-			Log::info('construction_amount: ' . $construction_amount);
-			Log::info('violatePrice: ' . $violatePrice);
-			Log::info('calculate_price: ' . $average_price);
-			Log::info('violateArea: ' . $violateArea);
-			Log::info('totalArea: ' . $totalArea);
-			Log::info('average_price: ' . $average_price);
-			Log::info('legalRate: ' . $legalRate);
-			Log::info('averate_price_legal: ' . $averate_price_legal);
-			Log::info('legalAmount: ' . $legalAmount);
+
 			//Price after ajust by other factor
 			$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
 			$indicative_amount = $averate_price_legal + $diffRateAmount;
-			Log::info('diffRateAmount]: ' . $diffRateAmount);
-			Log::info('diffRateTotal]: ' . $diffRateTotal);
-			Log::info('indicative_amount]: ' . $indicative_amount);
 			$data[$asset_general_id]['indicative_price'] = $indicative_amount;
 
 			if ($diffRateTotal + $legalRate > ValueDefault::TOTAL_ADJUST_RATE) {
@@ -1546,9 +1532,6 @@ class CommonService
 		foreach ($data as $item) {
 			$diff = round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0);
 
-			Log::info('item[indicative_price]: ' . $item['indicative_price']);
-			Log::info('avg_adjust_price: ' . $avg_adjust_price);
-			Log::info('diff: ' . $diff);
 			if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
 				$appraise->checkAdjustRate = true;
 			}

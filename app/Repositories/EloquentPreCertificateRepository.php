@@ -616,6 +616,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
+        Log::info([$role]);
         // dd($role->name);
         if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
             $result = $result->where(function ($query) use ($user) {
@@ -633,6 +634,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 });
             });
         }
+
 
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
