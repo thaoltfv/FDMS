@@ -112,6 +112,7 @@
 							</div>
 						</div>
 						<div
+							v-if="!permissionNotAllowEdit"
 							class=" d-lg-flex d-block justify-content-end align-items-center "
 						>
 							<div class="d-lg-flex d-block button-contain">
@@ -192,7 +193,9 @@ export default {
 	},
 	setup() {
 		const preCertificateStore = usePreCertificateStore();
-		const { dataPC, other, permission } = storeToRefs(preCertificateStore);
+		const { dataPC, other, permission, vueStoree } = storeToRefs(
+			preCertificateStore
+		);
 		const drawer = ref(false);
 		const openModalDelete = ref(false);
 		const paymentDelete = ref({ id: null, isUpload: false });
@@ -201,9 +204,49 @@ export default {
 
 		const permissionNotAllowEdit = ref(false);
 		const showDrawer = async () => {
-			permissionNotAllowEdit.value = !(
-				permission.value.editPayments && permission.value.edit
-			);
+			const user = vueStoree.value.user;
+			permissionNotAllowEdit.value = false;
+			let haveViewPermission = false;
+			if (user.roles && user.roles[0]) {
+				if (
+					user.roles[0].name === "ROOT_ADMIN" ||
+					user.roles[0].name === "SUB_ADMIN"
+				) {
+					permissionNotAllowEdit.value = false;
+					haveViewPermission = true;
+				} else if (user.roles[0].permissions) {
+					for (
+						let index = 0;
+						index < user.roles[0].permissions.length;
+						index++
+					) {
+						const element = user.roles[0].permissions[index];
+						if (element.name === "VIEW_ACCOUNTING") {
+							haveViewPermission = true;
+						}
+						if (
+							element.name === "EDIT_ACCOUNTING" ||
+							element.name === "ADD_ACCOUNTING"
+						) {
+							permissionNotAllowEdit.value = false;
+							break;
+						}
+					}
+				}
+				if (!permission.value.editPayments) {
+					permissionNotAllowEdit.value = true;
+				}
+			}
+			if (!haveViewPermission) {
+				drawer.value = false;
+				other.value.toast.open({
+					message: "Bạn không có quyền xem lịch sử thanh toán",
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+				return;
+			}
 			const temp = await preCertificateStore.getPreCertificate(dataPC.value.id);
 			dataForm.value = ref(_.cloneDeep(temp));
 			dataOriginal.value = ref(_.cloneDeep(dataForm.value.payments));

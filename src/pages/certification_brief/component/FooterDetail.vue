@@ -306,10 +306,10 @@ export default {
 			if (configData.put_require && configData.put_require.length > 0) {
 				configData.put_require.forEach(key_required => {
 					if (
-						(key_required === "created_by" &&
-							this.form[key_required] === this.user.id) ||
-						(key_required !== "created_by" &&
-							this.form[key_required] === this.user.appraiser.id)
+						// (key_required === "created_by" &&
+						// 	this.form[key_required] === this.user.id) ||
+						key_required !== "created_by" &&
+						this.form[key_required] === this.user.appraiser.id
 					) {
 						check = true;
 					}

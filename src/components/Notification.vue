@@ -62,7 +62,7 @@
 				</a>
 			</div>
 		</div>
-		<a-badge :count="unreadNotificationCountCompute">
+		<a-badge :key="notiCount" :count="unreadNotificationCountCompute">
 			<font-awesome-icon
 				@click="handleGetNotifications"
 				class="fa-lg"
@@ -80,6 +80,8 @@ import { BListGroup, BListGroupItem } from "bootstrap-vue";
 import { Badge } from "ant-design-vue";
 import { SET_UNREAD_NOTIFICATION } from "@/store/mutation-types";
 
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
 export default {
 	name: "Notification",
 	components: {
@@ -93,8 +95,24 @@ export default {
 			notifications: [],
 			notificationShow: [],
 			limit: 10,
-			unreadNotificationCount: null
+			intervalId: null,
+			channel: null
 		};
+	},
+	setup() {
+		const workFlowConfig = useWorkFlowConfig();
+		workFlowConfig.setNoti(store.getters.unreadNotification);
+		const { notiCount } = storeToRefs(workFlowConfig);
+		console.log("notiCount", notiCount.value, store.getters.unreadNotification);
+		return { notiCount, workFlowConfig };
+	},
+	watch: {
+		notiCount: {
+			handler(newValue) {
+				localStorage.setItem("unreadNotifications", newValue);
+			},
+			immediate: true
+		}
 	},
 	computed: {
 		currentUser() {
@@ -103,68 +121,72 @@ export default {
 			}
 		},
 		unreadNotificationCountCompute() {
-			return store.getters.unreadNotification;
+			console.log("notiCount2", this.notiCount);
+			return this.notiCount;
 		}
 	},
 
 	created() {
-		if (!localStorage.getItem("tabId")) {
-			localStorage.setItem("tabId", Math.random().toString());
+		this.channel = new BroadcastChannel("pollingChannel");
+		this.channel.onmessage = this.handleMessage;
+		if (!document.hidden) {
+			this.startPolling();
 		}
-
-		this.tabId = localStorage.getItem("tabId");
-
-		this.intervalId = setInterval(() => {
-			if (localStorage.getItem("tabId") === this.tabId) {
-				// this.getNoti();
-				console.log("call get noti 2");
-			} else {
-				console.log("not get noti 2");
-			}
-
-			localStorage.setItem("tabId", this.tabId);
-		}, 5000);
-
-		window.addEventListener("storage", this.handleStorageEvent);
+		document.addEventListener("visibilitychange", this.handleVisibilityChange);
 	},
+
 	beforeDestroy() {
-		if (localStorage.getItem("tabId") === this.tabId) {
-			localStorage.removeItem("tabId");
-		}
-		clearInterval(this.intervalId);
-		window.removeEventListener("storage", this.handleStorageEvent);
+		document.removeEventListener(
+			"visibilitychange",
+			this.handleVisibilityChange
+		);
+		this.stopPolling();
+		this.channel.close();
 	},
 	methods: {
-		handleStorageEvent(event) {
-			if (
-				event.key === "tabId" &&
-				localStorage.getItem("tabId") !== this.tabId
-			) {
-				clearInterval(this.intervalId);
-				this.tabId = Math.random().toString();
-				localStorage.setItem("tabId", this.tabId);
-				this.intervalId = setInterval(() => {
-					if (localStorage.getItem("tabId") === this.tabId) {
-						// this.getNoti();
-						console.log("call get noti");
-					} else {
-						console.log("not get noti");
-					}
-					localStorage.setItem("tabId", this.tabId);
-				}, 5000);
+		handleMessage(event) {
+			if (event.data === "stop" && this.intervalId) {
+				this.stopPolling();
 			}
+		},
+
+		handleVisibilityChange() {
+			if (document.visibilityState === "visible" && !this.intervalId) {
+				this.startPolling();
+			} else if (document.visibilityState === "hidden" && this.intervalId) {
+				this.stopPolling();
+				this.channel.postMessage("stop");
+			}
+		},
+
+		startPolling() {
+			this.intervalId = setInterval(() => {
+				this.getNoti();
+				console.log("callnoti");
+			}, 5000);
+		},
+
+		stopPolling() {
+			clearInterval(this.intervalId);
+			this.intervalId = null;
 		},
 		async getNoti() {
 			const profile = await Notification.getUnreadCount(this.currentUser.id);
-			store.commit(
-				SET_UNREAD_NOTIFICATION,
-				profile.data.unreadNotifications + 1
+			// store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
+			this.notiCount = profile.data.unreadNotifications;
+			this.workFlowConfig.setNoti(profile.data.unreadNotifications);
+			console.log(
+				"unreadNotifications",
+				profile.data.unreadNotifications,
+				store.getters.unreadNotification,
+				this.notiCount
 			);
 		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");
 		},
 		async handleGetNotifications() {
+			console.log("this.noti", this.notiCount);
 			try {
 				const resp = await Notification.getAll(this.currentUser.id);
 				this.notifications = resp.data.notifications;
