@@ -189,7 +189,7 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
-		permissionNotAllowEdit: {
+		editPayments: {
 			type: Boolean,
 			default: false
 		},
@@ -219,14 +219,11 @@ export default {
 		const paymentDelete = ref({ id: null, isUpload: false });
 		const dataForm = ref(props.form);
 		const dataOriginal = ref(null);
-		const permissionNotAllowEditHere = ref(
-			props.permissionNotAllowEdit || false
-		);
+		const permissionNotAllowEditHere = ref(true);
 		const showDrawer = async () => {
 			const user = props.user;
 			let haveViewPermission = false;
-			permissionNotAllowEditHere.value = props.permissionNotAllowEdit || false;
-
+			permissionNotAllowEditHere.value = true;
 			if (user.roles && user.roles[0]) {
 				if (
 					user.roles[0].name === "ROOT_ADMIN" ||
@@ -247,7 +244,7 @@ export default {
 						}
 					});
 				}
-				if (props.permissionNotAllowEdit) {
+				if (!props.editPayments) {
 					permissionNotAllowEditHere.value = true;
 				}
 			}

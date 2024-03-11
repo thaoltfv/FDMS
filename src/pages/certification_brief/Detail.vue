@@ -256,7 +256,7 @@
 			:key="keyRender"
 			@getDetail="getDetail"
 			:form="form"
-			:permissionNotAllowEdit="!editPayment"
+			:editPayments="editPayment"
 			:user="user"
 			:toast="$toast"
 		/>

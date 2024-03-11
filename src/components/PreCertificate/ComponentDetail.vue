@@ -702,10 +702,9 @@ export default {
 					checkPermissionObject.file_result && dataJson[0].edit.file_result
 						? dataJson[0].edit.file_result
 						: false;
-
 				const tempPermission = {
 					edit: edit.value,
-					editPayments: editPayments.value
+					editPayments: dataJson[0].edit.payments || false
 				};
 				preCertificateStore.updatePermission(tempPermission);
 			}

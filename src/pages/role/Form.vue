@@ -12,6 +12,16 @@
 					<div class="row">
 						<!--Display name role-->
 						<InputText
+							v-model="form.name"
+							class="col-md-6 mb-3 mb-sm-0"
+							rules="required|max:100"
+							:max-length="100"
+							vid="role_name"
+							label="Mã phân quyền"
+							placeholder="Nhập Mã phân quyền"
+						/>
+						<!--Display name role-->
+						<InputText
 							v-model="form.role_name"
 							class="col-md-6 mb-3 mb-sm-0"
 							rules="required|max:100"
@@ -289,9 +299,9 @@ export default {
 		}
 	},
 	mounted() {
-		if (this.$route.name === "role.create") {
-			this.form.name = this.randomRoleName(6);
-		}
+		// if (this.$route.name === "role.create") {
+		// 	this.form.name = this.randomRoleName(6);
+		// }
 	},
 	methods: {
 		randomRoleName(name) {
