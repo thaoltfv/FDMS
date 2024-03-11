@@ -107,17 +107,22 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
      */
     public function createRole(array $objects)
     {
-        $roleId = $this->model->query()->insertGetId(
-            [
-                'id' => Uuid::uuid4()->toString(),
-                'name' => $objects['name'],
-                'guard_name' => 'api',
-                'role_name' => $objects['role_name']
-            ]
-        );
-        $role = $this->model->query()->find($roleId);
-        $role->givePermissionTo($objects['permissions']);
-        return $role;
+        $existingRole = $this->model->query()->firstWhere('name', $objects['name']);
+
+        if ($existingRole) {
+            return ['message' => 'Mã phân quyền đã tồn tại, vui lòng chọn mã khác', 'exception' => '', 'statusCode' => 403];
+        } else {
+            $roleId = $this->model->query()->insertGetId(
+                [
+                    'id' => Uuid::uuid4()->toString(),
+                    'name' => $objects['name'],
+                    'guard_name' => 'api',
+                    'role_name' => $objects['role_name']
+                ]
+            );
+            $role = $this->model->query()->find($roleId);
+            $role->givePermissionTo($objects['permissions']);
+        }
     }
 
     /**
