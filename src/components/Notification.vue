@@ -126,61 +126,56 @@ export default {
 		}
 	},
 
-	created() {
-		this.channel = new BroadcastChannel("pollingChannel");
-		this.channel.onmessage = this.handleMessage;
-		if (!document.hidden) {
-			this.startPolling();
+	created() {},
+
+	mounted() {
+		if (document.visibilityState === "visible") {
+			this.startInterval();
 		}
 		document.addEventListener("visibilitychange", this.handleVisibilityChange);
 	},
-
 	beforeDestroy() {
+		this.stopInterval();
 		document.removeEventListener(
 			"visibilitychange",
 			this.handleVisibilityChange
 		);
-		this.stopPolling();
-		this.channel.close();
 	},
 	methods: {
-		handleMessage(event) {
-			if (event.data === "stop" && this.intervalId) {
-				this.stopPolling();
-			}
-		},
-
 		handleVisibilityChange() {
-			if (document.visibilityState === "visible" && !this.intervalId) {
-				this.startPolling();
-			} else if (document.visibilityState === "hidden" && this.intervalId) {
-				this.stopPolling();
-				this.channel.postMessage("stop");
+			if (document.visibilityState === "visible") {
+				this.startInterval();
+			} else {
+				this.stopInterval();
 			}
 		},
-
-		startPolling() {
-			this.intervalId = setInterval(() => {
-				this.getNoti();
-				console.log("callnoti");
-			}, 5000);
+		startInterval() {
+			if (this.intervalId) {
+				console.log("clearInterval");
+				clearInterval(this.intervalId);
+			}
+			console.log("startInterval called", new Date());
+			this.getNoti();
+			this.intervalId = setInterval(this.getNoti, 30000);
 		},
-
-		stopPolling() {
-			clearInterval(this.intervalId);
-			this.intervalId = null;
+		stopInterval() {
+			console.log("stopInterval called", new Date());
+			if (this.intervalId) {
+				clearInterval(this.intervalId);
+				this.intervalId = null;
+			}
 		},
 		async getNoti() {
-			const profile = await Notification.getUnreadCount(this.currentUser.id);
-			// store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
-			this.notiCount = profile.data.unreadNotifications;
-			this.workFlowConfig.setNoti(profile.data.unreadNotifications);
-			console.log(
-				"unreadNotifications",
-				profile.data.unreadNotifications,
-				store.getters.unreadNotification,
-				this.notiCount
-			);
+			// const profile = await Notification.getUnreadCount(this.currentUser.id);
+			// // store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
+			// this.notiCount = profile.data.unreadNotifications;
+			// this.workFlowConfig.setNoti(profile.data.unreadNotifications);
+			// console.log(
+			// 	"unreadNotifications",
+			// 	profile.data.unreadNotifications,
+			// 	store.getters.unreadNotification,
+			// 	this.notiCount
+			// );
 		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");

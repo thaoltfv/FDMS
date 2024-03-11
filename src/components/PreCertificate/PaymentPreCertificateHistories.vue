@@ -205,7 +205,7 @@ export default {
 		const permissionNotAllowEdit = ref(false);
 		const showDrawer = async () => {
 			const user = vueStoree.value.user;
-			permissionNotAllowEdit.value = false;
+			permissionNotAllowEdit.value = true;
 			let haveViewPermission = false;
 			if (user.roles && user.roles[0]) {
 				if (
