@@ -94,9 +94,9 @@
 										alt="user"
 									/>
 									<div class="d-flex">
-										<span style="font-weight: 500"
-											>{{ element.petitioner_name }}</span
-										>
+										<span style="font-weight: 500">{{
+											element.petitioner_name
+										}}</span>
 									</div>
 								</div>
 							</div>
@@ -196,7 +196,7 @@
 				v-if="isMoved"
 				:notification="
 					confirm_message == 'Từ chối' ||
-					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Duyệt' ||
 					confirm_message == 'Hủy'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
@@ -212,7 +212,7 @@
 				@cancel="isHandleAction = false"
 				:notification="
 					confirm_message == 'Từ chối' ||
-					confirm_message == 'Khôi phục' ||
+					confirm_message == 'Duyệt' ||
 					confirm_message == 'Hủy'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
