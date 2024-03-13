@@ -28,7 +28,7 @@ class CreatePreCertificatePaymentsTable extends Migration
                     ->references('id')
                     ->on('certificates')
                     ->onDelete('cascade');
-                $table->date('pre_date');
+                $table->date('pay_date');
                 $table->bigInteger('amount')->unsigned();
                 $table->timestamp('created_at')->useCurrent();
                 $table->uuid('created_by')->nullable();
