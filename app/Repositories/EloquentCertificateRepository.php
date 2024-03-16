@@ -3118,6 +3118,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'total_preliminary_value',
             'pre_type_id',
             'administrative_id',
+            'business_manager_id',
         ];
         $with = [
             'appraiser:id,name,user_id',

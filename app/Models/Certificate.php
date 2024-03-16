@@ -61,7 +61,8 @@ class Certificate extends Model
         'status_updated_at',
         'status_expired_at',
         'note',
-        'administrative_id'
+        'administrative_id',
+        'business_manager_id',
     ];
 
     public function getStatusTextAttribute()
@@ -130,6 +131,10 @@ class Certificate extends Model
     public function appraiserManager(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_manager_id', 'id');
+    }
+    public function appraiserbusinessManager(): BelongsTo
+    {
+        return $this->belongsTo(Appraiser::class, 'business_manager_id', 'id');
     }
 
     public function appraiserControl(): BelongsTo
