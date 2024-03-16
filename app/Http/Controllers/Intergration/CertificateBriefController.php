@@ -81,6 +81,7 @@ class CertificateBriefController extends Controller
             'customer.phone' => 'required_with:customer.name|nullable|numeric',
             'commission_fee' => 'numeric',
             'note' => 'nullable|string',
+            'business_manager_id' => 'required',
         ];
 
         $customAttributes = [
@@ -105,6 +106,7 @@ class CertificateBriefController extends Controller
             'customer.phone' => 'Điện thoại',
             'commission_fee' => 'Chiết khấu',
             'note' => 'Ghi chú',
+            'business_manager_id' => 'Quản lý nghiệp vụ',
         ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
