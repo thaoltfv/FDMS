@@ -31,7 +31,6 @@ class CertificateRealEstate extends Model
         'real_estate_id',
         'created_at',
         'updated_at',
-        'full_address'
     ];
 
     public function createdBy():BelongsTo

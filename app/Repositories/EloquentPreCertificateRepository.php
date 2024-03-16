@@ -364,8 +364,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 4
                             then 'Thương thảo'
                         when 5
-                            then 'Hoàn thành'
+                            then 'In hồ sơ'
                         when 6
+                            then 'Hoàn thành'
+                        when 7
                             then 'Hủy'
                     end as status_text
                 "),
@@ -536,8 +538,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 4
                             then 'Thương thảo'
                         when 5
-                            then 'Hoàn thành'
+                            then 'In hồ sơ'
                         when 6
+                            then 'Hoàn thành'
+                        when 7
                             then 'Hủy'
                     end as status_text
                 "),
@@ -556,6 +560,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 5
                             then u1.image
                         when 6
+                            then u1.image
+                        when 7
                             then u3.image
                     end as image
                 "),
@@ -1341,9 +1347,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Thương thảo';
                 break;
             case 5:
-                $statusText = 'Hoàn thành';
+                $statusText = 'In hồ sơ';
                 break;
             case 6:
+                $statusText = 'Hoàn thành';
+                break;
+            case 7:
                 $statusText = 'Đã hủy';
                 break;
             default:
@@ -1382,9 +1391,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Thương thảo';
                 break;
             case 5:
-                $statusText = 'Hoàn thành';
+                $statusText = 'In hồ sơ';
                 break;
             case 6:
+                $statusText = 'Hoàn thành';
+                break;
+            case 7:
                 $statusText = 'Đã hủy';
                 break;
             default:
@@ -1523,8 +1535,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 WHEN 2 THEN 'Định giá sơ bộ'
                 WHEN 3 THEN 'Duyệt giá sơ bộ'
                 WHEN 4 THEN 'Thương thảo'
-                WHEN 5 THEN 'Hoàn thành'
-                WHEN 6 THEN 'Hủy'
+                WHEN 5 THEN 'In hồ sơ'
+                WHEN 6 THEN 'Hoàn thành'
+                WHEN 7 THEN 'Hủy'
             END AS status_text
                 "),
         ];
