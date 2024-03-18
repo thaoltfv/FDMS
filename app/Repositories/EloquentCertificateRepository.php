@@ -2670,7 +2670,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
             'appraiser_sale_id', 'appraiser_control_id', 'administrative_id',
-            'pre_certificate_id',
+            'pre_certificate_id','business_manager_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
@@ -2698,7 +2698,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             DB::raw("case status
                         when 1
-                            then u2.image
+                            then u6.image
                         when 2
                             then u3.image
                         when 3
@@ -2742,6 +2742,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate:id,real_estate_id',
             'personalProperties:id,personal_property_id',
             'administrative:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
         ];
         // dd($this->model);
         DB::enableQueryLog();
@@ -2805,6 +2806,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $j->on('administrative.user_id', '=', 'u5.id');
                     })
                     ->select('u5.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as businessmanager', function ($join) {
+                $join->on('businessmanager.id', '=', 'certificates.business_manager_id')
+                    ->join('users as u6', function ($j) {
+                        $j->on('businessmanager.user_id', '=', 'u6.id');
+                    })
+                    ->select('u6.image')
                     ->limit(1);
             })
             ->select($select);
