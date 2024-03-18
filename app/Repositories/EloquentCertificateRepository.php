@@ -4832,7 +4832,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
                 'administrative:id,name,user_id',
-                'businessManagers:id,name,user_id',
+                'appraiserBusinessManager:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
             if ($result['status'] == 5) {
