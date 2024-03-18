@@ -4803,6 +4803,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (isset($object['administrative_id'])) {
                 $updateArray['administrative_id'] = $object['administrative_id'];
             }
+            if (isset($object['business_manager_id'])) {
+                $updateArray['business_manager_id'] = $object['business_manager_id'];
+            }
 
             Certificate::where('id', $id)->update($updateArray);
         }
