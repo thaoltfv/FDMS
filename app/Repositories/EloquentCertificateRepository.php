@@ -3148,6 +3148,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
             'preType:id,description',
             'administrative:id,name,user_id',
+            'business_manager:id,name,user_id',
         ];
         $result = $this->model->query()
             ->with($with)
@@ -4821,7 +4822,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'status_expired_at',
                 'updated_at',
                 'status',
-                'administrative_id'
+                'administrative_id',
+                'business_manager_id',
             ];
             $with = [
                 'appraiser:id,name,user_id',
@@ -4830,6 +4832,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
                 'administrative:id,name,user_id',
+                'business_manager:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
             if ($result['status'] == 5) {
