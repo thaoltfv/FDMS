@@ -81,7 +81,7 @@ class CertificateBriefController extends Controller
             'customer.phone' => 'required_with:customer.name|nullable|numeric',
             'commission_fee' => 'numeric',
             'note' => 'nullable|string',
-            'business_manager_id' => 'required',
+            'business_manager_id' => 'nullable',
         ];
 
         $customAttributes = [
