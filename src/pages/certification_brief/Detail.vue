@@ -179,6 +179,18 @@
 										</div>
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
+												>Quản lý nghiệp vụ:</strong
+											>
+											<p>
+												{{
+													form.appraiser_business_manager
+														? form.appraiser_business_manager.name
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
 												>Chuyên viên thực hiện:</strong
 											>
 											<p>
@@ -2264,9 +2276,12 @@ export default {
 			this.form.note = dataAppraiseInformation.note;
 		},
 		updateAppraisal(dataAppraisal) {
+			console.log('dataAppraisal',dataAppraisal)
 			this.form.appraiser_perform = dataAppraisal.appraiser_perform;
 			this.form.appraiser_perform_id = dataAppraisal.appraiser_perform_id;
 			this.form.appraiser_confirm_id = dataAppraisal.appraiser_confirm_id;
+			this.form.business_manager_id = dataAppraisal.business_manager_id,
+			this.form.appraiser_business_manager = dataAppraisal.appraiser_business_manager,
 			this.form.appraiser_confirm = dataAppraisal.appraiser_confirm;
 			this.form.appraiser_manager_id = dataAppraisal.appraiser_manager_id;
 			this.form.appraiser_manager = dataAppraisal.appraiser_manager;

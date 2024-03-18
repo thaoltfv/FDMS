@@ -1195,6 +1195,9 @@ export default {
 			this.isHandleAction = false;
 		},
 		async handleAction2(note, reason_id, tempAppraiser) {
+			console.log('reason_id',reason_id)
+			console.log('note',note)
+			console.log('tempAppraiser',tempAppraiser)
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;

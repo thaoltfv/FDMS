@@ -256,6 +256,33 @@
 								:options="optionsBusiness"
 							/>
 							<InputCategory
+								v-model="business_manager_compute"
+								vid="business_manager_id"
+								label="Quản lý nghiệp vụ"
+								rules="required"
+								class="form-group-container col-sm-12 col-md-6"
+								:options="optionsBusinessManager"
+							/>
+							
+						</div>
+						<!-- <div class="form-group-container">
+              <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
+              <div class="form-control border_disable disabled">
+                <p class="mb-0">
+                  {{ appraisersManager.length > 0 ? appraisersManager[0].name : ""}}
+                </p>
+              </div>
+            </div> -->
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="administrative_compute"
+								vid="administrative_id"
+								label="Hành chính viên"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="handleChangeAppraiser"
+								:options="optionsAdministratives"
+							/>
+							<InputCategory
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
@@ -263,6 +290,7 @@
 								@change="handleChangeAppraiserPerform"
 								:options="optionsPeformance"
 							/>
+						
 						</div>
 						<div class="row justify-content-between">
 							<InputCategory
@@ -283,23 +311,7 @@
 							/>
 						</div>
 
-						<!-- <div class="form-group-container">
-              <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
-              <div class="form-control border_disable disabled">
-                <p class="mb-0">
-                  {{ appraisersManager.length > 0 ? appraisersManager[0].name : ""}}
-                </p>
-              </div>
-            </div> -->
 						<div class="row justify-content-between">
-							<InputCategory
-								v-model="administrative_compute"
-								vid="administrative_id"
-								label="Hành chính viên"
-								class="form-group-container col-sm-12 col-md-6"
-								@change="handleChangeAppraiser"
-								:options="optionsAdministratives"
-							/>
 							<InputCategory
 								v-model="appraiser_manager_compute"
 								vid="appraiser_manager_id"
@@ -308,14 +320,14 @@
 								@change="handleChangeAppraiserManager"
 								:options="optionsAppraiserManager"
 							/>
+							<InputCategory
+								v-model="appraiser_confirm_compute"
+								vid="appraiser_confirm_id"
+								label="Đại diện ủy quyền"
+								class="form-group-container col-sm-12 col-md-6"
+								:options="optionsSignAppraiser"
+							/>
 						</div>
-						<InputCategory
-							v-model="appraiser_confirm_compute"
-							vid="appraiser_confirm_id"
-							label="Đại diện ủy quyền"
-							class="form-group-container"
-							:options="optionsSignAppraiser"
-						/>
 					</div>
 				</div>
 			</div>
@@ -374,7 +386,8 @@ export default {
 		"employeeBusiness",
 		"employeePerformance",
 		"typeAppraiseProperty",
-		"userAppraiserId"
+		"userAppraiserId",
+		"businessManagers"
 	],
 	components: {
 		InputCategory,
@@ -401,11 +414,28 @@ export default {
 		InputTextPrefixCustomIcon
 	},
 	computed: {
+		business_manager_compute: {
+			get: function() {
+				if (this.businessManagers.length > 0) {
+					 console.log('vô đây trước businessManagers',this.businessManagers)
+					return this.data.business_manager_id;
+				} else {	
+					console.log('vô đây trước 2',this.data.business_manager.name)
+					return this.data.business_manager.name;
+					
+				}
+			},
+			// setter
+			set: function(newValue) {
+				 console.log('newwww', newValue)
+				this.data.business_manager_id = newValue;
+			}
+		},
 		appraiser_perform_compute: {
 			// getter
 			get: function() {
 				if (this.employeePerformance.length > 0) {
-					// // console.log('vô đây trước 1')
+				//	 console.log('vô đây trước 1',this.employeePerformance)
 					return this.data.appraiser_perform_id;
 				} else {
 					// // console.log('vô đây trước 2')
@@ -556,6 +586,13 @@ export default {
 				id: "id",
 				key: "name"
 				// selected: this.userAppraiserId
+			};
+		},
+		optionsBusinessManager() {
+			return {
+				data: this.businessManagers,
+				id: "id",
+				key: "name"
 			};
 		},
 		optionsSignAppraiser() {

@@ -150,6 +150,16 @@
 							</div>
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline"
+									>Quản lý nghiệp vụ:</strong
+								>
+								<p>
+									{{
+										form.appraiser_business_manager ? form.appraiser_business_manager.name : ""
+									}}
+								</p>
+							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline"
 									>Chuyên viên thực hiện:</strong
 								>
 								<p>
@@ -397,6 +407,7 @@ export default {
 				appraiser_manager: "",
 				appraiser_control: "",
 				appraiser_perform: "",
+				business_manager: "",
 				customer: "",
 				petitioner_address: "",
 				petitioner_phone: "",
