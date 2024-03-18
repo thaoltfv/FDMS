@@ -928,7 +928,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         'message' => 'Hồ sơ này đã được chuyển chính thức, vui lòng kiểm tra lại'
                     ];
                 }
-                if ($preCertificate->status != 5) {
+                if ($preCertificate->status != 6) {
                     return [
                         'error' => true,
                         'message' => 'Hồ sơ này không đạt đủ yêu cầu để chuyển chính thức, vui lòng kiểm tra lại'
