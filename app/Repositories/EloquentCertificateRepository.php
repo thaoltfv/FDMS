@@ -3148,7 +3148,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
             'preType:id,description',
             'administrative:id,name,user_id',
-            'business_manager:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
         ];
         $result = $this->model->query()
             ->with($with)
