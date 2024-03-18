@@ -4574,6 +4574,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         $wardId = request()->get('ward_id');
         $streetId = request()->get('street_id');
         $sourceId = request()->get('source_id');
+        $transactiontypeId = request()->get('transaction_type_id');
         $publicDateFrom = request()->get('public_date_from');
         $publicDateTo = request()->get('public_date_to');
         $contactPerson = request()->get('contact_person');
@@ -4661,6 +4662,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         }
         if (!empty($streetId)) {
             $result->where('street_id', $streetId);
+        }
+        if (!empty($transactiontypeId)) {
+            $result->where('transaction_type_id', $transactiontypeId);
         }
         if (!empty($sourceId)) {
             $result->where('source_id', $sourceId);
