@@ -4349,16 +4349,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 AppraiseAdapter::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $asset_general_id)->forceDelete();
                                 goto createNewAsset;
                             }
-                            $oldAssetGeneralId = $asset_general_id;
-                            $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id,$oldAssetGeneralId) ;
-                            continue;
+                            // $oldAssetGeneralId = $asset_general_id;
+                            // $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id,$oldAssetGeneralId) ;
+                            // continue;
                         }
                     }
                     // add thêm để dự phòng trường hợp không qua được điều kiện trên
-                    if(AppraiseHasAsset::where('appraise_id',$appraiseId)->where('asset_general_id',$asset_general_id)->exists()){
-                        $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id,$asset_general_id) ;
-                        continue;
-                    }
+                    // if(AppraiseHasAsset::where('appraise_id',$appraiseId)->where('asset_general_id',$asset_general_id)->exists()){
+                    //     $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id,$asset_general_id) ;
+                    //     continue;
+                    // }
                     createNewAsset:
                     //create appraise has asset
                     $version = $asset['version'];
@@ -4429,20 +4429,20 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 //calculate price
                 $this->getAppraiseCalculate($appraiseId);
                 //delete old asset
-                if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
-                    foreach($oldAppraiseHasAssets as  $oldAsset){
-                        $key =array_search($oldAsset['asset_general_id'], array_column($asset_general, 'id'),true);
-                        if($key === false){
-                            $oldId=$oldAsset['asset_general_id'];
-                            AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
-                            AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('type', '=', 'yeu_to_khac')->forceDelete();
-                            AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
-                            AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
-                            AppraiseHasAsset::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
-                            AppraiseAdapter::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
-                        }
-                    }
-                }
+                // if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
+                //     foreach($oldAppraiseHasAssets as  $oldAsset){
+                //         $key =array_search($oldAsset['asset_general_id'], array_column($asset_general, 'id'),true);
+                //         if($key === false){
+                //             $oldId=$oldAsset['asset_general_id'];
+                //             AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
+                //             AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('type', '=', 'yeu_to_khac')->forceDelete();
+                //             AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
+                //             AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
+                //             AppraiseHasAsset::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
+                //             AppraiseAdapter::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
+                //         }
+                //     }
+                // }
             }
             // dd(AppraiseHasAsset::where('appraise_id',$appraiseId)->count('asset_general_id'));
             if(AppraiseHasAsset::where('appraise_id',$appraiseId)->count('asset_general_id') >3 ){
