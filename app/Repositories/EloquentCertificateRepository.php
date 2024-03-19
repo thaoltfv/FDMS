@@ -3326,7 +3326,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     } else if (isset($request['administrative_id'])) {
                         $updateArray['administrative_id'] = $request['administrative_id'];
                     }  else if (isset($request['business_manager_id'])) {
-                        Log::info("Vao ham if");
+                        Log::info("Vao ham if business_manager_id");
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
                    
