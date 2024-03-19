@@ -2670,7 +2670,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
             'appraiser_sale_id', 'appraiser_control_id', 'administrative_id',
-            'pre_certificate_id',
+            'pre_certificate_id','business_manager_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
@@ -2698,7 +2698,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             DB::raw("case status
                         when 1
-                            then u2.image
+                            then u6.image
                         when 2
                             then u3.image
                         when 3
@@ -2742,6 +2742,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate:id,real_estate_id',
             'personalProperties:id,personal_property_id',
             'administrative:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
         ];
         // dd($this->model);
         DB::enableQueryLog();
@@ -2805,6 +2806,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $j->on('administrative.user_id', '=', 'u5.id');
                     })
                     ->select('u5.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as businessmanager', function ($join) {
+                $join->on('businessmanager.id', '=', 'certificates.business_manager_id')
+                    ->join('users as u6', function ($j) {
+                        $j->on('businessmanager.user_id', '=', 'u6.id');
+                    })
+                    ->select('u6.image')
                     ->limit(1);
             })
             ->select($select);
@@ -3148,7 +3157,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
             'preType:id,description',
             'administrative:id,name,user_id',
-            'businessManager:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
         ];
         $result = $this->model->query()
             ->with($with)
@@ -4803,6 +4812,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (isset($object['administrative_id'])) {
                 $updateArray['administrative_id'] = $object['administrative_id'];
             }
+            if (isset($object['business_manager_id'])) {
+                $updateArray['business_manager_id'] = $object['business_manager_id'];
+            }
 
             Certificate::where('id', $id)->update($updateArray);
         }
@@ -4832,7 +4844,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
                 'administrative:id,name,user_id',
-                'business_manager:id,name,user_id',
+                'appraiserBusinessManager:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
             if ($result['status'] == 5) {

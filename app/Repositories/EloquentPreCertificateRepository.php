@@ -973,6 +973,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'appraise_date',
                     'service_fee',
                     'appraiser_sale_id',
+                    'business_manager_id',
                     'appraiser_perform_id',
                     'certificate_date',
                     'certificate_num',

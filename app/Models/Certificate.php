@@ -132,7 +132,7 @@ class Certificate extends Model
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_manager_id', 'id');
     }
-    public function appraiserbusinessManager(): BelongsTo
+    public function appraiserBusinessManager(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'business_manager_id', 'id');
     }
