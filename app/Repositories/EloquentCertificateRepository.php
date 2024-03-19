@@ -5083,6 +5083,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     if (request()->get('administrative_id')) {
                         $appraiser['administrative_id'] = request()->get('administrative_id');
                     }
+                    if (request()->get('business_manager_id')) {
+                        $appraiser['business_manager_id'] = request()->get('business_manager_id');
+                    }
                     if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
