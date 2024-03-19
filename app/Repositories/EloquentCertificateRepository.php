@@ -3276,6 +3276,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     }
     public function updateStatus_v2($id, $request)
     {
+        Log::info("Vao ham update");
         return DB::transaction(function () use ($id, $request) {
             try {
                 $result = [];
@@ -3300,6 +3301,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
 
                 if (isset($status) && isset($subStatus)) {
+                    Log::info("Vao ham if");
                     switch ($status) {
                         case 1: //Move to first step in workflow -> remove all asset in certificate
                             // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
@@ -3326,8 +3328,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     }  else if (isset($request['business_manager_id'])) {
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
-                    Log::info("Vao ham update");
-                    Log::info("Migration appraise_pics is start!",['data' => $request]);
+                   
+                    Log::info("data request!",['data' => $updateArray]);
+                    Log::info("data request!",['data' => $request]);
+
                     
                     $result = $this->model->query()
                         ->where('id', '=', $id)
