@@ -186,6 +186,8 @@
 				"
 				workflowName="ycsbConfig"
 				:status_text="confirm_message"
+				:status_next="next_status"
+				:dataHSTD="detailData"
 				@action="handleChangeAccept2"
 				@cancel="handleCancelAccept2"
 				:appraiser="appraiserChangeStage"
@@ -202,6 +204,8 @@
 				"
 				workflowName="ycsbConfig"
 				:status_text="confirm_message"
+				:status_next="next_status"
+				:dataHSTD="detailData"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
 			/>
@@ -452,6 +456,7 @@ export default {
 							dataTmp = lstPreCertificateKanban.value.filter(
 								i => i.status === item.status
 							);
+
 							subStatusDataTmp.value[item.id] = dataTmp;
 						});
 						pushSubStatusData();
@@ -484,14 +489,12 @@ export default {
 			lstDataConfig,
 			dataPC,
 			preCertificateStore,
-
 			key_dragg,
 			lstPreCertificateKanban,
 			subStatusDataTmp,
 			countData,
 			subStatusDataReturn,
 			subStatusData,
-
 			getDataWorkFlow2,
 			pushSubStatusData
 		};
@@ -508,10 +511,10 @@ export default {
 		getExpireDate(element) {
 			let strExpire = "";
 			switch (element.status) {
-				case 6:
+				case 7:
 					strExpire = "Đã hủy";
 					break;
-				case 5:
+				case 6:
 					strExpire = "Đã hoàn thành";
 					break;
 				default:
@@ -784,6 +787,11 @@ export default {
 		},
 
 		async handleChangeAccept2(note, reason_id, tempAppraiser) {
+			if (this.dataPC.target_code == "in_ho_so") {
+				console.log("Mới tới in sơ bộ", this.dataPC);
+
+				return;
+			}
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -792,7 +800,8 @@ export default {
 				this.idDragger,
 				note,
 				reason_id,
-				tempAppraiser
+				tempAppraiser,
+				estime
 			);
 
 			if (res.data) {
@@ -1052,6 +1061,55 @@ export default {
 		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
+
+			if (
+				target.description &&
+				target.description.toUpperCase() === "HOÀN THÀNH" &&
+				this.dataPC.debtRemain
+			) {
+				if (
+					this.dataPC.payments &&
+					(this.dataPC.payments.length === 0 ||
+						(this.dataPC.payments.length === 1 && !this.dataPC.payments[0].id))
+				) {
+					this.$toast.open({
+						message:
+							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				} else if (
+					this.detailData.payments &&
+					this.detailData.payments.length > 0 &&
+					this.detailData.payments[0].id
+				) {
+					let debt_remain = this.detailData.service_fee;
+					let amount_paid = 0;
+					for (
+						let index = 0;
+						index < this.detailData.payments.length;
+						index++
+					) {
+						const element = this.detailData.payments[index];
+						if (element.amount && element.amount > 0) {
+							amount_paid += parseFloat(element.amount);
+						}
+					}
+					if (debt_remain - amount_paid > 0) {
+						this.$toast.open({
+							message:
+								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+						return;
+					}
+				}
+			}
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				const checkStage = this.checkDataBeforeChangeToStage3();
 				if (!checkStage) {

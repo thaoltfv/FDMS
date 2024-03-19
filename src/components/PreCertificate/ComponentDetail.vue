@@ -444,6 +444,8 @@
 			"
 			workflowName="ycsbConfig"
 			:status_text="message"
+			:status_next="targetStatus"
+			:dataHSTD="dataPC"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
@@ -1093,6 +1095,51 @@ export default {
 		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
+
+			if (
+				target.description &&
+				target.description.toUpperCase() === "HOÀN THÀNH" &&
+				this.dataPC.debtRemain
+			) {
+				if (
+					this.dataPC.payments &&
+					(this.dataPC.payments.length === 0 ||
+						(this.dataPC.payments.length === 1 && !this.dataPC.payments[0].id))
+				) {
+					this.$toast.open({
+						message:
+							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				} else if (
+					this.dataPC.payments &&
+					this.dataPC.payments.length > 0 &&
+					this.dataPC.payments[0].id
+				) {
+					let debt_remain = this.dataPC.service_fee;
+					let amount_paid = 0;
+					for (let index = 0; index < this.dataPC.payments.length; index++) {
+						const element = this.dataPC.payments[index];
+						if (element.amount && element.amount > 0) {
+							amount_paid += parseFloat(element.amount);
+						}
+					}
+					if (debt_remain - amount_paid > 0) {
+						this.$toast.open({
+							message:
+								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+						return;
+					}
+				}
+			}
 			if (target.code && target.code === "chuyen_chinh_thuc") {
 				if (
 					!this.preCertificateOtherDocuments.Result ||
@@ -1194,7 +1241,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleAction2(note, reason_id, tempAppraiser) {
+		async handleAction2(note, reason_id, tempAppraiser, estime) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -1203,7 +1250,8 @@ export default {
 				this.dataPC.id,
 				note,
 				reason_id,
-				tempAppraiser
+				tempAppraiser,
+				estime
 			);
 
 			if (res.data) {

@@ -42,6 +42,36 @@
 						class="form-group-container col-12"
 						:options="optionsAppraisers"
 					/>
+
+					<div
+						v-if="
+							appraiser &&
+								status_text &&
+								status_text != 'Khôi phục' &&
+								status_text != 'Hủy' &&
+								status_text != 'Từ chối'
+						"
+						class="form-group-container row"
+					>
+						<InputDatePickerV2
+							v-model="estimateCompleteDate"
+							vid="estimateCompleteDate"
+							label="Thời gian hoàn thành dự kiến"
+							rules="required"
+							:requiredIcon="true"
+							class="col-6"
+						/>
+						<InputNumberMinute
+							@changeHour="changeEstimateComplete"
+							v-model="estimateCompleteTime"
+							vid="estimateCompleteTime"
+							label="Thời gian gia hạn"
+							rules="required"
+							:requiredIcon="true"
+							class="col-6"
+						/>
+					</div>
+
 					<InputCategory
 						v-if="notification == `Bạn có muốn 'Từ chối' hồ sơ này?`"
 						v-model="reason_id"
@@ -109,8 +139,15 @@ import { useWorkFlowConfig } from "@/store/workFlowConfig";
 import InputTextarea from "@/components/Form/InputTextarea";
 import InputCategory from "@/components/Form/InputCategory";
 import WareHouse from "@/models/WareHouse";
+import InputDatePickerV2 from "../Form/InputDatePickerV2.vue";
+import InputNumberMinute from "../Form/InputNumberMinute.vue";
 export default {
-	components: { InputTextarea, InputCategory },
+	components: {
+		InputTextarea,
+		InputCategory,
+		InputDatePickerV2,
+		InputNumberMinute
+	},
 	name: "ModalNotificationPreCertificateNote",
 	data() {
 		return {
@@ -121,16 +158,54 @@ export default {
 			reasonCancelPC: []
 		};
 	},
-	props: ["notification", "appraiser", "status_text", "workflowName"],
+	props: [
+		"notification",
+		"appraiser",
+		"status_text",
+		"workflowName",
+		"status_next",
+		"dataHSTD",
+		"status_next"
+	],
 	setup(props) {
 		const preCertificateStore = usePreCertificateStore();
 		const { lstDataConfig } = storeToRefs(preCertificateStore);
 		const configStore = useWorkFlowConfig();
 		const { configs } = storeToRefs(configStore);
 		const chosenAppraiser = ref(null);
+		const tempEstimate = ref(null);
+		const estimateCompleteDate = ref(null);
+		const estimateCompleteTime = ref(null);
 		const chosenAppraiserOriginal = ref(null);
 		const labelAppraiser = ref(null);
+		const getExpireStatusDate = config => {
+			const configTemp = config ? config : null;
+			let dateConvert = new Date();
+			let minutes = configTemp.process_time ? configTemp.process_time : 1440;
+			let dateConverted = dateConvert.getTime() + minutes * 60000;
+
+			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
+
+			return status_expired_at;
+		};
+		console.log(props);
 		const getStart = async () => {
+			if (props.dataHSTD) {
+				console.log(props.status_text);
+				const config = configs.value[props.workflowName].principle.find(
+					item => item.status === props.status_next && item.isActive === 1
+				);
+
+				let status_expired_at_temp = config.process_time
+					? getExpireStatusDate(config)
+					: null;
+
+				estimateCompleteDate.value = status_expired_at_temp;
+				let dateConvert = new Date();
+				let minutes = config.process_time ? config.process_time : 1440;
+				let dateConverted = dateConvert.getTime() + minutes * 60000;
+				tempEstimate.value = dateConverted;
+			}
 			chosenAppraiser.value = props.appraiser.id;
 			chosenAppraiserOriginal.value = props.appraiser.id;
 			if (!lstDataConfig.value.appraiser_sales) {
@@ -148,10 +223,14 @@ export default {
 			labelAppraiser.value =
 				configs.value[props.workflowName].appraiser[props.appraiser.type];
 		};
+
 		if (props.appraiser) getStart();
 		return {
 			chosenAppraiser,
 			chosenAppraiserOriginal,
+			tempEstimate,
+			estimateCompleteDate,
+			estimateCompleteTime,
 			labelAppraiser,
 			lstDataConfig,
 			preCertificateStore
@@ -185,6 +264,11 @@ export default {
 		this.getDictionary();
 	},
 	methods: {
+		changeEstimateComplete(value) {
+			let dateConverted = moment(this.tempEstimate).valueOf() + value;
+			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
+			this.estimateCompleteDate = status_expired_at;
+		},
 		isMobile() {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -229,7 +313,13 @@ export default {
 							id: this.chosenAppraiser,
 							type: this.appraiser.type
 					  };
-			this.$emit("action", note, reason_id, tempAppraiser);
+			this.$emit(
+				"action",
+				note,
+				reason_id,
+				tempAppraiser,
+				this.estimateCompleteDate
+			);
 			this.$emit("cancel", note);
 		},
 		async getDictionary() {
@@ -241,6 +331,14 @@ export default {
 				this.reasons = resp.data.li_do;
 				this.reasonCancelPC = resp.data.li_do_huy_so_bo;
 			}
+		},
+		getExpireStatusDate(config) {
+			const configTemp = config ? config : this.config;
+			let dateConvert = new Date();
+			let minutes = configTemp.process_time ? configTemp.process_time : 1440;
+			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
+			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
+			return status_expired_at;
 		}
 	}
 };
