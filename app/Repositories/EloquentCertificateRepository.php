@@ -3174,9 +3174,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 1 || $result['status'] == 4 || $result['status'] == 9) {
+        if ($result['status'] == 4 || $result['status'] == 9) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['appraiser_sale_id'])
+                ->first();
+            $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 1) {
+            $appraiser = Appraiser::query()
+                ->where('id', '=', $result['business_manager_id'])
                 ->first();
             $user = User::query()
                 ->where('id', '=', $appraiser->user_id)
