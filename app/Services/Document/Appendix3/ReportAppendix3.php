@@ -155,11 +155,11 @@ class ReportAppendix3 extends Report
     {
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tên tài sản: ', ['bold' => true]);
-        $textRun->addText($name ? $name : '');
+        $textRun->addText($name ?  htmlspecialchars($name) : '');
         if (!empty($address)) {
             $textRun = $section->addTextRun();
             $textRun->addText('     - Địa chỉ: ', ['bold' => true]);
-            $textRun->addText($address ? $address : '');
+            $textRun->addText($address ?  htmlspecialchars($address) : '');
         }
     }
     protected function printMapImage($section, $pic)

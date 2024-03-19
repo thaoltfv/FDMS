@@ -21,8 +21,8 @@ class ReportAppraisalVavc extends ReportAppraisal
     protected function step1Sub1($section, $certificate)
     {
         $section->addTitle('Thông tin về khách hàng thẩm định giá:', 2);
-        $section->addListItem('Khách hàng: ' . $certificate->petitioner_name, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $certificate->petitioner_address, 0, null, 'bullets');
+        $section->addListItem('Khách hàng: ' .  htmlspecialchars($certificate->petitioner_name), 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($certificate->petitioner_address), 0, null, 'bullets');
         $section->addListItem('Bên sử dụng kết quả thẩm định giá: Khách hàng yêu cầu thẩm định giá', 0, null, 'bullets');
     }
 
@@ -30,8 +30,8 @@ class ReportAppraisalVavc extends ReportAppraisal
     {
         $comAcronym = !empty($this->companyAcronym) ?  ' (' . mb_strtoupper($this->companyAcronym) . ')' : '';
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
-        $section->addListItem('Doanh nghiệp: ' . $this->companyName .  $comAcronym, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $this->companyAddress, 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName) .  $comAcronym, 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $this->companyPhone . "\tFax: " . $this->companyFax, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên người Đại diện pháp luật: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
         if(isset($certificate->appraiserConfirm->name)) {
@@ -1049,7 +1049,7 @@ class ReportAppraisalVavc extends ReportAppraisal
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('1', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Pháp lý');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Địa chỉ:');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($address);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(htmlspecialchars($address));
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);

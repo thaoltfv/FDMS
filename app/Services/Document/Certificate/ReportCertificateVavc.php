@@ -110,11 +110,11 @@ class ReportCertificateVavc extends ReportCertificate
         $textRun->addText("1. Khách hàng thẩm định giá: ", ['size' => '12.5','bold' => true]);
         $listItemRun1 = $section->addListItemRun(0,'bullets');
         $listItemRun1->addText("Khách hàng yêu cầu: ", ['size' => '12.5']);
-        $listItemRun1->addText($certificate->petitioner_name, ['size' => '12.5', 'bold' => true]);
+        $listItemRun1->addText(htmlspecialchars($certificate->petitioner_name), ['size' => '12.5', 'bold' => true]);
         // $section->addListItem("Khách hàng yêu cầu: " . $certificate->petitioner_name,0 , ['size' => '12.5'], 'bullets', $this->indentFistLine);
         // $certificate->petitioner_birthday = '01/01/1970';
         $section->addListItem($certificate->petitioner_birthday ? "Ngày sinh: " . date_create($certificate->petitioner_birthday)->format("d/m/Y") : "Ngày sinh: " ,0 , ['size' => '12.5'], 'bullets');
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , ['size' => '12.5'], 'bullets');
+        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address),0 , ['size' => '12.5'], 'bullets');
         $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card,0 , ['size' => '12.5'], 'bullets');
         // $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $textRun = $section->addTextRun();
