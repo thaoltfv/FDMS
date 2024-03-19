@@ -136,15 +136,15 @@ class ReportAppraisal extends Report
     protected function step1Sub1($section, $certificate)
     {
         $section->addTitle('Thông tin về khách hàng thẩm định giá:', 2);
-        $section->addListItem('Khách hàng: ' . $certificate->petitioner_name, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $certificate->petitioner_address, 0, null, 'bullets');
+        $section->addListItem('Khách hàng: ' .  htmlspecialchars($certificate->petitioner_name), 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($certificate->petitioner_address), 0, null, 'bullets');
     }
     protected function step1Sub2($section, $certificate)
     {
         $comAcronym = !empty($this->companyAcronym) ?  ' (' . mb_strtoupper($this->companyAcronym) . ')' : '';
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
-        $section->addListItem('Doanh nghiệp: ' . $this->companyName .  $comAcronym, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $this->companyAddress, 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName) .  $comAcronym, 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $this->companyPhone . "\tFax: " . $this->companyFax, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên Tổng Giám đốc: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
         $section->addListItem('Họ và tên Thẩm định viên: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
@@ -182,7 +182,7 @@ class ReportAppraisal extends Report
         if (!empty($address)) {
             $listTmp = $section->addListItemRun(0, 'bullets');
             $listTmp->addText('Địa chỉ: ', ['bold' => true]);
-            $listTmp->addText($address . '.');
+            $listTmp->addText( htmlspecialchars($address) . '.');
         }
     }
     protected function step1Sub4($section, $certificate)
@@ -1006,7 +1006,7 @@ class ReportAppraisal extends Report
         foreach ($constructionCompanies as $index => $item) {
             $stt++;
             $section->addText(($stt) . '. ' . $item->constructionCompany->name . '.', null, $this->indentFistLine);
-            $section->addText('- Địa chỉ: ' . $item->constructionCompany->address . '.', null, $this->indentFistLine);
+            $section->addText('- Địa chỉ: ' .  htmlspecialchars($item->constructionCompany->address) . '.', null, $this->indentFistLine);
             $section->addText('- Điện thoại: ' . $item->constructionCompany->phone_number, null, $this->indentFistLine);
             $section->addText('- Giám đốc: ' . $item->constructionCompany->manager_name . '.', null, $this->indentFistLine);
         }
