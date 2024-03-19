@@ -3326,7 +3326,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     }  else if (isset($request['business_manager_id'])) {
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
-
+                    Log::info("Vao ham update");
+                    Log::info("Migration appraise_pics is start!",['data' => $request]);
+                    
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
