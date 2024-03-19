@@ -125,7 +125,7 @@ class ReportCertificate extends Report
         $assets = $certificate->realEstate;
         foreach ($assets as $index => $item) {
             $name_assets .= ($index > 0) ? " và " : "";
-            $name_assets .= $item->appraise_asset;
+            $name_assets .= htmlspecialchars($item->appraise_asset);
         }
         return $name_assets;
 
@@ -143,15 +143,15 @@ class ReportCertificate extends Report
             }
         }
 
-        return $address_assets;
+        return  htmlspecialchars($address_assets);
     }
     protected function content1(Section $section, $certificate)
     {
         $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0 , [], 'bullets', $this->indentFistLine);
         $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:",0 , [], 'bullets', $this->indentFistLine);
         $section->addTitle("Khách hàng thẩm định giá:", 2);
-        $section->addListItem("Khách hàng: " . $certificate->petitioner_name,0 , [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name),0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address),0 , [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate),0 , [], 'bullets', $this->indentFistLine);
         // $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , [], 'bullets', $this->indentFistLine);
@@ -159,7 +159,7 @@ class ReportCertificate extends Report
         if (!empty($address)) {
             $listTmp = $section->addListItemRun(0, 'bullets');
             $listTmp->addText('Địa chỉ: ', ['bold' => true], []);
-            $listTmp->addText($address . '.');
+            $listTmp->addText(htmlspecialchars($address) . '.');
         }
         $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.",0 , [], 'bullets', $this->indentFistLine);
         $appraise_date = date_create($certificate->appraise_date);

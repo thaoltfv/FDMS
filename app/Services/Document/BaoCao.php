@@ -197,12 +197,12 @@ class BaoCao
 
         $section->addTitle('Thông tin về khách hàng thẩm định giá:', 2);
         $section->addListItem('Khách hàng: ' . $certificate->petitioner_name, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $certificate->petitioner_address, 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' . htmlspecialchars($certificate->petitioner_address), 0, null, 'bullets');
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
         $acronym1 = !empty($company->acronym) ? ' (' . mb_strtoupper($company->acronym) . ')' : '';
         $acronym = !empty($company->acronym) ? mb_strtoupper($company->acronym) : mb_strtoupper($company->name);
-        $section->addListItem('Doanh nghiệp: ' . $company->name . $acronym1 , 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $company->address, 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' . htmlspecialchars($company->name) . $acronym1 , 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' . htmlspecialchars($company->address), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $company->phone_number . "\tFax: " . $company->fax_number, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên Tổng Giám đốc: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
         $section->addListItem('Họ và tên Thẩm định viên: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
@@ -237,7 +237,7 @@ class BaoCao
         }
         $listTmp = $section->addListItemRun(0, 'bullets', ['align' => 'both']);
         $listTmp->addText('Tên tài sản: ', ['bold' => true], []);
-        $listTmp->addText($appraiseAssetName . '.', null, ['align' => 'both']);
+        $listTmp->addText(htmlspecialchars($appraiseAssetName) . '.', null, ['align' => 'both']);
 
         $section->addTitle('Thông tin về cuộc thẩm định giá:', 2);
         $listTmp = $section->addListItemRun(0, 'bullets', ['align' => 'both']);
@@ -921,7 +921,7 @@ class BaoCao
             foreach ($constructionCompanies as $index => $item) {
                 $stt++;
                 $section->addText(($stt) . '. ' . $item->constructionCompany->name . '.', null, $indentFistLine);
-                $section->addText('- Địa chỉ: ' . $item->constructionCompany->address . '.', null, $indentFistLine);
+                $section->addText('- Địa chỉ: ' . htmlspecialchars($item->constructionCompany->address) . '.', null, $indentFistLine);
                 $section->addText('- Điện thoại: ' . $item->constructionCompany->phone_number, null, $indentFistLine);
                 $section->addText('- Giám đốc: ' . $item->constructionCompany->manager_name . '.', null, $indentFistLine);
             }

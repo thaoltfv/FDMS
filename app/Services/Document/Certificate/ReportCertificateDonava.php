@@ -25,8 +25,8 @@ class ReportCertificateDonava extends ReportCertificate
         $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0 , [], 'bullets', $this->indentFistLine);
         $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:",0 , [], 'bullets', $this->indentFistLine);
         $section->addTitle("Khách hàng thẩm định giá:", 2);
-        $section->addListItem("Khách hàng: " . $certificate->petitioner_name,0 , [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name),0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address),0 , [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate),0 , [], 'bullets', $this->indentFistLine);
         $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.",0 , [], 'bullets', $this->indentFistLine);

@@ -9,7 +9,7 @@ class ReportAppendix2Donava extends ReportAppendix2
     {
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tên tài sản: ', ['size' => 13, 'bold' => true]);
-        $textRun->addText($name ? $name : '', ['size' => 13, 'bold' => false]);
+        $textRun->addText($name ? htmlspecialchars($name) : '', ['size' => 13, 'bold' => false]);
     }
 
 }

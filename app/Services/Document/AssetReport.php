@@ -466,7 +466,7 @@ class AssetReport
                         $cell = $table->addCell(4000);
                         $textRun = $cell->addTextRun();
                         $textRun->addText('- Tên tài sản: ');
-                        $textRun->addText(isset($otherAssets->other_asset) ? $this->mb_ucfirst(mb_strtolower($otherAssets->other_asset)) : '', ['bold' => true]);
+                        $textRun->addText(isset($otherAssets->other_asset) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($otherAssets->other_asset))) : '', ['bold' => true]);
                         $cell = $table->addCell(5000);
                         $textRun = $cell->addTextRun();
                         $textRun->addText("Giá trị: ");
