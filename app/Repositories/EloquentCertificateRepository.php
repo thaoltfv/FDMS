@@ -2448,6 +2448,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_control_id',
             'administrative_id',
+            'business_manager_id',
             DB::raw("case status
                     when 1
                     then 'Mới'
@@ -2484,6 +2485,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraisePurpose:id,name',
             'appraiserControl:id,name',
             'administrative:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
@@ -3321,6 +3323,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $updateArray['appraiser_control_id'] = $request['appraiser_control_id'];
                     } else if (isset($request['administrative_id'])) {
                         $updateArray['administrative_id'] = $request['administrative_id'];
+                    }  else if (isset($request['business_manager_id'])) {
+                        $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
 
                     $result = $this->model->query()
