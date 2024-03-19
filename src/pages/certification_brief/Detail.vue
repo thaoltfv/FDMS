@@ -1429,7 +1429,9 @@
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="hstdConfig"
+			:status_next="targetStatus"
 			:status_text="message"
+			:dataHSTD="form"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction"
 		/>
@@ -1492,7 +1494,9 @@
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="hstdConfig"
+			:status_next="targetStatus"
 			:status_text="message"
+			:dataHSTD="form"
 			:appraiser="appraiserChangeStage"
 			@action="handleAction2"
 		/>
@@ -1756,6 +1760,23 @@ export default {
 			this.position_profile =
 				profile.data.user.appraiser.appraise_position.acronym;
 			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
+		}
+		if (
+			this.form.status &&
+			this.form.status < 9 &&
+			this.position_profile &&
+			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
+				this.position_profile === "NHAN-VIEN-KINH-DOANH")
+		) {
+			this.$toast.open({
+				message:
+					"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+				type: "error",
+				position: "top-right"
+			});
+			let url = this.$router.push({
+				name: "certification_brief.index"
+			});
 		}
 		this.user_id = profile.data.user.id;
 		this.profile = profile;
@@ -2455,6 +2476,47 @@ export default {
 			this.appraiserChangeStage = null;
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
+			if (target.description.toUpperCase() === "HOÀN THÀNH") {
+				console.log("Data detail hoàn thành", this.form);
+				if (
+					this.form.payments &&
+					(this.form.payments.length === 0 ||
+						(this.form.payments.length === 1 && !this.form.payments[0].id))
+				) {
+					this.$toast.open({
+						message:
+							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				} else if (
+					this.form.payments &&
+					this.form.payments.length > 0 &&
+					this.form.payments[0].id
+				) {
+					let debt_remain = this.form.service_fee;
+					let amount_paid = 0;
+					for (let index = 0; index < this.form.payments.length; index++) {
+						const element = this.form.payments[index];
+						if (element.amount && element.amount > 0) {
+							amount_paid += parseFloat(element.amount);
+						}
+					}
+					if (debt_remain - amount_paid > 0) {
+						this.$toast.open({
+							message:
+								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+						return;
+					}
+				}
+			}
 			if (config) {
 				this.config = config;
 				let require = config.require;
@@ -2489,13 +2551,14 @@ export default {
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
 		},
-		async handleAction2(note, reason_id, tempAppraiser) {
+		async handleAction2(note, reason_id, tempAppraiser, estime) {
 			const config = this.jsonConfig.principle.find(
 				item => item.status === this.targetStatus && item.isActive === 1
 			);
-			let status_expired_at_temp = config.process_time
-				? this.getExpireStatusDate(config)
-				: null;
+			// let status_expired_at_temp = config.process_time
+			// 	? await this.getExpireStatusDate(config)
+			// 	: null;
+			let status_expired_at_temp = estime;
 			const {
 				appraiser_id,
 				appraiser_perform_id,
