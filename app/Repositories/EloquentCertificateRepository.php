@@ -3319,13 +3319,17 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                     if (isset($request['appraiser_sale_id'])) {
                         $updateArray['appraiser_sale_id'] = $request['appraiser_sale_id'];
-                    } else if (isset($request['appraiser_perform_id'])) {
+                    } 
+                    if (isset($request['appraiser_perform_id'])) {
                         $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
-                    } else if (isset($request['appraiser_control_id'])) {
+                    }
+                    if (isset($request['appraiser_control_id'])) {
                         $updateArray['appraiser_control_id'] = $request['appraiser_control_id'];
-                    } else if (isset($request['administrative_id'])) {
+                    }
+                    if (isset($request['administrative_id'])) {
                         $updateArray['administrative_id'] = $request['administrative_id'];
-                    }  else if (isset($request['business_manager_id'])) {
+                    }
+                    if (isset($request['business_manager_id'])) {
                         Log::info("Vao ham if business_manager_id");
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
