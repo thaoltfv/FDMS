@@ -110,9 +110,9 @@ class ReportAppraisal extends Report
                 //     $apartmentName = $item->apartment->apartmentAssetProperties->full_name ?: '';
                 // }
                 $apartmentName = $item->apartment->appraise_asset;
-                $name_assets .= $apartmentName;
+                $name_assets .= htmlspecialchars($apartmentName);
             } else {
-                $name_assets .= $item->appraise_asset;
+                $name_assets .= htmlspecialchars($item->appraise_asset);
             }
         }
         return $name_assets;
@@ -130,7 +130,7 @@ class ReportAppraisal extends Report
             }
         }
 
-        return $address_assets;
+        return htmlspecialchars($address_assets);
     }
     // I
     protected function step1Sub1($section, $certificate)
@@ -403,7 +403,7 @@ class ReportAppraisal extends Report
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('1', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Pháp lý');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Địa chỉ:');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($address);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(htmlspecialchars($address));
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);

@@ -295,6 +295,50 @@ class AppraiseController extends Controller
         }
     }
 
+    public function uploadDocument(Request $request): JsonResponse
+    {
+        try {
+            $files = $request->file('files');
+            $fileUrls = []; 
+            $path = env('STORAGE_OTHERS') .'/'. 'certification_assets/';
+            if (isset($files) && !empty($files)) {
+                foreach ($files as $file) {
+                    $fileName = $file->getClientOriginalName();
+                    $fileType = $file->getClientOriginalExtension();
+                    $fileSize = $file->getSize();
+                    $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
+                    Storage::put($name, file_get_contents($file));
+                    $fileUrl = Storage::url($name);
+                    $item = [
+                        'name' => $fileName,
+                        'link' => $fileUrl,
+                        'type' => $fileType,
+                        'size' => $fileSize,
+                    ];
+                    $fileUrls[] = $item;
+                }
+            }
+            return $this->respondWithCustomData($fileUrls);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    public function deleteDocument(Request $request): JsonResponse
+    {
+        try {
+            $link = $request->data;
+            Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
+            return $this->respondWithCustomData( ['message' => 'Xóa thành công' ]);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
     public function updateComparisonFactor(Request $objects): JsonResponse
     {
         try {

@@ -418,6 +418,8 @@ Route::group(['middleware' => 'auth'], function () {
     //Step 4
     Route::get('certification_asset/law-infomation/{id}', [CertificateAssetsController::class, 'getLaw']);
     Route::post('certification_asset/step4-law-infomation/{id}', [CertificateAssetsController::class, 'postLawInfomation']);
+    Route::post('certification_asset/step4-upload-law-document', [AppraiseController::class, 'uploadDocument']);
+    Route::post('certification_asset/step4-delete-law-document', [AppraiseController::class, 'deleteDocument']);
     //Step 5
     Route::get('certification_asset/appraisal-infomation/{id}', [CertificateAssetsController::class, 'getAppraisalFacility']);
     Route::post('certification_asset/step5-appraisal-infomation/{id}', [CertificateAssetsController::class, 'postAppraisalFacility']);
