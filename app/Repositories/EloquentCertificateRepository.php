@@ -4963,7 +4963,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $data = Certificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
+                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id || $data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên Sale mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
@@ -5127,7 +5127,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->created_by == $user->id || $data->appraiserBusinessManager->user_id == $user->id))
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 2:
