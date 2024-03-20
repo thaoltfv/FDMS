@@ -2448,6 +2448,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_control_id',
             'administrative_id',
+            'business_manager_id',
             DB::raw("case status
                     when 1
                     then 'Mới'
@@ -2484,6 +2485,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraisePurpose:id,name',
             'appraiserControl:id,name',
             'administrative:id,name,user_id',
+            'appraiserBusinessManager:id,name,user_id',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
@@ -2532,6 +2534,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('administrative', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -2845,6 +2850,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('administrative', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
             });
@@ -3172,9 +3180,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->first();
             $result['image'] = $user->image;
         }
-        if ($result['status'] == 1 || $result['status'] == 4 || $result['status'] == 9) {
+        if ($result['status'] == 4 || $result['status'] == 9) {
             $appraiser = Appraiser::query()
                 ->where('id', '=', $result['appraiser_sale_id'])
+                ->first();
+            $user = User::query()
+                ->where('id', '=', $appraiser->user_id)
+                ->first();
+            $result['image'] = $user->image;
+        }
+        if ($result['status'] == 1) {
+            $appraiser = Appraiser::query()
+                ->where('id', '=', $result['business_manager_id'])
                 ->first();
             $user = User::query()
                 ->where('id', '=', $appraiser->user_id)
@@ -3274,6 +3291,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     }
     public function updateStatus_v2($id, $request)
     {
+        Log::info("Vao ham update");
         return DB::transaction(function () use ($id, $request) {
             try {
                 $result = [];
@@ -3298,6 +3316,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
 
                 if (isset($status) && isset($subStatus)) {
+                    Log::info("Vao ham if");
                     switch ($status) {
                         case 1: //Move to first step in workflow -> remove all asset in certificate
                             // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
@@ -3315,14 +3334,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                     if (isset($request['appraiser_sale_id'])) {
                         $updateArray['appraiser_sale_id'] = $request['appraiser_sale_id'];
-                    } else if (isset($request['appraiser_perform_id'])) {
+                    } 
+                    if (isset($request['appraiser_perform_id'])) {
                         $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
-                    } else if (isset($request['appraiser_control_id'])) {
+                    }
+                    if (isset($request['appraiser_control_id'])) {
                         $updateArray['appraiser_control_id'] = $request['appraiser_control_id'];
-                    } else if (isset($request['administrative_id'])) {
+                    }
+                    if (isset($request['administrative_id'])) {
                         $updateArray['administrative_id'] = $request['administrative_id'];
                     }
+                    if (isset($request['business_manager_id'])) {
+                        Log::info("Vao ham if business_manager_id");
+                        $updateArray['business_manager_id'] = $request['business_manager_id'];
+                    }
+                   
+                    Log::info("data request!",['data' => $updateArray]);
+                    Log::info("data request!",['data' => $request]);
 
+                    
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
@@ -4933,7 +4963,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $data = Certificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
+                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id || $data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên Sale mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
@@ -5079,6 +5109,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     if (request()->get('administrative_id')) {
                         $appraiser['administrative_id'] = request()->get('administrative_id');
                     }
+                    if (request()->get('business_manager_id')) {
+                        $appraiser['business_manager_id'] = request()->get('business_manager_id');
+                    }
                     if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
                         return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
                     }
@@ -5094,7 +5127,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id))
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 2:
