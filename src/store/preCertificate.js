@@ -434,14 +434,15 @@ export const usePreCertificateStore = defineStore(
 			return;
 		}
 
-		async function updateStatus(id, note, reason_id, appraiser = null) {
+		async function updateStatus(id, note, reason_id, appraiser = null, estime) {
 			const config = jsonConfig.value.principle.find(
 				item =>
 					item.status === dataPC.value.target_status && item.isActive === 1
 			);
-			dataPC.value.status_expired_at_string = config.process_time
-				? await getExpireStatusDate(config)
-				: null;
+			// dataPC.value.status_expired_at_string = config.process_time
+			// 	? await getExpireStatusDate(config)
+			// 	: null;
+			dataPC.value.status_expired_at_string = estime;
 			let dataSend = {
 				business_manager_id: null,
 				appraiser_perform_id: null,
@@ -466,13 +467,13 @@ export const usePreCertificateStore = defineStore(
 				dataSend[appraiser.type] = appraiser.id;
 			}
 			if (
-				(dataPC.value.status == 2 || dataPC.value.status == 6) &&
+				(dataPC.value.status == 2 || dataPC.value.status == 7) &&
 				dataPC.value.target_status == 1
 			) {
 				await rejectFromStage2ToStage1();
 				dataSend.total_preliminary_value = 0;
 			}
-			if (dataPC.value.target_status == 6 && reason_id) {
+			if (dataPC.value.target_status == 7 && reason_id) {
 				dataSend.cancel_reason = reason_id;
 			}
 			const res = await PreCertificate.updateStatusPreCertificate(id, dataSend);

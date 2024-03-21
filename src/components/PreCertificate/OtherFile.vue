@@ -263,7 +263,7 @@
 				</div>
 			</div>
 
-			<div class="row d-flex justify-content-between" style=";margin-top:5px">
+			<div class="row d-flex justify-content-between" style="margin-top:5px">
 				<strong class="margin_content_inline" style="margin-left:-10px"
 					>File kèm kết quả sơ bộ:<b class="ml-1 text-red">*</b></strong
 				>

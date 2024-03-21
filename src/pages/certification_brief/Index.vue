@@ -202,9 +202,11 @@
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 				"
 				:status_text="confirm_message"
+				:status_next="next_status"
 				workflowName="hstdConfig"
 				@action="handleChangeAccept2"
 				:appraiser="appraiserChangeStage"
+				:dataHSTD="detailData"
 				@cancel="handleCancelAccept2"
 			/>
 			<ModalNotificationWithAssign
@@ -217,10 +219,13 @@
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 				"
+				:dataHSTD="detailData"
 				workflowName="hstdConfig"
+				:status_next="next_status"
 				:status_text="confirm_message"
 				:appraiser="appraiserChangeStage"
 				@action="handleChangeAccept2"
+				@status_expired_at=""
 			/>
 		</div>
 	</div>
@@ -707,13 +712,14 @@ export default {
 			} else return false;
 		},
 
-		async handleChangeAccept2(note, reason_id, tempAppraiser) {
+		async handleChangeAccept2(note, reason_id, tempAppraiser, estime) {
 			const config = this.jsonConfig.principle.find(
 				item => item.status === this.next_status && item.isActive === 1
 			);
-			let status_expired_at_temp = config.process_time
-				? this.getExpireStatusDate(config)
-				: null;
+			// let status_expired_at_temp = config.process_time
+			// 	? await this.getExpireStatusDate(config)
+			// 	: null;
+			let status_expired_at_temp = estime;
 			let dataSend = {
 				appraiser_confirm_id: this.elementDragger.appraiser_confirm_id,
 				appraiser_id: this.elementDragger.appraiser_id,
@@ -1165,6 +1171,22 @@ export default {
 			const res = await CertificationBrief.getDetailCertificateBrief(id);
 			if (res.data) {
 				this.detailData = await res.data;
+
+				if (
+					this.detailData.status &&
+					this.detailData.status < 9 &&
+					this.position_profile &&
+					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
+						this.position_profile === "NHAN-VIEN-KINH-DOANH")
+				) {
+					this.$toast.open({
+						message:
+							"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+						type: "error",
+						position: "top-right"
+					});
+					return;
+				}
 				this.showDetailPopUp = true;
 				this.idDragger = id;
 			} else {
@@ -1180,6 +1202,47 @@ export default {
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
+			if (target.description.toUpperCase() === "HOÀN THÀNH") {
+				console.log("Data detail hoàn thành", this.detailData);
+				if (this.detailData.payments && this.detailData.payments.length === 0) {
+					this.$toast.open({
+						message:
+							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				} else if (
+					this.detailData.payments &&
+					this.detailData.payments.length > 0 &&
+					this.detailData.payments[0].id
+				) {
+					let debt_remain = this.detailData.service_fee;
+					let amount_paid = 0;
+					for (
+						let index = 0;
+						index < this.detailData.payments.length;
+						index++
+					) {
+						const element = this.detailData.payments[index];
+						if (element.amount && element.amount > 0) {
+							amount_paid += parseFloat(element.amount);
+						}
+					}
+					if (debt_remain - amount_paid > 0) {
+						this.$toast.open({
+							message:
+								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+						return;
+					}
+				}
+			}
 			if (config) {
 				this.config = config;
 				check = this.checkRequired(config.require, this.detailData);
