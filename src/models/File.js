@@ -80,6 +80,20 @@ export default class File extends Model {
 			data
 		});
 	}
+	static async uploadDocumentLaw(data) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certification_asset/step4-upload-law-document`,
+			data
+		});
+	}
+	static async deleteDocumentLaw(data) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certification_asset/step4-delete-law-document`,
+			data
+		});
+	}
 	static async getToken() {
 		return new this().makeRequest({
 			method: "POST",
