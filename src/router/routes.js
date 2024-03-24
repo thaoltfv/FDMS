@@ -2109,5 +2109,96 @@ export const routes = [
 				}
 			}
 		]
+	},
+	// price_estimates
+	{
+		path: "/price_estimates",
+		component: Resource,
+		children: [
+			{
+				path: "/price_estimates/create",
+				name: "price_estimates.create",
+				component: page("price_estimates/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Tạo mới ước tính giá",
+					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
+					breadcrumbs: [
+						{
+							title: "Ước tính giá",
+							name: "price_estimates.index"
+						},
+						{
+							title: "Tạo mới ước tính giá",
+							name: "price_estimates.create"
+						}
+					],
+					gtm: "Trang tạo mới UTG"
+				}
+			},
+			{
+				path: "/price_estimates/edit",
+				name: "price_estimates.edit",
+				component: page("price_estimates/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				props: true,
+				meta: {
+					title: "Chỉnh sửa ước tính giá",
+					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
+					breadcrumbs: [
+						{
+							title: "Ước tính giá",
+							name: "price_estimates.index"
+						},
+						{
+							title: "Chỉnh sửa ước tính giá",
+							name: "price_estimates.create"
+						}
+					],
+					gtm: "Trang chỉnh sửa UTG"
+				}
+			},
+
+			{
+				path: "/price_estimates/index",
+				name: "price_estimates.index",
+				component: page("price_estimates/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Tài sản thẩm định",
+					// fix_permission
+					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					breadcrumbs: [
+						{
+							title: "Ước tính giá",
+							name: "price_estimates.index"
+						}
+					],
+					gtm: "Trang UTG"
+				}
+			},
+			{
+				path: "/price_estimates/detail",
+				name: "price_estimates.detail",
+				component: page("price_estimates/Detail.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Chi tiết ước tính giá",
+					// fix_permission
+					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					breadcrumbs: [
+						{
+							title: "Ước tính giá",
+							name: "price_estimates.index"
+						},
+						{
+							title: "Chi tiết ước tính giá",
+							name: "price_estimates.detail"
+						}
+					],
+					gtm: "Trang chi tiết UTG"
+				}
+			}
+		]
 	}
 ];
