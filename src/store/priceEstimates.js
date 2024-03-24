@@ -870,7 +870,7 @@ export const usePriceEstimatesStore = defineStore(
 			const res = await PriceEstimateModel.submitStep3(tempUpdate, id);
 			if (res.data) {
 				configThis.value.toast.open({
-					message: "Lưu lựa chọn tài sản so sánh thành công",
+					message: "Lưu giá trị tài sản thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
