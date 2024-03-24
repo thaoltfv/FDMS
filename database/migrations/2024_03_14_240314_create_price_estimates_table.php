@@ -72,7 +72,6 @@ class CreatePriceEstimatesTable extends Migration
                 $table->string('type_zoning')->default('');
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->useCurrent();
-                $table->timestamp('deleted_at')->nullable();
                 $table->softDeletes();
             });
         }
@@ -132,7 +131,7 @@ class CreatePriceEstimatesTable extends Migration
                 $table->integer('type_id')->nullable();
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->useCurrent();
-                $table->timestamp('deleted_at')->nullable();
+                $table->softDeletes();
             });
         }
         if (!Schema::hasTable('price_estimate_finals')) {
