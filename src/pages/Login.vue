@@ -200,10 +200,9 @@ export default {
 	}
   .login {
     // background: url("../assets/images/im_background.jpg") no-repeat top center #2d494d;
-    background: url("../assets/images/hinh_nen_login_nova.png");
+    background: url("../assets/images/hinh_nen_login_nova.png") no-repeat;
     // background: url("../assets/images/im_background.png") no-repeat ;
-    // background-size: contain;
-    background-size: cover;
+    background-size: contain;
     height: 100dvh;
     display: flex;
     justify-content: center;
