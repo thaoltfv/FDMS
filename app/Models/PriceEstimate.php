@@ -50,7 +50,9 @@ class PriceEstimate extends Model
         'appraise_asset',
         'full_address',
         'full_address_street',
-        'appraise_id'
+        'appraise_id',
+        'project_id',
+        'apartment_asset_id'
     ];
     protected $guarded = [];
 
