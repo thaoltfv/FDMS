@@ -698,7 +698,6 @@ import {
 import print from "vue-print-nb";
 import InputText from "../Form/InputText.vue";
 import moment from "moment";
-import printJS from "print-js";
 export default {
 	name: "ModalPrintEstimateAsset",
 	props: ["data"],
