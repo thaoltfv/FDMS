@@ -47,6 +47,14 @@ navigations = [
 		customImage: true
 	},
 	{
+		id: "price_estimates",
+		type: "item",
+		icon: "nav_ycsb",
+		title: "Ước tính giá",
+		routeName: "price_estimates.index",
+		customImage: true
+	},
+	{
 		id: "home",
 		type: "item",
 		icon: "nav_bdg",
