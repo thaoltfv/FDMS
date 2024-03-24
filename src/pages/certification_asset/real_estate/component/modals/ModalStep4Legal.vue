@@ -263,7 +263,45 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-12 col-xl-12">
+							 <!-- <div class="card" :style="checkMobile ? { 'margin-bottom': '150px' } : {}"> -->
+								<div class="card-title" style="margin-bottom: 20px;">
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="row d-flex justify-content-between align-items-center">
+											<h3 class="title ml-1">Tài liệu đính kèm
+												<label :for="'image_property' + type"
+														style="color: orange; cursor: pointer;">
+													<font-awesome-icon icon="cloud-upload-alt" size="1x"/>
+												</label>
+											</h3>
+
+											<input
+												class="btn-upload"
+												type="file"
+												ref="file"
+												:id="'image_property' + type"
+												multiple
+												accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+												@change="onUploadDocument($event)"
+												style="display: none;"
+											/>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div v-for="(file, index) in form.document_file" :key="index" class="d-flex">
+										<div style="cursor: pointer;" @click="downloadOtherFile(file)" class="d-flex">
+											<img class="mr-1" style="width: 1rem;" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
+											<div class="mr-3" style="font-weight: bold; color: #3D4D65;">{{ file.name }}</div>
+										</div>
+										<img style="cursor: pointer; width: 1rem;" @click="deleteOtherFile(file, index)" src="@/assets/icons/ic_delete_2.svg" alt="tag_2"/>
+									</div>
+								</div>
+
+								<!-- </div> -->
+							</div>
+						
+
+					
+							<!-- <div class="col-12 col-xl-12">
 								<div
 									class="card"
 									:style="checkMobile ? { 'margin-bottom': '150px' } : {}"
@@ -317,8 +355,8 @@
 													/>
 													<div class="mr-3">{{ file.name }}</div>
 												</div>
-												<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
-							<div class="mr-3">{{file.name}}</div> -->
+												<img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
+											<div class="mr-3">{{file.name}}</div>
 												<img
 													style="cursor: pointer; width: 1rem;"
 													@click="deleteOtherFile(file, index)"
@@ -328,8 +366,8 @@
 											</div>
 										</div>
 									</div>
-								</div>
-							</div>
+								</div> 
+							 </div> -->
 						</div>
 					</div>
 					<div class="container-title container-title__footer">
@@ -725,59 +763,65 @@ export default {
 			}
 		},
 		async onUploadDocument(e) {
-			const formData = new FormData();
-			let check = true;
-			let files = e.target.files;
-			if (!files.length) {
-				return;
-			}
-			for (let i = 0; i < e.target.files.length; i++) {
-				this.file = e.target.files[i];
-				if (
-					this.file.type === "image/png" ||
-					this.file.type === "image/jpeg" ||
-					this.file.type === "image/jpg" ||
-					this.file.type === "image/gif" ||
-					this.file.type ===
-						"application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-					this.file.type ===
-						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-					this.file.type === "application/pdf"
-				) {
-				} else {
-					check = false;
-					this.$toast.open({
-						message: "File dữ liệu không đúng định dạng vui lòng kiểm tra lại",
-						type: "error",
-						position: "top-right",
-						duration: 3000
-					});
-				}
-			}
-			if (check) {
-				if (files.length) {
+					const formData = new FormData();
+					let check = true;
+					let files = e.target.files;
+					if (!files.length) {
+						return;
+					}
+					
+					// Khai báo một mảng để lưu trữ các tệp được chọn
+					let selectedFiles = [];
+					
 					for (let i = 0; i < files.length; i++) {
-						formData.append("files[" + i + "]", files[i]);
+						let file = files[i]; // Lưu trữ từng file vào biến file
+						
+						if (
+							file.type === "image/png" ||
+							file.type === "image/jpeg" ||
+							file.type === "image/jpg" ||
+							file.type === "image/gif" ||
+							file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+							file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+							file.type === "application/pdf"
+						) {
+							// Nếu file hợp lệ, thêm vào mảng selectedFiles
+							selectedFiles.push(file);
+						} else {
+							check = false;
+							this.$toast.open({
+								message: "File dữ liệu không đúng định dạng vui lòng kiểm tra lại",
+								type: "error",
+								position: "top-right",
+								duration: 3000
+							});
+						}
 					}
-					let res = null;
-					res = await File.uploadDocumentLaw(formData);
-					if (res.data) {
-						this.form.document_file = res.data.data;
-						this.$toast.open({
-							message: "Thêm file thành công",
-							type: "success",
-							position: "top-right",
-							duration: 3000
-						});
+					
+					if (check && selectedFiles.length) {
+						for (let i = 0; i < selectedFiles.length; i++) {
+							formData.append("files[" + i + "]", selectedFiles[i]);
+						}
+						let res = null;
+						res = await File.uploadDocumentLaw(formData);
+						if (res.data) {
+							this.form.document_file = res.data.data;
+							console.log('',this.form.document_file)
+							this.$toast.open({
+								message: "Thêm file thành công",
+								type: "success",
+								position: "top-right",
+								duration: 3000
+							});
+						}
 					}
-				}
-			}
-		},
+				},
+
 		downloadOtherFile(file) {
 			const url = window.URL.createObjectURL(new Blob([file.link]));
 			const link = document.createElement("a");
 			link.href = url;
-			linksetAttribute("download", file.name);
+			link.setAttribute("download", file.name);
 			document.body.appendChild(link);
 			link.click();
 			window.URL.revokeObjectURL(link);
@@ -1354,5 +1398,8 @@ export default {
 	// position: absolute;
 	padding: 0;
 	border: 0;
+}
+.card-title{
+	width: 100%;
 }
 </style>
