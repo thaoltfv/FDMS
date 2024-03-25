@@ -364,15 +364,10 @@ class AppraiseController extends Controller
                 $documentFiles = $lawData->pluck('document_file');
                 $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
-                $filteredArray = array_filter($documentFilesArray, function ($value) {
-                    return $value->link != $link;
-                });
-                $filteredArray2 = array_filter($documentFilesArray, function ($value) {
-                    return $value->link == $link;
-                });
+                
             }else{
-                $filteredArray = '';
-                $filteredArray2= '';
+                $documentFilesArray = '';
+              
             }
            
             
@@ -382,7 +377,7 @@ class AppraiseController extends Controller
             //     $status = "Không tìm thấy link ảnh";
             // }
            
-            return $this->respondWithCustomData(['message' => $filteredArray ,'exception' => $filteredArray2  ]);
+            return $this->respondWithCustomData(['message' => $documentFilesArray ]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
