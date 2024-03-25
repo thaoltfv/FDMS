@@ -359,15 +359,28 @@ class AppraiseController extends Controller
         try {
             $status ="Xóa ảnh thành công";
             $data = $request;
-            $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
-            $link = $data['link_file_delete'];
+            if (AppraiseLaw::where('appraise_law_id', '=', $appraiseId)->exists()) {
+                $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
+                $link = $data['link_file_delete'];
+                $filteredArray = array_filter($lawData, function ($value) {
+                    return $value->link != $link ;
+                });
+                $filteredArray2 = array_filter($lawData, function ($value) {
+                    return $value->link == $link ;
+                });
+            }else{
+                $filteredArray = '';
+                $filteredArray2= '';
+            }
+           
+            
             // if($link) {
             //     Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
             // }else{
             //     $status = "Không tìm thấy link ảnh";
             // }
            
-            return $this->respondWithCustomData(['message' => $lawData ]);
+            return $this->respondWithCustomData(['message1' => $filteredArray ,'message2' => $filteredArray2  ]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
