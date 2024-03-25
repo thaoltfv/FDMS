@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Models\Appraise;
+use App\Models\AppraiseLaw;
 use App\Models\AppraiserCompany;
 use App\Services\AppraiseAsset\AppraiseAsset;
 use App\Services\Document\AssetReport;
@@ -356,10 +357,17 @@ class AppraiseController extends Controller
     public function deleteDocument(Request $request): JsonResponse
     {
         try {
+            $status ="Xóa ảnh thành công";
             $data = $request;
+            $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
             $link = $data['link_file_delete'];
-            // Storage::disk(env('FILESYSTEM_DRIVER'))->delete();
-            return $this->respondWithCustomData(['message' => $link ]);
+            // if($link) {
+            //     Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
+            // }else{
+            //     $status = "Không tìm thấy link ảnh";
+            // }
+           
+            return $this->respondWithCustomData(['message' => $lawData ]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
