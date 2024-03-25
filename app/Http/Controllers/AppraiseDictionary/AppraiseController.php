@@ -363,7 +363,7 @@ class AppraiseController extends Controller
                 $getDocumentFile = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
                 $link = $data['link_file_delete'];
                 foreach ($getDocumentFile as $arrayDocumentFile) {
-                    $array = json_decode($arrayDocumentFile['document_file']);
+                    $array = json_decode($arrayDocumentFile['document_file'], true);
                 }
                 if (!empty($array)) {
                     foreach ($array as $itemDocumentFile) {
