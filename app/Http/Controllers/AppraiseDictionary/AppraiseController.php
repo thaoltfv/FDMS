@@ -372,18 +372,15 @@ class AppraiseController extends Controller
                         }
                     }
                 }
+                AppraiseLaw::where('id', '=', $data['appraise_law_id'])->update([
+                    'document_file' => json_encode($arrayAfter),
+                ]);
+                Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
             } else {
                 $status = "Không tìm thấy tài sản pháp lý";
             }
 
-
-            // if($link) {
-            //     Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
-            // }else{
-            //     $status = "Không tìm thấy link ảnh";
-            // }
-
-            return $this->respondWithCustomData(['message' => $arrayAfter]);
+            return $this->respondWithCustomData(['message' => $status]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
