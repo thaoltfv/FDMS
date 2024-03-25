@@ -3924,7 +3924,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $law['appraise_id']= $appraiseId;
                     $law['appraise_law_id']=  $law['appraise_law_id']==0 ? null : $law['appraise_law_id'];
                     $law['law_date']= isset($law['law_date']) ?  $law['law_date'] : null;
-                    $law['document_file'] =  isset($law['document_file']) ?  json_decode($law['document_file'], FALSE) : null;
+                    $law['document_file'] =  isset($law['document_file']) ? json_decode(json_encode($law['document_file']),true) : null;
 
                     $appraiseLaw = new AppraiseLaw($law);
                     $lawId = QueryBuilder::for($appraiseLaw)
