@@ -849,31 +849,31 @@ export default {
 		},
 
 		downloadOtherFile(file) {
-			// axios({
-			// 	url:
-			// 		process.env.API_URL +
-			// 		"api/certification_asset/step4-download-law-document/" +
-			// 		file.uuidName +
-			// 		"/" +
-			// 		file.type,
-			// 	method: "GET",
-			// 	responseType: "blob",
-			// }).then((response) => {
-			// 	console.log(ré);
-			// 	const url = window.URL.createObjectURL(new Blob([response.data]));
-			// 	const link = document.createElement("a");
-			// 	link.href = url;
-			// 	link.setAttribute("download", file.originalName);
-			// 	document.body.appendChild(link);
-			// 	link.click();
-			// 	window.URL.revokeObjectURL(link);
-			// 	other.value.toast.open({
-			// 		message: `Tải xuống thành công`,
-			// 		type: "success",
-			// 		position: "top-right",
-			// 		duration: 3000,
-			// 	});
-			// });
+			axios({
+				url:
+					process.env.API_URL +
+					"api/certification_asset/step4-download-law-document/" +
+					file.uuidName +
+					"/" +
+					file.type,
+				method: "GET",
+				responseType: "blob",
+			}).then((response) => {
+				console.log(response);
+				const url = window.URL.createObjectURL(new Blob([response.data]));
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", file.originalName);
+				document.body.appendChild(link);
+				link.click();
+				window.URL.revokeObjectURL(link);
+				other.value.toast.open({
+					message: `Tải xuống thành công`,
+					type: "success",
+					position: "top-right",
+					duration: 3000,
+				});
+			});
 			// const url = window.URL.createObjectURL(
 			// 	new Blob([
 			// 		{
@@ -889,29 +889,29 @@ export default {
 			// link.click();
 			// window.URL.revokeObjectURL(link);
 
-			const url = window.URL.createObjectURL(
-				new Blob([
-					{
-						file_name: "BÁO CÁO CÔNG TÁC NỘI, NGOẠI TRÚ LỚP S22-61TH2.docx",
-						url: "https://fv-nova.s3-ap-southeast-1.amazonaws.com/others/certification_assets/f194a234-e41c-4b7a-8117-6f055281aea4.docx",
-					},
-				])
-			);
+			// const url = window.URL.createObjectURL(
+			// 	new Blob([
+			// 		{
+			// 			file_name: "BÁO CÁO CÔNG TÁC NỘI, NGOẠI TRÚ LỚP S22-61TH2.docx",
+			// 			url: "https://fv-nova.s3-ap-southeast-1.amazonaws.com/others/certification_assets/f194a234-e41c-4b7a-8117-6f055281aea4.docx",
+			// 		},
+			// 	])
+			// );
 
-			const link = document.createElement("a");
-			link.href = url;
-			link.download = "BÁO CÁO CÔNG TÁC NỘI, NGOẠI TRÚ LỚP S22-61TH2.docx";
-			document.body.appendChild(link);
-			link.click();
+			// const link = document.createElement("a");
+			// link.href = url;
+			// link.download = "BÁO CÁO CÔNG TÁC NỘI, NGOẠI TRÚ LỚP S22-61TH2.docx";
+			// document.body.appendChild(link);
+			// link.click();
 
-			document.body.removeChild(link);
-			URL.revokeObjectURL(url);
-			this.$toast.open({
-				message: `Tải xuống thành công`,
-				type: "success",
-				position: "top-right",
-				duration: 3000,
-			});
+			// document.body.removeChild(link);
+			// URL.revokeObjectURL(url);
+			// this.$toast.open({
+			// 	message: `Tải xuống thành công`,
+			// 	type: "success",
+			// 	position: "top-right",
+			// 	duration: 3000,
+			// });
 		},
 		deleteOtherFile(file, index) {
 			this.openModalDelete = true;
