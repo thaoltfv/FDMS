@@ -382,7 +382,7 @@ class AppraiseController extends Controller
             //     $status = "Không tìm thấy link ảnh";
             // }
            
-            return $this->respondWithCustomData(['message1' => $filteredArray ,'message2' => $filteredArray2  ]);
+            return $this->respondWithCustomData(['message' => $filteredArray ,'exception' => $filteredArray2  ]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
