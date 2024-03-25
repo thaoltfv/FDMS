@@ -328,6 +328,24 @@ class AppraiseController extends Controller
         }
     }
 
+    public function downloadDocument($uuid, $type, Request $request): JsonResponse 
+    {
+        try {
+            $path = env('STORAGE_OTHERS') .'/'. 'certification_assets/';
+            $link = $path . $uuid . '.' . $type;
+            $fileUrl = Storage::url($link);
+            if (isset($item->link)) {
+                return $this->respondWithCustomData(['file_name' => $uuid, 'url' => $fileUrl]);
+            } else {
+                return $this->respondWithErrorData(['message' => 'Không tìm thấy link tải', 'exception' => '']);
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
     public function deleteDocument(Request $request): JsonResponse
     {
         try {
