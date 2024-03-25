@@ -3886,7 +3886,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'description', 'legal_name_holder', 'certifying_agency',
                         'origin_of_use', 'content', 'duration',
                         // DB::raw("to_char(law_date , 'DD-MM-YYYY')  as law_date")
-                        'law_date', 'note'
+                        'law_date', 'note', 'document_file'
                     ];
             $with= [
                     'law:id,type,content',
