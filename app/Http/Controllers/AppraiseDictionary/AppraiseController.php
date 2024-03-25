@@ -328,6 +328,13 @@ class AppraiseController extends Controller
         }
     }
 
+
+     /**
+     * @param $uuid
+     * @param $type
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function downloadDocument($uuid, $type, Request $request): JsonResponse 
     {
         try {
