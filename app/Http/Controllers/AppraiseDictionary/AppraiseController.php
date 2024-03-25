@@ -359,7 +359,7 @@ class AppraiseController extends Controller
         try {
             $status ="Xóa ảnh thành công";
             $data = $request;
-            if (AppraiseLaw::where('appraise_law_id', '=',$data['appraise_law_id'])->exists()) {
+            if (AppraiseLaw::where('id', '=',$data['appraise_law_id'])->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
                 $documentFiles = $lawData->pluck('document_file');
                 $documentFilesArray = $documentFiles->toArray();
