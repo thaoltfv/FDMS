@@ -364,9 +364,12 @@ class AppraiseController extends Controller
                 $documentFiles = $lawData->pluck('document_file');
                 $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
+                $filteredArray = array_filter($documentFilesArray, function ($item) use ($link) {
+                    return $item->link !== $link;
+                });
                 
             }else{
-                $documentFilesArray = '';
+                $filteredArray = '';
               
             }
            
