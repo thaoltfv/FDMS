@@ -365,10 +365,10 @@ class AppraiseController extends Controller
                 $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
                 $filteredArray = array_filter($documentFilesArray, function ($value) {
-                    return $value->link != $link
+                    return $value->link != $link;
                 });
                 $filteredArray2 = array_filter($documentFilesArray, function ($value) {
-                    return $value->link == $link
+                    return $value->link == $link;
                 });
             }else{
                 $filteredArray = '';
