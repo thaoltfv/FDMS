@@ -49,15 +49,16 @@ class AppraiseController extends Controller
     /**
      * ProvinceController constructor.
      */
-    public function __construct(AppraiseRepository            $appraiseRepository,
-                                CertificateRepository         $certificateRepository,
-                                CompareAssetGeneralRepository $compareAssetGeneralRepository,
-                                UserRepository                $userRepository,
-                                DictionaryRepository          $dictionaryRepository,
-                                BuildingPriceRepository       $buildingPriceRepository,
-                                AppraiseAssetRepository       $appraiseAssetRepository,
-                                AppraiserCompanyRepository    $appraiserCompanyRepository)
-    {
+    public function __construct(
+        AppraiseRepository            $appraiseRepository,
+        CertificateRepository         $certificateRepository,
+        CompareAssetGeneralRepository $compareAssetGeneralRepository,
+        UserRepository                $userRepository,
+        DictionaryRepository          $dictionaryRepository,
+        BuildingPriceRepository       $buildingPriceRepository,
+        AppraiseAssetRepository       $appraiseAssetRepository,
+        AppraiserCompanyRepository    $appraiserCompanyRepository
+    ) {
         $this->appraiseRepository = $appraiseRepository;
         $this->certificateRepository = $certificateRepository;
         $this->compareAssetGeneralRepository = $compareAssetGeneralRepository;
@@ -106,7 +107,7 @@ class AppraiseController extends Controller
     {
         try {
             $result = $this->appraiseRepository->updateStatus($id, $request);
-            if(is_string($result)) {
+            if (is_string($result)) {
                 $data = ['message' => $result];
                 return $this->respondWithErrorData($data);
             } else {
@@ -128,7 +129,7 @@ class AppraiseController extends Controller
     {
         try {
             $test = request()->get('test');
-            if(isset($test)) {
+            if (isset($test)) {
                 $result = $this->appraiseRepository->findByIdTest($id);
             } else {
                 $result = $this->appraiseRepository->findById($id);
@@ -171,12 +172,11 @@ class AppraiseController extends Controller
         try {
             $objects = $request->toArray();
             if (isset($objects['properties'])) {
-                foreach( $objects['properties'] as $property){
-                    if(isset($property['property_detail']))
-                    {
+                foreach ($objects['properties'] as $property) {
+                    if (isset($property['property_detail'])) {
                         $property_detail  = $property['property_detail'];
                         foreach ($property_detail as $item) {
-                            if ($item['circular_unit_price'] <= ValueDefault::PRICE_VALIDATION_VALUE  ) {
+                            if ($item['circular_unit_price'] <= ValueDefault::PRICE_VALIDATION_VALUE) {
                                 $data = ['message' => ValueDefault::PRICE_VALIDATION_MESSAGE_UBND, 'exception' => null];
                                 return $this->respondWithErrorData($data);
                             }
@@ -201,14 +201,13 @@ class AppraiseController extends Controller
     public function update($id, UpdateAppraiseRequest $request): JsonResponse
     {
         try {
-              $objects = $request->toArray();
+            $objects = $request->toArray();
             if (isset($objects['properties'])) {
-                foreach( $objects['properties'] as $property){
-                    if(isset($property['property_detail']))
-                    {
+                foreach ($objects['properties'] as $property) {
+                    if (isset($property['property_detail'])) {
                         $property_detail  = $property['property_detail'];
                         foreach ($property_detail as $item) {
-                            if ($item['circular_unit_price'] <= ValueDefault::PRICE_VALIDATION_VALUE  ) {
+                            if ($item['circular_unit_price'] <= ValueDefault::PRICE_VALIDATION_VALUE) {
                                 $data = ['message' => ValueDefault::PRICE_VALIDATION_MESSAGE_UBND, 'exception' => null];
                                 return $this->respondWithErrorData($data);
                             }
@@ -248,7 +247,6 @@ class AppraiseController extends Controller
                 $this->dictionaryRepository
             ))
                 ->AppraiseAsset($request->toArray()));
-
         } catch (\Exception $exception) {
             dd($exception);
             Log::error($exception);
@@ -284,7 +282,7 @@ class AppraiseController extends Controller
     {
         try {
             $image = ($request->data);
-            $path = env('STORAGE_IMAGES') .'/'. 'certification_assets/';
+            $path = env('STORAGE_IMAGES') . '/' . 'certification_assets/';
             $name = $path . Uuid::uuid4()->toString() . '.png';
             Storage::put($name, file_get_contents($image));
             $fileUrl = Storage::url($name);
@@ -300,8 +298,8 @@ class AppraiseController extends Controller
     {
         try {
             $files = $request->file('files');
-            $fileUrls = []; 
-            $path = env('STORAGE_OTHERS') .'/'. 'certification_assets/';
+            $fileUrls = [];
+            $path = env('STORAGE_OTHERS') . '/' . 'certification_assets/';
             if (isset($files) && !empty($files)) {
                 foreach ($files as $file) {
                     $fileName = $file->getClientOriginalName();
@@ -330,16 +328,16 @@ class AppraiseController extends Controller
     }
 
 
-     /**
+    /**
      * @param $uuid
      * @param $type
      * @param Request $request
      * @return JsonResponse
      */
-    public function downloadDocument($uuid, $type, Request $request): JsonResponse 
+    public function downloadDocument($uuid, $type, Request $request): JsonResponse
     {
         try {
-            $path = env('STORAGE_OTHERS') .'/'. 'certification_assets/';
+            $path = env('STORAGE_OTHERS') . '/' . 'certification_assets/';
             $link = $path . $uuid . '.' . $type;
             $fileUrl = Storage::url($link);
             if (isset($item->link)) {
@@ -357,7 +355,7 @@ class AppraiseController extends Controller
     public function deleteDocument(Request $request): JsonResponse
     {
         try {
-            $status ="Xóa ảnh thành công";
+            $status = "Xóa ảnh thành công";
             $data = $request;
             if (AppraiseLaw::where('id', '=', $data['appraise_law_id'])->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
@@ -365,22 +363,20 @@ class AppraiseController extends Controller
                 $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
                 $filteredArray = array_filter($documentFilesArray, function ($item) use ($link) {
-                    return $item->link !== $link;
+                    return $item->link == $link;
                 });
-                
-            }else{
+            } else {
                 $filteredArray = '';
-              
             }
-           
-            
+
+
             // if($link) {
             //     Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
             // }else{
             //     $status = "Không tìm thấy link ảnh";
             // }
-           
-            return $this->respondWithCustomData(['message' => $documentFilesArray ]);
+
+            return $this->respondWithCustomData(['message' => $filteredArray]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
@@ -392,18 +388,16 @@ class AppraiseController extends Controller
     {
         try {
             $data = $objects->toArray();
-            if($data['layer_cutting_procedure']){
-                if($data['layer_cutting_price']<=0){
+            if ($data['layer_cutting_procedure']) {
+                if ($data['layer_cutting_price'] <= 0) {
                     $data = ['message' => 'Đơn giá sau cắt lớp phải lớn hơn 0', 'exception' => null];
                     return $this->respondWithErrorData($data);
-
                 }
             }
-            if(isset($data['remaining_price']['remaining_commerce_price'])){
-                if($data['remaining_price']['remaining_commerce_price']<=0){
-                    $data = ['message' => 'Đơn giá đất '. $data['remaining_price']['land_type'] .' thị trường phải lớn hơn 0', 'exception' => null];
+            if (isset($data['remaining_price']['remaining_commerce_price'])) {
+                if ($data['remaining_price']['remaining_commerce_price'] <= 0) {
+                    $data = ['message' => 'Đơn giá đất ' . $data['remaining_price']['land_type'] . ' thị trường phải lớn hơn 0', 'exception' => null];
                     return $this->respondWithErrorData($data);
-
                 }
             }
             return $this->respondWithCustomData($this->appraiseRepository->updateComparisonFactor($objects));
@@ -430,9 +424,9 @@ class AppraiseController extends Controller
 
     public function updateTangibleComparisonFactor(Request $objects): JsonResponse
     {
-        if( isset($objects["construction_company"]) ) {
-            foreach($objects["construction_company"] as $item) {
-                if( !isset($item["unit_price_m2"]) || !is_numeric($item["unit_price_m2"]) ) {
+        if (isset($objects["construction_company"])) {
+            foreach ($objects["construction_company"] as $item) {
+                if (!isset($item["unit_price_m2"]) || !is_numeric($item["unit_price_m2"])) {
                     $data = ['message' => "Dữ liệu nhập vào sai định dạng vui lòng nhập lại."];
                     return $this->respondWithErrorData($data);
                 }
@@ -441,8 +435,8 @@ class AppraiseController extends Controller
         //if(!is_numeric())
         try {
             $result = $this->appraiseRepository->updateTangibleComparisonFactor($objects);
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
             // return $this->respondWithCustomData($this->appraiseRepository->updateTangibleComparisonFactor($objects));
         } catch (\Exception $exception) {
