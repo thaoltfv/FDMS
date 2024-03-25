@@ -357,7 +357,7 @@ class AppraiseController extends Controller
     {
         try {
             $data = $request->toArray();
-            $link = $data->link_file_delete
+            $link = $data->link_file_delete;
             // Storage::disk(env('FILESYSTEM_DRIVER'))->delete();
             return $this->respondWithCustomData( ['message' => $link ]);
         } catch (\Exception $exception) {
