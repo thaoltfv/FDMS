@@ -361,10 +361,8 @@ class AppraiseController extends Controller
             if (AppraiseLaw::where('id', '=', $data['appraise_law_id'])->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
                 $link = $data['link_file_delete'];
-                $check = json_decode($lawData, true);
                 foreach ($lawData as $item) {
-
-                    array_push($array, json_decode($item['document_file']));
+                    $array = json_decode($item['document_file']);
                 }
             } else {
                 $status = "Không tìm thấy tài sản pháp lý";
