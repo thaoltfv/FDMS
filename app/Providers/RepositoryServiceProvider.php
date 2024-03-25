@@ -19,6 +19,7 @@ use App\Contracts\BranchRepository;
 use App\Contracts\BuildingPriceRepository;
 use App\Contracts\CertificateRepository;
 use App\Contracts\PreCertificateRepository;
+use App\Contracts\PriceEstimateRepository;
 use App\Contracts\PreCertificateConfigRepository;
 use App\Contracts\CompareAssetGeneralRepository;
 use App\Contracts\CompareAssetVersionRepository;
@@ -90,6 +91,8 @@ use App\Models\PersonalProperty;
 use App\Models\OtherCertificateAsset;
 use App\Models\PreCertificateConfig;
 use App\Models\PreCertificate;
+use App\Models\PriceEstimate;
+
 use App\Models\Project;
 use App\Models\RealEstate;
 use App\Models\TechnologicalLineCertificateAsset;
@@ -143,6 +146,7 @@ use App\Repositories\EloquentVerhicleCertificateAssetRepository;
 use App\Repositories\EloquentViewCertificateBriefRepository;
 use App\Repositories\EloquentPreCertificateRepository;
 use App\Repositories\EloquentPreCertificateConfigRepository;
+use App\Repositories\EloquentPriceEstimateRepository;
 use App\Services\Document\Certificate\ReportCertificate;
 use App\Services\Document\Certificate\ReportCertificateInterface;
 use App\Services\Document\DocumentInterface\Report;
@@ -316,6 +320,10 @@ class RepositoryServiceProvider extends ServiceProvider
             return new EloquentPreCertificateRepository(new PreCertificate());
         });
 
+        $this->app->singleton(PriceEstimateRepository::class, function () {
+            return new EloquentPriceEstimateRepository(new PriceEstimate());
+        });
+
         $this->app->singleton(PreCertificateConfigRepository::class, function () {
             return new EloquentPreCertificateConfigRepository(new PreCertificateConfig());
         });
@@ -351,7 +359,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ApartmentAssetRepository::class, function () {
             return new EloquentApartmentAssetRepository(new ApartmentAsset());
         });
-        
+
         $this->app->singleton(RealEstateRepository::class, function () {
             return new EloquentRealEstateRepository(new RealEstate());
         });

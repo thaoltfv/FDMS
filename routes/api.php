@@ -55,6 +55,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AppraiseDictionary\PreCertificateController;
 use App\Http\Controllers\PreCertificateConfig\PreCertificateConfigController;
+use App\Http\Controllers\PriceEstimate\PriceEstimateController;
 // use App\Http\Controllers\PreCertificateConfig\PreCertificateBriefController;
 /*
 |--------------------------------------------------------------------------
@@ -324,9 +325,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pre-certificates/pre-certificate-paging', [PreCertificateController::class, 'findPaging']);
 
     // Route::post('pre-certificate/pre-certification-brief/{id?}', [PreCertificateBriefController::class, 'postGeneralInfomation']);
-    Route::get('pre-certificates/pre-export', [PreCertificateController::class, 'exportPreCertificate']);
-    //  Route::get('pre-certificates/pre-customize-export', [CertificateBriefController::class, 'exportCustomizePreCertificate']);
-
+    // Route::get('pre-certificates/brief-export', [PreCertificateController::class, 'exportCertificateBriefs']);
     Route::get('pre-certificates/pre-certificate-workflow', [PreCertificateController::class, 'getPreCertificateWorkFlow']);
     Route::post('pre-certificates/pre-certification-brief/{id?}', [PreCertificateController::class, 'postGeneralInfomation']);
     Route::get('pre-certificates/pre-certification-infomation/{id}', [PreCertificateController::class, 'getPreCertificate']);
@@ -335,9 +334,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pre-certificates/pre-certificate-update-offical/{id}', [PreCertificateController::class, 'updateToOffical']);
     Route::post('pre-certificates/pre-certificate-update-payment/{id}', [PreCertificateController::class, 'updatePayments']);
     Route::post('pre-certificates/other-document/upload/{id}/{typeDocument}', [PreCertificateController::class, 'otherDocumentUpload']);
-
+    Route::get('pre-certificates/pre-export', [PreCertificateController::class, 'exportPreCertificate']);
     Route::post('pre-certificates/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
-
     Route::get('pre-certificates/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
 
     Route::get('/pre-certificates', [PreCertificateController::class, 'findAll']);
@@ -347,8 +345,26 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pre-certificate-configs', [PreCertificateConfigController::class, 'findAll']);
     Route::get('pre-certificate-configs/find-config/{name}', [PreCertificateConfigController::class, 'findByName']);
     Route::post('pre-certificate-configs/update-config/{name}', [PreCertificateConfigController::class, 'updateConfig']);
-
     Route::get('certificate-assets', [CertificateAssetController::class, 'findAll']);
+
+
+    Route::apiResource('/price_estimates', PriceEstimateController::class);
+    Route::get('price_estimates/general-infomation/{id}', [PriceEstimateController::class, 'getGeneralInfomation']);
+    Route::post('price_estimates/step1-general-infomation/{id?}', [PriceEstimateController::class, 'postGeneralInfomation']);
+    Route::get('price_estimates/price-estimate-all-step/{id}', [PriceEstimateController::class, 'getPriceEstimateDataFull']);
+    Route::post(
+        'price_estimates/step3-final/{id}',
+        [PriceEstimateController::class, 'step3Final']
+    );
+    Route::post(
+        'price_estimates/move-to-appraise/{id}',
+        [PriceEstimateController::class, 'moveToAppraise']
+    );
+    Route::post(
+        'price_estimates/get-price-estimate-final/{id}',
+        [PriceEstimateController::class, 'getPriceEstimateFinal']
+    );
+    Route::post('price_estimates/step2-assets-infomation/{id}', [PriceEstimateController::class, 'updateStep2']);
 
     Route::apiResource('certificate-asset', CertificateAssetController::class);
 

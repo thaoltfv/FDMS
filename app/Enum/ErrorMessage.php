@@ -53,4 +53,17 @@ class ErrorMessage
     public const PERSONAL_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách Động sản ';
     public const COMPAREASSET_NOTEXISTS = 'Không tồn tại tài sản so sánh - TSSS ';
     public const LOG_ACTIVITY_NOT_FOUND = 'Không tìm thấy lịch sử được ghi lại';
+
+    public const PE_CHECK_ADD = 'Bạn không có quyền tạo mới UTG ';
+    public const PE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa UTG ';
+    public const PE_CHECK_VIEW = 'Bạn không có quyền xem UTG ';
+    public const PE_CHECK_STATUS_FOR_UPDATE =  'Bạn không được chỉnh sửa phiếu có trạng thái ';
+    public const PE_CHECK_MULTIPLE_MDSDD = 'Chỉ được phép lưu một mục đích sử dụng đất Chính. Vui lòng xem lại.';
+    public const PE_CHECK_TUNNING = 'Vui lòng nhập thông tin hẻm.';
+    public const PE_CHECK_MDSDD = 'Bạn chưa chọn mục đích sử dụng Chính. Vui lòng xem lại.';
+    public const PE_CHECK_MAIN_EREA =  'Vui lòng nhập diện tích phù hợp quy hoạch.';
+    public const PE_CHECK_ASSET_NUMBER =  'Số lượng tài sản so sánh không thể lớn hơn 3. Vui lòng xem lại.';
+    public const PE_APPRAISE_EXIT =  'UTG đã được chuyển sang HSTĐ. Vui lòng kiểm tra lại.';
+    public const APPRAISE_PE_EXIT =  'Đã có HSTĐ được tạo từ UGT này. Vui lòng kiểm tra lại.';
+    public const PE_CHECK_EXIT =  'Không tồn tại ước tính giá - UTG';
 }
