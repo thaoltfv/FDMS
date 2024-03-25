@@ -306,7 +306,7 @@ class AppraiseController extends Controller
                     $fileName = $file->getClientOriginalName();
                     $fileType = $file->getClientOriginalExtension();
                     $fileSize = $file->getSize();
-                    $uuidName = Uuid::uuid4()->toString()
+                    $uuidName = Uuid::uuid4()->toString();
                     $name = $path . $uuidName . '.' . $fileType;
                     Storage::put($name, file_get_contents($file));
                     $fileUrl = Storage::url($name);
