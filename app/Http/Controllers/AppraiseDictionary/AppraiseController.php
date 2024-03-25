@@ -356,10 +356,10 @@ class AppraiseController extends Controller
     public function deleteDocument(Request $request): JsonResponse
     {
         try {
-            $data = $request->toArray();
-            $link = $data->link_file_delete;
+            $data = $request;
+            $link = $data['link_file_delete'];
             // Storage::disk(env('FILESYSTEM_DRIVER'))->delete();
-            return $this->respondWithCustomData( ['message' => $link ]);
+            return $this->respondWithCustomData(['message' => $link ]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
