@@ -358,7 +358,7 @@ class AppraiseController extends Controller
         try {
             $link = $request->data;
             Storage::disk(env('FILESYSTEM_DRIVER'))->delete($link);
-            return $this->respondWithCustomData( ['message' => 'Xóa thành công' ]);
+            return $this->respondWithCustomData( ['message' => $request->data ]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
