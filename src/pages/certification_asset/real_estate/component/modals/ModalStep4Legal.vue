@@ -84,7 +84,7 @@
 										ref="purposeDetails"
 										v-if="
 											form.appraise_law_id !== 0 &&
-												form.purpose_details.length > 0
+											form.purpose_details.length > 0
 										"
 									>
 										<div
@@ -107,7 +107,7 @@
 												:class="[
 													form.purpose_details.length > 1
 														? 'col-lg-5'
-														: 'col-lg-6'
+														: 'col-lg-6',
 												]"
 											>
 												<InputAreaCustom
@@ -175,7 +175,9 @@
 											<div
 												class="col-12 col item_land input-contain"
 												:class="[
-													form.land_details.length > 1 ? 'col-lg-5' : 'col-lg-6'
+													form.land_details.length > 1
+														? 'col-lg-5'
+														: 'col-lg-6',
 												]"
 											>
 												<InputText
@@ -263,44 +265,70 @@
 									</div>
 								</div>
 							</div>
-							 <!-- <div class="card" :style="checkMobile ? { 'margin-bottom': '150px' } : {}"> -->
-								<div class="card-title" style="margin-bottom: 20px;">
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="row d-flex justify-content-between align-items-center">
-											<h3 class="title ml-1">Tài liệu đính kèm
-												<label :for="'image_property' + type"
-														style="color: orange; cursor: pointer;">
-													<font-awesome-icon icon="cloud-upload-alt" size="1x"/>
-												</label>
-											</h3>
+							<!-- <div class="card" :style="checkMobile ? { 'margin-bottom': '150px' } : {}"> -->
+							<div class="card-title" style="margin-bottom: 20px">
+								<div class="d-flex justify-content-between align-items-center">
+									<div
+										class="row d-flex justify-content-between align-items-center"
+									>
+										<h3 class="title ml-1">
+											Tài liệu đính kèm
+											<label
+												:for="'image_property' + type"
+												style="color: orange; cursor: pointer"
+											>
+												<font-awesome-icon icon="cloud-upload-alt" size="1x" />
+											</label>
+										</h3>
 
-											<input
-												class="btn-upload"
-												type="file"
-												ref="file"
-												:id="'image_property' + type"
-												multiple
-												accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
-												@change="onUploadDocument($event)"
-												style="display: none;"
-											/>
+										<input
+											class="btn-upload"
+											type="file"
+											ref="file"
+											:id="'image_property' + type"
+											multiple
+											accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+											@change="onUploadDocument($event)"
+											style="display: none"
+										/>
 									</div>
 								</div>
 								<div class="row mt-3">
-									<div v-for="(file, index) in form.document_file" :key="index" class="d-flex">
-										<div style="cursor: pointer;" @click="downloadOtherFile(file)" class="d-flex">
-											<img class="mr-1" style="width: 1rem;" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
-											<div class="mr-3" style="font-weight: bold; color: #3D4D65;">{{ file.name }}</div>
+									<div
+										v-for="(file, index) in form.document_file"
+										:key="index"
+										class="d-flex"
+									>
+										<div
+											style="cursor: pointer"
+											@click="downloadOtherFile(file)"
+											class="d-flex"
+										>
+											<img
+												class="mr-1"
+												style="width: 1rem"
+												src="@/assets/icons/ic_taglink.svg"
+												alt="tag_2"
+											/>
+											<div
+												class="mr-3"
+												style="font-weight: bold; color: #3d4d65"
+											>
+												{{ file.originalName }}
+											</div>
 										</div>
-										<img style="cursor: pointer; width: 1rem;" @click="deleteOtherFile(file, index)" src="@/assets/icons/ic_delete_2.svg" alt="tag_2"/>
+										<img
+											style="cursor: pointer; width: 1rem"
+											@click="deleteOtherFile(file, index)"
+											src="@/assets/icons/ic_delete_2.svg"
+											alt="tag_2"
+										/>
 									</div>
 								</div>
 
 								<!-- </div> -->
 							</div>
-						
 
-					
 							<!-- <div class="col-12 col-xl-12">
 								<div
 									class="card"
@@ -422,6 +450,7 @@ import InputCategoryCustom from "@/components/Form/InputCategoryCustom";
 import WareHouse from "@/models/WareHouse";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
+import axios from "axios";
 // import ModalViewDocument from "./component/modals/ModalViewDocument";
 // import moment from 'moment'
 export default {
@@ -435,7 +464,7 @@ export default {
 		InputDatePicker,
 		InputAreaCustom,
 		InputCategoryCustom,
-		ModalDelete
+		ModalDelete,
 		// ModalViewDocument
 	},
 	data() {
@@ -450,7 +479,7 @@ export default {
 			link_file_delete: null,
 			contentRows: 3,
 			contentRowsNote: 6,
-			type_purposes: []
+			type_purposes: [],
 		};
 	},
 
@@ -459,16 +488,16 @@ export default {
 			return {
 				data: this.juridicals,
 				id: "id",
-				key: "content"
+				key: "content",
 			};
 		},
 		optionsTypePurposes() {
 			return {
 				data: this.type_purposes,
 				id: "id",
-				key: "description"
+				key: "description",
 			};
-		}
+		},
 	},
 	mounted() {
 		this.setContentRows();
@@ -480,7 +509,7 @@ export default {
 		async getDictionaryLand() {
 			const resp = await WareHouse.getDictionariesLand();
 			this.type_purposes = [...resp.data];
-			this.type_purposes.forEach(item => {
+			this.type_purposes.forEach((item) => {
 				item.description = this.formatSentenceCase(item.description);
 			});
 		},
@@ -489,7 +518,7 @@ export default {
 			return text.charAt(0).toUpperCase() + text.slice(1);
 		},
 		async getAppraiseLaws() {
-			await Certificate.getAppraiseLaws().then(resp => {
+			await Certificate.getAppraiseLaws().then((resp) => {
 				if (resp.data && resp.data.phap_ly) {
 					this.juridicals = resp.data.phap_ly;
 					this.juridicals.push({
@@ -501,7 +530,7 @@ export default {
 						id: 0,
 						is_defaults: false,
 						provinces: "Tất cả",
-						type: "PHAP_LY"
+						type: "PHAP_LY",
 					});
 				} else {
 					this.juridicals = [];
@@ -516,14 +545,14 @@ export default {
 		handleAddLandDoc() {
 			this.form.land_details.push({
 				doc_no: "",
-				land_no: ""
+				land_no: "",
 			});
 			this.setContentRows();
 		},
 		handleAddPurpose() {
 			this.form.purpose_details.push({
 				land_type_purpose_id: "",
-				total_area: ""
+				total_area: "",
 			});
 			this.setContentRows();
 		},
@@ -567,19 +596,19 @@ export default {
 			// console.log('data', this.form)
 			const map = new Map();
 			if (this.form.land_details.length > 0) {
-				await this.form.land_details.forEach(item => {
+				await this.form.land_details.forEach((item) => {
 					let land_no_description = "";
 					let land_description_item = "";
 					if (!map.has(item.doc_no)) {
 						map.set(item.doc_no, true);
 						let filterArray = this.form.land_details.filter(
-							itemFilter => item.doc_no === itemFilter.doc_no
+							(itemFilter) => item.doc_no === itemFilter.doc_no
 						);
 						land_description_item = "";
 						land_no_description = "";
 						let land_no_number = null;
 						if (filterArray.length > 0) {
-							filterArray.forEach(landItem => {
+							filterArray.forEach((landItem) => {
 								land_no_number = landItem.land_no;
 								if (!land_no_description) {
 									land_no_description =
@@ -647,8 +676,8 @@ export default {
 				this.form.land_details = [
 					{
 						doc_no: "",
-						land_no: ""
-					}
+						land_no: "",
+					},
 				];
 			} else {
 				this.form.description = "";
@@ -665,11 +694,11 @@ export default {
 			// console.log('form', this.form)
 			if (valid) {
 				let getLaw = await this.juridicals.filter(
-					item => item.id === this.form.appraise_law_id
+					(item) => item.id === this.form.appraise_law_id
 				);
 				this.form.law = getLaw[0];
 				let checkDocLand = true;
-				this.form.land_details.forEach(item => {
+				this.form.land_details.forEach((item) => {
 					if (
 						(item.doc_no || item.doc_no === 0) &&
 						(item.land_no || item.land_no === 0)
@@ -681,7 +710,7 @@ export default {
 					return this.$toast.open({
 						message: "Vui lòng nhập Số tờ , Số thửa",
 						type: "error",
-						position: "top-right"
+						position: "top-right",
 					});
 				}
 				await this.handleAction();
@@ -718,7 +747,7 @@ export default {
 						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
 						type: "error",
 						position: "top-right",
-						duration: 3000
+						duration: 3000,
 					});
 				}
 			}
@@ -752,7 +781,7 @@ export default {
 								message: "Thêm file thành công",
 								type: "success",
 								position: "top-right",
-								duration: 3000
+								duration: 3000,
 							});
 						}
 					} else {
@@ -763,73 +792,118 @@ export default {
 			}
 		},
 		async onUploadDocument(e) {
-					const formData = new FormData();
-					let check = true;
-					let files = e.target.files;
-					if (!files.length) {
-						return;
-					}
-					
-					// Khai báo một mảng để lưu trữ các tệp được chọn
-					let selectedFiles = [];
-					
-					for (let i = 0; i < files.length; i++) {
-						let file = files[i]; // Lưu trữ từng file vào biến file
-						
-						if (
-							file.type === "image/png" ||
-							file.type === "image/jpeg" ||
-							file.type === "image/jpg" ||
-							file.type === "image/gif" ||
-							file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-							file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-							file.type === "application/pdf"
-						) {
-							// Nếu file hợp lệ, thêm vào mảng selectedFiles
-							selectedFiles.push(file);
-						} else {
-							check = false;
-							this.$toast.open({
-								message: "File dữ liệu không đúng định dạng vui lòng kiểm tra lại",
-								type: "error",
-								position: "top-right",
-								duration: 3000
-							});
-						}
-					}
-					
-					if (check && selectedFiles.length) {
-						for (let i = 0; i < selectedFiles.length; i++) {
-							formData.append("files[" + i + "]", selectedFiles[i]);
-						}
-						let res = null;
-						res = await File.uploadDocumentLaw(formData);
-						if (res.data) {
-							this.form.document_file = res.data.data;
-							console.log('',this.form.document_file)
-							this.$toast.open({
-								message: "Thêm file thành công",
-								type: "success",
-								position: "top-right",
-								duration: 3000
-							});
-						}
-					}
-				},
+			const formData = new FormData();
+			let check = true;
+			let files = e.target.files;
+			if (!files.length) {
+				return;
+			}
+
+			// Khai báo một mảng để lưu trữ các tệp được chọn
+			let selectedFiles = [];
+
+			for (let i = 0; i < files.length; i++) {
+				let file = files[i]; // Lưu trữ từng file vào biến file
+
+				if (
+					file.type === "image/png" ||
+					file.type === "image/jpeg" ||
+					file.type === "image/jpg" ||
+					file.type === "image/gif" ||
+					file.type ===
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+					file.type ===
+						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+					file.type === "application/pdf"
+				) {
+					// Nếu file hợp lệ, thêm vào mảng selectedFiles
+					selectedFiles.push(file);
+				} else {
+					check = false;
+					this.$toast.open({
+						message: "File dữ liệu không đúng định dạng vui lòng kiểm tra lại",
+						type: "error",
+						position: "top-right",
+						duration: 3000,
+					});
+				}
+			}
+
+			if (check && selectedFiles.length) {
+				for (let i = 0; i < selectedFiles.length; i++) {
+					formData.append("files[" + i + "]", selectedFiles[i]);
+				}
+				let res = null;
+				res = await File.uploadDocumentLaw(formData);
+				if (res.data) {
+					this.form.document_file = res.data.data;
+					console.log("", this.form.document_file);
+					this.$toast.open({
+						message: "Thêm file thành công",
+						type: "success",
+						position: "top-right",
+						duration: 3000,
+					});
+				}
+			}
+		},
 
 		downloadOtherFile(file) {
-			const url = window.URL.createObjectURL(new Blob([file.link]));
+			// axios({
+			// 	url:
+			// 		process.env.API_URL +
+			// 		"api/certification_asset/step4-download-law-document/" +
+			// 		file.uuidName +
+			// 		"/" +
+			// 		file.type,
+			// 	method: "GET",
+			// 	responseType: "blob",
+			// }).then((response) => {
+			// 	console.log(ré);
+			// 	const url = window.URL.createObjectURL(new Blob([response.data]));
+			// 	const link = document.createElement("a");
+			// 	link.href = url;
+			// 	link.setAttribute("download", file.originalName);
+			// 	document.body.appendChild(link);
+			// 	link.click();
+			// 	window.URL.revokeObjectURL(link);
+			// 	other.value.toast.open({
+			// 		message: `Tải xuống thành công`,
+			// 		type: "success",
+			// 		position: "top-right",
+			// 		duration: 3000,
+			// 	});
+			// });
+			// const url = window.URL.createObjectURL(
+			// 	new Blob([
+			// 		{
+			// 			file_name: file.originalName,
+			// 			url: file.link,
+			// 		},
+			// 	])
+			// );
+			// const link = document.createElement("a");
+			// link.href = url;
+			// link.setAttribute("download", file.originalName);
+			// document.body.appendChild(link);
+			// link.click();
+			// window.URL.revokeObjectURL(link);
+
+			const url = window.URL.createObjectURL(new Blob([file]));
+
 			const link = document.createElement("a");
 			link.href = url;
-			link.setAttribute("download", file.name);
+			link.download = file.originalName;
 			document.body.appendChild(link);
 			link.click();
-			window.URL.revokeObjectURL(link);
+
+			document.body.removeChild(link);
+			URL.revokeObjectURL(url);
 			this.$toast.open({
 				message: `Tải xuống thành công`,
 				type: "success",
 				position: "top-right",
-				duration: 3000
+				duration: 3000,
 			});
 		},
 		deleteOtherFile(file, index) {
@@ -846,14 +920,14 @@ export default {
 					message: "Xóa thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 			}
 		},
@@ -868,7 +942,7 @@ export default {
 				) {
 					filePrint.value = {
 						link: file.link,
-						type: "image"
+						type: "image",
 					};
 					isShowPrint.value = true;
 				}
@@ -884,13 +958,13 @@ export default {
 						message: "Tạm thời chưa hỗ trợ xem trước loại file này",
 						type: "error",
 						position: "top-right",
-						duration: 3000
+						duration: 3000,
 					});
 				}
 			} else if (file.link) {
 				fetch(file.link)
-					.then(response => response.blob())
-					.then(blob => {
+					.then((response) => response.blob())
+					.then((blob) => {
 						// let reader = new FileReader();
 						// reader.onload = event => {
 						// 	mammoth
@@ -911,7 +985,7 @@ export default {
 						) {
 							filePrint.value = {
 								link: URL.createObjectURL(blob),
-								type: "image"
+								type: "image",
 							};
 						}
 						//  else if (file.type === "pdf") {
@@ -925,7 +999,7 @@ export default {
 								message: "Tạm thời chưa hỗ trợ xem trước loại file này",
 								type: "error",
 								position: "top-right",
-								duration: 3000
+								duration: 3000,
 							});
 						}
 						isShowPrint.value = true;
@@ -936,7 +1010,7 @@ export default {
 					message: "Có lỗi xảy ra vui lòng thử lại",
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				return null;
 			}
@@ -951,8 +1025,8 @@ export default {
 			} else {
 				return false;
 			}
-		}
-	}
+		},
+	},
 };
 </script>
 
@@ -1399,7 +1473,7 @@ export default {
 	padding: 0;
 	border: 0;
 }
-.card-title{
+.card-title {
 	width: 100%;
 }
 </style>
