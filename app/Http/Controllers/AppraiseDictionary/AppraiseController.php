@@ -360,10 +360,8 @@ class AppraiseController extends Controller
             $data = $request;
             if (AppraiseLaw::where('id', '=', $data['appraise_law_id'])->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
-                $documentFiles = $lawData->pluck('document_file');
-                $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
-                foreach ($documentFilesArray as $item) {
+                foreach ($lawData as $item) {
                     if ($item['link'] !=  $link) {
                         array_push($array, $item); // Đẩy object vào mảng
                     }
