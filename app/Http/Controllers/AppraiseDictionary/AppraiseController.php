@@ -356,13 +356,21 @@ class AppraiseController extends Controller
     {
         try {
             $status = "Xóa ảnh thành công";
-            $array = []; // Mảng chứa các ảnh còn lại
+            $array = []; // Mảng chứa tài liệu của tài sản
+            $arrayAfter = []; // Mảng sau khi xóa
             $data = $request;
             if (AppraiseLaw::where('id', '=', $data['appraise_law_id'])->exists()) {
-                $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
+                $getDocumentFile = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
                 $link = $data['link_file_delete'];
-                foreach ($lawData as $item) {
-                    $array = json_decode($item['document_file']);
+                foreach ($getDocumentFile as $arrayDocumentFile) {
+                    $array = json_decode($arrayDocumentFile['document_file']);
+                }
+                if (!empty($array)) {
+                    foreach ($array as $itemDocumentFile) {
+                        if ($itemDocumentFile['link'] != $link) {
+                            array_push($arrayAfter, $itemDocumentFile);
+                        }
+                    }
                 }
             } else {
                 $status = "Không tìm thấy tài sản pháp lý";
@@ -375,7 +383,7 @@ class AppraiseController extends Controller
             //     $status = "Không tìm thấy link ảnh";
             // }
 
-            return $this->respondWithCustomData(['message' => $array]);
+            return $this->respondWithCustomData(['message' => $arrayAfter]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
