@@ -356,17 +356,20 @@ class AppraiseController extends Controller
     {
         try {
             $status = "Xóa ảnh thành công";
+            $array = []; // Mảng chứa các ảnh còn lại
             $data = $request;
             if (AppraiseLaw::where('id', '=', $data['appraise_law_id'])->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
                 $documentFiles = $lawData->pluck('document_file');
                 $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
-                $filteredArray = array_filter($documentFilesArray, function ($item) use ($link) {
-                    return $item->link == $link;
-                });
+                foreach ($documentFilesArray as $item) {
+                    if ($item['link'] !=  $link) {
+                        array_push($array, $item); // Đẩy object vào mảng
+                    }
+                }
             } else {
-                $filteredArray = '';
+                $status = "Không tìm thấy tài sản pháp lý";
             }
 
 
@@ -376,7 +379,7 @@ class AppraiseController extends Controller
             //     $status = "Không tìm thấy link ảnh";
             // }
 
-            return $this->respondWithCustomData(['message' => $filteredArray]);
+            return $this->respondWithCustomData(['message' => $array]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
