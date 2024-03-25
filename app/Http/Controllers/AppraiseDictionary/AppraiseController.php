@@ -361,12 +361,14 @@ class AppraiseController extends Controller
             $data = $request;
             if (AppraiseLaw::where('appraise_law_id', '=', $appraiseId)->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
+                $documentFiles = $lawData->pluck('document_file');
+                $documentFilesArray = $documentFiles->toArray();
                 $link = $data['link_file_delete'];
-                $filteredArray = array_filter($lawData, function ($value) {
-                    return $value->link != $link ;
+                $filteredArray = array_filter($documentFilesArray, function ($value) use ($link) {
+                    return $value != $link;
                 });
-                $filteredArray2 = array_filter($lawData, function ($value) {
-                    return $value->link == $link ;
+                $filteredArray2 = array_filter($documentFilesArray, function ($value) use ($link) {
+                    return $value == $link;
                 });
             }else{
                 $filteredArray = '';
