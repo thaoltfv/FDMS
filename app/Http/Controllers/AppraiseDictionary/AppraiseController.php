@@ -361,7 +361,8 @@ class AppraiseController extends Controller
             if (AppraiseLaw::where('id', '=', $data['appraise_law_id'])->exists()) {
                 $lawData = AppraiseLaw::where('id', '=', $data['appraise_law_id'])->get(['document_file']);
                 $link = $data['link_file_delete'];
-                foreach ($lawData as $item) {
+                $check = json_decode($lawData, FALSE);
+                foreach ($check as $item) {
                     if ($item['link'] !=  $link) {
                         array_push($array, $item); // Đẩy object vào mảng
                     }
@@ -377,7 +378,7 @@ class AppraiseController extends Controller
             //     $status = "Không tìm thấy link ảnh";
             // }
 
-            return $this->respondWithCustomData(['message' => $array]);
+            return $this->respondWithCustomData(['message' => $check]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];
