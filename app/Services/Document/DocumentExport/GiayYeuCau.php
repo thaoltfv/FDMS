@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 0, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 600),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 600, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 900),
                 )
             )
         );
@@ -107,6 +107,8 @@ class GiayYeuCau
         $cellColSpan = array('gridSpan' => 2, 'valign' => 'center');
         $cellHCentered = array('align' => 'center');
         $cellVCentered = array('valign' => 'center');
+        $cellHJustify = array('align' => 'justify');
+        $cellVJustify = array('valign' => 'justify');
         $indentFistLine = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
 
@@ -128,25 +130,25 @@ class GiayYeuCau
         ];
         $section = $phpWord->addSection($styleSection);
 
-        $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], ['align' => 'center']);
+        $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '13'], ['align' => 'center']);
 
         $section->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], ['align' => 'center']);
-
+        $section->addText(" ", ['size' => '10'], ['align' => 'center']);
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '15'], ['align' => 'center']);
 
         $textRun = $section->addTextRun("alignItemCenter");
         $textRun->addText(' ', array('spaceAfter' => 240));
         $textRun->addText("Kính gửi", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
-        $textRun->addText(":", ['size' => '13'], ['align' => 'center']);
+        $textRun->addText(": ", ['size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
         $textRun->addText(' ', array('spaceAfter' => 240));
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
-
+        $section->addText(" ", ['size' => '10'], ['align' => 'center']);
 
         // 1
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => true]);
+        $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Số thẻ CCCD: 060187012054", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', $indentFistLine);
@@ -155,18 +157,18 @@ class GiayYeuCau
 
         //2
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Mục đích: ", ['bold' => true]);
+        $textRun->addText("Mục đích: ", ['bold' => false]);
         $textRun->addText('Cung cấp các hồ sơ, dữ liệu cá nhân cho Công ty TNHH Thẩm định giá NOVA để lập Hồ sơ Thẩm định giá tài sản.', ['bold' => false]);
 
         //3
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Phương thức nhận văn bản, hồ sơ, tài liệu: ", ['bold' => true]);
+        $textRun->addText("Phương thức nhận văn bản, hồ sơ, tài liệu: ", ['bold' => false]);
         $textRun->addText('Nhận qua mạng điện tử.', ['bold' => false]);
 
 
         //4
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Nội dung: ", ['bold' => true]);
+        $textRun->addText("Nội dung: ", ['bold' => false]);
         $textRun->addText('Đề nghị Công ty TNHH Thẩm định giá Nova thẩm định giá tài sản như sau: ', ['bold' => false]);
 
         $name_assets = "Quyền sử hữu căn hộ";
@@ -208,14 +210,14 @@ class GiayYeuCau
         // Thông tin tài sản
         $table->addRow(400, $cantSplit);
         $table->addCell(600, $cellVCentered)->addText('1', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(2000, $cellVCentered)->addText('Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', ['bold' => true], $cellHCentered);
+        $table->addCell(2000, $cellVJustify)->addText('Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', ['bold' => true], $cellHJustify);
         $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
         $table->addCell(2000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
 
         $table->addRow(400, $cantSplit);
         $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-        $table->addCell(2000, $cellVCentered)->addText('Quyền sử hữu căn hộ', ['bold' => false], $cellHCentered);
+        $table->addCell(2000, $cellVJustify)->addText('Quyền sử hữu căn hộ', ['bold' => false], $cellHJustify);
         $table->addCell(1000, $cellVCentered)->addText('50', ['bold' => false], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
         $table->addCell(2000, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
