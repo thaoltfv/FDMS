@@ -19,18 +19,10 @@
 								</a-button>
 								<template #overlay>
 									<a-menu @click="handleMenuClick">
-										<a-menu-item key="1">
-											<UserOutlined />
-											1st menu item
-										</a-menu-item>
-										<a-menu-item key="2">
-											<UserOutlined />
-											2nd menu item
-										</a-menu-item>
-										<a-menu-item key="3">
-											<UserOutlined />
-											3rd item
-										</a-menu-item>
+										<a-menu-item key="1"> Giay yeu cau TDG </a-menu-item>
+										<a-menu-item key="2"> Hop dong TDG </a-menu-item>
+										<a-menu-item key="3"> Ke hoach TDG </a-menu-item>
+										<a-menu-item key="4"> Bien ban thanh ly </a-menu-item>
 									</a-menu>
 								</template>
 							</a-dropdown>
@@ -2027,6 +2019,12 @@ export default {
 					});
 				});
 		},
+		handleMenuClick(e) {
+			if (e.key === "1") {
+				this.exportGYC();
+			}
+			console.log("click", e);
+		},
 		getNotificationMessage() {
 			switch (
 				this.form.status // Sử dụng this.form.status thay vì status
@@ -2880,6 +2878,27 @@ export default {
 			});
 			this.title = "Tài liệu chứng thư thẩm định";
 			this.isShowPrint = true;
+		},
+		async exportGYC() {
+			await Certificate.getPrintGYC(this.idData).then((resp) => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000,
+					});
+				}
+			});
 		},
 		async downloadCertificate() {
 			await Certificate.getPrintProof(this.idData).then((resp) => {
