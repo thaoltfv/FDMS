@@ -1241,7 +1241,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleAction2(note, reason_id, tempAppraiser, estime) {
+		async handleAction2(note, reason_id, tempAppraiser) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;

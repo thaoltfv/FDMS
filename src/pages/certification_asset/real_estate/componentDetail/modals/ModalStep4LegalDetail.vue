@@ -1,200 +1,237 @@
 <template>
-		<div>
-				<ValidationObserver tag="form"
-														ref="formLegal"
-														@submit.prevent="validateLegal">
-				<div class="modal-detail d-flex justify-content-center align-items-center" >
-						<div class="card">
-						<div class="container-title">
-								<div class="d-lg-flex d-block shadow-bottom">
-								<h2 class="title">Thông tin về pháp lý tài sản</h2>
-								</div>
+	<div>
+		<ValidationObserver
+			tag="form"
+			ref="formLegal"
+			@submit.prevent="validateLegal"
+		>
+			<div
+				class="modal-detail d-flex justify-content-center align-items-center"
+			>
+				<div class="card">
+					<div class="container-title">
+						<div class="d-lg-flex d-block shadow-bottom">
+							<h2 class="title">Thông tin về pháp lý tài sản</h2>
 						</div>
-						<div class="contain-detail">
-							<div class="row">
-									<div class="col-12 col-xl-6">
-											<div class="row flex-column h-100">
-													<div class="col">
-															<InputCategory
-																	v-model="form.appraise_law_id"
-																	vid="appraise_law_id"
-																	label="Loại pháp lý"
-																	rules="required"
-																	:disabled="true"
-																	:options="optionsJuridicals"
-																	@change="handleChangeTypeLegal"
-															/>
-													</div>
-													<div v-if="form.appraise_law_id === 0" class="col">
-															<InputText
-																	v-model="form.description"
-																	vid="description"
-																	class="form-group-container"
-																	label="Tên pháp lý"
-																	rules="required"
-															/>
-													</div>
-													<div class="col">
-															<div class="row">
-																	<InputTextarea
-																			v-model="form.date"
-																			vid="date"
-																			class="form-group-container col-6"
-																			label="Số pháp lý"
-																			:disableInput="true"
-																			rules="required"
-																			:autosize="true"
-																	/>
-																	<InputDatePicker
-																			v-model="form.law_date"
-																			vid="law_date"
-																			label="Ngày pháp lý"
-																			placeholder="Ngày/tháng/năm"
-																			class="form-group-container col-6"
-																			:formatDate="'DD/MM/YYYY'"
-																			:disabled="true"
-																	/>
-															</div>
-													</div>
-													<div class="col input-contain" v-if="form.appraise_law_id !== 0">
-														<div class="row">
-															<InputText
-																v-model="form.duration"
-																vid="duration"
-																label="Thời hạn sử dụng"
-																class="form-group-container col-6"
-																:disabledInput="true"
-															/>
-
-															<InputTextarea
-																v-model="form.origin_of_use"
-																vid="origin_of_use"
-																label="Nguồn gốc sử dụng"
-																class="form-group-container col-6"
-																:autosize="true"
-																:disableInput="true"
-															/>
-
-														</div>
-													</div>
-													<div class="col" ref="purposeDetails" v-if="form.appraise_law_id !== 0 && form.purpose_details.length > 0">
-													<div class="row" v-for="(itemPurpose, index) in form.purpose_details" :key="index">
-														<div class="col-12 col-lg-6 item_land input-contain">
-															<InputCategoryCustom
-																v-model="itemPurpose.land_type_purpose_id"
-																vid="land_type_purpose_id"
-																class="form-group-container"
-																label="Mục đích sử dụng"
-																:options="optionsTypePurposes"
-																:disabled="true"
-															/>
-														</div>
-														<div class="col-12 col-lg-6 item_land input-contain" >
-															<InputAreaCustom
-																v-model="itemPurpose.total_area"
-																vid="total_area"
-																label="Diện tích"
-																class="form-group-container"
-																:disabled="true"
-															/>
-														</div>
-													</div>
-												</div>
-													<div class="col" ref="landDetails" v-if="form.appraise_law_id !== 0 && form.land_details.length > 0">
-															<div class="row" v-for="(itemLand, index) in form.land_details" :key="index">
-																<div class="col-12 col-lg-6 item_land input-contain">
-																			<InputText
-																					v-model="itemLand.doc_no"
-																					vid="doc_num"
-																					label="Số tờ"
-																					class="form-group-container"
-																					:disabledInput="true"
-																			/>
-																	</div>
-																	<div class="col-12 col-lg-6 col item_land input-contain">
-																			<InputText
-																					v-model="itemLand.land_no"
-																					vid="plot_num"
-																					label="Số thửa"
-																					class="form-group-container"
-																					:disabledInput="true"
-																			/>
-																	</div>
-															</div>
-													</div>
-											</div>
+					</div>
+					<div class="contain-detail">
+						<div class="row">
+							<div class="col-12 col-xl-6">
+								<div class="row flex-column h-100">
+									<div class="col">
+										<InputCategory
+											v-model="form.appraise_law_id"
+											vid="appraise_law_id"
+											label="Loại pháp lý"
+											rules="required"
+											:disabled="true"
+											:options="optionsJuridicals"
+											@change="handleChangeTypeLegal"
+										/>
 									</div>
-									<div class="col-12 col-xl-6">
-											<div class="row flex-column h-100">
-													<div class="col input-contain">
-															<InputText
-																	:disabledInput="true"
-																	v-model="form.certifying_agency"
-																	vid="certifying_agency"
-																	label="Cơ quan các cấp xác nhận"
-																	rules="required"
-															/>
-													</div>
-													<div class="col input-contain" v-if="form.appraise_law_id !== 0">
-															<InputText
-																	:disabledInput="true"
-																	v-model="form.legal_name_holder"
-																	class="form-group-container"
-																	vid="name_building"
-																	label="Người đứng tên pháp lý"
-																	rules="required"
-															/>
-													</div>
-													<div v-if="form.note" class="col input-contain">
-														<InputTextarea
-															v-model="form.note"
-															vid="note"
-															label="Thông tin khác"
-															rules="required"
-															class="form-group-container"
-															:rows="contentRowsNote"
-															:disableInput="true"
-														/>
-													</div>
-													<div class="col input-contain">
-															<InputTextarea
-																	:disableInput="true"
-																	v-model="form.content"
-																	vid="content"
-																	label="Nội dung"
-																	rules="required"
-																	class="form-group-container"
-																	:rows="contentRows"
-															/>
-													</div>
-											</div>
+									<div v-if="form.appraise_law_id === 0" class="col">
+										<InputText
+											v-model="form.description"
+											vid="description"
+											class="form-group-container"
+											label="Tên pháp lý"
+											rules="required"
+										/>
 									</div>
+									<div class="col">
+										<div class="row">
+											<InputTextarea
+												v-model="form.date"
+												vid="date"
+												class="form-group-container col-6"
+												label="Số pháp lý"
+												:disableInput="true"
+												rules="required"
+												:autosize="true"
+											/>
+											<InputDatePicker
+												v-model="form.law_date"
+												vid="law_date"
+												label="Ngày pháp lý"
+												placeholder="Ngày/tháng/năm"
+												class="form-group-container col-6"
+												:formatDate="'DD/MM/YYYY'"
+												:disabled="true"
+											/>
+										</div>
+									</div>
+									<div
+										class="col input-contain"
+										v-if="form.appraise_law_id !== 0"
+									>
+										<div class="row">
+											<InputText
+												v-model="form.duration"
+												vid="duration"
+												label="Thời hạn sử dụng"
+												class="form-group-container col-6"
+												:disabledInput="true"
+											/>
+
+											<InputTextarea
+												v-model="form.origin_of_use"
+												vid="origin_of_use"
+												label="Nguồn gốc sử dụng"
+												class="form-group-container col-6"
+												:autosize="true"
+												:disableInput="true"
+											/>
+										</div>
+									</div>
+									<div
+										class="col"
+										ref="purposeDetails"
+										v-if="
+											form.appraise_law_id !== 0 &&
+												form.purpose_details.length > 0
+										"
+									>
+										<div
+											class="row"
+											v-for="(itemPurpose, index) in form.purpose_details"
+											:key="index"
+										>
+											<div class="col-12 col-lg-6 item_land input-contain">
+												<InputCategoryCustom
+													v-model="itemPurpose.land_type_purpose_id"
+													vid="land_type_purpose_id"
+													class="form-group-container"
+													label="Mục đích sử dụng"
+													:options="optionsTypePurposes"
+													:disabled="true"
+												/>
+											</div>
+											<div class="col-12 col-lg-6 item_land input-contain">
+												<InputAreaCustom
+													v-model="itemPurpose.total_area"
+													vid="total_area"
+													label="Diện tích"
+													class="form-group-container"
+													:disabled="true"
+												/>
+											</div>
+										</div>
+									</div>
+									<div
+										class="col"
+										ref="landDetails"
+										v-if="
+											form.appraise_law_id !== 0 && form.land_details.length > 0
+										"
+									>
+										<div
+											class="row"
+											v-for="(itemLand, index) in form.land_details"
+											:key="index"
+										>
+											<div class="col-12 col-lg-6 item_land input-contain">
+												<InputText
+													v-model="itemLand.doc_no"
+													vid="doc_num"
+													label="Số tờ"
+													class="form-group-container"
+													:disabledInput="true"
+												/>
+											</div>
+											<div class="col-12 col-lg-6 col item_land input-contain">
+												<InputText
+													v-model="itemLand.land_no"
+													vid="plot_num"
+													label="Số thửa"
+													class="form-group-container"
+													:disabledInput="true"
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-xl-6">
+								<div class="row flex-column h-100">
+									<div class="col input-contain">
+										<InputText
+											:disabledInput="true"
+											v-model="form.certifying_agency"
+											vid="certifying_agency"
+											label="Cơ quan các cấp xác nhận"
+											rules="required"
+										/>
+									</div>
+									<div
+										class="col input-contain"
+										v-if="form.appraise_law_id !== 0"
+									>
+										<InputText
+											:disabledInput="true"
+											v-model="form.legal_name_holder"
+											class="form-group-container"
+											vid="name_building"
+											label="Người đứng tên pháp lý"
+											rules="required"
+										/>
+									</div>
+									<div v-if="form.note" class="col input-contain">
+										<InputTextarea
+											v-model="form.note"
+											vid="note"
+											label="Thông tin khác"
+											rules="required"
+											class="form-group-container"
+											:rows="contentRowsNote"
+											:disableInput="true"
+										/>
+									</div>
+									<div class="col input-contain">
+										<InputTextarea
+											:disableInput="true"
+											v-model="form.content"
+											vid="content"
+											label="Nội dung"
+											rules="required"
+											class="form-group-container"
+											:rows="contentRows"
+										/>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="container-title container-title__footer">
-								<div class="d-lg-flex d-block justify-content-end shadow-bottom">
-								<button class="btn btn-white" type="button" @click="handleCancel"><img src="@/assets/icons/ic_cancel.svg" style="margin-right: 5px" alt="cancel"> Trở lại</button>
-								</div>
+					</div>
+					<div class="container-title container-title__footer">
+						<div class="d-lg-flex d-block justify-content-end shadow-bottom">
+							<button class="btn btn-white" type="button" @click="handleCancel">
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 5px"
+									alt="cancel"
+								/>
+								Trở lại
+							</button>
 						</div>
-						</div>
+					</div>
 				</div>
-				</ValidationObserver>
-		</div>
+			</div>
+		</ValidationObserver>
+	</div>
 </template>
 
 <script>
-import InputNumberNoneFormat from '@/components/Form/InputNumberNoneFormat'
-import InputCategory from '@/components/Form/InputCategory'
-import InputText from '@/components/Form/InputText'
-import InputTextarea from '@/components/Form/InputTextarea'
-import InputDatePicker from '@/components/Form/InputDatePicker'
-import InputCategoryCustom from '@/components/Form/InputCategoryCustom'
-import InputAreaCustom from '@/components/Form/InputAreaCustom'
-import WareHouse from '@/models/WareHouse'
+import InputNumberNoneFormat from "@/components/Form/InputNumberNoneFormat";
+import InputCategory from "@/components/Form/InputCategory";
+import InputText from "@/components/Form/InputText";
+import InputTextarea from "@/components/Form/InputTextarea";
+import InputDatePicker from "@/components/Form/InputDatePicker";
+import InputCategoryCustom from "@/components/Form/InputCategoryCustom";
+import InputAreaCustom from "@/components/Form/InputAreaCustom";
+import WareHouse from "@/models/WareHouse";
 
 export default {
-	name: 'ModalBuildingDetail',
-	props: ['data', 'juridicals'],
+	name: "ModalBuildingDetail",
+	props: ["data", "juridicals"],
 	components: {
 		InputCategory,
 		InputText,
@@ -204,483 +241,511 @@ export default {
 		InputCategoryCustom,
 		InputAreaCustom
 	},
-	data () {
+	data() {
 		return {
 			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
 			contentRows: 3,
 			contentRowsNote: 6,
 			type_purposes: []
-		}
+		};
 	},
 
 	computed: {
-		optionsJuridicals () {
+		optionsJuridicals() {
 			return {
 				data: this.juridicals,
-				id: 'id',
-				key: 'content'
-			}
+				id: "id",
+				key: "content"
+			};
 		},
-		optionsTypePurposes () {
+		optionsTypePurposes() {
 			// console.log('data1', this.type_purposes)
 			return {
 				data: this.type_purposes,
-				id: 'id',
-				key: 'description'
-
-			}
+				id: "id",
+				key: "description"
+			};
 		}
 	},
-	mounted () {
-		this.setContentRows()
+	mounted() {
+		this.setContentRows();
 	},
-	async beforeMount () {
-		this.getDictionaryLand()
+	async beforeMount() {
+		this.getDictionaryLand();
 	},
 	methods: {
-		async getDictionaryLand () {
-			const resp = await WareHouse.getDictionariesLand()
+		async getDictionaryLand() {
+			const resp = await WareHouse.getDictionariesLand();
 			// console.log('data', resp)
-			this.type_purposes = [...resp.data]
+			this.type_purposes = [...resp.data];
 			this.type_purposes.forEach(item => {
-				item.description = this.formatSentenceCase(item.description)
-			})
+				item.description = this.formatSentenceCase(item.description);
+			});
 		},
-		formatSentenceCase (phrase) {
-			let text = phrase.toLowerCase()
-			return text.charAt(0).toUpperCase() + text.slice(1)
+		formatSentenceCase(phrase) {
+			let text = phrase.toLowerCase();
+			return text.charAt(0).toUpperCase() + text.slice(1);
 		},
-		handleAddLandDoc () {
+		handleAddLandDoc() {
 			this.form.land_details.push({
-				doc_no: '',
-				land_no: ''
-			})
-			this.setContentRows()
+				doc_no: "",
+				land_no: ""
+			});
+			this.setContentRows();
 		},
-		changeLegal () {
-			this.getContent()
+		changeLegal() {
+			this.getContent();
 		},
-		async getContent () {
-			let land_description = ''
-			const map = new Map()
+		async getContent() {
+			let land_description = "";
+			const map = new Map();
 			if (this.form.land_details.length > 0) {
 				await this.form.land_details.forEach(item => {
-					let land_no_description = ''
-					let land_description_item = ''
+					let land_no_description = "";
+					let land_description_item = "";
 					if (!map.has(item.doc_no)) {
-						map.set(item.doc_no, true)
-						let filterArray = this.form.land_details.filter(itemFilter => item.doc_no === itemFilter.doc_no)
-						land_description_item = ''
-						land_no_description = ''
-						let land_no_number = null
+						map.set(item.doc_no, true);
+						let filterArray = this.form.land_details.filter(
+							itemFilter => item.doc_no === itemFilter.doc_no
+						);
+						land_description_item = "";
+						land_no_description = "";
+						let land_no_number = null;
 						if (filterArray.length > 0) {
 							filterArray.forEach(landItem => {
-								land_no_number = landItem.land_no
+								land_no_number = landItem.land_no;
 								if (!land_no_description) {
-									land_no_description = `${land_no_description} ` + `${land_no_number === 0 ? 0 : land_no_number || ''} `
-								} else land_no_description = `${land_no_description},` + `${land_no_number} `
-							})
+									land_no_description =
+										`${land_no_description} ` +
+										`${land_no_number === 0 ? 0 : land_no_number || ""} `;
+								} else
+									land_no_description =
+										`${land_no_description},` + `${land_no_number} `;
+							});
 						}
-						land_description_item = 'thửa đất số' + `${land_no_description || ''}` + 'tờ bản đồ số ' + `${item.doc_no || item.doc_no === 0 ? item.doc_no : ''}`
+						land_description_item =
+							"thửa đất số" +
+							`${land_no_description || ""}` +
+							"tờ bản đồ số " +
+							`${item.doc_no || item.doc_no === 0 ? item.doc_no : ""}`;
 						if (!land_description) {
-							land_description = `${land_description}` + `${land_description_item}`
-						} else land_description = `${land_description}, ` + `${land_description_item}`
+							land_description =
+								`${land_description}` + `${land_description_item}`;
+						} else
+							land_description =
+								`${land_description}, ` + `${land_description_item}`;
 					}
-				})
-				this.setContentRows()
+				});
+				this.setContentRows();
 			}
-			this.form.content = await 'Chứng nhận ' + `${this.form.legal_name_holder ? this.form.legal_name_holder + ' ' : ''}` + 'được quyền sử dụng đất thuộc ' + `${land_description} ` + `${this.full_address ? this.full_address : ''}.`
-			land_description = ''
+			this.form.content =
+				(await "Chứng nhận ") +
+				`${
+					this.form.legal_name_holder ? this.form.legal_name_holder + " " : ""
+				}` +
+				"được quyền sử dụng đất thuộc " +
+				`${land_description} ` +
+				`${this.full_address ? this.full_address : ""}.`;
+			land_description = "";
 		},
-		getProvince () {
-			this.form.certifying_agency = `Sở Tài nguyên và Môi trường ${this.provinceName && this.provinceName.toLowerCase().includes('thành phố') ? this.provinceName : this.provinceName ? 'Tỉnh ' + this.provinceName : ''}`
+		getProvince() {
+			this.form.certifying_agency = `Sở Tài nguyên và Môi trường ${
+				this.provinceName &&
+				this.provinceName.toLowerCase().includes("thành phố")
+					? this.provinceName
+					: this.provinceName
+					? "Tỉnh " + this.provinceName
+					: ""
+			}`;
 		},
-		setContentRows () {
+		setContentRows() {
 			if (this.form.appraise_law_id === 0) {
-				this.contentRows = 7
-			} else this.contentRows = this.form.land_details.length * 3
+				this.contentRows = 7;
+			} else this.contentRows = this.form.land_details.length * 3;
 		},
-		handleDeleteLand (index) {
-			this.form.land_details.splice(index, 1)
-			this.setContentRows()
-			this.getContent()
+		handleDeleteLand(index) {
+			this.form.land_details.splice(index, 1);
+			this.setContentRows();
+			this.getContent();
 		},
-		handleChangeTypeLegal (event) {
+		handleChangeTypeLegal(event) {
 			if (event === 0) {
-				this.form.content = ''
-				this.form.certifying_agency = ''
+				this.form.content = "";
+				this.form.certifying_agency = "";
 				this.form.land_details = [
 					{
-						doc_no: '',
-						land_no: ''
+						doc_no: "",
+						land_no: ""
 					}
-				]
-				this.setContentRows()
+				];
+				this.setContentRows();
 			} else {
-				this.form.description = ''
-				this.getContent()
-				this.getProvince()
+				this.form.description = "";
+				this.getContent();
+				this.getProvince();
 			}
 		},
-		handleCancel (event) {
-			this.$emit('cancel', event)
+		handleCancel(event) {
+			this.$emit("cancel", event);
 		},
-		async validateLegal () {
-			const valid = await this.$refs.formLegal.validate()
+		async validateLegal() {
+			const valid = await this.$refs.formLegal.validate();
 			if (valid) {
-				let getLaw = await this.juridicals.filter(item => item.id === this.form.appraise_law_id)
-				this.form.law = getLaw[0]
-				let checkDocLand = false
+				let getLaw = await this.juridicals.filter(
+					item => item.id === this.form.appraise_law_id
+				);
+				this.form.law = getLaw[0];
+				let checkDocLand = false;
 				this.form.land_details.forEach(item => {
 					if (!item.doc_no && item.doc_no !== 0) {
-						checkDocLand = true
+						checkDocLand = true;
 					} else if (!item.land_no && item.land_no !== 0) {
-						checkDocLand = true
+						checkDocLand = true;
 					}
-				})
+				});
 				if (checkDocLand) {
 					return this.$toast.open({
-						message: 'Vui lòng nhập Số tờ , Số thửa',
-						type: 'error',
-						position: 'top-right'
-					})
+						message: "Vui lòng nhập Số tờ , Số thửa",
+						type: "error",
+						position: "top-right"
+					});
 				}
-				await this.handleAction()
+				await this.handleAction();
 			}
 		},
-		handleAction () {
-			this.$emit('action', this.form)
+		handleAction() {
+			this.$emit("action", this.form);
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+.btn-delete {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	background: #ffffff;
+	border: none;
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+.title {
+	font-size: 1.125rem;
+	font-weight: 700;
+	margin-bottom: 25px;
+	color: #000000;
+}
+.modal-detail {
+	position: fixed;
+	z-index: 1031;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	.card {
+		border-radius: 5px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+		max-width: 1300px;
+		width: 100%;
+		max-height: 90vh;
+		margin-bottom: 0;
+		padding: 35px 95px;
+		@media (max-width: 787px) {
+			padding: 20px 10px;
+		}
+		&-header {
+			border-bottom: 1px solid #dddddd;
+			h3 {
+				color: #333333;
+			}
+			img {
+				cursor: pointer;
+			}
+		}
+		&-body {
+			text-align: center;
+			p {
+				color: #333333;
+				margin-bottom: 40px;
+			}
+
+			.btn__group {
+				.btn {
+					max-width: 150px;
+					width: 100%;
+					margin: 0 10px;
+				}
+			}
 		}
 	}
 }
-</script>
+.card {
+	.contain-detail {
+		overflow-y: auto;
+		overflow-x: hidden;
+		margin-top: 20px;
+		&::-webkit-scrollbar {
+			width: 2px;
+		}
+	}
+	&-title {
+		background: #f3f2f7;
+		padding: 16px 20px;
+		margin-bottom: 0;
+		.title {
+			font-size: 1.125rem;
+			font-weight: 600;
+			margin-bottom: 0;
+		}
+	}
+	&-table {
+		border-radius: 5px;
+		background: #ffffff;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+		width: 99%;
+		margin: 50px auto 50px;
+	}
+	&-body {
+		padding: 35px 30px 40px;
+	}
+	&-info {
+		.title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			margin-top: 28px;
+		}
+	}
+	&-land {
+		position: relative;
+		padding: 0;
+	}
+}
+.img {
+	margin-right: 13px;
+}
+.card {
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffffff;
+	margin-bottom: 75px;
+	&-title {
+		background: #f3f2f7;
+		padding: 16px 20px;
+		margin-bottom: 0;
+		.title {
+			font-size: 1.125rem;
+			font-weight: 600;
+			margin-bottom: 0;
+		}
+	}
+	&-body {
+		padding: 35px 30px 40px;
+	}
+	&-info {
+		.title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			margin-top: 28px;
+		}
+	}
+	&-land {
+		position: relative;
+		padding: 0;
+	}
+}
+.card__order {
+	max-width: 50%;
+	margin-bottom: 1.25rem;
+	@media (max-width: 767px) {
+		max-width: 100%;
+	}
+}
+.btn {
+	&-white {
+		max-height: none;
 
-		<style lang="scss" scoped>
-		.btn-delete {
+		line-height: 19.07px;
+		margin-right: 15px;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+	&-contain {
+		margin-bottom: 55px;
+	}
+}
+.d-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 8.9%;
+	&:first-child {
+		margin-top: 0;
+	}
+	&__checkbox {
+		grid-template-columns: 1fr 1fr;
+	}
+	@media (max-width: 767px) {
+		grid-template-columns: 1fr;
+	}
+}
+.content {
+	&-detail {
+	}
+	&-title {
+		color: #555555;
+		margin-bottom: 5px;
+
+		font-weight: 500;
+	}
+	&-name {
+		font-size: 1.125rem;
+		color: #000000;
+		margin-bottom: 15px;
+		font-weight: 600;
+		&__code {
+			color: #faa831;
+		}
+	}
+}
+.contain-table {
+	@media (max-width: 767px) {
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+	.table-property {
+		width: 100%;
+	}
+}
+.table-property {
+	width: 100%;
+	font-weight: 500;
+	color: #000000;
+	text-align: center;
+	thead {
+		th {
+			padding: 12px 0;
+			font-weight: 500;
+		}
+	}
+	tbody {
+		td {
+			border: 1px solid #e5e5e5;
+			&:first-child {
+				border-left: none;
+				width: 180px;
+			}
+			&:last-child {
+				border-right: none;
+			}
+			box-sizing: border-box;
+			padding: 14px;
+		}
+	}
+}
+.img-content {
+	color: #000000;
+
+	font-weight: 600;
+	span {
+		font-weight: 500;
+		margin-left: 10px;
+	}
+}
+.input-code {
+	color: #000000;
+	border-radius: 5px;
+	width: 180px;
+	border: 1px solid #000000;
+	background: #f5f5f5;
+	height: 35px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+.img-dropdown {
+	cursor: pointer;
+	width: 18px;
+	&__hide {
+		transform: rotate(90deg);
+		transition: 0.3s;
+	}
+}
+//.img-contain {
+//  max-width: 200px;
+//  max-height: 200px;
+//  height: auto;
+//  margin-left: 20px;
+//  &__table{
+//    margin: auto;
+//    max-width: 50px;
+//    img{
+//      cursor: pointer;
+//      display: flex;
+//      justify-content: center;
+//    }
+//  }
+//  img{
+//    object-fit: contain;
+//    width: 100%;
+//    height: auto;
+//    max-width: 200px;
+//    max-height: 200px;
+//  }
+//}
+.img-contain {
+	aspect-ratio: 1/1;
+	overflow: hidden;
+	img {
+		height: 100%;
+		cursor: pointer;
+		object-fit: cover;
+	}
+	&__table {
+		margin: auto;
+		max-width: 50px;
+		max-height: 50px;
+		img {
+			object-fit: cover;
+			object-position: top;
 			cursor: pointer;
 			display: flex;
-			align-items: center;
-			background: #FFFFFF;
-			border: none;
-			img {
-				width: 100%;
-				height: auto;
+			justify-content: center;
+			max-width: 50px;
+			max-height: 50px;
+		}
+	}
+}
+.container-title {
+	margin: -35px -95px auto;
+	padding: 35px 95px 0;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	.title {
+		font-size: 1.2rem;
+		@media (max-width: 767px) {
+			font-size: 1.125rem;
+		}
+	}
+	&__footer {
+		margin: auto -95px -35px;
+		padding: 20px 95px 20px;
+		@media (max-width: 767px) {
+			.btn-white {
+				margin-bottom: 20px;
 			}
 		}
-		.title{
-		font-size: 1.125rem;
-		font-weight: 700;
-		margin-bottom: 25px;
-		color: #000000;
-		}
-		.modal-detail {
-		position: fixed;
-		z-index: 1031;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0,0,0,.6);
-		.card {
-				border-radius: 5px;
-				box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-				max-width: 1300px;
-				width: 100%;
-				max-height: 90vh;
-				margin-bottom: 0;
-				padding: 35px 95px;
-				@media (max-width: 787px) {
-				padding: 20px 10px;
-				}
-				&-header {
-				border-bottom: 1px solid #DDDDDD;
-				h3 {
-						color: #333333;
-				}
-				img {
-						cursor: pointer;
-				}
-				}
-				&-body {
-				text-align: center;
-				p {
-						color: #333333;
-						margin-bottom: 40px;
-				}
-
-				.btn__group {
-						.btn {
-						max-width: 150px;
-						width: 100%;
-						margin: 0 10px;
-						}
-				}
-				}
-		}
-		}
-		.card{
-		.contain-detail{
-				overflow-y: auto;
-				overflow-x: hidden;
-				margin-top: 20px;
-				&::-webkit-scrollbar{
-				width: 2px;
-				}
-		}
-		&-title{
-				background: #F3F2F7;
-				padding: 16px 20px;
-				margin-bottom: 0;
-				.title{
-				font-size: 1.125rem;
-				font-weight: 600;
-				margin-bottom: 0;
-				}
-		}
-		&-table{
-				border-radius: 5px;
-				background: #FFFFFF;
-				box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-				width: 99%;
-				margin: 50px auto 50px;
-		}
-		&-body{
-				padding: 35px 30px 40px;
-		}
-		&-info{
-				.title{
-				font-size: 1.125rem;
-				font-weight: 700;
-				margin-top: 28px;
-				}
-		}
-		&-land{
-				position: relative;
-				padding: 0;
-		}
-		}
-		.img{
-		margin-right: 13px;
-		}
-		.card{
-		border-radius: 5px;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);;
-		background: #FFFFFF;
-		margin-bottom: 75px;
-		&-title{
-				background: #F3F2F7;
-				padding: 16px 20px;
-				margin-bottom: 0;
-				.title{
-				font-size: 1.125rem;
-				font-weight: 600;
-				margin-bottom: 0;
-				}
-		}
-		&-body{
-				padding: 35px 30px 40px;
-		}
-		&-info{
-				.title{
-				font-size: 1.125rem;
-				font-weight: 700;
-				margin-top: 28px;
-				}
-		}
-		&-land{
-				position: relative;
-				padding: 0;
-		}
-		}
-		.card__order{
-		max-width: 50%;
-		margin-bottom: 1.25rem;
-		@media (max-width: 767px) {
-				max-width: 100%;
-		}
-		}
-		.btn{
-		&-white{
-				max-height: none;
-
-				line-height: 19.07px;
-				margin-right: 15px;
-				&:last-child{
-				margin-right: 0;
-				}
-		}
-		&-contain{
-				margin-bottom: 55px;
-		}
-		}
-		.d-grid{
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		grid-column-gap: 8.9%;
-		&:first-child {
-				margin-top: 0;
-		}
-		&__checkbox{
-				grid-template-columns: 1fr 1fr;
-		}
-		@media (max-width: 767px) {
-				grid-template-columns: 1fr;
-		}
-		}
-		.content{
-		&-detail{
-		}
-		&-title{
-				color: #555555;
-				margin-bottom: 5px;
-
-				font-weight: 500;
-		}
-		&-name{
-				font-size: 1.125rem;
-				color: #000000;
-				margin-bottom: 15px;
-				font-weight: 600;
-				&__code{
-				color: #FAA831;
-				}
-		}
-		}
-		.contain-table{
-		@media (max-width: 767px) {
-				overflow-y: hidden;
-				overflow-x: auto;
-		}
-		.table-property{
-				width: 100%;
-		}
-		}
-		.table-property{
-		width: 100%;
-		font-weight: 500;
-		color: #000000;
-		text-align: center;
-		thead{
-				th{
-				padding: 12px 0;
-				font-weight: 500;
-				}
-		}
-		tbody{
-				td{
-				border: 1px solid #E5E5E5;
-				&:first-child{
-						border-left: none;
-						width: 180px
-				}
-				&:last-child{
-						border-right: none;
-				}
-				box-sizing: border-box;
-				padding: 14px;
-				}
-		}
-		}
-		.img-content{
-		color: #000000;
-
-		font-weight: 600;
-		span{
-				font-weight: 500;
-				margin-left: 10px;
-		}
-		}
-		.input-code{
-		color: #000000;
-		border-radius: 5px;
-		width: 180px;
-		border: 1px solid #000000;
-		background: #f5f5f5;
-		height: 35px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		}
-		.img-dropdown{
-		cursor: pointer;
-		width: 18px;
-		&__hide{
-				transform: rotate(90deg);
-				transition: .3s;
-		}
-		}
-		//.img-contain {
-		//  max-width: 200px;
-		//  max-height: 200px;
-		//  height: auto;
-		//  margin-left: 20px;
-		//  &__table{
-		//    margin: auto;
-		//    max-width: 50px;
-		//    img{
-		//      cursor: pointer;
-		//      display: flex;
-		//      justify-content: center;
-		//    }
-		//  }
-		//  img{
-		//    object-fit: contain;
-		//    width: 100%;
-		//    height: auto;
-		//    max-width: 200px;
-		//    max-height: 200px;
-		//  }
-		//}
-		.img-contain {
-		aspect-ratio: 1/1;
-		overflow: hidden;
-		img{
-				height: 100%;
-				cursor: pointer;
-				object-fit: cover;
-		}
-		&__table{
-				margin: auto;
-				max-width: 50px;
-				max-height: 50px;
-				img{
-				object-fit: cover;
-				object-position: top;
-				cursor: pointer;
-				display: flex;
-				justify-content: center;
-				max-width: 50px;
-				max-height: 50px;
-				}
-		}
-		}
-		.container-title{
-		margin: -35px -95px auto;
-		padding: 35px 95px 0;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-		.title{
-				font-size: 1.2rem;
-				@media (max-width: 767px) {
-				font-size: 1.125rem;
-				}
-		}
-		&__footer{
-				margin: auto -95px -35px;
-				padding: 20px 95px 20px;
-				@media (max-width: 767px) {
-				.btn-white{
-						margin-bottom: 20px;
-				}
-				}
-		}
-		}
-		.container-img{
-		padding: .75rem 0;
-		border: 1px solid #0b0d10;
-		}
-		.m-h-75 {
-			min-height: 75px;
-			max-height: 75px;
-		}
-		</style>
+	}
+}
+.container-img {
+	padding: 0.75rem 0;
+	border: 1px solid #0b0d10;
+}
+.m-h-75 {
+	min-height: 75px;
+	max-height: 75px;
+}
+</style>

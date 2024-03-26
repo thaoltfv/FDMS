@@ -428,6 +428,24 @@
               </div>
             </div>
           </TabItem>
+          <TabItem name="Biên bản khảo sát hiện trạng">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0">
+                <div class="contain-img contain-img__property" v-if="imageCurrentSurvey && data.picture_infomation.length > 0 && imageCurrentSurvey.id && images.type_id === imageCurrentSurvey.id" v-for="(images, index) in data.picture_infomation" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+								<div class="container_input_img">
+									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'biên bản khảo sát hiện trạng')" />
+								</div>
+              </div>
+            </div>
+          </TabItem>
           <TabItem name="Khác">
             <div class="mt-2">
               <div class="d-flex justify-content-between align-items-end mb-2">
@@ -1068,6 +1086,7 @@ export default {
 			imageType: null,
 			imgOverall: null,
 			imageCurrentStatus: null,
+      imageCurrentSurvey: null,
 			imageJuridical: null,
 			tileProviders: [
 				{
@@ -1109,10 +1128,13 @@ export default {
 			return text.charAt(0).toUpperCase() + text.slice(1)
 		},
 		getImageDescriptions (data) {
+      console.log('data',data)
 			this.imageType = data.find(imageDescription => imageDescription.description.toLowerCase() === 'đường tiếp giáp tài sản thẩm định giá')
 			this.imgOverall = data.find(imageDescription => imageDescription.description.toLowerCase() === 'tổng thể tài sản thẩm định giá')
 			this.imageCurrentStatus = data.find(imageDescription => imageDescription.description.toLowerCase() === 'hiện trạng tài sản thẩm định giá')
 			this.imageJuridical = data.find(imageDescription => imageDescription.description.toLowerCase() === 'pháp lý tài sản')
+      this.imageCurrentSurvey = data.find(imageDescription => imageDescription.description.toLowerCase() === 'biên bản khảo sát hiện trạng')
+      console.log('this.imageCurrentSurvey',this.imageCurrentSurvey) 
 		},
 		async initMap () {
 			// eslint-disable-next-line no-undef

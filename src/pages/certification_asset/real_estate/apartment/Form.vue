@@ -565,6 +565,7 @@ export default {
 				if (bindDataStep.full_address) { this.form.step_1.full_address = bindDataStep.full_address }
 				if (bindDataStep.project) { this.form.step_1.project = bindDataStep.project }
 				if (bindDataStep.real_estate) { this.form.step_1.real_estate = bindDataStep.real_estate }
+				if (bindDataStep.pic && bindDataStep.pic > 0 ) { this.form.step_1.pic = bindDataStep.pic }
 
 				// step 2
 				if (bindDataStep.law && bindDataStep.law.length > 0) { this.form.step_2.law = bindDataStep.law }

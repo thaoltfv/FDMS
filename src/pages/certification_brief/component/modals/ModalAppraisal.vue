@@ -35,6 +35,16 @@
 						</div>
 						<div class="col-12">
 							<InputCategory
+								v-model="business_manager_compute"
+								vid="business_manager_id"
+								label="Quản lý nghiệp vụ"
+								class="form-group-container"
+								@change="handleBusinessManager"
+								:options="optionsBusinessManager"
+							/>
+						</div>
+						<div class="col-12">
+							<InputCategory
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
@@ -164,7 +174,7 @@ export default {
 			users: [],
 			positions: [],
 			employeePerformance: [],
-			employeeBusiness: [],
+			businessManagers: [],
 			minutes: 0
 		};
 	},
@@ -216,6 +226,7 @@ export default {
 			let idManager = await appraiserCompany.data.data[0].appraiser.id;
 			this.employeePerformance = await dataAppraise;
 			this.employeeBusiness = await dataAppraise;
+			this.businessManagers = await dataAppraise;
 			this.appraisersControl = await dataAppraise;
 			this.administratives = await dataAppraise;
 			this.appraisersManager = await dataAppraise.filter(
@@ -279,6 +290,7 @@ export default {
 		},
 		handleChangeAppraiserControl() {},
 		handleChangeAppraiserPerform() {},
+		handleBusinessManager() {},
 		async validateAppraisal() {
 			const isValid = await this.$refs.appraisal.validate();
 			if (isValid) {
@@ -292,6 +304,7 @@ export default {
 			const data = {
 				status: this.status,
 				appraiser_perform_id: this.form.appraiser_perform_id,
+				business_manager_id: this.form.business_manager_id,
 				appraiser_id: this.form.appraiser_id,
 				appraiser_confirm_id: this.form.appraiser_confirm_id,
 				appraiser_manager_id: this.form.appraiser_manager_id,
@@ -380,6 +393,22 @@ export default {
 			set: function(newValue) {
 				// // console.log('newwww', newValue)
 				this.form.appraiser_perform_id = newValue;
+			}
+		},
+		business_manager_compute: {
+			get: function() {
+				if (this.businessManagers.length > 0) {
+					 console.log('vô đây trước businessManagers',this.businessManagers)
+					return this.form.business_manager_id;
+				} else {
+					 console.log('vô đây trước 2',this.form.business_manager.name)
+					return this.form.business_manager.name;
+				}
+			},
+			// setter
+			set: function(newValue) {
+				 console.log('newwww', newValue)
+				this.form.business_manager_id = newValue;
 			}
 		},
 		appraiser_control_compute: {
@@ -505,7 +534,14 @@ export default {
 				id: "id",
 				key: "name"
 			};
-		}
+		},
+		optionsBusinessManager() {
+			return {
+				data: this.businessManagers,
+				id: "id",
+				key: "name"
+			};
+		},
 	}
 };
 </script>

@@ -128,6 +128,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="card-body card-info" v-if="type === 'Result' && !fromComponent">
 			<div class="row ">
 				<div

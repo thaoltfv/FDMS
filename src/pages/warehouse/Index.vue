@@ -940,6 +940,7 @@ export default {
 			const filter = {}
 
 			for (let property in this.filter) {
+				console.log(property)
 				filter[`${property}`] = this.filter[property]
 			}
 
@@ -953,6 +954,14 @@ export default {
 					}
 				})
 				this.listWarehouses = [...resp.data.data]
+				console.log('query',
+					 {
+						page: 1,
+						limit: 20,
+						...query,
+						...filter
+					})
+				console.log(listWarehouses)
 				this.totalRecord = resp.data.total
 				this.pagination = convertPagination(resp.data)
 				this.isLoading = false

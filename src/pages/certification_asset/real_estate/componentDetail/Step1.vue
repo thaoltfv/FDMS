@@ -433,6 +433,24 @@
               </div>
             </div>
           </TabItem>
+          <TabItem name="Biên bản khảo sát hiện trạng">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div v-if="imageCurrentSurvey" class="container-img row mr-0 ml-0" >
+                <div class="contain-img contain-img__property" v-if="imageCurrentSurvey && data.picture_infomation.length > 0 && images.type_id === imageCurrentSurvey.id" v-for="(images) in data.picture_infomation" :key="images.id">
+                  <img class="asset-img" :src="images.link" alt="img">
+                </div>
+              </div>
+              <div v-if="data.picture_infomation.length === 0 || data.picture_infomation.length > 0 && imageCurrentStatus && !data.picture_infomation.find(item => item.type_id === imageCurrentSurvey.id)" class="infor-box">
+                <svg style="margin-right: 1rem" width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z" fill="#007EC6"/>
+                </svg>
+                Không có hình ảnh biên bản khảo sát hiện trạng
+              </div>
+            </div>
+          </TabItem>
           <TabItem name="Khác">
             <div class="mt-2">
               <div class="d-flex justify-content-between align-items-end mb-2">
@@ -897,6 +915,24 @@
               </div>
             </div>
           </TabItem>
+          <TabItem name="Biên bản khảo sát hiện trạng">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div v-if="imageCurrentSurvey" class="container-img row mr-0 ml-0" >
+                <div class="contain-img contain-img__property" v-if="imageCurrentSurvey && data.picture_infomation.length > 0 && images.type_id === imageCurrentSurvey.id" v-for="(images) in data.picture_infomation" :key="images.id">
+                  <img class="asset-img" :src="images.link" alt="img">
+                </div>
+              </div>
+              <div v-if="data.picture_infomation.length === 0 || data.picture_infomation.length > 0 && imageCurrentStatus && !data.picture_infomation.find(item => item.type_id === imageCurrentSurvey.id)" class="infor-box">
+                <svg style="margin-right: 1rem" width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z" fill="#007EC6"/>
+                </svg>
+                Không có hình ảnh biên bản khảo sát hiện trạng
+              </div>
+            </div>
+          </TabItem>
           <TabItem name="Khác">
             <div class="mt-2">
               <div class="d-flex justify-content-between align-items-end mb-2">
@@ -1096,6 +1132,7 @@ export default {
 			imgOverall: null,
 			imageCurrentStatus: null,
 			imageJuridical: null,
+      imageCurrentSurvey: null,
 			selectedDistrictId: null,
 			selectedWardId: null,
 			selectedStreetId: null,
@@ -1164,7 +1201,8 @@ export default {
 			this.imgOverall = data.find(imageDescription => imageDescription.description.toLowerCase() === 'tổng thể tài sản thẩm định giá')
 			this.imageCurrentStatus = data.find(imageDescription => imageDescription.description.toLowerCase() === 'hiện trạng tài sản thẩm định giá')
 			this.imageJuridical = data.find(imageDescription => imageDescription.description.toLowerCase() === 'pháp lý tài sản')
-		},
+      this.imageCurrentSurvey = data.find(imageDescription => imageDescription.description.toLowerCase() === 'biên bản khảo sát hiện trạng')
+    },
 		async initMap () {
 			// eslint-disable-next-line no-undef
 			if (this.data.general_infomation.coordinates) {
