@@ -25,8 +25,8 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('pStyle' => 'Heading1', 'format' => 'upperRoman', 'text' => '%1.', 'left' => 360, 'hanging' => 360, 'tabPos' => 360),
-                    array('pStyle' => 'Heading2', 'format' => 'decimal', 'text' => '%2.', 'left' => 360, 'hanging' => 360, 'tabPos' => 360),
+                    array('pStyle' => 'Heading1', 'format' => 'upperRoman', 'text' => '%1.', 'left' => 300, 'hanging' => 360, 'tabPos' => 360),
+                    array('pStyle' => 'Heading2', 'format' => 'decimal', 'text' => '%2.', 'left' => 300, 'hanging' => 360, 'tabPos' => 360),
                     array('pStyle' => 'Heading3', 'format' => 'decimal', 'text' => '%2.%3.', 'left' => 600, 'hanging' => 360, 'tabPos' => 600),
                 )
             )
@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 360, 'hanging' => 0, 'suffix' => 'space'),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 300, 'hanging' => 100, 'suffix' => 'space'),
                 )
             )
         );
@@ -125,13 +125,12 @@ class GiayYeuCau
 
         $section->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], ['align' => 'center']);
 
-        $section->addText(" ", ['bold' => true], ['align' => 'center']);
 
-        $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
+        $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '15'], ['align' => 'center']);
 
         $textRun = $section->addTextRun("alignItemCenter");
         $textRun->addText(' ', array('spaceAfter' => 240));
-        $textRun->addText("Kính gửi: ", ['underline' => true, 'size' => '13'], ['align' => 'center']);
+        $textRun->addText("Kính gửi: ", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
         $textRun->addText(' ', array('spaceAfter' => 240));
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
@@ -143,7 +142,7 @@ class GiayYeuCau
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => true]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Số thẻ CCCD: ", 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Số thẻ CCCD: 060187012054", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Địa chỉ: ", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Số điện thoại: ", 0, [], 'bullets', $indentFistLine);
