@@ -288,6 +288,14 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/appraises/print/bao-cao/{id}', [AppraiseController::class, 'printBaoCao']);
 
+    Route::get('/appraises/print/giay-yeu-cau/{id}', [AppraiseController::class, 'printGiayYeuCauTDG']);
+
+    Route::get('/appraises/print/hop-dong-tdg/{id}', [AppraiseController::class, 'printHopDongTDG']);
+
+    Route::get('/appraises/print/ke-hoach-tdg/{id}', [AppraiseController::class, 'printKeHoachTDG']);
+
+    Route::get('/appraises/print/bien-ban-thanh-ly/{id}', [AppraiseController::class, 'printBienBanThanhLy']);
+
     Route::post('/appraises/image', [AppraiseController::class, 'uploadImage']);
 
     Route::apiResource('asset/version', AssetVersionController::class);

@@ -45,15 +45,16 @@ class CertificateAssetController extends Controller
     /**
      * ProvinceController constructor.
      */
-    public function __construct(CertificateAssetRepository    $certificateAssetRepository,
-                                CertificateRepository         $certificateRepository,
-                                CompareAssetGeneralRepository $compareAssetGeneralRepository,
-                                UserRepository                $userRepository,
-                                DictionaryRepository          $dictionaryRepository,
-                                BuildingPriceRepository       $buildingPriceRepository,
-                                AppraiseAssetRepository       $appraiseAssetRepository,
-                                AppraiserCompanyRepository    $appraiserCompanyRepository)
-    {
+    public function __construct(
+        CertificateAssetRepository    $certificateAssetRepository,
+        CertificateRepository         $certificateRepository,
+        CompareAssetGeneralRepository $compareAssetGeneralRepository,
+        UserRepository                $userRepository,
+        DictionaryRepository          $dictionaryRepository,
+        BuildingPriceRepository       $buildingPriceRepository,
+        AppraiseAssetRepository       $appraiseAssetRepository,
+        AppraiserCompanyRepository    $appraiserCompanyRepository
+    ) {
         $this->certificateAssetRepository = $certificateAssetRepository;
         $this->certificateRepository = $certificateRepository;
         $this->compareAssetGeneralRepository = $compareAssetGeneralRepository;
@@ -178,7 +179,6 @@ class CertificateAssetController extends Controller
                 $this->dictionaryRepository
             ))
                 ->AppraiseAsset($request->toArray()));
-
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
@@ -216,13 +216,13 @@ class CertificateAssetController extends Controller
             //     $result = $this->respondWithCustomData((new PhuLuc1())->generateDocx($certificate, $company, $appraises, $format));
 
             // } else {
-                $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-                $service = 'App\\Services\\Document\\Appendix1\\ReportAppendix1'. $this->envDocument;
-                $format = '.docx';
-                $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-                $report = new $service;
-                $documentConfig = DocumentDictionary::query()->get();
-                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            $service = 'App\\Services\\Document\\Appendix1\\ReportAppendix1' . $this->envDocument;
+            $format = '.docx';
+            $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+            $report = new $service;
+            $documentConfig = DocumentDictionary::query()->get();
+            $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
             // }
             // activity-log download bảng điều chỉnh QSDĐ
             $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống bảng điều chỉnh QSDĐ');
@@ -264,7 +264,7 @@ class CertificateAssetController extends Controller
             // activity-log download bảng điều chỉnh CTXD
 
             $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-            $service = 'App\\Services\\Document\\Appendix2\\ReportAppendix2'. $this->envDocument;
+            $service = 'App\\Services\\Document\\Appendix2\\ReportAppendix2' . $this->envDocument;
             $format = '.docx';
             $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
             $report = new $service;
@@ -310,13 +310,13 @@ class CertificateAssetController extends Controller
             //     }
             //     $result = $this->respondWithCustomData((new PhuLucHinhAnh())->generateDocx($certificate, $company, $appraises, $format));
             // } else {
-                $service = 'App\Services\Document\Appendix3\ReportAppendix3' . $this->envDocument;
-                $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-                $format = '.docx';
-                $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-                $report = new $service;
-                $documentConfig = DocumentDictionary::query()->get();
-                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+            $service = 'App\Services\Document\Appendix3\ReportAppendix3' . $this->envDocument;
+            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            $format = '.docx';
+            $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+            $report = new $service;
+            $documentConfig = DocumentDictionary::query()->get();
+            $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
             // }
             // activity-log download hình ảnh hiện trạng
             $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống hình ảnh hiện trạng');
@@ -350,13 +350,13 @@ class CertificateAssetController extends Controller
             //     }
             //     $result = $this->respondWithCustomData((new ChungThu())->generateDocx($certificate, $company, $appraises, $format));
             // } else {
-                $service = 'App\\Services\\Document\\Certificate\\ReportCertificate' . $this->envDocument;
-                $report = new $service;
-                $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-                $format = '.docx';
-                $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-                $documentConfig = DocumentDictionary::query()->get();
-                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+            $service = 'App\\Services\\Document\\Certificate\\ReportCertificate' . $this->envDocument;
+            $report = new $service;
+            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            $format = '.docx';
+            $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+            $documentConfig = DocumentDictionary::query()->get();
+            $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
             // }
             // activity-log download chứng thư thẩm định
             $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống chứng thư thẩm định');
@@ -399,13 +399,13 @@ class CertificateAssetController extends Controller
             //     // dd(count($appraises));
             //     $result = $this->respondWithCustomData((new BaoCao())->generateDocx($company, $certificate, $appraises, $format));
             // } else {
-                $service = 'App\\Services\\Document\\Appraisal\\ReportAppraisal' . $this->envDocument;
-                $format = '.docx';
-                $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-                $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-                $documentConfig = DocumentDictionary::query()->get();
-                $report = new $service;
-                $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+            $service = 'App\\Services\\Document\\Appraisal\\ReportAppraisal' . $this->envDocument;
+            $format = '.docx';
+            $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+            $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+            $documentConfig = DocumentDictionary::query()->get();
+            $report = new $service;
+            $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
 
             // }
             // activity-log download báo cáo thẩm định
@@ -419,6 +419,17 @@ class CertificateAssetController extends Controller
         }
     }
 
+    public function printGiayYeuCauTDG(Request $request, $id): JsonResponse
+    {
+        $service = 'App\\Services\\Document\\GiayYeuCau';
+        $format = '.docx';
+        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+        $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+        $documentConfig = DocumentDictionary::query()->get();
+        $report = new $service;
+        $report = new $service;
+        $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+    }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
         try {
@@ -446,7 +457,7 @@ class CertificateAssetController extends Controller
     {
         try {
             $image = ($request->data);
-            $path = env('STORAGE_IMAGES').'/'. 'certification_assets/';
+            $path = env('STORAGE_IMAGES') . '/' . 'certification_assets/';
             $name = $path . Uuid::uuid4()->toString() . '.png';
             Storage::put($name, file_get_contents($image));
             $fileUrl = Storage::url($name);
