@@ -191,7 +191,7 @@ class GiayYeuCau
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
         $table = $section->addTable($styleTable);
-        $table->setMarginLeft(300);
+
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
         $table->addCell(4000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
