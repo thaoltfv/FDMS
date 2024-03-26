@@ -46,10 +46,10 @@
 					<div
 						v-if="
 							appraiser &&
-								status_text &&
-								status_text != 'Khôi phục' &&
-								status_text != 'Hủy' &&
-								status_text != 'Từ chối'
+							status_text &&
+							status_text != 'Khôi phục' &&
+							status_text != 'Hủy' &&
+							status_text != 'Từ chối'
 						"
 						class="form-group-container row"
 					>
@@ -110,15 +110,15 @@
 						v-text="$t('popup_btn_yes')"
 					/>
 				</div>
-				<div v-else class="btn__group row" style="padding: 0;">
-					<div class="col-6" style="padding:0;     margin-top: 8px;">
+				<div v-else class="btn__group row" style="padding: 0">
+					<div class="col-6" style="padding: 0; margin-top: 8px">
 						<button
 							class="btn btn-white font-weight-normal font-weight-bold"
 							@click.prevent="handleCancel"
 							v-text="$t('popup_btn_no')"
 						/>
 					</div>
-					<div class="col-6" style="padding:0;">
+					<div class="col-6" style="padding: 0">
 						<button
 							class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
 							@click.prevent="handleAction(note, reason_id)"
@@ -146,7 +146,7 @@ export default {
 		InputTextarea,
 		InputCategory,
 		InputDatePickerV2,
-		InputNumberMinute
+		InputNumberMinute,
 	},
 	name: "ModalNotificationPreCertificateNote",
 	data() {
@@ -155,7 +155,7 @@ export default {
 			rows: 3,
 			reason_id: null,
 			reasons: [],
-			reasonCancelPC: []
+			reasonCancelPC: [],
 		};
 	},
 	props: [
@@ -165,7 +165,7 @@ export default {
 		"workflowName",
 		"status_next",
 		"dataHSTD",
-		"status_next"
+		"status_next",
 	],
 	setup(props) {
 		const preCertificateStore = usePreCertificateStore();
@@ -178,7 +178,7 @@ export default {
 		const estimateCompleteTime = ref(null);
 		const chosenAppraiserOriginal = ref(null);
 		const labelAppraiser = ref(null);
-		const getExpireStatusDate = config => {
+		const getExpireStatusDate = (config) => {
 			const configTemp = config ? config : null;
 			let dateConvert = new Date();
 			let minutes = configTemp.process_time ? configTemp.process_time : 1440;
@@ -188,24 +188,8 @@ export default {
 
 			return status_expired_at;
 		};
-		console.log(props);
+
 		const getStart = async () => {
-			if (props.dataHSTD) {
-				console.log(props.status_text);
-				const config = configs.value[props.workflowName].principle.find(
-					item => item.status === props.status_next && item.isActive === 1
-				);
-
-				let status_expired_at_temp = config.process_time
-					? getExpireStatusDate(config)
-					: null;
-
-				estimateCompleteDate.value = status_expired_at_temp;
-				let dateConvert = new Date();
-				let minutes = config.process_time ? config.process_time : 1440;
-				let dateConverted = dateConvert.getTime() + minutes * 60000;
-				tempEstimate.value = dateConverted;
-			}
 			chosenAppraiser.value = props.appraiser.id;
 			chosenAppraiserOriginal.value = props.appraiser.id;
 			if (!lstDataConfig.value.appraiser_sales) {
@@ -222,6 +206,19 @@ export default {
 			}
 			labelAppraiser.value =
 				configs.value[props.workflowName].appraiser[props.appraiser.type];
+			const config = configs.value[props.workflowName].principle.find(
+				(item) => item.status === props.status_next && item.isActive === 1
+			);
+
+			let status_expired_at_temp = config.process_time
+				? getExpireStatusDate(config)
+				: null;
+
+			estimateCompleteDate.value = status_expired_at_temp;
+			let dateConvert = new Date();
+			let minutes = config.process_time ? config.process_time : 1440;
+			let dateConverted = dateConvert.getTime() + minutes * 60000;
+			tempEstimate.value = dateConverted;
 		};
 
 		if (props.appraiser) getStart();
@@ -233,7 +230,7 @@ export default {
 			estimateCompleteTime,
 			labelAppraiser,
 			lstDataConfig,
-			preCertificateStore
+			preCertificateStore,
 		};
 	},
 	computed: {
@@ -241,14 +238,14 @@ export default {
 			return {
 				data: this.reasons,
 				id: "id",
-				key: "description"
+				key: "description",
 			};
 		},
 		optionsReasonsCancelPC() {
 			return {
 				data: this.reasonCancelPC,
 				id: "id",
-				key: "description"
+				key: "description",
 			};
 		},
 
@@ -256,9 +253,9 @@ export default {
 			return {
 				data: this.lstDataConfig.appraiser_sales,
 				id: "id",
-				key: "name"
+				key: "name",
 			};
-		}
+		},
 	},
 	mounted() {
 		this.getDictionary();
@@ -293,7 +290,7 @@ export default {
 					message: "Vui lòng chọn lý do hủy sơ bộ",
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				return;
 			}
@@ -302,7 +299,7 @@ export default {
 					message: "Vui lòng chọn " + this.labelAppraiser,
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				return;
 			}
@@ -311,7 +308,7 @@ export default {
 					? null
 					: {
 							id: this.chosenAppraiser,
-							type: this.appraiser.type
+							type: this.appraiser.type,
 					  };
 			this.$emit(
 				"action",
@@ -339,8 +336,8 @@ export default {
 			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
-		}
-	}
+		},
+	},
 };
 </script>
 

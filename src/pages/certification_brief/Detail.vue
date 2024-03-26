@@ -3644,8 +3644,9 @@ export default {
 	}
 }
 .btn-export {
+	border: 1px solid black;
 	color: black;
-	margin-top: 5px;
+	margin-top: 8px;
 	margin-left: 5px;
 	height: 42px;
 }
