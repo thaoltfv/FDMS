@@ -9,12 +9,13 @@ use PhpOffice\PhpWord\Exception\Exception;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\JcTable;
-use \PhpOffice\PhpWord\Shared\Converter;
+use PhpOffice\PhpWord\Shared\Converter;
+use PhpOffice\PhpWord\Style\ListItem;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
 
-class ChungThu
+class GiayYeuCau
 {
     use ResponseTrait;
     public function setFormat(&$phpWord)
