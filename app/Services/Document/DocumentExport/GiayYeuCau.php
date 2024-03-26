@@ -128,9 +128,10 @@ class GiayYeuCau
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
 
         $textRun = $section->addTextRun("alignItemCenter");
+        $textRun->addText(' ', array('spaceAfter' => 240));
         $textRun->addText("Kính gửi: ", ['underline' => true, 'size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
-
+        $textRun->addText(' ', array('spaceAfter' => 240));
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
 
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
@@ -138,7 +139,7 @@ class GiayYeuCau
 
         // 1
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
+        $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => true]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Số thẻ CCCD: ", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', $indentFistLine);
@@ -147,18 +148,18 @@ class GiayYeuCau
 
         //2
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Mục đích: ", ['bold' => false]);
+        $textRun->addText("Mục đích: ", ['bold' => true]);
         $textRun->addText('Cung cấp các hồ sơ, dữ liệu cá nhân cho Công ty TNHH Thẩm định giá NOVA để lập Hồ sơ Thẩm định giá tài sản.', ['bold' => false]);
 
         //3
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Phương thức nhận văn bản, hồ sơ, tài liệu: ", ['bold' => false]);
+        $textRun->addText("Phương thức nhận văn bản, hồ sơ, tài liệu: ", ['bold' => true]);
         $textRun->addText('Nhận qua mạng điện tử.', ['bold' => false]);
 
 
         //4
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Nội dung: ", ['bold' => false]);
+        $textRun->addText("Nội dung: ", ['bold' => true]);
         $textRun->addText('Đề nghị Công ty TNHH Thẩm định giá Nova thẩm định giá tài sản như sau: ', ['bold' => false]);
 
         $name_assets = "Quyền sử hữu căn hộ";
@@ -189,7 +190,7 @@ class GiayYeuCau
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
         $table = $section->addTable($styleTable);
-
+        $table->setMarginLeft(300);
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
         $table->addCell(4000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
@@ -233,8 +234,9 @@ class GiayYeuCau
 
         $table3 = $section->addTable($tableBasicStyle);
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
-        $table3->addCell(Converter::inchToTwip(4))->addText("Tp.HCM, ngày 04 tháng 03 năm 2024", null,  $keepNext);
         $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $keepNext);;
+        $table3->addCell(Converter::inchToTwip(4))->addText("Tp.HCM, ngày 04 tháng 03 năm 2024", null,  $keepNext);
+
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
         $cell31 = $table3->addCell(Converter::inchToTwip(4));
         $cell31->addText("ĐƠN VỊ NHẬN YÊU CẦU", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
