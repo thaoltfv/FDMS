@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 300, 'hanging' => 100, 'suffix' => 'space'),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 300, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 360),
                 )
             )
         );
@@ -124,7 +124,6 @@ class GiayYeuCau
         $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], ['align' => 'center']);
 
         $section->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], ['align' => 'center']);
-
 
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '15'], ['align' => 'center']);
 
