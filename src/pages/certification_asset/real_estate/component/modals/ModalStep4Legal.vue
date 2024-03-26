@@ -297,7 +297,7 @@
 									<div
 										v-for="(file, index) in form.document_file"
 										:key="index"
-										class="d-flex"
+										class="col-3"
 									>
 										<div
 											style="cursor: pointer"
@@ -311,18 +311,22 @@
 												alt="tag_2"
 											/>
 											<div
-												class="mr-3"
+												class="mr-3 text-truncate"
 												style="font-weight: bold; color: #3d4d65"
+												:id="'file' + index"
 											>
 												{{ file.originalName }}
 											</div>
+											<b-tooltip :target="'file' + index" placement="bottom">
+												{{ file.originalName }}
+											</b-tooltip>
+											<img
+												style="cursor: pointer; width: 1rem"
+												@click="deleteOtherFile(file, index)"
+												src="@/assets/icons/ic_delete_2.svg"
+												alt="tag_2"
+											/>
 										</div>
-										<img
-											style="cursor: pointer; width: 1rem"
-											@click="deleteOtherFile(file, index)"
-											src="@/assets/icons/ic_delete_2.svg"
-											alt="tag_2"
-										/>
 									</div>
 								</div>
 
@@ -450,12 +454,12 @@ import InputCategoryCustom from "@/components/Form/InputCategoryCustom";
 import WareHouse from "@/models/WareHouse";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
-import axios from "axios";
+import { BTooltip } from "bootstrap-vue";
 // import ModalViewDocument from "./component/modals/ModalViewDocument";
 // import moment from 'moment'
 export default {
 	name: "ModalBuildingDetail",
-	props: ["data", "juridicals", "provinceName", "full_address"],
+	props: ["data", "juridicals", "provinceName", "full_address", "indexEdit"],
 	components: {
 		InputCategory,
 		InputText,
@@ -465,6 +469,7 @@ export default {
 		InputAreaCustom,
 		InputCategoryCustom,
 		ModalDelete,
+		"b-tooltip": BTooltip,
 		// ModalViewDocument
 	},
 	data() {
@@ -836,7 +841,11 @@ export default {
 				let res = null;
 				res = await File.uploadDocumentLaw(formData);
 				if (res.data) {
-					this.form.document_file = res.data.data;
+					if (this.form.document_file) {
+						this.form.document_file.push(...res.data.data);
+					} else {
+						this.form.document_file = res.data.data;
+					}
 					console.log("", this.form.document_file);
 					this.$toast.open({
 						message: "Thêm file thành công",
@@ -849,69 +858,30 @@ export default {
 		},
 
 		downloadOtherFile(file) {
-			axios({
-				url:
-					process.env.API_URL +
-					"api/certification_asset/step4-download-law-document/" +
-					file.uuidName +
-					"/" +
-					file.type,
-				method: "GET",
-				responseType: "blob",
-			}).then((response) => {
-				console.log(response);
-				const url = window.URL.createObjectURL(new Blob([response.data]));
-				const link = document.createElement("a");
-				link.href = url;
-				link.setAttribute("download", file.originalName);
-				document.body.appendChild(link);
-				link.click();
-				window.URL.revokeObjectURL(link);
-				other.value.toast.open({
-					message: `Tải xuống thành công`,
-					type: "success",
-					position: "top-right",
-					duration: 3000,
+			fetch(file.link)
+				.then((response) => {
+					if (response.ok) return response.blob();
+					throw new Error("Network response was not ok.");
+				})
+				.then((blobContent) => {
+					// Now we have the file content as a Blob
+					let objectURL = window.URL.createObjectURL(blobContent);
+					let link = document.createElement("a");
+					link.href = objectURL;
+					link.setAttribute("download", file.originalName);
+					document.body.appendChild(link);
+					link.click();
+
+					// Clean up link element from DOM and revoke the blob URL
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(objectURL);
+				})
+				.catch((error) => {
+					console.error(
+						"There has been a problem with your fetch operation:",
+						error
+					);
 				});
-			});
-			// const url = window.URL.createObjectURL(
-			// 	new Blob([
-			// 		{
-			// 			file_name: file.originalName,
-			// 			url: file.link,
-			// 		},
-			// 	])
-			// );
-			// const link = document.createElement("a");
-			// link.href = url;
-			// link.setAttribute("download", file.originalName);
-			// document.body.appendChild(link);
-			// link.click();
-			// window.URL.revokeObjectURL(link);
-
-			// const url = window.URL.createObjectURL(
-			// 	new Blob([
-			// 		{
-			// 			file_name: "BÁO CÁO CÔNG TÁC NỘI, NGOẠI TRÚ LỚP S22-61TH2.docx",
-			// 			url: "https://fv-nova.s3-ap-southeast-1.amazonaws.com/others/certification_assets/f194a234-e41c-4b7a-8117-6f055281aea4.docx",
-			// 		},
-			// 	])
-			// );
-
-			// const link = document.createElement("a");
-			// link.href = url;
-			// link.download = "BÁO CÁO CÔNG TÁC NỘI, NGOẠI TRÚ LỚP S22-61TH2.docx";
-			// document.body.appendChild(link);
-			// link.click();
-
-			// document.body.removeChild(link);
-			// URL.revokeObjectURL(url);
-			// this.$toast.open({
-			// 	message: `Tải xuống thành công`,
-			// 	type: "success",
-			// 	position: "top-right",
-			// 	duration: 3000,
-			// });
 		},
 		deleteOtherFile(file, index) {
 			this.openModalDelete = true;
@@ -919,10 +889,14 @@ export default {
 			this.link_file_delete = file.link;
 		},
 		async handleDelete() {
-			const res = await File.deleteDocumentLaw(this.link_file_delete);
+			const formData = new FormData();
+			formData.append("appraise_law_id", this.form.id);
+			formData.append("link_file_delete", this.link_file_delete);
+			const res = await File.deleteDocumentLaw({ data: formData });
 			if (res.data) {
 				this.form.document_file.splice(this.indexDelete, 1);
 				// this.files = this.form.files
+				this.$emit("deleteDoc", this.form.document_file, this.indexEdit);
 				this.$toast.open({
 					message: "Xóa thành công",
 					type: "success",

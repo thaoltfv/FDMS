@@ -129,12 +129,14 @@
 		</div>
 		<ModalStep4Legal
 			:data="form"
+			:indexEdit="indexEdit"
 			v-if="showModalActionLegal"
 			:juridicals="juridicals"
 			:provinceName="provinceName"
 			:full_address="full_address"
 			@cancel="showModalActionLegal = false"
 			@action="actionSaveLegal"
+			@deleteDoc="afterDeleteDoc"
 		/>
 		<ModalNotificationAppraisal
 			v-if="showConfirmDelete"
@@ -156,7 +158,7 @@ import {
 	BButtonGroup,
 	BDropdown,
 	BDropdownItem,
-	BTooltip
+	BTooltip,
 } from "bootstrap-vue";
 import ModalNotificationAppraisal from "@/components/Modal/ModalNotificationAppraisal";
 import Vue from "vue";
@@ -178,16 +180,16 @@ export default {
 		"b-dropdown-item": BDropdownItem,
 		"b-tooltip": BTooltip,
 		"b-button-group": BButtonGroup,
-		ModalNotificationAppraisal
+		ModalNotificationAppraisal,
 	},
 	computed: {
 		optionsJuridicals() {
 			return {
 				data: this.juridicals,
 				id: "id",
-				key: "content"
+				key: "content",
 			};
-		}
+		},
 	},
 	data() {
 		return {
@@ -213,21 +215,20 @@ export default {
 				land_details: [
 					{
 						doc_no: "",
-						land_no: ""
-					}
+						land_no: "",
+					},
 				],
 				purpose_details: [
 					{
 						land_type_purpose_id: "",
-						total_area: ""
-					}
+						total_area: "",
+					},
 				],
 				document_file: [],
 				document_file_delete: [],
-				note:
-					"2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-"
+				note: "2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-",
 			},
-			contentRows: 3
+			contentRows: 3,
 		};
 	},
 	methods: {
@@ -250,18 +251,17 @@ export default {
 				land_details: [
 					{
 						doc_no: "",
-						land_no: ""
-					}
+						land_no: "",
+					},
 				],
 				purpose_details: [
 					{
 						land_type_purpose_id: "",
-						total_area: ""
-					}
+						total_area: "",
+					},
 				],
-				note:
-					"2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồng: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú:  -/-",
-				document_file: []
+				note: "2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồng: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú:  -/-",
+				document_file: [],
 			};
 		},
 		actionSaveLegal(data) {
@@ -294,6 +294,15 @@ export default {
 			this.isEdit = true;
 			this.indexEdit = index;
 			this.form = JSON.parse(JSON.stringify(this.data.law[index]));
+			if (this.form.document_file && !Array.isArray(this.form.document_file)) {
+				const temp = JSON.parse(this.form.document_file);
+
+				if (!Array.isArray(temp)) {
+					this.form.document_file = JSON.parse(temp);
+				} else {
+					this.form.document_file = temp;
+				}
+			}
 			if (this.form.law_date) {
 				this.form.law_date = moment(this.form.law_date).format("DD/MM/YYYY");
 			}
@@ -301,8 +310,13 @@ export default {
 				this.form.note =
 					"2. Nhà ở: -/-\n3. Công trình xây dựng khác: -/-\n4. Rừng sản xuất là rừng trồn: -/-\n5. Cây lâu năm: -/-\n6. Ghi chú: -/-";
 			}
-		}
-	}
+		},
+		afterDeleteDoc(document, index) {
+			const documentU = JSON.parse(JSON.stringify(this.data.law[index]));
+			documentU.document_file = document;
+			this.data.law[index] = documentU;
+		},
+	},
 };
 </script>
 <style scoped lang="scss">
