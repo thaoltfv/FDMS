@@ -59,6 +59,10 @@ class GiayYeuCau
 
         $phpWord->addParagraphStyle(
             'leftTab',
+            array('align' => 'center')
+        );
+        $phpWord->addParagraphStyle(
+            'alignItemCenter',
             array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('left', 5000)))
         );
     }
@@ -119,11 +123,12 @@ class GiayYeuCau
 
         $section->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], ['align' => 'center']);
 
+        $section->addText(" ", ['bold' => true], ['align' => 'center']);
 
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
 
-        $textRun = $section->addTextRun();
-        $textRun->addText("Kính gửi", ['underline' => true, 'size' => '13']);
+        $textRun = $section->addTextRun("alignItemCenter");
+        $textRun->addText("Kính gửi: ", ['underline' => true, 'size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
 
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
