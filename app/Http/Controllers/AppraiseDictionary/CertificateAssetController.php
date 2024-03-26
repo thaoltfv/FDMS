@@ -421,7 +421,7 @@ class CertificateAssetController extends Controller
 
     public function printGiayYeuCauTDG(Request $request, $id): JsonResponse
     {
-        $service = 'App\\Services\\Document\\GiayYeuCau';
+        $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
