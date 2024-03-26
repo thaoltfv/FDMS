@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Document;
+namespace App\Services\Document\DocumentExport;
 
 use App\Enum\EstimateAssetDefault;
 use App\Http\ResponseTrait;
