@@ -119,7 +119,6 @@ class GiayYeuCau
 
         $section->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], ['align' => 'center']);
 
-        $section->addText("", ['bold' => true, 'size' => '18'], ['align' => 'center']);
 
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
 
@@ -188,7 +187,7 @@ class GiayYeuCau
 
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(2000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
+        $table->addCell(4000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
         $table->addCell(2000, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
