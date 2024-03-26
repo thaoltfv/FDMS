@@ -59,11 +59,12 @@ class GiayYeuCau
 
         $phpWord->addParagraphStyle(
             'leftTab',
-            array('align' => 'center')
+            array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('left', 5000)))
+
         );
         $phpWord->addParagraphStyle(
             'alignItemCenter',
-            array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('left', 5000)))
+            array('align' => 'center')
         );
     }
     /**
