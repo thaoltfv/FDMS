@@ -288,14 +288,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/appraises/print/bao-cao/{id}', [AppraiseController::class, 'printBaoCao']);
 
-    Route::get('/appraises/print/giay-yeu-cau/{id}', [AppraiseController::class, 'printGiayYeuCauTDG']);
-
-    Route::get('/appraises/print/hop-dong-tdg/{id}', [AppraiseController::class, 'printHopDongTDG']);
-
-    Route::get('/appraises/print/ke-hoach-tdg/{id}', [AppraiseController::class, 'printKeHoachTDG']);
-
-    Route::get('/appraises/print/bien-ban-thanh-ly/{id}', [AppraiseController::class, 'printBienBanThanhLy']);
-
     Route::post('/appraises/image', [AppraiseController::class, 'uploadImage']);
 
     Route::apiResource('asset/version', AssetVersionController::class);
@@ -395,6 +387,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('print/chung-thu/{id}', [CertificateAssetController::class, 'printChungThu']);
 
         Route::get('print/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCao']);
+
+        Route::get('print/giay-yeu-cau/{id}', [CertificateAssetController::class, 'printGiayYeuCauTDG']);
+
+        Route::get('print/hop-dong-tdg/{id}', [CertificateAssetController::class, 'printHopDongTDG']);
+
+        Route::get('print/ke-hoach-tdg/{id}', [CertificateAssetController::class, 'printKeHoachTDG']);
+
+        Route::get('print/bien-ban-thanh-ly/{id}', [CertificateAssetController::class, 'printBienBanThanhLy']);
 
         Route::get('print/test1/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest1']);
         Route::get('print/test2/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest2']);
