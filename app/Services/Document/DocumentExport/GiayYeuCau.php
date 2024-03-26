@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 300, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 360),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 0, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 600),
                 )
             )
         );
@@ -200,7 +200,7 @@ class GiayYeuCau
 
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
+        $table->addCell(5000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
         $table->addCell(2000, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
