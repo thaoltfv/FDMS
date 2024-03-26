@@ -77,6 +77,13 @@ class GiayYeuCau
         $this->setFormat($phpWord);
         $phpWord->setDefaultFontName('Times New Roman');
         $phpWord->setDefaultFontSize(13);
+        $phpWord->setDefaultParagraphStyle(
+            array(
+
+                'spacing' => 120,
+                'lineHeight' => 1.5,
+            )
+        );
         $styleTable = [
             'borderSize' => 1,
             'align' => JcTable::START,
