@@ -119,18 +119,22 @@ class GiayYeuCau
 
         $section->addText("Độc lập – Tự do – Hạnh phúc", ['bold' => true], ['align' => 'center']);
 
-        $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '18'], ['align' => 'center']);
+        $section->addText("", ['bold' => true, 'size' => '18'], ['align' => 'center']);
 
-        $section->addText("KÍNH GỬI: CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '14'], ['align' => 'center']);
+        $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
 
-        $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => true, 'size' => '13'], ['align' => 'center']);
+        $textRun = $section->addTextRun();
+        $textRun->addText("Kính gửi", ['underline' => 'single', 'size' => '13']);
+        $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
 
-        $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => true, 'size' => '13'], ['align' => 'center']);
+        $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
+
+        $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
 
 
         // 1
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ");
+        $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Số thẻ CCCD: ", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', $indentFistLine);
