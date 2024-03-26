@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 600, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 900),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 600, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 900, 'lineHeight' => 1.5),
                 )
             )
         );
@@ -77,13 +77,12 @@ class GiayYeuCau
         $this->setFormat($phpWord);
         $phpWord->setDefaultFontName('Times New Roman');
         $phpWord->setDefaultFontSize(13);
-        $phpWord->setDefaultParagraphStyle(
-            array(
-
-                'spacing' => 120,
-                'lineHeight' => 1.0,
-            )
-        );
+        // $phpWord->setDefaultParagraphStyle(
+        //     array(
+        //         'spacing' => 120,
+        //         'lineHeight' => 1.0,
+        //     )
+        // );
         $styleTable = [
             'borderSize' => 1,
             'align' => JcTable::START,
