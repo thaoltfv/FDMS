@@ -78,7 +78,8 @@ class GiayYeuCau
         $phpWord->setDefaultFontSize(13);
         $styleTable = [
             'borderSize' => 1,
-            'align' => JcTable::START
+            'align' => JcTable::START,
+            'cellMargin'  => Converter::inchToTwip(.1),
         ];
 
         $styleTableHide = [
