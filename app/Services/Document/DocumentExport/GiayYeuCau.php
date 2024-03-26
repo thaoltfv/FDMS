@@ -43,17 +43,17 @@ class GiayYeuCau
 
         $phpWord->addTitleStyle(
             1,
-            array('size' => '13', 'bold' => true, 'allCaps' => true),
+            array('size' => '13', 'bold' => false, 'allCaps' => true),
             array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 0)
         );
         $phpWord->addTitleStyle(
             2,
-            array('size' => '13', 'bold' => true),
+            array('size' => '13', 'bold' => false),
             array('numStyle' => 'headingNumbering', 'numLevel' => 1)
         );
         $phpWord->addTitleStyle(
             3,
-            array('size' => '13', 'bold' => true),
+            array('size' => '13', 'bold' => false),
             array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 2)
         );
 
@@ -81,13 +81,13 @@ class GiayYeuCau
             array(
 
                 'spacing' => 120,
-                'lineHeight' => 1.5,
+                'lineHeight' => 1.0,
             )
         );
         $styleTable = [
             'borderSize' => 1,
             'align' => JcTable::START,
-            'cellMargin'  => Converter::inchToTwip(.1),
+
         ];
 
         $styleTableHide = [
@@ -136,11 +136,11 @@ class GiayYeuCau
 
         $textRun = $section->addTextRun("alignItemCenter");
         $textRun->addText(' ', array('spaceAfter' => 240));
-        $textRun->addText("Kính gửi: ", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
+        $textRun->addText("Kính gửi", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
+        $textRun->addText(":", ['size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
         $textRun->addText(' ', array('spaceAfter' => 240));
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
-
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
 
 
