@@ -3911,12 +3911,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         AppraiseLawPurposeDetail::where(['appraise_law_id' => $lawId['id']])->delete();
 
                         // Xóa ảnh
-                        $array = json_decode($lawId['document_file'], true);
-                        if (!empty($array)) {
-                            foreach ($array as $itemDocumentFile) {
-                                Storage::disk(env('FILESYSTEM_DRIVER'))->delete($itemDocumentFile['link']);
-                            }
-                        }
+                        // $array = json_decode($lawId['document_file'], true);
+                        // if (!empty($array)) {
+                        //     foreach ($array as $itemDocumentFile) {
+                        //         Storage::disk(env('FILESYSTEM_DRIVER'))->delete($itemDocumentFile['link']);
+                        //     }
+                        // }
                     }
                     AppraiseLaw::where(['appraise_id' => $appraiseId])->delete();
                 }
