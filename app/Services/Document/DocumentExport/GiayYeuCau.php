@@ -105,8 +105,8 @@ class GiayYeuCau
         $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
         $cellRowContinue = array('vMerge' => 'continue');
         $cellColSpan = array('gridSpan' => 2, 'valign' => 'center');
-        $cellHCentered = array('align' => 'center');
-        $cellVCentered = array('valign' => 'center');
+        $cellHCentered = array('align' => 'both');
+        $cellVCentered = array('valign' => 'both');
         $cellHJustify = array('align' => 'justify');
         $cellVJustify = array('valign' => 'justify');
         $indentFistLine = ['indentation' => ['firstLine' => 360]];
