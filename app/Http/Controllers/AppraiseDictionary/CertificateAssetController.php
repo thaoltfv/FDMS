@@ -427,8 +427,7 @@ class CertificateAssetController extends Controller
         $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
-        $report = new $service;
-        $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
     }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
