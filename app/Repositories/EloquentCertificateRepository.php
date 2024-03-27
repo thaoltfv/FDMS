@@ -669,6 +669,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // $result->appraises[$stt]->append('tangible_assets');
             // $result->appraises[$stt]->append('appraise_law');
             $result->appraises[$stt]->append('asset_general');
+            $result->appraises[$stt]->tangibleAssets = $asset->tangibleAssets;
             $result->appraises[$stt]->appraiseLaw = $asset->appraiseLaw;
             $result->appraises[$stt]->assetGeneral = $result->appraises[$stt]->asset_general;
             // $result->appraises[$stt]->tangibleAssets = $result->appraises[$stt]->tangible_assets;
