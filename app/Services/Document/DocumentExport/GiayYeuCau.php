@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 600, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 900, 'lineHeight' => 1.5),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 0, 'hanging' => 0, 'suffix' => 'space', '0' => 900, 'lineHeight' => 1.5),
                 )
             )
         );
@@ -149,10 +149,10 @@ class GiayYeuCau
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Số thẻ CCCD: 060187012054", 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Số thẻ CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Địa chỉ: ", 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Số điện thoại: ", 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Số điện thoại: " . $certificate->petitioner_phone, 0, [], 'bullets', $indentFistLine);
 
         //2
         $textRun = $section->addTextRun('Heading2');
@@ -243,7 +243,7 @@ class GiayYeuCau
         $table3 = $section->addTable($tableBasicStyle);
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
         $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $keepNext);;
-        $table3->addCell(Converter::inchToTwip(4))->addText("Tp.HCM, ngày 04 tháng 03 năm 2024", null,  $keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("TP.HCM, ngày    tháng    năm   ", null,  $keepNext);
 
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
         $cell31 = $table3->addCell(Converter::inchToTwip(4));
@@ -288,6 +288,7 @@ class GiayYeuCau
         $data = [];
         $data['url'] = Storage::disk('public')->url($path .  $fileName . '.docx');
         $data['file_name'] = $fileName;
+        $data['certificate'] = $certificate;
         return $data;
     }
 }
