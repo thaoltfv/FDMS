@@ -429,7 +429,12 @@ class CertificateAssetController extends Controller
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $certificate = Certificate::where('id', $id)->first();
-        $realEstate = RealEstate::where('certificate_id', $id)->first();
+        $select = ['*'];
+        $with = [
+            'assetType:id,acronym,description',
+        ];
+        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+
 
         // $certificate = $this->certificateRepository->findById($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
