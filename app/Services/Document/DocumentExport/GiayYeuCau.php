@@ -180,6 +180,7 @@ class GiayYeuCau
         $name_assets = "";
         $appraise_law = "";
         $number_assets = "01";
+        $check = "";
         $count = 0;
         $type1 = 0; //Đất trống
         $type2 = 0; //Đất có nhà
@@ -201,8 +202,9 @@ class GiayYeuCau
         // }
         foreach ($certificate->appraises as $index => $item) {
             $name_assets .= ($index) ? " và " : "";
-            echo $item;
+
             $name_assets .= $item->appraise_asset;
+            $check = $item->appraise_law;
             if ($item->appraise_law) {
                 foreach ($item->appraise_law as $index2 => $item2) {
                     $appraise_law .= ($index2) ? " và " : "";
@@ -331,7 +333,7 @@ class GiayYeuCau
         $data['url'] = Storage::disk('public')->url($path .  $fileName . '.docx');
         $data['file_name'] = $fileName;
         $data['certificate'] = $certificate;
-        $data['appraises'] = $appraises;
+        $data['appraises'] = $check;
         return $data;
     }
 }
