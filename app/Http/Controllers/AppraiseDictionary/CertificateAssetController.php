@@ -430,12 +430,14 @@ class CertificateAssetController extends Controller
         $certificate = Certificate::where('id', $id)->first();
         $appraises = [];
         if ($certificate->appraises) {
-            $ids = [];
+            $idRE = null;
             foreach ($certificate->appraises as $appraise) {
-                $ids[] = $appraise->id;
+                $idRE = $appraise->real_estate_id;
             }
-            $realEstate = CertificateRealEstate::where('id', $id)->first();
-            array_push($appraises, $realEstate);
+            if ($idRE) {
+                $realEstate = CertificateRealEstate::where('real_estate_id', $idRE)->first();
+                array_push($appraises, $realEstate);
+            }
             // $appraises = $this->certificateAssetRepository->findByIds(json_encode($ids));
         }
 
