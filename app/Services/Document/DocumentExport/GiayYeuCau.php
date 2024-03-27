@@ -244,8 +244,8 @@ class GiayYeuCau
         $listItemRun->addText("01 Bản Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp.", ['italic' => true]);
 
         $section->addListItem("Số bản chứng thư yêu cầu cấp: 02 bản chính bằng tiếng Việt.", 0, [], 'bullets', []);
-        $section->addText("   Tôi đồng ý cung cấp các Hồ sơ, Dữ liệu cá nhân như trên cho Công ty TNHH Thẩm định giá Nova, Công ty Nova được phép xử lý các dữ liệu được cung cấp để công ty tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này.", []);
-        $section->addText("   Tôi cam kết thanh toán đủ phí dịch vụ theo quy định Công ty TNHH thẩm định giá Nova.", []);
+        $section->addText("    Tôi đồng ý cung cấp các Hồ sơ, Dữ liệu cá nhân như trên cho Công ty TNHH Thẩm định giá Nova, Công ty Nova được phép xử lý các dữ liệu được cung cấp để công ty tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này.", []);
+        $section->addText("    Tôi cam kết thanh toán đủ phí dịch vụ theo quy định Công ty TNHH thẩm định giá Nova.", []);
 
 
 
