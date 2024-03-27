@@ -36,7 +36,7 @@ class GiayYeuCau
             array(
                 'type' => 'multilevel',
                 'levels' => array(
-                    array('format' => 'upperLetter', 'text' => '-', 'left' => 0, 'hanging' => 0, 'suffix' => 'space', '0' => 900, 'lineHeight' => 1.5),
+                    array('format' => 'upperLetter', 'text' => '-', 'left' => 360, 'hanging' => 360, 'suffix' => 'space', 'tabPos' => 900, 'lineHeight' => 1.5),
                 )
             )
         );
@@ -99,7 +99,7 @@ class GiayYeuCau
 
         $m2 = 'm</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t xml:space="preserve">2</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
 
-        $indentFistLine = ['indentation' => ['firstLine' => 360]];
+        // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
         $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
         $cellRowContinue = array('vMerge' => 'continue');
@@ -108,7 +108,7 @@ class GiayYeuCau
         $cellVCentered = array('valign' => 'center');
         $cellHJustify = array('align' => 'both');
         $cellVJustify = array('valign' => 'both');
-        $indentFistLine = ['indentation' => ['firstLine' => 360]];
+        [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
 
         $phpWord->setDefaultParagraphStyle([
@@ -148,11 +148,11 @@ class GiayYeuCau
         // 1
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
-        $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Số thẻ CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address, 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Số điện thoại: " . $certificate->petitioner_phone, 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
+        $section->addListItem("Số thẻ CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', []);
+        $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', []);
+        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address, 0, [], 'bullets', []);
+        $section->addListItem("Số điện thoại: " . $certificate->petitioner_phone, 0, [], 'bullets', []);
 
         //2
         $textRun = $section->addTextRun('Heading2');
@@ -183,8 +183,8 @@ class GiayYeuCau
         // } else {
         //     $number_assets = strval($count);
         // }
-        $section->addListItem("Tên tài sản: " . htmlspecialchars($name_assets), 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Số lượng, khối lượng tài sản: " . $number_assets, 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Tên tài sản: " . htmlspecialchars($name_assets), 0, [], 'bullets', []);
+        $section->addListItem("Số lượng, khối lượng tài sản: " . $number_assets, 0, [], 'bullets', []);
 
         $tableBasicStyle = array(
             'borderSize' => 'none',
@@ -230,17 +230,17 @@ class GiayYeuCau
 
 
 
-        $section->addListItem("Mục đích yêu cầu thẩm định giá: " . $bien101 . ".", 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Thời điểm thẩm định giá: Tháng "  . date_format($appraise_date, "m/Y") . '.', 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Ngày giờ, địa điểm khảo sát: 04/03/2024 tại Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM.", 0, [], 'bullets', $indentFistLine);
-        $section->addListItem("Tên, điện thoại người liên hệ:                           ; Điện thoại:                   ", 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Mục đích yêu cầu thẩm định giá: " . $bien101 . ".", 0, [], 'bullets', []);
+        $section->addListItem("Thời điểm thẩm định giá: Tháng "  . date_format($appraise_date, "m/Y") . '.', 0, [], 'bullets', []);
+        $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
+        $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', []);
+        $section->addListItem("Ngày giờ, địa điểm khảo sát: 04/03/2024 tại Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM.", 0, [], 'bullets', []);
+        $section->addListItem("Tên, điện thoại người liên hệ:                           ; Điện thoại:                   ", 0, [], 'bullets', []);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Các hồ sơ, dữ liệu cá nhân, cung cấp gồm: ");
         $listItemRun->addText("01 Bản Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp.", ['italic' => true]);
 
-        $section->addListItem("Số bản chứng thư yêu cầu cấp: 02 bản chính bằng tiếng Việt.", 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Số bản chứng thư yêu cầu cấp: 02 bản chính bằng tiếng Việt.", 0, [], 'bullets', []);
         $section->addText("   Tôi đồng ý cung cấp các Hồ sơ, Dữ liệu cá nhân như trên cho Công ty TNHH Thẩm định giá Nova, Công ty Nova được phép xử lý các dữ liệu được cung cấp để công ty tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này.", []);
         $section->addText("   Tôi cam kết thanh toán đủ phí dịch vụ theo quy định Công ty TNHH thẩm định giá Nova.", []);
 
