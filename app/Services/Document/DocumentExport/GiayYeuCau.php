@@ -85,7 +85,7 @@ class GiayYeuCau
         // );
         $styleTable = [
             'borderSize' => 1,
-            'align' => JcTable::CENTER,
+            'align' => JcTable::START,
             // 'spaceBefore'        =>  240
             // 'cellMarginLeft'  => Converter::inchToTwip(1.0),
 
@@ -201,7 +201,6 @@ class GiayYeuCau
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
         $table = $section->addTable($styleTable);
-
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
         $table->addCell(5000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
