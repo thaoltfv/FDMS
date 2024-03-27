@@ -428,7 +428,7 @@ class CertificateAssetController extends Controller
         $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-        $certificate = Certificate::where('id', $id)->first();
+        // $certificate = Certificate::where('id', $id)->first();
         $select = ['*'];
         $with = [
             'assetType:id,acronym,description',
@@ -436,7 +436,7 @@ class CertificateAssetController extends Controller
         $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
-        // $certificate = $this->certificateRepository->findById($id);
+        $certificate = $this->certificateRepository->findById($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;

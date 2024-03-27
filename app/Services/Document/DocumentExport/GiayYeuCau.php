@@ -73,6 +73,7 @@ class GiayYeuCau
      */
     public function generateDocx($company, $certificate, $format, $appraises): array
     {
+
         $phpWord = new PhpWord();
         $this->setFormat($phpWord);
         $phpWord->setDefaultFontName('Times New Roman');
@@ -114,6 +115,7 @@ class GiayYeuCau
         // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
 
+
         $phpWord->setDefaultParagraphStyle([
             'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
             'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
@@ -130,6 +132,8 @@ class GiayYeuCau
             'marginRight' => Converter::inchToTwip(.8),
             'marginLeft' => Converter::inchToTwip(.8)
         ];
+
+
         $section = $phpWord->addSection($styleSection);
 
         $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '13'], ['align' => 'center']);
@@ -176,6 +180,24 @@ class GiayYeuCau
         $name_assets = "";
         $number_assets = "01";
         $count = 0;
+        $type1 = 0; //Đất trống
+        $type2 = 0; //Đất có nhà
+        $type3 = 0; //Chung cư
+        $appraiseAssetType = "Quyền sử dụng đất";
+        foreach ($appraises as $realEstate) {
+            if ($realEstate->assetType->description == "ĐẤT TRỐNG") $type1 = 1;
+            if ($realEstate->assetType->description == "ĐẤT CÓ NHÀ") $type2 = 1;
+            if ($realEstate->assetType->description == "CHUNG CƯ") $type3 = 1;
+        }
+        if ($type1 && $type2 && $type3) {
+            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc và căn hộ chung cư";
+        } else if ($type1 && $type3) {
+            $appraiseAssetType = "Quyền sử dụng đất và căn hộ chung cư";
+        } else if (($type1 && $type2) || ($type2)) {
+            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc";
+        } else if ($type3) {
+            $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
+        }
         foreach ($certificate->appraises as $index => $item) {
             $name_assets .= ($index) ? " và " : "";
             $name_assets .= $item->appraise_asset;
