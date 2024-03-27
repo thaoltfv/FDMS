@@ -239,6 +239,7 @@ class GiayYeuCau
         $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
         foreach ($certificate->appraises as $stt => $asset) {
             // Thông tin tài sản
+            $test = $asset;
             $dt = 0;
             $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
@@ -246,8 +247,8 @@ class GiayYeuCau
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-            if ($asset->tangible_assets) {
-                foreach ($asset->tangible_assets as $tangible) {
+            if ($test->tangible_assets) {
+                foreach ($test->tangible_assets as $tangible) {
                     $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
                 }
             }
