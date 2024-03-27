@@ -203,9 +203,11 @@ class GiayYeuCau
             $name_assets .= ($index) ? " và " : "";
 
             $name_assets .= $item->appraise_asset;
-            foreach ($item->appraise_law as $index2 => $item2) {
-                $appraise_law .= ($index2) ? " và " : "";
-                $appraise_law .= "01 Bản Giấy" . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+            if ($item->appraise_law) {
+                foreach ($item->appraise_law as $index2 => $item2) {
+                    $appraise_law .= ($index2) ? " và " : "";
+                    $appraise_law .= "01 Bản Giấy" . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                }
             }
             $count += 1;
         }
