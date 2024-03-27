@@ -71,7 +71,7 @@ class GiayYeuCau
      * @throws Exception
      * @throws \Exception
      */
-    public function generateDocx($company, $certificate, $format, $documentConfig): array
+    public function generateDocx($company, $certificate, $format, $appraises): array
     {
         $phpWord = new PhpWord();
         $this->setFormat($phpWord);
@@ -295,6 +295,7 @@ class GiayYeuCau
         $data['url'] = Storage::disk('public')->url($path .  $fileName . '.docx');
         $data['file_name'] = $fileName;
         $data['certificate'] = $certificate;
+        $data['appraises'] = $appraises;
         return $data;
     }
 }

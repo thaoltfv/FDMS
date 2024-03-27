@@ -21,6 +21,7 @@ use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
+use App\Models\RealEstate;
 use App\Models\DocumentDictionary;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
@@ -404,6 +405,7 @@ class CertificateAssetController extends Controller
             $format = '.docx';
             $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
             $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+
             $documentConfig = DocumentDictionary::query()->get();
             $report = new $service;
             $result = $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
@@ -426,11 +428,20 @@ class CertificateAssetController extends Controller
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $certificate = Certificate::where('id', $id)->first();
+        $appraises = [];
+        if ($certificate->appraises) {
+            $ids = [];
+            foreach ($certificate->appraises as $appraise) {
+                $ids[] = $appraise->id;
+            }
+            $appraises = $this->certificateAssetRepository->findByIds(json_encode($ids));
+        }
+        // $realEstate = RealEstate::where('id', $id)->first();
         // $certificate = $this->certificateRepository->findById($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
+        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $appraises));
     }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
