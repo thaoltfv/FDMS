@@ -178,6 +178,7 @@ class GiayYeuCau
         $textRun->addText('Đề nghị Công ty TNHH Thẩm định giá Nova thẩm định giá tài sản như sau: ', ['bold' => false]);
 
         $name_assets = "";
+        $appraise_law = "";
         $number_assets = "01";
         $count = 0;
         $type1 = 0; //Đất trống
@@ -200,7 +201,12 @@ class GiayYeuCau
         // }
         foreach ($certificate->appraises as $index => $item) {
             $name_assets .= ($index) ? " và " : "";
+
             $name_assets .= $item->appraise_asset;
+            foreach ($item->appraise_law as $index2 => $item2) {
+                $appraise_law .= ($index2) ? " và " : "";
+                $appraise_law .= "01 Bản Giấy" . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+            }
             $count += 1;
         }
         if ($count < 10) {
@@ -231,18 +237,21 @@ class GiayYeuCau
         $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
         foreach ($certificate->appraises as $stt => $asset) {
             // Thông tin tài sản
+            $dt = 0;
             $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
             $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-
+            foreach ($asset->tangible_assets as $tangible) {
+                $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
+            }
             $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
             $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
-            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
-            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => false], $cellHCentered); //$m2
+            $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
+            $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
         }
 
@@ -258,7 +267,7 @@ class GiayYeuCau
         $section->addListItem("Tên, điện thoại người liên hệ: ", 0, [], 'bullets', []);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Các hồ sơ, dữ liệu cá nhân, cung cấp gồm: ");
-        $listItemRun->addText("01 Bản Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp.", ['italic' => true]);
+        $listItemRun->addText($appraise_law, ['italic' => true]);
 
         $section->addListItem("Số bản chứng thư yêu cầu cấp: 02 bản chính bằng tiếng Việt.", 0, [], 'bullets', []);
         $section->addText("    Tôi đồng ý cung cấp các Hồ sơ, Dữ liệu cá nhân như trên cho Công ty TNHH Thẩm định giá Nova, Công ty Nova được phép xử lý các dữ liệu được cung cấp để công ty tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này.", []);
