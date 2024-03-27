@@ -21,7 +21,7 @@ use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
-use App\Models\RealEstate;
+use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
@@ -434,9 +434,11 @@ class CertificateAssetController extends Controller
             foreach ($certificate->appraises as $appraise) {
                 $ids[] = $appraise->id;
             }
-            $appraises = $this->certificateAssetRepository->findByIds(json_encode($ids));
+            $realEstate = CertificateRealEstate::where('id', $id)->first();
+            array_push($appraises, $realEstate);
+            // $appraises = $this->certificateAssetRepository->findByIds(json_encode($ids));
         }
-        // $realEstate = RealEstate::where('id', $id)->first();
+
         // $certificate = $this->certificateRepository->findById($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
