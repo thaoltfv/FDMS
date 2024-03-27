@@ -665,8 +665,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             } else {
                 $result->appraises[$stt]->building_price = 0;
             }
+
+            $result->appraises[$stt]->append('tangible_assets');
+            $result->appraises[$stt]->append('appraise_law');
             $result->appraises[$stt]->append('asset_general');
-            $result->appraises[$stt]->assetGeneral = $result->appraises[$stt]->asset_general;
+            $result->appraises[$stt]->appraiseLaw = $result->appraises[$stt]->asset_general;
+            $result->appraises[$stt]->assetGeneral = $result->appraises[$stt]->appraise_law;
+            $result->appraises[$stt]->tangibleAssets = $result->appraises[$stt]->tangible_assets;
+
             $asset->assetGeneral = $result->appraises[$stt]->asset_general;
 
             $result->appraises[$stt]->append('layer_cutting_procedure');
@@ -2675,7 +2681,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
             'appraiser_sale_id', 'appraiser_control_id', 'administrative_id',
-            'pre_certificate_id','business_manager_id',
+            'pre_certificate_id', 'business_manager_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
@@ -3334,7 +3340,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
                     if (isset($request['appraiser_sale_id'])) {
                         $updateArray['appraiser_sale_id'] = $request['appraiser_sale_id'];
-                    } 
+                    }
                     if (isset($request['appraiser_perform_id'])) {
                         $updateArray['appraiser_perform_id'] = $request['appraiser_perform_id'];
                     }
@@ -3348,11 +3354,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         Log::info("Vao ham if business_manager_id");
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
-                   
-                    Log::info("data request!",['data' => $updateArray]);
-                    Log::info("data request!",['data' => $request]);
 
-                    
+                    Log::info("data request!", ['data' => $updateArray]);
+                    Log::info("data request!", ['data' => $request]);
+
+
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
@@ -6030,7 +6036,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'&& $role->name !== 'Accounting')) {
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
                 $result = $result->where(function ($query) use ($userId) {
                     $query = $query->whereHas('createdBy', function ($q) use ($userId) {
                         return $q->where('id', $userId);
