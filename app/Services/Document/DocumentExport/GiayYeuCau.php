@@ -176,16 +176,16 @@ class GiayYeuCau
         $name_assets = "Quyền sử hữu căn hộ";
         $number_assets = "01";
         $count = 0;
-        // foreach ($assets as $index => $item) {
-        //     $name_assets .= ($index) ? " và " : "";
-        //     $name_assets .= $item->appraise_asset;
-        //     $count += 1;
-        // }
-        // if ($count < 10) {
-        //     $number_assets = '0' . strval($count);
-        // } else {
-        //     $number_assets = strval($count);
-        // }
+        foreach ($certificate->appraises as $index => $item) {
+            $name_assets .= ($index) ? " và " : "";
+            $name_assets .= $item->appraise_asset;
+            $count += 1;
+        }
+        if ($count < 10) {
+            $number_assets = '0' . strval($count);
+        } else {
+            $number_assets = strval($count);
+        }
         $section->addListItem("Tên tài sản: " . htmlspecialchars($name_assets), 0, [], 'bullets', []);
         $section->addListItem("Số lượng, khối lượng tài sản: " . $number_assets, 0, [], 'bullets', []);
 
@@ -207,22 +207,22 @@ class GiayYeuCau
         $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
         $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
-        // foreach ($assets as $stt => $asset) {
-        // Thông tin tài sản
-        $table->addRow(400, $cantSplit);
-        $table->addCell(600, $cellVCentered)->addText('1', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4500, $cellVJustify)->addText('Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', ['bold' => true], $cellHJustify);
-        $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-        $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-        $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+        foreach ($certificate->appraises as $stt => $asset) {
+            // Thông tin tài sản
+            $table->addRow(400, $cantSplit);
+            $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
+            $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
+            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+            $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
 
-        $table->addRow(400, $cantSplit);
-        $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4500, $cellVJustify)->addText('Quyền sử hữu căn hộ', ['bold' => false], $cellHJustify);
-        $table->addCell(1000, $cellVCentered)->addText('50', ['bold' => false], $cellHCentered);
-        $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
-        $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
-        // }
+            $table->addRow(400, $cantSplit);
+            $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
+            $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
+            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
+            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => false], $cellHCentered); //$m2
+            $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
+        }
 
         $appraise_date = date_create($certificate->appraise_date);
         $bien101 = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
@@ -232,7 +232,7 @@ class GiayYeuCau
         $section->addListItem("Thời điểm thẩm định giá: Tháng "  . date_format($appraise_date, "m/Y") . '.', 0, [], 'bullets', []);
         $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
         $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', []);
-        $section->addListItem("Ngày giờ, địa điểm khảo sát: 04/03/2024 tại Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM.", 0, [], 'bullets', []);
+        $section->addListItem("Ngày giờ, địa điểm khảo sát: ", 0, [], 'bullets', []);
         $section->addListItem("Tên, điện thoại người liên hệ: ", 0, [], 'bullets', []);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Các hồ sơ, dữ liệu cá nhân, cung cấp gồm: ");
