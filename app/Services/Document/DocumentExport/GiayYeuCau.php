@@ -108,7 +108,7 @@ class GiayYeuCau
         $cellVCentered = array('valign' => 'center');
         $cellHJustify = array('align' => 'both');
         $cellVJustify = array('valign' => 'both');
-        [] = ['indentation' => ['firstLine' => 360]];
+        // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
 
         $phpWord->setDefaultParagraphStyle([
