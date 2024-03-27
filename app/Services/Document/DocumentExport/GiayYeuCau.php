@@ -201,7 +201,7 @@ class GiayYeuCau
         // }
         foreach ($certificate->appraises as $index => $item) {
             $name_assets .= ($index) ? " và " : "";
-
+            echo $item;
             $name_assets .= $item->appraise_asset;
             if ($item->appraise_law) {
                 foreach ($item->appraise_law as $index2 => $item2) {
