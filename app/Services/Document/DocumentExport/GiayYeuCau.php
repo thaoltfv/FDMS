@@ -173,7 +173,7 @@ class GiayYeuCau
         $textRun->addText("Nội dung: ", ['bold' => false]);
         $textRun->addText('Đề nghị Công ty TNHH Thẩm định giá Nova thẩm định giá tài sản như sau: ', ['bold' => false]);
 
-        $name_assets = "Quyền sử hữu căn hộ";
+        $name_assets = "";
         $number_assets = "01";
         $count = 0;
         foreach ($certificate->appraises as $index => $item) {
@@ -186,7 +186,7 @@ class GiayYeuCau
         } else {
             $number_assets = strval($count);
         }
-        $section->addListItem("Tên tài sản: " . htmlspecialchars($name_assets), 0, [], 'bullets', []);
+        $section->addListItem("Tên tài sản: " . htmlspecialchars($name_assets) . '.', 0, [], 'bullets', []);
         $section->addListItem("Số lượng, khối lượng tài sản: " . $number_assets, 0, [], 'bullets', []);
 
         $tableBasicStyle = array(
