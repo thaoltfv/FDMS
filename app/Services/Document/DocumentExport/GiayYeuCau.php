@@ -203,7 +203,7 @@ class GiayYeuCau
         $table = $section->addTable($styleTable);
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4200, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
+        $table->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
         $table->addCell(1300, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
         $table->addCell(1500, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
@@ -211,14 +211,14 @@ class GiayYeuCau
         // Thông tin tài sản
         $table->addRow(400, $cantSplit);
         $table->addCell(600, $cellVCentered)->addText('1', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4000, $cellVJustify)->addText('Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', ['bold' => true], $cellHJustify);
+        $table->addCell(4500, $cellVJustify)->addText('Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', ['bold' => true], $cellHJustify);
         $table->addCell(1300, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
         $table->addCell(1500, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
 
         $table->addRow(400, $cantSplit);
         $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4200, $cellVJustify)->addText('Quyền sử hữu căn hộ', ['bold' => false], $cellHJustify);
+        $table->addCell(4500, $cellVJustify)->addText('Quyền sử hữu căn hộ', ['bold' => false], $cellHJustify);
         $table->addCell(1300, $cellVCentered)->addText('50', ['bold' => false], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
         $table->addCell(1500, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
@@ -226,10 +226,6 @@ class GiayYeuCau
 
         $appraise_date = date_create($certificate->appraise_date);
         $bien101 = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
-
-
-
-
 
 
         $section->addListItem("Mục đích yêu cầu thẩm định giá: " . $bien101 . ".", 0, [], 'bullets', []);
