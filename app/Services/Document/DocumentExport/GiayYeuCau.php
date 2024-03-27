@@ -85,7 +85,7 @@ class GiayYeuCau
         // );
         $styleTable = [
             'borderSize' => 1,
-            'align' => JcTable::START,
+            'align' => JcTable::CENTER,
             // 'spaceBefore'        =>  240
             // 'cellMarginLeft'  => Converter::inchToTwip(1.0),
 
@@ -203,10 +203,10 @@ class GiayYeuCau
         $table = $section->addTable($styleTable);
         $table->addRow(400, $rowHeader);
         $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(5000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
-        $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
+        $table->addCell(4000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
+        $table->addCell(1500, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
-        $table->addCell(2000, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
+        $table->addCell(1500, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
         // foreach ($assets as $stt => $asset) {
         // Thông tin tài sản
         $table->addRow(400, $cantSplit);
