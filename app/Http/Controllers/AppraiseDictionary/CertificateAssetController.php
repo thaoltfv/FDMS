@@ -20,6 +20,7 @@ use App\Services\Document\BaoCaoTest;
 use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
+use App\Models\Certificate;
 use App\Models\DocumentDictionary;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
@@ -424,7 +425,9 @@ class CertificateAssetController extends Controller
         $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-        $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+        // $certificate = Certificate::where('id', $id)->first();
+        $certificate = $this->certificateRepository->findById($id);
+        // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
         return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $documentConfig));
