@@ -250,7 +250,7 @@ class GiayYeuCau
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             if ($item->tangibleAssets) {
-                foreach ($$item->tangibleAssets as $tangible) {
+                foreach ($item->tangibleAssets as $tangible) {
                     $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
                 }
             }
