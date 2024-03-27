@@ -208,7 +208,7 @@ class GiayYeuCau
             if ($item->appraiseLaw) {
                 foreach ($item->appraiseLaw as $index2 => $item2) {
                     $appraise_law .= ($index2) ? " và " : "";
-                    $appraise_law .= "01 Bản Giấy" . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                    $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
                 }
             }
             $count += 1;
