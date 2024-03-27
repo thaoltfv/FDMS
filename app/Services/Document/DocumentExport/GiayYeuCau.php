@@ -86,6 +86,7 @@ class GiayYeuCau
         $styleTable = [
             'borderSize' => 1,
             'align' => JcTable::START,
+            'spaceBefore'        =>  240
             // 'cellMarginLeft'  => Converter::inchToTwip(1.0),
 
         ];
@@ -201,7 +202,7 @@ class GiayYeuCau
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
         $table = $section->addTable($styleTable);
         $table->addRow(400, $rowHeader);
-        $table->addCell(600, array_merge($cellVCentered, $marginLeft))->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
+        $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
         $table->addCell(5000, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
@@ -209,14 +210,14 @@ class GiayYeuCau
         // foreach ($assets as $stt => $asset) {
         // Thông tin tài sản
         $table->addRow(400, $cantSplit);
-        $table->addCell(600,  array_merge($cellVCentered, $marginLeft))->addText('1', ['bold' => true], array_merge($cellHCentered, $keepNext));
+        $table->addCell(600, $cellVCentered)->addText('1', ['bold' => true], array_merge($cellHCentered, $keepNext));
         $table->addCell(2000, $cellVJustify)->addText('Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', ['bold' => true], $cellHJustify);
         $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
         $table->addCell(2000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
 
         $table->addRow(400, $cantSplit);
-        $table->addCell(600, array_merge($cellVCentered, $marginLeft))->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
+        $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
         $table->addCell(2000, $cellVJustify)->addText('Quyền sử hữu căn hộ', ['bold' => false], $cellHJustify);
         $table->addCell(1000, $cellVCentered)->addText('50', ['bold' => false], $cellHCentered);
         $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
