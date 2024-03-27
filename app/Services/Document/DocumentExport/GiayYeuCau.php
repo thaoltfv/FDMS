@@ -244,8 +244,10 @@ class GiayYeuCau
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-            foreach ($asset->tangible_assets as $tangible) {
-                $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
+            if ($asset->tangible_assets) {
+                foreach ($asset->tangible_assets as $tangible) {
+                    $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
+                }
             }
             $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
