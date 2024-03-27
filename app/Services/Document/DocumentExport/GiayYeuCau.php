@@ -205,8 +205,8 @@ class GiayYeuCau
 
             $name_assets .= $item->appraise_asset;
             $check = $item->tangibleAssets;
-            if ($item->appraise_law) {
-                foreach ($item->appraise_law as $index2 => $item2) {
+            if ($item->appraiseLaw) {
+                foreach ($item->appraiseLaw as $index2 => $item2) {
                     $appraise_law .= ($index2) ? " và " : "";
                     $appraise_law .= "01 Bản Giấy" . $item2->content . " do " . $item2->certifying_agency . " cấp.";
                 }
@@ -241,7 +241,7 @@ class GiayYeuCau
         $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
         foreach ($certificate->appraises as $stt => $asset) {
             // Thông tin tài sản
-            $test = $asset;
+
             $dt = 0;
             $table->addRow(400, $cantSplit);
             $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
@@ -249,8 +249,8 @@ class GiayYeuCau
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-            if ($test->tangible_assets) {
-                foreach ($test->tangible_assets as $tangible) {
+            if ($item->tangibleAssets) {
+                foreach ($$item->tangibleAssets as $tangible) {
                     $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
                 }
             }
