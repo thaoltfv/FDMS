@@ -18,6 +18,7 @@
 					:signAppraisers="signAppraisers"
 					:customers="customers"
 					:employeePerformance="employeePerformance"
+					:businessManagers="businessManagers"
 					:employeeBusiness="employeeBusiness"
 					:render_price_fee="render_price_fee"
 					@handleChangeAppraiser="handleChangeAppraiser"
@@ -140,6 +141,10 @@ export default {
 					administrative: {
 						name: ""
 					},
+					business_manager_id: null,
+					appraiser_business_manager: {
+						name: ""
+					},
 					appraiser_control_id: null,
 					appraiser_control: {
 						name: ""
@@ -179,6 +184,7 @@ export default {
 			},
 			employeeBusiness: [],
 			employeePerformance: [],
+			businessManagers: [],
 			customers: [],
 			appraisersManager: [],
 			appraisersControl: [],
@@ -266,6 +272,7 @@ export default {
 			let dataAppraise = [...resp.data];
 			let managerId = await appraiserCompany.data.data[0].appraiser.id;
 			this.employeePerformance = dataAppraise;
+			this.businessManagers = dataAppraise;
 			this.employeeBusiness = dataAppraise;
 			this.appraisersControl = dataAppraise;
 			this.administratives = dataAppraise;

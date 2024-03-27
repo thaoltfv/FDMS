@@ -142,6 +142,13 @@
                 label="Bản đồ số"
                 class="contain-input contain-input__info"
               />
+			  <InputCategory
+                  v-model="filter.transaction_type_id"
+                  vid="info"
+                  label="Loại giao dịch"
+                  class="contain-input contain-input__info"
+                  :options="optionsTransactionType"
+                />
               </div>
                 <div class="row row__total">
                   <div class="col-md-6 col-lg-3">
@@ -328,6 +335,7 @@ export default {
 			showSearch: false,
 			propertyTypes: [],
 			infoSources: [],
+			transactionType: [],
 			provinces: [],
 			districts: [],
 			wards: [],
@@ -574,6 +582,14 @@ export default {
 				key: 'description'
 			}
 		},
+		optionsTransactionType ()
+		{
+			return {
+				data: this.transactionType,
+				id: 'id',
+				key: 'description'
+			}
+		},
 		optionsProvince () {
 			return {
 				data: this.provinces,
@@ -633,6 +649,7 @@ export default {
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 		},
 		search (filter) {
+			console.log('vào hàm search')
 			this.$emit('filter-changed', this.filter)
 			this.$emit('cancel', event)
 			this.$router.push({
@@ -666,6 +683,7 @@ export default {
 					average_land_unit_price_to: filter.average_land_unit_price_to
 				}
 			}).catch(_ => {})
+			console.log('filter.transaction_type_id',filter.transaction_type_id)
 		},
 		handleCancel (event) {
 			this.$emit('cancel', event)
@@ -683,6 +701,15 @@ export default {
 			try {
 				const resp = await WareHouse.getInfoSource()
 				this.infoSources = [...resp.data]
+			} catch (err) {
+				this.isSubmit = false
+				throw err
+			}
+		},
+		async getTransactionType() {
+			try {
+				const resp = await WareHouse.getTransactionType()
+				this.transactionType = [...resp.data]
 			} catch (err) {
 				this.isSubmit = false
 				throw err
@@ -811,6 +838,7 @@ export default {
 		this.getProvinces()
 		this.getInfoSource()
 		this.getUser()
+		this.getTransactionType()
 	}
 }
 </script>

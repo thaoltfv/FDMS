@@ -396,6 +396,24 @@
               </div>
             </div>
           </TabItem>
+          <TabItem name="Biên bản khảo sát hiện trạng">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0" v-if="imageCurrentSurvey">
+                <div style="width: auto;" class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageCurrentSurvey.id)" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+								<div class="container_input_img" style="width: unset;">
+									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'biên bản khảo sát hiện trạng')" />
+								</div>
+              </div>
+            </div>
+          </TabItem>
           <TabItem name="Khác">
             <div class="mt-2">
               <div class="d-flex justify-content-between align-items-end mb-2">
@@ -824,6 +842,24 @@
               </div>
             </div>
           </TabItem>
+          <TabItem name="Biên bản khảo sát hiện trạng">
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <h3 class="mb-0"> </h3>
+              </div>
+              <div class="container-img row mr-0 ml-0" v-if="imageCurrentSurvey">
+                <div style="width: auto;" class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageCurrentSurvey.id)" :key="images.id">
+                  <div class="delete" @click="removeImage(index)">X</div>
+                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
+                </div>
+								<div class="container_input_img" style="width: unset;">
+									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'biên bản khảo sát hiện trạng')" />
+								</div>
+              </div>
+            </div>
+          </TabItem>
           <TabItem name="Khác">
             <div class="mt-2">
               <div class="d-flex justify-content-between align-items-end mb-2">
@@ -1043,6 +1079,7 @@ export default {
 			imageType: null,
 			imgOverall: null,
 			imageCurrentStatus: null,
+      imageCurrentSurvey: null,
 			imageJuridical: null,
 			built_years: []
 		}
@@ -1080,11 +1117,14 @@ export default {
 			return apartmentName + floorName + blockName + projectName
 		},
 		getImageDescriptions (data) {
+      console.log('data',data)
 			this.imageType = data.find(imageDescription => imageDescription.description.toLowerCase() === 'đường tiếp giáp tài sản thẩm định giá')
 			this.imgOverall = data.find(imageDescription => imageDescription.description.toLowerCase() === 'tổng thể tài sản thẩm định giá')
 			this.imageCurrentStatus = data.find(imageDescription => imageDescription.description.toLowerCase() === 'hiện trạng tài sản thẩm định giá')
 			this.imageJuridical = data.find(imageDescription => imageDescription.description.toLowerCase() === 'pháp lý tài sản')
-		},
+      this.imageCurrentSurvey = data.find(imageDescription => imageDescription.description.toLowerCase() === 'biên bản khảo sát hiện trạng')
+      console.log('this.imageCurrentSurvey',this.imageCurrentSurvey)
+    },
 		handleClickUtilities (event) {
 			// // console.log(this.data.apartment_asset_properties.utilities, 'event')
 		},
@@ -1290,6 +1330,7 @@ export default {
 			reader.readAsDataURL(this.file)
 		},
 		uploadImage () {
+      console.log('vào hàm uploadImage')
 			this.isLoading = true
 			const formData = new FormData()
 			formData.append('image', this.file)
