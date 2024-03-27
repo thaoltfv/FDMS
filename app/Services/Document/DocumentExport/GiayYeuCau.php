@@ -204,7 +204,7 @@ class GiayYeuCau
             $name_assets .= ($index) ? " và " : "";
 
             $name_assets .= $item->appraise_asset;
-            $check = $item->assetGeneral;
+            $check = $item->assetLaw;
             if ($item->appraise_law) {
                 foreach ($item->appraise_law as $index2 => $item2) {
                     $appraise_law .= ($index2) ? " và " : "";
