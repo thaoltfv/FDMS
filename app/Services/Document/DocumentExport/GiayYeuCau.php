@@ -236,7 +236,7 @@ class GiayYeuCau
         $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Ngày giờ, địa điểm khảo sát: 04/03/2024 tại Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM.", 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Tên, điện thoại người liên hệ:                           ; Điện thoại:                   ", 0, [], 'bullets', $indentFistLine);
-        $listItemRun  = $section->addListItemRun('Heading2');
+        $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Các hồ sơ, dữ liệu cá nhân, cung cấp gồm: ");
         $listItemRun->addText("01 Bản Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp.", ['italic' => true]);
 
