@@ -23,6 +23,7 @@ use App\Enum\ErrorMessage;
 use App\Models\Certificate;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
+use App\Models\RealEstate;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
 use Illuminate\Http\JsonResponse;
@@ -428,24 +429,13 @@ class CertificateAssetController extends Controller
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $certificate = Certificate::where('id', $id)->first();
-        $appraises = [];
-        if ($certificate->appraises) {
-            $idRE = null;
-            foreach ($certificate->appraises as $appraise) {
-                $idRE = $appraise->real_estate_id;
-            }
-            if ($idRE) {
-                $realEstate = CertificateRealEstate::where('real_estate_id', $idRE)->first();
-                array_push($appraises, $realEstate);
-            }
-            // $appraises = $this->certificateAssetRepository->findByIds(json_encode($ids));
-        }
+        $realEstate = RealEstate::where('certificate_id', $id)->first();
 
         // $certificate = $this->certificateRepository->findById($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $appraises));
+        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
     }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
