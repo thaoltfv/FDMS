@@ -86,7 +86,7 @@ class GiayYeuCau
         $styleTable = [
             'borderSize' => 1,
             'align' => JcTable::START,
-            'cellMargin'  => 50,
+            'cellMargin'  => Converter::inchToTwip(1.4),
 
         ];
 
@@ -126,7 +126,7 @@ class GiayYeuCau
             'marginTop' => Converter::inchToTwip(.8),
             'marginBottom' => Converter::inchToTwip(.8),
             'marginRight' => Converter::inchToTwip(.8),
-            'marginLeft' => Converter::inchToTwip(1.2)
+            'marginLeft' => Converter::inchToTwip(.8)
         ];
         $section = $phpWord->addSection($styleSection);
 
