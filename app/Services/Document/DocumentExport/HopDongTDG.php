@@ -186,7 +186,7 @@ class HopDongTDG
         $section->addText(
             "Hôm nay, ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y') . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
             null,
-            $indent13
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
         );
 
         $table = $section->addTable([
@@ -194,25 +194,28 @@ class HopDongTDG
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
+        $alignBoth = ['align' => 'both'];
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row1->addCell(2000, $cellVCentered)->addText('BÊN A', ['bold' => true,],  array('align' => 'left'));
-        $row1->addCell(7900, $cellVCentered)->addText(': ' . $certificate->petitioner_name, ['bold' => true],  array('align' => 'left'));
+        $row1->addCell(1900, $cellVCentered)->addText('BÊN A', ['bold' => true,],  $alignBoth);
+        $row1->addCell(8000, $cellVCentered)->addText(': ' . $certificate->petitioner_name, ['bold' => true],  $alignBoth);
 
         $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
-        $row2->addCell(2000, $cellVCentered)->addText('-    Địa chỉ', null,  array('align' => 'left'));
-        $row2->addCell(7900, $cellVCentered)->addText(': ' . $certificate->petitioner_address, null,  array('align' => 'left'));
+        $row2->addCell(1900, $cellVCentered)->addText('-    Địa chỉ', null,  $alignBoth);
+        $row2->addCell(8000, $cellVCentered)->addText(': ' . $certificate->petitioner_address, null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
         ));
-        $row3->addCell(2000, $cellVCentered)->addText('-    Số CCCD', null,  array('align' => 'left'));
-        $row3->addCell(7900, $cellVCentered)->addText(': ' . $certificate->petitioner_identity_card, null,  array('align' => 'left'));
+        $row3->addCell(1900, $cellVCentered)->addText('-    Số CCCD', null,  $alignBoth);
+        $row3->addCell(8000, $cellVCentered)->addText(': ' . $certificate->petitioner_identity_card, null,  $alignBoth);
 
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row4->addCell(2000, $cellVCentered)->addText('-    Số điện thoại', null,  array('align' => 'left'));
-        $row4->addCell(7900, $cellVCentered)->addText(': ' . $certificate->petitioner_phone, null,  array('align' => 'left'));
+        $row4->addCell(1900, $cellVCentered)->addText('-    Số điện thoại', null,  $alignBoth);
+        $row4->addCell(8000, $cellVCentered)->addText(': ' . $certificate->petitioner_phone, null,  $alignBoth);
+
+
 
 
         $footer = $section->addFooter();
@@ -220,7 +223,7 @@ class HopDongTDG
         $table->addRow();
         $cell = $table->addCell(4500);
         $textrun = $cell->addTextRun();
-        // $textrun->addText($comName  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID, array('size' => 8), array('align' => 'left'));
+        // $textrun->addText($comName  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID, array('size' => 8), $alignBoth);
         $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right'));
 
         $reportUserName = CommonService::getUserReport();
