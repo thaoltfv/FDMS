@@ -442,6 +442,26 @@ class CertificateAssetController extends Controller
         $report = new $service;
         return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
     }
+
+    public function printHopDongTDG(Request $request, $id): JsonResponse
+    {
+        $service = 'App\\Services\\Document\\DocumentExport\\HopDongTDG';
+        $format = '.docx';
+        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+        // $certificate = Certificate::where('id', $id)->first();
+        $select = ['*'];
+        $with = [
+            'assetType:id,acronym,description',
+        ];
+        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+
+
+        $certificate = $this->certificateRepository->findById($id);
+        // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+        $documentConfig = DocumentDictionary::query()->get();
+        $report = new $service;
+        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
+    }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
         try {
