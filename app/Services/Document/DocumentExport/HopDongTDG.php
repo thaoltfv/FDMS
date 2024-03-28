@@ -125,7 +125,7 @@ class HopDongTDG
         ]);
         $styleSection = [
             // 'footerHeight' => 300,
-            'marginTop' => Converter::inchToTwip(0),
+            'marginTop' => Converter::inchToTwip(0.3),
             // 'marginBottom' => Converter::inchToTwip(.6),
             'marginRight' => Converter::inchToTwip(0),
             'marginLeft' => Converter::inchToTwip(0)
@@ -142,11 +142,11 @@ class HopDongTDG
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(4000, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true,], $cellHCentered);
         $row1->addCell(500, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
-        $row1->addCell(5400, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true], $cellHCentered);
+        $row1->addCell(5700, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true], $cellHCentered);
         $row2 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
         $row2->addCell(4000, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true,  'underline' => 'single'], $cellHCentered);
-        $row2->addCell(500, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
-        $row2->addCell(5400, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
+        $row2->addCell(200, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
         $row3->addCell(4000, $cellVCentered)->addText('Số: 24145/HĐTĐG-HCM ', null, $cellHCentered);
         $row3->addCell(500, $cellVCentered)->addText(
@@ -154,7 +154,7 @@ class HopDongTDG
             ['bold' => true,],
             $cellHCentered
         );
-        $row3->addCell(5400, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $row3->addCell(5700, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
