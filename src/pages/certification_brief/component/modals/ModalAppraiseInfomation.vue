@@ -43,7 +43,7 @@
 									v-model="form.document_num"
 									vid="document_num"
 									label="Số hợp đồng"
-									:disabledInput="!editDocument"
+									:disabledInput="editDocument"
 									class="form-group-container"
 								/>
 							</div>
@@ -164,7 +164,7 @@
 									vid="certificate_date"
 									label="Ngày chứng thư"
 									placeholder="Ngày / tháng / năm"
-									:disabled="editDocument"
+									:disabled="!editDocument"
 									class="form-group-container"
 									:formatDate="'DD/MM/YYYY'"
 									:date="disabledDate"

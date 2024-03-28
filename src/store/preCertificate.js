@@ -282,20 +282,20 @@ export const usePreCertificateStore = defineStore(
 			if (res.data) {
 				dataPC.value.id = res.data.id;
 
-				if (dataPC.value.payments && dataPC.value.payments.length > 0) {
-					for (let index = 0; index < dataPC.value.payments.length; index++) {
-						const element = dataPC.value.payments[index];
-						if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
-							element.pay_date = moment(element.pay_date, "DD-MM-YYYY").format(
-								"YYYY-MM-DD"
-							);
-						}
-					}
-					let difference = dataPC.value.payments.filter(
-						payment => !dataPC.value.paymentsOriginal.includes(payment)
-					);
-					const res = await updatePaymentFunction(difference, true);
-				}
+				// if (dataPC.value.payments && dataPC.value.payments.length > 0) {
+				// 	for (let index = 0; index < dataPC.value.payments.length; index++) {
+				// 		const element = dataPC.value.payments[index];
+				// 		if (moment(element.pay_date, "DD/MM/YYYY", true).isValid()) {
+				// 			element.pay_date = moment(element.pay_date, "DD-MM-YYYY").format(
+				// 				"YYYY-MM-DD"
+				// 			);
+				// 		}
+				// 	}
+				// 	let difference = dataPC.value.payments.filter(
+				// 		payment => !dataPC.value.paymentsOriginal.includes(payment)
+				// 	);
+				// 	const res = await updatePaymentFunction(difference, true);
+				// }
 				await uploadFilePreCertificateFunction("Appendix");
 				other.value.toast.open({
 					message: "Lưu hồ sơ thẩm định thành công",
