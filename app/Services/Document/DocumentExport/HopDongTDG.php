@@ -143,14 +143,14 @@ class HopDongTDG
         $cellHCentered = array('align' => 'center');
         $cellVCentered = array('valign' => 'center');
         $row1 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row1->addCell(400, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true, 'size' => 11, 'name' => 'Cambria'], $cellHCentered);
-        $row1->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true, 'size' => 11, 'name' => 'Cambria'], $cellHCentered);
+        $row1->addCell(4000, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true, 'name' => 'Cambria'], $cellHCentered);
+        $row1->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true,  'name' => 'Cambria'], $cellHCentered);
         $row2 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row2->addCell(400, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true, 'size' => 11, 'name' => 'Cambria', 'underline' => 'single'], $cellHCentered);
-        $row2->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true, 'size' => 11, 'name' => 'Cambria', 'underline' => 'single'], $cellHCentered);
+        $row2->addCell(4000, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true, 'name' => 'Cambria', 'underline' => 'single'], $cellHCentered);
+        $row2->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true,  'name' => 'Cambria', 'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(400, $cellVCentered)->addText('CÔNG TY TNHH ', ['bold' => true, 'size' => 11, 'name' => 'Cambria'], $cellHCentered);
-        $row3->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true, 'size' => 11, 'name' => 'Cambria'], $cellHCentered);
+        $row3->addCell(4000, $cellVCentered)->addText('Số: 24145/HĐTĐG-HCM ', ['bold' => true,  'name' => 'Cambria'], $cellHCentered);
+        $row3->addCell(5900, $cellVCentered)->addText('', ['bold' => true,  'name' => 'Cambria'], $cellHCentered);
 
 
         $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '13'], ['align' => 'center']);
@@ -330,7 +330,7 @@ class HopDongTDG
         $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right'));
 
         $reportUserName = CommonService::getUserReport();
-        $reportName = 'GYC' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = 'HDTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
