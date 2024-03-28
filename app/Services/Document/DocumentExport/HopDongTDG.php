@@ -289,19 +289,19 @@ class HopDongTDG
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(800, $cellVTop)->addText('STT', null,  $alignCenter);
-        $row1->addCell(7500, $cellVTop)->addText('Hạng mục', null, $alignCenter);
-        $row1->addCell(1600, $cellVTop)->addText("Diện tích sàn (m\u{00B2})", null, $alignCenter);
+        $row1->addCell(800, $cellVCentered)->addText('STT', null,  $alignCenter);
+        $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', null, $alignCenter);
+        $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", null, $alignCenter);
 
         foreach ($certificate->appraises as $index => $item) {
-            if ($item->appraiseLaw) {
-                foreach ($item->appraiseLaw as $index2 => $item2) {
+            if ($item->tangibleAssets) {
+                foreach ($item->tangibleAssets as $index2 => $item2) {
                     $row2 = $table->addRow(100, array(
                         'tblHeader' => false,
                         'cantSplit' => false
                     ));
                     $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
-                    $row2->addCell(7500, $cellVTop)->addText('Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
+                    $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
                     $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base, null, ['align' => 'right']);
                 }
             }
