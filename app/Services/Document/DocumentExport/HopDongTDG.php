@@ -366,8 +366,8 @@ class HopDongTDG
         ));
         $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row6->addCell(3900, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
-        $row6->addCell(4800, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
+        $row6->addCell(3800, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
+        $row6->addCell(4900, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
