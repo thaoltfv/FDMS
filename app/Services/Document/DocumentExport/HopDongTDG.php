@@ -272,7 +272,8 @@ class HopDongTDG
             'tblHeader' => false,
             'cantSplit' => false
         ));
-        $row1->addCell(1200, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row1->addCell(1000, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row1->addCell(200, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row1->addCell(8700, $cellVTop)->addText('Tài sản thẩm định giá : Quyền sở hữu căn hộ  (Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', null,  $alignBoth);
 
         $footer = $section->addFooter();
