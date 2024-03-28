@@ -243,8 +243,10 @@ class HopDongTDG
         $row9->addCell(8100, $cellVTop)->addText(': 3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText(': ' . 'Ông ' . ($certificate->appraiserManager ? $certificate->appraiserManager->name . ' – Chức vụ: Tổng Giám đốc' : ''), null,  $alignBoth);
-
+        $textRun = $row9->addCell(8100, $cellVTop)->addTextRun($alignBoth);
+        $textRun->addText(': Ông ', ['bold' => false]);
+        $textRun->addText($certificate->appraiserManager ? $certificate->appraiserManager->name : '', ['bold' => true]);
+        $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau",
             null,
