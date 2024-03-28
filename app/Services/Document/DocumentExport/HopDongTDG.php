@@ -164,7 +164,7 @@ class HopDongTDG
         );
         $indent13 = ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.13)]];
         $section->addText(
-            ' ' . "- Căn cứ Bộ Luật dân sự nước Cộng Hoà Xã Hội Chủ Nghĩa Việt Nam số 91/2015/QH13 được Quốc Hội thông qua ngày 24/11/2015 có hiệu lực ngày 01/01/2017;",
+            html_entity_decode('&#8203;') . "- Căn cứ Bộ Luật dân sự nước Cộng Hoà Xã Hội Chủ Nghĩa Việt Nam số 91/2015/QH13 được Quốc Hội thông qua ngày 24/11/2015 có hiệu lực ngày 01/01/2017;",
             ['italic' => true],
             $indent13
         );
@@ -174,9 +174,8 @@ class HopDongTDG
             $indent13
         );
         $section->addText(
-            htmlspecialchars(' &nbsp;- Căn cứ Bộ Luật dân sự nước Cộng Hoà Xã Hội Chủ Nghĩa Việt Nam số 91/2015/QH13 được Quốc Hội thông qua ngày 24/11/2015 có hiệu lực ngày 01/01/2017;'),
-            ['italic'
-            => true],
+            ' ' . "- Căn cứ Luật giá số 11/2012/QH13 do Quốc Hội thông qua ngày 20/06/2012, có hiệu lực thi hành từ ngày 01/01/2013;",
+            ['italic' => true],
             $indent13
         );
         $section->addText(
