@@ -350,7 +350,16 @@ class HopDongTDG
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(3000, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
         $row4->addCell(5700, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam', null,  $alignBoth);
-        // appraise_date
+
+        $row5 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row5->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row5->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+        $row5->addCell(3500, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá', null, ['align' => 'left']);
+        $row5->addCell(5200, $cellVTop)->addText(': ' . $certificate->petitioner_name, null,  $alignBoth);
+
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
