@@ -127,8 +127,8 @@ class HopDongTDG
             // 'footerHeight' => 300,
             'marginTop' => Converter::inchToTwip(0.75),
             // 'marginBottom' => Converter::inchToTwip(.6),
-            'marginRight' => Converter::inchToTwip(0),
-            'marginLeft' => Converter::inchToTwip(0)
+            'marginRight' => Converter::inchToTwip(0.3),
+            'marginLeft' => Converter::inchToTwip(0.3)
         ];
 
         $check = "";
@@ -166,22 +166,27 @@ class HopDongTDG
         $section->addText(
             "- Căn cứ Bộ Luật dân sự nước Cộng Hoà Xã Hội Chủ Nghĩa Việt Nam số 91/2015/QH13 được Quốc Hội thông qua ngày 24/11/2015 có hiệu lực ngày 01/01/2017;",
             ['italic' => true],
+            $indent13
         );
         $section->addText(
             "- Căn cứ Luật thương mại nước Cộng Hoà Xã Hội Chủ Nghĩa Việt Nam do Quốc Hội thông qua ngày 01/01/2006;",
             ['italic' => true],
+            $indent13
         );
         $section->addText(
             "- Căn cứ Luật giá số 11/2012/QH13 do Quốc Hội thông qua ngày 20/06/2012, có hiệu lực thi hành từ ngày 01/01/2013;",
             ['italic' => true],
+            $indent13
         );
         $section->addText(
             "- Căn cứ vào chức năng quyền hạn của Công ty TNHH Thẩm định giá Nova và nhu cầu của khách hàng.",
             ['italic' => true],
+            $indent13
         );
         $section->addText(
             "Hôm nay, ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y') . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
             null,
+            $indent13
         );
 
 
