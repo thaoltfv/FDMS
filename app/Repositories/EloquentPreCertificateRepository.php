@@ -1213,7 +1213,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         break;
                     case 2:
                         if (!($data->appraiserPerform->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thực hiện mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
