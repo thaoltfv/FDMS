@@ -320,17 +320,18 @@ class HopDongTDG
         ));
         $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2500, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
-        $row1->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row1->addCell(2600, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
+        $row1->addCell(6100, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
 
+        $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
         $row2 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
         ));
         $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row2->addCell(2200, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
-        $row2->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row2->addCell(2600, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
+        $row2->addCell(6100, $cellVTop)->addText(': ' . $appraise_date_formatted, null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -338,8 +339,8 @@ class HopDongTDG
         ));
         $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row3->addCell(2300, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row3->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row3->addCell(2600, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
+        $row3->addCell(6100, $cellVTop)->addText(': ' . isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name : '', null,  $alignBoth);
 
         $row4 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -347,8 +348,8 @@ class HopDongTDG
         ));
         $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row4->addCell(2400, $cellVTop)->addText('Phương pháp thẩm định giá', null,  $alignBoth);
-        $row4->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row4->addCell(2600, $cellVTop)->addText('Phương pháp thẩm định giá', null,  $alignBoth);
+        $row4->addCell(6100, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam', null,  $alignBoth);
         // appraise_date
         $footer = $section->addFooter();
         $table = $footer->addTable();
