@@ -258,12 +258,10 @@ class HopDongTDG
         $textRun->addText('Nội dung công việc thực hiện', ['bold' => true]);
 
         $section->addText(
-            "1.1. Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
+            "➢ Tài sản thẩm định giá : Quyền sở hữu căn hộ  (Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).",
             null,
-            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
         );
-        $textRun = $section->addTextRun();
-        $textRun->addText('→ Item 1', ['bold' => true]);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
