@@ -253,6 +253,16 @@ class HopDongTDG
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
         );
 
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 1: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Nội dung công việc thực hiện', ['bold' => true]);
+
+        $section->addText(
+            "1.1. Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
+            null,
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.17)]]
+        );
+
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
