@@ -121,7 +121,7 @@ class HopDongTDG
             'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
             'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3)),
             'space' => [
-                'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(16), 'rule' => 'exact'
+                'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(10), 'rule' => 'exact'
             ],
             'align' => 'both'
         ]);
