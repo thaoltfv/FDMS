@@ -340,7 +340,7 @@ class HopDongTDG
         $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row3->addCell(2600, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row3->addCell(6100, $cellVTop)->addText(': ' . isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name : '', null,  $alignBoth);
+        $row3->addCell(6100, $cellVTop)->addText(': ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name : ''), null,  $alignBoth);
 
         $row4 = $table->addRow(100, array(
             'tblHeader' => false,
