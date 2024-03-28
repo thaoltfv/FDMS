@@ -49,12 +49,12 @@ class BaoCao
         $phpWord->addTitleStyle(
             2,
             array('size' => '13', 'bold' => true),
-            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 1)//, 'spaceBefore' => 200, 'spaceAfter' => 100
+            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 1) //, 'spaceBefore' => 200, 'spaceAfter' => 100
         );
         $phpWord->addTitleStyle(
             3,
             array('size' => '13', 'bold' => true),
-            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 2)//, 'spaceBefore' => 150, 'spaceAfter' => 100
+            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 2) //, 'spaceBefore' => 150, 'spaceAfter' => 100
         );
 
         $phpWord->addParagraphStyle(
@@ -104,8 +104,8 @@ class BaoCao
                 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5)
             ],
             'space' => [
-				'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(16), 'rule' => 'exact'
-			]
+                'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(16), 'rule' => 'exact'
+            ]
         ]);
         $section = $phpWord->addSection([
             'footerHeight' => 300,
@@ -132,9 +132,9 @@ class BaoCao
         $cell11 = $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'center']);
         // check fecth image
         // if (($data = @file_get_contents($company->link)) !== false) {
-        $imgName = env('STORAGE_IMAGES','images') .'/'.'company_logo.png';
+        $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png';
         $cell11->addImage(
-            storage_path('app/public/'.$imgName),
+            storage_path('app/public/' . $imgName),
             array(
                 'width'         => 54,
                 'height'        => 33,
@@ -149,15 +149,16 @@ class BaoCao
         // }
         # watermark
         $header = $section->addHeader();
-        $header->addWatermark(storage_path('app/public/'.$imgName),
-                                array(
-                                    'width' => 200,
-                                    'marginTop' => 200,
-                                    'marginLeft' => 120,
-                                    'posHorizontal' => 'absolute',
-                                    'posVertical' => 'absolute',
-                                )
-                            );
+        $header->addWatermark(
+            storage_path('app/public/' . $imgName),
+            array(
+                'width' => 200,
+                'marginTop' => 200,
+                'marginLeft' => 120,
+                'posHorizontal' => 'absolute',
+                'posVertical' => 'absolute',
+            )
+        );
         $cell12 = $table1->addCell(Converter::inchToTwip(2.6), ['valign' => 'center']);
         $cell12->addText(CommonService::formatCompanyName($company), ['bold' => true, 'size' => '12'], ['align' => 'center']);
         $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'center']);
@@ -201,7 +202,7 @@ class BaoCao
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
         $acronym1 = !empty($company->acronym) ? ' (' . mb_strtoupper($company->acronym) . ')' : '';
         $acronym = !empty($company->acronym) ? mb_strtoupper($company->acronym) : mb_strtoupper($company->name);
-        $section->addListItem('Doanh nghiệp: ' . htmlspecialchars($company->name) . $acronym1 , 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' . htmlspecialchars($company->name) . $acronym1, 0, null, 'bullets');
         $section->addListItem('Địa chỉ: ' . htmlspecialchars($company->address), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $company->phone_number . "\tFax: " . $company->fax_number, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên Tổng Giám đốc: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
@@ -381,11 +382,11 @@ class BaoCao
                 } else {
                     $lawTypeTitle = isset($doc->law->content) ? $doc->law->content : '';
                 }
-                $table->addCell(2000, $cellVCentered)->addText($lawTypeTitle, null, ['align' => 'both' ,'keepNext' => true]);
+                $table->addCell(2000, $cellVCentered)->addText($lawTypeTitle, null, ['align' => 'both', 'keepNext' => true]);
                 $soPL = isset($doc->date) ? $doc->date : '';
-                $ngayPL = isset($doc->law_date) ? ' ngày '. date_format(date_create($doc->law_date), "d/m/Y")  : '';
-                $table->addCell(2000, $cellVCentered)->addText( $soPL . $ngayPL , null, ['align' => 'center','keepNext' => true]);
-                $table->addCell(5000, $cellVCentered)->addText(isset($doc->content) ? CommonService::nl2br($doc->content) : '', null, ['align' => 'both','keepNext' => true]);
+                $ngayPL = isset($doc->law_date) ? ' ngày ' . date_format(date_create($doc->law_date), "d/m/Y")  : '';
+                $table->addCell(2000, $cellVCentered)->addText($soPL . $ngayPL, null, ['align' => 'center', 'keepNext' => true]);
+                $table->addCell(5000, $cellVCentered)->addText(isset($doc->content) ? CommonService::nl2br($doc->content) : '', null, ['align' => 'both', 'keepNext' => true]);
                 $table->addCell(2000, $cellVCentered)->addText(isset($doc->certifying_agency) ? CommonService::nl2br($doc->certifying_agency) : '', null, ['align' => 'both']);
             }
         }
@@ -994,7 +995,7 @@ class BaoCao
 
 
         $section->addTitle('KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
-        $section->addText('Trên cơ sở các tài liệu do ' . $certificate->petitioner_name . ' cung cấp, với phương pháp thẩm định giá như trên được áp dụng trong tính toán, '. $company->name .' thông báo kết quả thẩm định giá như sau:', null, $indentFistLine);
+        $section->addText('Trên cơ sở các tài liệu do ' . $certificate->petitioner_name . ' cung cấp, với phương pháp thẩm định giá như trên được áp dụng trong tính toán, ' . $company->name . ' thông báo kết quả thẩm định giá như sau:', null, $indentFistLine);
 
         $totalEstimatePrice = [];
         foreach ($appraises as $stt => $appraise) {
@@ -1211,7 +1212,7 @@ class BaoCao
                     if (!$isFirst) {
                         $table->addCell(4000, $cellRowSpan)->addText('Phần diện tích đất phù hợp quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
                     } else {
-                        $table->addCell(null, $cellRowContinue, [], $cellHCentered)->addText(null,null,['keepNext'=> true]);
+                        $table->addCell(null, $cellRowContinue, [], $cellHCentered)->addText(null, null, ['keepNext' => true]);
                     }
                     $table->addCell(1500, $cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
                     $table->addCell(1500, $cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
@@ -1225,7 +1226,7 @@ class BaoCao
                     if (!$isFirst) {
                         $table->addCell(4000, $cellRowSpan)->addText('Phần diện tích đất vi phạm quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
                     } else {
-                        $table->addCell(null, $cellRowContinue, [], $cellHCentered)->addText(null,null,['keepNext'=> true]);
+                        $table->addCell(null, $cellRowContinue, [], $cellHCentered)->addText(null, null, ['keepNext' => true]);
                     }
                     $table->addCell(1500, $cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
                     $table->addCell(1500, $cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
@@ -1411,10 +1412,10 @@ class BaoCao
         $section->addTitle('NHỮNG ĐIỀU KHOẢN LOẠI TRỪ VÀ HẠN CHẾ CỦA KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
 
         $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị cho tài sản có đặc điểm pháp lý, đặc điểm kỹ thuật được mô tả tại mục IV của báo cáo này, theo yêu cầu thẩm định giá của ' . (isset($certificate->petitioner_name) ? $certificate->petitioner_name : '') . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $indentFistLine);
-        $section->addListItem('Các số liệu về tài sản '. $company->name .' căn cứ vào hồ sơ do khách hàng cung cấp và kết hợp khảo sát thực tế tại hiện trường dưới sự hướng dẫn của khách hàng và các bên có liên quan.', 0, null, 'bullets', $indentFistLine);
+        $section->addListItem('Các số liệu về tài sản ' . $company->name . ' căn cứ vào hồ sơ do khách hàng cung cấp và kết hợp khảo sát thực tế tại hiện trường dưới sự hướng dẫn của khách hàng và các bên có liên quan.', 0, null, 'bullets', $indentFistLine);
         $section->addListItem('Báo cáo chỉ có hiệu lực trong phạm vi số lượng và giá trị tài sản ghi tại mục IX của báo cáo này.', 0, null, 'bullets', $indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên chỉ được sử dụng cho một “mục đích thẩm định giá” duy nhất theo yêu cầu của khách hàng. Khách hàng phải hoàn toàn chịu trách nhiệm khi sử dụng sai mục đích đã yêu cầu.', 0, null, 'bullets', $indentFistLine);
-        $section->addListItem('Khách hàng là chủ tài sản hoặc bên thứ ba yêu cầu thẩm định giá phải chịu hoàn toàn trách nhiệm về tính chính xác, hợp pháp các thông tin liên quan đến đặc điểm kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho '. $company->name .' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $indentFistLine);
+        $section->addListItem('Khách hàng là chủ tài sản hoặc bên thứ ba yêu cầu thẩm định giá phải chịu hoàn toàn trách nhiệm về tính chính xác, hợp pháp các thông tin liên quan đến đặc điểm kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho ' . $company->name . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $indentFistLine);
         $section->addListItem('' . $company->name . ' không có trách nhiệm kiểm tra thông tin của những bản sao các giấy tờ liên quan đến tính chất pháp lý của tài sản yêu cầu thẩm định giá so với bản gốc. ', 0, null, 'bullets', array_merge($indentFistLine, $keepNext));
         // $section->addListItem('Thông tin quy hoạch được '.mb_strtoupper($company->acronym).' tham chiếu tại ứng dụng DNAILIS của Trung tâm Công nghệ thông tin Sở Tài nguyên và Môi trường Đồng Nai tại thời điểm Thẩm định giá, '.mb_strtoupper($company->acronym).' loại trừ trong trường hợp có cập nhật hoặc thay đổi sau thời điểm phát hành chứng thư.', 0, null, 'bullets', array_merge($indentFistLine, $keepNext));
 
@@ -1426,9 +1427,9 @@ class BaoCao
         $cell32 = $table3->addCell(Converter::inchToTwip(4));
         if (isset($certificate->appraiserConfirm->name)) {
             $cell32->addText("KT. TỔNG GIÁM ĐỐC", ['bold' => true, 'size' => '13'], ['align' => 'center', 'keepNext' => true]);
-            $cell32->addText($certificate->appraiserConfirm->appraisePosition->description??'', ['bold' => true, 'size' => '13'], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText($certificate->appraiserConfirm->appraisePosition->description ?? '', ['bold' => true, 'size' => '13'], ['align' => 'center', 'keepNext' => true]);
         } else {
-            $cell32->addText("".$company->appraiser->appraisePosition->description??'', ['bold' => true, 'size' => '13'], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText("" . $company->appraiser->appraisePosition->description ?? '', ['bold' => true, 'size' => '13'], ['align' => 'center', 'keepNext' => true]);
         }
 
         $table3->addRow(Converter::inchToTwip(1.5), $cantSplit);
@@ -1439,7 +1440,7 @@ class BaoCao
         $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
         $cell33->addText($bien171, ['bold' => true, 'size' => '13'], ['align' => 'center', 'keepNext' => true]);
         $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
-        $cell33->addText("Số thẻ TĐV về giá: " .  $appraiserNumber , ['bold' => true, 'size' => '13'], ['align' => 'center']);
+        $cell33->addText("Số thẻ TĐV về giá: " .  $appraiserNumber, ['bold' => true, 'size' => '13'], ['align' => 'center']);
         $cell34 = $table3->addCell(Converter::inchToTwip(4));
         $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
         $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
@@ -1466,24 +1467,24 @@ class BaoCao
         $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right'));
 
         $reportUserName = CommonService::getUserReport();
-		$reportName = '2_BC' . '_' . $reportUserName . '_' . $reportID . '_' . $comName;
+        $reportName = '2_BC' . '_' . $reportUserName . '_' . $reportID . '_' . $comName;
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
 
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'comparison_brief/' . $now->format('Y') . '/' . $now->format('m') ;
-        if(!File::exists(storage_path('app/public/'. $path))){
-            File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/' . $now->format('Y') . '/' . $now->format('m');
+        if (!File::exists(storage_path('app/public/' . $path))) {
+            File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
         try {
-            $objWriter->save(storage_path('app/public/'. $path. '/'. $fileName .'.docx'));
+            $objWriter->save(storage_path('app/public/' . $path . '/' . $fileName . '.docx'));
         } catch (\Exception $e) {
             throw $e;
         }
         $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName .'.docx');
+        $data['url'] = Storage::disk('public')->url($path . '/' . $fileName . '.docx');
         $data['file_name'] = $fileName;
         return $data;
     }
