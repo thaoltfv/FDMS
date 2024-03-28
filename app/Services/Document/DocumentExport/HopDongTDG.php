@@ -144,11 +144,11 @@ class HopDongTDG
         $row1->addCell(5400, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true], $cellHCentered);
         $row2 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
         $row2->addCell(3500, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true,  'underline' => 'single'], $cellHCentered);
-        $row1->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row2->addCell(5400, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
         $row3->addCell(3500, $cellVCentered)->addText('Số: 24145/HĐTĐG-HCM ', null, $cellHCentered);
-        $row1->addCell(1000, $cellVCentered)->addText(
+        $row3->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
             $cellHCentered
