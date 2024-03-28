@@ -323,20 +323,32 @@ class HopDongTDG
         $row1->addCell(2500, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
         $row1->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
 
-        $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2200, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
-        $row1->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row2 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+        $row2->addCell(2200, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
+        $row2->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
 
-        $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2300, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row1->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row3 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+        $row3->addCell(2300, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
+        $row3->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
 
-        $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2400, $cellVTop)->addText('Phương pháp thẩm định giá', null,  $alignBoth);
-        $row1->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row4 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+        $row4->addCell(2400, $cellVTop)->addText('Phương pháp thẩm định giá', null,  $alignBoth);
+        $row4->addCell(6200, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
         // appraise_date
         $footer = $section->addFooter();
         $table = $footer->addTable();
