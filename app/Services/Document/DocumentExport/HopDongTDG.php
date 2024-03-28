@@ -117,12 +117,10 @@ class HopDongTDG
 
 
         $phpWord->setDefaultParagraphStyle([
-            'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(5),
-            'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
-            'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3)),
-            'space' => [
-                'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(10), 'rule' => 'exact'
-            ],
+            'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3),
+            'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3),
+            'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.13)),
+
             'align' => 'both'
         ]);
         $styleSection = [
