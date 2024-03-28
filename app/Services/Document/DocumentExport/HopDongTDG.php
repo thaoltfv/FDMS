@@ -148,7 +148,7 @@ class HopDongTDG
         $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(3500, $cellVCentered)->addText('Số: 24145/HĐTĐG-HCM ', null, $cellHCentered);
+        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . $certificate->document_num, null, $cellHCentered);
         $row3->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
