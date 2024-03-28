@@ -240,7 +240,7 @@ class HopDongTDG
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVCentered)->addText('-   Tài khoản số', null,  $alignBoth);
         $row9->addCell(8100, $cellVCentered)->addText(': 3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
-
+        \Log::info('Certificate data: ', ['certificate' => $certificate]);
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVCentered)->addText('-   Đại diện', null,  $alignBoth);
         $row9->addCell(8100, $cellVCentered)->addText(': ' . 'Ông ' . $certificate->appraiser_manager->name, null,  $alignBoth);
