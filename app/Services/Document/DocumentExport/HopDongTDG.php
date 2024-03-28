@@ -127,8 +127,8 @@ class HopDongTDG
             // 'footerHeight' => 300,
             // 'marginTop' => Converter::inchToTwip(.6),
             // 'marginBottom' => Converter::inchToTwip(.6),
-            // 'marginRight' => Converter::inchToTwip(.8),
-            // 'marginLeft' => Converter::inchToTwip(.8)
+            'marginRight' => Converter::inchToTwip(0),
+            'marginLeft' => Converter::inchToTwip(0)
         ];
 
         $check = "";
