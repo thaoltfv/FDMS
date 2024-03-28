@@ -163,7 +163,6 @@ export default {
 		"appraiser",
 		"status_text",
 		"workflowName",
-		"status_next",
 		"dataHSTD",
 		"status_next",
 	],
