@@ -260,9 +260,10 @@ class HopDongTDG
         $section->addText(
             "1.1. Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
             null,
-            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.17)]]
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]
         );
-
+        $textRun = $section->addTextRun();
+        $textRun->addText('→ Item 1', ['bold' => true]);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
