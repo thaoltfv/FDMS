@@ -117,9 +117,9 @@ class HopDongTDG
 
 
         $phpWord->setDefaultParagraphStyle([
-            'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
+            'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(5),
             'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
-            'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5)),
+            'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3)),
             'space' => [
                 'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(16), 'rule' => 'exact'
             ],
@@ -140,8 +140,6 @@ class HopDongTDG
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        $cellHCentered = array('align' => 'center');
-        $cellVCentered = array('valign' => 'center');
         $row1 = $table->addRow(300, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(4000, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true, 'name' => 'Cambria'], $cellHCentered);
         $row1->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true,  'name' => 'Cambria'], $cellHCentered);
