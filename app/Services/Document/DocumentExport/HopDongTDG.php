@@ -189,6 +189,11 @@ class HopDongTDG
             $indent13
         );
 
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(2700, $cellVCentered)->addText('BÊN A', ['bold' => true,], $cellHCentered);
         $row1->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_name, ['bold' => true], $cellHCentered);
