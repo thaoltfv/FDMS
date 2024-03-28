@@ -195,24 +195,24 @@ class HopDongTDG
             'unit' => 'pct'
         ]);
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row1->addCell(2700, $cellVCentered)->addText('BÊN A', ['bold' => true,],  array('align' => 'left'));
-        $row1->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_name, ['bold' => true],  array('align' => 'left'));
+        $row1->addCell(2400, $cellVCentered)->addText('BÊN A', ['bold' => true,],  array('align' => 'left'));
+        $row1->addCell(7500, $cellVCentered)->addText(': ' . $certificate->petitioner_name, ['bold' => true],  array('align' => 'left'));
 
         $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
-        $row2->addCell(2700, $cellVCentered)->addText('-   Địa chỉ', null,  array('align' => 'left'));
-        $row2->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_address, null,  array('align' => 'left'));
+        $row2->addCell(2400, $cellVCentered)->addText('-    Địa chỉ', null,  array('align' => 'left'));
+        $row2->addCell(7500, $cellVCentered)->addText(': ' . $certificate->petitioner_address, null,  array('align' => 'left'));
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
         ));
-        $row3->addCell(2700, $cellVCentered)->addText('-   Số CCCD', null,  array('align' => 'left'));
-        $row3->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_identity_card, null,  array('align' => 'left'));
+        $row3->addCell(2400, $cellVCentered)->addText('-    Số CCCD', null,  array('align' => 'left'));
+        $row3->addCell(7500, $cellVCentered)->addText(': ' . $certificate->petitioner_identity_card, null,  array('align' => 'left'));
 
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row4->addCell(2700, $cellVCentered)->addText('-   Số điện thoại', null,  array('align' => 'left'));
-        $row4->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_phone, null,  array('align' => 'left'));
+        $row4->addCell(2400, $cellVCentered)->addText('-    Số điện thoại', null,  array('align' => 'left'));
+        $row4->addCell(7500, $cellVCentered)->addText(': ' . $certificate->petitioner_phone, null,  array('align' => 'left'));
 
 
         $footer = $section->addFooter();
