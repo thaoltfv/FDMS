@@ -138,15 +138,15 @@ class HopDongTDG
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        $row1 = $table->addRow(200, array('tblHeader' => false, 'cantSplit' => false));
-        $row1->addCell(4000, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true,], $cellHCentered);
-        $row1->addCell(5900, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true,], $cellHCentered);
+        $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row1->addCell(3500, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true,], $cellHCentered);
+        $row1->addCell(6400, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true], $cellHCentered);
         $row2 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row2->addCell(4000, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true,  'underline' => 'single'], $cellHCentered);
-        $row2->addCell(5900, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
+        $row2->addCell(3500, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true,  'underline' => 'single'], $cellHCentered);
+        $row2->addCell(6400, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(4000, $cellVCentered)->addText('Số: 24145/HĐTĐG-HCM ', null, $cellHCentered);
-        $row3->addCell(5900, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $row3->addCell(3500, $cellVCentered)->addText('Số: 24145/HĐTĐG-HCM ', null, $cellHCentered);
+        $row3->addCell(6400, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
 
 
         $section->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '13'], ['align' => 'center']);
