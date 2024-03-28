@@ -18,6 +18,18 @@ use Illuminate\Support\Facades\Storage;
 class HopDongTDG
 {
     use ResponseTrait;
+    function formatNumberFunction($number, $count = 0, $tenp = ',', $temp2 = '.')
+    {
+        if (!empty($number)) {
+            $number = (float)$number;
+            if (floor($number) != $number) {
+                $number = number_format($number, $count, $tenp, $temp2);
+            } else {
+                $number = number_format($number, 0, $tenp, $temp2);
+            }
+        }
+        return $number;
+    }
     public function setFormat(&$phpWord)
     {
         $phpWord->addNumberingStyle(
@@ -263,12 +275,6 @@ class HopDongTDG
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
         );
 
-        $section->addListItem(
-            "Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.",
-            0,
-            null,
-            ['listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER_NESTED]
-        );
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -412,6 +418,61 @@ class HopDongTDG
         $row = $table->addRow();
         $row->addCell(600)->addText("2.5.", null, ['align' => 'right']);
         $row->addCell(9300)->addText("Trường hợp Bên A có nhu cầu thẩm định giá bổ sung các tài sản ngoài danh mục thì các bên sẽ thỏa thuận cụ thể về thời gian, quy trình, mức phí thẩm định đối với các tài sản phát sinh. ", null, ['align' => 'both']);
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 3: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Giá trị pháp lý của Chứng thư thẩm định giá', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("3.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Chứng thư thẩm định giá do Bên B cung cấp chỉ có giá trị đối với tài sản thẩm định giá tại thời điểm thẩm định giá và địa điểm thẩm định giá.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("3.2.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Chứng thư thẩm định giá do Bên B cung cấp chỉ nhằm thực hiện mục đích ghi trong hợp đồng này.", null, ['align' => 'both']);
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 4: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Phí dịch vụ thẩm định và phương thức thanh toán', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("4.1.", null, ['align' => 'right']);
+        $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+        $textRun = $row->addCell(9300)->addTextRun(['align' => 'both']);
+        $textRun->addText("Phí dịch vụ thẩm định giá tài sản: " . $textServiceFee, ['bold' => true]);
+        if (isset($textServiceFee))
+            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee)) . ').', ['italic' => true]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("4.2.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Phí dịch vụ thẩm định giá được thanh toán ngay sau khi hợp đồng thẩm định giá có hiệu lực.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("4.3.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Phương thức thanh toán: Tiền mặt hoặc Chuyển khoản.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("4.4.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Trường hợp có nhu cầu cung cấp thêm Chứng thư thẩm định giá ngoài số lượng Chứng thư thẩm định giá thì Bên A phải thanh toán cho Bên B mức phí tương ứng.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("4.5.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Nếu Bên A không thanh toán hết toàn bộ phí thẩm định cho Bên B ghi trong hợp đồng này thì Bên B sẽ không chịu trách nhiệm về kết quả thẩm định giá ghi trong chứng thư đã cấp cho Bên A (Chứng thư thẩm định giá sẽ không có giá trị pháp lý) và Bên B sẽ không chịu bất cứ trách nhiệm nào về chứng thư thẩm định giá.", null, ['align' => 'both']);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
