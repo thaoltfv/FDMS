@@ -263,6 +263,12 @@ class HopDongTDG
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
         );
 
+        $section->addListItem(
+            "Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.",
+            0,
+            null,
+            ['listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER_NESTED]
+        );
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
