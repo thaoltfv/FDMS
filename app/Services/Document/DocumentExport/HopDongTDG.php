@@ -366,9 +366,38 @@ class HopDongTDG
         ));
         $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row6->addCell(3800, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
-        $row6->addCell(4900, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
+        $row6->addCell(3900, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
+        $row6->addCell(4800, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
 
+        $section->addText(
+            "1.2. Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
+            null,
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
+        );
+
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 2: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Tiến trình thực hiện', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(500)->addText("2.1.");
+        $row->addCell(9400)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("2.1.");
+        $row->addCell(9300)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
+
+
+        $row = $table->addRow();
+        $row->addCell(700)->addText("2.1.");
+        $row->addCell(9200)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
