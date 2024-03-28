@@ -189,6 +189,19 @@ class HopDongTDG
             $indent13
         );
 
+        $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row1->addCell(2700, $cellVCentered)->addText('BÊN A', ['bold' => true,], $cellHCentered);
+        $row1->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_name, ['bold' => true], $cellHCentered);
+
+        $row1->addCell(2700, $cellVCentered)->addText('-   Địa chỉ', null, $cellHCentered);
+        $row1->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_address, null, $cellHCentered);
+
+        $row1->addCell(2700, $cellVCentered)->addText('-   Số CCCD', null, $cellHCentered);
+        $row1->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_identity_card, null, $cellHCentered);
+
+        $row1->addCell(2700, $cellVCentered)->addText('-   Số điện thoại', null, $cellHCentered);
+        $row1->addCell(7200, $cellVCentered)->addText(': ' . $certificate->petitioner_phone, null, $cellHCentered);
+
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
