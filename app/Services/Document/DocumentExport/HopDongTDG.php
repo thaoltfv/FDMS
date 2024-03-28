@@ -390,6 +390,22 @@ class HopDongTDG
         $row->addCell(600)->addText("2.1.", null, ['align' => 'right']);
         $row->addCell(9300)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
 
+        $row = $table->addRow();
+        $row->addCell(600)->addText("2.2.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Bên A cung cấp đầy đủ hồ sơ pháp lý của tài sản và hướng dẫn người của Bên B thẩm định hiện trạng tài sản tại hiện trường. Bên A thanh toán đợt 1 cho bên B làm chi phí để bên B cử cán bộ và phương tiện phối hợp với bên A đi khảo sát thu thập thông tin và thẩm định hiện trường. Mức chi phí trên do hai bên thỏa thuận tùy thuộc vào loại tài sản và vị trí tài sản và được tính là chi phí không hoàn lại. Hình thức chi bằng chuyển khoản hoặc thanh toán tiền mặt tại thời điểm hiện trường.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("2.3.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Tối đa 03 ngày làm việc, kể từ ngày bên B đã nhận đủ hồ sơ pháp lý và đi thẩm định hiện trường hoàn tất, bên B sẽ cử người gọi điện thoại thông báo kết quả sơ bộ cho bên A. Nếu bên A đồng ý phát hành chứng thư thẩm định giá thì bên A thanh toán đủ 100% phí thẩm định cho bên B, sau đó bên B sẽ cấp chứng thư cho bên A. ", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("2.4.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Sau khi nhận được kết quả sơ bộ mà bên A yêu cầu ngừng dịch vụ thì bên B sẽ hủy toàn bộ hồ sơ theo Quy trình lưu trữ nội bộ, Bên B sẽ không hoàn trả lại số tiền đã nhận của Bên A. ", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("2.5.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Trường hợp Bên A có nhu cầu thẩm định giá bổ sung các tài sản ngoài danh mục thì các bên sẽ thỏa thuận cụ thể về thời gian, quy trình, mức phí thẩm định đối với các tài sản phát sinh. ", null, ['align' => 'both']);
+
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
