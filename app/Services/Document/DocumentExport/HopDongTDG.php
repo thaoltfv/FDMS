@@ -258,10 +258,22 @@ class HopDongTDG
         $textRun->addText('Nội dung công việc thực hiện', ['bold' => true]);
 
         $section->addText(
-            "➢ Tài sản thẩm định giá : Quyền sở hữu căn hộ  (Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).",
+            "1.1. Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
         );
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row1 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row1->addCell(1200, $cellVTop)->addText('➢', null,  $alignBoth);
+        $row1->addCell(8700, $cellVTop)->addText('Tài sản thẩm định giá : Quyền sở hữu căn hộ  (Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', null,  $alignBoth);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
