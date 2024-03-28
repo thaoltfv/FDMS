@@ -387,17 +387,9 @@ class HopDongTDG
             'unit' => 'pct'
         ]);
         $row = $table->addRow();
-        $row->addCell(500)->addText("2.1.");
-        $row->addCell(9400)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
+        $row->addCell(450)->addText("2.1.", null, ['align' => 'right']);
+        $row->addCell(9450)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
 
-        $row = $table->addRow();
-        $row->addCell(600)->addText("2.1.");
-        $row->addCell(9300)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
-
-
-        $row = $table->addRow();
-        $row->addCell(700)->addText("2.1.");
-        $row->addCell(9200)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
