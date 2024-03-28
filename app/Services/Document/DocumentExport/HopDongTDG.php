@@ -15,7 +15,7 @@ use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
 
-class GiayYeuCau
+class HopDongTDG
 {
     use ResponseTrait;
     public function setFormat(&$phpWord)
