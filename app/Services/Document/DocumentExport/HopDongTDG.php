@@ -293,7 +293,9 @@ class HopDongTDG
         $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', null, $alignCenter);
         $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", null, $alignCenter);
 
+        $addressHSTD = '';
         foreach ($certificate->appraises as $index => $item) {
+            $addressHSTD = $item->full_address;
             if ($item->tangibleAssets) {
                 foreach ($item->tangibleAssets as $index2 => $item2) {
                     $row2 = $table->addRow(100, array(
@@ -302,11 +304,25 @@ class HopDongTDG
                     ));
                     $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
                     $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
-                    $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base, null, ['align' => 'right']);
+                    $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base . ' ', null, ['align' => 'right']);
                 }
             }
         }
 
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row1 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+        $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+        $row1->addCell(3000, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
+        $row1->addCell(5700, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        // appraise_date
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
