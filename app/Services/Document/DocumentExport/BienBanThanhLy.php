@@ -318,8 +318,7 @@ class BienBanThanhLy
         $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
         $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
         $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
-            'align' => 'center',  'indent' => 40,
-            'hanging' => 40
+            'align' => 'center'
         ));
         $row2->addCell(1600, array('vMerge' => 'continue'));
 
