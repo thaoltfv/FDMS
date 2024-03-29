@@ -328,7 +328,6 @@ class HopDongTDG
         $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $alignCenter);
         $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
 
-        Log::info('asdasd', ['certificate' => $certificate]);
         $addressHSTD = '';
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
@@ -370,8 +369,9 @@ class HopDongTDG
         ));
         $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2600, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
-        $row1->addCell(6100, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
+        $row1->addCell(3000, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
+        $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row1->addCell(5600, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
 
         $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
         $row2 = $table->addRow(100, array(
@@ -380,8 +380,12 @@ class HopDongTDG
         ));
         $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row2->addCell(2600, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
-        $row2->addCell(6100, $cellVTop)->addText(': ' . $appraise_date_formatted . '.', null,  $alignBoth);
+        $row2->addCell(3000, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
+        $row1->addCell(
+            100,
+            $cellVTop
+        )->addText(':', null,  $alignBoth);
+        $row2->addCell(5600, $cellVTop)->addText(': ' . $appraise_date_formatted . '.', null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -389,8 +393,12 @@ class HopDongTDG
         ));
         $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row3->addCell(2600, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row3->addCell(6100, $cellVTop)->addText(': ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
+        $row3->addCell(3000, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
+        $row1->addCell(
+            100,
+            $cellVTop
+        )->addText(':', null,  $alignBoth);
+        $row3->addCell(5600, $cellVTop)->addText(': ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
 
         $row4 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -399,8 +407,13 @@ class HopDongTDG
         $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(3000, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
-        $row4->addCell(5700, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
-
+        $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row4->addCell(5600, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
         $row5 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
