@@ -173,6 +173,7 @@ class HopDongTDG
             $cellHCentered
         );
         $row3->addCell(5700, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $isApartment = in_array('CC', $certificate->document_type);
 
         $section->addText("HỢP ĐỒNG CUNG CẤP DỊCH VỤ ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
         $section->addText(
@@ -327,20 +328,34 @@ class HopDongTDG
         $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
 
         $addressHSTD = '';
-        foreach ($certificate->appraises as $index => $item) {
-            $addressHSTD = $item->full_address;
-            if ($item->tangibleAssets) {
-                foreach ($item->tangibleAssets as $index2 => $item2) {
-                    $row2 = $table->addRow(100, array(
-                        'tblHeader' => false,
-                        'cantSplit' => false
-                    ));
-                    $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
-                    $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
-                    $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base . ' ', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+        if ($isApartment) {
+            foreach ($certificate->apartmentAsset as $index => $item) {
+                $addressHSTD = $item->full_address;
+                $row2 = $table->addRow(100, array(
+                    'tblHeader' => false,
+                    'cantSplit' => false
+                ));
+                $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
+                $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index > 0 ? ' ' . ($index + 1) . ' ' : ''), null, ['align' => 'left']);
+                $row2->addCell(1600, $cellVTop)->addText(isset($item->apartmentAssetProperties) ? $item->apartmentAssetProperties->area : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+            }
+        } else {
+            foreach ($certificate->appraises as $index => $item) {
+                $addressHSTD = $item->full_address;
+                if ($item->tangibleAssets) {
+                    foreach ($item->tangibleAssets as $index2 => $item2) {
+                        $row2 = $table->addRow(100, array(
+                            'tblHeader' => false,
+                            'cantSplit' => false
+                        ));
+                        $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
+                        $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
+                        $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base, null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                    }
                 }
             }
         }
+
 
         $table = $section->addTable([
             'align' => JcTable::START,

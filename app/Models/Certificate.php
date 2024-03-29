@@ -67,60 +67,60 @@ class Certificate extends Model
 
     public function getStatusTextAttribute()
     {
-		$status = $this->status;
-		$statusText = "";
-		switch ($status) {
+        $status = $this->status;
+        $statusText = "";
+        switch ($status) {
             case 1:
                 $statusText = "Mới";
                 break;
-			case 2:
-				$statusText = "Đang Thẩm Định";
-			    break;
-			case 3:
-				$statusText = "Đang Duyệt";
-			    break;
-			case 4:
-				$statusText = "Hoàn Thành";
-			    break;
+            case 2:
+                $statusText = "Đang Thẩm Định";
+                break;
+            case 3:
+                $statusText = "Đang Duyệt";
+                break;
+            case 4:
+                $statusText = "Hoàn Thành";
+                break;
             case 6:
                 return 'Đang Kiểm Soát';
                 break;
-			case 5:
-				$statusText = "Huỷ";
-			    break;
+            case 5:
+                $statusText = "Huỷ";
+                break;
             case 7:
-				$statusText = "Duyệt phát hành";
-			    break;
+                $statusText = "Duyệt phát hành";
+                break;
             case 8:
-				$statusText = "In hồ sơ";
-			    break;
+                $statusText = "In hồ sơ";
+                break;
             case 9:
-				$statusText = "Bàn giao khách hàng";
-			    break;
-		}
+                $statusText = "Bàn giao khách hàng";
+                break;
+        }
         return $statusText;
     }
-	public function getRoundCertificateTotalAttribute()
+    public function getRoundCertificateTotalAttribute()
     {
-		$roundCertificateTotal = 0;
-		foreach($this->appraises as $index => $certificateAsset) {
-			$item = AppraisePrice::where('appraise_id', $certificateAsset->appraise_id)->where('slug', 'round_appraise_total')->first();
-			$roundAppraiseTotal = isset($item->value) ? (int)$item->value : 0;
-			if(!$index) {
-				$roundCertificateTotal = $roundAppraiseTotal;
-			} else {
-				if(($roundCertificateTotal < 0) || ($roundAppraiseTotal < 0)) {
-					if (abs($roundCertificateTotal) > abs($roundAppraiseTotal))
-						$roundCertificateTotal = -abs($roundAppraiseTotal);
-					else
-						$roundCertificateTotal = -abs($roundCertificateTotal);
-				} else {
-					if ($roundCertificateTotal > $roundAppraiseTotal) $roundCertificateTotal = $roundAppraiseTotal;
-				}
-			}
-		}
+        $roundCertificateTotal = 0;
+        foreach ($this->appraises as $index => $certificateAsset) {
+            $item = AppraisePrice::where('appraise_id', $certificateAsset->appraise_id)->where('slug', 'round_appraise_total')->first();
+            $roundAppraiseTotal = isset($item->value) ? (int)$item->value : 0;
+            if (!$index) {
+                $roundCertificateTotal = $roundAppraiseTotal;
+            } else {
+                if (($roundCertificateTotal < 0) || ($roundAppraiseTotal < 0)) {
+                    if (abs($roundCertificateTotal) > abs($roundAppraiseTotal))
+                        $roundCertificateTotal = -abs($roundAppraiseTotal);
+                    else
+                        $roundCertificateTotal = -abs($roundCertificateTotal);
+                } else {
+                    if ($roundCertificateTotal > $roundAppraiseTotal) $roundCertificateTotal = $roundAppraiseTotal;
+                }
+            }
+        }
 
-		return $roundCertificateTotal;
+        return $roundCertificateTotal;
     }
 
     public function appraiser(): BelongsTo
@@ -147,73 +147,73 @@ class Certificate extends Model
         return $this->belongsTo(Appraiser::class, 'appraiser_confirm_id', 'id');
     }
 
-	public function appraiserSale(): BelongsTo
+    public function appraiserSale(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_sale_id', 'id');
     }
 
-	public function appraiserPerform(): BelongsTo
+    public function appraiserPerform(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_perform_id', 'id');
     }
 
     public function certificateApproach(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseOtherInformation::class,'certificate_approach','certificate_id','certificate_approach_id');
+        return $this->belongsToMany(AppraiseOtherInformation::class, 'certificate_approach', 'certificate_id', 'certificate_approach_id');
     }
 
     public function appraiseMethodUsed(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseOtherInformation::class,'certificate_method_used','certificate_id','certificate_method_used_id');
+        return $this->belongsToMany(AppraiseOtherInformation::class, 'certificate_method_used', 'certificate_id', 'certificate_method_used_id');
     }
 
     public function appraiseBasisProperty(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseOtherInformation::class,'certificate_basis_property','certificate_id','certificate_basis_property_id');
+        return $this->belongsToMany(AppraiseOtherInformation::class, 'certificate_basis_property', 'certificate_id', 'certificate_basis_property_id');
     }
 
     public function certificatePrinciple(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseOtherInformation::class,'certificate_principle','certificate_id','certificate_principle_id');
+        return $this->belongsToMany(AppraiseOtherInformation::class, 'certificate_principle', 'certificate_id', 'certificate_principle_id');
     }
 
     public function appraisePurpose(): BelongsTo
     {
         return $this->belongsTo(AppraiseOtherInformation::class, 'appraise_purpose_id');
     }
-    
+
     public function preType(): BelongsTo
     {
         return $this->belongsTo(Dictionary::class, 'pre_type_id', 'id');
     }
     public function administrative(): BelongsTo
     {
-     
+
         return $this->belongsTo(Appraiser::class, 'administrative_id', 'id');
     }
     public function appraises(): belongsToMany
     {
-        return $this->belongsToMany(CertificateAsset::class,'certificate_has_appraises','certificate_id','appraise_id');
+        return $this->belongsToMany(CertificateAsset::class, 'certificate_has_appraises', 'certificate_id', 'appraise_id');
     }
 
     public function legalDocumentsOnValuation(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseLawDocument::class,'certificate_legal_documents_on_valuation','certificate_id','certificate_law_id')->orderBy('position');
+        return $this->belongsToMany(AppraiseLawDocument::class, 'certificate_legal_documents_on_valuation', 'certificate_id', 'certificate_law_id')->orderBy('position');
     }
 
     public function legalDocumentsOnConstruction(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseLawDocument::class,'certificate_legal_documents_on_construction','certificate_id','certificate_law_id')->orderBy('position');
+        return $this->belongsToMany(AppraiseLawDocument::class, 'certificate_legal_documents_on_construction', 'certificate_id', 'certificate_law_id')->orderBy('position');
     }
 
     public function legalDocumentsOnLand(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseLawDocument::class,'certificate_legal_documents_on_land','certificate_id','certificate_law_id')->orderBy('position');
+        return $this->belongsToMany(AppraiseLawDocument::class, 'certificate_legal_documents_on_land', 'certificate_id', 'certificate_law_id')->orderBy('position');
     }
 
     public function legalDocumentsOnLocal(): belongsToMany
     {
-        return $this->belongsToMany(AppraiseLawDocument::class,'certificate_legal_documents_on_local','certificate_id','certificate_law_id')->orderBy('position');
+        return $this->belongsToMany(AppraiseLawDocument::class, 'certificate_legal_documents_on_local', 'certificate_id', 'certificate_law_id')->orderBy('position');
     }
 
     /* public function constructionCompany(): belongsToMany
@@ -221,10 +221,10 @@ class Certificate extends Model
         return $this->belongsToMany(AppraisalConstructionCompany::class,'certificate_construction_company','certificate_id','construction_company_id');
     }  */
 
-	public function constructionCompany(): hasMany
+    public function constructionCompany(): hasMany
     {
         //return $this->belongsTo(CertificateAssetConstructionCompany::class,'certificate_asset_comparison_factor','certificate_id');
-		return $this->hasMany(CertificateAssetConstructionCompany::class,'certificate_id');
+        return $this->hasMany(CertificateAssetConstructionCompany::class, 'certificate_id');
     }
 
     public function createdBy(): BelongsTo
@@ -237,12 +237,12 @@ class Certificate extends Model
         return $this->hasMany(CertificateComparisonFactor::class, 'certificate_id');
     }
 
-	public function otherDocuments(): HasMany
+    public function otherDocuments(): HasMany
     {
         return $this->hasMany(CertificateOtherDocuments::class, 'certificate_id');
     }
 
-	public function assetPrice(): HasMany
+    public function assetPrice(): HasMany
     {
         return $this->hasMany(CertificatePrice::class, 'certificate_id');
     }
@@ -252,29 +252,29 @@ class Certificate extends Model
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-	/* public function getTotalAssetPriceAttribute()
+    /* public function getTotalAssetPriceAttribute()
     {
 		$item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
 		return isset($item->value) ? $item->value : 0;
     } */
 
-	public function getTotalAssetPriceAttribute()
+    public function getTotalAssetPriceAttribute()
     {
-		$item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
-		$value = isset($item->value) ? $item->value : 0;
-		$certificate = new \stdClass();
-		$certificate->round_certificate_total = $this->getRoundCertificateTotalAttribute();
-		return CommonService::roundCertificatePrice($certificate, $value);
+        $item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
+        $value = isset($item->value) ? $item->value : 0;
+        $certificate = new \stdClass();
+        $certificate->round_certificate_total = $this->getRoundCertificateTotalAttribute();
+        return CommonService::roundCertificatePrice($certificate, $value);
     }
 
     public function getCertificateAssetPriceAttribute()
     {
-		$item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
+        $item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
         return isset($item->value) ? (int)$item->value : 0;
     }
     public function getCertificateAssetPriceRoundAttribute()
     {
-		$item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
+        $item = CertificatePrice::where('certificate_id', $this->id)->where('slug', 'total_asset_price')->first();
         $value =  isset($item->value) ? (int)$item->value : 0;
         $certificate = new \stdClass();
         return CommonService::roundCertificatePrice($certificate, $value);
@@ -287,7 +287,7 @@ class Certificate extends Model
 
     public function personalProperties(): BelongsToMany
     {
-        return $this->belongsToMany(CertificatePersonalProperty::class,'certificate_has_personal_properties','certificate_id','personal_property_id');
+        return $this->belongsToMany(CertificatePersonalProperty::class, 'certificate_has_personal_properties', 'certificate_id', 'personal_property_id');
     }
 
     public function getGeneralAssetAttribute()
@@ -325,7 +325,7 @@ class Certificate extends Model
                 $data[$stt]['name'] = $item->name;
                 $data[$stt]['created_by'] = $item->createdBy;
                 $data[$stt]['asset_type'] = $item->assetType;
-                $data[$stt]['asset'] =null;
+                $data[$stt]['asset'] = null;
                 $data[$stt]['total_area'] = $item->total_area;
                 $data[$stt]['total_price'] = $item->total_price;
                 $data[$stt]['round_total'] = 0;
@@ -335,13 +335,14 @@ class Certificate extends Model
         }
         return $data;
     }
+
     public function getDetailListIdAttribute()
     {
         $result = [];
         $realEstate = $this->realEstate;
         $personalProperties = $this->personalProperties;
         if (count($realEstate) > 0) {
-            $result =array_merge($result, Arr::pluck($realEstate, 'real_estate_id'));
+            $result = array_merge($result, Arr::pluck($realEstate, 'real_estate_id'));
         }
         if (count($personalProperties) > 0) {
             $result = array_merge($result, Arr::pluck($personalProperties, 'personal_property_id'));
@@ -351,17 +352,21 @@ class Certificate extends Model
 
     public function branch(): BelongsTo
     {
-        return $this->belongsTo(Branch::class, 'branch_id','id');
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 
     public function apartmentAsset(): belongsToMany
     {
-        return $this->belongsToMany(CertificateApartment::class, CertificateHasApartment::class ,'certificate_id', 'apartment_asset_id');
+        return $this->belongsToMany(CertificateApartment::class, CertificateHasApartment::class, 'certificate_id', 'apartment_asset_id');
+    }
+    public function appraises(): belongsToMany
+    {
+        return $this->belongsToMany(CertificateAsset::class, 'certificate_has_appraises', 'certificate_id', 'appraise_id');
     }
 
     public function realEstate(): belongsToMany
     {
-        return $this->belongsToMany(CertificateRealEstate::class, CertificateHasRealEstate::class,'certificate_id', 'real_estate_id')->orderBy('real_estate_id');
+        return $this->belongsToMany(CertificateRealEstate::class, CertificateHasRealEstate::class, 'certificate_id', 'real_estate_id')->orderBy('real_estate_id');
     }
 
     public function payments(): HasMany
