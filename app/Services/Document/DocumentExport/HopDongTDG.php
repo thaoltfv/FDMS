@@ -563,7 +563,7 @@ class HopDongTDG
         ]);
 
         $indentleftword =
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]];
+            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.1)]];
         $row = $table->addRow();
         $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
         $row->addCell(9300)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, $indentleftword);
