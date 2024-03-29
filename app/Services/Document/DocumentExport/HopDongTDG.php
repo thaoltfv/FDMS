@@ -563,11 +563,11 @@ class HopDongTDG
         ]);
 
         $indentleftword =
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.1)]];
+            ['align' => 'both'];
         $indentleftNumber =
             ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.05)]];
         $indentleftSymbol =
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]];
+            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.1)]];
         $row = $table->addRow();
         $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
         $row->addCell(9300, ['gridSpan' => 2])->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, $indentleftNumber);
@@ -583,13 +583,13 @@ class HopDongTDG
         $row3->addCell(9250)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, $indentleftword);
 
         $row4 = $table->addRow();
-        $row4->addCell(600)->addText("-", null, ['align' => 'right']);
-        $row4->addCell(200)->addText("", null, ['align' => 'right']);
+        $row4->addCell(700)->addText("-", null, ['align' => 'right']);
+        $row4->addCell(100)->addText("", null, ['align' => 'right']);
         $row4->addCell(9100)->addText("Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, $indentleftSymbol);
 
         $row5 = $table->addRow();
-        $row5->addCell(600)->addText("-", null, ['align' => 'right']);
-        $row5->addCell(200)->addText("", null, ['align' => 'right']);
+        $row5->addCell(700)->addText("-", null, ['align' => 'right']);
+        $row5->addCell(100)->addText("", null, ['align' => 'right']);
         $row5->addCell(9100)->addText("Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, $indentleftSymbol);
 
         $row6 = $table->addRow();
