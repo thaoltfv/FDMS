@@ -328,9 +328,7 @@ class BienBanThanhLy
             $total += $certificate->service_fee ?? 0;
             $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
             $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-            $cell = $row3->addCell(3200, $cellVCentered);
-            $textRun = $cell->addTextRun(array('indent' => 20, 'hanging' => 20));
-            $textRun->addText($item->appraise_asset, null, $alignBoth);
+            $row3->addCell(3200, $cellVCentered)->addText($item->appraise_asset, null,  $alignBoth);
             $row3->addCell(1200, $cellVCentered)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null,  $alignBoth);
             $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
             $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
@@ -348,7 +346,51 @@ class BienBanThanhLy
         $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') . ' đồng' : '', ['bold' => true],  $alignBoth);
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ')', ['italic' => true],  $alignCenter);
+        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ').', ['italic' => true],  $alignCenter);
+
+        $section->addText(
+            "Hợp đồng số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+                $formattedDateCertificateDate . ' 2024 được thanh lý khi bên A thanh toán hết số tiền phải thanh toán cho Bên B thì trách nhiệm và nghĩa vụ của hai bên được chấm dứt.',
+            null,
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
+        );
+        $section->addText(
+            "Biên bản lập thành 04 bản, có giá trị pháp lý như nhau, bên A giữ 02 bản, bên B giữ 02 bản",
+            null,
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
+        );
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(4950)->addText("ĐẠI DIỆN BÊN A", ['bold' => true], ['align' => 'center']);
+        $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
+
+        $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
+        $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        $row2 = $table->addRow();
+        $row2->addCell(4950)->addText("CHẤP HÀNH VIÊN", ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
+
+        $row3 = $table->addRow();
+        $row3->addCell(4950)->addText("\n\n\n\n\n");
+        $row3->addCell(4950)->addText("\n\n\n\n\n");
+
+        $row5 = $table->addRow();
+        $row5->addCell(4950)->addText("\n\n\n\n\n");
+        $row5->addCell(4950)->addText("\n\n\n\n\n");
+
+        $row6 = $table->addRow();
+        $row6->addCell(4950)->addText("\n\n\n\n\n");
+        $row6->addCell(4950)->addText("\n\n\n\n\n");
+
+        $row4 = $table->addRow();
+        $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
+
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
         $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '_CT' . htmlspecialchars($filename) : '');
