@@ -540,15 +540,15 @@ class HopDongTDG
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.5.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Bên B và người lao động của Bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu Bên A hoặc người của Bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText(" Bên B và người lao động của Bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu Bên A hoặc người của Bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực.", null, ['align' => 'both']);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.6.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Sau khi đã nhận chứng thư mà Bên A không được ngân hàng cấp tín dụng, công ty thẩm định giá sẽ không hoàn trả chi phí thẩm định mà Bên A đã thanh toán trước đó.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText(" Sau khi đã nhận chứng thư mà Bên A không được ngân hàng cấp tín dụng, công ty thẩm định giá sẽ không hoàn trả chi phí thẩm định mà Bên A đã thanh toán trước đó.", null, ['align' => 'both']);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.7.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText(" Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, ['align' => 'both']);
 
 
         $textRun = $section->addTextRun(['align' => 'both']);
@@ -563,18 +563,65 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
+        $row->addCell(9300)->addText(" Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
 
         $row2 = $table->addRow();
         $row2->addCell(700)->addText("a.", null, ['align' => 'right']);
-        $row2->addCell(9200)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
+        $row2->addCell(9200)->addText(" 	Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
         $row3 = $table->addRow();
-        $row3->addCell(700)->addText("b.", null, ['align' => 'right']);
-        $row3->addCell(9300)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
+        $row3->addCell(670)->addText("b.", null, ['align' => 'right']);
+        $row3->addCell(9330)->addText(" 	Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
 
         $row4 = $table->addRow();
         $row4->addCell(800)->addText("-", null, ['align' => 'right']);
         $row4->addCell(9100)->addText(" 	Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, ['align' => 'both']);
+
+        $row5 = $table->addRow();
+        $row5->addCell(800)->addText("-", null, ['align' => 'right']);
+        $row5->addCell(9100)->addText(" 	Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, ['align' => 'both']);
+        $row6 = $table->addRow();
+        $row6->addCell(670)->addText("c.", null, ['align' => 'right']);
+        $row6->addCell(9330)->addText(" 	Đơn phương chấm dứt hợp đồng: Trường hợp một trong hai bên vi phạm các điều khoản trong hợp đồng thì bên kia có quyền đơn phương chấm dứt hợp đồng mà không cần báo trước. Bên vi phạm hợp đồng phải bồi thường thiệt hại (nếu có) cho bên kia.", null, ['align' => 'both']);
+
+        $row7 = $table->addRow();
+        $row7->addCell(600)->addText("7.2.", null, ['align' => 'right']);
+        $row7->addCell(9300)->addText(" Hai bên thỏa thuận được quyền đơn phương chấm dứt hợp đồng trong các trường hợp sau đây: ", null, ['align' => 'both']);
+
+        $row8 = $table->addRow();
+        $row8->addCell(700)->addText("a.", null, ['align' => 'right']);
+        $row8->addCell(9200)->addText(" 	a.	Sau 10 ngày ký hợp đồng mà Bên A không hướng dẫn Bên B thẩm định tài sản hiện trường; hoặc tối đa 10 ngày sau khi nhận thông báo (bằng thư qua email/hoặc tin nhắn điện thoại) mà Bên A không đến công ty thẩm định giá để nhận chứng thư thì Bên B có quyền đơn phương chấm dứt hợp đồng với Bên A, hợp đồng này mặc nhiên thanh lý.", null, ['align' => 'both']);
+        $row9 = $table->addRow();
+        $row9->addCell(670)->addText("b.", null, ['align' => 'right']);
+        $row9->addCell(9330)->addText(" 	b.	Nếu Bên B không cung cấp chứng thư thẩm định giá cho Bên A theo đúng thời gian thỏa thuận thì Bên A có quyền đơn phương chấm dứt hợp đồng với Bên B, đồng thời yêu cầu Bên B phải hoàn tiền đã nhận lại cho Bên A.", null, ['align' => 'both']);
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 8: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Các thỏa thuận khác', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("8.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText(" Mọi sửa đổi, bổ sung hợp đồng này phải do hai bên thỏa thuận, được lập thành văn bản và là một phần không tách rời của hợp đồng.", null, ['align' => 'both']);
+
+
+        $row2 = $table->addRow();
+        $row2->addCell(600)->addText("8.2.", null, ['align' => 'right']);
+        $row2->addCell(9300)->addText(" Trong quá trình thực hiện hợp đồng, nếu phát sinh tranh chấp, hai bên sẽ cùng nhau thương lượng trên tinh thần hợp tác. Trường hợp không thương lượng được, vụ việc sẽ do Tòa án nhân dân Quận 5, TP.HCM giải quyết.", null, ['align' => 'both']);
+
+
+        $row3 = $table->addRow();
+        $row3->addCell(600)->addText("8.3.", null, ['align' => 'right']);
+        $row3->addCell(9300)->addText(" Sau khi Bên B nhận đủ phí và cung cấp kết quả thẩm định cho Bên A thì trách nhiệm và nghĩa vụ hai bên chấm dứt, hợp đồng này mặc nhiên được thanh lý.", null, ['align' => 'both']);
+
+
+        $row4 = $table->addRow();
+        $row4->addCell(600)->addText("8.4.", null, ['align' => 'right']);
+        $row4->addCell(9300)->addText(" Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 03 bản, có giá trị pháp lý như nhau, Bên A giữ 01 bản, bên B giữ 02 bản.", null, ['align' => 'both']);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
