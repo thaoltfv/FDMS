@@ -220,6 +220,32 @@ class BienBanThanhLy
         $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
             $formattedDateCertificateDate, null, $indentleftSymbol);
 
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $alignBoth = ['align' => 'both'];
+        $cellVTop = ['valign' => 'top'];
+        $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row1->addCell(1800, $cellVTop)->addText('BÊN A', ['bold' => true,],  $alignBoth);
+        $row1->addCell(8100, $cellVTop)->addText(': ' . $certificate->petitioner_name, ['bold' => true],  $alignBoth);
+
+        $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        => false));
+        $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
+        $row2->addCell(8100, $cellVTop)->addText(': ' . $certificate->petitioner_address, null,  $alignBoth);
+
+        $row3 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        => false));
+        $row3->addCell(1800, $cellVTop)->addText('-    Mã số thuế', null,  $alignBoth);
+        $row3->addCell(8100, $cellVTop)->addText(': ', null,  $alignBoth);
+
+        $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        => false));
+        $row4->addCell(1800, $cellVTop)->addText('-    Đại diện', null,  $alignBoth);
+        $row4->addCell(8100, $cellVTop)->addText(': ', null,  $alignBoth);
+
         $reportName = 'Bien Ban Thanh Ly' . (isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
