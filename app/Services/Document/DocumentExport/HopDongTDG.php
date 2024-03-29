@@ -142,9 +142,9 @@ class HopDongTDG
             'align' => 'both'
         ]);
         $styleSection = [
-            // 'footerHeight' => 300,
+            'footerHeight' => 0,
             'marginTop' => Converter::inchToTwip(0.7),
-            'marginBottom' => Converter::inchToTwip(0),
+            'marginBottom' => Converter::inchToTwip(0.28),
             'marginRight' => Converter::inchToTwip(0.3),
             'marginLeft' => Converter::inchToTwip(0.6)
         ];
