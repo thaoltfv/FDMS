@@ -189,7 +189,7 @@ class KeHoachTDG
         );
 
         $textRun = $section->addTextRun(['align' => 'both']);
-        $textRun->addText('1. Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
+        $textRun->addText('1.  Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
 
         $addressHSTD = '';
         foreach ($certificate->appraises as $index => $item) {
@@ -218,7 +218,28 @@ class KeHoachTDG
         $row4->addCell(9700)->addText("Bên sử dụng Chứng thư thẩm định giá: " . $certificate->petitioner_name, null, $indentleftSymbol);
 
         $textRun = $section->addTextRun(['align' => 'both']);
-        $textRun->addText('2. Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);
+        $textRun->addText('2.  Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);
+
+        $row = $table->addRow();
+        $row->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row->addCell(9700, array('gridSpan' => 2))->addText("Phương thức thẩm định giá: Thực hiện toàn bộ quy trình Thẩm định giá theo quy định pháp luật hiện hành:  khảo sát hiện trạng tài sản, thu thập thông tin, ước tính giá trị tài sản thẩm định giá, lập và ký tên Hồ sơ thẩm định giá.", null, $indentleftSymbol);
+
+        $row2 = $table->addRow();
+        $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh" . $addressHSTD, null, $indentleftSymbol);
+
+        $row3 = $table->addRow();
+        $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row3->addCell(9700, array('gridSpan' => 2))->addText("Nguồn thông tin: dự kiến thu thập các thông tin giao dịch thực tế trên thị trường, trên báo chí, trên mạng internet và một số nguồn thông tin khác nếu có; phân tích, xử lý thông tin và nhận định hoặc biện luận lựa chọn thông tin phù hợp.", null, $indentleftSymbol);
+
+        $row4 = $table->addRow();
+        $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row4->addCell(9700, array('gridSpan' => 2))->addText("Tiến độ thực hiện công việc dự kiến như sau:", null, $indentleftSymbol);
+
+        $row5 = $table->addRow();
+        $row5->addCell(200)->addText("", null, ['align' => 'left']);
+        $row5->addCell(1100)->addText("o", null, ['align' => 'left']);
+        $row5->addCell(8600, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
