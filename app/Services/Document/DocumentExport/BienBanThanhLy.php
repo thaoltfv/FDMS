@@ -307,10 +307,10 @@ class BienBanThanhLy
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(400, array('vMerge' => 'restart', 'align' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
-        $row1->addCell(3200, array('vMerge' => 'restart', 'align' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
-        $row1->addCell(3800, array('gridSpan' => 3, 'align' => 'center'))->addText("Tổng giá trị", ['bold' => true], $alignCenter);
-        $row1->addCell(1600, array('vMerge' => 'restart', 'align' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
+        $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
+        $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
+        $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Tổng giá trị", ['bold' => true], $alignCenter);
+        $row1->addCell(1600, array('vMerge' => 'restart',  'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
 
         $row2 = $table->addRow();
         $row2->addCell(400, array('vMerge' => 'continue'));
