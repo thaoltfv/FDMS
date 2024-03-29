@@ -317,8 +317,37 @@ class BienBanThanhLy
         $row2->addCell(3200, array('vMerge' => 'continue'));
         $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
         $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
-        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array('align' => 'center', 'spaceBefore' => 80, 'spaceAfter' => 80));
+        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
+            'align' => 'center', 'spaceBefore' => 80, 'spaceAfter' => 80, 'indent' => 80,
+            'hanging' => 80
+        ));
         $row2->addCell(1600, array('vMerge' => 'continue'));
+
+        $total = 0;
+        foreach ($certificate->appraises as $index => $item) {
+            $row3 = $table->addRow();
+            $total += $certificate->service_fee ?? 0;
+            $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+            $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
+            $row3->addCell(3200, $cellVCentered)->addText($item->appraise_asset, null,  $alignBoth);
+            $row3->addCell(1200, $cellVCentered)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null,  $alignBoth);
+            $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+            $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+            $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+        }
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row4->addCell(3400, $cellVCentered)->addText('Tổng số tiền phải thanh toán', null,  $alignBoth);
+        $row4->addCell(100, $cellVCentered)->addText(':', null,  $alignBoth);
+        $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') : '', ['bold' => true],  $alignBoth);
+
+        $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) : '') . ').', ['italic' => true],  $alignBoth);
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
         $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '_CT' . htmlspecialchars($filename) : '');
