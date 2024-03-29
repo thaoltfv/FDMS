@@ -328,7 +328,9 @@ class BienBanThanhLy
             $total += $certificate->service_fee ?? 0;
             $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
             $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-            $row3->addCell(3200, array('cellMargin' => 80, $cellVCentered))->addText($item->appraise_asset, null,  $alignBoth);
+            $cell = $row3->addCell(3200, $cellVCentered);
+            $textRun = $cell->addTextRun(array('indent' => '0.5cm', 'hanging' => '0.5cm'));
+            $textRun->addText($item->appraise_asset, null, $alignBoth);
             $row3->addCell(1200, $cellVCentered)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null,  $alignBoth);
             $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
             $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
@@ -346,7 +348,7 @@ class BienBanThanhLy
         $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') . ' đồng' : '', ['bold' => true],  $alignBoth);
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ').', ['italic' => true],  $alignCenter);
+        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ')', ['italic' => true],  $alignCenter);
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
         $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '_CT' . htmlspecialchars($filename) : '');
