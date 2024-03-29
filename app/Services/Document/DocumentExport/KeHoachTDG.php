@@ -197,12 +197,12 @@ class KeHoachTDG
             'unit' => 'pct'
         ]);
         $row = $table->addRow();
-        $row->addCell(400)->addText("-", null, ['align' => 'left']);
-        $row->addCell(9300)->addText(" Khách hàng yêu cầu thẩm định giá: Bà Võ Lại Thùy Dung", null, $cellHJustify);
+        $row->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row->addCell(9700)->addText(" Khách hàng yêu cầu thẩm định giá: Bà Võ Lại Thùy Dung", null, $cellHJustify);
 
         $row2 = $table->addRow();
-        $row2->addCell(400)->addText("-", null, ['align' => 'left']);
-        $row2->addCell(9300)->addText(" Tài sản thẩm định giá: Bất động sản là Quyền sở hữu Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM", null, $cellHJustify);
+        $row2->addCell(200)->addText("-", null, ['align' => 'left', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.01)]]);
+        $row2->addCell(9700)->addText(" Tài sản thẩm định giá: Bất động sản là Quyền sở hữu Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM", null, $cellHJustify);
 
 
         $footer = $section->addFooter();
