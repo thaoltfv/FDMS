@@ -568,13 +568,14 @@ class HopDongTDG
 
         $row2 = $table->addRow();
         $row2->addCell(650)->addText("a.", null, ['align' => 'right']);
-        $row->addCell(
+        $row2->addCell(
             100
         )->addText("", null, ['align' => 'right']);
         $row2->addCell(9150)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
+
         $row3 = $table->addRow();
         $row3->addCell(650)->addText("b.", null, ['align' => 'right']);
-        $row->addCell(150)->addText("", null, ['align' => 'right']);
+        $row3->addCell(150)->addText("", null, ['align' => 'right']);
         $row3->addCell(9100)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
 
         $row4 = $table->addRow();
