@@ -179,9 +179,18 @@ class BienBanThanhLy
             ['bold' => true, 'size' => '14'],
             ['align' => 'center']
         );
+        if ($certificate->document_date) {
+            $timestamp = strtotime($certificate->document_date);
+            $day = date('d', $timestamp);
+            $month = date('m', $timestamp);
+            $year = date('Y', $timestamp);
+            $formattedDateDocumentDate = "ngày $day tháng $month năm $year";
+        } else {
+            $formattedDateDocumentDate = '';
+        }
         $section->addText(
-            "(Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
-                "ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y'),
+            "(Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num  : '') .
+                (isset($formattedDateDocumentDate) ? ' ' . $formattedDateDocumentDate : '') . ")",
             ['italic' => true, 'size' => '12'],
             ['align' => 'center']
         );
@@ -191,15 +200,7 @@ class BienBanThanhLy
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        if ($certificate->document_date) {
-            $timestamp = strtotime($certificate->document_date);
-            $day = date('d', $timestamp);
-            $month = date('m', $timestamp);
-            $year = date('Y', $timestamp);
-            $formattedDateDocumentDate = "Ngày $day tháng $month năm $year";
-        } else {
-            $formattedDateDocumentDate = '';
-        }
+
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row->addCell(9700)->addText("Căn cứ Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
@@ -210,7 +211,7 @@ class BienBanThanhLy
             $day = date('d', $timestamp);
             $month = date('m', $timestamp);
             $year = date('Y', $timestamp);
-            $formattedDateCertificateDate = "Ngày $day tháng $month năm $year";
+            $formattedDateCertificateDate = "ngày $day tháng $month năm $year";
         } else {
             $formattedDateCertificateDate = '';
         }
