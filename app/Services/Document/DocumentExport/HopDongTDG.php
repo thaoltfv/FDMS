@@ -217,13 +217,13 @@ class HopDongTDG
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(1800, $cellVTop)->addText('BÊN A', ['bold' => true,],  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(8100, $cellVTop)->addText(': ' . $certificate->petitioner_name, ['bold' => true],  $alignBoth);
+        $row1->addCell(8100, $cellVTop)->addText($certificate->petitioner_name, ['bold' => true],  $alignBoth);
 
         $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
         $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
         $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row2->addCell(8100, $cellVTop)->addText(': ' . $certificate->petitioner_address, null,  $alignBoth);
+        $row2->addCell(8100, $cellVTop)->addText($certificate->petitioner_address, null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -231,24 +231,24 @@ class HopDongTDG
         ));
         $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
         $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row3->addCell(8100, $cellVTop)->addText(': ' . $certificate->petitioner_identity_card, null,  $alignBoth);
+        $row3->addCell(8100, $cellVTop)->addText($certificate->petitioner_identity_card, null,  $alignBoth);
 
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(8100, $cellVTop)->addText(': ' . $certificate->petitioner_phone, null,  $alignBoth);
+        $row4->addCell(8100, $cellVTop)->addText($certificate->petitioner_phone, null,  $alignBoth);
 
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row5->addCell(1800, $cellVTop)->addText('BÊN B', ['bold' => true,],  $alignBoth);
         $row5->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row5->addCell(8100, $cellVTop)->addText(': CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA', ['bold' => true],  $alignBoth);
+        $row5->addCell(8100, $cellVTop)->addText('CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA', ['bold' => true],  $alignBoth);
 
         $row6 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
         $row6->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
         $row6->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row6->addCell(8100, $cellVTop)->addText(': Số 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM', null,  $alignBoth);
+        $row6->addCell(8100, $cellVTop)->addText('Số 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM', null,  $alignBoth);
 
         $row7 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -256,24 +256,24 @@ class HopDongTDG
         ));
         $row7->addCell(1800, $cellVTop)->addText('-    Điện thoại bàn', null,  $alignBoth);
         $row7->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row7->addCell(8100, $cellVTop)->addText(': (028) 3920 6779 – Fax: (028) 3920 6778', null,  $alignBoth);
+        $row7->addCell(8100, $cellVTop)->addText('(028) 3920 6779 – Fax: (028) 3920 6778', null,  $alignBoth);
 
         $row8 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row8->addCell(1800, $cellVTop)->addText('-   Mã số thuế', null,  $alignBoth);
         $row8->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row8->addCell(8100, $cellVTop)->addText(': 0314514140', null,  $alignBoth);
+        $row8->addCell(8100, $cellVTop)->addText('0314514140', null,  $alignBoth);
 
 
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
         $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText(': 3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
+        $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
 
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8100, $cellVTop)->addTextRun($alignBoth);
-        $textRun->addText(': Ông ', ['bold' => false]);
+        $textRun->addText('Ông ', ['bold' => false]);
         $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
         $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
         $section->addText(
