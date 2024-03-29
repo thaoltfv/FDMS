@@ -174,7 +174,7 @@ class KeHoachTDG
         );
         $row3->addCell(5700, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
         $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row4->addCell(3500, $cellVCentered)->addText('Số: ' . $certificate->document_num, null, $cellHCentered);
+        $row4->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num  : ''), null, $cellHCentered);
         $row4->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
@@ -254,12 +254,12 @@ class KeHoachTDG
         $row7 = $table->addRow();
         $row7->addCell(200)->addText("", null, ['align' => 'left']);
         $row7->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row7->addCell(8200)->addText("Lập hồ sơ và báo cáo Thẩm định giá: " . ($certificate->document_date ? date('m/Y', strtotime($certificate->document_date)) : ''), null, $indentleftSymbol);
+        $row7->addCell(8200)->addText("Lập hồ sơ và báo cáo Thẩm định giá: " . ($certificate->document_date ? date('d/m/Y', strtotime($certificate->document_date)) : ''), null, $indentleftSymbol);
 
         $row8 = $table->addRow();
         $row8->addCell(200)->addText("", null, ['align' => 'left']);
         $row8->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row8->addCell(8200)->addText("Cấp chứng thư Thẩm định giá: " . ($certificate->certificate_date ? date('m/Y', strtotime($certificate->certificate_date)) : ''), null, $indentleftSymbol);
+        $row8->addCell(8200)->addText("Cấp chứng thư Thẩm định giá: " . ($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $indentleftSymbol);
 
         $row9 = $table->addRow();
         $row9->addCell(200)->addText(" -", null, ['align' => 'left']);
