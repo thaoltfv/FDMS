@@ -562,15 +562,20 @@ class HopDongTDG
             'unit' => 'pct'
         ]);
         $row = $table->addRow();
-        $row->addCell(600)->addText("7.1." . ' ', null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
+        $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
+        $row->addCell(100)->addText("", null, ['align' => 'right']);
+        $row->addCell(9200)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
 
         $row2 = $table->addRow();
         $row2->addCell(650)->addText("a.", null, ['align' => 'right']);
-        $row2->addCell(9250)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
+        $row->addCell(
+            100
+        )->addText("", null, ['align' => 'right']);
+        $row2->addCell(9150)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
         $row3 = $table->addRow();
         $row3->addCell(650)->addText("b.", null, ['align' => 'right']);
-        $row3->addCell(9250)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
+        $row->addCell(150)->addText("", null, ['align' => 'right']);
+        $row3->addCell(9100)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
 
         $row4 = $table->addRow();
         $row4->addCell(800)->addText("-", null, ['align' => 'right']);
@@ -585,7 +590,10 @@ class HopDongTDG
 
         $row7 = $table->addRow();
         $row7->addCell(600)->addText("7.2.", null, ['align' => 'right']);
-        $row7->addCell(9300)->addText("Hai bên thỏa thuận được quyền đơn phương chấm dứt hợp đồng trong các trường hợp sau đây: ", null, ['align' => 'both']);
+        $row->addCell(
+            50
+        )->addText("", null, ['align' => 'right']);
+        $row7->addCell(9250)->addText("Hai bên thỏa thuận được quyền đơn phương chấm dứt hợp đồng trong các trường hợp sau đây: ", null, ['align' => 'both']);
 
         $row8 = $table->addRow();
         $row8->addCell(650)->addText("a.", null, ['align' => 'right']);
