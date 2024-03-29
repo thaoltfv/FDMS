@@ -381,7 +381,7 @@ class HopDongTDG
         $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row2->addCell(3000, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
-        $row1->addCell(
+        $row2->addCell(
             100,
             $cellVTop
         )->addText(':', null,  $alignBoth);
@@ -394,7 +394,7 @@ class HopDongTDG
         $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row3->addCell(3000, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row1->addCell(
+        $row3->addCell(
             100,
             $cellVTop
         )->addText(':', null,  $alignBoth);
@@ -407,7 +407,7 @@ class HopDongTDG
         $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(3000, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
-        $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row4->addCell(5600, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
         $table = $section->addTable([
             'align' => JcTable::START,
