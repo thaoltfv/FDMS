@@ -322,8 +322,8 @@ class BienBanThanhLy
         $row2->addCell(1600, $cellVCentered)->addText('', ['bold' => true], $alignCenter);
         $row2->addCell(1600, array('vMerge' => 'continue'));
 
-        $filename = (isset($certificate->certificate_num) ? '-' . str_replace('/', '-', htmlspecialchars($certificate->certificate_num)) : '');
-        $reportName = 'Bien Ban Thanh Ly' . $filename;
+        $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
+        $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '-' . htmlspecialchars($filename) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
