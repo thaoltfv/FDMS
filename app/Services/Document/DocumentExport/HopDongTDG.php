@@ -293,7 +293,7 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("1.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau:", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau:", null, $indentleftNumber);
 
         $table = $section->addTable([
             'align' => JcTable::START,
