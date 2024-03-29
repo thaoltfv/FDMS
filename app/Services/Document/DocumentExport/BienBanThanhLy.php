@@ -309,7 +309,7 @@ class BienBanThanhLy
             ['align' => 'center'];
         $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
         $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
-        $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Tổng giá trị", ['bold' => true], $alignCenter);
+        $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
         $row1->addCell(1600, array('vMerge' => 'restart',  'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
 
         $row2 = $table->addRow();
@@ -318,8 +318,8 @@ class BienBanThanhLy
         $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
         $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
         $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
-            'align' => 'center', 'spaceBefore' => 80, 'spaceAfter' => 80, 'indent' => 80,
-            'hanging' => 80
+            'align' => 'center',  'indent' => 40,
+            'hanging' => 40
         ));
         $row2->addCell(1600, array('vMerge' => 'continue'));
 
@@ -344,10 +344,10 @@ class BienBanThanhLy
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(3400, $cellVCentered)->addText('Tổng số tiền phải thanh toán', null,  $alignBoth);
         $row4->addCell(100, $cellVCentered)->addText(':', null,  $alignBoth);
-        $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') : '', ['bold' => true],  $alignBoth);
+        $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') . ' đồng' : '', ['bold' => true],  $alignBoth);
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) : '') . ').', ['italic' => true],  $alignBoth);
+        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) : '') . ').', ['italic' => true],  $alignCenter);
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
         $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '_CT' . htmlspecialchars($filename) : '');
