@@ -420,8 +420,8 @@ class HopDongTDG
         ));
         $row5->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row5->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row5->addCell(3800, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá', null, ['align' => 'left']);
-        $row5->addCell(4900, $cellVTop)->addText(': ' . $certificate->petitioner_name . '.', null,  $alignBoth);
+        $row5->addCell(3800, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá: ', null, ['align' => 'left']);
+        $row5->addCell(4900, $cellVTop)->addText($certificate->petitioner_name . '.', null,  $alignBoth);
 
         $row6 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -429,8 +429,8 @@ class HopDongTDG
         ));
         $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row6->addCell(3900, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
-        $row6->addCell(4800, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
+        $row6->addCell(3900, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu: ', null, ['align' => 'left']);
+        $row6->addCell(4800, $cellVTop)->addText('02 bản chính bằng tiếng Việt.', null,  $alignBoth);
 
         $section->addText(
             "1.2.  Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
