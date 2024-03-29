@@ -196,11 +196,11 @@ class KeHoachTDG
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                $addressHSTD .= ($index == 0 ?  $item->full_address : 'và ' . $item->full_address);
+                $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         } else {
             foreach ($certificate->appraises as $index => $item) {
-                $addressHSTD .= ($index == 0 ?  $item->full_address : 'và ' . $item->full_address);
+                $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         }
 
