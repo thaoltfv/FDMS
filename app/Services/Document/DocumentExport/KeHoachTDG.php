@@ -191,6 +191,11 @@ class KeHoachTDG
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('1. Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
 
+        $addressHSTD = '';
+        foreach ($certificate->appraises as $index => $item) {
+            $addressHSTD .= ($index == 0 ?  $item->full_address : 'và ' . $item->full_address);
+        }
+
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -198,19 +203,29 @@ class KeHoachTDG
         ]);
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row->addCell(9700)->addText(" Khách hàng yêu cầu thẩm định giá: Bà Võ Lại Thùy Dung", null, $cellHJustify);
+        $row->addCell(9700)->addText(" Khách hàng yêu cầu thẩm định giá: " . $certificate->petitioner_name, null, $cellHJustify);
 
         $row2 = $table->addRow();
-        $row2->addCell(200)->addText("-", null, ['align' => 'left', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.01)]]);
-        $row2->addCell(9700)->addText(" Tài sản thẩm định giá: Bất động sản là Quyền sở hữu Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM", null, $cellHJustify);
+        $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row2->addCell(9700)->addText(" Tài sản thẩm định giá: Bất động sản là" . $addressHSTD, null, $cellHJustify);
 
+        $row3 = $table->addRow();
+        $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row3->addCell(9700)->addText(" Mục đích Thẩm định giá: " . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null, $cellHJustify);
+
+        $row4 = $table->addRow();
+        $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row4->addCell(9700)->addText(" Bên sử dụng Chứng thư thẩm định giá: " . $certificate->petitioner_name, null, $cellHJustify);
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('2. Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
         $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
-        $reportName = 'HDTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
