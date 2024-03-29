@@ -295,6 +295,12 @@ class BienBanThanhLy
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
 
+        $table = $section->addTable([
+            'borderSize' => 1,
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
         $row1 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => true
