@@ -231,7 +231,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh" . $addressHSTD, null, $indentleftSymbol);
+        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh", null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -264,7 +264,7 @@ class KeHoachTDG
         $row9 = $table->addRow();
         $row9->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row9->addCell(9700, array('gridSpan' => 2))->addText(
-            "Họ, tên người có trách nhiệm tham gia khảo sát, lập biên bản hiện trạng tài sản, thu thập thông tin, lập và ký tên Hồ sơ thẩm định giá: " .
+            "Họ, tên người có trách nhiệm tham gia khảo sát, lập biên bản hiện trạng tài sản, thu thập thông tin, lập và ký tên Hồ sơ thẩm định giá:" .
                 (isset($certificate->appraiser) ? ' Thẩm định viên ' . $certificate->appraiser->name . ',' : '') .
                 (isset($certificate->appraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->appraiserPerform->name : ''),
             null,
@@ -283,10 +283,28 @@ class KeHoachTDG
         $row12->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row12->addCell(9700, array('gridSpan' => 2))->addText("Các yêu cầu hỗ trợ khác (nếu có): Không đề xuất.", null, $indentleftSymbol);
 
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row13 = $table->addRow();
+        $row13->addCell(3300)->addText('Người duyệt', ['bold' => true], ['align' => 'center']);
+        $row13->addCell(3300)->addText('Người kiểm tra', ['bold' => true], ['align' => 'center']);
+        $row13->addCell(3300)->addText('Người lập', ['bold' => true], ['align' => 'center']);
+
+        $row14 = $table->addRow();
+        $row14->addCell(3300)->addText('Tổng Giám đốc', ['bold' => true], ['align' => 'center']);
+        $row14->addCell(3300)->addText('Thẩm Định viên', ['bold' => true], ['align' => 'center']);
+        $row14->addCell(3300)->addText('Chuyên viên thẩm định', ['bold' => true], ['align' => 'center']);
+
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
-        $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0));
+        $table->addCell(9900)->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>
+            Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>
+            Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
+            ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
