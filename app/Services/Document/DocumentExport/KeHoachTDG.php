@@ -243,8 +243,8 @@ class KeHoachTDG
 
         $row5 = $table->addRow();
         $row5->addCell(200)->addText("", null, ['align' => 'left']);
-        $row5->addCell(1100)->addText("o", null, ['align' => 'left']);
-        $row5->addCell(8600, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
+        $row5->addCell(1400)->addText("o", null, ['align' => 'right']);
+        $row5->addCell(8300, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
