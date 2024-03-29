@@ -565,16 +565,16 @@ class HopDongTDG
         $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
         $row->addCell(9300)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
 
-        $row = $table->addRow();
-        $row->addCell(700)->addText("a.", null, ['align' => 'right']);
-        $row->addCell(9200)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
-        $row = $table->addRow();
-        $row->addCell(700)->addText("b.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
+        $row2 = $table->addRow();
+        $row2->addCell(700)->addText("a.", null, ['align' => 'right']);
+        $row2->addCell(9200)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
+        $row3 = $table->addRow();
+        $row3->addCell(700)->addText("b.", null, ['align' => 'right']);
+        $row3->addCell(9300)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
 
-        $row = $table->addRow();
-        $row->addCell(800)->addText("-", null, ['align' => 'right']);
-        $row->addCell(9100)->addText(" 	Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, ['align' => 'both']);
+        $row4 = $table->addRow();
+        $row4->addCell(800)->addText("-", null, ['align' => 'right']);
+        $row4->addCell(9100)->addText(" 	Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, ['align' => 'both']);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
