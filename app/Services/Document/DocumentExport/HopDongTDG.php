@@ -127,6 +127,12 @@ class HopDongTDG
         // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
 
+        $indentleftword =
+            ['align' => 'both'];
+        $indentleftNumber =
+            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.05)]];
+        $indentleftSymbol =
+            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]];
 
         $phpWord->setDefaultParagraphStyle([
             'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3),
@@ -401,23 +407,23 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("2.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("2.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Bên A cung cấp đầy đủ hồ sơ pháp lý của tài sản và hướng dẫn người của Bên B thẩm định hiện trạng tài sản tại hiện trường. Bên A thanh toán đợt 1 cho bên B làm chi phí để bên B cử cán bộ và phương tiện phối hợp với bên A đi khảo sát thu thập thông tin và thẩm định hiện trường. Mức chi phí trên do hai bên thỏa thuận tùy thuộc vào loại tài sản và vị trí tài sản và được tính là chi phí không hoàn lại. Hình thức chi bằng chuyển khoản hoặc thanh toán tiền mặt tại thời điểm hiện trường.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Bên A cung cấp đầy đủ hồ sơ pháp lý của tài sản và hướng dẫn người của Bên B thẩm định hiện trạng tài sản tại hiện trường. Bên A thanh toán đợt 1 cho bên B làm chi phí để bên B cử cán bộ và phương tiện phối hợp với bên A đi khảo sát thu thập thông tin và thẩm định hiện trường. Mức chi phí trên do hai bên thỏa thuận tùy thuộc vào loại tài sản và vị trí tài sản và được tính là chi phí không hoàn lại. Hình thức chi bằng chuyển khoản hoặc thanh toán tiền mặt tại thời điểm hiện trường.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("2.3.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Tối đa 03 ngày làm việc, kể từ ngày bên B đã nhận đủ hồ sơ pháp lý và đi thẩm định hiện trường hoàn tất, bên B sẽ cử người gọi điện thoại thông báo kết quả sơ bộ cho bên A. Nếu bên A đồng ý phát hành chứng thư thẩm định giá thì bên A thanh toán đủ 100% phí thẩm định cho bên B, sau đó bên B sẽ cấp chứng thư cho bên A. ", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Tối đa 03 ngày làm việc, kể từ ngày bên B đã nhận đủ hồ sơ pháp lý và đi thẩm định hiện trường hoàn tất, bên B sẽ cử người gọi điện thoại thông báo kết quả sơ bộ cho bên A. Nếu bên A đồng ý phát hành chứng thư thẩm định giá thì bên A thanh toán đủ 100% phí thẩm định cho bên B, sau đó bên B sẽ cấp chứng thư cho bên A. ", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("2.4.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Sau khi nhận được kết quả sơ bộ mà bên A yêu cầu ngừng dịch vụ thì bên B sẽ hủy toàn bộ hồ sơ theo Quy trình lưu trữ nội bộ, Bên B sẽ không hoàn trả lại số tiền đã nhận của Bên A. ", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Sau khi nhận được kết quả sơ bộ mà bên A yêu cầu ngừng dịch vụ thì bên B sẽ hủy toàn bộ hồ sơ theo Quy trình lưu trữ nội bộ, Bên B sẽ không hoàn trả lại số tiền đã nhận của Bên A. ", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("2.5.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Trường hợp Bên A có nhu cầu thẩm định giá bổ sung các tài sản ngoài danh mục thì các bên sẽ thỏa thuận cụ thể về thời gian, quy trình, mức phí thẩm định đối với các tài sản phát sinh. ", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Trường hợp Bên A có nhu cầu thẩm định giá bổ sung các tài sản ngoài danh mục thì các bên sẽ thỏa thuận cụ thể về thời gian, quy trình, mức phí thẩm định đối với các tài sản phát sinh. ", null, $indentleftNumber);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('Điều 3:', ['bold' => true, 'underline' => 'single']);
@@ -431,11 +437,11 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("3.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Chứng thư thẩm định giá do Bên B cung cấp chỉ có giá trị đối với tài sản thẩm định giá tại thời điểm thẩm định giá và địa điểm thẩm định giá.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Chứng thư thẩm định giá do Bên B cung cấp chỉ có giá trị đối với tài sản thẩm định giá tại thời điểm thẩm định giá và địa điểm thẩm định giá.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("3.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Chứng thư thẩm định giá do Bên B cung cấp chỉ nhằm thực hiện mục đích ghi trong hợp đồng này.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Chứng thư thẩm định giá do Bên B cung cấp chỉ nhằm thực hiện mục đích ghi trong hợp đồng này.", null, $indentleftNumber);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('Điều 4:', ['bold' => true, 'underline' => 'single']);
@@ -450,29 +456,29 @@ class HopDongTDG
         $row = $table->addRow();
         $row->addCell(600)->addText("4.1.", null, ['align' => 'right']);
         $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
-        $textRun = $row->addCell(9300)->addTextRun(['align' => 'both']);
+        $textRun = $row->addCell(9300)->addTextRun($indentleftNumber);
         $textRun->addText(" Phí dịch vụ thẩm định giá tài sản: " . $textServiceFee, ['bold' => true]);
         if (isset($textServiceFee))
             $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee)) . ').', ['italic' => true]);
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Phí dịch vụ thẩm định giá được thanh toán ngay sau khi hợp đồng thẩm định giá có hiệu lực.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Phí dịch vụ thẩm định giá được thanh toán ngay sau khi hợp đồng thẩm định giá có hiệu lực.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.3.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Phương thức thanh toán: Tiền mặt hoặc Chuyển khoản.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Phương thức thanh toán: Tiền mặt hoặc Chuyển khoản.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.4.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Trường hợp có nhu cầu cung cấp thêm Chứng thư thẩm định giá ngoài số lượng Chứng thư thẩm định giá thì Bên A phải thanh toán cho Bên B mức phí tương ứng.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Trường hợp có nhu cầu cung cấp thêm Chứng thư thẩm định giá ngoài số lượng Chứng thư thẩm định giá thì Bên A phải thanh toán cho Bên B mức phí tương ứng.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.5.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Nếu Bên A không thanh toán hết toàn bộ phí thẩm định cho Bên B ghi trong hợp đồng này thì Bên B sẽ không chịu trách nhiệm về kết quả thẩm định giá ghi trong chứng thư đã cấp cho Bên A (Chứng thư thẩm định giá sẽ không có giá trị pháp lý) và Bên B sẽ không chịu bất cứ trách nhiệm nào về chứng thư thẩm định giá.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Nếu Bên A không thanh toán hết toàn bộ phí thẩm định cho Bên B ghi trong hợp đồng này thì Bên B sẽ không chịu trách nhiệm về kết quả thẩm định giá ghi trong chứng thư đã cấp cho Bên A (Chứng thư thẩm định giá sẽ không có giá trị pháp lý) và Bên B sẽ không chịu bất cứ trách nhiệm nào về chứng thư thẩm định giá.", null, $indentleftNumber);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('Điều 5:', ['bold' => true, 'underline' => 'single']);
@@ -486,31 +492,31 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("5.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Nhận Chứng thư thẩm định giá theo quy định tại điều 1 hợp đồng này.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Nhận Chứng thư thẩm định giá theo quy định tại điều 1 hợp đồng này.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("5.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Khi Bên A yêu cầu bên B cung cấp thêm quyển Chứng thư thì phải trả thêm số tiền phí tương ứng với số lượng yêu cầu. Bên A yêu cầu bên B cử nhân viên làm việc ngoài giờ thì Bên B có quyền thương lượng thu thêm phí dịch vụ ngoài giờ.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Khi Bên A yêu cầu bên B cung cấp thêm quyển Chứng thư thì phải trả thêm số tiền phí tương ứng với số lượng yêu cầu. Bên A yêu cầu bên B cử nhân viên làm việc ngoài giờ thì Bên B có quyền thương lượng thu thêm phí dịch vụ ngoài giờ.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("5.3.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Cung cấp cho Bên B các hồ sơ, tài liệu liên quan đến tài sản thẩm định giá, hướng dẫn Bên B khảo sát hiện trạng tài sản và chịu trách nhiệm về tính hợp pháp, xác thực, đầy đủ của các hồ sơ, tài liệu mà mình cung cấp.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Cung cấp cho Bên B các hồ sơ, tài liệu liên quan đến tài sản thẩm định giá, hướng dẫn Bên B khảo sát hiện trạng tài sản và chịu trách nhiệm về tính hợp pháp, xác thực, đầy đủ của các hồ sơ, tài liệu mà mình cung cấp.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("5.4.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Chỉ được sử dụng Chứng thư thẩm định giá đúng mục đích thỏa thuận trong hợp đồng này. Nếu sử dụng sai mục đích, Bên A hoàn toàn chịu trách nhiệm trước pháp luật.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Chỉ được sử dụng Chứng thư thẩm định giá đúng mục đích thỏa thuận trong hợp đồng này. Nếu sử dụng sai mục đích, Bên A hoàn toàn chịu trách nhiệm trước pháp luật.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("5.5.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Thanh toán cho Bên B đầy đủ phí dịch vụ thẩm định giá theo thỏa thuận trong hợp đồng và các chi phí khác phát sinh khác nếu có. Trường hợp Bên A chưa thanh toán hết phí dịch vụ cho Bên B thì bên B không có trách nhiệm phải giao chứng thư cho Bên A. Bên B được miễn trừ hoàn toàn trách nhiệm đối với chứng thư khách hàng đã nhận mà chưa thanh toán đủ 100% phí dịch vụ ghi tại hợp đồng này.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Thanh toán cho Bên B đầy đủ phí dịch vụ thẩm định giá theo thỏa thuận trong hợp đồng và các chi phí khác phát sinh khác nếu có. Trường hợp Bên A chưa thanh toán hết phí dịch vụ cho Bên B thì bên B không có trách nhiệm phải giao chứng thư cho Bên A. Bên B được miễn trừ hoàn toàn trách nhiệm đối với chứng thư khách hàng đã nhận mà chưa thanh toán đủ 100% phí dịch vụ ghi tại hợp đồng này.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("5.6.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Bên A sẽ được ưu tiên giảm 20% mức phí, nếu yêu cầu tái thẩm định cùng tài sản ghi trên hợp đồng này trong vòng 06 tháng kể từ ngày thẩm định giá lần đầu.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Bên A sẽ được ưu tiên giảm 20% mức phí, nếu yêu cầu tái thẩm định cùng tài sản ghi trên hợp đồng này trong vòng 06 tháng kể từ ngày thẩm định giá lần đầu.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("5.7.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, $indentleftNumber);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('Điều 6:', ['bold' => true, 'underline' => 'single']);
@@ -524,31 +530,31 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("6.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Yêu cầu Bên A cung cấp hồ sơ pháp lý, các tài liệu liên quan đến tài sản thẩm định giá.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Yêu cầu Bên A cung cấp hồ sơ pháp lý, các tài liệu liên quan đến tài sản thẩm định giá.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Cung cấp cho Bên A Chứng thư sau khi nhận đủ phí dịch vụ quy định trong hợp đồng.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Cung cấp cho Bên A Chứng thư sau khi nhận đủ phí dịch vụ quy định trong hợp đồng.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.3.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Tuân thủ các quy định của pháp luật trong quá trình thực hiện thẩm định giá tài sản.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Tuân thủ các quy định của pháp luật trong quá trình thực hiện thẩm định giá tài sản.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.4.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Từ chối thực hiện thẩm định giá tài sản theo yêu cầu của Bên A khi nhận thấy tài sản đó không đủ điều kiện pháp lý để thực hiện việc thẩm định.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Từ chối thực hiện thẩm định giá tài sản theo yêu cầu của Bên A khi nhận thấy tài sản đó không đủ điều kiện pháp lý để thực hiện việc thẩm định.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.5.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Bên B và người lao động của Bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu Bên A hoặc người của Bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Bên B và người lao động của Bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu Bên A hoặc người của Bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.6.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Sau khi đã nhận chứng thư mà Bên A không được ngân hàng cấp tín dụng, công ty thẩm định giá sẽ không hoàn trả chi phí thẩm định mà Bên A đã thanh toán trước đó.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Sau khi đã nhận chứng thư mà Bên A không được ngân hàng cấp tín dụng, công ty thẩm định giá sẽ không hoàn trả chi phí thẩm định mà Bên A đã thanh toán trước đó.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.7.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, $indentleftNumber);
 
 
         $textRun = $section->addTextRun(['align' => 'both']);
@@ -562,12 +568,7 @@ class HopDongTDG
             'unit' => 'pct'
         ]);
 
-        $indentleftword =
-            ['align' => 'both'];
-        $indentleftNumber =
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.05)]];
-        $indentleftSymbol =
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]];
+
         $row = $table->addRow();
         $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
         $row->addCell(9300, ['gridSpan' => 2])->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, $indentleftNumber);
@@ -643,6 +644,31 @@ class HopDongTDG
         $row4 = $table->addRow();
         $row4->addCell(600)->addText("8.4.", null, ['align' => 'right']);
         $row4->addCell(9300)->addText("Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 03 bản, có giá trị pháp lý như nhau, Bên A giữ 01 bản, bên B giữ 02 bản.", null, $indentleftNumber);
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(4950)->addText("ĐẠI DIỆN BÊN A", ['bold' => true], ['align' => 'center']);
+        $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
+
+        $textNamePetitioner = strtoupper($certificate->petitioner_name);
+        $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        $row2 = $table->addRow();
+        $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
+
+        $row3 = $table->addRow();
+        $row3->addCell(4950)->addText("\n\n\n\n\n");
+        $row3->addCell(4950)->addText("\n\n\n\n\n");
+
+        $row4 = $table->addRow();
+        $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText($certificate->appraiserManager ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
+
+
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
