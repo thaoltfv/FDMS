@@ -276,7 +276,7 @@ class HopDongTDG
         $textRun->addText('Nội dung công việc thực hiện', ['bold' => true]);
 
         $section->addText(
-            "1.1. Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
+            "1.1.  Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
         );
@@ -389,7 +389,7 @@ class HopDongTDG
         $row6->addCell(4800, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
 
         $section->addText(
-            "1.2. Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
+            "1.2.  Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
         );
@@ -457,9 +457,15 @@ class HopDongTDG
         $row->addCell(600)->addText("4.1.", null, ['align' => 'right']);
         $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
         $textRun = $row->addCell(9300)->addTextRun($indentleftNumber);
-        $textRun->addText(" Phí dịch vụ thẩm định giá tài sản: " . $textServiceFee, ['bold' => true]);
-        if (isset($textServiceFee))
+        $textRun->addText("Phí dịch vụ thẩm định giá tài sản: ");
+        if (isset($textServiceFee)) {
+
+            $textRun->addText(
+                $textServiceFee,
+                ['bold' => true]
+            );
             $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee)) . ').', ['italic' => true]);
+        }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
         $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, $indentleftNumber);
@@ -661,8 +667,8 @@ class HopDongTDG
         $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
-        $row3->addCell(4950)->addText("\n\n\n\n\n");
-        $row3->addCell(4950)->addText("\n\n\n\n\n");
+        $row3->addCell(4950)->addText("\n\n\n\n\n\n\n\n\n\n");
+        $row3->addCell(4950)->addText("\n\n\n\n\n\n\n\n\n\n");
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
