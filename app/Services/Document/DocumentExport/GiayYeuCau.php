@@ -263,7 +263,7 @@ class GiayYeuCau
                 $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                 $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                 $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                $dt = isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->area) ? $this->formatNumberFunction($item->apartmentAssetProperties->area, 2, ',', '.') : '';
+                $dt = isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->area) ? $this->formatNumberFunction($asset->apartmentAssetProperties->area, 2, ',', '.') : '';
                 $table->addRow(400, $cantSplit);
                 $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
                 $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
