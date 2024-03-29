@@ -220,7 +220,7 @@ class BienBanThanhLy
         $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
             $formattedDateCertificateDate, null, $indentleftSymbol);
 
-        $reportName = 'Bien Ban Thanh Ly' . isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '';
+        $reportName = 'Bien Ban Thanh Ly' . (isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
