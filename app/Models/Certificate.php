@@ -363,6 +363,11 @@ class Certificate extends Model
     //     return $this->belongsToMany(ApartmentAsset::class, 'certificate_id');
     //     return $this->belongsToMany(CertificateAsset::class, 'certificate_has_appraises', 'certificate_id', 'appraise_id');
     // }
+
+    public function apartmentAssetPrint(): HasMany
+    {
+        return $this->hasMany(ApartmentAsset::class, 'certificate_id');
+    }
     public function realEstate(): belongsToMany
     {
         return $this->belongsToMany(CertificateRealEstate::class, CertificateHasRealEstate::class, 'certificate_id', 'real_estate_id')->orderBy('real_estate_id');
