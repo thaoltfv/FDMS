@@ -263,7 +263,7 @@ class HopDongTDG
         $row9->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $textRun = $row9->addCell(8100, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText(': Ông ', ['bold' => false]);
-        $textRun->addText($certificate->appraiserManager ? $certificate->appraiserManager->name : '', ['bold' => true]);
+        $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
         $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
@@ -683,7 +683,7 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText($certificate->appraiserManager ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
 
 
 

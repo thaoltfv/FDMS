@@ -244,22 +244,44 @@ class KeHoachTDG
         $row5 = $table->addRow();
         $row5->addCell(200)->addText("", null, ['align' => 'left']);
         $row5->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row5->addCell(8200, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
+        $row5->addCell(8200)->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
 
         $row6 = $table->addRow();
         $row6->addCell(200)->addText("", null, ['align' => 'left']);
         $row6->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row6->addCell(8200, array('gridSpan' => 3))->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
+        $row6->addCell(8200)->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
 
         $row7 = $table->addRow();
         $row7->addCell(200)->addText("", null, ['align' => 'left']);
         $row7->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row7->addCell(8200, array('gridSpan' => 3))->addText("Lập hồ sơ và báo cáo Thẩm định giá: " . ($certificate->document_date ? date('m/Y', strtotime($certificate->document_date)) : ''), null, $indentleftSymbol);
+        $row7->addCell(8200)->addText("Lập hồ sơ và báo cáo Thẩm định giá: " . ($certificate->document_date ? date('m/Y', strtotime($certificate->document_date)) : ''), null, $indentleftSymbol);
 
         $row8 = $table->addRow();
         $row8->addCell(200)->addText("", null, ['align' => 'left']);
         $row8->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row8->addCell(8200, array('gridSpan' => 3))->addText("Cấp chứng thư Thẩm định giá: " . ($certificate->certificate_date ? date('m/Y', strtotime($certificate->certificate_date)) : ''), null, $indentleftSymbol);
+        $row8->addCell(8200)->addText("Cấp chứng thư Thẩm định giá: " . ($certificate->certificate_date ? date('m/Y', strtotime($certificate->certificate_date)) : ''), null, $indentleftSymbol);
+
+        $row9 = $table->addRow();
+        $row9->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row9->addCell(9700, array('gridSpan' => 2))->addText(
+            "Họ, tên người có trách nhiệm tham gia khảo sát, lập biên bản hiện trạng tài sản, thu thập thông tin, lập và ký tên Hồ sơ thẩm định giá: " .
+                (isset($certificate->appraiser) ? ' Thẩm định viên ' . $certificate->appraiser->name . ',' : '') .
+                (isset($certificate->apraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->apraiserPerform->name : ''),
+            null,
+            $indentleftSymbol
+        );
+
+        $row10 = $table->addRow();
+        $row10->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row10->addCell(9700, array('gridSpan' => 2))->addText("Phương tiện cần thiết: Di chuyển bằng xe máy, ghi ảnh bằng điện thoại cá nhân." . $addressHSTD, null, $indentleftSymbol);
+
+        $row11 = $table->addRow();
+        $row11->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row11->addCell(9700, array('gridSpan' => 2))->addText("Các nội dung cần trưng cầu ý kiến chuyên gia (nếu có): Không đề xuất." . $addressHSTD, null, $indentleftSymbol);
+
+        $row12 = $table->addRow();
+        $row12->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row12->addCell(9700, array('gridSpan' => 2))->addText("Các yêu cầu hỗ trợ khác (nếu có): Không đề xuất." . $addressHSTD, null, $indentleftSymbol);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
