@@ -203,19 +203,19 @@ class KeHoachTDG
         ]);
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row->addCell(9700)->addText(" Khách hàng yêu cầu thẩm định giá: " . $certificate->petitioner_name, null, $cellHJustify);
+        $row->addCell(9700)->addText("Khách hàng yêu cầu thẩm định giá: " . $certificate->petitioner_name, null, $indentleftNumber);
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText(" Tài sản thẩm định giá: Bất động sản là" . $addressHSTD, null, $cellHJustify);
+        $row2->addCell(9700)->addText("Tài sản thẩm định giá: Bất động sản là" . $addressHSTD, null, $indentleftNumber);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row3->addCell(9700)->addText(" Mục đích Thẩm định giá: " . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null, $cellHJustify);
+        $row3->addCell(9700)->addText("Mục đích Thẩm định giá: " . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null, $indentleftNumber);
 
         $row4 = $table->addRow();
         $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row4->addCell(9700)->addText(" Bên sử dụng Chứng thư thẩm định giá: " . $certificate->petitioner_name, null, $cellHJustify);
+        $row4->addCell(9700)->addText("Bên sử dụng Chứng thư thẩm định giá: " . $certificate->petitioner_name, null, $indentleftNumber);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('2. Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);
