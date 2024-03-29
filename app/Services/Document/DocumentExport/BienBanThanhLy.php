@@ -246,11 +246,7 @@ class BienBanThanhLy
         $row4->addCell(1800, $cellVTop)->addText('-    Đại diện', null,  $alignBoth);
         $row4->addCell(8100, $cellVTop)->addText(': ', null,  $alignBoth);
 
-        $row51 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row51->addCell(1800, $cellVTop)->addText('', ['bold' => true,],  $alignBoth);
-        $row51->addCell(8100, $cellVTop)->addText('', ['bold' => true],  $alignBoth);
-
-        $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false, 'spaceBefore' => 200));
         $row5->addCell(1800, $cellVTop)->addText('BÊN B', ['bold' => true,],  $alignBoth);
         $row5->addCell(8100, $cellVTop)->addText(': CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA', ['bold' => true],  $alignBoth);
 
