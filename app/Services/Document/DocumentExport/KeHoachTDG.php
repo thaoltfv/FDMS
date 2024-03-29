@@ -162,9 +162,9 @@ class KeHoachTDG
         $row1->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row1->addCell(5700, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true], $cellHCentered);
         $row2 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row2->addCell(3500, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true,  'underline' => 'single'], $cellHCentered);
+        $row2->addCell(3500, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true], $cellHCentered);
         $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
-        $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
+        $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
         $row3->addCell(3500, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
         $row3->addCell(1000, $cellVCentered)->addText(
