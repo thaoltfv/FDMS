@@ -591,7 +591,7 @@ class HopDongTDG
 
         $row7 = $table->addRow();
         $row7->addCell(600)->addText("7.2.", null, ['align' => 'right']);
-        $row->addCell(
+        $row7->addCell(
             50
         )->addText("", null, ['align' => 'right']);
         $row7->addCell(9250)->addText("Hai bên thỏa thuận được quyền đơn phương chấm dứt hợp đồng trong các trường hợp sau đây: ", null, ['align' => 'both']);
