@@ -563,8 +563,8 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
-        $row->addCell(100)->addText("", null, ['align' => 'right']);
-        $row->addCell(9200)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
+        $row->addCell(40)->addText("", null, ['align' => 'right']);
+        $row->addCell(9260)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
 
         $row2 = $table->addRow();
         $row2->addCell(650)->addText("a.", null, ['align' => 'right']);
@@ -575,18 +575,18 @@ class HopDongTDG
 
         $row3 = $table->addRow();
         $row3->addCell(650)->addText("b.", null, ['align' => 'right']);
-        $row3->addCell(150)->addText("", null, ['align' => 'right']);
-        $row3->addCell(9100)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
+        $row3->addCell(100)->addText("", null, ['align' => 'right']);
+        $row3->addCell(9150)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
 
         $row4 = $table->addRow();
         $row4->addCell(800)->addText("-", null, ['align' => 'right']);
-        $row4->addCell(100)->addText("", null, ['align' => 'right']);
-        $row4->addCell(9000)->addText("Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, ['align' => 'both']);
+        $row4->addCell(140)->addText("", null, ['align' => 'right']);
+        $row4->addCell(8600)->addText("Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, ['align' => 'both']);
 
         $row5 = $table->addRow();
         $row5->addCell(800)->addText("-", null, ['align' => 'right']);
-        $row5->addCell(100)->addText("", null, ['align' => 'right']);
-        $row5->addCell(9000)->addText("Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, ['align' => 'both']);
+        $row5->addCell(140)->addText("", null, ['align' => 'right']);
+        $row5->addCell(8600)->addText("Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, ['align' => 'both']);
 
         $row6 = $table->addRow();
         $row6->addCell(650)->addText("c.", null, ['align' => 'right']);
@@ -596,9 +596,9 @@ class HopDongTDG
         $row7 = $table->addRow();
         $row7->addCell(600)->addText("7.2.", null, ['align' => 'right']);
         $row7->addCell(
-            50
+            40
         )->addText("", null, ['align' => 'right']);
-        $row7->addCell(9250)->addText("Hai bên thỏa thuận được quyền đơn phương chấm dứt hợp đồng trong các trường hợp sau đây: ", null, ['align' => 'both']);
+        $row7->addCell(9260)->addText("Hai bên thỏa thuận được quyền đơn phương chấm dứt hợp đồng trong các trường hợp sau đây: ", null, ['align' => 'both']);
 
         $row8 = $table->addRow();
         $row8->addCell(650)->addText("a.", null, ['align' => 'right']);
