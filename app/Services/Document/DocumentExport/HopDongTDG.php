@@ -2,6 +2,7 @@
 
 namespace App\Services\Document\DocumentExport;
 
+use Illuminate\Support\Facades\Log;
 use App\Enum\EstimateAssetDefault;
 use App\Http\ResponseTrait;
 use Carbon\Carbon;
@@ -327,6 +328,7 @@ class HopDongTDG
         $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $alignCenter);
         $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
 
+        Log::info('asdasd', ['certificate' => $certificate]);
         $addressHSTD = '';
         if ($isApartment) {
             foreach ($certificate->apartmentAsset as $index => $item) {
