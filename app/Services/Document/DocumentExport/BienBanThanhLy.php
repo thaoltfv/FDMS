@@ -220,14 +220,7 @@ class BienBanThanhLy
         $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
             $formattedDateCertificateDate, null, $indentleftSymbol);
 
-        $footer = $section->addFooter();
-        $table = $footer->addTable();
-        $table->addRow();
-        $table->addCell(9900, array('borderTopSize' => 1, 'borderTopColor' => '000000')) // Add a top border to the cell
-            ->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
-                ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
-        $reportUserName = CommonService::getUserReport();
-        $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = 'BBTL' . '_' . htmlspecialchars($certificate->petitioner_name);
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
