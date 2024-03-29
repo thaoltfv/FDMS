@@ -474,6 +474,108 @@ class HopDongTDG
         $row->addCell(600)->addText("4.5.", null, ['align' => 'right']);
         $row->addCell(9300)->addText("Nếu Bên A không thanh toán hết toàn bộ phí thẩm định cho Bên B ghi trong hợp đồng này thì Bên B sẽ không chịu trách nhiệm về kết quả thẩm định giá ghi trong chứng thư đã cấp cho Bên A (Chứng thư thẩm định giá sẽ không có giá trị pháp lý) và Bên B sẽ không chịu bất cứ trách nhiệm nào về chứng thư thẩm định giá.", null, ['align' => 'both']);
 
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 5: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Quyền và nghĩa vụ của Bên A', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Nhận Chứng thư thẩm định giá theo quy định tại điều 1 hợp đồng này.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.2.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Khi Bên A yêu cầu bên B cung cấp thêm quyển Chứng thư thì phải trả thêm số tiền phí tương ứng với số lượng yêu cầu. Bên A yêu cầu bên B cử nhân viên làm việc ngoài giờ thì Bên B có quyền thương lượng thu thêm phí dịch vụ ngoài giờ.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.3.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Cung cấp cho Bên B các hồ sơ, tài liệu liên quan đến tài sản thẩm định giá, hướng dẫn Bên B khảo sát hiện trạng tài sản và chịu trách nhiệm về tính hợp pháp, xác thực, đầy đủ của các hồ sơ, tài liệu mà mình cung cấp.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.4.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Chỉ được sử dụng Chứng thư thẩm định giá đúng mục đích thỏa thuận trong hợp đồng này. Nếu sử dụng sai mục đích, Bên A hoàn toàn chịu trách nhiệm trước pháp luật.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.5.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Thanh toán cho Bên B đầy đủ phí dịch vụ thẩm định giá theo thỏa thuận trong hợp đồng và các chi phí khác phát sinh khác nếu có. Trường hợp Bên A chưa thanh toán hết phí dịch vụ cho Bên B thì bên B không có trách nhiệm phải giao chứng thư cho Bên A. Bên B được miễn trừ hoàn toàn trách nhiệm đối với chứng thư khách hàng đã nhận mà chưa thanh toán đủ 100% phí dịch vụ ghi tại hợp đồng này.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.6.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Bên A sẽ được ưu tiên giảm 20% mức phí, nếu yêu cầu tái thẩm định cùng tài sản ghi trên hợp đồng này trong vòng 06 tháng kể từ ngày thẩm định giá lần đầu.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("5.7.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, ['align' => 'both']);
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 6: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Quyền và nghĩa vụ của Bên B', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Yêu cầu Bên A cung cấp hồ sơ pháp lý, các tài liệu liên quan đến tài sản thẩm định giá.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.2.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Cung cấp cho Bên A Chứng thư sau khi nhận đủ phí dịch vụ quy định trong hợp đồng.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.3.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Tuân thủ các quy định của pháp luật trong quá trình thực hiện thẩm định giá tài sản.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.4.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Từ chối thực hiện thẩm định giá tài sản theo yêu cầu của Bên A khi nhận thấy tài sản đó không đủ điều kiện pháp lý để thực hiện việc thẩm định.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.5.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Bên B và người lao động của Bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu Bên A hoặc người của Bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.6.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Sau khi đã nhận chứng thư mà Bên A không được ngân hàng cấp tín dụng, công ty thẩm định giá sẽ không hoàn trả chi phí thẩm định mà Bên A đã thanh toán trước đó.", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.7.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Các quyền và nghĩa vụ khác theo quy định pháp luật.", null, ['align' => 'both']);
+
+
+        $textRun = $section->addTextRun(['align' => 'both']);
+        $textRun->addText('Điều 7: ', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText('Chấm dứt hợp đồng', ['bold' => true]);
+
+
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("7.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Hợp đồng được chấm dứt trong các trường hợp sau:", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(700)->addText("a.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Hai bên hoàn thành nghĩa vụ theo thỏa thuận trong hợp đồng;", null, ['align' => 'both']);
+        $row = $table->addRow();
+        $row->addCell(700)->addText("b.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Hai bên thỏa thuận chấm dứt hợp đồng trước thời hạn:", null, ['align' => 'both']);
+
+        $row = $table->addRow();
+        $row->addCell(800)->addText("6.3.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Tuân thủ các quy định của pháp luật trong quá trình thực hiện thẩm định giá tài sản.", null, ['align' => 'both']);
+
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
