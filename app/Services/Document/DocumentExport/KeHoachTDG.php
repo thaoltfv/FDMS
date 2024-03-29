@@ -190,9 +190,9 @@ class KeHoachTDG
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('1.', ['bold' => true, 'underline' => 'single']);
-        $textRun->addText(' 1.	Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
-        $section->addListItem('-	Khách hàng yêu cầu thẩm định giá: Bà Võ Lại Thùy Dung', 0, null, 'bullets');
-        $section->addListItem('-	Tài sản thẩm định giá: Bất động sản là Quyền sở hữu Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', 0, null, 'bullets');
+        $textRun->addText(' Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
+        $section->addListItem('Khách hàng yêu cầu thẩm định giá: Bà Võ Lại Thùy Dung', 0, null, 'bullets');
+        $section->addListItem('Tài sản thẩm định giá: Bất động sản là Quyền sở hữu Căn hộ số 10.32, Chung cư Flora Anh Đào (Ehome 6), 619 Đỗ Xuân Hợp, phường Phước Long B, Quận 9, TP.HCM', 0, null, 'bullets');
 
 
 
