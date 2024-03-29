@@ -307,23 +307,21 @@ class BienBanThanhLy
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(800, array('vMerge' => 'restart'))->addText('STT', ['bold' => true],  $alignCenter);
-        $row1->addCell(7500, array('vMerge' => 'restart'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
-        $row1->addCell(800, $cellVCentered)->addText("Số chứng thư", ['bold' => true], $alignCenter);
-        $row1->addCell(800, $cellVCentered)->addText("Ngày", ['bold' => true], $alignCenter);
-        $row1->addCell(1600, $cellVCentered)->addText("Tổng giá trị", ['bold' => true], $alignCenter);
-        $row1->addCell(1600, array('vMerge' => 'restart'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
+        $row1->addCell(600, array('vMerge' => 'restart', 'align' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
+        $row1->addCell(3200, array('vMerge' => 'restart', 'align' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
+        $row1->addCell(3800, array('gridSpan' => 3, 'align' => 'center'))->addText("Tổng giá trị", ['bold' => true], $alignCenter);
+        $row1->addCell(1400, array('vMerge' => 'restart', 'align' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
 
         $row2 = $table->addRow();
-        $row2->addCell(800, array('vMerge' => 'continue'));
-        $row2->addCell(7500, array('vMerge' => 'continue'));
-        $row2->addCell(800, $cellVCentered)->addText('', ['bold' => true],  $alignCenter);
-        $row2->addCell(800, $cellVCentered)->addText('', ['bold' => true], $alignCenter);
-        $row2->addCell(1600, $cellVCentered)->addText('', ['bold' => true], $alignCenter);
-        $row2->addCell(1600, array('vMerge' => 'continue'));
+        $row2->addCell(600, array('vMerge' => 'continue'));
+        $row2->addCell(3200, array('vMerge' => 'continue'));
+        $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
+        $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
+        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], $alignCenter);
+        $row2->addCell(1400, array('vMerge' => 'continue'));
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
-        $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '-' . htmlspecialchars($filename) : '');
+        $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '-CT' . htmlspecialchars($filename) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
