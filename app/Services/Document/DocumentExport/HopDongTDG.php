@@ -326,7 +326,7 @@ class HopDongTDG
                     ));
                     $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
                     $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
-                    $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base . ' ', null, ['align' => 'right']);
+                    $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base . ' ', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
                 }
             }
         }
