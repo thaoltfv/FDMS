@@ -338,7 +338,7 @@ class HopDongTDG
                 ));
                 $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
                 $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index > 0 ? ' ' . ($index + 1) . ' ' : ''), null, ['align' => 'left']);
-                $row2->addCell(1600, $cellVTop)->addText(isset($item->apartmentAssetProperties) ? $item->apartmentAssetProperties->area : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                $row2->addCell(1600, $cellVTop)->addText(isset($item->apartmentAssetProperties) && isset($item->apartmentAssetProperties->area) ? $this->formatNumberFunction($item->apartmentAssetProperties->area, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
             }
         } else {
             foreach ($certificate->appraises as $index => $item) {
@@ -351,7 +351,7 @@ class HopDongTDG
                         ));
                         $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
                         $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
-                        $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base, null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                        $row2->addCell(1600, $cellVTop)->addText(isset($item2->total_construction_base) ? $this->formatNumberFunction($item2->total_construction_base, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
                     }
                 }
             }
