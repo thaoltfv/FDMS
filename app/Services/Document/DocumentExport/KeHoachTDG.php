@@ -184,8 +184,8 @@ class KeHoachTDG
 
         $section->addText(
             "KẾ HOẠCH THẨM ĐỊNH GIÁ",
-            ['bold' => true, 'size' => '16'],
-            ['align' => 'center', 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12)]
+            ['bold' => true, 'size' => '12'],
+            ['align' => 'center', 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12), 'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(8)]
         );
 
         $textRun = $section->addTextRun(['align' => 'both']);
@@ -207,7 +207,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText("Tài sản thẩm định giá: Bất động sản là" . $addressHSTD, null, $indentleftSymbol);
+        $row2->addCell(9700)->addText("Tài sản thẩm định giá: Bất động sản là " . $addressHSTD, null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -301,9 +301,7 @@ class KeHoachTDG
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
-        $table->addCell(9900)->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>
-            Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>
-            Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
+        $table->addCell(9900)->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
             ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
