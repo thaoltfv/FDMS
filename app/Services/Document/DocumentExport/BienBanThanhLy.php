@@ -246,6 +246,49 @@ class BienBanThanhLy
         $row4->addCell(1800, $cellVTop)->addText('-    Đại diện', null,  $alignBoth);
         $row4->addCell(8100, $cellVTop)->addText(': ', null,  $alignBoth);
 
+        $row51 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row51->addCell(1800, $cellVTop)->addText('', ['bold' => true,],  $alignBoth);
+        $row51->addCell(8100, $cellVTop)->addText('', ['bold' => true],  $alignBoth);
+
+        $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row5->addCell(1800, $cellVTop)->addText('BÊN B', ['bold' => true,],  $alignBoth);
+        $row5->addCell(8100, $cellVTop)->addText(': CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA', ['bold' => true],  $alignBoth);
+
+        $row6 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        => false));
+        $row6->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
+        $row6->addCell(8100, $cellVTop)->addText(': Số 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM', null,  $alignBoth);
+
+        $row7 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => false
+        ));
+        $row7->addCell(1800, $cellVTop)->addText('-    Điện thoại', null,  $alignBoth);
+        $row7->addCell(8100, $cellVTop)->addText(': (028) 3920 6779 – Fax: (028) 3920 6778', null,  $alignBoth);
+
+        $row8 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row8->addCell(1800, $cellVTop)->addText('-   Mã số thuế', null,  $alignBoth);
+        $row8->addCell(8100, $cellVTop)->addText(': 0314514140', null,  $alignBoth);
+
+
+        $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
+        $row9->addCell(8100, $cellVTop)->addText(': 3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
+        $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row9->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
+        $textRun = $row9->addCell(8100, $cellVTop)->addTextRun($alignBoth);
+        $textRun->addText(': Ông ', ['bold' => false]);
+        $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
+        $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
+        $section->addText(
+            "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
+                $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+                $formattedDateCertificateDate . '.',
+            null,
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
+        );
+
+
         $reportName = 'Bien Ban Thanh Ly' . (isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
