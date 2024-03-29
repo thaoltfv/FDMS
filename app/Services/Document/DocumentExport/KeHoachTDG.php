@@ -246,6 +246,21 @@ class KeHoachTDG
         $row5->addCell(1500)->addText("o", null, ['align' => 'right']);
         $row5->addCell(8200, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
 
+        $row6 = $table->addRow();
+        $row6->addCell(200)->addText("", null, ['align' => 'left']);
+        $row6->addCell(1500)->addText("o", null, ['align' => 'right']);
+        $row6->addCell(8200, array('gridSpan' => 3))->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
+
+        $row7 = $table->addRow();
+        $row7->addCell(200)->addText("", null, ['align' => 'left']);
+        $row7->addCell(1500)->addText("o", null, ['align' => 'right']);
+        $row7->addCell(8200, array('gridSpan' => 3))->addText("Lập hồ sơ và báo cáo Thẩm định giá: " . ($certificate->document_date ? date('m/Y', strtotime($certificate->document_date)) : ''), null, $indentleftSymbol);
+
+        $row8 = $table->addRow();
+        $row8->addCell(200)->addText("", null, ['align' => 'left']);
+        $row8->addCell(1500)->addText("o", null, ['align' => 'right']);
+        $row8->addCell(8200, array('gridSpan' => 3))->addText("Cấp chứng thư Thẩm định giá: " . ($certificate->certificate_date ? date('m/Y', strtotime($certificate->certificate_date)) : ''), null, $indentleftSymbol);
+
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
