@@ -329,7 +329,7 @@ class BienBanThanhLy
             $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
             $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
             $cell = $row3->addCell(3200, $cellVCentered);
-            $textRun = $cell->addTextRun(array('indent' => '0.5cm', 'hanging' => '0.5cm'));
+            $textRun = $cell->addTextRun(array('indent' => 20, 'hanging' => 20));
             $textRun->addText($item->appraise_asset, null, $alignBoth);
             $row3->addCell(1200, $cellVCentered)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null,  $alignBoth);
             $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
