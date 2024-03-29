@@ -295,7 +295,25 @@ class BienBanThanhLy
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
 
+        $row1 = $table->addRow(100, array(
+            'tblHeader' => false,
+            'cantSplit' => true
+        ));
 
+        $alignCenter =
+            ['align' => 'center'];
+        $row1->addCell(800, array('gridSpan' => 2, 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
+        $row1->addCell(7500, array('gridSpan' => 2, 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
+        $row1->addCell(1600, array('gridSpan' => 2, 'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
+        $row1->addCell(1600, array('gridSpan' => 2, 'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
+
+        $row2 = $table->addRow();
+        $row2->addCell(800, $cellVCentered)->addText('', ['bold' => true],  $alignCenter);
+        $row2->addCell(7500, $cellVCentered)->addText('', ['bold' => true], $alignCenter);
+        $row2->addCell(800, $cellVCentered)->addText("Số chứng thư", ['bold' => true], $alignCenter);
+        $row2->addCell(800, $cellVCentered)->addText("Ngày", ['bold' => true], $alignCenter);
+        $row2->addCell(1600, $cellVCentered)->addText("Tổng giá trị tài sản thẩm định giá", ['bold' => true], $alignCenter);
+        $row2->addCell(1600, $cellVCentered)->addText('', ['bold' => true], $alignCenter);
         $reportName = 'Bien Ban Thanh Ly' . (isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
