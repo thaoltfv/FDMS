@@ -268,7 +268,7 @@ class HopDongTDG
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
             null,
-            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.22)]]
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
 
         $textRun = $section->addTextRun(['align' => 'both']);

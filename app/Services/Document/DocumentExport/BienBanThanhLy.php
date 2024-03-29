@@ -285,7 +285,7 @@ class BienBanThanhLy
                 $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
                 $formattedDateCertificateDate . '.',
             null,
-            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.22)]]
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
 
 
