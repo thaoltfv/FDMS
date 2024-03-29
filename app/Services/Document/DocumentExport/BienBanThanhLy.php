@@ -142,9 +142,11 @@ class BienBanThanhLy
             'align' => 'both'
         ]);
         $styleSection = [
-            'footerHeight' => 370,
+            'footerHeight' => 0,
             'marginTop' => Converter::inchToTwip(0.7),
-            'marginBottom' => Converter::inchToTwip(0.28),
+            // 'marginBottom' => Converter::inchToTwip(0.28),
+            'marginBottom' => Converter::inchToTwip(0),
+
             'marginRight' => Converter::inchToTwip(0.4),
             'marginLeft' => Converter::inchToTwip(0.8)
         ];
@@ -346,7 +348,7 @@ class BienBanThanhLy
         $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') . ' đồng' : '', ['bold' => true],  $alignBoth);
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
-        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ').', ['italic' => true],  $alignCenter);
+        $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ')', ['italic' => true],  $alignCenter);
 
         $section->addText(
             "Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
