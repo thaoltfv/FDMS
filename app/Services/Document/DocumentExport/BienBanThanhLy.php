@@ -282,7 +282,7 @@ class BienBanThanhLy
 
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
-        $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8000, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
         $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
