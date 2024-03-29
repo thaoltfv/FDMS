@@ -220,6 +220,11 @@ class KeHoachTDG
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('2.  Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);
 
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row->addCell(9700, array('gridSpan' => 2))->addText("Phương thức thẩm định giá: Thực hiện toàn bộ quy trình Thẩm định giá theo quy định pháp luật hiện hành:  khảo sát hiện trạng tài sản, thu thập thông tin, ước tính giá trị tài sản thẩm định giá, lập và ký tên Hồ sơ thẩm định giá.", null, $indentleftSymbol);
