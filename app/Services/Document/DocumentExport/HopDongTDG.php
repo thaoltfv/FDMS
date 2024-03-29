@@ -344,7 +344,7 @@ class HopDongTDG
             $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
             $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
             $row1->addCell(2600, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
-            $row1->addCell(6100, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
+            $row1->addCell(6100, $cellVTop)->addText(': ' . $item->full_address, null,  $alignBoth);
 
             $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
             $row2 = $table->addRow(100, array(
