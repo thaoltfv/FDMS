@@ -331,67 +331,68 @@ class HopDongTDG
                     $row2->addCell(1600, $cellVTop)->addText($item2->total_construction_base . ' ', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
                 }
             }
+
+            $table = $section->addTable([
+                'align' => JcTable::START,
+                'width' => 100 * 50,
+                'unit' => 'pct'
+            ]);
+            $row1 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => false
+            ));
+            $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+            $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+            $row1->addCell(2600, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
+            $row1->addCell(6100, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
+
+            $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
+            $row2 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => false
+            ));
+            $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+            $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+            $row2->addCell(2600, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
+            $row2->addCell(6100, $cellVTop)->addText(': ' . $appraise_date_formatted . '.', null,  $alignBoth);
+
+            $row3 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => false
+            ));
+            $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+            $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+            $row3->addCell(2600, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
+            $row3->addCell(6100, $cellVTop)->addText(': ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
+
+            $row4 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => false
+            ));
+            $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+            $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+            $row4->addCell(3000, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
+            $row4->addCell(5700, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
+
+            $row5 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => false
+            ));
+            $row5->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+            $row5->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+            $row5->addCell(3800, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá', null, ['align' => 'left']);
+            $row5->addCell(4900, $cellVTop)->addText(': ' . $certificate->petitioner_name . '.', null,  $alignBoth);
+
+            $row6 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => false
+            ));
+            $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
+            $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
+            $row6->addCell(3900, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
+            $row6->addCell(4800, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
         }
 
-        $table = $section->addTable([
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $row1 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => false
-        ));
-        $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2600, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
-        $row1->addCell(6100, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
-
-        $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
-        $row2 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => false
-        ));
-        $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row2->addCell(2600, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
-        $row2->addCell(6100, $cellVTop)->addText(': ' . $appraise_date_formatted . '.', null,  $alignBoth);
-
-        $row3 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => false
-        ));
-        $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row3->addCell(2600, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row3->addCell(6100, $cellVTop)->addText(': ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
-
-        $row4 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => false
-        ));
-        $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row4->addCell(3000, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
-        $row4->addCell(5700, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
-
-        $row5 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => false
-        ));
-        $row5->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row5->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row5->addCell(3800, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá', null, ['align' => 'left']);
-        $row5->addCell(4900, $cellVTop)->addText(': ' . $certificate->petitioner_name . '.', null,  $alignBoth);
-
-        $row6 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => false
-        ));
-        $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
-        $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row6->addCell(3900, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu', null, ['align' => 'left']);
-        $row6->addCell(4800, $cellVTop)->addText(': 02 bản chính bằng tiếng Việt.', null,  $alignBoth);
 
         $section->addText(
             "1.2.  Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
