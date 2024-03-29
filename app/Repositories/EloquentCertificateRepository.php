@@ -765,8 +765,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->with('createdBy')
                 ->with('appraisePurpose')
 
-                ->with('apartmentAsset')
-                ->with('apartmentAsset.apartmentAssetProperties')
+                ->with('apartmentAssetPrint')
+                ->with('apartmentAssetPrint.apartmentAssetProperties')
+                ->with('realEstate')
+                ->with('realEstate.apartment')
                 ->with('appraises')
 
                 ->with('appraises.province')

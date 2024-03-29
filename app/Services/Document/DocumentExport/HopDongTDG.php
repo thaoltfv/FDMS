@@ -331,7 +331,7 @@ class HopDongTDG
         Log::info('asdasd', ['certificate' => $certificate]);
         $addressHSTD = '';
         if ($isApartment) {
-            foreach ($certificate->apartmentAsset as $index => $item) {
+            foreach ($certificate->apartmentAssetPrint as $index => $item) {
                 $addressHSTD = $item->full_address;
                 $row2 = $table->addRow(100, array(
                     'tblHeader' => false,
