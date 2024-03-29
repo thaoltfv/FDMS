@@ -592,7 +592,7 @@ class HopDongTDG
         $row8->addCell(9250)->addText("   Sau 10 ngày ký hợp đồng mà Bên A không hướng dẫn Bên B thẩm định tài sản hiện trường; hoặc tối đa 10 ngày sau khi nhận thông báo (bằng thư qua email/hoặc tin nhắn điện thoại) mà Bên A không đến công ty thẩm định giá để nhận chứng thư thì Bên B có quyền đơn phương chấm dứt hợp đồng với Bên A, hợp đồng này mặc nhiên thanh lý.", null, ['align' => 'both']);
         $row9 = $table->addRow();
         $row9->addCell(650)->addText("b.", null, ['align' => 'right']);
-        $row9->addCell(9250)->addText("   ếu Bên B không cung cấp chứng thư thẩm định giá cho Bên A theo đúng thời gian thỏa thuận thì Bên A có quyền đơn phương chấm dứt hợp đồng với Bên B, đồng thời yêu cầu Bên B phải hoàn tiền đã nhận lại cho Bên A.", null, ['align' => 'both']);
+        $row9->addCell(9250)->addText("   Nếu Bên B không cung cấp chứng thư thẩm định giá cho Bên A theo đúng thời gian thỏa thuận thì Bên A có quyền đơn phương chấm dứt hợp đồng với Bên B, đồng thời yêu cầu Bên B phải hoàn tiền đã nhận lại cho Bên A.", null, ['align' => 'both']);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('Điều 8:', ['bold' => true, 'underline' => 'single']);
