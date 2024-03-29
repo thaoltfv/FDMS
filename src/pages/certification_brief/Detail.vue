@@ -19,10 +19,10 @@
 								</a-button>
 								<template #overlay>
 									<a-menu @click="handleMenuClick">
-										<a-menu-item key="1"> Giay yeu cau TDG </a-menu-item>
-										<a-menu-item key="2"> Hop dong TDG </a-menu-item>
-										<a-menu-item key="3"> Ke hoach TDG </a-menu-item>
-										<a-menu-item key="4"> Bien ban thanh ly </a-menu-item>
+										<a-menu-item key="1"> Giấy yêu cầu TĐG </a-menu-item>
+										<a-menu-item key="2"> Hợp đồng TĐG </a-menu-item>
+										<a-menu-item key="3"> Kế hoạch TĐG </a-menu-item>
+										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
 									</a-menu>
 								</template>
 							</a-dropdown>
@@ -1445,7 +1445,7 @@
 			@updateAppraises="updateAppraises"
 			@cancel="showAppraiseListDialog = false"
 		/>
-		<ModalNotificationWithAssign
+		<ModalNotificationWithAssignHSTD
 			v-if="openNotification"
 			@cancel="handleCancel"
 			:notification="
@@ -1510,7 +1510,7 @@
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/> -->
-		<ModalNotificationWithAssign
+		<ModalNotificationWithAssignHSTD
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
@@ -1560,7 +1560,7 @@ import PaymentCertificateHistories from "./component/PaymentCertificateHistories
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
+import ModalNotificationWithAssignHSTD from "@/components/Modal/ModalNotificationWithAssignHSTD";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -1632,7 +1632,7 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalAppraiseListVersion,
-		ModalNotificationWithAssign
+		ModalNotificationWithAssignHSTD
 	},
 	data() {
 		return {
@@ -2026,8 +2026,11 @@ export default {
 				this.exportGYC();
 			} else if (e.key === "2") {
 				this.exportHDTDG();
+			} else if (e.key === "3") {
+				this.exportKHTDG();
+			} else if (e.key === "4") {
+				this.exportBBTL();
 			}
-			console.log("click", e);
 		},
 		getNotificationMessage() {
 			switch (
@@ -2904,6 +2907,48 @@ export default {
 		},
 		async exportHDTDG() {
 			await Certificate.getPrintHDTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportBBTL() {
+			await Certificate.getPrintBBTL(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportKHTDG() {
+			await Certificate.getPrintKHTDG(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");

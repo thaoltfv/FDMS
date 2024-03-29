@@ -112,6 +112,20 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async getPrintKHTDG(id) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/print/ke-hoach-tdg/${id}`,
+			isStatic: true
+		});
+	}
+	static async getPrintBBTL(id) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/print/bien-ban-thanh-ly/${id}`,
+			isStatic: true
+		});
+	}
 	static async getPrintHDTDG(id) {
 		return new this().request({
 			method: "GET",

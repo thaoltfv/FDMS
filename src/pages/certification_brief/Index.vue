@@ -192,7 +192,7 @@
 				@cancel="handleCancelVerify"
 				@updateAppraisal="handleChangeVerify"
 			/>
-			<ModalNotificationWithAssign
+			<ModalNotificationWithAssignHSTD
 				v-if="isMoved"
 				:notification="
 					confirm_message == 'Từ chối' ||
@@ -209,7 +209,7 @@
 				:dataHSTD="detailData"
 				@cancel="handleCancelAccept2"
 			/>
-			<ModalNotificationWithAssign
+			<ModalNotificationWithAssignHSTD
 				v-if="isHandleAction"
 				@cancel="isHandleAction = false"
 				:notification="
@@ -262,7 +262,7 @@ import CertificationBrief from "@/models/CertificationBrief";
 import moment from "moment";
 import KanboardStatus from "./component/KanboardStatus.vue";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
+import ModalNotificationWithAssignHSTD from "@/components/Modal/ModalNotificationWithAssignHSTD";
 import IconBase from "@/components/IconBase.vue";
 
 Vue.component("downloadExcel", JsonExcel);
@@ -364,7 +364,7 @@ export default {
 		ModalAppraisal,
 		KanboardStatus,
 		ModalNotificationCertificate,
-		ModalNotificationWithAssign
+		ModalNotificationWithAssignHSTD
 	},
 	setup() {
 		const workFlowConfigStore = useWorkFlowConfig();
