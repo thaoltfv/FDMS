@@ -152,6 +152,40 @@ class BienBanThanhLy
         $check = "";
 
         $section = $phpWord->addSection($styleSection);
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row1->addCell(3500, $cellVCentered)->addText('CÔNG TY TNHH', ['bold' => true,], $cellHCentered);
+        $row1->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $row1->addCell(5700, $cellVCentered)->addText('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', ['bold' => true], $cellHCentered);
+        $row2 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
+        $row2->addCell(3500, $cellVCentered)->addText('THẨM ĐỊNH GIÁ NOVA', ['bold' => true], $cellHCentered);
+        $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
+        $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true], $cellHCentered);
+        $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
+        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num  : ''), null, $cellHCentered);
+        $row3->addCell(1000, $cellVCentered)->addText(
+            '',
+            ['bold' => true,],
+            $cellHCentered
+        );
+        $row3->addCell(5700, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
+        $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
+
+        $section->addText(
+            "BIÊN BẢN THANH LÝ HỢP ĐỒNG THẨM ĐỊNH GIÁ",
+            ['bold' => true, 'size' => '14'],
+            ['align' => 'center']
+        );
+        $section->addText(
+            "(Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
+                "ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y'),
+            ['italic' => true, 'size' => '12'],
+            ['align' => 'center']
+        );
 
 
         $reportName = 'Bien Ban Thanh Ly' . (isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '');
