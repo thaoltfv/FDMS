@@ -266,7 +266,7 @@ class HopDongTDG
         $textRun->addText($certificate->appraiserManager ? $certificate->appraiserManager->name : '', ['bold' => true]);
         $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
         $section->addText(
-            "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau",
+            "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
         );
@@ -275,11 +275,14 @@ class HopDongTDG
         $textRun->addText('Điều 1: ', ['bold' => true, 'underline' => 'single']);
         $textRun->addText('Nội dung công việc thực hiện', ['bold' => true]);
 
-        $section->addText(
-            "1.1.  Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau: ",
-            null,
-            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.16)]]
-        );
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("1.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText(" Bên A yêu cầu Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, chi tiết cụ thể như sau:", null, $indentleftNumber);
 
         $table = $section->addTable([
             'align' => JcTable::START,
@@ -674,6 +677,10 @@ class HopDongTDG
         $row5->addCell(4950)->addText("\n\n\n\n\n");
         $row5->addCell(4950)->addText("\n\n\n\n\n");
 
+        $row6 = $table->addRow();
+        $row6->addCell(4950)->addText("\n\n\n\n\n");
+        $row6->addCell(4950)->addText("\n\n\n\n\n");
+
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
         $row4->addCell(4950)->addText($certificate->appraiserManager ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
@@ -683,10 +690,7 @@ class HopDongTDG
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
-        $cell = $table->addCell(4500);
-        $textrun = $cell->addTextRun();
-        // $textrun->addText($comName  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID, array('size' => 8), $alignBoth);
-        $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right'));
+        $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center'));
 
         $reportUserName = CommonService::getUserReport();
         $reportName = 'HDTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
