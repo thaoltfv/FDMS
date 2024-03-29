@@ -173,7 +173,6 @@ class BienBanThanhLy
             $cellHCentered
         );
         $row3->addCell(5700, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
-        $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
 
         $section->addText(
             "BIÊN BẢN THANH LÝ HỢP ĐỒNG THẨM ĐỊNH GIÁ",
@@ -187,6 +186,38 @@ class BienBanThanhLy
             ['align' => 'center']
         );
 
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        if ($certificate->document_date) {
+            $timestamp = strtotime($certificate->document_date);
+            $day = date('d', $timestamp);
+            $month = date('m', $timestamp);
+            $year = date('Y', $timestamp);
+            $formattedDateDocumentDate = "Ngày $day tháng $month năm $year";
+        } else {
+            $formattedDateDocumentDate = '';
+        }
+        $row = $table->addRow();
+        $row->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row->addCell(9700)->addText("Căn cứ Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
+            $formattedDateDocumentDate, null, $indentleftSymbol);
+
+        if ($certificate->certificate_date) {
+            $timestamp = strtotime($certificate->certificate_date);
+            $day = date('d', $timestamp);
+            $month = date('m', $timestamp);
+            $year = date('Y', $timestamp);
+            $formattedDateCertificateDate = "Ngày $day tháng $month năm $year";
+        } else {
+            $formattedDateCertificateDate = '';
+        }
+        $row2 = $table->addRow();
+        $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
+        $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+            $formattedDateCertificateDate, null, $indentleftSymbol);
 
         $reportName = 'Bien Ban Thanh Ly' . (isset($certificate->certificate_num) ? '-' . htmlspecialchars($certificate->certificate_num) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
