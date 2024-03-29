@@ -335,7 +335,6 @@ class Certificate extends Model
         }
         return $data;
     }
-
     public function getDetailListIdAttribute()
     {
         $result = [];
@@ -358,10 +357,6 @@ class Certificate extends Model
     public function apartmentAsset(): belongsToMany
     {
         return $this->belongsToMany(CertificateApartment::class, CertificateHasApartment::class, 'certificate_id', 'apartment_asset_id');
-    }
-    public function appraises(): belongsToMany
-    {
-        return $this->belongsToMany(CertificateAsset::class, 'certificate_has_appraises', 'certificate_id', 'appraise_id');
     }
 
     public function realEstate(): belongsToMany
