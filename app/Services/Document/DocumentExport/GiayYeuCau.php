@@ -212,19 +212,38 @@ class GiayYeuCau
         // } else if ($type3) {
         //     $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
         // }
-        foreach ($certificate->appraises as $index => $item) {
-            $name_assets .= ($index) ? " và " : "";
+        $isApartment =
+            in_array('CC', $certificate->document_type);
 
-            $name_assets .= $item->appraise_asset;
-            $check = $item->tangibleAssets;
-            if ($item->appraiseLaw) {
-                foreach ($item->appraiseLaw as $index2 => $item2) {
-                    $appraise_law .= ($index2) ? " và " : "";
-                    $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+        if ($isApartment) {
+            foreach ($certificate->apartmentAssetPrint as $index => $item) {
+                $name_assets .= ($index) ? " và " : "";
+
+                $name_assets .= $item->appraise_asset;
+                if ($item->law) {
+                    foreach ($item->law as $index2 => $item2) {
+                        $appraise_law .= ($index2) ? " và " : "";
+                        $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                    }
                 }
+                $count += 1;
             }
-            $count += 1;
+        } else {
+            foreach ($certificate->appraises as $index => $item) {
+                $name_assets .= ($index) ? " và " : "";
+
+                $name_assets .= $item->appraise_asset;
+                $check = $item->tangibleAssets;
+                if ($item->appraiseLaw) {
+                    foreach ($item->appraiseLaw as $index2 => $item2) {
+                        $appraise_law .= ($index2) ? " và " : "";
+                        $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                    }
+                }
+                $count += 1;
+            }
         }
+
         if ($count < 10) {
             $number_assets = '0' . strval($count);
         } else {
@@ -252,7 +271,6 @@ class GiayYeuCau
         $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
         $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
 
-        $isApartment = in_array('CC', $certificate->document_type);
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $stt => $asset) {
