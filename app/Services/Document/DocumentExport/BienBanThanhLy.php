@@ -317,7 +317,7 @@ class BienBanThanhLy
         $row2->addCell(3200, array('vMerge' => 'continue'));
         $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
         $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
-        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], $alignCenter);
+        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array('align' => 'center', 'spaceBefore' => 80, 'spaceAfter' => 80));
         $row2->addCell(1600, array('vMerge' => 'continue'));
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
