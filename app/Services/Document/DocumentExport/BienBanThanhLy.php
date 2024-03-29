@@ -143,7 +143,7 @@ class BienBanThanhLy
         ]);
         $styleSection = [
             'footerHeight' => 0,
-            'marginTop' => Converter::inchToTwip(0.7),
+            'marginTop' => Converter::inchToTwip(0.4),
             // 'marginBottom' => Converter::inchToTwip(0.28),
             'marginBottom' => Converter::inchToTwip(0),
 
@@ -386,8 +386,8 @@ class BienBanThanhLy
         $row5->addCell(4950)->addText("\n\n\n\n\n");
 
         $row6 = $table->addRow();
-        $row6->addCell(4950)->addText("\n\n\n");
-        $row6->addCell(4950)->addText("\n\n\n");
+        $row6->addCell(4950)->addText("\n\n\n\n\n");
+        $row6->addCell(4950)->addText("\n\n\n\n\n");
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
