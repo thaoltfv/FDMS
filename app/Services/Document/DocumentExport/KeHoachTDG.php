@@ -142,7 +142,7 @@ class KeHoachTDG
             'align' => 'both'
         ]);
         $styleSection = [
-            'footerHeight' => 350,
+            'footerHeight' => 370,
             'marginTop' => Converter::inchToTwip(0.7),
             'marginBottom' => Converter::inchToTwip(0.28),
             'marginRight' => Converter::inchToTwip(0.4),
