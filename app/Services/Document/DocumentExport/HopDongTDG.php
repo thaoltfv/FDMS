@@ -584,13 +584,13 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(600)->addText("-", null, ['align' => 'right']);
-        $row4->addCell(100)->addText("", null, ['align' => 'right']);
-        $row4->addCell(9200)->addText("Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, $indentleftSymbol);
+        $row4->addCell(80)->addText("", null, ['align' => 'right']);
+        $row4->addCell(9220)->addText("Trường hợp Bên A muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên B 01 ngày và phải thanh toán cho Bên B tiền phí dịch vụ tương ứng với khối lượng công việc Bên B đã thực hiện. Phí này do Bên B xác định và không thấp hơn phí đã thanh toán đợt 1.", null, $indentleftSymbol);
 
         $row5 = $table->addRow();
         $row5->addCell(600)->addText("-", null, ['align' => 'right']);
-        $row5->addCell(100)->addText("", null, ['align' => 'right']);
-        $row5->addCell(9200)->addText("Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, $indentleftSymbol);
+        $row5->addCell(80)->addText("", null, ['align' => 'right']);
+        $row5->addCell(9220)->addText("Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, $indentleftSymbol);
 
         $row6 = $table->addRow();
         $row6->addCell(600)->addText("c.", null, ['align' => 'right']);
@@ -627,22 +627,22 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("8.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText(" Mọi sửa đổi, bổ sung hợp đồng này phải do hai bên thỏa thuận, được lập thành văn bản và là một phần không tách rời của hợp đồng.", null, ['align' => 'both']);
+        $row->addCell(9300)->addText("Mọi sửa đổi, bổ sung hợp đồng này phải do hai bên thỏa thuận, được lập thành văn bản và là một phần không tách rời của hợp đồng.", null, $indentleftNumber);
 
 
         $row2 = $table->addRow();
         $row2->addCell(600)->addText("8.2.", null, ['align' => 'right']);
-        $row2->addCell(9300)->addText(" Trong quá trình thực hiện hợp đồng, nếu phát sinh tranh chấp, hai bên sẽ cùng nhau thương lượng trên tinh thần hợp tác. Trường hợp không thương lượng được, vụ việc sẽ do Tòa án nhân dân Quận 5, TP.HCM giải quyết.", null, ['align' => 'both']);
+        $row2->addCell(9300)->addText("Trong quá trình thực hiện hợp đồng, nếu phát sinh tranh chấp, hai bên sẽ cùng nhau thương lượng trên tinh thần hợp tác. Trường hợp không thương lượng được, vụ việc sẽ do Tòa án nhân dân Quận 5, TP.HCM giải quyết.", null, $indentleftNumber);
 
 
         $row3 = $table->addRow();
         $row3->addCell(600)->addText("8.3.", null, ['align' => 'right']);
-        $row3->addCell(9300)->addText(" Sau khi Bên B nhận đủ phí và cung cấp kết quả thẩm định cho Bên A thì trách nhiệm và nghĩa vụ hai bên chấm dứt, hợp đồng này mặc nhiên được thanh lý.", null, ['align' => 'both']);
+        $row3->addCell(9300)->addText("Sau khi Bên B nhận đủ phí và cung cấp kết quả thẩm định cho Bên A thì trách nhiệm và nghĩa vụ hai bên chấm dứt, hợp đồng này mặc nhiên được thanh lý.", null, $indentleftNumber);
 
 
         $row4 = $table->addRow();
         $row4->addCell(600)->addText("8.4.", null, ['align' => 'right']);
-        $row4->addCell(9300)->addText(" Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 03 bản, có giá trị pháp lý như nhau, Bên A giữ 01 bản, bên B giữ 02 bản.", null, ['align' => 'both']);
+        $row4->addCell(9300)->addText("Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 03 bản, có giá trị pháp lý như nhau, Bên A giữ 01 bản, bên B giữ 02 bản.", null, $indentleftNumber);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
