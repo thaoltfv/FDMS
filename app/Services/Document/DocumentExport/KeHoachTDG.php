@@ -142,11 +142,11 @@ class KeHoachTDG
             'align' => 'both'
         ]);
         $styleSection = [
-            'footerHeight' => 300,
+            'footerHeight' => 350,
             'marginTop' => Converter::inchToTwip(0.7),
             'marginBottom' => Converter::inchToTwip(0.28),
-            'marginRight' => Converter::inchToTwip(0.6),
-            'marginLeft' => Converter::inchToTwip(0.9)
+            'marginRight' => Converter::inchToTwip(0.4),
+            'marginLeft' => Converter::inchToTwip(0.8)
         ];
 
         $check = "";
@@ -185,7 +185,7 @@ class KeHoachTDG
         $section->addText(
             "KẾ HOẠCH THẨM ĐỊNH GIÁ",
             ['bold' => true, 'size' => '12'],
-            ['align' => 'center', 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12), 'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(8)]
+            ['align' => 'center', 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12), 'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(10)]
         );
 
         $textRun = $section->addTextRun(['align' => 'both']);
