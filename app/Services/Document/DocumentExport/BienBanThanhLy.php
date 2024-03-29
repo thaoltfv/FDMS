@@ -15,7 +15,7 @@ use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
 
-class BBTL
+class BienBanThanhLy
 {
     use ResponseTrait;
     function formatNumberFunction($number, $count = 0, $tenp = ',', $temp2 = '.')
