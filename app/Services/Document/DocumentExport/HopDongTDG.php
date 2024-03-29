@@ -585,11 +585,12 @@ class HopDongTDG
 
         $row5 = $table->addRow();
         $row5->addCell(800)->addText("-", null, ['align' => 'right']);
-        $row4->addCell(100)->addText("", null, ['align' => 'right']);
+        $row5->addCell(100)->addText("", null, ['align' => 'right']);
         $row5->addCell(9000)->addText("Trường hợp Bên B muốn chấm dứt hợp đồng trước hạn thì phải thông báo trước cho Bên A 01 ngày và phải hoàn lại cho Bên A toàn bộ số tiền phí dịch vụ mà Bên B đã nhận.", null, ['align' => 'both']);
+
         $row6 = $table->addRow();
         $row6->addCell(650)->addText("c.", null, ['align' => 'right']);
-        $row4->addCell(100)->addText("", null, ['align' => 'right']);
+        $row6->addCell(100)->addText("", null, ['align' => 'right']);
         $row6->addCell(9150)->addText("Đơn phương chấm dứt hợp đồng: Trường hợp một trong hai bên vi phạm các điều khoản trong hợp đồng thì bên kia có quyền đơn phương chấm dứt hợp đồng mà không cần báo trước. Bên vi phạm hợp đồng phải bồi thường thiệt hại (nếu có) cho bên kia.", null, ['align' => 'both']);
 
         $row7 = $table->addRow();
@@ -601,11 +602,12 @@ class HopDongTDG
 
         $row8 = $table->addRow();
         $row8->addCell(650)->addText("a.", null, ['align' => 'right']);
-        $row4->addCell(100)->addText("", null, ['align' => 'right']);
+        $row8->addCell(100)->addText("", null, ['align' => 'right']);
         $row8->addCell(9150)->addText("Sau 10 ngày ký hợp đồng mà Bên A không hướng dẫn Bên B thẩm định tài sản hiện trường; hoặc tối đa 10 ngày sau khi nhận thông báo (bằng thư qua email/hoặc tin nhắn điện thoại) mà Bên A không đến công ty thẩm định giá để nhận chứng thư thì Bên B có quyền đơn phương chấm dứt hợp đồng với Bên A, hợp đồng này mặc nhiên thanh lý.", null, ['align' => 'both']);
+
         $row9 = $table->addRow();
         $row9->addCell(650)->addText("b." . '   ', null, ['align' => 'right']);
-        $row4->addCell(100)->addText("", null, ['align' => 'right']);
+        $row9->addCell(100)->addText("", null, ['align' => 'right']);
         $row9->addCell(9150)->addText("Nếu Bên B không cung cấp chứng thư thẩm định giá cho Bên A theo đúng thời gian thỏa thuận thì Bên A có quyền đơn phương chấm dứt hợp đồng với Bên B, đồng thời yêu cầu Bên B phải hoàn tiền đã nhận lại cho Bên A.", null, ['align' => 'both']);
 
         $textRun = $section->addTextRun(['align' => 'both']);
