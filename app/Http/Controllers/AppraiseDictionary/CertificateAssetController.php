@@ -436,7 +436,7 @@ class CertificateAssetController extends Controller
         $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
-        $certificate = $this->certificateRepository->findById($id);
+        $certificate = $this->certificateRepository->dataPrintExport($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
@@ -456,7 +456,7 @@ class CertificateAssetController extends Controller
         $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
-        $certificate = $this->certificateRepository->findById($id);
+        $certificate = $this->certificateRepository->dataPrintExport($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
@@ -475,7 +475,7 @@ class CertificateAssetController extends Controller
         $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
-        $certificate = $this->certificateRepository->findById($id);
+        $certificate = $this->certificateRepository->dataPrintExport($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
@@ -494,7 +494,7 @@ class CertificateAssetController extends Controller
         $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
-        $certificate = $this->certificateRepository->findById($id);
+        $certificate = $this->certificateRepository->dataPrintExport($id);
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;

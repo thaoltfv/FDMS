@@ -736,7 +736,177 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result->construction_company_custom = $constructionCompanies;  */
         return $result;
     }
+    public function dataPrintExport($id)
+    {
+        $version = request()->get('version');
+        $result = null;
+        if ($version && !is_array($version)) {
+            $result = $this->findVersionById($id, $version);
+        }
+        if (!$result) {
+            $result =  $this->model->query()
+                ->where('id', '=', $id)
+                ->with('appraiser')
+                ->with('appraiserManager')
+                ->with('appraiserConfirm')
+                ->with('appraiserControl')
+                ->with('appraiserSale')
+                ->with('appraiserPerform')
+                ->with('certificateApproach')
+                ->with('appraiseMethodUsed')
+                ->with('appraiseBasisProperty')
+                ->with('certificatePrinciple')
+                ->with('legalDocumentsOnValuation')
+                ->with('legalDocumentsOnConstruction')
+                ->with('legalDocumentsOnLand')
+                ->with('legalDocumentsOnLocal')
+                ->with('constructionCompany')
+                ->with('comparisonFactor')
+                ->with('createdBy')
+                ->with('appraisePurpose')
 
+                ->with('apartmentAsset')
+                ->with('apartmentAsset.apartmentAssetProperties')
+                ->with('appraises')
+
+                ->with('appraises.province')
+                ->with('appraises.district')
+                ->with('appraises.ward')
+                ->with('appraises.street')
+                ->with('appraises.distance')
+                ->with('appraises.assetType')
+                ->with('appraises.pic.picType')
+                ->with('appraises.topographic')
+                ->with('appraises.appraiseApproach')
+                ->with('appraises.appraisePrinciple')
+                ->with('appraises.appraiseMethodUsed')
+                ->with('appraises.appraiseBasisProperty')
+                ->with('appraises.properties.propertyDetail')
+                ->with('appraises.properties.propertyTurningTime')
+                ->with('appraises.properties.propertyTurningTime.material')
+                ->with('appraises.properties.propertyDetail.landTypePurpose')
+                ->with('appraises.properties.propertyDetail.positionType')
+                ->with('appraises.properties.legal')
+                ->with('appraises.properties.zoning')
+                ->with('appraises.properties.landType')
+                ->with('appraises.properties.landShape')
+                ->with('appraises.properties.business')
+                ->with('appraises.properties.electricWater')
+                ->with('appraises.properties.socialSecurity')
+                ->with('appraises.properties.fengShui')
+                ->with('appraises.properties.paymenMethod')
+                ->with('appraises.properties.conditions')
+                ->with('appraises.properties.material')
+                ->with('appraises.tangibleAssets.buildingType')
+                ->with('appraises.tangibleAssets.buildingCategory')
+                ->with('appraises.tangibleAssets.rate')
+                ->with('appraises.tangibleAssets.structure')
+                ->with('appraises.tangibleAssets.crane')
+                ->with('appraises.tangibleAssets.aperture')
+                ->with('appraises.tangibleAssets.factoryType')
+                ->with('appraises.otherAssets')
+                ->with('appraises.constructionCompany')
+                ->with('appraises.appraiseLaw.law')
+                ->with('appraises.appraiseLaw.lawDetails')
+                ->with('appraises.appraiseLaw.lawDetails.landTypePurpose')
+                ->with('appraises.appraiseLaw.landDetails')
+                ->with('appraises.appraiseHasAssets')
+                ->with('appraises.createdBy')
+                ->with('appraises.comparisonFactor')
+                ->with('appraises.appraiseAdapter')
+                ->with('appraises.comparisonTangibleFactor')
+                ->with('appraises.version')
+                ->with('appraises.assetUnitPrice')
+                ->with('appraises.assetUnitPrice.landTypeData')
+                ->with('appraises.assetUnitPrice.createdBy')
+                ->with('otherDocuments')
+                ->with('otherDocuments.createdBy')
+                ->with('assetPrice')
+                ->with('appraises.appraisalMethods')
+                ->first();
+        }
+
+        foreach ($result->appraises as $stt => $asset) {
+            $result->appraises[$stt]->comparison_factor_custom = $this->getComparisonFactor($asset->id);
+            //$result->appraises[$stt]->construction_company_custom = $this->getConstructionCompany($id, $asset->id);
+            //$result->appraises[$stt]->construction_company_custom = $this->getConstructionCompany($id, $asset->id);
+            $eloquentBuildingPriceRepository = new EloquentBuildingPriceRepository(new BuildingPrice());
+            if (isset($asset->tangibleAssets[0])) {
+                $result->appraises[$stt]->building_price = $eloquentBuildingPriceRepository->getAverageBuildPriceV2($asset->tangibleAssets[0]);
+            } else {
+                $result->appraises[$stt]->building_price = 0;
+            }
+
+            // $result->appraises[$stt]->append('tangible_assets');
+            // $result->appraises[$stt]->append('appraise_law');
+            $result->appraises[$stt]->append('asset_general');
+            $result->appraises[$stt]->tangibleAssets = $asset->tangibleAssets;
+            $result->appraises[$stt]->appraiseLaw = $asset->appraiseLaw;
+            $result->appraises[$stt]->assetGeneral = $result->appraises[$stt]->asset_general;
+            // $result->appraises[$stt]->tangibleAssets = $result->appraises[$stt]->tangible_assets;
+
+            $asset->assetGeneral = $result->appraises[$stt]->asset_general;
+
+            $result->appraises[$stt]->append('layer_cutting_procedure');
+            $result->appraises[$stt]->append('layer_cutting_price');
+            $result->appraises[$stt]->append('unify_indicative_price_slug');
+            $result->appraises[$stt]->append('composite_land_remaning_slug');
+            $result->appraises[$stt]->append('composite_land_remaning_value');
+            $result->appraises[$stt]->append('planning_violation_price_slug');
+            $result->appraises[$stt]->append('planning_violation_price_value');
+
+            $asset1 = $asset->assetGeneral[0] ?? null;
+            $asset2 = $asset->assetGeneral[1] ?? null;
+            $asset3 = $asset->assetGeneral[2] ?? null;
+            $isExistAsset1 = false;
+            $isExistAsset2 = false;
+            $isExistAsset3 = false;
+            if (isset($asset1) && isset($asset2) && isset($asset3)) {
+                foreach ($result->appraises[$stt]->appraiseAdapter as $item) {
+                    if ($item->asset_general_id == $asset1->id) {
+                        $isExistAsset1 = true;
+                    }
+                    if ($item->asset_general_id == $asset2->id) {
+                        $isExistAsset2 = true;
+                    }
+                    if ($item->asset_general_id == $asset3->id) {
+                        $isExistAsset3 = true;
+                    }
+                }
+                if (!$isExistAsset1) {
+                    $result->appraises[$stt]->appraiseAdapter[] = [
+                        'appraise_id' => $asset->id,
+                        'asset_general_id' => $asset1->id,
+                        'percent' => intval($asset1->adjust_percent) + 100,
+                    ];
+                }
+                if (!$isExistAsset2) {
+                    $result->appraises[$stt]->appraiseAdapter[] = [
+                        'appraise_id' => $asset->id,
+                        'asset_general_id' => $asset2->id,
+                        'percent' => intval($asset2->adjust_percent) + 100,
+                    ];
+                }
+                if (!$isExistAsset3) {
+                    $result->appraises[$stt]->appraiseAdapter[] = [
+                        'appraise_id' => $asset->id,
+                        'asset_general_id' => $asset3->id,
+                        'percent' => intval($asset3->adjust_percent) + 100,
+                    ];
+                }
+            }
+        }
+        $result->append('round_certificate_total');
+
+        //CommonService::getCertificateAssetPriceTotal($result);
+
+        /* $constructionCompanies = [];
+        foreach($result->constructionCompany as $constructionCompany) {
+            $constructionCompanies[$constructionCompany->appraise_id]['construction_company'][$constructionCompany->id] = $constructionCompany;
+        }
+        $result->construction_company_custom = $constructionCompanies;  */
+        return $result;
+    }
     /**
      * @param $id
      * @return Builder|Model|object
