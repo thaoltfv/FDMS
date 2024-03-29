@@ -144,7 +144,7 @@ class HopDongTDG
         $styleSection = [
             // 'footerHeight' => 300,
             'marginTop' => Converter::inchToTwip(0.7),
-            // 'marginBottom' => Converter::inchToTwip(.6),
+            'marginBottom' => Converter::inchToTwip(0.3),
             'marginRight' => Converter::inchToTwip(0.3),
             'marginLeft' => Converter::inchToTwip(0.6)
         ];
@@ -667,8 +667,8 @@ class HopDongTDG
         $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
-        $row3->addCell(4950)->addText("\n\n\n\n\n\n\n\n\n\n");
-        $row3->addCell(4950)->addText("\n\n\n\n\n\n\n\n\n\n");
+        $row3->addCell(4950)->addText("\n\n\n\n\n");
+        $row3->addCell(4950)->addText("\n\n\n\n\n");
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
