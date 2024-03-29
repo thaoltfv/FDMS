@@ -266,22 +266,22 @@ class KeHoachTDG
         $row9->addCell(9700, array('gridSpan' => 2))->addText(
             "Họ, tên người có trách nhiệm tham gia khảo sát, lập biên bản hiện trạng tài sản, thu thập thông tin, lập và ký tên Hồ sơ thẩm định giá: " .
                 (isset($certificate->appraiser) ? ' Thẩm định viên ' . $certificate->appraiser->name . ',' : '') .
-                (isset($certificate->apraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->apraiserPerform->name : ''),
+                (isset($certificate->appraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->appraiserPerform->name : ''),
             null,
             $indentleftSymbol
         );
 
         $row10 = $table->addRow();
         $row10->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row10->addCell(9700, array('gridSpan' => 2))->addText("Phương tiện cần thiết: Di chuyển bằng xe máy, ghi ảnh bằng điện thoại cá nhân." . $addressHSTD, null, $indentleftSymbol);
+        $row10->addCell(9700, array('gridSpan' => 2))->addText("Phương tiện cần thiết: Di chuyển bằng xe máy, ghi ảnh bằng điện thoại cá nhân.", null, $indentleftSymbol);
 
         $row11 = $table->addRow();
         $row11->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row11->addCell(9700, array('gridSpan' => 2))->addText("Các nội dung cần trưng cầu ý kiến chuyên gia (nếu có): Không đề xuất." . $addressHSTD, null, $indentleftSymbol);
+        $row11->addCell(9700, array('gridSpan' => 2))->addText("Các nội dung cần trưng cầu ý kiến chuyên gia (nếu có): Không đề xuất.", null, $indentleftSymbol);
 
         $row12 = $table->addRow();
         $row12->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row12->addCell(9700, array('gridSpan' => 2))->addText("Các yêu cầu hỗ trợ khác (nếu có): Không đề xuất." . $addressHSTD, null, $indentleftSymbol);
+        $row12->addCell(9700, array('gridSpan' => 2))->addText("Các yêu cầu hỗ trợ khác (nếu có): Không đề xuất.", null, $indentleftSymbol);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
