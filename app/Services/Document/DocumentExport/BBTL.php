@@ -192,15 +192,33 @@ class BBTL
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
+        if ($certificate->document_date) {
+            $timestamp = strtotime($certificate->document_date);
+            $day = date('d', $timestamp);
+            $month = date('m', $timestamp);
+            $year = date('Y', $timestamp);
+            $formattedDateDocumentDate = "Ngày $day tháng $month năm $year";
+        } else {
+            $formattedDateDocumentDate = '';
+        }
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row->addCell(9700)->addText("Căn cứ Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
-            ($certificate->document_date ? date('d/m/Y', strtotime($certificate->document_date)) : ''), null, $indentleftSymbol);
+            $formattedDateDocumentDate, null, $indentleftSymbol);
 
+        if ($certificate->certificate_date) {
+            $timestamp = strtotime($certificate->certificate_date);
+            $day = date('d', $timestamp);
+            $month = date('m', $timestamp);
+            $year = date('Y', $timestamp);
+            $formattedDateCertificateDate = "Ngày $day tháng $month năm $year";
+        } else {
+            $formattedDateCertificateDate = '';
+        }
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
-            ($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $indentleftSymbol);
+            $formattedDateCertificateDate, null, $indentleftSymbol);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
