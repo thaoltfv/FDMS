@@ -371,7 +371,7 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row1->addCell(3000, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(5600, $cellVTop)->addText(': ' . $addressHSTD, null,  $alignBoth);
+        $row1->addCell(5600, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
 
         $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
         $row2 = $table->addRow(100, array(
@@ -385,7 +385,7 @@ class HopDongTDG
             100,
             $cellVTop
         )->addText(':', null,  $alignBoth);
-        $row2->addCell(5600, $cellVTop)->addText(': ' . $appraise_date_formatted . '.', null,  $alignBoth);
+        $row2->addCell(5600, $cellVTop)->addText($appraise_date_formatted . '.', null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -398,7 +398,7 @@ class HopDongTDG
             100,
             $cellVTop
         )->addText(':', null,  $alignBoth);
-        $row3->addCell(5600, $cellVTop)->addText(': ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
+        $row3->addCell(5600, $cellVTop)->addText((isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
 
         $row4 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -408,7 +408,7 @@ class HopDongTDG
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(3000, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(5600, $cellVTop)->addText(': Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
+        $row4->addCell(5600, $cellVTop)->addText('Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
