@@ -272,8 +272,8 @@ class HopDongTDG
         );
 
         $textRun = $section->addTextRun(['align' => 'both']);
-        $textRun->addText('Điều 1: ', ['bold' => true, 'underline' => 'single']);
-        $textRun->addText('Nội dung công việc thực hiện', ['bold' => true]);
+        $textRun->addText('Điều 1:', ['bold' => true, 'underline' => 'single']);
+        $textRun->addText(' Nội dung công việc thực hiện', ['bold' => true]);
 
         $table = $section->addTable([
             'align' => JcTable::START,
@@ -298,6 +298,7 @@ class HopDongTDG
         $textRun = $row1->addCell(8700, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Tài sản thẩm định giá : Quyền sở hữu căn hộ ');
         $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
+
         $table = $section->addTable([
             'borderSize' => 1,
             'align' => JcTable::START,
@@ -306,7 +307,7 @@ class HopDongTDG
         ]);
         $row1 = $table->addRow(100, array(
             'tblHeader' => false,
-            'cantSplit' => false
+            'cantSplit' => true
         ));
 
         $alignCenter =
