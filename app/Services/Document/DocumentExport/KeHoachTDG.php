@@ -166,13 +166,13 @@ class KeHoachTDG
         $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(3500, $cellVCentered)->addText('----------o0o---------' . $certificate->document_num, null, $cellHCentered);
+        $row3->addCell(3500, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
         $row3->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
             $cellHCentered
         );
-        $row3->addCell(5700, $cellVCentered)->addText('----------o0o---------', ['bold' => true,], $cellHCentered);
+        $row3->addCell(5700, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
         $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(3500, $cellVCentered)->addText('Số: ' . $certificate->document_num, null, $cellHCentered);
         $row4->addCell(1000, $cellVCentered)->addText(
@@ -243,8 +243,8 @@ class KeHoachTDG
 
         $row5 = $table->addRow();
         $row5->addCell(200)->addText("", null, ['align' => 'left']);
-        $row5->addCell(1400)->addText("o", null, ['align' => 'right']);
-        $row5->addCell(8300, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
+        $row5->addCell(1500)->addText("o", null, ['align' => 'right']);
+        $row5->addCell(8200, array('gridSpan' => 3))->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
