@@ -269,7 +269,7 @@ class BienBanThanhLy
 
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText(': 3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
+        $row9->addCell(8100, $cellVTop)->addText(': 3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  array('align' => 'both', 'textIndent' => 720));
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $textRun = $row9->addCell(8100, $cellVTop)->addTextRun($alignBoth);
