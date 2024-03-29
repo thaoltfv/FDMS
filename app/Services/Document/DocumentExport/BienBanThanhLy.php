@@ -288,8 +288,8 @@ class BienBanThanhLy
         $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
         $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
         $section->addText(
-            "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
-                $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+            "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+                $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
                 $formattedDateCertificateDate . '.',
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
@@ -349,7 +349,7 @@ class BienBanThanhLy
         $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ').', ['italic' => true],  $alignCenter);
 
         $section->addText(
-            "Hợp đồng số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+            "Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
                 $formattedDateCertificateDate . ' 2024 được thanh lý khi bên A thanh toán hết số tiền phải thanh toán cho Bên B thì trách nhiệm và nghĩa vụ của hai bên được chấm dứt.',
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
