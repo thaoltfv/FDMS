@@ -217,6 +217,7 @@
 							>
 								<div class="col-custom-4-5">
 									<InputCategoryCustom
+										v-if="!priceEstimates.isTransfer"
 										v-model="tangible.building_type_id"
 										vid="building_type_id"
 										nonLabel="Loại CTXD"
@@ -224,9 +225,17 @@
 										:options="optionsHousingType"
 										@change="tangible.building_type_id = $event"
 									/>
+									<span class="text-style-input" v-else>
+										{{
+											tangible.building_type
+												? tangible.building_type.description
+												: ""
+										}}
+									</span>
 								</div>
 								<div class="col-custom-1-5">
 									<InputPercent
+										v-if="!priceEstimates.isTransfer"
 										:key="tangible.remaining_quality"
 										v-model="tangible.remaining_quality"
 										vid="remaining_quality"
@@ -236,9 +245,17 @@
 										rules="required"
 										@change="handleChangeTangible(tangible, index)"
 									/>
+									<span class="number-style-input" v-else>
+										{{
+											tangible.remaining_quality
+												? formatNumber(tangible.remaining_quality) + " %"
+												: ""
+										}}
+									</span>
 								</div>
 								<div :key="renderInputMainArea" class="col-custom-1-5">
 									<InputAreaCustom
+										v-if="!priceEstimates.isTransfer"
 										v-model="tangible.total_construction_area"
 										:decimal="2"
 										vid="total_construction_area"
@@ -251,10 +268,17 @@
 										nonLabel="Diện tích sàn"
 										@change="handleChangeTangible(tangible, index)"
 										:errorCustom="validateContructionArea()"
-									/>
+									/><span class="number-style-input" v-else>
+										{{
+											tangible.total_construction_area
+												? formatNumber(tangible.total_construction_area)
+												: ""
+										}}
+									</span>
 								</div>
 								<div class="col-2">
 									<InputCurrencyUnit
+										v-if="!priceEstimates.isTransfer"
 										:id="`tangibleunit_price${index}`"
 										v-model="tangible.unit_price"
 										:vid="'unit_price' + index"
@@ -263,7 +287,13 @@
 										:required="true"
 										class="w-100"
 										@change="handleChangeTangible(tangible, index)"
-									/>
+									/><span class="number-style-input" v-else>
+										{{
+											tangible.unit_price
+												? formatNumber(tangible.unit_price)
+												: ""
+										}}
+									</span>
 								</div>
 
 								<div class="col-2">
@@ -275,7 +305,10 @@
 										}}
 									</span>
 								</div>
-								<div class="col-custom-0-5 px-3 d-flex align-items-end">
+								<div
+									class="col-custom-0-5 px-3 d-flex align-items-end"
+									v-if="!priceEstimates.isTransfer"
+								>
 									<div
 										@click="handleDeleteTangibleAsset(index)"
 										class="btn-delete"
@@ -350,10 +383,10 @@
 					</div>
 				</div>
 				<div class="container-fluid color_content">
-					<div class="row">
+					<div class="row mt-3">
 						<div class="col-custom-11-5">
 							<hr style="border-top: 5px solid #007ec6; margin: 0;" />
-							<div class="row">
+							<div class="row mt-3">
 								<div class="col-md-12 col-lg-12">
 									<InputTextPrefixCustom
 										id="petitioner_name"
@@ -863,15 +896,14 @@ export default {
 	computed: {
 		computeShowTangibleAset() {
 			let boolA = false;
-
-			if (
-				this.priceEstimates.appraise_id &&
-				this.step_3.tangible_assets.length > 0
-			) {
-				boolA = false;
-			}
 			if (this.miscVariable.isHaveContruction && this.step_3.tangible_assets) {
 				boolA = true;
+			}
+			if (
+				this.priceEstimates.appraise_id &&
+				this.step_3.tangible_assets.length === 0
+			) {
+				boolA = false;
 			}
 
 			return boolA;
