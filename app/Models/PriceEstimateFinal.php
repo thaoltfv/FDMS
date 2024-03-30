@@ -30,7 +30,8 @@ class PriceEstimateFinal extends Model
         'coordinates',
         'description',
         'img_map',
-        'created_by'
+        'created_by',
+        'total_price'
     ];
 
 
@@ -62,5 +63,10 @@ class PriceEstimateFinal extends Model
     public function tangibleAssets(): HasMany
     {
         return $this->hasMany(PriceEstimateFinalTangibleAsset::class, 'price_estimate_final_id');
+    }
+
+    public function apartmentFinals(): HasMany
+    {
+        return $this->hasMany(PriceEstimateApartmentFinal::class, 'price_estimate_final_id');
     }
 }

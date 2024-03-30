@@ -145,7 +145,7 @@ class CreatePriceEstimatesTable extends Migration
                 $table->string('appraise_asset');
                 $table->string('full_address');
                 $table->string('coordinates');
-                $table->string('description');
+                $table->string('description')->nullable();
                 $table->string('img_map')->nullable();
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->useCurrent();

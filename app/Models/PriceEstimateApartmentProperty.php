@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PriceEstimateApartmentProperty extends Model
 {
     use SoftDeletes;
-    protected $table = 'price_estimate_apartments_properties';
+    protected $table = 'price_estimate_apartment_properties';
 
     protected $fillable = [
         'price_estimate_id',

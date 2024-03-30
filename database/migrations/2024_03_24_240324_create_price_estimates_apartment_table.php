@@ -32,8 +32,8 @@ class CreatePriceEstimatesApartmentTable extends Migration
                 $table->timestamp('deleted_at')->nullable();
             });
         }
-        if (!Schema::hasTable('price_estimate_final_apartments')) {
-            Schema::create('price_estimate_final_apartments', function (Blueprint $table) {
+        if (!Schema::hasTable('price_estimate_apartment_finals')) {
+            Schema::create('price_estimate_apartment_finals', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('price_estimate_final_id');
                 $table->string('name');
@@ -62,6 +62,11 @@ class CreatePriceEstimatesApartmentTable extends Migration
                 $table->integer('apartment_asset_id')->nullable();
             });
         }
+        if (!Schema::hasColumn('price_estimate_finals', 'total_price')) {
+            Schema::table('price_estimate_finals', function (Blueprint $table) {
+                $table->double('total_price')->nullable();
+            });
+        }
     }
 
     /**
@@ -72,7 +77,7 @@ class CreatePriceEstimatesApartmentTable extends Migration
     public function down()
     {
         Schema::dropIfExists('price_estimate_apartment_properties');
-        Schema::dropIfExists('price_estimate_final_apartments');
+        Schema::dropIfExists('price_estimate_apartment_finals');
 
         if (Schema::hasColumn('apartment_assets', 'price_estimate_id')) {
             Schema::table('apartment_assets', function (Blueprint $table) {
@@ -88,6 +93,11 @@ class CreatePriceEstimatesApartmentTable extends Migration
         if (Schema::hasColumn('price_estimates', 'apartment_asset_id')) {
             Schema::table('price_estimates', function (Blueprint $table) {
                 $table->dropColumn('apartment_asset_id');
+            });
+        }
+        if (Schema::hasColumn('price_estimate_finals', 'total_price')) {
+            Schema::table('price_estimate_finals', function (Blueprint $table) {
+                $table->dropColumn('total_price');
             });
         }
     }

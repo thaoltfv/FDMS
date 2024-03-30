@@ -106,10 +106,14 @@ class PriceEstimate extends Model
         return $this->hasOne(PriceEstimateVersion::class, 'price_estimate_id')->latest();
     }
 
-    // public function finalEstimate(): HasMany
-    // {
-    //     return $this->hasMany(PriceEstimateFinal::class, 'price_estimate_id');
-    // }
+    public function apartmentProperties(): HasMany
+    {
+        return $this->hasMany(PriceEstimateApartmentProperty::class, 'price_estimate_id');
+    }
+    public function landFinalEstimate(): HasMany
+    {
+        return $this->hasMany(PriceEstimateFinal::class, 'price_estimate_id');
+    }
 
     public function getFinalEstimateAttribute()
     {
@@ -122,6 +126,7 @@ class PriceEstimate extends Model
             'tangibleAssets.buildingType:id,description',
             'appraisePurpose',
             'assetType',
+            'apartmentFinals'
         ];
         return PriceEstimateFinal::with($with)
             ->where('price_estimate_id', $this->id)
@@ -144,31 +149,44 @@ class PriceEstimate extends Model
     }
     public function getTotalAreaAttribute()
     {
-        $select = ['id', 'price_estimate_property_id', 'land_type_purpose_id', 'total_area', 'is_transfer_facility', 'main_area'];
-        $with = ['landTypePurpose:id,type,description'];
-        $propertieId = PriceEstimateProperty::where('price_estimate_id', $this->id)->first()->id;
+        $property = PriceEstimateProperty::where('price_estimate_id', $this->id)->first();
+        if ($property) {
+            $propertieId = $property->id;
 
-        $result = PriceEstimatePropertyDetail::with($with)
-            ->select($select)
-            ->where(['price_estimate_property_id' => $propertieId])
-            ->where('total_area', '>', 0)
-            ->get();
-        return $result;
+            $select = ['id', 'price_estimate_property_id', 'land_type_purpose_id', 'total_area', 'is_transfer_facility', 'main_area'];
+            $with = ['landTypePurpose:id,type,description'];
+
+            $result = PriceEstimatePropertyDetail::with($with)
+                ->select($select)
+                ->where(['price_estimate_property_id' => $propertieId])
+                ->where('total_area', '>', 0)
+                ->get();
+            return $result;
+        } else {
+            // Handle the case where no PriceEstimateProperty was found
+            return [];
+        }
     }
 
     public function getPlanningAreaAttribute()
     {
         $select = ['id', 'price_estimate_property_id', 'land_type_purpose_id', 'type_zoning', 'planning_area'];
         $with = ['landTypePurpose:id,type,description'];
-        $propertieId = PriceEstimateProperty::where('price_estimate_id', $this->id)->first()->id;
+        $property = PriceEstimateProperty::where('price_estimate_id', $this->id)->first();
 
-        $result = PriceEstimatePropertyDetail::with($with)
-            ->select($select)
-            ->where(['price_estimate_property_id' => $propertieId])
-            ->where('planning_area', '>', 0)
-            // ->whereNotNull(['extra_planning'])
-            ->get();
-        return $result;
+        if ($property) {
+            $propertieId = $property->id;
+
+            $result = PriceEstimatePropertyDetail::with($with)
+                ->select($select)
+                ->where(['price_estimate_property_id' => $propertieId])
+                ->where('planning_area', '>', 0)
+                ->get();
+            return $result;
+        } else {
+            // Handle the case where no PriceEstimateProperty was found
+            return [];
+        }
     }
 
     public function getTrafficInfomationAttribute()
