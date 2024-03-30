@@ -37,7 +37,7 @@ class ApartmentAsset extends Model
         'real_estate_id',
         'sub_status',
         'full_address',
-        'price_estimate_id'
+        'price_estimate_id', 'apartment_number'
     ];
 
     protected $hidden = [
