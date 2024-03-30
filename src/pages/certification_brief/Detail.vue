@@ -1784,16 +1784,19 @@ export default {
 				profile.data.user.appraiser.appraise_position.acronym;
 			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
 		}
+		this.user_id = profile.data.user.id;
 		if (
 			this.form.status &&
 			this.form.status < 9 &&
 			this.position_profile &&
 			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-				this.position_profile === "NHAN-VIEN-KINH-DOANH")
+				this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+				(this.form.appraiser_sale &&
+					this.form.appraiser_sale.user_id === this.user_id))
 		) {
 			this.$toast.open({
 				message:
-					"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+					"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 				type: "error",
 				position: "top-right",
 			});
@@ -1801,7 +1804,6 @@ export default {
 				name: "certification_brief.index",
 			});
 		}
-		this.user_id = profile.data.user.id;
 		this.profile = profile;
 		if (profile.data.user.id === this.form.created_by) {
 			this.checkRole = true;

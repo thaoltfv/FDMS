@@ -34,20 +34,18 @@
 						<b-card
 							:class="{
 								border_expired: checkDateExpired(element).statusExpire,
-								['border-' + config.css.color]: true
+								['border-' + config.css.color]: true,
 							}"
 							class="card_container mb-3"
 							v-for="element in subStatusData[config.id]"
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<div class=" ml-0">
+								<div class="ml-0">
 									<span
 										@click="handleDetailPreCertificate(element.id)"
 										class="content_id"
-										:class="
-											`bg-${config.css.color}-15 text-${config.css.color}`
-										"
+										:class="`bg-${config.css.color}-15 text-${config.css.color}`"
 										>{{ element.slug }}</span
 									>
 								</div>
@@ -84,7 +82,7 @@
 							<div class="property-content mb-2 d-flex color_content">
 								<div class="label_container d-flex">
 									<img
-										style="min-width:15px"
+										style="min-width: 15px"
 										width="15px"
 										height="21px"
 										class="mr-2"
@@ -124,7 +122,7 @@
 									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
 									<span
 										v-if="getExpireDate(element).includes('Đã hết')"
-										style="font-weight: 500; color: red;"
+										style="font-weight: 500; color: red"
 									>
 										{{ getExpireDate(element) }}
 									</span>
@@ -132,7 +130,7 @@
 										v-else
 										style="font-weight: 500"
 										:class="{
-											'text-orange': checkDateExpired(element).inExpiringState
+											'text-orange': checkDateExpired(element).inExpiringState,
 										}"
 										>{{ getExpireDate(element) }}</span
 									>
@@ -145,7 +143,7 @@
 										class="mr-2"
 										src="@/assets/icons/ic_taglink.svg"
 										alt="user"
-									/><span style="color:#8B94A3">{{
+									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span>
 								</div>
@@ -225,7 +223,7 @@ import {
 	UserIcon,
 	DollarSignIcon,
 	HomeIcon,
-	ClockIcon
+	ClockIcon,
 } from "vue-feather-icons";
 import {
 	BCard,
@@ -233,7 +231,7 @@ import {
 	BCol,
 	BFormGroup,
 	BFormInput,
-	BTooltip
+	BTooltip,
 } from "bootstrap-vue";
 import draggable from "vuedraggable";
 import JsonExcel from "vue-json-excel";
@@ -257,7 +255,7 @@ export default {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
 				slider: "#FAA831",
-				arrow: "#000000"
+				arrow: "#000000",
 			},
 			now: new Date(),
 			total_amount: "",
@@ -266,8 +264,8 @@ export default {
 			listTest: [
 				{
 					name: "test",
-					id: 1
-				}
+					id: 1,
+				},
 			],
 			idUpdate: "",
 			idData: "",
@@ -316,7 +314,7 @@ export default {
 			isCheckPrice: false,
 			isCheckLegal: false,
 			isCheckVersion: false,
-			changeStatusRequire: {}
+			changeStatusRequire: {},
 		};
 	},
 	components: {
@@ -338,7 +336,7 @@ export default {
 		ModalDetailPreCertificate,
 		ModalSendVerify,
 		ModalNotificationCertificate,
-		ModalNotificationPreCertificateNote
+		ModalNotificationPreCertificateNote,
 	},
 	created() {
 		// fix_permission
@@ -351,7 +349,7 @@ export default {
 		}
 		this.user_id = profile.data.user.id;
 		const permission = this.$store.getters.currentPermissions;
-		permission.forEach(value => {
+		permission.forEach((value) => {
 			if (value === PERMISSIONS.VIEW_PRE_CERTIFICATE) {
 				this.view = true;
 			}
@@ -378,16 +376,16 @@ export default {
 				message: "Bạn ko có quyền xem yêu cầu sơ bộ",
 				type: "error",
 				position: "top-right",
-				duration: 5000
+				duration: 5000,
 			});
 		}
 	},
 	computed: {
 		updateDate() {
-			return dateUpdate => {
+			return (dateUpdate) => {
 				return moment(dateUpdate).fromNow();
 			};
-		}
+		},
 	},
 	setup(props) {
 		const checkMobile = () => {
@@ -404,9 +402,8 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const preCertificateStore = usePreCertificateStore();
-		const { lstDataConfig, dataPC, jsonConfig, filter } = storeToRefs(
-			preCertificateStore
-		);
+		const { lstDataConfig, dataPC, jsonConfig, filter } =
+			storeToRefs(preCertificateStore);
 
 		const principleConfig = ref([]);
 
@@ -420,7 +417,7 @@ export default {
 			let config = principleConfig.value;
 			let data = [];
 			let dataReturn = subStatusDataReturn.value;
-			config.forEach(item => {
+			config.forEach((item) => {
 				data = subStatusData.value[item.id] ? subStatusData.value[item.id] : [];
 				if (tmp[item.id] && tmp[item.id].length > count) {
 					for (var i = count; i < count + 10; i++) {
@@ -452,9 +449,9 @@ export default {
 					}
 					if (principleConfig.value.length > 0) {
 						let dataTmp = [];
-						principleConfig.value.forEach(item => {
+						principleConfig.value.forEach((item) => {
 							dataTmp = lstPreCertificateKanban.value.filter(
-								i => i.status === item.status
+								(i) => i.status === item.status
 							);
 
 							subStatusDataTmp.value[item.id] = dataTmp;
@@ -470,7 +467,7 @@ export default {
 			}
 			if (jsonConfig.value && jsonConfig.value.principle) {
 				principleConfig.value = jsonConfig.value.principle.filter(
-					i => i.isActive === 1
+					(i) => i.isActive === 1
 				);
 			}
 			if (props.search_kanban) {
@@ -496,7 +493,7 @@ export default {
 			subStatusDataReturn,
 			subStatusData,
 			getDataWorkFlow2,
-			pushSubStatusData
+			pushSubStatusData,
 		};
 	},
 	methods: {
@@ -528,12 +525,12 @@ export default {
 		checkDateExpired(element) {
 			const check = {
 				statusExpire: false,
-				inExpiringState: false
+				inExpiringState: false,
 			};
 
 			if (element.status_expired_at) {
 				const config = this.jsonConfig.principle.find(
-					item => item.status === element.status && item.isActive === 1
+					(item) => item.status === element.status && item.isActive === 1
 				);
 				if (config.expire_in) {
 					const now = new Date();
@@ -594,12 +591,12 @@ export default {
 		checkMove(evt) {
 			let draggerElement = evt.draggedContext.element;
 			let configId = parseInt(evt.from.id);
-			let config = this.principleConfig.find(i => i.id === configId);
+			let config = this.principleConfig.find((i) => i.id === configId);
 			let user = this.profile.data.user;
 			let check = false;
 			if (evt.from.id !== evt.to.id) {
 				if (config && config.put_require.length > 0) {
-					config.put_require.forEach(i => {
+					config.put_require.forEach((i) => {
 						if (
 							(i === "created_by" && draggerElement[i] === user.id) ||
 							(i !== "created_by" && draggerElement[i] === user.appraiser.id)
@@ -619,9 +616,9 @@ export default {
 			this.appraiserChangeStage = null;
 			let targetId = parseInt(evt.to.id);
 			let check = false;
-			let targetConfig = this.principleConfig.find(i => i.id === targetId);
+			let targetConfig = this.principleConfig.find((i) => i.id === targetId);
 			let draggableDescription = this.config.target_description.find(
-				i => i.id === targetId
+				(i) => i.id === targetId
 			);
 			let message = draggableDescription
 				? draggableDescription.description
@@ -642,7 +639,7 @@ export default {
 				if (targetConfig.re_assign)
 					this.appraiserChangeStage = {
 						id: this.dataPC[targetConfig.re_assign],
-						type: targetConfig.re_assign
+						type: targetConfig.re_assign,
 					};
 
 				this.next_status = targetConfig.status;
@@ -659,7 +656,7 @@ export default {
 			let resultDocumentsLength = 0;
 			if (this.dataPC.other_documents) {
 				let resultDocuments = this.dataPC.other_documents.filter(
-					doc => doc.type_document === "Result"
+					(doc) => doc.type_document === "Result"
 				);
 				resultDocumentsLength = resultDocuments.length;
 			}
@@ -682,7 +679,7 @@ export default {
 				message: message,
 				type: type,
 				position: position,
-				duration: duration
+				duration: duration,
 			});
 		},
 		checkRequired(require, data) {
@@ -724,7 +721,7 @@ export default {
 		},
 		async updateAppraisal(data, id, status_expired_at) {
 			this.isAccept = true;
-			this.listCertificateTemp.forEach(item => {
+			this.listCertificateTemp.forEach((item) => {
 				if (item.id === id) {
 					item.status = 2;
 				}
@@ -735,10 +732,10 @@ export default {
 			this.showAppraisalDialog = false;
 			if (!this.isAccept) {
 				this.listCertificateDraft = this.listCertificateTemp.filter(
-					item => item.status === 1
+					(item) => item.status === 1
 				);
 				this.listCertificateOpen = this.listCertificateTemp.filter(
-					item => item.status === 2
+					(item) => item.status === 2
 				);
 			}
 			this.isAccept = false;
@@ -758,7 +755,7 @@ export default {
 		},
 		async handleChangeVerify(data, id, status_expired_at) {
 			this.isAccept = true;
-			this.listCertificateTemp.forEach(item => {
+			this.listCertificateTemp.forEach((item) => {
 				if (item.id === id) {
 					item.status = 3;
 				}
@@ -769,10 +766,10 @@ export default {
 			this.showVerifyCertificate = false;
 			if (!this.isAccept) {
 				this.listCertificateOpen = this.listCertificateTemp.filter(
-					item => item.status === 2
+					(item) => item.status === 2
 				);
 				this.listCertificateLock = this.listCertificateTemp.filter(
-					item => item.status === 3
+					(item) => item.status === 3
 				);
 				this.idUpdate = "";
 			}
@@ -786,12 +783,12 @@ export default {
 			} else return false;
 		},
 
-		async handleChangeAccept2(note, reason_id, tempAppraiser) {
-			if (this.dataPC.target_code == "in_ho_so") {
-				console.log("Mới tới in sơ bộ", this.dataPC);
+		async handleChangeAccept2(note, reason_id, tempAppraiser, estime) {
+			// if (this.dataPC.target_code == "in_ho_so") {
+			// 	console.log("Mới tới in sơ bộ", this.dataPC);
 
-				return;
-			}
+			// 	return;
+			// }
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;
@@ -819,7 +816,7 @@ export default {
 							  " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				// this.key_dragg++;
 			} else {
@@ -827,7 +824,7 @@ export default {
 					message: `${res.error.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				this.handleCancelAccept2();
 			}
@@ -848,7 +845,7 @@ export default {
 					message: this.confirm_message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				// this.key_dragg++;
 			} else {
@@ -856,7 +853,7 @@ export default {
 					message: `${res.data.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				this.handleCancelAccept2();
 			}
@@ -880,12 +877,12 @@ export default {
 			this.returnData();
 		},
 		returnData() {
-			this.principleConfig.forEach(item => {
+			this.principleConfig.forEach((item) => {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(
-					i => i.status === item.status
+					(i) => i.status === item.status
 				);
 				this.subStatusDataTmp[item.id] = this.lstPreCertificateKanban.filter(
-					i => i.status === item.status
+					(i) => i.status === item.status
 				);
 			});
 			this.key_dragg++;
@@ -894,8 +891,8 @@ export default {
 			let url = this.$router.resolve({
 				name: "certification_brief.detail",
 				query: {
-					id: id.toString()
-				}
+					id: id.toString(),
+				},
 			}).href;
 
 			window.open(url, "_blank");
@@ -971,22 +968,22 @@ export default {
 		async handleUpdateListKanBan(id, status) {
 			this.showDetailPopUp = false;
 			// await this.updateDataWorkFlow()
-			this.listCertificateTemp.forEach(item => {
+			this.listCertificateTemp.forEach((item) => {
 				if (item.id === id) {
 					item.status = status;
 				}
 			});
 			this.listCertificateDraft = this.listCertificateTemp.filter(
-				item => item.status === 1
+				(item) => item.status === 1
 			);
 			this.listCertificateOpen = this.listCertificateTemp.filter(
-				item => item.status === 2
+				(item) => item.status === 2
 			);
 			this.listCertificateOpen = this.listCertificateTemp.filter(
-				item => item.status === 2
+				(item) => item.status === 2
 			);
 			this.listCertificateLock = this.listCertificateTemp.filter(
-				item => item.status === 3
+				(item) => item.status === 3
 			);
 		},
 
@@ -1002,7 +999,7 @@ export default {
 			this.currency = value;
 		},
 		loadMore() {
-			setTimeout(e => {
+			setTimeout((e) => {
 				let count = this.countData;
 				for (var i = count, j = count; i < j + 10; i++) {
 					this.listCertificateDraftTemp[i] &&
@@ -1034,14 +1031,14 @@ export default {
 			}, 200);
 		},
 		loadMore2() {
-			setTimeout(e => {
+			setTimeout((e) => {
 				this.pushSubStatusData();
 			}, 200);
 		},
 
 		getConfigByStatus(status) {
 			return this.principleConfig.filter(
-				item => item.status === status && item.isActive === 1
+				(item) => item.status === status && item.isActive === 1
 			);
 		},
 		async getDetailCertificate(id) {
@@ -1055,7 +1052,7 @@ export default {
 				await this.$toast.open({
 					message: "Lấy dữ liệu thất bại",
 					type: "error",
-					position: "top-right"
+					position: "top-right",
 				});
 			}
 		},
@@ -1077,7 +1074,7 @@ export default {
 							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
 						type: "error",
 						position: "top-right",
-						duration: 3000
+						duration: 3000,
 					});
 
 					return;
@@ -1104,7 +1101,7 @@ export default {
 								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
 							type: "error",
 							position: "top-right",
-							duration: 3000
+							duration: 3000,
 						});
 						return;
 					}
@@ -1126,7 +1123,7 @@ export default {
 				return;
 			}
 			let check = true;
-			let config = this.principleConfig.find(i => i.id === target.id);
+			let config = this.principleConfig.find((i) => i.id === target.id);
 			this.elementDragger = this.detailData;
 			if (config) {
 				this.config = config;
@@ -1146,7 +1143,7 @@ export default {
 				if (config.re_assign)
 					this.appraiserChangeStage = {
 						id: this.dataPC[config.re_assign],
-						type: config.re_assign
+						type: config.re_assign,
 					};
 				this.next_status = config.status;
 				this.dataPC.target_status = config.status;
@@ -1162,16 +1159,16 @@ export default {
 		},
 		changeHeight() {
 			let maxHeight = 0;
-			this.principleConfig.forEach(i => {
+			this.principleConfig.forEach((i) => {
 				let ElementHeight = document.getElementById(i.id).offsetHeight;
 				if (maxHeight < ElementHeight) {
 					maxHeight = ElementHeight;
 				}
 			});
-			this.principleConfig.forEach(i => {
+			this.principleConfig.forEach((i) => {
 				document.getElementById(i.id).style.height = maxHeight + "px";
 			});
-		}
+		},
 	},
 	updated() {
 		this.changeHeight();
@@ -1180,7 +1177,7 @@ export default {
 		this.preCertificateStore.updateRouteToast(this.$router, this.$toast);
 
 		const listElm = document.querySelector("#infinite-list");
-		listElm.addEventListener("scroll", e => {
+		listElm.addEventListener("scroll", (e) => {
 			if (
 				listElm.scrollTop + listElm.clientHeight >=
 				listElm.scrollHeight - 5
@@ -1192,7 +1189,7 @@ export default {
 	},
 	beforeMount() {
 		this.getProfiles();
-	}
+	},
 };
 </script>
 
