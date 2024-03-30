@@ -34,20 +34,18 @@
 						<b-card
 							:class="{
 								border_expired: checkDateExpired(element),
-								['border-' + config.css.color]: true
+								['border-' + config.css.color]: true,
 							}"
 							class="card_container mb-3"
 							v-for="element in subStatusData[config.id]"
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<div class=" ml-0">
+								<div class="ml-0">
 									<span
 										@click="handleDetailCertificate(element.id)"
 										class="content_id"
-										:class="
-											`bg-${config.css.color}-15 text-${config.css.color}`
-										"
+										:class="`bg-${config.css.color}-15 text-${config.css.color}`"
 										>{{ element.slug }}</span
 									>
 								</div>
@@ -57,7 +55,7 @@
 										@click="
 											handleDetailPreCertificate(element.pre_certificate_id)
 										"
-										class="arrowBox arrow-right "
+										class="arrowBox arrow-right"
 										:id="`${element.pre_certificate_id + element.id}`"
 									>
 										<icon-base
@@ -86,7 +84,7 @@
 							<div class="property-content mb-2 d-flex color_content">
 								<div class="label_container d-flex">
 									<img
-										style="min-width:15px"
+										style="min-width: 15px"
 										width="15px"
 										height="21px"
 										class="mr-2"
@@ -123,11 +121,11 @@
 								<div class="label_container d-flex">
 									<span
 										v-if="getExpireDate(element).includes('Đã hết')"
-										style="font-weight: 500; color: red;"
+										style="font-weight: 500; color: red"
 									>
 										{{ getExpireDate(element) }}
 									</span>
-									<span v-else style="font-weight: 500;">
+									<span v-else style="font-weight: 500">
 										{{ getExpireDate(element) }}
 									</span>
 								</div>
@@ -139,7 +137,7 @@
 										class="mr-2"
 										src="@/assets/icons/ic_taglink.svg"
 										alt="user"
-									/><span style="color:#8B94A3">{{
+									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span>
 								</div>
@@ -243,7 +241,7 @@ import {
 	UserIcon,
 	DollarSignIcon,
 	HomeIcon,
-	ClockIcon
+	ClockIcon,
 } from "vue-feather-icons";
 import {
 	BCard,
@@ -251,7 +249,7 @@ import {
 	BCol,
 	BFormGroup,
 	BFormInput,
-	BTooltip
+	BTooltip,
 } from "bootstrap-vue";
 import draggable from "vuedraggable";
 import JsonExcel from "vue-json-excel";
@@ -275,7 +273,7 @@ export default {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
 				slider: "#FAA831",
-				arrow: "#000000"
+				arrow: "#000000",
 			},
 			now: new Date(),
 			total_amount: "",
@@ -284,8 +282,8 @@ export default {
 			listTest: [
 				{
 					name: "test",
-					id: 1
-				}
+					id: 1,
+				},
 			],
 			idUpdate: "",
 			idData: "",
@@ -341,7 +339,7 @@ export default {
 			isCheckPrice: false,
 			isCheckLegal: false,
 			isCheckVersion: false,
-			changeStatusRequire: {}
+			changeStatusRequire: {},
 		};
 	},
 	components: {
@@ -364,7 +362,7 @@ export default {
 		ModalAppraisal,
 		KanboardStatus,
 		ModalNotificationCertificate,
-		ModalNotificationWithAssign
+		ModalNotificationWithAssign,
 	},
 	setup() {
 		const workFlowConfigStore = useWorkFlowConfig();
@@ -376,7 +374,7 @@ export default {
 			jsonConfig.value = configs.value.hstdConfig;
 			if (jsonConfig.value && jsonConfig.value.principle) {
 				principleConfig.value = jsonConfig.value.principle.filter(
-					i => i.isActive === 1
+					(i) => i.isActive === 1
 				);
 			}
 		};
@@ -385,7 +383,7 @@ export default {
 			appraiserChangeStage,
 			jsonConfig,
 			principleConfig,
-			startFunction
+			startFunction,
 		};
 	},
 	created() {
@@ -399,7 +397,7 @@ export default {
 		}
 		this.user_id = profile.data.user.id;
 		const permission = this.$store.getters.currentPermissions;
-		permission.forEach(value => {
+		permission.forEach((value) => {
 			if (value === PERMISSIONS.VIEW_CERTIFICATE_BRIEF) {
 				this.view = true;
 			}
@@ -422,10 +420,10 @@ export default {
 	},
 	computed: {
 		updateDate() {
-			return dateUpdate => {
+			return (dateUpdate) => {
 				return moment(dateUpdate).fromNow();
 			};
-		}
+		},
 	},
 
 	methods: {
@@ -543,12 +541,12 @@ export default {
 		checkMove(evt) {
 			let draggerElement = evt.draggedContext.element;
 			let configId = parseInt(evt.from.id);
-			let config = this.principleConfig.find(i => i.id === configId);
+			let config = this.principleConfig.find((i) => i.id === configId);
 			let user = this.profile.data.user;
 			let check = false;
 			if (evt.from.id !== evt.to.id) {
 				if (config && config.put_require.length > 0) {
-					config.put_require.forEach(i => {
+					config.put_require.forEach((i) => {
 						if (
 							(i === "created_by" && draggerElement[i] === user.id) ||
 							(i !== "created_by" && draggerElement[i] === user.appraiser.id)
@@ -567,9 +565,9 @@ export default {
 			this.appraiserChangeStage = null;
 			let targetId = parseInt(evt.to.id);
 			let check = false;
-			let targetConfig = this.principleConfig.find(i => i.id === targetId);
+			let targetConfig = this.principleConfig.find((i) => i.id === targetId);
 			let draggableDescription = this.config.target_description.find(
-				i => i.id === targetId
+				(i) => i.id === targetId
 			);
 			let message = draggableDescription
 				? draggableDescription.description
@@ -579,7 +577,7 @@ export default {
 				if (targetConfig.re_assign)
 					this.appraiserChangeStage = {
 						id: this.elementDragger[targetConfig.re_assign],
-						type: targetConfig.re_assign
+						type: targetConfig.re_assign,
 					};
 				this.isMoved = check;
 				this.next_status = targetConfig.status;
@@ -600,7 +598,7 @@ export default {
 				message: message,
 				type: type,
 				position: position,
-				duration: duration
+				duration: duration,
 			});
 		},
 		checkRequired(require, data) {
@@ -650,7 +648,7 @@ export default {
 		},
 		async updateAppraisal(data, id, status_expired_at) {
 			this.isAccept = true;
-			this.listCertificateTemp.forEach(item => {
+			this.listCertificateTemp.forEach((item) => {
 				if (item.id === id) {
 					item.status = 2;
 				}
@@ -661,10 +659,10 @@ export default {
 			this.showAppraisalDialog = false;
 			if (!this.isAccept) {
 				this.listCertificateDraft = this.listCertificateTemp.filter(
-					item => item.status === 1
+					(item) => item.status === 1
 				);
 				this.listCertificateOpen = this.listCertificateTemp.filter(
-					item => item.status === 2
+					(item) => item.status === 2
 				);
 			}
 			this.isAccept = false;
@@ -684,7 +682,7 @@ export default {
 		},
 		async handleChangeVerify(data, id, status_expired_at) {
 			this.isAccept = true;
-			this.listCertificateTemp.forEach(item => {
+			this.listCertificateTemp.forEach((item) => {
 				if (item.id === id) {
 					item.status = 3;
 				}
@@ -695,10 +693,10 @@ export default {
 			this.showVerifyCertificate = false;
 			if (!this.isAccept) {
 				this.listCertificateOpen = this.listCertificateTemp.filter(
-					item => item.status === 2
+					(item) => item.status === 2
 				);
 				this.listCertificateLock = this.listCertificateTemp.filter(
-					item => item.status === 3
+					(item) => item.status === 3
 				);
 				this.idUpdate = "";
 			}
@@ -714,7 +712,7 @@ export default {
 
 		async handleChangeAccept2(note, reason_id, tempAppraiser, estime) {
 			const config = this.jsonConfig.principle.find(
-				item => item.status === this.next_status && item.isActive === 1
+				(item) => item.status === this.next_status && item.isActive === 1
 			);
 			// let status_expired_at_temp = config.process_time
 			// 	? await this.getExpireStatusDate(config)
@@ -737,7 +735,7 @@ export default {
 				status_note: note,
 				status_reason_id: reason_id,
 				status_description: this.message,
-				status_config: this.jsonConfig.principle
+				status_config: this.jsonConfig.principle,
 			};
 			if (tempAppraiser) {
 				dataSend[tempAppraiser.type] = tempAppraiser.id;
@@ -749,7 +747,7 @@ export default {
 			);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(
-					i => i.id === this.idDragger
+					(i) => i.id === this.idDragger
 				);
 				if (returnData) {
 					returnData.status = this.next_status;
@@ -763,7 +761,7 @@ export default {
 					message: this.confirm_message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				this.key_dragg++;
 			} else {
@@ -771,7 +769,7 @@ export default {
 					message: `${res.error.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				this.handleCancelAccept2();
 			}
@@ -782,7 +780,7 @@ export default {
 		async handleUpdateStatus(id, data, message) {
 			const res = await CertificationBrief.updateStatusCertificate(id, data);
 			if (res.data) {
-				let returnData = this.subStatusDataReturn.find(i => i.id === id);
+				let returnData = this.subStatusDataReturn.find((i) => i.id === id);
 				if (returnData) {
 					returnData.status = data.status;
 					returnData.sub_status = data.sub_status;
@@ -793,7 +791,7 @@ export default {
 					message: message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				this.key_dragg++;
 			} else {
@@ -801,7 +799,7 @@ export default {
 					message: `${res.error.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000
+					duration: 3000,
 				});
 				this.showDetailPopUp = false;
 			}
@@ -822,12 +820,12 @@ export default {
 			this.returnData();
 		},
 		returnData() {
-			this.principleConfig.forEach(item => {
+			this.principleConfig.forEach((item) => {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(
-					i => i.status === item.status && i.sub_status === item.sub_status
+					(i) => i.status === item.status && i.sub_status === item.sub_status
 				);
 				this.subStatusDataTmp[item.id] = this.listCertificate.filter(
-					i => i.status === item.status && i.sub_status === item.sub_status
+					(i) => i.status === item.status && i.sub_status === item.sub_status
 				);
 			});
 			this.key_dragg++;
@@ -839,8 +837,8 @@ export default {
 			let url = this.$router.resolve({
 				name: "pre_certification.detail",
 				query: {
-					id: id.toString()
-				}
+					id: id.toString(),
+				},
 			}).href;
 
 			window.open(url, "_blank");
@@ -913,22 +911,22 @@ export default {
 		async handleUpdateListKanBan(id, status) {
 			this.showDetailPopUp = false;
 			// await this.updateDataWorkFlow()
-			this.listCertificateTemp.forEach(item => {
+			this.listCertificateTemp.forEach((item) => {
 				if (item.id === id) {
 					item.status = status;
 				}
 			});
 			this.listCertificateDraft = this.listCertificateTemp.filter(
-				item => item.status === 1
+				(item) => item.status === 1
 			);
 			this.listCertificateOpen = this.listCertificateTemp.filter(
-				item => item.status === 2
+				(item) => item.status === 2
 			);
 			this.listCertificateOpen = this.listCertificateTemp.filter(
-				item => item.status === 2
+				(item) => item.status === 2
 			);
 			this.listCertificateLock = this.listCertificateTemp.filter(
-				item => item.status === 3
+				(item) => item.status === 3
 			);
 		},
 		async updateDataWorkFlow(search) {
@@ -938,19 +936,19 @@ export default {
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
 					this.listCertificateDraftTemp = resp.data.HSTD.filter(
-						item => item.status === 1
+						(item) => item.status === 1
 					);
 					this.listCertificateOpenTemp = resp.data.HSTD.filter(
-						item => item.status === 2
+						(item) => item.status === 2
 					);
 					this.listCertificateLockTemp = resp.data.HSTD.filter(
-						item => item.status === 3
+						(item) => item.status === 3
 					);
 					this.listCertificatesCloseTemp = resp.data.HSTD.filter(
-						item => item.status === 4
+						(item) => item.status === 4
 					);
 					this.listCertificatesCanceledTemp = resp.data.HSTD.filter(
-						item => item.status === 5
+						(item) => item.status === 5
 					);
 					this.listCertificateDraft = [];
 					this.listCertificateOpen = [];
@@ -1005,19 +1003,19 @@ export default {
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
 					this.listCertificateDraftTemp = resp.data.HSTD.filter(
-						item => item.status === 1
+						(item) => item.status === 1
 					);
 					this.listCertificateOpenTemp = resp.data.HSTD.filter(
-						item => item.status === 2
+						(item) => item.status === 2
 					);
 					this.listCertificateLockTemp = resp.data.HSTD.filter(
-						item => item.status === 3
+						(item) => item.status === 3
 					);
 					this.listCertificatesCloseTemp = resp.data.HSTD.filter(
-						item => item.status === 4
+						(item) => item.status === 4
 					);
 					this.listCertificatesCanceledTemp = resp.data.HSTD.filter(
-						item => item.status === 5
+						(item) => item.status === 5
 					);
 					this.listCertificateDraft = [];
 					this.listCertificateOpen = [];
@@ -1073,9 +1071,9 @@ export default {
 					this.listCertificate = resp.data.HSTD;
 					if (this.principleConfig.length > 0) {
 						let dataTmp = [];
-						this.principleConfig.forEach(item => {
+						this.principleConfig.forEach((item) => {
 							dataTmp = this.listCertificate.filter(
-								i =>
+								(i) =>
 									i.status === item.status && i.sub_status === item.sub_status
 							);
 							this.subStatusDataTmp[item.id] = dataTmp;
@@ -1099,7 +1097,7 @@ export default {
 			this.currency = value;
 		},
 		loadMore() {
-			setTimeout(e => {
+			setTimeout((e) => {
 				let count = this.countData;
 				for (var i = count, j = count; i < j + 10; i++) {
 					this.listCertificateDraftTemp[i] &&
@@ -1131,7 +1129,7 @@ export default {
 			}, 200);
 		},
 		loadMore2() {
-			setTimeout(e => {
+			setTimeout((e) => {
 				this.pushSubStatusData();
 			}, 200);
 		},
@@ -1141,7 +1139,7 @@ export default {
 			let config = this.principleConfig;
 			let data = [];
 			let dataReturn = this.subStatusDataReturn;
-			config.forEach(item => {
+			config.forEach((item) => {
 				data = this.subStatusData[item.id] ? this.subStatusData[item.id] : [];
 				if (tmp[item.id] && tmp[item.id].length > count) {
 					for (var i = count; i < count + 10; i++) {
@@ -1161,7 +1159,7 @@ export default {
 		},
 		getConfigByStatus(status, sub_status) {
 			return this.principleConfig.filter(
-				item =>
+				(item) =>
 					item.status === status &&
 					item.sub_status === sub_status &&
 					item.isActive === 1
@@ -1177,13 +1175,15 @@ export default {
 					this.detailData.status < 9 &&
 					this.position_profile &&
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-						this.position_profile === "NHAN-VIEN-KINH-DOANH")
+						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+						(this.detailData.appraiser_sale &&
+							this.detailData.appraiser_sale.user_id === this.user_id))
 				) {
 					this.$toast.open({
 						message:
-							"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 						type: "error",
-						position: "top-right"
+						position: "top-right",
 					});
 					return;
 				}
@@ -1193,14 +1193,14 @@ export default {
 				await this.$toast.open({
 					message: "Lấy dữ liệu thất bại",
 					type: "error",
-					position: "top-right"
+					position: "top-right",
 				});
 			}
 		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
 			let check = true;
-			let config = this.principleConfig.find(i => i.id === target.id);
+			let config = this.principleConfig.find((i) => i.id === target.id);
 			this.elementDragger = this.detailData;
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
 				console.log("Data detail hoàn thành", this.detailData);
@@ -1210,7 +1210,7 @@ export default {
 							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
 						type: "error",
 						position: "top-right",
-						duration: 3000
+						duration: 3000,
 					});
 
 					return;
@@ -1237,7 +1237,7 @@ export default {
 								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
 							type: "error",
 							position: "top-right",
-							duration: 3000
+							duration: 3000,
 						});
 						return;
 					}
@@ -1252,7 +1252,7 @@ export default {
 				if (config.re_assign)
 					this.appraiserChangeStage = {
 						id: this.elementDragger[config.re_assign],
-						type: config.re_assign
+						type: config.re_assign,
 					};
 				this.next_status = config.status;
 				this.next_sub_status = config.sub_status;
@@ -1268,23 +1268,23 @@ export default {
 		},
 		changeHeight() {
 			let maxHeight = 0;
-			this.principleConfig.forEach(i => {
+			this.principleConfig.forEach((i) => {
 				let ElementHeight = document.getElementById(i.id).offsetHeight;
 				if (maxHeight < ElementHeight) {
 					maxHeight = ElementHeight;
 				}
 			});
-			this.principleConfig.forEach(i => {
+			this.principleConfig.forEach((i) => {
 				document.getElementById(i.id).style.height = maxHeight + "px";
 			});
-		}
+		},
 	},
 	updated() {
 		this.changeHeight();
 	},
 	mounted() {
 		const listElm = document.querySelector("#infinite-list");
-		listElm.addEventListener("scroll", e => {
+		listElm.addEventListener("scroll", (e) => {
 			if (
 				listElm.scrollTop + listElm.clientHeight >=
 				listElm.scrollHeight - 5
@@ -1300,7 +1300,7 @@ export default {
 			this.getDataWorkFlow2(this.search_kanban.search);
 		} else this.getDataWorkFlow2();
 		this.getProfiles();
-	}
+	},
 };
 </script>
 
