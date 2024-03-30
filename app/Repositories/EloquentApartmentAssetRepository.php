@@ -643,7 +643,6 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     {
         $data = [];
         $apartmentAsset = $this->getApartmentAssetById($id);
-        Log::info('calculatePrice');
         $assets = $apartmentAsset->assets_general;
         $adapters = $apartmentAsset->apartmentAdapter;
         $comparisons = $apartmentAsset->comparisonFactor;
@@ -651,18 +650,11 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
         $apartmentArea = $apartmentAsset->apartmentAssetProperties->area ?? 0;
         $assetPrice = $apartmentAsset->price;
         $otherAssets = $apartmentAsset->otherAssets;
-        Log::info('calculatePrice2');
         if (isset($assets) && isset($adapters) && isset($comparisons)) {
-            Log::info(
-                'calculatePrice3'
-            );
             $total = 0;
             $min = 0;
             $max = 0;
             foreach ($assets as $asset) {
-                Log::info(
-                    'calculatePrice4'
-                );
                 $adapter = $adapters->where('asset_general_id', $asset->id)->first();
                 $comparison = $comparisons->where('asset_general_id', $asset->id);
                 $legal = $comparison->where('type', 'phap_ly')->first();
@@ -700,34 +692,32 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $data[$asset->id]['not_legal_rate'] = $notLegalRate;
                 $data[$asset->id]['price'] = $price;
             }
-            // $apartmentPrice = 0;
-            // if(isset($methods)){
-            //     $method = $methods['thong_nhat_muc_gia_chi_dan']??null;
-            //     if(isset($method)){
-            //         switch($method['slug_value']){
-            //             case 'thap-nhat':
-            //                 $apartmentPrice = $min;
-            //                 break;
-            //             case 'cao-nhat':
-            //                 $apartmentPrice = $max;
-            //                 break;
-            //             default:
-            //                 $apartmentPrice = $total/3;
-            //         }
-            //         $slug = 'apartment_asset_price';
-            //         $this->updateOrCreatePrice($id, $slug, $apartmentPrice??0);
-            //     }
-            // }
+            $apartmentPrice = 0;
+            if (isset($methods)) {
+                $method = $methods['thong_nhat_muc_gia_chi_dan'] ?? null;
+                if (isset($method)) {
+                    switch ($method['slug_value']) {
+                        case 'thap-nhat':
+                            $apartmentPrice = $min;
+                            break;
+                        case 'cao-nhat':
+                            $apartmentPrice = $max;
+                            break;
+                        default:
+                            $apartmentPrice = $total / 3;
+                    }
+                    $slug = 'apartment_asset_price';
+                    $this->updateOrCreatePrice($id, $slug, $apartmentPrice ?? 0);
+                }
+            }
             $slug = 'apartment_area';
             $this->updateOrCreatePrice($id, $slug, $apartmentArea ?? 0);
             //total
             $roundTotal = 0;
             $otherPrice = 0;
-            $apartmentPrice  =  0;
             if (isset($assetPrice)) {
                 $priceRound = $assetPrice->where('slug', 'round_total')->first();
                 $roundTotal = $priceRound->value ?? 0;
-                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first()->value ?? 0;
             }
             if (isset($otherAssets)) {
                 $otherPrice = $otherAssets->sum('total_price');
