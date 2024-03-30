@@ -439,8 +439,8 @@
 			@cancel="isHandleAction = false"
 			:notification="
 				message == 'Từ chối' || message == 'Khôi phục' || message == 'Hủy'
-					? `Bạn có muốn '${message}' yêu cầu này?`
-					: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="ycsbConfig"
 			:status_text="message"

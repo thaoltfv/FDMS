@@ -91,7 +91,8 @@
 								<div class="col-2">
 									<span class="number-style-input">
 										{{
-											main_land.total_price
+											main_land.total_price !== null &&
+											main_land.total_price !== undefined
 												? formatNumber(main_land.total_price)
 												: ""
 										}}
@@ -173,7 +174,8 @@
 								<div class="col-2 ">
 									<span class="number-style-input">
 										{{
-											planning_area.total_price
+											planning_area.total_price !== null &&
+											planning_area.total_price !== undefined
 												? formatNumber(planning_area.total_price)
 												: ""
 										}}
@@ -299,7 +301,8 @@
 								<div class="col-2">
 									<span class="number-style-input">
 										{{
-											tangible.total_price
+											tangible.total_price !== null &&
+											tangible.total_price !== undefined
 												? formatNumber(tangible.total_price)
 												: ""
 										}}
@@ -909,22 +912,22 @@ export default {
 			return boolA;
 		},
 		totalPriceTotalArea() {
-			const temp = this.step_3.total_area.reduce(
-				(total, area) => total + Number(area.total_price),
-				0
-			);
-			const temp2 = this.step_3.planning_area.reduce(
-				(total, area) => total + Number(area.total_price),
-				0
-			);
+			const temp = this.step_3.total_area.reduce((total, area) => {
+				area.total_price = area.total_price || 0;
+				return total + Number(area.total_price);
+			}, 0);
+			const temp2 = this.step_3.planning_area.reduce((total, area) => {
+				area.total_price = area.total_price || 0;
+				return total + Number(area.total_price);
+			}, 0);
 			return temp + temp2;
 		},
 
 		totalPriceTangibleAsset() {
-			return this.step_3.tangible_assets.reduce(
-				(total, area) => total + Number(area.total_price),
-				0
-			);
+			return this.step_3.tangible_assets.reduce((total, area) => {
+				area.total_price = area.total_price || 0;
+				return total + Number(area.total_price);
+			}, 0);
 		},
 		totalAllPrice() {
 			return this.totalPriceTotalArea + this.totalPriceTangibleAsset;
@@ -1361,6 +1364,8 @@ export default {
 					this.step_3.total_area[index].total_price =
 						this.step_3.total_area[index].unit_price *
 						this.step_3.total_area[index].main_area;
+				} else {
+					this.step_3.total_area[index].total_price = 0;
 				}
 			}
 		},
@@ -1371,6 +1376,8 @@ export default {
 					this.step_3.apartment_finals[index].total_price =
 						this.step_3.apartment_finals[index].unit_price *
 						this.step_3.apartment_finals[index].total_area;
+				} else {
+					this.step_3.apartment_finals[index].total_price = 0;
 				}
 			}
 		},
@@ -1392,6 +1399,8 @@ export default {
 					this.step_3.planning_area[index].total_price =
 						this.step_3.planning_area[index].unit_price *
 						this.step_3.planning_area[index].planning_area;
+				} else {
+					this.step_3.planning_area[index].total_price = 0;
 				}
 			}
 		},

@@ -997,6 +997,23 @@ export const usePriceEstimatesStore = defineStore(
 					position: "top-right"
 				});
 			} else {
+				if (
+					!priceEstimates.value.step_3.tangible_assets.every(
+						asset =>
+							asset.remaining_quality !== null &&
+							asset.remaining_quality !== undefined &&
+							asset.remaining_quality !== "" &&
+							asset.remaining_quality >= 0 &&
+							asset.remaining_quality <= 100
+					)
+				) {
+					configThis.value.toast.open({
+						message: "Vui lòng kiểm tra lại CLCL",
+						type: "error",
+						position: "top-right"
+					});
+					return;
+				}
 				handleSubmitStep_3(
 					priceEstimates.value.step_3,
 					priceEstimates.value.id
@@ -1018,37 +1035,38 @@ export const usePriceEstimatesStore = defineStore(
 			let temp = 0;
 			let temp1 = 0;
 			let temp2 = 0;
+
 			if (!miscVariable.value.isApartment) {
 				if (tempUpdate.total_area && tempUpdate.total_area.length > 0) {
-					temp = tempUpdate.total_area.reduce(
-						(total, area) => total + Number(area.total_price),
-						0
-					);
+					temp = tempUpdate.total_area.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
 				}
 				if (tempUpdate.planning_area && tempUpdate.planning_area.length > 0) {
-					temp1 = tempUpdate.planning_area.reduce(
-						(total, area) => total + Number(area.total_price),
-						0
-					);
+					temp1 = tempUpdate.planning_area.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
 				}
 				if (
 					tempUpdate.tangible_assets &&
 					tempUpdate.tangible_assets.length > 0
 				) {
-					temp2 = tempUpdate.tangible_assets.reduce(
-						(total, area) => total + Number(area.total_price),
-						0
-					);
+					temp2 = tempUpdate.tangible_assets.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
 				}
 			} else {
 				if (
 					tempUpdate.apartment_finals &&
 					tempUpdate.apartment_finals.length > 0
 				) {
-					temp = tempUpdate.apartment_finals.reduce(
-						(total, area) => total + Number(area.total_price),
-						0
-					);
+					temp = tempUpdate.apartment_finals.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
 				}
 			}
 			tempUpdate.total_price = temp + temp1 + temp2;
