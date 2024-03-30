@@ -625,16 +625,12 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     #region calculate price
     private function updateOrCreatePrice($id, $slug, $value)
     {
-        Log::info('updateOrCreatePrice');
 
         $apartmentPriceData = ['apartment_asset_id' => $id, 'slug' => $slug, 'value' => $value];
-        Log::info('Apartment Price Data:', $apartmentPriceData);
 
         $apartmentCheckExists = ['apartment_asset_id' => $id, 'slug' => $slug];
-        Log::info('Apartment Check Exists:', $apartmentCheckExists);
 
         $apartmentPriceArr = new ApartmentAssetPrice($apartmentPriceData);
-        Log::info('Apartment Price Array:', $apartmentPriceArr->attributesToArray());
 
         ApartmentAssetPrice::query()->updateOrCreate($apartmentCheckExists, $apartmentPriceArr->attributesToArray());
     }
@@ -738,7 +734,6 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
         if (ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->forceDelete();
         }
-        Log::info('calculatePriceNew');
         $this->calculatePrice($id);
     }
 
