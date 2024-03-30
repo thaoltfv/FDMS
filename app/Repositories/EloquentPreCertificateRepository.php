@@ -1287,10 +1287,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
                         break;
                     case 3:
+                    case 6:
                         if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền cập nhật.', 'exception' => ''];
                         break;
-                    case 6:
+                    case 7:
                         if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền khôi phục.', 'exception' => ''];
                         break;
