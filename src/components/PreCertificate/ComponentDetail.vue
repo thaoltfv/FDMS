@@ -8,8 +8,8 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
-						<div class="row" style="display: flex;align-items: center;">
-							<div class=" color_content card-status-pre-certificate">
+						<div class="row" style="display: flex; align-items: center">
+							<div class="color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
@@ -45,7 +45,7 @@
 									<div
 										v-if="editInfo && edit"
 										@click="handleShowAppraiseInformation"
-										class="btn-edit "
+										class="btn-edit"
 									>
 										<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
 									</div>
@@ -110,7 +110,7 @@
 									</p>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline ">Chiết khấu:</strong>
+									<strong class="margin_content_inline">Chiết khấu:</strong>
 									<p>
 										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
 									</p>
@@ -183,7 +183,7 @@
 											<div
 												v-if="editAppraiser && edit"
 												@click="handleShowAppraisal"
-												class="btn-edit "
+												class="btn-edit"
 											>
 												<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
 											</div>
@@ -283,7 +283,7 @@
 			:visible="visible"
 			@close="onClose"
 		>
-			<a-timeline style="padding-bottom: 10px;">
+			<a-timeline style="padding-bottom: 10px">
 				<a-timeline-item
 					v-for="(item, index) in historyList"
 					:key="index"
@@ -338,7 +338,7 @@
 						<div
 							v-if="allowEditFile.result && edit"
 							@click="dialogRequireForStage3 = true"
-							class="btn-edit "
+							class="btn-edit"
 						>
 							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
 						</div>
@@ -1241,7 +1241,7 @@ export default {
 			this.showDetailPopUp = false;
 			this.isHandleAction = false;
 		},
-		async handleAction2(note, reason_id, tempAppraiser) {
+		async handleAction2(note, reason_id, tempAppraiser, estime) {
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;

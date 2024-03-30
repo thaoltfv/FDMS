@@ -41,7 +41,7 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<div class=" ml-0">
+								<div class="ml-0">
 									<span
 										@click="handleDetailPreCertificate(element.id)"
 										class="content_id"
@@ -84,7 +84,7 @@
 							<div class="property-content mb-2 d-flex color_content">
 								<div class="label_container d-flex">
 									<img
-										style="min-width:15px"
+										style="min-width: 15px"
 										width="15px"
 										height="21px"
 										class="mr-2"
@@ -124,7 +124,7 @@
 									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
 									<span
 										v-if="getExpireDate(element).includes('Đã hết')"
-										style="font-weight: 500; color: red;"
+										style="font-weight: 500; color: red"
 									>
 										{{ getExpireDate(element) }}
 									</span>
@@ -145,7 +145,7 @@
 										class="mr-2"
 										src="@/assets/icons/ic_taglink.svg"
 										alt="user"
-									/><span style="color:#8B94A3">{{
+									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span>
 								</div>
@@ -786,12 +786,12 @@ export default {
 			} else return false;
 		},
 
-		async handleChangeAccept2(note, reason_id, tempAppraiser) {
-			if (this.dataPC.target_code == "in_ho_so") {
-				console.log("Mới tới in sơ bộ", this.dataPC);
+		async handleChangeAccept2(note, reason_id, tempAppraiser, estime) {
+			// if (this.dataPC.target_code == "in_ho_so") {
+			// 	console.log("Mới tới in sơ bộ", this.dataPC);
 
-				return;
-			}
+			// 	return;
+			// }
 			if (this.dataPC.target_code == "chuyen_chinh_thuc") {
 				this.updateToOffical(note);
 				return;

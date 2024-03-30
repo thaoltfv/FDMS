@@ -93,14 +93,14 @@
 						v-for="(re, index) in real_estate"
 						:id="('content_appraise_asset_' + id).toString()"
 					>
-						<p class="text-main text-truncate" style="max-width: 220px;">
+						<p class="text-main text-truncate" style="max-width: 220px">
 							{{ "TSTĐ" + (index + 1) + ": " + re.appraise_asset }}
 						</p>
 					</div>
 					<p
 						v-else-if="real_estate && real_estate.length === 1"
 						class="text-main d-inline-block text-truncate"
-						style="max-width: 220px;"
+						style="max-width: 220px"
 						:id="('content_appraise_asset_' + id).toString()"
 					>
 						{{ re.appraise_asset }}
@@ -115,7 +115,7 @@
 							v-if="real_estate && real_estate.length > 1"
 							v-for="(re, index) in real_estate"
 						>
-							<p class="text-main" style="max-width: 220px;">
+							<p class="text-main" style="max-width: 220px">
 								{{ "- TSTĐ" + (index + 1) + ": " + re.appraise_asset }}
 							</p>
 						</div>
@@ -136,7 +136,7 @@
 					</p>
 					<p
 						class="text-secondary d-inline-block text-truncate"
-						style="max-width: 220px;"
+						style="max-width: 220px"
 						:id="`content_appraise_purpose_${id}`"
 					>
 						Mục đích: {{ appraise_purpose ? appraise_purpose.name : "-" }}
@@ -222,10 +222,10 @@
 			</div>
 		</div>
 	</div>
-	<div v-else class="table-wrapper" style="margin: 0;">
+	<div v-else class="table-wrapper" style="margin: 0">
 		<div
 			class="table-detail position-relative empty-data"
-			style="overflow: scroll;max-height: 76vh;"
+			style="overflow: scroll; max-height: 76vh"
 		>
 			<b-card
 				:class="{
@@ -255,7 +255,7 @@
 				<div class="property-content mb-2 d-flex color_content">
 					<div class="label_container d-flex">
 						<img
-							style="min-width:15px"
+							style="min-width: 15px"
 							width="15px"
 							height="21px"
 							class="mr-2"
@@ -300,7 +300,7 @@
 							class="mr-2"
 							src="@/assets/icons/ic_taglink.svg"
 							alt="user"
-						/><span style="color:#8B94A3">{{ element.document_count }}</span>
+						/><span style="color: #8b94a3">{{ element.document_count }}</span>
 					</div>
 					<img
 						class="img_user"
@@ -313,7 +313,7 @@
 				</div>
 			</b-card>
 		</div>
-		<div class="pagination-wrapper" style="margin-bottom: 20px;">
+		<div class="pagination-wrapper" style="margin-bottom: 20px">
 			<div class="page-size">
 				Hiển thị
 				<a-select
@@ -817,7 +817,7 @@ export default {
 				this.config = config;
 				check = this.checkRequired(config.require, this.detailData);
 			}
-			// // console.log(check)
+
 			if (check) {
 				this.next_status = config.status;
 				this.next_sub_status = config.sub_status;
@@ -860,11 +860,13 @@ export default {
 					this.detailData.status < 9 &&
 					this.position_profile &&
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-						this.position_profile === "NHAN-VIEN-KINH-DOANH")
+						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+						(this.detailData.appraiser_sale &&
+							this.detailData.appraiser_sale.user_id === this.user_id))
 				) {
 					this.$toast.open({
 						message:
-							"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 						type: "error",
 						position: "top-right"
 					});
@@ -908,7 +910,6 @@ export default {
 			return status_expired_at;
 		},
 		getExpireDate(element) {
-			// // console.log('elemt', element)
 			let strExpire = "";
 			switch (element.status) {
 				case 1:
@@ -1094,16 +1095,19 @@ export default {
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 		async handleDetail(id, property) {
+			console.log(this.listCertificates);
 			if (
 				property.status &&
 				property.status < 9 &&
 				this.position_profile &&
 				(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-					this.position_profile === "NHAN-VIEN-KINH-DOANH")
+					this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+					(property.appraiser_sale &&
+						property.appraiser_sale.user_id === this.user_id))
 			) {
 				this.$toast.open({
 					message:
-						"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+						"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 					type: "error",
 					position: "top-right"
 				});

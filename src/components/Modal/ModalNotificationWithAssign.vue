@@ -46,10 +46,10 @@
 					<div
 						v-if="
 							appraiser &&
-							status_text &&
-							status_text != 'Khôi phục' &&
-							status_text != 'Hủy' &&
-							status_text != 'Từ chối'
+								status_text &&
+								status_text != 'Khôi phục' &&
+								status_text != 'Hủy' &&
+								status_text != 'Từ chối'
 						"
 						class="form-group-container row"
 					>
@@ -141,12 +141,13 @@ import InputCategory from "@/components/Form/InputCategory";
 import WareHouse from "@/models/WareHouse";
 import InputDatePickerV2 from "../Form/InputDatePickerV2.vue";
 import InputNumberMinute from "../Form/InputNumberMinute.vue";
+import moment from "moment";
 export default {
 	components: {
 		InputTextarea,
 		InputCategory,
 		InputDatePickerV2,
-		InputNumberMinute,
+		InputNumberMinute
 	},
 	name: "ModalNotificationPreCertificateNote",
 	data() {
@@ -155,7 +156,7 @@ export default {
 			rows: 3,
 			reason_id: null,
 			reasons: [],
-			reasonCancelPC: [],
+			reasonCancelPC: []
 		};
 	},
 	props: [
@@ -164,7 +165,7 @@ export default {
 		"status_text",
 		"workflowName",
 		"dataHSTD",
-		"status_next",
+		"status_next"
 	],
 	setup(props) {
 		const preCertificateStore = usePreCertificateStore();
@@ -177,7 +178,7 @@ export default {
 		const estimateCompleteTime = ref(null);
 		const chosenAppraiserOriginal = ref(null);
 		const labelAppraiser = ref(null);
-		const getExpireStatusDate = (config) => {
+		const getExpireStatusDate = config => {
 			const configTemp = config ? config : null;
 			let dateConvert = new Date();
 			let minutes = configTemp.process_time ? configTemp.process_time : 1440;
@@ -206,7 +207,7 @@ export default {
 			labelAppraiser.value =
 				configs.value[props.workflowName].appraiser[props.appraiser.type];
 			const config = configs.value[props.workflowName].principle.find(
-				(item) => item.status === props.status_next && item.isActive === 1
+				item => item.status === props.status_next && item.isActive === 1
 			);
 
 			let status_expired_at_temp = config.process_time
@@ -229,7 +230,7 @@ export default {
 			estimateCompleteTime,
 			labelAppraiser,
 			lstDataConfig,
-			preCertificateStore,
+			preCertificateStore
 		};
 	},
 	computed: {
@@ -237,14 +238,14 @@ export default {
 			return {
 				data: this.reasons,
 				id: "id",
-				key: "description",
+				key: "description"
 			};
 		},
 		optionsReasonsCancelPC() {
 			return {
 				data: this.reasonCancelPC,
 				id: "id",
-				key: "description",
+				key: "description"
 			};
 		},
 
@@ -252,9 +253,9 @@ export default {
 			return {
 				data: this.lstDataConfig.appraiser_sales,
 				id: "id",
-				key: "name",
+				key: "name"
 			};
-		},
+		}
 	},
 	mounted() {
 		this.getDictionary();
@@ -289,7 +290,7 @@ export default {
 					message: "Vui lòng chọn lý do hủy sơ bộ",
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				return;
 			}
@@ -298,7 +299,7 @@ export default {
 					message: "Vui lòng chọn " + this.labelAppraiser,
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				return;
 			}
@@ -307,7 +308,7 @@ export default {
 					? null
 					: {
 							id: this.chosenAppraiser,
-							type: this.appraiser.type,
+							type: this.appraiser.type
 					  };
 			this.$emit(
 				"action",
@@ -335,8 +336,8 @@ export default {
 			let dateConverted = new Date(dateConvert.getTime() + minutes * 60000);
 			let status_expired_at = moment(dateConverted).format("DD-MM-YYYY HH:mm");
 			return status_expired_at;
-		},
-	},
+		}
+	}
 };
 </script>
 

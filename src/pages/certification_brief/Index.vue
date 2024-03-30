@@ -41,7 +41,7 @@
 							:key="element.id + '_' + element.status"
 						>
 							<div class="col-12 d-flex mb-2 justify-content-between">
-								<div class=" ml-0">
+								<div class="ml-0">
 									<span
 										@click="handleDetailCertificate(element.id)"
 										class="content_id"
@@ -57,7 +57,7 @@
 										@click="
 											handleDetailPreCertificate(element.pre_certificate_id)
 										"
-										class="arrowBox arrow-right "
+										class="arrowBox arrow-right"
 										:id="`${element.pre_certificate_id + element.id}`"
 									>
 										<icon-base
@@ -86,7 +86,7 @@
 							<div class="property-content mb-2 d-flex color_content">
 								<div class="label_container d-flex">
 									<img
-										style="min-width:15px"
+										style="min-width: 15px"
 										width="15px"
 										height="21px"
 										class="mr-2"
@@ -123,11 +123,11 @@
 								<div class="label_container d-flex">
 									<span
 										v-if="getExpireDate(element).includes('Đã hết')"
-										style="font-weight: 500; color: red;"
+										style="font-weight: 500; color: red"
 									>
 										{{ getExpireDate(element) }}
 									</span>
-									<span v-else style="font-weight: 500;">
+									<span v-else style="font-weight: 500">
 										{{ getExpireDate(element) }}
 									</span>
 								</div>
@@ -139,7 +139,7 @@
 										class="mr-2"
 										src="@/assets/icons/ic_taglink.svg"
 										alt="user"
-									/><span style="color:#8B94A3">{{
+									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span>
 								</div>
@@ -1177,11 +1177,13 @@ export default {
 					this.detailData.status < 9 &&
 					this.position_profile &&
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-						this.position_profile === "NHAN-VIEN-KINH-DOANH")
+						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+						(this.detailData.appraiser_sale &&
+							this.detailData.appraiser_sale.user_id === this.user_id))
 				) {
 					this.$toast.open({
 						message:
-							"Bạn không có quyền xem chi tiết hồ sơ này, vui lòng liên hệ admin",
+							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 						type: "error",
 						position: "top-right"
 					});
