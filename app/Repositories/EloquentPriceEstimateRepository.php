@@ -21,6 +21,11 @@ use App\Models\PriceEstimatePropertyTurningTime;
 use App\Models\PriceEstimateHasAsset;
 use App\Models\PriceEstimateFinal;
 use App\Models\PriceEstimatePic;
+use App\Models\PriceEstimateApartmentFinal;
+use App\Models\ApartmentAsset;
+use App\Models\PriceEstimateApartmentProperty;
+
+
 use App\Models\Appraise;
 use App\Models\RealEstate;
 
@@ -109,7 +114,92 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
     /**
      * @return LengthAwarePaginator
      */
-    public function findPaging(): LengthAwarePaginator
+    public function findPaging()
+    {
+        $perPage = (int)request()->get('limit');
+        $page = (int)request()->get('page');
+        $search = request()->get('search');
+        $status = request()->get('status');
+
+        $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
+        $user = CommonService::getUser();
+        $result = $this->model->query()->with([
+            'province',
+            'district',
+            'ward',
+            'street',
+            'properties',
+            'properties.propertyDetail.landTypePurpose',
+            'createdBy',
+            'version',
+            'assetType',
+            'apartmentProperties',
+            'apartmentProperties.floor',
+            'landFinalEstimate'
+        ]);
+        $role = $user->roles->last();
+        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
+            $result = $result->where('created_by', $user->id);
+        }
+        if (isset($search)) {
+            $filterSubstr = substr($search, 0, 1);
+            $filterData = substr($search, 1);
+            switch ($filterSubstr) {
+                case '!':
+                    if (floatval($filterData) >= 0) {
+                        $result = $result->where('total_area', floatval($filterData));
+                    }
+                    break;
+                case '@':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('createdBy', function ($has) use ($filterData) {
+                            $has->where('name', 'ILIKE', '%' . $filterData . '%');
+                        });
+                    });
+                    break;
+                case '&':
+                    $data = explode('/', $filterData);
+                    $doc_no = $data[0];
+                    $land_no = isset($data[1]) ? $data[1] : -1;
+                    if (intval($doc_no) >= 0) {
+                        $result = $result->where(function ($q) use ($doc_no, $land_no) {
+                            $q = $q->where('doc_no', '=', $doc_no);
+                            if (intval($land_no) >= 0)
+                                $q = $q->Where('land_no', '=', $land_no);
+                        });
+                    }
+                    break;
+                case '$':
+                    if (floatval($filterData) >= 0) {
+                        $fromValue = floatval($filterData) - floatval($filterData) * $betweenTotal;
+                        $toValue = floatval($filterData) + floatval($filterData) * $betweenTotal;
+                        $result = $result->whereBetween('total_price', [$fromValue, $toValue]);
+                    }
+                    break;
+                default:
+                    $result = $result->where(function ($q) use ($search) {
+                        $q = $q->where('id', 'like', strval($search));
+                        $q = $q->orwhere('appraise_asset', 'ILIKE', '%' . $search . '%');
+                        $q = $q->orwhereHas('assetType', function ($has) use ($search) {
+                            $has->where('description', 'ILIKE', '%' . $search . '%');
+                        });
+                        $q = $q->orwhereHas('createdBy', function ($has) use ($search) {
+                            $has->where('name', 'ILIKE', '%' . $search . '%');
+                        });
+                    });
+            }
+        }
+        if (isset($status)) {
+            $result = $result->whereIn('status', $status);
+        }
+        $result = $result->orderByDesc('updated_at');
+        $result = $result->orderByDesc('id');
+        $result = $result->forPage($page, $perPage)
+            ->paginate($perPage);
+        return $result;
+    }
+
+    public function findPaging2(): LengthAwarePaginator
     {
         $user = CommonService::getUser();
 
@@ -141,13 +231,10 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 'createdBy',
                 'version',
                 'assetType',
+                'apartmentProperties',
+                'apartmentProperties.floor',
             ])
-            ->whereHas('properties', function ($q) use ($query) {
-                if (isset($query->front_side) && !empty($query->front_side)) {
-                    $query->front_side = intval($query->front_side) - 1;
-                    return $q->where('front_side', '=', $query->front_side);
-                }
-            })
+
             ->whereHas('assetType', function ($q) use ($query) {
                 if (isset($query->asset_type_id) && !empty($query->asset_type_id)) {
                     return $q->where('id', '=', $query->asset_type_id);
@@ -185,7 +272,37 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     return $q->where('id', '=', $query->ward_id);
                 }
             })
-            ->whereHas('properties', function ($q) use ($query, $sortField, $sortOrder) {
+            // ->whereHas('properties', function ($q) use ($query, $sortField, $sortOrder) {
+            //     if ($sortField == 'properties[0].front_side') {
+            //         if ($sortOrder == 'descend') {
+            //             $q->orderBy('front_side', 'DESC');
+            //         } else {
+            //             $q->orderBy('front_side', 'ASC');
+            //         }
+            //     } else if ($sortField == 'properties[0].appraise_land_sum_area') {
+            //         if ($sortOrder == 'descend') {
+            //             $q->orderBy('appraise_land_sum_area', 'DESC');
+            //         } else {
+            //             $q->orderBy('appraise_land_sum_area', 'ASC');
+            //         }
+            //     }
+            // })
+            ->whereHas('street', function ($q) use ($query, $sortField, $sortOrder) {
+                if (isset($query->street_id) && !empty($query->street_id)) {
+                    return $q->where('id', '=', $query->street_id);
+                }
+                if ($sortField == 'street') {
+                    if ($sortOrder == 'descend') {
+                        $q->orderBy('name', 'DESC');
+                    } else {
+                        $q->orderBy('name', 'ASC');
+                    }
+                }
+            });
+
+        if (isset($query->front_side) && !empty($query->front_side)) {
+            $query->front_side = intval($query->front_side) - 1;
+            $query->whereHas('properties', function ($q) use ($query, $sortField, $sortOrder) {
                 if ($sortField == 'properties[0].front_side') {
                     if ($sortOrder == 'descend') {
                         $q->orderBy('front_side', 'DESC');
@@ -199,54 +316,9 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                         $q->orderBy('appraise_land_sum_area', 'ASC');
                     }
                 }
-                // else if ($sortField == 'properties[0].total_construction_area') {
-                //     if ($sortOrder == 'descend') {
-                //         $q->orderBy('total_construction_area', 'DESC');
-                //     } else {
-                //         $q->orderBy('total_construction_area', 'ASC');
-                //     }
-                // }
-            })
-            ->whereHas('street', function ($q) use ($query, $sortField, $sortOrder) {
-                if (isset($query->street_id) && !empty($query->street_id)) {
-                    return $q->where('id', '=', $query->street_id);
-                }
-                if ($sortField == 'street') {
-                    if ($sortOrder == 'descend') {
-                        $q->orderBy('name', 'DESC');
-                    } else {
-                        $q->orderBy('name', 'ASC');
-                    }
-                }
+                return $q->where('front_side', '=', $query->front_side);
             });
-        // if (isset($query->total_area_from) || isset($query->total_area_to) || isset($query->total_construction_area_from) || isset($query->total_construction_area_to) || isset($query->total_amount_from) || isset($query->total_amount_to)) {
-        //     $result = $result
-        //         ->whereHas('assetPrice', function ($q) use ($query) {
-        //             if (isset($query->total_area_from)) {
-        //                 $q->where('slug', '=', 'total_asset_area')->where('value', '>=', $query->total_area_from);
-        //             }
-        //             if (isset($query->total_area_to) && (floatval($query->total_area_to) != 0)) {
-        //                 $q->where('slug', '=', 'total_asset_area')->where('value', '<=', $query->total_area_to);
-        //             }
-        //         })
-        //         ->whereHas('assetPrice', function ($q) use ($query) {
-        //             if (isset($query->total_construction_area_from)) {
-        //                 $q->where('slug', '=', 'land_asset_price')->where('value', '>=', $query->total_construction_area_from);
-        //             }
-        //             if (isset($query->total_construction_area_to) && (floatval($query->total_construction_area_to) != 0)) {
-        //                 $q->where('slug', '=', 'land_asset_price')->where('value', '<=', $query->total_construction_area_to);
-        //             }
-        //         })
-        //         ->whereHas('assetPrice', function ($q) use ($query) {
-        //             if (isset($query->total_amount_from)) {
-        //                 $q->where('slug', '=', 'total_asset_price')->where('value', '>=', $query->total_amount_from);
-        //             }
-        //             if (isset($query->total_amount_to) && (floatval($query->total_amount_to) != 0)) {
-        //                 $q->where('slug', '=', 'total_asset_price')->where('value', '<=', $query->total_amount_to);
-        //             }
-        //         });
-        // }
-
+        }
         if (isset($query->status) && !empty($query->status)) {
             $result = $result->where('status', $query->status);
         } else if (isset($status)) {
@@ -726,38 +798,41 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
         $check = $this->checkAuthorization($priceEstimateId);
         if (!empty($check))
             return $check;
-        $select = ['id', 'step', 'status', 'coordinates', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at'];
+        $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'appraise_id', 'apartment_asset_id'];
         $with = [
             'createdBy:id,name',
             'lastVersion',
+            'apartmentProperties',
+            'apartmentProperties.floor',
         ];
         $result = PriceEstimate::with($with)
             ->select($select)
             ->where('id', $priceEstimateId);
 
         $result = $result->first();
-        // $result['picture_infomation'] = $result['pic'];
         unset($result->pic);
-        $result->append('land_details');
-        $result->append('total_area');
-        $result->append('planning_area');
-        $result->append('traffic_infomation');
-        $result->append('general_infomation');
-        // $result->append('appraisal_methods');
-        // $result->append('value_base_and_approach');
-        $result->append('map_img');
-        $result->append('assets_general');
-        $result->append('distance_max');
-        $result->append('final_estimate');
-        // $result->append('comparison_factor');
-        // $comparisonFactor = $this->getComparisonFactors($priceEstimateId);
-        // $result['comparison_factor'] = $comparisonFactor;
 
+
+        $result->append('general_infomation');
+        $result->append('map_img');
+        $result->append('distance_max');
         $version = PriceEstimateVersionService::getVersionPriceEstimate($priceEstimateId);
         $result['max_version'] = $version;
-        $geo = PriceEstimateProperty::where('price_estimate_id', $priceEstimateId)->first();
-        $result['traffic_infomation'] = $geo;
-        // $result['geographical_location'] = $geo->geographical_location;
+        $result->append(
+            'assets_general'
+        );
+        $result->append(
+            'final_estimate'
+        );
+        if ($result->asset_type_id !== 39) {
+            $result->append('land_details');
+            $result->append('total_area');
+            $result->append('planning_area');
+            $result->append('traffic_infomation');
+            $geo = PriceEstimateProperty::where('price_estimate_id', $priceEstimateId)->first();
+            $result['traffic_infomation'] = $geo;
+        }
+
         return $result;
     }
     private function checkAuthorization($id)
@@ -850,11 +925,6 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     'land_no' => $generalInfomation['land_no'],
 
                 ]);
-
-                $edited = PriceEstimate::where('id', $priceEstimateId)->first();
-
-                # activity-log có id -> cập nhật
-                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật dữ liệu');
 
                 // $this->update_activity_log($priceEstimateId, $this->model, $generalInfomation, $log, $logName);
 
@@ -950,6 +1020,9 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 // update step, status
                 $this->updatePriceEstimateStep($priceEstimateId, 1);
                 $this->postLandDetailInfomation($objects, $id);
+
+                $data = PriceEstimate::where('id', $priceEstimateId)->first();
+                $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật thông tin chung');
             } else {
                 $generalInfomation = $objects['general_infomation'];
                 // $pictureInfomation = $objects['picture_infomation'];
@@ -1327,9 +1400,6 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
     {
         $generalInfomation = [];
         $traffic =  [];
-        $economic =  [];
-        $pic =  [];
-        $picTypeId = [149, 150, 151, 152];
         if (PriceEstimate::where('id', '=', $id)->exists()) {
             // $propertieId = PriceEstimateProperty::where('price_estimate_id', '=',$id)->first()->id;
             $generalInfomation = $this->getGeneralInfomation($id);
@@ -1541,7 +1611,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     $hasAsset['price_estimate_id'] = $priceEstimateId;
                     $hasAsset['version'] = $version;
                     $hasAsset['asset_general_id'] = $asset_general_id;
-                    $hasAsset['asset_property_detail_id'] = $asset['properties'][0]['id'];
+                    $hasAsset['asset_property_detail_id'] = isset($asset['properties']) && isset($asset['properties'][0]) &&  isset($asset['properties'][0]['id']) ? $asset['properties'][0]['id'] : null;
                     $priceEstimateHasAsset = new PriceEstimateHasAsset($hasAsset);
                     QueryBuilder::for($priceEstimateHasAsset)
                         ->insert($priceEstimateHasAsset->attributesToArray());
@@ -1625,7 +1695,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 // Delete related records
                 $priceEstimateFinal->lands()->delete();
                 $priceEstimateFinal->tangibleAssets()->delete();
-
+                $priceEstimateFinal->apartmentFinals()->delete();
                 // Delete the record itself
             }
 
@@ -1718,6 +1788,54 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             return $data;
         }
     }
+    public function step3FinalApartment($data, $id = null)
+    {
+        DB::beginTransaction();
+        try {
+            if ($id) {
+                // Delete old record
+                $priceEstimateFinals = PriceEstimateFinal::where('price_estimate_id', $id)->get();
+
+                foreach ($priceEstimateFinals as $priceEstimateFinal) {
+                    // Delete related records
+                    $priceEstimateFinal->apartmentFinals()->delete();
+
+                    // Delete the record itself
+                    $priceEstimateFinal->delete();
+                }
+            }
+
+            // Create new record
+            $priceEstimateFinal = PriceEstimateFinal::create($data);
+
+            // Create related rows
+            if (isset($data['apartment_finals'])) {
+                foreach ($data['apartment_finals'] as $apartment) {
+                    $apartment['price_estimate_final_id'] = $priceEstimateFinal->id;
+                    $priceEstimateFinal->apartmentFinals()->create($apartment);
+                }
+            }
+
+            $this->CreateActivityLog(
+                $priceEstimateFinal,
+                $priceEstimateFinal,
+                'update_data',
+                'Cập nhật giá trị tài sản'
+            );
+            $this->updatePriceEstimateStep($id, 3);
+            $this->processAfterSave($id);
+            DB::commit();
+            $priceEstimateFinal = $priceEstimateFinal->load('apartmentFinals', 'appraisePurpose', 'assetType');
+
+
+            return $priceEstimateFinal;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
+            return $data;
+        }
+    }
     public function moveToAppraise($id = null)
     {
         DB::beginTransaction();
@@ -1730,12 +1848,12 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     $data = ['message' => ErrorMessage::PE_CHECK_EXIT, 'exception' =>  ''];
                     return $data;
                 }
-                if ($priceEstimateCheck->appraise_id) {
+                if ($priceEstimateCheck->appraise_id || $priceEstimateCheck->apartment_asset_id) {
                     $data = ['message' => ErrorMessage::PE_APPRAISE_EXIT, 'exception' =>  ''];
                     return $data;
                 }
 
-                if (Appraise::where('price_estimate_id', $id)->exists()) {
+                if (Appraise::where('price_estimate_id', $id)->exists() || ApartmentAsset::where('price_estimate_id', $id)->exists()) {
                     $data = ['message' => ErrorMessage::APPRAISE_PE_EXIT, 'exception' =>  ''];
                     return $data;
                 }
@@ -1746,10 +1864,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     ->with('properties.propertyTurningTime')
                     ->with('version')
                     ->first();
-                Log::info(
-                    'priceEstimate:',
-                    ['priceEstimate' => $priceEstimate]
-                );
+
                 $realEstate = new RealEstate;
                 $realEstate->asset_type_id = $priceEstimate->asset_type_id;
                 $realEstate->appraise_asset = $priceEstimate->appraise_asset;
@@ -1838,11 +1953,199 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             return $data;
         }
     }
+    public function moveToApartmentAsset($id = null)
+    {
+        DB::beginTransaction();
+        try {
+            if ($id) {
+                $user = CommonService::getUser();
 
+                $priceEstimateCheck = PriceEstimate::find($id);
+                if (!$priceEstimateCheck) {
+                    $data = ['message' => ErrorMessage::PE_CHECK_EXIT, 'exception' =>  ''];
+                    return $data;
+                }
+                if ($priceEstimateCheck->appraise_id || $priceEstimateCheck->apartment_asset_id) {
+                    $data = ['message' => ErrorMessage::PE_APPRAISE_EXIT, 'exception' =>  ''];
+                    return $data;
+                }
+
+                if (Appraise::where('price_estimate_id', $id)->exists() || ApartmentAsset::where('price_estimate_id', $id)->exists()) {
+                    $data = ['message' => ErrorMessage::APPRAISE_PE_EXIT, 'exception' =>  ''];
+                    return $data;
+                }
+                // Fetch the PriceEstimate model instance with its relations
+                $priceEstimate = $this->model->query()
+                    ->where('id', $id)
+                    ->with('apartmentProperties')
+                    ->with('version')
+                    ->first();
+
+                $realEstate = new RealEstate;
+                $realEstate->asset_type_id = $priceEstimate->asset_type_id;
+                $realEstate->appraise_asset = $priceEstimate->appraise_asset;
+                $realEstate->coordinates = $priceEstimate->coordinates;
+                $realEstate->created_by = $user->id;
+                if ($priceEstimate->properties->isNotEmpty() && isset($priceEstimate->properties->first()->appraise_land_sum_area)) {
+                    $realEstate->total_area = $priceEstimate->properties->first()->appraise_land_sum_area;
+                }
+                if ($priceEstimate->properties->isNotEmpty() && isset($priceEstimate->properties->first()->front_side)) {
+                    $realEstate->front_side = $priceEstimate->properties->first()->front_side;
+                }
+                $realEstate->status = 1;
+                $realEstate->sub_status = 1;
+                $realEstate->save();
+                // Create a new Appraise model instance and assign the data from the PriceEstimate model
+                $apartment = new ApartmentAsset;
+                $fillable = $apartment->getFillable();
+                $apartment->apartment_number = $priceEstimate->address_number;
+                foreach ($priceEstimate->getAttributes() as $key => $value) {
+                    if ($key != $priceEstimate->getKeyName() && in_array($key, $fillable) && $value) {
+                        $apartment->$key = $value;
+                    }
+                }
+                $apartment->created_by = $user->id;
+                $apartment->price_estimate_id = $priceEstimate->id;
+                $apartment->id = $realEstate->id;
+                $apartment->real_estate_id = $realEstate->id;
+                $apartment->step = 1;
+                // Save the Appraise model instance
+                $apartment->save();
+                $message = "Chuyển chính thức thành công sang TSTĐ: " . $apartment->id;
+
+                // Fetch the relations of the PriceEstimate model, change the price_estimate_id to appraise_id, and attach them to the Appraise model instance
+                foreach ($priceEstimate->relationsToArray() as $relation => $items) {
+                    if ($relation == 'apartment_properties') {
+                        foreach ($items as $item) {
+                            $item['apartment_asset_id'] = $apartment->id;
+                            $item['description'] = null;
+                            $newRelation = $apartment->apartmentAssetProperties()->make($item);
+                            $newRelation->save();
+                        }
+                    } else if ($relation == 'version') {
+                        foreach ($items as $item) {
+                            $item['apartment_asset_id'] =
+                                $apartment->id;
+                            $newRelation = $apartment->$relation()->make($item);
+                            $newRelation->save();
+                        }
+                    }
+                }
+                $priceEstimate->update(['apartment_asset_id' => $apartment->id]);
+                $this->CreateActivityLog(
+                    $priceEstimate,
+                    $priceEstimate,
+                    'update_data',
+                    $message
+                );
+                DB::commit();
+            }
+
+
+            return $apartment;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
+            return $data;
+        }
+    }
     public function getPriceEstimateFinal($price_estimate_id)
     {
         return PriceEstimateFinal::with('planningArea', 'totalArea', 'tangibleAssets', 'appraisePurpose', 'assetType')
             ->where('price_estimate_id', $price_estimate_id)
             ->get();
+    }
+
+    //step 1
+    public function postApartmentInformation(array $objects, int $id = null)
+    {
+        DB::beginTransaction();
+        try {
+            $user = CommonService::getUser();
+            if (isset($id)) {
+                # block xác thực
+                $check = $this->beforeSave($id);
+                if (isset($check)) {
+                    return $check;
+                }
+
+                $generalInfomation = $objects['general_infomation'];
+                $apartmentProperties = $objects['apartment_properties'];
+                $priceEstimateId = $id;
+                PriceEstimate::where('id', $priceEstimateId)->update([
+                    'appraise_asset' => $generalInfomation['appraise_asset'],
+                    'asset_type_id' => $generalInfomation['asset_type_id'],
+                    'project_id' => $generalInfomation['project_id'],
+                    'coordinates' => $generalInfomation['coordinates'],
+                    'distance_id' => $generalInfomation['distance_id'],
+                    'district_id' => $generalInfomation['district_id'],
+                    'province_id' => $generalInfomation['province_id'],
+                    'street_id' => $generalInfomation['street_id'],
+                    'ward_id' => $generalInfomation['ward_id'],
+                    'full_address' => $generalInfomation['full_address'],
+                    'full_address_street' => $generalInfomation['full_address_street'],
+                    // 'address_number' => $generalInfomation['address_number'],
+                ]);
+
+                if (isset($apartmentProperties)) {
+                    $propertieId =
+                        PriceEstimateApartmentProperty::where('price_estimate_id', $priceEstimateId)->get()->first()->id;
+                    if (isset($propertieId)) {
+                        PriceEstimateApartmentProperty::where('price_estimate_id', $priceEstimateId)->where('id', $propertieId)->update([
+                            'block_id' => $apartmentProperties['block_id'],
+                            'floor_id' => $apartmentProperties['floor_id'],
+                            'area' => $apartmentProperties['area'],
+                            'apartment_name' => $apartmentProperties['apartment_name'],
+                            'description' => $apartmentProperties['description'] ?? null,
+                            'bedroom_num' => $apartmentProperties['bedroom_num'] ?? null,
+                            'wc_num' => $apartmentProperties['wc_num'] ?? null,
+                            'handover_year' => $apartmentProperties['handover_year'] ?? null,
+                            'direction_id' => $apartmentProperties['direction_id'] ?? null,
+                            'furniture_quality_id' => $apartmentProperties['furniture_quality_id'] ?? null,
+
+                        ]);
+                    } else {
+                        $apartmentProperties['price_estimate_id'] = $priceEstimateId;
+                        $priceEstimateProperties = new PriceEstimateApartmentProperty($apartmentProperties);
+                        $propertieId = QueryBuilder::for($priceEstimateProperties)
+                            ->insertGetId($priceEstimateProperties->attributesToArray());
+                    }
+                }
+                $data = PriceEstimate::where(
+                    'id',
+                    $priceEstimateId
+                )->first();
+                $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật thông tin chung');
+            } else {
+                $generalInfomation = $objects['general_infomation'];
+                $apartmentProperties = $objects['apartment_properties'];
+                $generalInfomation['created_by'] = $user->id;
+                $generalInfomation['status'] = 1;
+                $generalInfomation['step'] = 1;
+
+                $priceEstimate = new PriceEstimate($generalInfomation);
+                $appraiseArr = $priceEstimate->attributesToArray();
+                $data = $this->model->query()->create($appraiseArr);
+                $priceEstimateId = $data->id;
+                if (isset($apartmentProperties)) {
+                    $apartmentProperties['price_estimate_id'] = $priceEstimateId;
+
+                    $priceEstimateProperties = new PriceEstimateApartmentProperty($apartmentProperties);
+                    $propertieId =   QueryBuilder::for($priceEstimateProperties)
+                        ->insertGetId($priceEstimateProperties->attributesToArray());
+                }
+                # activity-log
+                $data = PriceEstimate::where('id', $priceEstimateId)->first();
+                $this->CreateActivityLog($data, $data, 'create', 'tạo mới');
+            }
+            $this->processAfterSave($priceEstimateId);
+            DB::commit();
+            return $this->getInfomation($priceEstimateId);
+        } catch (Exception $ex) {
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
+            return $data;
+            DB::rollBack();
+        }
     }
 }

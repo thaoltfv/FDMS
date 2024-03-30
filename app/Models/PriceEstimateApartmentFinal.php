@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Province
  * @package App\Models
  */
-class PriceEstimateFinalAoartnent extends Model
+class PriceEstimateApartmentFinal extends Model
 {
     use SoftDeletes;
-    protected $table = 'price_estimate_final_apartments';
+    protected $table = 'price_estimate_apartment_finals';
 
     protected $fillable = [
         'price_estimate_final_id',
