@@ -60,6 +60,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use Exception;
 use Throwable;
+use Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Input;
 
@@ -180,8 +181,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     return $q->where('id', '=', $query->asset_type_id);
                 }
             })
-            ->whereHas('createdBy', function ($q) use ($query, $sortField, $user, $popup,$sortOrder) {
-                if(isset($query->created_by)&&($query->created_by!='Tất cả người tạo')) {
+            ->whereHas('createdBy', function ($q) use ($query, $sortField, $user, $popup, $sortOrder) {
+                if (isset($query->created_by) && ($query->created_by != 'Tất cả người tạo')) {
                     return $q->where('name', '=', $query->created_by);
                 }
                 if ($sortField == 'created_by.name') {
@@ -212,9 +213,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     return $q->where('id', '=', $query->ward_id);
                 }
             })
-            ->whereHas('properties', function ($q) use($query, $sortField,$sortOrder) {
-                if($sortField=='properties[0].front_side') {
-                    if($sortOrder=='descend') {
+            ->whereHas('properties', function ($q) use ($query, $sortField, $sortOrder) {
+                if ($sortField == 'properties[0].front_side') {
+                    if ($sortOrder == 'descend') {
                         $q->orderBy('front_side', 'DESC');
                     } else {
                         $q->orderBy('front_side', 'ASC');
@@ -233,8 +234,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     }
                 }
             })
-            ->whereHas('street', function ($q) use($query, $sortField,$sortOrder) {
-                if(isset($query->street_id)&&!empty($query->street_id)) {
+            ->whereHas('street', function ($q) use ($query, $sortField, $sortOrder) {
+                if (isset($query->street_id) && !empty($query->street_id)) {
                     return $q->where('id', '=', $query->street_id);
                 }
                 if ($sortField == 'street') {
@@ -488,7 +489,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result->append('price_other_asset');
         $result->append('price_total_asset');
 
-        if(!empty($asset->assetGeneral)) {
+        if (!empty($asset->assetGeneral)) {
             $user = CommonService::getUser();
             foreach ($asset->assetGeneral as $assetGeneral) {
                 $isExist = 0;
@@ -2683,16 +2684,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             }
         }
         $isAddnew = 0;
-        foreach ($oldAssetGeneralIds as $assetGeneralId=>$value) {
-			if($value) {
-                $isAddnew =1 ;
-				AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $assetGeneralId)->forceDelete();
-				AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $assetGeneralId)->forceDelete();
-				AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $assetGeneralId)->forceDelete();
-			}
-		}
-        foreach ($oldAssetGeneralIds as $assetGeneralId=>$value) {
-            if(!$value&&$isAddnew) {
+        foreach ($oldAssetGeneralIds as $assetGeneralId => $value) {
+            if ($value) {
+                $isAddnew = 1;
+                AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $assetGeneralId)->forceDelete();
+                AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $assetGeneralId)->forceDelete();
+                AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $assetGeneralId)->forceDelete();
+            }
+        }
+        foreach ($oldAssetGeneralIds as $assetGeneralId => $value) {
+            if (!$value && $isAddnew) {
                 AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)
                     ->where('asset_general_id', '=', $assetGeneralId)
                     ->where('type', '=', 'yeu_to_khac')
@@ -2837,8 +2838,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
             $existAssetGeneralIds = [];
-            if (isset($objects['appraise_adapter'])&&!empty($objects['appraise_adapter'])) {
-                foreach($objects['appraise_adapter'] as $item) {
+            if (isset($objects['appraise_adapter']) && !empty($objects['appraise_adapter'])) {
+                foreach ($objects['appraise_adapter'] as $item) {
                     $appraiseAdapter = AppraiseAdapter::where('appraise_id', $item['appraise_id'])
                         ->where('asset_general_id', $item['asset_general_id'])->first();
                     if (isset($appraiseAdapter)) {
@@ -2923,10 +2924,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = [];
         if (isset($objects['comparison_tangible_factor'])) {
             foreach ($objects['comparison_tangible_factor'] as $comparisonFactorData) {
-                if(! isset($appraiseId)){
+                if (!isset($appraiseId)) {
                     $appraiseId = $comparisonFactorData['appraise_id'];
                     $check = $this->beforeSave($appraiseId);
-                    if(isset($check)){
+                    if (isset($check)) {
                         return $check;
                     }
                 }
@@ -2938,10 +2939,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
         if (isset($objects['construction_company'])) {
             foreach ($objects['construction_company'] as $item) {
-                if(! isset($appraiseId)){
+                if (!isset($appraiseId)) {
                     $appraiseId = $item['appraise_id'];
                     $check = $this->beforeSave($appraiseId);
-                    if(isset($check)){
+                    if (isset($check)) {
                         return $check;
                     }
                 }
@@ -2958,20 +2959,19 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
         }
-        if(isset($appraiseId)){
+        if (isset($appraiseId)) {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
 
-            if(isset($objects['total_desicion_average'])){
-                if(AppraisePrice::where(['appraise_id' => $appraiseId, 'slug' => 'total_desicion_average'])->exists()){
+            if (isset($objects['total_desicion_average'])) {
+                if (AppraisePrice::where(['appraise_id' => $appraiseId, 'slug' => 'total_desicion_average'])->exists()) {
                     AppraisePrice::where(['appraise_id' => $appraiseId, 'slug' => 'total_desicion_average'])
-                                ->update([
-                                    'value' => intval($objects['total_desicion_average']),
-                                ]);
-                }
-                else{
+                        ->update([
+                            'value' => intval($objects['total_desicion_average']),
+                        ]);
+                } else {
                     $data = [
                         'appraise_id' => $appraiseId,
                         'slug' => 'total_desicion_average',
@@ -2984,7 +2984,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
             $this->getAppraiseCalculate($appraiseId);
-            $this->updateAppraiseStep($appraiseId,7);
+            $this->updateAppraiseStep($appraiseId, 7);
             $result = $this->getPriceById($appraiseId);
         }
 
@@ -3486,12 +3486,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     //step 1 - view data
     private function getUBNDPrice(int $propertieId)
     {
-        $select = ['id','appraise_property_id','land_type_purpose_id','circular_unit_price','position_type_id'];
-        $with=['positionType:id,type,description','landTypePurpose:id,type,description'];
+        $select = ['id', 'appraise_property_id', 'land_type_purpose_id', 'circular_unit_price', 'position_type_id'];
+        $with = ['positionType:id,type,description', 'landTypePurpose:id,type,description'];
 
         $result = AppraisePropertyDetail::with($with)
             ->select($select)
-            ->where(['appraise_property_id'=>$propertieId])
+            ->where(['appraise_property_id' => $propertieId])
             ->get();
         return $result;
     }
@@ -3505,26 +3505,26 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'propertyDetail totalArea',
             'propertyDetail landDetail',
         ];
-        if (AppraiseProperty::where('appraise_id', '=',$appraiseId)->exists()) {
-            $propertieId = AppraiseProperty::where('appraise_id', '=',$appraiseId)->first()->id;
+        if (AppraiseProperty::where('appraise_id', '=', $appraiseId)->exists()) {
+            $propertieId = AppraiseProperty::where('appraise_id', '=', $appraiseId)->first()->id;
             $landDetail = $this->getLandDetails($propertieId);
-            if (AppraisePropertyDetail::where('appraise_property_id', '=',$propertieId)->exists()) {
+            if (AppraisePropertyDetail::where('appraise_property_id', '=', $propertieId)->exists()) {
                 $totalArea =  $this->getTotalArea($propertieId);
                 $planningArea =  $this->getPlanningArea($propertieId);
                 $ubndPrice =  $this->getUBNDPrice($propertieId);
             }
         }
         $result = array_merge(
-            ['land_details'=> $landDetail],
-            ['total_area'=>$totalArea],
-            ['planning_area'=>$planningArea],
-            ['UBND_price'=>$ubndPrice]
+            ['land_details' => $landDetail],
+            ['total_area' => $totalArea],
+            ['planning_area' => $planningArea],
+            ['UBND_price' => $ubndPrice]
         );
         return $result;
-
     }
     //Step 2 - post data
-    private function checkDuplicateLandTypePurpose ($data) {
+    private function checkDuplicateLandTypePurpose($data)
+    {
         $check = [];
         foreach ($data as $item) {
             if (empty($check)) {
@@ -3537,11 +3537,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
         return false;
     }
-    private function checkPlanningArea($totalArea , $planningArea) {
+    private function checkPlanningArea($totalArea, $planningArea)
+    {
         $result = null;
         foreach ($totalArea as $item) {
             $landTypeId = $item['land_type_purpose_id'];
-            $key =array_search($landTypeId, array_column($planningArea, 'land_type_purpose_id'));
+            $key = array_search($landTypeId, array_column($planningArea, 'land_type_purpose_id'));
             $total = $item['total_area'];
             $planArea = 0;
             if ($key !== false) {
@@ -3554,30 +3555,31 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $result;
     }
 
-    private function checkPlanningArea1($totalArea , $planningArea) {
+    private function checkPlanningArea1($totalArea, $planningArea)
+    {
         $result = null;
         foreach ($totalArea as $item) {
             $landTypeId = $item['land_type_purpose_id'];
             $total = $item['total_area'];
             $planArea = 0;
             foreach ($planningArea as $y) {
-                if ($y['land_type_purpose_id'] == $landTypeId){
+                if ($y['land_type_purpose_id'] == $landTypeId) {
                     $planArea = $planArea + intval($y['planning_area']);
                 }
             }
             if ($planArea > $total) {
-                $result = ['message' => 'Diện tích quy hoạch '.strtolower($item['land_type_purpose']['description']).' không được lớn hơn diện sử dụng', 'exception' => ''];
+                $result = ['message' => 'Diện tích quy hoạch ' . strtolower($item['land_type_purpose']['description']) . ' không được lớn hơn diện sử dụng', 'exception' => ''];
             }
         }
         return $result;
     }
 
-    public function postLandDetailInfomation(array $objects , int $appraiseId)
+    public function postLandDetailInfomation(array $objects, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
             // dd(1);
@@ -3588,19 +3590,19 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $real_estate = $objects['real_estate'] ?? [];
             $isDuplicate = $this->checkDuplicateLandTypePurpose($totalArea);
             // if (!$isDuplicate)
-                // if (isset($planningArea))
-                //     $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
+            // if (isset($planningArea))
+            //     $isDuplicate = $this->checkDuplicateLandTypePurpose($planningArea);
             if (!$isDuplicate)
                 $isDuplicate = $this->checkDuplicateLandTypePurpose($ubndPrice);
             if ($isDuplicate) {
-                return ['message' => 'Trùng mục đích sử dụng. Vui lòng kiểm tra lại' , 'exception' => ''];
+                return ['message' => 'Trùng mục đích sử dụng. Vui lòng kiểm tra lại', 'exception' => ''];
             }
             $check = $this->checkPlanningArea1($totalArea, $planningArea);
             if (isset($check))
                 return $check;
-            if (AppraiseProperty::where('appraise_id', '=',$appraiseId)->exists()) {
-                $propertieId = AppraiseProperty::where('appraise_id', '=',$appraiseId)->first()->id;
-                if(isset($landDetail)){
+            if (AppraiseProperty::where('appraise_id', '=', $appraiseId)->exists()) {
+                $propertieId = AppraiseProperty::where('appraise_id', '=', $appraiseId)->first()->id;
+                if (isset($landDetail)) {
                     AppraiseProperty::where('id', $propertieId)->update([
                         'coordinates' => $landDetail['coordinates'],
                         'front_side_width' => $landDetail['front_side_width'],
@@ -3610,100 +3612,95 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'legal_id' => 1,
                     ]);
                     Appraise::where('id', $appraiseId)->update([
-                        'topographic_id'=> isset($landDetail['topographic']['topographic_id']) ? $landDetail['topographic']['topographic_id'] : null,
+                        'topographic_id' => isset($landDetail['topographic']['topographic_id']) ? $landDetail['topographic']['topographic_id'] : null,
                     ]);
                 }
-                if (AppraisePropertyDetail::where(['appraise_property_id'=>$propertieId])->exists()) {
-                    AppraisePropertyDetail::where(['appraise_property_id'=>$propertieId])->delete();
+                if (AppraisePropertyDetail::where(['appraise_property_id' => $propertieId])->exists()) {
+                    AppraisePropertyDetail::where(['appraise_property_id' => $propertieId])->delete();
                 }
-                $AppraisePropertyDetailData=[];
+                $AppraisePropertyDetailData = [];
                 $isMain = false;
-                if(isset($totalArea) && count($totalArea) >0){
-                    foreach($totalArea as $total){
-                        if(!$isMain){
-                            if($total['is_transfer_facility'])
+                if (isset($totalArea) && count($totalArea) > 0) {
+                    foreach ($totalArea as $total) {
+                        if (!$isMain) {
+                            if ($total['is_transfer_facility'])
                                 $isMain = true;
-                        }
-                        else{
-                            if($total['is_transfer_facility']){
+                        } else {
+                            if ($total['is_transfer_facility']) {
                                 DB::rollBack();
                                 $data = ['message' => ErrorMessage::APPRAISE_CHECK_MULTIPLE_MDSDD, 'exception' =>  ''];
                                 return $data;
                             }
                         }
-                        $AppraisePropertyDetailData[] =[
-                            'appraise_property_id'=> $propertieId,
-                            'land_type_purpose_id'=> $total['land_type_purpose_id'],
-                            'is_transfer_facility'=> $total['is_transfer_facility'],
-                            'total_area'=>  $total['total_area'],
-                            'main_area'=> $total['total_area'],
-                            'circular_unit_price'=> 0,
-                            'position_type_id'=> null,
-                            'planning_area'=> 0,
-                            'type_zoning'=> '',
-                            'is_zoning'=> false,
+                        $AppraisePropertyDetailData[] = [
+                            'appraise_property_id' => $propertieId,
+                            'land_type_purpose_id' => $total['land_type_purpose_id'],
+                            'is_transfer_facility' => $total['is_transfer_facility'],
+                            'total_area' =>  $total['total_area'],
+                            'main_area' => $total['total_area'],
+                            'circular_unit_price' => 0,
+                            'position_type_id' => null,
+                            'planning_area' => 0,
+                            'type_zoning' => '',
+                            'is_zoning' => false,
                         ];
                     }
                     // $key =array_search(61, array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
-                    if(isset($planningArea) && count($planningArea) >0){
-                        foreach($planningArea as $planning){
-                            $key =array_search($planning['land_type_purpose_id'], array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
-                            if( ($key === false) ){
-                                $AppraisePropertyDetailData[] =[
-                                    'appraise_property_id'=> $propertieId,
-                                    'land_type_purpose_id'=> $planning['land_type_purpose_id'],
-                                    'is_transfer_facility'=> false,
-                                    'total_area'=>  $planning['planning_area'],
-                                    'main_area'=> 0,
-                                    'circular_unit_price'=> 0,
-                                    'position_type_id'=> null,
-                                    'planning_area'=>  $planning['planning_area'],
-                                    'type_zoning'=>  $planning['type_zoning'],
-                                    'is_zoning'=>  true,
+                    if (isset($planningArea) && count($planningArea) > 0) {
+                        foreach ($planningArea as $planning) {
+                            $key = array_search($planning['land_type_purpose_id'], array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
+                            if (($key === false)) {
+                                $AppraisePropertyDetailData[] = [
+                                    'appraise_property_id' => $propertieId,
+                                    'land_type_purpose_id' => $planning['land_type_purpose_id'],
+                                    'is_transfer_facility' => false,
+                                    'total_area' =>  $planning['planning_area'],
+                                    'main_area' => 0,
+                                    'circular_unit_price' => 0,
+                                    'position_type_id' => null,
+                                    'planning_area' =>  $planning['planning_area'],
+                                    'type_zoning' =>  $planning['type_zoning'],
+                                    'is_zoning' =>  true,
                                 ];
-                            }
-                            else
-                            {
+                            } else {
                                 $mainArea = $AppraisePropertyDetailData[$key]['main_area'] - $planning['planning_area'];
                                 $planningArea = $AppraisePropertyDetailData[$key]['planning_area'] + $planning['planning_area'];
-                                $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0 ;
+                                $AppraisePropertyDetailData[$key]['main_area'] =  $mainArea > 0 ? $mainArea : 0;
                                 $AppraisePropertyDetailData[$key]['planning_area'] =  $planningArea;
-                                $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'] ;
-                                $AppraisePropertyDetailData[$key]['is_zoning'] =  true ;
+                                $AppraisePropertyDetailData[$key]['type_zoning'] =  $planning['type_zoning'];
+                                $AppraisePropertyDetailData[$key]['is_zoning'] =  true;
                                 $AppraisePropertyDetailData[$key]['extra_planning'][] = [
-                                    'land_type_purpose_id'=> $planning['land_type_purpose_id'],
-                                    'planning_area'=>  $planning['planning_area'],
-                                    'type_zoning'=>  $planning['type_zoning'],
-                                    'appraise_property_id'=> $propertieId,
+                                    'land_type_purpose_id' => $planning['land_type_purpose_id'],
+                                    'planning_area' =>  $planning['planning_area'],
+                                    'type_zoning' =>  $planning['type_zoning'],
+                                    'appraise_property_id' => $propertieId,
                                 ];
                             }
                         }
                         // dd($AppraisePropertyDetailData);
                     }
-                    if(! $isMain){
+                    if (!$isMain) {
                         DB::rollBack();
                         $data = ['message' => ErrorMessage::APPRAISE_CHECK_MDSDD, 'exception' =>  ''];
                         return $data;
                     }
-                    if(isset($ubndPrice)){
-                        foreach($ubndPrice as $UNBD){
-                            $key =array_search($UNBD['land_type_purpose_id'], array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
-                            if( !($key === false)  ){
-                                $AppraisePropertyDetailData[$key]['position_type_id'] =  $UNBD['position_type_id'] ;
-                                $AppraisePropertyDetailData[$key]['circular_unit_price'] =  $UNBD['circular_unit_price'] ;
+                    if (isset($ubndPrice)) {
+                        foreach ($ubndPrice as $UNBD) {
+                            $key = array_search($UNBD['land_type_purpose_id'], array_column($AppraisePropertyDetailData, 'land_type_purpose_id'));
+                            if (!($key === false)) {
+                                $AppraisePropertyDetailData[$key]['position_type_id'] =  $UNBD['position_type_id'];
+                                $AppraisePropertyDetailData[$key]['circular_unit_price'] =  $UNBD['circular_unit_price'];
                             }
                         }
-                    }
-                    else{
+                    } else {
                         DB::rollBack();
                         $data = ['message' => ErrorMessage::APPRAISE_CHECK_UBND_PRICE, 'exception' =>  ''];
                         return $data;
                     }
                     $sumArea = 0.00;
                     // dd($AppraisePropertyDetailData);
-                    foreach($AppraisePropertyDetailData as $data)
-                    {
-                        if(!isset($data['position_type_id'])){
+                    foreach ($AppraisePropertyDetailData as $data) {
+                        if (!isset($data['position_type_id'])) {
                             DB::rollBack();
                             $data = ['message' => ErrorMessage::APPRAISE_CHECK_UBND_PRICE, 'exception' =>  ''];
                             return $data;
@@ -3712,29 +3709,26 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         if (isset($data['extra_planning'])) {
                             $data['extra_planning'] = json_encode($data['extra_planning']);
                         }
-                        
+
                         $propertieDetail = new AppraisePropertyDetail($data);
                         QueryBuilder::for($propertieDetail)
-                        ->insert($propertieDetail->attributesToArray());
+                            ->insert($propertieDetail->attributesToArray());
                     }
                     AppraiseProperty::where('id', $propertieId)->update([
-                        'appraise_land_sum_area'=> $sumArea
+                        'appraise_land_sum_area' => $sumArea
                     ]);
-                }
-                else
-                {
+                } else {
                     DB::rollBack();
                     $data = ['message' => ErrorMessage::APPRAISE_CHECK_MAIN_EREA, 'exception' =>  ''];
                     return $data;
                 }
-            }
-            else{
+            } else {
                 DB::rollBack();
                 $data = ['message' => 'Vui lòng nhập thông tin giao thông, đặc điểm kinh tế ở bước 1', 'exception' =>  ''];
                 return $data;
             }
             // if (isset($real_estate) && isset($real_estate['id'])) {
-            if (isset($real_estate)){
+            if (isset($real_estate)) {
                 // $result = RealEstate::find($real_estate['id']);
                 $result = RealEstate::find($appraiseId);
                 if ($result) {
@@ -3745,13 +3739,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
             # activity-log
             $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật dữ liệu quyền sử dụng đất');
-            $this->updateAppraiseStep($appraiseId,2);
+            $this->updateAppraiseStep($appraiseId, 2);
 
             $this->processAfterSave($appraiseId);
             DB::commit();
             // return $this->getLandInfomation($appraiseId);
             return $appraiseId;
-        }catch(Exception $ex) {
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -3762,62 +3756,62 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     //Step 3
     public function getConstruction(int $appraiseId)
     {
-        $result =[];
+        $result = [];
         if (AppraiseTangibleAsset::where('appraise_id', '=', $appraiseId)->exists()) {
-            $select = ['id', 'appraise_id', 'building_type_id', 'building_category_id',
-                        'floor', 'remaining_quality', 'total_construction_base',
-                        'total_construction_area', 'start_using_year', 'duration',
-                        'description', 'other_building', 'rate_id', 'structure_id',
-                        'crane_id', 'aperture_id', 'factory_type_id', 'contruction_description',
-                        'gpxd','created_at', 'tangible_name'
-                    ];
-            $with= [
-                    'buildingType:id,type,description',
-                    'buildingCategory:id,type,description',
-                    'rate:id,type,description',
-                    'structure:id,type,description',
-                    'crane:id,type,description',
-                    'aperture:id,type,description',
-                    'factoryType:id,type,description',
-                    ];
+            $select = [
+                'id', 'appraise_id', 'building_type_id', 'building_category_id',
+                'floor', 'remaining_quality', 'total_construction_base',
+                'total_construction_area', 'start_using_year', 'duration',
+                'description', 'other_building', 'rate_id', 'structure_id',
+                'crane_id', 'aperture_id', 'factory_type_id', 'contruction_description',
+                'gpxd', 'created_at', 'tangible_name'
+            ];
+            $with = [
+                'buildingType:id,type,description',
+                'buildingCategory:id,type,description',
+                'rate:id,type,description',
+                'structure:id,type,description',
+                'crane:id,type,description',
+                'aperture:id,type,description',
+                'factoryType:id,type,description',
+            ];
             $result = AppraiseTangibleAsset::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
+                ->where(['appraise_id' => $appraiseId])
                 ->get();
         }
         return  $result;
-
     }
 
-    public function postConstructionInfomation(array $objects , int $appraiseId)
+    public function postConstructionInfomation(array $objects, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
             if (AppraiseTangibleAsset::where('appraise_id', '=', $appraiseId)->exists()) {
-                AppraiseTangibleAsset::where(['appraise_id'=>$appraiseId])->delete();
+                AppraiseTangibleAsset::where(['appraise_id' => $appraiseId])->delete();
             }
             if (ConstructionCompany::where('appraise_id', $appraiseId)->exists()) {
                 ConstructionCompany::where('appraise_id', $appraiseId)->delete();
             }
-            if(AppraiseTangibleComparisonFactor::where('appraise_id',$appraiseId)->exists())
+            if (AppraiseTangibleComparisonFactor::where('appraise_id', $appraiseId)->exists())
                 AppraiseTangibleComparisonFactor::where('appraise_id', $appraiseId)->delete();
 
             $buildingPriceRepository = new EloquentBuildingPriceRepository(new BuildingPrice());
-            foreach($objects['construction'] as $construct){
-                
+            foreach ($objects['construction'] as $construct) {
+
                 $province_id = Appraise::where('id', '=', $appraiseId)->get('province_id')->first();
                 // dd('province_id',$province_id);
                 $desicionAverage = $buildingPriceRepository->getAverageBuildPriceV4($construct, $province_id['province_id']);
                 $construction = $construct;
-                $construction['appraise_id']= $appraiseId;
-                $construction['total_desicion_average']= $desicionAverage;
+                $construction['appraise_id'] = $appraiseId;
+                $construction['total_desicion_average'] = $desicionAverage;
                 $tangibleAsset = new AppraiseTangibleAsset($construction);
                 $tangibleAssetId =   QueryBuilder::for($tangibleAsset)
-                        ->insertGetId($tangibleAsset->attributesToArray());
+                    ->insertGetId($tangibleAsset->attributesToArray());
 
                 $constructionCompany = $this->getContructionCompanyDefault();
                 foreach ($constructionCompany as $company) {
@@ -3831,7 +3825,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $companyCons['is_defaults'] = $company['is_defaults'];
                     $companyCons['tangible_asset_id'] = $tangibleAssetId;
                     $constructionCompanyData = new ConstructionCompany($companyCons);
-                        QueryBuilder::for($constructionCompanyData)
+                    QueryBuilder::for($constructionCompanyData)
                         ->insert($constructionCompanyData->attributesToArray());
                 }
                 $pp2 = $buildingPriceRepository->getPP2_V1($construct, $province_id['province_id']);
@@ -3839,7 +3833,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $tangibleComparisonFactor = [];
                 $tangibleComparisonFactor['appraise_id'] = $appraiseId;
                 $tangibleComparisonFactor['tangible_asset_id'] = $tangibleAssetId;
-                if(isset($pp2)){
+                if (isset($pp2)) {
                     $tangibleComparisonFactor['h1'] = $pp2['h1'];
                     $tangibleComparisonFactor['h2'] = $pp2['h2'];
                     $tangibleComparisonFactor['h3'] = $pp2['h3'];
@@ -3855,8 +3849,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
                 $tangibleComparisonFactor = new AppraiseTangibleComparisonFactor($tangibleComparisonFactor);
                 QueryBuilder::for($tangibleComparisonFactor)
-                        ->insert($tangibleComparisonFactor->attributesToArray());
-
+                    ->insert($tangibleComparisonFactor->attributesToArray());
             }
 
             $data = Appraise::where('id', $appraiseId)->first();
@@ -3864,12 +3857,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             #  CẬP NHẬT THÔNG TIN VỀ CÔNG TRÌNH XÂY DỰNG
             # activity-log
             $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật dữ liệu công trình xây dựng');
-            $this->updateAppraiseStep($appraiseId,3);
+            $this->updateAppraiseStep($appraiseId, 3);
             $this->processAfterSave($appraiseId);
             DB::commit();
             // return $this->getConstruction($appraiseId);
-            return ['id' => $appraiseId , 'step'=> 3];
-        }catch(Exception $ex){
+            return ['id' => $appraiseId, 'step' => 3];
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -3880,68 +3873,77 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     //STEP 4
     public function getLaw(int $appraiseId)
     {
-        $result =[];
+        $result = [];
         if (AppraiseLaw::where('appraise_id', '=', $appraiseId)->exists()) {
-            $select = ['id', 'appraise_id', DB::raw("coalesce(appraise_law_id,0) as appraise_law_id"), 'date',
-                        'description', 'legal_name_holder', 'certifying_agency',
-                        'origin_of_use', 'content', 'duration',
-                        // DB::raw("to_char(law_date , 'DD-MM-YYYY')  as law_date")
-                        'law_date', 'note'
-                    ];
-            $with= [
-                    'law:id,type,content',
-                    'landDetails:id,appraise_law_id,doc_no,land_no',
-                    'purposeDetails:id,appraise_law_id,land_type_purpose_id,total_area',
-                    ];
+            $select = [
+                'id', 'appraise_id', DB::raw("coalesce(appraise_law_id,0) as appraise_law_id"), 'date',
+                'description', 'legal_name_holder', 'certifying_agency',
+                'origin_of_use', 'content', 'duration',
+                // DB::raw("to_char(law_date , 'DD-MM-YYYY')  as law_date")
+                'law_date', 'note', 'document_file'
+            ];
+            $with = [
+                'law:id,type,content',
+                'landDetails:id,appraise_law_id,doc_no,land_no',
+                'purposeDetails:id,appraise_law_id,land_type_purpose_id,total_area',
+            ];
             $result = AppraiseLaw::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
+                ->where(['appraise_id' => $appraiseId])
                 ->get();
         }
         return  $result;
     }
 
-    public function postLawInfomation(array $objects , int $appraiseId)
+    public function postLawInfomation(array $objects, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
-            if(Appraise::where('id',$appraiseId)->exists())
-            {
+            if (Appraise::where('id', $appraiseId)->exists()) {
                 if (AppraiseLaw::where('appraise_id', '=', $appraiseId)->exists()) {
-                    $lawData = AppraiseLaw::where('appraise_id', '=', $appraiseId)->get(['id']);
-                    foreach($lawData as $lawId){
-                        AppraiseLawLandDetail::where(['appraise_law_id'=>$lawId['id']])->delete();
-                        AppraiseLawPurposeDetail::where(['appraise_law_id'=>$lawId['id']])->delete();
+                    $lawData = AppraiseLaw::where('appraise_id', '=', $appraiseId)->get(['id', 'document_file']);
+                    foreach ($lawData as $lawId) {
+                        AppraiseLawLandDetail::where(['appraise_law_id' => $lawId['id']])->delete();
+                        AppraiseLawPurposeDetail::where(['appraise_law_id' => $lawId['id']])->delete();
+
+                        // Xóa ảnh
+                        // $array = json_decode($lawId['document_file'], true);
+                        // if (!empty($array)) {
+                        //     foreach ($array as $itemDocumentFile) {
+                        //         Storage::disk(env('FILESYSTEM_DRIVER'))->delete($itemDocumentFile['link']);
+                        //     }
+                        // }
                     }
-                    AppraiseLaw::where(['appraise_id'=>$appraiseId])->delete();
+                    AppraiseLaw::where(['appraise_id' => $appraiseId])->delete();
                 }
                 $laws = $objects['law'];
-                foreach($laws as $law){
-                    $law['appraise_id']= $appraiseId;
-                    $law['appraise_law_id']=  $law['appraise_law_id']==0 ? null : $law['appraise_law_id'];
-                    $law['law_date']= isset($law['law_date']) ?  $law['law_date'] : null;
+                foreach ($laws as $law) {
+                    $law['appraise_id'] = $appraiseId;
+                    $law['appraise_law_id'] =  $law['appraise_law_id'] == 0 ? null : $law['appraise_law_id'];
+                    $law['law_date'] = isset($law['law_date']) ?  $law['law_date'] : null;
+                    $law['document_file'] =  isset($law['document_file']) ? json_encode($law['document_file']) : null;
 
                     $appraiseLaw = new AppraiseLaw($law);
                     $lawId = QueryBuilder::for($appraiseLaw)
                         ->insertGetId($appraiseLaw->attributesToArray());
                     $lawLandDetails = $law['land_details'];
                     $lawPurposeDetails = $law['purpose_details'];
-                    if(isset($law['appraise_law_id']) && $law['appraise_law_id']!=0 ){
-                        foreach($lawLandDetails as $land){
+                    if (isset($law['appraise_law_id']) && $law['appraise_law_id'] != 0) {
+                        foreach ($lawLandDetails as $land) {
                             $land['appraise_law_id'] = $lawId;
                             $lawLandDetail = new AppraiseLawLandDetail($land);
                             QueryBuilder::for($lawLandDetail)
-                            ->insertGetId($lawLandDetail->attributesToArray());
+                                ->insertGetId($lawLandDetail->attributesToArray());
                         }
-                        foreach($lawPurposeDetails as $land){
+                        foreach ($lawPurposeDetails as $land) {
                             $land['appraise_law_id'] = $lawId;
                             $lawPurposeDetail = new AppraiseLawPurposeDetail($land);
                             QueryBuilder::for($lawPurposeDetail)
-                            ->insertGetId($lawPurposeDetail->attributesToArray());
+                                ->insertGetId($lawPurposeDetail->attributesToArray());
                         }
                     }
                 }
@@ -3951,16 +3953,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 # activity-log
                 $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật dữ liệu pháp lý tài sản');
 
-                $this->updateAppraiseStep($appraiseId,4);
+                $this->updateAppraiseStep($appraiseId, 4);
                 $this->processAfterSave($appraiseId);
                 DB::commit();
                 return $this->getAppraisalFacility($appraiseId);
-            }
-            else{
+            } else {
                 $data = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . $appraiseId, 'exception' =>  ''];
                 return $data;
             }
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -3976,45 +3977,44 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result2 = [];
         $result3 = [];
         if (AppraiseAppraisalMethods::where('appraise_id', '=', $appraiseId)->exists()) {
-            $select = [ 'slug_value','value',
-                    ];
-            $with= [
-                    ];
+            $select = [
+                'slug_value', 'value',
+            ];
+            $with = [];
             $result1 = AppraiseAppraisalMethods::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
-                ->where('slug',['thong_nhat_muc_gia_chi_dan'])
+                ->where(['appraise_id' => $appraiseId])
+                ->where('slug', ['thong_nhat_muc_gia_chi_dan'])
                 ->get()->first();
             $result2 = AppraiseAppraisalMethods::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
-                ->where('slug',['tinh_gia_dat_hon_hop_con_lai'])
+                ->where(['appraise_id' => $appraiseId])
+                ->where('slug', ['tinh_gia_dat_hon_hop_con_lai'])
                 ->get()->first();
             $result3 = AppraiseAppraisalMethods::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
-                ->where('slug',['tinh_gia_dat_vi_pham_quy_hoach'])
+                ->where(['appraise_id' => $appraiseId])
+                ->where('slug', ['tinh_gia_dat_vi_pham_quy_hoach'])
                 ->get()->first();
-        }
-        else
-        {
-            $result1=[
+        } else {
+            $result1 = [
                 'slug_value' => 'trung-binh',
                 'value' => null,
-                        ];
-            $result2=[
-                            'slug_value' => 'theo-chi-phi-chuyen-mdsd-dat',
-                            'value' => null,
-                        ];
-            $result3=[
-                            'slug_value' => 'theo-gia-dat-qd-ubnd',
-                            'value' => null,
-                        ];
+            ];
+            $result2 = [
+                'slug_value' => 'theo-chi-phi-chuyen-mdsd-dat',
+                'value' => null,
+            ];
+            $result3 = [
+                'slug_value' => 'theo-gia-dat-qd-ubnd',
+                'value' => null,
+            ];
         }
-        $result = array_merge(['thong_nhat_muc_gia_chi_dan' => $result1],
-                                ['tinh_gia_dat_hon_hop_con_lai' => $result2],
-                                ['tinh_gia_dat_vi_pham_quy_hoach' => $result3]
-                            );
+        $result = array_merge(
+            ['thong_nhat_muc_gia_chi_dan' => $result1],
+            ['tinh_gia_dat_hon_hop_con_lai' => $result2],
+            ['tinh_gia_dat_vi_pham_quy_hoach' => $result3]
+        );
         return $result;
     }
 
@@ -4022,24 +4022,25 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     {
         // $result = [];
         if (Appraise::where('id', '=', $appraiseId)->exists()) {
-            $select = ['id', 'appraise_basis_property_id', 'appraise_principle_id',
-                     'document_description', 'appraise_approach_id', 'appraise_method_used_id',
-                    ];
-            $with= [
-                    'appraiseApproach:id,name,description,type',
-                    'appraisePrinciple:id,name,description,type',
-                    'appraiseMethodUsed:id,name,description,type',
-                    'appraiseBasisProperty:id,name,description,type',
-                    ];
+            $select = [
+                'id', 'appraise_basis_property_id', 'appraise_principle_id',
+                'document_description', 'appraise_approach_id', 'appraise_method_used_id',
+            ];
+            $with = [
+                'appraiseApproach:id,name,description,type',
+                'appraisePrinciple:id,name,description,type',
+                'appraiseMethodUsed:id,name,description,type',
+                'appraiseBasisProperty:id,name,description,type',
+            ];
             $result = Appraise::with($with)
                 ->select($select)
-                ->where(['id'=>$appraiseId])
+                ->where(['id' => $appraiseId])
                 ->whereNotNull('appraise_approach_id')
                 ->get()
                 ->first();
 
             // add default value
-            if(! isset($result)){
+            if (!isset($result)) {
                 $result = Appraise::where('id', '=', $appraiseId)->get('id')->first();
                 $result->append('appraise_approach_id');
                 $result->append('appraise_basis_property_id');
@@ -4060,60 +4061,58 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     }
 
     //Step 5 - Save data
-    public function postAppraisalFacility(array $objects , int $appraiseId)
+    public function postAppraisalFacility(array $objects, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
             if (Appraise::where('id', $appraiseId)->exists()) {
                 $appraisal_methods = $objects['appraisal_methods'];
                 $value_base_and_approach = $objects['value_base_and_approach'];
                 Appraise::where('id', $appraiseId)->update([
-                    'appraise_basis_property_id'=> $value_base_and_approach['appraise_basis_property_id'],
-                    'document_description'=> $value_base_and_approach['document_description'],
-                    'appraise_approach_id'=> $value_base_and_approach['appraise_approach_id'],
-                    'appraise_method_used_id'=> $value_base_and_approach['appraise_method_used_id'],
-                    'appraise_principle_id'=> $value_base_and_approach['appraise_principle_id'],
+                    'appraise_basis_property_id' => $value_base_and_approach['appraise_basis_property_id'],
+                    'document_description' => $value_base_and_approach['document_description'],
+                    'appraise_approach_id' => $value_base_and_approach['appraise_approach_id'],
+                    'appraise_method_used_id' => $value_base_and_approach['appraise_method_used_id'],
+                    'appraise_principle_id' => $value_base_and_approach['appraise_principle_id'],
                 ]);
 
-                if(AppraiseAppraisalMethods::where('appraise_id',$appraiseId)->exists()){
-                    foreach(array_keys($appraisal_methods) as $item){
-                        if(AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug','=',$item)->exists())
-                            AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug','=',$item)->update([
-                                'slug_value'=> $appraisal_methods[$item]['slug_value'],
+                if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->exists()) {
+                    foreach (array_keys($appraisal_methods) as $item) {
+                        if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', '=', $item)->exists())
+                            AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', '=', $item)->update([
+                                'slug_value' => $appraisal_methods[$item]['slug_value'],
                                 'value' => $appraisal_methods[$item]['value'],
                             ]);
-                        else{
+                        else {
                             $data = [
-                                'appraise_id'=>$appraiseId,
-                                'slug'=>$item,
-                                'slug_value'=>$appraisal_methods[$item]['slug_value'],
-                                'value'=>$appraisal_methods[$item]['value'],
+                                'appraise_id' => $appraiseId,
+                                'slug' => $item,
+                                'slug_value' => $appraisal_methods[$item]['slug_value'],
+                                'value' => $appraisal_methods[$item]['value'],
                             ];
                             $appraiseAppraisalMethods = new AppraiseAppraisalMethods($data);
                             QueryBuilder::for($appraiseAppraisalMethods)
-                            ->insert($appraiseAppraisalMethods->attributesToArray());
+                                ->insert($appraiseAppraisalMethods->attributesToArray());
                         }
                     }
-                }
-                else{
-                    foreach(array_keys($appraisal_methods) as $item){
+                } else {
+                    foreach (array_keys($appraisal_methods) as $item) {
                         $data = [
-                            'appraise_id'=>$appraiseId,
-                            'slug'=>$item,
-                            'slug_value'=>$appraisal_methods[$item]['slug_value'],
-                            'value'=>$appraisal_methods[$item]['value'],
+                            'appraise_id' => $appraiseId,
+                            'slug' => $item,
+                            'slug_value' => $appraisal_methods[$item]['slug_value'],
+                            'value' => $appraisal_methods[$item]['value'],
                         ];
                         $appraiseAppraisalMethods = new AppraiseAppraisalMethods($data);
                         QueryBuilder::for($appraiseAppraisalMethods)
-                        ->insert($appraiseAppraisalMethods->attributesToArray());
+                            ->insert($appraiseAppraisalMethods->attributesToArray());
                     }
                 }
-            }
-            else{
+            } else {
                 DB::rollBack();
                 $data = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . $appraiseId, 'exception' => ''];
                 return $data;
@@ -4123,12 +4122,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             # activity-log
             $this->CreateActivityLog($data, $data, 'update_data', 'cập nhật dữ liệu cơ sở thẩm định');
 
-            $this->updateAppraiseStep($appraiseId,5);
+            $this->updateAppraiseStep($appraiseId, 5);
             $this->processAfterSave($appraiseId);
             DB::commit();
             // return $this->getAppraisalFacility($appraiseId);
-            return ['id' => $appraiseId , 'step'=> 5 ,'distance_max' => 2];
-        }catch(Exception $ex){
+            return ['id' => $appraiseId, 'step' => 5, 'distance_max' => 2];
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -4143,78 +4142,77 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = [];
         if (AppraiseHasAsset::where('appraise_id', $appraiseId)->exists()) {
             $select = [
-                        'asset_general_id',
-                        'version',
-                    ];
-            $with= [
-                    ];
+                'asset_general_id',
+                'version',
+            ];
+            $with = [];
             $hasAssets = AppraiseHasAsset::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
-                ->orderby('asset_general_id','desc')
+                ->where(['appraise_id' => $appraiseId])
+                ->orderby('asset_general_id', 'desc')
                 ->get();
-            $asset_general =[];
+            $asset_general = [];
             $stt = 0;
-            $appraise = Appraise::where('id',$appraiseId)->select('coordinates')->first();
+            $appraise = Appraise::where('id', $appraiseId)->select('coordinates')->first();
             $appraiseLocation = $appraise['coordinates'];
             // $distance = 2;
             $distanceMax = 0;
             $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
-            foreach($hasAssets as $asset){
-                $asset_general[$stt] = $compareAssetGeneralRepository->findVersionById_v2($asset['asset_general_id'],$asset['version']);
+            foreach ($hasAssets as $asset) {
+                $asset_general[$stt] = $compareAssetGeneralRepository->findVersionById_v2($asset['asset_general_id'], $asset['version']);
                 $asset_general[$stt]['version'] = $asset['version'];
 
                 $assetLocation = isset($asset_general[$stt]['coordinates']) ? $asset_general[$stt]['coordinates'] : $appraiseLocation;
-                $calDistance =  CommonService::calAppraiseAssetDistance($appraiseLocation,$assetLocation);
-                if($calDistance > $distanceMax){
+                $calDistance =  CommonService::calAppraiseAssetDistance($appraiseLocation, $assetLocation);
+                if ($calDistance > $distanceMax) {
                     $distanceMax = $calDistance;
                 }
                 $stt++;
             }
-            $result= $asset_general;
+            $result = $asset_general;
         }
-        if($distanceMax ==0)
+        if ($distanceMax == 0)
             $distanceMax = 2;
-        $result['distance_max']= CommonService::roundDistance($distanceMax);
-        return  $result ;
+        $result['distance_max'] = CommonService::roundDistance($distanceMax);
+        return  $result;
     }
 
     private function getComparisonFactors(int $appraiseId)
     {
         $result = [];
-        if (AppraiseComparisonFactor::where('appraise_id',$appraiseId)->exists()){
-            $select = ['type'
-                ];
-            $with= [
-                ];
+        if (AppraiseComparisonFactor::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'type'
+            ];
+            $with = [];
             $comparisonFators = AppraiseComparisonFactor::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
-                ->where(['status'=>1])
-                ->where('type','!=','yeu_to_khac')
+                ->where(['appraise_id' => $appraiseId])
+                ->where(['status' => 1])
+                ->where('type', '!=', 'yeu_to_khac')
                 ->distinct()
                 ->get();
             $stt = 0;
-            foreach($comparisonFators as $item){
+            foreach ($comparisonFators as $item) {
                 $result[$stt]  = $item['type'];
                 $stt++;
             }
         }
 
-        return $result ;
+        return $result;
     }
 
     public function getAssets(int $appraiseId)
     {
-        $result =[];
-        $picTypeId=[153];
+        $result = [];
+        $picTypeId = [153];
         $asset = $this->getAppraiseHasAssets($appraiseId);
         $comparisonFators = $this->getComparisonFactors($appraiseId);
         $pic =  $this->getPic($appraiseId, $picTypeId);
-        if(count($pic)>0)
+        if (count($pic) > 0)
             $pic = ['map_img' => $pic[0]['link']];
         $asset = ['assets_general' => $asset];
-        $result = array_merge($asset,[ 'comparison_factor' => $comparisonFators ],$pic);
+        $result = array_merge($asset, ['comparison_factor' => $comparisonFators], $pic);
         return $result;
     }
 
@@ -4222,20 +4220,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     {
         $result = [];
         if (Appraise::where('id', $appraiseId)->exists()) {
-            $select = ['id','coordinates',
-            'district_id', 'province_id', 'street_id', 'ward_id',
-                    ];
-            $with= [
-                    'properties:id,appraise_id,front_side',
-                    'properties.propertyDetail:id,appraise_property_id,land_type_purpose_id,total_area'
-                    ];
+            $select = [
+                'id', 'coordinates',
+                'district_id', 'province_id', 'street_id', 'ward_id',
+            ];
+            $with = [
+                'properties:id,appraise_id,front_side',
+                'properties.propertyDetail:id,appraise_property_id,land_type_purpose_id,total_area'
+            ];
             $data = Appraise::with($with)
                 ->select($select)
-                ->where(['id'=>$appraiseId])
+                ->where(['id' => $appraiseId])
                 ->get()->first();
 
-            if(isset($data)){
-                $result['distance']=2;
+            if (isset($data)) {
+                $result['distance'] = 2;
                 $result['ward_id'] = $data['ward_id'];
                 $result['district_id'] = $data['district_id'];
                 $result['province_id'] = $data['province_id'];
@@ -4243,10 +4242,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result['location'] = $data['coordinates'];
                 $result['front_side'] = $data['properties'][0]['front_side'];
                 $stt = 0;
-                foreach($data['properties'][0]['propertyDetail']  as $item){
+                foreach ($data['properties'][0]['propertyDetail']  as $item) {
                     $result['unrecognized'][$stt]['area'] = strval($item['total_area']);
                     $result['unrecognized'][$stt]['land_type_purpose'] = $item['land_type_purpose_id'];
-                    $stt ++;
+                    $stt++;
                 }
             }
         }
@@ -4258,42 +4257,42 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result = [];
         if (Appraise::where('id', $appraiseId)->exists()) {
             $select = [
-                    'id',
-                    ];
-            $with= [
-                    'properties:id,appraise_id,front_side,feng_shui_id,paymen_method_id,condition_id,social_security_id,electric_water_id,business_id,material_id,land_shape_id,land_type_id,zoning_id,legal_id,front_side_width,main_road_length,insight_width,appraise_land_sum_area',
-                    'properties.legal:id,description',
-                    'properties.zoning:id,description',
-                    'properties.landType:id,description',
-                    'properties.landShape:id,description',
-                    'properties.material:id,description',
-                    'properties.business:id,description',
-                    'properties.electricWater:id,description',
-                    'properties.socialSecurity:id,description',
-                    'properties.fengShui:id,description',
-                    'properties.paymenMethod:id,description',
-                    'properties.conditions:id,description',
-                    'properties.propertyTurningTime',
-                ];
+                'id',
+            ];
+            $with = [
+                'properties:id,appraise_id,front_side,feng_shui_id,paymen_method_id,condition_id,social_security_id,electric_water_id,business_id,material_id,land_shape_id,land_type_id,zoning_id,legal_id,front_side_width,main_road_length,insight_width,appraise_land_sum_area',
+                'properties.legal:id,description',
+                'properties.zoning:id,description',
+                'properties.landType:id,description',
+                'properties.landShape:id,description',
+                'properties.material:id,description',
+                'properties.business:id,description',
+                'properties.electricWater:id,description',
+                'properties.socialSecurity:id,description',
+                'properties.fengShui:id,description',
+                'properties.paymenMethod:id,description',
+                'properties.conditions:id,description',
+                'properties.propertyTurningTime',
+            ];
             $result = Appraise::with($with)
                 ->select($select)
-                ->where(['id'=>$appraiseId])
+                ->where(['id' => $appraiseId])
                 ->get()->first();
         }
         return $result;
     }
 
-    public function postAssets(array $objects , int $appraiseId)
+    public function postAssets(array $objects, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
 
             $user = CommonService::getUser();
-            $comparisonFactors =$objects['comparison_factor'];
+            $comparisonFactors = $objects['comparison_factor'];
             $dictionaries = $this->findAllAppraiseDictionaries();
             // dd($comparisonFactors,$dictionaries);
             // $appraiseData = $this->getAppraiseDataComparison($appraiseId);
@@ -4301,11 +4300,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $baseUBNDPrice = $this->getBaseUBNDPrice($appraiseId);
             // dd(json_encode($baseUBNDPrice) );
             $cpcmdsd = 0;
-            if(isset($objects['map_img'])){
+            if (isset($objects['map_img'])) {
                 $link  = $objects['map_img'];
                 $type_id = 153;
-                AppraisePic::query()->where('appraise_id', '=', $appraiseId)->where('type_id',$type_id)->delete();
-                $map =[
+                AppraisePic::query()->where('appraise_id', '=', $appraiseId)->where('type_id', $type_id)->delete();
+                $map = [
                     'appraise_id' => $appraiseId,
                     'link' => $objects['map_img'],
                     'type_id' => $type_id,
@@ -4315,9 +4314,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     ->insert($pic->attributesToArray());
             }
 
-            if(isset($objects['assets_general']))
-            {
-                if(count($objects['assets_general'])>3){
+            if (isset($objects['assets_general'])) {
+                if (count($objects['assets_general']) > 3) {
                     DB::rollBack();
                     $data = ['message' => ErrorMessage::APPRAISE_CHECK_ASSET_NUMBER, 'exception' =>  ''];
                     return $data;
@@ -4325,21 +4323,20 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
                 $asset_general = $objects['assets_general'];
 
-                $oldAppraiseHasAssets = AppraiseHasAsset::where('appraise_id',$appraiseId)->get();
-                $oldAppraiseHasAssets= json_decode(json_encode($oldAppraiseHasAssets),true);
+                $oldAppraiseHasAssets = AppraiseHasAsset::where('appraise_id', $appraiseId)->get();
+                $oldAppraiseHasAssets = json_decode(json_encode($oldAppraiseHasAssets), true);
                 //add new asset and update
-                $stt=0;
+                $stt = 0;
                 $assetPrice = [];
-                foreach($asset_general as $asset)
-                {
+                foreach ($asset_general as $asset) {
                     $asset_general_id = $asset['id'];
                     $version = $asset['version'];
-                    if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
-                        $key =array_search($asset['id'], array_column($oldAppraiseHasAssets, 'asset_general_id'));
-                        if(!($key === false)){
+                    if (isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets) > 0) {
+                        $key = array_search($asset['id'], array_column($oldAppraiseHasAssets, 'asset_general_id'));
+                        if (!($key === false)) {
                             //step 5 -> step 6 delete all appraise asset ... => khi có thay đổi về đơn giá UBND hoặc diện tích đất thì không cần sử lý ở đây
                             //update appraie comparison factor
-                            if($oldAppraiseHasAssets[$key]['version']!=$version){
+                            if ($oldAppraiseHasAssets[$key]['version'] != $version) {
                                 //delete data
                                 AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $asset_general_id)->forceDelete();
                                 AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('type', '=', 'yeu_to_khac')->forceDelete();
@@ -4350,13 +4347,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                                 goto createNewAsset;
                             }
                             $oldAssetGeneralId = $asset_general_id;
-                            $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id,$oldAssetGeneralId) ;
+                            $this->postComparisonFactor($dictionaries, $appraise->properties[0], $comparisonFactors, $asset, $appraiseId, $asset_general_id, $oldAssetGeneralId);
                             continue;
                         }
                     }
                     // add thêm để dự phòng trường hợp không qua được điều kiện trên
-                    if(AppraiseHasAsset::where('appraise_id',$appraiseId)->where('asset_general_id',$asset_general_id)->exists()){
-                        $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id,$asset_general_id) ;
+                    if (AppraiseHasAsset::where('appraise_id', $appraiseId)->where('asset_general_id', $asset_general_id)->exists()) {
+                        $this->postComparisonFactor($dictionaries, $appraise->properties[0], $comparisonFactors, $asset, $appraiseId, $asset_general_id, $asset_general_id);
                         continue;
                     }
                     createNewAsset:
@@ -4370,11 +4367,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     QueryBuilder::for($appraiseHasAsset)
                         ->insert($appraiseHasAsset->attributesToArray());
                     //create appraie comparison factor
-                    $this->postComparisonFactor($dictionaries, $appraise->properties[0] , $comparisonFactors , $asset , $appraiseId, $asset_general_id) ;
+                    $this->postComparisonFactor($dictionaries, $appraise->properties[0], $comparisonFactors, $asset, $appraiseId, $asset_general_id);
                     //create appraise unit area , appraise unit price
                     $assetDetails = $asset['properties'][0]['property_detail'];
-                    $key =array_search($baseUBNDPrice['land_type_purpose_id'], array_column($assetDetails, 'land_type_purpose'));
-                    if($key === false){
+                    $key = array_search($baseUBNDPrice['land_type_purpose_id'], array_column($assetDetails, 'land_type_purpose'));
+                    if ($key === false) {
                         $basePrice = $baseUBNDPrice['circular_unit_price'];
 
                         $area_price['appraise_id'] = $appraiseId;
@@ -4388,14 +4385,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
                         QueryBuilder::for($appraiseUnitPrice)
                             ->insert($appraiseUnitPrice->attributesToArray());
-                    }
-                    else{
+                    } else {
                         $basePrice = $assetDetails[$key]['circular_unit_price'];
                     }
                     $cpcmdsd = 0;
-                    foreach($assetDetails as $detail){
+                    foreach ($assetDetails as $detail) {
 
-                        $cpcmdsd = $cpcmdsd + CommonService::calAssetCPCMDSD($basePrice,$detail['circular_unit_price'],$detail['total_area']);
+                        $cpcmdsd = $cpcmdsd + CommonService::calAssetCPCMDSD($basePrice, $detail['circular_unit_price'], $detail['total_area']);
                         $area_price['appraise_id'] = $appraiseId;
                         $area_price['asset_general_id'] = $asset['id'];
                         $area_price['position_type_id'] = $detail['position_type_id'];
@@ -4416,7 +4412,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $appraiseAdapterData = [
                         'appraise_id' => $appraiseId,
                         'asset_general_id' => $asset_general_id,
-                        'percent' => floatval($asset['adjust_percent'])+100,
+                        'percent' => floatval($asset['adjust_percent']) + 100,
                         'change_purpose_price' => $cpcmdsd,
                         'change_violate_price' => 0,
                         'change_negotiated_price' => $asset['adjust_amount'],
@@ -4424,16 +4420,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     // dd($appraiseAdapterData);
                     $appraiseAdatter = new AppraiseAdapter($appraiseAdapterData);
                     QueryBuilder::for($appraiseAdatter)
-                    ->insert($appraiseAdatter->attributesToArray());
+                        ->insert($appraiseAdatter->attributesToArray());
                 }
                 //calculate price
                 $this->getAppraiseCalculate($appraiseId);
                 //delete old asset
-                if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
-                    foreach($oldAppraiseHasAssets as  $oldAsset){
-                        $key =array_search($oldAsset['asset_general_id'], array_column($asset_general, 'id'),true);
-                        if($key === false){
-                            $oldId=$oldAsset['asset_general_id'];
+                if (isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets) > 0) {
+                    foreach ($oldAppraiseHasAssets as  $oldAsset) {
+                        $key = array_search($oldAsset['asset_general_id'], array_column($asset_general, 'id'), true);
+                        if ($key === false) {
+                            $oldId = $oldAsset['asset_general_id'];
                             AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
                             AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->where('type', '=', 'yeu_to_khac')->forceDelete();
                             AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->where('asset_general_id', '=', $oldId)->forceDelete();
@@ -4445,7 +4441,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
             // dd(AppraiseHasAsset::where('appraise_id',$appraiseId)->count('asset_general_id'));
-            if(AppraiseHasAsset::where('appraise_id',$appraiseId)->count('asset_general_id') >3 ){
+            if (AppraiseHasAsset::where('appraise_id', $appraiseId)->count('asset_general_id') > 3) {
                 DB::rollBack();
                 $data = ['message' => ErrorMessage::APPRAISE_CHECK_ASSET_NUMBER, 'exception' =>  ''];
                 return $data;
@@ -4460,10 +4456,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             Appraise::where('id', $appraiseId)->update([
                 'filter_year' => $objects['filter_year'],
             ]);
-            $result = Appraise::where('id',$appraiseId)->get(['id','step','coordinates'])->first();
+            $result = Appraise::where('id', $appraiseId)->get(['id', 'step', 'coordinates'])->first();
             $result->append('distance_max');
             return $result;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -4472,7 +4468,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     }
 
     #region comparison Factor
-    private function postComparisonFactor(array $dictionaries, $property ,array $comparison,array $asset , int $appraiseId,int $assetGeneralId, int  $oldAssetGeneralId = null  )
+    private function postComparisonFactor(array $dictionaries, $property, array $comparison, array $asset, int $appraiseId, int $assetGeneralId, int  $oldAssetGeneralId = null)
     {
         $allComparisonFactor = [
             "phap_ly",
@@ -4499,13 +4495,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         // dd($description);
         // dd(json_encode($object));
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
-            if(isset($oldAssetGeneralId)){
-                if(in_array($comparisonFactorTmp, $comparison)) {
+            if (isset($oldAssetGeneralId)) {
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     AppraiseComparisonFactor::where('appraise_id', $appraiseId)
                         ->where('type', $comparisonFactorTmp)
                         ->update(['status' => 1]);
                 } else {
-                    if(($comparisonFactorTmp != "yeu_to_khac") && $comparisonFactorTmp != "phap_ly") {
+                    if (($comparisonFactorTmp != "yeu_to_khac") && $comparisonFactorTmp != "phap_ly") {
                         AppraiseComparisonFactor::where('appraise_id', $appraiseId)
                             ->where('type', $comparisonFactorTmp)
                             ->update(['status' => 0]);
@@ -4513,52 +4509,52 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
                 continue;
             }
-            if($comparisonFactorTmp == 'phap_ly'){
+            if ($comparisonFactorTmp == 'phap_ly') {
                 $appraiseValue = $property->legal ? $property->legal->description : '';
-                $assetValue = isset($asset['properties'][0]['legal'])?$asset['properties'][0]['legal']['description']: '';
+                $assetValue = isset($asset['properties'][0]['legal']) ? $asset['properties'][0]['legal']['description'] : '';
                 ////phap ly always true
                 $status = true;
                 $dictionary = $dictionaries['phap_ly'];
                 // $this->comparisionLegal( $dataAppraise,$dataAsset,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'phap_ly';
                 $name = 'Pháp lý';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'quy_mo'){
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'quy_mo') {
                 $appraiseValue = $property->appraise_land_sum_area ?? 0;
                 $assetValue = $asset['properties'][0]['asset_general_land_sum_area'] ?? 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $this->comparisonSize( $appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId );
                 $type = 'quy_mo';
                 $name = 'Quy mô';
-                $this->comparisonNoDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
-            }elseif($comparisonFactorTmp == 'chieu_rong_mat_tien'){
+                $this->comparisonNoDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'chieu_rong_mat_tien') {
                 $appraiseValue = $property->front_side_width ?? 0;
                 $assetValue = $asset['properties'][0]['front_side_width'] ?? 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $this->comparisonFrontSideWidth( $appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId );
                 $type = 'chieu_rong_mat_tien';
                 $name = 'Chiều rộng mặt tiền';
-                $this->comparisonNoDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
-            }elseif($comparisonFactorTmp == 'chieu_sau_khu_dat'){
+                $this->comparisonNoDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'chieu_sau_khu_dat') {
                 $appraiseValue =  $property->insight_width ?? 0;
                 $assetValue = $asset['properties'][0]['insight_width'] ?? 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $this->comparisonInsightWitdh($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId );
                 $type = 'chieu_sau_khu_dat';
                 $name = 'Chiều sâu khu đất';
-                $this->comparisonNoDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
-            }elseif($comparisonFactorTmp == 'do_rong_duong'){
+                $this->comparisonNoDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'do_rong_duong') {
                 $appraiseValue = $property->main_road_length ?? 0;
-                if($appraiseValue==0){
+                if ($appraiseValue == 0) {
                     if ($property->propertyTurningTime) {
                         foreach ($property->propertyTurningTime as $propertyTurningTime) {
                             $appraiseValue = $propertyTurningTime->main_road_length ?? 0;
@@ -4566,85 +4562,83 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     }
                 }
                 $assetValue = $asset['properties'][0]['main_road_length'] ?? 0;
-                if($assetValue==0){
-                    if(isset($asset['properties'][0]['compare_property_turning_time'])) {
+                if ($assetValue == 0) {
+                    if (isset($asset['properties'][0]['compare_property_turning_time'])) {
                         foreach ($asset['properties'][0]['compare_property_turning_time'] as $propertyTurningTime) {
                             $assetValue = $propertyTurningTime['main_road_length'] ?? 0;
                         }
                     }
                 }
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['do_rong_duong'];
                 $this->comparisonMainRoadLength($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary);
-            }elseif($comparisonFactorTmp == 'hinh_dang_dat'){
-                $appraiseValue = $property->landShape ? $property->landShape->description :'Không biết';
-                $assetValue = isset($asset['properties'][0]['land_shape'])?$asset['properties'][0]['land_shape']['description']: 'Không biết' ;
+            } elseif ($comparisonFactorTmp == 'hinh_dang_dat') {
+                $appraiseValue = $property->landShape ? $property->landShape->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['land_shape']) ? $asset['properties'][0]['land_shape']['description'] : 'Không biết';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['hinh_dang_dat'];
                 // $this->comparisonLandSharp( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'hinh_dang_dat';
                 $name = 'Hình dáng đất';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'ket_cau_duong'){
-                $appraiseValue = $property->material ? $property->material->description :'Không biết';
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'ket_cau_duong') {
+                $appraiseValue = $property->material ? $property->material->description : 'Không biết';
                 // $assetValue = isset($asset['landShape'])?$asset['landShape']: 'Không biết' ;
-                if($appraiseValue=='Không biết'){
-                    if(isset($property->propertyTurningTime)) {
+                if ($appraiseValue == 'Không biết') {
+                    if (isset($property->propertyTurningTime)) {
                         foreach ($property->propertyTurningTime as $propertyTurningTime) {
                             $appraiseValue = $propertyTurningTime->material ? $propertyTurningTime->material->description : 'Không biết';
                         }
                     }
                 }
-                $assetValue = isset($asset['properties'][0]['material']) ? $asset['properties'][0]['material']['description']: 'Không biết';
-                if($assetValue=='Không biết'){
-                    if(isset($asset['properties'][0]['compare_property_turning_time'])) {
+                $assetValue = isset($asset['properties'][0]['material']) ? $asset['properties'][0]['material']['description'] : 'Không biết';
+                if ($assetValue == 'Không biết') {
+                    if (isset($asset['properties'][0]['compare_property_turning_time'])) {
                         foreach ($asset['properties'][0]['compare_property_turning_time'] as $propertyTurningTime) {
                             $assetValue = $propertyTurningTime['material']['description'] ?? 'Không biết';
                         }
                     }
                 }
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['ket_cau_duong'];
                 // $this->comparisonMaterial( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'ket_cau_duong';
                 $name = 'Kết cấu đường';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-
-            }elseif($comparisonFactorTmp == 'giao_thong'){
-                $appraiseValue ='KHÔNG ĐẤU NỐI ĐƯỜNG CHÍNH';
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'giao_thong') {
+                $appraiseValue = 'KHÔNG ĐẤU NỐI ĐƯỜNG CHÍNH';
                 $assetValue = "KHÔNG ĐẤU NỐI ĐƯỜNG CHÍNH";
-                if(isset($object[0]['propertyTurningTime'])) {
+                if (isset($object[0]['propertyTurningTime'])) {
                     $appraiseValue = "ĐẤU NỐI TRỰC TIẾP ĐƯỜNG CHÍNH";
                 }
 
-                if(isset($asset['properties'][0]['compare_property_turning_time'])) {
+                if (isset($asset['properties'][0]['compare_property_turning_time'])) {
                     $assetValue = "ĐẤU NỐI TRỰC TIẾP ĐƯỜNG CHÍNH";
                 }
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['giao_thong'];
                 // $this->comparisonTurning( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'giao_thong';
                 $name = 'Giao thông';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-
-            }elseif($comparisonFactorTmp == 'dieu_kien_ha_tang'){
-                $appraiseValue =isset($property->conditions) ? $property->conditions->description :'Không biết' ;
-                $assetValue = isset($asset['properties'][0]['conditions'])?$asset['properties'][0]['conditions']['description']: 'Không biết' ;
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'dieu_kien_ha_tang') {
+                $appraiseValue = isset($property->conditions) ? $property->conditions->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['conditions']) ? $asset['properties'][0]['conditions']['description'] : 'Không biết';
                 $status = false;
 
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['dieu_kien_ha_tang'];
@@ -4652,112 +4646,113 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 // $this->comparisonConditions( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'dieu_kien_ha_tang';
                 $name = 'Điều kiện hạ tầng';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'kinh_doanh'){
-                $appraiseValue =isset($property->business)?$property->business->description : 'Không biết';
-                $assetValue = isset($asset['properties'][0]['business'])?$asset['properties'][0]['business']['description']: 'Không biết' ;
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'kinh_doanh') {
+                $appraiseValue = isset($property->business) ? $property->business->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['business']) ? $asset['properties'][0]['business']['description'] : 'Không biết';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['kinh_doanh'];
                 // $this->comparisonBussiness( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'kinh_doanh';
                 $name = 'Kinh doanh';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'an_ninh_moi_truong_song'){
-                $appraiseValue =isset($property->socialSecurity)?$property->socialSecurity->description :'Không biết';
-                $assetValue = isset($asset['properties'][0]['social_security'])?$asset['properties'][0]['social_security']['description']: 'Không biết' ;
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'an_ninh_moi_truong_song') {
+                $appraiseValue = isset($property->socialSecurity) ? $property->socialSecurity->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['social_security']) ? $asset['properties'][0]['social_security']['description'] : 'Không biết';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['an_ninh_moi_truong_song'];
                 // $this->comparisonSecurity( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'an_ninh_moi_truong_song';
                 $name = 'An ninh môi trường sống';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'phong_thuy'){
-                $appraiseValue = isset($property->fengShui)?$property->fengShui->description :'Không biết';
-                $assetValue = isset($asset['properties'][0]['feng_shui'])?$asset['properties'][0]['feng_shui']['description']: 'Không biết' ;
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'phong_thuy') {
+                $appraiseValue = isset($property->fengShui) ? $property->fengShui->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['feng_shui']) ? $asset['properties'][0]['feng_shui']['description'] : 'Không biết';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['phong_thuy'];
                 // $this->comparisonFengShui( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'phong_thuy';
                 $name = 'Phong thủy';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'quy_hoach'){
-                $appraiseValue =isset($property->zoning) ? $property->zoning->description :'Không biết';
-                $assetValue = isset($asset['properties'][0]['zoning'])?$asset['properties'][0]['zoning']['description']: 'Không biết' ;
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'quy_hoach') {
+                $appraiseValue = isset($property->zoning) ? $property->zoning->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['zoning']) ? $asset['properties'][0]['zoning']['description'] : 'Không biết';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $this->comparisonZoning( $appraiseValue, $assetValue, $status , $appraiseId, $assetGeneralId );
                 $type = 'quy_hoach';
                 $name = 'Quy hoạch/Hiện trạng';
-                $this->comparisonNoDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
-            }elseif($comparisonFactorTmp == 'dieu_kien_thanh_toan'){
-                $appraiseValue =isset($property->paymenMethod)?$property->paymenMethod->description:'Không biết' ;
-                $assetValue = isset($asset['properties'][0]['paymen_method'])?$asset['properties'][0]['paymen_method']['description']: 'Không biết' ;
+                $this->comparisonNoDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'dieu_kien_thanh_toan') {
+                $appraiseValue = isset($property->paymenMethod) ? $property->paymenMethod->description : 'Không biết';
+                $assetValue = isset($asset['properties'][0]['paymen_method']) ? $asset['properties'][0]['paymen_method']['description'] : 'Không biết';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $dictionary = $dictionaries['dieu_kien_thanh_toan'];
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'dieu_kien_thanh_toan';
                 $name = 'Điều kiện thanh toán';
-                $this->comparisionHasDictionary( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary,$type,$name );
-            }elseif($comparisonFactorTmp == 'khoang_cach'){
-                $appraiseValue = 0 ;
+                $this->comparisionHasDictionary($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $dictionary, $type, $name);
+            } elseif ($comparisonFactorTmp == 'khoang_cach') {
+                $appraiseValue = 0;
                 $assetValue = 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $dictionary = $dictionaries['khoang_cach'];
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'khoang_cach';
                 $name = 'Khoảng cách TSSS đến TSTĐ';
-                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
-            }elseif($comparisonFactorTmp == 'muc_dich_chinh'){
-                $appraiseValue = 'false' ;
+                $this->comparisionDistance($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'muc_dich_chinh') {
+                $appraiseValue = 'false';
                 // $assetValue = 0;
                 $assetValue = $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym'];
                 // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $dictionary = $dictionaries['khoang_cach'];
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'muc_dich_chinh';
                 $name = 'Mục đích sử dụng đất chính';
-                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
-            }elseif($comparisonFactorTmp == 'vi_tri'){
+                $this->comparisionDistance($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'vi_tri') {
                 // dd('vô đây');
-                $appraiseValue = isset($property->description) ? $property->description :'Không biết'; ;
+                $appraiseValue = isset($property->description) ? $property->description : 'Không biết';;
                 // $assetValue = 0;
                 $assetValue = $description->description;
                 // dd('sdsdsds', $asset['properties'][0]['property_detail'][0]['land_type_purpose_data']['acronym']);
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 // $dictionary = $dictionaries['khoang_cach'];
                 // $this->comparisonPayment( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$dictionary );
                 $type = 'vi_tri';
                 $name = 'Vị trí';
-                $this->comparisionDistance( $appraiseValue,$assetValue,$status , $appraiseId, $assetGeneralId,$type,$name );
+                $this->comparisionDistance($appraiseValue, $assetValue, $status, $appraiseId, $assetGeneralId, $type, $name);
             }
         }
     }
 
-    private function comparisionDistance(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId , string $type , string $name){
+    private function comparisionDistance(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, string $type, string $name)
+    {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
             'asset_general_id' => $assetGeneralId,
@@ -4773,7 +4768,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $comparisonFactorId = QueryBuilder::for($comparisonFactor)
             ->insertGetId($comparisonFactor->attributesToArray());
     }
-    private function comparisonNoDictionary(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId , string $type , string $name){
+    private function comparisonNoDictionary(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, string $type, string $name)
+    {
         $description = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -4791,7 +4787,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             ->insertGetId($comparisonFactor->attributesToArray());
     }
 
-    private function comparisionHasDictionary( $appraiseValue, $assetValue, int $status , int $appraiseId,int $assetGeneralId  ,array $dictionaries , string $type , string $name ){
+    private function comparisionHasDictionary($appraiseValue, $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries, string $type, string $name)
+    {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
             'asset_general_id' => $assetGeneralId,
@@ -4826,7 +4823,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
     }
 
-    private function comparisionLegal(  string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisionLegal(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
 
         $comparisonFactor = [
@@ -4863,7 +4860,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
     }
 
-    private function comparisonSize( float $appraiseValue,float $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonSize(float $appraiseValue, float $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $description = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
         $comparisonFactor = [
@@ -4882,7 +4879,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             ->insertGetId($comparisonFactor->attributesToArray());
     }
 
-    private function comparisonFrontSideWidth( float $appraiseValue,float $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonFrontSideWidth(float $appraiseValue, float $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $description = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
 
@@ -4903,7 +4900,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             ->insertGetId($comparisonFactor->attributesToArray());
     }
 
-    private function comparisonInsightWitdh( float $appraiseValue,float $assetValue, int $status , int $appraiseId,int $assetGeneralId, array $dictionaries = null )
+    private function comparisonInsightWitdh(float $appraiseValue, float $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $description = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
 
@@ -4924,7 +4921,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             ->insertGetId($comparisonFactor->attributesToArray());
     }
 
-    private function comparisonMainRoadLength(float $appraiseRoad,float $assetRoad, int $status , int $appraiseId,int $assetGeneralId, array $dictionaries = null)
+    private function comparisonMainRoadLength(float $appraiseRoad, float $assetRoad, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $assetRoadLength = 'Không biết';
         $appraiseRoadLength = 'Không biết';
@@ -4993,7 +4990,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
     }
 
-    private function comparisonLandSharp(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonLandSharp(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
 
         $comparisonFactor = [
@@ -5031,7 +5028,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
     }
 
-    private function comparisonMaterial(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonMaterial(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5067,7 +5064,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
     }
 
-    private function comparisonTurning(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonTurning(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5102,11 +5099,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                     ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
             }
-
         }
     }
 
-    private function comparisonConditions(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonConditions(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5139,11 +5135,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                     ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
             }
-
         }
     }
 
-    private function comparisonSecurity(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonSecurity(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5176,11 +5171,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                     ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
             }
-
         }
     }
 
-    private function comparisonBussiness(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonBussiness(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5213,11 +5207,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                     ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
             }
-
         }
     }
 
-    private function comparisonFengShui(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonFengShui(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5250,11 +5243,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                     ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
             }
-
         }
     }
 
-    private function comparisonZoning(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonZoning(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5284,10 +5276,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $comparisonFactor = new AppraiseComparisonFactor($comparisonFactor);
         $comparisonFactorId = QueryBuilder::for($comparisonFactor)
             ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
-
     }
 
-    private function comparisonPayment(string $appraiseValue,string $assetValue, int $status , int $appraiseId,int $assetGeneralId ,array $dictionaries = null)
+    private function comparisonPayment(string $appraiseValue, string $assetValue, int $status, int $appraiseId, int $assetGeneralId, array $dictionaries = null)
     {
         $comparisonFactor = [
             'appraise_id' => $appraiseId,
@@ -5320,13 +5311,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                     ->updateOrInsert(['id' => $comparisonFactorId], $comparisonFactor->attributesToArray());
             }
-
         }
     }
     #endregion
 
     #region calculate price
-    private function getAppraiseCalculate(int $appraiseId){
+    private function getAppraiseCalculate(int $appraiseId)
+    {
         $version = request()->get('version');
         $result = null;
         if ($version && !is_array($version)) {
@@ -5366,12 +5357,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     private function getBaseUBNDPrice(int $appraiseId)
     {
         $result = [];
-        if (AppraiseProperty::where('appraise_id',$appraiseId)->exists()){
-            $propertyId = AppraiseProperty::where('appraise_id',$appraiseId)->get()->first()->id;
-            $select = ['id','appraise_property_id','circular_unit_price','land_type_purpose_id','position_type_id'
-                ];
-            $with= [
-                ];
+        if (AppraiseProperty::where('appraise_id', $appraiseId)->exists()) {
+            $propertyId = AppraiseProperty::where('appraise_id', $appraiseId)->get()->first()->id;
+            $select = [
+                'id', 'appraise_property_id', 'circular_unit_price', 'land_type_purpose_id', 'position_type_id'
+            ];
+            $with = [];
             $result = AppraisePropertyDetail::with($with)
                 ->select($select)
                 ->where(['appraise_property_id' => $propertyId])
@@ -5403,41 +5394,39 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'other_assets' => $otherAsset,
 
         ];
-
     }
 
-    private function getAssetUnitPrice(int $appraiseId,int $asset_general_id = null)
+    private function getAssetUnitPrice(int $appraiseId, int $asset_general_id = null)
     {
         $result = [];
-        if (AppraiseUnitPrice::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id','asset_general_id','land_type_id','update_value','original_value'
-                ];
-            $with= [
-                ];
+        if (AppraiseUnitPrice::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id', 'asset_general_id', 'land_type_id', 'update_value', 'original_value'
+            ];
+            $with = [];
             $result = AppraiseUnitPrice::with($with)
                 ->select($select)
-                ->where(['appraise_id'=> $appraiseId]);
-            if(isset($asset_general_id))
-                $result = $result->where(['asset_general_id'=>$asset_general_id]);
+                ->where(['appraise_id' => $appraiseId]);
+            if (isset($asset_general_id))
+                $result = $result->where(['asset_general_id' => $asset_general_id]);
             $result = $result->get();
-
         }
         return $result;
     }
 
-    private function getAssetUnitArea(int $appraiseId,int $asset_general_id=null)
+    private function getAssetUnitArea(int $appraiseId, int $asset_general_id = null)
     {
         $result = [];
-        if (AppraiseUnitArea::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id','asset_general_id','land_type_id','violation_asset_area'
-                ];
-            $with= [
-                ];
+        if (AppraiseUnitArea::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id', 'asset_general_id', 'land_type_id', 'violation_asset_area'
+            ];
+            $with = [];
             $result = AppraiseUnitArea::with($with)
                 ->select($select)
-                ->where(['appraise_id'=> $appraiseId]);
-            if(isset($asset_general_id))
-                $result = $result->where(['asset_general_id'=>$asset_general_id]);
+                ->where(['appraise_id' => $appraiseId]);
+            if (isset($asset_general_id))
+                $result = $result->where(['asset_general_id' => $asset_general_id]);
             $result = $result->get();
         }
         return $result;
@@ -5446,36 +5435,35 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     private function getComparison(int $appraiseId, int $asset_general_id = null)
     {
         $result = [];
-        if (AppraiseComparisonFactor::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id','asset_general_id','adjust_percent','appraise_title','asset_title','description'
-                        ,'name','type','position','status'
-                ];
-            $with= [
-                ];
+        if (AppraiseComparisonFactor::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id', 'asset_general_id', 'adjust_percent', 'appraise_title', 'asset_title', 'description', 'name', 'type', 'position', 'status'
+            ];
+            $with = [];
             $result = AppraiseComparisonFactor::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId])
+                ->where(['appraise_id' => $appraiseId])
                 ->orderbyDesc('asset_general_id')
                 ->get();
         }
-        return $result ;
+        return $result;
     }
 
-    private function getAppraiseAdapter(int $appraiseId,int $asset_general_id=null)
+    private function getAppraiseAdapter(int $appraiseId, int $asset_general_id = null)
     {
         $result = [];
-        if (AppraiseAdapter::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id','asset_general_id','change_purpose_price','percent'
-                ];
-            $with= [
-                ];
+        if (AppraiseAdapter::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id', 'asset_general_id', 'change_purpose_price', 'percent'
+            ];
+            $with = [];
             $result = AppraiseAdapter::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId]);
-            if(isset($asset_general_id))
-                $result = $result->where(['asset_general_id'=>$asset_general_id]);
+                ->where(['appraise_id' => $appraiseId]);
+            if (isset($asset_general_id))
+                $result = $result->where(['asset_general_id' => $asset_general_id]);
             $result = $result->get();
-            if(isset($asset_general_id))
+            if (isset($asset_general_id))
                 $result = $result->first();
         }
         return $result;
@@ -5484,14 +5472,14 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     private function getAppraisePrice(int $appraiseId)
     {
         $result = [];
-        if (AppraisePrice::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id','slug','value','description'
-                ];
-            $with= [
-                ];
+        if (AppraisePrice::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id', 'slug', 'value', 'description'
+            ];
+            $with = [];
             $result = AppraisePrice::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId]);
+                ->where(['appraise_id' => $appraiseId]);
             $result = $result->get();
         }
         return $result;
@@ -5501,11 +5489,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     {
         $result = [];
 
-        $select = ['id','name','address','phone_number','manager_name','unit_price_m2','is_defaults',
-                    DB::raw("id as construction_company_id"),
-                ];
-        $with= [
-            ];
+        $select = [
+            'id', 'name', 'address', 'phone_number', 'manager_name', 'unit_price_m2', 'is_defaults',
+            DB::raw("id as construction_company_id"),
+        ];
+        $with = [];
         $result = AppraisalConstructionCompany::with($with)
             ->select($select)
             ->orderbyDesc('is_defaults')
@@ -5518,31 +5506,31 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     private function getContructionCompany(int $appraiseId)
     {
         $result = [];
-        if (ConstructionCompany::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id','construction_company_id','name','address','unit_price_m2','is_defaults'
-                ];
-            $with= [
-                ];
+        if (ConstructionCompany::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id', 'construction_company_id', 'name', 'address', 'unit_price_m2', 'is_defaults'
+            ];
+            $with = [];
             $result = ConstructionCompany::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId]);
+                ->where(['appraise_id' => $appraiseId]);
             $result = $result->get();
-            }
+        }
         return $result;
     }
 
     private function getTangibleComparison(int $appraiseId)
     {
         $result = [];
-        if (AppraiseTangibleComparisonFactor::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id',
-                            'p1', 'h1',  'p2',  'h2',    'p3',  'h3','d4', 'h4','p5','h5',
-                ];
-            $with= [
-                ];
+        if (AppraiseTangibleComparisonFactor::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id',
+                'p1', 'h1',  'p2',  'h2',    'p3',  'h3', 'd4', 'h4', 'p5', 'h5',
+            ];
+            $with = [];
             $result = AppraiseTangibleComparisonFactor::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId]);
+                ->where(['appraise_id' => $appraiseId]);
             $result = $result->get();
         }
         return $result;
@@ -5551,17 +5539,17 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     private function getOtherAsset(int $appraiseId)
     {
         $result = [];
-        if (AppraiseOtherAsset::where('appraise_id',$appraiseId)->exists()){
-            $select = ['id','appraise_id',
-                        'name', 'total','dvt',
-                        'description','total_area',
-                        'unit_price','total_price',
-                ];
-            $with= [
-                ];
+        if (AppraiseOtherAsset::where('appraise_id', $appraiseId)->exists()) {
+            $select = [
+                'id', 'appraise_id',
+                'name', 'total', 'dvt',
+                'description', 'total_area',
+                'unit_price', 'total_price',
+            ];
+            $with = [];
             $result = AppraiseOtherAsset::with($with)
                 ->select($select)
-                ->where(['appraise_id'=>$appraiseId]);
+                ->where(['appraise_id' => $appraiseId]);
             $result = $result->get();
         }
         return $result;
@@ -5570,9 +5558,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
     #endregion
     // update and reset data if step < 6
-    private function updateAppraiseStep(int $appraiseId, int $step){
-        if(Appraise::where('id',$appraiseId)->exists()){
-            $appraise = Appraise::where('id',$appraiseId)->first();
+    private function updateAppraiseStep(int $appraiseId, int $step)
+    {
+        if (Appraise::where('id', $appraiseId)->exists()) {
+            $appraise = Appraise::where('id', $appraiseId)->first();
             if ($appraise->status === 3) {
                 $status = 3;
             } else {
@@ -5584,25 +5573,27 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         $this->resetDataStep6($appraiseId);
                 }
             }
-            $update = ['step' => $step,
-                    'status' => $status
-                ];
-            if($appraise->status != $status){
+            $update = [
+                'step' => $step,
+                'status' => $status
+            ];
+            if ($appraise->status != $status) {
                 $edited = $appraise;
                 $edited->step = $step;
                 $edited->status = $status;
                 $this->CreateActivityLog($appraise, $edited, 'update_status', 'cập nhật trạng thái');
             }
-            Appraise::where('id',$appraiseId)->update($update);
+            Appraise::where('id', $appraiseId)->update($update);
 
             $this->updateRealEstates($appraiseId);
         }
         return $update;
     }
 
-    private function updateAppraiseStepVer1(int $appraiseId, int $step){
-        if(Appraise::where('id',$appraiseId)->exists()){
-            $appraise = Appraise::where('id',$appraiseId)->first();
+    private function updateAppraiseStepVer1(int $appraiseId, int $step)
+    {
+        if (Appraise::where('id', $appraiseId)->exists()) {
+            $appraise = Appraise::where('id', $appraiseId)->first();
             if ($appraise->status === 3) {
                 $status = 3;
             } else {
@@ -5614,36 +5605,38 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         $this->resetDataStep6($appraiseId);
                 }
             }
-            $update = ['step' => $step,
-                    'status' => $status
-                ];
-            if($appraise->status != $status){
+            $update = [
+                'step' => $step,
+                'status' => $status
+            ];
+            if ($appraise->status != $status) {
                 $edited = $appraise;
                 $edited->step = $step;
                 $edited->status = $status;
                 // $this->CreateActivityLog($appraise, $edited, 'update_status', 'cập nhật trạng thái');
             }
-            Appraise::where('id',$appraiseId)->update($update);
+            Appraise::where('id', $appraiseId)->update($update);
 
             $this->updateRealEstates($appraiseId);
         }
         return $update;
     }
 
-    public function getAppraiseStep(int $appraiseId = null){
+    public function getAppraiseStep(int $appraiseId = null)
+    {
         $result = ['step' => 1];
-        if(isset($appraiseId))
-            if(Appraise::where('id',$appraiseId)->exists()){
-                $result= Appraise::where('id',$appraiseId)->get('step')->first();
+        if (isset($appraiseId))
+            if (Appraise::where('id', $appraiseId)->exists()) {
+                $result = Appraise::where('id', $appraiseId)->get('step')->first();
             }
         return $result;
     }
 
-    public function getAppraiseData(int $appraiseId){
-        if(Appraise::where('id',$appraiseId)->exists())
-        {
+    public function getAppraiseData(int $appraiseId)
+    {
+        if (Appraise::where('id', $appraiseId)->exists()) {
             $check = $this->checkUser($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
             $version = request()->get('version');
@@ -5750,62 +5743,60 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             // }
 
             $result->unify_indicative_price = [];
-            foreach(AppraiseOtherInformationEnum::DATA['thong_nhat_muc_gia_chi_dan'] as $item) {
-                if($item['slug'] == $result->unify_indicative_price_slug) {
+            foreach (AppraiseOtherInformationEnum::DATA['thong_nhat_muc_gia_chi_dan'] as $item) {
+                if ($item['slug'] == $result->unify_indicative_price_slug) {
                     $result->unify_indicative_price = $item;
                 }
             }
 
             $result->composite_land_remaning = [];
-            foreach(AppraiseOtherInformationEnum::DATA['tinh_gia_dat_hon_hop_con_lai'] as $item) {
-                if($item['slug'] == $result->composite_land_remaning_slug) {
+            foreach (AppraiseOtherInformationEnum::DATA['tinh_gia_dat_hon_hop_con_lai'] as $item) {
+                if ($item['slug'] == $result->composite_land_remaning_slug) {
                     $result->composite_land_remaning = $item;
                 }
             }
             $result->planning_violation_price = [];
-            foreach(AppraiseOtherInformationEnum::DATA['tinh_gia_dat_vi_pham_quy_hoach'] as $item) {
-                if($item['slug'] == $result->planning_violation_price_slug) {
+            foreach (AppraiseOtherInformationEnum::DATA['tinh_gia_dat_vi_pham_quy_hoach'] as $item) {
+                if ($item['slug'] == $result->planning_violation_price_slug) {
                     $result->planning_violation_price = $item;
                 }
             }
             return $result;
-        }else{
+        } else {
             return ['message' => ErrorMessage::APPRAISE_NOTEXISTS . $appraiseId, 'exception' => ''];
         }
-
     }
 
-    public function postOtherAssets(array $objects , int $appraiseId)
+    public function postOtherAssets(array $objects, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
 
-            if(Appraise::where('id',$appraiseId)->exists())
-            {
+            if (Appraise::where('id', $appraiseId)->exists()) {
                 $otherAssetTotal = 0;
-                if(AppraiseOtherAsset::where('appraise_id',$appraiseId)->exists())
-                    AppraiseOtherAsset::where('appraise_id',$appraiseId)->delete();
+                if (AppraiseOtherAsset::where('appraise_id', $appraiseId)->exists())
+                    AppraiseOtherAsset::where('appraise_id', $appraiseId)->delete();
 
-                    if (isset($objects['other_assets']) && count($objects['other_assets'])>0 ) {
-                        foreach ($objects['other_assets'] as $otherAssetData) {
-                            $otherAssetTotal = $otherAssetTotal + $otherAssetData['total_price'];
+                if (isset($objects['other_assets']) && count($objects['other_assets']) > 0) {
+                    foreach ($objects['other_assets'] as $otherAssetData) {
+                        $otherAssetTotal = $otherAssetTotal + $otherAssetData['total_price'];
 
-                            $otherAssetData['appraise_id'] = $appraiseId;
-                            $otherAssetData['unit_price'] = $otherAssetData['unit_price'];
-                            $otherAssetData['total_price'] = $otherAssetData['total_price'];
-                            $otherAssetData['description'] = isset($otherAssetData['description'])?$otherAssetData['description']:'';
-                            $otherAssetData['name'] = $otherAssetData['name'];
-                            $otherAssetData['total'] = $otherAssetData['total'];
-                            $otherAssetData['dvt'] = $otherAssetData['dvt'];
-                            $otherAssetData['total_area'] = 0; // not use but data not null -> must be 0
+                        $otherAssetData['appraise_id'] = $appraiseId;
+                        $otherAssetData['unit_price'] = $otherAssetData['unit_price'];
+                        $otherAssetData['total_price'] = $otherAssetData['total_price'];
+                        $otherAssetData['description'] = isset($otherAssetData['description']) ? $otherAssetData['description'] : '';
+                        $otherAssetData['name'] = $otherAssetData['name'];
+                        $otherAssetData['total'] = $otherAssetData['total'];
+                        $otherAssetData['dvt'] = $otherAssetData['dvt'];
+                        $otherAssetData['total_area'] = 0; // not use but data not null -> must be 0
 
-                            $otherAsset = new AppraiseOtherAsset($otherAssetData);
-                            QueryBuilder::for($otherAsset)
-                                ->insert($otherAsset->attributesToArray());
+                        $otherAsset = new AppraiseOtherAsset($otherAssetData);
+                        QueryBuilder::for($otherAsset)
+                            ->insert($otherAsset->attributesToArray());
                     }
                 }
                 $appraise = $this->model->query()->where('id', $appraiseId)->first();
@@ -5822,9 +5813,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result = $this->getPriceById($appraiseId);
                 return $result;
             }
-
-        }
-        catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -5836,38 +5825,39 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     {
         $certificate = $this->model->query()->where('id', $appraiseId)->first();
         if ($certificate->status < 3) {
-             //delete comparison factor
-            if(AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->exists())
-            AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->forceDelete();
+            //delete comparison factor
+            if (AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->exists())
+                AppraiseComparisonFactor::query()->where('appraise_id', '=', $appraiseId)->forceDelete();
             //delete appraise unit price
-            if(AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->exists())
+            if (AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->exists())
                 AppraiseUnitPrice::query()->where('appraise_id', '=', $appraiseId)->forceDelete();
             //delete appraise unit area
-            if(AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->exists())
+            if (AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->exists())
                 AppraiseUnitArea::query()->where('appraise_id', '=', $appraiseId)->forceDelete();
             //delete appraise has assets
-            if(AppraiseHasAsset::query()->where('appraise_id', '=', $appraiseId)->exists())
+            if (AppraiseHasAsset::query()->where('appraise_id', '=', $appraiseId)->exists())
                 AppraiseHasAsset::query()->where('appraise_id', '=', $appraiseId)->forceDelete();
             //delete appraise adapter
-            if(AppraiseAdapter::query()->where('appraise_id', '=', $appraiseId)->exists())
+            if (AppraiseAdapter::query()->where('appraise_id', '=', $appraiseId)->exists())
                 AppraiseAdapter::query()->where('appraise_id', '=', $appraiseId)->forceDelete();
             //delete appraise price
-            if(AppraisePrice::query()->where('appraise_id', '=', $appraiseId)->where('slug' ,'<>', 'estimate_asset_price')->exists())
-                AppraisePrice::query()->where('appraise_id', '=', $appraiseId)->where('slug' ,'<>', 'estimate_asset_price')->forceDelete();
+            if (AppraisePrice::query()->where('appraise_id', '=', $appraiseId)->where('slug', '<>', 'estimate_asset_price')->exists())
+                AppraisePrice::query()->where('appraise_id', '=', $appraiseId)->where('slug', '<>', 'estimate_asset_price')->forceDelete();
             //delete map image
-            if(AppraisePic::query()->where('appraise_id', '=', $appraiseId)->where('type_id',153)->exists())
-                AppraisePic::query()->where('appraise_id', '=', $appraiseId)->where('type_id',153)->forceDelete();
+            if (AppraisePic::query()->where('appraise_id', '=', $appraiseId)->where('type_id', 153)->exists())
+                AppraisePic::query()->where('appraise_id', '=', $appraiseId)->where('type_id', 153)->forceDelete();
             //delete layer_cutting_procedure
-            if( AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->exists())
+            if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->exists())
                 AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->forceDelete();
         }
     }
 
-    public function getApraiseDataStepOneToSix(int $appraiseId){
+    public function getApraiseDataStepOneToSix(int $appraiseId)
+    {
         $check = $this->checkAuthorization($appraiseId);
         if (!empty($check))
             return $check;
-        $select = ['id','step','status','coordinates','created_by', 'sub_status', 'certificate_id', 'real_estate_id', 'filter_year'];
+        $select = ['id', 'step', 'status', 'coordinates', 'created_by', 'sub_status', 'certificate_id', 'real_estate_id', 'filter_year'];
         $with = [
             'pic:id,appraise_id,link,type_id',
             'pic.picType:id,description',
@@ -5875,10 +5865,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'createdBy:id,name',
             'lastVersion',
             'realEstate'
-            ];
-        $result= Appraise::with($with)
+        ];
+        $result = Appraise::with($with)
             ->select($select)
-            ->where('id',$appraiseId);
+            ->where('id', $appraiseId);
 
         $result = $result->first();
         $result['picture_infomation'] = $result['pic'];
@@ -5906,19 +5896,19 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
         $version = AppraiseVersionService::getVersionAppraise($appraiseId);
         $result['max_version'] = $version;
-        $geo = AppraiseProperty::where('appraise_id',$appraiseId)->first();
+        $geo = AppraiseProperty::where('appraise_id', $appraiseId)->first();
         $result['traffic_infomation'] = $geo;
         $result['geographical_location'] = $geo->geographical_location;
         return $result;
     }
 
-    public function updateComparisonFactor_V2($objects , int $id)
+    public function updateComparisonFactor_V2($objects, int $id)
     {
         $appraiseId = $id;
         // CommonService::getComparisonAsset($appraiseId);
         // CommonService::getComparisonAppraise($appraiseId);
         $check = $this->beforeSave($appraiseId);
-        if(isset($check)){
+        if (isset($check)) {
             return $check;
         }
         $user = CommonService::getUser();
@@ -5926,11 +5916,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         if (isset($objects['comparison_factor'])) {
             $comparisonFactorDatas = isset($objects['other_comparison']) ? array_merge($objects['comparison_factor'], $objects['other_comparison']) : $objects['comparison_factor'];
             foreach ($comparisonFactorDatas as $comparisonFactorData) {
-                $comparisonFactorData = array_map(function($v){
+                $comparisonFactorData = array_map(function ($v) {
                     return (is_null($v)) ? "" : $v;
-                },$comparisonFactorData);
+                }, $comparisonFactorData);
 
-                if(!isset($appraiseId)&&(isset($comparisonFactorData['appraise_id'])))
+                if (!isset($appraiseId) && (isset($comparisonFactorData['appraise_id'])))
                     $appraiseId = $comparisonFactorData['appraise_id'];
 
                 if (!isset($comparisonFactorData['adjust_percent'])) {
@@ -5940,30 +5930,28 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['kem_thuan_loi'];
                 } else if ($comparisonFactorData['adjust_percent']  < 0) {
                     $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['thuan_loi'];
-                }
-                else {
+                } else {
                     $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
                 }
 
-                if(!$comparisonFactorData['status']&&($comparisonFactorData['type']=='yeu_to_khac')) {
+                if (!$comparisonFactorData['status'] && ($comparisonFactorData['type'] == 'yeu_to_khac')) {
                     $comparisonFactorData['status'] = 1;
                 }
 
                 $comparisonFactor = new AppraiseComparisonFactor($comparisonFactorData);
-                if(isset($comparisonFactorData['id'])) {
+                if (isset($comparisonFactorData['id'])) {
                     $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                         ->updateOrInsert(['id' => $comparisonFactorData['id']], $comparisonFactor->attributesToArray());
                 } else {
                     $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                         ->insert($comparisonFactor->attributesToArray());
                 }
-
             }
         }
 
         if (isset($objects['delete_other_comparison'])) {
             foreach ($objects['delete_other_comparison'] as $comparisonFactorData) {
-                if(isset($comparisonFactorData['id'])) {
+                if (isset($comparisonFactorData['id'])) {
                     AppraiseComparisonFactor::where('id', $comparisonFactorData['id'])->forceDelete();
                 }
             }
@@ -5975,7 +5963,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $item['created_by'] = $user->id;
 
                 $appraiseUnitPrice = new AppraiseUnitPrice($item);
-                if(isset($item['id'])) {
+                if (isset($item['id'])) {
                     $appraiseUnitPriceId = QueryBuilder::for($appraiseUnitPrice)
                         ->updateOrInsert(['id' => $item['id']], $appraiseUnitPrice->attributesToArray());
                 } else {
@@ -5991,7 +5979,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $item['created_by'] = $user->id;
 
                 $appraiseUnitArea = new AppraiseUnitArea($item);
-                if(isset($item['id'])) {
+                if (isset($item['id'])) {
                     $appraiseUnitAreaId = QueryBuilder::for($appraiseUnitArea)
                         ->updateOrInsert(['id' => $item['id']], $appraiseUnitArea->attributesToArray());
                 } else {
@@ -6001,21 +5989,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             }
         }
 
-        if(isset($appraiseId)) {
+        if (isset($appraiseId)) {
             $appraise = $this->findById($appraiseId);
 
-            if (isset($objects['remaining_price'])&&!empty($objects['remaining_price'])&&isset($appraise->composite_land_remaning_slug)&&$appraise->composite_land_remaning_slug=='theo-phuong-phap-doc-lap') {
+            if (isset($objects['remaining_price']) && !empty($objects['remaining_price']) && isset($appraise->composite_land_remaning_slug) && $appraise->composite_land_remaning_slug == 'theo-phuong-phap-doc-lap') {
                 $remainingPrice = $objects['remaining_price'];
-                if(isset($remainingPrice['remaining_commerce_price'])&&isset($remainingPrice['land_type'])) {
-                    CommonService::setAppraisePrice($appraise, $remainingPrice['remaining_commerce_price'], 'land_asset_purpose_'.$remainingPrice['land_type'].'_price');
+                if (isset($remainingPrice['remaining_commerce_price']) && isset($remainingPrice['land_type'])) {
+                    CommonService::setAppraisePrice($appraise, $remainingPrice['remaining_commerce_price'], 'land_asset_purpose_' . $remainingPrice['land_type'] . '_price');
                 }
             }
             $existAssetGeneralIds = [];
-            if (isset($objects['appraise_adapter'])&&!empty($objects['appraise_adapter'])) {
-                foreach($objects['appraise_adapter'] as $item) {
+            if (isset($objects['appraise_adapter']) && !empty($objects['appraise_adapter'])) {
+                foreach ($objects['appraise_adapter'] as $item) {
                     $appraiseAdapter = AppraiseAdapter::where('appraise_id', $item['appraise_id'])
                         ->where('asset_general_id', $item['asset_general_id'])->first();
-                    if(isset($appraiseAdapter)) {
+                    if (isset($appraiseAdapter)) {
                         AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
                             'percent' => $item['percent'],
                             'change_negotiated_price' => $item['change_negotiated_price'],
@@ -6039,14 +6027,14 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
             if (isset($objects['layer_cutting_procedure'])) {
                 $items = AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->get();
-                if(count($items)==1) {
+                if (count($items) == 1) {
                     AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->update([
                         'appraise_id' => $appraiseId,
                         'slug' => "layer_cutting_procedure",
                         'slug_value' => $objects['layer_cutting_procedure'],
                     ]);
                 } else {
-                    if(count($items)>1) {
+                    if (count($items) > 1) {
                         AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->forceDelete();
                     }
                     AppraiseAppraisalMethods::create([
@@ -6055,17 +6043,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'slug_value' => $objects['layer_cutting_procedure'],
                     ]);
                 }
-                if($objects['layer_cutting_procedure']) {
-                    if (isset($objects['layer_cutting_price'])&&!empty($objects['layer_cutting_price'])) {
+                if ($objects['layer_cutting_procedure']) {
+                    if (isset($objects['layer_cutting_price']) && !empty($objects['layer_cutting_price'])) {
                         CommonService::setAppraisePrice($appraise, $objects['layer_cutting_price'], 'layer_cutting_price');
                     }
-                }else
-                {
-                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                } else {
+                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->update(['value' => 0]);
                 }
-            }else{
-                if(AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->exists()){
-                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+            } else {
+                if (AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->exists()) {
+                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->update(['value' => 0]);
                 }
             }
             $appraise = Appraise::where('id', $appraiseId)->first();
@@ -6096,8 +6083,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 if ($islayerCuttingPirce) {
                     CommonService::setAppraisePrice($appraise, $layerCuttingPirce, 'layer_cutting_price');
                 } else {
-                    if(AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->exists()){
-                        AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                    if (AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->exists()) {
+                        AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->update(['value' => 0]);
                     }
                 }
                 $price = intval($mainPrice['price']);
@@ -6135,12 +6122,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
 
-            AppraisePrice::query()->updateOrCreate(['appraise_id' => $appraiseId, 'slug' => 'land_asset_price'],['value' =>$landPrice]);
+            AppraisePrice::query()->updateOrCreate(['appraise_id' => $appraiseId, 'slug' => 'land_asset_price'], ['value' => $landPrice]);
             $this->calculateTotalPrice($appraiseId);
         }
         $this->updateAppraiseStep($appraiseId, 7);
         $price = $this->getPriceById($id);
-        $price['comparison_factor'] =$this->getComparisonFactorList($id);
+        $price['comparison_factor'] = $this->getComparisonFactorList($id);
         $data = Appraise::where('id', $appraiseId)->first();
 
         # cập nhật bảng tổng hợp thông tin
@@ -6150,13 +6137,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $price;
     }
 
-    public function updateComparisonFactor_V2_ver1($objects , int $id)
+    public function updateComparisonFactor_V2_ver1($objects, int $id)
     {
         $appraiseId = $id;
         // CommonService::getComparisonAsset($appraiseId);
         // CommonService::getComparisonAppraise($appraiseId);
         $check = $this->beforeSave($appraiseId);
-        if(isset($check)){
+        if (isset($check)) {
             return $check;
         }
         $user = CommonService::getUser();
@@ -6164,11 +6151,11 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         if (isset($objects['comparison_factor'])) {
             $comparisonFactorDatas = isset($objects['other_comparison']) ? array_merge($objects['comparison_factor'], $objects['other_comparison']) : $objects['comparison_factor'];
             foreach ($comparisonFactorDatas as $comparisonFactorData) {
-                $comparisonFactorData = array_map(function($v){
+                $comparisonFactorData = array_map(function ($v) {
                     return (is_null($v)) ? "" : $v;
-                },$comparisonFactorData);
+                }, $comparisonFactorData);
 
-                if(!isset($appraiseId)&&(isset($comparisonFactorData['appraise_id'])))
+                if (!isset($appraiseId) && (isset($comparisonFactorData['appraise_id'])))
                     $appraiseId = $comparisonFactorData['appraise_id'];
 
                 if (!isset($comparisonFactorData['adjust_percent'])) {
@@ -6178,30 +6165,28 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                     $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['kem_thuan_loi'];
                 } else if ($comparisonFactorData['adjust_percent']  < 0) {
                     $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['thuan_loi'];
-                }
-                else {
+                } else {
                     $comparisonFactorData['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
                 }
 
-                if(!$comparisonFactorData['status']&&($comparisonFactorData['type']=='yeu_to_khac')) {
+                if (!$comparisonFactorData['status'] && ($comparisonFactorData['type'] == 'yeu_to_khac')) {
                     $comparisonFactorData['status'] = 1;
                 }
 
                 $comparisonFactor = new AppraiseComparisonFactor($comparisonFactorData);
-                if(isset($comparisonFactorData['id'])) {
+                if (isset($comparisonFactorData['id'])) {
                     $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                         ->updateOrInsert(['id' => $comparisonFactorData['id']], $comparisonFactor->attributesToArray());
                 } else {
                     $comparisonFactorId = QueryBuilder::for($comparisonFactor)
                         ->insert($comparisonFactor->attributesToArray());
                 }
-
             }
         }
 
         if (isset($objects['delete_other_comparison'])) {
             foreach ($objects['delete_other_comparison'] as $comparisonFactorData) {
-                if(isset($comparisonFactorData['id'])) {
+                if (isset($comparisonFactorData['id'])) {
                     AppraiseComparisonFactor::where('id', $comparisonFactorData['id'])->forceDelete();
                 }
             }
@@ -6213,7 +6198,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $item['created_by'] = $user->id;
 
                 $appraiseUnitPrice = new AppraiseUnitPrice($item);
-                if(isset($item['id'])) {
+                if (isset($item['id'])) {
                     $appraiseUnitPriceId = QueryBuilder::for($appraiseUnitPrice)
                         ->updateOrInsert(['id' => $item['id']], $appraiseUnitPrice->attributesToArray());
                 } else {
@@ -6229,7 +6214,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $item['created_by'] = $user->id;
 
                 $appraiseUnitArea = new AppraiseUnitArea($item);
-                if(isset($item['id'])) {
+                if (isset($item['id'])) {
                     $appraiseUnitAreaId = QueryBuilder::for($appraiseUnitArea)
                         ->updateOrInsert(['id' => $item['id']], $appraiseUnitArea->attributesToArray());
                 } else {
@@ -6239,21 +6224,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             }
         }
 
-        if(isset($appraiseId)) {
+        if (isset($appraiseId)) {
             $appraise = $this->findById($appraiseId);
 
-            if (isset($objects['remaining_price'])&&!empty($objects['remaining_price'])&&isset($appraise->composite_land_remaning_slug)&&$appraise->composite_land_remaning_slug=='theo-phuong-phap-doc-lap') {
+            if (isset($objects['remaining_price']) && !empty($objects['remaining_price']) && isset($appraise->composite_land_remaning_slug) && $appraise->composite_land_remaning_slug == 'theo-phuong-phap-doc-lap') {
                 $remainingPrice = $objects['remaining_price'];
-                if(isset($remainingPrice['remaining_commerce_price'])&&isset($remainingPrice['land_type'])) {
-                    CommonService::setAppraisePrice($appraise, $remainingPrice['remaining_commerce_price'], 'land_asset_purpose_'.$remainingPrice['land_type'].'_price');
+                if (isset($remainingPrice['remaining_commerce_price']) && isset($remainingPrice['land_type'])) {
+                    CommonService::setAppraisePrice($appraise, $remainingPrice['remaining_commerce_price'], 'land_asset_purpose_' . $remainingPrice['land_type'] . '_price');
                 }
             }
             $existAssetGeneralIds = [];
-            if (isset($objects['appraise_adapter'])&&!empty($objects['appraise_adapter'])) {
-                foreach($objects['appraise_adapter'] as $item) {
+            if (isset($objects['appraise_adapter']) && !empty($objects['appraise_adapter'])) {
+                foreach ($objects['appraise_adapter'] as $item) {
                     $appraiseAdapter = AppraiseAdapter::where('appraise_id', $item['appraise_id'])
                         ->where('asset_general_id', $item['asset_general_id'])->first();
-                    if(isset($appraiseAdapter)) {
+                    if (isset($appraiseAdapter)) {
                         AppraiseAdapter::where('id', $appraiseAdapter->id)->update([
                             'percent' => $item['percent'],
                             'change_negotiated_price' => $item['change_negotiated_price'],
@@ -6277,14 +6262,14 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
             if (isset($objects['layer_cutting_procedure'])) {
                 $items = AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->get();
-                if(count($items)==1) {
+                if (count($items) == 1) {
                     AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->update([
                         'appraise_id' => $appraiseId,
                         'slug' => "layer_cutting_procedure",
                         'slug_value' => $objects['layer_cutting_procedure'],
                     ]);
                 } else {
-                    if(count($items)>1) {
+                    if (count($items) > 1) {
                         AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_procedure')->forceDelete();
                     }
                     AppraiseAppraisalMethods::create([
@@ -6293,17 +6278,16 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'slug_value' => $objects['layer_cutting_procedure'],
                     ]);
                 }
-                if($objects['layer_cutting_procedure']) {
-                    if (isset($objects['layer_cutting_price'])&&!empty($objects['layer_cutting_price'])) {
+                if ($objects['layer_cutting_procedure']) {
+                    if (isset($objects['layer_cutting_price']) && !empty($objects['layer_cutting_price'])) {
                         CommonService::setAppraisePrice($appraise, $objects['layer_cutting_price'], 'layer_cutting_price');
                     }
-                }else
-                {
-                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                } else {
+                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->update(['value' => 0]);
                 }
-            }else{
-                if(AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->exists()){
-                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+            } else {
+                if (AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->exists()) {
+                    AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->update(['value' => 0]);
                 }
             }
             $appraise = Appraise::where('id', $appraiseId)->first();
@@ -6334,8 +6318,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 if ($islayerCuttingPirce) {
                     CommonService::setAppraisePrice($appraise, $layerCuttingPirce, 'layer_cutting_price');
                 } else {
-                    if(AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->exists()){
-                        AppraisePrice::where('appraise_id', $appraiseId)->where('slug','layer_cutting_price')->update(['value' => 0]);
+                    if (AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->exists()) {
+                        AppraisePrice::where('appraise_id', $appraiseId)->where('slug', 'layer_cutting_price')->update(['value' => 0]);
                     }
                 }
                 $price = intval($mainPrice['price']);
@@ -6373,12 +6357,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 }
             }
 
-            AppraisePrice::query()->updateOrCreate(['appraise_id' => $appraiseId, 'slug' => 'land_asset_price'],['value' =>$landPrice]);
+            AppraisePrice::query()->updateOrCreate(['appraise_id' => $appraiseId, 'slug' => 'land_asset_price'], ['value' => $landPrice]);
             $this->calculateTotalPrice($appraiseId);
         }
         $this->updateAppraiseStepVer1($appraiseId, 7);
         $price = $this->getPriceById($id);
-        $price['comparison_factor'] =$this->getComparisonFactorList($id);
+        $price['comparison_factor'] = $this->getComparisonFactorList($id);
         $data = Appraise::where('id', $appraiseId)->first();
 
         # cập nhật bảng tổng hợp thông tin
@@ -6389,41 +6373,41 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     }
     private function getComparisonFactorList(int $appraiseId)
     {
-       $result = AppraiseComparisonFactor::where('appraise_id',$appraiseId)->orderByDesc('asset_general_id')->orderBy('position')->get();
+        $result = AppraiseComparisonFactor::where('appraise_id', $appraiseId)->orderByDesc('asset_general_id')->orderBy('position')->get();
 
-       return $result;
+        return $result;
     }
 
-    public function updateTangibleComparisonFactor_V2($objects , int $appraiseId)
+    public function updateTangibleComparisonFactor_V2($objects, int $appraiseId)
     {
         $result = [];
         $check = $this->beforeSave($appraiseId);
-        if(isset($check)){
+        if (isset($check)) {
             return $check;
         }
-        DB::transaction(function () use($objects,$appraiseId) {
-            if(isset($objects['xac_dinh_clcl'])) {
+        DB::transaction(function () use ($objects, $appraiseId) {
+            if (isset($objects['xac_dinh_clcl'])) {
                 $data = $objects['xac_dinh_clcl'];
                 $require = ['appraise_id' => $appraiseId, 'slug' => $data['type']];
-                $insert = array_merge($require,['slug_value' => $data['slug'], 'description' => $data['description']]);
+                $insert = array_merge($require, ['slug_value' => $data['slug'], 'description' => $data['description']]);
                 AppraiseAppraisalMethods::query()->updateOrCreate($require, $insert);
             } else {
-                return [ 'message' => 'Vui lòng chọn phương pháp xác định chất lượng còn lại', 'exception' => ''];
+                return ['message' => 'Vui lòng chọn phương pháp xác định chất lượng còn lại', 'exception' => ''];
             }
-            if(isset($objects['xac_dinh_dgxd'])) {
+            if (isset($objects['xac_dinh_dgxd'])) {
                 $data = $objects['xac_dinh_dgxd'];
                 $require = ['appraise_id' => $appraiseId, 'slug' => $data['type']];
-                $insert = array_merge($require,['slug_value' => $data['slug'], 'description' => $data['description']]);
+                $insert = array_merge($require, ['slug_value' => $data['slug'], 'description' => $data['description']]);
                 AppraiseAppraisalMethods::query()->updateOrCreate($require, $insert);
-            }else {
-                return [ 'message' => 'Vui lòng chọn loại đơn giá xây dựng', 'exception' => ''];
+            } else {
+                return ['message' => 'Vui lòng chọn loại đơn giá xây dựng', 'exception' => ''];
             }
-            if(isset($objects['tangible_assets'])){
-                foreach($objects['tangible_assets'] as $object){
-                    if(isset($object['total_desicion_average'])){
-                        AppraiseTangibleAsset::where('id',$object['id'])->update(['total_desicion_average' => $object['total_desicion_average']]);
+            if (isset($objects['tangible_assets'])) {
+                foreach ($objects['tangible_assets'] as $object) {
+                    if (isset($object['total_desicion_average'])) {
+                        AppraiseTangibleAsset::where('id', $object['id'])->update(['total_desicion_average' => $object['total_desicion_average']]);
                     }
-                    if(isset($object['comparison_tangible_factor'])){
+                    if (isset($object['comparison_tangible_factor'])) {
                         $comparisonFactorData = $object['comparison_tangible_factor'];
                         $comparisonFactorId = $comparisonFactorData['id'];
                         AppraiseTangibleComparisonFactor::whereId($comparisonFactorId)->update([
@@ -6438,11 +6422,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             'h4' => $comparisonFactorData['h4'],
                             'h5' => $comparisonFactorData['h5'],
                         ]);
-
                     }
-                    if(isset($object['construction_company'])){
-                        foreach($object['construction_company'] as $item){
-                            if(isset($item['unit_price_m2'])) {
+                    if (isset($object['construction_company'])) {
+                        foreach ($object['construction_company'] as $item) {
+                            if (isset($item['unit_price_m2'])) {
                                 ConstructionCompany::whereId($item['id'])->update([
                                     'unit_price_m2' => $item['unit_price_m2']
                                 ]);
@@ -6454,13 +6437,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $tangibleTotal = CommonService::getTangibleAssetPriceTotal($appraise);
                 AppraisePrice::query()->updateOrCreate(['appraise_id' => $appraiseId, 'slug' => 'tangible_asset_price'], ['value' => $tangibleTotal]);
                 $this->calculateTotalPrice($appraiseId);
-                $this->updateAppraiseStep($appraiseId,7);
+                $this->updateAppraiseStep($appraiseId, 7);
                 $this->processAfterSave($appraiseId);
                 # cập nhât bảng điều chỉnh công trình xây dựng
                 # activity-log
                 $this->CreateActivityLog($appraise, $appraise, 'update-data', 'cập nhật dữ liệu bảng điều chỉnh công trình xây dựng');
             }
-
         });
 
         $result = $this->getPriceById($appraiseId);
@@ -6474,61 +6456,61 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $search = request()->get('search');
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
         $user = CommonService::getUser();
-        $result = RealEstate::query()->with(['createdBy','assetType']);
+        $result = RealEstate::query()->with(['createdBy', 'assetType']);
         // $result = $result->where('asset_type_id', 39);
         $role = $user->roles->last();
-        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
-            $result= $result ->whereHas('createdBy', function ($has) use ($user) {
+        if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))) {
+            $result = $result->whereHas('createdBy', function ($has) use ($user) {
                 $has->where('id', $user->id);
             });
         }
-        if (isset($search)){
-            $filterSubstr = substr($search,0,1);
-            $filterData = substr($search,1);
-            switch($filterSubstr) {
+        if (isset($search)) {
+            $filterSubstr = substr($search, 0, 1);
+            $filterData = substr($search, 1);
+            switch ($filterSubstr) {
                 case '!':
-                    if(floatval($filterData)>=0){
-                        $result=$result->where('total_area', floatval($filterData));
+                    if (floatval($filterData) >= 0) {
+                        $result = $result->where('total_area', floatval($filterData));
                     }
                     break;
                 case '@':
-                    $result=$result->where(function ($q) use ($filterData) {
-                        $q = $q->whereHas('createdBy',function($has) use($filterData){
-                            $has->where('name', 'ILIKE', '%'. $filterData . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('createdBy', function ($has) use ($filterData) {
+                            $has->where('name', 'ILIKE', '%' . $filterData . '%');
                         });
                     });
                     break;
                 case '&':
-                    $data = explode('/',$filterData);
+                    $data = explode('/', $filterData);
                     $doc_no = $data[0];
                     $land_no = isset($data[1]) ? $data[1] : -1;
-                    if(intval($doc_no)>=0 ){
+                    if (intval($doc_no) >= 0) {
                         // return ['message' => 'Sau "&" phải là "số tờ/số thửa". Vui lòng nhập đúng định dạng"', 'exception' => ''];
-                        $result=$result->where(function ($q) use ($doc_no,$land_no) {
-                            $q = $q->whereHas('appraises.appraiseLaw.landDetails',function($has) use($doc_no,$land_no){
-                                $has->where('doc_no', '=', $doc_no );
-                                if(intval($land_no) >=0)
-                                    $has=$has->Where('land_no','=',$land_no);
+                        $result = $result->where(function ($q) use ($doc_no, $land_no) {
+                            $q = $q->whereHas('appraises.appraiseLaw.landDetails', function ($has) use ($doc_no, $land_no) {
+                                $has->where('doc_no', '=', $doc_no);
+                                if (intval($land_no) >= 0)
+                                    $has = $has->Where('land_no', '=', $land_no);
                             });
                         });
                     }
                     break;
                 case '$':
-                    if(floatval($filterData)>=0){
+                    if (floatval($filterData) >= 0) {
                         $fromValue = floatval($filterData) - floatval($filterData) * $betweenTotal;
                         $toValue = floatval($filterData) + floatval($filterData) * $betweenTotal;
-                        $result=$result->whereBetween('total_price', [$fromValue, $toValue]);
+                        $result = $result->whereBetween('total_price', [$fromValue, $toValue]);
                     }
                     break;
                 default:
-                    $result=$result->where(function ($q) use ($search) {
-                        $q = $q->where('id', 'like',strval($search) );
+                    $result = $result->where(function ($q) use ($search) {
+                        $q = $q->where('id', 'like', strval($search));
                         $q = $q->orwhere('appraise_asset', 'ILIKE', '%' . $search . '%');
-                        $q = $q->orwhereHas('assetType',function($has) use($search){
-                            $has->where('description', 'ILIKE', '%'. $search . '%');
+                        $q = $q->orwhereHas('assetType', function ($has) use ($search) {
+                            $has->where('description', 'ILIKE', '%' . $search . '%');
                         });
-                        $q = $q->orwhereHas('createdBy',function($has) use($search){
-                            $has->where('name', 'ILIKE', '%'. $search . '%');
+                        $q = $q->orwhereHas('createdBy', function ($has) use ($search) {
+                            $has->where('name', 'ILIKE', '%' . $search . '%');
                         });
                     });
             }
@@ -6538,7 +6520,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             ->paginate($perPage);
         return $result;
     }
-    public function findPaging_v2()//: LengthAwarePaginator
+    public function findPaging_v2() //: LengthAwarePaginator
     {
         $user = CommonService::getUser();
         $perPage = (int)request()->get('limit');
@@ -6582,8 +6564,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $tbName = '"tbTotal"';
 
         $result = QueryBuilder::for(appraise::class)
-                ->with($with)
-                ->leftjoin(DB::raw("
+            ->with($with)
+            ->leftjoin(DB::raw("
                         (select t0.id,
                             coalesce(case
                                 when  max(t2.value) > 0
@@ -6597,154 +6579,149 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                             left join appraise_prices t1  on t0.id = t1.appraise_id and t1.slug = 'total_asset_price'
                             left join appraise_prices t2 on t1.appraise_id = t2.appraise_id and t2.slug = 'round_appraise_total'
                         group by t0.id
-                        ) as " .$tbName ), function($join){
-                            $join->on('appraises.id','=','tbTotal.id');
-                        })
-                ->leftjoin('appraise_properties',function ($join){
-                        $join->on( 'appraises.id','=', 'appraise_properties.appraise_id')
-                            ->whereNull('appraise_properties.deleted_at')
-                            ->limit(1);
-                })
-                ->leftjoin(DB::raw('(select appraise_id , sum(total_construction_area) as total_construction_area
+                        ) as " . $tbName), function ($join) {
+                $join->on('appraises.id', '=', 'tbTotal.id');
+            })
+            ->leftjoin('appraise_properties', function ($join) {
+                $join->on('appraises.id', '=', 'appraise_properties.appraise_id')
+                    ->whereNull('appraise_properties.deleted_at')
+                    ->limit(1);
+            })
+            ->leftjoin(DB::raw('(select appraise_id , sum(total_construction_area) as total_construction_area
                                         from appraise_tangible_assets
                                         where deleted_at is null
-                                        group by appraise_id) as "totalTangible"') ,function($join){
-                                    $join->on('appraises.id','=','totalTangible.appraise_id')
-                                    ->select(['appraise_id','total_construction_area']);
-                             })
-                ->select($select)->distinct();
+                                        group by appraise_id) as "totalTangible"'), function ($join) {
+                $join->on('appraises.id', '=', 'totalTangible.appraise_id')
+                    ->select(['appraise_id', 'total_construction_area']);
+            })
+            ->select($select)->distinct();
         $role = $user->roles->last();
-        if((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))){
-            $result= $result ->whereHas('createdBy', function ($has) use ( $user) {
+        if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))) {
+            $result = $result->whereHas('createdBy', function ($has) use ($user) {
                 $has->where('id', $user->id);
             });
         }
 
-        if(isset($filter))
-        {
-            $filterSubstr = substr($filter,0,1);
-            $filterData = substr($filter,1);
-            switch($filterSubstr) {
+        if (isset($filter)) {
+            $filterSubstr = substr($filter, 0, 1);
+            $filterData = substr($filter, 1);
+            switch ($filterSubstr) {
                 case '!':
-                    if(floatval($filterData)>=0){
+                    if (floatval($filterData) >= 0) {
                         // return ['message' => 'Sau "!" phải là số để tìm kiếm theo tổng diện tích đất', 'exception' => ''];
-                        $result=$result->where(function ($q) use ($filterData) {
-                            $q->where('appraise_land_sum_area' , '=' , floatval($filterData));
-                            if(floatval($filterData) ==0){
+                        $result = $result->where(function ($q) use ($filterData) {
+                            $q->where('appraise_land_sum_area', '=', floatval($filterData));
+                            if (floatval($filterData) == 0) {
                                 $q = $q->orwhereNull('appraise_land_sum_area');
                             }
                         });
                     }
                     break;
                 case '@':
-                    $result=$result->where(function ($q) use ($filterData) {
-                        $q = $q->whereHas('createdBy',function($has) use($filterData){
-                            $has->where('name', 'ILIKE', '%'. $filterData . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('createdBy', function ($has) use ($filterData) {
+                            $has->where('name', 'ILIKE', '%' . $filterData . '%');
                         });
                     });
                     break;
                 case '&':
-                    $data = explode('/',$filterData);
+                    $data = explode('/', $filterData);
                     $doc_no = $data[0];
                     $land_no = isset($data[1]) ? $data[1] : -1;
-                    if(intval($doc_no)>=0 ){
+                    if (intval($doc_no) >= 0) {
                         // return ['message' => 'Sau "&" phải là "số tờ/số thửa". Vui lòng nhập đúng định dạng"', 'exception' => ''];
-                        $result=$result->where(function ($q) use ($doc_no,$land_no) {
-                            $q = $q->whereHas('appraiseLaw.landDetails',function($has) use($doc_no,$land_no){
-                                $has->where('doc_no', '=', $doc_no );
-                                if(intval($land_no) >=0)
-                                    $has=$has->Where('land_no','=',$land_no);
+                        $result = $result->where(function ($q) use ($doc_no, $land_no) {
+                            $q = $q->whereHas('appraiseLaw.landDetails', function ($has) use ($doc_no, $land_no) {
+                                $has->where('doc_no', '=', $doc_no);
+                                if (intval($land_no) >= 0)
+                                    $has = $has->Where('land_no', '=', $land_no);
                             });
                         });
                     }
 
                     break;
                 case '$':
-                    if(floatval($filterData)>=0){
+                    if (floatval($filterData) >= 0) {
                         // return ['message' => 'Sau "$" phải là số để tìm kiếm theo tổng giá trị.', 'exception' => ''];
                         $fromValue = floatval($filterData) - floatval($filterData) * $betweenTotal;
                         $toValue = floatval($filterData) + floatval($filterData) * $betweenTotal;
                         // dd($fromValue .'-'. $toValue);
-                        $result=$result->where(function ($q) use ($fromValue,$toValue) {
-                            $q->whereBetween('tbTotal.total_price' , [$fromValue, $toValue]);
+                        $result = $result->where(function ($q) use ($fromValue, $toValue) {
+                            $q->whereBetween('tbTotal.total_price', [$fromValue, $toValue]);
                         });
                     }
 
                     break;
                 default:
-                    $result=$result->where(function ($q) use ($filter) {
-                        $q = $q->where('appraises.id', 'like',strval($filter) );
+                    $result = $result->where(function ($q) use ($filter) {
+                        $q = $q->where('appraises.id', 'like', strval($filter));
                         $q = $q->orwhere('appraise_asset', 'ILIKE', '%' . $filter . '%');
-                        $q = $q->orwhereHas('assetType',function($has) use($filter){
-                            $has->where('description', 'ILIKE', '%'. $filter . '%');
+                        $q = $q->orwhereHas('assetType', function ($has) use ($filter) {
+                            $has->where('description', 'ILIKE', '%' . $filter . '%');
                         });
-                        $q = $q->orwhereHas('createdBy',function($has) use($filter){
-                            $has->where('name', 'ILIKE', '%'. $filter . '%');
+                        $q = $q->orwhereHas('createdBy', function ($has) use ($filter) {
+                            $has->where('name', 'ILIKE', '%' . $filter . '%');
                         });
                     });
             }
-
-
         }
 
-        if(isset($status))
-        {
-            $result=$result->whereIn('status',$status);
+        if (isset($status)) {
+            $result = $result->whereIn('status', $status);
         }
 
-        if(isset($sortField) && isset($sortOrder)){
-            if($sortField=='asset_type.description')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('asset_type_id', 'DESC');
+        if (isset($sortField) && isset($sortOrder)) {
+            if ($sortField == 'asset_type.description')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('asset_type_id', 'DESC');
                 else
-                    $result=  $result->orderBy('asset_type_id', 'ASC');
-            if($sortField=='is_check_frontside')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('is_check_frontside', 'DESC');
+                    $result =  $result->orderBy('asset_type_id', 'ASC');
+            if ($sortField == 'is_check_frontside')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('is_check_frontside', 'DESC');
                 else
-                    $result=  $result->orderBy('is_check_frontside', 'ASC');
-            if($sortField=='appraise_asset')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('appraise_asset', 'DESC');
+                    $result =  $result->orderBy('is_check_frontside', 'ASC');
+            if ($sortField == 'appraise_asset')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('appraise_asset', 'DESC');
                 else
-                    $result=  $result->orderBy('appraise_asset', 'ASC');
-            if($sortField=='status')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('status', 'DESC');
+                    $result =  $result->orderBy('appraise_asset', 'ASC');
+            if ($sortField == 'status')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('status', 'DESC');
                 else
-                    $result=  $result->orderBy('status', 'ASC');
-            if($sortField=='created_at')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('created_at', 'DESC');
+                    $result =  $result->orderBy('status', 'ASC');
+            if ($sortField == 'created_at')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('created_at', 'DESC');
                 else
-                    $result=  $result->orderBy('created_at', 'ASC');
-            if($sortField=='created_by.name')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('created_by', 'DESC');
+                    $result =  $result->orderBy('created_at', 'ASC');
+            if ($sortField == 'created_by.name')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('created_by', 'DESC');
                 else
-                    $result=  $result->orderBy('created_by', 'ASC');
-            if($sortField=='total_price')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('appraise_prices.value', 'DESC');
+                    $result =  $result->orderBy('created_by', 'ASC');
+            if ($sortField == 'total_price')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('appraise_prices.value', 'DESC');
                 else
-                    $result=  $result->orderBy('appraise_prices.value', 'ASC');
-            if($sortField=='appraise_land_sum_area')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('appraise_properties.appraise_land_sum_area', 'DESC');
+                    $result =  $result->orderBy('appraise_prices.value', 'ASC');
+            if ($sortField == 'appraise_land_sum_area')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('appraise_properties.appraise_land_sum_area', 'DESC');
                 else
-                    $result=  $result->orderBy('appraise_properties.appraise_land_sum_area', 'ASC');
-            if($sortField=='total_construction_area')
-                if($sortOrder=='descend')
-                    $result=  $result->orderBy('appraise_tangible_assets.total_construction_area', 'DESC');
+                    $result =  $result->orderBy('appraise_properties.appraise_land_sum_area', 'ASC');
+            if ($sortField == 'total_construction_area')
+                if ($sortOrder == 'descend')
+                    $result =  $result->orderBy('appraise_tangible_assets.total_construction_area', 'DESC');
                 else
-                    $result=  $result->orderBy('appraise_tangible_assets.total_construction_area', 'ASC');
-
-        }else
-            $result = $result->orderby('updated_at','desc');
+                    $result =  $result->orderBy('appraise_tangible_assets.total_construction_area', 'ASC');
+        } else
+            $result = $result->orderby('updated_at', 'desc');
 
         $result = $result
-        ->forPage($page, $perPage)
-        ->paginate($perPage);
+            ->forPage($page, $perPage)
+            ->paginate($perPage);
 
         // foreach($result as $item)
         // {
@@ -6756,45 +6733,45 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $result;
     }
 
-    public function updateConstructionCompany(array $object , int $appraiseId)
+    public function updateConstructionCompany(array $object, int $appraiseId)
     {
         DB::beginTransaction();
-        try{
+        try {
             // dd($object);
             $check = $this->beforeSave($appraiseId);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
 
             $update = $object['contruction_company_update'];
             $default = $object['contruction_company_default'];
 
-            $deleteList = array_diff($default,$update);
-            $addNewList = array_diff($update,$default);
+            $deleteList = array_diff($default, $update);
+            $addNewList = array_diff($update, $default);
             // if(count($deleteList) ==0 && count($addNewList) ==0){
             //     return 'Dữ liệu không thay đổi';
             // }
 
-            if(count($deleteList)>0){
-                foreach($deleteList as $oldId){
-                    if($oldId == 0)
-                        ConstructionCompany::where('appraise_id',$appraiseId)->whereNull('construction_company_id')->delete() ;
+            if (count($deleteList) > 0) {
+                foreach ($deleteList as $oldId) {
+                    if ($oldId == 0)
+                        ConstructionCompany::where('appraise_id', $appraiseId)->whereNull('construction_company_id')->delete();
 
-                    ConstructionCompany::where('appraise_id',$appraiseId)->where('construction_company_id',$oldId)->delete() ;
+                    ConstructionCompany::where('appraise_id', $appraiseId)->where('construction_company_id', $oldId)->delete();
                 }
             }
 
-            if(count($addNewList)>0){
-                $select = ['id','name','address','phone_number','manager_name','unit_price_m2','is_defaults'];
-                $tangibleAssets = AppraiseTangibleAsset::where('appraise_id',$appraiseId)->get('id');
-                if(! isset($tangibleAssets)){
+            if (count($addNewList) > 0) {
+                $select = ['id', 'name', 'address', 'phone_number', 'manager_name', 'unit_price_m2', 'is_defaults'];
+                $tangibleAssets = AppraiseTangibleAsset::where('appraise_id', $appraiseId)->get('id');
+                if (!isset($tangibleAssets)) {
                     DB::rollBack();
                     $data = ['message' => ErrorMessage::APPRAISE_NOTEXISTS_TANGIBLE, 'exception' => ''];
                     return $data;
                 }
-                foreach($tangibleAssets as $tangible){
-                    foreach($addNewList as $newId){
-                        $company = AppraisalConstructionCompany::where('id',$newId)->select($select)->first();
+                foreach ($tangibleAssets as $tangible) {
+                    foreach ($addNewList as $newId) {
+                        $company = AppraisalConstructionCompany::where('id', $newId)->select($select)->first();
                         $construction['appraise_id'] = $appraiseId;
                         $construction['construction_company_id'] = $company['id'];
                         $construction['name'] = $company['name'];
@@ -6805,12 +6782,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         $construction['is_defaults'] = $company['is_defaults'];
                         $construction['tangible_asset_id'] = $tangible->id;
                         $constructionCompanyData = new ConstructionCompany($construction);
-                         QueryBuilder::for($constructionCompanyData)
+                        QueryBuilder::for($constructionCompanyData)
                             ->insert($constructionCompanyData->attributesToArray());
-
                     }
                 }
-
             }
             $this->updateAppraiseStep($appraiseId, 7);
             $data = Appraise::where('id', $appraiseId)->first();
@@ -6821,11 +6796,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             $this->processAfterSave($appraiseId);
             DB::commit();
             $result = $this->getPriceById($appraiseId);
-            $tangibles = AppraiseTangibleAsset::with(['constructionCompany' ])->where('appraise_id', $appraiseId)->get('id');
+            $tangibles = AppraiseTangibleAsset::with(['constructionCompany'])->where('appraise_id', $appraiseId)->get('id');
             $result['tangible_assets'] = $tangibles;
             return $result;
-        }catch(Exception $ex)
-        {
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $ex->getMessage()];
@@ -6835,18 +6809,18 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
     private function beforeSave(int $appraiseId)
     {
-        if(Appraise::where('id',$appraiseId)->exists()){
-            $checkCreatedBy = $this->checkUser($appraiseId,'SAVE');
-            if(isset($checkCreatedBy)){
+        if (Appraise::where('id', $appraiseId)->exists()) {
+            $checkCreatedBy = $this->checkUser($appraiseId, 'SAVE');
+            if (isset($checkCreatedBy)) {
                 return $checkCreatedBy;
             }
             $result = null;
-            $status = [4 , 5];
-            $data = Appraise::where('id',$appraiseId)->whereIn('status' , $status)->get(['id','status'])->first();
-            if(isset($data)){
-                $result = ['message' => ErrorMessage::APPRAISE_CHECK_STATUS_FOR_UPDATE . $data->status_text , 'exception' => ''];
+            $status = [4, 5];
+            $data = Appraise::where('id', $appraiseId)->whereIn('status', $status)->get(['id', 'status'])->first();
+            if (isset($data)) {
+                $result = ['message' => ErrorMessage::APPRAISE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
             }
-        }else{
+        } else {
             $result = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . $appraiseId, 'exception' => ''];
         }
         return $result;
@@ -6857,13 +6831,13 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $result =  [];
 
         $check = $this->beforeSave($appraiseId);
-        if(isset($check)){
+        if (isset($check)) {
             return $check;
         }
         $appraise = Appraise::where('id', $appraiseId)->first();
         CommonService::setAppraisePrice($appraise, $objects['round_appraise_total'], 'round_appraise_total');
 
-        $this->updateAppraiseStep($appraiseId,7);
+        $this->updateAppraiseStep($appraiseId, 7);
 
         $data = Appraise::where('id', $appraiseId)->first();
 
@@ -6876,9 +6850,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $result;
     }
 
-    private function getPriceById(int $appraiseId){
-        $data = Appraise::where('id',$appraiseId)->with('assetPrice')->get(['id','step'])->first();
-        if(isset($data)){
+    private function getPriceById(int $appraiseId)
+    {
+        $data = Appraise::where('id', $appraiseId)->with('assetPrice')->get(['id', 'step'])->first();
+        if (isset($data)) {
             $data->append('price_land_asset');
             $data->append('price_tangible_asset');
             $data->append('price_other_asset');
@@ -6888,16 +6863,17 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $data;
     }
 
-    private function checkUser(int $appraiseId, string $type = 'VIEW' ){
+    private function checkUser(int $appraiseId, string $type = 'VIEW')
+    {
         $result = null;
         $user = CommonService::getUser();
-        if($user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+        if ($user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
             return $result;
         }
-        $data = Appraise::where('id',$appraiseId)->where('created_by',$user->id)->first();
-        if(! isset($data)) {
-            if($type == 'VIEW'){
-                if($user->roles->last()->name =='USER'){
+        $data = Appraise::where('id', $appraiseId)->where('created_by', $user->id)->first();
+        if (!isset($data)) {
+            if ($type == 'VIEW') {
+                if ($user->roles->last()->name == 'USER') {
                     $result = ['message' => ErrorMessage::APPRAISE_CHECK_VIEW . $appraiseId . '.', 'exception' => ''];
                 }
             } else {
@@ -6913,15 +6889,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $users = request()->get('created_by');
-        if(isset($fromDate) && isset($toDate)){
+        if (isset($fromDate) && isset($toDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $diff = $toDate->diff($fromDate);
-            if($diff->days >93){
+            if ($diff->days > 93) {
                 return ['message' => 'Chỉ được tìm kiếm tối đa 3 tháng.', 'exception' => ''];
             }
             // dd($diff->days);
-        }else{
+        } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
         }
         if (!empty($status)) {
@@ -6971,45 +6947,45 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         ];
 
         $result = Appraise::with($with)
-                    // ->join('users', function ($join){
-                    //     $join->on('appraises.created_by', '=', 'users.id');
-                    // })
-                    ->leftjoin('appraise_prices',function ($join){
-                        $join->on( 'appraises.id','=','appraise_prices.appraise_id')
-                            ->whereNull('appraise_prices.deleted_at')
-                            ->where('appraise_prices.slug','=','total_asset_price')
-                            ->limit(1)
-                            ->distinct();
-                    })
-                    ->leftjoin('appraise_prices as round',function ($join){
-                        $join->on( 'appraises.id','=','round.appraise_id')
-                            ->whereNull('round.deleted_at')
-                            ->where('round.slug','=','round_appraise_total')
-                            ->limit(1)
-                            ->distinct();
-                    })
-                    // ->leftjoin('appraise_properties',function ($join){
-                    //         $join->on( 'appraises.id','=', 'appraise_properties.appraise_id')
-                    //             ->whereNull('appraise_properties.deleted_at')
-                    //             ->limit(1);
-                    // })
-                    ->leftjoin(DB::raw('(select appraise_id , sum(total_construction_area) as total_construction_area
+            // ->join('users', function ($join){
+            //     $join->on('appraises.created_by', '=', 'users.id');
+            // })
+            ->leftjoin('appraise_prices', function ($join) {
+                $join->on('appraises.id', '=', 'appraise_prices.appraise_id')
+                    ->whereNull('appraise_prices.deleted_at')
+                    ->where('appraise_prices.slug', '=', 'total_asset_price')
+                    ->limit(1)
+                    ->distinct();
+            })
+            ->leftjoin('appraise_prices as round', function ($join) {
+                $join->on('appraises.id', '=', 'round.appraise_id')
+                    ->whereNull('round.deleted_at')
+                    ->where('round.slug', '=', 'round_appraise_total')
+                    ->limit(1)
+                    ->distinct();
+            })
+            // ->leftjoin('appraise_properties',function ($join){
+            //         $join->on( 'appraises.id','=', 'appraise_properties.appraise_id')
+            //             ->whereNull('appraise_properties.deleted_at')
+            //             ->limit(1);
+            // })
+            ->leftjoin(DB::raw('(select appraise_id , sum(total_construction_area) as total_construction_area
                                         from appraise_tangible_assets
                                         where deleted_at is null
-                                        group by appraise_id) as "totalTangible"') ,function($join){
-                                    $join->on('appraises.id', '=', 'totalTangible.appraise_id')
-                                    ->select(['appraise_id','total_construction_area']);
-                             })
-                    ->select($select);
+                                        group by appraise_id) as "totalTangible"'), function ($join) {
+                $join->on('appraises.id', '=', 'totalTangible.appraise_id')
+                    ->select(['appraise_id', 'total_construction_area']);
+            })
+            ->select($select);
 
-        if(isset($status)){
-            $result=$result->whereIn('appraises.status',$status);
+        if (isset($status)) {
+            $result = $result->whereIn('appraises.status', $status);
         }
-        if(isset($users)){
-            $result=$result->whereIn('appraises.created_by',$users);
+        if (isset($users)) {
+            $result = $result->whereIn('appraises.created_by', $users);
         }
-        if(isset($fromDate) && isset($toDate)){
-            $result=$result->whereRaw("to_char(appraises.created_at , 'YYYY-MM-dd') between '".$fromDate->format('Y-m-d')."' and '".$toDate->format('Y-m-d')."'");
+        if (isset($fromDate) && isset($toDate)) {
+            $result = $result->whereRaw("to_char(appraises.created_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'");
         }
         $result = $result->orderBy('id');
         $result = $result->get();
@@ -7038,8 +7014,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $result;
     }
 
-     #region lưu estate
-    private function updateRealEstates(int $id){
+    #region lưu estate
+    private function updateRealEstates(int $id)
+    {
         $select = [
             'id',
             'appraise_asset',
@@ -7052,23 +7029,23 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'real_estate_id'
         ];
         $with = [
-            'assetPrice' => function($query){
+            'assetPrice' => function ($query) {
                 $query->whereIn('slug', ['total_asset_price', 'total_asset_area', 'round_appraise_total'])
                     ->select(['id', 'appraise_id', 'slug', 'value']);
             },
             'properties:id,appraise_id,front_side,appraise_land_sum_area',
         ];
         $data = $this->model::query()->with($with)->where('id', $id)->first($select);
-        if (isset($data)){
+        if (isset($data)) {
             $total_price = 0;
             $total_area = 0;
             $round_total = 0;
-            $round = $data->assetPrice->where('slug','round_appraise_total')->first();
+            $round = $data->assetPrice->where('slug', 'round_appraise_total')->first();
             if (isset($round))
                 $round_total = $round->value;
-            $price = $data->assetPrice->where('slug','total_asset_price')->first();
+            $price = $data->assetPrice->where('slug', 'total_asset_price')->first();
             if (isset($price))
-                $total_price = CommonService::roundPrice($price->value,$round_total) ;
+                $total_price = CommonService::roundPrice($price->value, $round_total);
 
             $area = $data->properties->first();
             if (isset($area))
@@ -7082,7 +7059,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 'appraise_asset' => $data->appraise_asset,
                 'created_by' => $data->created_by,
                 'coordinates' => $data->coordinates,
-                'front_side' => $frontSide->front_side??null,
+                'front_side' => $frontSide->front_side ?? null,
                 'status' => $data->status,
                 'real_estate_id' => $data->real_estate_id,
             ];
@@ -7092,7 +7069,8 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 Appraise::query()->where('id', $id)->update(['real_estate_id' => $id]);
         }
     }
-    private function createRealEstate(array $object){
+    private function createRealEstate(array $object)
+    {
         $realEstateRep = new EloquentRealEstateRepository(new RealEstate());
         $data = new RealEstate($object);
         $realCreated = $realEstateRep->store($data->attributesToArray());
@@ -7110,13 +7088,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         RealEstate::query()->where('id', $realEstateId)->update($dataUpdate);
     }
 
-    public function updateEstimateAssetPrice(int $id) {
+    public function updateEstimateAssetPrice(int $id)
+    {
         $select = ['id', 'coordinates', 'asset_type_id', 'created_by', 'updated_at'];
-        $with = ['assetPrice', 'properties', 'properties.propertyDetail', 'properties.propertyDetail.landTypePurpose',
-                'assetType','createdBy',
-                'tangibleAssets' , 'tangibleAssets.constructionCompany', 'tangibleAssets.comparisonTangibleFactor',
-                'appraiseLaw', 'appraiseLaw.landDetails'
-            ];
+        $with = [
+            'assetPrice', 'properties', 'properties.propertyDetail', 'properties.propertyDetail.landTypePurpose',
+            'assetType', 'createdBy',
+            'tangibleAssets', 'tangibleAssets.constructionCompany', 'tangibleAssets.comparisonTangibleFactor',
+            'appraiseLaw', 'appraiseLaw.landDetails'
+        ];
         $data = $this->model->query()->with($with)->where('id', $id)->first($select);
         // dd($data);
         $propertyDetail = $data->properties[0]->propertyDetail;
@@ -7125,14 +7105,14 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $appraiseLaw = $data->appraiseLaw->first();
         $assetData = [];
         $tangibleData = [];
-        $cuttingPrice = $assetPrice->whereNotNull('value')->where('slug', 'layer_cutting_price')->where('value', '>' , 0)->first();
+        $cuttingPrice = $assetPrice->whereNotNull('value')->where('slug', 'layer_cutting_price')->where('value', '>', 0)->first();
         if (isset($propertyDetail)) {
             $stt = 0;
             foreach ($propertyDetail as $detail) {
                 $acronym = $detail->landTypePurpose->acronym ?? '';
-                $slug = 'land_asset_purpose_'. $acronym;
-                $slugViolate = 'land_asset_purpose_'. $acronym . '_violation';
-                $purposePrice = $assetPrice->where('slug', $slug .'_price')->first();
+                $slug = 'land_asset_purpose_' . $acronym;
+                $slugViolate = 'land_asset_purpose_' . $acronym . '_violation';
+                $purposePrice = $assetPrice->where('slug', $slug . '_price')->first();
                 $violatePrice = $assetPrice->where('slug', $slugViolate . '_price')->first();
                 $landTypeDescription = $detail->landTypePurpose->description ?? '';
                 if (isset($purposePrice)) {
@@ -7150,7 +7130,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         $assetData[$stt]['area'] = $area;
                         $assetData[$stt]['price'] = $price;
                         $assetData[$stt]['total'] = $total;
-                        $stt ++;
+                        $stt++;
                     }
                 }
                 if (isset($violatePrice)) {
@@ -7160,36 +7140,36 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         $round = $assetPrice->where('slug', $slugViolate . '_round')->first()->value ?? 0;
                         $assetData[$stt]['description'] = 'Diện tích đất vi phạm quy hoạch';
                         $assetData[$stt]['land_type_description'] = $landTypeDescription;
-                        $price =  CommonService::roundPrice($violatePrice->value ?? 0 , $round);
+                        $price =  CommonService::roundPrice($violatePrice->value ?? 0, $round);
                         $total = CommonService::roundPrice($price * $area, 0);
                         $assetData[$stt]['area'] = $area;
                         $assetData[$stt]['price'] = $price;
                         $assetData[$stt]['total'] = $total;
-                        $stt ++;
+                        $stt++;
                     }
                 }
             }
         }
-        if (isset($tangibleAssets) && ! empty($tangibleAssets)) {
+        if (isset($tangibleAssets) && !empty($tangibleAssets)) {
             $clcl = 0;
             $stt = 0;
-			$appraisalMethod = AppraiseAppraisalMethods::query()->where('appraise_id', $id)->whereIn('slug', ['XAC_DINH_DON_GIA_XAY_DUNG', 'XAC_DINH_CHAT_LUONG_CON_LAI'])->get();
-            $priceMethod = $appraisalMethod->where('slug' , 'XAC_DINH_DON_GIA_XAY_DUNG')->first();
+            $appraisalMethod = AppraiseAppraisalMethods::query()->where('appraise_id', $id)->whereIn('slug', ['XAC_DINH_DON_GIA_XAY_DUNG', 'XAC_DINH_CHAT_LUONG_CON_LAI'])->get();
+            $priceMethod = $appraisalMethod->where('slug', 'XAC_DINH_DON_GIA_XAY_DUNG')->first();
             $priceMethod = $priceMethod->slug_value ?? '';
-            $remainMethod = $appraisalMethod->where('slug' , 'XAC_DINH_CHAT_LUONG_CON_LAI')->first();
+            $remainMethod = $appraisalMethod->where('slug', 'XAC_DINH_CHAT_LUONG_CON_LAI')->first();
             $remainMethod = $remainMethod->slug_value ?? '';
             foreach ($tangibleAssets as $tangible) {
                 $tangibleName = $tangible->tangible_name;
                 $area = $tangible->total_construction_base;
                 $price = CommonService::getSelectedTangibleAssetPrice($tangible, $priceMethod);
                 $clcl = CommonService::getSelectedRemain($tangible, $remainMethod);
-                $total =CommonService::roundPrice($area * $price * $clcl / 100, 0);
+                $total = CommonService::roundPrice($area * $price * $clcl / 100, 0);
                 $tangibleData[$stt]['name'] = $tangibleName;
                 $tangibleData[$stt]['area'] = $area;
                 $tangibleData[$stt]['clcl'] = $clcl;
                 $tangibleData[$stt]['price'] = $price;
                 $tangibleData[$stt]['total'] = $total;
-                $stt ++;
+                $stt++;
             }
         }
         $doc_num = '';
@@ -7197,15 +7177,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             if (!empty($appraiseLaw->landDetails)) {
                 foreach ($appraiseLaw->landDetails as $detail) {
                     if ($doc_num == '') {
-                        $doc_num = 'Thửa đất số '. $detail->land_no . ' tờ bản đồ số '. $detail->doc_no;
+                        $doc_num = 'Thửa đất số ' . $detail->land_no . ' tờ bản đồ số ' . $detail->doc_no;
                     } else {
-                        $doc_num = $doc_num . ', thửa đất số '. $detail->land_no . ' tờ bản đồ số '. $detail->doc_no;
+                        $doc_num = $doc_num . ', thửa đất số ' . $detail->land_no . ' tờ bản đồ số ' . $detail->doc_no;
                     }
                 }
             }
         }
         $result = $data->toArray();
-        usort($assetData, function($a, $b) {
+        usort($assetData, function ($a, $b) {
             return strcmp($a["description"], $b["description"]);
         });
         $result = array_merge($result, ['assets' => $assetData], ['tangibles' => $tangibleData]);
@@ -7224,10 +7204,12 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         AppraisePrice::query()->updateOrCreate(['appraise_id' => $id, 'slug' => $slug], ['value' => $total]);
         return $result;
     }
-    private function processAfterSave($appraiseId) {
+    private function processAfterSave($appraiseId)
+    {
         $this->createAppraiseVersion($appraiseId);
     }
-    private function createAppraiseVersion($appraiseId) {
+    private function createAppraiseVersion($appraiseId)
+    {
         $appraise = $this->model->query()->with('version')->where('id', $appraiseId)->whereHas('version')->first();
         // $appraise = $this->model->query()->with('version')->where('id', $appraiseId)->first();
         $data = [];
@@ -7251,7 +7233,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             AppraiseVersion::query()->create($data);
         }
     }
-    private function calculateTotalPrice ($id)
+    private function calculateTotalPrice($id)
     {
         $whereIn = ['land_asset_price', 'tangible_asset_price', 'other_asset_price'];
         $prices = AppraisePrice::query()->where('appraise_id', $id)->whereIn('slug', $whereIn)->get()->toArray();
@@ -7261,7 +7243,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             AppraisePrice::query()->updateOrCreate(['appraise_id' => $id, 'slug' => 'total_asset_price'], ['value' => $total]);
         }
     }
-    public function getAppraiseDetail ($id)
+    public function getAppraiseDetail($id)
     {
         $select = [
             'id',
@@ -7297,7 +7279,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         ];
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
         // dd($result['appraiseLaw'][0]['id']);
-        if ($result['appraiseLaw'][0]['id']){
+        if ($result['appraiseLaw'][0]['id']) {
             $clone = AppraiseLawLandDetail::query()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->get();
             $clone1 = AppraiseLawPurposeDetail::query()->where('appraise_law_id', $result['appraiseLaw'][0]['id'])->get();
             // dd($clone);
@@ -7307,7 +7289,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         return $result;
     }
 
-    public function getApartmentDetail ($id)
+    public function getApartmentDetail($id)
     {
         $select = [
             'id',
@@ -7354,7 +7336,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         // dd($result);
         return $result;
     }
-    private function checkAuthorization ($id)
+    private function checkAuthorization($id)
     {
         $check = null;
         if ($this->model->query()->where('id', $id)->exists()) {
@@ -7367,7 +7349,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             }
             $result = $result->first();
             if (empty($result))
-                $check = ['message' => 'Bạn không có quyền ở TSTĐ '. $id , 'exception' => '', 'statusCode' => 403];
+                $check = ['message' => 'Bạn không có quyền ở TSTĐ ' . $id, 'exception' => '', 'statusCode' => 403];
         } else {
             $check = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
@@ -7377,21 +7359,21 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     public function updateDistance(int $objects, int $id = null)
     {
         return AppraiseComparisonFactor::query()
-                ->where('id', $id)
-                ->update(['asset_title' => $objects]);
-            }
-    
+            ->where('id', $id)
+            ->update(['asset_title' => $objects]);
+    }
+
     public function updateMucdichchinh(string $objects, int $id = null)
     {
         return AppraiseComparisonFactor::query()
-                ->where('id', $id)
-                ->update(['asset_title' => $objects]);
-            }
+            ->where('id', $id)
+            ->update(['asset_title' => $objects]);
+    }
 
     public function updateNoteHienTrang($objects, int $id = null)
     {
         return AppraiseTangibleComparisonFactor::query()
-                ->where('id', $id)
-                ->update(['note' => $objects]);
-            }
+            ->where('id', $id)
+            ->update(['note' => $objects]);
+    }
 }

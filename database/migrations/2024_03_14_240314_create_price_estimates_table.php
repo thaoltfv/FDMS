@@ -189,6 +189,16 @@ class CreatePriceEstimatesTable extends Migration
                 $table->integer('price_estimate_id')->nullable();
             });
         }
+        if (!Schema::hasColumn('appraises', 'apartment_number')) {
+            Schema::table('appraises', function (Blueprint $table) {
+                $table->string('apartment_number')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('appraises', 'plot_num')) {
+            Schema::table('appraises', function (Blueprint $table) {
+                $table->string('plot_num')->nullable();
+            });
+        }
     }
 
     /**
@@ -212,6 +222,16 @@ class CreatePriceEstimatesTable extends Migration
         if (Schema::hasColumn('appraises', 'price_estimate_id')) {
             Schema::table('appraises', function (Blueprint $table) {
                 $table->dropColumn('price_estimate_id');
+            });
+        }
+        if (Schema::hasColumn('appraises', 'apartment_number')) {
+            Schema::table('appraises', function (Blueprint $table) {
+                $table->dropColumn('apartment_number');
+            });
+        }
+        if (Schema::hasColumn('appraises', 'plot_num')) {
+            Schema::table('appraises', function (Blueprint $table) {
+                $table->dropColumn('plot_num');
             });
         }
     }
