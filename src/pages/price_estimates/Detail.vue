@@ -7,9 +7,7 @@
 			<form-wizard
 				ref="wizard"
 				color="#99D161"
-				:title="
-					`UTG${tempPriceEstimates.id ? `_${tempPriceEstimates.id}` : ''}`
-				"
+				:title="`UTG${priceEstimates.id ? `_${priceEstimates.id}` : ''}`"
 				:subtitle="status_text"
 				layout="vertical"
 				finish-button-text="Hoàn Thành"
@@ -139,6 +137,10 @@
 							</div>
 						</div>
 						<div
+							v-if="
+								!priceEstimates.appraise_id &&
+									!priceEstimates.apartment_asset_id
+							"
 							class="btn-drawer-footer btn-footer d-md-flex d-block justify-content-end align-items-center"
 						>
 							<div class="d-md-flex d-block">
@@ -158,29 +160,51 @@
 						</div>
 					</a-drawer>
 				</div>
-				<div class="wizard-custom-info" v-if="tempPriceEstimates.createdBy">
-					<div class="col-13">
-						<div class="row d-flex">
-							<p class="mb-1">Version :</p>
-							<p class="mb-1">{{ tempPriceEstimates.max_version }}</p>
-						</div>
-						<div class="row d-flex" v-if="tempPriceEstimates.price_estimate_id">
+				<div
+					class="wizard-custom-info"
+					v-if="priceEstimates.appraise_id || priceEstimates.apartment_asset_id"
+				>
+					<div class="col-12">
+						<!-- <div class="row d-flex"> -->
+						<!-- <p class="mb-1">Version :</p> -->
+						<!-- <p class="mb-1">{{ priceEstimates.max_version }}</p> -->
+						<!-- </div> -->
+						<div
+							class="row d-flex"
+							v-if="
+								priceEstimates.appraise_id || priceEstimates.apartment_asset_id
+							"
+						>
 							<p class="mb-1">Mã TSTĐ :</p>
 							<a
 								class="mb-1"
 								:href="
-									`/certification_asset/detail?id=${tempPriceEstimates.price_estimate_id}`
+									priceEstimates.appraise_id
+										? `/certification_asset/real-estate/detail?id=${priceEstimates.appraise_id}`
+										: priceEstimates.apartment_asset_id
+										? `/certification_asset/apartment/detail?id=${priceEstimates.apartment_asset_id}`
+										: ''
 								"
 								target="_blank"
-								>{{ tempPriceEstimates.price_estimate_id }}</a
+								>{{
+									priceEstimates.appraise_id ||
+										priceEstimates.apartment_asset_id
+								}}</a
 							>
 						</div>
-						<div class="">
+						<!-- <div class="">
 							<p class="mb-1">Người được chỉnh sửa :</p>
 							<div>
-								<p class="mb-1">- {{ tempPriceEstimates.createdBy.name }}</p>
+								<p class="mb-1">
+									-
+									{{
+										priceEstimates.createdBy
+											? priceEstimates.createdBy
+											: ""
+									}}
+								</p>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -201,7 +225,11 @@
 								</button>
 
 								<button
-									v-if="isEditStatus"
+									v-if="
+										isEditStatus &&
+											!priceEstimates.appraise_id &&
+											!priceEstimates.apartment_asset_id
+									"
 									class="btn btn-white"
 									@click.prevent="handleEdit(0)"
 									type="submit"
@@ -219,7 +247,7 @@
 
 				<tab-content title="Tài sản so sánh" icon="">
 					<ValidationObserver tag="div" ref="step_2">
-						<Step2 />
+						<Step2 :key="miscInfo.key_step_2" />
 						<div
 							class="btn-footer d-md-flex d-block justify-content-end align-items-center"
 						>
@@ -232,7 +260,11 @@
 									/>Thoát
 								</button>
 								<button
-									v-if="isEditStatus"
+									v-if="
+										isEditStatus &&
+											!priceEstimates.appraise_id &&
+											!priceEstimates.apartment_asset_id
+									"
 									class="btn btn-white"
 									@click.prevent="handleEdit(1)"
 									type="submit"
@@ -278,7 +310,11 @@
 									/>Trở lại
 								</button>
 								<button
-									v-if="isEditStatus"
+									v-if="
+										isEditStatus &&
+											!priceEstimates.appraise_id &&
+											!priceEstimates.apartment_asset_id
+									"
 									class="btn btn-white btn-orange text-nowrap"
 									:class="{ 'btn_loading disabled': isSubmit }"
 									@click.prevent="validateSubmitStep3"
@@ -291,11 +327,16 @@
 									/>Lưu
 								</button>
 								<button
-									v-if="isEditStatus"
+									v-if="
+										this.isEditStatus &&
+											!this.priceEstimates.appraise_id &&
+											!this.priceEstimates.apartment_asset_id &&
+											priceEstimates.step_3.id
+									"
 									class="btn btn-white  text-nowrap"
 									style="background-color: #007ec6;color: white;"
 									:class="{ 'btn_loading disabled': isSubmit }"
-									@click.prevent="moveToAppraise"
+									@click.prevent="openNotification = true"
 									type="submit"
 								>
 									<img
@@ -443,7 +484,11 @@
 					>
 						<div class="d-md-flex d-block">
 							<button
-								v-if="isEditStatus"
+								v-if="
+									isEditStatus &&
+										!priceEstimates.appraise_id &&
+										!priceEstimates.apartment_asset_id
+								"
 								:class="{ 'btn_loading disabled': isSubmit }"
 								class="btn btn-white btn-orange text-nowrap"
 								@click.prevent="handleSaveAdditional"
@@ -458,36 +503,18 @@
 					</div>
 				</a-drawer>
 			</div>
-			<!-- <div class="wizard-custom-info" v-if="createdBy">
-			<div class="col-13">
-				<div class="row d-flex">
-					<p class="mb-1">Version :</p>
-					<p class="mb-1">{{max_version}}</p>
-				</div>
-				<div class="row d-flex">
-					<p class="mb-1">Mã HSTĐ :</p>
-					<a class="mb-1" :href="`/certification_brief/detail?id=${form.certificate.id}`" v-if="form.certificate" target='_blank'>{{form.certificate ? form.certificate.id : ''}}</a>
-					<p class="mb-1" v-else>{{form.certificate ? form.certificate.id : ''}}</p>
-				</div>
-				<div class="">
-					<p class="mb-1">Người được chỉnh sửa :</p>
-					<div>
-						<p class="mb-1"> - {{createdBy.name}}</p>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		</div>
 		<ModalPrintEstimateAssets
 			v-if="openPrint"
 			@cancel="openPrint = false"
 			:data="priceEstimates"
+			:isApartment="miscVariable.isApartment"
 		/>
 		<ModalNotificationAppraisal
-			v-if="openCancelAppraisal"
-			@cancel="openCancelAppraisal = false"
-			v-bind:notification="message"
-			@action="handleActionCancelAppraise"
+			v-if="openNotification"
+			@cancel="openNotification = false"
+			v-bind:notification="messageNoti"
+			@action="moveToAppraise"
 		/>
 	</div>
 </template>
@@ -845,6 +872,7 @@ export default {
 		const isMobile = ref(checkMobile());
 		const isEdit = ref(false);
 		const priceEstimateStore = usePriceEstimatesStore();
+		priceEstimateStore.resetVariables();
 		priceEstimateStore.getDictionary();
 		priceEstimateStore.getProvinces();
 		const {
@@ -855,7 +883,9 @@ export default {
 			miscVariable
 		} = storeToRefs(priceEstimateStore);
 
-		const tempPriceEstimates = ref(priceEstimates.value);
+		const openNotification = ref(false);
+		const messageNoti =
+			"Phiếu ước tính giá sẽ được xác lập và không thể chỉnh sửa sau khi chuyển thành Tài sản thẩm định. Bạn có muốn tiếp tục ?";
 		return {
 			isMobile,
 			priceEstimates,
@@ -865,7 +895,8 @@ export default {
 			priceEstimateStore,
 			configThis,
 			isEdit,
-			tempPriceEstimates
+			openNotification,
+			messageNoti
 		};
 	},
 	async created() {
@@ -898,23 +929,20 @@ export default {
 			);
 			if (response.error) {
 				this.$router.push({ name: "error.403" });
-			} else {
-				this.tempPriceEstimates = response.data;
 			}
 		} else {
 			this.$router.push({ name: "error.403" });
 		}
-		if (!this.isMobile) {
-			await this.$refs.wizard.tabs.forEach((tab, index) => {
-				if (index <= this.miscVariable.step_active) {
-					tab.checked = true;
-				}
-			});
-			await this.$refs.wizard.changeTab(0, this.miscVariable.step_active);
-			this.miscInfo.key_step_1 += 1;
-			this.miscInfo.key_step_2 += 1;
-			this.miscInfo.key_step_3 += 1;
-		}
+		await this.$refs.wizard.tabs.forEach((tab, index) => {
+			if (index <= this.miscVariable.step_active) {
+				tab.checked = true;
+			}
+		});
+		await this.$refs.wizard.changeTab(0, this.miscVariable.step_active);
+
+		this.miscInfo.key_step_1 += 1;
+		this.miscInfo.key_step_2 += 1;
+		this.miscInfo.key_step_3 += 1;
 	},
 	methods: {
 		getProfiles() {
@@ -925,7 +953,7 @@ export default {
 		},
 		showHistoryDrawer() {
 			this.visibleHistoryDrawer = true;
-			this.getHistoryTimeline(this.tempPriceEstimates.id);
+			this.getHistoryTimeline(this.priceEstimates.id);
 		},
 		onHistoryDrawerClose() {
 			this.visibleHistoryDrawer = false;
@@ -957,15 +985,9 @@ export default {
 			}
 		},
 		async handleEdit(step) {
-			console.log(
-				"runhere",
-				this.tempPriceEstimates,
-				this.tempPriceEstimates.id,
-				step
-			);
 			await this.$router.push({
 				name: "price_estimates.edit",
-				query: { id: this.tempPriceEstimates.id },
+				query: { id: this.priceEstimates.id },
 				params: { step: step }
 			});
 		},
@@ -980,84 +1002,85 @@ export default {
 					position: "top-right"
 				});
 			} else {
-				if (
-					!this.priceEstimates.step_3 ||
-					!this.priceEstimates.step_3.total_area ||
-					this.priceEstimates.step_3.total_area.length === 0
-				) {
-					this.$toast.open({
-						message:
-							"Chưa thể in giá sơ bộ do chưa đủ thông tin. Vui lòng lưu giá trị tài sản trước khi in.",
-						type: "error",
-						position: "top-right"
-					});
-				}
-
 				this.priceEstimates.assets = [];
 				this.priceEstimates.totalLandPrice = 0;
 				this.priceEstimates.totalTangibleAssetPrice = 0;
-				for (
-					let index = 0;
-					index < this.priceEstimates.step_3.total_area.length;
-					index++
-				) {
-					const element = this.priceEstimates.step_3.total_area[index];
-					const temp = {
-						description: "Phần diện tích PHQH",
-						land_type_description: element.land_type_purpose
-							? element.land_type_purpose.description
-							: "",
-						area: element.main_area,
-						price: element.unit_price,
-						total: element.total_price
-					};
-					this.priceEstimates.totalLandPrice += Number(element.total_price);
-					this.priceEstimates.assets.push(temp);
-				}
+				if (!this.miscVariable.isApartment) {
+					if (
+						!this.priceEstimates.step_3 ||
+						!this.priceEstimates.step_3.total_area ||
+						this.priceEstimates.step_3.total_area.length === 0
+					) {
+						this.$toast.open({
+							message:
+								"Chưa thể in giá sơ bộ do chưa đủ thông tin. Vui lòng lưu giá trị tài sản trước khi in.",
+							type: "error",
+							position: "top-right"
+						});
+					}
 
-				if (
-					this.priceEstimates.step_3.planning_area &&
-					this.priceEstimates.step_3.planning_area.length > 0
-				) {
 					for (
 						let index = 0;
-						index < this.priceEstimates.step_3.planning_area.length;
+						index < this.priceEstimates.step_3.total_area.length;
 						index++
 					) {
-						const element = this.priceEstimates.step_3.planning_area[index];
+						const element = this.priceEstimates.step_3.total_area[index];
 						const temp = {
-							description: "Phần diện tích không PHQH",
+							description: "Phần diện tích PHQH",
 							land_type_description: element.land_type_purpose
-								? element.land_type_purpose.description
+								? element.land_type_purpose.acronym
 								: "",
-							area: element.planning_area,
+							area: element.main_area,
 							price: element.unit_price,
 							total: element.total_price
 						};
 						this.priceEstimates.totalLandPrice += Number(element.total_price);
 						this.priceEstimates.assets.push(temp);
 					}
+
+					if (
+						this.priceEstimates.step_3.planning_area &&
+						this.priceEstimates.step_3.planning_area.length > 0
+					) {
+						for (
+							let index = 0;
+							index < this.priceEstimates.step_3.planning_area.length;
+							index++
+						) {
+							const element = this.priceEstimates.step_3.planning_area[index];
+							const temp = {
+								description: "Phần diện tích không PHQH",
+								land_type_description: element.land_type_purpose
+									? element.land_type_purpose.acronym
+									: "",
+								area: element.planning_area,
+								price: element.unit_price,
+								total: element.total_price
+							};
+							this.priceEstimates.totalLandPrice += Number(element.total_price);
+							this.priceEstimates.assets.push(temp);
+						}
+					}
+					if (
+						this.priceEstimates.step_3.tangible_assets &&
+						this.priceEstimates.step_3.tangible_assets.length > 0
+					)
+						this.priceEstimates.totalTangibleAssetPrice = this.priceEstimates.step_3.tangible_assets.reduce(
+							(total, asset) => total + (asset.total_price || 0),
+							0
+						);
 				}
-				if (
-					this.priceEstimates.step_3.tangible_assets &&
-					this.priceEstimates.step_3.tangible_assets.length > 0
-				)
-					this.priceEstimates.totalTangibleAssetPrice = this.priceEstimates.step_3.tangible_assets.reduce(
-						(total, asset) => total + (asset.total_price || 0),
-						0
-					);
 
 				this.priceEstimates.totalAllPrice =
 					Number(this.priceEstimates.totalLandPrice) +
 					Number(this.priceEstimates.totalTangibleAssetPrice);
-				console.log(this.priceEstimates);
 				this.openPrint = true;
 			}
 
 			// this.printEstimateAssetPrice();
 		},
 		async printEstimateAssetPrice() {
-			let id = this.tempPriceEstimates.id ? this.tempPriceEstimates.id : "";
+			let id = this.priceEstimates.id ? this.priceEstimates.id : "";
 			const res = await CertificateAsset.postEstimateAssetPrice(id);
 			if (res.data) {
 				if (res.data.assets.length > 0) {
@@ -1091,9 +1114,10 @@ export default {
 			}
 		},
 		async moveToAppraise() {
-			if (this.tempPriceEstimates.id) {
+			if (this.priceEstimates.id) {
 				const res = await PriceEstimateModel.moveToAppraise(
-					this.tempPriceEstimates.id
+					this.priceEstimates.id,
+					this.miscVariable.isApartment
 				);
 				if (res.data) {
 					this.isSubmit = false;
@@ -1104,7 +1128,13 @@ export default {
 						position: "top-right",
 						duration: 3000
 					});
-					this.tempPriceEstimates.appraise_id = res.data.id;
+					if (this.miscVariable.isApartment) {
+						this.priceEstimates.apartment_asset_id = res.data.id;
+					} else {
+						this.priceEstimates.appraise_id = res.data.id;
+					}
+					this.priceEstimates.isTransfer = true;
+					this.miscInfo.key_step_3++;
 				} else if (res.error) {
 					this.isSubmit = false;
 					this.$toast.open({
@@ -1127,6 +1157,10 @@ export default {
 					position: "top-right"
 				});
 			}
+		},
+		async handleChangeBack() {
+			// this.$refs.wizard.prevTab()
+			return this.$router.go(-1);
 		},
 		handleChange(prevIndex, nextIndex) {
 			this.key_step_1 += 1;
@@ -1153,8 +1187,14 @@ export default {
 	async mounted() {},
 	async beforeMount() {},
 	computed: {
+		isAllowTransfer() {
+			return (
+				this.isEditStatus &&
+				!this.priceEstimates.appraise_id &&
+				!this.priceEstimates.apartment_asset_id
+			);
+		},
 		isEditStatus() {
-			// // console.log(this.form)
 			let check = true;
 
 			return check;

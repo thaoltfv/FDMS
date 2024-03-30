@@ -76,7 +76,6 @@ export default {
 		const { priceEstimates } = storeToRefs(priceEstimateStore);
 
 		const step_2 = ref(priceEstimates.value.step_2);
-
 		return {
 			step_2,
 			priceEstimateStore

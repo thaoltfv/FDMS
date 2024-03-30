@@ -18,7 +18,10 @@
 					<div class="row">
 						<div class="col-12 col-lg-7">
 							<div class="row">
-								<div class="col-md-12 col-lg-6">
+								<div
+									class="col-md-12 col-lg-6"
+									v-if="!miscVariable.isApartment"
+								>
 									<InputCategory
 										:disabled="true"
 										v-model="step_1.general_infomation.asset_type_id"
@@ -51,6 +54,17 @@
 										:options="optionsDistrict"
 									/>
 								</div>
+								<div class="col-12" v-if="miscVariable.isApartment">
+									<InputCategory
+										v-model="step_1.general_infomation.project_id"
+										vid="project_id"
+										:disabled="true"
+										rules="required"
+										label="Tên chung cư"
+										class="form-group-container"
+										:options="optionsProjects"
+									/>
+								</div>
 								<div class="col-md-12 col-lg-6">
 									<InputCategory
 										:disabled="true"
@@ -73,7 +87,10 @@
 										:options="optionsStreet"
 									/>
 								</div>
-								<div class="col-md-12 col-lg-6">
+								<div
+									class="col-md-12 col-lg-6"
+									v-if="!miscVariable.isApartment"
+								>
 									<InputCategory
 										:disabled="true"
 										v-model="step_1.general_infomation.distance_id"
@@ -93,7 +110,17 @@
 										class="form-group-container"
 									/>
 								</div>
-								<div class="col-md-6 col-lg-3">
+								<div class="col-md-12 col-lg-6" v-if="miscVariable.isApartment">
+									<InputCategory
+										v-model="step_1.general_infomation.position_by_unbd_id"
+										vid="position_by_unbd_id"
+										label="Vị trí theo UBND"
+										:disabled="true"
+										class="form-group-container"
+										:options="optionsPosition"
+									/>
+								</div>
+								<div class="col-md-6 col-lg-3" v-if="!miscVariable.isApartment">
 									<InputText
 										:disabledInput="true"
 										v-model="step_1.general_infomation.doc_no"
@@ -104,7 +131,7 @@
 									/>
 								</div>
 
-								<div class="col-md-6 col-lg-3">
+								<div class="col-md-6 col-lg-3" v-if="!miscVariable.isApartment">
 									<InputText
 										:disabledInput="true"
 										v-model="step_1.general_infomation.land_no"
@@ -114,8 +141,17 @@
 										class="form-group-container"
 									/>
 								</div>
-
 								<div class="col-12">
+									<InputText
+										v-model="step_1.general_infomation.full_address"
+										:disabledInput="true"
+										vid="doc_no"
+										label="Địa chỉ"
+										rules="required"
+										class="form-group-container"
+									/>
+								</div>
+								<div class="col-12" v-if="!miscVariable.isApartment">
 									<InputText
 										:disabledInput="true"
 										v-model="step_1.general_infomation.appraise_asset"
@@ -227,7 +263,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="card">
+		<div class="card" v-if="!miscVariable.isApartment">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<h3 class="title">Đặc điểm tài sản</h3>
@@ -587,6 +623,121 @@
 				</div>
 			</div>
 		</div>
+		<div class="card" v-else>
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Chi tiết căn hộ</h3>
+					<img
+						class="img-dropdown"
+						:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showCardDetailTraffic = !showCardDetailTraffic"
+					/>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showCardDetailTraffic">
+				<div class="container-fluid">
+					<div class="row">
+						<InputCategory
+							:disabled="true"
+							v-model="step_1.apartment_properties.block_id"
+							vid="block_id"
+							rules="required"
+							label="Block (khu)"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionsBlocks"
+						/>
+						<InputCategory
+							:disabled="true"
+							v-model="step_1.apartment_properties.floor_id"
+							vid="floor_id"
+							rules="required"
+							label="Tầng"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionsFloors"
+						/>
+						<InputText
+							v-model="step_1.apartment_properties.apartment_name"
+							vid="apartment_name"
+							:disabledInput="true"
+							label="Mã căn hộ"
+							rules="required"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+						<InputArea
+							v-model="step_1.apartment_properties.area"
+							vid="area"
+							:disabled="true"
+							label="Diện tích (m²)"
+							rules="required"
+							:max="99999999"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+
+						<InputNumberNoneFormat
+							v-model="step_1.apartment_properties.bedroom_num"
+							:disabled="true"
+							vid="bedroom_num"
+							label="Số phòng ngủ"
+							:max="9999"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+						<InputNumberNoneFormat
+							v-model="step_1.apartment_properties.wc_num"
+							:disabled="true"
+							vid="wc_num"
+							label="Số phòng WC"
+							:max="9999"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+						<InputCategory
+							:disabled="true"
+							v-model="step_1.apartment_properties.handover_year"
+							class="col-12 col-lg-4 form-group-container"
+							vid="handover_year"
+							label="Năm sử dụng"
+							:options="optionYearBuild"
+						/>
+						<InputCategory
+							:disabled="true"
+							v-model="step_1.apartment_properties.direction_id"
+							vid="direction_id"
+							label="Hướng chính"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionDirection"
+						/>
+
+						<InputCategory
+							:disabled="true"
+							v-model="step_1.apartment_properties.furniture_quality_id"
+							vid="furniture_quality_id"
+							label="Tình trạng nội thất"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionFurniture"
+						/>
+
+						<InputText
+							:disabledInput="true"
+							v-model="step_1.general_infomation.appraise_asset"
+							vid="data.appraise_asset"
+							label="Tên căn hộ"
+							rules="required"
+							class="col-12 form-group-container"
+						/>
+						<InputTextarea
+							:disableInput="true"
+							label="Mô tả"
+							v-model="step_1.apartment_properties.description"
+							vid="description"
+							:rows="4"
+							:maxLength="1000"
+							class="col-12 form-group-container"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <style lang="scss">
@@ -604,7 +755,8 @@ import InputNumberFormat from "@/components/Form/InputNumber";
 import InputCategoryBoolean from "@/components/Form/InputCategoryBoolean";
 import InputCategoryCustom from "@/components/Form/InputCategoryCustom";
 import InputAreaCustom from "@/components/Form/InputAreaCustom";
-
+import InputArea from "@/components/Form/InputArea";
+import InputNumberNoneFormat from "@/components/Form/InputNumberNoneFormat";
 import ModalDeleteIndex from "@/components/Modal/ModalDeleteIndex";
 import { Tabs, TabItem } from "vue-material-tabs";
 import File from "@/models/File";
@@ -633,6 +785,8 @@ export default {
 	name: "Step1",
 	props: ["isEdit", "addressName"],
 	components: {
+		InputNumberNoneFormat,
+		InputArea,
 		InputAreaCustom,
 		InputCategoryCustom,
 		InputCategoryBoolean,
@@ -670,10 +824,9 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const priceEstimateStore = usePriceEstimatesStore();
-		const { priceEstimates, miscInfo, addressName } = storeToRefs(
+		const { priceEstimates, miscInfo, addressName, miscVariable } = storeToRefs(
 			priceEstimateStore
 		);
-
 		// const step_1 = ref(_.cloneDeep(priceEstimates.value.step_1));
 		const step_1 = ref(priceEstimates.value.step_1);
 		const checkShowPlanning = ref(false);
@@ -681,6 +834,7 @@ export default {
 			step_1,
 			isMobile,
 			miscInfo,
+			miscVariable,
 			addressName,
 			priceEstimates,
 			priceEstimateStore,
@@ -688,6 +842,55 @@ export default {
 		};
 	},
 	computed: {
+		optionYearBuild() {
+			return {
+				data: this.built_years,
+				id: "year",
+				key: "year"
+			};
+		},
+		optionFurniture() {
+			return {
+				data: this.miscInfo.furniture_list,
+				id: "id",
+				key: "description"
+			};
+		},
+		optionsPosition() {
+			return {
+				data: this.miscInfo.points,
+				id: "id",
+				key: "description"
+			};
+		},
+		optionDirection() {
+			return {
+				data: this.miscInfo.directions,
+				id: "id",
+				key: "description"
+			};
+		},
+		optionsProjects() {
+			return {
+				data: this.miscInfo.projects,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsBlocks() {
+			return {
+				data: this.miscInfo.blocks,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsFloors() {
+			return {
+				data: this.miscInfo.floors,
+				id: "id",
+				key: "name"
+			};
+		},
 		optionsTypePurposes() {
 			return {
 				data: this.miscInfo.type_purposes,
