@@ -49,7 +49,7 @@ navigations = [
 	{
 		id: "price_estimates",
 		type: "item",
-		icon: "nav_ycsb",
+		icon: "nav_utg",
 		title: "Ước tính giá",
 		routeName: "price_estimates.index",
 		customImage: true
@@ -80,15 +80,15 @@ navigations = [
 		routeName: "warehouse.index",
 		customImage: true
 	},
-	{
-		id: "price_estimate",
-		type: "item",
-		icon: "nav_utg",
-		title: "Ước tính giá",
-		routeName: "price_estimate.index",
-		customImage: true,
-		denied: ["nova"]
-	},
+	// {
+	// 	id: "price_estimate",
+	// 	type: "item",
+	// 	icon: "nav_utg",
+	// 	title: "Ước tính giá",
+	// 	routeName: "price_estimate.index",
+	// 	customImage: true,
+	// 	denied: ["nova"]
+	// },
 	{
 		id: "log",
 		type: "item",

@@ -8,7 +8,7 @@
 				:columns="columns"
 				:data-source="listCertificates"
 				:loading="isLoading"
-				:rowKey="(record) => record.id"
+				:rowKey="record => record.id"
 				:filtered="false"
 				:row-class-name="
 					(_record, index) => (index % 2 === 1 ? 'table-striped' : null)
@@ -230,7 +230,7 @@
 			<b-card
 				:class="{
 					border_expired: checkDateExpired(element),
-					['border-' + configColor(element)]: true,
+					['border-' + configColor(element)]: true
 				}"
 				class="card_container mb-3"
 				v-for="element in listCertificates"
@@ -240,9 +240,9 @@
 					<span
 						@click="handleDetailCertificate(element.id)"
 						class="content_id"
-						:class="`bg-${configColor(element)}-15 text-${configColor(
-							element
-						)}`"
+						:class="
+							`bg-${configColor(element)}-15 text-${configColor(element)}`
+						"
 						>HSTD_{{ element.id }}</span
 					>
 					<img
@@ -403,7 +403,7 @@ import {
 	BRow,
 	BCol,
 	BFormGroup,
-	BFormInput,
+	BFormInput
 } from "bootstrap-vue";
 import moment from "moment";
 import Certificate from "@/models/Certificate";
@@ -431,7 +431,7 @@ export default {
 		BRow,
 		BCol,
 		BFormGroup,
-		BFormInput,
+		BFormInput
 	},
 	data() {
 		return {
@@ -440,13 +440,13 @@ export default {
 			pageSizeOptions: [
 				{ value: "10", label: "10" },
 				{ value: "20", label: "20" },
-				{ value: "30", label: "30" },
+				{ value: "30", label: "30" }
 			],
 			theme: {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
 				slider: "#FAA831",
-				arrow: "#000000",
+				arrow: "#000000"
 			},
 			now: new Date(),
 			total_amount: "",
@@ -455,8 +455,8 @@ export default {
 			listTest: [
 				{
 					name: "test",
-					id: 1,
-				},
+					id: 1
+				}
 			],
 			idUpdate: "",
 			idData: "",
@@ -515,7 +515,7 @@ export default {
 			isCheckPrice: false,
 			isCheckLegal: false,
 			isCheckVersion: false,
-			changeStatusRequire: {},
+			changeStatusRequire: {}
 		};
 	},
 	created() {
@@ -529,7 +529,7 @@ export default {
 		}
 		this.user_id = profile.data.user.id;
 		const permission = this.$store.getters.currentPermissions;
-		permission.forEach((value) => {
+		permission.forEach(value => {
 			if (value === PERMISSIONS.VIEW_CERTIFICATE_BRIEF) {
 				this.view = true;
 			}
@@ -552,7 +552,7 @@ export default {
 	},
 	computed: {
 		updateDate() {
-			return (dateUpdate) => {
+			return dateUpdate => {
 				return moment(dateUpdate).fromNow();
 			};
 		},
@@ -565,7 +565,7 @@ export default {
 					dataIndex: "id",
 					// sorter: (a, b) => a.id - b.id,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Mã TSTĐ",
@@ -574,7 +574,7 @@ export default {
 					scopedSlots: { customRender: "detail_appraise" },
 					// sorter: (a, b) => a.document_num - b.document_num,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Số hợp đồng",
@@ -582,7 +582,7 @@ export default {
 					scopedSlots: { customRender: "document_date" },
 					// sorter: (a, b) => a.document_num - b.document_num,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Số chứng thư",
@@ -591,7 +591,7 @@ export default {
 					scopedSlots: { customRender: "certificate_date" },
 					// sorter: (a, b) => a.certificate_num.length - b.certificate_num.length,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Khách hàng",
@@ -600,13 +600,13 @@ export default {
 					dataIndex: "petitioner_name",
 					// sorter: (a, b) => a.petitioner_name - b.petitioner_name,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Tài sản thẩm định (TSTĐ)",
 					align: "left",
 					scopedSlots: { customRender: "appraised_asset" },
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Tổng giá trị (VNĐ)",
@@ -614,7 +614,7 @@ export default {
 					scopedSlots: { customRender: "total_asset_price" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Tổ thẩm định",
@@ -622,7 +622,7 @@ export default {
 					scopedSlots: { customRender: "appraiser" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Người tạo",
@@ -631,7 +631,7 @@ export default {
 					scopedSlots: { customRender: "created_by" },
 					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Trạng thái",
@@ -647,11 +647,11 @@ export default {
 					// onFilter: (value, record) => record.status === value,
 					// sorter: (a, b) => a.status - b.status,
 					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false,
-				},
+					hiddenItem: false
+				}
 			];
-			return dataColumn.filter((item) => item.hiddenItem === false);
-		},
+			return dataColumn.filter(item => item.hiddenItem === false);
+		}
 	},
 	beforeMount() {
 		if (this.search_kanban) {
@@ -662,7 +662,7 @@ export default {
 	mounted() {
 		if (this.jsonConfig && this.jsonConfig.principle) {
 			this.principleConfig = this.jsonConfig.principle.filter(
-				(i) => i.isActive === 1
+				i => i.isActive === 1
 			);
 		}
 	},
@@ -674,12 +674,12 @@ export default {
 			this.returnData();
 		},
 		returnData() {
-			this.principleConfig.forEach((item) => {
+			this.principleConfig.forEach(item => {
 				this.subStatusData[item.id] = this.subStatusDataReturn.filter(
-					(i) => i.status === item.status && i.sub_status === item.sub_status
+					i => i.status === item.status && i.sub_status === item.sub_status
 				);
 				this.subStatusDataTmp[item.id] = this.listCertificate.filter(
-					(i) => i.status === item.status && i.sub_status === item.sub_status
+					i => i.status === item.status && i.sub_status === item.sub_status
 				);
 			});
 			this.key_dragg++;
@@ -701,7 +701,7 @@ export default {
 				status_note: note,
 				status_reason_id: reason_id,
 				status_description: this.message,
-				status_config: this.jsonConfig.principle,
+				status_config: this.jsonConfig.principle
 			};
 			// console.log('data send', dataSend)
 			const res = await CertificationBrief.updateStatusCertificate(
@@ -710,7 +710,7 @@ export default {
 			);
 			if (res.data) {
 				let returnData = this.subStatusDataReturn.find(
-					(i) => i.id === this.idDragger
+					i => i.id === this.idDragger
 				);
 				if (returnData) {
 					returnData.status = this.next_status;
@@ -724,7 +724,7 @@ export default {
 					message: this.confirm_message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				this.key_dragg++;
 			} else {
@@ -732,7 +732,7 @@ export default {
 					message: `${res.error.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				this.handleCancelAccept2();
 			}
@@ -789,9 +789,9 @@ export default {
 					this.listCertificate = resp.data.HSTD;
 					if (this.principleConfig.length > 0) {
 						let dataTmp = [];
-						this.principleConfig.forEach((item) => {
+						this.principleConfig.forEach(item => {
 							dataTmp = this.listCertificate.filter(
-								(i) =>
+								i =>
 									i.status === item.status && i.sub_status === item.sub_status
 							);
 							this.subStatusDataTmp[item.id] = dataTmp;
@@ -811,7 +811,7 @@ export default {
 		},
 		handleFooterAccept(target) {
 			let check = true;
-			let config = this.principleConfig.find((i) => i.id === target.id);
+			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
 			if (config) {
 				this.config = config;
@@ -832,7 +832,7 @@ export default {
 					message: message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				this.key_dragg++;
 			} else {
@@ -840,7 +840,7 @@ export default {
 					message: `${res.error.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				this.showDetailPopUp = false;
 			}
@@ -868,7 +868,7 @@ export default {
 						message:
 							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 						type: "error",
-						position: "top-right",
+						position: "top-right"
 					});
 					this.showDetailPopUp = true;
 					this.idDragger = id;
@@ -877,7 +877,7 @@ export default {
 				await this.$toast.open({
 					message: "Lấy dữ liệu thất bại",
 					type: "error",
-					position: "top-right",
+					position: "top-right"
 				});
 			}
 		},
@@ -1032,7 +1032,7 @@ export default {
 		},
 		async openPrint(id) {
 			this.isSubmit = true;
-			await Certificate.getPrint(id).then((resp) => {
+			await Certificate.getPrint(id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1048,7 +1048,7 @@ export default {
 		},
 		async openPrintAppendix(id) {
 			this.isSubmit = true;
-			await Certificate.getPrintAppendix(id).then((resp) => {
+			await Certificate.getPrintAppendix(id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1064,7 +1064,7 @@ export default {
 		},
 		async openPrintImage(id) {
 			this.isSubmit = true;
-			await Certificate.getPrintImage(id).then((resp) => {
+			await Certificate.getPrintImage(id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1085,7 +1085,7 @@ export default {
 			// convert number to dot format
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
-				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
 				});
 			}
@@ -1109,7 +1109,7 @@ export default {
 					message:
 						"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 					type: "error",
-					position: "top-right",
+					position: "top-right"
 				});
 				this.showDetailPopUp = true;
 				this.idDragger = id;
@@ -1119,10 +1119,10 @@ export default {
 				.push({
 					name: "certification_brief.detail",
 					query: {
-						id: id,
-					},
+						id: id
+					}
 				})
-				.catch((_) => {});
+				.catch(_ => {});
 		},
 		onSizeChange(pageSize) {
 			const pagination = { ...this.pagination, pageSize: Number(pageSize) };
@@ -1142,8 +1142,8 @@ export default {
 			} else {
 				return false;
 			}
-		},
-	},
+		}
+	}
 };
 </script>
 

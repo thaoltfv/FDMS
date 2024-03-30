@@ -34,16 +34,35 @@ export default {
 		const priceEstimateStore = usePriceEstimatesStore();
 		priceEstimateStore.resetVariables();
 		priceEstimateStore.getDictionary();
-		const { priceEstimates, configThis } = storeToRefs(priceEstimateStore);
+		const { priceEstimates, configThis, miscVariable } = storeToRefs(
+			priceEstimateStore
+		);
 
 		configThis.value.isMobile = isMobile.value;
 		const step_1 = ref(null);
-		return { isMobile, priceEstimates, configThis, priceEstimateStore, step_1 };
+		return {
+			isMobile,
+			priceEstimates,
+			miscVariable,
+			configThis,
+			priceEstimateStore,
+			step_1
+		};
 	},
 	created() {
 		this.configThis.toast = this.$toast;
 		this.configThis.route = this.$route;
 		this.configThis.router = this.$router;
+
+		if (this.$route.query.asset_type_id == 39) {
+			this.miscVariable.isApartment = true;
+			this.priceEstimates.step_1.asset_type_id = 39;
+			this.priceEstimates.step_1.general_infomation.asset_type_id = 39;
+		} else {
+			this.miscVariable.isApartment = false;
+			this.priceEstimates.step_1.asset_type_id = 38;
+			this.priceEstimates.step_1.general_infomation.asset_type_id = 38;
+		}
 	},
 	methods: {}
 };

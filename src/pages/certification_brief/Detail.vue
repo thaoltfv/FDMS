@@ -19,10 +19,10 @@
 								</a-button>
 								<template #overlay>
 									<a-menu @click="handleMenuClick">
-										<a-menu-item key="1"> Giay yeu cau TDG </a-menu-item>
-										<a-menu-item key="2"> Hop dong TDG </a-menu-item>
-										<a-menu-item key="3"> Ke hoach TDG </a-menu-item>
-										<a-menu-item key="4"> Bien ban thanh ly </a-menu-item>
+										<a-menu-item key="1"> Giấy yêu cầu TĐG </a-menu-item>
+										<a-menu-item key="2"> Hợp đồng TĐG </a-menu-item>
+										<a-menu-item key="3"> Kế hoạch TĐG </a-menu-item>
+										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
 									</a-menu>
 								</template>
 							</a-dropdown>
@@ -400,10 +400,10 @@
 						<div
 							v-if="
 								form.general_asset.length > 0 &&
-								form.appraiser_perform &&
-								editItemList &&
-								(edit || add) &&
-								user_id === form.appraiser_perform.user_id
+									form.appraiser_perform &&
+									editItemList &&
+									(edit || add) &&
+									user_id === form.appraiser_perform.user_id
 							"
 							@click="handleShowAppraiseList"
 							class="btn-edit"
@@ -417,10 +417,10 @@
 						<div
 							v-if="
 								form.general_asset.length === 0 &&
-								form.appraiser_perform &&
-								form.status === 2 &&
-								(edit || add) &&
-								user_id === form.appraiser_perform.user_id
+									form.appraiser_perform &&
+									form.status === 2 &&
+									(edit || add) &&
+									user_id === form.appraiser_perform.user_id
 							"
 							class="col-12 d-flex mt-2 justify-content-center"
 						>
@@ -466,7 +466,7 @@
 								:data-source="form.general_asset"
 								table-layout="top"
 								class="table_appraise_list"
-								:rowKey="(record) => record.id"
+								:rowKey="record => record.id"
 							>
 								<template slot="asset" slot-scope="asset">
 									<p :id="asset.id" class="text-none mb-0">{{ asset.name }}</p>
@@ -505,7 +505,7 @@
 									>
 										{{
 											`${showAcronym(data.asset_type.dictionary_acronym)}_` +
-											data.general_asset_id
+												data.general_asset_id
 										}}
 									</button>
 								</template>
@@ -844,9 +844,9 @@
 									<div
 										v-if="
 											isCertificateReport &&
-											(form.status === 1 ||
-												form.status === 2 ||
-												form.status === 3)
+												(form.status === 1 ||
+													form.status === 2 ||
+													form.status === 3)
 										"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -856,7 +856,7 @@
 												color: 'lightgray',
 												position: 'absolute',
 												height: '1.5rem',
-												width: '1.5rem',
+												width: '1.5rem'
 											}"
 											class="cursor_pointer"
 											icon="trash-alt"
@@ -872,7 +872,7 @@
 													color: '#2682bfad',
 													position: 'absolute',
 													height: '2rem',
-													width: '2rem',
+													width: '2rem'
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
@@ -916,9 +916,9 @@
 									<div
 										v-if="
 											isAppraisalReport &&
-											(form.status === 1 ||
-												form.status === 2 ||
-												form.status === 3)
+												(form.status === 1 ||
+													form.status === 2 ||
+													form.status === 3)
 										"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -928,7 +928,7 @@
 												color: 'lightgray',
 												position: 'absolute',
 												height: '1.5rem',
-												width: '1.5rem',
+												width: '1.5rem'
 											}"
 											class="cursor_pointer"
 											icon="trash-alt"
@@ -944,7 +944,7 @@
 													color: '#2682bfad',
 													position: 'absolute',
 													height: '2rem',
-													width: '2rem',
+													width: '2rem'
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
@@ -988,9 +988,9 @@
 									<div
 										v-if="
 											isAppendix1Report &&
-											(form.status === 1 ||
-												form.status === 2 ||
-												form.status === 3)
+												(form.status === 1 ||
+													form.status === 2 ||
+													form.status === 3)
 										"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -1000,7 +1000,7 @@
 												color: 'lightgray',
 												position: 'absolute',
 												height: '1.5rem',
-												width: '1.5rem',
+												width: '1.5rem'
 											}"
 											class="cursor_pointer"
 											icon="trash-alt"
@@ -1016,7 +1016,7 @@
 													color: '#2682bfad',
 													position: 'absolute',
 													height: '2rem',
-													width: '2rem',
+													width: '2rem'
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
@@ -1066,9 +1066,9 @@
 									<div
 										v-if="
 											isAppendix2Report &&
-											(form.status === 1 ||
-												form.status === 2 ||
-												form.status === 3)
+												(form.status === 1 ||
+													form.status === 2 ||
+													form.status === 3)
 										"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -1078,7 +1078,7 @@
 												color: 'lightgray',
 												position: 'absolute',
 												height: '1.5rem',
-												width: '1.5rem',
+												width: '1.5rem'
 											}"
 											class="cursor_pointer"
 											icon="trash-alt"
@@ -1094,7 +1094,7 @@
 													color: '#2682bfad',
 													position: 'absolute',
 													height: '2rem',
-													width: '2rem',
+													width: '2rem'
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
@@ -1138,9 +1138,9 @@
 									<div
 										v-if="
 											isAppendix3Report &&
-											(form.status === 1 ||
-												form.status === 2 ||
-												form.status === 3)
+												(form.status === 1 ||
+													form.status === 2 ||
+													form.status === 3)
 										"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -1150,7 +1150,7 @@
 												color: 'lightgray',
 												position: 'absolute',
 												height: '1.5rem',
-												width: '1.5rem',
+												width: '1.5rem'
 											}"
 											class="cursor_pointer"
 											icon="trash-alt"
@@ -1166,7 +1166,7 @@
 													color: '#2682bfad',
 													position: 'absolute',
 													height: '2rem',
-													width: '2rem',
+													width: '2rem'
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
@@ -1214,9 +1214,9 @@
 									<div
 										v-if="
 											isComparisionAssetReport &&
-											(form.status === 1 ||
-												form.status === 2 ||
-												form.status === 3)
+												(form.status === 1 ||
+													form.status === 2 ||
+													form.status === 3)
 										"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -1226,7 +1226,7 @@
 												color: 'lightgray',
 												position: 'absolute',
 												height: '1.5rem',
-												width: '1.5rem',
+												width: '1.5rem'
 											}"
 											class="cursor_pointer"
 											icon="trash-alt"
@@ -1242,7 +1242,7 @@
 													color: '#2682bfad',
 													position: 'absolute',
 													height: '2rem',
-													width: '2rem',
+													width: '2rem'
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
@@ -1310,7 +1310,7 @@
 					<div class="row mt-3">
 						<div
 							v-for="(file, index) in form.other_documents.filter(
-								(i) => i.description === 'appendix' || i.description === 'other'
+								i => i.description === 'appendix' || i.description === 'other'
 							)"
 							:key="index"
 							class="d-flex"
@@ -1333,7 +1333,9 @@
 							<img
 								v-if="
 									deleted &&
-									(form.status === 1 || form.status === 2 || form.status === 3)
+										(form.status === 1 ||
+											form.status === 2 ||
+											form.status === 3)
 								"
 								style="cursor: pointer; width: 1rem"
 								@click="deleteOtherFile(file, index)"
@@ -1443,7 +1445,7 @@
 			@updateAppraises="updateAppraises"
 			@cancel="showAppraiseListDialog = false"
 		/>
-		<ModalNotificationWithAssign
+		<ModalNotificationWithAssignHSTD
 			v-if="openNotification"
 			@cancel="handleCancel"
 			:notification="
@@ -1508,7 +1510,7 @@
 			:notification="`Bạn có muốn '${message}' hồ sơ này?`"
 			@action="handleAction2"
 		/> -->
-		<ModalNotificationWithAssign
+		<ModalNotificationWithAssignHSTD
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
@@ -1558,7 +1560,7 @@ import PaymentCertificateHistories from "./component/PaymentCertificateHistories
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
+import ModalNotificationWithAssignHSTD from "@/components/Modal/ModalNotificationWithAssignHSTD";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -1588,7 +1590,7 @@ import {
 	BTooltip,
 	BDropdown,
 	BDropdownItem,
-	BButtonGroup,
+	BButtonGroup
 } from "bootstrap-vue";
 import Footer from "./component/FooterDetail.vue";
 
@@ -1630,7 +1632,7 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalAppraiseListVersion,
-		ModalNotificationWithAssign,
+		ModalNotificationWithAssignHSTD
 	},
 	data() {
 		return {
@@ -1638,7 +1640,7 @@ export default {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
 				slider: "#FAA831",
-				arrow: "#000000",
+				arrow: "#000000"
 			},
 			user: {},
 			idData: "",
@@ -1678,7 +1680,7 @@ export default {
 				appraises: [],
 				other_documents: [],
 				document_type: [],
-				note: "",
+				note: ""
 			},
 			file: "",
 			documentAppraise: [],
@@ -1736,8 +1738,8 @@ export default {
 				"Bảng điều chỉnh QSDĐ",
 				"Bảng điều chỉnh CTXD",
 				"Hình ảnh hiện trạng",
-				"Phiếu thu thập TSSS",
-			],
+				"Phiếu thu thập TSSS"
+			]
 		};
 	},
 	setup() {
@@ -1750,12 +1752,12 @@ export default {
 			appraiserChangeStage,
 			jsonConfig,
 			workFlowConfigStore,
-			keyRender,
+			keyRender
 		};
 	},
 	beforeRouteEnter: async (to, from, next) => {
 		await CertificationBrief.getDetailCertificateBrief(to.query["id"])
-			.then((resp) => {
+			.then(resp => {
 				if (resp.data) {
 					to.meta["detail"] = resp.data;
 					return next();
@@ -1763,7 +1765,7 @@ export default {
 					return next("/".resp.error.statusCode);
 				}
 			})
-			.catch((err) => {
+			.catch(err => {
 				return next("/403");
 			});
 	},
@@ -1798,10 +1800,10 @@ export default {
 				message:
 					"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
 				type: "error",
-				position: "top-right",
+				position: "top-right"
 			});
 			let url = this.$router.push({
-				name: "certification_brief.index",
+				name: "certification_brief.index"
 			});
 		}
 		this.profile = profile;
@@ -1810,7 +1812,7 @@ export default {
 		}
 		const permission = this.$store.getters.currentPermissions;
 		// fix_permission
-		permission.forEach((value) => {
+		permission.forEach(value => {
 			if (value === "VIEW_CERTIFICATE_BRIEF") {
 				this.view = true;
 			}
@@ -1836,7 +1838,7 @@ export default {
 		statusDescription() {
 			if (this.jsonConfig) {
 				const status = this.jsonConfig.principle.find(
-					(i) =>
+					i =>
 						i.status === this.form.status &&
 						i.sub_status === this.form.sub_status
 				);
@@ -1852,26 +1854,26 @@ export default {
 					title: "Mã TSTĐ",
 					align: "left",
 					scopedSlots: { customRender: "data" },
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Version",
 					align: "center",
 					scopedSlots: { customRender: "version" },
 					dataIndex: "version",
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Loại tài sản",
 					align: "left",
 					dataIndex: "asset_type.description",
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				{
 					title: "Tên tài sản",
 					align: "left",
 					scopedSlots: { customRender: "asset" },
-					hiddenItem: false,
+					hiddenItem: false
 				},
 				// {
 				// 	title: 'Loại đất',
@@ -1884,15 +1886,15 @@ export default {
 					align: "right",
 					scopedSlots: { customRender: "area" },
 					dataIndex: "total_area",
-					hiddenItem: !this.isCheckRealEstate,
+					hiddenItem: !this.isCheckRealEstate
 				},
 				{
 					title: "Tổng giá trị",
 					align: "right",
 					scopedSlots: { customRender: "price" },
 					dataIndex: "total_price",
-					hiddenItem: false,
-				},
+					hiddenItem: false
+				}
 				// {
 				// 	title: 'Ngày tạo',
 				// 	align: 'right',
@@ -1901,7 +1903,7 @@ export default {
 				// 	hiddenItem: false
 				// }
 			];
-			return dataColumn.filter((item) => item.hiddenItem === false);
+			return dataColumn.filter(item => item.hiddenItem === false);
 		},
 		filterDocumentName() {
 			return this.documentName;
@@ -1991,15 +1993,15 @@ export default {
 			return "Phiếu thu thập TSSS";
 		},
 		getHistoryTextColor() {
-			return this.historyList.map((item) => {
+			return this.historyList.map(item => {
 				return this.loadColor(item);
 			});
-		},
+		}
 	},
 	methods: {
 		async getDetail() {
 			await CertificationBrief.getDetailCertificateBrief(this.form.id)
-				.then((resp) => {
+				.then(resp => {
 					if (resp.data) {
 						this.form = Object.assign(this.form, { ...resp.data });
 						// this.keyRender++;
@@ -2008,24 +2010,29 @@ export default {
 							message: resp.error.statusCode,
 							type: "error",
 							position: "top-right",
-							duration: 5000,
+							duration: 5000
 						});
 					}
 				})
-				.catch((err) => {
+				.catch(err => {
 					this.$toast.open({
 						message: err,
 						type: "error",
 						position: "top-right",
-						duration: 5000,
+						duration: 5000
 					});
 				});
 		},
 		handleMenuClick(e) {
 			if (e.key === "1") {
 				this.exportGYC();
+			} else if (e.key === "2") {
+				this.exportHDTDG();
+			} else if (e.key === "3") {
+				this.exportKHTDG();
+			} else if (e.key === "4") {
+				this.exportBBTL();
 			}
-			console.log("click", e);
 		},
 		getNotificationMessage() {
 			switch (
@@ -2048,9 +2055,7 @@ export default {
 			}
 		},
 		getReport(type) {
-			let report = this.form.other_documents.find(
-				(i) => i.description === type
-			);
+			let report = this.form.other_documents.find(i => i.description === type);
 			return report;
 		},
 		openFile() {
@@ -2077,7 +2082,7 @@ export default {
 				store.commit(types.SET_DICTIONARIES, { ...resp });
 			}
 			this.typeAppraiseProperty = [...resp.data.loai_tai_san];
-			this.typeAppraiseProperty.forEach((item) => {
+			this.typeAppraiseProperty.forEach(item => {
 				item.description = this.formatSentenceCase(item.description);
 			});
 		},
@@ -2119,16 +2124,16 @@ export default {
 						name: "certification_asset.vehicle.detail",
 						query: {
 							id: data.general_asset_id,
-							asset_type_id: data.asset_type_id,
-						},
+							asset_type_id: data.asset_type_id
+						}
 					});
 				} else if (data.asset_type.acronym === "MMTB") {
 					routeData = this.$router.resolve({
 						name: "certification_asset.machine.detail",
 						query: {
 							id: data.general_asset_id,
-							asset_type_id: data.asset_type_id,
-						},
+							asset_type_id: data.asset_type_id
+						}
 					});
 				}
 			} else if (data.asset_type.dictionary_acronym === "KHAC") {
@@ -2136,25 +2141,25 @@ export default {
 					name: "certification_asset.other_purpose.detail",
 					query: {
 						id: data.general_asset_id,
-						asset_type_id: data.asset_type_id,
-					},
+						asset_type_id: data.asset_type_id
+					}
 				});
 			} else if (data.asset_type.acronym === "CC") {
 				routeData = this.$router.resolve({
 					name: "certification_asset.apartment.detail",
-					query: { id: data.asset.asset_id },
+					query: { id: data.asset.asset_id }
 				});
 			} else {
 				routeData = this.$router.resolve({
 					name: "certification_asset.detail",
-					query: { id: data.asset.asset_id },
+					query: { id: data.asset.asset_id }
 				});
 			}
 			window.open(routeData.href, "_blank");
 		},
 		async viewDetailAppraise() {
 			let ids = [];
-			await this.form.real_estate.forEach((item) => {
+			await this.form.real_estate.forEach(item => {
 				ids.push(item.real_estate_id);
 			});
 			const res = await CertificationBrief.getAppraiseCompare(ids);
@@ -2164,7 +2169,7 @@ export default {
 						message: res.data[0].message,
 						type: "error",
 						position: "top-right",
-						duration: 5000,
+						duration: 5000
 					});
 				}
 				this.dataDetailAppraise = res.data;
@@ -2174,7 +2179,7 @@ export default {
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 		},
@@ -2188,7 +2193,7 @@ export default {
 						let e = this.historyList[i];
 						if (e.properties.reason_id) {
 							let result = resp.data.li_do.filter(
-								(item) => item.id === e.properties.reason_id
+								item => item.id === e.properties.reason_id
 							);
 							// console.log('répóne',result)
 							e.reason_description = result[0].description;
@@ -2202,7 +2207,7 @@ export default {
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 		},
@@ -2216,7 +2221,7 @@ export default {
 			// convert number to dot formatNumber
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
-				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
 				});
 			}
@@ -2226,10 +2231,10 @@ export default {
 				.push({
 					name: "certification_brief.edit",
 					query: {
-						id: this.idData,
-					},
+						id: this.idData
+					}
 				})
-				.catch((_) => {});
+				.catch(_ => {});
 		},
 		onCancel() {
 			return this.$router.push({ name: "certification_brief.index" });
@@ -2257,12 +2262,12 @@ export default {
 				this.$toast.open({
 					message: "Vui lòng chọn tài sản thẩm định",
 					type: "error",
-					position: "top-right",
+					position: "top-right"
 				});
 			}
 		},
 		updateSendRequired() {
-			this.$router.push({ name: "certification_brief.index" }).catch((_) => {});
+			this.$router.push({ name: "certification_brief.index" }).catch(_ => {});
 		},
 		handleSendAppraiser() {
 			this.openSendAppraiser = true;
@@ -2270,7 +2275,7 @@ export default {
 			this.status = 2;
 		},
 		updateSendAppraiser() {
-			this.$router.push({ name: "certification_brief.index" }).catch((_) => {});
+			this.$router.push({ name: "certification_brief.index" }).catch(_ => {});
 		},
 		handleCancel() {
 			this.openNotification = false;
@@ -2295,7 +2300,7 @@ export default {
 				message: "Hiện tại chức năng này chưa được mở ở phiên bản dùng thử",
 				type: "error",
 				position: "top-right",
-				duration: 3000,
+				duration: 3000
 			});
 		},
 		updateAppraiseInformation(dataAppraiseInformation) {
@@ -2363,7 +2368,7 @@ export default {
 				appraiser_manager,
 				appraiser,
 				appraiser_control,
-				appraiser_control_id,
+				appraiser_control_id
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -2380,7 +2385,7 @@ export default {
 				sub_status: 1,
 				status_config: this.jsonConfig.principle,
 				status_note: note,
-				status_reason_id: reason_id,
+				status_reason_id: reason_id
 			};
 			if (this.form.status === 2 && !this.cancel_certificate) {
 				// change status 2 --> 3
@@ -2394,7 +2399,7 @@ export default {
 						message: "Gửi phê duyệt thành công",
 						type: "success",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 					this.form.status = 3;
 				} else if (res.error) {
@@ -2402,7 +2407,7 @@ export default {
 						message: res.error.message,
 						type: "error",
 						position: "top-right",
-						duration: 5000,
+						duration: 5000
 					});
 				}
 				this.openNotification = false;
@@ -2418,7 +2423,7 @@ export default {
 						message: "Xác nhận hồ sơ thành công",
 						type: "success",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 					this.form.status = 4;
 				} else if (res.error) {
@@ -2426,7 +2431,7 @@ export default {
 						message: res.error.message,
 						type: "error",
 						position: "top-right",
-						duration: 5000,
+						duration: 5000
 					});
 				}
 				this.openNotification = false;
@@ -2442,7 +2447,7 @@ export default {
 						message: "Hủy hồ sơ thành công",
 						type: "success",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 					this.form.status = 5;
 				} else if (res.error) {
@@ -2450,7 +2455,7 @@ export default {
 						message: res.error.message,
 						type: "error",
 						position: "top-right",
-						duration: 5000,
+						duration: 5000
 					});
 				}
 				this.openNotification = false;
@@ -2478,8 +2483,8 @@ export default {
 			let url = this.$router.resolve({
 				name: "pre_certification.detail",
 				query: {
-					id: id.toString(),
-				},
+					id: id.toString()
+				}
 			}).href;
 
 			window.open(url, "_blank");
@@ -2511,7 +2516,7 @@ export default {
 		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
-			let config = this.jsonConfig.principle.find((i) => i.id === target.id);
+			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
 				console.log("Data detail hoàn thành", this.form);
@@ -2525,7 +2530,7 @@ export default {
 							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 
 					return;
@@ -2548,7 +2553,7 @@ export default {
 								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
 							type: "error",
 							position: "top-right",
-							duration: 3000,
+							duration: 3000
 						});
 						return;
 					}
@@ -2565,7 +2570,7 @@ export default {
 					if (config.re_assign)
 						this.appraiserChangeStage = {
 							id: this.form[config.re_assign],
-							type: config.re_assign,
+							type: config.re_assign
 						};
 					this.targetStatus = config.status;
 					this.targetSubStatus = config.sub_status;
@@ -2590,7 +2595,7 @@ export default {
 		},
 		async handleAction2(note, reason_id, tempAppraiser, estime) {
 			const config = this.jsonConfig.principle.find(
-				(item) => item.status === this.targetStatus && item.isActive === 1
+				item => item.status === this.targetStatus && item.isActive === 1
 			);
 			// let status_expired_at_temp = config.process_time
 			// 	? await this.getExpireStatusDate(config)
@@ -2608,7 +2613,7 @@ export default {
 				appraiser_control,
 				appraiser_control_id,
 				administrative_id,
-				administrative,
+				administrative
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -2633,7 +2638,7 @@ export default {
 				status_note: note,
 				status_reason_id: reason_id,
 				status_description: this.message,
-				status_config: this.jsonConfig.principle,
+				status_config: this.jsonConfig.principle
 			};
 
 			if (tempAppraiser) {
@@ -2652,14 +2657,14 @@ export default {
 					message: this.message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 			this.isHandleAction = false;
@@ -2675,7 +2680,7 @@ export default {
 				appraiser_manager,
 				appraiser,
 				appraiser_control,
-				appraiser_control_id,
+				appraiser_control_id
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -2688,7 +2693,7 @@ export default {
 				appraiser_control,
 				appraiser_control_id,
 				appraiser,
-				status: 0,
+				status: 0
 			};
 			if (this.form.status === 3) {
 				// denined change status 3 ---> 2
@@ -2702,7 +2707,7 @@ export default {
 						message: "Từ chối phê duyệt thành công",
 						type: "success",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 					this.form.status = 2;
 				} else if (res.error) {
@@ -2710,7 +2715,7 @@ export default {
 						message: res.error.message,
 						type: "error",
 						position: "top-right",
-						duration: 5000,
+						duration: 5000
 					});
 				}
 				this.openNotificationDenined = false;
@@ -2742,7 +2747,7 @@ export default {
 						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			}
@@ -2764,7 +2769,7 @@ export default {
 							message: "Thêm file thành công",
 							type: "success",
 							position: "top-right",
-							duration: 3000,
+							duration: 3000
 						});
 					}
 				}
@@ -2841,7 +2846,7 @@ export default {
 						message: "File dữ liệu không đúng định dạng vui lòng kiểm tra lại",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			}
@@ -2858,14 +2863,14 @@ export default {
 							message: "Thêm file thành công",
 							type: "success",
 							position: "top-right",
-							duration: 3000,
+							duration: 3000
 						});
 					}
 				}
 			}
 		},
 		async viewCertificate() {
-			await Certificate.getPrintProof(this.idData).then((resp) => {
+			await Certificate.getPrintProof(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2874,7 +2879,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -2882,7 +2887,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async exportGYC() {
-			await Certificate.getPrintGYC(this.idData).then((resp) => {
+			await Certificate.getPrintGYC(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2897,13 +2902,76 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportHDTDG() {
+			await Certificate.getPrintHDTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportBBTL() {
+			await Certificate.getPrintBBTL(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportKHTDG() {
+			await Certificate.getPrintKHTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
 					});
 				}
 			});
 		},
 		async downloadCertificate() {
-			await Certificate.getPrintProof(this.idData).then((resp) => {
+			await Certificate.getPrintProof(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2918,13 +2986,13 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
 		},
 		async viewReportCertificate() {
-			await Certificate.getPrintReport(this.idData).then((resp) => {
+			await Certificate.getPrintReport(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -2933,7 +3001,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -2941,7 +3009,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadReportCertificate() {
-			await Certificate.getPrintReport(this.idData).then((resp) => {
+			await Certificate.getPrintReport(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -2956,7 +3024,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -2964,13 +3032,13 @@ export default {
 		async viewAssetDocument() {
 			let arrayAsset = [];
 			if (this.form.real_estate && this.form.real_estate.length > 0) {
-				await this.form.real_estate.forEach((item) => {
+				await this.form.real_estate.forEach(item => {
 					if (
 						item.appraises &&
 						item.appraises.appraise_has_assets &&
 						item.appraises.appraise_has_assets.length > 0
 					) {
-						item.appraises.appraise_has_assets.forEach((asset) => {
+						item.appraises.appraise_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -2979,7 +3047,7 @@ export default {
 						item.apartment.apartment_has_assets &&
 						item.apartment.apartment_has_assets.length > 0
 					) {
-						item.apartment.apartment_has_assets.forEach((asset) => {
+						item.apartment.apartment_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -2996,7 +3064,7 @@ export default {
 					message: "Xem file bị lỗi vui lòng gọi hỗ trợ",
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			}
 		},
@@ -3004,13 +3072,13 @@ export default {
 			let arrayAsset = [];
 			// console.log(this.form.real_estate)
 			if (this.form.real_estate && this.form.real_estate.length > 0) {
-				await this.form.real_estate.forEach((item) => {
+				await this.form.real_estate.forEach(item => {
 					if (
 						item.appraises &&
 						item.appraises.appraise_has_assets &&
 						item.appraises.appraise_has_assets.length > 0
 					) {
-						item.appraises.appraise_has_assets.forEach((asset) => {
+						item.appraises.appraise_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -3019,7 +3087,7 @@ export default {
 						item.apartment.apartment_has_assets &&
 						item.apartment.apartment_has_assets.length > 0
 					) {
-						item.apartment.apartment_has_assets.forEach((asset) => {
+						item.apartment.apartment_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -3041,12 +3109,12 @@ export default {
 					message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			}
 		},
 		async viewAppendix1() {
-			await Certificate.getPrint(this.idData).then((resp) => {
+			await Certificate.getPrint(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -3056,7 +3124,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix1() {
-			await Certificate.getPrint(this.idData).then((resp) => {
+			await Certificate.getPrint(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -3071,13 +3139,13 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
 		},
 		async viewAppendix2() {
-			await Certificate.getPrintAppendix(this.idData).then((resp) => {
+			await Certificate.getPrintAppendix(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -3087,7 +3155,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix2() {
-			await Certificate.getPrintAppendix(this.idData).then((resp) => {
+			await Certificate.getPrintAppendix(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -3102,13 +3170,13 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
 		},
 		async viewAppendix3() {
-			await Certificate.getPrintImage(this.idData).then((resp) => {
+			await Certificate.getPrintImage(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -3117,7 +3185,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -3125,7 +3193,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix3() {
-			await Certificate.getPrintImage(this.idData).then((resp) => {
+			await Certificate.getPrintImage(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -3140,7 +3208,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -3153,8 +3221,8 @@ export default {
 						"/api/certificate/other-document/download/" +
 						file.id,
 					method: "GET",
-					responseType: "blob",
-				}).then((response) => {
+					responseType: "blob"
+				}).then(response => {
 					const url = window.URL.createObjectURL(new Blob([response.data]));
 					const link = document.createElement("a");
 					link.href = url;
@@ -3166,8 +3234,15 @@ export default {
 						message: `Tải xuống thành công`,
 						type: "success",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
+				});
+			} else {
+				this.$toast.open({
+					message: `Bạn không có quyền tải tài liệu đính kèm này`,
+					type: "success",
+					position: "top-right",
+					duration: 3000
 				});
 			}
 		},
@@ -3185,27 +3260,27 @@ export default {
 					message: "Xóa thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			}
 		},
 		getTotalPrice() {
 			let total_price = 0;
-			this.form.general_asset.forEach((item) => {
+			this.form.general_asset.forEach(item => {
 				total_price += +item.total_price;
 			});
 			this.total_price_appraise = total_price;
 		},
 		changeEditStatus() {
 			let dataJson = this.jsonConfig.principle.filter(
-				(item) =>
+				item =>
 					item.status === this.form.status &&
 					item.sub_status === this.form.sub_status &&
 					item.isActive === 1
@@ -3238,7 +3313,7 @@ export default {
 				message: message,
 				type: type,
 				position: position,
-				duration: duration,
+				duration: duration
 			});
 		},
 		checkDiffVersion() {
@@ -3264,7 +3339,7 @@ export default {
 			let isApartment = false;
 			if (this.form.document_type && this.form.document_type.length > 0) {
 				if (
-					this.form.document_type.filter(function (item) {
+					this.form.document_type.filter(function(item) {
 						return item !== "DCN" && item !== "DT" && item !== "CC";
 					}).length > 0
 				) {
@@ -3272,19 +3347,19 @@ export default {
 					isExportAutomatic = false;
 				}
 				if (
-					this.form.document_type.find((i) => i === "CC") &&
-					(this.form.document_type.find((i) => i === "DCN") ||
-						this.form.document_type.find((i) => i === "DT"))
+					this.form.document_type.find(i => i === "CC") &&
+					(this.form.document_type.find(i => i === "DCN") ||
+						this.form.document_type.find(i => i === "DT"))
 				) {
 					isExportAutomatic = false;
 				}
 				if (
 					this.form.document_type.length === 1 &&
-					this.form.document_type.find((i) => i === "CC")
+					this.form.document_type.find(i => i === "CC")
 				) {
 					isApartment = true;
 				}
-				if (this.form.document_type.find((i) => i === "DCN")) {
+				if (this.form.document_type.find(i => i === "DCN")) {
 					isCheckConstruction = true;
 				}
 			} else {
@@ -3298,7 +3373,7 @@ export default {
 					"Bảng điều chỉnh QSDĐ",
 					"Bảng điều chỉnh CTXD",
 					"Hình ảnh hiện trạng",
-					"Phiếu thu thập TSSS",
+					"Phiếu thu thập TSSS"
 				];
 			} else {
 				this.documentName = [
@@ -3307,7 +3382,7 @@ export default {
 					"Phụ lục kèm theo",
 					"Phụ lục kèm theo",
 					"Phụ lục kèm theo",
-					"Phiếu thu thập TSSS",
+					"Phiếu thu thập TSSS"
 				];
 			}
 			this.isCheckRealEstate = isCheckRealEstate;
@@ -3316,7 +3391,7 @@ export default {
 			this.isApartment = isApartment;
 		},
 		downloadDocumentFile(type) {
-			let file = this.form.other_documents.find((i) => i.description === type);
+			let file = this.form.other_documents.find(i => i.description === type);
 			if (file) {
 				// this.downloadDocument(file)
 				this.downloadOtherFile(file);
@@ -3326,14 +3401,14 @@ export default {
 				);
 		},
 		deletedDocumentFile(type) {
-			let file = this.form.other_documents.find((i) => i.description === type);
+			let file = this.form.other_documents.find(i => i.description === type);
 			if (file) {
 				this.deleteUploadDocument = true;
 				this.id_file_delete = file.id;
 			} else this.openMessage("Không tìm thấy file cần xóa.");
 		},
 		async deleteDocument() {
-			await Certificate.deleteDocument(this.id_file_delete).then((resp) => {
+			await Certificate.deleteDocument(this.id_file_delete).then(resp => {
 				const file = resp;
 				if (file.data) {
 					this.form.other_documents = file.data;
@@ -3343,7 +3418,7 @@ export default {
 			});
 		},
 		async downloadDocument(file) {
-			await Certificate.downloadDocument(file.id).then((resp) => {
+			await Certificate.downloadDocument(file.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -3358,7 +3433,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -3373,7 +3448,7 @@ export default {
 			} else {
 				return false;
 			}
-		},
+		}
 	},
 	beforeMount() {
 		if (this.form.general_asset && this.form.general_asset.length > 0) {
@@ -3394,9 +3469,9 @@ export default {
 			deep: true,
 			handler(newValue) {
 				this.setDocumentViewStatus();
-			},
-		},
-	},
+			}
+		}
+	}
 };
 </script>
 <style scoped lang="scss">

@@ -15,6 +15,32 @@
 			class="vertical-steps steps-transparent"
 			:class="{ step3: isStep3Active }"
 		>
+			<div class="wizard-custom-info" v-if="dataForm.appraise_id">
+				<div class="col-12">
+					<!-- <div class="row d-flex">
+						<p class="mb-1">Version :</p>
+						<p class="mb-1">{{ dataForm.max_version }}</p>
+					</div> -->
+					<div class="row d-flex" v-if="dataForm.appraise_id">
+						<p class="mb-1">Mã TSTĐ :</p>
+						<a
+							class="mb-1"
+							:href="`/certification_asset/detail?id=${dataForm.appraise_id}`"
+							target="_blank"
+							>{{ dataForm.appraise_id }}</a
+						>
+					</div>
+					<!-- <div class="">
+						<p class="mb-1">Người được chỉnh sửa :</p>
+						<div>
+							<p class="mb-1">
+								-
+								{{ dataForm.createdBy ? dataForm.createdBy.name : "" }}
+							</p>
+						</div>
+					</div> -->
+				</div>
+			</div>
 			<tab-content title="Thông tin chung" icon="">
 				<ValidationObserver
 					tag="div"
@@ -37,6 +63,7 @@
 								/>Trở lại
 							</button>
 							<button
+								v-if="!dataForm.appraise_id && !dataForm.apartment_id"
 								class="btn btn-white btn-orange text-nowrap"
 								:class="{ 'btn_loading disabled': isSubmit }"
 								@click.prevent="priceEstimateStore.validateSubmitStep1"
@@ -83,7 +110,11 @@
 								/>Trở lại
 							</button>
 							<button
-								v-if="edit || add"
+								v-if="
+									(edit || add) &&
+										!dataForm.appraise_id &&
+										!dataForm.apartment_id
+								"
 								class="btn btn-white btn-orange text-nowrap"
 								:class="{ 'btn_loading disabled': isSubmit }"
 								@click.prevent="validateSubmitStep2"
@@ -130,7 +161,11 @@
 								/>Trở lại
 							</button>
 							<button
-								v-if="edit || add"
+								v-if="
+									(edit || add) &&
+										!dataForm.appraise_id &&
+										!dataForm.apartment_id
+								"
 								class="btn btn-white btn-orange text-nowrap"
 								:class="{ 'btn_loading disabled': isSubmit }"
 								@click.prevent="validateSubmitStep3"
@@ -251,7 +286,7 @@ export default {
 			miscVariable
 		} = storeToRefs(priceEstimateStore);
 		priceEstimateStore.getProvinces();
-		const dataForm = ref(_.cloneDeep(priceEstimates.value));
+		const dataForm = ref(priceEstimates.value);
 		const step_1 = ref(null);
 
 		return {
@@ -300,20 +335,23 @@ export default {
 		}
 		this.configThis.wizard = this.$refs.wizard;
 		this.configThis.step_1 = this.$refs.step_1;
-		if (!this.isMobile) {
+		if (this.$route.name === "price_estimates.edit") {
 			await this.$refs.wizard.tabs.forEach((tab, index) => {
-				if (index <= this.miscVariable.step_active) {
+				if (index < this.miscVariable.step_active) {
 					tab.checked = true;
+				} else {
+					tab.checked = false;
 				}
 			});
-			// if (this.miscVariable.step_active === 3) {
-			// 	await this.configThis.wizard.changeTab(0, 1);
-			// } else {
-			// 	await this.configThis.wizard.changeTab(
-			// 		0,
-			// 		this.miscVariable.step_active
-			// 	);
-			// }
+			if (this.miscVariable.step_active === 2) {
+				await this.$refs.wizard.changeTab(0, 1);
+			} else {
+				await this.$refs.wizard.changeTab(0, this.miscVariable.step_active);
+			}
+
+			if (this.$route.params.step || this.$route.params.step === 0) {
+				await this.$refs.wizard.changeTab(0, this.$route.params.step);
+			}
 		}
 	},
 	methods: {
@@ -357,7 +395,6 @@ export default {
 					this.form.step_6.map_img = "";
 					this.distance_max = response.data.distance_max;
 					this.filter_year = response.data.filter_year;
-					// // console.log('đsdấdasđâsd', response.data)
 					if (response.data.assets.length === 0) {
 						this.$toast.open({
 							message: `${response.data.message}`,
@@ -397,7 +434,7 @@ export default {
 			const userId = this.$store.getters.profile
 				? this.$store.getters.profile.data.user.id
 				: this.$store.getters.userId;
-			this.dataForm.created_by = userId;
+			// this.dataForm.created_by = userId;
 			this.miscInfo.current_create_by = userId;
 		}
 	}

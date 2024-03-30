@@ -106,8 +106,10 @@
 								<div class="data-label">Mô tả vị trí:</div>
 								<div class="data-value">
 									{{
-										data.step_1.traffic_infomation.description
+										!isApartment && data.step_1.traffic_infomation.description
 											? data.step_1.traffic_infomation.description
+											: data.step_1.apartment_properties.description
+											? data.step_1.apartment_properties.description
 											: ""
 									}}
 								</div>
@@ -164,7 +166,10 @@
 					<div class="vendorListHeading mt-3 mb-3">
 						KẾT QUẢ ƯỚC TÍNH SƠ BỘ
 					</div>
-					<div class="card mb-4" v-if="data.assets && data.assets.length > 0">
+					<div
+						class="card mb-4"
+						v-if="!isApartment && data.assets && data.assets.length > 0"
+					>
 						<table cellspacing="0" cellpadding="0">
 							<thead class="vendorListHeadingResult p-0">
 								<tr>
@@ -235,7 +240,8 @@
 					<div
 						class="card mb-4"
 						v-if="
-							data.step_3.tangible_assets &&
+							!isApartment &&
+								data.step_3.tangible_assets &&
 								data.step_3.tangible_assets.length > 0
 						"
 					>
@@ -317,7 +323,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="card mb-4">
+					<div class="card mb-4" v-if="!isApartment">
 						<table cellspacing="0" cellpadding="0">
 							<thead class="vendorListHeadingResult p-0">
 								<tr>
@@ -327,6 +333,55 @@
 									</th>
 								</tr>
 							</thead>
+						</table>
+					</div>
+
+					<div
+						class="card mb-4"
+						v-if="
+							isApartment &&
+								data.step_3.apartment_finals &&
+								data.step_3.apartment_finals.length > 0
+						"
+					>
+						<table cellspacing="0" cellpadding="0">
+							<thead class="vendorListHeadingResult p-0">
+								<tr>
+									<th style="border-top-left-radius: 15px;" class="text-left">
+										Tên tài sản
+									</th>
+									<th class="text-center">
+										Diện tích (m<sup style="font-size: 9px !important">2</sup>)
+									</th>
+									<th class="text-center">Đơn giá (đ)</th>
+									<th style="border-top-right-radius: 15px;" class="text-right">
+										Thành tiền (đ)
+									</th>
+								</tr>
+							</thead>
+							<tbody class="vendorListHeadingResultBody">
+								<tr
+									v-for="(item, index) in data.step_3.apartment_finals"
+									:key="'detail' + index"
+								>
+									<td class="text-left">{{ item.name }}</td>
+
+									<td class="text-center">
+										{{ formatNumber(item.total_area) }}
+										<!-- m<sup style="font-size: 11px"
+											>2</sup
+										> -->
+									</td>
+									<td class="text-center">
+										{{ formatNumber(item.unit_price) }}
+									</td>
+									<td class="text-right">
+										{{ formatNumber(item.total_price) }}
+									</td>
+									<!-- <td class="text-center">{{ format(item.price) + " đ" }}</td>
+									<td class="text-right">{{ format(item.total) + " đ" }}</td> -->
+								</tr>
+							</tbody>
 						</table>
 					</div>
 					<div class="d-flex mt-5">
@@ -700,7 +755,7 @@ import InputText from "../Form/InputText.vue";
 import moment from "moment";
 export default {
 	name: "ModalPrintEstimateAsset",
-	props: ["data"],
+	props: ["data", "isApartment"],
 	directives: {
 		print
 	},
