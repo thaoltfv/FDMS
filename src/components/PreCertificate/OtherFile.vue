@@ -443,6 +443,20 @@ export default {
 						duration: 3000
 					});
 				});
+			} else if (!permission.value.allowExport) {
+				this.$toast.open({
+					message: `Bạn không có quyền tải tài liệu đính kèm này`,
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
+			} else {
+				other.value.toast.open({
+					message: `Tài liệu chưa được tải lên`,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
 			}
 		};
 

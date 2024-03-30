@@ -2240,6 +2240,7 @@ export default {
 			return this.$router.push({ name: "certification_brief.index" });
 		},
 		handleCancelCertificate() {
+			this.appraiserChangeStage = null;
 			this.openNotification = true;
 			this.cancel_certificate = true;
 			this.message = "Hủy";
