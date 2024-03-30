@@ -550,7 +550,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status_expired_at',
             DB::raw("case status
                         when 1
-                            then u1.image
+                            then u3.image
                         when 2
                             then u2.image
                         when 3
@@ -1208,7 +1208,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $data = PreCertificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->appraiserSale->user_id == $user->id))
+                        if (!($data->appraiserSale->user_id == $user->id) || !($data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
@@ -1274,6 +1274,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền cập nhật.', 'exception' => ''];
+                        break;
                     case 4:
                     case 5:
                         if (!($data->appraiserSale->user_id == $user->id))
