@@ -1786,14 +1786,13 @@ export default {
 		}
 		this.user_id = profile.data.user.id;
 		if (
-			this.form.status &&
-			this.form.status < 9 &&
-			this.position_profile &&
-			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-				this.position_profile === "NHAN-VIEN-KINH-DOANH")
-			//  ||
-			// (this.form.appraiser_sale &&
-			// 	this.form.appraiser_sale.user_id === this.user_id)
+			(this.form.status &&
+				this.form.status < 9 &&
+				this.position_profile &&
+				(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
+					this.position_profile === "NHAN-VIEN-KINH-DOANH")) ||
+			(this.form.appraiser_sale &&
+				this.form.appraiser_sale.user_id === this.user_id)
 		) {
 			this.$toast.open({
 				message:
