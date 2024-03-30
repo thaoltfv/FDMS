@@ -33,15 +33,15 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     use ActivityLog;
     private function beforeSave(int $id)
     {
-        if(! $this->model->query()->where('id', $id)->exists()){
-            return ['message' => 'Không tồn tại TSTĐ chung cư '. $id, 'exception' => ''];
+        if (!$this->model->query()->where('id', $id)->exists()) {
+            return ['message' => 'Không tồn tại TSTĐ chung cư ' . $id, 'exception' => ''];
         }
         return null;
     }
 
-    private function afterSave(int $id , int $step)
+    private function afterSave(int $id, int $step)
     {
-        switch($step){
+        switch ($step) {
             case 4:
             case 5:
                 $status = 2;
@@ -70,7 +70,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     //step 1
     public function createApartmentAsset(array $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $user = CommonService::getUser();
             $objects['created_by'] = $user->id;
@@ -84,14 +84,14 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $data = $this->model->query()->create($apartmentAssetArr);
             $this->model->query()->where('id', $data->id)->update(['id' => $realEstateId]);
             $id = $realEstateId;
-            if(isset($objects['apartment_asset_properties'])){
+            if (isset($objects['apartment_asset_properties'])) {
                 $properties = $objects['apartment_asset_properties'];
                 $properties['apartment_asset_id'] = $id;
                 $properties['legal_id'] = $properties['legal_id'] ?? 1;
                 $propertiesArr = new ApartmentAssetProperty($properties);
                 ApartmentAssetProperty::query()->create($propertiesArr->attributesToArray());
             }
-            if(isset($objects['pic'])){
+            if (isset($objects['pic'])) {
                 $pics = $objects['pic'];
                 foreach ($pics as $pic) {
                     $pic['apartment_asset_id'] = $id;
@@ -107,7 +107,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAllStep($id);
             $this->CreateActivityLog($result, $result, 'create', 'tạo mới');
             return $result;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => $ex];
         }
@@ -116,16 +116,16 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     public function updateApartmentAsset(int $id, array $objects)
     {
         $check = $this->beforeSave($id);
-        if(isset($check)){
+        if (isset($check)) {
             return $check;
         }
-        try{
+        try {
             DB::beginTransaction();
             $objects['step'] = 1;
             $objects['status'] = 1;
             $apartmentAssetArr = new ApartmentAsset($objects);
             $this->model->query()->where('id', $id)->update($apartmentAssetArr->attributesToArray());
-            if(isset($objects['apartment_asset_properties'])){
+            if (isset($objects['apartment_asset_properties'])) {
                 $properties = $objects['apartment_asset_properties'];
                 $properties['apartment_asset_id'] = $id;
                 $properties['legal_id'] = $properties['legal_id'] ?? 1;
@@ -133,7 +133,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 ApartmentAssetProperty::query()->updateOrCreate(['apartment_asset_id' => $id], $propertiesArr->attributesToArray());
             }
             ApartmentAssetPic::query()->where('apartment_asset_id', $id)->forceDelete();
-            if(isset($objects['pic'])){
+            if (isset($objects['pic'])) {
                 $pics = $objects['pic'];
                 foreach ($pics as $pic) {
                     $pic['apartment_asset_id'] = $id;
@@ -157,7 +157,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAllStep($id);
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật thông tin tài sản');
             return $result;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => $ex];
         }
@@ -166,16 +166,16 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     //step 2
     public function postApartmentAssetLaw(int $id, array $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $check = $this->beforeSave($id);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
-            if(ApartmentAssetLaw::query()->where('apartment_asset_id', $id)->exists()){
+            if (ApartmentAssetLaw::query()->where('apartment_asset_id', $id)->exists()) {
                 ApartmentAssetLaw::query()->where('apartment_asset_id', $id)->delete();
             }
-            foreach($objects['law'] as $data){
+            foreach ($objects['law'] as $data) {
                 $data['apartment_asset_id'] = $id;
                 // $data['document_date'] = Carbon::createFromFormat('d/m/Y', $data['document_date'])->format('Y-m-d');
                 $lawArr = new ApartmentAssetLaw($data);
@@ -188,7 +188,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAllStep($id);
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật thông tin pháp lý tài sản');
             return $result;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => $ex];
         }
@@ -196,17 +196,17 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     //step 3
     public function postApartmentAssetAppraisal(int $id, array $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $check = $this->beforeSave($id);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
             $appraisalMethods = $objects['appraisal_methods'];
             $methodKeys = array_keys($appraisalMethods);
             ApartmentAssetAppraisalMethod::query()->where(['apartment_asset_id' => $id])->delete();
-            foreach($methodKeys as $method){
-                $methodData= $appraisalMethods[$method];
+            foreach ($methodKeys as $method) {
+                $methodData = $appraisalMethods[$method];
                 $methodData['slug'] = $method;
                 $methodData['apartment_asset_id'] = $id;
                 $appraisalMethodsArr = new ApartmentAssetAppraisalMethod($methodData);
@@ -224,7 +224,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             // $result = EstimateAssetDefault::COMPARATION_FACTORS_APARTMENT;
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật thông tin cơ sở thẩm định');
             return $result;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => $ex];
         }
@@ -232,19 +232,19 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     //step 4
     public function postApartmentAssetHasAsset(int $id, array $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $check = $this->beforeSave($id);
-            if(isset($check)){
+            if (isset($check)) {
                 return $check;
             }
             $comparisons = $objects['comparison_factor'];
             $assets = $objects['assets_general'];
             $link  = $objects['map_img'];
-            if(isset($link)){
+            if (isset($link)) {
                 $type_id = 153;
                 ApartmentAssetPic::query()->where('apartment_asset_id', '=', $id)->where('type_id', $type_id)->delete();
-                $map =[
+                $map = [
                     'apartment_asset_id' => $id,
                     'link' => $link,
                     'type_id' => $type_id,
@@ -253,24 +253,24 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 ApartmentAssetPic::query()->create($pic->attributesToArray());
             }
 
-            if(isset($assets) && isset($comparisons)){
+            if (isset($assets) && isset($comparisons)) {
                 $dictionaries = [];
                 $apartmentData = $this->getApartmentAssetById($id);
-                if(count($objects['assets_general']) > 3){
+                if (count($objects['assets_general']) > 3) {
                     DB::rollBack();
                     $data = ['message' => ErrorMessage::APPRAISE_CHECK_ASSET_NUMBER, 'exception' =>  ''];
                     return $data;
                 }
                 $oldAppraiseHasAssets = ApartmentAssetHasAsset::query()->where('apartment_asset_id', $id)->get()->toArray();
-                foreach($assets as $asset){
+                foreach ($assets as $asset) {
                     // dd($asset['adjust_percent']);
                     $assetId = $asset['id'];
                     $version = $asset['version'];
-                    if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
-                        if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
-                            $key =array_search($asset['id'], array_column($oldAppraiseHasAssets, 'asset_general_id'));
-                            if (!($key === false)){
-                                if ($oldAppraiseHasAssets[$key]['version'] != $version){
+                    if (isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets) > 0) {
+                        if (isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets) > 0) {
+                            $key = array_search($asset['id'], array_column($oldAppraiseHasAssets, 'asset_general_id'));
+                            if (!($key === false)) {
+                                if ($oldAppraiseHasAssets[$key]['version'] != $version) {
                                     ApartmentAssetComparisonFactor::query()->where('apartment_asset_id', $id)->where('asset_general_id', $assetId)->forceDelete();
                                     ApartmentAssetHasAsset::query()->where('apartment_asset_id', $id)->where('asset_general_id', $assetId)->forceDelete();
                                     ApartmentAssetAdapter::query()->where('apartment_asset_id', $id)->where('asset_general_id', $assetId)->forceDelete();
@@ -278,13 +278,13 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                                 }
                             }
                             $oldAssetGeneralId = $assetId;
-                            $this->postComparisonFactor($dictionaries, $apartmentData->toArray(), $comparisons , $asset , $id , $assetId, $oldAssetGeneralId) ;
+                            $this->postComparisonFactor($dictionaries, $apartmentData->toArray(), $comparisons, $asset, $id, $assetId, $oldAssetGeneralId);
                             continue;
                         }
                     }
                     // add thêm để dự phòng trường hợp không qua được điều kiện trên
-                    if(ApartmentAssetHasAsset::where('apartment_asset_id',$id)->where('asset_general_id',$assetId)->exists()){
-                        $this->postComparisonFactor($dictionaries, $apartmentData->toArray() , $comparisons , $asset , $id, $assetId,$oldAssetGeneralId) ;
+                    if (ApartmentAssetHasAsset::where('apartment_asset_id', $id)->where('asset_general_id', $assetId)->exists()) {
+                        $this->postComparisonFactor($dictionaries, $apartmentData->toArray(), $comparisons, $asset, $id, $assetId, $oldAssetGeneralId);
                         continue;
                     }
                     createNewAsset:
@@ -299,17 +299,17 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                     $adapter = [
                         'apartment_asset_id' => $id,
                         'asset_general_id' => $assetId,
-                        'percent' => intval($asset['adjust_percent']??0)+100,
+                        'percent' => intval($asset['adjust_percent'] ?? 0) + 100,
                     ];
                     $adapterArr = new ApartmentAssetAdapter($adapter);
                     ApartmentAssetAdapter::query()->create($adapterArr->attributesToArray());
                     //create comparison fator
-                    $this->postComparisonFactor($dictionaries,  $apartmentData->toArray(), $comparisons , $asset , $id, $assetId) ;
+                    $this->postComparisonFactor($dictionaries,  $apartmentData->toArray(), $comparisons, $asset, $id, $assetId);
                 }
-                if(isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets)>0){
-                    foreach($oldAppraiseHasAssets as  $oldAsset){
-                        $key =array_search($oldAsset['asset_general_id'], array_column($assets, 'id'),true);
-                        if($key === false){
+                if (isset($oldAppraiseHasAssets) && count($oldAppraiseHasAssets) > 0) {
+                    foreach ($oldAppraiseHasAssets as  $oldAsset) {
+                        $key = array_search($oldAsset['asset_general_id'], array_column($assets, 'id'), true);
+                        if ($key === false) {
                             $oldId = $oldAsset['asset_general_id'];
                             ApartmentAssetComparisonFactor::query()->where('apartment_asset_id', $id)->where('asset_general_id', $oldId)->forceDelete();
                             ApartmentAssetHasAsset::query()->where('apartment_asset_id', $id)->where('asset_general_id', $oldId)->forceDelete();
@@ -324,26 +324,26 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAssetById($id);
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật thông tin tài sản so sánh');
             return $result;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
             return ['message' => $ex->getMessage(), 'exception' => $ex];
         }
     }
-    public function postOtherAssets(int $id , array $objects)
+    public function postOtherAssets(int $id, array $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $check = $this->beforeSave($id);
-            if(isset($check))
+            if (isset($check))
                 return $check;
-            if(ApartmentAssetOtherAsset::query()->where('apartment_asset_id', $id)->exists()){
+            if (ApartmentAssetOtherAsset::query()->where('apartment_asset_id', $id)->exists()) {
                 ApartmentAssetOtherAsset::query()->where('apartment_asset_id', $id)->forceDelete();
             }
             $others = $objects['other_assets'];
             $otherPrice = 0;
-            if(isset($others)){
-                foreach($others as $other){
+            if (isset($others)) {
+                foreach ($others as $other) {
                     $other['apartment_asset_id'] = $id;
                     $otherArr = new ApartmentAssetOtherAsset($other);
                     ApartmentAssetOtherAsset::query()->create($otherArr->attributesToArray());
@@ -356,7 +356,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAssetById($id);
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật thông tin tài sản khác');
             return $this->getTotalPrice($id);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => $ex];
         }
@@ -364,38 +364,38 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
 
     public function updateComparisonFactor(int $id, array $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $comparisons = $objects['comparison_factor'];
             $otherComparisons = $objects['other_comparison'];
             $deleteComparisons = $objects['delete_other_comparison'];
             $roundTotal = $objects['round_total'];
-            if (isset($objects['apartment_asset_price'])){
+            if (isset($objects['apartment_asset_price'])) {
                 $apartment_asset_price = $objects['apartment_asset_price'];
             }
-            
+
             $adapters = $objects['apartment_adapter'];
-            if (isset($roundTotal)){
+            if (isset($roundTotal)) {
                 $slug = 'round_total';
                 $this->updateOrCreatePrice($id, $slug, $roundTotal);
             }
-            if (isset($apartment_asset_price)){
+            if (isset($apartment_asset_price)) {
                 $slug = 'apartment_asset_price';
                 $this->updateOrCreatePrice($id, $slug, $apartment_asset_price);
             }
-            if (isset($adapters)){
-                foreach ($adapters as $adapter){
-                    ApartmentAssetAdapter::query()->where('id', $adapter['id'])->update(['percent' => $adapter['percent'],'change_negotiated_price' => $adapter['change_negotiated_price']]);
+            if (isset($adapters)) {
+                foreach ($adapters as $adapter) {
+                    ApartmentAssetAdapter::query()->where('id', $adapter['id'])->update(['percent' => $adapter['percent'], 'change_negotiated_price' => $adapter['change_negotiated_price']]);
                 }
             }
-            if (isset($comparisons)){
-                if (isset($otherComparisons)){
+            if (isset($comparisons)) {
+                if (isset($otherComparisons)) {
                     $comparisons = array_merge($comparisons, $otherComparisons);
                 }
-                foreach ($comparisons as $comparison){
-                    $comparison = array_map(function($v){
+                foreach ($comparisons as $comparison) {
+                    $comparison = array_map(function ($v) {
                         return (is_null($v)) ? "" : $v;
-                    },$comparison);
+                    }, $comparison);
 
                     if ($comparison['adjust_percent']  > 0) {
                         $comparison['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['kem_thuan_loi'];
@@ -405,7 +405,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                         $comparison['description'] = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
                     }
                     $comparisonArr = new ApartmentAssetComparisonFactor($comparison);
-                    ApartmentAssetComparisonFactor::query()->updateOrCreate(['id' => $comparison['id']??-1], $comparisonArr->attributesToArray());
+                    ApartmentAssetComparisonFactor::query()->updateOrCreate(['id' => $comparison['id'] ?? -1], $comparisonArr->attributesToArray());
                 }
             }
             if (isset($deleteComparisons)) {
@@ -421,7 +421,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAssetById($id);
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật bảng tổng hợp và bảng điều chỉnh QSDĐ');
             return $this->getTotalPrice($id);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => ''];
         }
@@ -429,7 +429,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
 
     public function updateRoundTotal(int $id, $objects)
     {
-        try{
+        try {
             DB::beginTransaction();
             $roundTotal = $objects['apartment_round_total'];
             $slug = 'apartment_round_total';
@@ -439,14 +439,14 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $result = $this->getApartmentAssetById($id);
             $this->CreateActivityLog($result, $result, 'update_data', 'cập nhật thông tin bảng tổng hợp kết quả');
             return $this->getTotalPrice($id);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return ['message' => $ex->getMessage(), 'exception' => ''];
         }
     }
 
     #region comparison Factor
-    private function postComparisonFactor(array $dictionaries, array $apartment ,array $comparison, array $asset , int $id,int $assetGeneralId, int  $oldAssetGeneralId = null  )
+    private function postComparisonFactor(array $dictionaries, array $apartment, array $comparison, array $asset, int $id, int $assetGeneralId, int  $oldAssetGeneralId = null)
     {
         $allComparisonFactor = [
             'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc', 'loai_can_ho'
@@ -454,13 +454,13 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
         // dd($apartment['apartment_asset_properties']);
         // dd($comparison,$allComparisonFactor,$oldAssetGeneralId);
         foreach ($allComparisonFactor as $comparisonFactorTmp) {
-            if(isset($oldAssetGeneralId)){
-                if(in_array($comparisonFactorTmp, $comparison)) {
+            if (isset($oldAssetGeneralId)) {
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     ApartmentAssetComparisonFactor::where('apartment_asset_id', $id)
                         ->where('type', $comparisonFactorTmp)
                         ->update(['status' => 1]);
                 } else {
-                    if(($comparisonFactorTmp != "yeu_to_khac") && $comparisonFactorTmp != "phap_ly") {
+                    if (($comparisonFactorTmp != "yeu_to_khac") && $comparisonFactorTmp != "phap_ly") {
                         ApartmentAssetComparisonFactor::where('apartment_asset_id', $id)
                             ->where('type', $comparisonFactorTmp)
                             ->update(['status' => 0]);
@@ -469,81 +469,81 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 continue;
             }
             // dd('làm nè');
-            if($comparisonFactorTmp == 'phap_ly'){
-                $apartmentValue = $apartment['apartment_asset_properties']['legal']['description']??'-';
-                $assetValue = $asset['room_details'][0]['legal']['description']??'-';
+            if ($comparisonFactorTmp == 'phap_ly') {
+                $apartmentValue = $apartment['apartment_asset_properties']['legal']['description'] ?? '-';
+                $assetValue = $asset['room_details'][0]['legal']['description'] ?? '-';
                 ////phap ly always true
                 $status = true;
                 // $dictionary = $dictionaries['phap_ly'];
                 $type = 'phap_ly';
                 $name = 'Pháp lý';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
-            }elseif($comparisonFactorTmp == 'loai_can'){
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'loai_can') {
                 $apartmentValue = $apartment['apartment_asset_properties']['block']['rank']['description'] ?? '-';
                 $assetValue = $asset['apartment_specification']['rank']['description'] ?? '-';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $type = 'loai_can';
                 $name = 'Loại chung cư';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
-            }elseif($comparisonFactorTmp == 'so_phong_ngu'){
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'so_phong_ngu') {
                 $apartmentValue = $apartment['apartment_asset_properties']['bedroom_num'] ?? 0;
                 $assetValue = $asset['room_details'][0]['bedroom_num'] ?? 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $type = 'so_phong_ngu';
                 $name = 'Số phòng ngủ';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
-            }elseif($comparisonFactorTmp == 'dien_tich'){
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'dien_tich') {
                 $apartmentValue = $apartment['apartment_asset_properties']['area'] ?? 0;
                 $assetValue = $asset['room_details'][0]['area'] ?? 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $type = 'dien_tich';
                 $name = 'Diện tích';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
-            }elseif($comparisonFactorTmp == 'tang'){
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'tang') {
                 $apartmentValue = $apartment['apartment_asset_properties']['floor']['name'] ?? '-';
                 $assetValue = $asset['floor']['name'] ?? '-';
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $type = 'tang';
                 $name = 'Tầng';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
-            }elseif($comparisonFactorTmp == 'so_phong_wc'){
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'so_phong_wc') {
                 $apartmentValue = $apartment['apartment_asset_properties']['wc_num'] ?? 0;
                 $assetValue = $asset['room_details'][0]['wc_num'] ?? 0;
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $type = 'so_phong_wc';
                 $name = 'Số phòng vệ sinh';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
-            }elseif($comparisonFactorTmp == 'loai_can_ho'){
-                $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description']??'-';
-                $assetValue = $asset['room_details'][0]['loaicanho']['description']??'-';
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'loai_can_ho') {
+                $apartmentValue = $apartment['apartment_asset_properties']['loaicanho']['description'] ?? '-';
+                $assetValue = $asset['room_details'][0]['loaicanho']['description'] ?? '-';
                 // dd($apartment['apartment_asset_properties']);
                 $status = false;
-                if(in_array($comparisonFactorTmp, $comparison)){
+                if (in_array($comparisonFactorTmp, $comparison)) {
                     $status = true;
                 }
                 $type = 'loai_can_ho';
                 $name = 'Loại căn hộ';
-                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status , $id, $assetGeneralId, $type, $name);
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
             }
         }
     }
 
-    private function comparisonNoDictionary(string $apartmentValue,string $assetValue, int $status , int $id,int $assetGeneralId , string $type , string $name)
+    private function comparisonNoDictionary(string $apartmentValue, string $assetValue, int $status, int $id, int $assetGeneralId, string $type, string $name)
     {
         $description = CompareMaterData::COMPARISONS_DESCRIPTION['tuong_dong'];
         $comparisonFactor = [
@@ -561,7 +561,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
         ApartmentAssetComparisonFactor::query()->create($comparisonFactor->attributesToArray());
     }
 
-    private function comparisionHasDictionary( $apartmentValue, $assetValue, int $status , int $id,int $assetGeneralId  ,array $dictionaries , string $type , string $name )
+    private function comparisionHasDictionary($apartmentValue, $assetValue, int $status, int $id, int $assetGeneralId, array $dictionaries, string $type, string $name)
     {
         $comparisonFactor = [
             'apartment_id' => $id,
@@ -601,22 +601,22 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     #region deleted assets
     private function deleteComparisonAsset(int $id)
     {
-        if(ApartmentAssetHasAsset::query()->where('apartment_asset_id', $id)->exists()){
+        if (ApartmentAssetHasAsset::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetHasAsset::query()->where('apartment_asset_id', $id)->forceDelete();
         }
-        if(ApartmentAssetPic::query()->where('apartment_asset_id', $id)->where('type_id', 153)->exists()){
+        if (ApartmentAssetPic::query()->where('apartment_asset_id', $id)->where('type_id', 153)->exists()) {
             ApartmentAssetPic::query()->where('apartment_asset_id', $id)->where('type_id', 153)->forceDelete();
         }
-        if(ApartmentAssetComparisonFactor::query()->where('apartment_asset_id', $id)->exists()){
+        if (ApartmentAssetComparisonFactor::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetComparisonFactor::query()->where('apartment_asset_id', $id)->forceDelete();
         }
-        if(ApartmentAssetAdapter::query()->where('apartment_asset_id', $id)->exists()){
+        if (ApartmentAssetAdapter::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetAdapter::query()->where('apartment_asset_id', $id)->forceDelete();
         }
-        if(ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->exists()){
+        if (ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->forceDelete();
         }
-        if(ApartmentAssetOtherAsset::query()->where('apartment_asset_id', $id)->exists()){
+        if (ApartmentAssetOtherAsset::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetOtherAsset::query()->where('apartment_asset_id', $id)->forceDelete();
         }
     }
@@ -625,8 +625,9 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     #region calculate price
     private function updateOrCreatePrice($id, $slug, $value)
     {
+        Log::info('updateOrCreatePrice');
         $apartmentPriceData = ['apartment_asset_id' => $id, 'slug' => $slug, 'value' => $value];
-        $apartmentCheckExists = [ 'apartment_asset_id' => $id, 'slug' => $slug];
+        $apartmentCheckExists = ['apartment_asset_id' => $id, 'slug' => $slug];
         $apartmentPriceArr = new ApartmentAssetPrice($apartmentPriceData);
         ApartmentAssetPrice::query()->updateOrCreate($apartmentCheckExists, $apartmentPriceArr->attributesToArray());
     }
@@ -635,41 +636,49 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     {
         $data = [];
         $apartmentAsset = $this->getApartmentAssetById($id);
+        Log::info('calculatePrice');
         $assets = $apartmentAsset->assets_general;
         $adapters = $apartmentAsset->apartmentAdapter;
         $comparisons = $apartmentAsset->comparisonFactor;
         $methods = $apartmentAsset->appraisal_methods;
-        $apartmentArea = $apartmentAsset->apartmentAssetProperties->area??0;
+        $apartmentArea = $apartmentAsset->apartmentAssetProperties->area ?? 0;
         $assetPrice = $apartmentAsset->price;
         $otherAssets = $apartmentAsset->otherAssets;
-        if(isset($assets) && isset($adapters) && isset($comparisons)){
+        Log::info('calculatePrice2');
+        if (isset($assets) && isset($adapters) && isset($comparisons)) {
+            Log::info(
+                'calculatePrice3'
+            );
             $total = 0;
             $min = 0;
             $max = 0;
-            foreach($assets as $asset){
+            foreach ($assets as $asset) {
+                Log::info(
+                    'calculatePrice4'
+                );
                 $adapter = $adapters->where('asset_general_id', $asset->id)->first();
                 $comparison = $comparisons->where('asset_general_id', $asset->id);
-                $legal = $comparison->where('type','phap_ly')->first();
-                $notLegal = $comparison->whereNotIn('type',['phap_ly']);
+                $legal = $comparison->where('type', 'phap_ly')->first();
+                $notLegal = $comparison->whereNotIn('type', ['phap_ly']);
                 $assetId = $asset->id;
                 $totalAmount = $asset->total_amount;
                 $percent = $adapter->percent;
-                $amount = $totalAmount * $percent/100;
-                $area =floatval($asset->room_details[0]['area']??0);
-                $unitPrice = $amount/$area;
+                $amount = $totalAmount * $percent / 100;
+                $area = floatval($asset->room_details[0]['area'] ?? 0);
+                $unitPrice = $amount / $area;
                 $legalRate = $legal->adjust_percent;
-                $legalUnitPrice = $unitPrice + $unitPrice * $legalRate/100;
+                $legalUnitPrice = $unitPrice + $unitPrice * $legalRate / 100;
                 $notLegalRate = $notLegal->sum('adjust_percent');
-                $price = $legalUnitPrice + $legalUnitPrice * $notLegalRate/100;
-                $total+= $price;
-                if($min ==0){
+                $price = $legalUnitPrice + $legalUnitPrice * $notLegalRate / 100;
+                $total += $price;
+                if ($min == 0) {
                     $min = $price;
-                }elseif($price < $min){
+                } elseif ($price < $min) {
                     $min = $price;
                 }
-                if($max ==0){
+                if ($max == 0) {
                     $max = $price;
-                }elseif($price > $min){
+                } elseif ($price > $min) {
                     $max = $price;
                 }
 
@@ -703,35 +712,36 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             //     }
             // }
             $slug = 'apartment_area';
-            $this->updateOrCreatePrice($id, $slug, $apartmentArea??0);
+            $this->updateOrCreatePrice($id, $slug, $apartmentArea ?? 0);
             //total
             $roundTotal = 0;
             $otherPrice = 0;
             $apartmentPrice  =  0;
-            if(isset($assetPrice)){
+            if (isset($assetPrice)) {
                 $priceRound = $assetPrice->where('slug', 'round_total')->first();
-                $roundTotal = $priceRound->value??0;
-                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first()->value??0;
+                $roundTotal = $priceRound->value ?? 0;
+                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first()->value ?? 0;
             }
-            if(isset($otherAssets)){
+            if (isset($otherAssets)) {
                 $otherPrice = $otherAssets->sum('total_price');
                 $slug = 'other_asset_price';
-                $this->updateOrCreatePrice($id, $slug, $otherPrice??0);
+                $this->updateOrCreatePrice($id, $slug, $otherPrice ?? 0);
             }
             $apartmentTotal = CommonService::roundPrice($apartmentPrice, $roundTotal) * $apartmentArea;
             $slug = 'apartment_total_price';
-            $this->updateOrCreatePrice($id, $slug, $apartmentTotal??0);
+            $this->updateOrCreatePrice($id, $slug, $apartmentTotal ?? 0);
 
             $assetTotal = $apartmentTotal +  $otherPrice;
             $slug = 'total_price';
-            $this->updateOrCreatePrice($id, $slug, $assetTotal??0);
+            $this->updateOrCreatePrice($id, $slug, $assetTotal ?? 0);
         }
     }
     private function calculatePriceNew($id)
     {
-        if(ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->exists()){
+        if (ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->exists()) {
             ApartmentAssetPrice::query()->where('apartment_asset_id', $id)->forceDelete();
         }
+        Log::info('calculatePriceNew');
         $this->calculatePrice($id);
     }
 
@@ -753,35 +763,35 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             'price'
         ];
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
-        $result->append(['status_text', 'appraisal_methods','assets_general']);
-        if (isset($result->comparisonFactor) && count($result->comparisonFactor) >0){
-            $comparisons= $result->comparisonFactor->where('asset_general_id' , $result->assets_general[0]['id']??-1)->where('status',1)->whereNotIn('type', 'yeu_to_khac')->toArray();
+        $result->append(['status_text', 'appraisal_methods', 'assets_general']);
+        if (isset($result->comparisonFactor) && count($result->comparisonFactor) > 0) {
+            $comparisons = $result->comparisonFactor->where('asset_general_id', $result->assets_general[0]['id'] ?? -1)->where('status', 1)->whereNotIn('type', 'yeu_to_khac')->toArray();
             $comparisonArr = Arr::pluck($comparisons, 'type');
             $result->comparison_factors = $comparisonArr;
-        }else{
+        } else {
             $result->comparison_factors = EstimateAssetDefault::COMPARATION_FACTORS_APARTMENT;
         }
         $distanceMax = ValueDefault::RADIUS_SCAN;
         $assets = $result->assets_general;
-        if (isset($assets) && count($assets)>0){
+        if (isset($assets) && count($assets) > 0) {
             $stt = 0;
-            foreach ($assets as $asset){
+            foreach ($assets as $asset) {
                 $assetLocation =  $asset['coordinates'];
-                if ($result->coordinates != $assetLocation){
+                if ($result->coordinates != $assetLocation) {
                     $calDistance =  CommonService::calAppraiseAssetDistance($result->coordinates, $assetLocation);
-                    if ($calDistance > $distanceMax){
+                    if ($calDistance > $distanceMax) {
                         $distanceMax = $calDistance;
                     }
                 }
-                $stt ++;
+                $stt++;
             }
         }
-        $map_img = $result->pic->where('type_id' , 153)->first();
-        $result->map_img = $map_img->link??'';
+        $map_img = $result->pic->where('type_id', 153)->first();
+        $result->map_img = $map_img->link ?? '';
         $result->distance_max = $distanceMax;
         return $result;
     }
-    private function checkAuthorization ($id)
+    private function checkAuthorization($id)
     {
         $check = null;
         if ($this->model->query()->where('id', $id)->exists()) {
@@ -794,7 +804,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             }
             $result = $result->first();
             if (empty($result))
-                $check = ['message' => 'Bạn không có quyền ở TSTĐ '. $id , 'exception' => '', 'statusCode' => 403];
+                $check = ['message' => 'Bạn không có quyền ở TSTĐ ' . $id, 'exception' => '', 'statusCode' => 403];
         } else {
             $check = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
@@ -843,25 +853,25 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             '*',
         ];
         $result = $this->model->query()->with($with)->where('id', $id)->first($select);
-        if (! isset($result))
+        if (!isset($result))
             return ['message' => 'TSTD này không tồn tại.', 'exception' => ''];
-        $result->append(['status_text', 'appraisal_methods','assets_general','max_version']);
-        $comparisons= $result->comparisonFactor->where('asset_general_id' , $result->assets_general[0]['id']??-1)->where('status',1)->whereNotIn('type', 'yeu_to_khac')->toArray();
-        $map_img = $result->pic->where('type_id' , 153)->first();
+        $result->append(['status_text', 'appraisal_methods', 'assets_general', 'max_version']);
+        $comparisons = $result->comparisonFactor->where('asset_general_id', $result->assets_general[0]['id'] ?? -1)->where('status', 1)->whereNotIn('type', 'yeu_to_khac')->toArray();
+        $map_img = $result->pic->where('type_id', 153)->first();
         $comparisonArr = Arr::pluck($comparisons, 'type');
         $result->comparison_factors = $comparisonArr;
-        $result->map_img = $map_img->link??'';
+        $result->map_img = $map_img->link ?? '';
         $distanceMax = ValueDefault::RADIUS_SCAN;
         $assets = $result->assets_general;
         $utilities = CommonService::getUtilities();
 
-        if (isset($assets) && count($assets)>0){
-            for ($i =0; $i<count($assets); $i++){
+        if (isset($assets) && count($assets) > 0) {
+            for ($i = 0; $i < count($assets); $i++) {
                 $asset = $assets[$i];
                 $assetLocation =  $asset['coordinates'];
-                if ($result->coordinates != $assetLocation){
+                if ($result->coordinates != $assetLocation) {
                     $calDistance =  CommonService::calAppraiseAssetDistance($result->coordinates, $assetLocation);
-                    if ($calDistance > $distanceMax){
+                    if ($calDistance > $distanceMax) {
                         $distanceMax = $calDistance;
                     }
                 }
@@ -882,18 +892,16 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 //     // $asset->apartment_specification =$arr;
                 // }
             }
-
         }
         $result->distance_max = $distanceMax;
-        if (isset($result->apartmentAssetProperties))
-        {
+        if (isset($result->apartmentAssetProperties)) {
             $apartmentUti = $result->apartmentAssetProperties->utilities;
             $utilityDesc = [];
-            if (isset($apartmentUti) ){
-                foreach($apartmentUti as $uti){
-                    $des = $utilities->where('acronym','ilike',strval($uti))->first();
-                    if (isset($des)){
-                        $utilityDesc[] = $des->description??'';
+            if (isset($apartmentUti)) {
+                foreach ($apartmentUti as $uti) {
+                    $des = $utilities->where('acronym', 'ilike', strval($uti))->first();
+                    if (isset($des)) {
+                        $utilityDesc[] = $des->description ?? '';
                     }
                 }
             }
@@ -905,7 +913,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
 
     private function getTotalPrice(int $id)
     {
-        $with = ['price','comparisonFactor'];
+        $with = ['price', 'comparisonFactor'];
         $result = $this->model->query()->with($with)->where('id', $id)->first(['id', 'status', 'step']);
         return $result;
     }
@@ -918,18 +926,19 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
         ];
         $data = $this->model->query()->with($with)->where('id', $id)->first('id');
         $data->append(['assets_general']);
-        $asset= $data->assets_general;
-        $comparisons= $data->comparisonFactor->where('status',1)->whereNotIn('type', 'yeu_to_khac')->get();
+        $asset = $data->assets_general;
+        $comparisons = $data->comparisonFactor->where('status', 1)->whereNotIn('type', 'yeu_to_khac')->get();
         $comparisonFactors = Arr::pluck($comparisons, 'type');
         $pic = $data->pic->where('type_id', 153)->first();
-        $result = array_merge(['assets_general' => $asset],[ 'comparison_factor' => $comparisonFactors ],['map_img' => $pic]);
+        $result = array_merge(['assets_general' => $asset], ['comparison_factor' => $comparisonFactors], ['map_img' => $pic]);
         return $result;
     }
 
     #endregion
 
     #region lưu estate
-    private function updateRealEstate(int $id, array $additional = []){
+    private function updateRealEstate(int $id, array $additional = [])
+    {
         $select = [
             'id',
             'appraise_asset',
@@ -942,22 +951,22 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             'real_estate_id',
         ];
         $with = [
-            'price' => function($query){
+            'price' => function ($query) {
                 $query->whereIn('slug', ['total_price', 'apartment_area', 'apartment_round_total'])
                     ->select(['id', 'apartment_asset_id', 'slug', 'value']);
             },
             'apartmentAssetProperties:id,apartment_asset_id,area'
         ];
         $data = $this->model::query()->with($with)->where('id', $id)->first($select);
-        if (isset($data)){
+        if (isset($data)) {
             $total_price = 0;
             $total_area = 0;
             $round_total = 0;
 
-            $round = $data->price->where('slug','apartment_round_total')->first();
+            $round = $data->price->where('slug', 'apartment_round_total')->first();
             if (isset($round))
                 $round_total = $round->value;
-            $price = $data->price->where('slug','total_price')->first();
+            $price = $data->price->where('slug', 'total_price')->first();
             if (isset($price))
                 $total_price = CommonService::roundPrice($price->value, $round_total);
 
@@ -990,10 +999,10 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
         $realCreated = $realEstateRep->store($data->attributesToArray());
         $realId = $realCreated->id;
         return $realId;
-
     }
     #endregion
-    private function createAppraiseVersion($id) {
+    private function createAppraiseVersion($id)
+    {
         $apartment = $this->model->query()->with('version')->where('id', $id)->whereHas('version')->first();
         // $apartment = $this->model->query()->with('version')->where('id', $apartmentId)->first();
         $data = [];
@@ -1021,21 +1030,21 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     {
         $select = ['id', 'coordinates', 'asset_type_id', 'created_by', 'updated_at', 'appraise_asset', 'full_address', 'project_id'];
         $with = [
-                'price' => function ($q) {
-                    $q->whereIn('slug', ['apartment_asset_price', 'round_total', 'total_price']);
-                },
-                'assetType:id,description','createdBy:id,name',
-                'apartmentAssetProperties:id,apartment_asset_id,block_id,floor_id,apartment_name,area,bedroom_num,wc_num',
-                'apartmentAssetProperties.block:id,name',
-                'apartmentAssetProperties.floor:id,name',
-                'project:id,name'
-            ];
+            'price' => function ($q) {
+                $q->whereIn('slug', ['apartment_asset_price', 'round_total', 'total_price']);
+            },
+            'assetType:id,description', 'createdBy:id,name',
+            'apartmentAssetProperties:id,apartment_asset_id,block_id,floor_id,apartment_name,area,bedroom_num,wc_num',
+            'apartmentAssetProperties.block:id,name',
+            'apartmentAssetProperties.floor:id,name',
+            'project:id,name'
+        ];
         $apartment = $this->model->query()->with($with)->where('id', $id)->first($select);
         $total =  $apartment->price->where('slug', 'total_price')->first();
         $price =  $apartment->price->where('slug', 'apartment_asset_price')->first();
         $round =  $apartment->price->where('slug', 'round_total')->first();
         $apartment->total = $total ? $total->value : 0;
-        $apartment->unit_price = $price ? CommonService::roundPrice($price->value , $round ? $round->value : 0) : 0;
+        $apartment->unit_price = $price ? CommonService::roundPrice($price->value, $round ? $round->value : 0) : 0;
         return $apartment;
     }
 }
