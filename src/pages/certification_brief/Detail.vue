@@ -3237,6 +3237,13 @@ export default {
 						duration: 3000
 					});
 				});
+			} else {
+				this.$toast.open({
+					message: `Bạn không có quyền tải tài liệu đính kèm này`,
+					type: "success",
+					position: "top-right",
+					duration: 3000
+				});
 			}
 		},
 		deleteOtherFile(file, index) {
