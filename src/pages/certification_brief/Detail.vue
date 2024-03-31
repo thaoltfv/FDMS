@@ -1789,8 +1789,9 @@ export default {
 		this.user_id = profile.data.user.id;
 		if (
 			this.form.status &&
-			this.form.status > 1 &&
-			this.form.status < 9 &&
+			(this.form.status == 2 ||
+				this.form.status == 3 ||
+				this.form.status == 7) &&
 			this.position_profile &&
 			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 				this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
@@ -2663,8 +2664,9 @@ export default {
 				});
 				if (
 					this.form.status &&
-					this.form.status > 1 &&
-					this.form.status < 9 &&
+					(this.form.status == 2 ||
+						this.form.status == 3 ||
+						this.form.status == 7) &&
 					this.position_profile &&
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
