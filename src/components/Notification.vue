@@ -154,7 +154,7 @@ export default {
 				clearInterval(this.intervalId);
 			}
 			this.getNoti();
-			this.intervalId = setInterval(this.getNoti, 1200000);
+			this.intervalId = setInterval(this.getNoti, 120000);
 		},
 		stopInterval() {
 			if (this.intervalId) {
