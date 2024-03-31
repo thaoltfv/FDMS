@@ -1364,6 +1364,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Yêu cầu sơ bộ';
         }
 
+        Log::info('List of preCertificate: ', ['preCertificate' => $preCertificate, 'check' => $preCertificate->appraiserSale->user_id != $loginUser->id]);
+        Log::info('List of loginUser: ', ['loginUser' => $loginUser]);
+        Log::info('List of users: ', ['users' => $users]);
+
         $data = [
             'subject' => '[YCSB_' . $id . '] Chuyển sang trạng thái ' . $statusText,
             'message' => 'YCSB_' . $id . ' đã được ' . $loginUser->name . ' chuyển sang trạng thái ' . $statusText . '.',
