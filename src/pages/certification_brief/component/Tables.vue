@@ -857,6 +857,7 @@ export default {
 
 				if (
 					this.detailData.status &&
+					this.detailData.status > 1 &&
 					this.detailData.status < 9 &&
 					this.position_profile &&
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
@@ -1098,6 +1099,7 @@ export default {
 			console.log(this.listCertificates);
 			if (
 				property.status &&
+				property.status > 1 &&
 				property.status < 9 &&
 				this.position_profile &&
 				(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||

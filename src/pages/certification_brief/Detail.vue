@@ -1789,6 +1789,7 @@ export default {
 		this.user_id = profile.data.user.id;
 		if (
 			this.form.status &&
+			this.form.status > 1 &&
 			this.form.status < 9 &&
 			this.position_profile &&
 			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
