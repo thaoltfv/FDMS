@@ -331,7 +331,8 @@ class KeHoachTDG
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
         Log::info(
-            '8'
+            '8',
+            $path
         );
         try {
             $objWriter->save(storage_path('app/public/' . $path . $fileName . '.docx'));
