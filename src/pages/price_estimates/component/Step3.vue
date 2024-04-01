@@ -1,163 +1,5 @@
 <template>
 	<div v-if="step_3">
-		<!-- <div class="card">
-			<div class="card-title">
-				<div class="d-flex justify-content-between align-items-center">
-					<h3 class="title">THÔNG TIN SƠ BỘ VỀ TÀI SẢN</h3>
-					<img
-						class="img-dropdown"
-						:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
-						src="@/assets/images/icon-btn-down.svg"
-						alt="dropdown"
-						@click="showCardDetailTraffic = !showCardDetailTraffic"
-					/>
-				</div>
-			</div>
-			<div class="card-body card-info" v-show="showCardDetailTraffic">
-				<div class="container-fluid color_content">
-					<div class="row">
-						<div class="col-12 col-lg-7">
-							<div class="row">
-								<div class="col-12">
-									<InputCategory
-										v-model="step_3.asset_type_id"
-										vid="asset_type_id"
-										label="Loại tài sản"
-										rules="required"
-										class="form-group-container"
-										:options="optionsType"
-										@change="changeAssetTypeFinal($event)"
-									/>
-								</div>
-								<div class="col-12">
-									<InputText
-										v-model="step_3.appraise_asset"
-										vid="appraise_asset"
-										label="Tên tài sản"
-										rules="required"
-										class="form-group-container"
-									/>
-								</div>
-
-								<div class="col-12">
-									<InputText
-										v-model="step_3.full_address"
-										vid="full_address"
-										label="Địa chỉ tài sản"
-										rules="required"
-										class="form-group-container"
-									/>
-								</div>
-								<div class="col-12">
-									<InputTextarea
-										:autosize="true"
-										:maxLength="1000"
-										v-model="step_3.description"
-										label="Mô tả vị trí"
-										class="form-group-container"
-									/>
-								</div>
-							</div>
-						</div>
-						<div class="col-12 col-lg-5">
-							<div class="d-flex flex-column h-100">
-								<div class="form-group-container position-relative w-100">
-									<InputText
-										id="coordinate"
-										:disabledInput="true"
-										v-model="step_3.coordinates"
-										vid="coordinates"
-										label="Tọa độ"
-										class="coordinates"
-										rules="required"
-									/>
-									<div class="img-locate">
-										<img
-											src="@/assets/icons/ic_edit_2.svg"
-											alt="locate"
-											@click="handleOpenModalMap()"
-										/>
-									</div>
-								</div>
-								
-
-								<div
-									class="col-12 w-100 h-100 mt-3 d-none d-lg-block layer-map"
-									style="flex: 1"
-								>
-									<div class="d-flex all-map w-100 h-100">
-										<div class="main-map w-100 h-100">
-											<div id="mapid" class="layer-map w-100 h-100">
-												<l-map
-													ref="map_step1"
-													:zoom="map.zoom"
-													:center="map.center"
-													:maxZoom="20"
-													:options="{ zoomControl: false }"
-												>
-													<l-tile-layer
-														:url="url"
-														:options="{ maxNativeZoom: 20, maxZoom: 20 }"
-													></l-tile-layer>
-													<l-tile-layer
-														v-for="tileProvider in tileProviders"
-														:key="tileProvider.name"
-														:name="tileProvider.name"
-														:visible="tileProvider.visible"
-														:url="tileProvider.url"
-														:attribution="tileProvider.attribution"
-														:layer-type="tileProvider.type"
-														:options="{ maxNativeZoom: 20, maxZoom: 20 }"
-													/>
-													<l-control-zoom
-														position="bottomright"
-													></l-control-zoom>
-													<l-control position="bottomleft">
-														<button
-															class="btn btn-map"
-															@click="handleView"
-															type="button"
-														>
-															<img
-																v-if="!imageMap"
-																src="@/assets/images/im_map.png"
-																alt=""
-															/>
-															<img
-																v-if="imageMap"
-																src="@/assets/images/im_satellite.png"
-																alt=""
-															/>
-														</button>
-													</l-control>
-													<l-control-layers
-														position="bottomleft"
-													></l-control-layers>
-													<l-marker :lat-lng="markerLatLng">
-														<l-icon
-															class-name="someExtraClass"
-															:iconAnchor="[30, 58]"
-														>
-															<img
-																style="width: 60px !important"
-																class="icon_marker"
-																src="@/assets/images/svg_home.svg"
-																alt=""
-															/>
-														</l-icon>
-														<l-tooltip>Vị trí tài sản</l-tooltip>
-													</l-marker>
-												</l-map>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		<div class="card">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
@@ -173,7 +15,11 @@
 					/>
 				</div>
 			</div>
-			<div class="card-body card-info" v-show="showCardDetailTraffic">
+			<div
+				class="card-body card-info"
+				v-show="showCardDetailTraffic"
+				v-if="!miscVariable.isApartment"
+			>
 				<div class="container-fluid mb-2">
 					<div class="row">
 						<div class="col-custom-11-5">
@@ -223,6 +69,7 @@
 								</div>
 								<div class="col-2">
 									<InputCurrencyUnit
+										v-if="!priceEstimates.isTransfer"
 										:id="`main_landunit_price${index}`"
 										v-model="main_land.unit_price"
 										:vid="'unit_price' + index"
@@ -232,11 +79,20 @@
 										class="w-100"
 										@change="handleChangePriceMainArea($event, index)"
 									/>
+
+									<span class="number-style-input" v-else>
+										{{
+											main_land.unit_price
+												? formatNumber(main_land.unit_price)
+												: ""
+										}}
+									</span>
 								</div>
 								<div class="col-2">
 									<span class="number-style-input">
 										{{
-											main_land.total_price
+											main_land.total_price !== null &&
+											main_land.total_price !== undefined
 												? formatNumber(main_land.total_price)
 												: ""
 										}}
@@ -297,6 +153,7 @@
 								</div>
 								<div class="col-2">
 									<InputCurrencyUnit
+										v-if="!priceEstimates.isTransfer"
 										:key="key_render"
 										:id="`planning_areaunit_price${index}`"
 										v-model="planning_area.unit_price"
@@ -306,12 +163,19 @@
 										:required="true"
 										class="w-100"
 										@change="handleChangePricePlanningArea($event, index)"
-									/>
+									/><span class="number-style-input" v-else>
+										{{
+											planning_area.unit_price
+												? formatNumber(planning_area.unit_price)
+												: ""
+										}}
+									</span>
 								</div>
 								<div class="col-2 ">
 									<span class="number-style-input">
 										{{
-											planning_area.total_price
+											planning_area.total_price !== null &&
+											planning_area.total_price !== undefined
 												? formatNumber(planning_area.total_price)
 												: ""
 										}}
@@ -321,7 +185,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="container-fluid mb-2" v-if="miscVariable.isHaveContruction">
+				<div class="container-fluid mb-2" v-if="computeShowTangibleAset">
 					<div class="row">
 						<div class="col-custom-11-5">
 							<div class="select-group sub_header_title">
@@ -355,6 +219,7 @@
 							>
 								<div class="col-custom-4-5">
 									<InputCategoryCustom
+										v-if="!priceEstimates.isTransfer"
 										v-model="tangible.building_type_id"
 										vid="building_type_id"
 										nonLabel="Loại CTXD"
@@ -362,9 +227,17 @@
 										:options="optionsHousingType"
 										@change="tangible.building_type_id = $event"
 									/>
+									<span class="text-style-input" v-else>
+										{{
+											tangible.building_type
+												? tangible.building_type.description
+												: ""
+										}}
+									</span>
 								</div>
 								<div class="col-custom-1-5">
 									<InputPercent
+										v-if="!priceEstimates.isTransfer"
 										:key="tangible.remaining_quality"
 										v-model="tangible.remaining_quality"
 										vid="remaining_quality"
@@ -374,9 +247,17 @@
 										rules="required"
 										@change="handleChangeTangible(tangible, index)"
 									/>
+									<span class="number-style-input" v-else>
+										{{
+											tangible.remaining_quality
+												? formatNumber(tangible.remaining_quality) + " %"
+												: ""
+										}}
+									</span>
 								</div>
 								<div :key="renderInputMainArea" class="col-custom-1-5">
 									<InputAreaCustom
+										v-if="!priceEstimates.isTransfer"
 										v-model="tangible.total_construction_area"
 										:decimal="2"
 										vid="total_construction_area"
@@ -389,10 +270,17 @@
 										nonLabel="Diện tích sàn"
 										@change="handleChangeTangible(tangible, index)"
 										:errorCustom="validateContructionArea()"
-									/>
+									/><span class="number-style-input" v-else>
+										{{
+											tangible.total_construction_area
+												? formatNumber(tangible.total_construction_area)
+												: ""
+										}}
+									</span>
 								</div>
 								<div class="col-2">
 									<InputCurrencyUnit
+										v-if="!priceEstimates.isTransfer"
 										:id="`tangibleunit_price${index}`"
 										v-model="tangible.unit_price"
 										:vid="'unit_price' + index"
@@ -401,30 +289,39 @@
 										:required="true"
 										class="w-100"
 										@change="handleChangeTangible(tangible, index)"
-									/>
+									/><span class="number-style-input" v-else>
+										{{
+											tangible.unit_price
+												? formatNumber(tangible.unit_price)
+												: ""
+										}}
+									</span>
 								</div>
 
 								<div class="col-2">
 									<span class="number-style-input">
 										{{
-											tangible.total_price
+											tangible.total_price !== null &&
+											tangible.total_price !== undefined
 												? formatNumber(tangible.total_price)
 												: ""
 										}}
 									</span>
 								</div>
-								<div class="col-custom-0-5 px-3 d-flex align-items-end">
+								<div
+									class="col-custom-0-5 px-3 d-flex align-items-end"
+									v-if="!priceEstimates.isTransfer"
+								>
 									<div
 										@click="handleDeleteTangibleAsset(index)"
 										class="btn-delete"
 									>
-										<!-- <img src="@/assets/icons/ic_delete_2.svg" alt="delete" /> -->
-										Xóa
+										<img src="@/assets/icons/ic_delete_2.svg" alt="delete" />
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="d-flex mt-n2">
+						<div class="d-flex mt-n2" v-if="!priceEstimates.isTransfer">
 							<div class="d-flex justify-content-end">
 								<button
 									class="btn text-warning btn-ghost btn-add"
@@ -466,12 +363,7 @@
 											</td>
 										</tr>
 
-										<tr
-											v-if="
-												miscVariable.isHaveContruction &&
-													step_3.tangible_assets.length > 0
-											"
-										>
+										<tr v-if="computeShowTangibleAset">
 											<td class="">Công trình xây dựng</td>
 											<td class="text-right">
 												{{
@@ -494,16 +386,17 @@
 					</div>
 				</div>
 				<div class="container-fluid color_content">
-					<div class="row">
+					<div class="row mt-3">
 						<div class="col-custom-11-5">
 							<hr style="border-top: 5px solid #007ec6; margin: 0;" />
-							<div class="row">
+							<div class="row mt-3">
 								<div class="col-md-12 col-lg-12">
 									<InputTextPrefixCustom
 										id="petitioner_name"
 										placeholder="Ông / Bà"
 										v-model="step_3.petitioner_name"
 										vid="petitioner_name"
+										:disabledInput="priceEstimates.isTransfer ? true : false"
 										:iconUser="true"
 										:showIcon="true"
 										label="Tên người yêu cầu"
@@ -519,6 +412,7 @@
 										label="Ngày yêu cầu"
 										placeholder="Ngày / tháng / năm"
 										rules="required"
+										:disabled="priceEstimates.isTransfer ? true : false"
 										:requiredIcon="true"
 										:formatDate="'DD/MM/YYYY'"
 										class="form-group-container "
@@ -532,6 +426,134 @@
 										class="form-group-container input_certification_brief"
 										vid="appraise_purpose_id"
 										label="Mục đích thẩm định"
+										:disabled="priceEstimates.isTransfer ? true : false"
+										rules="required"
+										:requiredIcon="true"
+										:options="optionsAppraisalPurposes"
+										@change="step_3.appraise_purpose_id = $event"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showCardDetailTraffic" v-else>
+				<div class="container-fluid mb-2">
+					<div class="row">
+						<div class="col-12 mt-2">
+							<div class="row content_form color_content">
+								<div class="col-6  font-weight-bold">
+									Tên tài sản
+								</div>
+								<div class="col-custom-1-5 font-weight-bold text-right">
+									Diện tích (m<sup>2</sup>)
+								</div>
+								<div class="col-2 font-weight-bold text-right">
+									Đơn giá (đ)
+								</div>
+								<div class="col-2 font-weight-bold text-right">
+									Thành tiền (đ)
+								</div>
+							</div>
+						</div>
+						<div class="col-12 mt-2">
+							<div
+								v-for="(apartment, index) in step_3.apartment_finals"
+								:key="index"
+								class=" mb-2 row content_form"
+							>
+								<div class="col-6">
+									<span class="text-style-input">
+										{{ apartment.name || "" }}
+									</span>
+								</div>
+								<div :key="renderInputMainArea" class="col-custom-1-5">
+									<span class="number-style-input">
+										{{ apartment.total_area || "" }}
+									</span>
+								</div>
+								<div class="col-2">
+									<InputCurrencyUnit
+										v-if="!priceEstimates.apartment_asset_id"
+										:id="`apartmentunit_price${index}`"
+										v-model="apartment.unit_price"
+										:vid="'unit_price' + index"
+										:max="999999999"
+										nonLabel="Đơn giá"
+										:required="true"
+										class="w-100"
+										@change="handleChangePriceApartment($event, index)"
+									/>
+
+									<span class="number-style-input" v-else>
+										{{
+											apartment.unit_price
+												? formatNumber(apartment.unit_price)
+												: ""
+										}}
+									</span>
+								</div>
+								<div class="col-2">
+									<span class="number-style-input">
+										{{
+											apartment.total_price
+												? formatNumber(apartment.total_price)
+												: ""
+										}}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid color_content">
+					<div class="row">
+						<div class="col-custom-11-5">
+							<hr style="border-top: 5px solid #007ec6; margin: 0;" />
+							<div class="row">
+								<div class="col-md-12 col-lg-12">
+									<InputTextPrefixCustom
+										id="petitioner_name"
+										placeholder="Ông / Bà"
+										v-model="step_3.petitioner_name"
+										vid="petitioner_name"
+										:disabledInput="priceEstimates.isTransfer ? true : false"
+										:iconUser="true"
+										:showIcon="true"
+										:label="
+											!miscVariable.isApartment
+												? 'Tên người yêu cầu'
+												: 'Tên Khách hàng / đơn vị / tổ chức yêu cầu'
+										"
+										:requiredIcon="true"
+										rules="required"
+										class="form-group-container "
+									/>
+								</div>
+								<div class="col-md-12 col-lg-6">
+									<InputDatePicker
+										v-model="step_3.request_date"
+										vid="request_date"
+										label="Ngày yêu cầu"
+										placeholder="Ngày / tháng / năm"
+										rules="required"
+										:disabled="priceEstimates.isTransfer ? true : false"
+										:requiredIcon="true"
+										:formatDate="'DD/MM/YYYY'"
+										class="form-group-container "
+										@change="step_3.request_date = $event"
+									/>
+								</div>
+
+								<div class="col-md-12 col-lg-6">
+									<InputCategory
+										v-model="step_3.appraise_purpose_id"
+										class="form-group-container input_certification_brief"
+										vid="appraise_purpose_id"
+										label="Mục đích thẩm định"
+										:disabled="priceEstimates.isTransfer ? true : false"
 										rules="required"
 										:requiredIcon="true"
 										:options="optionsAppraisalPurposes"
@@ -644,14 +666,14 @@ export default {
 		const isMobile = ref(checkMobile());
 
 		const priceEstimateStore = usePriceEstimatesStore();
-		const { priceEstimates, miscInfo, miscVariable } = storeToRefs(
+		const { priceEstimates, miscInfo, miscVariable, configThis } = storeToRefs(
 			priceEstimateStore
 		);
 
 		// const step_3 = ref(_.cloneDeep(priceEstimates.value.step_3));
 
 		const step_3 = ref(null);
-		const getStarted = () => {
+		const getStartedLand = () => {
 			const step1 = priceEstimates.value.step_1;
 			const tempTotalArea = step1.total_area || [];
 			let totals = {};
@@ -779,7 +801,89 @@ export default {
 				step_3.value = priceEstimates.value.step_3;
 			}
 		};
-		getStarted();
+		const getStartedApartment = () => {
+			const step1 = priceEstimates.value.step_1;
+			let total = 0;
+			let count = 0;
+
+			if (priceEstimates.value.step_2.assets_general) {
+				priceEstimates.value.step_2.assets_general.forEach(asset => {
+					total += Number(asset.average_land_unit_price);
+					count++;
+				});
+			}
+			const average = Math.floor(total / count) || 0;
+			const totalPrice = step1.apartment_properties.area * average;
+			if (priceEstimates.value.step_3 && priceEstimates.value.step_3.id) {
+				step_3.value = priceEstimates.value.step_3;
+				if (step_3.value.apartment_finals.length === 0) {
+					step_3.value.apartment_finals = [
+						{
+							name: step1.general_infomation.full_address,
+							total_area: step1.apartment_properties.area,
+							unit_price: average,
+							total_price: totalPrice
+						}
+					];
+				}
+			} else {
+				const address = step1.general_infomation.full_address;
+				if (priceEstimates.value.step_3.reInit) {
+					priceEstimates.value.step_3 = {
+						petitioner_name: priceEstimates.value.step_3.petitioner_name,
+						request_date: priceEstimates.value.step_3.request_date,
+						appraise_purpose_id:
+							priceEstimates.value.step_3.appraise_purpose_id,
+						asset_type_id: step1.general_infomation.asset_type_id,
+						appraise_asset: step1.general_infomation.appraise_asset,
+						full_address: address,
+						description: step1.apartment_properties.description,
+						coordinates: step1.general_infomation.coordinates,
+						total_area: [],
+						planning_area: [],
+						tangible_assets: [],
+						apartment_finals: [
+							{
+								name: address,
+								total_area: step1.apartment_properties.area,
+								unit_price: average,
+								total_price: totalPrice
+							}
+						],
+						appraise_land_sum_area: null
+					};
+				} else {
+					priceEstimates.value.step_3 = {
+						petitioner_name: "Ông / Bà",
+						request_date: "",
+						appraise_purpose_id: "",
+						asset_type_id: step1.general_infomation.asset_type_id,
+						appraise_asset: step1.general_infomation.appraise_asset,
+						full_address: address,
+						description: step1.apartment_properties.description,
+						coordinates: step1.general_infomation.coordinates,
+						total_area: [],
+						planning_area: [],
+						tangible_assets: [],
+						apartment_finals: [
+							{
+								name: address,
+								total_area: step1.apartment_properties.area,
+								unit_price: average,
+								total_price: totalPrice
+							}
+						],
+						appraise_land_sum_area: null
+					};
+				}
+				step_3.value = priceEstimates.value.step_3;
+			}
+		};
+		if (!miscVariable.value.isApartment) {
+			getStartedLand();
+		} else {
+			getStartedApartment();
+		}
 
 		const checkShowPlanning = ref(false);
 		return {
@@ -793,23 +897,37 @@ export default {
 		};
 	},
 	computed: {
+		computeShowTangibleAset() {
+			let boolA = false;
+			if (this.miscVariable.isHaveContruction && this.step_3.tangible_assets) {
+				boolA = true;
+			}
+			if (
+				this.priceEstimates.appraise_id &&
+				this.step_3.tangible_assets.length === 0
+			) {
+				boolA = false;
+			}
+
+			return boolA;
+		},
 		totalPriceTotalArea() {
-			const temp = this.step_3.total_area.reduce(
-				(total, area) => total + Number(area.total_price),
-				0
-			);
-			const temp2 = this.step_3.planning_area.reduce(
-				(total, area) => total + Number(area.total_price),
-				0
-			);
+			const temp = this.step_3.total_area.reduce((total, area) => {
+				area.total_price = area.total_price || 0;
+				return total + Number(area.total_price);
+			}, 0);
+			const temp2 = this.step_3.planning_area.reduce((total, area) => {
+				area.total_price = area.total_price || 0;
+				return total + Number(area.total_price);
+			}, 0);
 			return temp + temp2;
 		},
 
 		totalPriceTangibleAsset() {
-			return this.step_3.tangible_assets.reduce(
-				(total, area) => total + Number(area.total_price),
-				0
-			);
+			return this.step_3.tangible_assets.reduce((total, area) => {
+				area.total_price = area.total_price || 0;
+				return total + Number(area.total_price);
+			}, 0);
 		},
 		totalAllPrice() {
 			return this.totalPriceTotalArea + this.totalPriceTangibleAsset;
@@ -843,7 +961,6 @@ export default {
 			};
 		},
 		optionsProvince() {
-			// console.log('llll tỉnh', this.miscInfo.provinces)
 			return {
 				data: this.miscInfo.provinces,
 				id: "id",
@@ -1106,7 +1223,6 @@ export default {
 			if (checkIsCheckFacility && checkIsCheckFacility.length === 0) {
 				this.step_3.total_area[0].is_transfer_facility = true;
 			}
-			// console.log('mục đích',this.step_3.total_area)
 			this.handleChangeUBNDPrice();
 			this.handleGetTotalArea();
 		},
@@ -1248,6 +1364,20 @@ export default {
 					this.step_3.total_area[index].total_price =
 						this.step_3.total_area[index].unit_price *
 						this.step_3.total_area[index].main_area;
+				} else {
+					this.step_3.total_area[index].total_price = 0;
+				}
+			}
+		},
+		handleChangePriceApartment(value, index) {
+			if (value) {
+				this.step_3.apartment_finals[index].unit_price = value;
+				if (this.step_3.apartment_finals[index].total_area) {
+					this.step_3.apartment_finals[index].total_price =
+						this.step_3.apartment_finals[index].unit_price *
+						this.step_3.apartment_finals[index].total_area;
+				} else {
+					this.step_3.apartment_finals[index].total_price = 0;
 				}
 			}
 		},
@@ -1269,6 +1399,8 @@ export default {
 					this.step_3.planning_area[index].total_price =
 						this.step_3.planning_area[index].unit_price *
 						this.step_3.planning_area[index].planning_area;
+				} else {
+					this.step_3.planning_area[index].total_price = 0;
 				}
 			}
 		},
@@ -1336,8 +1468,8 @@ export default {
 				);
 			}
 
-			if (total_construction_area > this.step_3.appraise_land_sum_area)
-				error = "Diện tích sàn không được lớn hơn tổng diện tích sử dụng";
+			// if (total_construction_area > this.step_3.appraise_land_sum_area)
+			// 	error = "Diện tích sàn không được lớn hơn tổng diện tích sử dụng";
 			this.miscInfo.step3AreaValidate = error;
 
 			return error;
@@ -1360,7 +1492,6 @@ export default {
 			if (checkIsCheckFacility && checkIsCheckFacility.length === 0) {
 				this.step_3.total_area[0].is_transfer_facility = true;
 			}
-			// console.log('mục đích',this.step_3.total_area)
 			this.handleChangeUBNDPrice();
 			this.handleGetTotalArea();
 			this.renderInputMainArea += 1;

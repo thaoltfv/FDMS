@@ -151,25 +151,22 @@ export default {
 		},
 		startInterval() {
 			if (this.intervalId) {
-				console.log("clearInterval");
 				clearInterval(this.intervalId);
 			}
-			console.log("startInterval called", new Date());
 			this.getNoti();
-			this.intervalId = setInterval(this.getNoti, 30000);
+			this.intervalId = setInterval(this.getNoti, 90000);
 		},
 		stopInterval() {
-			console.log("stopInterval called", new Date());
 			if (this.intervalId) {
 				clearInterval(this.intervalId);
 				this.intervalId = null;
 			}
 		},
 		async getNoti() {
-			// const profile = await Notification.getUnreadCount(this.currentUser.id);
-			// // store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
-			// this.notiCount = profile.data.unreadNotifications;
-			// this.workFlowConfig.setNoti(profile.data.unreadNotifications);
+			const profile = await Notification.getUnreadCount(this.currentUser.id);
+			// store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
+			this.notiCount = profile.data.unreadNotifications;
+			this.workFlowConfig.setNoti(profile.data.unreadNotifications);
 			// console.log(
 			// 	"unreadNotifications",
 			// 	profile.data.unreadNotifications,

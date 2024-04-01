@@ -353,7 +353,7 @@
 								:data-source="computedResultPreCertificate"
 								table-layout="top"
 								class="table_appraise_list"
-								:rowKey="(record) => record.id"
+								:rowKey="record => record.id"
 							>
 								<template slot="asset" slot-scope="asset">
 									<p :id="asset.id" class="text-none mb-0">{{ asset.name }}</p>
@@ -439,8 +439,8 @@
 			@cancel="isHandleAction = false"
 			:notification="
 				message == 'Từ chối' || message == 'Khôi phục' || message == 'Hủy'
-					? `Bạn có muốn '${message}' yêu cầu này?`
-					: `Bạn có muốn chuyển yêu cầu này sang trạng thái`
+					? `Bạn có muốn '${message}' hồ sơ này?`
+					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="ycsbConfig"
 			:status_text="message"
@@ -457,7 +457,9 @@
 		/>
 		<ModalRequireForStage3
 			v-if="dialogRequireForStage3"
-			:notification="`Bạn có muốn chuyển yêu cầu này sang trạng thái 'Định giá sơ bộ'?`"
+			:notification="
+				`Bạn có muốn chuyển yêu cầu này sang trạng thái 'Định giá sơ bộ'?`
+			"
 			@cancel="dialogRequireForStage3 = false"
 		/>
 	</div>
@@ -506,7 +508,7 @@ import {
 	BTooltip,
 	BDropdown,
 	BDropdownItem,
-	BButtonGroup,
+	BButtonGroup
 } from "bootstrap-vue";
 import Footer from "@/components/PreCertificate/FooterDetail.vue";
 import IconBase from "./../IconBase.vue";
@@ -515,8 +517,8 @@ Vue.use(Icon);
 export default {
 	props: {
 		routeId: {
-			type: String,
-		},
+			type: String
+		}
 	},
 	name: "detail_pre_certification",
 	components: {
@@ -549,7 +551,7 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalNotificationPreCertificateNote,
-		ModalRequireForStage3,
+		ModalRequireForStage3
 	},
 	data() {
 		return {
@@ -558,7 +560,7 @@ export default {
 					title: "Tên tài sản sơ bộ",
 					align: "left",
 					scopedSlots: { customRender: "asset" },
-					hiddenItem: false,
+					hiddenItem: false
 				},
 
 				{
@@ -566,14 +568,14 @@ export default {
 					align: "right",
 					scopedSlots: { customRender: "total_preliminary_value" },
 					dataIndex: "total_preliminary_value",
-					hiddenItem: false,
-				},
+					hiddenItem: false
+				}
 			],
 			theme: {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
 				slider: "#FAA831",
-				arrow: "#000000",
+				arrow: "#000000"
 			},
 			status: 1,
 			total_price_appraise: "",
@@ -627,8 +629,8 @@ export default {
 				"Bảng điều chỉnh QSDĐ",
 				"Bảng điều chỉnh CTXD",
 				"Hình ảnh hiện trạng",
-				"Phiếu thu thập TSSS",
-			],
+				"Phiếu thu thập TSSS"
+			]
 		};
 	},
 	setup(props) {
@@ -651,7 +653,7 @@ export default {
 			preCertificateOtherDocuments,
 			jsonConfig,
 			vueStoree,
-			other,
+			other
 		} = storeToRefs(preCertificateStore);
 		const dialogRequireForStage3 = ref(false);
 		const config = ref({});
@@ -661,7 +663,7 @@ export default {
 		const allowEditFile = ref({ appendix: false, result: false });
 		const changeEditStatus = async () => {
 			let dataJson = jsonConfig.value.principle.filter(
-				(item) => item.status === dataPC.value.status && item.isActive === 1
+				item => item.status === dataPC.value.status && item.isActive === 1
 			);
 			if (dataJson && dataJson.length > 0) {
 				config.value = dataJson[0];
@@ -672,7 +674,7 @@ export default {
 					file_appendix: false,
 					file_result: false,
 					payments: false,
-					appraiser: false,
+					appraiser: false
 				};
 				for (const key of Object.keys(checkPermissionObject)) {
 					checkPermissionObject[key] = await checkPermissionRequire(
@@ -704,7 +706,7 @@ export default {
 						: false;
 				const tempPermission = {
 					edit: edit.value,
-					editPayments: dataJson[0].edit.payments || false,
+					editPayments: dataJson[0].edit.payments || false
 				};
 				preCertificateStore.updatePermission(tempPermission);
 			}
@@ -751,7 +753,7 @@ export default {
 				checkRole.value = true;
 			}
 			const permission = vueStoree.value.currentPermissions;
-			permission.forEach((value) => {
+			permission.forEach(value => {
 				if (value === "VIEW_PRE_CERTIFICATE") {
 					view.value = true;
 				}
@@ -777,7 +779,7 @@ export default {
 					message: "Bạn ko có quyền xem yêu cầu sơ bộ",
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 		};
@@ -824,7 +826,7 @@ export default {
 			user_id,
 
 			showCardDetailFileResult,
-			changeEditStatus,
+			changeEditStatus
 		};
 	},
 
@@ -833,7 +835,7 @@ export default {
 		statusDescription() {
 			if (this.jsonConfig) {
 				const status = this.jsonConfig.principle.find(
-					(i) => i.status === this.dataPC.status
+					i => i.status === this.dataPC.status
 				);
 				return status ? status.description : "";
 			}
@@ -841,7 +843,7 @@ export default {
 			return "";
 		},
 		getHistoryTextColor() {
-			return this.historyList.map((item) => {
+			return this.historyList.map(item => {
 				return this.loadColor(item);
 			});
 		},
@@ -849,10 +851,10 @@ export default {
 			return [
 				{
 					name: this.dataPC.pre_asset_name,
-					total_preliminary_value: this.dataPC.total_preliminary_value,
-				},
+					total_preliminary_value: this.dataPC.total_preliminary_value
+				}
 			];
-		},
+		}
 	},
 	methods: {
 		handleshowCardPCPayments() {
@@ -862,13 +864,13 @@ export default {
 					message: "Vui lòng bổ sung tổng phí dịch vụ",
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 		},
 		getReport(type) {
 			let report = this.dataPC.other_documents.find(
-				(i) => i.description === type
+				i => i.description === type
 			);
 			return report;
 		},
@@ -925,16 +927,16 @@ export default {
 						name: "certification_asset.vehicle.detail",
 						query: {
 							id: data.general_asset_id,
-							asset_type_id: data.asset_type_id,
-						},
+							asset_type_id: data.asset_type_id
+						}
 					});
 				} else if (data.asset_type.acronym === "MMTB") {
 					routeData = this.$router.resolve({
 						name: "certification_asset.machine.detail",
 						query: {
 							id: data.general_asset_id,
-							asset_type_id: data.asset_type_id,
-						},
+							asset_type_id: data.asset_type_id
+						}
 					});
 				}
 			} else if (data.asset_type.dictionary_acronym === "KHAC") {
@@ -942,18 +944,18 @@ export default {
 					name: "certification_asset.other_purpose.detail",
 					query: {
 						id: data.general_asset_id,
-						asset_type_id: data.asset_type_id,
-					},
+						asset_type_id: data.asset_type_id
+					}
 				});
 			} else if (data.asset_type.acronym === "CC") {
 				routeData = this.$router.resolve({
 					name: "certification_asset.apartment.detail",
-					query: { id: data.asset.asset_id },
+					query: { id: data.asset.asset_id }
 				});
 			} else {
 				routeData = this.$router.resolve({
 					name: "certification_asset.detail",
-					query: { id: data.asset.asset_id },
+					query: { id: data.asset.asset_id }
 				});
 			}
 			window.open(routeData.href, "_blank");
@@ -962,8 +964,8 @@ export default {
 			let url = this.$router.resolve({
 				name: "certification_brief.detail",
 				query: {
-					id: id.toString(),
-				},
+					id: id.toString()
+				}
 			}).href;
 
 			window.open(url, "_blank");
@@ -980,11 +982,11 @@ export default {
 							let result = null;
 							if (e.description.includes("Hủy")) {
 								result = resp.data.li_do_huy_so_bo.filter(
-									(item) => item.id === e.properties.reason_id
+									item => item.id === e.properties.reason_id
 								);
 							} else {
 								result = resp.data.li_do.filter(
-									(item) => item.id === e.properties.reason_id
+									item => item.id === e.properties.reason_id
 								);
 							}
 
@@ -997,7 +999,7 @@ export default {
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 		},
@@ -1010,7 +1012,7 @@ export default {
 		formatNumber(num) {
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
-				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
+				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
 				});
 			}
@@ -1020,10 +1022,10 @@ export default {
 				.push({
 					name: "pre_certification.edit",
 					query: {
-						id: `${this.dataPC.id}`,
-					},
+						id: `${this.dataPC.id}`
+					}
 				})
-				.catch((_) => {});
+				.catch(_ => {});
 		},
 		onCancel() {
 			return this.$router.push({ name: "pre_certification.index" });
@@ -1045,7 +1047,7 @@ export default {
 				message: "Hiện tại chức năng này chưa được mở ở phiên bản dùng thử",
 				type: "error",
 				position: "top-right",
-				duration: 3000,
+				duration: 3000
 			});
 		},
 		async updatePayments() {
@@ -1109,7 +1111,7 @@ export default {
 							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 
 					return;
@@ -1132,7 +1134,7 @@ export default {
 								"Vui lòng thanh toán hết dư nợ  để chuyển sang trạng thái hoàn thành !",
 							type: "error",
 							position: "top-right",
-							duration: 3000,
+							duration: 3000
 						});
 						return;
 					}
@@ -1157,7 +1159,7 @@ export default {
 				this.isHandleAction = true;
 				return;
 			}
-			let config = this.jsonConfig.principle.find((i) => i.id === target.id);
+			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
 			if (config) {
 				this.config = config;
@@ -1192,7 +1194,7 @@ export default {
 					if (config.re_assign)
 						this.appraiserChangeStage = {
 							id: this.dataPC[config.re_assign],
-							type: config.re_assign,
+							type: config.re_assign
 						};
 					this.isHandleAction = true;
 				} else {
@@ -1223,7 +1225,7 @@ export default {
 					message: this.message + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				// this.key_dragg++;
 			} else {
@@ -1231,7 +1233,7 @@ export default {
 					message: `${res.data.message}`,
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 				this.handleCancelAccept2();
 			}
@@ -1266,14 +1268,14 @@ export default {
 							: "Chuyển trạng thái " + `'${this.message}'` + " thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 5000,
+					duration: 5000
 				});
 			}
 			this.isHandleAction = false;
@@ -1305,7 +1307,7 @@ export default {
 						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			}
@@ -1330,7 +1332,7 @@ export default {
 							message: "Thêm file thành công",
 							type: "success",
 							position: "top-right",
-							duration: 3000,
+							duration: 3000
 						});
 					}
 				}
@@ -1357,7 +1359,7 @@ export default {
 						message: "File dữ liệu không đúng định dạng vui lòng kiểm tra lại",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			}
@@ -1374,14 +1376,14 @@ export default {
 							message: "Thêm file thành công",
 							type: "success",
 							position: "top-right",
-							duration: 3000,
+							duration: 3000
 						});
 					}
 				}
 			}
 		},
 		async viewCertificate() {
-			await Certificate.getPrintProof(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintProof(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -1390,7 +1392,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -1398,7 +1400,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadCertificate() {
-			await Certificate.getPrintProof(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintProof(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1413,13 +1415,13 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
 		},
 		async viewReportCertificate() {
-			await Certificate.getPrintReport(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintReport(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -1428,7 +1430,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -1436,7 +1438,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadReportCertificate() {
-			await Certificate.getPrintReport(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintReport(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1451,7 +1453,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -1459,13 +1461,13 @@ export default {
 		async viewAssetDocument() {
 			let arrayAsset = [];
 			if (this.dataPC.real_estate && this.dataPC.real_estate.length > 0) {
-				await this.dataPC.real_estate.forEach((item) => {
+				await this.dataPC.real_estate.forEach(item => {
 					if (
 						item.appraises &&
 						item.appraises.appraise_has_assets &&
 						item.appraises.appraise_has_assets.length > 0
 					) {
-						item.appraises.appraise_has_assets.forEach((asset) => {
+						item.appraises.appraise_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -1474,7 +1476,7 @@ export default {
 						item.apartment.apartment_has_assets &&
 						item.apartment.apartment_has_assets.length > 0
 					) {
-						item.apartment.apartment_has_assets.forEach((asset) => {
+						item.apartment.apartment_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -1491,20 +1493,20 @@ export default {
 					message: "Xem file bị lỗi vui lòng gọi hỗ trợ",
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			}
 		},
 		async downloadAssetDocument() {
 			let arrayAsset = [];
 			if (this.dataPC.real_estate && this.dataPC.real_estate.length > 0) {
-				await this.dataPC.real_estate.forEach((item) => {
+				await this.dataPC.real_estate.forEach(item => {
 					if (
 						item.appraises &&
 						item.appraises.appraise_has_assets &&
 						item.appraises.appraise_has_assets.length > 0
 					) {
-						item.appraises.appraise_has_assets.forEach((asset) => {
+						item.appraises.appraise_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -1513,7 +1515,7 @@ export default {
 						item.apartment.apartment_has_assets &&
 						item.apartment.apartment_has_assets.length > 0
 					) {
-						item.apartment.apartment_has_assets.forEach((asset) => {
+						item.apartment.apartment_has_assets.forEach(asset => {
 							arrayAsset.push(asset.asset_general_id);
 						});
 					}
@@ -1535,12 +1537,12 @@ export default {
 					message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			}
 		},
 		async viewAppendix1() {
-			await Certificate.getPrint(this.dataPC.id).then((resp) => {
+			await Certificate.getPrint(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -1550,7 +1552,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix1() {
-			await Certificate.getPrint(this.dataPC.id).then((resp) => {
+			await Certificate.getPrint(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1565,13 +1567,13 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
 		},
 		async viewAppendix2() {
-			await Certificate.getPrintAppendix(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintAppendix(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -1581,7 +1583,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix2() {
-			await Certificate.getPrintAppendix(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintAppendix(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1596,13 +1598,13 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
 		},
 		async viewAppendix3() {
-			await Certificate.getPrintImage(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintImage(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					this.filePrint = file.url;
@@ -1611,7 +1613,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -1619,7 +1621,7 @@ export default {
 			this.isShowPrint = true;
 		},
 		async downloadAppendix3() {
-			await Certificate.getPrintImage(this.dataPC.id).then((resp) => {
+			await Certificate.getPrintImage(this.dataPC.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1634,7 +1636,7 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
@@ -1647,8 +1649,8 @@ export default {
 						"/api/certificate/other-document/download/" +
 						file.id,
 					method: "GET",
-					responseType: "blob",
-				}).then((response) => {
+					responseType: "blob"
+				}).then(response => {
 					const url = window.URL.createObjectURL(new Blob([response.data]));
 					const link = document.createElement("a");
 					link.href = url;
@@ -1660,7 +1662,7 @@ export default {
 						message: `Tải xuống thành công`,
 						type: "success",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				});
 			}
@@ -1679,20 +1681,20 @@ export default {
 					message: "Xóa thành công",
 					type: "success",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
-					duration: 3000,
+					duration: 3000
 				});
 			}
 		},
 		getTotalPrice() {
 			let total_price = 0;
-			this.dataPC.general_asset.forEach((item) => {
+			this.dataPC.general_asset.forEach(item => {
 				total_price += +item.total_price;
 			});
 			this.total_price_appraise = total_price;
@@ -1708,7 +1710,7 @@ export default {
 				message: message,
 				type: type,
 				position: position,
-				duration: duration,
+				duration: duration
 			});
 		},
 		checkDiffVersion() {
@@ -1729,7 +1731,7 @@ export default {
 			let isApartment = false;
 			if (this.dataPC.document_type && this.dataPC.document_type.length > 0) {
 				if (
-					this.dataPC.document_type.filter(function (item) {
+					this.dataPC.document_type.filter(function(item) {
 						return item !== "DCN" && item !== "DT" && item !== "CC";
 					}).length > 0
 				) {
@@ -1737,19 +1739,19 @@ export default {
 					isExportAutomatic = false;
 				}
 				if (
-					this.dataPC.document_type.find((i) => i === "CC") &&
-					(this.dataPC.document_type.find((i) => i === "DCN") ||
-						this.dataPC.document_type.find((i) => i === "DT"))
+					this.dataPC.document_type.find(i => i === "CC") &&
+					(this.dataPC.document_type.find(i => i === "DCN") ||
+						this.dataPC.document_type.find(i => i === "DT"))
 				) {
 					isExportAutomatic = false;
 				}
 				if (
 					this.dataPC.document_type.length === 1 &&
-					this.dataPC.document_type.find((i) => i === "CC")
+					this.dataPC.document_type.find(i => i === "CC")
 				) {
 					isApartment = true;
 				}
-				if (this.dataPC.document_type.find((i) => i === "DCN")) {
+				if (this.dataPC.document_type.find(i => i === "DCN")) {
 					isCheckConstruction = true;
 				}
 			} else {
@@ -1763,7 +1765,7 @@ export default {
 					"Bảng điều chỉnh QSDĐ",
 					"Bảng điều chỉnh CTXD",
 					"Hình ảnh hiện trạng",
-					"Phiếu thu thập TSSS",
+					"Phiếu thu thập TSSS"
 				];
 			} else {
 				this.documentName = [
@@ -1772,7 +1774,7 @@ export default {
 					"Phụ lục kèm theo",
 					"Phụ lục kèm theo",
 					"Phụ lục kèm theo",
-					"Phiếu thu thập TSSS",
+					"Phiếu thu thập TSSS"
 				];
 			}
 			this.isCheckRealEstate = isCheckRealEstate;
@@ -1781,9 +1783,7 @@ export default {
 			this.isApartment = isApartment;
 		},
 		downloadDocumentFile(type) {
-			let file = this.dataPC.other_documents.find(
-				(i) => i.description === type
-			);
+			let file = this.dataPC.other_documents.find(i => i.description === type);
 			if (file) {
 				// this.downloadDocument(file)
 				this.downloadOtherFile(file);
@@ -1793,16 +1793,14 @@ export default {
 				);
 		},
 		deletedDocumentFile(type) {
-			let file = this.dataPC.other_documents.find(
-				(i) => i.description === type
-			);
+			let file = this.dataPC.other_documents.find(i => i.description === type);
 			if (file) {
 				this.deleteUploadDocument = true;
 				this.id_file_delete = file.id;
 			} else this.openMessage("Không tìm thấy file cần xóa.");
 		},
 		async deleteDocument() {
-			await Certificate.deleteDocument(this.id_file_delete).then((resp) => {
+			await Certificate.deleteDocument(this.id_file_delete).then(resp => {
 				const file = resp;
 				if (file.data) {
 					this.dataPC.other_documents = file.data;
@@ -1812,7 +1810,7 @@ export default {
 			});
 		},
 		async downloadDocument(file) {
-			await Certificate.downloadDocument(file.id).then((resp) => {
+			await Certificate.downloadDocument(file.id).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
@@ -1827,11 +1825,11 @@ export default {
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
 						type: "error",
 						position: "top-right",
-						duration: 3000,
+						duration: 3000
 					});
 				}
 			});
-		},
+		}
 	},
 	beforeMount() {
 		if (this.dataPC.general_asset && this.dataPC.general_asset.length > 0) {
@@ -1847,9 +1845,9 @@ export default {
 			deep: true,
 			handler(newValue) {
 				this.setDocumentViewStatus();
-			},
-		},
-	},
+			}
+		}
+	}
 };
 </script>
 <style scoped lang="scss">

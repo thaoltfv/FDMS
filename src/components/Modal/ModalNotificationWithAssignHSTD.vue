@@ -84,7 +84,7 @@
 						v-if="notification == `Bạn có muốn 'Hủy' hồ sơ này?`"
 						v-model="reason_id"
 						vid="reason_id"
-						label="Lí do hủy sơ bộ"
+						label="Lí do hủy"
 						class="mb-3"
 						:options="optionsReasonsCancelPC"
 					/>
@@ -287,7 +287,7 @@ export default {
 				!this.reason_id
 			) {
 				this.$toast.open({
-					message: "Vui lòng chọn lý do hủy sơ bộ",
+					message: "Vui lòng chọn lý do hủy",
 					type: "error",
 					position: "top-right",
 					duration: 3000
@@ -326,7 +326,7 @@ export default {
 			) {
 				const resp = await WareHouse.getDictionaries();
 				this.reasons = resp.data.li_do;
-				this.reasonCancelPC = resp.data.li_do_huy_so_bo;
+				this.reasonCancelPC = resp.data.li_do;
 			}
 		},
 		getExpireStatusDate(config) {

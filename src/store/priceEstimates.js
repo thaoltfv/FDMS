@@ -20,6 +20,7 @@ export const usePriceEstimatesStore = defineStore(
 			step_1: null
 		});
 		const miscVariable = ref({
+			isApartment: false,
 			step1AreaValidate: null,
 			step_edit: "",
 			step_active: null,
@@ -38,6 +39,11 @@ export const usePriceEstimatesStore = defineStore(
 			key_step_2: 0,
 			key_step_3: 0,
 			current_create_by: null,
+			points: [],
+			blocks: [],
+			floors: [],
+			projects: [],
+			directions: [],
 			propertyTypes: [],
 			topographic: [],
 			provinces: [],
@@ -87,7 +93,7 @@ export const usePriceEstimatesStore = defineStore(
 		const priceEstimatesOrigin = ref(null);
 		const priceEstimates = ref({
 			step_1: {
-				asset_type_id: 39,
+				asset_type_id: null,
 				general_infomation: {
 					province_id: null,
 					district_id: null,
@@ -95,6 +101,7 @@ export const usePriceEstimatesStore = defineStore(
 					street_id: null,
 					distance_id: null
 				},
+				apartment_properties: {},
 				traffic_infomation: {
 					property_turning_time: []
 				},
@@ -174,6 +181,11 @@ export const usePriceEstimatesStore = defineStore(
 					miscInfo.value.type_purposes.forEach(item => {
 						item.description = formatSentenceCase(item.description);
 					});
+					miscInfo.value.furniture_list = resp.data.chat_luong_noi_that;
+					miscInfo.value.furniture_list.forEach(item => {
+						item.description = formatSentenceCase(item.description);
+					});
+					miscInfo.value.directions = resp.data.huong_can_ho;
 					miscInfo.value.buildingCrane = resp.data.cau_truc_nha_xuong;
 					miscInfo.value.key_step_1 += 1;
 				})
@@ -215,6 +227,11 @@ export const usePriceEstimatesStore = defineStore(
 				.then(resp => {
 					miscInfo.value.districts = resp.data;
 					if (priceEstimates.value.step_1.general_infomation.district_id) {
+						if (miscVariable.value.isApartment) {
+							getProjectsByDistrictId(
+								priceEstimates.value.step_1.general_infomation.district_id
+							);
+						}
 						getWardsByDistrictId(
 							priceEstimates.value.step_1.general_infomation.district_id
 						);
@@ -271,6 +288,9 @@ export const usePriceEstimatesStore = defineStore(
 			getFullAddress();
 		}
 		function getFullAddress() {
+			if (miscVariable.value.isApartment) {
+				return;
+			}
 			miscInfo.value.full_address =
 				`${
 					priceEstimates.value.step_1.general_infomation.land_no
@@ -393,6 +413,119 @@ export const usePriceEstimatesStore = defineStore(
 			findDistance();
 			getFullAddress();
 		}
+
+		async function getProjectsByDistrictId(id) {
+			await WareHouse.getProjectsByDistrictId(id)
+				.then(resp => {
+					miscInfo.value.projects = resp.data;
+				})
+				.catch(err => {
+					throw err;
+				})
+				.finally(() => {
+					getProjects();
+				});
+		}
+		async function handleChangeProject(projectId) {
+			miscInfo.value.blocks = [];
+			miscInfo.value.floors = [];
+			priceEstimates.value.step_1.apartment_properties.block_id = "";
+			priceEstimates.value.step_1.apartment_properties.floor_id = "";
+			if (projectId) {
+				let project = miscInfo.value.projects.filter(
+					item => item.id === projectId
+				);
+				priceEstimates.value.step_1.general_infomation.coordinates =
+					project[0].coordinates;
+				if (project[0].utilities) {
+					priceEstimates.value.step_1.apartment_properties.utilities =
+						project[0].utilities;
+				}
+				priceEstimates.value.step_1.general_infomation.province_id =
+					project[0].province_id;
+				priceEstimates.value.step_1.general_infomation.district_id =
+					project[0].district_id;
+				priceEstimates.value.step_1.general_infomation.ward_id =
+					project[0].ward_id;
+				priceEstimates.value.step_1.general_infomation.street_id =
+					project[0].street_id;
+				priceEstimates.value.step_1.general_infomation.distance_id =
+					project[0].distance_id;
+				priceEstimates.value.step_1.general_infomation.apartment_number =
+					project[0].apartment_number;
+				priceEstimates.value.step_1.general_infomation.position_by_unbd_id =
+					project[0].position_by_unbd_id;
+
+				getProvinces();
+				let provinceName = "";
+				let districtName = "";
+				let wardName = "";
+				let streetName = "";
+				const nameAparment = project[0].apartment_number
+					? project[0].apartment_number + ", "
+					: "";
+				if (project[0].province) {
+					provinceName = project[0].province.name;
+				}
+				if (project[0].district) {
+					districtName = project[0].district.name + ", ";
+				}
+				if (project[0].ward) {
+					wardName = project[0].ward.name + ", ";
+				}
+				if (project[0].street) {
+					streetName =
+						project[0].street.name
+							.toLowerCase()
+							.replace(/(^|\s)\S/g, function(l) {
+								return l.toUpperCase();
+							}) + ", ";
+				}
+				if (project[0].address) {
+					priceEstimates.value.step_1.general_infomation.full_address =
+						project[0].address;
+				} else {
+					priceEstimates.value.step_1.general_infomation.full_address =
+						nameAparment + streetName + wardName + districtName + provinceName;
+				}
+				priceEstimates.value.step_1.general_infomation.full_address_street =
+					priceEstimates.value.step_1.general_infomation.full_address;
+				getBlocks(+projectId);
+				miscInfo.value.key_step_1 += 1;
+			}
+		}
+		function handleChangeBlock(blockId) {
+			miscInfo.value.floors = [];
+			priceEstimates.value.step_1.apartment_properties.floor_id = "";
+			// this.form.step_1.apartment_properties.apartment_id = ''
+			if (blockId) {
+				let block = miscInfo.value.blocks.filter(item => item.id === blockId);
+				priceEstimates.value.step_1.apartment_properties.handover_year =
+					block[0].handover_year;
+				getFloors(blockId);
+			}
+		}
+
+		async function getProjects() {
+			if (priceEstimates.value.step_1.general_infomation.project_id) {
+				getBlocks(priceEstimates.value.step_1.general_infomation.project_id);
+			}
+		}
+		function getBlocks(id) {
+			let project = miscInfo.value.projects.filter(item => item.id === id);
+			if (project && project.length > 0) {
+				miscInfo.value.blocks = project[0].block;
+			}
+			if (priceEstimates.value.step_1.apartment_properties.block_id) {
+				getFloors(priceEstimates.value.step_1.apartment_properties.block_id);
+			}
+		}
+		function getFloors(id) {
+			let block = miscInfo.value.blocks.filter(item => item.id === id);
+			if (block && block.length > 0) {
+				miscInfo.value.floors = block[0].floor;
+			}
+		}
 		function findDistance() {
 			const distance = miscInfo.value.distances.find(
 				distances =>
@@ -424,6 +557,14 @@ export const usePriceEstimatesStore = defineStore(
 			getInfo();
 		}
 		function getInfo() {
+			if (
+				!dataInfo.value.assetName &&
+				priceEstimates.value.step_1.general_infomation.asset_type_id !== 39
+			) {
+				changeAssetType(
+					priceEstimates.value.step_1.general_infomation.asset_type_id
+				);
+			}
 			if (
 				dataInfo.value.assetName === "Đất trống" &&
 				miscInfo.value.full_address
@@ -596,6 +737,7 @@ export const usePriceEstimatesStore = defineStore(
 			priceEstimates.value.step_1.general_infomation.street_id = "";
 			priceEstimates.value.step_1.general_infomation.distance_id = "";
 			if (priceEstimates.value.step_1.general_infomation.district_id) {
+				getProjectsByDistrictId(id);
 				getWardsByDistrictId(id);
 				getStreetByDistrictId(id);
 			}
@@ -616,7 +758,11 @@ export const usePriceEstimatesStore = defineStore(
 				isSubmit.value = true;
 			}
 			let id = priceEstimates.value.id ? priceEstimates.value.id : "";
-			const res = await PriceEstimateModel.submitStep1(dataStep1, id);
+			const res = await PriceEstimateModel.submitStep1(
+				dataStep1,
+				id,
+				miscVariable.value.isApartment
+			);
 			if (res.data) {
 				isSubmit.value = false;
 				priceEstimates.value.id = res.data.general_infomation.id;
@@ -660,7 +806,12 @@ export const usePriceEstimatesStore = defineStore(
 			}
 		}
 		async function validateSubmitStep1() {
+			if (miscVariable.value.isApartment) {
+				validateApartmentSubmitStep1();
+				return;
+			}
 			const isValid = await configThis.value.step_1.validate();
+
 			let step_1 = priceEstimates.value.step_1;
 			let checkValidPurpose = false;
 			step_1.total_area.forEach(item => {
@@ -693,17 +844,22 @@ export const usePriceEstimatesStore = defineStore(
 						type: "error",
 						position: "top-right"
 					});
-				}
-				// else if (this.step2DuplicateLandType) {
-				// 	configThis.value.toast.open({
-				// 		message: this.step2DuplicateLandType,
-				// 		type: "error",
-				// 		position: "top-right"
-				// 	});
-				// }
-				else {
+				} else {
 					confirmSavePreviousStep(1);
 				}
+			} else {
+				configThis.value.toast.open({
+					message: "Vui lòng nhập đầy đủ các trường bắt buộc",
+					type: "error",
+					position: "top-right"
+				});
+			}
+		}
+		async function validateApartmentSubmitStep1() {
+			const isValid = await configThis.value.step_1.validate();
+
+			if (isValid) {
+				confirmSavePreviousStep(1);
 			} else {
 				configThis.value.toast.open({
 					message: "Vui lòng nhập đầy đủ các trường bắt buộc",
@@ -782,13 +938,12 @@ export const usePriceEstimatesStore = defineStore(
 			} else {
 				isSubmit.value = true;
 			}
+			// dataStep2.asset_type_id =
+			// 	priceEstimates.value.step_1.general_infomation.asset_type_id;
 			const res = await PriceEstimateModel.submitStep2(dataStep2, id);
 			if (res.data) {
 				await getDataAllStep(id);
-				if (priceEstimates.value.step_3.id) {
-					priceEstimates.value.step_3.id = null;
-					priceEstimates.value.step_3.reInit = true;
-				}
+
 				configThis.value.toast.open({
 					message: "Lưu lựa chọn tài sản so sánh thành công",
 					type: "success",
@@ -797,24 +952,24 @@ export const usePriceEstimatesStore = defineStore(
 				});
 				miscVariable.value.distance_max = res.data.distance_max;
 				miscVariable.value.filter_year = res.data.filter_year;
-				// configThis.value.router.push({
-				// 	name: "price_estimates.detail",
-				// 	query: { id: priceEstimates.value.id },
-				// 	params: { step: 3 }
-				// });
-				if (!configThis.value.isMobile) {
-					configThis.value.wizard.maxStep = 2;
-					configThis.value.wizard.tabs.forEach((tab, index) => {
-						if (index > 2) {
-							tab.checked = false;
-						}
+
+				configThis.value.wizard.maxStep = 2;
+				configThis.value.wizard.tabs.forEach((tab, index) => {
+					if (index > 2) {
+						tab.checked = false;
+					}
+				});
+				miscInfo.value.key_step_3 += 1;
+				if (priceEstimates.value.step_3.id) {
+					priceEstimates.value.step_3.id = null;
+					priceEstimates.value.step_3.reInit = true;
+					configThis.value.router.push({
+						name: "price_estimates.detail",
+						query: { id: priceEstimates.value.id },
+						params: { step: 3 }
 					});
-					miscInfo.value.key_step_3 += 1;
-					await configThis.value.wizard.nextTab();
 				} else {
-					await configThis.value.router
-						.push({ name: "price_estimates.index" })
-						.catch(_ => {});
+					await configThis.value.wizard.nextTab();
 				}
 			} else if (res.error) {
 				isSubmit.value = false;
@@ -835,13 +990,30 @@ export const usePriceEstimatesStore = defineStore(
 		}
 		async function validateSubmitStep3() {
 			let step_3 = priceEstimates.value.step_3;
-			if (step_3.total_area.length === 0) {
+			if (!miscVariable.value.isApartment && step_3.total_area.length === 0) {
 				configThis.value.toast.open({
 					message: "Vui lòng chọn diện tích theo mục đích sử dụng",
 					type: "error",
 					position: "top-right"
 				});
 			} else {
+				if (
+					!priceEstimates.value.step_3.tangible_assets.every(
+						asset =>
+							asset.remaining_quality !== null &&
+							asset.remaining_quality !== undefined &&
+							asset.remaining_quality !== "" &&
+							asset.remaining_quality >= 0 &&
+							asset.remaining_quality <= 100
+					)
+				) {
+					configThis.value.toast.open({
+						message: "Vui lòng kiểm tra lại CLCL",
+						type: "error",
+						position: "top-right"
+					});
+					return;
+				}
 				handleSubmitStep_3(
 					priceEstimates.value.step_3,
 					priceEstimates.value.id
@@ -860,6 +1032,44 @@ export const usePriceEstimatesStore = defineStore(
 				isSubmit.value = true;
 			}
 			const tempUpdate = _.cloneDeep(dataStep3);
+			let temp = 0;
+			let temp1 = 0;
+			let temp2 = 0;
+
+			if (!miscVariable.value.isApartment) {
+				if (tempUpdate.total_area && tempUpdate.total_area.length > 0) {
+					temp = tempUpdate.total_area.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
+				}
+				if (tempUpdate.planning_area && tempUpdate.planning_area.length > 0) {
+					temp1 = tempUpdate.planning_area.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
+				}
+				if (
+					tempUpdate.tangible_assets &&
+					tempUpdate.tangible_assets.length > 0
+				) {
+					temp2 = tempUpdate.tangible_assets.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
+				}
+			} else {
+				if (
+					tempUpdate.apartment_finals &&
+					tempUpdate.apartment_finals.length > 0
+				) {
+					temp = tempUpdate.apartment_finals.reduce((total, area) => {
+						area.total_price = area.total_price || 0;
+						return total + Number(area.total_price);
+					}, 0);
+				}
+			}
+			tempUpdate.total_price = temp + temp1 + temp2;
 			tempUpdate.price_estimate_id = priceEstimates.value.id;
 			if (moment(tempUpdate.request_date, "DD/MM/YYYY", true).isValid()) {
 				tempUpdate.request_date = moment(
@@ -867,7 +1077,11 @@ export const usePriceEstimatesStore = defineStore(
 					"DD-MM-YYYY"
 				).format("YYYY-MM-DD");
 			}
-			const res = await PriceEstimateModel.submitStep3(tempUpdate, id);
+			const res = await PriceEstimateModel.submitStep3(
+				tempUpdate,
+				id,
+				miscVariable.value.isApartment
+			);
 			if (res.data) {
 				configThis.value.toast.open({
 					message: "Lưu giá trị tài sản thành công",
@@ -875,13 +1089,13 @@ export const usePriceEstimatesStore = defineStore(
 					position: "top-right",
 					duration: 3000
 				});
-				miscVariable.value.distance_max = res.data.distance_max;
-				miscVariable.value.filter_year = res.data.filter_year;
+				priceEstimates.value.step_3.id = res.data.id;
 				configThis.value.router.push({
 					name: "price_estimates.detail",
 					query: { id: priceEstimates.value.id },
 					params: { step: 1 }
 				});
+				miscInfo.value.key_step_3++;
 			} else if (res.error) {
 				isSubmit.value = false;
 				configThis.value.toast.open({
@@ -903,14 +1117,27 @@ export const usePriceEstimatesStore = defineStore(
 			const res = await PriceEstimateModel.getDataAllStep(id);
 
 			if (res && res.data) {
+				await resetPriseEstimate();
 				priceEstimatesOrigin.value = res.data;
 				const bindDataStep = res.data;
 				priceEstimates.value.id = bindDataStep.id;
+				priceEstimates.value.appraise_id = bindDataStep.appraise_id;
+				priceEstimates.value.apartment_asset_id =
+					bindDataStep.apartment_asset_id;
+				priceEstimates.value.isTransfer =
+					bindDataStep.appraise_id || bindDataStep.apartment_asset_id
+						? true
+						: false;
 				// step 1
 				if (bindDataStep.created_by) {
+					priceEstimates.value.createdBy = bindDataStep.created_by.name;
 					priceEstimates.value.created_by = bindDataStep.created_by;
 				}
 				priceEstimates.value.max_version = bindDataStep.max_version || 1;
+				if (bindDataStep.apartment_properties) {
+					priceEstimates.value.step_1.apartment_properties =
+						bindDataStep.apartment_properties;
+				}
 				if (bindDataStep.economic_infomation) {
 					priceEstimates.value.step_1.economic_infomation =
 						bindDataStep.economic_infomation;
@@ -918,7 +1145,13 @@ export const usePriceEstimatesStore = defineStore(
 				if (bindDataStep.general_infomation) {
 					priceEstimates.value.step_1.general_infomation =
 						bindDataStep.general_infomation;
+					if (bindDataStep.asset_type_id != 39) {
+						miscVariable.value.isApartment = false;
+					} else {
+						miscVariable.value.isApartment = true;
+					}
 				}
+
 				if (bindDataStep.traffic_infomation) {
 					priceEstimates.value.step_1.traffic_infomation =
 						bindDataStep.traffic_infomation;
@@ -941,6 +1174,11 @@ export const usePriceEstimatesStore = defineStore(
 				} else {
 					miscVariable.value.step_active = bindDataStep.step;
 				}
+
+				if (bindDataStep.apartment_properties) {
+					priceEstimates.value.step_1.apartment_properties =
+						bindDataStep.apartment_properties[0];
+				}
 				// step 2
 				// if (
 				// 	bindDataStep.comparison_factor &&
@@ -949,6 +1187,10 @@ export const usePriceEstimatesStore = defineStore(
 				// 	priceEstimates.value.step_2.comparison_factor =
 				// 		bindDataStep.comparison_factor;
 				// }
+				if (bindDataStep.map_img) {
+					priceEstimates.value.step_2.map_img = bindDataStep.map_img;
+				}
+
 				if (
 					bindDataStep.assets_general &&
 					bindDataStep.assets_general.length > 0
@@ -963,10 +1205,6 @@ export const usePriceEstimatesStore = defineStore(
 					miscVariable.value.filter_year = bindDataStep.filter_year;
 				}
 
-				if (bindDataStep.map_img) {
-					priceEstimates.value.step_2.map_img = bindDataStep.map_img;
-				}
-
 				// step 3
 				if (bindDataStep.final_estimate) {
 					priceEstimates.value.step_3 = bindDataStep.final_estimate;
@@ -975,16 +1213,16 @@ export const usePriceEstimatesStore = defineStore(
 					).format("DD/MM/YYYY");
 				}
 				priceEstimates.value.updated_at = bindDataStep.updated_at;
-				// if (
-				// 	bindDataStep.general_infomation &&
-				// 	bindDataStep.general_infomation.assetType &&
-				// 	bindDataStep.general_infomation.assetType.description === "ĐẤT CÓ NHÀ"
-				// ) {
-				// 	miscVariable.value.isHaveContruction = true;
-				// } else {
-				// 	miscVariable.value.isHaveContruction = false;
-				// 	priceEstimates.value.step_3.tangible_assets = [];
-				// }
+				if (
+					bindDataStep.general_infomation &&
+					bindDataStep.general_infomation.asset_type &&
+					bindDataStep.general_infomation.asset_type.description ===
+						"ĐẤT CÓ NHÀ"
+				) {
+					miscVariable.value.isHaveContruction = true;
+				} else {
+					miscVariable.value.isHaveContruction = false;
+				}
 				// this.status_text = bindDataStep.status_text;
 				// priceEstimates.value.status = bindDataStep.status;
 				// this.idData = await priceEstimates.value.step_1.general_infomation.id;
@@ -1025,11 +1263,11 @@ export const usePriceEstimatesStore = defineStore(
 				// }
 			}
 			await getProvinces();
-			console.log("???");
 			// priceEstimatesOrigin;
 			return res;
 		}
 		function resetVariables() {
+			resetPriseEstimate();
 			configs.value = { hstdConfig: null, ycsbConfig: null };
 			configThis.value = {
 				toast: null,
@@ -1039,23 +1277,17 @@ export const usePriceEstimatesStore = defineStore(
 				wizard: null,
 				step_1: null
 			};
-			miscVariable.value = {
-				step1AreaValidate: null,
-				step_edit: "",
-				step_active: null,
-				showConfirmEdit: false,
-				messageConfirm: "",
-				filterYear: null,
-				full_address: null,
-				full_address_street: null,
-				filter_year: 1,
-				distance_max: null
-			};
+
 			miscInfo.value = {
 				key_step_1: 0,
 				key_step_2: 0,
 				key_step_3: 0,
 				current_create_by: null,
+				points: [],
+				blocks: [],
+				floors: [],
+				projects: [],
+				directions: [],
 				propertyTypes: [],
 				topographic: [],
 				provinces: [],
@@ -1099,10 +1331,27 @@ export const usePriceEstimatesStore = defineStore(
 				isHaveContruction: null
 			};
 			isSubmit.value = false;
+		}
+		function resetPriseEstimate() {
+			miscVariable.value = {
+				isApartment: null,
+				step1AreaValidate: null,
+				step_edit: "",
+				step_active: null,
+				showConfirmEdit: false,
+				messageConfirm: "",
+				filterYear: null,
+				full_address: null,
+				full_address_street: null,
+				filter_year: 1,
+				distance_max: null,
+				isHaveContruction: null
+			};
+
 			priceEstimatesOrigin.value = null;
 			priceEstimates.value = {
 				step_1: {
-					asset_type_id: 39,
+					asset_type_id: null,
 					general_infomation: {
 						province_id: null,
 						district_id: null,
@@ -1112,6 +1361,13 @@ export const usePriceEstimatesStore = defineStore(
 					},
 					traffic_infomation: {
 						property_turning_time: []
+					},
+					apartment_properties: {
+						floor_id: null,
+						block_id: null,
+						handover_year: null,
+						direction_id: null,
+						furniture_quality_id: null
 					},
 					economic_infomation: {},
 					land_details: {},
@@ -1129,6 +1385,14 @@ export const usePriceEstimatesStore = defineStore(
 					description: "",
 					coordinates: "",
 					total_area: [],
+					apartment_finals: [
+						{
+							name: "",
+							total_area: "",
+							unit_price: "",
+							total_price: ""
+						}
+					],
 					planning_area: [],
 					tangible_assets: [],
 					appraise_land_sum_area: 0
@@ -1148,6 +1412,8 @@ export const usePriceEstimatesStore = defineStore(
 			miscVariable,
 			priceEstimatesOrigin,
 
+			handleChangeProject,
+			handleChangeBlock,
 			resetVariables,
 			getFullAddress,
 			getDictionary,
@@ -1169,6 +1435,6 @@ export const usePriceEstimatesStore = defineStore(
 		};
 	},
 	{
-		persist: true
+		persist: false
 	}
 );

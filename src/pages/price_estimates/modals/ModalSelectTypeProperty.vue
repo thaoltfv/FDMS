@@ -6,16 +6,13 @@
 		<div class="card card__show">
 			<div
 				class="card-header"
-				:style="isMobile() ? { 'padding-top': '10px', padding: '0' } : {}"
+				:style="isMobile ? { 'padding-top': '10px', padding: '0' } : {}"
 			>
 				<div class="title">
 					Chọn loại ước tính giá
 				</div>
 			</div>
-			<div
-				class="card-body"
-				:style="isMobile() ? { 'padding-bottom': '0' } : {}"
-			>
+			<div class="card-body" :style="isMobile ? { 'padding-bottom': '0' } : {}">
 				<div class="row">
 					<div class="col">
 						<button
@@ -45,7 +42,7 @@
 				</div>
 				<div
 					class="container__selected"
-					:style="isMobile() ? { 'margin-top': '10px' } : {}"
+					:style="isMobile ? { 'margin-top': '10px' } : {}"
 				>
 					<button
 						type="button"
@@ -62,6 +59,10 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { usePriceEstimatesStore } from "@/store/priceEstimates";
+
 export default {
 	name: "ModalSelectTypeProperty",
 	data() {
@@ -75,8 +76,8 @@ export default {
 			technologicalLine: false
 		};
 	},
-	methods: {
-		isMobile() {
+	setup() {
+		const checkMobile = () => {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 					navigator.userAgent
@@ -86,7 +87,21 @@ export default {
 			} else {
 				return false;
 			}
-		},
+		};
+		const isMobile = ref(checkMobile());
+
+		const priceEstimateStore = usePriceEstimatesStore();
+		const { miscVariable, priceEstimates } = storeToRefs(priceEstimateStore);
+
+		// const step_1 = ref(_.cloneDeep(priceEstimates.value.step_1));
+
+		return {
+			isMobile,
+			miscVariable,
+			priceEstimates
+		};
+	},
+	methods: {
 		selectLandHaveHouse() {
 			this.land = false;
 			this.apartment = false;
@@ -155,12 +170,19 @@ export default {
 		},
 
 		handleAction(event) {
-			console.log("runhere");
 			if (this.landHouse) {
+				this.miscVariable.isApartment = false;
+				if (this.priceEstimates.step_1) {
+					this.priceEstimates.step_1.asset_type_id = 38;
+				}
 				return this.$router.push({ name: "price_estimates.create" });
 			} else if (this.apartment) {
+				this.miscVariable.isApartment = true;
+				if (this.priceEstimates.step_1) {
+					this.priceEstimates.step_1.asset_type_id = 39;
+				}
 				return this.$router.push({
-					name: "price_estimates.apartment.create",
+					name: "price_estimates.create",
 					query: { asset_type_id: 39 }
 				});
 			}

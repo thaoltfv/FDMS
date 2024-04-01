@@ -14,10 +14,12 @@ export default class priceEstimateModel extends Model {
 			isStatic: true
 		});
 	}
-	static async submitStep1(data, id = "") {
+	static async submitStep1(data, id = "", isApartment = false) {
 		return new this().request({
 			method: "POST",
-			url: `price_estimates/step1-general-infomation/${id}`,
+			url: !isApartment
+				? `price_estimates/step1-general-infomation/${id}`
+				: `price_estimates/apartment/step1/${id}`,
 			data: data,
 			isStatic: true
 		});
@@ -30,18 +32,22 @@ export default class priceEstimateModel extends Model {
 			isStatic: true
 		});
 	}
-	static async submitStep3(data, id = "") {
+	static async submitStep3(data, id = "", isApartment = false) {
 		return new this().request({
 			method: "POST",
-			url: `price_estimates/step3-final/${id}`,
+			url: !isApartment
+				? `price_estimates/step3-final/${id}`
+				: `price_estimates/apartment/step3-final/${id}`,
 			data: data,
 			isStatic: true
 		});
 	}
-	static async moveToAppraise(id = "") {
+	static async moveToAppraise(id = "", isApartment = false) {
 		return new this().request({
 			method: "POST",
-			url: `price_estimates/move-to-appraise/${id}`,
+			url: !isApartment
+				? `price_estimates/move-to-appraise/${id}`
+				: `price_estimates/move-to-apartment-asset/${id}`,
 			isStatic: true
 		});
 	}

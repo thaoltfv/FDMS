@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isMobile()" class="table-wrapper">
+	<div class="table-wrapper">
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				ref="table"
@@ -43,9 +43,20 @@
 				<template slot="created_at" slot-scope="created_at">
 					<p class="public_date mb-0">{{ formatDate(created_at) }}</p>
 				</template>
-				<template slot="total_price" slot-scope="total_price">
+				<template slot="total_price" slot-scope="text, row, index">
 					<p class="text-none mb-0">
-						{{ total_price ? formatNumber(total_price) + " đ" : "-" }}
+						{{
+							row.land_final_estimate &&
+							row.land_final_estimate[0] &&
+							row.land_final_estimate[0].total_price
+								? formatNumber(row.land_final_estimate[0].total_price) + " đ"
+								: row.apartment_final_estimate &&
+								  row.apartment_final_estimate[0] &&
+								  row.apartment_final_estimate[0].total_price
+								? formatNumber(row.apartment_final_estimate[0].total_price) +
+								  " đ"
+								: "-"
+						}}
 					</p>
 				</template>
 				<template slot="total_area" slot-scope="total_area">
@@ -54,11 +65,6 @@
 						<sup>2</sup>
 					</p>
 				</template>
-				<!-- <template slot="total_construction_area" slot-scope="total_construction_area">
-          <p class="text-none mb-0">{{ total_construction_area ? formatNumber(total_construction_area) : 0 }} m
-            <sup>2</sup>
-          </p>
-        </template> -->
 				<template slot="created_by" slot-scope="created_by">
 					<p class="text-none mb-0">{{ created_by }}</p>
 				</template>
@@ -92,7 +98,7 @@
     </div> -->
 		</div>
 	</div>
-	<div v-else class="table-wrapper" style="margin: 0;">
+	<!-- <div v-else class="table-wrapper" style="margin: 0;">
 		<div
 			class="table-detail position-relative empty-data"
 			style="overflow: scroll;max-height: 76vh;"
@@ -261,7 +267,7 @@
 			>
 			</a-pagination>
 		</div>
-	</div>
+	</div> -->
 </template>
 <script>
 import { BDropdown, BDropdownItem, BTooltip } from "bootstrap-vue";
@@ -305,8 +311,6 @@ export default {
 					scopedSlots: { customRender: "id" },
 					dataIndex: "id",
 					width: "30px",
-					// sorter: (a, b) => a.id - b.id,
-					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
@@ -315,8 +319,6 @@ export default {
 					scopedSlots: { customRender: "description" },
 					dataIndex: "asset_type.description",
 					width: "30px",
-					// sorter: (a, b) => a.asset_type.description.length - b.asset_type.description.length,
-					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
@@ -326,8 +328,6 @@ export default {
 					scopedSlots: { customRender: "front_side" },
 					dataIndex: "properties[0].front_side",
 					width: "70px",
-					// sorter: (a, b) => a.properties[0].front_side - b.properties[0].front_side,
-					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
@@ -336,49 +336,25 @@ export default {
 					align: "left",
 					scopedSlots: { customRender: "property_name" },
 					dataIndex: "appraise_asset",
-					width: "320px",
-					// sorter: (a, b) => a.appraise_asset.length - b.appraise_asset.length,
-					// sortDirections: ['descend', 'ascend'],
+					width: "220px",
 					hiddenItem: false
 				},
-				// {
-				// 	title: "Tổng diện tích",
-				// 	align: "right",
-				// 	scopedSlots: { customRender: "total_area" },
-				// 	dataIndex: "total_area",
-				// 	width: "30px",
-				// 	// sorter: (a, b) => a.total_area - b.total_area,
-				// 	// sortDirections: ['descend', 'ascend'],
-				// 	hiddenItem: false
-				// },
-				// // {
-				// // 	title: 'Tổng DT xây dựng',
-				// // 	align: 'right',
-				// // 	scopedSlots: { customRender: 'total_construction_area' },
-				// // 	dataIndex: 'total_construction_area',
-				// // 	width: '30px',
-				// // 	// sorter: (a, b) => a.total_construction_area - b.total_construction_area,
-				// // 	// sortDirections: ['descend', 'ascend'],
-				// // 	hiddenItem: false
-				// // },
-				// {
-				// 	title: "Tổng giá trị (VNĐ)",
-				// 	align: "right",
-				// 	scopedSlots: { customRender: "total_price" },
-				// 	dataIndex: "total_price",
-				// 	width: "30px",
-				// 	// sorter: (a, b) => a.total_price - b.total_price,
-				// 	// sortDirections: ['descend', 'ascend'],
-				// 	hiddenItem: false
-				// },
+				{
+					title: "Tổng giá trị sơ bộ",
+					class: "optional-data",
+					align: "center",
+					scopedSlots: { customRender: "total_price" },
+					dataIndex: "total_price",
+					width: "100px",
+					hiddenItem: false
+				},
+
 				{
 					title: "Người tạo",
 					align: "left",
 					scopedSlots: { customRender: "created_by" },
 					dataIndex: "created_by.name",
 					width: "30px",
-					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
-					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: !this.activeStatus
 				},
 				{
@@ -387,8 +363,6 @@ export default {
 					scopedSlots: { customRender: "created_at" },
 					dataIndex: "created_at",
 					width: "30px",
-					// sorter: (a, b) => moment(a.created_at).format('YYYYMMDD') - moment(b.created_at).format('YYYYMMDD'),
-					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				}
 			];
@@ -509,11 +483,10 @@ export default {
 			}
 		},
 		async handleDetail(id, data) {
-			console.log("data", data);
 			if (data.asset_type && data.asset_type.acronym === "CC") {
 				this.$router
 					.push({
-						name: "price_estimates.apartment.detail",
+						name: "price_estimates.detail",
 						query: {
 							id: data.id
 						}
@@ -554,7 +527,7 @@ export default {
 // }
 
 .full-address {
-	width: 600px;
+	width: 800px;
 	white-space: nowrap;
 	-webkit-line-clamp: 2 !important;
 	overflow: hidden;
