@@ -427,22 +427,22 @@ class CertificateAssetController extends Controller
         }
     }
 
-    public function printGiayYeuCauTDG($id, $is_pc = false)
+    public function printGiayYeuCauTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printHopDongTDG($id, $is_pc = false)
+    public function printHopDongTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\HopDongTDG';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printKeHoachTDG($id, $is_pc = false)
+    public function printKeHoachTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\KeHoachTDG';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printBienBanThanhLy($id, $is_pc = false)
+    public function printBienBanThanhLy($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
         return $this->printDocument($id, $is_pc, $service);
@@ -457,19 +457,7 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
-        Log::info('is_pc: ' . $is_pc);
         if ($is_pc) {
-            Log::info(
-                '1: ' . $is_pc
-            );
-            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
-
-
-            $certificate = $this->certificateRepository->dataPrintExport($id);
-        } else {
-            Log::info(
-                '2: ' . $is_pc
-            );
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
             if (isset($precertificate->certificate_id)) {
@@ -482,14 +470,19 @@ class CertificateAssetController extends Controller
                         $certificate->$key = $value;
                     }
                 }
-
                 $certificate->service_fee = $precertificate->total_service_fee;
                 $certificate->document_type = [];
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
             }
+        } else {
+            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            $certificate = $this->certificateRepository->dataPrintExport($id);
         }
-
+        if ($certificate === null) {
+            $data = ['message' => 'Có lỗi xảy ra trong quá trình xuất tài liệu', 'exception' => null];
+            return $this->respondWithErrorData($data);
+        }
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         // $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
