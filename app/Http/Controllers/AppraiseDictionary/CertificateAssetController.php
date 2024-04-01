@@ -460,7 +460,6 @@ class CertificateAssetController extends Controller
         if ($is_pc) {
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
-            Log::info('precertificate:', $precertificate->certificate_id);
             if (isset($precertificate->certificate_id)) {
                 $certificate = $this->certificateRepository->dataPrintExport($precertificate->certificate_id);
             } else {
