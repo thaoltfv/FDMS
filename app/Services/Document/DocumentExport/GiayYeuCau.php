@@ -14,6 +14,7 @@ use PhpOffice\PhpWord\Style\ListItem;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class GiayYeuCau
 {
@@ -264,7 +265,7 @@ class GiayYeuCau
         ];
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
-
+        Log::info('certifi', ['certifi' => $certificate, 'array' => is_array($certificate->appraises), 'count' => count($certificate->appraises)]);
         if ((is_array($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
             (is_array($certificate->appraises) && count($certificate->appraises) > 0)
         ) {
