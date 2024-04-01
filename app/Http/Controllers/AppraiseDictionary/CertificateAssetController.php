@@ -457,7 +457,7 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
-        if ($is_pc == 1) {
+        if ($is_pc) {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
