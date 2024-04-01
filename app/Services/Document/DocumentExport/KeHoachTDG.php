@@ -192,7 +192,7 @@ class KeHoachTDG
         $textRun->addText('1.  Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
 
         $isApartment = in_array('CC', $certificate->document_type ?? []);
-        $addressHSTD = '';
+        $addressHSTD = 'Bất động sản là ';
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
@@ -215,7 +215,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText("Tài sản thẩm định giá: Bất động sản là " . $addressHSTD, null, $indentleftSymbol);
+        $row2->addCell(9700)->addText("Tài sản thẩm định giá: " . $addressHSTD, null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);

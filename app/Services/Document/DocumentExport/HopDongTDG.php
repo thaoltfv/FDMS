@@ -391,7 +391,7 @@ class HopDongTDG
             100,
             $cellVTop
         )->addText(':', null,  $alignBoth);
-        $row2->addCell(5900, $cellVTop)->addText($appraise_date_formatted . '.', null,  $alignBoth);
+        $row2->addCell(5900, $cellVTop)->addText($appraise_date_formatted ? $appraise_date_formatted . '.' : '', null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
