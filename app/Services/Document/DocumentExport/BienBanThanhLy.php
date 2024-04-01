@@ -298,8 +298,8 @@ class BienBanThanhLy
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8000, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText($chucvu, ['bold' => true]);
-        $textRun->addText(' – Chức vụ:' . $daidien, ['bold' => false]);
+        $textRun->addText($daidien, ['bold' => true]);
+        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
         $section->addText(
             "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
                 $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
