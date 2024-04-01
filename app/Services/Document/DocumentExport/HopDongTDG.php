@@ -281,6 +281,7 @@ class HopDongTDG
             : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
                 ? $certificate->appraiserManager->appraisePosition->description
                 : '');
+        $chucvu = ucfirst(strtolower($chucvu));
 
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
@@ -723,7 +724,7 @@ class HopDongTDG
         $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
 
         $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
-        $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
         $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);

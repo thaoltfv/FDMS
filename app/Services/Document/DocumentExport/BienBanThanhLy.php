@@ -288,6 +288,8 @@ class BienBanThanhLy
                 ? $certificate->appraiserManager->appraisePosition->description
                 : '');
 
+        $chucvu = ucfirst(strtolower($chucvu));
+
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
             : (isset($certificate->appraiserManager)
@@ -298,8 +300,8 @@ class BienBanThanhLy
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8000, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText($chucvu, ['bold' => true]);
-        $textRun->addText(' – Chức vụ:' . $daidien, ['bold' => false]);
+        $textRun->addText($daidien, ['bold' => true]);
+        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
         $section->addText(
             "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
                 $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
@@ -405,7 +407,7 @@ class BienBanThanhLy
         $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
 
         $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
-        $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("CHẤP HÀNH VIÊN", ['bold' => true], ['align' => 'center']);
         $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
