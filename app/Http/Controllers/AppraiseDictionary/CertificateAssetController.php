@@ -457,14 +457,10 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
-        Log::info('is_pc: ' . $is_pc);
         if ($is_pc) {
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
             if (isset($precertificate->certificate_id)) {
-                Log::info(
-                    'is_pc1: ' . $is_pc
-                );
                 $certificate = $this->certificateRepository->dataPrintExport($precertificate->certificate_id);
             } else {
                 $certificate = new Certificate;
@@ -478,16 +474,12 @@ class CertificateAssetController extends Controller
                 $certificate->document_type = [];
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
-                Log::info(
-                    'is_pc2: ' . $is_pc
-                );
+
+                Log::info('Certificate:', (array) $certificate);
             }
         } else {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
             $certificate = $this->certificateRepository->dataPrintExport($id);
-            Log::info(
-                'is_pc3: ' . $is_pc
-            );
         }
         if ($certificate === null) {
             $data = ['message' => 'Có lỗi xảy ra trong quá trình xuất tài liệu', 'exception' => null];
