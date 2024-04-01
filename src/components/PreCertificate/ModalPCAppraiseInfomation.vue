@@ -88,6 +88,17 @@
 									@change="handleChangeAppraisePurpose"
 								/>
 							</div>
+							<div class="col-6">
+								<InputTextarea
+									:rows="1"
+									:disableInput="false"
+									v-model="dataForm.pre_asset_name"
+									label="Tên tài sản sơ bộ"
+									rules="required"
+									:requiredIcon="true"
+									class="form-group-container"
+								/>
+							</div>
 						</div>
 						<div class="row justify-content-between">
 							<InputCurrency
@@ -176,6 +187,7 @@ import { usePreCertificateStore } from "@/store/preCertificate";
 import _ from "lodash";
 
 import InputText from "@/components/Form/InputText";
+import InputTextarea from "@/components/Form/InputTextarea";
 import InputCategory from "@/components/Form/InputCategory";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
@@ -188,6 +200,7 @@ export default {
 	name: "ModalPCAppraiseInformation",
 
 	components: {
+		InputTextarea,
 		InputCategory,
 		InputText,
 		InputTextPrefixCustom,
