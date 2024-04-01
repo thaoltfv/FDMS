@@ -240,7 +240,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh", null, $indentleftSymbol);
+        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh.", null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -275,7 +275,7 @@ class KeHoachTDG
         $row9->addCell(9700, array('gridSpan' => 2))->addText(
             "Họ, tên người có trách nhiệm tham gia khảo sát, lập biên bản hiện trạng tài sản, thu thập thông tin, lập và ký tên Hồ sơ thẩm định giá:" .
                 (isset($certificate->appraiser) ? ' Thẩm định viên ' . $certificate->appraiser->name . ',' : '') .
-                (isset($certificate->appraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->appraiserPerform->name : ''),
+                (isset($certificate->appraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->appraiserPerform->name . '.' : ''),
             null,
             $indentleftSymbol
         );

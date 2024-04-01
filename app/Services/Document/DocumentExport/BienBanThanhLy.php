@@ -379,7 +379,7 @@ class BienBanThanhLy
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
         $section->addText(
-            "Biên bản lập thành 04 bản, có giá trị pháp lý như nhau, bên A giữ 02 bản, bên B giữ 02 bản",
+            "Biên bản lập thành 04 bản, có giá trị pháp lý như nhau, bên A giữ 02 bản, bên B giữ 02 bản.",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );

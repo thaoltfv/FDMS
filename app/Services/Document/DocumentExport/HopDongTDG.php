@@ -269,7 +269,7 @@ class HopDongTDG
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
         $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
+        $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo.', null,  $alignBoth);
 
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
