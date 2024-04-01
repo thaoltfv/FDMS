@@ -748,7 +748,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->where('id', '=', $id)
                 ->with('appraiser')
                 ->with('appraiserManager')
+                ->with('appraiserManager.appraisePosition:id,description')
                 ->with('appraiserConfirm')
+                ->with('appraiserConfirm.appraisePosition:id,description')
                 ->with('appraiserControl')
                 ->with('appraiserSale')
                 ->with('appraiserPerform')
@@ -3523,13 +3525,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         $updateArray['administrative_id'] = $request['administrative_id'];
                     }
                     if (isset($request['business_manager_id'])) {
-                        Log::info("Vao ham if business_manager_id");
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
                     }
-
-                    Log::info("data request!", ['data' => $updateArray]);
-                    Log::info("data request!", ['data' => $request]);
-
 
                     $result = $this->model->query()
                         ->where('id', '=', $id)

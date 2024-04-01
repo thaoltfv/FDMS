@@ -282,13 +282,24 @@ class BienBanThanhLy
         $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row9->addCell(8000, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
 
+        $chucvu = isset($certificate->appraiserConfirm) && isset($certificate->appraiserConfirm->appraisePosition)
+            ? $certificate->appraiserConfirm->appraisePosition->description
+            : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
+                ? $certificate->appraiserManager->appraisePosition->description
+                : '');
+
+        $daidien = isset($certificate->appraiserConfirm)
+            ? $certificate->appraiserConfirm->name
+            : (isset($certificate->appraiserManager)
+                ? $certificate->appraiserManager->name
+                : '');
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8000, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
-        $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
+        $textRun->addText($chucvu, ['bold' => true]);
+        $textRun->addText(' – Chức vụ:' . $daidien, ['bold' => false]);
         $section->addText(
             "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
                 $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
@@ -296,36 +307,40 @@ class BienBanThanhLy
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
-        $table = $section->addTable([
-            'borderSize' => 1,
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $row1 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => true
-        ));
+
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
-        $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
-        $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
-        $row1->addCell(1600, array('vMerge' => 'restart',  'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
+        if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (isset($certificate->appraises) && count($certificate->appraises) > 0)
+        ) {
+            $table = $section->addTable([
+                'borderSize' => 1,
+                'align' => JcTable::START,
+                'width' => 100 * 50,
+                'unit' => 'pct'
+            ]);
+            $row1 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => true
+            ));
+            $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
+            $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
+            $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
+            $row1->addCell(1600, array('vMerge' => 'restart',  'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
 
-        $row2 = $table->addRow();
-        $row2->addCell(400, array('vMerge' => 'continue'));
-        $row2->addCell(3200, array('vMerge' => 'continue'));
-        $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
-        $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
-        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
-            'align' => 'center'
-        ));
-        $row2->addCell(1600, array('vMerge' => 'continue'));
-
+            $row2 = $table->addRow();
+            $row2->addCell(400, array('vMerge' => 'continue'));
+            $row2->addCell(3200, array('vMerge' => 'continue'));
+            $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
+            $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
+            $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
+                'align' => 'center'
+            ));
+            $row2->addCell(1600, array('vMerge' => 'continue'));
+        }
         $total = 0;
-        $isApartment = in_array('CC', $certificate->document_type);
+        $isApartment = in_array('CC', $certificate->document_type ?? []);
 
 
         if ($isApartment) {
@@ -393,7 +408,7 @@ class BienBanThanhLy
         $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("CHẤP HÀNH VIÊN", ['bold' => true], ['align' => 'center']);
-        $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
         $row3->addCell(4950)->addText("\n\n\n\n\n");
@@ -409,7 +424,7 @@ class BienBanThanhLy
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText($daidien, ['bold' => true], ['align' => 'center']);
 
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');

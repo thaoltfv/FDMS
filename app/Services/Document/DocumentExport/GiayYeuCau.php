@@ -14,6 +14,7 @@ use PhpOffice\PhpWord\Style\ListItem;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class GiayYeuCau
 {
@@ -212,8 +213,9 @@ class GiayYeuCau
         // } else if ($type3) {
         //     $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
         // }
+
         $isApartment =
-            in_array('CC', $certificate->document_type);
+            in_array('CC', $certificate->document_type ?? []);
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
@@ -243,7 +245,7 @@ class GiayYeuCau
             }
         }
 
-        if ($count < 10) {
+        if ($count < 10 && $count > 0) {
             $number_assets = '0' . strval($count);
         } else {
             $number_assets = strval($count);
@@ -262,15 +264,39 @@ class GiayYeuCau
         ];
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
-        $table = $section->addTable($styleTable);
-        $table->addRow(400, $rowHeader);
-        $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
-        $table->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
-        $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
-        $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
-        $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
-        foreach ($certificate->appraises as $stt => $asset) {
-            // Thông tin tài sản
+        Log::info('certifi', ['array' => is_array($certificate->appraises), 'count' => count($certificate->appraises)]);
+        if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (isset($certificate->appraises) && count($certificate->appraises) > 0)
+        ) {
+            $table = $section->addTable($styleTable);
+            $table->addRow(400, $rowHeader);
+            $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
+            $table->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
+            $table->addCell(1000, $cellVCentered)->addText('Diện tích', ['bold' => true], $cellHCentered);
+            $table->addCell(1000, $cellVCentered)->addText('Đơn vị tính', ['bold' => true], $cellHCentered);
+            $table->addCell(1800, $cellVCentered)->addText('Thông tin tài sản kèm theo', ['bold' => true], $cellHCentered);
+        }
+
+        if ($isApartment) {
+            foreach ($certificate->apartmentAssetPrint as $stt => $asset) {
+                $dt = 0;
+                $table->addRow(400, $cantSplit);
+                $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
+                $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
+                $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                $dt = isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->area) ? $this->formatNumberFunction($asset->apartmentAssetProperties->area, 2, ',', '.') : '';
+                $table->addRow(400, $cantSplit);
+                $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
+                $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
+                $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
+                $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
+                $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
+            }
+        } else {
+            foreach ($certificate->appraises as $stt => $asset) {
+                // Thông tin tài sản
 
             $dt = 0;
             $table->addRow(400, $cantSplit);
@@ -344,6 +370,7 @@ class GiayYeuCau
 
         $reportUserName = CommonService::getUserReport();
         $reportName = 'GYC' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = str_replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], '', $reportName); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;

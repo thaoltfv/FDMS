@@ -22,6 +22,7 @@ use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
+use App\Models\Appraiser;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
 use App\Models\RealEstate;
@@ -427,22 +428,22 @@ class CertificateAssetController extends Controller
         }
     }
 
-    public function printGiayYeuCauTDG($id, $is_pc)
+    public function printGiayYeuCauTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printHopDongTDG($id, $is_pc)
+    public function printHopDongTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\HopDongTDG';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printKeHoachTDG($id, $is_pc)
+    public function printKeHoachTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\KeHoachTDG';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printBienBanThanhLy($id, $is_pc)
+    public function printBienBanThanhLy($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
         return $this->printDocument($id, $is_pc, $service);
@@ -458,11 +459,6 @@ class CertificateAssetController extends Controller
             'assetType:id,acronym,description',
         ];
         if ($is_pc) {
-            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
-
-
-            $certificate = $this->certificateRepository->dataPrintExport($id);
-        } else {
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
             if (isset($precertificate->certificate_id)) {
@@ -470,19 +466,35 @@ class CertificateAssetController extends Controller
             } else {
                 $certificate = new Certificate;
                 $fillable = $certificate->getFillable();
-                foreach ($precertificate->getAttributes() as $key => $value) {
-                    if ($key != $precertificate->getKeyName() && in_array($key, $fillable) && $value) {
-                        $certificate->$key = $value;
-                    }
+
+                foreach ($fillable as $attribute) {
+                    $certificate->$attribute = $precertificate->$attribute ?? null;
+                }
+                $appraiserManager = Appraiser::whereHas('appraisePosition', function ($query) {
+                    $query->where('description', 'TỔNG GIÁM ĐỐC');
+                })
+                    ->with(['appraisePosition:id,description'])
+                    ->first();
+
+                if ($appraiserManager) {
+                    $certificate->appraiserManager = $appraiserManager;
                 }
 
                 $certificate->service_fee = $precertificate->total_service_fee;
                 $certificate->document_type = [];
+                $certificate->appraisePurpose = $precertificate->appraisePurpose;
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
+                Log::info('certificate', ['certificate' => $certificate]);
             }
+        } else {
+            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            $certificate = $this->certificateRepository->dataPrintExport($id);
         }
-
+        if ($certificate === null) {
+            $data = ['message' => 'Có lỗi xảy ra trong quá trình xuất tài liệu', 'exception' => null];
+            return $this->respondWithErrorData($data);
+        }
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         // $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
