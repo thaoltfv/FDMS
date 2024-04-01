@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\CompareProperty;
 
 /**
  * Class Province
@@ -164,10 +165,9 @@ class CompareAssetGeneral extends Model
         return $this->hasMany(CompareOtherAsset::class, 'asset_general_id');
     }
 
-	public function appraiseHasAsset(): HasMany
+    public function appraiseHasAsset(): HasMany
     {
         return $this->HasMany(AppraiseHasAsset::class, 'asset_general_id');
-
     }
 
     public function project(): BelongsTo
@@ -198,19 +198,36 @@ class CompareAssetGeneral extends Model
         }
         return $value;
     }
-
     public function getFrontSideTextAttribute()
     {
         $value = 'Không biết';
-        if ($this->properties && count($this->properties) > 0)
-            $value = $this->properties->first()->front_side ? 'Mặt tiền' : 'Hẻm';
+        $item = CompareProperty::where('asset_general_id', $this->id)->first();
+        // dd($item->front_side);
+        if ($item)
+            $value = $item->front_side == 1 ? 'Mặt tiền' : 'Hẻm';
+        // dd($value);
         return $value;
     }
     public function getLandTypeTextAttribute()
     {
         $value = 'Không biết';
-        if ($this->properties && count($this->properties) > 0)
-            $value = $this->properties->first()->landType->description;
+        $item = CompareProperty::where('asset_general_id', $this->id)->first();
+        if ($item)
+            $value = $item->landType->description;
         return $value;
     }
+    // public function getFrontSideTextAttribute()
+    // {
+    //     $value = 'Không biết';
+    //     if ($this->properties && count($this->properties) > 0)
+    //         $value = $this->properties->first()->front_side ? 'Mặt tiền' : 'Hẻm';
+    //     return $value;
+    // }
+    // public function getLandTypeTextAttribute()
+    // {
+    //     $value = 'Không biết';
+    //     if ($this->properties && count($this->properties) > 0)
+    //         $value = $this->properties->first()->landType->description;
+    //     return $value;
+    // }
 }
