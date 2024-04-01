@@ -141,6 +141,17 @@
 								@change="handleChangeTime"
 							/>
 						</div>
+						<div class="row justify-content-between">
+							<InputTextarea
+								:rows="1"
+								:disableInput="false"
+								v-model="dataForm.pre_asset_name"
+								label="Tên tài sản sơ bộ"
+								rules="required"
+								:requiredIcon="true"
+								class="form-group-container col-12"
+							/>
+						</div>
 
 						<div
 							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
@@ -192,6 +203,7 @@ import InputCategory from "@/components/Form/InputCategory";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
 import InputCurrency from "@/components/Form/InputCurrency";
+import InputTextarea from "@/components/Form/InputTextarea";
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import moment from "moment";
 import InputPercent from "@/components/Form/InputPercent";

@@ -20,7 +20,11 @@
 				@cancel="openModalDelete = false"
 				@action="removePayment"
 			/>
-			<div class="row" style="margin-left:5px;margin-right:5px">
+			<div
+				class="row"
+				:key="keyRenderData"
+				style="margin-left:5px;margin-right:5px"
+			>
 				<ValidationObserver
 					tag="form"
 					ref="paymentsForm"
@@ -220,6 +224,7 @@ export default {
 		const dataForm = ref(props.form);
 		const dataOriginal = ref(null);
 		const permissionNotAllowEditHere = ref(true);
+		const keyRenderData = ref(0);
 		const showDrawer = async () => {
 			const user = props.user;
 			let haveViewPermission = false;
@@ -286,6 +291,7 @@ export default {
 							dataForm.value.debtRemain -= element.amount;
 						}
 						dataOriginal.value = ref(_.cloneDeep(dataForm.value.payments));
+						keyRenderData.value++;
 						drawer.value = true;
 					} else if (resp.error && resp.error.statusCode) {
 						props.toast.open({
@@ -384,6 +390,7 @@ export default {
 			paidCompute(0, 0, false, true);
 		};
 		return {
+			keyRenderData,
 			permissionNotAllowEditHere,
 			openModalDelete,
 			keyRender,

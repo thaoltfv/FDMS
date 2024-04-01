@@ -103,7 +103,6 @@ export default {
 		const workFlowConfig = useWorkFlowConfig();
 		workFlowConfig.setNoti(store.getters.unreadNotification);
 		const { notiCount } = storeToRefs(workFlowConfig);
-		console.log("notiCount", notiCount.value, store.getters.unreadNotification);
 		return { notiCount, workFlowConfig };
 	},
 	watch: {
@@ -121,7 +120,6 @@ export default {
 			}
 		},
 		unreadNotificationCountCompute() {
-			console.log("notiCount2", this.notiCount);
 			return this.notiCount;
 		}
 	},
@@ -163,16 +161,18 @@ export default {
 			}
 		},
 		async getNoti() {
-			const profile = await Notification.getUnreadCount(this.currentUser.id);
-			// store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
-			this.notiCount = profile.data.unreadNotifications;
-			this.workFlowConfig.setNoti(profile.data.unreadNotifications);
-			// console.log(
-			// 	"unreadNotifications",
-			// 	profile.data.unreadNotifications,
-			// 	store.getters.unreadNotification,
-			// 	this.notiCount
-			// );
+			if (this.currentUser) {
+				const profile = await Notification.getUnreadCount(this.currentUser.id);
+				// store.commit(SET_UNREAD_NOTIFICATION, profile.data.unreadNotifications);
+				this.notiCount = profile.data.unreadNotifications;
+				this.workFlowConfig.setNoti(profile.data.unreadNotifications);
+				// console.log(
+				// 	"unreadNotifications",
+				// 	profile.data.unreadNotifications,
+				// 	store.getters.unreadNotification,
+				// 	this.notiCount
+				// );
+			}
 		},
 		formatDate(value) {
 			return moment(String(value)).format("hh:mm DD/MM/YYYY");

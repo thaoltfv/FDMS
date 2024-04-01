@@ -857,8 +857,9 @@ export default {
 
 				if (
 					this.detailData.status &&
-					this.detailData.status > 1 &&
-					this.detailData.status < 9 &&
+					(this.detailData.status == 2 ||
+						this.detailData.status == 3 ||
+						this.detailData.status == 7) &&
 					this.position_profile &&
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
@@ -1099,8 +1100,9 @@ export default {
 			console.log(this.listCertificates);
 			if (
 				property.status &&
-				property.status > 1 &&
-				property.status < 9 &&
+				(property.status == 2 ||
+					property.status == 3 ||
+					property.status == 7) &&
 				this.position_profile &&
 				(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 					this.position_profile === "NHAN-VIEN-KINH-DOANH" ||

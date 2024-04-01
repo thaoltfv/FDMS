@@ -1789,8 +1789,9 @@ export default {
 		this.user_id = profile.data.user.id;
 		if (
 			this.form.status &&
-			this.form.status > 1 &&
-			this.form.status < 9 &&
+			(this.form.status == 2 ||
+				this.form.status == 3 ||
+				this.form.status == 7) &&
 			this.position_profile &&
 			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 				this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
@@ -2662,6 +2663,28 @@ export default {
 					position: "top-right",
 					duration: 3000
 				});
+				if (
+					this.form.status &&
+					(this.form.status == 2 ||
+						this.form.status == 3 ||
+						this.form.status == 7) &&
+					this.position_profile &&
+					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
+						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+						(this.form.appraiser_sale &&
+							this.form.appraiser_sale.user_id === this.user_id))
+				) {
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					this.$toast.open({
+						message:
+							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
+						type: "error",
+						position: "top-right"
+					});
+					let url = this.$router.push({
+						name: "certification_brief.index"
+					});
+				}
 			} else if (res.error) {
 				this.$toast.open({
 					message: res.error.message,
@@ -3747,7 +3770,7 @@ export default {
 	color: black;
 	margin-top: 8px;
 	margin-left: 5px;
-	height: 42px;
+	height: 45px;
 }
 .btn {
 	&-history {

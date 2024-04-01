@@ -20,7 +20,11 @@
 				@cancel="openModalDelete = false"
 				@action="removePayment"
 			/>
-			<div class="row" style="margin-left:5px;margin-right:5px">
+			<div
+				class="row"
+				:key="keyRenderData"
+				style="margin-left:5px;margin-right:5px"
+			>
 				<ValidationObserver
 					tag="form"
 					ref="paymentsForm"
@@ -203,6 +207,7 @@ export default {
 		const dataOriginal = ref(null);
 
 		const permissionNotAllowEdit = ref(false);
+		const keyRenderData = ref(0);
 		const showDrawer = async () => {
 			const user = vueStoree.value.user;
 			permissionNotAllowEdit.value = true;
@@ -251,6 +256,7 @@ export default {
 			dataForm.value = ref(_.cloneDeep(temp));
 			dataOriginal.value = ref(_.cloneDeep(dataForm.value.payments));
 			drawer.value = true;
+			keyRenderData.value++;
 		};
 		const closeDrawer = () => {
 			drawer.value = false;
@@ -314,6 +320,7 @@ export default {
 			permissionNotAllowEdit,
 			openModalDelete,
 			keyRender,
+			keyRenderData,
 			drawer,
 			dataForm,
 			preCertificateStore,

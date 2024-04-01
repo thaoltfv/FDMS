@@ -98,7 +98,14 @@
 							<div
 								class="d-flex align-items-center justify-content-end col-1 pr-3"
 							>
-								<div>
+								<div
+									v-if="
+										file.type === 'png' ||
+											file.type === 'jpeg' ||
+											file.type === 'jpg' ||
+											file.type === 'gif'
+									"
+								>
 									<img
 										src="@/assets/icons/ic_search_3.svg"
 										alt="search"
@@ -194,7 +201,14 @@
 						<div
 							class="d-flex align-items-center justify-content-end col-1 pr-3"
 						>
-							<div>
+							<div
+								v-if="
+									file.type === 'png' ||
+										file.type === 'jpeg' ||
+										file.type === 'jpg' ||
+										file.type === 'gif'
+								"
+							>
 								<img
 									src="@/assets/icons/ic_search_3.svg"
 									alt="search"
@@ -320,7 +334,14 @@
 					</div>
 				</div>
 				<div class="d-flex align-items-center justify-content-end col-1 pr-3">
-					<div>
+					<div
+						v-if="
+							file.type === 'png' ||
+								file.type === 'jpeg' ||
+								file.type === 'jpg' ||
+								file.type === 'gif'
+						"
+					>
 						<img
 							src="@/assets/icons/ic_search_3.svg"
 							alt="search"
