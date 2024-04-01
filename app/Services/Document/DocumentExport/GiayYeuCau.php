@@ -212,8 +212,9 @@ class GiayYeuCau
         // } else if ($type3) {
         //     $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
         // }
+
         $isApartment =
-            in_array('CC', $certificate->document_type);
+            in_array('CC', $certificate->document_type ?? []);
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {

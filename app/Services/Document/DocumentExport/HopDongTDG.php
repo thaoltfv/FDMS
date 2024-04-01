@@ -174,7 +174,7 @@ class HopDongTDG
             $cellHCentered
         );
         $row3->addCell(5700, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
-        $isApartment = in_array('CC', $certificate->document_type);
+        $isApartment = in_array('CC', $certificate->document_type ?? []);
 
         $section->addText("HỢP ĐỒNG CUNG CẤP DỊCH VỤ ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
         $section->addText(

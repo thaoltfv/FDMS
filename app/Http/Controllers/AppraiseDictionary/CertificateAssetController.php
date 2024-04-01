@@ -471,6 +471,7 @@ class CertificateAssetController extends Controller
                 }
                 $certificate->service_fee = $precertificate->total_service_fee;
                 $certificate->document_type = [];
+                $certificate->appraisePurpose = $precertificate->appraisePurpose;
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
                 Log::info('certificate', ['certificate' => $certificate]);

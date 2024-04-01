@@ -325,7 +325,7 @@ class BienBanThanhLy
         $row2->addCell(1600, array('vMerge' => 'continue'));
 
         $total = 0;
-        $isApartment = in_array('CC', $certificate->document_type);
+        $isApartment = in_array('CC', $certificate->document_type ?? []);
 
 
         if ($isApartment) {
