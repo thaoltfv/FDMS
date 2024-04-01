@@ -436,17 +436,9 @@ class BienBanThanhLy
         $row2->addCell(4950)->addText("CHẤP HÀNH VIÊN", ['bold' => true], ['align' => 'center']);
         $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
 
-        $row3 = $table->addRow();
-        $row3->addCell(4950)->addText("\n\n\n\n\n");
-        $row3->addCell(4950)->addText("\n\n\n\n\n");
-
-        $row5 = $table->addRow();
-        $row5->addCell(4950)->addText("\n\n\n\n\n");
-        $row5->addCell(4950)->addText("\n\n\n\n\n");
-
-        // $row6 = $table->addRow();
-        // $row6->addCell(4950)->addText("\n\n\n\n\n");
-        // $row6->addCell(4950)->addText("\n\n\n\n\n");
+        $row3 = $table->addRow(800);
+        $row3->addCell(4950)->addText("");
+        $row3->addCell(4950)->addText("");
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
