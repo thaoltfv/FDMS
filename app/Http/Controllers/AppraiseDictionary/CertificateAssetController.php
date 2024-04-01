@@ -470,7 +470,9 @@ class CertificateAssetController extends Controller
                 foreach ($fillable as $attribute) {
                     $certificate->$attribute = $precertificate->$attribute ?? null;
                 }
-                $appraiserManager = Appraiser::where('description', 'TỔNG GIÁM ĐỐC')
+                $appraiserManager = Appraiser::whereHas('appraisePosition', function ($query) {
+                    $query->where('description', 'TỔNG GIÁM ĐỐC');
+                })
                     ->with(['appraisePosition:id,description'])
                     ->first(['id', 'name']);
 
