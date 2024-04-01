@@ -275,9 +275,21 @@ class HopDongTDG
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8100, $cellVTop)->addTextRun($alignBoth);
+
+        $chucvu = isset($certificate->appraiserConfirm) && isset($certificate->appraiserConfirm->appraisePosition)
+            ? $certificate->appraiserConfirm->appraisePosition->description
+            : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
+                ? $certificate->appraiserManager->appraisePosition->description
+                : '');
+
+        $daidien = isset($certificate->appraiserConfirm)
+            ? $certificate->appraiserConfirm->name
+            : (isset($certificate->appraiserManager)
+                ? $certificate->appraiserManager->name
+                : '');
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText('HUỲNH VĂN NGOÃN', ['bold' => true]);
-        $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
+        $textRun->addText($daidien, ['bold' => true]);
+        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
             null,
@@ -714,7 +726,7 @@ class HopDongTDG
         $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
-        $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
         $row3->addCell(4950)->addText("\n\n\n\n\n");
@@ -730,7 +742,7 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText($daidien, ['bold' => true], ['align' => 'center']);
 
 
 

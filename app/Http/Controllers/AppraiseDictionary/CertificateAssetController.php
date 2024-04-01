@@ -22,6 +22,7 @@ use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
+use App\Models\Appraiser;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
 use App\Models\RealEstate;
@@ -469,6 +470,14 @@ class CertificateAssetController extends Controller
                 foreach ($fillable as $attribute) {
                     $certificate->$attribute = $precertificate->$attribute ?? null;
                 }
+                $appraiserManager = Appraiser::where('description', 'TỔNG GIÁM ĐỐC')
+                    ->with(['appraisePosition:id,description'])
+                    ->first(['id', 'name']);
+
+                if ($appraiserManager) {
+                    $certificate->appraiserManager = $appraiserManager;
+                }
+
                 $certificate->service_fee = $precertificate->total_service_fee;
                 $certificate->document_type = [];
                 $certificate->appraisePurpose = $precertificate->appraisePurpose;
