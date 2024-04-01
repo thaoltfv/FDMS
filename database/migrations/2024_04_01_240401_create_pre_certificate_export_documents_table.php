@@ -40,6 +40,9 @@ class CreatePreCertificateExportDocumentsTable extends Migration
                 $table->timestamp('updated_at')->useCurrent();
                 $table->text('type_document');
                 $table->softDeletes();
+
+                $table->unique(['certificate_id', 'type_document']);
+                $table->unique(['pre_certificate_id', 'type_document']);
             });
         }
     }
