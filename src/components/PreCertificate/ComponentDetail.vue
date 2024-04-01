@@ -9,10 +9,24 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
 						<div class="row" style="display: flex; align-items: center">
+							<a-dropdown>
+								<a-button class="btn-export">
+									<a-icon type="download" />
+								</a-button>
+								<template #overlay>
+									<a-menu @click="handleMenuClick">
+										<a-menu-item key="1"> Giấy yêu cầu TĐG </a-menu-item>
+										<a-menu-item key="2"> Hợp đồng TĐG </a-menu-item>
+										<a-menu-item key="3"> Kế hoạch TĐG </a-menu-item>
+										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
+									</a-menu>
+								</template>
+							</a-dropdown>
 							<div class="color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
+
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
@@ -493,6 +507,7 @@ import Vue from "vue";
 import Icon from "buefy";
 import InputLengthArea from "@/components/Form/InputLengthArea.vue";
 import PreCertificate from "@/models/PreCertificate";
+import Certificate from "@/models/Certificate";
 import WareHouse from "@/models/WareHouse";
 import { Timeline, Drawer } from "ant-design-vue";
 import moment from "moment";
@@ -1829,6 +1844,101 @@ export default {
 					});
 				}
 			});
+		},
+		handleMenuClick(e) {
+			if (e.key === "1") {
+				this.exportGYC();
+			} else if (e.key === "2") {
+				this.exportHDTDG();
+			} else if (e.key === "3") {
+				this.exportKHTDG();
+			} else if (e.key === "4") {
+				this.exportBBTL();
+			}
+		},
+		async exportGYC() {
+			await Certificate.getPrintGYC(this.dataPC.id, 1).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportHDTDG() {
+			await Certificate.getPrintHDTDG(this.dataPC.id, 1).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportBBTL() {
+			await Certificate.getPrintBBTL(this.dataPC.id, 1).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportKHTDG() {
+			await Certificate.getPrintKHTDG(this.dataPC.id, 1).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
 		}
 	},
 	beforeMount() {
@@ -2436,5 +2546,12 @@ export default {
 }
 .img_filter {
 	filter: grayscale(100%) invert(100%);
+}
+.btn-export {
+	border: 1px solid black;
+	color: black;
+	margin-top: 8px;
+	margin-right: 5px;
+	height: 45px;
 }
 </style>

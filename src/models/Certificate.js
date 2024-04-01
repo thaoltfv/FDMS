@@ -105,31 +105,31 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
-	static async getPrintGYC(id) {
+	static async getPrintGYC(id, is_pc = 0) {
 		return new this().request({
 			method: "GET",
-			url: `certificate-asset/print/giay-yeu-cau/${id}`,
+			url: `certificate-asset/print/giay-yeu-cau/${id}/${is_pc}`,
 			isStatic: true
 		});
 	}
-	static async getPrintKHTDG(id) {
+	static async getPrintKHTDG(id, is_pc = 0) {
 		return new this().request({
 			method: "GET",
-			url: `certificate-asset/print/ke-hoach-tdg/${id}`,
+			url: `certificate-asset/print/ke-hoach-tdg/${id}/${is_pc}`,
 			isStatic: true
 		});
 	}
-	static async getPrintBBTL(id) {
+	static async getPrintBBTL(id, is_pc = 0) {
 		return new this().request({
 			method: "GET",
-			url: `certificate-asset/print/bien-ban-thanh-ly/${id}`,
+			url: `certificate-asset/print/bien-ban-thanh-ly/${id}/${is_pc}`,
 			isStatic: true
 		});
 	}
-	static async getPrintHDTDG(id) {
+	static async getPrintHDTDG(id, is_pc = 0) {
 		return new this().request({
 			method: "GET",
-			url: `certificate-asset/print/hop-dong-tdg/${id}`,
+			url: `certificate-asset/print/hop-dong-tdg/${id}/${is_pc}`,
 			isStatic: true
 		});
 	}
