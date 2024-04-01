@@ -505,10 +505,10 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("4.1.", null, ['align' => 'right']);
-        $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
         $textRun = $row->addCell(9300)->addTextRun($indentleftNumber);
         $textRun->addText("Phí dịch vụ thẩm định giá tài sản: ");
-        if (isset($textServiceFee)) {
+        if (isset($certificate->service_fee)) {
+            $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
 
             $textRun->addText(
                 $textServiceFee,
