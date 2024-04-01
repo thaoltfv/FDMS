@@ -191,7 +191,6 @@ class PriceEstimateController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-
     public function postGeneralInfomation(Request $request, int $id = null)
     {
         if (!isset($id)) {
@@ -228,12 +227,12 @@ class PriceEstimateController extends Controller
 
         $customAttributes = [
             'general_infomation' => 'Thông tin chung',
-            'general_infomation.asset_type_id' => 'Loại TS',
+            'general_infomation.asset_type_id' => 'Loại tài sản',
             'general_infomation.province_id' => 'Tỉnh/Thành phố',
             'general_infomation.district_id' => 'Quận/Huyện',
             'general_infomation.ward_id' => 'Phường/Xã',
             'general_infomation.street_id' => 'Đường',
-            'general_infomation.appraise_asset' => 'Tên TS',
+            'general_infomation.appraise_asset' => 'Tên tài sản',
             'general_infomation.coordinates' => 'Toạ độ',
             'traffic_infomation' => 'Thông tin giao thông',
             'traffic_infomation.description' => 'Mô tả vị trí',
@@ -315,10 +314,14 @@ class PriceEstimateController extends Controller
             'total_area' => 'array|required',
             'total_area.*.land_type_purpose_id' => 'required_with:total_area|integer',
             'total_area.*.total_area' => 'required_with:total_area|numeric',
-            'total_area.*.main_area' => 'required_with:main_area|numeric',
+            'total_area.*.main_area' => 'required_with:total_area|numeric',
+            'total_area.*.unit_price' => 'required_with:total_area|numeric',
+            'total_area.*.total_price' => 'required_with:total_price|numeric',
             'planning_area' => 'sometimes|array',
             'planning_area.*.land_type_purpose_id' => 'required_with:planning_area|integer',
             'planning_area.*.planning_area' => 'required_with:planning_area|numeric',
+            'planning_area.*.unit_price' => 'required_with:planning_area|numeric',
+            'planning_area.*.total_price' => 'required_with:planning_area|numeric',
         ];
 
         $customAttributes = [
@@ -335,10 +338,14 @@ class PriceEstimateController extends Controller
             'total_area.*.land_type_purpose_id' => 'Mục đích sử dụng[PHQH]',
             'total_area.*.total_area' => 'Diện tích theo mục đích sử dụng',
             'total_area.*.main_area' => 'Diện tích phù hợp quy hoạch',
+            'total_area.*.unit_price' => 'Đơn giá phù hợp quy hoạch',
+            'total_area.*.total_price' => 'Thành tiền phù hợp quy hoạch',
             'total_area' => 'Diện tích theo mục đích sử dụng',
             'planning_area' => 'Diện tích vi phạm quy hoạch',
             'planning_area.*.land_type_purpose_id' => 'Mục đích sử dụng[VPQH]',
             'planning_area.*.planning_area' => 'Diện tích vi phạm quy hoạch',
+            'planning_area.*.unit_price' => 'Đơn giá vị phạm quy hoạch',
+            'planning_area.*.total_price' => 'Thành tiền vi phạm quy hoạch',
         ];
 
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
@@ -376,6 +383,152 @@ class PriceEstimateController extends Controller
         }
         $result = $this->priceEstimateRepository->getPriceEstimateFinal($id);
         // dd($result->toJSON(JSON_UNESCAPED_UNICODE));
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        return $this->respondWithCustomData($result);
+    }
+
+
+    public function postApartmentInformation(Request $request, int $id = null)
+    {
+        if (!isset($id)) {
+            if (!CommonService::checkUserPermission($this->permissionAdd))
+                return $this->respondWithErrorData(['message' => ErrorMessage::PE_CHECK_ADD, 'exception' => ''], 403);
+        } else {
+            if (!CommonService::checkUserPermission($this->permissionEdit))
+                return $this->respondWithErrorData(['message' => ErrorMessage::PE_CHECK_UPDATE, 'exception' => ''], 403);
+        }
+
+        $customAttributes = [
+
+            'traffic_infomation' => 'Thông tin giao thông',
+            'traffic_infomation.description' => 'Mô tả vị trí',
+            'traffic_infomation.front_side' => 'Mặt tiền',
+            'traffic_infomation.two_sides_land' => 'Căn góc',
+
+            'total_area.*.is_transfer_facility' => 'Phân mục đích',
+            'total_area.*.land_type_purpose_id' => 'Mục đích sử dụng[PHQH]',
+            'total_area.*.total_area' => 'Diện tích theo mục đích sử dụng',
+            'total_area' => 'Diện tích theo mục đích sử dụng',
+            'planning_area' => 'Diện tích vi phạm quy hoạch',
+            'planning_area.*.land_type_purpose_id' => 'Mục đích sử dụng[VPQH]',
+            'planning_area.*.planning_area' => 'Diện tích vi phạm quy hoạch',
+            'planning_area.*.type_zoning' => 'Loại quy hoạch',
+        ];
+        $rules = [
+            'general_infomation' => 'array|required',
+            'general_infomation.asset_type_id' => 'required|integer',
+            'general_infomation.project_id' => 'required|integer',
+            'general_infomation.province_id' => 'required|integer',
+            'general_infomation.district_id' => 'required|integer',
+            'general_infomation.ward_id' => 'required|integer',
+            // 'general_infomation.street_id' => 'required|integer',
+            'general_infomation.appraise_asset' => 'required|string|max:255',
+            'general_infomation.coordinates' => 'required|string|max:255',
+
+            'apartment_properties' => 'array|required',
+            'apartment_properties.block_id' => 'integer|required_with:apartment_properties',
+            'apartment_properties.floor_id' => 'integer|required_with:apartment_properties',
+            'apartment_properties.apartment_name' => 'string|required_with:apartment_properties',
+            'apartment_properties.area' => 'numeric|required_with:apartment_properties|min:0',
+        ];
+
+        $customAttributes = [
+            'general_infomation' => 'Thông tin chung',
+            'general_infomation.asset_type_id' => 'Loại tài sản',
+            'general_infomation.project_id' => 'Chung cư',
+            'general_infomation.province_id' => 'Tỉnh/Thành phố',
+            'general_infomation.district_id' => 'Quận/Huyện',
+            'general_infomation.ward_id' => 'Phường/Xã',
+            // 'general_infomation.street_id' => 'Đường',
+            'general_infomation.appraise_asset' => 'Tên tài sản',
+            'general_infomation.coordinates' => 'Toạ độ',
+
+            'apartment_properties' => 'Chi tiết căn hộ',
+            'apartment_properties.block_id' => 'Block',
+            'apartment_properties.floor_id' => 'Tầng',
+            'apartment_properties.apartment_name' => 'Mã căn hộ',
+            'apartment_properties.area' => 'Diện tích',
+
+        ];
+        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+        if ($validator->passes()) {
+            //TODO Handle your data
+            $result = $this->priceEstimateRepository->postApartmentInformation($request->toArray(), $id);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
+            return $this->respondWithCustomData($result);
+        } else {
+            //TODO Handle your error
+            $data = ['message' => $validator->errors()->all(), 'exception' => null];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    public function step3FinalApartment(Request $request, int $id)
+    {
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::PE_CHECK_UPDATE, 'exception' => ''], 403);
+
+        $rules = [
+            'price_estimate_id' => 'required|integer',
+            'asset_type_id' => 'required|integer',
+            'appraise_purpose_id' => 'required|integer',
+            'request_date' => 'required|date',
+            'appraise_asset' => 'required|string|max:255',
+            'coordinates' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'petitioner_name' => 'required|string|max:255',
+            'coordinates' => 'required|string|max:255',
+            'full_address' => 'required|string|max:255',
+            'img_map' => 'nullable|string|max:255',
+
+            'apartment_finals' => 'array|required',
+            'apartment_finals.*.name' => 'required_with:apartment_finals|string',
+            'apartment_finals.*.total_area' => 'required_with:apartment_finals|numeric',
+            'apartment_finals.*.unit_price' => 'required_with:apartment_finals|numeric',
+            'apartment_finals.*.total_price' => 'required_with:apartment_finals|numeric',
+        ];
+
+        $customAttributes = [
+            'asset_type_id' => 'Loại tài sản',
+            'appraise_asset' => 'Tên tài sản',
+            'coordinates' => 'Toạ độ',
+            'description' => 'Mô tả vị trí',
+            'petitioner_name' => 'Tên người yêu cầu',
+            'request_date' => 'Ngày yêu cầu',
+            'appraise_purpose_id' => 'Mục đích thẩm định',
+            'full_address' => 'Địa chỉ tài sản',
+            'img_map' => 'Sơ đồ vị trí',
+
+            'apartment_finals.*.total_price' => 'Thành tiền',
+            'apartment_finals.*.unit_price' => 'Đơn giá',
+            'apartment_finals.*.total_area' => 'Diện tích',
+            'apartment_finals.*.name' => 'Tên tài sản',
+            'apartment_finals' => '',
+        ];
+
+        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+        if ($validator->passes()) {
+            //TODO Handle your data
+            $result = $this->priceEstimateRepository->step3FinalApartment($request->toArray(), $id);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
+            return $this->respondWithCustomData($result);
+        } else {
+            //TODO Handle your error
+            $data = ['message' => $validator->errors()->all(), 'exception' => null];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    public function moveToApartmentAsset(int $id)
+    {
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::PE_CHECK_UPDATE, 'exception' => ''], 403);
+
+        //TODO Handle your data
+        $result = $this->priceEstimateRepository->moveToApartmentAsset($id);
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
