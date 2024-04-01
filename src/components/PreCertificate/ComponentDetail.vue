@@ -9,6 +9,10 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Thông tin chung</h3>
 						<div class="row" style="display: flex; align-items: center">
+							<div class="color_content card-status-pre-certificate">
+								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
+								<span>{{ statusDescription }}</span>
+							</div>
 							<a-dropdown>
 								<a-button class="btn-export">
 									<a-icon type="download" />
@@ -22,11 +26,6 @@
 									</a-menu>
 								</template>
 							</a-dropdown>
-							<div class="color_content card-status-pre-certificate">
-								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
-								<span>{{ statusDescription }}</span>
-							</div>
-
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
@@ -2551,7 +2550,7 @@ export default {
 	border: 1px solid black;
 	color: black;
 	margin-top: 8px;
-	margin-right: 5px;
+	margin-left: 5px;
 	height: 45px;
 }
 </style>
