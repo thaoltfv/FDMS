@@ -2,6 +2,8 @@
 
 namespace App\Services\Document\DocumentExport;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Enum\EstimateAssetDefault;
 use App\Http\ResponseTrait;
 use Carbon\Carbon;
@@ -86,6 +88,10 @@ class GiayYeuCau
     public function generateDocx($company, $certificate, $format, $appraises): array
     {
 
+        Log::info(
+            'certificate',
+            ['certificate' => $certificate, 'appraises' => $certificate->petitioner_name],
+        );
         $phpWord = new PhpWord();
         $this->setFormat($phpWord);
         $phpWord->setDefaultFontName('Times New Roman');
