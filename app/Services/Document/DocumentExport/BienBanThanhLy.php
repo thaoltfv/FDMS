@@ -296,22 +296,23 @@ class BienBanThanhLy
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
-        $table = $section->addTable([
-            'borderSize' => 1,
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $row1 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => true
-        ));
+
 
         $alignCenter =
             ['align' => 'center'];
         if ((is_array($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
             (is_array($certificate->appraise) && count($certificate->appraise) > 0)
         ) {
+            $table = $section->addTable([
+                'borderSize' => 1,
+                'align' => JcTable::START,
+                'width' => 100 * 50,
+                'unit' => 'pct'
+            ]);
+            $row1 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => true
+            ));
             $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
             $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
             $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
