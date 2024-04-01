@@ -427,22 +427,22 @@ class CertificateAssetController extends Controller
         }
     }
 
-    public function printGiayYeuCauTDG($id, $is_pc)
+    public function printGiayYeuCauTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printHopDongTDG($id, $is_pc)
+    public function printHopDongTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\HopDongTDG';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printKeHoachTDG($id, $is_pc)
+    public function printKeHoachTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\KeHoachTDG';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function printBienBanThanhLy($id, $is_pc)
+    public function printBienBanThanhLy($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
         return $this->printDocument($id, $is_pc, $service);
