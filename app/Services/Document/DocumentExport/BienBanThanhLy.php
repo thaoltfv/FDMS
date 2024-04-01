@@ -288,6 +288,8 @@ class BienBanThanhLy
                 ? $certificate->appraiserManager->appraisePosition->description
                 : '');
 
+        $chucvu = ucfirst(strtolower($chucvu));
+
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
             : (isset($certificate->appraiserManager)

@@ -281,6 +281,7 @@ class HopDongTDG
             : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
                 ? $certificate->appraiserManager->appraisePosition->description
                 : '');
+        $chucvu = ucfirst(strtolower($chucvu));
 
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
