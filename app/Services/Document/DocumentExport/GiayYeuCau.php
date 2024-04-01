@@ -234,12 +234,13 @@ class GiayYeuCau
             foreach ($certificate->appraises as $index => $item) {
                 $name_assets .= ($index) ? " và " : "";
 
-            $name_assets .= $item->appraise_asset;
-            $check = $item->tangibleAssets;
-            if ($item->appraiseLaw) {
-                foreach ($item->appraiseLaw as $index2 => $item2) {
-                    $appraise_law .= ($index2) ? " và " : "";
-                    $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                $name_assets .= $item->appraise_asset;
+                $check = $item->tangibleAssets;
+                if ($item->appraiseLaw) {
+                    foreach ($item->appraiseLaw as $index2 => $item2) {
+                        $appraise_law .= ($index2) ? " và " : "";
+                        $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                    }
                 }
                 $count += 1;
             }
@@ -298,25 +299,27 @@ class GiayYeuCau
             foreach ($certificate->appraises as $stt => $asset) {
                 // Thông tin tài sản
 
-            $dt = 0;
-            $table->addRow(400, $cantSplit);
-            $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
-            $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
-            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-            $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-            $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-            if ($item->tangibleAssets) {
-                foreach ($item->tangibleAssets as $tangible) {
-                    $dt = $tangible->total_construction_area ? $tangible->total_construction_area : 0;
+                $dt = 0;
+                $table->addRow(400, $cantSplit);
+                $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
+                $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
+                $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                if ($item->tangibleAssets) {
+                    foreach ($item->tangibleAssets as $tangible) {
+                        $dt = $tangible->total_construction_area ? $this->formatNumberFunction($tangible->total_construction_area, 2, ',', '.') : '';
+                    }
                 }
+                $table->addRow(400, $cantSplit);
+                $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
+                $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
+                $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
+                $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
+                $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
             }
-            $table->addRow(400, $cantSplit);
-            $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-            $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
-            $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
-            $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
-            $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
         }
+
 
         $appraise_date = date_create($certificate->appraise_date);
         $bien101 = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
