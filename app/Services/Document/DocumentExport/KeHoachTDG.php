@@ -193,15 +193,15 @@ class KeHoachTDG
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('1.  Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
         $isApartment = in_array('CC', $certificate->document_type ?? []);
-        $addressHSTD = 'Bất động sản là ';
+        $addressHSTD = '';
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $addressHSTD .= 'Bất động sản là ' . ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         } else {
             foreach ($certificate->appraises as $index => $item) {
-                $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $addressHSTD .= 'Bất động sản là ' . ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         }
 
