@@ -444,9 +444,9 @@ class BienBanThanhLy
         $row5->addCell(4950)->addText("\n\n\n\n\n");
         $row5->addCell(4950)->addText("\n\n\n\n\n");
 
-        $row6 = $table->addRow();
-        $row6->addCell(4950)->addText("\n\n\n\n\n");
-        $row6->addCell(4950)->addText("\n\n\n\n\n");
+        // $row6 = $table->addRow();
+        // $row6->addCell(4950)->addText("\n\n\n\n\n");
+        // $row6->addCell(4950)->addText("\n\n\n\n\n");
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
