@@ -276,7 +276,7 @@ class HopDongTDG
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8100, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
+        $textRun->addText('HUỲNH VĂN NGOÃN', ['bold' => true]);
         $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
