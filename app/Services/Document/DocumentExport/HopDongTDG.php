@@ -740,6 +740,11 @@ class HopDongTDG
         $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'HDTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = str_replace(
+            ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
+            '_',
+            $reportName
+        ); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
