@@ -475,8 +475,7 @@ class CertificateAssetController extends Controller
                 $certificate->document_type = [];
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
-
-                Log::info('Certificate:', (array) $certificate);
+                Log::info('certificate', ['certificate' => $certificate]);
             }
         } else {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
