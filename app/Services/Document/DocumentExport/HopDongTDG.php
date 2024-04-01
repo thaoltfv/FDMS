@@ -314,8 +314,8 @@ class HopDongTDG
 
         $alignCenter =
             ['align' => 'center'];
-        if ((is_array($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
-            (is_array($certificate->appraises) && count($certificate->appraises) > 0)
+        if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (isset($certificate->appraises) && count($certificate->appraises) > 0)
         ) {
             $table = $section->addTable([
                 'borderSize' => 1,

@@ -265,9 +265,9 @@ class GiayYeuCau
         ];
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
-        Log::info('certifi', ['certifi' => $certificate, 'array' => is_array($certificate->appraises), 'count' => count($certificate->appraises)]);
-        if ((is_array($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
-            (is_array($certificate->appraises) && count($certificate->appraises) > 0)
+        Log::info('certifi', ['array' => is_array($certificate->appraises), 'count' => count($certificate->appraises)]);
+        if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (isset($certificate->appraises) && count($certificate->appraises) > 0)
         ) {
             $table = $section->addTable($styleTable);
             $table->addRow(400, $rowHeader);
