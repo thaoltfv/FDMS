@@ -474,7 +474,7 @@ class CertificateAssetController extends Controller
                     $query->where('description', 'TỔNG GIÁM ĐỐC');
                 })
                     ->with(['appraisePosition:id,description'])
-                    ->first(['id', 'name']);
+                    ->first(['id', 'name', 'appraisePosition']);
 
                 if ($appraiserManager) {
                     $certificate->appraiserManager = $appraiserManager;
