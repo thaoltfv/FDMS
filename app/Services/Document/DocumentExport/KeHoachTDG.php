@@ -1,7 +1,9 @@
 <?php
 
+
 namespace App\Services\Document\DocumentExport;
 
+use Illuminate\Support\Facades\Log;
 use App\Enum\EstimateAssetDefault;
 use App\Http\ResponseTrait;
 use Carbon\Carbon;
@@ -190,7 +192,7 @@ class KeHoachTDG
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('1.  Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
-
+        Log::info($certificate->document_type);
         $isApartment = in_array('CC', $certificate->document_type ?? []);
         $addressHSTD = 'Bất động sản là ';
 
@@ -204,6 +206,7 @@ class KeHoachTDG
             }
         }
 
+        Log::info('2');
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -228,6 +231,7 @@ class KeHoachTDG
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('2.  Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);
 
+        Log::info('3');
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -279,6 +283,7 @@ class KeHoachTDG
             $indentleftSymbol
         );
 
+        Log::info('4');
         $row10 = $table->addRow();
         $row10->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row10->addCell(9700, array('gridSpan' => 2))->addText("Phương tiện cần thiết: Di chuyển bằng xe máy, ghi ảnh bằng điện thoại cá nhân.", null, $indentleftSymbol);
@@ -291,6 +296,7 @@ class KeHoachTDG
         $row12->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row12->addCell(9700, array('gridSpan' => 2))->addText("Các yêu cầu hỗ trợ khác (nếu có): Không đề xuất.", null, $indentleftSymbol);
 
+        Log::info('45');
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -324,11 +330,17 @@ class KeHoachTDG
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
+        Log::info(
+            '8'
+        );
         try {
             $objWriter->save(storage_path('app/public/' . $path . $fileName . '.docx'));
         } catch (\Exception $e) {
             throw $e;
         }
+        Log::info(
+            '6'
+        );
         $data = [];
         $data['url'] = Storage::disk('public')->url($path .  $fileName . '.docx');
         $data['file_name'] = $fileName;
