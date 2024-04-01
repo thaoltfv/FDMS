@@ -317,7 +317,7 @@ class KeHoachTDG
         $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
         $reportName = str_replace(
             ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
-            '_',
+            '',
             $reportName
         ); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
