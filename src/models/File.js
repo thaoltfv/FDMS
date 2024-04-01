@@ -92,7 +92,6 @@ export default class File extends Model {
 			method: "POST",
 			url: `/api/certification_asset/step4-delete-law-document`,
 			data
-
 		});
 	}
 	static async getToken() {
@@ -131,6 +130,26 @@ export default class File extends Model {
 		return new this().makeRequest({
 			method: "POST",
 			url: `/api/pre-certificates/other-document/upload/${id}/${typeDocument}`,
+			data
+		});
+	}
+
+	static async downloadFilePreCertificateExport(id) {
+		return new this().makeRequest({
+			method: "GET",
+			url: `api/pre-certificates/export-document/download/${id}`
+		});
+	}
+	static async deleteFilePreCertificateExport(id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `api/pre-certificates/export-document/remove/${id}`
+		});
+	}
+	static async uploadFilePreCertificateExport(data, id, typeDocument) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/pre-certificates/export-document/upload/${id}/${typeDocument}`,
 			data
 		});
 	}

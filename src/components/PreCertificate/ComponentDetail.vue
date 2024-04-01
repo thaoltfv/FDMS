@@ -401,6 +401,13 @@
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
+			<DocumentExport :allow-edit="allowEditFile.appendix" />
+		</div>
+		<div
+			v-if="dataPC.id"
+			class="col-12"
+			:style="isMobile ? { padding: '0' } : {}"
+		>
 			<OtherFile
 				:type="'Appendix'"
 				:allow-edit="allowEditFile.appendix"
@@ -516,6 +523,7 @@ import PaymentPreCertificateHistories from "@/components/PreCertificate/PaymentP
 import ModalPCAppraiseInfomation from "@/components/PreCertificate/ModalPCAppraiseInfomation";
 import ModalRequireForStage3 from "@/components/PreCertificate/ModalRequireForStage3";
 import OtherFile from "@/components/PreCertificate/OtherFile";
+import DocumentExport from "@/components/PreCertificate/DocumentExport";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
 import {
@@ -536,6 +544,7 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		DocumentExport,
 		ModalNotificationWithAssign,
 		PaymentPreCertificateHistories,
 		IconBase,
