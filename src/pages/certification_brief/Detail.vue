@@ -2521,7 +2521,6 @@ export default {
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
-				console.log("Data detail hoàn thành", this.form);
 				if (
 					this.form.payments &&
 					(this.form.payments.length === 0 ||
@@ -2541,7 +2540,9 @@ export default {
 					this.form.payments.length > 0 &&
 					this.form.payments[0].id
 				) {
-					let debt_remain = this.form.service_fee;
+					let debt_remain = this.form.service_fee
+						? Number(this.form.service_fee)
+						: Number(this.form.total_service_fee);
 					let amount_paid = 0;
 					for (let index = 0; index < this.form.payments.length; index++) {
 						const element = this.form.payments[index];

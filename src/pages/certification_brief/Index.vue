@@ -1206,7 +1206,6 @@ export default {
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
-				console.log("Data detail hoàn thành", this.detailData);
 				if (this.detailData.payments && this.detailData.payments.length === 0) {
 					this.$toast.open({
 						message:
@@ -1222,7 +1221,9 @@ export default {
 					this.detailData.payments.length > 0 &&
 					this.detailData.payments[0].id
 				) {
-					let debt_remain = this.detailData.service_fee;
+					let debt_remain = this.detailData.service_fee
+						? Number(this.detailData.service_fee)
+						: Number(this.detailData.total_service_fee);
 					let amount_paid = 0;
 					for (
 						let index = 0;
