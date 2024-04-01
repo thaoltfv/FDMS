@@ -330,7 +330,7 @@ class KeHoachTDG
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
-        Log::info('Path', ['path' => $path]);
+        Log::info('Path', ['path' => $path, 'fileName' => $fileName]);
         try {
             $objWriter->save(storage_path('app/public/' . $path . $fileName . '.docx'));
         } catch (\Exception $e) {
