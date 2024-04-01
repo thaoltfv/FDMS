@@ -457,12 +457,19 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
+        Log::info('is_pc: ' . $is_pc);
         if ($is_pc) {
+            Log::info(
+                '1: ' . $is_pc
+            );
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
 
 
             $certificate = $this->certificateRepository->dataPrintExport($id);
         } else {
+            Log::info(
+                '2: ' . $is_pc
+            );
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
             if (isset($precertificate->certificate_id)) {
