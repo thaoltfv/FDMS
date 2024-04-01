@@ -311,23 +311,27 @@ class HopDongTDG
         $textRun = $row1->addCell(8700, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Tài sản thẩm định giá : Quyền sở hữu căn hộ ');
         $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
-        $table = $section->addTable([
-            'borderSize' => 1,
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $row1 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => true
-        ));
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(800, $cellVCentered)->addText('STT', ['bold' => true],  $alignCenter);
-        $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $alignCenter);
-        $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
+        if ((is_array($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (is_array($certificate->appraise) && count($certificate->appraise) > 0)
+        ) {
+            $table = $section->addTable([
+                'borderSize' => 1,
+                'align' => JcTable::START,
+                'width' => 100 * 50,
+                'unit' => 'pct'
+            ]);
+            $row1 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => true
+            ));
 
+            $row1->addCell(800, $cellVCentered)->addText('STT', ['bold' => true],  $alignCenter);
+            $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $alignCenter);
+            $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
+        }
         $addressHSTD = '';
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {

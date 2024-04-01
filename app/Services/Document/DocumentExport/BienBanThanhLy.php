@@ -309,21 +309,24 @@ class BienBanThanhLy
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
-        $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
-        $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
-        $row1->addCell(1600, array('vMerge' => 'restart',  'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
+        if ((is_array($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (is_array($certificate->appraise) && count($certificate->appraise) > 0)
+        ) {
+            $row1->addCell(400, array('vMerge' => 'restart', 'valign' => 'center'))->addText('STT', ['bold' => true],  $alignCenter);
+            $row1->addCell(3200, array('vMerge' => 'restart', 'valign' => 'center'))->addText('Tài sản thẩm định giá', ['bold' => true], $alignCenter);
+            $row1->addCell(3800, array('gridSpan' => 3,  'valign' => 'center'))->addText("Kết quả thẩm định giá", ['bold' => true], $alignCenter);
+            $row1->addCell(1600, array('vMerge' => 'restart',  'valign' => 'center'))->addText("Giá dịch vụ đã bao gồm VAT(đồng)", ['bold' => true], $alignCenter);
 
-        $row2 = $table->addRow();
-        $row2->addCell(400, array('vMerge' => 'continue'));
-        $row2->addCell(3200, array('vMerge' => 'continue'));
-        $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
-        $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
-        $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
-            'align' => 'center'
-        ));
-        $row2->addCell(1600, array('vMerge' => 'continue'));
-
+            $row2 = $table->addRow();
+            $row2->addCell(400, array('vMerge' => 'continue'));
+            $row2->addCell(3200, array('vMerge' => 'continue'));
+            $row2->addCell(1200, $cellVCentered)->addText('Số chứng thư', ['bold' => true],  $alignCenter);
+            $row2->addCell(1200, $cellVCentered)->addText('Ngày', ['bold' => true], $alignCenter);
+            $row2->addCell(1400, $cellVCentered)->addText('Tổng giá trị tài sản thẩm định giá', ['bold' => true], array(
+                'align' => 'center'
+            ));
+            $row2->addCell(1600, array('vMerge' => 'continue'));
+        }
         $total = 0;
         $isApartment = in_array('CC', $certificate->document_type ?? []);
 
