@@ -465,10 +465,9 @@ class CertificateAssetController extends Controller
             } else {
                 $certificate = new Certificate;
                 $fillable = $certificate->getFillable();
-                foreach ($precertificate->getAttributes() as $key => $value) {
-                    if ($key != $precertificate->getKeyName() && in_array($key, $fillable) && $value) {
-                        $certificate->$key = $value;
-                    }
+
+                foreach ($fillable as $attribute) {
+                    $certificate->$attribute = $precertificate->$attribute ?? null;
                 }
                 $certificate->service_fee = $precertificate->total_service_fee;
                 $certificate->document_type = [];
