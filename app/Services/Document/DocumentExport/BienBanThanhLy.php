@@ -354,10 +354,17 @@ class BienBanThanhLy
                 $cell = $row3->addCell(3200, $cellVCentered);
                 $table = $cell->addTable();
                 $row = $table->addRow();
-                $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                $row->addCell(100)->addText('');
-                $row3->addCell(1200, $cellVCentered)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null,  $alignBoth);
+                $row->addCell(50)->addText('');
+                $row->addCell(3100)->addText($item->appraise_asset, null, $alignBoth);
+                $row->addCell(50)->addText('');
+
+                $cell = $row3->addCell(3200, $cellVCentered);
+                $table = $cell->addTable();
+                $row = $table->addRow();
+                $row->addCell(50)->addText('');
+                $row->addCell(3100)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null, $alignBoth);
+                $row->addCell(50)->addText('');
+
                 $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
                 $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
                 $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
@@ -371,10 +378,17 @@ class BienBanThanhLy
                 $cell = $row3->addCell(3200, $cellVCentered);
                 $table = $cell->addTable();
                 $row = $table->addRow();
-                $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                $row->addCell(100)->addText('');
-                $row3->addCell(1200, $cellVCentered)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null,  $alignBoth);
+                $row->addCell(50)->addText('');
+                $row->addCell(3100)->addText($item->appraise_asset, null, $alignBoth);
+                $row->addCell(50)->addText('');
+
+                $cell = $row3->addCell(3200, $cellVCentered);
+                $table = $cell->addTable();
+                $row = $table->addRow();
+                $row->addCell(50)->addText('');
+                $row->addCell(3100)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null, $alignBoth);
+                $row->addCell(50)->addText('');
+
                 $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
                 $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
                 $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
