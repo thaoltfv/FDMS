@@ -507,7 +507,7 @@ class HopDongTDG
         $row->addCell(600)->addText("4.1.", null, ['align' => 'right']);
         $textRun = $row->addCell(9300)->addTextRun($indentleftNumber);
         $textRun->addText("Phí dịch vụ thẩm định giá tài sản: ");
-        if (isset($certificate->service_fee)) {
+        if ($certificate->service_fee) {
             $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
 
             $textRun->addText(
