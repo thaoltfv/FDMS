@@ -288,7 +288,7 @@ class BienBanThanhLy
                 ? $certificate->appraiserManager->appraisePosition->description
                 : '');
 
-        $chucvu = ucfirst(strtolower($chucvu));
+        $chucvu = mb_convert_case(mb_strtolower($chucvu), MB_CASE_TITLE, "UTF-8");
 
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
