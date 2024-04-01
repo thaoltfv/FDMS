@@ -436,7 +436,7 @@ class BienBanThanhLy
         $row2->addCell(4950)->addText("CHẤP HÀNH VIÊN", ['bold' => true], ['align' => 'center']);
         $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
 
-        $row3 = $table->addRow(800);
+        $row3 = $table->addRow(1200);
         $row3->addCell(4950)->addText("");
         $row3->addCell(4950)->addText("");
 
