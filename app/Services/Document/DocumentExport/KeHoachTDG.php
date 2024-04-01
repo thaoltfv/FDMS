@@ -182,7 +182,7 @@ class KeHoachTDG
             ['bold' => true,],
             $cellHCentered
         );
-        $row4->addCell(5700, $cellVCentered)->addText("Tp. Hồ Chí Minh, ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y'), ['italic' => true], $cellHCentered);
+        $row4->addCell(5700, $cellVCentered)->addText("Tp. Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
 
         $section->addText(
             "KẾ HOẠCH THẨM ĐỊNH GIÁ",

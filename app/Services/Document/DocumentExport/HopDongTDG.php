@@ -204,7 +204,7 @@ class HopDongTDG
             $indent13
         );
         $section->addText(
-            "Hôm nay, ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y') . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
+            "Hôm nay, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ' . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
         );
