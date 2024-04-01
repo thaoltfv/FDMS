@@ -1143,7 +1143,9 @@ export default {
 					this.dataPC.payments.length > 0 &&
 					this.dataPC.payments[0].id
 				) {
-					let debt_remain = this.dataPC.service_fee;
+					let debt_remain = this.dataPC.service_fee
+						? Number(this.dataPC.service_fee)
+						: Number(this.dataPC.total_service_fee);
 					let amount_paid = 0;
 					for (let index = 0; index < this.dataPC.payments.length; index++) {
 						const element = this.dataPC.payments[index];
