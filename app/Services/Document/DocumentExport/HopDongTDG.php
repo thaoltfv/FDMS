@@ -373,7 +373,9 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row1->addCell(5900, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
 
-        $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
+        $appraise_date_formatted = $certificate->appraise_date
+            ? 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date))
+            : null;
         $row2 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
@@ -508,7 +510,7 @@ class HopDongTDG
                 $textServiceFee,
                 ['bold' => true]
             );
-            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee)) . ').', ['italic' => true]);
+            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee ?? 0)) . ').', ['italic' => true]);
         }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
