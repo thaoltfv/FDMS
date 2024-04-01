@@ -400,13 +400,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('print/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCao']);
 
-        Route::get('print/giay-yeu-cau/{id}/{is_pc}', [CertificateAssetController::class, 'printGiayYeuCauTDG']);
+        Route::get('print/giay-yeu-cau/{id}/{is_pc?}', [CertificateAssetController::class, 'printGiayYeuCauTDG']);
 
-        Route::get('print/hop-dong-tdg/{id}/{is_pc}', [CertificateAssetController::class, 'printHopDongTDG']);
+        Route::get('print/hop-dong-tdg/{id}/{is_pc?}', [CertificateAssetController::class, 'printHopDongTDG']);
 
-        Route::get('print/ke-hoach-tdg/{id}/{is_pc}', [CertificateAssetController::class, 'printKeHoachTDG']);
+        Route::get('print/ke-hoach-tdg/{id}/{is_pc?}', [CertificateAssetController::class, 'printKeHoachTDG']);
 
-        Route::get('print/bien-ban-thanh-ly/{id}/{is_pc}', [CertificateAssetController::class, 'printBienBanThanhLy']);
+        Route::get('print/bien-ban-thanh-ly/{id}/{is_pc?}', [CertificateAssetController::class, 'printBienBanThanhLy']);
 
         Route::get('print/test1/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest1']);
         Route::get('print/test2/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest2']);
