@@ -1689,7 +1689,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 }
             }
 
-            // delete priceEstimateFinal nếu cập nhật lại thông tin UTG
+            // delete priceEstimateFinal nếu cập nhật lại thông tin TSSB
             $priceEstimateFinals = PriceEstimateFinal::where('price_estimate_id', $priceEstimateId)->get();
             foreach ($priceEstimateFinals as $priceEstimateFinal) {
                 // Delete related records
