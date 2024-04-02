@@ -1634,7 +1634,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $path = env('STORAGE_OTHERS') . '/' . 'export_document/' . $now->year . '/' . $now->month . '/';
 
                 $files = $request->file('files');
-                $typeDocument = $request->input('name') ?? '';
+                $typeDocument = $request->input('type') ?? '';
 
                 if (!$typeDocument) {
                     return ['message' => 'Vui lòng nhập tên tài liệu', 'exception' => ''];
