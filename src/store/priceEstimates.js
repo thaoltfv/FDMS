@@ -1135,6 +1135,11 @@ export const usePriceEstimatesStore = defineStore(
 						? true
 						: false;
 				// step 1
+				if (bindDataStep.created_at) {
+					priceEstimates.value.createdAtString = moment(
+						bindDataStep.created_at
+					).format("DDMMYYYY");
+				}
 				if (bindDataStep.created_by) {
 					priceEstimates.value.createdBy = bindDataStep.created_by.name;
 					priceEstimates.value.created_by = bindDataStep.created_by;

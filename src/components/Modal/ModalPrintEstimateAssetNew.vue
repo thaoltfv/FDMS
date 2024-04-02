@@ -486,6 +486,9 @@
 								<tr class="mt-3">
 									<td></td>
 								</tr>
+								<tr class="mt-3">
+									<td></td>
+								</tr>
 								<tr>
 									<td class="text-center font-weight-bold">
 										Huỳnh Văn Ngoãn
@@ -498,11 +501,7 @@
 			</div>
 			<div class="card-footer footer-print">
 				<!-- v-print="'printBody'" -->
-				<button
-					v-print="'printBody'"
-					@click="statusPrint"
-					class="btn btn-orange"
-				>
+				<button v-print="printObj" @click="statusPrint" class="btn btn-orange">
 					In
 				</button>
 			</div>
@@ -771,8 +770,17 @@ export default {
 		LLayerGroup,
 		InputText
 	},
+
 	data() {
 		return {
+			printObj: {
+				id: "printBody",
+				popTitle:
+					"TSSB_" +
+					this.data.id +
+					(this.data.createdBy ? "_" + this.data.createdBy : "") +
+					(this.data.createdAtString ? "_" + this.data.createdAtString : "")
+			},
 			apartment_name: "",
 			land_types: [],
 			asset_details: [],

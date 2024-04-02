@@ -58,6 +58,7 @@
 							vid="estimateCompleteDate"
 							label="Thời gian hoàn thành dự kiến"
 							rules="required"
+							disabled
 							:requiredIcon="true"
 							class="col-6"
 						/>
