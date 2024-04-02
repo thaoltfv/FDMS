@@ -21,7 +21,7 @@
 					<span
 						style="color: #000; font-size: 12px !important;"
 						class="font-weight-bold"
-						>{{ data.id ? "SB_" + data.id : "" }}</span
+						>{{ data.id ? "TSSB_" + data.id : "" }}</span
 					>
 				</div>
 
@@ -525,7 +525,7 @@
 			<div class="card-body" id="printBody" style="padding: 10px;">
 				<img src="@/assets/images/header-kqsb.png" />
 				<div class="text-right" style="color: #000">
-					Mã sơ bộ: {{ data.id ? "SB_" + data.id : "" }}
+					Mã sơ bộ: {{ data.id ? "TSSB_" + data.id : "" }}
 				</div>
 				<div class="title__property text-center">KẾT QUẢ ƯỚC TÍNH SƠ BỘ</div>
 				<div class="w-100">

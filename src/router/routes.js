@@ -499,7 +499,7 @@ export const routes = [
 		beforeEnter: ResolveGuard([AuthGuard]),
 		meta: {
 			permissions: [PERMISSIONS.VIEW_PRICE],
-			gtm: "Trang ước tính giá"
+			gtm: "Trang tài sản sơ bộ"
 		}
 	},
 	{
@@ -509,7 +509,7 @@ export const routes = [
 		beforeEnter: ResolveGuard([AuthGuard]),
 		meta: {
 			permissions: [PERMISSIONS.VIEW_PRICE],
-			gtm: "Trang lịch sử ước tính giá"
+			gtm: "Trang lịch sử tài sản sơ bộ"
 		}
 	},
 
@@ -2121,7 +2121,7 @@ export const routes = [
 				component: page("price_estimates/Create.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Tạo mới ước tính giá",
+					title: "Tạo mới tài sản sơ bộ",
 					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
@@ -2129,11 +2129,11 @@ export const routes = [
 							name: "price_estimates.index"
 						},
 						{
-							title: "Tạo mới ước tính giá",
+							title: "Tạo mới tài sản sơ bộ",
 							name: "price_estimates.create"
 						}
 					],
-					gtm: "Trang tạo mới UTG"
+					gtm: "Trang tạo mới TSSB"
 				}
 			},
 			{
@@ -2143,7 +2143,7 @@ export const routes = [
 				beforeEnter: ResolveGuard([AuthGuard]),
 				props: true,
 				meta: {
-					title: "Chỉnh sửa ước tính giá",
+					title: "Chỉnh sửa tài sản sơ bộ",
 					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
@@ -2151,11 +2151,11 @@ export const routes = [
 							name: "price_estimates.index"
 						},
 						{
-							title: "Chỉnh sửa ước tính giá",
+							title: "Chỉnh sửa tài sản sơ bộ",
 							name: "price_estimates.create"
 						}
 					],
-					gtm: "Trang chỉnh sửa UTG"
+					gtm: "Trang chỉnh sửa TSSB"
 				}
 			},
 
@@ -2174,7 +2174,7 @@ export const routes = [
 							name: "price_estimates.index"
 						}
 					],
-					gtm: "Trang UTG"
+					gtm: "Trang TSSB"
 				}
 			},
 			{
@@ -2183,7 +2183,7 @@ export const routes = [
 				component: page("price_estimates/Detail.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Chi tiết ước tính giá",
+					title: "Chi tiết tài sản sơ bộ",
 					// fix_permission
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
@@ -2192,11 +2192,11 @@ export const routes = [
 							name: "price_estimates.index"
 						},
 						{
-							title: "Chi tiết ước tính giá",
+							title: "Chi tiết tài sản sơ bộ",
 							name: "price_estimates.detail"
 						}
 					],
-					gtm: "Trang chi tiết UTG"
+					gtm: "Trang chi tiết TSSB"
 				}
 			}
 		]

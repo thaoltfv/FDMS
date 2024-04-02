@@ -19,7 +19,7 @@
 				<!--Custom type table-->
 				<template slot="id" slot-scope="id, data">
 					<button @click.prevent="handleDetail(id, data)" class="link-detail">
-						{{ "UTG_" + id }}
+						{{ "TSSB_" + id }}
 					</button>
 				</template>
 				<template slot="description" slot-scope="description">
@@ -116,7 +116,7 @@
 						:class="
 							`bg-${configColor(element)}-15 text-${configColor(element)}`
 						"
-						>UTG_{{ element.id }}</span
+						>TSSB_{{ element.id }}</span
 					>
 				</div>
 				<div class="property-content mb-2 d-flex color_content">

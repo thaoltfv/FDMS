@@ -7,7 +7,7 @@
 			<form-wizard
 				ref="wizard"
 				color="#99D161"
-				:title="`UTG${priceEstimates.id ? `_${priceEstimates.id}` : ''}`"
+				:title="`TSSB${priceEstimates.id ? `_${priceEstimates.id}` : ''}`"
 				:subtitle="status_text"
 				layout="vertical"
 				finish-button-text="Hoàn Thành"
@@ -885,7 +885,7 @@ export default {
 
 		const openNotification = ref(false);
 		const messageNoti =
-			"Phiếu ước tính giá sẽ được xác lập và không thể chỉnh sửa sau khi chuyển thành Tài sản thẩm định. Bạn có muốn tiếp tục ?";
+			"Phiếu kết quả ước tính sơ bộ sẽ được xác lập và không thể chỉnh sửa sau khi chuyển thành Tài sản thẩm định. Bạn có muốn tiếp tục ?";
 		return {
 			isMobile,
 			priceEstimates,

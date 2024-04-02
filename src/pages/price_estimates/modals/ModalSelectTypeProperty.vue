@@ -9,7 +9,7 @@
 				:style="isMobile ? { 'padding-top': '10px', padding: '0' } : {}"
 			>
 				<div class="title">
-					Chọn loại ước tính giá
+					Chọn loại tài sản sơ bộ
 				</div>
 			</div>
 			<div class="card-body" :style="isMobile ? { 'padding-bottom': '0' } : {}">

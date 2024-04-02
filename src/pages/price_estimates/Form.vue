@@ -4,7 +4,7 @@
 			:key="key_render_formwizard"
 			ref="wizard"
 			color="#99D161"
-			:title="`UTG${dataForm.id ? `_${dataForm.id}` : ''}`"
+			:title="`TSSB${dataForm.id ? `_${dataForm.id}` : ''}`"
 			:subtitle="status_text"
 			layout="vertical"
 			finish-button-text="Hoàn Thành"
