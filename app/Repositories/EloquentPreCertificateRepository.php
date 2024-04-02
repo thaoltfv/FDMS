@@ -1726,7 +1726,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $item = PreCertificateExportDocuments::where('id', $id)->delete();
                 $edited = PreCertificate::where('id', $preCertificateId[0]->pre_certificate_id)->first();
                 $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
-                $item = PreCertificateExportDocuments::where('id', $id)->delete();
                 # activity-log delete file
                 $this->CreateActivityLog(
                     $edited,
@@ -1755,7 +1754,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $item = PreCertificateExportDocuments::where('id', $id)->delete();
                 $edited = Certificate::where('id', $certificateId[0]->id)->first();
                 $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
-                $item = PreCertificateExportDocuments::where('id', $id)->delete();
                 # activity-log delete file
                 $this->CreateActivityLog($edited, $edited2, 'delete_file', 'Xóa tài liệu sơ bộ ' . $delete_what . ' được tải lên');
                 // chưa lấy ra được model user và id user
