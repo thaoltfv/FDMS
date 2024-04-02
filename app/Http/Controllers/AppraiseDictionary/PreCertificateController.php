@@ -482,7 +482,7 @@ class PreCertificateController extends Controller
     public function exportDocumentDownloadPC($id)
     {
         if (
-            CommonService::checkUserPermission($this->permissionExport)
+            !CommonService::checkUserPermission($this->permissionExport)
         ) {
             return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
         }
