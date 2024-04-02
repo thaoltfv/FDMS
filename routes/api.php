@@ -341,7 +341,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('pre-certificates/export-document/upload/{id}', [PreCertificateController::class, 'ExportDocumentUpload']);
     Route::post('pre-certificates/export-document/remove', [PreCertificateController::class, 'ExportDocumentRemove']);
-    Route::get('pre-certificates/export-document/download/{id}', [PreCertificateController::class, 'ExportDocumentDownload']);
+    Route::get('pre-certificates/export-document-pc/download/{id}', [PreCertificateController::class, 'exportDocumentDownloadPC']);
+    Route::get('pre-certificates/export-document-certificate/download/{id}', [PreCertificateController::class, 'exportDocumentDownloadCertificate']);
 
     Route::get('/pre-certificates', [PreCertificateController::class, 'findAll']);
 

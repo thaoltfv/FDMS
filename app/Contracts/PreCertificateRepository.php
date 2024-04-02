@@ -47,7 +47,7 @@ interface PreCertificateRepository extends BaseRepository
 
     public function exportDocumentRemoveCertificate($id, $request);
 
-    public function exportDocumentDownload($id, $request);
+    public function exportDocumentDownload($id);
 
     public function exportDocumentUpload(
         $id,

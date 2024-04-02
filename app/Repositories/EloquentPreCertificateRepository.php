@@ -1757,7 +1757,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
                 $item = PreCertificateExportDocuments::where('id', $id)->delete();
                 # activity-log delete file
-                $this->CreateActivityLog($edited, $edited2, 'delete_file', 'xóa tài liệu sơ bộ ' . $delete_what);
+                $this->CreateActivityLog($edited, $edited2, 'delete_file', 'Xóa tài liệu sơ bộ ' . $delete_what . ' được tải lên');
                 // chưa lấy ra được model user và id user
                 return $item;
             } catch (Exception $exception) {
@@ -1769,9 +1769,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     /**
      * @return bool
      */
-    public function exportDocumentDownload($id, $request)
+    public function exportDocumentDownload($id)
     {
-        return DB::transaction(function () use ($id, $request) {
+        return DB::transaction(function () use ($id) {
             try {
                 $item = PreCertificateExportDocuments::where('id', $id)->first();
                 return $item;

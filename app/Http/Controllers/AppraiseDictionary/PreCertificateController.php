@@ -479,23 +479,37 @@ class PreCertificateController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function exportDocumentDownload($id, Request $request)
+    public function exportDocumentDownloadPC($id)
     {
-        $is_pc = $request->input('is_pc');
         if (
-            $is_pc && !CommonService::checkUserPermission($this->permissionExport)
+            CommonService::checkUserPermission($this->permissionExport)
         ) {
             return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
-
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        } else if (!isset($is_pc)) {
-            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
-            return $this->respondWithErrorData($data);
         }
 
         try {
-            $item = $this->preCertificateRepository->exportDocumentDownload($id, $request);
+            $item = $this->preCertificateRepository->exportDocumentDownload($id);
+            if (isset($item->link)) {
+                return response()->streamDownload(function () use ($item) {
+                    echo file_get_contents($item->link);
+                }, $item->name);
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+    public function exportDocumentDownloadCertificate($id)
+    {
+        if (!CommonService::checkUserPermission($this->permissionExport2)) {
+
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        }
+
+        try {
+            $item = $this->preCertificateRepository->exportDocumentDownload($id);
             if (isset($item->link)) {
                 return response()->streamDownload(function () use ($item) {
                     echo file_get_contents($item->link);
