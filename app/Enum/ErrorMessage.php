@@ -25,7 +25,7 @@ class ErrorMessage
     public const CERTIFICATE_CHOOSE_APPRAISE = 'HSTD không ở trạng thái Đang thẩm định.';
     public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa phiếu có trạng thái ';
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
-    public const PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB có trạng thái ';
+    public const PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chuyển tiếp YCSB có trạng thái ';
     public const PRE_CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB ';
     public const PAYMENT_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa thông tin thanh toán';
     public const PRE_CERTIFICATE_CHECK_UPDATE_TO_OFFICAL = 'Bạn không có quyền sang trạng thái chính thức ';
