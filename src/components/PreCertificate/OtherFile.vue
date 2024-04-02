@@ -465,7 +465,7 @@ export default {
 					});
 				});
 			} else if (!permission.value.allowExport) {
-				this.$toast.open({
+				other.value.toast.open({
 					message: `Bạn không có quyền tải tài liệu đính kèm này`,
 					type: "success",
 					position: "top-right",
@@ -684,7 +684,7 @@ export default {
 				} else {
 					check = false;
 					this.$toast.open({
-						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
+						message: "Không đúng định dạng vui lòng kiểm tra lại",
 						type: "error",
 						position: "top-right",
 						duration: 3000

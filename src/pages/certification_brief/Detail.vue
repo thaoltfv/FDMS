@@ -1270,7 +1270,20 @@
 				</div>
 			</div>
 		</div>
-
+		<div
+			v-if="idData"
+			class="col-12"
+			:style="isMobile() ? { padding: '0' } : {}"
+		>
+			<DocumentExport
+				:allow-edit="true"
+				:is_pc="false"
+				:data-id="idData"
+				:lstFileExport="form.export_documents || []"
+				:permission="{ allowExport: true }"
+				:toast="$toast"
+			/>
+		</div>
 		<div
 			v-if="
 				form.general_asset.length > 0 || form.status === 1 || form.status === 2
@@ -1584,6 +1597,7 @@ import ModalAppraisal from "./component/modals/ModalAppraisal";
 import ModalAppraiseInfomation from "./component/modals/ModalAppraiseInfomation";
 import ModalAppraiseList from "./component/modals/ModalAppraiseList";
 import ModalDetailAppraise from "./component/modals/ModalDetailAppraise";
+import DocumentExport from "@/components/PreCertificate/DocumentExport";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
 import {
@@ -1603,6 +1617,7 @@ Vue.use(Icon);
 export default {
 	name: "detail_certification_brief",
 	components: {
+		DocumentExport,
 		PaymentCertificateHistories,
 		IconBase,
 		InputCategory,
