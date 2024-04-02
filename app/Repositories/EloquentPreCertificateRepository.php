@@ -1636,6 +1636,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $files = $request->file('files');
                 $typeDocument = $request->input('name') ?? '';
 
+                if (!$typeDocument) {
+                    return ['message' => 'Vui lòng nhập tên tài liệu', 'exception' => ''];
+                }
                 $user = CommonService::getUser();
 
                 if (isset($files) && !empty($files)) {
