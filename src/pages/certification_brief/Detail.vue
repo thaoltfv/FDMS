@@ -13,7 +13,7 @@
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="editExportDocument">
+							<a-dropdown v-if="showExportDocument">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -1271,16 +1271,16 @@
 			</div>
 		</div>
 		<div
-			v-if="idData && editExportDocument"
+			v-if="idData && showExportDocument"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
 			<DocumentExport
-				:allow-edit="true"
+				:allow-edit="editExportDocument"
 				:is_pc="false"
 				:data-id="idData"
 				:lstFileExport="form.export_documents || []"
-				:permission="{ allowExport: true }"
+				:permission="{ allowExport: exportAction }"
 				:toast="$toast"
 			/>
 		</div>
@@ -1730,7 +1730,8 @@ export default {
 			editAppraiser: false,
 			editItemList: false,
 			editInfo: false,
-			editExportDocument: false,
+			showExportDocument: false,
+			editxportDocument: false,
 			editDocument: false,
 			editPayment: false,
 			printConfig: false,
@@ -2022,6 +2023,8 @@ export default {
 				.then(resp => {
 					if (resp.data) {
 						this.form = Object.assign(this.form, { ...resp.data });
+						this.changeEditStatus();
+
 						// this.keyRender++;
 					} else if (resp.error && resp.error.statusCode) {
 						this.$toast.open({
@@ -3329,7 +3332,10 @@ export default {
 			);
 			if (dataJson && dataJson.length > 0) {
 				this.config = dataJson[0];
-				this.editExportDocument = dataJson[0].isExportDocument;
+				this.showExportDocument = dataJson[0].isExportDocument;
+				this.editExportDocument = dataJson[0].edit.export_document
+					? dataJson[0].edit.export_document
+					: false;
 				this.editAppraiser = dataJson[0].edit.appraiser
 					? dataJson[0].edit.appraiser
 					: false;
