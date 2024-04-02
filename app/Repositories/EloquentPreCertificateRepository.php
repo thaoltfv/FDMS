@@ -1634,7 +1634,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $path = env('STORAGE_OTHERS') . '/' . 'export_document/' . $now->year . '/' . $now->month . '/';
 
                 $files = $request->file('files');
-                $name = $request->input('name') ?? '';
+                $typeDocument = $request->input('name') ?? '';
 
                 $user = CommonService::getUser();
 
@@ -1654,8 +1654,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             'link' => $fileUrl,
                             'type' => $fileType,
                             'size' => $fileSize,
-                            'description' => 'appendix',
+                            'description' => '',
                             'created_by' => $user->id,
+                            'type_document' => $typeDocument
                         ];
 
                         if ($is_pc) {
