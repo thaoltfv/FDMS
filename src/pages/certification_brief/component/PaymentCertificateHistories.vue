@@ -424,8 +424,9 @@ export default {
 			this.isSubmit = true;
 			const isValid = await this.$refs.paymentsForm.validate();
 			if (isValid) {
-				this.isSubmit = false;
 				this.handleAction();
+			} else {
+				this.isSubmit = false;
 			}
 		},
 		async handleAction() {
