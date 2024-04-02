@@ -136,6 +136,11 @@ export const usePriceEstimatesStore = defineStore(
 			let text = phrase.toLowerCase();
 			return text.charAt(0).toUpperCase() + text.slice(1);
 		}
+		function toTitleCase(str) {
+			return str.replace(/\w\S*/g, function(txt) {
+				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+			});
+		}
 		async function getDictionary() {
 			await WareHouse.getDictionaries()
 				.then(resp => {
@@ -256,7 +261,7 @@ export const usePriceEstimatesStore = defineStore(
 			let streets = miscInfo.value.districts.filter(item => item.id === id);
 			miscInfo.value.streets = streets[0].streets;
 			miscInfo.value.streets.forEach(item => {
-				item.name = formatCapitalize(item.name);
+				item.name = toTitleCase(item.name);
 			});
 			if (
 				priceEstimates.value.step_1.general_infomation.street_id !== "" &&
@@ -554,10 +559,11 @@ export const usePriceEstimatesStore = defineStore(
 			} else {
 				miscVariable.value.isHaveContruction = false;
 			}
-			getInfo();
+			getInfo(false);
 		}
-		function getInfo() {
+		function getInfo(shouldChangeAssetType = true) {
 			if (
+				shouldChangeAssetType &&
 				!dataInfo.value.assetName &&
 				priceEstimates.value.step_1.general_infomation.asset_type_id !== 39
 			) {
@@ -1129,6 +1135,11 @@ export const usePriceEstimatesStore = defineStore(
 						? true
 						: false;
 				// step 1
+				if (bindDataStep.created_at) {
+					priceEstimates.value.createdAtString = moment(
+						bindDataStep.created_at
+					).format("DDMMYYYY");
+				}
 				if (bindDataStep.created_by) {
 					priceEstimates.value.createdBy = bindDataStep.created_by.name;
 					priceEstimates.value.created_by = bindDataStep.created_by;

@@ -50,7 +50,7 @@ navigations = [
 		id: "price_estimates",
 		type: "item",
 		icon: "nav_utg",
-		title: "Ước tính giá",
+		title: "Tài sản sơ bộ",
 		routeName: "price_estimates.index",
 		customImage: true
 	},
@@ -84,7 +84,7 @@ navigations = [
 	// 	id: "price_estimate",
 	// 	type: "item",
 	// 	icon: "nav_utg",
-	// 	title: "Ước tính giá",
+	// 	title: "Tài sản sơ bộ",
 	// 	routeName: "price_estimate.index",
 	// 	customImage: true,
 	// 	denied: ["nova"]
@@ -300,7 +300,7 @@ navigations = [
 // 		{ id: 'home', type: 'item', icon: 'nav_bdg', title: 'Bản đồ giá', routeName: 'home', exact: true, customImage: true },
 // 		// { id: 'quyhoach', type: 'item', icon: 'nav_bdg', title: 'Bản đồ địa chính', routeName: 'map_dia_chinh', exact: true, customImage: true },
 // 		{ id: 'warehouse', type: 'item', icon: 'nav_kg', title: 'Kho giá', routeName: 'warehouse.index', customImage: true },
-// 		{ id: 'price_estimate', type: 'item', icon: 'nav_utg', title: 'Ước tính giá', routeName: 'price_estimate.index', customImage: true, denied: ['nova']},
+// 		{ id: 'price_estimate', type: 'item', icon: 'nav_utg', title: 'Tài sản sơ bộ', routeName: 'price_estimate.index', customImage: true, denied: ['nova']},
 // 		{ id: 'log', type: 'item', icon: 'nav_lsut', title: 'Lịch sử ước tính', routeName: 'log.index', customImage: true, denied: ['nova'] },
 // 		// { id: 'certificate', type: 'item', icon: 'certificate', title: 'Tài sản thẩm định Ver.1', routeName: 'certificate.index' },
 // 		// { id: 'appraisal', type: 'item', icon: 'file-signature', title: 'Hồ sơ thẩm định Ver.1', routeName: 'appraisal.index' },

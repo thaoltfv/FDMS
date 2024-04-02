@@ -17,18 +17,11 @@
 					class="text-right mt-3"
 					style="color: #000; font-size: 12px !important;"
 				>
+					Mã sơ bộ:
 					<span
 						style="color: #000; font-size: 12px !important;"
 						class="font-weight-bold"
-					>
-						{{
-							data.step_3.petitioner_name.toUpperCase() + " - ĐỊNH GIÁ SƠ BỘ - "
-						}}
-					</span>
-					<span
-						style="color: #000; font-size: 12px !important;"
-						class="font-weight-bold"
-						>{{ data.id ? +data.id : "" }}</span
+						>{{ data.id ? "TSSB_" + data.id : "" }}</span
 					>
 				</div>
 
@@ -531,7 +524,7 @@
 			<div class="card-body" id="printBody" style="padding: 10px;">
 				<img src="@/assets/images/header-kqsb.png" />
 				<div class="text-right" style="color: #000">
-					Mã sơ bộ: {{ data.id ? "SB_" + data.id : "" }}
+					Mã sơ bộ: {{ data.id ? "TSSB_" + data.id : "" }}
 				</div>
 				<div class="title__property text-center">KẾT QUẢ ƯỚC TÍNH SƠ BỘ</div>
 				<div class="w-100">
@@ -783,9 +776,10 @@ export default {
 			printObj: {
 				id: "printBody",
 				popTitle:
-					this.data.step_3.petitioner_name.toUpperCase() +
-					" - ĐỊNH GIÁ SƠ BỘ - " +
-					this.data.id
+					"TSSB_" +
+					this.data.id +
+					(this.data.createdBy ? "_" + this.data.createdBy : "") +
+					(this.data.createdAtString ? "_" + this.data.createdAtString : "")
 			},
 			apartment_name: "",
 			land_types: [],
