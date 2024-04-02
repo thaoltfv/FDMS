@@ -89,7 +89,10 @@
 									</span>
 								</div>
 								<div class="col-2">
-									<span class="number-style-input">
+									<span
+										class="number-style-input"
+										:key="keyRefreshTotalPriceMainLand"
+									>
 										{{
 											main_land.total_price !== null &&
 											main_land.total_price !== undefined
@@ -673,6 +676,7 @@ export default {
 		// const step_3 = ref(_.cloneDeep(priceEstimates.value.step_3));
 
 		const step_3 = ref(null);
+		const keyRefreshTotalPriceMainLand = ref(0);
 		const getStartedLand = () => {
 			const step1 = priceEstimates.value.step_1;
 			const tempTotalArea = step1.total_area || [];
@@ -709,7 +713,7 @@ export default {
 					tempTotalArea.forEach(area => {
 						if (area.land_type_purpose_id == id) {
 							area.unit_price = average;
-							area.total_price = area.main_area * average;
+							area.total_price = (area.main_area * average).toFixed(0);
 						}
 					});
 				}
@@ -887,6 +891,7 @@ export default {
 
 		const checkShowPlanning = ref(false);
 		return {
+			keyRefreshTotalPriceMainLand,
 			step_3,
 			isMobile,
 			miscInfo,
@@ -1342,18 +1347,23 @@ export default {
 				!isNaN(total_construction_area) &&
 				!isNaN(remaining_quality)
 			) {
-				this.step_3.tangible_assets[index].total_price =
-					unit_price * total_construction_area * (remaining_quality / 100);
+				this.step_3.tangible_assets[index].total_price = (
+					unit_price *
+					total_construction_area *
+					(remaining_quality / 100)
+				).toFixed(0);
 			}
 		},
 		handleChangeMainArea(value, index) {
 			if (value) {
 				this.step_3.total_area[index].total_area = value;
 				if (this.step_3.total_area[index].unit_price) {
-					this.step_3.total_area[index].total_price =
+					this.step_3.total_area[index].total_price = (
 						this.step_3.total_area[index].unit_price *
-						this.step_3.total_area[index].main_area;
+						this.step_3.total_area[index].main_area
+					).toFixed(0);
 				}
+				this.keyRefreshTotalPriceMainLand++;
 				this.handleGetTotalArea();
 			}
 		},
@@ -1361,9 +1371,11 @@ export default {
 			if (value) {
 				this.step_3.total_area[index].unit_price = value;
 				if (this.step_3.total_area[index].main_area) {
-					this.step_3.total_area[index].total_price =
+					this.step_3.total_area[index].total_price = (
 						this.step_3.total_area[index].unit_price *
-						this.step_3.total_area[index].main_area;
+						this.step_3.total_area[index].main_area
+					).toFixed(0);
+					this.keyRefreshTotalPriceMainLand++;
 				} else {
 					this.step_3.total_area[index].total_price = 0;
 				}
@@ -1373,9 +1385,10 @@ export default {
 			if (value) {
 				this.step_3.apartment_finals[index].unit_price = value;
 				if (this.step_3.apartment_finals[index].total_area) {
-					this.step_3.apartment_finals[index].total_price =
+					this.step_3.apartment_finals[index].total_price = (
 						this.step_3.apartment_finals[index].unit_price *
-						this.step_3.apartment_finals[index].total_area;
+						this.step_3.apartment_finals[index].total_area
+					).toFixed(0);
 				} else {
 					this.step_3.apartment_finals[index].total_price = 0;
 				}
@@ -1385,9 +1398,10 @@ export default {
 			if (value) {
 				this.step_3.planning_area[index].planning_area = value;
 				if (this.step_3.planning_area[index].unit_price) {
-					this.step_3.planning_area[index].total_price =
+					this.step_3.planning_area[index].total_price = (
 						this.step_3.planning_area[index].unit_price *
-						this.step_3.planning_area[index].planning_area;
+						this.step_3.planning_area[index].planning_area
+					).toFixed(0);
 				}
 				this.handleGetTotalArea();
 			}
@@ -1396,9 +1410,10 @@ export default {
 			if (value) {
 				this.step_3.planning_area[index].unit_price = value;
 				if (this.step_3.planning_area[index].planning_area) {
-					this.step_3.planning_area[index].total_price =
+					this.step_3.planning_area[index].total_price = (
 						this.step_3.planning_area[index].unit_price *
-						this.step_3.planning_area[index].planning_area;
+						this.step_3.planning_area[index].planning_area
+					).toFixed(0);
 				} else {
 					this.step_3.planning_area[index].total_price = 0;
 				}
