@@ -137,19 +137,26 @@ export default class File extends Model {
 	static async downloadFilePreCertificateExport(id) {
 		return new this().makeRequest({
 			method: "GET",
-			url: `api/pre-certificates/export-document/download/${id}`
+			url: `api/pre-certificates/export-document-pc/download/${id}`
 		});
 	}
-	static async deleteFilePreCertificateExport(id) {
+	static async downloadFileCertificateExport(id) {
 		return new this().makeRequest({
-			method: "POST",
-			url: `api/pre-certificates/export-document/remove/${id}`
+			method: "GET",
+			url: `api/pre-certificates/export-document-certificate/download/${id}`
 		});
 	}
-	static async uploadFilePreCertificateExport(data, id, typeDocument) {
+	static async deleteFilePreCertificateExport(data) {
 		return new this().makeRequest({
 			method: "POST",
-			url: `/api/pre-certificates/export-document/upload/${id}/${typeDocument}`,
+			url: `api/pre-certificates/export-document/remove`,
+			data
+		});
+	}
+	static async uploadFilePreCertificateExport(data, id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/pre-certificates/export-document/upload/${id}`,
 			data
 		});
 	}

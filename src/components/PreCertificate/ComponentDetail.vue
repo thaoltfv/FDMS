@@ -401,7 +401,14 @@
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
-			<DocumentExport :allow-edit="allowEditFile.appendix" />
+			<DocumentExport
+				:allow-edit="allowEditFile.appendix"
+				:is_pc="true"
+				:data-id="dataPC.id"
+				:lstFileExport="dataPC.export_documents || []"
+				:permission="{ allowExport: true }"
+				:toast="$toast"
+			/>
 		</div>
 		<div
 			v-if="dataPC.id"

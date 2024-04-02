@@ -5,23 +5,22 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
-		<ModalViewDocument
-			v-if="isShowPrint"
-			@cancel="isShowPrint = false"
-			:filePrint="filePrint"
-			title="Xem trước tập tin"
+		<ModalNotificationCertificate
+			v-if="isReUpload"
+			@cancel="isReUpload = false"
+			v-bind:notification="reUploadMessage"
+			@action="openUploadFile"
 		/>
 		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="row d-flex justify-content-between align-items-center">
 						<h3 class="title ml-1">
-							Hồ sơ đính kèm
+							Tài liệu sơ bộ
 						</h3>
 					</div>
 
 					<img
-						v-if="!fromComponent"
 						class="img-dropdown"
 						:class="!showCardDetailFile ? 'img-dropdown__hide' : ''"
 						src="@/assets/images/icon-btn-down.svg"
@@ -32,32 +31,89 @@
 			</div>
 
 			<div class="card-body card-info" v-show="showCardDetailFile">
-				<div class="ml-n3 mt-2 row">
+				<div class="ml-n3 mt-2 row" :key="keyRefresh">
 					<div
 						class="mb-4 col-3 "
 						v-for="(file, index) in lstFile"
 						:key="index"
 					>
 						<div
-							class="row input_download_certificate mx-1  d-flex justify-content-between"
+							class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+							:style="!file.name ? { height: '3.85rem' } : { height: '8.4rem' }"
 						>
-							<div class="d-flex align-items-center">
+							<div class="d-flex flex-column">
 								<div
-									class="title_input_content title_input_download cursor_pointer"
+									class="d-flex ml-1 row justify-content-between align-items-center w-100 mb-2"
 								>
-									{{ file.nameTitle }}
+									<div
+										class="title_input_content title_input_download cursor_pointer"
+										style="margin-top:-5px"
+									>
+										{{ file.nameTitle }}
+									</div>
+									<label>
+										<font-awesome-icon
+											:style="{ color: '#b6d5f3', cursor: 'pointer' }"
+											icon="cloud-upload-alt"
+											size="2x"
+										/>
+										<input
+											class="btn-upload-mini"
+											@click="checkFileUpload(file)"
+										/>
+										<input
+											type="file"
+											:ref="file.type_document"
+											:id="'image_property' + file.type_document"
+											accept=".doc, .docx, application/pdf"
+											@change="onImageChange($event, file.type_document)"
+											hidden
+										/>
+									</label>
 								</div>
-							</div>
-							<div
-								class="d-flex align-items-center justify-content-end col-1 pr-3"
-							>
-								<div>
-									<font-awesome-icon
-										:style="{ color: '#b6d5f3', cursor: 'pointer' }"
-										icon="cloud-upload-alt"
-										size="1x"
-										@click="deleteOtherFile(file, index)"
-									/>
+								<hr
+									v-if="file.name"
+									style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+								/>
+								<!-- Divider -->
+								<div
+									v-if="file.name"
+									class="row d-flex justify-content-between mt-2"
+									style="margin-left:1px;margin-right:1px;position: relative;padding:  0px;"
+								>
+									<div
+										class="d-flex align-items-center"
+										@click="downloadOtherFile(file)"
+									>
+										<img
+											class="mr-2"
+											style="width: 1.5rem;"
+											src="@/assets/icons/ic_taglink_2.svg"
+											alt="tag_2"
+										/>
+										<div
+											class="title_input_content title_input_download cursor_pointer"
+											style="color: #45AAF2;"
+										>
+											{{
+												file.name
+													? file.name.length > 20
+														? file.name.substring(20, 0) + "..."
+														: file.name
+													: ""
+											}}
+										</div>
+									</div>
+									<div
+										class="d-flex align-items-center justify-content-end col-1 pr-3"
+									>
+										<img
+											@click="deleteOtherFile(file, index)"
+											src="@/assets/icons/ic_delete_2.svg"
+											alt="tag_2"
+											class="img_document_action"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -71,6 +127,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 
+import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import Vue from "vue";
 import Icon from "buefy";
@@ -81,8 +138,8 @@ import axios from "@/plugins/axios";
 Vue.use(Icon);
 export default {
 	props: {
-		type: {
-			type: String
+		is_pc: {
+			type: Boolean
 		},
 		allowEdit: {
 			type: Boolean,
@@ -96,12 +153,12 @@ export default {
 		},
 		permission: {
 			type: Object
+		},
+		toast: {
+			type: Object
 		}
 	},
-	components: {
-		ModalDelete,
-		ModalViewDocument
-	},
+	components: { ModalNotificationCertificate, ModalDelete, ModalViewDocument },
 	setup(props, context) {
 		const checkMobile = () => {
 			if (
@@ -114,19 +171,24 @@ export default {
 				return false;
 			}
 		};
-		const showCardDetailFile = ref(false);
+		const showCardDetailFile = ref(true);
 		const isMobile = ref(checkMobile());
-
 		const lstFile = ref([
-			{ type: "GYC", nameTitle: "Giấy yêu cầu TĐG" },
-			{ type: "HDTDG", nameTitle: "Hợp đồng" },
-			{ type: "KHTDG", nameTitle: "Kế hoạch TĐG" },
-			{ type: "BBTL", nameTitle: "Thanh lý hợp đồng" }
+			{ type_document: "GYC", nameTitle: "Giấy yêu cầu TĐG" },
+			{ type_document: "HDTDG", nameTitle: "Hợp đồng" },
+			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG" },
+			{ type_document: "BBTL", nameTitle: "Thanh lý hợp đồng" }
+		]);
+		const lstFileOriginal = ref([
+			{ type_document: "GYC", nameTitle: "Giấy yêu cầu TĐG" },
+			{ type_document: "HDTDG", nameTitle: "Hợp đồng" },
+			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG" },
+			{ type_document: "BBTL", nameTitle: "Thanh lý hợp đồng" }
 		]);
 		if (props.lstFileExport) {
 			lstFile.value = lstFile.value.map(file => {
 				const matchingElement = props.lstFileExport.find(
-					element => element.type === file.type
+					element => element.type_document === file.type_document
 				);
 				return matchingElement ? { ...file, ...matchingElement } : file;
 			});
@@ -137,7 +199,9 @@ export default {
 				axios({
 					url:
 						process.env.API_URL +
-						"/api/pre-certificates/export-document/download/" +
+						(props.is_pc
+							? "/api/pre-certificates/export-document-pc/download/"
+							: "/api/pre-certificates/export-document-certificate/download/") +
 						file.id,
 					method: "GET",
 					responseType: "blob"
@@ -149,7 +213,7 @@ export default {
 					document.body.appendChild(link);
 					link.click();
 					window.URL.revokeObjectURL(link);
-					other.value.toast.open({
+					props.toast.open({
 						message: `Tải xuống thành công`,
 						type: "success",
 						position: "top-right",
@@ -157,14 +221,14 @@ export default {
 					});
 				});
 			} else if (!props.permission.allowExport) {
-				this.$toast.open({
-					message: `Bạn không có quyền tải tài liệu đính kèm này`,
+				props.toast.open({
+					message: `Bạn không có quyền tải tài liểu sơ bộ này`,
 					type: "success",
 					position: "top-right",
 					duration: 3000
 				});
 			} else {
-				other.value.toast.open({
+				props.toast.open({
 					message: `Tài liệu chưa được tải lên`,
 					type: "error",
 					position: "top-right",
@@ -177,40 +241,40 @@ export default {
 		const fileDelete = ref({ id: null, isUpload: false });
 		const deleteOtherFile = (file, index) => {
 			openModalDelete.value = true;
-			fileDelete.value = { id: file.id, isUpload: file.isUpload, index };
+			fileDelete.value = {
+				id: file.id,
+				isUpload: file.isUpload,
+				index,
+				nameTitle: file.nameTitle
+			};
 		};
+		const keyRefresh = ref(0);
 		const handleDelete = async () => {
-			if (fileDelete.value.isUpload === false) {
-				lstFile.value.splice(fileDelete.value.index, 1);
-				other.value.toast.open({
-					message: "Xóa thành công",
-					type: "success",
-					position: "top-right",
-					duration: 3000
-				});
-				return;
-			}
-			const res = await File.deleteFilePreCertificateExport(
-				fileDelete.value.id
-			);
+			const formData = new FormData();
+			formData.append("id", fileDelete.value.id);
+			formData.append("is_pc", props.is_pc);
+			formData.append("delete_what", fileDelete.value.nameTitle);
+			const res = await File.deleteFilePreCertificateExport(formData);
 			if (res.data) {
-				lstFile.value.splice(fileDelete.value.index, 1);
-
-				other.value.toast.open({
+				lstFile.value[fileDelete.value.index] = {
+					...lstFileOriginal.value[fileDelete.value.index]
+				};
+				keyRefresh.value++;
+				props.toast.open({
 					message: "Xóa thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
 				});
 			} else if (res.error) {
-				other.value.toast.open({
+				props.toast.open({
 					message: res.error.message,
 					type: "error",
 					position: "top-right",
 					duration: 3000
 				});
 			} else {
-				other.value.toast.open({
+				props.toast.open({
 					message: "Có lỗi xảy ra trong lúc xóa file",
 					type: "error",
 					position: "top-right",
@@ -218,28 +282,17 @@ export default {
 				});
 			}
 		};
-		const openFile = file => {
-			if (file.link) {
-				window.open(file.link, "_blank");
-			} else {
-				other.value.toast.open({
-					message: "Có lỗi xảy ra vui lòng thử lại",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-			}
-			// window.open(
-			// 	process.env.API_URL +
-			// 		"/api/certificate/other-document/download/" +
-			// 		file.id,
-			// 	"_blank"
-			// );
-		};
+
 		const isShowPrint = ref(false);
 		const filePrint = ref(null);
-
+		const reportType = ref(null);
+		const isReUpload = ref(false);
+		const reUploadMessage = ref("");
 		return {
+			reUploadMessage,
+			keyRefresh,
+			isReUpload,
+			reportType,
 			showCardDetailFile,
 			isMobile,
 			lstFile,
@@ -248,11 +301,23 @@ export default {
 			filePrint,
 			handleDelete,
 			deleteOtherFile,
-			downloadOtherFile,
-			openFile
+			downloadOtherFile
 		};
 	},
 	methods: {
+		checkFileUpload(file) {
+			this.reportType = file.type_document;
+			if (file.name) {
+				this.isReUpload = true;
+				this.reUploadMessage =
+					file.nameTitle +
+					" đã có, bạn có muốn upload " +
+					file.nameTitle +
+					" mới ?";
+			} else {
+				this.openUploadFile();
+			}
+		},
 		formatNumber(num) {
 			if (num) {
 				let formatedNum = num.toString().replace(".", ",");
@@ -261,8 +326,15 @@ export default {
 				});
 			}
 		},
-		async onImageChange(e) {
+		openUploadFile() {
+			const id = "image_property" + this.reportType;
+			document.getElementById(id).click();
+		},
+		async onImageChange(e, type) {
+			this.reportType = type;
 			const formData = new FormData();
+			formData.append("is_pc", this.is_pc);
+			formData.append("type", type);
 			let check = true;
 			let files = e.target.files;
 			if (!files.length) {
@@ -270,28 +342,9 @@ export default {
 			}
 			for (let i = 0; i < e.target.files.length; i++) {
 				this.file = e.target.files[i];
-				if (
-					this.file.type === "image/png" ||
-					this.file.type === "image/jpeg" ||
-					this.file.type === "image/jpg" ||
-					this.file.type === "image/gif" ||
-					this.file.type ===
-						"application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-					this.file.type ===
-						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-					this.file.type === "application/pdf"
-				) {
-					let link = URL.createObjectURL(this.file);
-					this.file.link = link;
-				} else {
-					check = false;
-					this.$toast.open({
-						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
-						type: "error",
-						position: "top-right",
-						duration: 3000
-					});
-				}
+
+				let link = URL.createObjectURL(this.file);
+				this.file.link = link;
 			}
 			if (check) {
 				this.showCardDetailFile = true;
@@ -302,21 +355,22 @@ export default {
 					}
 					let res = null;
 					if (this.dataId) {
-						res = await File.uploadFilePreCertificate(
+						res = await File.uploadFilePreCertificateExport(
 							formData,
-							this.dataId,
-							this.type
+							this.dataId
 						);
 						if (res.data) {
 							const tempList = [];
 							for (let index = 0; index < res.data.data.length; index++) {
 								const element = res.data.data[index];
-								if (element.type_document === this.type) {
-									tempList.push(element);
-								}
+								tempList.push(element);
 							}
-
-							this.lstFile = [...tempList];
+							this.lstFile = this.lstFile.map(file => {
+								const matchingElement = tempList.find(
+									element => element.type_document === file.type_document
+								);
+								return matchingElement ? { ...file, ...matchingElement } : file;
+							});
 
 							this.$toast.open({
 								message: "Thêm file thành công",
@@ -324,9 +378,14 @@ export default {
 								position: "top-right",
 								duration: 3000
 							});
+						} else {
+							this.$toast.open({
+								message: "Có lỗi xảy ra vui lòng kiểm tra lại sau",
+								type: "error",
+								position: "top-right",
+								duration: 3000
+							});
 						}
-					} else {
-						this.lstFile = [...this.lstFile, ...files];
 					}
 				}
 			}
@@ -474,7 +533,7 @@ export default {
 .btn-upload-mini {
 	left: 0;
 	opacity: 0;
-	width: 2rem;
+	width: 0rem;
 	// min-height: 10rem;
 	cursor: pointer;
 	// position: absolute;

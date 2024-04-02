@@ -254,6 +254,7 @@ export const usePreCertificateStore = defineStore(
 				temp.debtRemain -= element.amount;
 			}
 			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
+
 			dataPC.value = temp;
 			return dataPC.value;
 		}
