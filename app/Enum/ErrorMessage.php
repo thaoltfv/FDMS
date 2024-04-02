@@ -23,7 +23,7 @@ class ErrorMessage
     public const CERTIFICATE_APPRAISERTEAM = 'Vui lòng chọn đầy đủ thông tin tổ thẩm định.';
     public const CERTIFICATE_APPROVE_CHECK_APPRAISE = 'Bạn không thể thực hiện do chưa có thông tin tài sản thẩm định. ';
     public const CERTIFICATE_CHOOSE_APPRAISE = 'HSTD không ở trạng thái Đang thẩm định.';
-    public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chỉnh sửa phiếu có trạng thái ';
+    public const CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chuyển tiếp phiếu có trạng thái ';
     public const CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa HSTD ';
     public const PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE = 'Bạn không có quyền chuyển tiếp YCSB có trạng thái ';
     public const PRE_CERTIFICATE_CHECK_UPDATE = 'Bạn không có quyền chỉnh sửa YCSB ';
