@@ -1376,7 +1376,7 @@ export default {
 					let datafinal = response.data.data
 					//   let that = this
 					// console.log('data final', datafinal)
-					if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch') {
+					if (datafinal.message != 'Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau' && datafinal.message != 'Không tìm thấy thông tin quy hoạch' && datafinal.message != 'Thông tin quy hoạch chưa được cập nhật') {
 						this.dataResult = datafinal.data
 						this.geo_data = this.dataResult ? this.dataResult.geo_data : []
 						this.modalGeoInfo = true
