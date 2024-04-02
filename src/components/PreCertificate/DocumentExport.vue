@@ -135,6 +135,7 @@ import _ from "lodash";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
+import formMixin from "@/mixins/form.mixin";
 Vue.use(Icon);
 export default {
 	props: {
@@ -311,7 +312,9 @@ export default {
 				this.isReUpload = true;
 				this.reUploadMessage =
 					file.nameTitle +
-					" đã có, bạn có muốn upload " +
+					" đã có" +
+					"<br>" +
+					"Bạn có muốn upload " +
 					file.nameTitle +
 					" mới ?";
 			} else {
