@@ -859,7 +859,15 @@ export default {
 			this.$emit("cancel", event);
 		},
 		statusPrint(event) {
-			this.$emit("action", event);
+			// this.$emit("action", event);
+			this.printObj = {
+				id: "printBody",
+				popTitle:
+					"TSSB_" +
+					this.data.id +
+					(this.data.createdBy ? "_" + this.data.createdBy : "") +
+					(this.data.createdAtString ? "_" + this.data.createdAtString : "")
+			};
 		},
 		handleAction(event) {
 			this.$emit("action", event);
