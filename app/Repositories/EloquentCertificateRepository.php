@@ -3347,6 +3347,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'preType:id,description',
             'administrative:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'exportDocuments'
         ];
         $result = $this->model->query()
             ->with($with)
