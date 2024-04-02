@@ -253,7 +253,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 }
 
                 $role = $user->roles->last();
-                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
+                if ((($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -843,14 +843,14 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
+            if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
                 $result = $result->where('created_by', $userId);
             }
             $result = $result->first();
             if (empty($result))
-                $check = ['message' => 'Bạn không có quyền ở TSTĐ ' . $id, 'exception' => '', 'statusCode' => 403];
+                $check = ['message' => 'Bạn không có quyền ở TSSB ' . $id, 'exception' => '', 'statusCode' => 403];
         } else {
-            $check = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
+            $check = ['message' => ErrorMessage::PE_CHECK_EXIT . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
         return $check;
     }
