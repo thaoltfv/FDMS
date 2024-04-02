@@ -1662,12 +1662,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             'type_document' => $typeDocument
                         ];
 
+
+
                         if ($is_pc) {
                             $item['pre_certificate_id'] = $id;
+                            $oldItem = PreCertificateExportDocuments::firstWhere([
+                                'pre_certificate_id' => $id,
+                                'type_document' => $typeDocument,
+                            ]);
                         } else {
                             $item['certificate_id'] = $id;
+                            $oldItem = PreCertificateExportDocuments::firstWhere([
+                                'certificate_id' => $id,
+                                'type_document' => $typeDocument,
+                            ]);
                         }
-
+                        if ($oldItem) {
+                            $oldItem->delete();
+                        }
                         $item = new PreCertificateExportDocuments($item);
                         QueryBuilder::for($item)->insert($item->attributesToArray());
                         $result[] = $item;
