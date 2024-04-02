@@ -17,11 +17,18 @@
 					class="text-right mt-3"
 					style="color: #000; font-size: 12px !important;"
 				>
-					Mã sơ bộ:
 					<span
 						style="color: #000; font-size: 12px !important;"
 						class="font-weight-bold"
-						>{{ data.id ? "SB_" + data.id : "" }}</span
+					>
+						{{
+							data.step_3.petitioner_name.toUpperCase() + " - ĐỊNH GIÁ SƠ BỘ - "
+						}}
+					</span>
+					<span
+						style="color: #000; font-size: 12px !important;"
+						class="font-weight-bold"
+						>{{ data.id ? +data.id : "" }}</span
 					>
 				</div>
 
@@ -486,6 +493,9 @@
 								<tr class="mt-3">
 									<td></td>
 								</tr>
+								<tr class="mt-3">
+									<td></td>
+								</tr>
 								<tr>
 									<td class="text-center font-weight-bold">
 										Huỳnh Văn Ngoãn
@@ -498,11 +508,7 @@
 			</div>
 			<div class="card-footer footer-print">
 				<!-- v-print="'printBody'" -->
-				<button
-					v-print="'printBody'"
-					@click="statusPrint"
-					class="btn btn-orange"
-				>
+				<button v-print="printObj" @click="statusPrint" class="btn btn-orange">
 					In
 				</button>
 			</div>
@@ -771,8 +777,16 @@ export default {
 		LLayerGroup,
 		InputText
 	},
+
 	data() {
 		return {
+			printObj: {
+				id: "printBody",
+				popTitle:
+					this.data.step_3.petitioner_name.toUpperCase() +
+					" - ĐỊNH GIÁ SƠ BỘ - " +
+					this.data.id
+			},
 			apartment_name: "",
 			land_types: [],
 			asset_details: [],
