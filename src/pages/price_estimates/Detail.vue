@@ -20,6 +20,7 @@
 			>
 				<div>
 					<button
+						v-if="priceEstimates.step_3 && priceEstimates.step_3.id"
 						class="btn btn-orange btn-print btn-extra"
 						@click="handlePrint"
 					>
