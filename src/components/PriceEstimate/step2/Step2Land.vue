@@ -799,7 +799,6 @@ export default {
 		// const step_1 = ref(_.cloneDeep(priceEstimates.value.step_1));
 		const step_2 = ref(priceEstimates.value.step_2);
 		const step_1 = ref(priceEstimates.value.step_1);
-
 		const circle = ref({
 			center: [10.964112, 106.856461],
 			radius: miscVariable.value.distance_max
