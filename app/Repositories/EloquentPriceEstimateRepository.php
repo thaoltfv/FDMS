@@ -1372,7 +1372,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 $result = ['message' => ErrorMessage::PE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
             }
         } else {
-            $result = ['message' => ErrorMessage::APPRAISE_NOTEXISTS . $priceEstimateId, 'exception' => ''];
+            $result = ['message' => ErrorMessage::PE_CHECK_EXIT . $priceEstimateId, 'exception' => ''];
         }
         return $result;
     }
