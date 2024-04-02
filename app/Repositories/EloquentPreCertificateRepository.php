@@ -1665,12 +1665,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
 
                         if ($is_pc) {
+                            Log::info('s3', ['is_pc' => $is_pc]);
                             $item['pre_certificate_id'] = $id;
                             $oldItem = PreCertificateExportDocuments::firstWhere([
                                 'pre_certificate_id' => $id,
                                 'type_document' => $typeDocument,
                             ]);
                         } else {
+                            Log::info('s2', ['is_pc' =>
+                            $is_pc]);
                             $item['certificate_id'] = $id;
                             $oldItem = PreCertificateExportDocuments::firstWhere([
                                 'certificate_id' => $id,
