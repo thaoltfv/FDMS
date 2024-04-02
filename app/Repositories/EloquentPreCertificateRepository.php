@@ -1731,7 +1731,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $edited,
                     $edited2,
                     'delete_file',
-                    'xóa tài liệu sơ bộ ' . $delete_what
+                    'xóa tài liệu sơ bộ ' .
+                        $delete_what . ' được tải lên'
                 );
                 // chưa lấy ra được model user và id user
                 return $item;
