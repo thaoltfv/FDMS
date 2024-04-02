@@ -464,7 +464,7 @@ class PreCertificateController extends Controller
         }
 
         try {
-            if (isset($is_pc)) {
+            if ($is_pc) {
                 return $this->respondWithCustomData($this->preCertificateRepository->exportDocumentRemovePC($id, $request));
             } else {
                 return $this->respondWithCustomData($this->preCertificateRepository->exportDocumentRemoveCertificate($id, $request));
