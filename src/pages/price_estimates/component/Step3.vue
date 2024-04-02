@@ -679,7 +679,16 @@ export default {
 		const keyRefreshTotalPriceMainLand = ref(0);
 		const getStartedLand = () => {
 			const step1 = priceEstimates.value.step_1;
-			const tempTotalArea = step1.total_area || [];
+			const tempTotalArea = [];
+			if (step1.total_area) {
+				for (let index = 0; index < step1.total_area.length; index++) {
+					const element = step1.total_area[index];
+					if (element.main_area > 0) {
+						tempTotalArea.push(element);
+					}
+				}
+			}
+
 			let totals = {};
 			let counts = {};
 

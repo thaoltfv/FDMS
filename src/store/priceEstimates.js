@@ -975,7 +975,12 @@ export const usePriceEstimatesStore = defineStore(
 						params: { step: 3 }
 					});
 				} else {
-					await configThis.value.wizard.nextTab();
+					configThis.value.router.push({
+						name: "price_estimates.detail",
+						query: { id: priceEstimates.value.id },
+						params: { step: 3 }
+					});
+					// await configThis.value.wizard.nextTab();
 				}
 			} else if (res.error) {
 				isSubmit.value = false;
