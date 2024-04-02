@@ -2125,7 +2125,7 @@ export const routes = [
 					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Ước tính giá",
+							title: "Tài sản sơ bộ",
 							name: "price_estimates.index"
 						},
 						{
@@ -2147,7 +2147,7 @@ export const routes = [
 					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Ước tính giá",
+							title: "Tài sản sơ bộ",
 							name: "price_estimates.index"
 						},
 						{
@@ -2170,7 +2170,7 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Ước tính giá",
+							title: "Tài sản sơ bộ",
 							name: "price_estimates.index"
 						}
 					],
@@ -2188,7 +2188,7 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
 					breadcrumbs: [
 						{
-							title: "Ước tính giá",
+							title: "Tài sản sơ bộ",
 							name: "price_estimates.index"
 						},
 						{
