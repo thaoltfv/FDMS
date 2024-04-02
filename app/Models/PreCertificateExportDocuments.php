@@ -28,6 +28,7 @@ class PreCertificateExportDocuments extends Model
         'size',
         'description',
         'created_by',
+        'type_document'
     ];
 
     public function createdBy(): BelongsTo
