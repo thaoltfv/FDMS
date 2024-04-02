@@ -193,6 +193,7 @@ class PreCertificateController extends Controller
     private array $permissionAdd = ['ADD_PRE_CERTIFICATE'];
     private array $permissionEdit = ['EDIT_PRE_CERTIFICATE'];
     private array $permissionExport = ['EXPORT_PRE_CERTIFICATE'];
+    private array $permissionExport2 = ['EXPORT_CERTIFICATE'];
 
     public function getPreCertificate(int $id)
     {
@@ -415,4 +416,95 @@ class PreCertificateController extends Controller
 
     //     return $this->respondWithCustomData((new ExportPreCertificate())->exportCustomizePreCertificate($result));
     // }
+
+    public function exportDocumentUpload($id, Request $request): JsonResponse
+    {
+        $is_pc = $request->input('is_pc');
+        if (
+            $is_pc && !CommonService::checkUserPermission($this->permissionExport)
+        ) {
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
+
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        } else if (!isset($is_pc)) {
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
+            return $this->respondWithErrorData($data);
+        }
+
+        try {
+            return $this->respondWithCustomData($this->preCertificateRepository->exportDocumentUpload($id, $is_pc, $request));
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function exportDocumentRemove($id, Request $request): JsonResponse
+    {
+        $is_pc = $request->input('is_pc');
+        if (
+            $is_pc && !CommonService::checkUserPermission($this->permissionExport)
+        ) {
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        } else if (!isset($is_pc)) {
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
+            return $this->respondWithErrorData($data);
+        }
+
+        try {
+            if (isset($is_pc)) {
+                return $this->respondWithCustomData($this->preCertificateRepository->exportDocumentRemovePC($id, $request));
+            } else {
+                return $this->respondWithCustomData($this->preCertificateRepository->exportDocumentRemoveCertificate($id, $request));
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function exportDocumentDownload($id, Request $request)
+    {
+        $is_pc = $request->input('is_pc');
+        if (
+            $is_pc && !CommonService::checkUserPermission($this->permissionExport)
+        ) {
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
+
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        } else if (!isset($is_pc)) {
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
+            return $this->respondWithErrorData($data);
+        }
+
+        try {
+            $item = $this->preCertificateRepository->exportDocumentDownload($id, $request);
+            if (isset($item->link)) {
+                return response()->streamDownload(function () use ($item) {
+                    echo file_get_contents($item->link);
+                }, $item->name);
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }

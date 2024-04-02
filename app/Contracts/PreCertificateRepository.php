@@ -20,9 +20,9 @@ interface PreCertificateRepository extends BaseRepository
     public function findPaging_v2();
 
     public function exportPreCertificate();
-   // public function exportCustomizePreCertificate();
+    // public function exportCustomizePreCertificate();
 
-    public function postGeneralInfomation(array $object , int $id = null);
+    public function postGeneralInfomation(array $object, int $id = null);
 
 
     public function updateStatus_v2($id, $request);
@@ -43,4 +43,15 @@ interface PreCertificateRepository extends BaseRepository
     public function getProcessingTime();
 
 
+    public function exportDocumentRemovePC($id, $request);
+
+    public function exportDocumentRemoveCertificate($id, $request);
+
+    public function exportDocumentDownload($id, $request);
+
+    public function exportDocumentUpload(
+        $id,
+        $is_pc,
+        $request
+    );
 }

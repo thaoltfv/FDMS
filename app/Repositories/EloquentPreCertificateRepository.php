@@ -8,6 +8,7 @@ use App\Enum\CompareMaterData;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
 use App\Models\CertificateOtherDocuments;
+use App\Models\PreCertificateExportDocuments;
 use App\Models\PreCertificate;
 use App\Models\Customer;
 use App\Models\Appraise;
@@ -1618,5 +1619,149 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $check = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
         return $check;
+    }
+
+    /**
+     * @return bool
+     */
+    public function exportDocumentUpload($id, $is_pc, $request)
+    {
+        return DB::transaction(function () use ($id, $is_pc, $request) {
+            try {
+                $result = [];
+                $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+                $path = env('STORAGE_OTHERS') . '/' . 'export_document/' . $now->year . '/' . $now->month . '/';
+
+                $files = $request->file('files');
+                $name = $request->input('name') ?? '';
+
+                $user = CommonService::getUser();
+
+                if (isset($files) && !empty($files)) {
+                    if (!Storage::exists($path)) {
+                        Storage::makeDirectory($path);
+                    }
+                    foreach ($files as $file) {
+                        $fileName = $file->getClientOriginalName();
+                        $fileType = $file->getClientOriginalExtension();
+                        $fileSize = $file->getSize();
+                        $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
+                        Storage::put($name, file_get_contents($file));
+                        $fileUrl = Storage::url($name);
+                        $item = [
+                            'name' => $fileName,
+                            'link' => $fileUrl,
+                            'type' => $fileType,
+                            'size' => $fileSize,
+                            'description' => 'appendix',
+                            'created_by' => $user->id,
+                        ];
+
+                        if ($is_pc) {
+                            $item['pre_certificate_id'] = $id;
+                        } else {
+                            $item['certificate_id'] = $id;
+                        }
+
+                        $item = new PreCertificateExportDocuments($item);
+                        QueryBuilder::for($item)->insert($item->attributesToArray());
+                        $result[] = $item;
+                    }
+                    if ($is_pc) {
+                        $edited = PreCertificate::where('id', $id)->first();
+                        $edited2 = PreCertificateExportDocuments::where('pre_certificate_id', $id)->first();
+                    } else {
+                        $edited = Certificate::where('id', $id)->first();
+                        $edited2 = PreCertificateExportDocuments::where('certificate_id', $id)->first();
+                    }
+                    # activity-log upload file
+                    $this->CreateActivityLog($edited, $edited2, 'upload_file', 'Tải tài liệu sơ bộ ' . $name);
+                    // chưa lấy ra được model user và id user
+                }
+
+                if ($is_pc) {
+                    $result = PreCertificateExportDocuments::where('pre_certificate_id', $id)
+                        ->with('createdBy')
+                        ->get();
+                } else {
+                    $result = PreCertificateExportDocuments::where('certificate_id', $id)
+                        ->with('createdBy')
+                        ->get();
+                }
+                return $result;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function exportDocumentRemovePC($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $delete_what
+                    = $request->input('delete_what') ?? '';
+                $preCertificateId = PreCertificateExportDocuments::select('pre_certificate_id')->where('id', $id)->get();
+                $item = PreCertificateExportDocuments::where('id', $id)->delete();
+                $edited = PreCertificate::where('id', $preCertificateId[0]->pre_certificate_id)->first();
+                $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
+                $item = PreCertificateExportDocuments::where('id', $id)->delete();
+                # activity-log delete file
+                $this->CreateActivityLog(
+                    $edited,
+                    $edited2,
+                    'delete_file',
+                    'xóa tài liệu sơ bộ ' . $delete_what
+                );
+                // chưa lấy ra được model user và id user
+                return $item;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function exportDocumentRemoveCertificate($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $delete_what = $request->input('delete_what') ?? '';
+                $certificateId = PreCertificateExportDocuments::select('certificate_id')->where('id', $id)->get();
+                $item = PreCertificateExportDocuments::where('id', $id)->delete();
+                $edited = Certificate::where('id', $certificateId[0]->certificate_id)->first();
+                $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
+                $item = PreCertificateExportDocuments::where('id', $id)->delete();
+                # activity-log delete file
+                $this->CreateActivityLog($edited, $edited2, 'delete_file', 'xóa tài liệu sơ bộ ' . $delete_what);
+                // chưa lấy ra được model user và id user
+                return $item;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+    /**
+     * @return bool
+     */
+    public function exportDocumentDownload($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $item = PreCertificateExportDocuments::where('id', $id)->first();
+                return $item;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
     }
 }
