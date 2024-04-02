@@ -1626,9 +1626,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
      */
     public function exportDocumentUpload($id, $is_pc, $request)
     {
+        Log::info('exportDocumentUpload', ['id' => $id, 'is_pc' => $is_pc, 'request' => $request]);
         return DB::transaction(function () use ($id, $is_pc, $request) {
             try {
-                Log::info('exportDocumentUpload', ['id' => $id, 'is_pc' => $is_pc, 'request' => $request]);
+
                 $result = [];
                 $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
                 $path = env('STORAGE_OTHERS') . '/' . 'export_document/' . $now->year . '/' . $now->month . '/';
