@@ -164,6 +164,7 @@
 									class="btn btn-orange btn-action-modal"
 									type="submit"
 									style="width:152px"
+									:class="{ 'btn_loading disabled': isSubmit }"
 								>
 									<img src="@/assets/icons/ic_save.svg" alt="save" />
 									Lưu
@@ -389,7 +390,9 @@ export default {
 			}
 			paidCompute(0, 0, false, true);
 		};
+		const isSubmit = ref(false);
 		return {
+			isSubmit,
 			keyRenderData,
 			permissionNotAllowEditHere,
 			openModalDelete,
@@ -418,13 +421,17 @@ export default {
 			}
 		},
 		async validatePayment() {
+			this.isSubmit = true;
 			const isValid = await this.$refs.paymentsForm.validate();
 			if (isValid) {
+				this.isSubmit = false;
 				this.handleAction();
 			}
 		},
 		async handleAction() {
+			this.isSubmit = true;
 			if (this.dataForm.debtRemain < 0) {
+				this.isSubmit = false;
 				this.$toast.open({
 					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
 					type: "error",
@@ -448,6 +455,7 @@ export default {
 						position: "top-right",
 						duration: 3000
 					});
+					this.isSubmit = false;
 					return;
 				}
 				if (!this.dataForm.id) {
@@ -457,6 +465,7 @@ export default {
 						position: "top-right",
 						duration: 3000
 					});
+					this.isSubmit = false;
 					return;
 				}
 				element.pre_certificate_id = this.dataForm.pre_certificate_id || null;
@@ -469,6 +478,7 @@ export default {
 					position: "top-right",
 					duration: 3000
 				});
+				this.isSubmit = false;
 				return;
 			}
 			const res = await this.preCertificateStore.updatePaymentFunction(
@@ -497,6 +507,7 @@ export default {
 					position: "top-right"
 				});
 			}
+			this.isSubmit = false;
 		}
 	}
 };
