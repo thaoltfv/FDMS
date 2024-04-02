@@ -1753,7 +1753,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $delete_what = $request->input('delete_what') ?? '';
                 $certificateId = PreCertificateExportDocuments::select('certificate_id')->where('id', $id)->get();
                 $item = PreCertificateExportDocuments::where('id', $id)->delete();
-                $edited = Certificate::where('id', $certificateId[0]->certificate_id)->first();
+                $edited = Certificate::where('id', $certificateId[0]->id)->first();
                 $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
                 $item = PreCertificateExportDocuments::where('id', $id)->delete();
                 # activity-log delete file
