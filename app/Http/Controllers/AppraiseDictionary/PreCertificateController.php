@@ -193,7 +193,7 @@ class PreCertificateController extends Controller
     private array $permissionAdd = ['ADD_PRE_CERTIFICATE'];
     private array $permissionEdit = ['EDIT_PRE_CERTIFICATE'];
     private array $permissionExport = ['EXPORT_PRE_CERTIFICATE'];
-    private array $permissionExport2 = ['EXPORT_CERTIFICATE'];
+    private array $permissionExport2 = ['EXPORT_CERTIFICATE_BRIEF'];
 
     public function getPreCertificate(int $id)
     {
