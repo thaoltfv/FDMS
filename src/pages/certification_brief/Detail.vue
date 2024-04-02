@@ -13,7 +13,7 @@
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown>
+							<a-dropdown v-if="editExportDocument">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -1271,7 +1271,7 @@
 			</div>
 		</div>
 		<div
-			v-if="idData"
+			v-if="idData && editExportDocument"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
@@ -1730,6 +1730,7 @@ export default {
 			editAppraiser: false,
 			editItemList: false,
 			editInfo: false,
+			editExportDocument: false,
 			editDocument: false,
 			editPayment: false,
 			printConfig: false,
@@ -3328,6 +3329,7 @@ export default {
 			);
 			if (dataJson && dataJson.length > 0) {
 				this.config = dataJson[0];
+				this.editExportDocument = dataJson[0].isExportDocument;
 				this.editAppraiser = dataJson[0].edit.appraiser
 					? dataJson[0].edit.appraiser
 					: false;

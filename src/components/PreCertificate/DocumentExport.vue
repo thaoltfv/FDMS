@@ -147,7 +147,7 @@ export default {
 			default: true
 		},
 		dataId: {
-			type: Number
+			type: String
 		},
 		lstFileExport: {
 			type: Array

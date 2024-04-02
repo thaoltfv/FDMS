@@ -13,7 +13,7 @@
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown>
+							<a-dropdown v-if="editExportDocument">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -397,7 +397,7 @@
 			</div>
 		</div>
 		<div
-			v-if="dataPC.id"
+			v-if="dataPC.id && editExportDocument"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
@@ -691,6 +691,7 @@ export default {
 		const editAppraiser = ref(false);
 		const editPayments = ref(false);
 		const allowEditFile = ref({ appendix: false, result: false });
+		const editExportDocument = ref(false);
 		const changeEditStatus = async () => {
 			let dataJson = jsonConfig.value.principle.filter(
 				item => item.status === dataPC.value.status && item.isActive === 1
@@ -712,7 +713,7 @@ export default {
 						config.value
 					);
 				}
-
+				editExportDocument.value = dataJson[0].isExportDocument;
 				editAppraiser.value =
 					checkPermissionObject.appraiser && dataJson[0].edit.appraiser
 						? dataJson[0].edit.appraiser
@@ -830,6 +831,7 @@ export default {
 		const showCardPCPayments = ref(false);
 		const appraiserChangeStage = ref(null);
 		return {
+			editExportDocument,
 			appraiserChangeStage,
 			showCardPCPayments,
 			allowEditFile,
