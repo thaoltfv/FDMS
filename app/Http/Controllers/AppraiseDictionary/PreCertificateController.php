@@ -446,9 +446,10 @@ class PreCertificateController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function exportDocumentRemove($id, Request $request): JsonResponse
+    public function exportDocumentRemove(Request $request): JsonResponse
     {
         $is_pc = $request->input('is_pc');
+        $id = $request->input('id');
         if (
             $is_pc && !CommonService::checkUserPermission($this->permissionExport)
         ) {
