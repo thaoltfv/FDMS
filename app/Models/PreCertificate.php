@@ -62,10 +62,10 @@ class PreCertificate extends Model
         // tổng giá trị sơ bộ
         'total_preliminary_value',
         // 'pre_result_file'
-        
+
         // Lý do hủy sơ bộ
         'cancel_reason',
-        
+
         'branch_id',
         'created_by',
         'updated_at',
@@ -83,28 +83,27 @@ class PreCertificate extends Model
 
     public function getStatusTextAttribute()
     {
-		$status = $this->status;
-		$statusText = "";
-		switch ($status) {
+        $status = $this->status;
+        $statusText = "";
+        switch ($status) {
             case 1:
                 $statusText = "Yêu cầu sơ bộ";
                 break;
-			case 2:
-				$statusText = "Định giá sơ bộ";
-			    break;
-			case 3:
-				$statusText = "Duyệt giá sơ bộ";
-			    break;
-			case 4:
-				$statusText = "Thương thảo";
-			    break;
-			case 5:
-				$statusText = "Huỷ";
-			    break;
+            case 2:
+                $statusText = "Định giá sơ bộ";
+                break;
+            case 3:
+                $statusText = "Duyệt giá sơ bộ";
+                break;
+            case 4:
+                $statusText = "Thương thảo";
+                break;
+            case 5:
+                $statusText = "Huỷ";
+                break;
             case 6:
                 return 'Hoàn Thành';
-                
-		}
+        }
         return $statusText;
     }
     public function certificate(): BelongsTo
@@ -117,12 +116,12 @@ class PreCertificate extends Model
         return $this->belongsTo(Appraiser::class, 'business_manager_id', 'id');
     }
 
-	public function appraiserSale(): BelongsTo
+    public function appraiserSale(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_sale_id', 'id');
     }
 
-	public function appraiserPerform(): BelongsTo
+    public function appraiserPerform(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_perform_id', 'id');
     }
@@ -136,11 +135,11 @@ class PreCertificate extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-	public function otherDocuments(): HasMany
+    public function otherDocuments(): HasMany
     {
         return $this->hasMany(PreCertificateOtherDocuments::class, 'pre_certificate_id');
     }
-    
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
@@ -156,9 +155,13 @@ class PreCertificate extends Model
         return $this->belongsTo(Dictionary::class, 'pre_type_id', 'id');
     }
 
-     public function cancelReason(): BelongsTo
+    public function cancelReason(): BelongsTo
     {
         return $this->belongsTo(Dictionary::class, 'cancel_reason', 'id');
     }
 
+    public function exportDocuments(): HasMany
+    {
+        return $this->hasMany(PreCertificateExportDocuments::class, 'pre_certificate_id');
+    }
 }

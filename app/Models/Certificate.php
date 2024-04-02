@@ -377,4 +377,8 @@ class Certificate extends Model
     {
         return $this->hasMany(PreCertificatePayments::class, 'certificate_id');
     }
+    public function exportDocuments(): HasMany
+    {
+        return $this->hasMany(PreCertificateExportDocuments::class, 'certificate_id');
+    }
 }

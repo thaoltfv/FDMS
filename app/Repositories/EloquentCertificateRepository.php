@@ -652,6 +652,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->with('otherDocuments.createdBy')
                 ->with('assetPrice')
                 ->with('appraises.appraisalMethods')
+                ->with('exportDocuments')
                 ->first();
         }
 

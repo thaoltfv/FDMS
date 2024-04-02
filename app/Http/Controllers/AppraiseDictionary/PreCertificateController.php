@@ -420,8 +420,6 @@ class PreCertificateController extends Controller
     public function exportDocumentUpload($id, Request $request): JsonResponse
     {
         $is_pc = $request->input('is_pc');
-        $files = $request->file('files');
-        $typeDocument = $request->input('type') ?? '';
         if (
             $is_pc && !CommonService::checkUserPermission($this->permissionExport)
         ) {
@@ -433,7 +431,6 @@ class PreCertificateController extends Controller
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
             return $this->respondWithErrorData($data);
         }
-        Log::info('exportDocumentUpload', ['id' => $id, 'is_pc' => $is_pc, 'typeDocument' => $typeDocument, 'request' => $request]);
 
         try {
             return $this->respondWithCustomData($this->preCertificateRepository->exportDocumentUpload($id, $is_pc, $request));
