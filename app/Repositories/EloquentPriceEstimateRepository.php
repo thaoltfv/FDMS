@@ -138,7 +138,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             'landFinalEstimate'
         ]);
         $role = $user->roles->last();
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
+        if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
             $result = $result->where('created_by', $user->id);
         }
         if (isset($search)) {
