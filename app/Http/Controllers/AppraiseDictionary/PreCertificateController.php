@@ -420,6 +420,7 @@ class PreCertificateController extends Controller
     public function exportDocumentUpload($id, Request $request): JsonResponse
     {
         $is_pc = $request->input('is_pc');
+        $is_pc = $is_pc === 'true' ? true : false;
         if (
             $is_pc && !CommonService::checkUserPermission($this->permissionExport)
         ) {
@@ -449,6 +450,7 @@ class PreCertificateController extends Controller
     public function exportDocumentRemove(Request $request): JsonResponse
     {
         $is_pc = $request->input('is_pc');
+        $is_pc = $is_pc === 'true' ? true : false;
         $id = $request->input('id');
         if (
             $is_pc && !CommonService::checkUserPermission($this->permissionExport)

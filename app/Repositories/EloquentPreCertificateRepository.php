@@ -1665,15 +1665,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
 
                         if ($is_pc) {
-                            Log::info('s3', ['is_pc' => $is_pc]);
                             $item['pre_certificate_id'] = $id;
                             $oldItem = PreCertificateExportDocuments::firstWhere([
                                 'pre_certificate_id' => $id,
                                 'type_document' => $typeDocument,
                             ]);
                         } else {
-                            Log::info('s2', ['is_pc' =>
-                            $is_pc]);
                             $item['certificate_id'] = $id;
                             $oldItem = PreCertificateExportDocuments::firstWhere([
                                 'certificate_id' => $id,
@@ -1694,7 +1691,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $edited = Certificate::where('id', $id)->first();
                         $edited2 = PreCertificateExportDocuments::where('certificate_id', $id)->first();
                     }
-                    Log::info('s', ['is_pc' => $is_pc, 'edited' => $edited, 'edited2' => $edited2]);
                     # activity-log upload file
                     $this->CreateActivityLog($edited, $edited2, 'upload_file', 'Tải tài liệu sơ bộ ' . $name);
                     // chưa lấy ra được model user và id user
