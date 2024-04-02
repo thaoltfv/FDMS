@@ -16,16 +16,8 @@ class CreatePreCertificateExportDocumentsTable extends Migration
         if (!Schema::hasTable('pre_certificate_export_documents')) {
             Schema::create('pre_certificate_export_documents', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('pre_certificate_id');
-                $table->foreign('pre_certificate_id')
-                    ->references('id')
-                    ->on('pre_certificates')
-                    ->onDelete('cascade');
+                $table->integer('pre_certificate_id')->nullable();
                 $table->integer('certificate_id')->nullable();
-                $table->foreign('certificate_id')
-                    ->references('id')
-                    ->on('certificates')
-                    ->onDelete('cascade');
                 $table->text('name')->nullable();
                 $table->text('link')->nullable();
                 $table->text('type')->nullable();
@@ -40,9 +32,6 @@ class CreatePreCertificateExportDocumentsTable extends Migration
                 $table->timestamp('updated_at')->useCurrent();
                 $table->text('type_document');
                 $table->softDeletes();
-
-                $table->unique(['certificate_id', 'type_document']);
-                $table->unique(['pre_certificate_id', 'type_document']);
             });
         }
     }
