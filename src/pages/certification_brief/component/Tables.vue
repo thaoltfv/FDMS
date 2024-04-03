@@ -26,22 +26,23 @@
 						</button>
 					</div>
 				</template>
-				<template slot="status" slot-scope="status">
+				<template slot="status" slot-scope="status, data">
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<div v-if="status === 1" class="status-color bg-info" />
-						<div v-if="status === 2" class="status-color bg-primary" />
-						<div v-if="status === 3" class="status-color bg-warning" />
-						<div v-if="status === 4" class="status-color bg-success" />
-						<div v-if="status === 5" class="status-color bg-secondary" />
-						<div v-if="status === 6" class="status-color bg-control" />
-						<b-dropdown class="dropdown-container" no-caret>
+						<div
+							:id="(data.id + 'status').toString()"
+							:class="['status-color', 'bg-' + getStatusColor(status)]"
+						/>
+						<b-tooltip :target="(data.id + 'status').toString()">
+							{{ getStatusDescription(status) }}
+						</b-tooltip>
+						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />
 							</template>
 							<b-dropdown-item>Action</b-dropdown-item>
-						</b-dropdown>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template slot="created_at" slot-scope="created_at">
@@ -86,6 +87,76 @@
 						:target="('content' + detail_appraise.id).toString()"
 						><pre>{{ showDetailAppraise(detail_appraise) }}</pre></b-tooltip
 					> -->
+				</template>
+				<template slot="full_address" slot-scope="text, row, index">
+					<div
+						v-if="real_estate && real_estate.length > 1"
+						v-for="(re, index) in real_estate"
+						:id="('content_full_address_' + id).toString()"
+					>
+						<p class="text-main text-truncate" style="max-width: 220px">
+							{{
+								"TSTĐ" +
+									(index + 1) +
+									": " +
+									(re.appraises && re.appraises.full_address
+										? re.appraises && re.appraises.full_address
+										: re.apartment && re.apartment.full_address
+										? re.apartment && re.apartment.full_address
+										: "")
+							}}
+						</p>
+					</div>
+					<p
+						v-else-if="real_estate && real_estate.length === 1"
+						class="text-main d-inline-block text-truncate"
+						style="max-width: 220px"
+						:id="('content_full_address_' + id).toString()"
+					>
+						{{
+							re.appraises && re.appraises.full_address
+								? re.appraises && re.appraises.full_address
+								: re.apartment && re.apartment.full_address
+								? re.apartment && re.apartment.full_address
+								: ""
+						}}
+					</p>
+
+					<b-tooltip
+						:target="('content_full_address_' + id).toString()"
+						placement="top"
+						triggers="hover"
+					>
+						<div
+							v-if="real_estate && real_estate.length > 1"
+							v-for="(re, index) in real_estate"
+						>
+							<p class="text-main" style="max-width: 220px">
+								{{
+									"- TSTĐ" +
+										(index + 1) +
+										": " +
+										(re.appraises && re.appraises.full_address
+											? re.appraises && re.appraises.full_address
+											: re.apartment && re.apartment.full_address
+											? re.apartment && re.apartment.full_address
+											: "")
+								}}
+							</p>
+						</div>
+						<p
+							v-else-if="real_estate && real_estate.length === 1"
+							class="text-main"
+						>
+							{{
+								re.appraises && re.appraises.full_address
+									? re.appraises && re.appraises.full_address
+									: re.apartment && re.apartment.full_address
+									? re.apartment && re.apartment.full_address
+									: ""
+							}}
+						</p>
+					</b-tooltip>
 				</template>
 				<template slot="appraised_asset" slot-scope="{ id, real_estate }">
 					<div
@@ -413,6 +484,11 @@ import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import ModalAppraisal from "../component/modals/ModalAppraisal";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
+
 const jsonConfig = require("../../../../config/workflow.json");
 export default {
 	name: "Tables",
@@ -518,6 +594,33 @@ export default {
 			changeStatusRequire: {}
 		};
 	},
+
+	setup() {
+		const workFlowConfigStore = useWorkFlowConfig();
+		const { configs } = storeToRefs(workFlowConfigStore);
+		const jsonConfig = ref({});
+		const lstFilterStatus = ref([]);
+		const startFunction = async () => {
+			if (!configs.value.hstdConfig)
+				await workFlowConfigStore.getConfigByName("workflowHSTD");
+			jsonConfig.value = configs.value.hstdConfig;
+			if (jsonConfig.value && jsonConfig.value.principle) {
+				lstFilterStatus.value = jsonConfig.value.principle
+					.filter(element => element.isActive === 1)
+					.map(element => ({
+						...element,
+						value: element.status,
+						text: element.description
+					}));
+			}
+		};
+		startFunction();
+
+		return {
+			lstFilterStatus
+		};
+	},
+
 	created() {
 		// fix_permission
 		this.profile = this.$store.getters.profile;
@@ -609,6 +712,12 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Địa chỉ tài sản",
+					align: "left",
+					scopedSlots: { customRender: "full_addresss" },
+					hiddenItem: false
+				},
+				{
 					title: "Tổng giá trị (VNĐ)",
 					align: "left",
 					scopedSlots: { customRender: "total_asset_price" },
@@ -624,15 +733,7 @@ export default {
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
-				{
-					title: "Người tạo",
-					class: "optional-data",
-					align: "left",
-					scopedSlots: { customRender: "created_by" },
-					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
+
 				{
 					title: "Trạng thái",
 					align: "center",
@@ -667,6 +768,14 @@ export default {
 		}
 	},
 	methods: {
+		getStatusDescription(status) {
+			const item = this.lstFilterStatus.find(item => item.status === status);
+			return item ? item.description : "";
+		},
+		getStatusColor(status) {
+			const item = this.lstFilterStatus.find(item => item.status === status);
+			return item && item.css ? item.css.color : "info";
+		},
 		handleCancelAccept2() {
 			this.isMoved = false;
 			this.isHandleAction = false;

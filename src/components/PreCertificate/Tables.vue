@@ -137,22 +137,23 @@
 						</button>
 					</div>
 				</template>
-				<template slot="status" slot-scope="status">
+				<template slot="status" slot-scope="status, data">
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<div v-if="status === 1" class="status-color bg-info" />
-						<div v-if="status === 2" class="status-color bg-primary" />
-						<div v-if="status === 3" class="status-color bg-control" />
-						<div v-if="status === 4" class="status-color bg-warning" />
-						<div v-if="status === 5" class="status-color bg-success" />
-						<div v-if="status === 6" class="status-color bg-secondary" />
-						<b-dropdown class="dropdown-container" no-caret>
+						<div
+							:id="(data.id + 'status').toString()"
+							:class="['status-color', 'bg-' + getStatusColor(status)]"
+						/>
+						<b-tooltip :target="(data.id + 'status').toString()">
+							{{ getStatusDescription(status) }}
+						</b-tooltip>
+						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />
 							</template>
 							<b-dropdown-item>Action</b-dropdown-item>
-						</b-dropdown>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template
@@ -540,7 +541,6 @@ export default {
 			user_id: "",
 			countData: 0,
 			isAccept: false,
-			principleConfig: [],
 			subStatusData: {},
 			subStatusDataTmp: {},
 			next_status: "",
@@ -727,6 +727,14 @@ export default {
 	},
 	mounted() {},
 	methods: {
+		getStatusDescription(status) {
+			const item = this.principleConfig.find(item => item.status === status);
+			return item ? item.description : "";
+		},
+		getStatusColor(status) {
+			const item = this.principleConfig.find(item => item.status === status);
+			return item && item.css ? item.css.color : "info";
+		},
 		filterData(data, type) {
 			if (type === "status") {
 				this.selectedStatus = [data];
