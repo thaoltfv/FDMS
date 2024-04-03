@@ -796,6 +796,14 @@ export default {
 	mounted() {
 		this.zoom = 16;
 		this.getCreatedAt();
+		this.printObj = {
+			id: "printBody",
+			popTitle:
+				"TSSB_" +
+				this.data.id +
+				(this.data.createdBy ? "_" + this.data.createdBy : "") +
+				(this.data.createdAtString ? "_" + this.data.createdAtString : "")
+		};
 	},
 	methods: {
 		isMobile() {
@@ -858,8 +866,8 @@ export default {
 		handleCancel(event) {
 			this.$emit("cancel", event);
 		},
+
 		statusPrint(event) {
-			// this.$emit("action", event);
 			this.printObj = {
 				id: "printBody",
 				popTitle:
@@ -868,6 +876,14 @@ export default {
 					(this.data.createdBy ? "_" + this.data.createdBy : "") +
 					(this.data.createdAtString ? "_" + this.data.createdAtString : "")
 			};
+
+			const originalTitle = document.title;
+
+			document.title = this.printObj.popTitle;
+
+			setTimeout(() => {
+				document.title = originalTitle;
+			}, 3000);
 		},
 		handleAction(event) {
 			this.$emit("action", event);
