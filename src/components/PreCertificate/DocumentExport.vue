@@ -46,12 +46,14 @@
 									class="d-flex ml-1 row justify-content-between align-items-center w-100 mb-2"
 								>
 									<div
-										class="title_input_content title_input_download cursor_pointer"
+										class="title_input_content title_input_download "
 										style="margin-top:-5px"
 									>
 										{{ file.nameTitle }}
 									</div>
-									<label>
+									<label
+										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
+									>
 										<font-awesome-icon
 											:style="{ color: '#b6d5f3', cursor: 'pointer' }"
 											icon="cloud-upload-alt"
@@ -95,16 +97,11 @@
 											class="title_input_content title_input_download cursor_pointer"
 											style="color: #45AAF2;"
 										>
-											{{
-												file.name
-													? file.name.length > 20
-														? file.name.substring(20, 0) + "..."
-														: file.name
-													: ""
-											}}
+											{{ truncateFilename(file.name, allowEdit ? 20 : 30) }}
 										</div>
 									</div>
 									<div
+										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<img
@@ -147,7 +144,7 @@ export default {
 			default: true
 		},
 		dataId: {
-			type: String
+			type: Number
 		},
 		lstFileExport: {
 			type: Array
@@ -196,7 +193,7 @@ export default {
 		}
 
 		const downloadOtherFile = async file => {
-			if (props.permission.allowExport && !file.isUpload) {
+			if (props.permission.allowExport && file.name) {
 				axios({
 					url:
 						process.env.API_URL +
@@ -306,6 +303,13 @@ export default {
 		};
 	},
 	methods: {
+		truncateFilename(filename, limit) {
+			if (!filename) return "";
+			if (filename.length > limit) {
+				return filename.substring(0, limit) + "...";
+			}
+			return filename;
+		},
 		checkFileUpload(file) {
 			this.reportType = file.type_document;
 			if (file.name) {
