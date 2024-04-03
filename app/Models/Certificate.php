@@ -340,8 +340,17 @@ class Certificate extends Model
         $result = [];
         $realEstate = $this->realEstate;
         $personalProperties = $this->personalProperties;
+
         if (count($realEstate) > 0) {
             $result = array_merge($result, Arr::pluck($realEstate, 'real_estate_id'));
+            foreach ($realEstate as $estate) {
+                if ($estate->appraises) {
+                    $result[] = $estate->appraises->full_address;
+                }
+                if ($estate->apartment) {
+                    $result[] = $estate->apartment->full_address;
+                }
+            }
         }
         if (count($personalProperties) > 0) {
             $result = array_merge($result, Arr::pluck($personalProperties, 'personal_property_id'));
