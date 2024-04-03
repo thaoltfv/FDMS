@@ -39,38 +39,44 @@
 					>
 						<div
 							class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
-							:style="!file.name ? { height: '3.85rem' } : { height: '8.4rem' }"
+							style="height: auto "
 						>
 							<div class="d-flex flex-column">
 								<div
-									class="d-flex ml-1 row justify-content-between align-items-center w-100 mb-2"
+									class="d-flex ml-1 row justify-content-between align-items-center w-100"
 								>
-									<div
-										class="title_input_content title_input_download "
-										style="margin-top:-5px"
-									>
+									<div class="title_input_content title_input_download col-10">
 										{{ file.nameTitle }}
 									</div>
+
 									<label
 										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
+										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
-										<font-awesome-icon
-											:style="{ color: '#b6d5f3', cursor: 'pointer' }"
-											icon="cloud-upload-alt"
-											size="2x"
-										/>
-										<input
-											class="btn-upload-mini"
-											@click="checkFileUpload(file)"
-										/>
-										<input
-											type="file"
-											:ref="file.type_document"
-											:id="'image_property' + file.type_document"
-											accept=".doc, .docx, application/pdf"
-											@change="onImageChange($event, file.type_document)"
-											hidden
-										/>
+										<div class="d-flex align-items-center">
+											<font-awesome-icon
+												:style="{
+													color: '#2682bfad',
+													height: '2rem',
+													width: '2rem',
+													cursor: 'pointer'
+												}"
+												icon="cloud-upload-alt"
+												size="2x"
+											/>
+											<input
+												class="btn-upload-mini"
+												@click="checkFileUpload(file)"
+											/>
+											<input
+												type="file"
+												:ref="file.type_document"
+												:id="'image_property' + file.type_document"
+												accept=".doc, .docx, application/pdf"
+												@change="onImageChange($event, file.type_document)"
+												hidden
+											/>
+										</div>
 									</label>
 								</div>
 								<hr
@@ -80,11 +86,11 @@
 								<!-- Divider -->
 								<div
 									v-if="file.name"
-									class="row d-flex justify-content-between mt-2"
+									class="row d-flex justify-content-between mt-1"
 									style="margin-left:1px;margin-right:1px;position: relative;padding:  0px;"
 								>
 									<div
-										class="d-flex align-items-center"
+										class="d-flex align-items-center col-10"
 										@click="downloadOtherFile(file)"
 									>
 										<img
@@ -94,15 +100,15 @@
 											alt="tag_2"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer"
+											class="title_input_content-2 title_input_download cursor_pointer"
 											style="color: #45AAF2;"
 										>
-											{{ truncateFilename(file.name, allowEdit ? 20 : 30) }}
+											{{ file.name }}
 										</div>
 									</div>
 									<div
-										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										v-if="allowEdit"
+										class="d-flex align-items-center  justify-content-end col-1 pr-3"
 									>
 										<img
 											@click="deleteOtherFile(file, index)"
@@ -679,6 +685,13 @@ export default {
 
 .title_input_content {
 	font-size: 18px;
+}
+
+.title_input_content-2 {
+	font-size: 18px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .input_upload_file {
 	background-image: repeating-linear-gradient(
