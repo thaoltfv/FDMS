@@ -208,7 +208,6 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
 
                         $dataBlock = Block::query()->updateOrCreate($blockCheck, $blockAtt->attributesToArray());
                         if (isset($block['floor']) && count($block['floor']) > 0) {
-                            Floor::where('block_id', $dataBlock->id)->delete();
                             foreach ($block['floor'] as $floor) {
                                 $floor['block_id'] = $floor['block_id'] ?? $dataBlock->id;
                                 $floorAtt = new Floor($floor);
