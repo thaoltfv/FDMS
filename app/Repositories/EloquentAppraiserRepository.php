@@ -45,14 +45,17 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
         $result = $this->model->query();
         $search = request()->get('search');
         $is_legal_representative = request()->get('is_legal_representative');
+        $result = $result->whereHas('user', function ($query) {
+            $query->where('status_user', '=', 'active');
+        });
         if (!empty($search)) {
-            if(is_numeric($search)) {
-                $query = 'appraise_position_id = ' .  (int)$search ;
+            if (is_numeric($search)) {
+                $query = 'appraise_position_id = ' .  (int)$search;
                 $result = $result->whereRaw($query);
             } else {
                 $acronyms = explode(',', $search);
                 $chucVuIds = Dictionary::whereIn('acronym', $acronyms)->where('type', 'CHUC_VU')->pluck('id');
-                if(count($chucVuIds)) {
+                if (count($chucVuIds)) {
                     $result = $result->whereIn('appraise_position_id', $chucVuIds);
                 } else {
                     $query = 'appraise_position_id = 0';
@@ -62,10 +65,10 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
         }
 
         if (!empty($is_legal_representative)) {
-            $query = 'is_legal_representative = ' .  (int)$is_legal_representative ;
-                $result = $result->whereRaw($query);  
+            $query = 'is_legal_representative = ' .  (int)$is_legal_representative;
+            $result = $result->whereRaw($query);
         }
-        
+
         return $result
             ->with('appraisePosition')
             ->select()
@@ -126,5 +129,4 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
             ->whereRaw($query)
             ->first();
     }
-
 }

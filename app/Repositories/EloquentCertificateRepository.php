@@ -2775,10 +2775,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         });
                     }
                     break;
+                case '%':
+                    $result = $result->where(function ($q) use ($filter) {
+                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filter . '%');
+                    });
+                    break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q->whereHas('realEstate', function ($has) use ($filterData) {
+                            $has->whereHas('appraises', function ($query) use ($filterData) {
+                                $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                            })->orWhereHas('apartment', function ($query) use ($filterData) {
+                                $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                            });
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
                         $q = $q->where('certificates.id', 'like', strval($filter));
-                        $q = $q->orwhere('petitioner_name', 'ILIKE', '%' . $filter . '%');
                     });
             }
         }
@@ -3100,10 +3115,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         });
                     }
                     break;
+                case '%':
+                    $result = $result->where(function ($q) use ($filter) {
+                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filter . '%');
+                    });
+                    break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q->whereHas('realEstate', function ($has) use ($filterData) {
+                            $has->whereHas('appraises', function ($query) use ($filterData) {
+                                $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                            })->orWhereHas('apartment', function ($query) use ($filterData) {
+                                $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                            });
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
                         $q = $q->where('certificates.id', 'like', strval($filter));
-                        $q = $q->orwhere('petitioner_name', 'ILIKE', '%' . $filter . '%');
                     });
             }
         }
