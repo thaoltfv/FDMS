@@ -16,6 +16,6 @@ class PreCertificateConfig extends Model
     protected $fillable = [
         'name',
         'config',
+        'old_config',
     ];
-
 }
