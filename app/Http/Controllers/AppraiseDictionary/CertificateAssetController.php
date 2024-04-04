@@ -11,6 +11,7 @@ use App\Contracts\BuildingPriceRepository;
 use App\Contracts\CertificateRepository;
 use App\Contracts\CompareAssetGeneralRepository;
 use App\Contracts\DictionaryRepository;
+use App\Contracts\PreCertificateRepository;
 use App\Contracts\UserRepository;
 
 use App\Services\AppraiseAsset\AppraiseAsset;
@@ -21,6 +22,7 @@ use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
+use App\Models\Appraiser;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
 use App\Models\RealEstate;
@@ -44,6 +46,7 @@ class CertificateAssetController extends Controller
     public BuildingPriceRepository $buildingPriceRepository;
     private AppraiseAssetRepository $appraiseAssetRepository;
     private AppraiserCompanyRepository $appraiserCompanyRepository;
+    private PreCertificateRepository $preCertificateRepository;
     private string $envDocument = '';
     /**
      * ProvinceController constructor.
@@ -56,7 +59,8 @@ class CertificateAssetController extends Controller
         DictionaryRepository          $dictionaryRepository,
         BuildingPriceRepository       $buildingPriceRepository,
         AppraiseAssetRepository       $appraiseAssetRepository,
-        AppraiserCompanyRepository    $appraiserCompanyRepository
+        AppraiserCompanyRepository    $appraiserCompanyRepository,
+        PreCertificateRepository     $preCertificateRepository
     ) {
         $this->certificateAssetRepository = $certificateAssetRepository;
         $this->certificateRepository = $certificateRepository;
@@ -66,6 +70,7 @@ class CertificateAssetController extends Controller
         $this->buildingPriceRepository = $buildingPriceRepository;
         $this->appraiseAssetRepository = $appraiseAssetRepository;
         $this->appraiserCompanyRepository = $appraiserCompanyRepository;
+        $this->preCertificateRepository = $preCertificateRepository;
         $this->envDocument = config('services.document_service.document_module');
     }
 
@@ -423,67 +428,29 @@ class CertificateAssetController extends Controller
         }
     }
 
-    public function printGiayYeuCauTDG(Request $request, $id): JsonResponse
+    public function printGiayYeuCauTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\GiayYeuCau';
-        $format = '.docx';
-        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-        // $certificate = Certificate::where('id', $id)->first();
-        $select = ['*'];
-        $with = [
-            'assetType:id,acronym,description',
-        ];
-        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
-
-
-        $certificate = $this->certificateRepository->dataPrintExport($id);
-        // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-        $documentConfig = DocumentDictionary::query()->get();
-        $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
+        return $this->printDocument($id, $is_pc, $service);
     }
-
-    public function printHopDongTDG(Request $request, $id): JsonResponse
+    public function printHopDongTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\HopDongTDG';
-        $format = '.docx';
-        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-        // $certificate = Certificate::where('id', $id)->first();
-        $select = ['*'];
-        $with = [
-            'assetType:id,acronym,description',
-        ];
-        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
-
-
-        $certificate = $this->certificateRepository->dataPrintExport($id);
-        // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-        $documentConfig = DocumentDictionary::query()->get();
-        $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
+        return $this->printDocument($id, $is_pc, $service);
     }
-    public function printKeHoachTDG(Request $request, $id): JsonResponse
+    public function printKeHoachTDG($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\KeHoachTDG';
-        $format = '.docx';
-        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
-        // $certificate = Certificate::where('id', $id)->first();
-        $select = ['*'];
-        $with = [
-            'assetType:id,acronym,description',
-        ];
-        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
-
-
-        $certificate = $this->certificateRepository->dataPrintExport($id);
-        // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-        $documentConfig = DocumentDictionary::query()->get();
-        $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
+        return $this->printDocument($id, $is_pc, $service);
     }
-    public function printBienBanThanhLy(Request $request, $id): JsonResponse
+    public function printBienBanThanhLy($id, $is_pc = 0)
     {
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
+        return $this->printDocument($id, $is_pc, $service);
+    }
+
+    public function printDocument($id, $is_pc, $service): JsonResponse
+    {
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         // $certificate = Certificate::where('id', $id)->first();
@@ -491,15 +458,49 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
-        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+        if ($is_pc) {
+            $realEstate = null;
+            $precertificate = $this->preCertificateRepository->getPreCertificate($id);
+            if (isset($precertificate->certificate_id)) {
+                $certificate = $this->certificateRepository->dataPrintExport($precertificate->certificate_id);
+            } else {
+                $certificate = new Certificate;
+                $fillable = $certificate->getFillable();
 
+                foreach ($fillable as $attribute) {
+                    $certificate->$attribute = $precertificate->$attribute ?? null;
+                }
+                $appraiserManager = Appraiser::whereHas('appraisePosition', function ($query) {
+                    $query->where('description', 'TỔNG GIÁM ĐỐC');
+                })
+                    ->with(['appraisePosition:id,description'])
+                    ->first();
 
-        $certificate = $this->certificateRepository->dataPrintExport($id);
+                if ($appraiserManager) {
+                    $certificate->appraiserManager = $appraiserManager;
+                }
+
+                $certificate->service_fee = $precertificate->total_service_fee;
+                $certificate->document_type = [];
+                $certificate->appraisePurpose = $precertificate->appraisePurpose;
+                $certificate->appraises = [];
+                $certificate->apartmentAssetPrint = [];
+                Log::info('certificate', ['certificate' => $certificate]);
+            }
+        } else {
+            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            $certificate = $this->certificateRepository->dataPrintExport($id);
+        }
+        if ($certificate === null) {
+            $data = ['message' => 'Có lỗi xảy ra trong quá trình xuất tài liệu', 'exception' => null];
+            return $this->respondWithErrorData($data);
+        }
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
-        $documentConfig = DocumentDictionary::query()->get();
+        // $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
         return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
     }
+
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
         try {

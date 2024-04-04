@@ -51,6 +51,11 @@ class CreatePriceEstimatesApartmentTable extends Migration
                 $table->integer('price_estimate_id')->nullable();
             });
         }
+        if (!Schema::hasColumn('apartment_assets', 'apartment_number')) {
+            Schema::table('apartment_assets', function (Blueprint $table) {
+                $table->string('apartment_number')->nullable();
+            });
+        }
 
         if (!Schema::hasColumn('price_estimates', 'project_id')) {
             Schema::table('price_estimates', function (Blueprint $table) {
@@ -82,6 +87,11 @@ class CreatePriceEstimatesApartmentTable extends Migration
         if (Schema::hasColumn('apartment_assets', 'price_estimate_id')) {
             Schema::table('apartment_assets', function (Blueprint $table) {
                 $table->dropColumn('price_estimate_id');
+            });
+        }
+        if (Schema::hasColumn('apartment_assets', 'apartment_number')) {
+            Schema::table('apartment_assets', function (Blueprint $table) {
+                $table->dropColumn('apartment_number');
             });
         }
 

@@ -1,7 +1,9 @@
 <?php
 
+
 namespace App\Services\Document\DocumentExport;
 
+use Illuminate\Support\Facades\Log;
 use App\Enum\EstimateAssetDefault;
 use App\Http\ResponseTrait;
 use Carbon\Carbon;
@@ -180,7 +182,7 @@ class KeHoachTDG
             ['bold' => true,],
             $cellHCentered
         );
-        $row4->addCell(5700, $cellVCentered)->addText("Tp. Hồ Chí Minh, ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y'), ['italic' => true], $cellHCentered);
+        $row4->addCell(5700, $cellVCentered)->addText("Tp. Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
 
         $section->addText(
             "KẾ HOẠCH THẨM ĐỊNH GIÁ",
@@ -190,17 +192,16 @@ class KeHoachTDG
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('1.  Những thông tin chung về Khách hàng yêu cầu và Tài sản thẩm định giá', ['bold' => true]);
-
-        $isApartment = in_array('CC', $certificate->document_type);
+        $isApartment = in_array('CC', $certificate->document_type ?? []);
         $addressHSTD = '';
 
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $addressHSTD .= 'Bất động sản là ' . ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         } else {
             foreach ($certificate->appraises as $index => $item) {
-                $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $addressHSTD .= 'Bất động sản là ' . ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         }
 
@@ -215,7 +216,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText("Tài sản thẩm định giá: Bất động sản là " . $addressHSTD, null, $indentleftSymbol);
+        $row2->addCell(9700)->addText("Tài sản thẩm định giá: " . $addressHSTD, null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -239,7 +240,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh", null, $indentleftSymbol);
+        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh.", null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -274,7 +275,7 @@ class KeHoachTDG
         $row9->addCell(9700, array('gridSpan' => 2))->addText(
             "Họ, tên người có trách nhiệm tham gia khảo sát, lập biên bản hiện trạng tài sản, thu thập thông tin, lập và ký tên Hồ sơ thẩm định giá:" .
                 (isset($certificate->appraiser) ? ' Thẩm định viên ' . $certificate->appraiser->name . ',' : '') .
-                (isset($certificate->appraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->appraiserPerform->name : ''),
+                (isset($certificate->appraiserPerform) ? ' Chuyên viên thẩm định  ' . $certificate->appraiserPerform->name . '.' : ''),
             null,
             $indentleftSymbol
         );
@@ -314,6 +315,11 @@ class KeHoachTDG
                 ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = str_replace(
+            ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
+            '',
+            $reportName
+        ); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
@@ -324,11 +330,13 @@ class KeHoachTDG
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
+        Log::info('Path', ['path' => $path, 'fileName' => $fileName]);
         try {
             $objWriter->save(storage_path('app/public/' . $path . $fileName . '.docx'));
         } catch (\Exception $e) {
             throw $e;
         }
+
         $data = [];
         $data['url'] = Storage::disk('public')->url($path .  $fileName . '.docx');
         $data['file_name'] = $fileName;

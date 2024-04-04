@@ -174,7 +174,7 @@ class HopDongTDG
             $cellHCentered
         );
         $row3->addCell(5700, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
-        $isApartment = in_array('CC', $certificate->document_type);
+        $isApartment = in_array('CC', $certificate->document_type ?? []);
 
         $section->addText("HỢP ĐỒNG CUNG CẤP DỊCH VỤ ", ['bold' => true, 'size' => '16'], ['align' => 'center']);
         $section->addText(
@@ -204,7 +204,7 @@ class HopDongTDG
             $indent13
         );
         $section->addText(
-            "Hôm nay, ngày " . date('d') . " tháng " . date('m') . " năm " . date('Y') . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
+            "Hôm nay, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ' . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
         );
@@ -269,15 +269,28 @@ class HopDongTDG
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
         $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
+        $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo.', null,  $alignBoth);
 
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8100, $cellVTop)->addTextRun($alignBoth);
+
+        $chucvu = isset($certificate->appraiserConfirm) && isset($certificate->appraiserConfirm->appraisePosition)
+            ? $certificate->appraiserConfirm->appraisePosition->description
+            : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
+                ? $certificate->appraiserManager->appraisePosition->description
+                : '');
+        $chucvu = mb_convert_case(mb_strtolower($chucvu), MB_CASE_TITLE, "UTF-8");
+
+        $daidien = isset($certificate->appraiserConfirm)
+            ? $certificate->appraiserConfirm->name
+            : (isset($certificate->appraiserManager)
+                ? $certificate->appraiserManager->name
+                : '');
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true]);
-        $textRun->addText(' – Chức vụ: Tổng Giám đốc', ['bold' => false]);
+        $textRun->addText($daidien, ['bold' => true]);
+        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
             null,
@@ -311,23 +324,27 @@ class HopDongTDG
         $textRun = $row1->addCell(8700, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Tài sản thẩm định giá : Quyền sở hữu căn hộ ');
         $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
-        $table = $section->addTable([
-            'borderSize' => 1,
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $row1 = $table->addRow(100, array(
-            'tblHeader' => false,
-            'cantSplit' => true
-        ));
 
         $alignCenter =
             ['align' => 'center'];
-        $row1->addCell(800, $cellVCentered)->addText('STT', ['bold' => true],  $alignCenter);
-        $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $alignCenter);
-        $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
+        if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
+            (isset($certificate->appraises) && count($certificate->appraises) > 0)
+        ) {
+            $table = $section->addTable([
+                'borderSize' => 1,
+                'align' => JcTable::START,
+                'width' => 100 * 50,
+                'unit' => 'pct'
+            ]);
+            $row1 = $table->addRow(100, array(
+                'tblHeader' => false,
+                'cantSplit' => true
+            ));
 
+            $row1->addCell(800, $cellVCentered)->addText('STT', ['bold' => true],  $alignCenter);
+            $row1->addCell(7500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $alignCenter);
+            $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
+        }
         $addressHSTD = '';
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
@@ -373,7 +390,9 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row1->addCell(5900, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
 
-        $appraise_date_formatted = 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date));
+        $appraise_date_formatted = $certificate->appraise_date
+            ? 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date))
+            : null;
         $row2 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
@@ -385,7 +404,7 @@ class HopDongTDG
             100,
             $cellVTop
         )->addText(':', null,  $alignBoth);
-        $row2->addCell(5900, $cellVTop)->addText($appraise_date_formatted . '.', null,  $alignBoth);
+        $row2->addCell(5900, $cellVTop)->addText($appraise_date_formatted ? $appraise_date_formatted . '.' : '', null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -499,16 +518,16 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("4.1.", null, ['align' => 'right']);
-        $textServiceFee = $certificate->service_fee ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
         $textRun = $row->addCell(9300)->addTextRun($indentleftNumber);
         $textRun->addText("Phí dịch vụ thẩm định giá tài sản: ");
-        if (isset($textServiceFee)) {
+        if (isset($certificate->service_fee)) {
+            $textServiceFee =  $this->formatNumberFunction($certificate->service_fee, 2, ',', '.');
 
             $textRun->addText(
                 $textServiceFee,
                 ['bold' => true]
             );
-            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee)) . ').', ['italic' => true]);
+            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee ?? 0)) . ').', ['italic' => true]);
         }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
@@ -705,10 +724,10 @@ class HopDongTDG
         $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
 
         $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
-        $textNamePetitioner = str_replace(['BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
-        $row2->addCell(4950)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
         $row3->addCell(4950)->addText("\n\n\n\n\n");
@@ -724,7 +743,7 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText(isset($certificate->appraiserManager) ? $certificate->appraiserManager->name : '', ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText($daidien, ['bold' => true], ['align' => 'center']);
 
 
 
@@ -734,6 +753,11 @@ class HopDongTDG
         $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'HDTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = str_replace(
+            ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
+            '',
+            $reportName
+        ); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;

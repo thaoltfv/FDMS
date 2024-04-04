@@ -8,6 +8,7 @@ use App\Enum\CompareMaterData;
 use App\Enum\ErrorMessage;
 use App\Models\Certificate;
 use App\Models\CertificateOtherDocuments;
+use App\Models\PreCertificateExportDocuments;
 use App\Models\PreCertificate;
 use App\Models\Customer;
 use App\Models\Appraise;
@@ -550,7 +551,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status_expired_at',
             DB::raw("case status
                         when 1
-                            then u1.image
+                            then u3.image
                         when 2
                             then u2.image
                         when 3
@@ -880,6 +881,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'payments',
             'cancelReason:id,description',
             'preType:id,description',
+            'exportDocuments'
         ];
         $result = $this->model->query()
             ->with($with)
@@ -1208,7 +1210,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $data = PreCertificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->appraiserSale->user_id == $user->id))
+                        if (!($data->appraiserSale->user_id == $user->id) && !($data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
@@ -1274,22 +1276,26 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
+                        break;
                     case 4:
                     case 5:
                         if (!($data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền cập nhật.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền này.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền cập nhật.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền này.', 'exception' => ''];
                         break;
                     case 3:
-                        if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền cập nhật.', 'exception' => ''];
-                        break;
                     case 6:
                         if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền khôi phục.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
+                        break;
+                    case 7:
+                        if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
                         break;
                     default:
                         $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
@@ -1614,5 +1620,164 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $check = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
         return $check;
+    }
+
+    /**
+     * @return bool
+     */
+    public function exportDocumentUpload($id, $is_pc, $request)
+    {
+        return DB::transaction(function () use ($id, $is_pc, $request) {
+            try {
+                $result = [];
+                $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+                $path = env('STORAGE_OTHERS') . '/' . 'export_document/' . $now->year . '/' . $now->month . '/';
+
+                $files = $request->file('files');
+                $typeDocument = $request->input('type') ?? '';
+
+                if (!$typeDocument) {
+                    return ['message' => 'Vui lòng nhập tên tài liệu', 'exception' => ''];
+                }
+                $user = CommonService::getUser();
+
+                if (isset($files) && !empty($files)) {
+                    if (!Storage::exists($path)) {
+                        Storage::makeDirectory($path);
+                    }
+                    foreach ($files as $file) {
+                        $fileName = $file->getClientOriginalName();
+                        $fileType = $file->getClientOriginalExtension();
+                        $fileSize = $file->getSize();
+                        $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
+                        Storage::put($name, file_get_contents($file));
+                        $fileUrl = Storage::url($name);
+                        $item = [
+                            'name' => $fileName,
+                            'link' => $fileUrl,
+                            'type' => $fileType,
+                            'size' => $fileSize,
+                            'description' => '',
+                            'created_by' => $user->id,
+                            'type_document' => $typeDocument
+                        ];
+
+
+
+                        if ($is_pc) {
+                            $item['pre_certificate_id'] = $id;
+                            $oldItem = PreCertificateExportDocuments::firstWhere([
+                                'pre_certificate_id' => $id,
+                                'type_document' => $typeDocument,
+                            ]);
+                        } else {
+                            $item['certificate_id'] = $id;
+                            $oldItem = PreCertificateExportDocuments::firstWhere([
+                                'certificate_id' => $id,
+                                'type_document' => $typeDocument,
+                            ]);
+                        }
+                        if ($oldItem) {
+                            $oldItem->delete();
+                        }
+                        $item = new PreCertificateExportDocuments($item);
+                        QueryBuilder::for($item)->insert($item->attributesToArray());
+                        $result[] = $item;
+                    }
+                    if ($is_pc) {
+                        $edited = PreCertificate::where('id', $id)->first();
+                        $edited2 = PreCertificateExportDocuments::where('pre_certificate_id', $id)->first();
+                    } else {
+                        $edited = Certificate::where('id', $id)->first();
+                        $edited2 = PreCertificateExportDocuments::where('certificate_id', $id)->first();
+                    }
+                    # activity-log upload file
+                    $this->CreateActivityLog($edited, $edited2, 'upload_file', 'Tải tài liệu sơ bộ ' . $name);
+                    // chưa lấy ra được model user và id user
+                }
+
+                if ($is_pc) {
+                    $result = PreCertificateExportDocuments::where('pre_certificate_id', $id)
+                        ->with('createdBy')
+                        ->get();
+                } else {
+                    $result = PreCertificateExportDocuments::where('certificate_id', $id)
+                        ->with('createdBy')
+                        ->get();
+                }
+                return $result;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function exportDocumentRemovePC($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $delete_what
+                    = $request->input('delete_what') ?? '';
+                $preCertificateId = PreCertificateExportDocuments::select('pre_certificate_id')->where('id', $id)->get();
+                $item = PreCertificateExportDocuments::where('id', $id)->delete();
+                $edited = PreCertificate::where('id', $preCertificateId[0]->pre_certificate_id)->first();
+                $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
+                # activity-log delete file
+                $this->CreateActivityLog(
+                    $edited,
+                    $edited2,
+                    'delete_file',
+                    'xóa tài liệu sơ bộ ' .
+                        $delete_what . ' được tải lên'
+                );
+                // chưa lấy ra được model user và id user
+                return $item;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    public function exportDocumentRemoveCertificate($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $delete_what = $request->input('delete_what') ?? '';
+                $certificateId = PreCertificateExportDocuments::select('certificate_id')->where('id', $id)->get();
+                $item = PreCertificateExportDocuments::where('id', $id)->delete();
+                $edited = Certificate::where('id', $certificateId[0]->certificate_id)->first();
+                $edited2 = PreCertificateExportDocuments::where('id', $id)->get();
+                # activity-log delete file
+                $this->CreateActivityLog($edited, $edited2, 'delete_file', 'Xóa tài liệu sơ bộ ' . $delete_what . ' được tải lên');
+                // chưa lấy ra được model user và id user
+                return $item;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+    /**
+     * @return bool
+     */
+    public function exportDocumentDownload($id)
+    {
+        return DB::transaction(function () use ($id) {
+            try {
+                $item = PreCertificateExportDocuments::where('id', $id)->first();
+                return $item;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
     }
 }
