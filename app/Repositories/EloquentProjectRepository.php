@@ -86,10 +86,10 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
         if (empty($search)) {
             $search = '';
         }
-        $query = 'name ilike '."'%".$search."%'";
+        $query = 'name ilike ' . "'%" . $search . "%'";
         return QueryBuilder::for($this->model)
             ->whereRaw($query)
-            ->orderByDesc($this->allowedSorts )
+            ->orderByDesc($this->allowedSorts)
             ->forPage($page, $perPage)
             ->paginate($perPage);
     }
@@ -124,7 +124,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                             $totalFloor = intval($block['total_floors']);
 
                             $floorData = [];
-                            for ($i=1; $i<=$totalFloor; $i++) {
+                            for ($i = 1; $i <= $totalFloor; $i++) {
                                 $floorData[] = [
                                     'block_id' => $dataBlock->id,
                                     'status' => true,
@@ -177,9 +177,10 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             ->first($select);
     }
 
-    public function log_to_console($data) {
+    public function log_to_console($data)
+    {
         $output = json_encode($data);
-    
+
         echo "<script>console.log('{$output}' );</script>";
     }
     public function updateProject(int $id, array $objects)
@@ -200,7 +201,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                     foreach ($blockObjs as $block) {
                         $block['project_id'] = $id;
                         $blockAtt = new Block($block);
-                        if(isset($block['id']))
+                        if (isset($block['id']))
                             $blockCheck = ['id' => $block['id']];
                         else
                             $blockCheck = ['project_id' => $id, 'name' => $blockAtt->name];
@@ -209,23 +210,23 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                         if (isset($block['floor']) && count($block['floor']) > 0) {
                             Floor::where('block_id', $dataBlock->id)->delete();
                             foreach ($block['floor'] as $floor) {
-                                $floor['block_id'] = $floor['block_id']??$dataBlock->id;
+                                $floor['block_id'] = $floor['block_id'] ?? $dataBlock->id;
                                 $floorAtt = new Floor($floor);
-                                if(isset($floor['id']))
+                                if (isset($floor['id']))
                                     $floorCheck = ['id' => $floor['id']];
                                 else
                                     $floorCheck = ['block_id' => $id, 'name' => $floorAtt->name];
 
                                 Floor::query()->updateOrCreate($floorCheck, $floorAtt->attributesToArray());
                             }
-                        }  else {
+                        } else {
                             $startFloor = intval($block['first_floor']);
                             $endFloor = intval($block['last_floor']);
 
                             $totalFloor = intval($block['total_floors']);
 
                             $floorData = [];
-                            for ($i=1; $i<=$totalFloor; $i++) {
+                            for ($i = 1; $i <= $totalFloor; $i++) {
                                 $floorData[] = [
                                     'block_id' => $dataBlock->id,
                                     'status' => true,
@@ -252,12 +253,12 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             return $check;
         if (isset($object)) {
             try {
-                $result =[];
+                $result = [];
                 DB::beginTransaction();
-                foreach($blocks as $block){
+                foreach ($blocks as $block) {
                     $block['project_id'] = $projectId;
                     $blockAtt = new Block($block);
-                    if(isset($block['id']))
+                    if (isset($block['id']))
                         $blockCheck = ['id' => $block['id']];
                     else
                         $blockCheck = ['project_id' => $projectId, 'name' => $blockAtt->name];
@@ -265,7 +266,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                     Block::query()->updateOrCreate($blockCheck, $blockAtt->attributesToArray());
                 }
                 DB::commit();
-                $result= $this->getBlockByProject($projectId);
+                $result = $this->getBlockByProject($projectId);
                 return $result;
             } catch (Exception $ex) {
                 DB::rollBack();
@@ -278,14 +279,14 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
         $check = $this->beforeSave($blockId, 'Floor');
         if (isset($check))
             return $check;
-        if(isset($floors)){
-            try{
-                $result =[];
+        if (isset($floors)) {
+            try {
+                $result = [];
                 DB::beginTransaction();
-                foreach($floors as $floor){
+                foreach ($floors as $floor) {
                     $floor['block_id'] = $blockId;
                     $floorAtt = new Floor($floor);
-                    if(isset($floor['id']))
+                    if (isset($floor['id']))
                         $floorCheck = ['id' => $floor['id']];
                     else
                         $floorCheck = ['block_id' => $blockId, 'name' => $floorAtt->name];
@@ -295,7 +296,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 DB::commit();
                 $result = $this->getFloorByBlock($blockId);
                 return $result;
-            }catch(Exception $ex){
+            } catch (Exception $ex) {
                 DB::rollBack();
                 return ['message' => $ex->getMessage(), 'exception' => $ex];
             }
@@ -306,14 +307,14 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
         $check = $this->beforeSave($floorId, 'Apartment');
         if (isset($check))
             return $check;
-        if(isset($apartments)){
-            try{
-                $result =[];
+        if (isset($apartments)) {
+            try {
+                $result = [];
                 DB::beginTransaction();
-                foreach($apartments as $apartment){
+                foreach ($apartments as $apartment) {
                     $apartment['floor_id'] = $floorId;
                     $apartmentAtt = new Apartment($apartment);
-                    if(isset($apartment['id']))
+                    if (isset($apartment['id']))
                         $apartmentCheck = ['id' => $apartment['id']];
                     else
                         $apartmentCheck = ['floor_id' => $floorId, 'name' => $apartmentAtt->name];
@@ -323,7 +324,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 DB::commit();
                 $result = $this->getApartmentByFloor($floorId);
                 return $result;
-            }catch(Exception $ex){
+            } catch (Exception $ex) {
                 DB::rollBack();
                 return ['message' => $ex->getMessage(), 'exception' => $ex];
             }
@@ -331,15 +332,13 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
     }
     private function getBlockByProject(int $projectId)
     {
-        $with = [
-        ];
+        $with = [];
         $data = Block::query()->with($with)->where('project_id', $projectId)->get();
         return $data;
     }
     private function getFloorByBlock(int $blockId)
     {
-        $with = [
-        ];
+        $with = [];
         $data = Floor::query()->with($with)->where('block_id', $blockId)->get();
         return $data;
     }
@@ -348,25 +347,25 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
         $data = Apartment::query()->where('floor_id', $floorId)->get();
         return $data;
     }
-    public function updateStatus(int $id,bool $status,string $type)
+    public function updateStatus(int $id, bool $status, string $type)
     {
         // $status = $object['status'];
         // $type = $object['type'];
-        switch($type){
+        switch ($type) {
             case 'project':
-                if($this->model->query()->where('id', $id)->exists()){
+                if ($this->model->query()->where('id', $id)->exists()) {
                     $this->model->query()->where('id', $id)->update([
                         'status' => $status,
                     ]);
-                    if(Block::query()->where('project_id', $id)->exists()){
+                    if (Block::query()->where('project_id', $id)->exists()) {
                         $blocks = Block::query()->where('project_id', $id)->get('id');
                         $blockIds = Arr::pluck($blocks, 'id');
                         Block::query()->where('project_id', $id)->update([
                             'status' => $status,
                         ]);
-                        if(Floor::query()->whereIn('block_id', $blockIds)->exists()){
+                        if (Floor::query()->whereIn('block_id', $blockIds)->exists()) {
                             $floors = Floor::query()->whereIn('block_id', $blockIds)->get('id');
-                            $floorIds = Arr::pluck($floors,'id');
+                            $floorIds = Arr::pluck($floors, 'id');
                             Floor::query()->whereIn('block_id', $blockIds)->update([
                                 'status' => $status,
                             ]);
@@ -375,17 +374,17 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                             ]);
                         }
                     }
-                    return ['id' => $id, 'status' => $status,'type' => $type];
+                    return ['id' => $id, 'status' => $status, 'type' => $type];
                 }
                 break;
             case 'block':
-                if(Block::query()->where('id', $id)->exists()){
+                if (Block::query()->where('id', $id)->exists()) {
                     Block::query()->where('id', $id)->update([
                         'status' => $status,
                     ]);
-                    if(Floor::query()->where('block_id', $id)->exists()){
+                    if (Floor::query()->where('block_id', $id)->exists()) {
                         $floors = Floor::query()->where('block_id', $id)->get('id');
-                        $floorIds = Arr::pluck($floors,'id');
+                        $floorIds = Arr::pluck($floors, 'id');
                         Floor::query()->where('block_id', $id)->update([
                             'status' => $status,
                         ]);
@@ -393,11 +392,11 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                             'status' => $status,
                         ]);
                     }
-                    return ['id' => $id, 'status' => $status,'type' => $type];
+                    return ['id' => $id, 'status' => $status, 'type' => $type];
                 }
                 break;
             case 'floor':
-                if(Floor::query()->where('id', $id)->exists()){
+                if (Floor::query()->where('id', $id)->exists()) {
                     $floors = Floor::query()->where('id', $id)->get('id');
                     Floor::query()->where('id', $id)->update([
                         'status' => $status,
@@ -405,19 +404,19 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                     Apartment::query()->where('floor_id', $id)->update([
                         'status' => $status,
                     ]);
-                    return ['id' => $id, 'status' => $status,'type' => $type];
+                    return ['id' => $id, 'status' => $status, 'type' => $type];
                 }
                 break;
             case 'apartment':
-                if(Apartment::query()->where('id', $id)->exists()){
+                if (Apartment::query()->where('id', $id)->exists()) {
                     Apartment::query()->where('id', $id)->update([
                         'status' => $status,
                     ]);
-                    return ['id' => $id, 'status' => $status,'type' => $type];
+                    return ['id' => $id, 'status' => $status, 'type' => $type];
                 }
                 break;
             default:
-                return ['message' => 'Không tồn tại loại '. $type, 'exception' => ''];
+                return ['message' => 'Không tồn tại loại ' . $type, 'exception' => ''];
         }
     }
     public function getAll()
@@ -451,7 +450,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
     }
     public function getProjectActiveById(int $id)
     {
-        if($this->model->where(['id' => $id, 'status' => true])->exists()){
+        if ($this->model->where(['id' => $id, 'status' => true])->exists()) {
             $select = [
                 'id',
                 'name',
@@ -475,18 +474,18 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                 'district:id,name',
                 'ward:id,name',
                 'street:id,name',
-                'block' => function($q){
+                'block' => function ($q) {
                     $q->where('status', true);
                 },
-                'block.floor' => function($q){
+                'block.floor' => function ($q) {
                     $q->where('status', true);
                 },
-                'block.floor.apartment' => function($q){
+                'block.floor.apartment' => function ($q) {
                     $q->where('status', true);
                 },
             ];
             return $this->model->query()->with($with)->where(['id' => $id, 'status' => true])->get($select);
-        }else{
+        } else {
             return ['message' => 'Chung cư không tồn tại hoặc chưa được kích hoạt.', 'exception' => ''];
         }
     }
@@ -520,12 +519,12 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             'block.floor',
             // 'block.floor.apartment'
         ];
-        return $this->model->query()->with($with)->where('status',true)->get($select);
+        return $this->model->query()->with($with)->where('status', true)->get($select);
     }
 
     public function getApartmentByFloorId(int $floorId)
     {
-        return Apartment::query()->where('floor_id',$floorId)->where('status',true)->get(['id','name','floor_id']);
+        return Apartment::query()->where('floor_id', $floorId)->where('status', true)->get(['id', 'name', 'floor_id']);
     }
 
     public function getProjectByDistrictId()
@@ -559,7 +558,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             'block.floor',
         ];
         // return \Cache::remember('project_'.$districtId, 3600, function() use($districtId, $with, $select) {
-            return $this->model->query()
+        return $this->model->query()
             ->with($with)
             ->where('status', true)
             ->where('district_id', $districtId)
