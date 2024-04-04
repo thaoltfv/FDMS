@@ -1,77 +1,86 @@
 <template>
-    <form class="search" role="search" @submit.prevent="search">
-      <div class="position-relative">
-        <InputText
-          id="search_input"
-          v-model="filter.search"
-          class="input-flash"
-          placeholder="Tìm kiếm nhanh"
-          vid="search"
-           />
-          <b-tooltip v-if="!isMobile()" placement="rightbottom" target="search_input">
-              "!" - Tìm theo số hợp đồng hoặc số chứng thư <br/>
-              "#" - Tìm theo mã TSTD <br/>
-              "@" - Tìm theo tên Người tạo <br/>
-              "$" - tổng giá trị
-          </b-tooltip>
-        <button class="btn-img btn-img__search">
-          <img class="img" src="../../assets/icons/ic_search.svg" alt="search">
-        </button>
-      </div>
-    </form>
+	<form class="search" role="search" @submit.prevent="search">
+		<div class="position-relative">
+			<InputText
+				id="search_input"
+				v-model="filter.search"
+				class="input-flash"
+				placeholder="Tìm kiếm nhanh"
+				vid="search"
+			/>
+			<b-tooltip
+				v-if="!isMobile()"
+				placement="rightbottom"
+				target="search_input"
+			>
+				"!" - Tìm theo số hợp đồng hoặc số chứng thư <br />
+				"#" - Tìm theo mã TSTD <br />
+				"@" - Tìm theo tên Người tạo <br />
+				"$" - Tìm theo tổng giá trị<br />
+				"%" - Tìm theo tên Khách hàng<br />
+				"^" - Tìm theo địa chỉ tài sản
+			</b-tooltip>
+			<button class="btn-img btn-img__search">
+				<img class="img" src="../../assets/icons/ic_search.svg" alt="search" />
+			</button>
+		</div>
+	</form>
 </template>
 
 <script>
-import InputText from '@/components/Form/InputText'
-import { BTooltip } from 'bootstrap-vue'
+import InputText from "@/components/Form/InputText";
+import { BTooltip } from "bootstrap-vue";
 export default {
-	name: 'search',
+	name: "search",
 	components: {
 		InputText,
-		'b-tooltip': BTooltip
+		"b-tooltip": BTooltip
 	},
-	data () {
+	data() {
 		return {
 			filter: {
-				search: ''
+				search: ""
 			},
-			message: ''
-		}
+			message: ""
+		};
 	},
 	methods: {
-		isMobile () {
-			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-				return true
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
 			} else {
-				return false
+				return false;
 			}
 		},
-		search () {
-			this.$emit('filter-changed', this.filter)
+		search() {
+			this.$emit("filter-changed", this.filter);
 		},
-		reset () {
+		reset() {
 			for (let property in this.filter) {
 				if (this.filter.hasOwnProperty(property)) {
-					this.filter[property] = ''
+					this.filter[property] = "";
 				}
 			}
-			this.$emit('filter-changed', this.filter)
+			this.$emit("filter-changed", this.filter);
 		}
 	},
-	beforeMount () {
-	}
-}
+	beforeMount() {}
+};
 </script>
 <style scoped lang="scss">
-    .search{
-      @media (max-width: 1440px) {
-        width: 100%;
-      }
-    }
-    // .btn-img{
-    //   &__search{
-    //     right: 5px;
-    //     top: 45px;
-    //   }
-    // }
+.search {
+	@media (max-width: 1440px) {
+		width: 100%;
+	}
+}
+// .btn-img{
+//   &__search{
+//     right: 5px;
+//     top: 45px;
+//   }
+// }
 </style>

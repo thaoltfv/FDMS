@@ -14,7 +14,8 @@
 				target="search_input"
 			>
 				"@" - Tìm theo tên Người tạo <br />
-				"$" - tổng giá trị
+				"$" - Tìm theo tổng giá trị<br />
+				"%" - Tìm theo tên Khách hàng
 			</b-tooltip>
 			<button class="btn-img btn-img__search">
 				<img class="img" src="../../assets/icons/ic_search.svg" alt="search" />
