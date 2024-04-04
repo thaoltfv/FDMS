@@ -19,7 +19,7 @@ class UpdatePreCertificateConfigs extends Seeder
             $oldData = $record->config;
 
             // Prepare new data
-            $newData = [
+            $newData =
                 [
                     "appraiser" => [
                         "created_by" => "Người tạo",
@@ -630,9 +630,9 @@ class UpdatePreCertificateConfigs extends Seeder
                             "target_description" => []
                         ],
                     ],
-                ],
-                // Add more key-value pairs as needed
-            ];
+
+                    // Add more key-value pairs as needed
+                ];
 
             // Update config with new data
             $jsonData = json_encode($newData);
