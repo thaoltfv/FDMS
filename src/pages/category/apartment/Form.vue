@@ -219,7 +219,7 @@
 					</div>
 					<div class="card-body card-info">
 						<div class="container-fluid color_content">
-							<div class="row">
+							<div class="row" :key="floorRefreshKey">
 								<div class="col-12">
 									<a-table
 										bordered
@@ -371,6 +371,7 @@ export default {
 
 	data() {
 		return {
+			floorRefreshKey: 1,
 			checkdata: null,
 			location: {
 				lng: "",
@@ -510,13 +511,22 @@ export default {
 			};
 		},
 		handleActionFloor(data) {
-			console.log("data3", data);
+			if (!data.name) {
+				this.$toast.open({
+					message: "Vui lòng nhập tên tầng",
+					type: "error",
+					position: "top-right"
+				});
+				return;
+			}
 			if (this.isEdit) {
 				this.form.block[this.indexBlock].floor[this.indexEdit] = data;
 			} else {
 				this.form.block[this.indexBlock].floor.push(data);
 			}
-			console.log("block", this.form.block[this.indexBlock].floor);
+			this.floors = this.form.block[this.indexBlock].floor;
+			this.indexFloor = 0;
+			this.floorRefreshKey += 1;
 			this.openModalFloor = false;
 			this.isEdit = false;
 		},
@@ -524,22 +534,9 @@ export default {
 			this.openModalFloor = true;
 			this.isEdit = true;
 			this.indexEdit = index;
-			console.log("index", index);
-			console.log("this.block", this.indexBlock);
-			console.log("this.form.block[this.indexBlock]", this.form.block);
-			console.log(
-				"this.form.block[this.indexBlock]",
-				this.form.block[this.indexBlock].floor
-			);
-			console.log(
-				"this.form.block[this.indexBlock].floor[index]",
-				this.form.block[this.indexBlock].floor[index]
-			);
 			this.formFloor = JSON.parse(
 				JSON.stringify(this.form.block[this.indexBlock].floor[index])
 			);
-			console.log("formFloor", this.formFloor);
-			console.log("Vào hàm sửa tầng nè");
 		},
 		handleDeleteFloor() {},
 		// create a block
@@ -558,44 +555,33 @@ export default {
 		handleCheckActionBlock(data) {
 			this.openModalBlock = false;
 			if (this.isEdit) {
-				console.log("this.data", data);
-				console.log(
-					"this.form.block[this.indexEdit]",
-					this.form.block[this.indexEdit]
-				);
-				if (
-					data.total_floors !== this.form.block[this.indexEdit].total_floors
-				) {
-					this.openModalActiveFloor = true;
-					this.checkdata = data;
-				} else {
-					this.openModalActiveFloor = false;
-					this.indexFloor = 0;
-				}
+				// if (
+				// 	data.total_floors !== this.form.block[this.indexEdit].total_floors
+				// ) {
+				// 	this.openModalActiveFloor = true;
+				// 	this.checkdata = data;
+				// } else {
+				this.openModalActiveFloor = false;
+				this.indexFloor = 0;
+				this.form.block[this.indexEdit] = data;
+				// }
 			} else {
 				this.handleActionBlock(data);
 			}
 		},
 		handleActionBlock(data) {
 			if (this.isEdit) {
-				console.log("dataaaaa", data);
 				this.openModalActiveFloor = false;
 
-				// if (data.total_floors == this.form.block[this.indexEdit].total_floors)
-				// {
-				// 	this.indexFloor = 0;
-
-				// } else {
-				this.form.block[this.indexEdit].floor = [];
-				for (let i = 0; i < data.total_floors; i++) {
-					this.form.block[this.indexEdit].floor.push({
-						name: "Tầng " + (i + 1)
-					});
-					this.floors = this.form.block[this.indexEdit].floor;
-				}
+				// this.form.block[this.indexEdit].floor = [];
+				// for (let i = 0; i < data.total_floors; i++) {
+				// 	this.form.block[this.indexEdit].floor.push({
+				// 		name: "Tầng " + (i + 1)
+				// 	});
+				// 	this.floors = this.form.block[this.indexEdit].floor;
 				// }
 				this.form.block[this.indexEdit] = data;
-				this.form.block[this.indexEdit].floor = this.floors;
+				// this.form.block[this.indexEdit].floor = this.floors;
 			} else {
 				this.form.block.push(data);
 			}
@@ -844,25 +830,16 @@ export default {
 			this.selectedRowKeysBlock = [index];
 			this.selectedRowKeysFloor = [];
 			this.indexBlock = index;
-			this.floors = this.form.block[index].floor;
-			console.log("index", index);
-			console.log("this.form", this.form);
-			console.log("this.form.block", this.form.block);
-			console.log("this.form.block[index]", this.form.block[index]);
-			console.log("this.form.block[index].floor", this.form.block[index].floor);
-			console.log("item.total_floors", item.total_floors);
-			console.log("this.floors.length", this.floors.length);
-			if (item.total_floors !== this.floors.length) {
-				this.form.block[index].floor = [];
-				console.log("vao if ne");
-				for (let i = 0; i < item.total_floors; i++) {
-					this.form.block[index].floor.push({
-						name: "Tầng " + (i + 1)
-					});
-					this.floors = this.form.block[index].floor;
-				}
-			} else if (this.floors && this.floors.length > 0) {
+			this.floors = [];
+
+			if (
+				this.form.block[index].floor &&
+				this.form.block[index].floor.length > 0
+			) {
+				this.floors = this.form.block[index].floor;
 				this.indexFloor = 0;
+			} else {
+				this.form.block[index].floor = [];
 			}
 			this.apartments = [];
 		},
