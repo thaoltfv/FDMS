@@ -118,21 +118,22 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                                 $floorAtt = new Floor($floor);
                                 Floor::query()->create($floorAtt->attributesToArray());
                             }
-                        } else {
-                            $startFloor = intval($block['first_floor']);
-                            $endFloor = intval($block['last_floor']);
-                            $totalFloor = intval($block['total_floors']);
-
-                            $floorData = [];
-                            for ($i = 1; $i <= $totalFloor; $i++) {
-                                $floorData[] = [
-                                    'block_id' => $dataBlock->id,
-                                    'status' => true,
-                                    'name' => 'Tầng ' . $i
-                                ];
-                            }
-                            Floor::insert($floorData);
                         }
+                        //  else {
+                        //     $startFloor = intval($block['first_floor']);
+                        //     $endFloor = intval($block['last_floor']);
+                        //     $totalFloor = intval($block['total_floors']);
+
+                        //     $floorData = [];
+                        //     for ($i = 1; $i <= $totalFloor; $i++) {
+                        //         $floorData[] = [
+                        //             'block_id' => $dataBlock->id,
+                        //             'status' => true,
+                        //             'name' => 'Tầng ' . $i
+                        //         ];
+                        //     }
+                        //     Floor::insert($floorData);
+                        // }
                     }
                 }
                 DB::commit();
@@ -218,22 +219,23 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
 
                                 Floor::query()->updateOrCreate($floorCheck, $floorAtt->attributesToArray());
                             }
-                        } else {
-                            $startFloor = intval($block['first_floor']);
-                            $endFloor = intval($block['last_floor']);
-
-                            $totalFloor = intval($block['total_floors']);
-
-                            $floorData = [];
-                            for ($i = 1; $i <= $totalFloor; $i++) {
-                                $floorData[] = [
-                                    'block_id' => $dataBlock->id,
-                                    'status' => true,
-                                    'name' => 'Tầng ' . $i
-                                ];
-                            }
-                            Floor::insert($floorData);
                         }
+                        // else {
+                        //     $startFloor = intval($block['first_floor']);
+                        //     $endFloor = intval($block['last_floor']);
+
+                        //     $totalFloor = intval($block['total_floors']);
+
+                        //     $floorData = [];
+                        //     for ($i = 1; $i <= $totalFloor; $i++) {
+                        //         $floorData[] = [
+                        //             'block_id' => $dataBlock->id,
+                        //             'status' => true,
+                        //             'name' => 'Tầng ' . $i
+                        //         ];
+                        //     }
+                        //     Floor::insert($floorData);
+                        // }
                     }
                 }
                 DB::commit();
