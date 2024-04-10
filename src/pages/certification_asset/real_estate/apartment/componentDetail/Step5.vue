@@ -251,7 +251,8 @@
 															<td>Tầng</td>
 															<td>
 																{{
-																	data.apartment_asset_properties
+																	data.apartment_asset_properties &&
+																	data.apartment_asset_properties.floor
 																		? formatSentenceCase(
 																				data.apartment_asset_properties.floor
 																					.name
@@ -2375,7 +2376,9 @@
 																mgcl1 > 15 ||
 																mgcl2 > 15 ||
 																mgcl3 > 15 ||
-																mgcl1 < -15 || mgcl2 < -15 || mgcl3 < -15
+																mgcl1 < -15 ||
+																mgcl2 < -15 ||
+																mgcl3 < -15
 																	? 'text-danger'
 																	: ''
 															"
@@ -2909,8 +2912,11 @@ export default {
 			}
 		},
 		formatSentenceCase(phrase) {
-			let text = phrase.toLowerCase();
-			return text.charAt(0).toUpperCase() + text.slice(1);
+			if (phrase) {
+				let text = phrase.toLowerCase();
+				return text.charAt(0).toUpperCase() + text.slice(1);
+			}
+			return "";
 		},
 		onCancel() {
 			return this.$router.push({ name: "certification_asset.index" });
