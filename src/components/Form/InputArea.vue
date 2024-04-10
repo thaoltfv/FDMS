@@ -1,54 +1,62 @@
 <template>
-  <ValidationProvider tag="div"
-                      :name="label ? label : nonLabel"
-                      :vid="vid"
-                      :rules="rules+'|not_emoji'"
-                      v-slot="{ errors }">
-    <label v-if="label"
-           class="form-label font-weight-bold d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-start color_content">
-        {{ $t(label) }}
-        <!-- <span v-if="required" class="required">{{$t('required')}}</span> -->
-      </div>
-      <!-- <span v-if="rules.includes('max:')" class="character-count">
+	<ValidationProvider
+		tag="div"
+		:name="label ? label : nonLabel"
+		:vid="vid"
+		:rules="rules + '|not_emoji'"
+		v-slot="{ errors }"
+	>
+		<label
+			v-if="label"
+			class="form-label font-weight-bold d-flex justify-content-between align-items-center"
+		>
+			<div class="d-flex align-items-start color_content">
+				{{ $t(label) }}
+				<!-- <span v-if="required" class="required">{{$t('required')}}</span> -->
+			</div>
+			<!-- <span v-if="rules.includes('max:')" class="character-count">
           {{value.length}}/{{maxLength}}
         </span> -->
-    </label>
+		</label>
 
-    <div class="container_area">
-      <input
-        class="input_area ant-input color_content"
-        :class="{'inputError':errors[0] || errorMessage, 'input_center': text_center}"
-        type="text"
-        v-model="valueMutator"
-        :disabled="disabled"
-        @input="debounceInput"
+		<div class="container_area">
+			<input
+				class="input_area ant-input color_content"
+				:class="{
+					inputError: errors[0] || errorMessage,
+					input_center: text_center
+				}"
+				type="text"
+				v-model="valueMutator"
+				:disabled="disabled"
+				@input="debounceInput"
 				@change="onChange"
-      />
-      <span v-if="sufix" class="suffix color_content">m<sup>2</sup></span>
-      <!--Message Error-->
-      <span v-if="errors[0] || errorMessage" class="errors">{{ errors[0] || errorMessage }}</span>
-    </div>
-  </ValidationProvider>
+			/>
+			<span v-if="sufix" class="suffix color_content">m<sup>2</sup></span>
+			<!--Message Error-->
+			<span v-if="errors[0] || errorMessage" class="errors">{{
+				errors[0] || errorMessage
+			}}</span>
+		</div>
+	</ValidationProvider>
 </template>
 
 <script>
-import { debounce } from 'lodash-es'
+import { debounce } from "lodash-es";
 export default {
-	name: 'InputArea',
-	data () {
+	name: "InputArea",
+	data() {
 		return {
-			valueMutator: this.value || this.value === 0 ? this.formatNumber(this.value) : '',
-			errorMessage: ''
-		}
+			valueMutator:
+				this.value || this.value === 0 ? this.formatNumber(this.value) : "",
+			errorMessage: ""
+		};
 	},
 	model: {
-		prop: 'value',
-		event: 'change'
+		prop: "value",
+		event: "change"
 	},
-	components: {
-
-	},
+	components: {},
 	props: {
 		disabled: {
 			type: Boolean,
@@ -60,11 +68,11 @@ export default {
 		},
 		label: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		nonLabel: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		sufix: {
 			type: Boolean,
@@ -72,17 +80,17 @@ export default {
 		},
 		rules: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		vid: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		placeholder: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		max: {
 			type: [String, Number],
@@ -97,20 +105,20 @@ export default {
 		},
 		value: {
 			type: [String, Number],
-			default: ''
+			default: ""
 		},
 		autocomplete: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		icon: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		addon: {
 			type: String,
-			default: ''
+			default: ""
 		},
 		text_center: {
 			type: Boolean,
@@ -122,7 +130,7 @@ export default {
 		},
 		defaultValue: {
 			type: [String, Number],
-			default: ''
+			default: ""
 		},
 		formatter: {
 			type: Function
@@ -134,111 +142,118 @@ export default {
 	},
 
 	methods: {
-		debounceInput: debounce(function (e) {
-			this.onChange(e)
+		debounceInput: debounce(function(e) {
+			this.onChange(e);
 		}, 400),
-		async onChange (event) {
+		async onChange(event) {
 			if (event.target.value) {
-				if (event.target.value.match(/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g)) {
-					let valueChecked = event.target.value.match(/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g)[0]
-					let formatValue = this.supportClientAction(valueChecked)
+				if (
+					event.target.value.match(/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g)
+				) {
+					let valueChecked = event.target.value.match(
+						/^\d+(\.\d+)*(,\d+)?$|^\d+(,\d+)*(\.\d+)?$/g
+					)[0];
+					let formatValue = this.supportClientAction(valueChecked);
 					if (this.validateInput(formatValue)) {
-						let formatNumberDecimal = +parseFloat(formatValue).toFixed(this.decimal)
-						this.$emit('change', formatNumberDecimal)
-						let convertedValue = formatNumberDecimal.toString().replace('.', ',')
+						let formatNumberDecimal = +parseFloat(formatValue).toFixed(
+							this.decimal
+						);
+						this.$emit("change", formatNumberDecimal);
+						let convertedValue = formatNumberDecimal
+							.toString()
+							.replace(".", ",");
 						// change value number to dot format
-						this.valueMutator = this.formatNumber(convertedValue)
-						this.errorMessage = ''
+						this.valueMutator = this.formatNumber(convertedValue);
+						this.errorMessage = "";
 					}
 				} else {
 					// this.rules = 'required'
-					this.errorMessage = 'Vui lòng kiểm tra lại nhập không hợp lệ'
+					this.errorMessage = "Vui lòng kiểm tra lại nhập không hợp lệ";
 				}
 			} else if (this.required || this.rules) {
-				this.$emit('change', '')
+				this.$emit("change", "");
 			}
 		},
-		supportClientAction (value) {
-			let formatValue = value
+		supportClientAction(value) {
+			let formatValue = value;
 			// Remove first character is zero
 			if (value.match(/(^0+)([\d])/g)) {
-				formatValue = value.replace(/(^0+)([\d])/g, '$2')
+				formatValue = value.replace(/(^0+)([\d])/g, "$2");
 			}
 			// Remove dot group when copy from another place
 			if (value.match(/^\d+(\.\d+)*(,\d+)?$/g)) {
 				if (value.match(/(,+)/g)) {
-					formatValue = formatValue.replace(/(\.+)/g, '')
-					formatValue = formatValue.replace(/(,+)/g, '.')
+					formatValue = formatValue.replace(/(\.+)/g, "");
+					formatValue = formatValue.replace(/(,+)/g, ".");
 				} else if (value.match(/(\.)(\d{3})/g)) {
-					formatValue = formatValue.replace(/(\.)(\d{3})/g, '$2')
+					formatValue = formatValue.replace(/(\.)(\d{3})/g, "$2");
 				}
-				return formatValue
+				return formatValue;
 			} else {
-				formatValue = formatValue.replace(/(,+)/g, '')
-				return formatValue
+				formatValue = formatValue.replace(/(,+)/g, "");
+				return formatValue;
 			}
 		},
-		validateInput (value) {
+		validateInput(value) {
 			if (value <= this.min) {
-				this.errorMessage = `Diện tích phải lớn hơn ${this.min}`
-				return false
+				this.errorMessage = `Diện tích phải lớn hơn ${this.min}`;
+				return false;
 			}
 			if (value > this.max) {
-				this.errorMessage = `Diện tích phải nhỏ ${this.max}`
-				return false
+				this.errorMessage = `Diện tích phải nhỏ ${this.max}`;
+				return false;
 			}
-			return true
+			return true;
 		},
-		formatNumber (num) {
+		formatNumber(num) {
 			// convert number to dot format
-			let formatedNum = num.toString().replace('.', ',')
-			return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
-				return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
-			})
+			let formatedNum = num.toString().replace(".", ",");
+			return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
+				return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+			});
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .inputError {
-  border: 1px solid red !important;
+	border: 1px solid red !important;
 }
-  .errors {
-    color: #cd201f;
-    padding: 5px 0 0;
-    display: block;
-    font-size: 12px;
-  }
+.errors {
+	color: #cd201f;
+	padding: 5px 0 0;
+	display: block;
+	font-size: 12px;
+}
 .container_area {
-  position: relative;
+	position: relative;
 }
 .suffix {
-    position: absolute;
-    right: 1rem;
-    top: 6px;
+	position: absolute;
+	right: 1rem;
+	top: 6px;
 }
 .input_area {
 	text-align: end;
 	width: 100%;
 	height: 2.295rem;
-  padding-right: 2.5rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 5px;
-  color:#3D4D65 !important
+	padding-right: 2.5rem;
+	border: 1px solid #d9d9d9;
+	border-radius: 5px;
+	color: #3d4d65 !important;
 }
 .input_center {
-  text-align: center !important;
-  padding-right: unset !important;
-  padding-left: unset !important;
+	text-align: center !important;
+	padding-right: unset !important;
+	padding-left: unset !important;
 }
 .character-count {
-  font-size: 12px;
-  font-weight: normal;
-  color: #999999;
+	font-size: 12px;
+	font-weight: normal;
+	color: #999999;
 }
 .color_content {
-  color:#3D4D65 !important
-
+	color: #3d4d65 !important;
 }
 </style>
