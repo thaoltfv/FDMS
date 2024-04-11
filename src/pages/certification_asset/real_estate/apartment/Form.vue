@@ -635,17 +635,16 @@ export default {
 	computed: {
 		getApartmentName() {
 			const apartment_name = this.form.step_1.apartment_asset_properties
-				.apartment_name
 				? "Căn hộ số " +
 				  this.form.step_1.apartment_asset_properties.apartment_name
 				: "";
-			const floor_name = this.form.step_1.apartment_asset_properties.floor.name
+			const floor_name = this.form.step_1.apartment_asset_properties.floor
 				? " tầng " + this.form.step_1.apartment_asset_properties.floor.name
 				: "";
-			const block_name = this.form.step_1.apartment_asset_properties.block.name
+			const block_name = this.form.step_1.apartment_asset_properties.block
 				? " khu " + this.form.step_1.apartment_asset_properties.block.name
 				: "";
-			const project_name = this.form.step_1.project.name
+			const project_name = this.form.step_1.project
 				? " chung cư " + this.form.step_1.project.name
 				: "";
 			let apartmentName =
