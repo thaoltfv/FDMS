@@ -15,8 +15,6 @@ class UpdatePreCertificateConfigs extends Seeder
         $record = PreCertificateConfig::where('name', 'workflowHSTD')->first();
 
         if ($record) {
-            // Save old data
-            $oldData = $record->config;
 
             // Prepare new data
             $newData =
@@ -634,6 +632,8 @@ class UpdatePreCertificateConfigs extends Seeder
                     // Add more key-value pairs as needed
                 ];
 
+            $oldData = $record->config;
+
             // Update config with new data
             $jsonData = json_encode($newData);
 
@@ -641,14 +641,23 @@ class UpdatePreCertificateConfigs extends Seeder
                 // The data could not be converted to a JSON string
                 throw new \Exception("Invalid JSON data");
             } else {
-                $record->config = $jsonData;
-                // Save the record
-            }
-            // Update old_config with old data
-            $record->old_config = $oldData;
+                // Add a new record
+                $newRecord = PreCertificateConfig::create([
+                    'name' => "workflowHSTD",
+                    'config' => $jsonData,
+                    'old_config' => $oldData,
+                    // Add any other fields required for a new record
+                ]);
 
-            // Save changes
-            $record->save();
+                if ($newRecord) {
+                    // If the new record was created successfully, delete the old record
+                    $record->delete();
+                } else {
+                    // Handle the case where the new record could not be created
+                    // For example, throw an exception or log an error message
+                    throw new \Exception("Could not create new record");
+                }
+            }
         }
     }
 }
