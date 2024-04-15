@@ -134,14 +134,15 @@
 							</div>
 							<div class="property-content d-flex justify-content-between mb-0">
 								<div class="label_container d-flex">
-									<img
+									<!-- <img
 										width="15px"
 										class="mr-2"
 										src="@/assets/icons/ic_taglink.svg"
 										alt="user"
 									/><span style="color: #8b94a3">{{
 										element.document_count
-									}}</span>
+									}}</span> -->
+									NV: {{element.name_nv}}
 								</div>
 								<img
 									class="img_user"

@@ -93,7 +93,7 @@
 									/>
 									<div class="d-flex">
 										<span style="font-weight: 500"
-											><strong class="d-none d_inline mr-1">Khách hàng:</strong
+											><strong class="d-none d_inline mr-1"></strong
 											>{{ element.petitioner_name }}</span
 										>
 									</div>
@@ -105,9 +105,7 @@
 									src="@/assets/icons/ic_price.svg"
 									alt="user"
 								/>
-								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Tổng giá trị:</strong
-									><span style="font-weight: 500">{{
+								<div class="label_container d-flex"><span style="font-weight: 500">{{
 										element.total_preliminary_value
 											? `${formatPrice(element.total_preliminary_value)}`
 											: "-"
@@ -121,7 +119,6 @@
 									alt="user"
 								/>
 								<div class="label_container d-flex">
-									<strong class="d-none d_inline mr-1">Thời hạn:</strong>
 									<span
 										v-if="getExpireDate(element).includes('Đã hết')"
 										style="font-weight: 500; color: red"
@@ -140,14 +137,15 @@
 							</div>
 							<div class="property-content d-flex justify-content-between mb-0">
 								<div class="label_container d-flex">
-									<img
+									<!-- <img
 										width="15px"
 										class="mr-2"
 										src="@/assets/icons/ic_taglink.svg"
 										alt="user"
 									/><span style="color: #8b94a3">{{
 										element.document_count
-									}}</span>
+									}}</span> -->
+									NV: {{element.name_nv}}
 								</div>
 								<img
 									class="img_user"
