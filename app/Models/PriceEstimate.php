@@ -398,4 +398,8 @@ class PriceEstimate extends Model
         return isset($result['link']) ? $result['link'] : '';
         // return $result;
     }
+    public function assetGeneralRelation(): HasMany
+    {
+        return $this->hasMany(PriceEstimateHasAsset::class, 'price_estimate_id');
+    }
 }

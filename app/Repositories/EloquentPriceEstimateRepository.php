@@ -835,6 +835,57 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
 
         return $result;
     }
+
+    public function getPriceEstimateDataFullConnectPreCertificate($priceEstimateId)
+    {
+        $check = $this->checkAuthorization($priceEstimateId);
+        if (!empty($check))
+            return $check;
+        $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id'];
+        $with = [
+            'createdBy:id,name',
+            'lastVersion',
+            'apartmentProperties',
+            'apartmentProperties.floor',
+            'landFinalEstimate',
+            'landFinalEstimate.lands',
+            'landFinalEstimate.tangibleAssets',
+            'landFinalEstimate.apartmentFinals',
+            'properties',
+            'properties.propertyDetail',
+            'properties.propertyTurningTime',
+            'assetGeneralRelation',
+        ];
+        $result = PriceEstimate::with($with)
+            ->select($select)
+            ->where('id', $priceEstimateId);
+
+        $result = $result->first();
+        unset($result->pic);
+
+
+        $result->append('general_infomation');
+        $result->append('map_img');
+        $result->append('distance_max');
+        $version = PriceEstimateVersionService::getVersionPriceEstimate($priceEstimateId);
+        $result['max_version'] = $version;
+        $result->append(
+            'assets_general'
+        );
+        $result->append(
+            'final_estimate'
+        );
+        if ($result->asset_type_id !== 39) {
+            $result->append('land_details');
+            $result->append('total_area');
+            $result->append('planning_area');
+            $result->append('traffic_infomation');
+            $geo = PriceEstimateProperty::where('price_estimate_id', $priceEstimateId)->first();
+            $result['traffic_infomation'] = $geo;
+        }
+
+        return $result;
+    }
     private function checkAuthorization($id)
     {
         $check = null;

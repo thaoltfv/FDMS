@@ -114,7 +114,10 @@ class PreCertificatePriceEstimate extends Model
     {
         return $this->hasMany(PreCertificatePriceEstimateFinal::class, 'pre_certificate_price_estimate_id');
     }
-
+    public function assetGeneralRelation(): HasMany
+    {
+        return $this->hasMany(PreCertificatePriceEstimateHasAsset::class, 'pre_certificate_price_estimate_id');
+    }
     public function getFinalEstimateAttribute()
     {
         $with = [
@@ -397,5 +400,15 @@ class PreCertificatePriceEstimate extends Model
 
         return isset($result['link']) ? $result['link'] : '';
         // return $result;
+    }
+
+
+    public function priceEstimate(): BelongsTo
+    {
+        return $this->belongsTo(PriceEstimate::class, 'price_estimate_id', 'id');
+    }
+    public function preCertificate(): BelongsTo
+    {
+        return $this->belongsTo(PreCertificate::class, 'pre_certificate_id', 'id');
     }
 }

@@ -54,4 +54,6 @@ interface PreCertificateRepository extends BaseRepository
         $is_pc,
         $request
     );
+
+    public function updatePreCertificateV3(array $object, int $preCertificateId);
 }
