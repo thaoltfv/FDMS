@@ -36,6 +36,7 @@ class ErrorMessage
     public const PRE_CERTIFICATE_CHECK_EXPORT = 'Bạn không có quyền xuất danh sách YCSB';
     public const PRE_CERTIFICATE_CHECK_EXPORT_2 = 'Bạn không có quyền với tài liệu sơ bộ';
     public const PRE_CERTIFICATE_CHOOSE_PRICE_ESTIMATE = 'HSSB không ở trạng thái Định giá sơ bộ.';
+    public const PRICE_ESTIMATE_CHECK_ASSET = 'UTG không có tài sản so sánh.';
 
     public const APPRAISE_AUTOMATIC_ASSET = 'Xin lỗi! Khu vực hiện tại chưa đủ dữ liệu để so sánh. Vui lòng chọn TSSS trên bản đồ.';
     public const APPRAISE_NOTEXISTS = 'Không tồn tại tài sản thẩm định - TSTD ';
