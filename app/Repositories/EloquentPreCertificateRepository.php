@@ -1882,7 +1882,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $check = $this->checkAuthorization($priceEstimateId);
         if (!empty($check))
             return $check;
-        $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id'];
+        $select = ['*'];
         $with = [
             'createdBy:id,name',
             'lastVersion',
@@ -1976,7 +1976,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         $this->deleteApartmentWithRelations($preCertificateId, $priceEstimateId);
         $user = CommonService::getUser();
-        $preCertificatePriceEstimate = new PreCertificatePriceEstimate();
+        $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate);
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
         $preCertificatePriceEstimate->pre_certificate_id = $preCertificateId;
         $preCertificatePriceEstimate->created_by = $user->id;
@@ -1995,18 +1995,18 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         PriceEstimate::query()->where('id', $priceEstimateId)->update($dataUpdate);
     }
-    private function updateDetailPriceEstimateAppraise($preCertificateId,  $priceEstimateId)
+    private function updateDetailPriceEstimateAppraise($preCertificateId,  $priceEstimateId, $priceEstimate)
     {
         $this->deleteAppraiseWithRelations($preCertificateId, $priceEstimateId);
         $user = CommonService::getUser();
-        $preCertificatePriceEstimate = new PreCertificatePriceEstimate();
+        $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate);
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
         $preCertificatePriceEstimate->pre_certificate_id = $preCertificateId;
         $preCertificatePriceEstimate->created_by = $user->id;
         $preCertificatePriceEstimate->save();
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
 
-        $this->insertAppraiseData($priceEstimateId, $preCertificatePriceEstimateId, $preCertificateId);
+        $this->insertAppraiseData($preCertificatePriceEstimateId, $priceEstimate);
         // $appraiseRepo->updatePriceEstimateStatus($priceEstimateId, 3);
         $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId);
     }
