@@ -245,7 +245,7 @@ class addPeAssetTable extends Migration
         }
         if (!Schema::hasColumn('price_estimates', 'pre_certificate_id')) {
             Schema::table('price_estimates', function (Blueprint $table) {
-                $table->int('pre_certificate_id')->nullable();
+                $table->integer('pre_certificate_id')->nullable();
             });
         }
     }
