@@ -1860,10 +1860,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     private function checkAuthorization($id)
     {
         $check = null;
-        if ($this->model->query()->where('id', $id)->exists()) {
+        if (PriceEstimate::query()->where('id', $id)->exists()) {
             $user = CommonService::getUser();
             $role = $user->roles->last();
-            $result = $this->model->query()->where('id', $id);
+            $result = PriceEstimate::query()->where('id', $id);
             $userId = $user->id;
             if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
                 $result = $result->where('created_by', $userId);
@@ -1928,21 +1928,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
                         Log::info('price', ['priceEstimate' => $priceEstimate]);
-                        // Check if general_asset exists in the result
-                        if (isset($priceEstimate) && isset($priceEstimate['assetGeneralRelation'])) {
-                            // Loop over each asset in general_asset
-                            $generalAsset = $priceEstimate['assetGeneralRelation'];
-                            if (count($generalAsset) > 0) {
-                                if (isset($priceEstimate['project_id'])) {
-                                    $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
+                        // Check if $priceEstimate is not empty
+                        if (!empty($priceEstimate)) {
+                            // Check if general_asset exists in the result
+                            if (isset($priceEstimate['assetGeneralRelation'])) {
+                                // Loop over each asset in general_asset
+                                $generalAsset = $priceEstimate['assetGeneralRelation'];
+                                if (count($generalAsset) > 0) {
+                                    if (isset($priceEstimate['project_id'])) {
+                                        $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
+                                    } else {
+                                        $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
+                                    }
                                 } else {
-                                    $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
+                                    $result = ['message' => ErrorMessage::PRICE_ESTIMATE_CHECK_ASSET, 'exception' => ''];
+                                    return $result;
                                 }
-                            } else {
-                                $result = ['message' => ErrorMessage::PRICE_ESTIMATE_CHECK_ASSET, 'exception' => ''];
-                                return $result;
                             }
-                        } else if (!isset($priceEstimate)) {
+                        } else {
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
                             return $result;
                         }
@@ -1958,6 +1961,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 return $result;
             }
             DB::commit();
+            $result = $this->getPreCertificate($preCertificateId);
             // $result = $this->updateDocumentType($preCertificateId);
         } catch (exception $ex) {
             DB::rollBack();

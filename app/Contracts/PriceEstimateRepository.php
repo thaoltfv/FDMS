@@ -38,4 +38,6 @@ interface PriceEstimateRepository extends BaseRepository
     public function step3FinalApartment(array $object, int $id = null);
 
     public function moveToApartmentAsset($id);
+
+    public function getPriceEstimateDataFullForPreCertificate($preCertificateId);
 }
