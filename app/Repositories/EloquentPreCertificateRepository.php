@@ -1923,6 +1923,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 if (count($priceEstimates) == 0) {
                     $this->deletePriceEstimateWithRelations($preCertificateId);
                 } else {
+                    $this->deletePriceEstimateWithRelations($preCertificateId);
                     foreach ($priceEstimates as $priceEstimateId) {
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
@@ -1972,7 +1973,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     private function updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate)
     {
 
-        $this->deleteApartmentWithRelations($preCertificateId, $priceEstimateId);
+        // $this->deleteApartmentWithRelations($preCertificateId, $priceEstimateId);
         $user = CommonService::getUser();
         $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate->toArray());
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
@@ -1980,7 +1981,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $preCertificatePriceEstimate->created_by = $user->id;
         $preCertificatePriceEstimate->save();
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
-
+        Log::info('preCertificatePriceEstimateId: ', ['preCertificatePriceEstimateId' => $preCertificatePriceEstimate]);
         $this->insertApartmentData($preCertificatePriceEstimateId, $priceEstimate);
         $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, $preCertificatePriceEstimate->status);
     }
@@ -1995,7 +1996,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     }
     private function updateDetailPriceEstimateAppraise($preCertificateId,  $priceEstimateId, $priceEstimate)
     {
-        $this->deleteAppraiseWithRelations($preCertificateId, $priceEstimateId);
+        // $this->deleteAppraiseWithRelations($preCertificateId, $priceEstimateId);
         $user = CommonService::getUser();
         $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate->toArray());
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
