@@ -260,7 +260,7 @@ class addPeAssetTable extends Migration
         Schema::table('pre_certificate_configs', function (Blueprint $table) {
             if (Schema::hasColumn('pre_certificate_configs', 'name')) {
                 try {
-                    $table->dropUnique('pre_certificate_configs_name_unique');
+                    $table->dropUnique('pre_certificate_configs_name_key');
                 } catch (\Exception $e) {
                     // Unique constraint did not exist, do nothing
                 }
