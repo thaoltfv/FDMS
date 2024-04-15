@@ -15,9 +15,10 @@ class ReportAppendix1Nova extends ReportAppendix1
     protected function surveyDescription(Section $section, $asset)
     {
         $textRun = $section->addTextRun();
-        $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . mb_strtoupper($this->companyAcronym) . ' nhận thấy có ');
-        $textRun->addText(count($asset->assetGeneral), $this->styleBold);
-        $textRun->addText(' tài sản so sánh có các yếu tố tương đồng nhất với tài sản thẩm định, và sử dụng làm cơ sở điều chỉnh để tiến hành ước tính giá trị tài sản thẩm định, cụ thể như sau: ');
+        // $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . mb_strtoupper($this->companyAcronym) . ' nhận thấy có ');
+        // $textRun->addText(count($asset->assetGeneral), $this->styleBold);
+        // $textRun->addText(' tài sản so sánh có các yếu tố tương đồng nhất với tài sản thẩm định, và sử dụng làm cơ sở điều chỉnh để tiến hành ước tính giá trị tài sản thẩm định, cụ thể như sau: ');
+        $textRun->addText('           Tại thời điểm thẩm định giá, qua khảo sát hiện trạng thực tế và thu thập thông tin thị trường tại khu vực thẩm định giá. Do thị trường khu vực tài sản thẩm định hạn chế thu thập được giao dịch thành công, nên tổ thẩm định thu thập thông tin rao bán có phỏng vấn và ghi nhận mức giá thương lượng phù hợp khi tiến hành giao dịch mua bán tài sản. Các thông tin tài sản so sánh tương đồng do Tổ thẩm định thu thập được như sau: ');
     }
     protected function conclusion1($section)
     {
