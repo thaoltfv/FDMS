@@ -2917,6 +2917,26 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             then u2.image
                     end as image
                 "),
+            DB::raw("case status
+                when 1
+                    then u6.name
+                when 2
+                    then u3.name
+                when 3
+                    then u1.name
+                when 4
+                    then u1.name
+                when 5
+                    then users.name
+                when 7
+                    then u4.name
+                when 8
+                    then u5.name
+                    
+                when 9
+                    then u2.name
+            end as name_nv
+        "),
             'sub_status',
         ];
         $with = [
