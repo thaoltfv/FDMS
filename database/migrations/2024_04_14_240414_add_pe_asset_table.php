@@ -17,7 +17,7 @@ class addPeAssetTable extends Migration
         $dbSchemaManager = $conn->getDoctrineSchemaManager();
         $indexes = $dbSchemaManager->listTableIndexes('pre_certificate_configs');
 
-        if (array_key_exists('pre_certificate_configs_name_unique', $indexes)) {
+        if (array_key_exists('pre_certificate_configs_name_key', $indexes)) {
             Schema::table('pre_certificate_configs', function (Blueprint $table) {
                 $table->dropUnique(['name']);
             });
