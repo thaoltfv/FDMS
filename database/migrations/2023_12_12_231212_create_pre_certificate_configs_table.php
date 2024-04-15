@@ -17,7 +17,7 @@ class CreatePreCertificateConfigsTable extends Migration
         if (!Schema::hasTable('pre_certificate_configs')) {
             Schema::create('pre_certificate_configs', function (Blueprint $table) {
                 $table->increments('id');
-                $table->text('name')->unique();
+                $table->text('name');
                 $table->jsonb('config');
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->useCurrent();
