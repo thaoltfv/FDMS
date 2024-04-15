@@ -1869,16 +1869,22 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $priceEstimateRepository->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
                         // Check if general_asset exists in the result
-                        if (isset($priceEstimate['general_asset'])) {
+                        if (isset($priceEstimate) && isset($priceEstimate['assetGeneralRelation'])) {
                             // Loop over each asset in general_asset
-                            $generalAsset = $priceEstimate['general_asset'];
+                            $generalAsset = $priceEstimate['assetGeneralRelation'];
                             if (count($generalAsset) > 0) {
                                 if (isset($priceEstimate['project_id'])) {
                                     $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
                                 } else {
                                     $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
                                 }
+                            } else {
+                                $result = ['message' => ErrorMessage::PRICE_ESTIMATE_CHECK_ASSET, 'exception' => ''];
+                                return $result;
                             }
+                        } else if (!isset($priceEstimate)) {
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
+                            return $result;
                         }
                     }
                 }
@@ -1905,8 +1911,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
 
         $this->deleteApartmentWithRelations($preCertificateId, $priceEstimateId);
-        $assetData = PriceEstimate::where('id', $priceEstimateId)->first();
-        if (!isset($assetData)) continue;
         $user = CommonService::getUser();
         $preCertificatePriceEstimate = new PreCertificatePriceEstimate();
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
@@ -1930,8 +1934,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     private function updateDetailPriceEstimateAppraise($preCertificateId,  $priceEstimateId)
     {
         $this->deleteAppraiseWithRelations($preCertificateId, $priceEstimateId);
-        $assetData = PriceEstimate::where('id', $priceEstimateId)->first();
-        if (!isset($assetData)) continue;
         $user = CommonService::getUser();
         $preCertificatePriceEstimate = new PreCertificatePriceEstimate();
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
