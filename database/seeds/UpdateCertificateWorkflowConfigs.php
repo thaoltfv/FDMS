@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\PreCertificateConfig;
 
-class UpdatePreCertificateConfigs extends Seeder
+class UpdateCertificateWorkflowConfigs extends Seeder
 {
     /**
      * Run the database seeds.
@@ -44,8 +44,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => false,
                                 "other_document" => false,
+                                "export_document" => true,
                                 "appraise_item_list" => false
                             ],
+                            "isExportDocument" => true,
                             "slug" => "tiep_nhan_ho_so",
                             "print" => false,
                             "status" => 1,
@@ -96,8 +98,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => false,
                                 "other_document" => false,
+                                "export_document" => true,
                                 "appraise_item_list" => false
                             ],
+                            "isExportDocument" => true,
                             "slug" => "phan_bo_hs",
                             "print" => false,
                             "status" => 1,
@@ -153,8 +157,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => true,
                                 "other_document" => true,
+                                "export_document" => true,
                                 "appraise_item_list" => true
                             ],
+                            "isExportDocument" => true,
                             "slug" => "dinh_gia_so_bo",
                             "print" => true,
                             "status" => 2,
@@ -209,8 +215,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => false,
                                 "other_document" => true,
+                                "export_document" => true,
                                 "appraise_item_list" => false
                             ],
+                            "isExportDocument" => true,
                             "slug" => "duyet_gia_so_bo",
                             "print" => true,
                             "status" => 2,
@@ -265,8 +273,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => true,
                                 "other_document" => true,
+                                "export_document" => true,
                                 "appraise_item_list" => true
                             ],
+                            "isExportDocument" => true,
                             "slug" => "tham_dinh",
                             "print" => true,
                             "status" => 2,
@@ -323,8 +333,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => false,
                                 "other_document" => false,
+                                "export_document" => true,
                                 "appraise_item_list" => false
                             ],
+                            "isExportDocument" => true,
                             "slug" => "duyet_gia",
                             "print" => true,
                             "status" => 3,
@@ -386,7 +398,6 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "appraise_item_list" => false
                             ],
                             "slug" => "duyet_phat_hanh",
-                            "isExportDocument" => true,
                             "print" => true,
                             "status" => 7,
                             "require" => [
@@ -409,6 +420,7 @@ class UpdatePreCertificateConfigs extends Seeder
                                 6,
                                 10
                             ],
+                            "isExportDocument" => true,
                             "put_require_roles" => [
                                 "ROOT_ADMIN",
                                 "SUB_ADMIN"
@@ -562,6 +574,7 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => false,
                                 "other_document" => false,
+                                "export_document" => true,
                                 "appraise_item_list" => false
                             ],
                             "slug" => "hoan_thanh",
@@ -603,8 +616,10 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "payments" => true,
                                 "appraiser" => false,
                                 "other_document" => false,
+                                "export_document" => true,
                                 "appraise_item_list" => false
                             ],
+                            "isExportDocument" => true,
                             "slug" => "huy",
                             "print" => false,
                             "status" => 5,
@@ -626,10 +641,8 @@ class UpdatePreCertificateConfigs extends Seeder
                                 "SUB_ADMIN"
                             ],
                             "target_description" => []
-                        ],
-                    ],
-
-                    // Add more key-value pairs as needed
+                        ]
+                    ]
                 ];
 
             $oldData = $record->config;
