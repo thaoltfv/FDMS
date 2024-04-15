@@ -19,11 +19,11 @@ use App\Models\CompareAssetGeneral;
  * Class Province
  * @package App\Models
  */
-class PriceEstimate extends Model
+class PreCertificatePriceEstimate extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'price_estimates';
+    protected $table = 'pre_certificate_price_estimates';
     //protected $dateFormat = 'd-m-Y H:i:s';
     protected $casts = [
         'id' => 'integer',
@@ -88,7 +88,7 @@ class PriceEstimate extends Model
 
     public function properties(): HasMany
     {
-        return $this->hasMany(PriceEstimateProperty::class, 'price_estimate_id');
+        return $this->hasMany(PreCertificatePriceEstimateProperty::class, 'pre_certificate_price_estimate_id');
     }
 
     public function createdBy(): BelongsTo
@@ -98,23 +98,26 @@ class PriceEstimate extends Model
 
     public function version(): HasMany
     {
-        return $this->hasMany(PriceEstimateVersion::class, 'price_estimate_id');
+        return $this->hasMany(PreCertificatePriceEstimateVersion::class, 'pre_certificate_price_estimate_id');
     }
 
     public function lastVersion(): HasOne
     {
-        return $this->hasOne(PriceEstimateVersion::class, 'price_estimate_id')->latest();
+        return $this->hasOne(PreCertificatePriceEstimateVersion::class, 'pre_certificate_price_estimate_id')->latest();
     }
 
     public function apartmentProperties(): HasMany
     {
-        return $this->hasMany(PriceEstimateApartmentProperty::class, 'price_estimate_id');
+        return $this->hasMany(PreCertificatePriceEstimateApartmentProperty::class, 'pre_certificate_price_estimate_id');
     }
     public function landFinalEstimate(): HasMany
     {
-        return $this->hasMany(PriceEstimateFinal::class, 'price_estimate_id');
+        return $this->hasMany(PreCertificatePriceEstimateFinal::class, 'pre_certificate_price_estimate_id');
     }
-
+    public function assetGeneralRelation(): HasMany
+    {
+        return $this->hasMany(PreCertificatePriceEstimateHasAsset::class, 'pre_certificate_price_estimate_id');
+    }
     public function getFinalEstimateAttribute()
     {
         $with = [
@@ -128,78 +131,78 @@ class PriceEstimate extends Model
             'assetType',
             'apartmentFinals'
         ];
-        return PriceEstimateFinal::with($with)
-            ->where('price_estimate_id', $this->id)
+        return PreCertificatePriceEstimateFinal::with($with)
+            ->where('pre_certificate_price_estimate_id', $this->id)
             ->first();
     }
 
     public function getLandDetailsAttribute()
     {
-        $select = ['id', 'price_estimate_id', 'front_side', 'main_road_length', 'material_id', 'description', 'appraise_land_sum_area'];
+        $select = ['id', 'pre_certificate_price_estimate_id', 'front_side', 'main_road_length', 'material_id', 'description', 'appraise_land_sum_area'];
 
         $with = [
             // 'landShape:id,type,description',
             // 'legal:id,type,description',
         ];
 
-        $item = PriceEstimateProperty::with($with)->where('price_estimate_id', $this->id)->select($select)->first();
+        $item = PreCertificatePriceEstimateProperty::with($with)->where('pre_certificate_price_estimate_id', $this->id)->select($select)->first();
         // if (isset($item))
         //     $item->append('topographic');
         return $item;
     }
     public function getTotalAreaAttribute()
     {
-        $property = PriceEstimateProperty::where('price_estimate_id', $this->id)->first();
+        $property = PreCertificatePriceEstimateProperty::where('pre_certificate_price_estimate_id', $this->id)->first();
         if ($property) {
             $propertieId = $property->id;
 
-            $select = ['id', 'price_estimate_property_id', 'land_type_purpose_id', 'total_area', 'is_transfer_facility', 'main_area'];
+            $select = ['id', 'pre_certificate_price_estimate_property_id', 'land_type_purpose_id', 'total_area', 'is_transfer_facility', 'main_area'];
             $with = ['landTypePurpose:id,type,description'];
 
-            $result = PriceEstimatePropertyDetail::with($with)
+            $result = PreCertificatePriceEstimatePropertyDetail::with($with)
                 ->select($select)
-                ->where(['price_estimate_property_id' => $propertieId])
+                ->where(['pre_certificate_price_estimate_property_id' => $propertieId])
                 ->where('total_area', '>', 0)
                 ->get();
             return $result;
         } else {
-            // Handle the case where no PriceEstimateProperty was found
+            // Handle the case where no PreCertificatePriceEstimateProperty was found
             return [];
         }
     }
 
     public function getPlanningAreaAttribute()
     {
-        $select = ['id', 'price_estimate_property_id', 'land_type_purpose_id', 'type_zoning', 'planning_area'];
+        $select = ['id', 'pre_certificate_price_estimate_property_id', 'land_type_purpose_id', 'type_zoning', 'planning_area'];
         $with = ['landTypePurpose:id,type,description'];
-        $property = PriceEstimateProperty::where('price_estimate_id', $this->id)->first();
+        $property = PreCertificatePriceEstimateProperty::where('pre_certificate_price_estimate_id', $this->id)->first();
 
         if ($property) {
             $propertieId = $property->id;
 
-            $result = PriceEstimatePropertyDetail::with($with)
+            $result = PreCertificatePriceEstimatePropertyDetail::with($with)
                 ->select($select)
-                ->where(['price_estimate_property_id' => $propertieId])
+                ->where(['pre_certificate_price_estimate_property_id' => $propertieId])
                 ->where('planning_area', '>', 0)
                 ->get();
             return $result;
         } else {
-            // Handle the case where no PriceEstimateProperty was found
+            // Handle the case where no PreCertificatePriceEstimateProperty was found
             return [];
         }
     }
 
     public function getTrafficInfomationAttribute()
     {
-        $select = ['id', 'price_estimate_id', 'front_side', 'main_road_length', 'material_id', 'description', 'appraise_land_sum_area'];
+        $select = ['id', 'pre_certificate_price_estimate_id', 'front_side', 'main_road_length', 'material_id', 'description', 'appraise_land_sum_area'];
         $with = [
             'material:id,type,description',
-            'propertyTurningTime:id,price_estimate_property_id,main_road_length,turning,material_id,main_road_distance',
+            'propertyTurningTime:id,pre_certificate_price_estimate_property_id,main_road_length,turning,material_id,main_road_distance',
             'propertyTurningTime.material:id,type,description'
         ];
-        $result = PriceEstimateProperty::with($with)
+        $result = PreCertificatePriceEstimateProperty::with($with)
             ->select($select)
-            ->where(['price_estimate_id' => $this->id])
+            ->where(['pre_certificate_price_estimate_id' => $this->id])
             ->get()->first();
         return $result;
     }
@@ -215,7 +218,7 @@ class PriceEstimate extends Model
             'ward:id,name',
             'street:id,name'
         ];
-        $result = PriceEstimate::with($with)
+        $result = PreCertificatePriceEstimate::with($with)
             // ->select($select)
             ->where(['id' => $this->id])
             ->get()->first();
@@ -227,7 +230,7 @@ class PriceEstimate extends Model
     {
         $result = [];
         if (isset($this->id) && !empty($this->id)) {
-            $items = PriceEstimateHasAsset::where('price_estimate_id', $this->id)->get();
+            $items = PreCertificatePriceEstimateHasAsset::where('pre_certificate_price_estimate_id', $this->id)->get();
             foreach ($items as $item) {
                 $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
                 $item = $compareAssetGeneralRepository->findVersionById($item->asset_general_id, $item->version);
@@ -340,7 +343,7 @@ class PriceEstimate extends Model
     public function getDistanceMaxAttribute()
     {
         if (isset($this->id) && !empty($this->id)) {
-            $items = PriceEstimateHasAsset::where('price_estimate_id', $this->id)->get();
+            $items = PreCertificatePriceEstimateHasAsset::where('pre_certificate_price_estimate_id', $this->id)->get();
             if (isset($items) && count($items) > 1 && count($items) <= 3) {
                 $appraiseLocation = $this->coordinates;
                 $distanceMax = 0;
@@ -371,7 +374,7 @@ class PriceEstimate extends Model
     {
         $result = [];
         if (isset($this->id) && !empty($this->id)) {
-            $items = PriceEstimateHasAsset::where('price_estimate_id', $this->id)->get();
+            $items = PreCertificatePriceEstimateHasAsset::where('pre_certificate_price_estimate_id', $this->id)->get();
             $stt = 0;
             foreach ($items as $item) {
                 $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
@@ -385,12 +388,12 @@ class PriceEstimate extends Model
     public function getMapImgAttribute()
     {
         $select = [
-            'id', 'price_estimate_id', 'link', 'type_id'
+            'id', 'pre_certificate_price_estimate_id', 'link', 'type_id'
         ];
         $with = [];
-        $result = PriceEstimatePic::with($with)
+        $result = PreCertificatePriceEstimatePic::with($with)
             ->select($select)
-            ->where(['price_estimate_id' => $this->id])
+            ->where(['pre_certificate_price_estimate_id' => $this->id])
             ->where('type_id', 153)
             ->get()
             ->first();
@@ -398,8 +401,14 @@ class PriceEstimate extends Model
         return isset($result['link']) ? $result['link'] : '';
         // return $result;
     }
-    public function assetGeneralRelation(): HasMany
+
+
+    public function priceEstimate(): BelongsTo
     {
-        return $this->hasMany(PriceEstimateHasAsset::class, 'price_estimate_id');
+        return $this->belongsTo(PriceEstimate::class, 'price_estimate_id', 'id');
+    }
+    public function preCertificate(): BelongsTo
+    {
+        return $this->belongsTo(PreCertificate::class, 'pre_certificate_id', 'id');
     }
 }

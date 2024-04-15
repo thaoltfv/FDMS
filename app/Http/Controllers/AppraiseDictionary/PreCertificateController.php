@@ -524,4 +524,31 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+
+    public function updatePreCertificateV3(Request $request, int $preCertificateId)
+    {
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
+
+        $rules = [
+            'price_estimates' => 'array|sometimes',
+            'price_estimates.*' => 'integer'
+        ];
+        $customAttributes = [
+            'price_estimates' => 'Thông tin tài sản ước tính',
+            'price_estimates.*' => 'Số tài sản ước tính'
+        ];
+        $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
+        if ($validator->passes()) {
+            //TODO Handle your data
+            $result = $this->preCertificateRepository->updatePreCertificateV3($request->toArray(), $preCertificateId);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
+            return $this->respondWithCustomData($result);
+        } else {
+            //TODO Handle your error
+            $data = ['message' => $validator->errors()->all(), 'exception' => null];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }

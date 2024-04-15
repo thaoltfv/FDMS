@@ -14,6 +14,23 @@ use App\Models\Customer;
 use App\Models\Appraise;
 use App\Models\PreCertificateOtherDocuments;
 use App\Models\PreCertificatePayments;
+
+use App\Models\PreCertificateHasPriceEstimate;
+use App\Models\PriceEstimate;
+use App\Models\PreCertificatePriceEstimate;
+use App\Models\PreCertificatePriceEstimateApartmentProperty;
+use App\Models\PreCertificatePriceEstimateFinal;
+use App\Models\PreCertificatePriceEstimateApartmentFinal;
+use App\Models\PreCertificatePriceEstimateFinalTangibleAsset;
+use App\Models\PreCertificatePriceEstimateFinalLand;
+use App\Models\PreCertificatePriceEstimateProperty;
+use App\Models\PreCertificatePriceEstimatePropertyDetail;
+use App\Models\PreCertificatePriceEstimatePropertyTurningTime;
+use App\Models\PreCertificatePriceEstimateVersion;
+use App\Models\PreCertificatePriceEstimateHasAsset;
+
+use App\Repositories\EloquentPriceEstimateRepository;
+
 use App\Notifications\BroadcastNotification;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -1826,5 +1843,302 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 throw $exception;
             }
         });
+    }
+
+    public function updatePreCertificateV3(array $objects, int $preCertificateId)
+    {
+        $result =  [];
+
+        DB::beginTransaction();
+        try {
+            // # khóa khối block xác thực
+            $check = $this->beforeSave($preCertificateId);
+            if (isset($check)) {
+                return $check;
+            }
+            if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
+                $priceEstimateRepository = app(EloquentPriceEstimateRepository::class);
+                $priceEstimates = isset($objects['price_estimates']) ? $objects['price_estimates'] : [];
+
+                if (count($priceEstimates) == 0) {
+                    PreCertificatePriceEstimate::query()
+                        ->where('pre_certificate_id', $preCertificateId)
+                        ->forceDelete();
+                } else {
+                    foreach ($priceEstimates as $priceEstimateId) {
+                        // Fetch data using the getPriceEstimateDataFull method
+                        $priceEstimate = $priceEstimateRepository->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
+                        // Check if general_asset exists in the result
+                        if (isset($priceEstimate['general_asset'])) {
+                            // Loop over each asset in general_asset
+                            $generalAsset = $priceEstimate['general_asset'];
+                            if (count($generalAsset) > 0) {
+                                if (isset($priceEstimate['project_id'])) {
+                                    $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
+                                } else {
+                                    $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                $edited = PreCertificate::where('id', $preCertificateId)->first();
+                // activity-log cập nhật thông tin chi tiết
+                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin chi tiết');
+            } else {
+                $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHOOSE_PRICE_ESTIMATE, 'exception' => ''];
+                return $result;
+            }
+            DB::commit();
+            // $result = $this->updateDocumentType($preCertificateId);
+        } catch (exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            $result = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $ex->getMessage()];
+        }
+        return $result;
+    }
+
+    private function updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate)
+    {
+
+        $this->deleteApartmentWithRelations($preCertificateId, $priceEstimateId);
+        $assetData = PriceEstimate::where('id', $priceEstimateId)->first();
+        if (!isset($assetData)) continue;
+        $user = CommonService::getUser();
+        $preCertificatePriceEstimate = new PreCertificatePriceEstimate();
+        $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
+        $preCertificatePriceEstimate->pre_certificate_id = $preCertificateId;
+        $preCertificatePriceEstimate->created_by = $user->id;
+        $preCertificatePriceEstimate->save();
+        $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
+
+        $this->insertApartmentData($preCertificatePriceEstimateId, $priceEstimate);
+        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, false);
+    }
+    private function updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId = null,  $status = 2)
+    {
+        $dataUpdate = [
+            'pre_certificate_id' => $preCertificateId,
+            'status' => $status,
+        ];
+
+        PriceEstimate::query()->where('id', $priceEstimateId)->update($dataUpdate);
+    }
+    private function updateDetailPriceEstimateAppraise($preCertificateId,  $priceEstimateId)
+    {
+        $this->deleteAppraiseWithRelations($preCertificateId, $priceEstimateId);
+        $assetData = PriceEstimate::where('id', $priceEstimateId)->first();
+        if (!isset($assetData)) continue;
+        $user = CommonService::getUser();
+        $preCertificatePriceEstimate = new PreCertificatePriceEstimate();
+        $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
+        $preCertificatePriceEstimate->pre_certificate_id = $preCertificateId;
+        $preCertificatePriceEstimate->created_by = $user->id;
+        $preCertificatePriceEstimate->save();
+        $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
+
+        $this->insertAppraiseData($priceEstimateId, $preCertificatePriceEstimateId, $preCertificateId);
+        // $appraiseRepo->updatePriceEstimateStatus($priceEstimateId, 3);
+        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId);
+    }
+
+
+
+    private function insertApartmentData(int $preCertificatePriceEstimateId, $priceEstimate)
+    {
+        if (isset($priceEstimate['apartmentProperties'])) {
+            foreach ($priceEstimate['apartmentProperties'] as $apartmentProperty) {
+                $apartmentProperties = new PreCertificatePriceEstimateApartmentProperty($apartmentProperty);
+                $apartmentProperties->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+                $apartmentProperties->save();
+            }
+        }
+        if (isset($priceEstimate['landFinalEstimate'])) {
+            foreach ($priceEstimate['landFinalEstimate'] as $landFinalEstimate) {
+                $finalEstimate = new PreCertificatePriceEstimateFinal($landFinalEstimate);
+                $finalEstimate->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+                $finalEstimate->save();
+                $finalEstimateId = $finalEstimate->id;
+
+                if (isset($landFinalEstimate['apartmentFinals'])) {
+                    foreach ($landFinalEstimate['apartmentFinals'] as $apartmentFinals) {
+                        $apartmentFinal = new PreCertificatePriceEstimateApartmentFinal($apartmentFinals);
+                        $apartmentFinal->pre_certificate_price_estimate_final_id = $finalEstimateId;
+                        $apartmentFinal->save();
+                    }
+                }
+            }
+        }
+
+        if (isset($priceEstimate['assetGeneralRelation'])) {
+            foreach ($priceEstimate['assetGeneralRelation'] as $asset) {
+                $dataAsset = new PreCertificatePriceEstimateHasAsset($asset);
+                $dataAsset->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+                $dataAsset->save();
+            }
+        }
+        if (isset($priceEstimate->lastVersion)) {
+            $lastVersion = new PreCertificatePriceEstimateVersion($priceEstimate->lastVersion);
+            $lastVersion->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+            $lastVersion->save();
+        }
+    }
+
+    private function insertAppraiseData(int $preCertificatePriceEstimateId, $priceEstimate)
+    {
+        if (isset($priceEstimate['properties'])) {
+            foreach ($priceEstimate['properties'] as $appraiseProperty) {
+                $appraiseProperty = new PreCertificatePriceEstimateProperty($appraiseProperty);
+                $appraiseProperty->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+                $appraiseProperty->save();
+                $appraisePropertyId = $appraiseProperty->id;
+
+                if (isset($appraiseProperty['propertyDetail'])) {
+                    foreach ($appraiseProperty['propertyDetail'] as $propertyDetail) {
+                        $propertyDetailData = new PreCertificatePriceEstimatePropertyDetail($propertyDetail);
+                        $propertyDetailData->pre_certificate_price_estimate_final_id = $appraisePropertyId;
+                        $propertyDetailData->save();
+                    }
+                }
+
+                if (isset($appraiseProperty['propertyTurningTime'])) {
+                    foreach ($appraiseProperty['propertyTurningTime'] as $propertyTurningTime) {
+                        $propertyTurningTimeData = new PreCertificatePriceEstimatePropertyTurningTime($propertyTurningTime);
+                        $propertyTurningTimeData->pre_certificate_price_estimate_final_id = $appraisePropertyId;
+                        $propertyTurningTimeData->save();
+                    }
+                }
+            }
+        }
+        if (isset($priceEstimate['landFinalEstimate'])) {
+            foreach ($priceEstimate['landFinalEstimate'] as $landFinalEstimate) {
+                $finalEstimate = new PreCertificatePriceEstimateFinal($landFinalEstimate);
+                $finalEstimate->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+                $finalEstimate->save();
+                $finalEstimateId = $finalEstimate->id;
+
+                if (isset($landFinalEstimate['lands'])) {
+                    foreach ($landFinalEstimate['lands'] as $land) {
+                        $landData = new PreCertificatePriceEstimateFinalLand($land);
+                        $landData->pre_certificate_price_estimate_final_id = $finalEstimateId;
+                        $landData->save();
+                    }
+                }
+
+                if (isset($landFinalEstimate['tangibleAssets'])) {
+                    foreach ($landFinalEstimate['tangibleAssets'] as $tangibleAsset) {
+                        $tangibleAssetData = new PreCertificatePriceEstimateFinalTangibleAsset($tangibleAsset);
+                        $tangibleAssetData->pre_certificate_price_estimate_final_id = $finalEstimateId;
+                        $tangibleAssetData->save();
+                    }
+                }
+            }
+        }
+
+        if (isset($priceEstimate['assetGeneralRelation'])) {
+            foreach ($priceEstimate['assetGeneralRelation'] as $asset) {
+                $dataAsset = new PreCertificatePriceEstimateHasAsset($asset);
+                $dataAsset->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+                $dataAsset->save();
+            }
+        }
+
+        if (isset($priceEstimate->lastVersion)) {
+            $lastVersion = new PreCertificatePriceEstimateVersion($priceEstimate->lastVersion);
+            $lastVersion->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
+            $lastVersion->save();
+        }
+    }
+
+    public function deleteApartmentWithRelations(int $preCertificateId, int $priceEstimateId)
+    {
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+
+            $preCertificatePriceEstimateId = PreCertificatePriceEstimate::query()
+                ->where('pre_certificate_id', $preCertificateId)
+                ->where('price_estimate_id', $priceEstimateId)
+                ->pluck('id');
+            $finalEstimateIds = PreCertificatePriceEstimateFinal::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
+                ->pluck('id');
+
+            // Delete the PreCertificatePriceEstimateApartmentFinal records that belong to the PreCertificatePriceEstimateFinal records
+            PreCertificatePriceEstimateApartmentFinal::whereIn('pre_certificate_price_estimate_final_id', $finalEstimateIds)->forceDelete();
+
+            PreCertificatePriceEstimateFinal::whereIn('id', $finalEstimateIds)->forceDelete();
+
+            // Delete PreCertificatePriceEstimateApartmentProperty records
+            PreCertificatePriceEstimateApartmentProperty::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+
+            PreCertificatePriceEstimateVersion::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+
+            PreCertificatePriceEstimateHasAsset::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+            // Delete the PriceEstimate record
+            PreCertificatePriceEstimate::where('id', $preCertificatePriceEstimateId)->forceDelete();
+
+            // Commit the transaction
+            DB::commit();
+        } catch (\Exception $e) {
+            // An error occurred; cancel the transaction...
+            DB::rollback();
+
+            // and rethrow the exception
+            throw $e;
+        }
+    }
+
+    public function deleteAppraiseWithRelations(int $preCertificateId, int $priceEstimateId)
+    {
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+
+            $preCertificatePriceEstimateId = PreCertificatePriceEstimate::query()
+                ->where('pre_certificate_id', $preCertificateId)
+                ->where('price_estimate_id', $priceEstimateId)
+                ->pluck('id');
+            $finalEstimateIds = PreCertificatePriceEstimateFinal::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
+                ->pluck('id');
+
+            // Delete the PreCertificatePriceEstimateApartmentFinal records that belong to the PreCertificatePriceEstimateFinal records
+            PreCertificatePriceEstimateFinalLand::whereIn('pre_certificate_price_estimate_final_id', $finalEstimateIds)->forceDelete();
+
+            PreCertificatePriceEstimateFinalTangibleAsset::whereIn('pre_certificate_price_estimate_final_id', $finalEstimateIds)->forceDelete();
+
+            PreCertificatePriceEstimateFinal::whereIn('id', $finalEstimateIds)->forceDelete();
+
+            $propertyIds = PreCertificatePriceEstimateProperty::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
+                ->pluck('id');
+
+            // Delete the related PreCertificatePriceEstimatePropertyDetail records
+            PreCertificatePriceEstimatePropertyDetail::whereIn('pre_certificate_price_estimate_property_id', $propertyIds)->forceDelete();
+
+            // Delete the related PreCertificatePriceEstimatePropertyTurningTime records
+            PreCertificatePriceEstimatePropertyTurningTime::whereIn('pre_certificate_price_estimate_property_id', $propertyIds)->forceDelete();
+
+            // Delete the PreCertificatePriceEstimateProperty records
+            PreCertificatePriceEstimateProperty::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+
+            PreCertificatePriceEstimateVersion::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+
+            PreCertificatePriceEstimateHasAsset::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+            // Delete the PriceEstimate record
+            PreCertificatePriceEstimate::where('id', $preCertificatePriceEstimateId)->forceDelete();
+
+            // Commit the transaction
+            DB::commit();
+        } catch (\Exception $e) {
+            // An error occurred; cancel the transaction...
+            DB::rollback();
+
+            // and rethrow the exception
+            throw $e;
+        }
     }
 }
