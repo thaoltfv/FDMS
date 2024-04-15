@@ -2017,21 +2017,21 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         if (isset($priceEstimate['apartmentProperties'])) {
             foreach ($priceEstimate['apartmentProperties'] as $apartmentProperty) {
-                $apartmentProperties = new PreCertificatePriceEstimateApartmentProperty($apartmentProperty);
+                $apartmentProperties = new PreCertificatePriceEstimateApartmentProperty($apartmentProperty->toArray());
                 $apartmentProperties->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
                 $apartmentProperties->save();
             }
         }
         if (isset($priceEstimate['landFinalEstimate'])) {
             foreach ($priceEstimate['landFinalEstimate'] as $landFinalEstimate) {
-                $finalEstimate = new PreCertificatePriceEstimateFinal($landFinalEstimate);
+                $finalEstimate = new PreCertificatePriceEstimateFinal($landFinalEstimate->toArray());
                 $finalEstimate->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
                 $finalEstimate->save();
                 $finalEstimateId = $finalEstimate->id;
 
                 if (isset($landFinalEstimate['apartmentFinals'])) {
                     foreach ($landFinalEstimate['apartmentFinals'] as $apartmentFinals) {
-                        $apartmentFinal = new PreCertificatePriceEstimateApartmentFinal($apartmentFinals);
+                        $apartmentFinal = new PreCertificatePriceEstimateApartmentFinal($apartmentFinals->toArray());
                         $apartmentFinal->pre_certificate_price_estimate_final_id = $finalEstimateId;
                         $apartmentFinal->save();
                     }
@@ -2041,7 +2041,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         if (isset($priceEstimate['assetGeneralRelation'])) {
             foreach ($priceEstimate['assetGeneralRelation'] as $asset) {
-                $dataAsset = new PreCertificatePriceEstimateHasAsset($asset);
+                $dataAsset = new PreCertificatePriceEstimateHasAsset($asset->toArray());
                 $dataAsset->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
                 $dataAsset->save();
             }
@@ -2061,14 +2061,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         if (isset($priceEstimate['properties'])) {
             foreach ($priceEstimate['properties'] as $appraiseProperty) {
-                $appraiseProperty = new PreCertificatePriceEstimateProperty($appraiseProperty);
+                $appraiseProperty = new PreCertificatePriceEstimateProperty($appraiseProperty->toArray());
                 $appraiseProperty->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
                 $appraiseProperty->save();
                 $appraisePropertyId = $appraiseProperty->id;
 
                 if (isset($appraiseProperty['propertyDetail'])) {
                     foreach ($appraiseProperty['propertyDetail'] as $propertyDetail) {
-                        $propertyDetailData = new PreCertificatePriceEstimatePropertyDetail($propertyDetail);
+                        $propertyDetailData = new PreCertificatePriceEstimatePropertyDetail($propertyDetail->toArray());
                         $propertyDetailData->pre_certificate_price_estimate_final_id = $appraisePropertyId;
                         $propertyDetailData->save();
                     }
@@ -2076,7 +2076,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                 if (isset($appraiseProperty['propertyTurningTime'])) {
                     foreach ($appraiseProperty['propertyTurningTime'] as $propertyTurningTime) {
-                        $propertyTurningTimeData = new PreCertificatePriceEstimatePropertyTurningTime($propertyTurningTime);
+                        $propertyTurningTimeData = new PreCertificatePriceEstimatePropertyTurningTime($propertyTurningTime->toArray());
                         $propertyTurningTimeData->pre_certificate_price_estimate_final_id = $appraisePropertyId;
                         $propertyTurningTimeData->save();
                     }
@@ -2085,14 +2085,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
         if (isset($priceEstimate['landFinalEstimate'])) {
             foreach ($priceEstimate['landFinalEstimate'] as $landFinalEstimate) {
-                $finalEstimate = new PreCertificatePriceEstimateFinal($landFinalEstimate);
+                $finalEstimate = new PreCertificatePriceEstimateFinal($landFinalEstimate->toArray());
                 $finalEstimate->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
                 $finalEstimate->save();
                 $finalEstimateId = $finalEstimate->id;
 
                 if (isset($landFinalEstimate['lands'])) {
                     foreach ($landFinalEstimate['lands'] as $land) {
-                        $landData = new PreCertificatePriceEstimateFinalLand($land);
+                        $landData = new PreCertificatePriceEstimateFinalLand($land->toArray());
                         $landData->pre_certificate_price_estimate_final_id = $finalEstimateId;
                         $landData->save();
                     }
@@ -2100,7 +2100,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                 if (isset($landFinalEstimate['tangibleAssets'])) {
                     foreach ($landFinalEstimate['tangibleAssets'] as $tangibleAsset) {
-                        $tangibleAssetData = new PreCertificatePriceEstimateFinalTangibleAsset($tangibleAsset);
+                        $tangibleAssetData = new PreCertificatePriceEstimateFinalTangibleAsset($tangibleAsset->toArray());
                         $tangibleAssetData->pre_certificate_price_estimate_final_id = $finalEstimateId;
                         $tangibleAssetData->save();
                     }
@@ -2110,7 +2110,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         if (isset($priceEstimate['assetGeneralRelation'])) {
             foreach ($priceEstimate['assetGeneralRelation'] as $asset) {
-                $dataAsset = new PreCertificatePriceEstimateHasAsset($asset);
+                $dataAsset = new PreCertificatePriceEstimateHasAsset($asset->toArray());
                 $dataAsset->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
                 $dataAsset->save();
             }
