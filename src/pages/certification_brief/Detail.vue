@@ -1813,7 +1813,8 @@ export default {
 			(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 				this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
 				(this.form.appraiser_sale &&
-					this.form.appraiser_sale.user_id === this.user_id))
+					this.form.appraiser_sale.user_id === this.user_id &&
+					!this.checkExistInAppraisalTeam()))
 		) {
 			this.$toast.open({
 				message:
@@ -2691,7 +2692,8 @@ export default {
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
 						(this.form.appraiser_sale &&
-							this.form.appraiser_sale.user_id === this.user_id))
+							this.form.appraiser_sale.user_id === this.user_id &&
+							!this.checkExistInAppraisalTeam()))
 				) {
 					await new Promise(resolve => setTimeout(resolve, 1000));
 					this.$toast.open({
@@ -2713,6 +2715,56 @@ export default {
 				});
 			}
 			this.isHandleAction = false;
+		},
+		checkExistInAppraisalTeam() {
+			let check = false;
+			if (this.user_id) {
+				if (
+					this.form.administrative &&
+					this.form.administrative.user_id &&
+					this.form.administrative.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.form.appraiser &&
+					this.form.appraiser.user_id &&
+					this.form.appraiser.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.form.appraiser_business_manager &&
+					this.form.appraiser_business_manager.user_id &&
+					this.form.appraiser_business_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.form.appraiser_confirm &&
+					this.form.appraiser_confirm.user_id &&
+					this.form.appraiser_confirm.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.form.appraiser_control &&
+					this.form.appraiser_control.user_id &&
+					this.form.appraiser_control.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.form.appraiser_manager &&
+					this.form.appraiser_manager.user_id &&
+					this.form.appraiser_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.form.appraiser_perform &&
+					this.form.appraiser_perform.user_id &&
+					this.form.appraiser_perform.user_id === this.user_id
+				) {
+					check = true;
+				}
+			}
+
+			return check;
 		},
 		async handleActionDenined() {
 			const {
