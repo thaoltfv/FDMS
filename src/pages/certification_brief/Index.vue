@@ -142,7 +142,7 @@
 									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span> -->
-									NV: {{element.name_nv}}
+									NV: {{ element.name_nv }}
 								</div>
 								<img
 									class="img_user"
@@ -1182,7 +1182,8 @@ export default {
 					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
 						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
 						(this.detailData.appraiser_sale &&
-							this.detailData.appraiser_sale.user_id === this.user_id))
+							this.detailData.appraiser_sale.user_id === this.user_id &&
+							!this.checkExistInAppraisalTeam()))
 				) {
 					this.$toast.open({
 						message:
@@ -1201,6 +1202,56 @@ export default {
 					position: "top-right"
 				});
 			}
+		},
+		checkExistInAppraisalTeam() {
+			let check = false;
+			if (this.user_id) {
+				if (
+					this.detailData.administrative &&
+					this.detailData.administrative.user_id &&
+					this.detailData.administrative.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.detailData.appraiser &&
+					this.detailData.appraiser.user_id &&
+					this.detailData.appraiser.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.detailData.appraiser_business_manager &&
+					this.detailData.appraiser_business_manager.user_id &&
+					this.detailData.appraiser_business_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.detailData.appraiser_confirm &&
+					this.detailData.appraiser_confirm.user_id &&
+					this.detailData.appraiser_confirm.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.detailData.appraiser_control &&
+					this.detailData.appraiser_control.user_id &&
+					this.detailData.appraiser_control.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.detailData.appraiser_manager &&
+					this.detailData.appraiser_manager.user_id &&
+					this.detailData.appraiser_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					this.detailData.appraiser_perform &&
+					this.detailData.appraiser_perform.user_id &&
+					this.detailData.appraiser_perform.user_id === this.user_id
+				) {
+					check = true;
+				}
+			}
+
+			return check;
 		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
