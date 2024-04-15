@@ -88,7 +88,7 @@
 									:max="999999999"
 									:min="-1"
 									:decimal="2"
-									@change="changeDistanceLand($event, asset_com_1, asset, index )"
+									@change="changeDistanceLand($event, asset_com_1, asset_com, index )"
 								/>
 								</div>
 							</div>
@@ -3058,6 +3058,13 @@ export default {
 					checkViolatePrice = true
 				}
 			})
+			if (typeof this.appraises !== 'undefined') {
+				this.appraises.comparison_factor.forEach(comparison => {
+					comparison.comparison_factor.forEach(data => {
+						dataSave.push(data)
+					})
+				})
+			}
 			const payloadData = {
 				comparison_factor: dataSave,
 				other_comparison: otherDataSave,
@@ -3153,6 +3160,13 @@ export default {
 					checkViolatePrice = true
 				}
 			})
+			if (typeof this.appraises !== 'undefined') {
+				this.appraises.comparison_factor.forEach(comparison => {
+					comparison.comparison_factor.forEach(data => {
+						dataSave.push(data)
+					})
+				})
+			}
 			const payloadData = {
 				comparison_factor: dataSave,
 				other_comparison: otherDataSave,
@@ -3411,11 +3425,25 @@ export default {
 			await this.calculation(this.form, indexPrice)
 			this.key_render_1 += 1
 		},
-		async changeDistanceLand (event, comparator) {
+		async changeDistanceLand (event, comparator, m, n) {
 			// console.log('event', event)
 			// console.log('comparator', comparator)
-			let data = {'distance': event}
-			const res = await CertificateAsset.updateDistance(data, comparator.id)
+			// console.log('appraises.comparison_factor',this.appraises.comparison_factor, m , n)
+			if (typeof this.appraises !== 'undefined') {
+				this.appraises.comparison_factor.forEach(comparison => {
+					comparison.comparison_factor.forEach(data => {
+						// console.log('data.id',data.id,comparator)
+						if (data.id == comparator.id ) {
+							data.asset_title = event
+							console.log('data',data)
+						}
+					})
+				})
+			}
+			
+
+			// let data = {'distance': event}
+			// const res = await CertificateAsset.updateDistance(data, comparator.id)
 			this.key_render_1 += 1
 		},
 		async changeMucdichchinh (event, asset_com_1, asset, index, name_purpose_land_asset) {
