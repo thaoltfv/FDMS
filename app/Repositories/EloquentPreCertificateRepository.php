@@ -2005,7 +2005,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $preCertificatePriceEstimate->created_by = $user->id;
         $preCertificatePriceEstimate->save();
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
-
+        Log::info('price', ['preCertificatePriceEstimateId' => $preCertificatePriceEstimateId]);
         $this->insertAppraiseData($preCertificatePriceEstimateId, $priceEstimate);
         // $appraiseRepo->updatePriceEstimateStatus($priceEstimateId, 3);
         $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId);
@@ -2047,7 +2047,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
         if (isset($priceEstimate->lastVersion)) {
-            $lastVersion = new PreCertificatePriceEstimateVersion($priceEstimate->lastVersion);
+            $lastVersionData = is_object($priceEstimate->lastVersion) && method_exists($priceEstimate->lastVersion, 'toArray')
+                ? $priceEstimate->lastVersion->toArray()
+                : (array) $priceEstimate->lastVersion;
+
+            $lastVersion = new PreCertificatePriceEstimateVersion($lastVersionData);
             $lastVersion->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
             $lastVersion->save();
         }
@@ -2113,7 +2117,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         }
 
         if (isset($priceEstimate->lastVersion)) {
-            $lastVersion = new PreCertificatePriceEstimateVersion($priceEstimate->lastVersion);
+            $lastVersionData = is_object($priceEstimate->lastVersion) && method_exists($priceEstimate->lastVersion, 'toArray')
+                ? $priceEstimate->lastVersion->toArray()
+                : (array) $priceEstimate->lastVersion;
+
+            $lastVersion = new PreCertificatePriceEstimateVersion($lastVersionData);
             $lastVersion->pre_certificate_price_estimate_id = $preCertificatePriceEstimateId;
             $lastVersion->save();
         }
