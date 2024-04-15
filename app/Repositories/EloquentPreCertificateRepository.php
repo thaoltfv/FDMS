@@ -1927,6 +1927,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     foreach ($priceEstimates as $priceEstimateId) {
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
+                        Log::info('priceEstimate2: ', [
+                            'priceEstimate2' => $priceEstimate
+                        ]);
                         // Check if $priceEstimate is not empty
                         if (!empty($priceEstimate)) {
                             // Check if general_asset exists in the result
