@@ -29,7 +29,6 @@ use App\Models\PreCertificatePriceEstimatePropertyTurningTime;
 use App\Models\PreCertificatePriceEstimateVersion;
 use App\Models\PreCertificatePriceEstimateHasAsset;
 
-use App\Repositories\EloquentPriceEstimateRepository;
 
 use App\Notifications\BroadcastNotification;
 use Elasticsearch\ClientBuilder;
@@ -1275,14 +1274,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 switch ($data['status']) {
                     case 1:
                         if (!($data->appraiserSale->user_id == $user->id) && !($data->appraiserBusinessManager->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thực hiện mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thực hiện mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     default:
-                        $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
+                        $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
                         break;
                 }
             }
@@ -1845,6 +1844,55 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         });
     }
 
+    private function checkAuthorization($id)
+    {
+        $check = null;
+        if ($this->model->query()->where('id', $id)->exists()) {
+            $user = CommonService::getUser();
+            $role = $user->roles->last();
+            $result = $this->model->query()->where('id', $id);
+            $userId = $user->id;
+            if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
+                $result = $result->where('created_by', $userId);
+            }
+            $result = $result->first();
+            if (empty($result))
+                $check = ['message' => 'Bạn không có quyền ở TSSB ' . $id, 'exception' => '', 'statusCode' => 403];
+        } else {
+            $check = ['message' => ErrorMessage::PE_CHECK_EXIT . ' ' . $id, 'exception' => '', 'statusCode' => 403];
+        }
+        return $check;
+    }
+
+    public function getPriceEstimateDataFullConnectPreCertificate($priceEstimateId)
+    {
+        $check = $this->checkAuthorization($priceEstimateId);
+        if (!empty($check))
+            return $check;
+        $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id'];
+        $with = [
+            'createdBy:id,name',
+            'lastVersion',
+            'apartmentProperties',
+            'apartmentProperties.floor',
+            'landFinalEstimate',
+            'landFinalEstimate.lands',
+            'landFinalEstimate.tangibleAssets',
+            'landFinalEstimate.apartmentFinals',
+            'properties',
+            'properties.propertyDetail',
+            'properties.propertyTurningTime',
+            'assetGeneralRelation',
+        ];
+        $result = PriceEstimate::with($with)
+            ->select($select)
+            ->where('id', $priceEstimateId);
+
+        $result = $result->first();
+
+        return $result;
+    }
+
     public function updatePreCertificateV3(array $objects, int $preCertificateId)
     {
         $result =  [];
@@ -1857,17 +1905,14 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 return $check;
             }
             if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
-                $priceEstimateRepository = app(EloquentPriceEstimateRepository::class);
                 $priceEstimates = isset($objects['price_estimates']) ? $objects['price_estimates'] : [];
 
                 if (count($priceEstimates) == 0) {
-                    PreCertificatePriceEstimate::query()
-                        ->where('pre_certificate_id', $preCertificateId)
-                        ->forceDelete();
+                    $this->deletePriceEstimateWithRelations($preCertificateId);
                 } else {
                     foreach ($priceEstimates as $priceEstimateId) {
                         // Fetch data using the getPriceEstimateDataFull method
-                        $priceEstimate = $priceEstimateRepository->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
+                        $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
                         // Check if general_asset exists in the result
                         if (isset($priceEstimate) && isset($priceEstimate['assetGeneralRelation'])) {
                             // Loop over each asset in general_asset
@@ -2140,6 +2185,44 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             DB::rollback();
 
             // and rethrow the exception
+            throw $e;
+        }
+    }
+
+    public function deletePriceEstimateWithRelations(int $preCertificateId)
+    {
+        DB::beginTransaction();
+
+        try {
+            $preCertificatePriceEstimateIds = PreCertificatePriceEstimate::query()
+                ->where('pre_certificate_id', $preCertificateId)
+                ->pluck('id');
+
+            foreach ($preCertificatePriceEstimateIds as $preCertificatePriceEstimateId) {
+                $finalEstimateIds = PreCertificatePriceEstimateFinal::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
+                    ->pluck('id');
+
+                PreCertificatePriceEstimateFinalLand::whereIn('pre_certificate_price_estimate_final_id', $finalEstimateIds)->forceDelete();
+                PreCertificatePriceEstimateFinalTangibleAsset::whereIn('pre_certificate_price_estimate_final_id', $finalEstimateIds)->forceDelete();
+                PreCertificatePriceEstimateApartmentFinal::whereIn('pre_certificate_price_estimate_final_id', $finalEstimateIds)->forceDelete();
+                PreCertificatePriceEstimateApartmentProperty::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+                PreCertificatePriceEstimateFinal::whereIn('id', $finalEstimateIds)->forceDelete();
+
+                $propertyIds = PreCertificatePriceEstimateProperty::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
+                    ->pluck('id');
+
+                PreCertificatePriceEstimatePropertyDetail::whereIn('pre_certificate_price_estimate_property_id', $propertyIds)->forceDelete();
+                PreCertificatePriceEstimatePropertyTurningTime::whereIn('pre_certificate_price_estimate_property_id', $propertyIds)->forceDelete();
+                PreCertificatePriceEstimateProperty::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+                PreCertificatePriceEstimateVersion::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+                PreCertificatePriceEstimateHasAsset::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)->forceDelete();
+            }
+
+            PreCertificatePriceEstimate::whereIn('id', $preCertificatePriceEstimateIds)->forceDelete();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
             throw $e;
         }
     }
