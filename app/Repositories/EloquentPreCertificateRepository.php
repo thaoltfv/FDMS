@@ -2125,11 +2125,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         DB::beginTransaction();
 
         try {
-
             $preCertificatePriceEstimateId = PreCertificatePriceEstimate::query()
                 ->where('pre_certificate_id', $preCertificateId)
                 ->where('price_estimate_id', $priceEstimateId)
-                ->pluck('id');
+                ->value('id'); // Use value instead of pluck
+
             $finalEstimateIds = PreCertificatePriceEstimateFinal::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
                 ->pluck('id');
 
@@ -2164,11 +2164,11 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         DB::beginTransaction();
 
         try {
-
             $preCertificatePriceEstimateId = PreCertificatePriceEstimate::query()
                 ->where('pre_certificate_id', $preCertificateId)
                 ->where('price_estimate_id', $priceEstimateId)
-                ->pluck('id');
+                ->value('id'); // Use value instead of pluck
+
             $finalEstimateIds = PreCertificatePriceEstimateFinal::where('pre_certificate_price_estimate_id', $preCertificatePriceEstimateId)
                 ->pluck('id');
 
