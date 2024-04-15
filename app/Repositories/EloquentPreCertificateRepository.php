@@ -1984,7 +1984,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
 
         $this->insertApartmentData($preCertificatePriceEstimateId, $priceEstimate);
-        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, false);
+        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, $preCertificatePriceEstimate->status);
     }
     private function updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId = null,  $status = 2)
     {
@@ -2005,10 +2005,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $preCertificatePriceEstimate->created_by = $user->id;
         $preCertificatePriceEstimate->save();
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
-        Log::info('price', ['preCertificatePriceEstimateId' => $preCertificatePriceEstimateId]);
         $this->insertAppraiseData($preCertificatePriceEstimateId, $priceEstimate);
         // $appraiseRepo->updatePriceEstimateStatus($priceEstimateId, 3);
-        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId);
+        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, $preCertificatePriceEstimate->status);
     }
 
 
