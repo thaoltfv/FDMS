@@ -1927,9 +1927,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     foreach ($priceEstimates as $priceEstimateId) {
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
-                        Log::info('priceEstimate2: ', [
-                            'priceEstimate2' => $priceEstimate
-                        ]);
                         // Check if $priceEstimate is not empty
                         if (!empty($priceEstimate)) {
                             // Check if general_asset exists in the result
@@ -1984,12 +1981,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $preCertificatePriceEstimate->created_by = $user->id;
         $preCertificatePriceEstimate->save();
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
-        Log::info('preCertificatePriceEstimateId: ', ['priceEstimate' => $priceEstimate]);
         $this->insertApartmentData($preCertificatePriceEstimateId, $priceEstimate);
-        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, $priceEstimate->status);
+        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId);
     }
-    private function updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId = null,  $status = 2)
+    private function updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId = null)
     {
+        $preCertificate = PreCertificate::find($preCertificateId);
+        $status = $preCertificate->status;
         $dataUpdate = [
             'pre_certificate_id' => $preCertificateId,
             'status' => $status,
@@ -2009,7 +2007,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $preCertificatePriceEstimateId = $preCertificatePriceEstimate->id;
         $this->insertAppraiseData($preCertificatePriceEstimateId, $priceEstimate);
         // $appraiseRepo->updatePriceEstimateStatus($priceEstimateId, 3);
-        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId, $priceEstimate->status);
+        $this->updatePriceEstimatePreCertificateId($priceEstimateId, $preCertificateId);
     }
 
 
