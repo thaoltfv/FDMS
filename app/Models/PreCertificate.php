@@ -164,4 +164,9 @@ class PreCertificate extends Model
     {
         return $this->hasMany(PreCertificateExportDocuments::class, 'pre_certificate_id');
     }
+
+    public function priceEstimates(): HasMany
+    {
+        return $this->hasMany(PreCertificatePriceEstimate::class, 'pre_certificate_id');
+    }
 }

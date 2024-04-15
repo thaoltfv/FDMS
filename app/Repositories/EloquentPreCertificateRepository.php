@@ -944,7 +944,20 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'payments',
             'cancelReason:id,description',
             'preType:id,description',
-            'exportDocuments'
+            'exportDocuments',
+
+            'priceEstimates',
+            'priceEstimates.lastVersion',
+            'priceEstimates.apartmentProperties',
+            'priceEstimates.apartmentProperties.floor',
+            'priceEstimates.landFinalEstimate',
+            'priceEstimates.landFinalEstimate.lands',
+            'priceEstimates.landFinalEstimate.tangibleAssets',
+            'priceEstimates.landFinalEstimate.apartmentFinals',
+            'priceEstimates.properties',
+            'priceEstimates.properties.propertyDetail',
+            'priceEstimates.properties.propertyTurningTime',
+            'priceEstimates.assetGeneralRelation',
         ];
         $result = $this->model->query()
             ->with($with)
@@ -1904,6 +1917,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (isset($check)) {
                 return $check;
             }
+            Log::info('price', ['objects' => $objects, 'preCertificateId' => $preCertificateId]);
             if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
                 $priceEstimates = isset($objects['price_estimates']) ? $objects['price_estimates'] : [];
 
@@ -1913,6 +1927,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     foreach ($priceEstimates as $priceEstimateId) {
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
+                        Log::info('price', ['priceEstimate' => $priceEstimate]);
                         // Check if general_asset exists in the result
                         if (isset($priceEstimate) && isset($priceEstimate['assetGeneralRelation'])) {
                             // Loop over each asset in general_asset
