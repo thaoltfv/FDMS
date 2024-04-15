@@ -839,6 +839,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
     public function getPriceEstimateDataFullForPreCertificate($preCertificateId)
     {
         $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id'];
+        $user = CommonService::getUser();
         $with = [
             'createdBy:id,name',
             'assetType',
@@ -851,8 +852,8 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     ->orWhere('pre_certificate_id', $preCertificateId);
             })
             ->where('step', 3)
+            ->where('created_by', $user->id) // Add this line
             ->get();
-
         return $result;
     }
 
