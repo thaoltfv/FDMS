@@ -850,7 +850,8 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 $query->whereNull('pre_certificate_id')
                     ->orWhere('pre_certificate_id', $preCertificateId);
             })
-            ->where('step', 3);
+            ->where('step', 3)
+            ->get();
 
         return $result;
     }
