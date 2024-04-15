@@ -1917,7 +1917,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (isset($check)) {
                 return $check;
             }
-            Log::info('price', ['objects' => $objects, 'preCertificateId' => $preCertificateId]);
             if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
                 $priceEstimates = isset($objects['price_estimates']) ? $objects['price_estimates'] : [];
 
@@ -1927,7 +1926,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     foreach ($priceEstimates as $priceEstimateId) {
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
-                        Log::info('price', ['priceEstimate' => $priceEstimate]);
                         // Check if $priceEstimate is not empty
                         if (!empty($priceEstimate)) {
                             // Check if general_asset exists in the result
@@ -2129,8 +2127,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     public function deleteApartmentWithRelations(int $preCertificateId, int $priceEstimateId)
     {
         // Start a database transaction
-        DB::beginTransaction();
-
         try {
             $preCertificatePriceEstimateId = PreCertificatePriceEstimate::query()
                 ->where('pre_certificate_id', $preCertificateId)
@@ -2154,13 +2150,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             // Delete the PriceEstimate record
             PreCertificatePriceEstimate::where('id', $preCertificatePriceEstimateId)->forceDelete();
 
+            PriceEstimate::where('pre_certificate_id', $preCertificateId)
+                ->where('id', $priceEstimateId)
+                ->update(['pre_certificate_id' => null]);
             // Commit the transaction
-            DB::commit();
         } catch (\Exception $e) {
             // An error occurred; cancel the transaction...
-            DB::rollback();
-
-            // and rethrow the exception
             throw $e;
         }
     }
@@ -2168,7 +2163,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     public function deleteAppraiseWithRelations(int $preCertificateId, int $priceEstimateId)
     {
         // Start a database transaction
-        DB::beginTransaction();
 
         try {
             $preCertificatePriceEstimateId = PreCertificatePriceEstimate::query()
@@ -2204,12 +2198,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             // Delete the PriceEstimate record
             PreCertificatePriceEstimate::where('id', $preCertificatePriceEstimateId)->forceDelete();
 
+            PriceEstimate::where('pre_certificate_id', $preCertificateId)
+                ->where('id', $priceEstimateId)
+                ->update(['pre_certificate_id' => null]);
             // Commit the transaction
-            DB::commit();
         } catch (\Exception $e) {
             // An error occurred; cancel the transaction...
-            DB::rollback();
-
             // and rethrow the exception
             throw $e;
         }
@@ -2217,8 +2211,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     public function deletePriceEstimateWithRelations(int $preCertificateId)
     {
-        DB::beginTransaction();
-
         try {
             $preCertificatePriceEstimateIds = PreCertificatePriceEstimate::query()
                 ->where('pre_certificate_id', $preCertificateId)
@@ -2246,9 +2238,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
             PreCertificatePriceEstimate::whereIn('id', $preCertificatePriceEstimateIds)->forceDelete();
 
-            DB::commit();
+            PriceEstimate::where('pre_certificate_id', $preCertificateId)
+                ->update(['pre_certificate_id' => null]);
         } catch (\Exception $e) {
-            DB::rollBack();
             throw $e;
         }
     }
