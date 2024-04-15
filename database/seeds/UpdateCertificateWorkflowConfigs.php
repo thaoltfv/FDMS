@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\PreCertificateConfig;
 
-class UpdateCertificateWorkflowConfig extends Seeder
+class UpdateCertificateWorkflowConfigs extends Seeder
 {
     /**
      * Run the database seeds.
