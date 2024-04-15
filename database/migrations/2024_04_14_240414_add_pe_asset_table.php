@@ -13,15 +13,14 @@ class addPeAssetTable extends Migration
      */
     public function up()
     {
-        $conn = Schema::getConnection();
-        $dbSchemaManager = $conn->getDoctrineSchemaManager();
-        $indexes = $dbSchemaManager->listTableIndexes('pre_certificate_configs');
+        Schema::table('pre_certificate_configs', function (Blueprint $table) {
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexesFound = $sm->listTableIndexes('pre_certificate_configs');
 
-        if (array_key_exists('pre_certificate_configs_name_key', $indexes)) {
-            Schema::table('pre_certificate_configs', function (Blueprint $table) {
-                $table->dropUnique(['name']);
-            });
-        }
+            if (array_key_exists('pre_certificate_configs_name_key', $indexesFound)) {
+                $table->dropUnique('pre_certificate_configs_name_key');
+            }
+        });
 
         if (!Schema::hasTable('pre_certificate_price_estimates')) {
             Schema::create('pre_certificate_price_estimates', function (Blueprint $table) {
@@ -258,19 +257,11 @@ class addPeAssetTable extends Migration
     public function down()
     {
         Schema::table('pre_certificate_configs', function (Blueprint $table) {
-            if (Schema::hasColumn('pre_certificate_configs', 'name')) {
-                try {
-                    $table->dropUnique('pre_certificate_configs_name_key');
-                } catch (\Exception $e) {
-                    // Unique constraint did not exist, do nothing
-                }
-
-                // Now add the unique constraint
-                $table->string('name')->unique()->change();
-            }
+            $table->unique('name');
         });
 
         Schema::dropIfExists('pre_certificate_price_estimates');
+
         Schema::dropIfExists('pre_certificate_price_estimate_property_details');
         Schema::dropIfExists('pre_certificate_price_estimate_properties');
         Schema::dropIfExists('pre_certificate_price_estimate_property_turning_time');
