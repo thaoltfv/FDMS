@@ -1917,6 +1917,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (isset($check)) {
                 return $check;
             }
+            Log::info('price', ['objects' => $objects, 'preCertificateId' => $preCertificateId]);
             if (PreCertificate::where('id', $preCertificateId)->where('status', 2)->exists()) {
                 $priceEstimates = isset($objects['price_estimates']) ? $objects['price_estimates'] : [];
 
