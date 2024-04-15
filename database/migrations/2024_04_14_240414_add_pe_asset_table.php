@@ -261,6 +261,7 @@ class addPeAssetTable extends Migration
         });
 
         Schema::dropIfExists('pre_certificate_price_estimates');
+
         Schema::dropIfExists('pre_certificate_price_estimate_property_details');
         Schema::dropIfExists('pre_certificate_price_estimate_properties');
         Schema::dropIfExists('pre_certificate_price_estimate_property_turning_time');
