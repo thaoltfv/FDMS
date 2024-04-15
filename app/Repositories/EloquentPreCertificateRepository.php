@@ -1976,7 +1976,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         $this->deleteApartmentWithRelations($preCertificateId, $priceEstimateId);
         $user = CommonService::getUser();
-        $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate);
+        $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate->toArray());
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
         $preCertificatePriceEstimate->pre_certificate_id = $preCertificateId;
         $preCertificatePriceEstimate->created_by = $user->id;
@@ -1999,7 +1999,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     {
         $this->deleteAppraiseWithRelations($preCertificateId, $priceEstimateId);
         $user = CommonService::getUser();
-        $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate);
+        $preCertificatePriceEstimate = new PreCertificatePriceEstimate($priceEstimate->toArray());
         $preCertificatePriceEstimate->price_estimate_id = $priceEstimateId;
         $preCertificatePriceEstimate->pre_certificate_id = $preCertificateId;
         $preCertificatePriceEstimate->created_by = $user->id;
