@@ -505,7 +505,7 @@
 								<div class="col-2">
 									<span class="number-style-input">
 										{{
-											apartment.total_price
+											apartment.total_price || apartment.total_price === 0
 												? formatNumber(apartment.total_price)
 												: ""
 										}}
@@ -790,7 +790,11 @@ export default {
 						full_address: address,
 						description: step1.traffic_infomation.description,
 						coordinates: step1.general_infomation.coordinates,
-						total_area: tempTotalArea,
+						total_area: tempTotalArea
+							? tempTotalArea.map(area => ({
+									...area
+							  }))
+							: [],
 						planning_area: step1.planning_area
 							? step1.planning_area.map(area => ({
 									...area,
@@ -811,7 +815,11 @@ export default {
 						full_address: address,
 						description: step1.traffic_infomation.description,
 						coordinates: step1.general_infomation.coordinates,
-						total_area: tempTotalArea,
+						total_area: tempTotalArea
+							? tempTotalArea.map(area => ({
+									...area
+							  }))
+							: [],
 						planning_area: step1.planning_area
 							? step1.planning_area.map(area => ({
 									...area,
@@ -824,7 +832,6 @@ export default {
 					};
 				}
 				step_3.value = priceEstimates.value.step_3;
-				console.log("step_3", step_3.value);
 			}
 		};
 		const getStartedApartment = () => {
