@@ -314,7 +314,8 @@ class BienBanThanhLy
         $alignCenter =
             ['align' => 'center'];
         if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
-            (isset($certificate->appraises) && count($certificate->appraises) > 0)
+            (isset($certificate->appraises) && count($certificate->appraises) > 0) ||
+            (isset($priceEstimatePrint) && count($priceEstimatePrint) > 0)
         ) {
             $table = $section->addTable([
                 'borderSize' => 1,
