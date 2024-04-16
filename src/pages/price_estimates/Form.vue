@@ -15,19 +15,46 @@
 			class="vertical-steps steps-transparent"
 			:class="{ step3: isStep3Active }"
 		>
-			<div class="wizard-custom-info" v-if="dataForm.appraise_id">
+			<div
+				class="wizard-custom-info"
+				v-if="
+					dataForm.appraise_id ||
+						dataForm.pre_certificate_id ||
+						dataForm.apartment_asset_id
+				"
+			>
 				<div class="col-12">
 					<!-- <div class="row d-flex">
 						<p class="mb-1">Version :</p>
 						<p class="mb-1">{{ dataForm.max_version }}</p>
 					</div> -->
-					<div class="row d-flex" v-if="dataForm.appraise_id">
+					<div
+						class="row d-flex"
+						v-if="dataForm.appraise_id || dataForm.apartment_asset_id"
+					>
 						<p class="mb-1">Mã TSTĐ :</p>
 						<a
 							class="mb-1"
-							:href="`/certification_asset/detail?id=${dataForm.appraise_id}`"
+							:href="
+								dataForm.appraise_id
+									? `/certification_asset/real-estate/detail?id=${dataForm.appraise_id}`
+									: dataForm.apartment_asset_id
+									? `/certification_asset/apartment/detail?id=${dataForm.apartment_asset_id}`
+									: ''
+							"
 							target="_blank"
-							>{{ dataForm.appraise_id }}</a
+							>{{ dataForm.appraise_id || dataForm.apartment_asset_id }}</a
+						>
+					</div>
+					<div class="row d-flex" v-if="dataForm.pre_certificate_id">
+						<p class="mb-1">Mã HSSB :</p>
+						<a
+							class="mb-1"
+							:href="
+								`/pre_certification/detail?id=${dataForm.pre_certificate_id}`
+							"
+							target="_blank"
+							>{{ dataForm.pre_certificate_id }}</a
 						>
 					</div>
 					<!-- <div class="">

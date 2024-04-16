@@ -350,14 +350,14 @@
 						</div>
 						<div
 							v-if="allowEditFile.result && edit"
-							@click="dialogRequireForStage3 = true"
+							@click="showPriceEstimateListDialog = true"
 							class="btn-edit"
 						>
 							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
 						</div>
 					</div>
 				</div>
-				<div class="card-body card-info">
+				<!-- <div class="card-body card-info">
 					<div class="row">
 						<div class="col-12 mt-2 table-wrapper">
 							<a-table
@@ -393,7 +393,119 @@
 					v-if="showCardDetailFileResult && !dialogRequireForStage3"
 					type="Result"
 					:allow-edit="false"
-				/>
+				/> -->
+				<div class="card-body card-info">
+					<div class="row">
+						<div
+							v-if="
+								dataPC.price_estimates.length === 0 &&
+									dataPC.appraiser_perform &&
+									dataPC.status === 2 &&
+									(edit || add) &&
+									user_id === dataPC.appraiser_perform.user_id
+							"
+							class="col-12 d-flex mt-2 justify-content-center"
+						>
+							<button
+								class="btn btn_list_appraise-orange text-nowrap mr-3"
+								@click.prevent="handleShowAppraiseList"
+							>
+								Chọn tài sản sơ bộ
+							</button>
+						</div>
+						<div class="col-12" v-if="checkNoticeMessage()">
+							<div class="infor-box">
+								<svg
+									style="margin-right: 1rem"
+									width="12"
+									height="13"
+									viewBox="0 0 12 13"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z"
+										fill="#007EC6"
+									/>
+								</svg>
+								Hồ sơ chưa khai báo thông tin tài sản thẩm định
+							</div>
+						</div>
+						<div
+							v-if="dataPC.price_estimates.length > 0"
+							class="col-12 mt-2 table-wrapper"
+						>
+							<a-table
+								bordered
+								:columns="columnAssets"
+								:data-source="dataPC.price_estimates"
+								table-layout="top"
+								class="table_appraise_list"
+								:rowKey="record => record.id"
+							>
+								<template slot="asset" slot-scope="asset">
+									<p :id="asset.id" class="text-none mb-0">
+										{{ asset.appraise_asset }}
+									</p>
+									<!-- <b-tooltip :target="(asset.id).toString()">{{asset.name}}</b-tooltip> -->
+								</template>
+
+								<template slot="version" slot-scope="version">
+									<p class="text-none mb-0">{{ version }}</p>
+								</template>
+								<template slot="area" slot-scope="area">
+									<p class="text-none mb-0">
+										{{ area ? formatNumber(area) : 0 }} m <sup>2</sup>
+									</p>
+								</template>
+								<template slot="price" slot-scope="price">
+									<p class="text-none mb-0">
+										{{ price ? formatNumber(price) : 0 }} đ
+									</p>
+								</template>
+								<template slot="data" slot-scope="data">
+									<button
+										class="link-detail text-none mb-0"
+										@click.prevent="handleDetail(data)"
+									>
+										{{
+											`${showAcronym(data.asset_type.dictionary_acronym)}_` +
+												data.price_estimate_id
+										}}
+									</button>
+								</template>
+								<template slot="action" slot-scope="text, record">
+									<button
+										class="btn btn-orange btn-print btn-extra"
+										@click="handlePrint(record.price_estimate_id)"
+									>
+										<!-- <font-awesome-icon icon="print" /> -->
+										<img
+											src="@/assets/icons/ic_printer_white.svg"
+											alt="print"
+										/>
+									</button>
+								</template>
+							</a-table>
+						</div>
+						<div
+							v-if="dataPC.price_estimates.length > 0"
+							class="d-flex col-12 justify-content-end mt-3"
+						>
+							<span class="total mt-1">Tổng cộng</span>
+							<div class="d-flex container_total justify-content-between">
+								<div>
+									{{
+										totalPricePriceEstimate
+											? formatNumber(totalPricePriceEstimate)
+											: 0
+									}}
+								</div>
+								<div class="ml-1">VNĐ</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div
@@ -489,6 +601,21 @@
 			"
 			@cancel="dialogRequireForStage3 = false"
 		/>
+
+		<ModalPriceEstimateList
+			v-if="showPriceEstimateListDialog"
+			:data="dataPC"
+			:idData="dataPC.id"
+			@updatePriceEstimateList="updatePriceEstimateList"
+			@cancel="showPriceEstimateListDialog = false"
+		/>
+
+		<ModalPrintEstimateAssets
+			v-if="openPrint"
+			@cancel="openPrint = false"
+			:data="priceEstimates"
+			:isApartment="miscVariable.isApartment"
+		/>
 	</div>
 </template>
 <style lang="scss">
@@ -500,9 +627,12 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
+import { usePriceEstimatesStore } from "@/store/priceEstimates";
 
+import ModalPrintEstimateAssets from "@/components/Modal/ModalPrintEstimateAssetNew";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
+import ModalPriceEstimateList from "@/components/PreCertificate/ModalPriceEstimateList";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationPreCertificateNote from "@/components/PreCertificate/ModalNotificationPreCertificateNote";
 import ModalNotificationWithAssign from "@/components/Modal/ModalNotificationWithAssign";
@@ -551,6 +681,8 @@ export default {
 	},
 	name: "detail_pre_certification",
 	components: {
+		ModalPrintEstimateAssets,
+		ModalPriceEstimateList,
 		DocumentExport,
 		ModalNotificationWithAssign,
 		PaymentPreCertificateHistories,
@@ -601,6 +733,7 @@ export default {
 					hiddenItem: false
 				}
 			],
+			openPrint: false,
 			theme: {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
@@ -608,13 +741,13 @@ export default {
 				arrow: "#000000"
 			},
 			status: 1,
-			total_price_appraise: "",
+			total_price_price_estimates: "",
 			key_render_appraisal: 10000,
 			openModalDelete: false,
 			showCustomerDialog: false,
 			showAppraiseInformationDialog: false,
 			showAppraisalDialog: false,
-			showAppraiseListDialog: false,
+			showPriceEstimateListDialog: false,
 			visible: false,
 			showCardDetailImage: true,
 			openSendRequire: false,
@@ -677,13 +810,17 @@ export default {
 		};
 		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
+		const priceEstimateStore = usePriceEstimatesStore();
+		const { priceEstimates, miscVariable } = storeToRefs(priceEstimateStore);
+
 		const {
 			dataPC,
 			lstDataConfig,
 			preCertificateOtherDocuments,
 			jsonConfig,
 			vueStoree,
-			other
+			other,
+			totalPricePriceEstimate
 		} = storeToRefs(preCertificateStore);
 		const dialogRequireForStage3 = ref(false);
 		const config = ref({});
@@ -834,7 +971,13 @@ export default {
 		const showCardDetailFileResult = ref(true);
 		const showCardPCPayments = ref(false);
 		const appraiserChangeStage = ref(null);
+
 		return {
+			priceEstimateStore,
+			priceEstimates,
+			miscVariable,
+
+			totalPricePriceEstimate,
 			editExportDocument,
 			showExportDocument,
 			appraiserChangeStage,
@@ -891,6 +1034,70 @@ export default {
 					total_preliminary_value: this.dataPC.total_preliminary_value
 				}
 			];
+		},
+		columnAssets() {
+			let dataColumn = [
+				{
+					title: "Mã TSSB",
+					align: "left",
+					scopedSlots: { customRender: "data" },
+					hiddenItem: false
+				},
+				{
+					title: "Version",
+					align: "center",
+					scopedSlots: { customRender: "version" },
+					dataIndex: "last_version.version",
+					hiddenItem: false
+				},
+				{
+					title: "Loại tài sản",
+					align: "left",
+					dataIndex: "asset_type.description",
+					hiddenItem: false
+				},
+				{
+					title: "Tên tài sản",
+					align: "left",
+					scopedSlots: { customRender: "asset" },
+					hiddenItem: false
+				},
+				// {
+				// 	title: 'Loại đất',
+				// 	align: 'left',
+				// 	scopedSlots: {customRender: 'land'},
+				// 	hiddenItem: this.isCheckRealEstate
+				// },
+				{
+					title: "Tổng diện tích",
+					align: "right",
+					scopedSlots: { customRender: "area" },
+					dataIndex: "total_area",
+					hiddenItem: !this.isCheckRealEstate
+				},
+				{
+					title: "Tổng giá trị",
+					align: "right",
+					scopedSlots: { customRender: "price" },
+					dataIndex: "total_price",
+					hiddenItem: false
+				},
+				{
+					title: "",
+					dataIndex: "action",
+					key: "action",
+					scopedSlots: { customRender: "action" },
+					hiddenItem: false
+				}
+				// {
+				// 	title: 'Ngày tạo',
+				// 	align: 'right',
+				// 	scopedSlots: {customRender: 'created_at'},
+				// 	dataIndex: 'created_at',
+				// 	hiddenItem: false
+				// }
+			];
+			return dataColumn.filter(item => item.hiddenItem === false);
 		}
 	},
 	methods: {
@@ -928,14 +1135,14 @@ export default {
 
 		checkNoticeMessage() {
 			if (
-				this.dataPC.general_asset.length === 0 &&
+				this.dataPC.price_estimates.length === 0 &&
 				this.dataPC.appraiser_perform &&
 				this.user_id !== this.dataPC.appraiser_perform.user_id
 			) {
 				return true;
 			} else if (
-				this.dataPC.general_asset.length === 0 &&
-				this.dataPC.status === 5 &&
+				this.dataPC.price_estimates.length === 0 &&
+				this.dataPC.status === 6 &&
 				this.dataPC.appraiser_perform &&
 				this.user_id === this.dataPC.appraiser_perform.user_id
 			) {
@@ -943,11 +1150,12 @@ export default {
 			} else return false;
 		},
 		showAcronym(acronym) {
-			if (acronym === "KHAC") {
-				return "TSK";
-			} else if (acronym === "DS") {
-				return "DS";
-			} else return acronym;
+			// if (acronym === "KHAC") {
+			// 	return "TSK";
+			// } else if (acronym === "DS") {
+			// 	return "DS";
+			// } else return acronym;
+			return "TSSB";
 		},
 		showDrawer() {
 			this.visible = true;
@@ -958,43 +1166,13 @@ export default {
 		},
 		async handleDetail(data) {
 			let routeData;
-			if (data.asset_type.dictionary_acronym === "DS") {
-				if (data.asset_type.acronym === "PTVT") {
-					routeData = this.$router.resolve({
-						name: "certification_asset.vehicle.detail",
-						query: {
-							id: data.general_asset_id,
-							asset_type_id: data.asset_type_id
-						}
-					});
-				} else if (data.asset_type.acronym === "MMTB") {
-					routeData = this.$router.resolve({
-						name: "certification_asset.machine.detail",
-						query: {
-							id: data.general_asset_id,
-							asset_type_id: data.asset_type_id
-						}
-					});
+
+			routeData = this.$router.resolve({
+				name: "price_estimates.detail",
+				query: {
+					id: data.price_estimate_id
 				}
-			} else if (data.asset_type.dictionary_acronym === "KHAC") {
-				routeData = this.$router.resolve({
-					name: "certification_asset.other_purpose.detail",
-					query: {
-						id: data.general_asset_id,
-						asset_type_id: data.asset_type_id
-					}
-				});
-			} else if (data.asset_type.acronym === "CC") {
-				routeData = this.$router.resolve({
-					name: "certification_asset.apartment.detail",
-					query: { id: data.asset.asset_id }
-				});
-			} else {
-				routeData = this.$router.resolve({
-					name: "certification_asset.detail",
-					query: { id: data.asset.asset_id }
-				});
-			}
+			});
 			window.open(routeData.href, "_blank");
 		},
 		handleDetailCertificate(id) {
@@ -1077,7 +1255,7 @@ export default {
 			this.showAppraiseInformationDialog = true;
 		},
 		handleShowAppraiseList() {
-			this.showAppraiseListDialog = true;
+			this.showPriceEstimateListDialog = true;
 		},
 		handleImportAppraise() {
 			return this.$toast.open({
@@ -1091,6 +1269,9 @@ export default {
 			await this.preCertificateStore.getPreCertificate(this.routeId);
 		},
 		async updateAppraiseInformation() {
+			await this.preCertificateStore.getPreCertificate(this.routeId);
+		},
+		async updatePriceEstimateList() {
 			await this.preCertificateStore.getPreCertificate(this.routeId);
 		},
 		async updateAppraisal() {
@@ -1731,13 +1912,6 @@ export default {
 				});
 			}
 		},
-		getTotalPrice() {
-			let total_price = 0;
-			this.dataPC.general_asset.forEach(item => {
-				total_price += +item.total_price;
-			});
-			this.total_price_appraise = total_price;
-		},
 
 		openMessage(
 			message,
@@ -1963,12 +2137,95 @@ export default {
 					});
 				}
 			});
+		},
+		async handlePrint(id) {
+			const response = await this.priceEstimateStore.getDataAllStep(id, false);
+			if (response.error) {
+				this.$toast.open({
+					message: `${response.error.message}`,
+					type: "error",
+					position: "top-right"
+				});
+			} else {
+				this.priceEstimates.assets = [];
+				this.priceEstimates.totalLandPrice = 0;
+				this.priceEstimates.totalTangibleAssetPrice = 0;
+				if (!this.miscVariable.isApartment) {
+					if (
+						!this.priceEstimates.step_3 ||
+						!this.priceEstimates.step_3.total_area ||
+						this.priceEstimates.step_3.total_area.length === 0
+					) {
+						this.$toast.open({
+							message:
+								"Chưa thể in giá sơ bộ do chưa đủ thông tin. Vui lòng lưu giá trị tài sản trước khi in.",
+							type: "error",
+							position: "top-right"
+						});
+					}
+
+					for (
+						let index = 0;
+						index < this.priceEstimates.step_3.total_area.length;
+						index++
+					) {
+						const element = this.priceEstimates.step_3.total_area[index];
+						const temp = {
+							description: "Phần diện tích PHQH",
+							land_type_description: element.land_type_purpose
+								? element.land_type_purpose.acronym
+								: "",
+							area: element.main_area,
+							price: element.unit_price,
+							total: element.total_price
+						};
+						this.priceEstimates.totalLandPrice += Number(element.total_price);
+						this.priceEstimates.assets.push(temp);
+					}
+
+					if (
+						this.priceEstimates.step_3.planning_area &&
+						this.priceEstimates.step_3.planning_area.length > 0
+					) {
+						for (
+							let index = 0;
+							index < this.priceEstimates.step_3.planning_area.length;
+							index++
+						) {
+							const element = this.priceEstimates.step_3.planning_area[index];
+							const temp = {
+								description: "Phần diện tích không PHQH",
+								land_type_description: element.land_type_purpose
+									? element.land_type_purpose.acronym
+									: "",
+								area: element.planning_area,
+								price: element.unit_price,
+								total: element.total_price
+							};
+							this.priceEstimates.totalLandPrice += Number(element.total_price);
+							this.priceEstimates.assets.push(temp);
+						}
+					}
+					if (
+						this.priceEstimates.step_3.tangible_assets &&
+						this.priceEstimates.step_3.tangible_assets.length > 0
+					)
+						this.priceEstimates.totalTangibleAssetPrice = this.priceEstimates.step_3.tangible_assets.reduce(
+							(total, asset) => total + (asset.total_price || 0),
+							0
+						);
+				}
+
+				this.priceEstimates.totalAllPrice =
+					Number(this.priceEstimates.totalLandPrice) +
+					Number(this.priceEstimates.totalTangibleAssetPrice);
+				this.openPrint = true;
+			}
+
+			// this.printEstimateAssetPrice();
 		}
 	},
 	beforeMount() {
-		if (this.dataPC.general_asset && this.dataPC.general_asset.length > 0) {
-			this.getTotalPrice();
-		}
 		this.setDocumentViewStatus();
 	},
 	async mounted() {

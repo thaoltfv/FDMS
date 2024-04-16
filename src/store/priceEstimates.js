@@ -1124,7 +1124,7 @@ export const usePriceEstimatesStore = defineStore(
 			}
 			isSubmit.value = false;
 		}
-		async function getDataAllStep(id) {
+		async function getDataAllStep(id, boolRunGetProvince = true) {
 			const res = await PriceEstimateModel.getDataAllStep(id);
 
 			if (res && res.data) {
@@ -1133,6 +1133,8 @@ export const usePriceEstimatesStore = defineStore(
 				const bindDataStep = res.data;
 				priceEstimates.value.id = bindDataStep.id;
 				priceEstimates.value.appraise_id = bindDataStep.appraise_id;
+				priceEstimates.value.pre_certificate_id =
+					bindDataStep.pre_certificate_id;
 				priceEstimates.value.apartment_asset_id =
 					bindDataStep.apartment_asset_id;
 				priceEstimates.value.isTransfer =
@@ -1278,7 +1280,7 @@ export const usePriceEstimatesStore = defineStore(
 				// 	});
 				// }
 			}
-			await getProvinces();
+			if (boolRunGetProvince) await getProvinces();
 			// priceEstimatesOrigin;
 			return res;
 		}
