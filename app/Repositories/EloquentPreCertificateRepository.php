@@ -947,6 +947,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'exportDocuments',
 
             'priceEstimates',
+            'priceEstimates.createdBy:id,name',
+            'priceEstimates.assetType',
             'priceEstimates.lastVersion',
             'priceEstimates.apartmentProperties',
             'priceEstimates.apartmentProperties.floor',
