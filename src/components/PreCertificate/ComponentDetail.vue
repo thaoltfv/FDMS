@@ -128,10 +128,7 @@
 										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
 									</p>
 								</div>
-								<div
-									v-if="dataPC.status === 1"
-									class="d-flex container_content"
-								>
+								<div class="d-flex container_content">
 									<strong class="margin_content_inline"
 										>Tên tài sản sơ bộ:</strong
 									><span id="pre_asset_name" class="text-left">{{
@@ -338,7 +335,7 @@
 			</a-timeline>
 		</a-drawer>
 		<div
-			v-if="dataPC.id && dataPC.status >= 2"
+			v-if="dataPC.id && dataPC.status >= 2 && dataPC.status != 8"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
