@@ -363,7 +363,8 @@ Route::group(['middleware' => 'auth'], function () {
     );
     Route::post('price_estimates/step1-general-infomation/{id?}', [PriceEstimateController::class, 'postGeneralInfomation']);
     Route::get('price_estimates/price-estimate-all-step/{id}', [PriceEstimateController::class, 'getPriceEstimateDataFull']);
-    Route::get('price_estimates/price-estimate-for-pre-certificate/{id}', [PriceEstimateController::class, 'getPriceEstimateDataFullForPreCertificate']);
+    Route::get('price_estimates_for_pre_certificate', [PriceEstimateController::class, 'getPriceEstimateDataFullForPreCertificate']);
+
     Route::post(
         'price_estimates/step3-final/{id}',
         [PriceEstimateController::class, 'step3Final']

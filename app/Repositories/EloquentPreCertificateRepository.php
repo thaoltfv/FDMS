@@ -1927,8 +1927,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 } else {
                     $this->deletePriceEstimateWithRelations($preCertificateId);
                     foreach ($priceEstimates as $priceEstimateId) {
+                        Log::info('priceEstimateId: ' . $priceEstimateId);
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
+                        Log::info('priceEstimate: ', ['priceEstimate' => $priceEstimate]);
                         // Check if $priceEstimate is not empty
                         if (!empty($priceEstimate)) {
                             // Check if general_asset exists in the result
