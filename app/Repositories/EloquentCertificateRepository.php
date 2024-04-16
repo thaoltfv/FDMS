@@ -2942,7 +2942,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 when 9
                     then u2.name
                 when 10
-                    then u6.image
+                    then u6.name
             end as name_nv
         "),
             'sub_status',
