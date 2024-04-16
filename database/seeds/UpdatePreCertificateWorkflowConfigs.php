@@ -133,6 +133,12 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                                 "description" => "Hủy"
                             ],
                             [
+                                "id" => 1,
+                                "css" => "btn-white",
+                                "img" => "ic_cancel-1.svg",
+                                "description" => "Từ chối"
+                            ],
+                            [
                                 "id" => 2,
                                 "css" => "btn-white btn-orange",
                                 "img" => "ic_done.svg",
@@ -193,7 +199,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                                 "description" => "Hủy"
                             ],
                             [
-                                "id" => 1,
+                                "id" => 8,
                                 "css" => "btn-white",
                                 "img" => "ic_cancel-1.svg",
                                 "description" => "Từ chối"

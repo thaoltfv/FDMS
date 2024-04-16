@@ -359,7 +359,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             ],
                             "target_description" => [
                                 [
-                                    "id" => 1,
+                                    "id" => 12,
                                     "css" => "btn-white",
                                     "img" => "ic_cancel-1.svg",
                                     "description" => "Từ chối"
