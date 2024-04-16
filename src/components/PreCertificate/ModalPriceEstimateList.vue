@@ -256,7 +256,7 @@ export default {
 										element.land_final_estimate[0].lands[index];
 
 									element.total_area +=
-										elementland.planning_area + element.total_area;
+										elementland.planning_area + elementland.main_area;
 								}
 							}
 						}

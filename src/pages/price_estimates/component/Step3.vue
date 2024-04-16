@@ -359,7 +359,7 @@
 											<td class="">Quyền sử dụng đất</td>
 											<td class="text-right">
 												{{
-													totalPriceTotalArea
+													totalPriceTotalArea || totalPriceTotalArea === 0
 														? formatNumber(totalPriceTotalArea)
 														: ""
 												}}
@@ -370,7 +370,8 @@
 											<td class="">Công trình xây dựng</td>
 											<td class="text-right">
 												{{
-													totalPriceTangibleAsset
+													totalPriceTangibleAsset ||
+													totalPriceTangibleAsset === 0
 														? formatNumber(totalPriceTangibleAsset)
 														: ""
 												}}
@@ -379,7 +380,11 @@
 										<tr>
 											<td class="font-weight-bold">Tổng cộng</td>
 											<td class="text-right font-weight-bold">
-												{{ totalAllPrice ? formatNumber(totalAllPrice) : "" }}
+												{{
+													totalAllPrice || totalAllPrice === 0
+														? formatNumber(totalAllPrice)
+														: ""
+												}}
 											</td>
 										</tr>
 									</tbody>
@@ -500,7 +505,7 @@
 								<div class="col-2">
 									<span class="number-style-input">
 										{{
-											apartment.total_price
+											apartment.total_price || apartment.total_price === 0
 												? formatNumber(apartment.total_price)
 												: ""
 										}}
@@ -693,37 +698,44 @@ export default {
 			let counts = {};
 
 			if (priceEstimates.value.step_2.assets_general) {
-				priceEstimates.value.step_2.assets_general.forEach(asset => {
-					if (asset.properties) {
-						asset.properties.forEach(property => {
-							if (property.property_detail) {
-								property.property_detail.forEach(detail => {
-									const id = detail.land_type_purpose;
-									const unit_price = Number(detail.price_land); // price_land
+				if (priceEstimates.value.step_2.assets_general.length > 0) {
+					priceEstimates.value.step_2.assets_general.forEach(asset => {
+						if (asset.properties) {
+							asset.properties.forEach(property => {
+								if (property.property_detail) {
+									property.property_detail.forEach(detail => {
+										const id = detail.land_type_purpose;
+										const unit_price = Number(detail.price_land); // price_land
 
-									if (!isNaN(unit_price)) {
-										if (!totals[id]) {
-											totals[id] = 0;
-											counts[id] = 0;
+										if (!isNaN(unit_price)) {
+											if (!totals[id]) {
+												totals[id] = 0;
+												counts[id] = 0;
+											}
+
+											totals[id] += unit_price;
+											counts[id]++;
 										}
+									});
+								}
+							});
+						}
+					});
 
-										totals[id] += unit_price;
-										counts[id]++;
-									}
-								});
+					for (let id in totals) {
+						let average = Math.floor(totals[id] / counts[id]);
+
+						tempTotalArea.forEach(area => {
+							if (area.land_type_purpose_id == id) {
+								area.unit_price = average;
+								area.total_price = (area.main_area * average).toFixed(0);
 							}
 						});
 					}
-				});
-
-				for (let id in totals) {
-					let average = Math.floor(totals[id] / counts[id]);
-
+				} else {
 					tempTotalArea.forEach(area => {
-						if (area.land_type_purpose_id == id) {
-							area.unit_price = average;
-							area.total_price = (area.main_area * average).toFixed(0);
-						}
+						area.unit_price = 0;
+						area.total_price = 0;
 					});
 				}
 			}
@@ -778,7 +790,11 @@ export default {
 						full_address: address,
 						description: step1.traffic_infomation.description,
 						coordinates: step1.general_infomation.coordinates,
-						total_area: tempTotalArea,
+						total_area: tempTotalArea
+							? tempTotalArea.map(area => ({
+									...area
+							  }))
+							: [],
 						planning_area: step1.planning_area
 							? step1.planning_area.map(area => ({
 									...area,
@@ -799,7 +815,11 @@ export default {
 						full_address: address,
 						description: step1.traffic_infomation.description,
 						coordinates: step1.general_infomation.coordinates,
-						total_area: tempTotalArea,
+						total_area: tempTotalArea
+							? tempTotalArea.map(area => ({
+									...area
+							  }))
+							: [],
 						planning_area: step1.planning_area
 							? step1.planning_area.map(area => ({
 									...area,
@@ -926,6 +946,11 @@ export default {
 			return boolA;
 		},
 		totalPriceTotalArea() {
+			console.log(
+				"totalPriceTotalArea",
+				this.step_3.total_area,
+				this.step_3.planning_area
+			);
 			const temp = this.step_3.total_area.reduce((total, area) => {
 				area.total_price = area.total_price || 0;
 				return total + Number(area.total_price);
@@ -934,6 +959,7 @@ export default {
 				area.total_price = area.total_price || 0;
 				return total + Number(area.total_price);
 			}, 0);
+			console.log("temp", temp, temp2);
 			return temp + temp2;
 		},
 
@@ -1600,6 +1626,8 @@ export default {
 				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
 				});
+			} else if (num === 0) {
+				return 0;
 			} else {
 				return "";
 			}
