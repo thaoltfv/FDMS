@@ -232,8 +232,8 @@
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
-								rules="required"
-								:requiredIcon="true"
+								:rules="dataPC.status > 1 ? 'required' : ''"
+								:requiredIcon="dataPC.status > 1"
 								class="form-group-container col-12"
 								:options="optionsAppraiserPerformance"
 							/>
