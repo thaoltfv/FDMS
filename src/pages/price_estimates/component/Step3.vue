@@ -388,7 +388,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="container-fluid color_content">
+				<!-- <div class="container-fluid color_content">
 					<div class="row mt-3">
 						<div class="col-custom-11-5">
 							<hr style="border-top: 5px solid #007ec6; margin: 0;" />
@@ -439,7 +439,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<div class="card-body card-info" v-show="showCardDetailTraffic" v-else>
 				<div class="container-fluid mb-2">
@@ -511,7 +511,7 @@
 					</div>
 				</div>
 
-				<div class="container-fluid color_content">
+				<!-- <div class="container-fluid color_content">
 					<div class="row">
 						<div class="col-custom-11-5">
 							<hr style="border-top: 5px solid #007ec6; margin: 0;" />
@@ -566,7 +566,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 

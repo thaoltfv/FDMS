@@ -1142,6 +1142,7 @@ export const usePriceEstimatesStore = defineStore(
 					bindDataStep.appraise_id || bindDataStep.apartment_asset_id
 						? true
 						: false;
+
 				// step 1
 				if (bindDataStep.created_at) {
 					priceEstimates.value.createdAtString = moment(
@@ -1227,9 +1228,21 @@ export const usePriceEstimatesStore = defineStore(
 				// step 3
 				if (bindDataStep.final_estimate) {
 					priceEstimates.value.step_3 = bindDataStep.final_estimate;
-					priceEstimates.value.step_3.request_date = moment(
-						priceEstimates.value.step_3.request_date
-					).format("DD/MM/YYYY");
+					priceEstimates.value.step_3.petitioner_name = null;
+					priceEstimates.value.step_3.request_date = null;
+					priceEstimates.value.step_3.appraise_purpose = null;
+					if (bindDataStep.pre_certificate) {
+						priceEstimates.value.step_3.petitioner_name =
+							bindDataStep.pre_certificate.petitioner_name;
+						const tempDateHere = bindDataStep.pre_certificate.request_date;
+						priceEstimates.value.step_3.request_date = moment(
+							tempDateHere
+						).format("DD/MM/YYYY");
+						priceEstimates.value.step_3.appraise_purpose_id =
+							bindDataStep.pre_certificate.appraise_purpose_id;
+						priceEstimates.value.step_3.appraise_purpose =
+							bindDataStep.pre_certificate.appraise_purpose;
+					}
 				}
 				priceEstimates.value.updated_at = bindDataStep.updated_at;
 				if (
