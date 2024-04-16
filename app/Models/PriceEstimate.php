@@ -402,4 +402,9 @@ class PriceEstimate extends Model
     {
         return $this->hasMany(PriceEstimateHasAsset::class, 'price_estimate_id');
     }
+
+    public function preCertificate(): BelongsTo
+    {
+        return $this->belongsTo(PreCertificate::class, 'pre_certificate_id', 'id');
+    }
 }
