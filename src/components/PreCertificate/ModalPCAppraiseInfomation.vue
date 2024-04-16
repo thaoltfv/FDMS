@@ -88,17 +88,6 @@
 									@change="handleChangeAppraisePurpose"
 								/>
 							</div>
-							<div class="col-6">
-								<InputTextarea
-									:rows="1"
-									:disableInput="false"
-									v-model="dataForm.pre_asset_name"
-									label="Tên tài sản sơ bộ"
-									rules="required"
-									:requiredIcon="true"
-									class="form-group-container"
-								/>
-							</div>
 						</div>
 						<div class="row justify-content-between">
 							<InputCurrency

@@ -428,7 +428,7 @@
 										fill="#007EC6"
 									/>
 								</svg>
-								Hồ sơ chưa khai báo thông tin tài sản thẩm định
+								Hồ sơ chưa khai báo thông tin tài sản sơ bộ
 							</div>
 						</div>
 						<div

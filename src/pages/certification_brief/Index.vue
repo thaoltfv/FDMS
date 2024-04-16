@@ -1173,26 +1173,26 @@ export default {
 			if (res.data) {
 				this.detailData = await res.data;
 
-				if (
-					this.detailData.status &&
-					(this.detailData.status == 2 ||
-						this.detailData.status == 3 ||
-						this.detailData.status == 7) &&
-					this.position_profile &&
-					(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-						this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
-						(this.detailData.appraiser_sale &&
-							this.detailData.appraiser_sale.user_id === this.user_id &&
-							!this.checkExistInAppraisalTeam()))
-				) {
-					this.$toast.open({
-						message:
-							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
-						type: "error",
-						position: "top-right"
-					});
-					return;
-				}
+				// if (
+				// 	this.detailData.status &&
+				// 	(this.detailData.status == 2 ||
+				// 		this.detailData.status == 3 ||
+				// 		this.detailData.status == 7) &&
+				// 	this.position_profile &&
+				// 	(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
+				// 		this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
+				// 		(this.detailData.appraiser_sale &&
+				// 			this.detailData.appraiser_sale.user_id === this.user_id &&
+				// 			!this.checkExistInAppraisalTeam()))
+				// ) {
+				// 	this.$toast.open({
+				// 		message:
+				// 			"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
+				// 		type: "error",
+				// 		position: "top-right"
+				// 	});
+				// 	return;
+				// }
 				this.showDetailPopUp = true;
 				this.idDragger = id;
 			} else {
