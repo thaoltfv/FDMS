@@ -103,6 +103,7 @@ export const usePriceEstimatesStore = defineStore(
 				},
 				apartment_properties: {},
 				traffic_infomation: {
+					description: "",
 					property_turning_time: []
 				},
 				economic_infomation: {},

@@ -105,7 +105,8 @@
 									src="@/assets/icons/ic_price.svg"
 									alt="user"
 								/>
-								<div class="label_container d-flex"><span style="font-weight: 500">{{
+								<div class="label_container d-flex">
+									<span style="font-weight: 500">{{
 										element.total_preliminary_value
 											? `${formatPrice(element.total_preliminary_value)}`
 											: "-"
@@ -145,7 +146,7 @@
 									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span> -->
-									NV: {{element.name_nv}}
+									NV: {{ element.name_nv }}
 								</div>
 								<img
 									class="img_user"
@@ -627,15 +628,15 @@ export default {
 			check = this.checkRequired(targetConfig.require, this.elementDragger);
 			if (check) {
 				if (targetConfig.status === 3 && this.dataPC.status === 2) {
-					const checkStage = this.checkDataBeforeChangeToStage3();
-					if (!checkStage) {
-						this.openMessage(
-							"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
-							"error"
-						);
-						this.returnData();
-						return;
-					}
+					// const checkStage = this.checkDataBeforeChangeToStage3();
+					// if (!checkStage) {
+					// 	this.openMessage(
+					// 		"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+					// 		"error"
+					// 	);
+					// 	this.returnData();
+					// 	return;
+					// }
 				}
 				if (targetConfig.re_assign)
 					this.appraiserChangeStage = {
@@ -1111,14 +1112,14 @@ export default {
 			// 	}
 			// }
 			if (target.code && target.code === "chuyen_chinh_thuc") {
-				const checkStage = this.checkDataBeforeChangeToStage3();
-				if (!checkStage) {
-					this.openMessage(
-						"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
-						"error"
-					);
-					return;
-				}
+				// const checkStage = this.checkDataBeforeChangeToStage3();
+				// if (!checkStage) {
+				// 	this.openMessage(
+				// 		"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+				// 		"error"
+				// 	);
+				// 	return;
+				// }
 				this.dataPC.target_code = target.code;
 				this.confirm_message = target.description;
 				this.isHandleAction = true;
@@ -1134,14 +1135,14 @@ export default {
 			}
 			if (check) {
 				if (config.status === 3 && this.dataPC.status === 2) {
-					const checkStage = this.checkDataBeforeChangeToStage3();
-					if (!checkStage) {
-						this.openMessage(
-							"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
-							"error"
-						);
-						return;
-					}
+					// const checkStage = this.checkDataBeforeChangeToStage3();
+					// if (!checkStage) {
+					// 	this.openMessage(
+					// 		"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
+					// 		"error"
+					// 	);
+					// 	return;
+					// }
 				}
 				if (config.re_assign)
 					this.appraiserChangeStage = {
