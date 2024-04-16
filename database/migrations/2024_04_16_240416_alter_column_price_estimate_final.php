@@ -18,6 +18,11 @@ class alterColumnPriceEstimateFinal extends Migration
             $table->date('request_date')->nullable()->change();
             $table->integer('appraise_purpose_id')->nullable()->change();
         });
+        Schema::table('pre_certificate_price_estimate_finals', function (Blueprint $table) {
+            $table->string('petitioner_name')->nullable()->change();
+            $table->date('request_date')->nullable()->change();
+            $table->integer('appraise_purpose_id')->nullable()->change();
+        });
     }
 
     /**
@@ -28,6 +33,11 @@ class alterColumnPriceEstimateFinal extends Migration
     public function down()
     {
         Schema::table('price_estimate_finals', function (Blueprint $table) {
+            $table->string('petitioner_name')->nullable(false)->change();
+            $table->date('request_date')->nullable(false)->change();
+            $table->integer('appraise_purpose_id')->nullable(false)->change();
+        });
+        Schema::table('pre_certificate_price_estimate_finals', function (Blueprint $table) {
             $table->string('petitioner_name')->nullable(false)->change();
             $table->date('request_date')->nullable(false)->change();
             $table->integer('appraise_purpose_id')->nullable(false)->change();
