@@ -870,7 +870,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
 
     private function checkAuthorization($id)
     {
-        // $check = null;
+        $check = null;
         // if ($this->model->query()->where('id', $id)->exists()) {
         //     $user = CommonService::getUser();
         //     $role = $user->roles->last();
@@ -885,7 +885,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
         // } else {
         //     $check = ['message' => ErrorMessage::PE_CHECK_EXIT . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         // }
-        // return $check;
+        return $check;
     }
     private function getComparisonFactors(int $priceEstimateId)
     {
