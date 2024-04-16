@@ -131,15 +131,19 @@ export const usePriceEstimatesStore = defineStore(
 		});
 
 		function formatCapitalize(word) {
-			return word.replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
-				return x.toUpperCase();
-			});
+			if (word)
+				return word.replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+					return x.toUpperCase();
+				});
+			else return word;
 		}
 		function formatSentenceCase(phrase) {
+			if (!phrase) return phrase;
 			let text = phrase.toLowerCase();
 			return text.charAt(0).toUpperCase() + text.slice(1);
 		}
 		function toTitleCase(str) {
+			if (!str) return str;
 			return str.replace(/\w\S*/g, function(txt) {
 				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 			});
