@@ -627,7 +627,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'createdBy:id,name',
             'priceEstimates',
             'priceEstimates.landFinalEstimate',
-            'priceEstimates.landFinalEstimate.total_price',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
