@@ -5425,6 +5425,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     || (isset($data->appraiserPerform) && $data->appraiserPerform->user_id == $user->id)
                     || (isset($data->administrative) && $data->administrative->user_id == $user->id)
                     || (isset($data->createdBy) && $data->createdBy->id == $user->id))
+                || (isset($data->appraiserBusinessManager) && $data->appraiserBusinessManager->user_id == $user->id)
             ) {
                 $this->updateAppraisalTeam($id, $request);
                 $edited = Certificate::where('id', $id)->first();
