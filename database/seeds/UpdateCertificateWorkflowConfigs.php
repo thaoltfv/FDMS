@@ -93,13 +93,13 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "key" => 12,
                             "edit" => [
                                 "form" => true,
-                                "info" => false,
+                                "info" => true,
                                 "asset" => true,
                                 "payments" => true,
-                                "appraiser" => false,
-                                "other_document" => false,
+                                "appraiser" => true,
+                                "other_document" => true,
                                 "export_document" => true,
-                                "appraise_item_list" => false
+                                "appraise_item_list" => true
                             ],
                             "isExportDocument" => true,
                             "slug" => "phan_ho_so",

@@ -281,7 +281,7 @@ class PriceEstimateController extends Controller
             return $this->respondWithErrorData(['message' => ErrorMessage::PE_CHECK_UPDATE, 'exception' => ''], 403);
 
         $rules = [
-            'assets_general' => 'required|array|min:0|max:3',
+            'assets_general' => 'array|min:0|max:3',
             'assets_general.*.id' => 'required|integer',
             'assets_general.*.version' => 'required|integer',
         ];
