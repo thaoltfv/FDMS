@@ -107,9 +107,7 @@
 								/>
 								<div class="label_container d-flex">
 									<span style="font-weight: 500">{{
-										element.total_preliminary_value
-											? `${formatPrice(element.total_preliminary_value)}`
-											: "-"
+										`${formatPrice(element)}`
 									}}</span>
 								</div>
 							</div>
@@ -553,8 +551,27 @@ export default {
 			}
 			return check;
 		},
-		formatPrice(value) {
-			let num = parseFloat(value / 1)
+		formatPrice(data) {
+			let totalPrice = 0;
+			if (data.price_estimates && data.price_estimates.length > 0) {
+				for (let index = 0; index < data.price_estimates.length; index++) {
+					const element = data.price_estimates[index];
+					if (
+						element.land_final_estimate &&
+						element.land_final_estimate.length > 0
+					) {
+						for (
+							let indexLand = 0;
+							indexLand < element.land_final_estimate.length;
+							indexLand++
+						) {
+							const elementLand = element.land_final_estimate[indexLand];
+							totalPrice += Number(elementLand.total_price);
+						}
+					}
+				}
+			}
+			let num = parseFloat(totalPrice / 1)
 				.toFixed(0)
 				.replace(".", ",");
 			if (num.length > 3 && num.length <= 6) {
@@ -578,7 +595,9 @@ export default {
 			} else if (num < 900) {
 				return num + " đ"; // if value < 1000, nothing to do
 			}
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return num > 0
+				? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+				: "-";
 		},
 		handleMoveDraft(event) {
 			if (
