@@ -458,13 +458,14 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
-        $priceEstimatePrint = [];
         if ($is_pc) {
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
             if (isset($precertificate->certificate_id)) {
+                $priceEstimatePrint = null;
                 $certificate = $this->certificateRepository->dataPrintExport($precertificate->certificate_id);
             } else {
+                $priceEstimatePrint = [];
                 $certificate = new Certificate;
                 $fillable = $certificate->getFillable();
 
@@ -511,6 +512,7 @@ class CertificateAssetController extends Controller
         } else {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
             $certificate = $this->certificateRepository->dataPrintExport($id);
+            $priceEstimatePrint = null;
         }
         if ($certificate === null) {
             $data = ['message' => 'Có lỗi xảy ra trong quá trình xuất tài liệu', 'exception' => null];
