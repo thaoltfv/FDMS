@@ -485,12 +485,12 @@ class PriceEstimateController extends Controller
         $rules = [
             'price_estimate_id' => 'required|integer',
             'asset_type_id' => 'required|integer',
-            'appraise_purpose_id' => 'required|integer',
-            'request_date' => 'required|date',
+            'appraise_purpose_id' => 'nullable|integer',
+            'request_date' => 'nullable|date',
             'appraise_asset' => 'required|string|max:1000',
             'coordinates' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'petitioner_name' => 'required|string|max:255',
+            'petitioner_name' => 'nullable|string|max:255',
             'full_address' => 'required|string|max:255',
             'img_map' => 'nullable|string|max:255',
 
