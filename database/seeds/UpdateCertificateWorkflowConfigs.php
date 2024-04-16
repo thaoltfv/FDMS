@@ -69,6 +69,59 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             ],
                             "process_time" => 1440,
                             "put_draggable" => [
+                                12
+                            ],
+                            "put_require_roles" => [
+                                "ROOT_ADMIN",
+                                "SUB_ADMIN"
+                            ],
+                            "target_description" => [
+                                [
+                                    "id" => 12,
+                                    "css" => "btn-white btn-orange",
+                                    "img" => "ic_done.svg",
+                                    "description" => "Phân hồ sơ",
+                                    "btnDescription" => "Chuyển tiếp"
+                                ]
+                            ]
+                        ],
+                        [
+                            "id" => 12,
+                            "css" => [
+                                "color" => "info"
+                            ],
+                            "key" => 12,
+                            "edit" => [
+                                "form" => true,
+                                "info" => false,
+                                "asset" => true,
+                                "payments" => true,
+                                "appraiser" => false,
+                                "other_document" => false,
+                                "export_document" => true,
+                                "appraise_item_list" => false
+                            ],
+                            "isExportDocument" => true,
+                            "slug" => "phan_ho_so",
+                            "print" => false,
+                            "status" => 10,
+                            "require" => [
+                                "appraiser" => false,
+                                "check_legal" => false,
+                                "check_price" => false,
+                                "check_version" => false,
+                                "appraise_item_list" => false
+                            ],
+                            "isActive" => 1,
+                            "isCancel" => true,
+                            "re_assign" => "business_manager_id",
+                            "sub_status" => 1,
+                            "description" => "Phân hồ sơ",
+                            "put_require" => [
+                                "business_manager_id",
+                            ],
+                            "process_time" => 1440,
+                            "put_draggable" => [
                                 5
                             ],
                             "put_require_roles" => [
@@ -641,7 +694,8 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                                 "SUB_ADMIN"
                             ],
                             "target_description" => []
-                        ]
+                        ],
+
                     ]
                 ];
 
