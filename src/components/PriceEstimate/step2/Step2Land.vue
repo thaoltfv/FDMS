@@ -721,7 +721,7 @@
 			@filter_year="changeFilterYear"
 		/>
 		<ModalScreenShotMapAssets
-			v-if="showModalTakeAPic && assetHasChoose.length > 0"
+			v-if="showModalTakeAPic"
 			:assets="assetHasChoose"
 			:coordinates="step_1.general_infomation.coordinates"
 			@cancel="showModalTakeAPic = false"
@@ -1179,14 +1179,15 @@ export default {
 			this.showDetailAllSelected = false;
 		},
 		showMapGetPic() {
-			if (this.assetHasChoose.length === 0) {
-				this.showModalTakeAPic = false;
-				this.$toast.open({
-					message: "Vui lòng chọn tài sản so sánh",
-					type: "error",
-					position: "top-right"
-				});
-			} else if (this.assetHasChoose.length > 3) {
+			// if (this.assetHasChoose.length === 0) {
+			// 	this.showModalTakeAPic = false;
+			// 	this.$toast.open({
+			// 		message: "Vui lòng chọn tài sản so sánh",
+			// 		type: "error",
+			// 		position: "top-right"
+			// 	});
+			// } else
+			if (this.assetHasChoose.length > 3) {
 				this.$toast.open({
 					message: "Chỉ được chọn tối đa 3 tài sản so sánh",
 					type: "error",

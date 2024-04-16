@@ -99,11 +99,13 @@ export const usePriceEstimatesStore = defineStore(
 					district_id: null,
 					ward_id: null,
 					street_id: null,
-					distance_id: null
+					distance_id: null,
+					appraise_asset: null,
+					full_address: null
 				},
 				apartment_properties: {},
 				traffic_infomation: {
-					description: "",
+					description: null,
 					property_turning_time: []
 				},
 				economic_infomation: {},
@@ -545,6 +547,7 @@ export const usePriceEstimatesStore = defineStore(
 			}
 		}
 		function changeAssetType(id) {
+			priceEstimates.value.step_1.general_infomation.asset_type_id = id;
 			const assetType = miscInfo.value.propertyTypes.find(
 				assetType =>
 					assetType.id ===
@@ -610,6 +613,7 @@ export const usePriceEstimatesStore = defineStore(
 			const assetType = miscInfo.value.propertyTypes.find(
 				assetType => assetType.id === priceEstimates.value.step_3.asset_type_id
 			);
+
 			if (assetType) {
 				dataInfo.value.finalAssetName = assetType.description;
 			} else {
@@ -912,29 +916,35 @@ export const usePriceEstimatesStore = defineStore(
 		}
 		async function validateSubmitStep2() {
 			let step_2 = priceEstimates.value.step_2;
-			if (step_2.assets_general.length === 0) {
-				configThis.value.toast.open({
-					message: "Vui lòng chọn tài sản so sánh",
-					type: "error",
-					position: "top-right"
-				});
-			} else if (step_2.assets_general.length > 3) {
+			// if (step_2.assets_general.length === 0) {
+			// 	configThis.value.toast.open({
+			// 		message: "Vui lòng chọn tài sản so sánh",
+			// 		type: "error",
+			// 		position: "top-right"
+			// 	});
+			// }
+			if (step_2.assets_general.length > 3) {
 				configThis.value.toast.open({
 					message: "Chỉ được chọn tối đa 3 tài sản so sánh",
 					type: "error",
 					position: "top-right"
 				});
-			} else if (step_2.assets_general.length < 1) {
-				configThis.value.toast.open({
-					message: "Vui lòng chọn ít nhất 1 tài sản so sánh",
-					type: "error",
-					position: "top-right"
-				});
-			} else {
+			}
+			// else if (step_2.assets_general.length < 1) {
+			// 	configThis.value.toast.open({
+			// 		message: "Vui lòng chọn ít nhất 1 tài sản so sánh",
+			// 		type: "error",
+			// 		position: "top-right"
+			// 	});
+			// }
+			else {
 				confirmSavePreviousStep(2);
 			}
 		}
 		async function handleSubmitStep_2(dataStep2, id) {
+			// console.log("dataStep2", dataStep2);
+			// return;
+
 			if (isSubmit.value == true) {
 				configThis.value.toast.open({
 					message: "Hệ thống đang xử lý, vui lòng đợi trong giây lát.",
@@ -945,6 +955,16 @@ export const usePriceEstimatesStore = defineStore(
 			} else {
 				isSubmit.value = true;
 			}
+			if (!dataStep2.map_img) {
+				isSubmit.value = false;
+				configThis.value.toast.open({
+					message: "Vui lòng chụp bản đồ để tiếp tục",
+					type: "error",
+					position: "top-right"
+				});
+				return;
+			}
+
 			// dataStep2.asset_type_id =
 			// 	priceEstimates.value.step_1.general_infomation.asset_type_id;
 			const res = await PriceEstimateModel.submitStep2(dataStep2, id);
@@ -1389,9 +1409,12 @@ export const usePriceEstimatesStore = defineStore(
 						district_id: null,
 						ward_id: null,
 						street_id: null,
-						distance_id: null
+						distance_id: null,
+						appraise_asset: null,
+						full_address: null
 					},
 					traffic_infomation: {
+						description: null,
 						property_turning_time: []
 					},
 					apartment_properties: {
