@@ -294,7 +294,7 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
 
         $rules = [
-            'status' => 'integer|required|between:1,7',
+            'status' => 'integer|required|between:1,20',
         ];
         $customAttributes = [
             'status' => 'Trạng thái phiếu',
