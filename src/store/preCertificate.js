@@ -74,7 +74,7 @@ export const usePreCertificateStore = defineStore(
 			vueStoree.value.user = user;
 			vueStoree.value.currentPermissions = currentPermissions;
 		}
-
+		const totalPricePriceEstimate = ref(0);
 		const permission = ref({
 			allowDelete: true,
 			allowExport: true,
@@ -182,6 +182,7 @@ export const usePreCertificateStore = defineStore(
 			other.value.toast = toast;
 		}
 		async function getPreCertificate(id) {
+			totalPricePriceEstimate.value = 0;
 			const getDataCertificate = await PreCertificate.getDetailPreCertificate(
 				id
 			);
@@ -254,7 +255,41 @@ export const usePreCertificateStore = defineStore(
 				temp.debtRemain -= element.amount;
 			}
 			temp.paymentsOriginal = JSON.parse(JSON.stringify(temp.payments));
+			if (temp.price_estimates) {
+				for (let index = 0; index < temp.price_estimates.length; index++) {
+					const element = temp.price_estimates[index];
+					element.total_area = 0;
+					element.total_price = 0;
+					if (
+						element.land_final_estimate &&
+						element.land_final_estimate.length > 0
+					) {
+						element.total_price = element.land_final_estimate[0].total_price;
+						totalPricePriceEstimate.value += parseFloat(
+							element.land_final_estimate[0].total_price
+						);
+						if (
+							element.land_final_estimate[0].apartment_finals &&
+							element.land_final_estimate[0].apartment_finals[0]
+						) {
+							element.total_area =
+								element.land_final_estimate[0].apartment_finals[0].total_area;
+						}
+						if (element.land_final_estimate[0].lands) {
+							for (
+								let index = 0;
+								index < element.land_final_estimate[0].lands.length;
+								index++
+							) {
+								const elementland = element.land_final_estimate[0].lands[index];
 
+								element.total_area +=
+									elementland.planning_area + element.total_area;
+							}
+						}
+					}
+				}
+			}
 			dataPC.value = temp;
 			return dataPC.value;
 		}
@@ -643,6 +678,7 @@ export const usePreCertificateStore = defineStore(
 		}
 
 		return {
+			totalPricePriceEstimate,
 			vueStoree,
 			dataPC,
 			lstDataConfig,

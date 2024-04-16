@@ -163,7 +163,11 @@
 				</div>
 				<div
 					class="wizard-custom-info"
-					v-if="priceEstimates.appraise_id || priceEstimates.apartment_asset_id"
+					v-if="
+						priceEstimates.appraise_id ||
+							priceEstimates.apartment_asset_id ||
+							priceEstimates.pre_certificate_id
+					"
 				>
 					<div class="col-12">
 						<!-- <div class="row d-flex"> -->
@@ -191,6 +195,17 @@
 									priceEstimates.appraise_id ||
 										priceEstimates.apartment_asset_id
 								}}</a
+							>
+						</div>
+						<div class="row d-flex" v-if="priceEstimates.pre_certificate_id">
+							<p class="mb-1">Mã HSSB :</p>
+							<a
+								class="mb-1"
+								:href="
+									`/pre_certification/detail?id=${priceEstimates.pre_certificate_id}`
+								"
+								target="_blank"
+								>{{ priceEstimates.pre_certificate_id }}</a
 							>
 						</div>
 						<!-- <div class="">

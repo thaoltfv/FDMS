@@ -183,4 +183,13 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+
+	static async updatePriceEstimatesList(id = "", data) {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificates/pre-certificate-update-price-estimate/${id}`,
+			data: data,
+			isStatic: true
+		});
+	}
 }

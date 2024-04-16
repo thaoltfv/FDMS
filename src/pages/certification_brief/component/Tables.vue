@@ -26,22 +26,23 @@
 						</button>
 					</div>
 				</template>
-				<template slot="status" slot-scope="status">
+				<template slot="status" slot-scope="status, data">
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<div v-if="status === 1" class="status-color bg-info" />
-						<div v-if="status === 2" class="status-color bg-primary" />
-						<div v-if="status === 3" class="status-color bg-warning" />
-						<div v-if="status === 4" class="status-color bg-success" />
-						<div v-if="status === 5" class="status-color bg-secondary" />
-						<div v-if="status === 6" class="status-color bg-control" />
-						<b-dropdown class="dropdown-container" no-caret>
+						<div
+							:id="(data.id + 'status').toString()"
+							:class="['status-color', 'bg-' + getStatusColor(status)]"
+						/>
+						<b-tooltip :target="(data.id + 'status').toString()">
+							{{ getStatusDescription(status) }}
+						</b-tooltip>
+						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />
 							</template>
 							<b-dropdown-item>Action</b-dropdown-item>
-						</b-dropdown>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template slot="created_at" slot-scope="created_at">
@@ -382,6 +383,11 @@ import ModalSendVerify from "@/components/Modal/ModalSendVerify";
 import ModalAppraisal from "../component/modals/ModalAppraisal";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationCertificateNote from "@/components/Modal/ModalNotificationCertificateNote";
+
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useWorkFlowConfig } from "@/store/workFlowConfig";
+
 const jsonConfig = require("../../../../config/workflow.json");
 export default {
 	name: "Tables",
@@ -487,6 +493,33 @@ export default {
 			changeStatusRequire: {}
 		};
 	},
+
+	setup() {
+		const workFlowConfigStore = useWorkFlowConfig();
+		const { configs } = storeToRefs(workFlowConfigStore);
+		const jsonConfig = ref({});
+		const lstFilterStatus = ref([]);
+		const startFunction = async () => {
+			if (!configs.value.hstdConfig)
+				await workFlowConfigStore.getConfigByName("workflowHSTD");
+			jsonConfig.value = configs.value.hstdConfig;
+			if (jsonConfig.value && jsonConfig.value.principle) {
+				lstFilterStatus.value = jsonConfig.value.principle
+					.filter(element => element.isActive === 1)
+					.map(element => ({
+						...element,
+						value: element.status,
+						text: element.description
+					}));
+			}
+		};
+		startFunction();
+
+		return {
+			lstFilterStatus
+		};
+	},
+
 	created() {
 		// fix_permission
 		this.profile = this.$store.getters.profile;
@@ -578,6 +611,12 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Địa chỉ tài sản",
+					align: "left",
+					scopedSlots: { customRender: "full_addresss" },
+					hiddenItem: false
+				},
+				{
 					title: "Tổng giá trị (VNĐ)",
 					align: "left",
 					scopedSlots: { customRender: "total_asset_price" },
@@ -636,6 +675,14 @@ export default {
 		}
 	},
 	methods: {
+		getStatusDescription(status) {
+			const item = this.lstFilterStatus.find(item => item.status === status);
+			return item ? item.description : "";
+		},
+		getStatusColor(status) {
+			const item = this.lstFilterStatus.find(item => item.status === status);
+			return item && item.css ? item.css.color : "info";
+		},
 		handleCancelAccept2() {
 			this.isMoved = false;
 			this.isHandleAction = false;
