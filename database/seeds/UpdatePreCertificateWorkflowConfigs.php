@@ -63,6 +63,58 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         "description" => "Yêu cầu sơ bộ",
                         "put_require" => [
                             "appraiser_sale_id",
+                        ],
+                        "process_time" => 1520,
+                        "put_draggable" => [
+                            8,
+                            7
+                        ],
+                        "put_require_roles" => [
+                            "ROOT_ADMIN"
+                        ],
+                        "target_description" => [
+                            [
+                                "id" => 7,
+                                "css" => "btn-white",
+                                "img" => "ic_cancel-1.svg",
+                                "description" => "Hủy"
+                            ],
+                            [
+                                "id" => 8,
+                                "css" => "btn-white btn-orange",
+                                "img" => "ic_done.svg",
+                                "description" => "Phân hồ sơ",
+                                "btnDescription" => "Chuyển tiếp"
+                            ]
+                        ]
+                    ],
+                    [
+                        "id" => 8,
+                        "css" => [
+                            "color" => "info"
+                        ],
+                        "key" => 8,
+                        "edit" => [
+                            "export_document" => true,
+                            "form" => true,
+                            "info" => true,
+                            "payments" => true,
+                            "appraiser" => true,
+                            "file_result" => true,
+                            "file_appendix" => true
+                        ],
+                        "isExportDocument" => true,
+                        "slug" => "phan_ho_so",
+                        "print" => false,
+                        "status" => 8,
+                        "require" => [],
+                        "isActive" => 1,
+                        "isCancel" => true,
+                        "expire_in" => 1200,
+                        "re_assign" => "business_manager_id",
+                        "sub_status" => 1,
+                        "description" => "Phân hồ sơ",
+                        "put_require" => [
                             "business_manager_id"
                         ],
                         "process_time" => 1520,
@@ -461,7 +513,8 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                                 "description" => "Khôi phục"
                             ]
                         ]
-                    ]
+                    ],
+
                 ],
                 "filterStatus" => [
                     [
@@ -491,6 +544,11 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     [
                         "text" => "Hủy",
                         "value" => 7
+                    ],
+
+                    [
+                        "text" => "Phân hồ sơ",
+                        "value" => 8
                     ]
                 ],
                 "permissionAllowEdit" => [

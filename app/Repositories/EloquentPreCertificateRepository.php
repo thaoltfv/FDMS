@@ -386,6 +386,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             then 'Hoàn thành'
                         when 7
                             then 'Hủy'
+                         when 8
+                            then 'Phân hồ sơ'
                     end as status_text
                 "),
             'total_preliminary_value',
@@ -575,6 +577,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             then 'Hoàn thành'
                         when 7
                             then 'Hủy'
+                         when 8
+                            then 'Phân hồ sơ'
                     end as status_text
                 "),
             'total_preliminary_value',
@@ -582,7 +586,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'status_expired_at',
             DB::raw("case status
                         when 1
-                            then u3.image
+                            then u1.image
                         when 2
                             then u2.image
                         when 3
@@ -595,11 +599,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             then u1.image
                         when 7
                             then u3.image
+                         when 8
+                            then u3.image
                     end as image
                 "),
             DB::raw("case status
                 when 1
-                    then u3.name
+                    then u1.name
                 when 2
                     then u2.name
                 when 3
@@ -611,6 +617,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 when 6
                     then u1.name
                 when 7
+                    then u3.name
+                 when 8
                     then u3.name
             end as name_nv
         "),
@@ -1288,12 +1296,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $data = PreCertificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->appraiserSale->user_id == $user->id) && !($data->appraiserBusinessManager->user_id == $user->id))
+                        if (!($data->appraiserSale->user_id == $user->id)) //&& !($data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform->user_id == $user->id))
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thực hiện mới có quyền chỉnh sửa.', 'exception' => ''];
+                        break;
+                    case 8:
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     default:
                         $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
@@ -1372,6 +1384,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
                         break;
                     case 7:
+                    case 8:
                         if (!($data->appraiserBusinessManager && $data->appraiserBusinessManager->user_id == $user->id))
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
                         break;
@@ -1440,6 +1453,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             case 7:
                 $statusText = 'Đã hủy';
                 break;
+            case 8:
+                $statusText = 'Phân hồ sơ';
+                break;
             default:
                 $statusText = 'Yêu cầu sơ bộ';
         }
@@ -1483,6 +1499,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 break;
             case 7:
                 $statusText = 'Đã hủy';
+                break;
+            case 8:
+                $statusText = 'Phân hồ sơ';
                 break;
             default:
                 $statusText = 'Yêu cầu sơ bộ';
@@ -1623,6 +1642,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 WHEN 5 THEN 'In hồ sơ'
                 WHEN 6 THEN 'Hoàn thành'
                 WHEN 7 THEN 'Hủy'
+                WHEN 8 THEN 'Phân hồ sơ'
             END AS status_text
                 "),
         ];
@@ -1927,10 +1947,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 } else {
                     $this->deletePriceEstimateWithRelations($preCertificateId);
                     foreach ($priceEstimates as $priceEstimateId) {
-                        Log::info('priceEstimateId: ' . $priceEstimateId);
                         // Fetch data using the getPriceEstimateDataFull method
                         $priceEstimate = $this->getPriceEstimateDataFullConnectPreCertificate($priceEstimateId);
-                        Log::info('priceEstimate: ', ['priceEstimate' => $priceEstimate]);
                         // Check if $priceEstimate is not empty
                         if (!empty($priceEstimate)) {
                             // Check if general_asset exists in the result
