@@ -344,9 +344,8 @@ class BienBanThanhLy
         $total = 0;
         $isApartment = in_array('CC', $certificate->document_type ?? []);
 
-
-        if ($isApartment) {
-            foreach ($certificate->apartmentAssetPrint as $index => $item) {
+        if (isset($priceEstimatePrint)) {
+            foreach ($priceEstimatePrint as $index => $item) {
                 $row3 = $table->addRow();
                 $total += $certificate->service_fee ?? 0;
                 $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
@@ -370,28 +369,54 @@ class BienBanThanhLy
                 $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
             }
         } else {
-            foreach ($certificate->appraises as $index => $item) {
-                $row3 = $table->addRow();
-                $total += $certificate->service_fee ?? 0;
-                $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
-                $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-                $cell = $row3->addCell(3200, $cellVCentered);
-                $table = $cell->addTable();
-                $row = $table->addRow();
-                $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                $row->addCell(100)->addText('');
+            if ($isApartment) {
+                foreach ($certificate->apartmentAssetPrint as $index => $item) {
+                    $row3 = $table->addRow();
+                    $total += $certificate->service_fee ?? 0;
+                    $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+                    $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
+                    $cell = $row3->addCell(3200, $cellVCentered);
+                    $table = $cell->addTable();
+                    $row = $table->addRow();
+                    $row->addCell(100)->addText('');
+                    $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                    $row->addCell(100)->addText('');
 
-                $cell = $row3->addCell(3200, $cellVCentered);
-                $table = $cell->addTable();
-                $row = $table->addRow();
-                $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                $row->addCell(100)->addText('');
+                    $cell = $row3->addCell(3200, $cellVCentered);
+                    $table = $cell->addTable();
+                    $row = $table->addRow();
+                    $row->addCell(100)->addText('');
+                    $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                    $row->addCell(100)->addText('');
 
-                $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
-                $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
-                $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                    $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+                    $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+                    $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                }
+            } else {
+                foreach ($certificate->appraises as $index => $item) {
+                    $row3 = $table->addRow();
+                    $total += $certificate->service_fee ?? 0;
+                    $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+                    $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
+                    $cell = $row3->addCell(3200, $cellVCentered);
+                    $table = $cell->addTable();
+                    $row = $table->addRow();
+                    $row->addCell(100)->addText('');
+                    $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                    $row->addCell(100)->addText('');
+
+                    $cell = $row3->addCell(3200, $cellVCentered);
+                    $table = $cell->addTable();
+                    $row = $table->addRow();
+                    $row->addCell(100)->addText('');
+                    $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                    $row->addCell(100)->addText('');
+
+                    $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+                    $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+                    $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                }
             }
         }
 

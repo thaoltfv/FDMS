@@ -507,7 +507,6 @@ class CertificateAssetController extends Controller
 
                     $priceEstimatePrint[] = $tempPriceEstimate;
                 }
-                Log::info('certificate', ['priceEstimatePrint' => $priceEstimatePrint]);
             }
         } else {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
