@@ -151,18 +151,19 @@ class PriceEstimateController extends Controller
         return $this->respondWithCustomData($result);
     }
 
+
     public function getPriceEstimateDataFullForPreCertificate(Request $request)
     {
         if (!CommonService::checkUserPermission($this->permissionView)) {
             return $this->respondWithErrorData(['message' => ErrorMessage::PE_CHECK_VIEW, 'exception' => ''], 403);
         }
+
         $result = $this->priceEstimateRepository->getPriceEstimateDataFullForPreCertificate($request);
-        // dd($result->toJSON(JSON_UNESCAPED_UNICODE));
+
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
-
     public function update($id, Request $request): JsonResponse
     {
         try {
