@@ -218,6 +218,7 @@ class GiayYeuCau
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
                 $name_assets .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $count += 1;
             }
         } else {
             if ($isApartment) {
@@ -269,7 +270,8 @@ class GiayYeuCau
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
         if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
-            (isset($certificate->appraises) && count($certificate->appraises) > 0)
+            (isset($certificate->appraises) && count($certificate->appraises) > 0) ||
+            (isset($priceEstimatePrint) && count($priceEstimatePrint) > 0)
         ) {
             $table = $section->addTable($styleTable);
             $table->addRow(400, $rowHeader);
