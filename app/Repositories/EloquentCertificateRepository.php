@@ -2647,6 +2647,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     then 'In hồ sơ'
                 when 9
                     then 'Bàn giao khách hàng'
+                when 10
+                    then 'Phân hồ sơ'
             end as status_text
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2891,6 +2893,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     then 'In hồ sơ'
                 when 9
                     then 'Bàn giao khách hàng'
+                when 10
+                    then 'Phân hồ sơ'
             end as status_text
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
@@ -2899,7 +2903,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             DB::raw("case status
                         when 1
-                            then u6.image
+                            then u2.image
                         when 2
                             then u3.image
                         when 3
@@ -2915,11 +2919,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             
                         when 9
                             then u2.image
+                        when 10
+                            then u6.image    
                     end as image
                 "),
             DB::raw("case status
                 when 1
-                    then u6.name
+                    then u2.name
                 when 2
                     then u3.name
                 when 3
@@ -2935,6 +2941,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     
                 when 9
                     then u2.name
+                when 10
+                    then u6.image
             end as name_nv
         "),
             'sub_status',
@@ -5190,7 +5198,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $data = Certificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->created_by == $user->id || $data->appraiserSale->user_id == $user->id || $data->appraiserBusinessManager->user_id == $user->id))
+                        if (!($data->created_by == $user->id) && !($data->appraiserSale->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên Sale mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
@@ -5200,6 +5208,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     case 7:
                         if (!($data->appraiserControl &&  $data->appraiserControl->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có kiểm soát viên mới có quyền chỉnh sửa.', 'exception' => ''];
+                        break;
+                    case 10:
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có Quản lý nghiệp vụ mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
@@ -5354,7 +5366,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->appraiserBusinessManager->user_id == $user->id))
+                        if (!($data->appraiserSale->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
                         break;
                     case 2:
@@ -5378,6 +5390,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     case 9:
                         if (!($data->appraiserSale && $data->appraiserSale->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền này.', 'exception' => ''];
+                        break;
+                    case 10:
+                        if (!($data->appraiserBusinessManager->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
                         break;
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
@@ -5732,8 +5748,17 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 case 5:
                     $statusText = 'Đã hủy';
                     break;
-                case 6:
-                    $statusText = 'Đang kiểm soát';
+                case 7:
+                    $statusText = 'Đang Duyệt phát hành';
+                    break;
+                case 8:
+                    $statusText = 'Đang In hồ sơ';
+                    break;
+                case 9:
+                    $statusText = 'Đang Bàn giao khách hàng';
+                    break;
+                case 10:
+                    $statusText = 'Đang Phân hồ sơ';
                     break;
                 default:
                     $statusText = 'Mới';
@@ -5830,18 +5855,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_perform_id',
             'appraiser_sale_id',
             DB::raw("case status
-                    when 1
-                        then 'Mới'
-                    when 2
-                        then 'Đang thẩm định'
-                    when 3
-                        then 'Đang duyệt'
-                    when 4
-                        then 'Hoàn thành'
-                    when 6
-                        then 'Đang kiểm soát'
-                    else 'Huỷ'
-                end as status_text"),
+                when 1
+                    then 'Mới'
+                when 2
+                    then 'Thẩm định'
+                when 3
+                    then 'Duyệt giá'
+                when 4
+                    then 'Hoàn thành'
+                when 5
+                    then 'Huỷ'
+                when 7
+                    then 'Duyệt phát hành'
+                when 8
+                    then 'In hồ sơ'
+                when 9
+                    then 'Bàn giao khách hàng'
+                when 10
+                    then 'Phân hồ sơ'
+            end as status_text"),
             'commission_fee',
         ];
         $with = [

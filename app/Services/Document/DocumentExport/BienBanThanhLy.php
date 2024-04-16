@@ -362,7 +362,7 @@ class BienBanThanhLy
                 $table = $cell->addTable();
                 $row = $table->addRow();
                 $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null, $alignBoth);
+                $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
                 $row->addCell(100)->addText('');
 
                 $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
@@ -386,7 +386,7 @@ class BienBanThanhLy
                 $table = $cell->addTable();
                 $row = $table->addRow();
                 $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText((isset($certificate->document_num) ? $certificate->document_num . ' '  : ''), null, $alignBoth);
+                $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
                 $row->addCell(100)->addText('');
 
                 $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
