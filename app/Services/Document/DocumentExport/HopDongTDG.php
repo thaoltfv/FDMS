@@ -322,8 +322,18 @@ class HopDongTDG
         $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $textRun = $row1->addCell(8700, $cellVTop)->addTextRun($alignBoth);
-        $textRun->addText('Tài sản thẩm định giá : Quyền sở hữu căn hộ ');
-        $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
+        $appraiseAssetName = '';
+        if ($isApartment) {
+            foreach ($certificate->apartmentAssetPrint as $index => $item) {
+                $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+            }
+        } else {
+            foreach ($certificate->appraises as $index => $item) {
+                $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+            }
+        }
+        $textRun->addText('Tài sản thẩm định giá : ' . $appraiseAssetName);
+        // $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
 
         $alignCenter =
             ['align' => 'center'];
@@ -349,25 +359,28 @@ class HopDongTDG
         if ($isApartment) {
             foreach ($certificate->apartmentAssetPrint as $index => $item) {
                 $addressHSTD = $item->full_address;
+                $appraiseAssetNameApartment =  $item->appraise_asset;
                 $row2 = $table->addRow(100, array(
                     'tblHeader' => false,
                     'cantSplit' => false
                 ));
                 $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
-                $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index > 0 ? ' ' . ($index + 1) . ' ' : ''), null, ['align' => 'left']);
+                $row2->addCell(7500, $cellVTop)->addText($appraiseAssetNameApartment ? $appraiseAssetNameApartment : '', null, ['align' => 'left']);
                 $row2->addCell(1600, $cellVTop)->addText(isset($item->apartmentAssetProperties) && isset($item->apartmentAssetProperties->area) ? $this->formatNumberFunction($item->apartmentAssetProperties->area, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
             }
         } else {
             foreach ($certificate->appraises as $index => $item) {
                 $addressHSTD = $item->full_address;
+                $appraiseAssetNameAppraise =  $item->appraise_asset;
                 if ($item->tangibleAssets) {
                     foreach ($item->tangibleAssets as $index2 => $item2) {
                         $row2 = $table->addRow(100, array(
                             'tblHeader' => false,
                             'cantSplit' => false
                         ));
+
                         $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
-                        $row2->addCell(7500, $cellVTop)->addText(' Quyền sở hữu căn hộ' . ($index2 > 0 ? ' ' . ($index2 + 1) . ' ' : ''), null, ['align' => 'left']);
+                        $row2->addCell(7500, $cellVTop)->addText($appraiseAssetNameAppraise ? $appraiseAssetNameAppraise : '', null, ['align' => 'left']);
                         $row2->addCell(1600, $cellVTop)->addText(isset($item2->total_construction_base) ? $this->formatNumberFunction($item2->total_construction_base, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
                     }
                 }

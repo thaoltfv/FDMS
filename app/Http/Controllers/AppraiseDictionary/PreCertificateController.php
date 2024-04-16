@@ -421,14 +421,15 @@ class PreCertificateController extends Controller
     {
         $is_pc = $request->input('is_pc');
         $is_pc = $is_pc === 'true' ? true : false;
-        if (
-            $is_pc && !CommonService::checkUserPermission($this->permissionExport)
-        ) {
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
+        // if (
+        //     $is_pc && !CommonService::checkUserPermission($this->permissionExport)
+        // ) {
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        // } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
 
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        } else if (!isset($is_pc)) {
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        // } else 
+        if (!isset($is_pc)) {
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
             return $this->respondWithErrorData($data);
         }
@@ -452,13 +453,15 @@ class PreCertificateController extends Controller
         $is_pc = $request->input('is_pc');
         $is_pc = $is_pc === 'true' ? true : false;
         $id = $request->input('id');
-        if (
-            $is_pc && !CommonService::checkUserPermission($this->permissionExport)
-        ) {
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        } else if (!isset($is_pc)) {
+        // if (
+        //     $is_pc && !CommonService::checkUserPermission($this->permissionExport)
+        // ) {
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        // } else if (!$is_pc && !CommonService::checkUserPermission($this->permissionExport2)) {
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        // } else 
+
+        if (!isset($is_pc)) {
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => []];
             return $this->respondWithErrorData($data);
         }
@@ -483,11 +486,11 @@ class PreCertificateController extends Controller
      */
     public function exportDocumentDownloadPC($id)
     {
-        if (
-            !CommonService::checkUserPermission($this->permissionExport)
-        ) {
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        }
+        // if (
+        //     !CommonService::checkUserPermission($this->permissionExport)
+        // ) {
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        // }
 
         try {
             $item = $this->preCertificateRepository->exportDocumentDownload($id);
@@ -505,10 +508,10 @@ class PreCertificateController extends Controller
     }
     public function exportDocumentDownloadCertificate($id)
     {
-        if (!CommonService::checkUserPermission($this->permissionExport2)) {
+        // if (!CommonService::checkUserPermission($this->permissionExport2)) {
 
-            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
-        }
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_EXPORT_2, 'exception' => ''], 403);
+        // }
 
         try {
             $item = $this->preCertificateRepository->exportDocumentDownload($id);

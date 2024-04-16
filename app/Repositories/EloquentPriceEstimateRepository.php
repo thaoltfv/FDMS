@@ -804,7 +804,9 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             'lastVersion',
             'apartmentProperties',
             'apartmentProperties.floor',
-            'preCertificate'
+            'preCertificate',
+            'preCertificate.appraisePurpose:id,name'
+
         ];
         $result = PriceEstimate::with($with)
             ->select($select)
