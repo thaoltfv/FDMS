@@ -34,7 +34,11 @@
 							<div class="data-row">
 								<div class="data-label">Tên người yêu cầu:</div>
 								<div class="data-value">
-									{{ data.step_3.petitioner_name.toUpperCase() }}
+									{{
+										data.step_3.petitioner_name
+											? data.step_3.petitioner_name.toUpperCase()
+											: ""
+									}}
 								</div>
 							</div>
 							<div class="data-row">
