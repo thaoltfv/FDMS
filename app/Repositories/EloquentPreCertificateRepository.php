@@ -1952,19 +1952,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         // Check if $priceEstimate is not empty
                         if (!empty($priceEstimate)) {
                             // Check if general_asset exists in the result
-                            if (isset($priceEstimate['assetGeneralRelation'])) {
-                                // Loop over each asset in general_asset
-                                $generalAsset = $priceEstimate['assetGeneralRelation'];
-                                if (count($generalAsset) > 0) {
-                                    if (isset($priceEstimate['project_id'])) {
-                                        $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
-                                    } else {
-                                        $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
-                                    }
-                                } else {
-                                    $result = ['message' => ErrorMessage::PRICE_ESTIMATE_CHECK_ASSET, 'exception' => ''];
-                                    return $result;
-                                }
+                            // if (isset($priceEstimate['assetGeneralRelation'])) {
+                            //     // Loop over each asset in general_asset
+                            //     $generalAsset = $priceEstimate['assetGeneralRelation'];
+                            //     if (count($generalAsset) > 0) {
+                            //         if (isset($priceEstimate['project_id'])) {
+                            //             $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
+                            //         } else {
+                            //             $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
+                            //         }
+                            //     } else {
+                            //         $result = ['message' => ErrorMessage::PRICE_ESTIMATE_CHECK_ASSET, 'exception' => ''];
+                            //         return $result;
+                            //     }
+                            // }
+                            if (isset($priceEstimate['project_id'])) {
+                                $this->updateDetailPriceEstimateApartment($preCertificateId, $priceEstimateId, $priceEstimate);
+                            } else {
+                                $this->updateDetailPriceEstimateAppraise($preCertificateId, $priceEstimateId, $priceEstimate);
                             }
                         } else {
                             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
