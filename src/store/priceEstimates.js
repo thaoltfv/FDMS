@@ -1258,7 +1258,7 @@ export const usePriceEstimatesStore = defineStore(
 					if (bindDataStep.pre_certificate) {
 						priceEstimates.value.step_3.petitioner_name =
 							bindDataStep.pre_certificate.petitioner_name;
-						const tempDateHere = bindDataStep.pre_certificate.request_date;
+						const tempDateHere = bindDataStep.pre_certificate.pre_date;
 						priceEstimates.value.step_3.request_date = moment(
 							tempDateHere
 						).format("DD/MM/YYYY");
