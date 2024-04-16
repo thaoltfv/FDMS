@@ -5719,19 +5719,19 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $certificate = Certificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
 
-            if (isset($certificate->appraiserSale->user_id))
+            if (isset($certificate->appraiserSale) && isset($certificate->appraiserSale->user_id))
                 if ($certificate->appraiserSale->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiserSale->user_id);
                 }
-            if (isset($certificate->appraiserPerform->user_id))
+            if (isset($certificate->appraiserPerform) && isset($certificate->appraiserPerform->user_id))
                 if ($certificate->appraiserPerform->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiserPerform->user_id);
                 }
-            if (isset($certificate->appraiser->user_id))
+            if (isset($certificate->appraiser) && isset($certificate->appraiser->user_id))
                 if ($certificate->appraiser->user_id != $loginUser->id && $certificate->appraiser->user_id != $certificate->appraiserPerform->user_id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiser->user_id);
                 }
-            if (isset($certificate->appraiserControl->user_id))
+            if (isset($certificate->appraiserControl) && isset($certificate->appraiserControl->user_id))
                 if ($certificate->appraiserControl->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiserControl->user_id);
                 }
@@ -5749,16 +5749,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $statusText = 'Đã hủy';
                     break;
                 case 7:
-                    $statusText = 'Đang Duyệt phát hành';
+                    $statusText = 'Duyệt phát hành';
                     break;
                 case 8:
-                    $statusText = 'Đang In hồ sơ';
+                    $statusText = 'In hồ sơ';
                     break;
                 case 9:
-                    $statusText = 'Đang Bàn giao khách hàng';
+                    $statusText = 'Bàn giao khách hàng';
                     break;
                 case 10:
-                    $statusText = 'Đang Phân hồ sơ';
+                    $statusText = 'Phân hồ sơ';
                     break;
                 default:
                     $statusText = 'Mới';
