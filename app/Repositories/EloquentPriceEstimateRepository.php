@@ -849,7 +849,9 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
         $with = [
             'createdBy:id,name',
             'assetType',
-            'landFinalEstimate:id,total_price'
+            'landFinalEstimate',
+            'landFinalEstimate.lands',
+            'landFinalEstimate.apartmentFinals'
         ];
         $result = PriceEstimate::with($with)
             ->select($select)
