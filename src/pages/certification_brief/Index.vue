@@ -448,6 +448,10 @@ export default {
 				case 1:
 				case 2:
 				case 3:
+				case 7:
+				case 8:
+				case 9:
+				case 10:
 					strExpire = element.status_expired_at
 						? this.updateDate(element.status_expired_at, new Date())
 						: "Đã hết hạn";
@@ -761,7 +765,14 @@ export default {
 				}
 				this.returnData();
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message:
+						this.confirm_message == "Từ chối" ||
+						this.confirm_message == "Hủy" ||
+						this.confirm_message == "Khôi phục"
+							? this.confirm_message + " thành công"
+							: "Chuyển trạng thái " +
+							  `"${this.confirm_message}"` +
+							  " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -791,7 +802,10 @@ export default {
 				}
 				this.returnData();
 				await this.$toast.open({
-					message: message + " thành công",
+					message:
+						message == "Từ chối" || message == "Hủy" || message == "Khôi phục"
+							? message + " thành công"
+							: "Chuyển trạng thái " + `"${message}"` + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -1173,26 +1187,24 @@ export default {
 			if (res.data) {
 				this.detailData = await res.data;
 
-				// if (
-				// 	this.detailData.status &&
-				// 	(this.detailData.status == 2 ||
-				// 		this.detailData.status == 3 ||
-				// 		this.detailData.status == 7) &&
-				// 	this.position_profile &&
-				// 	(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-				// 		this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
-				// 		(this.detailData.appraiser_sale &&
-				// 			this.detailData.appraiser_sale.user_id === this.user_id &&
-				// 			!this.checkExistInAppraisalTeam()))
-				// ) {
-				// 	this.$toast.open({
-				// 		message:
-				// 			"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
-				// 		type: "error",
-				// 		position: "top-right"
-				// 	});
-				// 	return;
-				// }
+				if (
+					this.detailData.status &&
+					(this.detailData.status == 2 ||
+						this.detailData.status == 10 ||
+						this.detailData.status == 3 ||
+						this.detailData.status == 7) &&
+					this.detailData.appraiser_sale &&
+					this.detailData.appraiser_sale.user_id === this.user_id &&
+					!this.checkExistInAppraisalTeam()
+				) {
+					this.$toast.open({
+						message:
+							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
+						type: "error",
+						position: "top-right"
+					});
+					return;
+				}
 				this.showDetailPopUp = true;
 				this.idDragger = id;
 			} else {

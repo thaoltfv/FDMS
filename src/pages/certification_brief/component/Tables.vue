@@ -610,12 +610,12 @@ export default {
 					scopedSlots: { customRender: "appraised_asset" },
 					hiddenItem: false
 				},
-				{
-					title: "Địa chỉ tài sản",
-					align: "left",
-					scopedSlots: { customRender: "full_addresss" },
-					hiddenItem: false
-				},
+				// {
+				// 	title: "Địa chỉ tài sản",
+				// 	align: "left",
+				// 	scopedSlots: { customRender: "full_addresss" },
+				// 	hiddenItem: false
+				// },
 				{
 					title: "Tổng giá trị (VNĐ)",
 					align: "left",
@@ -737,7 +737,14 @@ export default {
 				}
 				this.returnData();
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message:
+						this.confirm_message == "Từ chối" ||
+						this.confirm_message == "Hủy" ||
+						this.confirm_message == "Khôi phục"
+							? this.confirm_message + " thành công"
+							: "Chuyển trạng thái " +
+							  `"${this.confirm_message}"` +
+							  " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -845,7 +852,10 @@ export default {
 			const res = await CertificationBrief.updateStatusCertificate(id, data);
 			if (res.data) {
 				await this.$toast.open({
-					message: message + " thành công",
+					message:
+						message == "Từ chối" || message == "Hủy" || message == "Khôi phục"
+							? message + " thành công"
+							: "Chuyển trạng thái " + `"${message}"` + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -871,27 +881,25 @@ export default {
 			if (res.data) {
 				this.detailData = await res.data;
 
-				// if (
-				// 	this.detailData.status &&
-				// 	(this.detailData.status == 2 ||
-				// 		this.detailData.status == 3 ||
-				// 		this.detailData.status == 7) &&
-				// 	this.position_profile &&
-				// 	(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-				// 		this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
-				// 		(this.detailData.appraiser_sale &&
-				// 			this.detailData.appraiser_sale.user_id === this.user_id &&
-				// 			!this.checkExistInAppraisalTeam()))
-				// ) {
-				// 	this.$toast.open({
-				// 		message:
-				// 			"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
-				// 		type: "error",
-				// 		position: "top-right"
-				// 	});
-				// 	this.showDetailPopUp = true;
-				// 	this.idDragger = id;
-				// }
+				if (
+					this.detailData.status &&
+					(this.detailData.status == 2 ||
+						this.detailData.status == 10 ||
+						this.detailData.status == 3 ||
+						this.detailData.status == 7) &&
+					this.detailData.appraiser_sale &&
+					this.detailData.appraiser_sale.user_id === this.user_id &&
+					!this.checkExistInAppraisalTeam()
+				) {
+					this.$toast.open({
+						message:
+							"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
+						type: "error",
+						position: "top-right"
+					});
+					this.showDetailPopUp = true;
+					this.idDragger = id;
+				}
 			} else {
 				await this.$toast.open({
 					message: "Lấy dữ liệu thất bại",
@@ -899,6 +907,56 @@ export default {
 					position: "top-right"
 				});
 			}
+		},
+		checkExistInAppraisalTeam2(property) {
+			let check = false;
+			if (this.user_id) {
+				if (
+					property.administrative &&
+					property.administrative.user_id &&
+					property.administrative.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser &&
+					property.appraiser.user_id &&
+					property.appraiser.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_business_manager &&
+					property.appraiser_business_manager.user_id &&
+					property.appraiser_business_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_confirm &&
+					property.appraiser_confirm.user_id &&
+					property.appraiser_confirm.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_control &&
+					property.appraiser_control.user_id &&
+					property.appraiser_control.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_manager &&
+					property.appraiser_manager.user_id &&
+					property.appraiser_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_perform &&
+					property.appraiser_perform.user_id &&
+					property.appraiser_perform.user_id === this.user_id
+				) {
+					check = true;
+				}
+			}
+
+			return check;
 		},
 		checkExistInAppraisalTeam() {
 			let check = false;
@@ -984,6 +1042,10 @@ export default {
 				case 1:
 				case 2:
 				case 3:
+				case 7:
+				case 8:
+				case 9:
+				case 10:
 					strExpire = element.status_expired_at
 						? this.updateDate(element.status_expired_at, new Date())
 						: "Đã hết hạn";
@@ -1198,28 +1260,26 @@ export default {
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 		async handleDetail(id, property) {
-			console.log(this.listCertificates);
-			// if (
-			// 	property.status &&
-			// 	(property.status == 2 ||
-			// 		property.status == 3 ||
-			// 		property.status == 7) &&
-			// 	this.position_profile &&
-			// 	(this.position_profile === "CHUYEN-VIEN-KINH-DOANH" ||
-			// 		this.position_profile === "NHAN-VIEN-KINH-DOANH" ||
-			// 		(property.appraiser_sale &&
-			// 			property.appraiser_sale.user_id === this.user_id))
-			// ) {
-			// 	this.$toast.open({
-			// 		message:
-			// 			"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
-			// 		type: "error",
-			// 		position: "top-right"
-			// 	});
-			// 	this.showDetailPopUp = true;
-			// 	this.idDragger = id;
-			// 	return;
-			// }
+			if (
+				property.status &&
+				(property.status == 2 ||
+					property.status == 3 ||
+					property.status == 10 ||
+					property.status == 7) &&
+				property.appraiser_sale &&
+				property.appraiser_sale.user_id === this.user_id &&
+				!this.checkExistInAppraisalTeam2(property)
+			) {
+				this.$toast.open({
+					message:
+						"Nhân viên kinh doanh không có quyền xem chi tiết hồ sơ này ở bước này, vui lòng liên hệ admin",
+					type: "error",
+					position: "top-right"
+				});
+				this.showDetailPopUp = true;
+				this.idDragger = id;
+				return;
+			}
 			this.$router
 				.push({
 					name: "certification_brief.detail",

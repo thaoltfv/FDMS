@@ -1486,7 +1486,7 @@ export default {
 						this.message == "Khôi phục" ||
 						this.message == "Hủy"
 							? this.message + " thành công"
-							: "Chuyển trạng thái " + `'${this.message}'` + " thành công",
+							: "Chuyển trạng thái " + `"${this.message}"` + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
