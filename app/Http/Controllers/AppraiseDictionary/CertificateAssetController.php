@@ -458,6 +458,7 @@ class CertificateAssetController extends Controller
         $with = [
             'assetType:id,acronym,description',
         ];
+        $priceEstimatePrint = [];
         if ($is_pc) {
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
@@ -485,8 +486,6 @@ class CertificateAssetController extends Controller
                 $certificate->appraisePurpose = $precertificate->appraisePurpose;
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
-                $certificate->priceEstimatePrint = [];
-                $certificate->isPreCertifcate = true;
 
                 foreach ($precertificate->priceEstimates as $priceEstimates) {
                     $tempPriceEstimate = [];
@@ -505,9 +504,9 @@ class CertificateAssetController extends Controller
                         }
                     }
 
-                    $certificate->priceEstimatePrint[] = $tempPriceEstimate;
+                    $priceEstimatePrint[] = $tempPriceEstimate;
                 }
-                Log::info('certificate', ['certificate' => $certificate]);
+                Log::info('certificate', ['priceEstimatePrint' => $priceEstimatePrint]);
             }
         } else {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
@@ -520,7 +519,7 @@ class CertificateAssetController extends Controller
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         // $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
+        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint));
     }
 
     public function printBaoCaoTest1(Request $request, $id): JsonResponse

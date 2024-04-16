@@ -84,7 +84,7 @@ class HopDongTDG
      * @throws Exception
      * @throws \Exception
      */
-    public function generateDocx($company, $certificate, $format, $appraises): array
+    public function generateDocx($company, $certificate, $format, $appraises, $priceEstimatePrint): array
     {
 
         $phpWord = new PhpWord();
@@ -323,8 +323,8 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $textRun = $row1->addCell(8700, $cellVTop)->addTextRun($alignBoth);
         $appraiseAssetName = '';
-        if (isset($certificate->isPreCertifcate)) {
-            foreach ($certificate->priceEstimatePrint as $index => $item) {
+        if (isset($priceEstimatePrint)) {
+            foreach ($priceEstimatePrint as $index => $item) {
                 $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
             }
         } else {
@@ -346,7 +346,7 @@ class HopDongTDG
             ['align' => 'center'];
         if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
             (isset($certificate->appraises) && count($certificate->appraises) > 0) ||
-            (isset($certificate->priceEstimatePrint) && count($certificate->priceEstimatePrint) > 0)
+            (isset($priceEstimatePrint) && count($priceEstimatePrint) > 0)
         ) {
             $table = $section->addTable([
                 'borderSize' => 1,
@@ -364,8 +364,8 @@ class HopDongTDG
             $row1->addCell(1600, $cellVCentered)->addText("Diện tích sàn (m\u{00B2})", ['bold' => true], $alignCenter);
         }
         $addressHSTD = '';
-        if (isset($certificate->isPreCertifcate)) {
-            foreach ($certificate->priceEstimatePrint as $index => $item) {
+        if (isset($priceEstimatePrint)) {
+            foreach ($priceEstimatePrint as $index => $item) {
                 $addressHSTD = $item->full_address;
                 $appraiseAssetNameApartment =  $item->appraise_asset;
                 $row2 = $table->addRow(100, array(

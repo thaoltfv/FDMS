@@ -83,7 +83,7 @@ class BienBanThanhLy
      * @throws Exception
      * @throws \Exception
      */
-    public function generateDocx($company, $certificate, $format, $appraises): array
+    public function generateDocx($company, $certificate, $format, $appraises, $priceEstimatePrint): array
     {
 
         $phpWord = new PhpWord();
