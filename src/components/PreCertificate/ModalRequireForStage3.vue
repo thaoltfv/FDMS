@@ -76,13 +76,13 @@ export default {
 			}
 			if (this.preCertificateOtherDocuments.Result.length > 0) {
 			} else {
-				await this.$toast.open({
-					message: "Vui lòng bổ sung file kết quả sơ bộ",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				return;
+				// await this.$toast.open({
+				// 	message: "Vui lòng bổ sung file kết quả sơ bộ",
+				// 	type: "error",
+				// 	position: "top-right",
+				// 	duration: 3000
+				// });
+				// return;
 			}
 
 			const res = await this.preCertificateStore.createUpdatePreCertificateion(
