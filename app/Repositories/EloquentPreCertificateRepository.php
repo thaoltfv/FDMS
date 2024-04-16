@@ -1366,8 +1366,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->appraiserBusinessManager->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
+                        if (!($data->appraiserSale->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền này.', 'exception' => ''];
                         break;
                     case 4:
                     case 5:
