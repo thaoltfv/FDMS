@@ -349,7 +349,11 @@
 							<h3 class="title">Kết quả sơ bộ</h3>
 						</div>
 						<div
-							v-if="allowEditFile.result && edit"
+							v-if="
+								dataPC.price_estimates.length > 0 &&
+									allowEditFile.result &&
+									edit
+							"
 							@click="showPriceEstimateListDialog = true"
 							class="btn-edit"
 						>
