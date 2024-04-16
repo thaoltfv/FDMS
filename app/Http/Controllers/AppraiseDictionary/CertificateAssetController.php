@@ -462,8 +462,10 @@ class CertificateAssetController extends Controller
             $realEstate = null;
             $precertificate = $this->preCertificateRepository->getPreCertificate($id);
             if (isset($precertificate->certificate_id)) {
+                $priceEstimatePrint = null;
                 $certificate = $this->certificateRepository->dataPrintExport($precertificate->certificate_id);
             } else {
+                $priceEstimatePrint = [];
                 $certificate = new Certificate;
                 $fillable = $certificate->getFillable();
 
@@ -485,33 +487,31 @@ class CertificateAssetController extends Controller
                 $certificate->appraisePurpose = $precertificate->appraisePurpose;
                 $certificate->appraises = [];
                 $certificate->apartmentAssetPrint = [];
-                $certificate->priceEstimatePrint = [];
-                $certificate->isPreCertifcate = true;
 
                 foreach ($precertificate->priceEstimates as $priceEstimates) {
-                    $tempPriceEstimate = [];
-                    $tempPriceEstimate['total_area'] = 0;
-                    $tempPriceEstimate['appraise_asset'] = $priceEstimates['appraise_asset'];
-                    $tempPriceEstimate['full_address'] = $priceEstimates['full_address'];
+                    $tempPriceEstimate = new \stdClass();
+                    $tempPriceEstimate->total_area = 0;
+                    $tempPriceEstimate->appraise_asset = $priceEstimates['appraise_asset'];
+                    $tempPriceEstimate->full_address = $priceEstimates['full_address'];
 
                     if (isset($priceEstimates['landFinalEstimate']) && count($priceEstimates['landFinalEstimate']) > 0) {
                         if (isset($priceEstimates['landFinalEstimate'][0]['apartmentFinals']) && isset($priceEstimates['landFinalEstimate'][0]['apartmentFinals'][0])) {
-                            $tempPriceEstimate['total_area'] = $priceEstimates['landFinalEstimate'][0]['apartmentFinals'][0]['total_area'];
+                            $tempPriceEstimate->total_area = $priceEstimates['landFinalEstimate'][0]['apartmentFinals'][0]['total_area'];
                         }
                         if (isset($priceEstimates['landFinalEstimate'][0]['lands'])) {
                             foreach ($priceEstimates['landFinalEstimate'][0]['lands'] as $elementland) {
-                                $tempPriceEstimate['total_area'] += $elementland['planning_area'] + $elementland['main_area'];
+                                $tempPriceEstimate->total_area += $elementland['planning_area'] + $elementland['main_area'];
                             }
                         }
                     }
 
-                    $certificate->priceEstimatePrint[] = $tempPriceEstimate;
+                    $priceEstimatePrint[] = $tempPriceEstimate;
                 }
-                Log::info('certificate', ['certificate' => $certificate]);
             }
         } else {
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
             $certificate = $this->certificateRepository->dataPrintExport($id);
+            $priceEstimatePrint = null;
         }
         if ($certificate === null) {
             $data = ['message' => 'Có lỗi xảy ra trong quá trình xuất tài liệu', 'exception' => null];
@@ -520,7 +520,7 @@ class CertificateAssetController extends Controller
         // $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         // $documentConfig = DocumentDictionary::query()->get();
         $report = new $service;
-        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate));
+        return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint));
     }
 
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
