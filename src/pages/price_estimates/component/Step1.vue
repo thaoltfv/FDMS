@@ -30,6 +30,7 @@
 										class="form-group-container"
 										:options="optionsType"
 										:disabled="isEdit ? true : false"
+										:key="indexAssetType"
 										@change="changeAssetType($event)"
 									/>
 								</div>
@@ -469,6 +470,7 @@
 								:autosize="true"
 								:maxLength="1000"
 								v-model="step_1.traffic_infomation.description"
+								vid="description"
 								label="Mô tả vị trí"
 								class="form-group-container"
 							/>
@@ -1105,6 +1107,7 @@ export default {
 			imgOverall: null,
 			imageCurrentStatus: null,
 			imageJuridical: null,
+			indexAssetType: 986,
 			tileProviders: [
 				{
 					name: "Bản đồ ranh tờ, thửa",
@@ -1141,10 +1144,10 @@ export default {
 	},
 	methods: {
 		getFullAddress() {
-			if (!miscVariable.isApartment) {
-				this.data.appraise_asset = this.getFullName();
-				this.data.apartment_asset_properties.accessibility = this.getAccessibility();
-			}
+			// if (this.miscVariable.isApartment) {
+			// 	this.step_1.appraise_asset = this.getFullName();
+			// 	this.step_1.apartment_properties.accessibility = this.getAccessibility();
+			// }
 		},
 		getFullName() {
 			let projectName = "";
@@ -1325,7 +1328,11 @@ export default {
 					position: "top-right",
 					duration: 5000
 				});
-			} else this.priceEstimateStore.changeAssetType(id);
+			} else {
+				this.step_1.general_infomation.asset_type_id = id;
+				this.indexAssetType++;
+				this.priceEstimateStore.changeAssetType(id);
+			}
 		},
 		handleChangeRoadFrontSide(value) {
 			this.step_1.traffic_infomation.main_road_length = value;
