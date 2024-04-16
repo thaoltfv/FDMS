@@ -625,6 +625,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         ];
         $with = [
             'createdBy:id,name',
+            'priceEstimates',
+            'priceEstimates.landFinalEstimate',
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
