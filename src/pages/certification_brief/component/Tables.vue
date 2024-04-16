@@ -87,45 +87,14 @@
 						><pre>{{ showDetailAppraise(detail_appraise) }}</pre></b-tooltip
 					> -->
 				</template>
-				<template slot="appraised_asset" slot-scope="{ id, real_estate }">
-					<div
-						v-if="real_estate && real_estate.length > 1"
-						v-for="(re, index) in real_estate"
-						:id="('content_appraise_asset_' + id).toString()"
-					>
-						<p class="text-main text-truncate" style="max-width: 220px">
-							{{ "TSTĐ" + (index + 1) + ": " + re.appraise_asset }}
-						</p>
-					</div>
+				<template slot="appraised_asset" slot-scope="detail_appraise">
 					<p
-						v-else-if="real_estate && real_estate.length === 1"
-						class="text-main d-inline-block text-truncate"
-						style="max-width: 220px"
-						:id="('content_appraise_asset_' + id).toString()"
+						:id="`content_appraised_asset`"
+						class="appraised_asset text-none text-wrap"
+						style="width: 250px !important;"
 					>
-						{{ re.appraise_asset }}
+						<span v-html="showAddressAppraise(detail_appraise)"></span>
 					</p>
-
-					<b-tooltip
-						:target="('content_appraise_asset_' + id).toString()"
-						placement="top"
-						triggers="hover"
-					>
-						<div
-							v-if="real_estate && real_estate.length > 1"
-							v-for="(re, index) in real_estate"
-						>
-							<p class="text-main" style="max-width: 220px">
-								{{ "- TSTĐ" + (index + 1) + ": " + re.appraise_asset }}
-							</p>
-						</div>
-						<p
-							v-else-if="real_estate && real_estate.length === 1"
-							class="text-main"
-						>
-							{{ re.appraise_asset }}
-						</p>
-					</b-tooltip>
 				</template>
 				<template
 					slot="total_asset_price"
@@ -603,7 +572,7 @@ export default {
 					hiddenItem: false
 				},
 				{
-					title: "Tài sản thẩm định (TSTĐ)",
+					title: "Địa chỉ ",
 					align: "left",
 					scopedSlots: { customRender: "appraised_asset" },
 					hiddenItem: false
@@ -624,15 +593,15 @@ export default {
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
-				{
-					title: "Người tạo",
-					class: "optional-data",
-					align: "left",
-					scopedSlots: { customRender: "created_by" },
-					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
+				// {
+				// 	title: "Người tạo",
+				// 	class: "optional-data",
+				// 	align: "left",
+				// 	scopedSlots: { customRender: "created_by" },
+				// 	// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
+				// 	// sortDirections: ['descend', 'ascend'],
+				// 	hiddenItem: false
+				// },
 				{
 					title: "Trạng thái",
 					align: "center",
@@ -1034,36 +1003,70 @@ export default {
 			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 		showDetailAppraise(data) {
-			let arconymText = "";
 			let arconymText1 = "";
-			let arconymText2 = "";
-			if (data.detail_list_id && data.detail_list_id.length > 0) {
-				data.detail_list_id.forEach((item, index) => {
-					if (index === 0) {
-						if (data.document_type && data.document_type[0] === "KHAC") {
-							arconymText = `DS_${item}`;
-							arconymText2 = `DS_${item}`;
-						} else if (data.document_type && data.document_type[0] === "DS") {
-							arconymText = `DS_${item}`;
-							arconymText2 = `DS_${item}`;
-						} else {
-							arconymText = `BDS_${item}`;
-							arconymText2 = `BDS_${item}`;
-						}
-					} else {
-						if (data.document_type && data.document_type[0] === "KHAC") {
-							arconymText += `\nDS_${item}`;
-							arconymText2 = `\nDS_${item}`;
-						} else if (data.document_type && data.document_type[0] === "DS") {
-							arconymText += `\nDS_${item}`;
-							arconymText2 = `\nDS_${item}`;
-						} else {
-							arconymText += `\nBDS_${item}`;
-							arconymText2 = `\nBDS_${item}`;
-						}
+			if (data.real_estate && data.real_estate.length > 0) {
+				for (let index = 0; index < data.real_estate.length; index++) {
+					const element = data.real_estate[index];
+					// Đất trống 37 đất có nhà 38
+					if (element.asset_type_id === 37 || element.asset_type_id === 38) {
+						const arconymText = `BDS_${element.real_estate_id}`;
+						const link = `<a href="/certification_asset/real-estate/detail?id=${element.real_estate_id}" target='_blank'>${arconymText}</a><br/>`;
+						arconymText1 += link;
 					}
-					arconymText1 += `<a href="/certification_asset/real-estate/detail?id=${item}" target='_blank'>${arconymText2}</a><br/>`;
-				});
+					// Chung cư 39
+					if (element.asset_type_id === 39) {
+						const arconymText = `BDS_${element.real_estate_id}`;
+						const link = `<a href="/certification_asset/apartment/detail?id=${element.real_estate_id}" target='_blank'>${arconymText}</a><br/>`;
+						arconymText1 += link;
+					}
+					// Giá trị DN 179 Tài sản khác 180 Dây chuyền CN 183
+					if (
+						element.asset_type_id === 179 ||
+						element.asset_type_id === 180 ||
+						element.asset_type_id === 183
+					) {
+						const arconymText = `DS_${element.real_estate_id}`;
+						const link = `<a href="/certification_asset/other-purpose/detail?id=${element.real_estate_id}" target='_blank'>${arconymText}</a><br/>`;
+						arconymText1 += link;
+					}
+					// Máy móc thiết bị 181
+					if (element.asset_type_id === 181) {
+						const arconymText = `DS_${element.real_estate_id}`;
+						const link = `<a href="/certification_asset/machine/detail?id=${element.real_estate_id}" target='_blank'>${arconymText}</a><br/>`;
+						arconymText1 += link;
+					}
+					// Phương tiện vận tải 182
+					if (element.asset_type_id === 182) {
+						const arconymText = `DS_${element.real_estate_id}`;
+						const link = `<a href="/certification_asset/vehicle/detail?id=${element.real_estate_id}" target='_blank'>${arconymText}</a><br/>`;
+						arconymText1 += link;
+					}
+				}
+
+				return arconymText1;
+			} else return "";
+		},
+		showAddressAppraise(data) {
+			let arconymText1 = "";
+			if (data.real_estate && data.real_estate.length > 0) {
+				for (let index = 0; index < data.real_estate.length; index++) {
+					const element = data.real_estate[index];
+					// Đất trống 37 đất có nhà 38
+					if (
+						(element.asset_type_id === 37 || element.asset_type_id === 38) &&
+						element.appraises
+					) {
+						const arconymText = `BDS_${element.real_estate_id}: ${element.appraises.full_address}`;
+						const fullAddress = `<p class="text-wrap">${arconymText}</p>`;
+						arconymText1 += fullAddress;
+					}
+					// Chung cư 39
+					if (element.asset_type_id === 39 && element.apartment) {
+						const arconymText = `BDS_${element.real_estate_id} : ${element.apartment.full_address}`;
+						const fullAddress = `<p class="text-wrap">${arconymText}</p>`;
+						arconymText1 += fullAddress;
+					}
+				}
 
 				return arconymText1;
 			} else return "";
