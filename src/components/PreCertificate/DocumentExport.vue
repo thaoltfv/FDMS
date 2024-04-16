@@ -12,7 +12,7 @@
 			@action="openUploadFile"
 		/>
 		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
-			<div class="card-title">
+			<!-- <div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="row d-flex justify-content-between align-items-center">
 						<h3 class="title ml-1">
@@ -28,9 +28,9 @@
 						@click="showCardDetailFile = !showCardDetailFile"
 					/>
 				</div>
-			</div>
+			</div> -->
 
-			<div class="card-body card-info" v-show="showCardDetailFile">
+			<div class="card-body card-info">
 				<div class="ml-n3 mt-2 row" :key="keyRefresh">
 					<div
 						class="mb-4 col-3 "

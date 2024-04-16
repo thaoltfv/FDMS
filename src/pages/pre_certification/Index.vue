@@ -814,7 +814,7 @@ export default {
 						this.confirm_message == "Khôi phục"
 							? this.confirm_message + " thành công"
 							: "Chuyển trạng thái " +
-							  `'${this.confirm_message}'` +
+							  `"${this.confirm_message}"` +
 							  " thành công",
 					type: "success",
 					position: "top-right",

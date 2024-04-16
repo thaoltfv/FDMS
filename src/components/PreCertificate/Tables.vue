@@ -812,7 +812,14 @@ export default {
 				}
 				this.returnData();
 				await this.$toast.open({
-					message: this.confirm_message + " thành công",
+					message:
+						this.confirm_message == "Từ chối" ||
+						this.confirm_message == "Hủy" ||
+						this.confirm_message == "Khôi phục"
+							? this.confirm_message + " thành công"
+							: "Chuyển trạng thái " +
+							  `"${this.confirm_message}"` +
+							  " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
@@ -920,7 +927,10 @@ export default {
 			const res = await PreCertificate.updateStatusCertificate(id, data);
 			if (res.data) {
 				await this.$toast.open({
-					message: message + " thành công",
+					message:
+						message == "Từ chối" || message == "Hủy" || message == "Khôi phục"
+							? message + " thành công"
+							: "Chuyển trạng thái " + `"${message}"` + " thành công",
 					type: "success",
 					position: "top-right",
 					duration: 3000
