@@ -411,7 +411,7 @@ class BienBanThanhLy
 
         $section->addText(
             "Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
-                $formattedDateCertificateDate . ' 2024 được thanh lý khi bên A thanh toán hết số tiền phải thanh toán cho Bên B thì trách nhiệm và nghĩa vụ của hai bên được chấm dứt.',
+                $formattedDateCertificateDate . ' được thanh lý khi bên A thanh toán hết số tiền phải thanh toán cho Bên B thì trách nhiệm và nghĩa vụ của hai bên được chấm dứt.',
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
