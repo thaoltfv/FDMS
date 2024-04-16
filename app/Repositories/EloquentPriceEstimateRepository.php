@@ -836,11 +836,13 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
         return $result;
     }
 
-    public function getPriceEstimateDataFullForPreCertificate()
+    public function getPriceEstimateDataFullForPreCertificate(Request $request)
     {
-        $perPage = (int)request()->get('limit');
-        $page = (int)request()->get('page');
-        $preCertificateId = request()->get('pre_certificate_id');
+        $page = $request->query('page', 1);
+        $perPage = $request->query('limit', 15);
+        $status = $request->query('status');
+        $popup = $request->query('popup');
+        $preCertificateId = $request->query('pre_certificate_id');
         $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id'];
         $user = CommonService::getUser();
         $with = [
