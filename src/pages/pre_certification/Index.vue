@@ -647,15 +647,10 @@ export default {
 			check = this.checkRequired(targetConfig.require, this.elementDragger);
 			if (check) {
 				if (targetConfig.status === 3 && this.dataPC.status === 2) {
-					// const checkStage = this.checkDataBeforeChangeToStage3();
-					// if (!checkStage) {
-					// 	this.openMessage(
-					// 		"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
-					// 		"error"
-					// 	);
-					// 	this.returnData();
-					// 	return;
-					// }
+					if (this.dataPC.price_estimates.length == 0) {
+						this.openMessage("Vui lòng bổ sung tài sản sơ bộ");
+						return;
+					}
 				}
 				if (targetConfig.re_assign)
 					this.appraiserChangeStage = {
@@ -1154,14 +1149,10 @@ export default {
 			}
 			if (check) {
 				if (config.status === 3 && this.dataPC.status === 2) {
-					// const checkStage = this.checkDataBeforeChangeToStage3();
-					// if (!checkStage) {
-					// 	this.openMessage(
-					// 		"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ",
-					// 		"error"
-					// 	);
-					// 	return;
-					// }
+					if (this.dataPC.price_estimates.length == 0) {
+						this.openMessage("Vui lòng bổ sung tài sản sơ bộ");
+						return;
+					}
 				}
 				if (config.re_assign)
 					this.appraiserChangeStage = {

@@ -1,23 +1,36 @@
 <template>
 	<div>
+		<ModalDetailSelectedAssetApartment
+			v-if="isApartment && showDetailAllSelected && assetHasChoose.length > 0"
+			:assetHasChoose="showChoosingAssetDetails"
+			@cancel="handleCancelShowAllDetail"
+		/>
+		<ModalDetailSelectedAsset
+			v-if="!isApartment && showDetailAllSelected && assetHasChoose.length > 0"
+			:assetHasChoose="showChoosingAssetDetails"
+			@cancel="handleCancelShowAllDetail"
+		/>
 		<div class="card">
-			<div class="card-title">
+			<div class="card-title ">
 				<div class="d-flex justify-content-between align-items-center">
 					<h3 class="title">Hình ảnh bản đồ</h3>
-					<img
-						class="img-dropdown"
-						:class="!showTookAPhoto ? 'img-dropdown__hide' : ''"
-						src="@/assets/images/icon-btn-down.svg"
-						alt="dropdown"
-						@click="
-							() => {
-								showTookAPhoto = !showTookAPhoto;
-							}
-						"
-					/>
+					<button
+						@click="showDetailsSelectedAsset"
+						class="btn btn-white text-nowrap index-screen-button "
+						style="font-weight: normal;"
+					>
+						<img
+							height="25px"
+							src="@/assets/icons/ic_fv_location.svg"
+							style="margin-right: 8px"
+						/>Đã chọn
+						<strong style="color: #FF963D; margin-left: 5px">{{
+							` (${assetHasChoose.length})`
+						}}</strong>
+					</button>
 				</div>
 			</div>
-			<div class="card-body card-info" v-show="showTookAPhoto">
+			<div class="card-body card-info">
 				<div class="container-fluid container_imageMap" v-if="step_2.map_img">
 					<img class="w-100" :src="step_2.map_img" alt="map" />
 				</div>
@@ -46,9 +59,12 @@
 import { Tabs, TabItem } from "vue-material-tabs";
 import { BCarousel, BCarouselSlide } from "bootstrap-vue";
 
+import CertificateAsset from "@/models/CertificateAsset";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePriceEstimatesStore } from "@/store/priceEstimates";
+import ModalDetailSelectedAsset from "@/components/PriceEstimate/step2/modals/ModalDetailSelectedAsset";
+import ModalDetailSelectedAssetApartment from "@/components/PriceEstimate/step2/modals/ModalDetailSelectedAssetApartment";
 
 import Vue from "vue";
 import Icon from "buefy";
@@ -65,6 +81,8 @@ export default {
 		"step_active"
 	],
 	components: {
+		ModalDetailSelectedAssetApartment,
+		ModalDetailSelectedAsset,
 		BCarousel,
 		BCarouselSlide,
 		Tabs,
@@ -73,12 +91,18 @@ export default {
 	computed: {},
 	setup() {
 		const priceEstimateStore = usePriceEstimatesStore();
-		const { priceEstimates } = storeToRefs(priceEstimateStore);
-
+		const { priceEstimates, miscVariable } = storeToRefs(priceEstimateStore);
+		const assetHasChoose = ref([]);
+		const showChoosingAssetDetails = ref([]);
 		const step_2 = ref(priceEstimates.value.step_2);
+		assetHasChoose.value = step_2.value.assets_general;
+		const isApartment = ref(miscVariable.value.isApartment);
 		return {
+			isApartment,
 			step_2,
-			priceEstimateStore
+			priceEstimateStore,
+			assetHasChoose,
+			showChoosingAssetDetails
 		};
 	},
 	data() {
@@ -89,13 +113,36 @@ export default {
 				slider: "#007EC6",
 				arrow: "#000000"
 			},
-
+			showDetailAllSelected: false,
 			showTookAPhoto: true
 		};
 	},
 	async mounted() {},
 	beforeUpdate() {},
-	methods: {}
+	methods: {
+		handleCancelShowAllDetail() {
+			this.showDetailAllSelected = false;
+		},
+		async showDetailsSelectedAsset() {
+			if (this.assetHasChoose.length === 0) {
+				this.showDetailAllSelected = false;
+				this.$toast.open({
+					message: "Không có tài sản nào để xem chi tiết",
+					type: "error",
+					position: "top-right"
+				});
+			} else {
+				this.assetHasChoose = this.assetHasChoose.sort((a, b) => b.id - a.id);
+				const dataDetail = await CertificateAsset.getDetailAssetStep6(
+					this.assetHasChoose
+				);
+				if (dataDetail.data) {
+					this.showChoosingAssetDetails = dataDetail.data;
+					this.showDetailAllSelected = true;
+				}
+			}
+		}
+	}
 };
 </script>
 <style scoped lang="scss">
