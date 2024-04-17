@@ -539,8 +539,10 @@ class Appraise extends Model
         // $item = AppraiseProperty::with($with)->where('appraise_id', $this->id)->whereNotNull(['insight_width'])->select($select)->first();
         $item = AppraiseProperty::with($with)
             ->where('appraise_id', $this->id)
-            ->whereNotNull('insight_width')
-            ->orWhereNotNull('appraise_land_sum_area')
+            ->where(function ($query) {
+                $query->whereNotNull('insight_width')
+                    ->orWhereNotNull('appraise_land_sum_area');
+            })
             ->select($select)
             ->first();
         if (isset($item))
