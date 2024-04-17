@@ -1210,10 +1210,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
+                    if ($current == 2 && $next == 8) {
+                        //delete tài sản sơ bộ nếu từ định giá sơ bộ về phân hồ sơ
+                        $this->deletePriceEstimateWithRelations(
+                            $id
+                        );
+                    }
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
-                    if ($current > $next) {
+                    if ($next != 8 && $current > $next) {
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
