@@ -92,7 +92,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             ],
                             "key" => 12,
                             "edit" => [
-                                "form" => true,
+                                "form" => false,
                                 "info" => true,
                                 "asset" => true,
                                 "payments" => true,
