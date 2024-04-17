@@ -144,7 +144,7 @@
 									/><span style="color: #8b94a3">{{
 										element.document_count
 									}}</span> -->
-									NV: {{ element.name_nv }}
+									<span class="text-primary">{{ element.name_nv }}</span>
 								</div>
 								<img
 									class="img_user"
