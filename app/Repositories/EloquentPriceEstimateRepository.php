@@ -1956,7 +1956,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                                                 [
                                                     "land_type_purpose_id" => $detail['land_type_purpose_id'],
                                                     "planning_area" => $detail['planning_area'],
-                                                    "type_zoning" => "",
+                                                    "type_zoning" => $detail['type_zoning'],
                                                     "appraise_property_id" => $newRelation->id,
                                                     "pp_tinh" => "",
                                                     "he_so" => null
