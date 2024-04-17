@@ -536,7 +536,13 @@ class Appraise extends Model
             'legal:id,type,description',
         ];
 
-        $item = AppraiseProperty::with($with)->where('appraise_id', $this->id)->whereNotNull(['insight_width'])->select($select)->first();
+        // $item = AppraiseProperty::with($with)->where('appraise_id', $this->id)->whereNotNull(['insight_width'])->select($select)->first();
+        $item = AppraiseProperty::with($with)
+            ->where('appraise_id', $this->id)
+            ->whereNotNull('insight_width')
+            ->orWhereNotNull('appraise_land_sum_area')
+            ->select($select)
+            ->first();
         if (isset($item))
             $item->append('topographic');
         return $item;
