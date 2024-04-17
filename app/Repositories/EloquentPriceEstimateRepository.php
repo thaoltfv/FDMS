@@ -1938,6 +1938,9 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 foreach ($priceEstimate->relationsToArray() as $relation => $items) {
                     if ($relation == 'properties' || $relation == 'version') {
                         foreach ($items as $item) {
+                            if ($relation == 'properties') {
+                                $item['insidth_width'] = 0; // Add this line
+                            }
                             $newRelation = $appraise->$relation()->make($item);
                             $newRelation->save();
 
