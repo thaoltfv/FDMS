@@ -96,7 +96,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         "key" => 8,
                         "edit" => [
                             "export_document" => true,
-                            "form" => true,
+                            "form" => false,
                             "info" => true,
                             "payments" => true,
                             "appraiser" => true,
