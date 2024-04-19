@@ -4,8 +4,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Permission;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
-class UpdatePermissionAccountSeeder extends Seeder
+class UpdateNewPermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,6 +23,8 @@ class UpdatePermissionAccountSeeder extends Seeder
             $retryCount = 0;
             do {
                 try {
+                    DB::beginTransaction(); // Start a new database transaction
+
                     $uuid = (string) Str::uuid(); // Generate a new UUID
 
                     $permission = Permission::create([
@@ -37,12 +40,20 @@ class UpdatePermissionAccountSeeder extends Seeder
                         $role = Role::findByName($roleName, 'api');
                         $role->givePermissionTo($permission);
                     }
+
+                    DB::commit(); // Commit the transaction
                 } catch (\Illuminate\Database\QueryException $e) {
+                    DB::rollBack(); // Roll back the transaction
+
                     $retryCount++;
                     $inserted = false; // If there was a conflict, set $inserted to false and the loop will retry
                     if ($retryCount >= 5) {
                         break; // If we've retried 5 times, break out of the loop
                     }
+                } catch (\Exception $e) {
+                    DB::rollBack(); // Roll back the transaction
+
+                    break; // If there was another type of exception, break out of the loop
                 }
             } while (!$inserted);
         }
