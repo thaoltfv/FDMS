@@ -60,11 +60,10 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             ],
                             "isActive" => 1,
                             "isCancel" => true,
-                            "re_assign" => "business_manager_id",
+                            "re_assign" => "appraiser_sale_id",
                             "sub_status" => 1,
                             "description" => "Tiếp nhận hồ sơ",
                             "put_require" => [
-                                "business_manager_id",
                                 "appraiser_sale_id"
                             ],
                             "process_time" => 1440,
