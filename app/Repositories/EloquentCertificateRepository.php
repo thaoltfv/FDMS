@@ -3375,6 +3375,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'pre_type_id',
             'administrative_id',
             'business_manager_id',
+            'document_alter_by_bank'
         ];
         $with = [
             'appraiser:id,name,user_id',
