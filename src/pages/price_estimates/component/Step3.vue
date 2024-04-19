@@ -946,11 +946,6 @@ export default {
 			return boolA;
 		},
 		totalPriceTotalArea() {
-			console.log(
-				"totalPriceTotalArea",
-				this.step_3.total_area,
-				this.step_3.planning_area
-			);
 			const temp = this.step_3.total_area.reduce((total, area) => {
 				area.total_price = area.total_price || 0;
 				return total + Number(area.total_price);
@@ -959,7 +954,6 @@ export default {
 				area.total_price = area.total_price || 0;
 				return total + Number(area.total_price);
 			}, 0);
-			console.log("temp", temp, temp2);
 			return temp + temp2;
 		},
 

@@ -23,7 +23,7 @@
 			<div
 				class="row"
 				:key="keyRenderData"
-				style="margin-left:5px;margin-right:5px"
+				style="margin-left: 5px; margin-right: 5px"
 			>
 				<ValidationObserver
 					tag="form"
@@ -38,31 +38,25 @@
 								vid="amount"
 								:disabled="true"
 								:max="99999999999999"
-								class="form-group-container "
-								style="width:175px"
+								class="form-group-container"
+								style="width: 175px"
 							/>
 						</div>
 
 						<div class="row justify-content-between row-payment">
-							<div style="width:275px">
-								Nội dung
-							</div>
-							<div style="width:175px">
-								Ngày thanh toán
-							</div>
-							<div style="width:175px">
-								Giá trị thanh toán
-							</div>
+							<div style="width: 275px">Nội dung</div>
+							<div style="width: 175px">Ngày thanh toán</div>
+							<div style="width: 175px">Giá trị thanh toán</div>
 						</div>
 						<div
-							class="row justify-content-between "
+							class="row justify-content-between"
 							v-for="(payment, index) in dataForm.payments"
 							:key="index"
 							v-if="!payment.is_deleted"
 							:class="index === 0 ? '' : 'row-payment'"
 							:style="permissionNotAllowEditHere ? '' : 'margin-right:-35px'"
 						>
-							<div style="width:275px">
+							<div style="width: 275px">
 								<InputTextPrefixCustom
 									v-model="payment.for_payment_of"
 									id="petitioner_name"
@@ -74,7 +68,7 @@
 									class="form-group-container input_certification_brief mt-n2"
 								/>
 							</div>
-							<div style="width:175px">
+							<div style="width: 175px">
 								<InputDatePicker
 									v-model="payment.pay_date"
 									:vid="'pay_date' + index"
@@ -90,12 +84,12 @@
 							</div>
 							<div class="row">
 								<div
-									style="width:175px;"
+									style="width: 175px"
 									:style="
 										permissionNotAllowEditHere ? '' : 'margin-right:-15px'
 									"
 								>
-									<InputCurrency
+									<InputCurrencyNegative
 										v-model="payment.amount"
 										:vid="'amount' + index"
 										:max="99999999999999"
@@ -112,14 +106,14 @@
 										@click="deletePaymentDialog(payment, index)"
 										src="@/assets/icons/ic_delete_2.svg"
 										alt="tag_2"
-										class=" img_document_action"
+										class="img_document_action"
 									/>
 								</div>
 							</div>
 						</div>
 						<div
 							v-if="!permissionNotAllowEditHere"
-							class=" d-lg-flex d-block justify-content-end align-items-center "
+							class="d-lg-flex d-block justify-content-end align-items-center"
 						>
 							<div class="d-lg-flex d-block button-contain">
 								<span
@@ -137,8 +131,8 @@
 								vid="amount"
 								:disabled="true"
 								:max="99999999999999"
-								class="form-group-container "
-								style="width:175px"
+								class="form-group-container"
+								style="width: 175px"
 							/>
 						</div>
 
@@ -150,8 +144,8 @@
 								vid="amount"
 								:disabled="true"
 								:max="99999999999999"
-								class="form-group-container "
-								style="width:175px"
+								class="form-group-container"
+								style="width: 175px"
 							/>
 						</div>
 
@@ -163,7 +157,7 @@
 								<button
 									class="btn btn-orange btn-action-modal"
 									type="submit"
-									style="width:152px"
+									style="width: 152px"
 									:class="{ 'btn_loading disabled': isSubmit }"
 								>
 									<img src="@/assets/icons/ic_save.svg" alt="save" />
@@ -182,6 +176,8 @@ import { ref } from "vue";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import _ from "lodash";
 import InputCurrency from "@/components/Form/InputCurrency";
+import InputCurrencyNegative from "@/components/Form/InputCurrencyNegative";
+
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import ModalDelete from "@/components/Modal/ModalDelete";
@@ -212,6 +208,7 @@ export default {
 	},
 
 	components: {
+		InputCurrencyNegative,
 		ModalDelete,
 		InputDatePicker,
 		InputCurrency,
@@ -292,8 +289,8 @@ export default {
 							dataForm.value.debtRemain -= element.amount;
 						}
 						dataOriginal.value = ref(_.cloneDeep(dataForm.value.payments));
-						keyRenderData.value++;
 						drawer.value = true;
+						keyRenderData.value++;
 					} else if (resp.error && resp.error.statusCode) {
 						props.toast.open({
 							message: resp.error.statusCode,
@@ -362,7 +359,7 @@ export default {
 					position: "top-right",
 					duration: 3000
 				});
-				return;
+				// return;
 			}
 
 			keyRender.value++;
@@ -393,7 +390,6 @@ export default {
 		const isSubmit = ref(false);
 		return {
 			isSubmit,
-			keyRenderData,
 			permissionNotAllowEditHere,
 			openModalDelete,
 			keyRender,
@@ -401,7 +397,7 @@ export default {
 			dataForm,
 			preCertificateStore,
 			dataOriginal,
-
+			keyRenderData,
 			showDrawer,
 			closeDrawer,
 			addPayment,
@@ -431,16 +427,16 @@ export default {
 		},
 		async handleAction() {
 			this.isSubmit = true;
-			if (this.dataForm.debtRemain < 0) {
-				this.isSubmit = false;
-				this.$toast.open({
-					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				return;
-			}
+			// if (this.dataForm.debtRemain < 0) {
+			// 	this.$toast.open({
+			// 		message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
+			// 		type: "error",
+			// 		position: "top-right",
+			// 		duration: 3000
+			// 	});
+			// 	this.isSubmit = false;
+			// 	return;
+			// }
 			const temp = _.differenceWith(
 				this.dataForm.payments,
 				this.dataOriginal,
@@ -448,10 +444,9 @@ export default {
 			);
 			for (let index = 0; index < temp.length; index++) {
 				const element = temp[index];
-				if (!element.pay_date || element.amount < 0) {
+				if (!element.pay_date || !element.amount) {
 					this.$toast.open({
-						message:
-							"Vui lòng nhập đầy đủ thông tin thanh toán và số tiền phải lớn hơn hoặc bằng 0",
+						message: "Vui lòng nhập đầy đủ thông tin thanh toán",
 						type: "error",
 						position: "top-right",
 						duration: 3000

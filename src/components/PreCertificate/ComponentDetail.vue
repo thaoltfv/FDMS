@@ -1399,18 +1399,10 @@ export default {
 						this.dataPC.status < this.targetStatus &&
 						this.targetStatus == 3
 					) {
-						// if (
-						// 	!this.preCertificateOtherDocuments.Result ||
-						// 	this.preCertificateOtherDocuments.Result.length === 0 ||
-						// 	this.dataPC.total_preliminary_value == 0 ||
-						// 	this.dataPC.total_preliminary_value == null ||
-						// 	this.dataPC.total_preliminary_value == undefined
-						// ) {
-						// 	this.openMessage(
-						// 		"Vui lòng bổ sung file kết quả sơ bộ và Tổng giá trị sơ bộ"
-						// 	);
-						// 	return;
-						// }
+						if (this.dataPC.price_estimates.length == 0) {
+							this.openMessage("Vui lòng bổ sung tài sản sơ bộ");
+							return;
+						}
 					}
 					if (config.re_assign)
 						this.appraiserChangeStage = {
