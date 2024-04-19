@@ -1135,6 +1135,25 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         }
                     }
+                    $documentsExports = PreCertificateExportDocuments::where('pre_certificate_id', $preCertificate->id)
+                        ->whereNull('deleted_at')
+                        ->get();
+                    if ($documentsExports->count() > 0) {
+                        foreach ($documentsExports as $documentsExport) {
+                            $item = [
+                                'certificate_id' => $certificateId,
+                                'name' => $documentsExport->name,
+                                'link' => $documentsExport->link,
+                                'type' => $documentsExport->type,
+                                'size' => $documentsExport->size,
+                                'description' => $documentsExport->description,
+                                'type_document' => $documentsExport->type_document,
+                                'created_by' => $user->id,
+                            ];
+                            $item = new PreCertificateExportDocuments($item);
+                            QueryBuilder::for($item)->insert($item->attributesToArray());
+                        }
+                    }
 
                     $edited = Certificate::where('id', $certificateId)->first();
                     $this->CreateActivityLog($edited, $edited, 'create', 'Chuyển chính thức từ YCSB_' . $id);
@@ -1211,7 +1230,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         ->where('id', '=', $id)
                         ->update($updateArray);
                     if (($current == 2 && $next == 8) || $next == 7) {
-                        //delete tài sản sơ bộ nếu từ định giá sơ bộ về phân hồ sơ
+                        //xóa tài sản sơ bộ khỏi HSSB nếu từ định giá sơ bộ về phân hồ sơ, hoặc hủy
                         $this->deletePriceEstimateWithRelations(
                             $id
                         );
