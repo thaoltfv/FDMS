@@ -60,15 +60,28 @@
 								/>
 							</div>
 							<div class="col-6">
-								<InputDatePicker
-									v-model="form.document_date"
-									vid="document_date"
-									label="Ngày hợp đồng"
-									:formatDate="'DD/MM/YYYY'"
-									@change="changeDocumentDate"
-									placeholder="Ngày / tháng / năm"
-									class="form-group-container"
-								/>
+								<div class="row justify-content-around">
+									<InputDatePicker
+										v-model="form.document_date"
+										vid="document_date"
+										label="Ngày hợp đồng"
+										:formatDate="'DD/MM/YYYY'"
+										@change="changeDocumentDate"
+										placeholder="Ngày / tháng / năm"
+										class="w-50 form-group-container input_left"
+									/>
+
+									<InputCategory
+										v-model="form.label_type_certificate"
+										class="w-50 form-group-container input_right"
+										vid="label_type_certificate"
+										label="Loại hồ sơ"
+										rules="required"
+										:options="optionsLoaiHs"
+										:disabled="editDocument"
+										@change="data.label_type_certificate = $event"
+									/>
+								</div>
 							</div>
 							<div class="col-6">
 								<InputTextPrefixCustomIcon
@@ -277,6 +290,16 @@ export default {
 		InputTextarea
 	},
 	computed: {
+		optionsLoaiHs() {
+			return {
+				data: [
+					{ id: 0, name: "Hồ sơ mẫu" },
+					{ id: 1, name: "Hồ sơ Shinhan" }
+				],
+				id: "id",
+				key: "name"
+			};
+		},
 		optionsAppraisalPurposes() {
 			return {
 				data: this.appraisalPurposes,
