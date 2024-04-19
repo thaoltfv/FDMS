@@ -1210,7 +1210,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
-                    if ($current == 2 && $next == 8) {
+                    if (($current == 2 && $next == 8) || $next == 7) {
                         //delete tài sản sơ bộ nếu từ định giá sơ bộ về phân hồ sơ
                         $this->deletePriceEstimateWithRelations(
                             $id
