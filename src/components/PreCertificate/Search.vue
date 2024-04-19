@@ -15,7 +15,8 @@
 			>
 				"@" - Tìm theo tên Người tạo <br />
 				"$" - Tìm theo tổng giá trị<br />
-				"%" - Tìm theo tên Khách hàng
+				"%" - Tìm theo tên Khách hàng<br />
+				"^" - Tìm theo địa chỉ tài sản
 			</b-tooltip>
 			<button class="btn-img btn-img__search">
 				<img class="img" src="../../assets/icons/ic_search.svg" alt="search" />

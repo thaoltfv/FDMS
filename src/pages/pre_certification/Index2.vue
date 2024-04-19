@@ -126,6 +126,7 @@
 					</div>
 					<div class="col-12 col-md-6 col-xl-8">
 						<button-checkbox
+							v-show="showFilter"
 							:options="statusOptions"
 							:value="selectedStatus"
 							@change="onChangeStatus"
@@ -200,18 +201,7 @@ export default {
 			accept: false,
 			export: false,
 			showFilter: false,
-			statusOptions: {
-				data: [
-					{ label: "Yêu cầu sơ bộ", value: "1", class: "bg-info" },
-					{ label: "Định giá sơ bộ", value: "2", class: "bg-primary" },
-					{ label: "Duyệt giá sơ bộ", value: "3", class: "bg-control" },
-					{ label: "Thương thảo", value: "4", class: "bg-warning" },
-					{ label: "Hoàn thành", value: "5", class: "bg-success" },
-					{ label: "Hủy", value: "6", class: "bg-secondary" }
-				],
-				value: "value",
-				label: "label"
-			},
+
 			form: {
 				createdBy: [],
 				fromDate: "",
@@ -286,10 +276,48 @@ export default {
 			selectedStatus,
 			filter,
 			isLoading,
-			paginationAll
+			paginationAll,
+			jsonConfig
 		} = storeToRefs(preCertificateStore);
+		const statusOptions = ref({
+			data: [
+				{ label: "Yêu cầu sơ bộ", value: "1", class: "bg-info" },
+				{ label: "Phân hồ sơ", value: "8", class: "bg-secondary" },
+				{ label: "Định giá sơ bộ", value: "2", class: "bg-primary" },
+				{ label: "Duyệt giá sơ bộ", value: "3", class: "bg-control" },
+				{ label: "Thương thảo", value: "4", class: "bg-warning" },
+				{ label: "In Hồ sơ", value: "5", class: "bg-warning" },
+				{ label: "Hoàn thành", value: "6", class: "bg-success" },
+				{ label: "Hủy", value: "7", class: "bg-secondary" }
+			],
+			value: "value",
+			label: "label"
+		});
+		const startSetup = async () => {
+			if (jsonConfig.value === null) {
+				jsonConfig.value = await preCertificateStore.getConfig();
+			}
+			if (jsonConfig.value && jsonConfig.value.principle) {
+				const principleConfig = jsonConfig.value.principle.filter(
+					i => i.isActive === 1
+				);
+				statusOptions.value.data = [];
+				for (let index = 0; index < principleConfig.length; index++) {
+					const element = principleConfig[index];
+					const temphere = {
+						label: element.description,
+						class: "bg-" + element.css.color,
+						value: element.id
+					};
+					statusOptions.value.data.push(temphere);
+				}
+				console.log("statusOptions", statusOptions.value.data);
+			}
+		};
+		startSetup();
 		return {
 			isMobile,
+			statusOptions,
 
 			filter,
 			lstPreCertificateTable,
