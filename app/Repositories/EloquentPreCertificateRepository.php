@@ -400,6 +400,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'priceEstimates',
+            'priceEstimates.landFinalEstimate',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
@@ -449,21 +451,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                     break;
                 case '%':
-                    $result = $result->where(function ($q) use ($filter) {
-                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filter . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filterData . '%');
                     });
                     break;
-                    // case '^':
-                    //     $result = $result->where(function ($q) use ($filterData) {
-                    //         $q->whereHas('realEstate', function ($has) use ($filterData) {
-                    //             $has->whereHas('appraises', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             })->orWhereHas('apartment', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             });
-                    //         });
-                    //     });
-                    //     break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('priceEstimates', function ($has) use ($filterData) {
+                            $has->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
                         $q = $q->where('pre_certificates.id', 'like', strval($filter));
@@ -725,21 +723,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                     break;
                 case '%':
-                    $result = $result->where(function ($q) use ($filter) {
-                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filter . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filterData . '%');
                     });
                     break;
-                    // case '^':
-                    //     $result = $result->where(function ($q) use ($filterData) {
-                    //         $q->whereHas('realEstate', function ($has) use ($filterData) {
-                    //             $has->whereHas('appraises', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             })->orWhereHas('apartment', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             });
-                    //         });
-                    //     });
-                    //     break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('priceEstimates', function ($has) use ($filterData) {
+                            $has->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
                         $q = $q->where('pre_certificates.id', 'like', strval($filter));
