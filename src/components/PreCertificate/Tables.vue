@@ -1,5 +1,16 @@
 <template>
 	<div v-if="!isMobile" class="table-wrapper">
+		<div class="row mb-2 ml-1 mt-n4">
+			<div
+				v-for="(status, index) in statusOptions.data"
+				:key="status.value"
+				:class="status.class"
+				class="mx-2 py-1 mt-2"
+				style=" border-radius: 2px;"
+			>
+				<span class="text-white">{{ status.label }}</span>
+			</div>
+		</div>
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				bordered
@@ -192,18 +203,25 @@
 
 				<template
 					slot="total_preliminary_value"
-					slot-scope="{ total_preliminary_value, appraise_purpose }"
+					slot-scope="{ price_estimates }"
 				>
-					<p class="text-main__blue text-wrap ">
-						{{
-							total_preliminary_value
-								? formatNumber(total_preliminary_value) + " đ"
-								: "-"
-						}}
-					</p>
-					<p class="text-secondary text-wrap ">
-						Mục đích: {{ appraise_purpose ? appraise_purpose.name : "-" }}
-					</p>
+					<div v-for="(price_estimate, index) in price_estimates" :key="index">
+						<p class="text-main__blue text-wrap ">
+							{{ price_estimate.full_address || "-" }}
+						</p>
+						<p class="text-secondary text-wrap ">
+							Giá trị tài sản:
+							{{
+								price_estimate.land_final_estimate &&
+								price_estimate.land_final_estimate[0] &&
+								price_estimate.land_final_estimate[0].total_price
+									? formatNumber(
+											price_estimate.land_final_estimate[0].total_price
+									  ) + " đ"
+									: "-"
+							}}
+						</p>
+					</div>
 				</template>
 				<template slot="petitioner_name" slot-scope="petitioner_name">
 					<p class="text-main text-wrap">
@@ -577,7 +595,20 @@ export default {
 			preCertificateStore
 		);
 		const principleConfig = ref([]);
-
+		const statusOptions = ref({
+			data: [
+				{ label: "Yêu cầu sơ bộ", value: "1", class: "bg-info" },
+				{ label: "Phân hồ sơ", value: "8", class: "bg-secondary" },
+				{ label: "Định giá sơ bộ", value: "2", class: "bg-primary" },
+				{ label: "Duyệt giá sơ bộ", value: "3", class: "bg-control" },
+				{ label: "Thương thảo", value: "4", class: "bg-warning" },
+				{ label: "In Hồ sơ", value: "5", class: "bg-warning" },
+				{ label: "Hoàn thành", value: "6", class: "bg-success" },
+				{ label: "Hủy", value: "7", class: "bg-secondary" }
+			],
+			value: "value",
+			label: "label"
+		});
 		const startSetup = async () => {
 			if (!jsonConfig.value) {
 				jsonConfig.value = await preCertificateStore.getConfig();
@@ -586,8 +617,20 @@ export default {
 				principleConfig.value = jsonConfig.value.principle.filter(
 					i => i.isActive === 1
 				);
+				statusOptions.value.data = [];
+				for (let index = 0; index < principleConfig.value.length; index++) {
+					const element = principleConfig.value[index];
+					const temphere = {
+						label: element.description,
+						class: "bg-" + element.css.color,
+						value: element.id
+					};
+					statusOptions.value.data.push(temphere);
+				}
+				console.log("statusOptions", statusOptions.value.data);
 			}
 		};
+
 		startSetup();
 		return {
 			jsonConfig,
@@ -595,6 +638,7 @@ export default {
 			isMobile,
 			filter,
 			selectedStatus,
+			statusOptions,
 			preCertificateStore
 		};
 	},
@@ -663,7 +707,7 @@ export default {
 					hiddenItem: false
 				},
 				{
-					title: "Tổng giá trị sơ bộ(VNĐ)",
+					title: "Địa chỉ tài sản",
 					align: "left",
 					scopedSlots: { customRender: "total_preliminary_value" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
