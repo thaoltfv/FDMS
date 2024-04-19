@@ -3531,7 +3531,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     }
     public function updateStatus_v2($id, $request)
     {
-        Log::info("Vao ham update");
         return DB::transaction(function () use ($id, $request) {
             try {
                 $result = [];
@@ -3556,9 +3555,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $status_expired_at = isset($request['status_expired_at']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request['status_expired_at'])->format('Y-m-d H:i') : null;
 
                 if (isset($status) && isset($subStatus)) {
-                    Log::info("Vao ham if");
                     switch ($status) {
-                        case 1: //Move to first step in workflow -> remove all asset in certificate
+                        case 10: //Move to first step in workflow -> remove all asset in certificate
                             // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
                             $this->removeAssetInCertificate($id);
                             break;
@@ -5199,22 +5197,22 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 switch ($data['status']) {
                     case 1:
                         if (!($data->created_by == $user->id) && !($data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên Sale mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có người tạo phiếu và nhân viên Sale mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 7:
                         if (!($data->appraiserControl &&  $data->appraiserControl->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có kiểm soát viên mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có kiểm soát viên mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     case 10:
                         if (!($data->appraiserBusinessManager->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có Quản lý nghiệp vụ mới có quyền chỉnh sửa.', 'exception' => ''];
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có Quản lý nghiệp vụ mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
                     default:
-                        $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
+                        $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text, 'exception' => ''];
                         break;
                 }
             }
@@ -5366,8 +5364,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
-                        if (!($data->appraiserSale->user_id == $user->id))
-                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có quản lý nghiệp vụ mới có quyền này.', 'exception' => ''];
+                        if (!($data->appraiserSale && $data->appraiserSale->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền này.', 'exception' => ''];
                         break;
                     case 2:
                         if (!($data->appraiserPerform && $data->appraiserPerform->user_id == $user->id))
