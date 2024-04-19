@@ -389,7 +389,12 @@
 			</a-timeline>
 		</a-drawer>
 		<div
-			v-if="form.status !== 1 || form.general_asset.length > 0 ? true : false"
+			v-if="
+				(form.status !== 1 && form.status !== 10) ||
+				form.general_asset.length > 0
+					? true
+					: false
+			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
