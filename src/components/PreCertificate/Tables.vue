@@ -1,11 +1,11 @@
 <template>
 	<div v-if="!isMobile" class="table-wrapper">
-		<div class="row mb-2 ml-1">
+		<div class="row mb-2 ml-1 mt-n4">
 			<div
 				v-for="(status, index) in statusOptions.data"
 				:key="status.value"
 				:class="status.class"
-				class="mx-2 py-1 txt"
+				class="mx-2 py-1 mt-2"
 				style=" border-radius: 2px;"
 			>
 				<span class="text-white">{{ status.label }}</span>
