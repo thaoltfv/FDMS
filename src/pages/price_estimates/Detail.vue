@@ -75,91 +75,6 @@
 							</a-timeline-item>
 						</a-timeline>
 					</a-drawer>
-					<a-drawer
-						width="600"
-						placement="right"
-						:visible="visibleAdditionalDrawer"
-						:closable="false"
-						@close="onAdditionalDrawerClose"
-					>
-						<div class="card">
-							<div class="card-title">
-								<div class="d-flex justify-content-between align-items-center">
-									<h3 class="title">Thông tin tham khảo</h3>
-									<img
-										class="img-dropdown"
-										:class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
-										src="@/assets/images/icon-btn-down.svg"
-										alt="dropdown"
-										@click="showDetailPlanning = !showDetailPlanning"
-									/>
-								</div>
-							</div>
-							<div
-								class="card-body card-sub_header_title"
-								v-show="showDetailPlanning"
-							>
-								<div class="container-fluid row">
-									<div class="col-12 mb-2">
-										<InputTextarea
-											v-model="real_estate.planning_info"
-											:disableInput="!isEditStatus"
-											label="Thông tin quy hoạch"
-											class="form-group-container"
-											:autosize="true"
-										/>
-									</div>
-									<div class="col-12 mb-2">
-										<InputTextarea
-											v-model="real_estate.planning_source"
-											:disableInput="!isEditStatus"
-											label="Nguồn thông tin"
-											class="form-group-container"
-											:autosize="true"
-										/>
-									</div>
-									<div class="col-12 mb-2">
-										<InputText
-											v-model="real_estate.contact_person"
-											:disabledInput="!isEditStatus"
-											label="Người hướng dẫn khảo sát"
-											class="form-group-container"
-										/>
-									</div>
-									<div class="col-12 mb-2">
-										<InputText
-											v-model="real_estate.contact_phone"
-											:disabledInput="!isEditStatus"
-											label="Số điện thoại"
-											class="form-group-container"
-										/>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div
-							v-if="
-								!priceEstimates.appraise_id &&
-									!priceEstimates.apartment_asset_id
-							"
-							class="btn-drawer-footer btn-footer d-md-flex d-block justify-content-end align-items-center"
-						>
-							<div class="d-md-flex d-block">
-								<button
-									v-if="isEditStatus"
-									:class="{ 'btn_loading disabled': isSubmit }"
-									class="btn btn-white btn-orange text-nowrap"
-									@click.prevent="handleSaveAdditional"
-								>
-									<img
-										src="@/assets/icons/ic_save.svg"
-										style="margin-right: 12px"
-										alt="save"
-									/>Lưu
-								</button>
-							</div>
-						</div>
-					</a-drawer>
 				</div>
 				<div
 					class="wizard-custom-info"
@@ -208,19 +123,15 @@
 								>{{ priceEstimates.pre_certificate_id }}</a
 							>
 						</div>
-						<!-- <div class="">
+						<div class="" v-if="priceEstimates.createdBy">
 							<p class="mb-1">Người được chỉnh sửa :</p>
 							<div>
 								<p class="mb-1">
 									-
-									{{
-										priceEstimates.createdBy
-											? priceEstimates.createdBy
-											: ""
-									}}
+									{{ priceEstimates.createdBy ? priceEstimates.createdBy : "" }}
 								</p>
 							</div>
-						</div> -->
+						</div>
 					</div>
 				</div>
 
@@ -433,91 +344,6 @@
 						</a-timeline-item>
 					</a-timeline>
 				</a-drawer>
-				<a-drawer
-					width="100%"
-					placement="right"
-					:visible="visibleAdditionalDrawer"
-					@close="onAdditionalDrawerClose"
-					closeIcon="true"
-				>
-					<div class="card" style="    margin-top: 15px;">
-						<div class="card-title">
-							<div class="d-flex justify-content-between align-items-center">
-								<h3 class="title">Thông tin tham khảo</h3>
-								<img
-									class="img-dropdown"
-									:class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
-									src="@/assets/images/icon-btn-down.svg"
-									alt="dropdown"
-									@click="showDetailPlanning = !showDetailPlanning"
-								/>
-							</div>
-						</div>
-						<div
-							class="card-body card-sub_header_title"
-							v-show="showDetailPlanning"
-						>
-							<div class="container-fluid row">
-								<div class="col-12 mb-2">
-									<InputTextarea
-										v-model="real_estate.planning_info"
-										:disableInput="!isEditStatus"
-										label="Thông tin quy hoạch"
-										class="form-group-container"
-										:autosize="true"
-									/>
-								</div>
-								<div class="col-12 mb-2">
-									<InputTextarea
-										v-model="real_estate.planning_source"
-										:disableInput="!isEditStatus"
-										label="Nguồn thông tin"
-										class="form-group-container"
-										:autosize="true"
-									/>
-								</div>
-								<div class="col-12 mb-2">
-									<InputText
-										v-model="real_estate.contact_person"
-										:disabledInput="!isEditStatus"
-										label="Người hướng dẫn khảo sát"
-										class="form-group-container"
-									/>
-								</div>
-								<div class="col-12 mb-2">
-									<InputText
-										v-model="real_estate.contact_phone"
-										:disabledInput="!isEditStatus"
-										label="Số điện thoại"
-										class="form-group-container"
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div
-						class="btn-drawer-footer btn-footer d-md-flex d-block justify-content-end align-items-center"
-					>
-						<div class="d-md-flex d-block">
-							<button
-								v-if="
-									isEditStatus &&
-										!priceEstimates.appraise_id &&
-										!priceEstimates.apartment_asset_id
-								"
-								:class="{ 'btn_loading disabled': isSubmit }"
-								class="btn btn-white btn-orange text-nowrap"
-								@click.prevent="handleSaveAdditional"
-							>
-								<img
-									src="@/assets/icons/ic_save.svg"
-									style="margin-right: 12px"
-									alt="save"
-								/>Lưu
-							</button>
-						</div>
-					</div>
-				</a-drawer>
 			</div>
 		</div>
 		<ModalPrintEstimateAssets
@@ -598,7 +424,6 @@ export default {
 			showDetailPlanning: true,
 			message: "",
 			visibleHistoryDrawer: false,
-			visibleAdditionalDrawer: false,
 			businesses: [],
 			conditions: [],
 			socialSecurities: [],
@@ -946,6 +771,7 @@ export default {
 			if (response.error) {
 				this.$router.push({ name: "error.403" });
 			}
+			this.getProfiles();
 		} else {
 			this.$router.push({ name: "error.403" });
 		}
@@ -964,7 +790,9 @@ export default {
 		getProfiles() {
 			const profile = this.$store.getters.profile;
 			this.checkRole =
-				(this.createdBy && profile.data.user.id === this.createdBy.id) ||
+				(this.priceEstimates &&
+					this.priceEstimates.created_by &&
+					profile.data.user.id === this.priceEstimates.created_by.id) ||
 				["ROOT_ADMIN", "SUB_ADMIN"].includes(profile.data.user.roles[0].name);
 		},
 		showHistoryDrawer() {
@@ -973,12 +801,6 @@ export default {
 		},
 		onHistoryDrawerClose() {
 			this.visibleHistoryDrawer = false;
-		},
-		showAdditionalDrawer() {
-			this.visibleAdditionalDrawer = true;
-		},
-		onAdditionalDrawerClose() {
-			this.visibleAdditionalDrawer = false;
 		},
 
 		onCancel() {
@@ -1213,7 +1035,7 @@ export default {
 		isEditStatus() {
 			let check = true;
 
-			return check;
+			return this.checkRole;
 		}
 	}
 };
