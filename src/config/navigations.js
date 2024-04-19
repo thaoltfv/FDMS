@@ -18,6 +18,14 @@ navigations = [
 		customImage: true
 	},
 	{
+		id: "price_estimates",
+		type: "item",
+		icon: "nav_utg",
+		title: "Tài sản sơ bộ",
+		routeName: "price_estimates.index",
+		customImage: true
+	},
+	{
 		id: "certification_brief",
 		type: "item",
 		icon: "nav_hstd",
@@ -44,14 +52,6 @@ navigations = [
 				exact: true
 			}
 		],
-		customImage: true
-	},
-	{
-		id: "price_estimates",
-		type: "item",
-		icon: "nav_utg",
-		title: "Tài sản sơ bộ",
-		routeName: "price_estimates.index",
 		customImage: true
 	},
 	{
@@ -89,15 +89,15 @@ navigations = [
 	// 	customImage: true,
 	// 	denied: ["nova"]
 	// },
-	{
-		id: "log",
-		type: "item",
-		icon: "nav_lsut",
-		title: "Lịch sử ước tính",
-		routeName: "log.index",
-		customImage: true,
-		denied: ["nova"]
-	},
+	// {
+	// 	id: "log",
+	// 	type: "item",
+	// 	icon: "nav_lsut",
+	// 	title: "Lịch sử ước tính",
+	// 	routeName: "log.index",
+	// 	customImage: true,
+	// 	denied: ["nova"]
+	// },
 	// { id: 'certificate', type: 'item', icon: 'certificate', title: 'Tài sản thẩm định Ver.1', routeName: 'certificate.index' },
 	// { id: 'appraisal', type: 'item', icon: 'file-signature', title: 'Hồ sơ thẩm định Ver.1', routeName: 'appraisal.index' },
 	{
