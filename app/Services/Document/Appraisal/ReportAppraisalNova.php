@@ -1276,12 +1276,12 @@ class ReportAppraisalNova extends ReportAppraisal
                 $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
                 $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
                 $table = $section->addTable($this->styleTable);
-                // $table->addRow(400, $this->rowHeader);
-                // $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addRow(400, $this->rowHeader);
+                $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
                 $isFirst = 0;
                 foreach ($zoningAppraise as $item) {
                     $table->addRow(400, $this->cantSplit);
@@ -1417,16 +1417,15 @@ class ReportAppraisalNova extends ReportAppraisal
                 $table->addCell(1000, ['align' => 'right'])->addText('', ['bold' => true], ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1000, ['align' => 'right'])->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
 
-                $section->addTitle('Quyền sử dụng đất:', $sttLevel + 1);
                 $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
                 $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
                 $table = $section->addTable($this->styleTable);
-                // $table->addRow(400, $this->rowHeader);
-                // $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
-                // $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addRow(400, $this->rowHeader);
+                $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
                 $isFirst = 0;
                 foreach ($zoningAppraise as $item) {
                     $table->addRow(400, $this->cantSplit);
