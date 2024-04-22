@@ -1163,6 +1163,7 @@ class ReportAppraisalNova extends ReportAppraisal
 
     protected function step9AppraiseShinnhan(Section $section, $certificate)
     {
+        $propertyDetailtotalZoningAll = 0;
         foreach ($this->realEstates as $stt => $realEstate) {
             $appraise = $realEstate->appraises;
             $sttLevel = 2;
@@ -1211,6 +1212,7 @@ class ReportAppraisalNova extends ReportAppraisal
                             $total = (round($dientich * $donGiaDatRound));
                             $propertyDetailTotal += $total;
                             $propertyDetailTotalZoning += $total;
+                            $propertyDetailtotalZoningAll += $total;
                             $totalArea += $dientich;
                             $totalAreaZoning += $dientich;
                             $rowTmp = [];
@@ -1272,6 +1274,23 @@ class ReportAppraisalNova extends ReportAppraisal
                 $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalAreaNoZoning, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                //Sumary table
+                // $totalAll = $propertyDetailTotal;
+                $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
+                $totalAllRound = $realEstate->total_price;
+
+
+                if (!$this->isOnlyAsset) {
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left']);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+                } else {
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 5))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($propertyDetailTotalNoZoning) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center', 'keepNext' => true]);
+                }
 
                 $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
                 $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
@@ -1301,24 +1320,6 @@ class ReportAppraisalNova extends ReportAppraisal
                 $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalAreaZoning, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
-
-                //Sumary table
-                // $totalAll = $propertyDetailTotal;
-                $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
-                $totalAllRound = $realEstate->total_price;
-
-
-                if (!$this->isOnlyAsset) {
-                    $table->addRow(400, $this->cantSplit);
-                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left']);
-                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
-                } else {
-                    $table->addRow(400, $this->cantSplit);
-                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
-                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
-                    $table->addRow(400, $this->cantSplit);
-                    $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 5))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($totalAllRound) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center', 'keepNext' => true]);
-                }
             } else {
                 $section->addTitle('Quyền sử dụng đất:', $sttLevel + 1);
                 $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
@@ -1351,8 +1352,9 @@ class ReportAppraisalNova extends ReportAppraisal
                             //     $donGiaDatRound = CommonService::roundViolationCompositeAssetPrice($appraise, $donGiaDat);
                             // }
                             $total = (round($dientich * $donGiaDatRound));
-                            $propertyDetailTotal += $total;
+                            // $propertyDetailTotal += $total;
                             $propertyDetailTotalZoning += $total;
+                            $propertyDetailtotalZoningAll += $total;
                             $totalArea += $dientich;
                             $totalAreaZoning += $dientich;
                             $rowTmp = [];
@@ -1417,7 +1419,8 @@ class ReportAppraisalNova extends ReportAppraisal
                 $table->addCell(1000, ['align' => 'right'])->addText('', ['bold' => true], ['align' => 'right', 'keepNext' => true]);
                 $table->addCell(1000, ['align' => 'right'])->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
 
-                $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => true], ['align' => 'left', 'keepNext' => true]);
                 $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
                 $table = $section->addTable($this->styleTable);
                 $table->addRow(400, $this->rowHeader);
@@ -1534,7 +1537,7 @@ class ReportAppraisalNova extends ReportAppraisal
                 $table->addRow(400, $this->cantSplit);
                 //$table->addCell(1000, $this->cellVCentered)->addText('1', null, $this->cellHCentered);
                 $table->addCell(1000, $this->cellVCentered)->addText('Quyền sử dụng đất', null, ['align' => 'left', 'keepNext' => true]);
-                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotal, 0, ',', '.'), null, array('align' => 'right'));
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), null, array('align' => 'right'));
                 if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
                     $table->addRow(400, $this->cantSplit);
                     //$table->addCell(1000, $this->cellVCentered)->addText('2', null, $this->cellHCentered);
@@ -1552,11 +1555,11 @@ class ReportAppraisalNova extends ReportAppraisal
                 // $totalAll = $propertyDetailTotal + $tangibleAssetTotal + $otherAssetTotal;
                 $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
 
-                $totalAllRound = $realEstate->total_price;
+                $totalAllRound = $realEstate->total_price - $propertyDetailTotalZoning;
 
                 $table->addRow(400, $this->cantSplit);
                 $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
-                $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAll, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
 
                 $table->addRow(400, $this->cantSplit);
                 if ($this->isOnlyAsset) {
@@ -1598,11 +1601,11 @@ class ReportAppraisalNova extends ReportAppraisal
 
             // $totalAllRound = CommonService::roundCertificatePrice($certificate, $totalAll);
 
-            $totalAllRound = $totalAll;
+            $totalAllRound = $totalAll - $propertyDetailtotalZoningAll;
 
             $table->addRow(400, $this->cantSplit);
             $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
-            $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAll, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
+            $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
             $table->addRow(400, $this->cantSplit);
             //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->);
             $table->addCell(1000, $this->cellVCentered)->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
