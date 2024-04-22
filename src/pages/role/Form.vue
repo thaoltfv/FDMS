@@ -576,6 +576,9 @@ export default {
 					if (screen.name == "ACCOUNTING") {
 						screen.name_vietsub = "THANH TOÁN";
 					}
+					if (screen.name == "PRELIMINARY_ASSET") {
+						screen.name_vietsub = "TÀI SẢN SƠ BỘ";
+					}
 					if (this.permissions.length > 0) {
 						this.permissions.forEach(permission => {
 							const perScreen = permission.name.split(/^([A-Z]+)/g);

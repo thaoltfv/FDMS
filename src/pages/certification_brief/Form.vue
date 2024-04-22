@@ -177,7 +177,8 @@ export default {
 						full_info: ""
 					},
 					status: 1,
-					sub_status: 1
+					sub_status: 1,
+					document_alter_by_bank: 0
 				},
 				status: "2",
 				created_by: ""

@@ -2122,7 +2122,7 @@ export const routes = [
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
 					title: "Tạo mới tài sản sơ bộ",
-					permissions: [PERMISSIONS.ADD_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.ADD_PRELIMINARY_ASSET],
 					breadcrumbs: [
 						{
 							title: "Tài sản sơ bộ",
@@ -2144,7 +2144,7 @@ export const routes = [
 				props: true,
 				meta: {
 					title: "Chỉnh sửa tài sản sơ bộ",
-					permissions: [PERMISSIONS.EDIT_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.EDIT_PRELIMINARY_ASSET],
 					breadcrumbs: [
 						{
 							title: "Tài sản sơ bộ",
@@ -2167,7 +2167,7 @@ export const routes = [
 				meta: {
 					title: "Tài sản thẩm định",
 					// fix_permission
-					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.VIEW_PRELIMINARY_ASSET],
 					breadcrumbs: [
 						{
 							title: "Tài sản sơ bộ",
@@ -2185,7 +2185,7 @@ export const routes = [
 				meta: {
 					title: "Chi tiết tài sản sơ bộ",
 					// fix_permission
-					permissions: [PERMISSIONS.VIEW_CERTIFICATE_BRIEF],
+					permissions: [PERMISSIONS.VIEW_PRELIMINARY_ASSET],
 					breadcrumbs: [
 						{
 							title: "Tài sản sơ bộ",

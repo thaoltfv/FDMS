@@ -112,8 +112,17 @@
 								:max="100"
 								:decimal="0"
 								rules="required"
-								class="form-group-container col-sm-12 col-md-6"
+								class="form-group-container col-sm-12 col-md-3"
 								@change="changeCommissionFee($event)"
+							/>
+							<InputCategory
+								v-model="data.document_alter_by_bank"
+								class="form-group-container col-sm-12 col-md-3"
+								vid="document_alter_by_bank"
+								label="Loại hồ sơ"
+								rules="required"
+								:options="optionsLoaiHs"
+								@change="data.document_alter_by_bank = $event"
 							/>
 						</div>
 						<div class="row justify-content-between">
@@ -263,7 +272,6 @@
 								class="form-group-container col-sm-12 col-md-6"
 								:options="optionsBusinessManager"
 							/>
-							
 						</div>
 						<!-- <div class="form-group-container">
               <label class="color-black font-weight-bold">Đại diện theo pháp luật</label>
@@ -290,7 +298,6 @@
 								@change="handleChangeAppraiserPerform"
 								:options="optionsPeformance"
 							/>
-						
 						</div>
 						<div class="row justify-content-between">
 							<InputCategory
@@ -417,17 +424,13 @@ export default {
 		business_manager_compute: {
 			get: function() {
 				if (this.businessManagers.length > 0) {
-					 console.log('vô đây trước businessManagers',this.businessManagers)
 					return this.data.business_manager_id;
-				} else {	
-					console.log('vô đây trước 2',this.data.business_manager.name)
+				} else {
 					return this.data.business_manager.name;
-					
 				}
 			},
 			// setter
 			set: function(newValue) {
-				 console.log('newwww', newValue)
 				this.data.business_manager_id = newValue;
 			}
 		},
@@ -435,7 +438,7 @@ export default {
 			// getter
 			get: function() {
 				if (this.employeePerformance.length > 0) {
-				//	 console.log('vô đây trước 1',this.employeePerformance)
+					//	 console.log('vô đây trước 1',this.employeePerformance)
 					return this.data.appraiser_perform_id;
 				} else {
 					// // console.log('vô đây trước 2')
@@ -537,6 +540,17 @@ export default {
 				// // console.log('newwww', newValue)
 				this.data.appraiser_sale_id = newValue;
 			}
+		},
+		optionsLoaiHs() {
+			return {
+				data: [
+					{ id: 0, name: "Hồ sơ mẫu" },
+					{ id: 1, name: "Hồ sơ Shinhan" }
+				],
+				id: "id",
+				key: "name"
+				// selected: this.userAppraiserId
+			};
 		},
 		optionsAppraisalPurposes() {
 			return {

@@ -137,6 +137,18 @@
 									<p>{{ form.commission_fee ? form.commission_fee : 0 }}%</p>
 								</div>
 								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Loại hồ sơ:</strong>
+									<p>
+										{{
+											form.document_alter_by_bank === 0
+												? "Hồ sơ mẫu"
+												: form.document_alter_by_bank === 1
+												? "Hồ sơ shinnhan"
+												: ""
+										}}
+									</p>
+								</div>
+								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
 										form.note && form.note.length > 25
@@ -389,7 +401,12 @@
 			</a-timeline>
 		</a-drawer>
 		<div
-			v-if="form.status !== 1 || form.general_asset.length > 0 ? true : false"
+			v-if="
+				(form.status !== 1 && form.status !== 10) ||
+				form.general_asset.length > 0
+					? true
+					: false
+			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>

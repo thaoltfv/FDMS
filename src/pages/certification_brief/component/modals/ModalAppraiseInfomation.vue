@@ -60,15 +60,28 @@
 								/>
 							</div>
 							<div class="col-6">
-								<InputDatePicker
-									v-model="form.document_date"
-									vid="document_date"
-									label="Ngày hợp đồng"
-									:formatDate="'DD/MM/YYYY'"
-									@change="changeDocumentDate"
-									placeholder="Ngày / tháng / năm"
-									class="form-group-container"
-								/>
+								<div class="row justify-content-around">
+									<InputDatePicker
+										v-model="form.document_date"
+										vid="document_date"
+										label="Ngày hợp đồng"
+										:formatDate="'DD/MM/YYYY'"
+										@change="changeDocumentDate"
+										placeholder="Ngày / tháng / năm"
+										class="w-50 form-group-container input_left"
+									/>
+
+									<InputCategory
+										v-model="form.document_alter_by_bank"
+										class="w-50 form-group-container input_right"
+										vid="document_alter_by_bank"
+										label="Loại hồ sơ"
+										rules="required"
+										:options="optionsLoaiHs"
+										:disabled="editDocument"
+										@change="data.document_alter_by_bank = $event"
+									/>
+								</div>
 							</div>
 							<div class="col-6">
 								<InputTextPrefixCustomIcon
@@ -277,6 +290,16 @@ export default {
 		InputTextarea
 	},
 	computed: {
+		optionsLoaiHs() {
+			return {
+				data: [
+					{ id: 0, name: "Hồ sơ mẫu" },
+					{ id: 1, name: "Hồ sơ Shinhan" }
+				],
+				id: "id",
+				key: "name"
+			};
+		},
 		optionsAppraisalPurposes() {
 			return {
 				data: this.appraisalPurposes,
@@ -294,6 +317,7 @@ export default {
 	},
 	created() {
 		this.getAppraiseOthers();
+		console.log("form", this.form);
 	},
 	methods: {
 		async getAppraiseOthers() {
@@ -427,6 +451,7 @@ export default {
 				commission_fee: form.commission_fee,
 				petitioner_identity_card: form.petitioner_identity_card,
 				document_type: form.document_type,
+				document_alter_by_bank: form.document_alter_by_bank,
 				note: form.note
 			};
 			// console.log('data',data)
