@@ -27,23 +27,28 @@ class UpdateNewPermissionSeeder extends Seeder
 
                     $uuid = (string) Str::uuid(); // Generate a new UUID
 
-                    $permission = Permission::create([
-                        'id' => $uuid,
-                        'name' => $permissionName,
-                        'guard_name' => 'api'
-                    ]);
+                    $permission = Permission::firstOrCreate(
+                        ['name' => $permissionName, 'guard_name' => 'api'],
+                        ['id' => $uuid]
+                    );
+
 
                     $inserted = true; // If the record was inserted successfully, set $inserted to true
 
                     // Assign the permission to each role
-                    foreach ($lstRoleInsertAutoPermission as $roleName) {
-                        $role = Role::findByName($roleName, 'api');
-                        $role->givePermissionTo($permission);
+                    if ($permission->wasRecentlyCreated) {
+                        foreach ($lstRoleInsertAutoPermission as $roleName) {
+                            $role = Role::findByName($roleName, 'api');
+                            if (!$role->hasPermissionTo($permission)) {
+                                $role->givePermissionTo($permission);
+                            }
+                        }
                     }
 
                     DB::commit(); // Commit the transaction
                 } catch (\Illuminate\Database\QueryException $e) {
                     DB::rollBack(); // Roll back the transaction
+                    Log::error('Database query exception: ' . $e->getMessage());
 
                     $retryCount++;
                     $inserted = false; // If there was a conflict, set $inserted to false and the loop will retry
@@ -52,6 +57,7 @@ class UpdateNewPermissionSeeder extends Seeder
                     }
                 } catch (\Exception $e) {
                     DB::rollBack(); // Roll back the transaction
+                    Log::error('General exception: ' . $e->getMessage());
 
                     break; // If there was another type of exception, break out of the loop
                 }
