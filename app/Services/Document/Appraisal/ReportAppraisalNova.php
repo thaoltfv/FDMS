@@ -1292,7 +1292,8 @@ class ReportAppraisalNova extends ReportAppraisal
                     $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 5))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($propertyDetailTotalNoZoning) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center', 'keepNext' => true]);
                 }
 
-                $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => true], ['align' => 'left', 'keepNext' => true]);
                 $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
                 $table = $section->addTable($this->styleTable);
                 $table->addRow(400, $this->rowHeader);
