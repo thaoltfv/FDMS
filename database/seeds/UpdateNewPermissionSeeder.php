@@ -48,6 +48,7 @@ class UpdateNewPermissionSeeder extends Seeder
                     DB::commit(); // Commit the transaction
                 } catch (\Illuminate\Database\QueryException $e) {
                     DB::rollBack(); // Roll back the transaction
+                    Log::error('Database query exception: ' . $e->getMessage());
 
                     $retryCount++;
                     $inserted = false; // If there was a conflict, set $inserted to false and the loop will retry
@@ -56,6 +57,7 @@ class UpdateNewPermissionSeeder extends Seeder
                     }
                 } catch (\Exception $e) {
                     DB::rollBack(); // Roll back the transaction
+                    Log::error('General exception: ' . $e->getMessage());
 
                     break; // If there was another type of exception, break out of the loop
                 }
