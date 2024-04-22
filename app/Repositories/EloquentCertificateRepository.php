@@ -5048,6 +5048,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'certificate_date' => isset($object['certificate_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['certificate_date'])->format('Y-m-d') : null,
                 'commission_fee' => $object['commission_fee'],
                 'document_type' => $object['document_type'],
+                'document_alter_by_bank' => $object['document_alter_by_bank'],
                 'note' => $object['note']
             ]);
 

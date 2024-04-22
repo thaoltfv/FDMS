@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class UpdateNewPermissionSeeder extends Seeder
