@@ -13,6 +13,7 @@
 		</div>
 		<div class="table-detail position-relative empty-data">
 			<a-table
+				ref="table"
 				bordered
 				class="table-property"
 				@change="handleTableChange"
@@ -20,7 +21,7 @@
 				:data-source="listCertificates"
 				:loading="isLoading"
 				:rowKey="record => record.id"
-				:filtered="true"
+				:filtered="false"
 				:row-class-name="
 					(_record, index) => (index % 2 === 1 ? 'table-striped' : null)
 				"

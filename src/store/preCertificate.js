@@ -377,7 +377,7 @@ export const usePreCertificateStore = defineStore(
 		});
 		const selectedStatus = ref([]);
 		const isLoading = ref(false);
-		async function getPreCertificateAll(type = "table") {
+		async function getPreCertificateAll(type = "table", param = {}) {
 			isLoading.value = true;
 			let tempots = [];
 			if (
@@ -414,6 +414,7 @@ export const usePreCertificateStore = defineStore(
 						query: {
 							page: 1,
 							limit: 20,
+							...param,
 							...temp
 						}
 					});
