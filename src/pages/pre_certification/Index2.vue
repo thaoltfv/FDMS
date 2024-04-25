@@ -370,8 +370,7 @@ export default {
 				page: pagination.current,
 				limit: pagination.pageSize
 			};
-
-			await this.preCertificateStore.getPreCertificateAll(params);
+			await this.preCertificateStore.getPreCertificateAll("table", params);
 		},
 		onChangeStatus(value) {
 			this.selectedStatus = value;

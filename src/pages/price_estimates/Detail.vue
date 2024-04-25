@@ -13,7 +13,7 @@
 				finish-button-text="Hoàn Thành"
 				back-button-text="Thoát"
 				next-button-text="Lưu"
-				:startIndex="miscVariable.step_active || 0"
+				:startIndex="miscVariable.step_active"
 				@on-change="handleChange"
 				class="vertical-steps steps-transparent"
 				:class="{ step7: isStep3Active }"
@@ -1001,9 +1001,9 @@ export default {
 			return this.$router.go(-1);
 		},
 		handleChange(prevIndex, nextIndex) {
-			this.key_step_1 += 1;
-			this.key_step_2 += 1;
-			this.key_step_3 += 1;
+			this.miscInfo.key_step_1 += 1;
+			this.miscInfo.key_step_2 += 1;
+			this.miscInfo.key_step_3 += 1;
 			this.isStep3Active = !!(
 				this.miscVariable.step_active === 3 && nextIndex === 2
 			);
