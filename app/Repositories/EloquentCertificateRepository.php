@@ -2630,6 +2630,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_control_id',
             'administrative_id',
             'business_manager_id',
+            'customer_id',
             DB::raw("case status
                     when 1
                     then 'Mới'
@@ -2881,6 +2882,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
             'appraiser_sale_id', 'appraiser_control_id', 'administrative_id',
             'pre_certificate_id', 'business_manager_id',
+            'customer_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
             DB::raw("case status
