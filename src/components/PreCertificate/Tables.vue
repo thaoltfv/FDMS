@@ -224,12 +224,15 @@
 						</p>
 					</div>
 				</template>
-				<template slot="petitioner_name" slot-scope="petitioner_name">
-					<p class="text-main text-wrap">
-						{{ petitioner_name }}
+				<template
+					slot="petitioner_name"
+					slot-scope="{ petitioner_name, customer }"
+				>
+					<p class="text-main">KH: {{ petitioner_name }}</p>
+					<p class="text-secondary">
+						Đối tác: {{ customer ? customer.name : " " }}
 					</p>
 				</template>
-
 				<template slot="created_by" slot-scope="{ created_by, created_at }">
 					<p class="text-main">
 						{{ created_by ? created_by.name : " " }}
@@ -702,7 +705,6 @@ export default {
 					title: "Khách hàng",
 					align: "left",
 					scopedSlots: { customRender: "petitioner_name" },
-					dataIndex: "petitioner_name",
 					// sorter: (a, b) => a.petitioner_name - b.petitioner_name,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
