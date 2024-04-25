@@ -370,6 +370,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_perform_id',
             'appraise_purpose_id',
             'pre_certificates.created_at',
+            'customer_id',
+
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                         when 1
@@ -560,6 +562,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_sale_id',
             'appraiser_perform_id',
             'certificate_id',
+            'customer_id',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                        when 1
