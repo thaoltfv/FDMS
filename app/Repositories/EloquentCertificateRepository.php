@@ -2669,6 +2669,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserControl:id,name',
             'administrative:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'customer:id,name,phone,address',
+
+
+            'realEstate.appraises',
+            'realEstate.appraises.certificateAppraiseLaw',
+            'realEstate.apartment',
+            'realEstate.apartment.law',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
@@ -2972,6 +2979,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'personalProperties:id,personal_property_id',
             'administrative:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'customer:id,name,phone,address',
         ];
         // dd($this->model);
         DB::enableQueryLog();

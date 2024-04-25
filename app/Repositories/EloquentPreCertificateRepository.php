@@ -402,6 +402,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserBusinessManager:id,name,user_id',
             'priceEstimates',
             'priceEstimates.landFinalEstimate',
+            'customer:id,name,phone,address',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
@@ -633,6 +634,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $query->whereNull('deleted_at');
             },
             'preType:id,description',
+            'customer:id,name,phone,address',
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
