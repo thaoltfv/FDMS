@@ -271,80 +271,15 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                                 "description" => "Từ chối"
                             ],
                             [
-                                "id" => 4,
-                                "css" => "btn-white btn-orange",
-                                "img" => "ic_done.svg",
-                                "description" => "Thương thảo",
-                                "btnDescription" => "Chuyển tiếp"
-                            ]
-                        ]
-                    ],
-                    [
-                        "id" => 4,
-                        "css" => [
-                            "color" => "warning"
-                        ],
-                        "key" => 4,
-                        "edit" => [
-                            "export_document" => true,
-                            "form" => false,
-                            "info" => false,
-                            "payments" => true,
-                            "appraiser" => false,
-                            "file_result" => false,
-                            "file_appendix" => false
-                        ],
-                        "isExportDocument" => true,
-                        "slug" => "thuong_thao",
-                        "print" => true,
-                        "status" => 4,
-                        "require" => [
-                            "appraiser" => true,
-                            "check_legal" => false,
-                            "check_price" => false,
-                            "check_version" => false,
-                            "appraise_item_list" => false
-                        ],
-                        "isActive" => 1,
-                        "isCancel" => true,
-                        "expire_in" => 1200,
-                        "re_assign" => "appraiser_sale_id",
-                        "sub_status" => 4,
-                        "description" => "Thương thảo",
-                        "put_require" => [
-                            "appraiser_sale_id"
-                        ],
-                        "process_time" => 1440,
-                        "put_draggable" => [
-                            3,
-                            5,
-                            7
-                        ],
-                        "put_require_roles" => [
-                            "ROOT_ADMIN"
-                        ],
-                        "target_description" => [
-                            [
-                                "id" => 6,
-                                "css" => "btn-white",
-                                "img" => "ic_cancel-1.svg",
-                                "description" => "Hủy"
-                            ],
-                            [
-                                "id" => 3,
-                                "css" => "btn-white",
-                                "img" => "ic_cancel-1.svg",
-                                "description" => "Từ chối"
-                            ],
-                            [
                                 "id" => 5,
                                 "css" => "btn-white btn-orange",
                                 "img" => "ic_done.svg",
-                                "description" => "In hồ sơ",
+                                "description" => "Phát hành kết quả sơ bộ",
                                 "btnDescription" => "Chuyển tiếp"
                             ]
                         ]
                     ],
+
                     [
                         "id" => 5,
                         "css" => [
@@ -376,7 +311,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         "expire_in" => 1200,
                         "re_assign" => "appraiser_sale_id",
                         "sub_status" => 5,
-                        "description" => "In hồ sơ",
+                        "description" => "Phát hành kết quả sơ bộ",
                         "put_require" => [
                             "appraiser_sale_id"
                         ],
@@ -536,11 +471,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         "value" => 3
                     ],
                     [
-                        "text" => "Thương thảo",
-                        "value" => 4
-                    ],
-                    [
-                        "text" => "In hồ sơ",
+                        "text" => "Phát hành kết quả sơ bộ",
                         "value" => 5
                     ],
                     [

@@ -73,14 +73,17 @@ class ExportPreCertificate
                         case 3:
                             $status_text = 'Duyệt giá sơ bộ';
                             break;
-                        case 4:
-                            $status_text = 'Thương thảo';
-                            break;
                         case 5:
-                            $status_text = 'Hoàn thành';
+                            $status_text = 'Phát hành kết quả sơ bộ';
                             break;
                         case 6:
+                            $status_text = 'Hoàn thành';
+                            break;
+                        case 7:
                             $status_text = 'Hủy';
+                            break;
+                        case 8:
+                            $status_text = 'Phân hồ sơ';
                             break;
                     }
                     foreach ($data->payments as $item) {

@@ -383,7 +383,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 4
                             then 'Thương thảo'
                         when 5
-                            then 'In hồ sơ'
+                            then 'Phát hành kết quả sơ bộ'
                         when 6
                             then 'Hoàn thành'
                         when 7
@@ -574,7 +574,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 4
                             then 'Thương thảo'
                         when 5
-                            then 'In hồ sơ'
+                            then 'Phát hành kết quả sơ bộ'
                         when 6
                             then 'Hoàn thành'
                         when 7
@@ -1471,7 +1471,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Thương thảo';
                 break;
             case 5:
-                $statusText = 'In hồ sơ';
+                $statusText = 'Phát hành kết quả sơ bộ';
                 break;
             case 6:
                 $statusText = 'Hoàn thành';
@@ -1518,7 +1518,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Thương thảo';
                 break;
             case 5:
-                $statusText = 'In hồ sơ';
+                $statusText = 'Phát hành kết quả sơ bộ';
                 break;
             case 6:
                 $statusText = 'Hoàn thành';
@@ -1665,7 +1665,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 WHEN 2 THEN 'Định giá sơ bộ'
                 WHEN 3 THEN 'Duyệt giá sơ bộ'
                 WHEN 4 THEN 'Thương thảo'
-                WHEN 5 THEN 'In hồ sơ'
+                WHEN 5 THEN 'Phát hành kết quả sơ bộ'
                 WHEN 6 THEN 'Hoàn thành'
                 WHEN 7 THEN 'Hủy'
                 WHEN 8 THEN 'Phân hồ sơ'
