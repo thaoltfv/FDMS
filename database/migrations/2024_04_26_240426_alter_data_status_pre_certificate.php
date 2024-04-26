@@ -12,7 +12,7 @@ class AlterDataStatusPreCertificate extends Migration
      */
     public function up()
     {
-        DB::table('pre_certificate')
+        DB::table('pre_certificates')
             ->where('status', 4)
             ->update(['status' => 5]);
     }
@@ -24,7 +24,7 @@ class AlterDataStatusPreCertificate extends Migration
      */
     public function down()
     {
-        DB::table('pre_certificate')
+        DB::table('pre_certificates')
             ->where('status', 5)
             ->update(['status' => 4]);
     }
