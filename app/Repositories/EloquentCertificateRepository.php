@@ -2627,6 +2627,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'created_by',
             'appraiser_id',
             'appraiser_perform_id',
+            'appraiser_sale_id',
             'appraiser_control_id',
             'administrative_id',
             'business_manager_id',
