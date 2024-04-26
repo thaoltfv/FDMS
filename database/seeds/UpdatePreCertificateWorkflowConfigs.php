@@ -332,7 +332,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                                 "description" => "Hủy"
                             ],
                             [
-                                "id" => 4,
+                                "id" => 3,
                                 "css" => "btn-white",
                                 "img" => "ic_cancel-1.svg",
                                 "description" => "Từ chối"
