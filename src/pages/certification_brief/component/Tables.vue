@@ -128,27 +128,31 @@
 						<span v-html="showAddressAppraise(detail_appraise)"></span>
 					</p>
 				</template>
-				<template
-					slot="total_asset_price"
-					slot-scope="{ total_price, appraise_purpose, id }"
-				>
-					<p class="text-main__blue">
-						{{ total_price ? formatNumber(total_price) + " đ" : "-" }}
+				<template slot="total_asset_price" slot-scope="props">
+					<p class="text-main__blue" v-if="isShowPrice(props)">
+						{{
+							props.total_price ? formatNumber(props.total_price) + " đ" : "-"
+						}}
 					</p>
 					<p
-						class="text-secondary d-inline-block text-truncate"
+						:class="
+							isShowPrice(props)
+								? 'text-main__blue'
+								: 'text-secondary d-inline-block text-truncate'
+						"
 						style="max-width: 220px"
-						:id="`content_appraise_purpose_${id}`"
+						:id="`content_appraise_purpose_${props.id}`"
 					>
-						Mục đích: {{ appraise_purpose ? appraise_purpose.name : "-" }}
+						Mục đích:
+						{{ props.appraise_purpose ? props.appraise_purpose.name : "-" }}
 					</p>
 					<b-tooltip
-						v-if="appraise_purpose"
-						:target="('content_appraise_purpose_' + id).toString()"
+						v-if="props.appraise_purpose"
+						:target="('content_appraise_purpose_' + props.id).toString()"
 						placement="top"
 						triggers="hover"
 						>{{
-							appraise_purpose ? appraise_purpose.name : "Không có"
+							props.appraise_purpose ? props.appraise_purpose.name : ""
 						}}</b-tooltip
 					>
 				</template>
@@ -860,12 +864,7 @@ export default {
 				this.isLoading1 = false;
 			}
 		},
-		async getProfiles() {
-			const profile = this.$store.getters.profile;
-			if (profile && profile.data.user.roles[0].name.slice(-5) === "ADMIN") {
-				this.activeStatus = true;
-			}
-		},
+
 		handleFooterAccept(target) {
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
@@ -941,6 +940,22 @@ export default {
 					position: "top-right"
 				});
 			}
+		},
+		isShowPrice(property) {
+			if (this.activeStatus) return true;
+
+			if (
+				property.status &&
+				(property.status == 1 ||
+					property.status == 2 ||
+					property.status == 3 ||
+					property.status == 10) &&
+				property.appraiser_sale &&
+				property.appraiser_sale.user_id === this.user_id
+			) {
+				return false;
+			}
+			return true;
 		},
 		checkExistInAppraisalTeam2(property) {
 			let check = false;
@@ -1217,7 +1232,8 @@ export default {
 			const profile = this.$store.getters.profile;
 			if (
 				profile.data.user.roles[0].name === "ADMIN" ||
-				profile.data.user.roles[0].name === "ROOT_ADMIN"
+				profile.data.user.roles[0].name === "ROOT_ADMIN" ||
+				profile.data.user.roles[0].name === "SUB_ADMIN"
 			) {
 				this.activeStatus = true;
 			}

@@ -108,7 +108,7 @@
 								/>
 								<div class="label_container d-flex">
 									<span style="font-weight: 500">{{
-										element.total_price
+										element.total_price && isShowPrice(element)
 											? `${formatPrice(element.total_price)}`
 											: "-"
 									}}</span>
@@ -921,7 +921,11 @@ export default {
 		},
 		async getProfiles() {
 			const profile = this.$store.getters.profile;
-			if (profile && profile.data.user.roles[0].name.slice(-5) === "ADMIN") {
+			if (
+				profile.data.user.roles[0].name === "ADMIN" ||
+				profile.data.user.roles[0].name === "ROOT_ADMIN" ||
+				profile.data.user.roles[0].name === "SUB_ADMIN"
+			) {
 				this.activeStatus = true;
 			}
 		},
@@ -1346,6 +1350,22 @@ export default {
 			this.principleConfig.forEach(i => {
 				document.getElementById(i.id).style.height = maxHeight + "px";
 			});
+		},
+		isShowPrice(property) {
+			if (this.activeStatus) return true;
+
+			if (
+				property.status &&
+				(property.status == 1 ||
+					property.status == 2 ||
+					property.status == 3 ||
+					property.status == 10) &&
+				property.appraiser_sale &&
+				property.appraiser_sale.user_id === this.user_id
+			) {
+				return false;
+			}
+			return true;
 		}
 	},
 	updated() {
