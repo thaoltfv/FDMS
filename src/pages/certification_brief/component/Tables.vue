@@ -134,7 +134,7 @@
 							props.total_price ? formatNumber(props.total_price) + " đ" : "-"
 						}}
 					</p>
-					<p
+					<!-- <p
 						:class="
 							isShowPrice(props)
 								? 'text-main__blue'
@@ -154,7 +154,7 @@
 						>{{
 							props.appraise_purpose ? props.appraise_purpose.name : ""
 						}}</b-tooltip
-					>
+					> -->
 				</template>
 				<template
 					slot="petitioner_name"
