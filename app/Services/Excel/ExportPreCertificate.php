@@ -74,7 +74,7 @@ class ExportPreCertificate
                             $status_text = 'Duyệt giá sơ bộ';
                             break;
                         case 5:
-                            $status_text = 'Phát hành kết quả sơ bộ';
+                            $status_text = 'Phát hành KQSB';
                             break;
                         case 6:
                             $status_text = 'Hoàn thành';

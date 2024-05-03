@@ -274,7 +274,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                                 "id" => 5,
                                 "css" => "btn-white btn-orange",
                                 "img" => "ic_done.svg",
-                                "description" => "Phát hành kết quả sơ bộ",
+                                "description" => "Phát hành KQSB",
                                 "btnDescription" => "Chuyển tiếp"
                             ]
                         ]
@@ -311,7 +311,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         "expire_in" => 1200,
                         "re_assign" => "appraiser_sale_id",
                         "sub_status" => 5,
-                        "description" => "Phát hành kết quả sơ bộ",
+                        "description" => "Phát hành KQSB",
                         "put_require" => [
                             "appraiser_sale_id"
                         ],
@@ -471,7 +471,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         "value" => 3
                     ],
                     [
-                        "text" => "Phát hành kết quả sơ bộ",
+                        "text" => "Phát hành KQSB",
                         "value" => 5
                     ],
                     [
