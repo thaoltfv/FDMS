@@ -6313,6 +6313,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $query = $query->orwhereHas('appraiserManager', function ($q) use ($userId) {
                         return $q->where('user_id', $userId);
                     });
+                    $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($userId) {
+                        return $q->where('user_id', $userId);
+                    });
                     $query = $query->orwhereHas('appraiserConfirm', function ($q) use ($userId) {
                         return $q->where('user_id', $userId);
                     });
@@ -6322,6 +6325,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $query = $query->orwhereHas('appraiserPerform', function ($q) use ($userId) {
                         return $q->where('user_id', $userId);
                     });
+
                     $query = $query->orwhereHas('appraiserControl', function ($q) use ($userId) {
                         return $q->where('user_id', $userId);
                     });
