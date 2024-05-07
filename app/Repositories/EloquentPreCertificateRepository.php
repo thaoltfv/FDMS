@@ -1915,9 +1915,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $role = $user->roles->last();
             $result = PriceEstimate::query()->where('id', $id);
             $userId = $user->id;
-            if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
-                $result = $result->where('created_by', $userId);
-            }
+            // if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
+            //     $result = $result->where('created_by', $userId);
+            // }
             $result = $result->first();
             if (empty($result))
                 $check = ['message' => 'Bạn không có quyền ở TSSB ' . $id, 'exception' => '', 'statusCode' => 403];
