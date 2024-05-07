@@ -370,6 +370,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_perform_id',
             'appraise_purpose_id',
             'pre_certificates.created_at',
+            'customer_id',
+
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                         when 1
@@ -381,7 +383,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 4
                             then 'Thương thảo'
                         when 5
-                            then 'In hồ sơ'
+                            then 'Phát hành KQSB'
                         when 6
                             then 'Hoàn thành'
                         when 7
@@ -402,6 +404,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserSale:id,name,user_id',
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
+            'priceEstimates',
+            'priceEstimates.landFinalEstimate',
+            'customer:id,name,phone,address',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
@@ -451,21 +456,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                     break;
                 case '%':
-                    $result = $result->where(function ($q) use ($filter) {
-                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filter . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filterData . '%');
                     });
                     break;
-                    // case '^':
-                    //     $result = $result->where(function ($q) use ($filterData) {
-                    //         $q->whereHas('realEstate', function ($has) use ($filterData) {
-                    //             $has->whereHas('appraises', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             })->orWhereHas('apartment', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             });
-                    //         });
-                    //     });
-                    //     break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('priceEstimates', function ($has) use ($filterData) {
+                            $has->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
                         $q = $q->where('pre_certificates.id', 'like', strval($filter));
@@ -563,6 +564,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_sale_id',
             'appraiser_perform_id',
             'certificate_id',
+            'customer_id',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                        when 1
@@ -574,7 +576,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         when 4
                             then 'Thương thảo'
                         when 5
-                            then 'In hồ sơ'
+                            then 'Phát hành KQSB'
                         when 6
                             then 'Hoàn thành'
                         when 7
@@ -637,6 +639,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $query->whereNull('deleted_at');
             },
             'preType:id,description',
+            'customer:id,name,phone,address',
         ];
         DB::enableQueryLog();
         $result = $this->model->with($with)
@@ -727,21 +730,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     }
                     break;
                 case '%':
-                    $result = $result->where(function ($q) use ($filter) {
-                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filter . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->where('petitioner_name', 'ILIKE', '%' . $filterData . '%');
                     });
                     break;
-                    // case '^':
-                    //     $result = $result->where(function ($q) use ($filterData) {
-                    //         $q->whereHas('realEstate', function ($has) use ($filterData) {
-                    //             $has->whereHas('appraises', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             })->orWhereHas('apartment', function ($query) use ($filterData) {
-                    //                 $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
-                    //             });
-                    //         });
-                    //     });
-                    //     break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('priceEstimates', function ($has) use ($filterData) {
+                            $has->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($filter) {
                         $q = $q->where('pre_certificates.id', 'like', strval($filter));
@@ -1137,6 +1136,25 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             }
                         }
                     }
+                    $documentsExports = PreCertificateExportDocuments::where('pre_certificate_id', $preCertificate->id)
+                        ->whereNull('deleted_at')
+                        ->get();
+                    if ($documentsExports->count() > 0) {
+                        foreach ($documentsExports as $documentsExport) {
+                            $item = [
+                                'certificate_id' => $certificateId,
+                                'name' => $documentsExport->name,
+                                'link' => $documentsExport->link,
+                                'type' => $documentsExport->type,
+                                'size' => $documentsExport->size,
+                                'description' => $documentsExport->description,
+                                'type_document' => $documentsExport->type_document,
+                                'created_by' => $user->id,
+                            ];
+                            $item = new PreCertificateExportDocuments($item);
+                            QueryBuilder::for($item)->insert($item->attributesToArray());
+                        }
+                    }
 
                     $edited = Certificate::where('id', $certificateId)->first();
                     $this->CreateActivityLog($edited, $edited, 'create', 'Chuyển chính thức từ YCSB_' . $id);
@@ -1212,10 +1230,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result = $this->model->query()
                         ->where('id', '=', $id)
                         ->update($updateArray);
+                    if (($current == 2 && $next == 8) || $next == 7) {
+                        //xóa tài sản sơ bộ khỏi HSSB nếu từ định giá sơ bộ về phân hồ sơ, hoặc hủy
+                        $this->deletePriceEstimateWithRelations(
+                            $id
+                        );
+                    }
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
-                    if ($current > $next) {
+                    if ($next != 8 && $current > $next) {
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
@@ -1449,7 +1473,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Thương thảo';
                 break;
             case 5:
-                $statusText = 'In hồ sơ';
+                $statusText = 'Phát hành KQSB';
                 break;
             case 6:
                 $statusText = 'Hoàn thành';
@@ -1496,7 +1520,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 $statusText = 'Thương thảo';
                 break;
             case 5:
-                $statusText = 'In hồ sơ';
+                $statusText = 'Phát hành KQSB';
                 break;
             case 6:
                 $statusText = 'Hoàn thành';
@@ -1643,7 +1667,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 WHEN 2 THEN 'Định giá sơ bộ'
                 WHEN 3 THEN 'Duyệt giá sơ bộ'
                 WHEN 4 THEN 'Thương thảo'
-                WHEN 5 THEN 'In hồ sơ'
+                WHEN 5 THEN 'Phát hành KQSB'
                 WHEN 6 THEN 'Hoàn thành'
                 WHEN 7 THEN 'Hủy'
                 WHEN 8 THEN 'Phân hồ sơ'

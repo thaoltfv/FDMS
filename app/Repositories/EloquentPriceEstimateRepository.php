@@ -138,7 +138,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             'landFinalEstimate'
         ]);
         $role = $user->roles->last();
-        if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
+        if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN'))) {
             $result = $result->where('created_by', $user->id);
         }
         if (isset($search)) {
@@ -253,7 +253,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 }
 
                 $role = $user->roles->last();
-                if ((($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) || (!empty($popup))) {
+                if ((($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) || (!empty($popup))) {
                     return $q->where('id', $user->id);
                 }
             })
@@ -348,7 +348,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             $search = $query->search;
             $result = $result->where(function ($q) use ($search) {
                 $q = $q->where('id', 'like', strval($search));
-                $q = $q->orwhere('priceEstimate_asset', 'ILIKE', '%' . $search . '%');
+                $q = $q->orwhere('appraise_asset', 'ILIKE', '%' . $search . '%');
             });
         }
 
@@ -874,20 +874,20 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
     private function checkAuthorization($id)
     {
         $check = null;
-        // if ($this->model->query()->where('id', $id)->exists()) {
-        //     $user = CommonService::getUser();
-        //     $role = $user->roles->last();
-        //     $result = $this->model->query()->where('id', $id);
-        //     $userId = $user->id;
-        //     if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN')) {
-        //         $result = $result->where('created_by', $userId);
-        //     }
-        //     $result = $result->first();
-        //     if (empty($result))
-        //         $check = ['message' => 'Bạn không có quyền ở TSSB ' . $id, 'exception' => '', 'statusCode' => 403];
-        // } else {
-        //     $check = ['message' => ErrorMessage::PE_CHECK_EXIT . ' ' . $id, 'exception' => '', 'statusCode' => 403];
-        // }
+        if ($this->model->query()->where('id', $id)->exists()) {
+            $user = CommonService::getUser();
+            $role = $user->roles->last();
+            $result = $this->model->query()->where('id', $id);
+            $userId = $user->id;
+            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
+                $result = $result->where('created_by', $userId);
+            }
+            $result = $result->first();
+            if (empty($result))
+                $check = ['message' => 'Bạn không có quyền ở TSSB ' . $id, 'exception' => '', 'statusCode' => 403];
+        } else {
+            $check = ['message' => ErrorMessage::PE_CHECK_EXIT . ' ' . $id, 'exception' => '', 'statusCode' => 403];
+        }
         return $check;
     }
     private function getComparisonFactors(int $priceEstimateId)
@@ -1956,7 +1956,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                                                 [
                                                     "land_type_purpose_id" => $detail['land_type_purpose_id'],
                                                     "planning_area" => $detail['planning_area'],
-                                                    "type_zoning" => "",
+                                                    "type_zoning" => $detail['type_zoning'],
                                                     "appraise_property_id" => $newRelation->id,
                                                     "pp_tinh" => "",
                                                     "he_so" => null

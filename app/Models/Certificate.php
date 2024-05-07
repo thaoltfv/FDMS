@@ -63,6 +63,7 @@ class Certificate extends Model
         'note',
         'administrative_id',
         'business_manager_id',
+        'document_alter_by_bank',
     ];
 
     public function getStatusTextAttribute()

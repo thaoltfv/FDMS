@@ -134,10 +134,10 @@ class PriceEstimateController extends Controller
      */
 
 
-    private array $permissionView = ['VIEW_CERTIFICATE_ASSET'];
-    private array $permissionAdd = ['ADD_CERTIFICATE_ASSET'];
-    private array $permissionEdit = ['EDIT_CERTIFICATE_ASSET'];
-    private array $permissionExport = ['EXPORT_CERTIFICATE_ASSET'];
+    private array $permissionView = ['VIEW_PRELIMINARY_ASSET'];
+    private array $permissionAdd = ['ADD_PRELIMINARY_ASSET'];
+    private array $permissionEdit = ['EDIT_PRELIMINARY_ASSET'];
+    private array $permissionExport = ['EXPORT_PRELIMINARY_ASSET'];
 
     public function getPriceEstimateDataFull(int $id)
     {
