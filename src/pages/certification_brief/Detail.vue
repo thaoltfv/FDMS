@@ -1303,7 +1303,7 @@
 		</div>
 		<div
 			v-if="
-				form.general_asset.length > 0 || form.status === 1 || form.status === 2
+				form.general_asset.length > 0 || form.status === 1 || form.status === 2 || form.status === 10
 			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
