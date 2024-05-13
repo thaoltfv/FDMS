@@ -795,9 +795,9 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
 
     public function getPriceEstimateDataFull($priceEstimateId)
     {
-        $check = $this->checkAuthorization($priceEstimateId);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorization($priceEstimateId);
+        // if (!empty($check))
+        //     return $check;
         $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id', 'pre_certificate_id'];
         $with = [
             'createdBy:id,name',

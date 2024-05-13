@@ -3297,9 +3297,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     public function getGeneralInfomation(int $id)
     {
         $result = [];
-        $check = $this->checkAuthorizationCertificate($id);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorizationCertificate($id);
+        // if (!empty($check))
+        //     return $check;
 
         $select = [
             'id',
@@ -3352,9 +3352,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     public function getCertificate(int $id)
     {
         $result = [];
-        $check = $this->checkAuthorizationCertificate($id);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorizationCertificate($id);
+        // if (!empty($check))
+        //     return $check;
         $select = [
             'id',
             'petitioner_name',
@@ -6186,9 +6186,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         return DB::transaction(function () use ($id, $description, $request) {
             try {
                 $result = [];
-                $check = $this->checkAuthorizationCertificate($id);
-                if (!empty($check))
-                    return $check;
+                // $check = $this->checkAuthorizationCertificate($id);
+                // if (!empty($check))
+                //     return $check;
                 // $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
                 // $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/' . $now->year . '/' . $now->month . '/' . $id . '/';
                 $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/upload/' . $id . '/';
@@ -6240,9 +6240,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         try {
             $other = CertificateOtherDocuments::query()->where('id', $id)->first();
             $certificateId = $other->certificate_id;
-            $check = $this->checkAuthorizationCertificate($certificateId);
-            if (!empty($check))
-                return $check;
+            // $check = $this->checkAuthorizationCertificate($certificateId);
+            // if (!empty($check))
+            //     return $check;
             $description = $other->description;
             $logDescription = $this->getOtherDescription($description);
             $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/upload/' . $id . '/';

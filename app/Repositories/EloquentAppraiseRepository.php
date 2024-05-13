@@ -5635,10 +5635,10 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
     public function getAppraiseData(int $appraiseId)
     {
         if (Appraise::where('id', $appraiseId)->exists()) {
-            $check = $this->checkUser($appraiseId);
-            if (isset($check)) {
-                return $check;
-            }
+            // $check = $this->checkUser($appraiseId);
+            // if (isset($check)) {
+            //     return $check;
+            // }
             $version = request()->get('version');
             $result = null;
             if ($version && !is_array($version)) {
@@ -5854,9 +5854,9 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
 
     public function getApraiseDataStepOneToSix(int $appraiseId)
     {
-        $check = $this->checkAuthorization($appraiseId);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorization($appraiseId);
+        // if (!empty($check))
+        //     return $check;
         $select = ['id', 'step', 'status', 'coordinates', 'created_by', 'sub_status', 'certificate_id', 'real_estate_id', 'filter_year'];
         $with = [
             'pic:id,appraise_id,link,type_id',

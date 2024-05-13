@@ -910,9 +910,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
     public function getPreCertificate(int $id)
     {
         $result = [];
-        $check = $this->checkAuthorizationPreCertificate($id);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorizationPreCertificate($id);
+        // if (!empty($check))
+        //     return $check;
         $select = [
             'id',
             'certificate_id',
@@ -1929,9 +1929,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
     public function getPriceEstimateDataFullConnectPreCertificate($priceEstimateId)
     {
-        $check = $this->checkAuthorization($priceEstimateId);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorization($priceEstimateId);
+        // if (!empty($check))
+        //     return $check;
         $select = ['*'];
         $with = [
             'createdBy:id,name',

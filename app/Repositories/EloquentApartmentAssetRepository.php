@@ -804,9 +804,9 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     }
     public function getApartmentAssetById(int $id)
     {
-        $check = $this->checkAuthorization($id);
-        if (!empty($check))
-            return $check;
+        // $check = $this->checkAuthorization($id);
+        // if (!empty($check))
+        //     return $check;
         $with = [
             'apartmentAssetProperties',
             'apartmentAssetProperties.block',
