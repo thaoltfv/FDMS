@@ -81,11 +81,11 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
                     }
                     break;
                 case '^':
-                    $result = $result->where(function ($q) use ($search) {
-                        $q = $q->whereHas('appraises', function ($query) use ($search) {
-                            $query->where('full_address', 'ILIKE', '%' . $search . '%');
-                        })->orWhereHas('apartment', function ($query) use ($search) {
-                            $query->where('full_address', 'ILIKE', '%' . $search . '%');
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('appraises', function ($query) use ($filterData) {
+                            $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        })->orWhereHas('apartment', function ($query) use ($filterData) {
+                            $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
                         });
                     });
                     break;
