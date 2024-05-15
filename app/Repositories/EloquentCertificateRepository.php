@@ -283,6 +283,61 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     /**
      * @return bool
      */
+    public function otherDocumentOriginalUpload($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $result = [];
+                $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+                $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/' . $now->year . '/' . $now->month . '/';
+
+                $files = $request->file('files');
+
+                $user = CommonService::getUser();
+
+                if (isset($files) && !empty($files)) {
+                    foreach ($files as $file) {
+                        $fileName = $file->getClientOriginalName();
+                        $fileType = $file->getClientOriginalExtension();
+                        $fileSize = $file->getSize();
+                        $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
+                        Storage::put($name, file_get_contents($file));
+                        $fileUrl = Storage::url($name);
+                        $item = [
+                            'certificate_id' => $id,
+                            'name' => $fileName,
+                            'link' => $fileUrl,
+                            'type' => $fileType,
+                            'size' => $fileSize,
+                            'description' => 'original',
+                            'created_by' => $user->id,
+                        ];
+
+                        $item = new CertificateOtherDocuments($item);
+                        QueryBuilder::for($item)->insert($item->attributesToArray());
+                        $result[] = $item;
+                    }
+                    $edited = Certificate::where('id', $id)->first();
+                    $edited2 = CertificateOtherDocuments::where('certificate_id', $id)->first();
+                    # activity-log upload file
+                    $this->CreateActivityLog($edited, $edited2, 'upload_file', 'tải hồ sơ gốc');
+                    // chưa lấy ra được model user và id user
+                }
+
+                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                    ->with('createdBy')
+                    ->get();
+                return $result;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
     public function testDocumentUpload($request)
     {
         return DB::transaction(function () use ($request) {

@@ -307,6 +307,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('certificate/other-document/upload/{id}', [CertificateController::class, 'otherDocumentUpload']);
 
+    Route::post('certificate/other-document-original/upload/{id}', [CertificateController::class, 'otherDocumentOriginalUpload']);
+
     //test
 
     Route::post('certificate/test-document/upload', [CertificateController::class, 'testDocumentUpload']);
