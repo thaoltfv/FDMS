@@ -1361,11 +1361,62 @@ export default {
 					property.status == 3 ||
 					property.status == 10) &&
 				property.appraiser_sale &&
-				property.appraiser_sale.user_id === this.user_id
+				property.appraiser_sale.user_id === this.user_id &&
+				!this.checkExistInAppraisalTeam2(property)
 			) {
 				return false;
 			}
 			return true;
+		},
+		checkExistInAppraisalTeam2(property) {
+			let check = false;
+			if (this.user_id) {
+				if (
+					property.administrative &&
+					property.administrative.user_id &&
+					property.administrative.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser &&
+					property.appraiser.user_id &&
+					property.appraiser.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_business_manager &&
+					property.appraiser_business_manager.user_id &&
+					property.appraiser_business_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_confirm &&
+					property.appraiser_confirm.user_id &&
+					property.appraiser_confirm.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_control &&
+					property.appraiser_control.user_id &&
+					property.appraiser_control.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_manager &&
+					property.appraiser_manager.user_id &&
+					property.appraiser_manager.user_id === this.user_id
+				) {
+					check = true;
+				} else if (
+					property.appraiser_perform &&
+					property.appraiser_perform.user_id &&
+					property.appraiser_perform.user_id === this.user_id
+				) {
+					check = true;
+				}
+			}
+
+			return check;
 		}
 	},
 	updated() {
