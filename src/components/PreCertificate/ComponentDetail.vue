@@ -13,7 +13,7 @@
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="showExportDocument">
+							<a-dropdown v-if="showExportDocument && dataPC.status !== 1">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -129,8 +129,7 @@
 									</p>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Tên tài sản sơ bộ:</strong
+									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="pre_asset_name" class="text-left">{{
 										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
 											? dataPC.pre_asset_name.substring(25, 0) + "..."
@@ -510,7 +509,7 @@
 			</div>
 		</div>
 		<div
-			v-if="dataPC.id && showExportDocument"
+			v-if="dataPC.id && showExportDocument && dataPC.status !== 1"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>

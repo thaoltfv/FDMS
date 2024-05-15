@@ -24,6 +24,13 @@ export default class File extends Model {
 			data
 		});
 	}
+	static async uploadFileCertificateOriginal(data, id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certificate/other-document-original/upload/${id}`,
+			data
+		});
+	}
 	static async saleUploadFileCertificate(data, id) {
 		return new this().makeRequest({
 			method: "POST",

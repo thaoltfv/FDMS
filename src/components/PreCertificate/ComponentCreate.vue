@@ -131,7 +131,7 @@
 								:rows="4"
 								:disableInput="false"
 								v-model="dataPC.pre_asset_name"
-								label="Tên tài sản sơ bộ"
+								label="Ghi chú"
 								rules="required"
 								:requiredIcon="true"
 								class="form-group-container"

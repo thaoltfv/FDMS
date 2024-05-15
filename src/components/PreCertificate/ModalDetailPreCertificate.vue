@@ -124,7 +124,7 @@
 							</p>
 						</div>
 						<div class="d-flex container_content">
-							<strong class="margin_content_inline">Tên tài sản sơ bộ:</strong
+							<strong class="margin_content_inline">Ghi chú:</strong
 							><span id="note" class="text-left">{{
 								dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
 									? dataPC.pre_asset_name.substring(25, 0) + "..."

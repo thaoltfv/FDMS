@@ -243,7 +243,7 @@
 					:rows="3"
 					:disableInput="false"
 					v-model="dataForm.pre_asset_name"
-					label="Tên tài sản sơ bộ"
+					label="Ghi chú"
 					class="form-group-container col-12"
 					style="margin-left:-10px;margin-bottom: 10px;"
 					:requiredIcon="true"

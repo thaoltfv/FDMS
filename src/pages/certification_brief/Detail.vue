@@ -1303,9 +1303,12 @@
 		</div>
 		<div
 			v-if="
-				form.general_asset.length > 0 || form.status === 1 || form.status === 2 || form.status === 10
+				form.general_asset.length > 0 ||
+					form.status === 1 ||
+					form.status === 2 ||
+					form.status === 10
 			"
-			class="col-12"
+			class="col-6"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
 			<div class="card" :style="isMobile() ? { 'margin-bottom': '150px' } : {}">
@@ -1343,7 +1346,7 @@
 								i => i.description === 'appendix' || i.description === 'other'
 							)"
 							:key="index"
-							class="d-flex"
+							class="d-flex col-6"
 						>
 							<div
 								style="cursor: pointer"
@@ -1356,7 +1359,86 @@
 									src="@/assets/icons/ic_taglink.svg"
 									alt="tag_2"
 								/>
-								<div class="mr-3">{{ file.name }}</div>
+								<div class="mr-3 text-truncate">{{ file.name }}</div>
+							</div>
+							<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
+							<div class="mr-3">{{file.name}}</div> -->
+							<img
+								v-if="
+									deleted &&
+										(form.status === 1 ||
+											form.status === 2 ||
+											form.status === 3)
+								"
+								style="cursor: pointer; width: 1rem"
+								@click="deleteOtherFile(file, index)"
+								src="@/assets/icons/ic_delete_2.svg"
+								alt="tag_2"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			v-if="
+				form.general_asset.length > 0 ||
+					form.status === 1 ||
+					form.status === 2 ||
+					form.status === 10
+			"
+			class="col-6"
+			:style="isMobile() ? { padding: '0' } : {}"
+		>
+			<div class="card" :style="isMobile() ? { 'margin-bottom': '150px' } : {}">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<h3 class="title">Hồ sơ gốc</h3>
+					</div>
+				</div>
+				<div class="card-body card-info">
+					<div class="row">
+						<div class="col-12 mt-3">
+							<div
+								class="input_upload_file d-flex justify-content-center align-items-center"
+							>
+								<font-awesome-icon
+									:style="{ color: 'orange', position: 'absolute' }"
+									icon="cloud-upload-alt"
+									size="5x"
+								/>
+								<input
+									class="btn-upload"
+									type="file"
+									ref="file"
+									id="image_property"
+									multiple
+									accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+									@change="onImageChangeOriginal($event)"
+								/>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div
+							v-for="(file, index) in form.other_documents.filter(
+								i => i.description === 'original' || i.description === 'other'
+							)"
+							:key="index"
+							class="d-flex col-6"
+						>
+							<div
+								style="cursor: pointer"
+								@click="downloadOtherFile(file)"
+								class="d-flex"
+							>
+								<img
+									class="mr-1"
+									style="width: 1rem"
+									src="@/assets/icons/ic_taglink.svg"
+									alt="tag_2"
+								/>
+								<div class="mr-3 text-truncate">{{ file.name }}</div>
 							</div>
 							<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
 							<div class="mr-3">{{file.name}}</div> -->
@@ -2877,6 +2959,58 @@ export default {
 					} else {
 						res = await File.uploadFileCertificate(formData, this.idData);
 					}
+					if (res.data) {
+						// await this.$emit('handleChangeFile', res.data.data)
+						this.form.other_documents = res.data.data;
+						this.$toast.open({
+							message: "Thêm file thành công",
+							type: "success",
+							position: "top-right",
+							duration: 3000
+						});
+					}
+				}
+			}
+		},
+		async onImageChangeOriginal(e) {
+			const formData = new FormData();
+			let check = true;
+			let files = e.target.files;
+			if (!files.length) {
+				return;
+			}
+			for (let i = 0; i < e.target.files.length; i++) {
+				this.file = e.target.files[i];
+				if (
+					this.file.type === "image/png" ||
+					this.file.type === "image/jpeg" ||
+					this.file.type === "image/jpg" ||
+					this.file.type === "image/gif" ||
+					this.file.type ===
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+					this.file.type ===
+						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+					this.file.type === "application/pdf"
+				) {
+				} else {
+					check = false;
+					this.$toast.open({
+						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			}
+			if (check) {
+				if (files.length) {
+					for (let i = 0; i < files.length; i++) {
+						formData.append("files[" + i + "]", files[i]);
+					}
+					let res = null;
+
+					res = await File.uploadFileCertificateOriginal(formData, this.idData);
+
 					if (res.data) {
 						// await this.$emit('handleChangeFile', res.data.data)
 						this.form.other_documents = res.data.data;
