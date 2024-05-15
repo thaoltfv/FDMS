@@ -219,13 +219,13 @@ class HopDongTDG
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(1800, $cellVTop)->addText('BÊN A', ['bold' => true,],  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(8100, $cellVTop)->addText($certificate->petitioner_name, ['bold' => true],  $alignBoth);
+        $row1->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true],  $alignBoth);
 
         $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
         $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
         $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row2->addCell(8100, $cellVTop)->addText($certificate->petitioner_address, null,  $alignBoth);
+        $row2->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_address), null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -233,12 +233,12 @@ class HopDongTDG
         ));
         $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
         $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row3->addCell(8100, $cellVTop)->addText($certificate->petitioner_identity_card, null,  $alignBoth);
+        $row3->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card), null,  $alignBoth);
 
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(8100, $cellVTop)->addText($certificate->petitioner_phone, null,  $alignBoth);
+        $row4->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_phone), null,  $alignBoth);
 
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
@@ -290,7 +290,7 @@ class HopDongTDG
                 : '');
         $textRun->addText('Ông ', ['bold' => false]);
         $textRun->addText($daidien, ['bold' => true]);
-        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
+        $textRun->addText(' – Chức vụ: ' . $chucvu, ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
             null,
@@ -325,16 +325,16 @@ class HopDongTDG
         $appraiseAssetName = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
-                $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
             }
         } else {
             if ($isApartment) {
                 foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
                 }
             } else {
                 foreach ($certificate->appraises as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
                 }
             }
         }
@@ -423,7 +423,7 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row1->addCell(2900, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(5900, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row1->addCell(5900, $cellVTop)->addText(htmlspecialchars($addressHSTD), null,  $alignBoth);
 
         $appraise_date_formatted = $certificate->appraise_date
             ? 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date))
@@ -475,7 +475,7 @@ class HopDongTDG
         $row5->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row5->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row5->addCell(3600, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá: ', null, ['align' => 'left']);
-        $row5->addCell(5100, $cellVTop)->addText($certificate->petitioner_name . '.', null,  $alignBoth);
+        $row5->addCell(5100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name) . '.', null,  $alignBoth);
 
         $row6 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -778,7 +778,7 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText($daidien, ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(mb_strtoupper($daidien), ['bold' => true], ['align' => 'center']);
 
 
 

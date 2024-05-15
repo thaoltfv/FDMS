@@ -232,13 +232,13 @@ class BienBanThanhLy
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(1800, $cellVTop)->addText('BÊN A', ['bold' => true,],  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(8000, $cellVTop)->addText($certificate->petitioner_name, ['bold' => true],  $alignBoth);
+        $row1->addCell(8000, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true],  $alignBoth);
 
         $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
         $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
         $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row2->addCell(8000, $cellVTop)->addText($certificate->petitioner_address, null,  $alignBoth);
+        $row2->addCell(8000, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_address), null,  $alignBoth);
 
         $row3 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
@@ -301,7 +301,7 @@ class BienBanThanhLy
         $textRun = $row10->addCell(8000, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
         $textRun->addText($daidien, ['bold' => true]);
-        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
+        $textRun->addText(' – Chức vụ: ' . $chucvu, ['bold' => false]);
         $section->addText(
             "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
                 $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
@@ -468,7 +468,7 @@ class BienBanThanhLy
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText($daidien, ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(mb_strtoupper($daidien), ['bold' => true], ['align' => 'center']);
 
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
