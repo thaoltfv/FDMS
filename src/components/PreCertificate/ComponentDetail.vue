@@ -546,6 +546,7 @@
 			:checkVersion="checkVersion"
 			:certificateId="dataPC.certificate_id"
 			@handleFooterAccept="handleFooterAccept"
+			@handleFooterRedistributeRecord="handleFooterRedistributeRecord"
 			@handleEdit="handleEdit"
 			@onCancel="onCancel"
 			@viewAppraiseListVersion="viewAppraiseListVersion"
@@ -577,8 +578,15 @@
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
-				message == 'Từ chối' || message == 'Khôi phục' || message == 'Hủy'
-					? `Bạn có muốn '${message}' hồ sơ này?`
+				message == 'Từ chối' ||
+				message == 'Khôi phục' ||
+				message == 'Hủy' ||
+				message == 'Phân lại'
+					? `Bạn có muốn '${message}' hồ sơ này ${
+							message == 'Phân lại'
+								? ` ở bước '` + statusDescription + `' `
+								: ''
+					  }? `
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="ycsbConfig"
@@ -1312,6 +1320,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			console.log(target);
 			this.appraiserChangeStage = null;
 
 			// if (
@@ -1418,6 +1427,38 @@ export default {
 				);
 			}
 		},
+		handleFooterRedistributeRecord(idStep2) {
+			this.appraiserChangeStage = null;
+			let config = this.jsonConfig.principle.find(i => i.id === idStep2);
+			let message = "";
+			if (config) {
+				this.config = config;
+				let require = config.require;
+				message = this.checkDiffVersion();
+				if (message === "" && require) {
+					message = this.checkRequired(require, this.data);
+				}
+				if (message === "") {
+					this.targetStatus = config.status;
+					this.dataPC.target_status = config.status;
+					this.dataPC.target_code = "";
+					this.message = "Phân lại";
+
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.dataPC[config.re_assign],
+							type: config.re_assign
+						};
+					this.isHandleAction = true;
+				} else {
+					this.openMessage(message);
+				}
+			} else {
+				this.openMessage(
+					"Không tìm thấy thông tin bước tiếp theo. Vui lòng liên hệ admin để hỗ trợ."
+				);
+			}
+		},
 		getExpireStatusDate() {
 			let dateConvert = new Date();
 			let minutes = this.config.process_time ? this.config.process_time : 1440;
@@ -1475,7 +1516,8 @@ export default {
 					message:
 						this.message == "Từ chối" ||
 						this.message == "Khôi phục" ||
-						this.message == "Hủy"
+						this.message == "Hủy" ||
+						this.message == "Phân lại"
 							? this.message + " thành công"
 							: "Chuyển trạng thái " + `"${this.message}"` + " thành công",
 					type: "success",

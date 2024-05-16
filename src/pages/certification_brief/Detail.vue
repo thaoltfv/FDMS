@@ -1346,7 +1346,7 @@
 								i => i.description === 'appendix' || i.description === 'other'
 							)"
 							:key="index"
-							class="d-flex col-6"
+							class="d-flex col-12"
 						>
 							<div
 								style="cursor: pointer"
@@ -1422,10 +1422,10 @@
 					<div class="row mt-3">
 						<div
 							v-for="(file, index) in form.other_documents.filter(
-								i => i.description === 'original' || i.description === 'other'
+								i => i.description === 'original'
 							)"
 							:key="index"
-							class="d-flex col-6"
+							class="d-flex col-12"
 						>
 							<div
 								style="cursor: pointer"
@@ -1471,6 +1471,7 @@
 			:idData="idData"
 			:checkVersion="checkVersion"
 			@handleFooterAccept="handleFooterAccept"
+			@handleFooterRedistributeRecord="handleFooterRedistributeRecord"
 			@handleEdit="handleEdit"
 			@handleCancelCertificate="handleCancelCertificate"
 			@onCancel="onCancel"
@@ -1561,8 +1562,15 @@
 			v-if="openNotification"
 			@cancel="handleCancel"
 			:notification="
-				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
-					? `Bạn có muốn '${message}' hồ sơ này?`
+				message == 'Từ chối' ||
+				message == 'Duyệt' ||
+				message == 'Hủy' ||
+				message == 'Phân lại'
+					? `Bạn có muốn '${message}' hồ sơ này ${
+							message == 'Phân lại'
+								? ` ở bước '` + statusDescription + `' `
+								: ''
+					  }? `
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="hstdConfig"
@@ -1626,7 +1634,10 @@
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
-				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
+				message == 'Từ chối' ||
+				message == 'Duyệt' ||
+				message == 'Hủy' ||
+				message == 'Phân lại'
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
@@ -2634,6 +2645,35 @@ export default {
 			}
 			return message;
 		},
+		handleFooterRedistributeRecord(idStep2) {
+			let config = this.jsonConfig.principle.find(i => i.id === idStep2);
+			let message = "";
+			if (config) {
+				this.config = config;
+				let require = config.require;
+				message = this.checkDiffVersion();
+				if (message === "" && require) {
+					message = this.checkRequired(require, this.data);
+				}
+				if (message === "") {
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.form[config.re_assign],
+							type: config.re_assign
+						};
+					this.targetStatus = config.status;
+					this.targetSubStatus = config.sub_status;
+					this.message = "Phân lại";
+					this.isHandleAction = true;
+				} else {
+					this.openMessage(message);
+				}
+			} else {
+				this.openMessage(
+					"Không tìm thấy thông tin bước tiếp theo. Vui lòng liên hệ admin để hỗ trợ."
+				);
+			}
+		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
@@ -2778,7 +2818,8 @@ export default {
 					message:
 						this.message == "Từ chối" ||
 						this.message == "Hủy" ||
-						this.message == "Khôi phục"
+						this.message == "Khôi phục" ||
+						this.message == "Phân lại"
 							? this.message + " thành công"
 							: "Chuyển trạng thái " + `"${this.message}"` + " thành công",
 					type: "success",

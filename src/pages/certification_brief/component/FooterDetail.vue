@@ -41,6 +41,7 @@
             <img class="img" src="@/assets/icons/ic_edit.svg" alt="edit">
             Cập nhật Version
         </button> -->
+
 		<button
 			v-if="isPermission && isGrossCheck"
 			class="btn btn-white"
@@ -48,6 +49,24 @@
 		>
 			<img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit" />
 			Cross check
+		</button>
+		<button
+			v-if="
+				isBusinessManager &&
+					config &&
+					config.description !== 'Hoàn thành' &&
+					config.description !== 'Hủy'
+			"
+			class="btn btn-white mr-3"
+			@click="redistributeRecord"
+		>
+			<!-- <img
+				color="black"
+				class="img"
+				src="@/assets/icons/ic_done.svg"
+				alt="record"
+			/> -->
+			Phân lại HS
 		</button>
 		<button
 			v-for="(target, index) in getTargetDescription()"
@@ -245,11 +264,19 @@ export default {
 			config: "",
 			isPermission: false,
 			isGrossCheck: false,
+			isBusinessManager: false,
 			targetDescription: []
 		};
 	},
 	mounted() {
 		this.user = this.profile.data.user;
+		if (
+			this.form &&
+			this.form.appraiser_business_manager &&
+			this.form.appraiser_business_manager.user_id === this.user.id
+		) {
+			this.isBusinessManager = true;
+		}
 		let configData = this.loadConfigByStatus(this.status, this.sub_status);
 		if (configData) {
 			this.loadConfigData(configData);
@@ -277,6 +304,11 @@ export default {
 		},
 		viewAppraiseListVersion() {
 			this.$emit("viewAppraiseListVersion");
+		},
+		redistributeRecord() {
+			if (this.config.id) {
+				this.$emit("handleFooterRedistributeRecord", this.config.id);
+			}
 		},
 		loadConfigByStatus(status, sub_status) {
 			return this.jsonConfig.principle.find(

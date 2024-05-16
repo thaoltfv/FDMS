@@ -22,6 +22,7 @@
 					v-html="
 						`${notification}${
 							status_text &&
+							status_text != 'Phân lại' &&
 							status_text != 'Khôi phục' &&
 							status_text != 'Hủy' &&
 							status_text != 'Từ chối'
