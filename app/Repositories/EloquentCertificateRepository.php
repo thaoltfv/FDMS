@@ -3602,12 +3602,22 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         return DB::transaction(function () use ($id, $request) {
             try {
                 $result = [];
-                // # đang tắt khối block xác thực
-                $check = $this->beforeUpdateStatus($id);
-                if (isset($check)) {
-                    return $check;
-                }
                 $certificate = $this->model->query()->where('id', $id)->first();
+                // Phân lại hồ sơ
+                if ($certificate->status ==  $request['status']) {
+                    $check = $this->beforeUpdateStatusRedistribute($id);
+                    if (isset($check)) {
+                        return $check;
+                    }
+                } else {
+                    // # đang tắt khối block xác thực
+                    $check = $this->beforeUpdateStatus($id);
+                    if (isset($check)) {
+                        return $check;
+                    }
+                }
+
+                // $certificate = $this->model->query()->where('id', $id)->first();
                 $currentStatus = $certificate->status;
                 $currentSubStatus = $certificate->sub_status;
                 $current = intval($currentStatus . $currentSubStatus);
@@ -3664,6 +3674,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
+                    } elseif ($current == $next) {
+                        // Phân lại hồ sơ
+                        $logDescription = 'phân lại hồ sơ ';
                     } else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
                         $logDescription = 'cập nhật trạng thái ' . $description;
@@ -5465,6 +5478,43 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
                         break;
+                }
+            }
+            if (!empty($appraiser)) {
+                $this->updateAppraisalTeam($id, $appraiser);
+            }
+        } else {
+            $result = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS, 'exception' => ''];
+        }
+        return $result;
+    }
+
+    private function beforeUpdateStatusRedistribute(int $id)
+    {
+        $result = null;
+
+        if (Certificate::where('id', $id)->exists()) {
+            $user = CommonService::getUser();
+            $data = Certificate::where('id', $id)->get()->first();
+            $appraiser = [];
+            $appraiser['appraiser_id'] =  request()->get('appraiser_id');
+            $appraiser['appraiser_manager_id'] =  request()->get('appraiser_manager_id');
+            $appraiser['appraiser_confirm_id'] =  request()->get('appraiser_confirm_id');
+            $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
+            $appraiser['appraiser_control_id'] =  request()->get('appraiser_control_id');
+            if (request()->get('administrative_id')) {
+                $appraiser['administrative_id'] = request()->get('administrative_id');
+            }
+            if (request()->get('business_manager_id')) {
+                $appraiser['business_manager_id'] = request()->get('business_manager_id');
+            }
+            if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
+                return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
+            }
+            //Check role and permision
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+                if (!($data->appraiserBusinessManager->user_id == $user->id)) {
+                    $result = ['message' => 'Chỉ có quản lý nghiệp vụ mới có quyền phân lại hồ sơ này.', 'exception' => ''];
                 }
             }
             if (!empty($appraiser)) {
