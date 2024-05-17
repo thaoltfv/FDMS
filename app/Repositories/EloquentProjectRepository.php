@@ -99,6 +99,10 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             try {
                 $result = [];
                 DB::beginTransaction();
+                $checkExistProjectName =  $this->model->query()->where('name', 'ILIKE', '%' . $objects['name'] . '%')->where('province_id', '=', $objects['province_id'])->get();
+                if (isset($checkExistProjectName) && count($checkExistProjectName) != 0) {
+                    return ['message' => 'Tên chung cư đã tồn tại ở tỉnh thành này', 'exception' => ''];
+                }
                 $blockObjs = $objects['block'];
                 // unset($objects['block']);
                 $objects['status'] = true;
@@ -193,6 +197,10 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             try {
                 $result = [];
                 DB::beginTransaction();
+                $checkExistProjectName =  $this->model->query()->where('name', 'ILIKE', '%' . $objects['name'] . '%')->where('province_id', '=', $objects['province_id'])->get();
+                if (isset($checkExistProjectName) && count($checkExistProjectName) != 0) {
+                    return ['message' => 'Tên chung cư đã tồn tại ở tỉnh thành này', 'exception' => ''];
+                }
                 $blockObjs = $objects['block'];
                 // $this->log_to_console($objects);
                 // $objects['rank'] = explode(',', $objects['rank']);
