@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Facades\Log;
+use App\Enum\PermissionsDefault;
+use App\Enum\ScreensDefault;
+use App\Models\Permission;
 
 class EloquentRoleRepository extends EloquentRepository implements RoleRepository
 {
@@ -110,8 +113,7 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
         $existingRole = $this->model->query()->firstWhere('name', $objects['name']);
 
         if ($existingRole) {
-            return ['message' => 'Mã phân quyền đã tồn tại, vui lòng chọn mã khác', 'exception' => '', 'statusCode' => 403];
-        } else {
+            // return ['message' => 'Mã phân quyền đã tồn tại, vui lòng chọn mã khác', 'exception' => '', 'statusCode' => 403];
             $roleId = $this->model->query()->insertGetId(
                 [
                     'id' => Uuid::uuid4()->toString(),
@@ -121,8 +123,45 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
                 ]
             );
             $role = $this->model->query()->find($roleId);
-            $role->givePermissionTo($objects['permissions']);
-            return $role;
+            // $role->givePermissionTo($objects['permissions']);
+            //Default User
+            if ($objects['name'] == 'USER') {
+                foreach (PermissionsDefault::PERMISSIONS as $permission) {
+                    foreach (ScreensDefault::USER as $screen) {
+                        $role->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
+                    }
+                }
+            }
+
+            //SUB_ADMIN
+            if ($objects['name'] == 'SUB_ADMIN') {
+                foreach (PermissionsDefault::PERMISSIONS as $permission) {
+                    foreach (ScreensDefault::USER as $screen) {
+                        $role->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
+                    }
+                }
+            }
+            //Default Admin
+            if ($objects['name'] == 'ADMIN') {
+                foreach (PermissionsDefault::PERMISSIONS as $permission) {
+                    foreach (ScreensDefault::ADMIN_SCREENS as $screen) {
+                        $role->givePermissionTo(Permission::where('name', '=', $permission . '_' . $screen)->get());
+                    }
+                }
+            }
+        } else {
+            //  Comment code cũ
+            // $roleId = $this->model->query()->insertGetId(
+            //     [
+            //         'id' => Uuid::uuid4()->toString(),
+            //         'name' => $objects['name'],
+            //         'guard_name' => 'api',
+            //         'role_name' => $objects['role_name']
+            //     ]
+            // );
+            // $role = $this->model->query()->find($roleId);
+            // $role->givePermissionTo($objects['permissions']);
+            // return $role;
         }
     }
 
