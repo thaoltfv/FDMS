@@ -149,6 +149,7 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
                     }
                 }
             }
+            return $role;
         } else {
             //  Comment code cũ
             // $roleId = $this->model->query()->insertGetId(
