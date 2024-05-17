@@ -28,7 +28,6 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             'id',
             'asset_type_id',
             'appraise_asset',
-            'full_address',
             'total_area',
             'created_by',
             'coordinates',
