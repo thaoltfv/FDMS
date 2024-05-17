@@ -195,7 +195,7 @@
 												</p>
 											</div>
 											<div
-												v-if="editAppraiser && edit"
+												v-if="(editAppraiser && edit) || isBusinessManager"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -1807,6 +1807,7 @@ export default {
 				document_type: [],
 				note: ""
 			},
+			isBusinessManager: false,
 			file: "",
 			documentAppraise: [],
 			message: "",
@@ -1914,6 +1915,13 @@ export default {
 			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
 		}
 		this.user_id = profile.data.user.id;
+		if (
+			this.form &&
+			this.form.appraiser_business_manager &&
+			this.form.appraiser_business_manager.user_id === this.user.id
+		) {
+			this.isBusinessManager = true;
+		}
 		if (
 			this.form.status &&
 			(this.form.status == 2 ||
@@ -3575,6 +3583,7 @@ export default {
 					item.sub_status === this.form.sub_status &&
 					item.isActive === 1
 			);
+
 			if (dataJson && dataJson.length > 0) {
 				this.config = dataJson[0];
 				this.showExportDocument = dataJson[0].isExportDocument;

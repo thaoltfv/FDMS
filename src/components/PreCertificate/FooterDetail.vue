@@ -49,7 +49,7 @@
 			<img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit" />
 			Cross check
 		</button>
-		<button
+		<!-- <button
 			v-if="
 				isBusinessManager &&
 					config &&
@@ -59,14 +59,9 @@
 			class="btn btn-white mr-3"
 			@click="redistributeRecord"
 		>
-			<!-- <img
-				color="black"
-				class="img"
-				src="@/assets/icons/ic_done.svg"
-				alt="record"
-			/> -->
+		
 			Phân lại HS
-		</button>
+		</button> -->
 		<button
 			v-if="!certificateId"
 			v-for="(target, index) in getTargetDescription()"

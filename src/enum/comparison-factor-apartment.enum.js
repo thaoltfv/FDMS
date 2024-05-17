@@ -46,5 +46,19 @@ export const COMPARISON_APARTMENT = [{
 	slug: 'so_phong_wc',
 	disable: false,
 	visible: true
+},
+{
+	id: 7,
+	name: 'Hướng chính',
+	slug: 'huong_chinh',
+	disable: false,
+	visible: true
+},
+{
+	id: 8,
+	name: 'Tình trạng nội thất',
+	slug: 'tinh_trang_noi_that',
+	disable: false,
+	visible: true
 }
 ]

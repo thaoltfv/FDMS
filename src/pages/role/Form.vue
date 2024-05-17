@@ -11,7 +11,16 @@
 				<div class="card-body">
 					<div class="row">
 						<!--Display name role-->
-						<InputText
+						<InputCategory
+							v-model="getRoleName"
+							class="col-md-6 mb-3 mb-sm-0"
+							vid="role_name"
+							:requiredIcon="true"
+							label="Mã phân quyền"
+							rules="required"
+							:options="optionsRole"
+						/>
+						<!-- <InputText
 							v-model="form.name"
 							class="col-md-6 mb-3 mb-sm-0"
 							rules="required|max:100"
@@ -19,7 +28,7 @@
 							vid="role_name"
 							label="Mã phân quyền"
 							placeholder="Nhập Mã phân quyền"
-						/>
+						/> -->
 						<!--Display name role-->
 						<InputText
 							v-model="form.role_name"
@@ -272,6 +281,7 @@ export default {
 				name: "",
 				role_name: ""
 			},
+			getRoleName: "",
 			error: null,
 			isSubmit: false,
 			selected: [],
@@ -286,14 +296,46 @@ export default {
 			editPermissions: [],
 			deletePermissions: [],
 			acceptPermissions: [],
-			exportPermissions: []
+			exportPermissions: [],
+			roles: [
+				{
+					id: 1,
+					description: "USER"
+				},
+				{
+					id: 2,
+					description: "ADMIN"
+				},
+				{
+					id: 3,
+					description: "SUB_ADMIN"
+				}
+			]
 		};
+	},
+	computed: {
+		optionsRole() {
+			return {
+				data: this.roles,
+				id: "id",
+				key: "description"
+			};
+		}
 	},
 	created() {
 		if ("id" in this.$route.query && this.$route.name === "role.edit") {
 			this.form = Object.assign(this.form, {
 				...this.$route.meta["detail"]
 			});
+			if (this.form.name === "USER") {
+				this.getRoleName = 1;
+			}
+			if (this.form.name === "ADMIN") {
+				this.getRoleName = 2;
+			}
+			if (this.form.name === "SUB_ADMIN") {
+				this.getRoleName = 3;
+			}
 			this.permissions = this.$route.meta["detail"].permissions;
 		} else {
 		}
@@ -447,6 +489,22 @@ export default {
 		handleSubmit() {
 			this.isSubmit = true;
 			let data = this.form;
+			if (Number(this.getRoleName) === 1) {
+				data.name = "USER";
+			}
+			if (Number(this.getRoleName) === 2) {
+				data.name = "ADMIN";
+			}
+			if (Number(this.getRoleName) === 3) {
+				data.name = "SUB_ADMIN";
+			}
+			if (this.getRoleName === "") {
+				this.$toast.open({
+					message: "Vui lòng chọn mã phần quyền",
+					type: "error",
+					position: "top-right"
+				});
+			}
 			let permissions = [];
 			if (this.viewPermissions.length > 0) {
 				this.viewPermissions.forEach(value => {

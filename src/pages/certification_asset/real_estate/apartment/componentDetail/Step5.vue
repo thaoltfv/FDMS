@@ -2142,6 +2142,457 @@
 														</td>
 													</tr>
 
+													<!-- Hướng chính -->
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'huong_chinh' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'huong_chinh' + index"
+													>
+														<td rowspan="5">
+															<div
+																class="btn-delete"
+																v-if="isEditStatus"
+																type="button"
+																@click="
+																	dialogDeleteComparisionDefault('huong_chinh')
+																"
+															>
+																<img
+																	src="@/assets/icons/ic_delete_2.svg"
+																	alt="save"
+																/>
+															</div>
+														</td>
+														<td><strong>Hướng chính</strong></td>
+														<td
+															v-for="(comparison_factor_appraise,
+															index) in apartment.comparison_factor[0].comparison_factor.filter(
+																comparison_factor_appraise =>
+																	comparison_factor_appraise.type ===
+																		'huong_chinh' &&
+																	comparison_factor_appraise.status === 1
+															)"
+															:key="'huongchinh1' + index"
+														>
+															{{
+																formatSentenceCase(
+																	comparison_factor_appraise.apartment_title
+																)
+															}}
+														</td>
+														<td
+															v-for="(asset, index) in apartment.assets_general"
+															:key="'assetHuongChinh' + index"
+														>
+															<span
+																v-for="(comparison_factor,
+																indexItem) in apartment.comparison_factor[index]
+																	.comparison_factor"
+																:key="'huongchinh2' + indexItem"
+															>
+																<span
+																	v-if="
+																		comparison_factor.type === 'huong_chinh'
+																	"
+																>
+																	{{
+																		formatSentenceCase(
+																			comparison_factor.asset_title
+																		)
+																	}}
+																</span>
+															</span>
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'huong_chinh' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'huongchinh3' + index"
+													>
+														<td>Hệ số tương quan</td>
+														<td>100%</td>
+														<td
+															v-for="(asset,
+															indexAsset) in apartment.assets_general"
+															:key="'inputHuongChinh' + indexAsset"
+														>
+															<div
+																v-for="(comparison_factor, index) in apartment
+																	.comparison_factor[indexAsset]
+																	.comparison_factor"
+																:key="'huongchinh4' + index"
+															>
+																<div
+																	v-if="
+																		comparison_factor.type === 'huong_chinh'
+																	"
+																>
+																	<InputPercent
+																		:key="5567 + key_render_111"
+																		:disabled="!isEditStatus"
+																		class="label-none input_center"
+																		v-model="
+																			comparison_factor.adjust_coefficient
+																		"
+																		vid="number_legal"
+																		:text_center="true"
+																		@change="
+																			changeLegalCoefficient(
+																				$event,
+																				indexAsset,
+																				comparison_factor.type
+																			)
+																		"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'huong_chinh' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'huongchinh3' + index"
+													>
+														<td>Tỷ lệ điều chỉnh</td>
+														<td></td>
+														<td
+															v-for="(asset,
+															indexAsset) in apartment.assets_general"
+															:key="'inputHuongChinh' + indexAsset"
+														>
+															<div
+																v-for="(comparison_factor, index) in apartment
+																	.comparison_factor[indexAsset]
+																	.comparison_factor"
+																:key="'huongchinh4' + index"
+															>
+																<div
+																	v-if="
+																		comparison_factor.type === 'huong_chinh'
+																	"
+																>
+																	<InputPercentNegative
+																		:key="5567 + key_render_1"
+																		:disabled="true"
+																		class="label-none input_center"
+																		v-model="comparison_factor.adjust_percent"
+																		vid="number_legal"
+																		:text_center="true"
+																		@change="
+																			changeLegalRate(
+																				$event,
+																				indexAsset,
+																				comparison_factor.type
+																			)
+																		"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'huong_chinh' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'huongchinh5' + index"
+													>
+														<td>Mức điều chỉnh</td>
+														<td></td>
+														<td>
+															{{
+																formatNumber(parseFloat(priceHC1).toFixed(0))
+															}}
+														</td>
+														<td>
+															{{
+																formatNumber(parseFloat(priceHC2).toFixed(0))
+															}}
+														</td>
+														<td>
+															{{
+																formatNumber(parseFloat(priceHC3).toFixed(0))
+															}}
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'huong_chinh' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'huongchinh6' + index"
+													>
+														<td><strong>Giá sau điều chỉnh</strong></td>
+														<td></td>
+														<td>
+															<strong>{{
+																formatNumber(adjustPriceData["huong_chinh"][0])
+															}}</strong>
+														</td>
+														<td>
+															<strong>{{
+																formatNumber(adjustPriceData["huong_chinh"][1])
+															}}</strong>
+														</td>
+														<td>
+															<strong>{{
+																formatNumber(adjustPriceData["huong_chinh"][2])
+															}}</strong>
+														</td>
+													</tr>
+
+													<!-- Tình trạng nội thất -->
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'tinh_trang_noi_that' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'tinh_trang_noi_that' + index"
+													>
+														<td rowspan="5">
+															<div
+																class="btn-delete"
+																v-if="isEditStatus"
+																type="button"
+																@click="
+																	dialogDeleteComparisionDefault(
+																		'tinh_trang_noi_that'
+																	)
+																"
+															>
+																<img
+																	src="@/assets/icons/ic_delete_2.svg"
+																	alt="save"
+																/>
+															</div>
+														</td>
+														<td><strong>Tình trạng nội thất</strong></td>
+														<td
+															v-for="(comparison_factor_appraise,
+															index) in apartment.comparison_factor[0].comparison_factor.filter(
+																comparison_factor_appraise =>
+																	comparison_factor_appraise.type ===
+																		'tinh_trang_noi_that' &&
+																	comparison_factor_appraise.status === 1
+															)"
+															:key="'tinhtrangnoithat1' + index"
+														>
+															{{
+																formatSentenceCase(
+																	comparison_factor_appraise.apartment_title
+																)
+															}}
+														</td>
+														<td
+															v-for="(asset, index) in apartment.assets_general"
+															:key="'assetTinhTrangNoiThat' + index"
+														>
+															<span
+																v-for="(comparison_factor,
+																indexItem) in apartment.comparison_factor[index]
+																	.comparison_factor"
+																:key="'tinhtrangnoithat2' + indexItem"
+															>
+																<span
+																	v-if="
+																		comparison_factor.type ===
+																			'tinh_trang_noi_that'
+																	"
+																>
+																	{{
+																		formatSentenceCase(
+																			comparison_factor.asset_title
+																		)
+																	}}
+																</span>
+															</span>
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'tinh_trang_noi_that' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'tinhtrangnoithat3' + index"
+													>
+														<td>Hệ số tương quan</td>
+														<td>100%</td>
+														<td
+															v-for="(asset,
+															indexAsset) in apartment.assets_general"
+															:key="'inputTinhTrangNoiThat' + indexAsset"
+														>
+															<div
+																v-for="(comparison_factor, index) in apartment
+																	.comparison_factor[indexAsset]
+																	.comparison_factor"
+																:key="'tinhtrangnoithat4' + index"
+															>
+																<div
+																	v-if="
+																		comparison_factor.type ===
+																			'tinh_trang_noi_that'
+																	"
+																>
+																	<InputPercent
+																		:key="5567 + key_render_111"
+																		:disabled="!isEditStatus"
+																		class="label-none input_center"
+																		v-model="
+																			comparison_factor.adjust_coefficient
+																		"
+																		vid="number_legal"
+																		:text_center="true"
+																		@change="
+																			changeLegalCoefficient(
+																				$event,
+																				indexAsset,
+																				comparison_factor.type
+																			)
+																		"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'tinh_trang_noi_that' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'tinhtrangnoithat3' + index"
+													>
+														<td>Tỷ lệ điều chỉnh</td>
+														<td></td>
+														<td
+															v-for="(asset,
+															indexAsset) in apartment.assets_general"
+															:key="'inputTinhTrangNoiThat' + indexAsset"
+														>
+															<div
+																v-for="(comparison_factor, index) in apartment
+																	.comparison_factor[indexAsset]
+																	.comparison_factor"
+																:key="'tinhtrangnoithat4' + index"
+															>
+																<div
+																	v-if="
+																		comparison_factor.type ===
+																			'tinh_trang_noi_that'
+																	"
+																>
+																	<InputPercentNegative
+																		:key="5567 + key_render_1"
+																		:disabled="true"
+																		class="label-none input_center"
+																		v-model="comparison_factor.adjust_percent"
+																		vid="number_legal"
+																		:text_center="true"
+																		@change="
+																			changeLegalRate(
+																				$event,
+																				indexAsset,
+																				comparison_factor.type
+																			)
+																		"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'tinh_trang_noi_that' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'tinhtrangnoithat5' + index"
+													>
+														<td>Mức điều chỉnh</td>
+														<td></td>
+														<td>
+															{{
+																formatNumber(parseFloat(priceTTNT1).toFixed(0))
+															}}
+														</td>
+														<td>
+															{{
+																formatNumber(parseFloat(priceTTNT2).toFixed(0))
+															}}
+														</td>
+														<td>
+															{{
+																formatNumber(parseFloat(priceTTNT3).toFixed(0))
+															}}
+														</td>
+													</tr>
+													<tr
+														v-for="(comparison_factor_appraise,
+														index) in apartment.comparison_factor[0].comparison_factor.filter(
+															comparison_factor_appraise =>
+																comparison_factor_appraise.type ===
+																	'tinh_trang_noi_that' &&
+																comparison_factor_appraise.status === 1
+														)"
+														:key="'tinhtrangnoithat6' + index"
+													>
+														<td><strong>Giá sau điều chỉnh</strong></td>
+														<td></td>
+														<td>
+															<strong>{{
+																formatNumber(
+																	adjustPriceData["tinh_trang_noi_that"][0]
+																)
+															}}</strong>
+														</td>
+														<td>
+															<strong>{{
+																formatNumber(
+																	adjustPriceData["tinh_trang_noi_that"][1]
+																)
+															}}</strong>
+														</td>
+														<td>
+															<strong>{{
+																formatNumber(
+																	adjustPriceData["tinh_trang_noi_that"][2]
+																)
+															}}</strong>
+														</td>
+													</tr>
+
 													<tr
 														v-if="
 															showOtherFactor &&
@@ -2786,6 +3237,14 @@ export default {
 			pricePWC1: 0,
 			pricePWC2: 0,
 			pricePWC3: 0,
+			// Hướng chính
+			priceHC1: 0,
+			priceHC2: 0,
+			priceHC3: 0,
+			// Tình trạng nội thất
+			priceTTNT1: 0,
+			priceTTNT2: 0,
+			priceTTNT3: 0,
 			mgcd1: 0,
 			mgcd2: 0,
 			mgcd3: 0,
@@ -3977,6 +4436,92 @@ export default {
 				this.comparisonFactorChange3 += percentPn3 !== 0 ? 1 : 0;
 			}
 
+			// Hướng chính
+			this.priceHC1 = 0;
+			this.priceHC2 = 0;
+			this.priceHC3 = 0;
+			if (
+				typeof comparisonFactor1["huong_chinh"] !== "undefined" &&
+				comparisonFactor1["huong_chinh"].status === 1
+			) {
+				let percentHC1 = +comparisonFactor1["huong_chinh"].adjust_percent || 0;
+				let percentHC2 = +comparisonFactor2["huong_chinh"].adjust_percent || 0;
+				let percentHC3 = +comparisonFactor3["huong_chinh"].adjust_percent || 0;
+
+				// mức điều chỉnh của yếu tố WC
+				let price1 = this.roundPrice(
+					(percentHC1 * this.totalPricePL1) / 100,
+					0
+				);
+				let price2 = this.roundPrice(
+					(percentHC2 * this.totalPricePL2) / 100,
+					0
+				);
+				let price3 = this.roundPrice(
+					(percentHC3 * this.totalPricePL3) / 100,
+					0
+				);
+				this.priceHC1 = price1;
+				this.priceHC2 = price2;
+				this.priceHC3 = price3;
+				adjustPrice1 += price1;
+				adjustPrice2 += price2;
+				adjustPrice3 += price3;
+				this.adjustPriceData["huong_chinh"] = [
+					adjustPrice1,
+					adjustPrice2,
+					adjustPrice3
+				];
+
+				this.comparisonFactorChange1 += percentHC1 !== 0 ? 1 : 0;
+				this.comparisonFactorChange2 += percentHC2 !== 0 ? 1 : 0;
+				this.comparisonFactorChange3 += percentHC3 !== 0 ? 1 : 0;
+			}
+
+			// Tình trạng nội thất
+			this.priceTTNT1 = 0;
+			this.priceTTNT2 = 0;
+			this.priceTTNT3 = 0;
+			if (
+				typeof comparisonFactor1["tinh_trang_noi_that"] !== "undefined" &&
+				comparisonFactor1["tinh_trang_noi_that"].status === 1
+			) {
+				let percentTTNT1 =
+					+comparisonFactor1["tinh_trang_noi_that"].adjust_percent || 0;
+				let percentTTNT2 =
+					+comparisonFactor2["tinh_trang_noi_that"].adjust_percent || 0;
+				let percentTTNT3 =
+					+comparisonFactor3["tinh_trang_noi_that"].adjust_percent || 0;
+
+				// mức điều chỉnh của yếu tố WC
+				let price1 = this.roundPrice(
+					(percentTTNT1 * this.totalPricePL1) / 100,
+					0
+				);
+				let price2 = this.roundPrice(
+					(percentTTNT2 * this.totalPricePL2) / 100,
+					0
+				);
+				let price3 = this.roundPrice(
+					(percentTTNT3 * this.totalPricePL3) / 100,
+					0
+				);
+				this.priceTTNT1 = price1;
+				this.priceTTNT2 = price2;
+				this.priceTTNT3 = price3;
+				adjustPrice1 += price1;
+				adjustPrice2 += price2;
+				adjustPrice3 += price3;
+				this.adjustPriceData["tinh_trang_noi_that"] = [
+					adjustPrice1,
+					adjustPrice2,
+					adjustPrice3
+				];
+
+				this.comparisonFactorChange1 += percentTTNT1 !== 0 ? 1 : 0;
+				this.comparisonFactorChange2 += percentTTNT2 !== 0 ? 1 : 0;
+				this.comparisonFactorChange3 += percentTTNT3 !== 0 ? 1 : 0;
+			}
 			// if ((typeof comparisonFactor1['yeu_to_khac'] !== 'undefined') && comparisonFactor2['yeu_to_khac'] && comparisonFactor3['yeu_to_khac'] && comparisonFactor1['yeu_to_khac'].status === 1) {
 			// 	let percentYtk1 = 0
 			// 	let percentYtk2 = 0
@@ -4064,6 +4609,8 @@ export default {
 				Math.abs(this.priceDt1) +
 				Math.abs(this.priceSt1) +
 				Math.abs(this.pricePWC1) +
+				Math.abs(this.priceHC1) +
+				Math.abs(this.priceTTNT1) +
 				Math.abs(mgcd_price_other_abs[0]);
 			this.tldcg2 =
 				Math.abs(this.pricePl2) +
@@ -4073,6 +4620,8 @@ export default {
 				Math.abs(this.priceDt2) +
 				Math.abs(this.priceSt2) +
 				Math.abs(this.pricePWC2) +
+				Math.abs(this.priceHC2) +
+				Math.abs(this.priceTTNT2) +
 				Math.abs(mgcd_price_other_abs[1]);
 			this.tldcg3 =
 				Math.abs(this.pricePl3) +
@@ -4082,6 +4631,8 @@ export default {
 				Math.abs(this.priceDt3) +
 				Math.abs(this.priceSt3) +
 				Math.abs(this.pricePWC3) +
+				Math.abs(this.priceHC3) +
+				Math.abs(this.priceTTNT3) +
 				Math.abs(mgcd_price_other_abs[2]);
 
 			// tổng giá trị điều chỉnh thuần
@@ -4093,6 +4644,8 @@ export default {
 				this.priceDt1 +
 				this.priceSt1 +
 				this.pricePWC1 +
+				this.priceHC1 +
+				this.priceTTNT1 +
 				mgcd_price_other[0];
 			this.tldc2 =
 				this.pricePl2 +
@@ -4102,6 +4655,8 @@ export default {
 				this.priceDt2 +
 				this.priceSt2 +
 				this.pricePWC2 +
+				this.priceHC2 +
+				this.priceTTNT2 +
 				mgcd_price_other[1];
 			this.tldc3 =
 				this.pricePl3 +
@@ -4111,6 +4666,8 @@ export default {
 				this.priceDt3 +
 				this.priceSt3 +
 				this.pricePWC3 +
+				this.priceHC3 +
+				this.priceTTNT3 +
 				mgcd_price_other[2];
 
 			// tính mức giá chỉ dẫn của TSSS

@@ -190,7 +190,7 @@
 												</p>
 											</div>
 											<div
-												v-if="editAppraiser && edit"
+												v-if="(editAppraiser && edit) || isBusinessManager"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -774,7 +774,7 @@ export default {
 			title: "",
 			indexDelete: "",
 			id_file_delete: "",
-
+			isBusinessManager: false,
 			showDetailAppraise: false,
 			dataDetailAppraise: [],
 			appraiser_number: "",
@@ -1018,7 +1018,15 @@ export default {
 		};
 	},
 
-	created() {},
+	created() {
+		if (
+			this.dataPC &&
+			this.dataPC.appraiser_business_manager &&
+			this.dataPC.appraiser_business_manager.user_id === this.user_id
+		) {
+			this.isBusinessManager = true;
+		}
+	},
 	computed: {
 		statusDescription() {
 			if (this.jsonConfig) {
