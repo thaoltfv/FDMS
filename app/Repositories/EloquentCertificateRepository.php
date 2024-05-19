@@ -3383,6 +3383,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             'created_by',
             'document_type',
+            'phone_contact',
+            'name_contact',
+            'survey_location',
+            'survey_time',
+            'issue_date_card',
+            'issue_place_card'
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3444,7 +3450,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'pre_type_id',
             'administrative_id',
             'business_manager_id',
-            'document_alter_by_bank'
+            'document_alter_by_bank',
+            'phone_contact',
+            'name_contact',
+            'survey_location',
+            'survey_time',
+            'issue_date_card',
+            'issue_place_card'
         ];
         $with = [
             'appraiser:id,name,user_id',
