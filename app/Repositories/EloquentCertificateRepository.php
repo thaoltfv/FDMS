@@ -3297,6 +3297,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $data['certificate_date'] = isset($objects['certificate_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['certificate_date'])->format('Y-m-d') : null;
             $data['branch_id'] = $branch_id;
             $data['customer_id'] = $customerId;
+            $data['issue_date_card'] = isset($objects['issue_date_card']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['issue_date_card'])->format('Y-m-d') : null;
+            $data['survey_time'] = isset($objects['survey_time']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $objects['survey_time'])->format('Y-m-d H:i') : null;
             if (isset($id)) {
                 $check = $this->beforeSave($id);
                 if (isset($check)) {
