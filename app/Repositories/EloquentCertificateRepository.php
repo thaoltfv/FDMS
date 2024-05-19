@@ -5129,6 +5129,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
         if (Certificate::where('id', $id)->exists()) {
             Certificate::where('id', $id)->update([
+                // Data mới
+                'survey_location' => $object['survey_location'],
+                'survey_time' => isset($object['survey_time']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $object['survey_time'])->format('Y-m-d H:i') : null,
+                'issue_date_card' =>  isset($object['issue_date_card']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['issue_date_card'])->format('Y-m-d') : null,
+                'issue_place_card' => $object['issue_place_card'],
+                'name_contact' => $object['name_contact'],
+                'phone_contact' => $object['phone_contact'],
                 'petitioner_name' => $object['petitioner_name'],
                 'petitioner_phone' => $object['petitioner_phone'],
                 'petitioner_identity_card' => $object['petitioner_identity_card'],
