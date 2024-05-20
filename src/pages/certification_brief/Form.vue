@@ -256,10 +256,10 @@ export default {
 				: "";
 			// Data mới
 			this.form.step_1.survey_time = this.form.step_1.survey_time
-				? moment(this.form.step_1.survey_time).format("DD/MM/YYYY HH:mm:ss")
+				? moment(this.form.step_1.survey_time).format("DD-MM-YYYY HH:mm")
 				: "";
 			this.form.step_1.issue_date_card = this.form.step_1.issue_date_card
-				? moment(this.form.step_1.issue_date_card).format("DD/MM/YYYY HH:mm:ss")
+				? moment(this.form.step_1.issue_date_card).format("DD/MM/YYYY")
 				: "";
 			if (!this.form.step_1.customer) {
 				this.form.step_1.customer = {

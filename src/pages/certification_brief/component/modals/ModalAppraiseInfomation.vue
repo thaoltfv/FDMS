@@ -100,7 +100,6 @@
 									vid="issue_date_card"
 									label="Ngày cấp "
 									placeholder="Ngày / tháng / năm"
-									rules="required"
 									:formatDate="'DD/MM/YYYY'"
 									class="w-50 form-group-container input_right"
 									@change="changeIssueDate"

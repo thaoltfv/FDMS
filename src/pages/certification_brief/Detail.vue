@@ -1348,10 +1348,34 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tài liệu đính kèm</h3>
+
+						<div class="d-flex align-items-center">
+							<font-awesome-icon
+								@click="openUploadFile('documnent')"
+								:style="{
+									color: '#2682bfad',
+									height: '2rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="cloud-upload-alt"
+								size="1x"
+							/>
+
+							<input
+								hidden
+								type="file"
+								ref="file"
+								id="certificate_document"
+								multiple
+								accept="image/png, image/gif, image/jpeg, image/jpg"
+								@change="onImageChange($event)"
+							/>
+						</div>
 					</div>
 				</div>
 				<div class="card-body card-info">
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-12 mt-3">
 							<div
 								class="input_upload_file d-flex justify-content-center align-items-center"
@@ -1372,7 +1396,7 @@
 								/>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="row mt-3">
 						<div
 							v-for="(file, index) in form.other_documents.filter(
@@ -1427,10 +1451,33 @@
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Hồ sơ gốc</h3>
+						<div class="d-flex align-items-center">
+							<font-awesome-icon
+								@click="openUploadFile('original')"
+								:style="{
+									color: '#2682bfad',
+									height: '2rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="cloud-upload-alt"
+								size="2x"
+							/>
+
+							<input
+								hidden
+								type="file"
+								ref="file"
+								id="certificate_original"
+								multiple
+								accept="image/png, image/gif, image/jpeg, image/jpg"
+								@change="onImageChangeOriginal($event)"
+							/>
+						</div>
 					</div>
 				</div>
 				<div class="card-body card-info">
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-12 mt-3">
 							<div
 								class="input_upload_file d-flex justify-content-center align-items-center"
@@ -1451,7 +1498,7 @@
 								/>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="row mt-3">
 						<div
 							v-for="(file, index) in form.other_documents.filter(
@@ -2199,6 +2246,11 @@ export default {
 						duration: 5000
 					});
 				});
+		},
+		openUploadFile(type) {
+			const id =
+				type === "original" ? "certificate_original" : "certificate_document";
+			document.getElementById(id).click();
 		},
 		handleMenuClick(e) {
 			if (e.key === "1") {
@@ -3994,6 +4046,16 @@ export default {
 	padding: 0;
 	border: 0;
 }
+.btn-upload-mini-document {
+	left: 0;
+	opacity: 0;
+	width: 0rem;
+	// min-height: 10rem;
+	cursor: pointer;
+	// position: absolute;
+	padding: 0;
+	border: 0;
+}
 .btn_list_appraise {
 	&-orange {
 		background: #faa831;
@@ -4172,7 +4234,7 @@ export default {
 	width: 123px;
 	height: 35px;
 	color: #fff;
-	background: #faa831;
+	background: #fff;
 	font-size: 1.125rem;
 	border-radius: 5px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
