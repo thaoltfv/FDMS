@@ -397,7 +397,7 @@ class ReportAppraisal extends Report
         $table->addRow(400, $this->cantSplit);
         $apartment = $realEstate->apartment;
         //1
-        $address = htmlspecialchars($apartment->full_address) ?: '';
+        $address = $apartment->full_address ? htmlspecialchars($apartment->full_address) : '';
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('1', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Pháp lý');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Địa chỉ:');
