@@ -32,15 +32,18 @@ class ReportAppraisalNova extends ReportAppraisal
     {
         $comAcronym = !empty($this->companyAcronym) ?  ' (' . mb_strtoupper($this->companyAcronym) . ')' : '';
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
-        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName) .  $comAcronym, 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName), 0, null, 'bullets');
         $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $this->companyPhone . "\tFax: " . $this->companyFax, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên người Đại diện pháp luật: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
         if (isset($certificate->appraiserConfirm->name)) {
             $section->addListItem('Họ và tên người được uỷ quyền Đại diện pháp luật: ' . $certificate->appraiserConfirm->name, 0, null, 'bullets');
         }
-        $section->addListItem('Họ và tên Thẩm định viên: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
-        $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
+        $section->addListItem('Họ và tên Thẩm định viên về giá: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
+        // $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
+        $section->addListItem('Người lập báo cáo giá: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? $certificate->appraiserPerform->name : ''), 0, null, 'bullets');
+
+        // appraiserPerform
     }
 
     protected function step1Sub3($section, $certificate)
@@ -55,18 +58,26 @@ class ReportAppraisalNova extends ReportAppraisal
             if ($realEstate->assetType->description == "ĐẤT CÓ NHÀ") $type2 = 1;
             if ($realEstate->assetType->description == "CHUNG CƯ") $type3 = 1;
         }
-        if ($type1 && $type2 && $type3) {
-            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc và căn hộ chung cư";
-        } else if ($type1 && $type3) {
-            $appraiseAssetType = "Quyền sử dụng đất và căn hộ chung cư";
-        } else if (($type1 && $type2) || ($type2)) {
-            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc";
+        // if ($type1 && $type2 && $type3) {
+        //     $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc và căn hộ chung cư";
+        // } else if ($type1 && $type3) {
+        //     $appraiseAssetType = "Quyền sử dụng đất và căn hộ chung cư";
+        // } else if (($type1 && $type2) || ($type2)) {
+        //     $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc";
+        // } else if ($type3) {
+        //     $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
+        // }
+
+        if ($type1) {
+            $appraiseAssetType = 'Quyền sử dụng đất';
+        } else if ($type2) {
+            $appraiseAssetType = 'Quyền sử dụng đất và sở hữu công trình xây dựng trên đất';
         } else if ($type3) {
             $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
         }
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Loại tài sản: ', ['bold' => true]);
-        $listTmp->addText('Bất động sản.');
+        $listTmp->addText($appraiseAssetType);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Tên tài sản: ', ['bold' => true]);
         $listTmp->addText($this->getAssetName($certificate) . '.');
@@ -563,18 +574,18 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function printAppendix(Section $section, $certificate)
     {
         $section->addListItem('Kết quả thẩm định giá trên chỉ xác nhận giá trị thị trường cho tài sản thẩm định có đặc điểm pháp lý và đặc điểm kinh tế - kỹ thuật và hiện trạng được mô tả chi tiết tại thời điểm thẩm định được ghi trong báo cáo thẩm định giá này.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('' . $this->acronym . ' mô tả đặc điểm pháp lý và đặc điểm kinh tế - kỹ thuật của tài sản thẩm định giá dựa trên các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá do khách hàng cung cấp và ghi nhận hiện trạng tài sản theo sự hướng dẫn của khách hàng hoặc người hướng dẫn do khách hàng chỉ định. Trong trường hợp có sự sai khác về các đặc điểm đã mô tả có khả năng dẫn đến sự thay đổi của kết quả thẩm định giá. Khách hàng và các bên liên quan khi sử dụng kết quả thẩm định giá trên xem như đã hiểu rõ về vấn đề này và đưa ra quyết định phù hợp với mục đích thẩm định giá đã ghi trong báo cáo này', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Công ty TNHH Thẩm định giá ' . $this->acronym . ' mô tả đặc điểm pháp lý và đặc điểm kinh tế - kỹ thuật của tài sản thẩm định giá dựa trên các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá do khách hàng cung cấp và ghi nhận hiện trạng tài sản theo sự hướng dẫn của khách hàng hoặc người hướng dẫn do khách hàng chỉ định. Trong trường hợp có sự sai khác về các đặc điểm đã mô tả có khả năng dẫn đến sự thay đổi của kết quả thẩm định giá. Khách hàng và các bên liên quan khi sử dụng kết quả thẩm định giá trên xem như đã hiểu rõ về vấn đề này và đưa ra quyết định phù hợp với mục đích thẩm định giá đã ghi trong báo cáo này', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên được tính toán trong điều kiện thị trường bình thường tại thời điểm thẩm định giá. Những biến động bất thường của thị trường hay chính sách trong tương lai có ảnh hưởng đến giá trị của tài sản không được xem xét trong báo cáo này.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Kết quả thẩm định giá phải được sử dụng đúng đối tượng và mục đích đã ghi trong báo cáo này. ' . $this->acronym . ' không chịu trách nhiệm trong mọi trường hợp khách hàng hoặc bên thứ ba không đúng đối tượng sử dụng kết quả thẩm định giá sai mục đích.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị khi và chỉ khi các bên tham gia tuân thủ và hoàn thành các điều khoản trong hợp đồng cung cấp dịch vụ thẩm định giá. Trong trường hợp khách hàng không thực hiện đầy đủ các nghĩa vụ (bao gồm nghĩa vụ thanh toán) được ghi trong hợp đồng thì ' . $this->acronym . ' mặc nhiên coi là hợp đồng vô hiệu và toàn bộ Chứng thư / Báo cáo thẩm định giá đã thỏa thuận giao trước cho khách hàng (nếu có) sẽ không có giá trị pháp lý.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Chứng thư này phát hành chỉ để tư vấn giá trị tài sản cho khách hàng làm cơ sở tham khảo để xem xét cân nhắc và tự quyết định theo mục đích đã yêu cầu. ' . $this->acronym . ' không đi sâu tìm hiểu kỹ nguồn gốc chủ quyền. Chủ quyền sở hữu tài sản là do các cơ quan có thẩm quyền cấp hoặc được xác định theo quy định của pháp luật hiện hành.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Về pháp lý tài sản thẩm định giá: Khách hàng cung cấp các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá như trên bằng bản sao (bản photo). Khách hàng chịu trách nhiệm về tính chính xác của hồ sơ đã cung cấp. ' . $this->acronym . ' không kiểm tra sự phù hợp giữa bản chính và bản chụp hồ sơ pháp lý khách hàng cung cấp. Kết quả thẩm định giá được nêu trong báo cáo này dựa trên giả định các tài liệu, chứng từ, hồ sơ pháp lý khách hàng cung cấp là trung thực và đúng với hiện trạng pháp lý của tài sản tại thời điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Khách hàng yêu cầu thẩm định giá hoặc người hướng dẫn được khách hàng chỉ định đã hướng dẫn thẩm định viên/ chuyên viên ' . $this->acronym . ' thực hiện khảo sát / thẩm định hiện trạng tài sản phải chịu hoàn toàn trách nhiệm về thông tin liên quan đến đặc điểm kinh tế - kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho ' . $this->acronym . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. ' . $this->acronym . ' không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của nó hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Kết quả thẩm định giá phải được sử dụng đúng đối tượng và mục đích đã ghi trong báo cáo này. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không chịu trách nhiệm trong mọi trường hợp khách hàng hoặc bên thứ ba không đúng đối tượng sử dụng kết quả thẩm định giá sai mục đích.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị khi và chỉ khi các bên tham gia tuân thủ và hoàn thành các điều khoản trong hợp đồng cung cấp dịch vụ thẩm định giá. Trong trường hợp khách hàng không thực hiện đầy đủ các nghĩa vụ (bao gồm nghĩa vụ thanh toán) được ghi trong hợp đồng thì Công ty TNHH Thẩm định giá ' . $this->acronym . ' mặc nhiên coi là hợp đồng vô hiệu và toàn bộ Chứng thư / Báo cáo thẩm định giá đã thỏa thuận giao trước cho khách hàng (nếu có) sẽ không có giá trị pháp lý.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Chứng thư này phát hành chỉ để tư vấn giá trị tài sản cho khách hàng làm cơ sở tham khảo để xem xét cân nhắc và tự quyết định theo mục đích đã yêu cầu. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không đi sâu tìm hiểu kỹ nguồn gốc chủ quyền. Chủ quyền sở hữu tài sản là do các cơ quan có thẩm quyền cấp hoặc được xác định theo quy định của pháp luật hiện hành.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Về pháp lý tài sản thẩm định giá: Khách hàng cung cấp các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá như trên bằng bản sao (bản photo). Khách hàng chịu trách nhiệm về tính chính xác của hồ sơ đã cung cấp. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không kiểm tra sự phù hợp giữa bản chính và bản chụp hồ sơ pháp lý khách hàng cung cấp. Kết quả thẩm định giá được nêu trong báo cáo này dựa trên giả định các tài liệu, chứng từ, hồ sơ pháp lý khách hàng cung cấp là trung thực và đúng với hiện trạng pháp lý của tài sản tại thời điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Khách hàng yêu cầu thẩm định giá hoặc người hướng dẫn được khách hàng chỉ định đã hướng dẫn thẩm định viên/ chuyên viên Công ty TNHH Thẩm định giá '  . $this->acronym . ' thực hiện khảo sát / thẩm định hiện trạng tài sản phải chịu hoàn toàn trách nhiệm về thông tin liên quan đến đặc điểm kinh tế - kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho Công ty TNHH Thẩm định giá ' . $this->acronym . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của nó hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Thẩm định viên và những người tham gia trực tiếp không có quan hệ kinh tế hoặc quyền lợi kinh tế như góp vốn cổ phần, cho vay hoặc vay vốn từ khách hàng, không là cổ đông chi phối của khách hàng hoặc ký kết hợp đồng gia công dịch vụ, đại lý tiêu thụ hàng hóa và không có xảy ra bất kỳ xung đột lợi ích nào', 0, null, 'bullets', $this->indentFistLine);
 
         $section->addTitle('CÁC TÀI LIỆU KÈM THEO:', 1);
-        $section->addListItem('Hồ sơ pháp lý tài sản thẩm định.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Hồ sơ pháp lý tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addText('Báo cáo kết quả thẩm định giá được phát hành 03 bản chính Tiếng Việt, kèm theo Chứng thư thẩm định giá số ' . $this->certificateCode . ' ngày ' . $this->certificateShortDateText . ' tại ' . $this->companyName, ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
     }
     protected function signature(Section $section, $certificate)
