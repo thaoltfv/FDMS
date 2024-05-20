@@ -13,7 +13,7 @@
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="showExportDocument">
+							<!-- <a-dropdown v-if="showExportDocument">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -25,7 +25,7 @@
 										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
 									</a-menu>
 								</template>
-							</a-dropdown>
+							</a-dropdown> -->
 							<div
 								v-if="form.pre_certificate_id"
 								id="pre_certificate_id"
@@ -585,7 +585,11 @@
 			</div>
 		</div>
 		<div
-			v-if="form.general_asset.length > 0 && printConfig"
+			v-if="
+				form.general_asset.length > 0 &&
+					printConfig &&
+					statusDescription !== 'In hồ sơ'
+			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
@@ -1331,6 +1335,269 @@
 				</div>
 			</div>
 		</div>
+		<div v-else class="col-12" :style="isMobile() ? { padding: '0' } : {}">
+			<div
+				class="d-flex flex-column flex-lg-row justify-content-around align-items-center"
+			>
+				<div class="card w-100">
+					<div class="card-title text-center">
+						<h3 class="title title_input_content">Tài liệu chính thức</h3>
+					</div>
+					<div class="card-body card-info">
+						<div class=" mt-2 row">
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[0] }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isCertificateReport }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isCertificateReport"
+												@click="downloadDocumentFile('certificate_report')"
+											>
+												{{ certificatReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[0] }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppraisalReport }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppraisalReport"
+												@click="downloadDocumentFile('appraisal_report')"
+											>
+												{{ appraisalReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppendix1Report }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppendix1Report"
+												@click="downloadDocumentFile('appendix1_report')"
+											>
+												{{ appendix1ReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppendix2Report }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppendix2Report"
+												@click="downloadDocumentFile('appendix2_report')"
+											>
+												{{ appendix2ReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppendix3Report }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppendix3Report"
+												@click="downloadDocumentFile('appendix3_report')"
+											>
+												{{ appendix3ReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isComparisionAssetReport }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isComparisionAssetReport"
+												@click="
+													downloadDocumentFile('comparision_asset_report')
+												"
+											>
+												{{ comparisionAssetReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div
 			v-if="idData && showExportDocument"
 			class="col-12"
@@ -1339,10 +1606,11 @@
 			<DocumentExport
 				:allow-edit="editExportDocument"
 				:is_pc="false"
-				:data-id="idData"
+				:idData="idData"
 				:lstFileExport="form.export_documents || []"
 				:permission="{ allowExport: exportAction }"
 				:toast="$toast"
+				@handleDownloadAutoDocument="handleDownloadAutoDocument"
 			/>
 		</div>
 		<div
@@ -2271,6 +2539,17 @@ export default {
 			const id =
 				type === "original" ? "certificate_original" : "certificate_document";
 			document.getElementById(id).click();
+		},
+		handleDownloadAutoDocument(type) {
+			if (type === "GYC") {
+				this.exportGYC();
+			} else if (type === "HDTDG") {
+				this.exportHDTDG();
+			} else if (type === "KHTDG") {
+				this.exportKHTDG();
+			} else if (type === "BBTL") {
+				this.exportBBTL();
+			}
 		},
 		handleMenuClick(e) {
 			if (e.key === "1") {
@@ -4306,6 +4585,7 @@ export default {
 	height: 3.85rem;
 	padding: 0.85rem 0px;
 }
+
 .title_input_download {
 	color: #00507c;
 	font-weight: 600;

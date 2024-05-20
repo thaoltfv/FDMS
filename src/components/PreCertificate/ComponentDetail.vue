@@ -13,7 +13,7 @@
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="showExportDocument && dataPC.status !== 1">
+							<!-- <a-dropdown v-if="showExportDocument && dataPC.status !== 1">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -25,7 +25,7 @@
 										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
 									</a-menu>
 								</template>
-							</a-dropdown>
+							</a-dropdown> -->
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
@@ -508,7 +508,7 @@
 				</div>
 			</div>
 		</div>
-		<div
+		<!-- <div
 			v-if="dataPC.id && showExportDocument && dataPC.status !== 1"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
@@ -521,7 +521,7 @@
 				:permission="{ allowExport: exportAction }"
 				:toast="$toast"
 			/>
-		</div>
+		</div> -->
 		<div
 			v-if="dataPC.id"
 			class="col-12"
