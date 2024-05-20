@@ -1799,7 +1799,7 @@ export default {
 			return text.charAt(0).toUpperCase() + text.slice(1);
 		},
 		formatCapitalize(word) {
-			return word.replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+			return word.toLowerCase().replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
 				return x.toUpperCase();
 			});
 		},

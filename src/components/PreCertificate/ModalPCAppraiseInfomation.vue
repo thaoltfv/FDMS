@@ -135,7 +135,7 @@
 								:rows="1"
 								:disableInput="false"
 								v-model="dataForm.pre_asset_name"
-								label="Tên tài sản sơ bộ"
+								label="Ghi chú"
 								rules="required"
 								:requiredIcon="true"
 								class="form-group-container col-12"

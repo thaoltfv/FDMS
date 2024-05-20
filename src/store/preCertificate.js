@@ -48,7 +48,7 @@ export const usePreCertificateStore = defineStore(
 			pre_type_id: null,
 			commission_fee: 0,
 			pre_date: null,
-			pre_asset_name: null,
+			pre_asset_name: `- Địa chỉ tài sản: \n- Tọa độ: \n- Thông tin khác:`,
 			total_service_fee: 0,
 
 			uploadFile: null,
@@ -344,7 +344,7 @@ export const usePreCertificateStore = defineStore(
 						name: "pre_certification.detail",
 						query: { id: `${res.data.id}` }
 					})
-					.catch(_ => {});
+					.catch(_ => { });
 			} else if (res.error) {
 				other.value.toast.open({
 					message: `${res.error.message}`,
@@ -625,7 +625,7 @@ export const usePreCertificateStore = defineStore(
 				pre_type_id: null,
 				commission_fee: 0,
 				pre_date: null,
-				pre_asset_name: null,
+				pre_asset_name: `- Địa chỉ tài sản: \n- Tọa độ: \n- Thông tin khác:`,
 				total_service_fee: 0,
 				uploadFile: null
 			};

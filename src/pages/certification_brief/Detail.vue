@@ -71,6 +71,20 @@
 									<strong class="margin_content_inline">Điện thoại:</strong>
 									<p>{{ form.petitioner_phone }}</p>
 								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Ngày cấp:</strong>
+									<p>
+										{{
+											form.issue_date_card
+												? formatDate(form.issue_date_card)
+												: ""
+										}}
+									</p>
+									<strong class="margin_content_inline">Nơi cấp:</strong>
+									<p>
+										{{ form.issue_place_card ? form.issue_place_card : "" }}
+									</p>
+								</div>
 								<!-- <div class="d-flex container_content">
 											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{form.petitioner_phone}}</p>
 										</div> -->
@@ -148,6 +162,7 @@
 										}}
 									</p>
 								</div>
+
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
@@ -158,6 +173,28 @@
 									<b-tooltip target="note" placement="top-right">{{
 										form.note
 									}}</b-tooltip>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline">Người liên hệ:</strong>
+									<p>{{ form.name_contact }}</p>
+									<strong class="margin_content_inline">Điện thoại:</strong>
+									<p>{{ form.phone_contact }}</p>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline"
+										>Ngày giờ khảo sát:</strong
+									>
+									<p>
+										{{
+											form.survey_time ? formatDateTime(form.survey_time) : ""
+										}}
+									</p>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline"
+										>Địa điểm khảo sát:</strong
+									>
+									<p>{{ form.survey_location ? form.survey_location : "" }}</p>
 								</div>
 							</div>
 						</div>
@@ -195,7 +232,7 @@
 												</p>
 											</div>
 											<div
-												v-if="editAppraiser && edit"
+												v-if="(editAppraiser && edit) || isBusinessManager"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -244,7 +281,6 @@
 											>
 											<p>{{ form.appraiser ? form.appraiser.name : "" }}</p>
 										</div>
-
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
 												>Hành chính viên:</strong
@@ -255,7 +291,6 @@
 												}}
 											</p>
 										</div>
-
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
 												>Đại diện theo pháp luật:</strong
@@ -297,6 +332,7 @@
 			:user="user"
 			:toast="$toast"
 		/>
+
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -574,14 +610,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadCertificate(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('certificate')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadCertificate(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('certificate')
 											"
 										>
 											{{ filterDocumentName[0] || "Chứng thư thẩm định" }}
@@ -617,7 +655,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadReportCertificate(idData)
+													checkDownloadDocument('report_certificate')
 											"
 										/>
 										<div
@@ -625,7 +663,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadReportCertificate(idData)
+													checkDownloadDocument('report_certificate')
 											"
 										>
 											{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
@@ -660,14 +698,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix1(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix1')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix1(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix1')
 											"
 										>
 											{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
@@ -708,14 +748,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix2(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix2')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix2(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix2')
 											"
 										>
 											{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
@@ -750,14 +792,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix3(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix3')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix3(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix3')
 											"
 										>
 											{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
@@ -797,7 +841,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadAssetDocument(idData)
+													checkDownloadDocument('asset_document')
 											"
 										/>
 										<div
@@ -805,7 +849,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadAssetDocument(idData)
+													checkDownloadDocument('asset_document')
 											"
 										>
 											{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
@@ -1303,19 +1347,46 @@
 		</div>
 		<div
 			v-if="
-				form.general_asset.length > 0 || form.status === 1 || form.status === 2 || form.status === 10
+				form.general_asset.length > 0 ||
+					form.status === 1 ||
+					form.status === 2 ||
+					form.status === 10
 			"
-			class="col-12"
+			class="col-6"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
 			<div class="card" :style="isMobile() ? { 'margin-bottom': '150px' } : {}">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tài liệu đính kèm</h3>
+
+						<div class="d-flex align-items-center">
+							<font-awesome-icon
+								@click="openUploadFile('documnent')"
+								:style="{
+									color: '#2682bfad',
+									height: '2rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="cloud-upload-alt"
+								size="1x"
+							/>
+
+							<input
+								hidden
+								type="file"
+								ref="file"
+								id="certificate_document"
+								multiple
+								accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+								@change="onImageChange($event)"
+							/>
+						</div>
 					</div>
 				</div>
 				<div class="card-body card-info">
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-12 mt-3">
 							<div
 								class="input_upload_file d-flex justify-content-center align-items-center"
@@ -1336,14 +1407,14 @@
 								/>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="row mt-3">
 						<div
 							v-for="(file, index) in form.other_documents.filter(
 								i => i.description === 'appendix' || i.description === 'other'
 							)"
 							:key="index"
-							class="d-flex"
+							class="d-flex col-12"
 						>
 							<div
 								style="cursor: pointer"
@@ -1356,7 +1427,109 @@
 									src="@/assets/icons/ic_taglink.svg"
 									alt="tag_2"
 								/>
-								<div class="mr-3">{{ file.name }}</div>
+								<div class="mr-3 text-truncate">{{ file.name }}</div>
+							</div>
+							<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
+							<div class="mr-3">{{file.name}}</div> -->
+							<img
+								v-if="
+									deleted &&
+										(form.status === 1 ||
+											form.status === 2 ||
+											form.status === 3)
+								"
+								style="cursor: pointer; width: 1rem"
+								@click="deleteOtherFile(file, index)"
+								src="@/assets/icons/ic_delete_2.svg"
+								alt="tag_2"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			v-if="
+				form.general_asset.length > 0 ||
+					form.status === 1 ||
+					form.status === 2 ||
+					form.status === 10
+			"
+			class="col-6"
+			:style="isMobile() ? { padding: '0' } : {}"
+		>
+			<div class="card" :style="isMobile() ? { 'margin-bottom': '150px' } : {}">
+				<div class="card-title">
+					<div class="d-flex justify-content-between align-items-center">
+						<h3 class="title">Hồ sơ gốc</h3>
+						<div class="d-flex align-items-center">
+							<font-awesome-icon
+								@click="openUploadFile('original')"
+								:style="{
+									color: '#2682bfad',
+									height: '2rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="cloud-upload-alt"
+								size="2x"
+							/>
+
+							<input
+								hidden
+								type="file"
+								ref="file"
+								id="certificate_original"
+								multiple
+								accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+								@change="onImageChangeOriginal($event)"
+							/>
+						</div>
+					</div>
+				</div>
+				<div class="card-body card-info">
+					<!-- <div class="row">
+						<div class="col-12 mt-3">
+							<div
+								class="input_upload_file d-flex justify-content-center align-items-center"
+							>
+								<font-awesome-icon
+									:style="{ color: 'orange', position: 'absolute' }"
+									icon="cloud-upload-alt"
+									size="5x"
+								/>
+								<input
+									class="btn-upload"
+									type="file"
+									ref="file"
+									id="image_property"
+									multiple
+									accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
+									@change="onImageChangeOriginal($event)"
+								/>
+							</div>
+						</div>
+					</div> -->
+					<div class="row mt-3">
+						<div
+							v-for="(file, index) in form.other_documents.filter(
+								i => i.description === 'original'
+							)"
+							:key="index"
+							class="d-flex col-12"
+						>
+							<div
+								style="cursor: pointer"
+								@click="downloadOtherFile(file)"
+								class="d-flex"
+							>
+								<img
+									class="mr-1"
+									style="width: 1rem"
+									src="@/assets/icons/ic_taglink.svg"
+									alt="tag_2"
+								/>
+								<div class="mr-3 text-truncate">{{ file.name }}</div>
 							</div>
 							<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
 							<div class="mr-3">{{file.name}}</div> -->
@@ -1389,6 +1562,7 @@
 			:idData="idData"
 			:checkVersion="checkVersion"
 			@handleFooterAccept="handleFooterAccept"
+			@handleFooterRedistributeRecord="handleFooterRedistributeRecord"
 			@handleEdit="handleEdit"
 			@handleCancelCertificate="handleCancelCertificate"
 			@onCancel="onCancel"
@@ -1445,6 +1619,11 @@
 		</div> -->
 
 		<!-- <ModalCustomer v-if="showCustomerDialog"/> -->
+		<ModalConfirmDownload
+			v-if="showPopupComfirmDownloadAutoDocument"
+			@cancel="showPopupComfirmDownloadAutoDocument = false"
+			@action="handleDownloadConfirm"
+		/>
 		<ModalAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
@@ -1479,8 +1658,15 @@
 			v-if="openNotification"
 			@cancel="handleCancel"
 			:notification="
-				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
-					? `Bạn có muốn '${message}' hồ sơ này?`
+				message == 'Từ chối' ||
+				message == 'Duyệt' ||
+				message == 'Hủy' ||
+				message == 'Phân lại'
+					? `Bạn có muốn '${message}' hồ sơ này ${
+							message == 'Phân lại'
+								? ` ở bước '` + statusDescription + `' `
+								: ''
+					  }? `
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="hstdConfig"
@@ -1544,7 +1730,10 @@
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
-				message == 'Từ chối' || message == 'Duyệt' || message == 'Hủy'
+				message == 'Từ chối' ||
+				message == 'Duyệt' ||
+				message == 'Hủy' ||
+				message == 'Phân lại'
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
@@ -1629,6 +1818,7 @@ import store from "@/store";
 import * as types from "@/store/mutation-types";
 import ModalAppraiseListVersion from "./component/modals/ModalAppraiseListVersion";
 import IconBase from "@/components/IconBase.vue";
+import ModalConfirmDownload from "@/components/Modal/ModalConfirmDownload.vue";
 
 Vue.use(Icon);
 export default {
@@ -1659,6 +1849,7 @@ export default {
 		ModalNotificationCertificate,
 		ModalViewDocument,
 		ModalDelete,
+		ModalConfirmDownload,
 		"b-dropdown-item": BDropdownItem,
 		"b-button-group": BButtonGroup,
 		"b-dropdown": BDropdown,
@@ -1668,6 +1859,8 @@ export default {
 	},
 	data() {
 		return {
+			showPopupComfirmDownloadAutoDocument: false,
+			typeConfirm: "",
 			theme: {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
@@ -1712,8 +1905,15 @@ export default {
 				appraises: [],
 				other_documents: [],
 				document_type: [],
-				note: ""
+				note: "",
+				survey_time: "",
+				survey_location: "",
+				name_contact: "",
+				phone_contact: "",
+				issue_date_card: "",
+				issue_place_card: ""
 			},
+			isBusinessManager: false,
 			file: "",
 			documentAppraise: [],
 			message: "",
@@ -1821,6 +2021,13 @@ export default {
 			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
 		}
 		this.user_id = profile.data.user.id;
+		if (
+			this.form &&
+			this.form.appraiser_business_manager &&
+			this.form.appraiser_business_manager.user_id === this.user.id
+		) {
+			this.isBusinessManager = true;
+		}
 		if (
 			this.form.status &&
 			(this.form.status == 2 ||
@@ -2059,6 +2266,11 @@ export default {
 						duration: 5000
 					});
 				});
+		},
+		openUploadFile(type) {
+			const id =
+				type === "original" ? "certificate_original" : "certificate_document";
+			document.getElementById(id).click();
 		},
 		handleMenuClick(e) {
 			if (e.key === "1") {
@@ -2342,6 +2554,14 @@ export default {
 			});
 		},
 		updateAppraiseInformation(dataAppraiseInformation) {
+			// Data mới thêm
+			this.form.survey_time = dataAppraiseInformation.survey_time;
+			this.form.survey_location = dataAppraiseInformation.survey_location;
+			this.form.name_contact = dataAppraiseInformation.name_contact;
+			this.form.phone_contact = dataAppraiseInformation.phone_contact;
+			this.form.issue_date_card = dataAppraiseInformation.issue_date_card;
+			this.form.issue_place_card = dataAppraiseInformation.issue_place_card;
+
 			this.form.appraise_date = dataAppraiseInformation.appraise_date;
 			this.form.appraise_purpose_id =
 				dataAppraiseInformation.appraise_purpose_id;
@@ -2552,7 +2772,81 @@ export default {
 			}
 			return message;
 		},
+		handleFooterRedistributeRecord(idStep2) {
+			let config = this.jsonConfig.principle.find(i => i.id === idStep2);
+			let message = "";
+			if (config) {
+				this.config = config;
+				let require = config.require;
+				message = this.checkDiffVersion();
+				if (message === "" && require) {
+					message = this.checkRequired(require, this.data);
+				}
+				if (message === "") {
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.form[config.re_assign],
+							type: config.re_assign
+						};
+					this.targetStatus = config.status;
+					this.targetSubStatus = config.sub_status;
+					this.message = "Phân lại";
+					this.isHandleAction = true;
+				} else {
+					this.openMessage(message);
+				}
+			} else {
+				this.openMessage(
+					"Không tìm thấy thông tin bước tiếp theo. Vui lòng liên hệ admin để hỗ trợ."
+				);
+			}
+		},
 		handleFooterAccept(target) {
+			if (target.description.toUpperCase() === "IN HỒ SƠ") {
+				// Nhà đất
+				if (!this.isApartment) {
+					if (
+						this.isCertificateReport &&
+						this.isAppraisalReport &&
+						this.isAppendix1Report &&
+						this.isAppendix2Report &&
+						this.isAppendix3Report &&
+						this.isComparisionAssetReport
+					) {
+						// Đã upload đủ
+					} else {
+						this.$toast.open({
+							message:
+								"Vui lòng tải lên đầy đủ tài liệu chính thức trước khi chuyển sang bước in hồ sơ",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+
+						return;
+					}
+				} else {
+					if (
+						this.isCertificateReport &&
+						this.isAppraisalReport &&
+						this.isAppendix1Report &&
+						this.isAppendix3Report &&
+						this.isComparisionAssetReport
+					) {
+						// Đã upload đủ
+					} else {
+						this.$toast.open({
+							message:
+								"Vui lòng tải lên đầy đủ tài liệu chính thức trước khi chuyển sang bước in hồ sơ",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+
+						return;
+					}
+				}
+			}
 			this.appraiserChangeStage = null;
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
@@ -2696,7 +2990,8 @@ export default {
 					message:
 						this.message == "Từ chối" ||
 						this.message == "Hủy" ||
-						this.message == "Khôi phục"
+						this.message == "Khôi phục" ||
+						this.message == "Phân lại"
 							? this.message + " thành công"
 							: "Chuyển trạng thái " + `"${this.message}"` + " thành công",
 					type: "success",
@@ -2877,6 +3172,58 @@ export default {
 					} else {
 						res = await File.uploadFileCertificate(formData, this.idData);
 					}
+					if (res.data) {
+						// await this.$emit('handleChangeFile', res.data.data)
+						this.form.other_documents = res.data.data;
+						this.$toast.open({
+							message: "Thêm file thành công",
+							type: "success",
+							position: "top-right",
+							duration: 3000
+						});
+					}
+				}
+			}
+		},
+		async onImageChangeOriginal(e) {
+			const formData = new FormData();
+			let check = true;
+			let files = e.target.files;
+			if (!files.length) {
+				return;
+			}
+			for (let i = 0; i < e.target.files.length; i++) {
+				this.file = e.target.files[i];
+				if (
+					this.file.type === "image/png" ||
+					this.file.type === "image/jpeg" ||
+					this.file.type === "image/jpg" ||
+					this.file.type === "image/gif" ||
+					this.file.type ===
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+					this.file.type ===
+						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+					this.file.type === "application/pdf"
+				) {
+				} else {
+					check = false;
+					this.$toast.open({
+						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			}
+			if (check) {
+				if (files.length) {
+					for (let i = 0; i < files.length; i++) {
+						formData.append("files[" + i + "]", files[i]);
+					}
+					let res = null;
+
+					res = await File.uploadFileCertificateOriginal(formData, this.idData);
+
 					if (res.data) {
 						// await this.$emit('handleChangeFile', res.data.data)
 						this.form.other_documents = res.data.data;
@@ -3084,6 +3431,72 @@ export default {
 					});
 				}
 			});
+		},
+		checkDocumentNumAndDate() {
+			let returnCheck = false;
+			if (
+				this.form.document_num &&
+				this.form.document_num.trim() !== "" &&
+				this.form.document_date &&
+				this.form.document_date.trim() !== ""
+			) {
+				returnCheck = true;
+			}
+			return returnCheck;
+		},
+		checkDownloadDocument(type) {
+			const check = this.checkDocumentNumAndDate();
+			if (check) {
+				// Chứng thư thẩm định
+				if (type === "certificate") {
+					this.downloadCertificate();
+				}
+				// Báo cáo thẩm định
+				if (type === "report_certificate") {
+					this.downloadReportCertificate();
+				}
+				// QSDĐ
+				if (type === "appendix1") {
+					this.downloadAppendix1();
+				}
+				// CTXD
+				if (type === "appendix2") {
+					this.downloadAppendix2();
+				}
+				// Hình ảnh hiện trạng
+				if (type === "appendix3") {
+					this.downloadAppendix3();
+				}
+				// Tài sản so sánh
+				if (type === "asset_document") {
+					this.downloadAssetDocument();
+				}
+			} else {
+				this.showPopupComfirmDownloadAutoDocument = true;
+				this.typeConfirm = type;
+			}
+		},
+		handleDownloadConfirm() {
+			// Chứng thư thẩm định
+			if (this.typeConfirm === "certificate") {
+				this.downloadCertificate();
+			}
+			if (this.typeConfirm === "report_certificate") {
+				this.downloadReportCertificate();
+			}
+			if (this.typeConfirm === "appendix1") {
+				this.downloadAppendix1();
+			}
+			if (this.typeConfirm === "appendix2") {
+				this.downloadAppendix2();
+			}
+			if (this.typeConfirm === "appendix3") {
+				this.downloadAppendix3();
+			}
+			if (this.typeConfirm === "asset_document") {
+				this.downloadAssetDocument();
+			}
+			this.typeConfirm = "";
 		},
 		async downloadCertificate() {
 			await Certificate.getPrintProof(this.idData).then(resp => {
@@ -3400,6 +3813,7 @@ export default {
 					item.sub_status === this.form.sub_status &&
 					item.isActive === 1
 			);
+
 			if (dataJson && dataJson.length > 0) {
 				this.config = dataJson[0];
 				this.showExportDocument = dataJson[0].isExportDocument;
@@ -3763,6 +4177,16 @@ export default {
 	padding: 0;
 	border: 0;
 }
+.btn-upload-mini-document {
+	left: 0;
+	opacity: 0;
+	width: 0rem;
+	// min-height: 10rem;
+	cursor: pointer;
+	// position: absolute;
+	padding: 0;
+	border: 0;
+}
 .btn_list_appraise {
 	&-orange {
 		background: #faa831;
@@ -3941,7 +4365,7 @@ export default {
 	width: 123px;
 	height: 35px;
 	color: #fff;
-	background: #faa831;
+	background: #fff;
 	font-size: 1.125rem;
 	border-radius: 5px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);

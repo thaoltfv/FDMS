@@ -235,7 +235,14 @@ export default {
 					align: "left",
 					scopedSlots: { customRender: "process_time" },
 					dataIndex: "process_time",
-					width: "60%"
+					width: "30%"
+				},
+				{
+					title: "Cảnh báo đến hạn",
+					align: "left",
+					scopedSlots: { customRender: "expire_in" },
+					dataIndex: "expire_in",
+					width: "30%"
 				}
 			];
 			if (this.type !== "workflowHSTD") {

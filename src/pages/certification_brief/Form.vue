@@ -126,6 +126,14 @@ export default {
 			render_price_fee: 12331,
 			form: {
 				step_1: {
+					// Data mới
+					survey_time: "",
+					survey_location: "",
+					name_contact: "",
+					phone_contact: "",
+					issue_date_card: "",
+					issue_place_card: "",
+					//
 					petitioner_name: "Ông / Bà",
 					petitioner_phone: "",
 					petitioner_address: "",
@@ -245,6 +253,13 @@ export default {
 				: "";
 			this.form.step_1.appraise_date = this.form.step_1.appraise_date
 				? moment(this.form.step_1.appraise_date).format("DD/MM/YYYY")
+				: "";
+			// Data mới
+			this.form.step_1.survey_time = this.form.step_1.survey_time
+				? moment(this.form.step_1.survey_time).format("DD-MM-YYYY HH:mm")
+				: "";
+			this.form.step_1.issue_date_card = this.form.step_1.issue_date_card
+				? moment(this.form.step_1.issue_date_card).format("DD/MM/YYYY")
 				: "";
 			if (!this.form.step_1.customer) {
 				this.form.step_1.customer = {

@@ -49,6 +49,19 @@
 			<img class="img" src="@/assets/icons/ic_done-orange.svg" alt="edit" />
 			Cross check
 		</button>
+		<!-- <button
+			v-if="
+				isBusinessManager &&
+					config &&
+					config.description !== 'Hoàn thành' &&
+					config.description !== 'Hủy'
+			"
+			class="btn btn-white mr-3"
+			@click="redistributeRecord"
+		>
+		
+			Phân lại HS
+		</button> -->
 		<button
 			v-if="!certificateId"
 			v-for="(target, index) in getTargetDescription()"
@@ -240,6 +253,7 @@ export default {
 			nextSubStatus: "",
 			preStatus: "",
 			preSubStatus: "",
+			isBusinessManager: false,
 			isCancel: false,
 			isButton: true,
 			editForm: false,
@@ -253,6 +267,13 @@ export default {
 	},
 	mounted() {
 		this.user = this.profile.data.user;
+		if (
+			this.form &&
+			this.form.appraiser_business_manager &&
+			this.form.appraiser_business_manager.user_id === this.user.id
+		) {
+			this.isBusinessManager = true;
+		}
 		let configData = this.loadConfigByStatus(this.status);
 		if (configData) {
 			this.loadConfigData(configData);
@@ -280,6 +301,12 @@ export default {
 		},
 		viewAppraiseListVersion() {
 			this.$emit("viewAppraiseListVersion");
+		},
+		redistributeRecord() {
+			console.log(this.config);
+			if (this.config.id) {
+				this.$emit("handleFooterRedistributeRecord", this.config.id);
+			}
 		},
 		loadConfigByStatus(status) {
 			return this.jsonConfig.principle.find(

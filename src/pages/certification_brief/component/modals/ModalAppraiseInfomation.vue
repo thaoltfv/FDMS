@@ -83,17 +83,27 @@
 									/>
 								</div>
 							</div>
-							<div class="col-6">
+							<div class="col-6 row">
 								<InputTextPrefixCustomIcon
 									id="petitioner_identity_card"
 									placeholder="Nhập MST/CMND/CCCD/Passport"
 									v-model="form.petitioner_identity_card"
-									class="form-group-container input_certification_brief"
+									class="w-50 form-group-container input_left"
 									:disabledInput="editDocument"
 									vid="petitioner_identity_card"
 									icon="ic_id_card_2"
 									:showCustomIcon="true"
 									label="MST/CMND/CCCD/Passport"
+								/>
+								<InputDatePicker
+									v-model="form.issue_date_card"
+									vid="issue_date_card"
+									label="Ngày cấp "
+									placeholder="Ngày / tháng / năm"
+									:formatDate="'DD/MM/YYYY'"
+									class="w-50 form-group-container input_right"
+									@change="changeIssueDate"
+									:disabled="editDocument"
 								/>
 							</div>
 							<div class="col-6">
@@ -122,19 +132,28 @@
 									/>
 								</div>
 							</div>
-							<div class="col-6">
+							<div class="col-6 row">
 								<InputTextPrefixCustom
 									id="petitioner_phone"
 									placeholder="Nhập số điện thoại"
 									v-model="form.petitioner_phone"
-									class="form-group-container input_certification_brief"
+									class="w-50 form-group-container input_left"
 									vid="petitioner_phone"
 									:disabledInput="editDocument"
 									:iconPhone="true"
 									:showIcon="true"
 									label="Điện thoại"
 								/>
+								<InputText
+									v-model="form.issue_place_card"
+									vid="issue_place_card"
+									label="Nơi cấp"
+									placeholder="Nhập nơi cấp MST/CMND/CCCD/Passport"
+									class="w-50 form-group-container input_right"
+									:disabledInput="editDocument"
+								/>
 							</div>
+
 							<div class="col-6">
 								<InputCategory
 									v-model="form.appraise_purpose_id"
@@ -147,6 +166,7 @@
 									@change="handleChangeAppraisePurpose"
 								/>
 							</div>
+
 							<div class="col-6">
 								<InputText
 									v-model="form.certificate_num"
@@ -189,9 +209,53 @@
 									vid="note"
 									:disableInput="editDocument"
 									label="Ghi chú"
+									rows="1"
 									class="form-group-container"
 								/>
 							</div>
+							<div class="col-6 row">
+								<InputDatePickerV2
+									v-model="form.survey_time"
+									vid="survey_time"
+									show-time
+									label="Thời điểm khảo sát"
+									class="w-50 form-group-container input_left"
+									@change="changeSurveyDate"
+									:disabled="editDocument"
+								/>
+								<InputText
+									v-model="form.survey_location"
+									vid="survey_location"
+									label="Địa điểm khảo sát"
+									class="w-50 form-group-container input_right"
+									:disabledInput="editDocument"
+								/>
+							</div>
+							<div class="col-6 row">
+								<InputTextPrefixCustom
+									id="name_contact"
+									placeholder="Nhập tên người liên hệ"
+									v-model="form.name_contact"
+									vid="name_contact"
+									:iconUser="true"
+									:showIcon="true"
+									label="Tên người liên hệ"
+									:disabledInput="editDocument"
+									class="w-50 form-group-container input_left"
+								/>
+								<InputTextPrefixCustom
+									id="phone_contact"
+									placeholder="Nhập số điện thoại người liên hệ"
+									v-model="form.phone_contact"
+									class="w-50 form-group-container input_right"
+									vid="phone_contact"
+									:iconPhone="true"
+									:showIcon="true"
+									:disabledInput="editDocument"
+									label="Điện thoại người liên hệ"
+								/>
+							</div>
+
 							<!-- <div class="col-6">
                  <InputCategoryMulti
                     v-model="form.document_type"
@@ -249,6 +313,7 @@ import FileUpload from "@/components/file/FileUpload";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
 import InputTextPrefixCustomIcon from "@/components/Form/InputTextPrefixCustomIcon";
 import InputDatePicker from "@/components/Form/InputDatePicker";
+import InputDatePickerV2 from "@/components/Form/InputDatePickerV2";
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputPercent from "@/components/Form/InputPercent";
 import Certificate from "@/models/Certificate";
@@ -283,6 +348,7 @@ export default {
 		InputText,
 		InputTextPrefixCustom,
 		InputDatePicker,
+		InputDatePickerV2,
 		InputCurrency,
 		InputPercent,
 		InputTextPrefixCustomIcon,
@@ -348,6 +414,12 @@ export default {
 			this.form.appraise_date = this.data.appraise_date
 				? moment(this.data.appraise_date).format("DD/MM/YYYY")
 				: "";
+			this.form.issue_date_card = this.data.issue_date_card
+				? moment(this.data.issue_date_card).format("DD/MM/YYYY")
+				: "";
+			this.form.survey_time = this.data.survey_time
+				? moment(this.data.survey_time).format("DD-MM-YYYY HH:mm")
+				: "";
 			this.form.appraise_purpose_id = this.data.appraise_purpose_id;
 			this.form.note = this.data.note;
 		},
@@ -386,6 +458,12 @@ export default {
 		},
 		changeAppraiseDate(event) {
 			this.form.appraise_date = event;
+		},
+		changeSurveyDate(event) {
+			this.form.survey_time = event;
+		},
+		changeIssueDate(event) {
+			this.form.issue_date_card = event;
 		},
 		changeCertificateDate(event) {
 			this.form.certificate_date = event;
@@ -438,6 +516,13 @@ export default {
 				return;
 			}
 			const data = {
+				// data mới
+				issue_date_card: form.issue_date_card,
+				issue_place_card: form.issue_place_card,
+				name_contact: form.name_contact,
+				phone_contact: form.phone_contact,
+				survey_location: form.survey_location,
+				survey_time: form.survey_time,
 				petitioner_name: form.petitioner_name,
 				document_num: form.document_num,
 				petitioner_address: form.petitioner_address,

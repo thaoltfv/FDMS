@@ -951,7 +951,8 @@ export default {
 					property.status == 3 ||
 					property.status == 10) &&
 				property.appraiser_sale &&
-				property.appraiser_sale.user_id === this.user_id
+				property.appraiser_sale.user_id === this.user_id &&
+				!this.checkExistInAppraisalTeam2(property)
 			) {
 				return false;
 			}

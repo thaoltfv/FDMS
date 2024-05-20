@@ -13,7 +13,7 @@
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="showExportDocument">
+							<a-dropdown v-if="showExportDocument && dataPC.status !== 1">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -129,8 +129,7 @@
 									</p>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Tên tài sản sơ bộ:</strong
+									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="pre_asset_name" class="text-left">{{
 										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
 											? dataPC.pre_asset_name.substring(25, 0) + "..."
@@ -191,7 +190,7 @@
 												</p>
 											</div>
 											<div
-												v-if="editAppraiser && edit"
+												v-if="(editAppraiser && edit) || isBusinessManager"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -510,7 +509,7 @@
 			</div>
 		</div>
 		<div
-			v-if="dataPC.id && showExportDocument"
+			v-if="dataPC.id && showExportDocument && dataPC.status !== 1"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
 		>
@@ -547,6 +546,7 @@
 			:checkVersion="checkVersion"
 			:certificateId="dataPC.certificate_id"
 			@handleFooterAccept="handleFooterAccept"
+			@handleFooterRedistributeRecord="handleFooterRedistributeRecord"
 			@handleEdit="handleEdit"
 			@onCancel="onCancel"
 			@viewAppraiseListVersion="viewAppraiseListVersion"
@@ -578,8 +578,15 @@
 			v-if="isHandleAction"
 			@cancel="isHandleAction = false"
 			:notification="
-				message == 'Từ chối' || message == 'Khôi phục' || message == 'Hủy'
-					? `Bạn có muốn '${message}' hồ sơ này?`
+				message == 'Từ chối' ||
+				message == 'Khôi phục' ||
+				message == 'Hủy' ||
+				message == 'Phân lại'
+					? `Bạn có muốn '${message}' hồ sơ này ${
+							message == 'Phân lại'
+								? ` ở bước '` + statusDescription + `' `
+								: ''
+					  }? `
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 			"
 			workflowName="ycsbConfig"
@@ -767,7 +774,7 @@ export default {
 			title: "",
 			indexDelete: "",
 			id_file_delete: "",
-
+			isBusinessManager: false,
 			showDetailAppraise: false,
 			dataDetailAppraise: [],
 			appraiser_number: "",
@@ -1011,7 +1018,15 @@ export default {
 		};
 	},
 
-	created() {},
+	created() {
+		if (
+			this.dataPC &&
+			this.dataPC.appraiser_business_manager &&
+			this.dataPC.appraiser_business_manager.user_id === this.user_id
+		) {
+			this.isBusinessManager = true;
+		}
+	},
 	computed: {
 		statusDescription() {
 			if (this.jsonConfig) {
@@ -1313,6 +1328,7 @@ export default {
 			return message;
 		},
 		handleFooterAccept(target) {
+			console.log(target);
 			this.appraiserChangeStage = null;
 
 			// if (
@@ -1419,6 +1435,38 @@ export default {
 				);
 			}
 		},
+		handleFooterRedistributeRecord(idStep2) {
+			this.appraiserChangeStage = null;
+			let config = this.jsonConfig.principle.find(i => i.id === idStep2);
+			let message = "";
+			if (config) {
+				this.config = config;
+				let require = config.require;
+				message = this.checkDiffVersion();
+				if (message === "" && require) {
+					message = this.checkRequired(require, this.data);
+				}
+				if (message === "") {
+					this.targetStatus = config.status;
+					this.dataPC.target_status = config.status;
+					this.dataPC.target_code = "";
+					this.message = "Phân lại";
+
+					if (config.re_assign)
+						this.appraiserChangeStage = {
+							id: this.dataPC[config.re_assign],
+							type: config.re_assign
+						};
+					this.isHandleAction = true;
+				} else {
+					this.openMessage(message);
+				}
+			} else {
+				this.openMessage(
+					"Không tìm thấy thông tin bước tiếp theo. Vui lòng liên hệ admin để hỗ trợ."
+				);
+			}
+		},
 		getExpireStatusDate() {
 			let dateConvert = new Date();
 			let minutes = this.config.process_time ? this.config.process_time : 1440;
@@ -1476,7 +1524,8 @@ export default {
 					message:
 						this.message == "Từ chối" ||
 						this.message == "Khôi phục" ||
-						this.message == "Hủy"
+						this.message == "Hủy" ||
+						this.message == "Phân lại"
 							? this.message + " thành công"
 							: "Chuyển trạng thái " + `"${this.message}"` + " thành công",
 					type: "success",
