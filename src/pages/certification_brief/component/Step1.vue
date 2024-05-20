@@ -42,6 +42,22 @@
 								:showCustomIcon="true"
 								label="MST/CMND/CCCD/Passport"
 							/>
+							<InputDatePicker
+								v-model="data.issue_date_card"
+								vid="issue_date_card"
+								label="Ngày cấp "
+								placeholder="Ngày / tháng / năm"
+								:formatDate="'DD/MM/YYYY'"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="changeIssueDate"
+							/>
+							<InputText
+								v-model="data.issue_place_card"
+								vid="issue_place_card"
+								label="Nơi cấp"
+								placeholder="Nhập nơi cấp MST/CMND/CCCD/Passport"
+								class="form-group-container col-sm-12 col-md-6"
+							/>
 							<InputTextPrefixCustom
 								id="petitioner_phone"
 								placeholder="Nhập số điện thoại"
@@ -84,6 +100,13 @@
 								@change="changeAppraiseDate"
 							/>
 						</div>
+						<InputTextarea
+							:autosize="true"
+							:disableInput="false"
+							v-model="data.note"
+							label="Ghi chú"
+							class="form-group-container"
+						/>
 						<!-- <InputCategoryMulti
               v-model="data.document_type"
               :maxTagCount="1"
@@ -162,13 +185,53 @@
 								@change="changeCertificateDate"
 							/>
 						</div>
-						<InputTextarea
-							:autosize="true"
-							:disableInput="false"
-							v-model="data.note"
-							label="Ghi chú"
-							class="form-group-container"
-						/>
+
+						<div class="row justify-content-between">
+							<InputText
+								v-model="data.survey_location"
+								vid="survey_location"
+								label="Địa điểm khảo sát"
+								class="form-group-container col-sm-12 col-md-6"
+							/>
+							<!-- <InputDatePicker
+								v-model="data.survey_time"
+								vid="survey_time"
+								label="Thời điểm khảo sát"
+								placeholder="Ngày / tháng / năm"
+								:formatDate="'DD/MM/YYYY'"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="changeSurveyDate"
+							/> -->
+							<InputDatePickerV2
+								v-model="data.survey_time"
+								vid="survey_time"
+								show-time
+								label="Thời điểm khảo sát"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="changeSurveyDate"
+							/>
+							<InputTextPrefixCustom
+								id="name_contact"
+								placeholder="Nhập tên người liên hệ"
+								v-model="data.name_contact"
+								vid="name_contact"
+								:iconUser="true"
+								:showIcon="true"
+								label="Tên người liên hệ"
+								rules="required"
+								class="form-group-container col-sm-12 col-md-6"
+							/>
+							<InputTextPrefixCustom
+								id="phone_contact"
+								placeholder="Nhập số điện thoại người liên hệ"
+								v-model="data.phone_contact"
+								class="form-group-container col-sm-12 col-md-6"
+								vid="phone_contact"
+								:iconPhone="true"
+								:showIcon="true"
+								label="Điện thoại người liên hệ"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -426,7 +489,7 @@ export default {
 				if (this.businessManagers.length > 0) {
 					return this.data.business_manager_id;
 				} else {
-					return this.data.business_manager.name;
+					return this.data.appraiser_business_manager.name;
 				}
 			},
 			// setter
@@ -517,7 +580,9 @@ export default {
 				if (this.signAppraisers.length > 0) {
 					return this.data.appraiser_confirm_id;
 				} else {
-					return this.data.appraiser_confirm.name;
+					return this.data.appraiser_confirm
+						? this.data.appraiser_confirm.name
+						: "";
 				}
 			},
 			// setter
@@ -766,6 +831,12 @@ export default {
 			console.log("event", event);
 			this.data.appraise_date = event;
 		},
+		changeSurveyDate(event) {
+			this.data.survey_time = event;
+		},
+		changeIssueDate(event) {
+			this.data.issue_date_card = event;
+		},
 		changeCertificateDate(event) {
 			this.data.certificate_date = event;
 		},
@@ -778,6 +849,12 @@ export default {
 				: "";
 			this.form.appraise_date = this.data.appraise_date
 				? moment(this.data.appraise_date).format("DD/MM/YYYY")
+				: "";
+			this.form.survey_time = this.data.survey_time
+				? moment(this.data.survey_time).format("DD/MM/YYYY")
+				: "";
+			this.form.issue_date_card = this.data.issue_date_card
+				? moment(this.data.issue_date_card).format("DD/MM/YYYY")
 				: "";
 			// this.form.appraise_purpose_id = this.data.appraise_purpose_id
 		}

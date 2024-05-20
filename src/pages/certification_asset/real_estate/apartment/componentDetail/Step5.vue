@@ -2876,25 +2876,13 @@
 														<td>6</td>
 														<td colspan="2">Tổng số lần điều chỉnh (lần)</td>
 														<td>
-															{{
-																formatNumber(
-																	parseFloat(comparisonFactorChange1).toFixed(0)
-																)
-															}}
+															{{ comparisonFactorChange1 }}
 														</td>
 														<td>
-															{{
-																formatNumber(
-																	parseFloat(comparisonFactorChange2).toFixed(0)
-																)
-															}}
+															{{ comparisonFactorChange2 }}
 														</td>
 														<td>
-															{{
-																formatNumber(
-																	parseFloat(comparisonFactorChange3).toFixed(0)
-																)
-															}}
+															{{ comparisonFactorChange3 }}
 														</td>
 													</tr>
 													<tr>
@@ -4135,18 +4123,13 @@ export default {
 				typeof comparisonFactor1["phap_ly"] !== "undefined" &&
 				comparisonFactor1["phap_ly"].status === 1
 			) {
+				// Convert dạng số
 				let percentPl1 =
-					typeof comparisonFactor1["phap_ly"].adjust_percent !== "undefined"
-						? comparisonFactor1["phap_ly"].adjust_percent
-						: 0;
+					Number(comparisonFactor1["phap_ly"].adjust_percent) || 0;
 				let percentPl2 =
-					typeof comparisonFactor2["phap_ly"].adjust_percent !== "undefined"
-						? comparisonFactor2["phap_ly"].adjust_percent
-						: 0;
+					Number(comparisonFactor2["phap_ly"].adjust_percent) || 0;
 				let percentPl3 =
-					typeof comparisonFactor3["phap_ly"].adjust_percent !== "undefined"
-						? comparisonFactor3["phap_ly"].adjust_percent
-						: 0;
+					Number(comparisonFactor3["phap_ly"].adjust_percent) || 0;
 				// mức điều chỉnh của yếu tố PHÁP LÝ
 				this.pricePl1 = (percentPl1 * this.dgcc1) / 100;
 				this.pricePl2 = (percentPl2 * this.dgcc2) / 100;

@@ -71,6 +71,20 @@
 									<strong class="margin_content_inline">Điện thoại:</strong>
 									<p>{{ form.petitioner_phone }}</p>
 								</div>
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline">Ngày cấp:</strong>
+									<p>
+										{{
+											form.issue_date_card
+												? formatDate(form.issue_date_card)
+												: ""
+										}}
+									</p>
+									<strong class="margin_content_inline">Nơi cấp:</strong>
+									<p>
+										{{ form.issue_place_card ? form.issue_place_card : "" }}
+									</p>
+								</div>
 								<!-- <div class="d-flex container_content">
 											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{form.petitioner_phone}}</p>
 										</div> -->
@@ -148,6 +162,7 @@
 										}}
 									</p>
 								</div>
+
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
@@ -158,6 +173,26 @@
 									<b-tooltip target="note" placement="top-right">{{
 										form.note
 									}}</b-tooltip>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline">Người liên hệ:</strong>
+									<p>{{ form.name_contact }}</p>
+									<strong class="margin_content_inline">Điện thoại:</strong>
+									<p>{{ form.phone_contact }}</p>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline"
+										>Ngày giờ khảo sát:</strong
+									>
+									<p>
+										{{ form.survey_time ? formatDate(form.survey_time) : "" }}
+									</p>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline"
+										>Địa điểm khảo sát:</strong
+									>
+									<p>{{ form.survey_location ? form.survey_location : "" }}</p>
 								</div>
 							</div>
 						</div>
@@ -244,7 +279,6 @@
 											>
 											<p>{{ form.appraiser ? form.appraiser.name : "" }}</p>
 										</div>
-
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
 												>Hành chính viên:</strong
@@ -255,7 +289,6 @@
 												}}
 											</p>
 										</div>
-
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
 												>Đại diện theo pháp luật:</strong
@@ -1805,7 +1838,13 @@ export default {
 				appraises: [],
 				other_documents: [],
 				document_type: [],
-				note: ""
+				note: "",
+				survey_time: "",
+				survey_location: "",
+				name_contact: "",
+				phone_contact: "",
+				issue_date_card: "",
+				issue_place_card: ""
 			},
 			isBusinessManager: false,
 			file: "",
@@ -2443,6 +2482,14 @@ export default {
 			});
 		},
 		updateAppraiseInformation(dataAppraiseInformation) {
+			// Data mới thêm
+			this.form.survey_time = dataAppraiseInformation.survey_time;
+			this.form.survey_location = dataAppraiseInformation.survey_location;
+			this.form.name_contact = dataAppraiseInformation.name_contact;
+			this.form.phone_contact = dataAppraiseInformation.phone_contact;
+			this.form.issue_date_card = dataAppraiseInformation.issue_date_card;
+			this.form.issue_place_card = dataAppraiseInformation.issue_place_card;
+
 			this.form.appraise_date = dataAppraiseInformation.appraise_date;
 			this.form.appraise_purpose_id =
 				dataAppraiseInformation.appraise_purpose_id;

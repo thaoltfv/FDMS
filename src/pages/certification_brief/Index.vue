@@ -33,7 +33,7 @@
 					>
 						<b-card
 							:class="{
-								border_expired: checkDateExpired(element),
+								border_expired: checkDateExpired(element).statusExpire,
 								['border-' + config.css.color]: true
 							}"
 							class="card_container mb-3"
@@ -74,7 +74,7 @@
 									</div>
 									<div>
 										<img
-											v-if="checkDateExpired(element)"
+											v-if="checkDateExpired(element).statusExpire"
 											class="mr-2 icon_expired"
 											src="@/assets/icons/ic_expire_calender.svg"
 											alt="ic_expire_calender"
@@ -127,9 +127,14 @@
 									>
 										{{ getExpireDate(element) }}
 									</span>
-									<span v-else style="font-weight: 500">
-										{{ getExpireDate(element) }}
-									</span>
+									<span
+										v-else
+										style="font-weight: 500"
+										:class="{
+											'text-orange': checkDateExpired(element).inExpiringState
+										}"
+										>{{ getExpireDate(element) }}</span
+									>
 								</div>
 							</div>
 							<div class="property-content d-flex justify-content-between mb-0">
@@ -488,25 +493,52 @@ export default {
 			}
 		},
 		checkDateExpired(element) {
-			let check = false;
-			switch (element.status) {
-				case 1:
-				case 2:
-				case 3:
-					if (element.status_expired_at) {
-						if (
-							this.updateDate(element.status_expired_at, this.now).includes(
-								"Đã hết hạn"
-							)
-						) {
-							check = true;
-						}
-					} else {
-						check = true;
+			const check = {
+				statusExpire: false,
+				inExpiringState: false
+			};
+
+			if (element.status_expired_at) {
+				const config = this.jsonConfig.principle.find(
+					item => item.status === element.status && item.isActive === 1
+				);
+				if (config.expire_in) {
+					const now = new Date();
+					const futureTime = new Date(now.getTime() + config.expire_in * 60000); // config.expire_in is assumed to be in minutes
+
+					if (futureTime >= new Date(element.status_expired_at)) {
+						check.inExpiringState = true;
 					}
-					break;
+				}
+				if (
+					this.updateDate(element.status_expired_at, this.now).includes(
+						"Đã hết hạn"
+					)
+				) {
+					check.statusExpire = true;
+					check.inExpiringState = false;
+				}
 			}
 			return check;
+			// let check = false;
+			// switch (element.status) {
+			// 	case 1:
+			// 	case 2:
+			// 	case 3:
+			// 		if (element.status_expired_at) {
+			// 			if (
+			// 				this.updateDate(element.status_expired_at, this.now).includes(
+			// 					"Đã hết hạn"
+			// 				)
+			// 			) {
+			// 				check = true;
+			// 			}
+			// 		} else {
+			// 			check = true;
+			// 		}
+			// 		break;
+			// }
+			// return check;
 		},
 		formatPrice(value) {
 			let num = parseFloat(value / 1)

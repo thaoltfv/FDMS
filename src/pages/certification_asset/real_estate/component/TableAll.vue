@@ -3,7 +3,6 @@
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				ref="table"
-				bordered
 				class="table-property"
 				@change="handleTableChange"
 				:columns="columns"
