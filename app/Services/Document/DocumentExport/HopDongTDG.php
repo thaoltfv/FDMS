@@ -167,7 +167,7 @@ class HopDongTDG
         $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num : ''), null, $cellHCentered);
+        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num . '/HĐ-TĐG' : '/HĐ-TĐG'), null, $cellHCentered);
         $row3->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
@@ -205,9 +205,14 @@ class HopDongTDG
         );
         // Lấy ngày khảo sát
         $stringTime = "ngày " . '  ' . " tháng " . '  ' . " năm " . '    ';
-        if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
-            $surveyTime = date_create($certificate->certificate_date);
-            $stringTime = "ngày " . $surveyTime->format('d') . " tháng " . $surveyTime->format('m') . " năm " . $surveyTime->format('Y');
+        $stringTimeSoc = '';
+        if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
+            $document_date = date_create($certificate->document_date);
+            $stringTime = "ngày " . $document_date->format('d') . " tháng " . $document_date->format('m') . " năm " . $document_date->format('Y');
+        }
+        if (isset($certificate->issue_date_card) && !empty(trim($certificate->issue_date_card))) {
+            $issue_date_card = date_create($certificate->issue_date_card);
+            $stringTimeSoc =  $issue_date_card->format('d') . "/" . $issue_date_card->format('m') . "/" . $issue_date_card->format('Y');
         }
         $section->addText(
             "Hôm nay," .  $stringTime . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
@@ -240,7 +245,12 @@ class HopDongTDG
         $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
         $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row3->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card), null,  $alignBoth);
-
+        $row3->addCell(1800, $cellVTop)->addText('-    Ngày cấp', null,  $alignBoth);
+        $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row3->addCell(8100, $cellVTop)->addText($stringTimeSoc, null,  $alignBoth);
+        $row3->addCell(1800, $cellVTop)->addText('-    Nơi cấp', null,  $alignBoth);
+        $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row3->addCell(8100, $cellVTop)->addText($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : "", null,  $alignBoth);
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
@@ -569,7 +579,7 @@ class HopDongTDG
                 $textServiceFee,
                 ['bold' => true]
             );
-            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee ?? 0)) . ' đồng chẵn).', ['italic' => true]);
+            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee ?? 0)) . ' đồng chẵn./.).', ['italic' => true]);
         }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);

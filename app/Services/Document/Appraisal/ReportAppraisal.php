@@ -143,12 +143,13 @@ class ReportAppraisal extends Report
     {
         $comAcronym = !empty($this->companyAcronym) ?  ' (' . mb_strtoupper($this->companyAcronym) . ')' : '';
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
-        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName) .  $comAcronym, 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName), 0, null, 'bullets');
         $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $this->companyPhone . "\tFax: " . $this->companyFax, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên Tổng Giám đốc: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
-        $section->addListItem('Họ và tên Thẩm định viên: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
-        $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
+        $section->addListItem('Họ và tên Thẩm định viên về giá: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
+        // $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
+        $section->addListItem('Người lập báo cáo giá: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? $certificate->appraiserPerform->name : ''), 0, null, 'bullets');
     }
     protected function step1Sub3($section, $certificate)
     {

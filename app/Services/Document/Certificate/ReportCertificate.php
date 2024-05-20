@@ -182,10 +182,10 @@ class ReportCertificate extends Report
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true]);
         $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", null, ['keepNext' => false]);
         $section->addTitle("Kết quả thẩm định giá: ", 2);
-        $section->addText("Trên cơ sở các tài liệu do khách hàng cung cấp, dựa trên cách tiếp cận và phương pháp thẩm định giá được áp dụng trong tính toán, " . $this->companyName . " ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, $this->keepNext));
+        $section->addText("Trên cơ sở các tài liệu do khách hàng cung cấp, dựa trên cách tiếp cận và phương pháp thẩm định giá được áp dụng trong tính toán, " . $this->companyName . " ước tính giá trị tài sản " . $this->getAssetName($certificate) . " như sau:", [], array_merge($this->indentFistLine, $this->keepNext));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
-        $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], $this->styleAlignCenter);
+        $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng./.)", ['italic' => true, 'bold' => true], $this->styleAlignCenter);
         $section->addText($this->companyName . " thông báo kết quả thẩm định giá đến " . $certificate->petitioner_name . " để thực hiện theo mục đích thẩm định giá và thời điểm thẩm định giá.", [], $this->indentFistLine);
         $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
         $section->addListItem("Nội dung chi tiết xem tại Mục X, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', $this->indentFistLine);
