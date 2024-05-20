@@ -1335,7 +1335,15 @@
 				</div>
 			</div>
 		</div>
-		<div v-else class="col-12" :style="isMobile() ? { padding: '0' } : {}">
+		<div
+			v-if="
+				form.general_asset.length > 0 &&
+					printConfig &&
+					statusDescription === 'In hồ sơ'
+			"
+			class="col-12"
+			:style="isMobile() ? { padding: '0' } : {}"
+		>
 			<div
 				class="d-flex flex-column flex-lg-row justify-content-around align-items-center"
 			>
