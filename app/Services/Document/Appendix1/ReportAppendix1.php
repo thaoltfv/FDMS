@@ -273,12 +273,12 @@ class ReportAppendix1 extends Report
         } else {
             $totalEstimateAmount = round($totalAmount * $adjustPercent / 100);
         }
-        
+
         if ($this->isApartment) {
             $estimateAmount = $totalEstimateAmount;
             $avgPrice = round($estimateAmount / $mainArea);
         } else {
-            if (isset($item->muc_dich_chinh)){
+            if (isset($item->muc_dich_chinh)) {
                 $purposePrice = 0;
                 // AppraiseUnitArea
                 $appraise_id = $item->appraise_id;
@@ -310,7 +310,7 @@ class ReportAppendix1 extends Report
                 $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice;
                 $avgPrice = round($estimateAmount / $area_chinh_cuoicung);
                 // dd($area_phu_ve_chinh,$area_chinh_cuoicung,$totalEstimateAmount - $buildingPrice - $otherAssetPrice - $violatePrice, $estimateAmount );
-                
+
                 // dd($item);
             } else {
                 $purposePrice = floatval($adapter->change_purpose_price);
@@ -318,9 +318,8 @@ class ReportAppendix1 extends Report
                 $estimateAmount = $totalEstimateAmount - $buildingPrice - $otherAssetPrice + $purposePrice - $violatePrice;
                 $avgPrice = round($estimateAmount / $mainArea);
             }
-            
         }
-        
+
         $result = [
             'id' => $item->id,
             'building_price' => $buildingPrice,
@@ -362,7 +361,7 @@ class ReportAppendix1 extends Report
                 unset($unitPrice[$idP]);
             }
         }
-        
+
         // dd($unitPrice);
 
         foreach ($assetDetails as $detail) {
@@ -438,7 +437,7 @@ class ReportAppendix1 extends Report
             } else {
                 $this->notbaseAcronym = $acronym;
             }
-                
+
             $this->landType['appraise'][$id] = $this->setLandTypeData($id, $acronym, $isMain, $totalArea, $planinngArea, $mainArea, $price);
         }
         foreach ($asset->assetGeneral as $item) {
@@ -483,7 +482,7 @@ class ReportAppendix1 extends Report
             }
             // $textRun->addText($asset->appraise_asset ?? '', ['size' => 13, 'bold' => false]);
             $assetName = $asset->appraise_asset;
-            $address = $asset->full_address;
+            $address = htmlspecialchars($asset->full_address);
             $this->printAssetInfo($section, $assetName, $address);
 
             $this->surveyDescription($section, $asset);
@@ -641,9 +640,9 @@ class ReportAppendix1 extends Report
         }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ước tính (đ)', $asset);
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
-            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
-            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
-            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất sau khi quy đổi về '. $this->baseAcronym.' ('.$this->m2.')', $asset);
+            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất ' . $this->notbaseAcronym . '/đất ' . $this->baseAcronym . '', $asset);
+            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất ' . $this->notbaseAcronym . ' quy về đất ' . $this->baseAcronym . '(' . $this->m2 . ')', $asset);
+            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất sau khi quy đổi về ' . $this->baseAcronym . ' (' . $this->m2 . ')', $asset);
         }
         $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá ' . $this->baseAcronym . " bình quân (đ/$this->m2)", $asset);
         return $data;
@@ -757,7 +756,7 @@ class ReportAppendix1 extends Report
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($other->appraise_title, 2, ',', '.') . 'm' : number_format($other->asset_title, 2, ',', '.') . 'm' . ' so với ' . number_format($other->appraise_title, 2, ',', '.') . 'm';
                 else
-                    $strCompare =($iDesription == 'TƯƠNG ĐỒNG') ? $other->appraise_title : $other->asset_title . ' so với ' . $other->appraise_title;
+                    $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $other->appraise_title : $other->asset_title . ' so với ' . $other->appraise_title;
 
                 $description .= $strCompare . ')';
                 $cell->addText($description, ['bold' => false]);
@@ -794,7 +793,7 @@ class ReportAppendix1 extends Report
                 $table->addRow(500, $this->cantSplit);
                 $table->addCell(600, $this->cellRowSpan)->addText('+', $this->styleBold, $this->cellHCenteredKeepNext);
                 $cell = $table->addCell(10000, $this->cellColSpan);
-                $cell->addText( $other->name, $this->styleBold, ['align' => JcTable::START, 'keepNext' => true]);
+                $cell->addText($other->name, $this->styleBold, ['align' => JcTable::START, 'keepNext' => true]);
                 $this->getDifferenceAssetByType($table,  $other, 1);
                 $this->getDifferenceAssetByType($table, $compare2, 2);
                 $this->getDifferenceAssetByType($table, $compare3, 3);
@@ -885,7 +884,7 @@ class ReportAppendix1 extends Report
                 $this->addCompareRowExt($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
-                $stt ++;
+                $stt++;
             }
         }
 
@@ -1306,8 +1305,8 @@ class ReportAppendix1 extends Report
     {
         $result = '-';
         // if ($description == 'ĐÃ BÁN') {
-            $date = date_create($publicDate);
-            $result = 'Tháng ' . date_format($date, 'm/Y');
+        $date = date_create($publicDate);
+        $result = 'Tháng ' . date_format($date, 'm/Y');
         // }
         return $result;
     }
@@ -1373,10 +1372,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            $asset->full_address ?: '-',
-            $this->asset1->full_address ?: '-',
-            $this->asset2->full_address ?: '-',
-            $this->asset3->full_address ?: '-',
+            $asset->full_address ? htmlspecialchars($asset->full_address) : '-',
+            $this->asset1->full_address ? htmlspecialchars($this->asset1->full_address) : '-',
+            $this->asset2->full_address ? htmlspecialchars($this->asset2->full_address) : '-',
+            $this->asset3->full_address ? htmlspecialchars($this->asset3->full_address) : '-',
             false
         ];
         return $data;
@@ -1389,14 +1388,14 @@ class ReportAppendix1 extends Report
         // $address = $landNo . $docNo . $item->ward->name . ', ' . $item->district->name . ', ' . $item->province->name;
         $address = $landNo . $docNo . $item->full_address;
         // $address = $item->full_address;
-        return $address;
+        return htmlspecialchars($address);
     }
     protected function collectInfoAddressAppraise($stt, $title, $asset)
     {
         $data = [
             $stt,
             $title,
-            $asset->full_address ?: '-',
+            $asset->full_address ? htmlspecialchars($asset->full_address) : '-',
             $this->getLandAddress($this->asset1),
             $this->getLandAddress($this->asset2),
             $this->getLandAddress($this->asset3),
@@ -1663,7 +1662,7 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->properties[0] && $asset->properties[0]->insight_width) ? number_format($asset->properties[0]->insight_width, 2, ',', '.'): '-',
+            ($asset->properties[0] && $asset->properties[0]->insight_width) ? number_format($asset->properties[0]->insight_width, 2, ',', '.') : '-',
             ($this->asset1->properties[0] && $this->asset1->properties[0]->insight_width) ? number_format($this->asset1->properties[0]->insight_width, 2, ',', '.') : '-',
             ($this->asset2->properties[0] && $this->asset2->properties[0]->insight_width) ? number_format($this->asset2->properties[0]->insight_width, 2, ',', '.') : '-',
             ($this->asset3->properties[0] && $this->asset3->properties[0]->insight_width) ? number_format($this->asset3->properties[0]->insight_width, 2, ',', '.') : '-',
@@ -1880,9 +1879,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             '-',
-            number_format($this->assetPrice['asset1']['ti_le_dat'], 0, ',', '.').'%',
-            number_format($this->assetPrice['asset2']['ti_le_dat'], 0, ',', '.').'%',
-            number_format($this->assetPrice['asset3']['ti_le_dat'], 0, ',', '.').'%',
+            number_format($this->assetPrice['asset1']['ti_le_dat'], 0, ',', '.') . '%',
+            number_format($this->assetPrice['asset2']['ti_le_dat'], 0, ',', '.') . '%',
+            number_format($this->assetPrice['asset3']['ti_le_dat'], 0, ',', '.') . '%',
             false
         ];
         return $data;
@@ -2013,11 +2012,11 @@ class ReportAppendix1 extends Report
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
-            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col2 . $ext, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col3 . $ext, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( $col4 . $ext, null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold], $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col2 . $ext, null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col3 . $ext, null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col4 . $ext, null, $this->cellHCenteredKeepNext);
         }
     }
     protected function addCompareRowDescription($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false, $ext = '')
@@ -2036,9 +2035,9 @@ class ReportAppendix1 extends Report
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(is_numeric($col1) ? number_format($col1, 2, ',', '.') : '-', null, $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 2, ',', '.') , null, $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 2, ',', '.') , null, $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 2, ',', '.') , null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, 2, ',', '.'), null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, 2, ',', '.'), null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, 2, ',', '.'), null, $this->cellHCenteredKeepNext);
     }
     private function setLandTypeData($id, $acronym, $isTransfer, $totalArea, $planinngArea, $mainArea, $price)
     {
