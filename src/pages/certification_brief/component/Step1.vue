@@ -218,7 +218,6 @@
 								:iconUser="true"
 								:showIcon="true"
 								label="Tên người liên hệ"
-								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 							/>
 							<InputTextPrefixCustom

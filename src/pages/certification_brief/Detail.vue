@@ -185,7 +185,9 @@
 										>Ngày giờ khảo sát:</strong
 									>
 									<p>
-										{{ form.survey_time ? formatDate(form.survey_time) : "" }}
+										{{
+											form.survey_time ? formatDateTime(form.survey_time) : ""
+										}}
 									</p>
 								</div>
 								<div class="row d-flex container_content">
@@ -330,6 +332,7 @@
 			:user="user"
 			:toast="$toast"
 		/>
+
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
 				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
@@ -607,14 +610,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadCertificate(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('certificate')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadCertificate(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('certificate')
 											"
 										>
 											{{ filterDocumentName[0] || "Chứng thư thẩm định" }}
@@ -650,7 +655,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadReportCertificate(idData)
+													checkDownloadDocument('report_certificate')
 											"
 										/>
 										<div
@@ -658,7 +663,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadReportCertificate(idData)
+													checkDownloadDocument('report_certificate')
 											"
 										>
 											{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
@@ -693,14 +698,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix1(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix1')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix1(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix1')
 											"
 										>
 											{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
@@ -741,14 +748,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix2(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix2')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix2(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix2')
 											"
 										>
 											{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
@@ -783,14 +792,16 @@
 											alt="document"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix3(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix3')
 											"
 										/>
 										<div
 											class="title_input_content title_input_download"
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
-												isViewAutomationDocument && downloadAppendix3(idData)
+												isViewAutomationDocument &&
+													checkDownloadDocument('appendix3')
 											"
 										>
 											{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
@@ -830,7 +841,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadAssetDocument(idData)
+													checkDownloadDocument('asset_document')
 											"
 										/>
 										<div
@@ -838,7 +849,7 @@
 											:class="{ cursor_pointer: isViewAutomationDocument }"
 											@click="
 												isViewAutomationDocument &&
-													downloadAssetDocument(idData)
+													checkDownloadDocument('asset_document')
 											"
 										>
 											{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
@@ -1368,7 +1379,7 @@
 								ref="file"
 								id="certificate_document"
 								multiple
-								accept="image/png, image/gif, image/jpeg, image/jpg"
+								accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
 								@change="onImageChange($event)"
 							/>
 						</div>
@@ -1470,7 +1481,7 @@
 								ref="file"
 								id="certificate_original"
 								multiple
-								accept="image/png, image/gif, image/jpeg, image/jpg"
+								accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
 								@change="onImageChangeOriginal($event)"
 							/>
 						</div>
@@ -1608,6 +1619,11 @@
 		</div> -->
 
 		<!-- <ModalCustomer v-if="showCustomerDialog"/> -->
+		<ModalConfirmDownload
+			v-if="showPopupComfirmDownloadAutoDocument"
+			@cancel="showPopupComfirmDownloadAutoDocument = false"
+			@action="handleDownloadConfirm"
+		/>
 		<ModalAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
@@ -1802,6 +1818,7 @@ import store from "@/store";
 import * as types from "@/store/mutation-types";
 import ModalAppraiseListVersion from "./component/modals/ModalAppraiseListVersion";
 import IconBase from "@/components/IconBase.vue";
+import ModalConfirmDownload from "@/components/Modal/ModalConfirmDownload.vue";
 
 Vue.use(Icon);
 export default {
@@ -1832,6 +1849,7 @@ export default {
 		ModalNotificationCertificate,
 		ModalViewDocument,
 		ModalDelete,
+		ModalConfirmDownload,
 		"b-dropdown-item": BDropdownItem,
 		"b-button-group": BButtonGroup,
 		"b-dropdown": BDropdown,
@@ -1841,6 +1859,8 @@ export default {
 	},
 	data() {
 		return {
+			showPopupComfirmDownloadAutoDocument: false,
+			typeConfirm: "",
 			theme: {
 				navItem: "#000000",
 				navActiveItem: "#FAA831",
@@ -2782,6 +2802,51 @@ export default {
 			}
 		},
 		handleFooterAccept(target) {
+			if (target.description.toUpperCase() === "IN HỒ SƠ") {
+				// Nhà đất
+				if (!this.isApartment) {
+					if (
+						this.isCertificateReport &&
+						this.isAppraisalReport &&
+						this.isAppendix1Report &&
+						this.isAppendix2Report &&
+						this.isAppendix3Report &&
+						this.isComparisionAssetReport
+					) {
+						// Đã upload đủ
+					} else {
+						this.$toast.open({
+							message:
+								"Vui lòng tải lên đầy đủ tài liệu chính thức trước khi chuyển sang bước in hồ sơ",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+
+						return;
+					}
+				} else {
+					if (
+						this.isCertificateReport &&
+						this.isAppraisalReport &&
+						this.isAppendix1Report &&
+						this.isAppendix3Report &&
+						this.isComparisionAssetReport
+					) {
+						// Đã upload đủ
+					} else {
+						this.$toast.open({
+							message:
+								"Vui lòng tải lên đầy đủ tài liệu chính thức trước khi chuyển sang bước in hồ sơ",
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+
+						return;
+					}
+				}
+			}
 			this.appraiserChangeStage = null;
 			let config = this.jsonConfig.principle.find(i => i.id === target.id);
 			let message = "";
@@ -3366,6 +3431,72 @@ export default {
 					});
 				}
 			});
+		},
+		checkDocumentNumAndDate() {
+			let returnCheck = false;
+			if (
+				this.form.document_num &&
+				this.form.document_num.trim() !== "" &&
+				this.form.document_date &&
+				this.form.document_date.trim() !== ""
+			) {
+				returnCheck = true;
+			}
+			return returnCheck;
+		},
+		checkDownloadDocument(type) {
+			const check = this.checkDocumentNumAndDate();
+			if (check) {
+				// Chứng thư thẩm định
+				if (type === "certificate") {
+					this.downloadCertificate();
+				}
+				// Báo cáo thẩm định
+				if (type === "report_certificate") {
+					this.downloadReportCertificate();
+				}
+				// QSDĐ
+				if (type === "appendix1") {
+					this.downloadAppendix1();
+				}
+				// CTXD
+				if (type === "appendix2") {
+					this.downloadAppendix2();
+				}
+				// Hình ảnh hiện trạng
+				if (type === "appendix3") {
+					this.downloadAppendix3();
+				}
+				// Tài sản so sánh
+				if (type === "asset_document") {
+					this.downloadAssetDocument();
+				}
+			} else {
+				this.showPopupComfirmDownloadAutoDocument = true;
+				this.typeConfirm = type;
+			}
+		},
+		handleDownloadConfirm() {
+			// Chứng thư thẩm định
+			if (this.typeConfirm === "certificate") {
+				this.downloadCertificate();
+			}
+			if (this.typeConfirm === "report_certificate") {
+				this.downloadReportCertificate();
+			}
+			if (this.typeConfirm === "appendix1") {
+				this.downloadAppendix1();
+			}
+			if (this.typeConfirm === "appendix2") {
+				this.downloadAppendix2();
+			}
+			if (this.typeConfirm === "appendix3") {
+				this.downloadAppendix3();
+			}
+			if (this.typeConfirm === "asset_document") {
+				this.downloadAssetDocument();
+			}
+			this.typeConfirm = "";
 		},
 		async downloadCertificate() {
 			await Certificate.getPrintProof(this.idData).then(resp => {
