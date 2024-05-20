@@ -64,6 +64,12 @@ class Certificate extends Model
         'administrative_id',
         'business_manager_id',
         'document_alter_by_bank',
+        'phone_contact',
+        'name_contact',
+        'survey_location',
+        'survey_time',
+        'issue_date_card',
+        'issue_place_card'
     ];
 
     public function getStatusTextAttribute()

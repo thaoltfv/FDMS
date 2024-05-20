@@ -52,6 +52,8 @@ interface CertificateRepository extends BaseRepository
 
     public function otherDocumentUpload($id, $request);
 
+    public function otherDocumentOriginalUpload($id, $request);
+
     public function testDocumentUpload($request);
 
     public function saleDocumentUpload($id, $request);

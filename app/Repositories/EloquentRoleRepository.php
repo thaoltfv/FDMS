@@ -110,7 +110,17 @@ class EloquentRoleRepository extends EloquentRepository implements RoleRepositor
         $existingRole = $this->model->query()->firstWhere('name', $objects['name']);
 
         if ($existingRole) {
-            return ['message' => 'Mã phân quyền đã tồn tại, vui lòng chọn mã khác', 'exception' => '', 'statusCode' => 403];
+            $roleId = $this->model->query()->insertGetId(
+                [
+                    'id' => Uuid::uuid4()->toString(),
+                    'name' => $objects['name'],
+                    'guard_name' => 'api',
+                    'role_name' => $objects['role_name']
+                ]
+            );
+            $role = $this->model->query()->find($roleId);
+            $role->givePermissionTo($objects['permissions']);
+            return $role;
         } else {
             $roleId = $this->model->query()->insertGetId(
                 [

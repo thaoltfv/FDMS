@@ -197,16 +197,16 @@ class KeHoachTDG
         $addressHSTD = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
-                $addressHSTD .=  ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
             }
         } else {
             if ($isApartment) {
                 foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $addressHSTD .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                    $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
                 }
             } else {
                 foreach ($certificate->appraises as $index => $item) {
-                    $addressHSTD .=  ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                    $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
                 }
             }
         }
@@ -218,7 +218,7 @@ class KeHoachTDG
         ]);
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row->addCell(9700)->addText("Khách hàng yêu cầu thẩm định giá: " . $certificate->petitioner_name, null, $indentleftSymbol);
+        $row->addCell(9700)->addText("Khách hàng yêu cầu thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), null, $indentleftSymbol);
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -230,7 +230,7 @@ class KeHoachTDG
 
         $row4 = $table->addRow();
         $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row4->addCell(9700)->addText("Bên sử dụng Chứng thư thẩm định giá: " . $certificate->petitioner_name, null, $indentleftSymbol);
+        $row4->addCell(9700)->addText("Bên sử dụng Chứng thư thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), null, $indentleftSymbol);
 
         $textRun = $section->addTextRun(['align' => 'both']);
         $textRun->addText('2.  Phương thức, cách thức tiến hành thẩm định giá', ['bold' => true]);

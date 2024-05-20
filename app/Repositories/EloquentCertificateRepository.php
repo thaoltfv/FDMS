@@ -283,6 +283,61 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     /**
      * @return bool
      */
+    public function otherDocumentOriginalUpload($id, $request)
+    {
+        return DB::transaction(function () use ($id, $request) {
+            try {
+                $result = [];
+                $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+                $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/' . $now->year . '/' . $now->month . '/';
+
+                $files = $request->file('files');
+
+                $user = CommonService::getUser();
+
+                if (isset($files) && !empty($files)) {
+                    foreach ($files as $file) {
+                        $fileName = $file->getClientOriginalName();
+                        $fileType = $file->getClientOriginalExtension();
+                        $fileSize = $file->getSize();
+                        $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
+                        Storage::put($name, file_get_contents($file));
+                        $fileUrl = Storage::url($name);
+                        $item = [
+                            'certificate_id' => $id,
+                            'name' => $fileName,
+                            'link' => $fileUrl,
+                            'type' => $fileType,
+                            'size' => $fileSize,
+                            'description' => 'original',
+                            'created_by' => $user->id,
+                        ];
+
+                        $item = new CertificateOtherDocuments($item);
+                        QueryBuilder::for($item)->insert($item->attributesToArray());
+                        $result[] = $item;
+                    }
+                    $edited = Certificate::where('id', $id)->first();
+                    $edited2 = CertificateOtherDocuments::where('certificate_id', $id)->first();
+                    # activity-log upload file
+                    $this->CreateActivityLog($edited, $edited2, 'upload_file', 'tải hồ sơ gốc');
+                    // chưa lấy ra được model user và id user
+                }
+
+                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                    ->with('createdBy')
+                    ->get();
+                return $result;
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+
+    /**
+     * @return bool
+     */
     public function testDocumentUpload($request)
     {
         return DB::transaction(function () use ($request) {
@@ -3242,6 +3297,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $data['certificate_date'] = isset($objects['certificate_date']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['certificate_date'])->format('Y-m-d') : null;
             $data['branch_id'] = $branch_id;
             $data['customer_id'] = $customerId;
+            $data['issue_date_card'] = isset($objects['issue_date_card']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $objects['issue_date_card'])->format('Y-m-d') : null;
+            $data['survey_time'] = isset($objects['survey_time']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $objects['survey_time'])->format('Y-m-d H:i') : null;
             if (isset($id)) {
                 $check = $this->beforeSave($id);
                 if (isset($check)) {
@@ -3326,6 +3383,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             'created_by',
             'document_type',
+            'phone_contact',
+            'name_contact',
+            'survey_location',
+            'survey_time',
+            'issue_date_card',
+            'issue_place_card'
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3387,7 +3450,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'pre_type_id',
             'administrative_id',
             'business_manager_id',
-            'document_alter_by_bank'
+            'document_alter_by_bank',
+            'phone_contact',
+            'name_contact',
+            'survey_location',
+            'survey_time',
+            'issue_date_card',
+            'issue_place_card'
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -3547,12 +3616,22 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         return DB::transaction(function () use ($id, $request) {
             try {
                 $result = [];
-                // # đang tắt khối block xác thực
-                $check = $this->beforeUpdateStatus($id);
-                if (isset($check)) {
-                    return $check;
-                }
                 $certificate = $this->model->query()->where('id', $id)->first();
+                // Phân lại hồ sơ
+                if ($certificate->status ==  $request['status']) {
+                    $check = $this->beforeUpdateStatusRedistribute($id);
+                    if (isset($check)) {
+                        return $check;
+                    }
+                } else {
+                    // # đang tắt khối block xác thực
+                    $check = $this->beforeUpdateStatus($id);
+                    if (isset($check)) {
+                        return $check;
+                    }
+                }
+
+                // $certificate = $this->model->query()->where('id', $id)->first();
                 $currentStatus = $certificate->status;
                 $currentSubStatus = $certificate->sub_status;
                 $current = intval($currentStatus . $currentSubStatus);
@@ -3609,6 +3688,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
+                    } elseif ($current == $next) {
+                        // Phân lại hồ sơ
+                        $logDescription = 'phân lại hồ sơ ';
                     } else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
                         $logDescription = 'cập nhật trạng thái ' . $description;
@@ -5047,6 +5129,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
         if (Certificate::where('id', $id)->exists()) {
             Certificate::where('id', $id)->update([
+                // Data mới
+                'survey_location' => $object['survey_location'],
+                'survey_time' => isset($object['survey_time']) ? \Carbon\Carbon::createFromFormat('d-m-Y H:i', $object['survey_time'])->format('Y-m-d H:i') : null,
+                'issue_date_card' =>  isset($object['issue_date_card']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $object['issue_date_card'])->format('Y-m-d') : null,
+                'issue_place_card' => $object['issue_place_card'],
+                'name_contact' => $object['name_contact'],
+                'phone_contact' => $object['phone_contact'],
                 'petitioner_name' => $object['petitioner_name'],
                 'petitioner_phone' => $object['petitioner_phone'],
                 'petitioner_identity_card' => $object['petitioner_identity_card'],
@@ -5190,7 +5279,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'commission_fee',
                 'status_expired_at',
                 'document_type',
-                'note'
+                'note',
+                'phone_contact',
+                'name_contact',
+                'survey_location',
+                'survey_time',
+                'issue_date_card',
+                'issue_place_card'
             ];
             $with = [
                 'appraisePurpose:id,name',
@@ -5410,6 +5505,43 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     default:
                         $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_STATUS_FOR_UPDATE . $data->status_text, 'exception' => ''];
                         break;
+                }
+            }
+            if (!empty($appraiser)) {
+                $this->updateAppraisalTeam($id, $appraiser);
+            }
+        } else {
+            $result = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS, 'exception' => ''];
+        }
+        return $result;
+    }
+
+    private function beforeUpdateStatusRedistribute(int $id)
+    {
+        $result = null;
+
+        if (Certificate::where('id', $id)->exists()) {
+            $user = CommonService::getUser();
+            $data = Certificate::where('id', $id)->get()->first();
+            $appraiser = [];
+            $appraiser['appraiser_id'] =  request()->get('appraiser_id');
+            $appraiser['appraiser_manager_id'] =  request()->get('appraiser_manager_id');
+            $appraiser['appraiser_confirm_id'] =  request()->get('appraiser_confirm_id');
+            $appraiser['appraiser_perform_id'] =  request()->get('appraiser_perform_id');
+            $appraiser['appraiser_control_id'] =  request()->get('appraiser_control_id');
+            if (request()->get('administrative_id')) {
+                $appraiser['administrative_id'] = request()->get('administrative_id');
+            }
+            if (request()->get('business_manager_id')) {
+                $appraiser['business_manager_id'] = request()->get('business_manager_id');
+            }
+            if (empty($appraiser['appraiser_id']) || empty($appraiser['appraiser_manager_id']) || empty($appraiser['appraiser_perform_id'])) {
+                return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
+            }
+            //Check role and permision
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+                if (!($data->appraiserBusinessManager->user_id == $user->id)) {
+                    $result = ['message' => 'Chỉ có quản lý nghiệp vụ mới có quyền phân lại hồ sơ này.', 'exception' => ''];
                 }
             }
             if (!empty($appraiser)) {

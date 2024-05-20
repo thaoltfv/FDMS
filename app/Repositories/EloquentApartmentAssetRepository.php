@@ -449,7 +449,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
     private function postComparisonFactor(array $dictionaries, array $apartment, array $comparison, array $asset, int $id, int $assetGeneralId, int  $oldAssetGeneralId = null)
     {
         $allComparisonFactor = [
-            'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc', 'loai_can_ho'
+            'phap_ly', 'loai_can', 'so_phong_ngu', 'dien_tich', 'tang', 'so_phong_wc', 'loai_can_ho', 'huong_chinh', 'tinh_trang_noi_that'
         ];
         // dd($apartment['apartment_asset_properties']);
         // dd($comparison,$allComparisonFactor,$oldAssetGeneralId);
@@ -538,6 +538,26 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 }
                 $type = 'loai_can_ho';
                 $name = 'Loại căn hộ';
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'huong_chinh') {
+                $apartmentValue = $apartment['apartment_asset_properties']['direction']['description'] ?? '-';
+                $assetValue = $asset['room_details'][0]['direction']['description'] ?? '-';
+                $status = false;
+                if (in_array($comparisonFactorTmp, $comparison)) {
+                    $status = true;
+                }
+                $type = 'huong_chinh';
+                $name = 'Hướng chính';
+                $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
+            } elseif ($comparisonFactorTmp == 'tinh_trang_noi_that') {
+                $apartmentValue = $apartment['apartment_asset_properties']['furniture_quality']['description'] ?? '-';
+                $assetValue = $asset['room_details'][0]['furniture_quality']['description'] ?? '-';
+                $status = false;
+                if (in_array($comparisonFactorTmp, $comparison)) {
+                    $status = true;
+                }
+                $type = 'tinh_trang_noi_that';
+                $name = 'Tình trạng nội thất';
                 $this->comparisonNoDictionary($apartmentValue, $assetValue, $status, $id, $assetGeneralId, $type, $name);
             }
         }

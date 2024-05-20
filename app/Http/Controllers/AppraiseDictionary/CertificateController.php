@@ -38,14 +38,15 @@ class CertificateController extends Controller
     /**
      * ProvinceController constructor.
      */
-    public function __construct(CertificateRepository         $certificateRepository,
-                                CompareAssetGeneralRepository $compareAssetGeneralRepository,
-                                UserRepository                $userRepository,
-                                DictionaryRepository          $dictionaryRepository,
-                                BuildingPriceRepository       $buildingPriceRepository,
-                                AppraiseAssetRepository       $appraiseAssetRepository,
-                                AppraiserCompanyRepository    $appraiserCompanyRepository)
-    {
+    public function __construct(
+        CertificateRepository         $certificateRepository,
+        CompareAssetGeneralRepository $compareAssetGeneralRepository,
+        UserRepository                $userRepository,
+        DictionaryRepository          $dictionaryRepository,
+        BuildingPriceRepository       $buildingPriceRepository,
+        AppraiseAssetRepository       $appraiseAssetRepository,
+        AppraiserCompanyRepository    $appraiserCompanyRepository
+    ) {
         $this->certificateRepository = $certificateRepository;
         $this->compareAssetGeneralRepository = $compareAssetGeneralRepository;
         $this->userRepository = $userRepository;
@@ -116,6 +117,23 @@ class CertificateController extends Controller
         }
     }
 
+    // Hồ sơ gốc
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function otherDocumentOriginalUpload($id, Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->certificateRepository->otherDocumentOriginalUpload($id, $request));
+        } catch (\Exception $exception) {
+            dd($exception);
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
     /**
      * @param $id
      * @return JsonResponse
@@ -156,7 +174,7 @@ class CertificateController extends Controller
     {
         try {
             $item = $this->certificateRepository->otherDocumentDownload($id, $request);
-            if(isset($item->link)) {
+            if (isset($item->link)) {
                 return response()->streamDownload(function () use ($item) {
                     echo file_get_contents($item->link);
                 }, $item->name);
@@ -177,7 +195,7 @@ class CertificateController extends Controller
     {
         try {
             $test = request()->get('test');
-            if(isset($test)) {
+            if (isset($test)) {
                 $result = $this->certificateRepository->findByIdTest($id);
             } else {
                 $result = $this->certificateRepository->findById($id);
@@ -201,7 +219,7 @@ class CertificateController extends Controller
     {
         try {
             $result = $this->certificateRepository->createCertificate($request->toArray());
-            if(is_numeric($result)) {
+            if (is_numeric($result)) {
                 return $this->respondWithCustomData($result);
             } else {
                 $data = ['message' => $result, 'exception' => []];
@@ -223,7 +241,7 @@ class CertificateController extends Controller
     {
         try {
             $result = $this->certificateRepository->updateCertificate($id, $request->toArray());
-            if(is_numeric($result)) {
+            if (is_numeric($result)) {
                 return $this->respondWithCustomData($result);
             } else {
                 $data = ['message' => $result, 'exception' => []];
@@ -270,7 +288,6 @@ class CertificateController extends Controller
                 $this->dictionaryRepository
             ))
                 ->AppraiseAsset($request->toArray()));
-
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];

@@ -161,7 +161,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí hành chính', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText($appraise->full_address, null, ['align' => 'left']);
+            ->addText(htmlspecialchars($appraise->full_address), null, ['align' => 'left']);
 
         $positionType1 = "";
         foreach ($appraise->properties as $index => $property) {
@@ -1081,7 +1081,7 @@ class ReportAppraisalNova extends ReportAppraisal
         //2
         $coordinateArr = explode(',', $realEstate->coordinates);
         $fullName = $apartment->appraise_asset ?: '';
-        $assetName = $fullName . ' tọa lạc tại ' . $address;
+        $assetName = $fullName . ' tọa lạc tại ' . htmlspecialchars($address);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('2', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí');

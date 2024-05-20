@@ -80,6 +80,15 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
                         $result = $result->whereBetween('total_price', [$fromValue, $toValue]);
                     }
                     break;
+                case '^':
+                    $result = $result->where(function ($q) use ($filterData) {
+                        $q = $q->whereHas('appraises', function ($query) use ($filterData) {
+                            $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        })->orWhereHas('apartment', function ($query) use ($filterData) {
+                            $query->where('full_address', 'ILIKE', '%' . $filterData . '%');
+                        });
+                    });
+                    break;
                 default:
                     $result = $result->where(function ($q) use ($search) {
                         $q = $q->where('id', 'like', strval($search));
@@ -164,7 +173,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
 
     public function updateRealEstateAditionalData(array $realEstate, $id)
     {
-        try{
+        try {
             $dataUpdate = [
                 'planning_info' => $realEstate['planning_info'] ?: '',
                 'planning_source' => $realEstate['planning_source'] ?: '',
@@ -176,7 +185,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             } else {
                 return ['message' => ErrorMessage::SYSTEM_ERROR];
             }
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $e->getMessage()];
             return $data;
         }
@@ -192,7 +201,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
         } else {
             return ['message' => "Vui lòng nhập thông tin trạng thái"];
         }
-        try{
+        try {
             $realEstate = $this->model->find($id);
             if ($realEstate && $realEstate->appraises) {
                 if ($realEstate->update($dataUpdate) && $realEstate->appraises->update($dataUpdate)) {
@@ -210,7 +219,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
                     return ['message' => ErrorMessage::SYSTEM_ERROR];
                 }
             }
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' =>  $e->getMessage()];
             return $data;
         }
@@ -219,17 +228,17 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
     public function CreateActivityLog($model, $request, $activity, $log, $note = '')
     {
         // if (is_object($model)) {
-            // $loga = $this->CustomizeLogMessage($model, $activity, $log);
+        // $loga = $this->CustomizeLogMessage($model, $activity, $log);
 
-            // dd ($loga);
-            activity($activity)
-                ->by(CommonService::getUser())
-                ->on($model)
-                ->withProperties([
-                    'data' => [$request],
-                    'note' => $note
-                ])
-                ->log($log);
+        // dd ($loga);
+        activity($activity)
+            ->by(CommonService::getUser())
+            ->on($model)
+            ->withProperties([
+                'data' => [$request],
+                'note' => $note
+            ])
+            ->log($log);
         // }
     }
 
@@ -264,7 +273,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             });
         }
         if (!empty($createdBy)) {
-            $list_user = explode(',',$createdBy);
+            $list_user = explode(',', $createdBy);
             $result = $result->whereIn('created_by', $list_user);
         }
         if (!empty($fromDate) && $fromDate != 'Invalid date') {
@@ -275,6 +284,5 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
         }
         // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
         return $result->get()->append('total_construction_base');
-
     }
 }

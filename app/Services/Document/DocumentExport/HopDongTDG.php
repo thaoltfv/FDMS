@@ -203,8 +203,14 @@ class HopDongTDG
             ['italic' => true],
             $indent13
         );
+        // Lấy ngày khảo sát
+        $stringTime = "ngày " . '  ' . " tháng " . '  ' . " năm " . '    ';
+        if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
+            $surveyTime = date_create($certificate->certificate_date);
+            $stringTime = "ngày " . $surveyTime->format('d') . " tháng " . $surveyTime->format('m') . " năm " . $surveyTime->format('Y');
+        }
         $section->addText(
-            "Hôm nay, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ' . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
+            "Hôm nay," .  $stringTime . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
         );
@@ -219,13 +225,13 @@ class HopDongTDG
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(1800, $cellVTop)->addText('BÊN A', ['bold' => true,],  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(8100, $cellVTop)->addText($certificate->petitioner_name, ['bold' => true],  $alignBoth);
+        $row1->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true],  $alignBoth);
 
         $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
         $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
         $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row2->addCell(8100, $cellVTop)->addText($certificate->petitioner_address, null,  $alignBoth);
+        $row2->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_address), null,  $alignBoth);
 
         $row3 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -233,12 +239,12 @@ class HopDongTDG
         ));
         $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
         $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row3->addCell(8100, $cellVTop)->addText($certificate->petitioner_identity_card, null,  $alignBoth);
+        $row3->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card), null,  $alignBoth);
 
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(8100, $cellVTop)->addText($certificate->petitioner_phone, null,  $alignBoth);
+        $row4->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_phone), null,  $alignBoth);
 
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
@@ -290,7 +296,7 @@ class HopDongTDG
                 : '');
         $textRun->addText('Ông ', ['bold' => false]);
         $textRun->addText($daidien, ['bold' => true]);
-        $textRun->addText(' – Chức vụ:' . $chucvu, ['bold' => false]);
+        $textRun->addText(' – Chức vụ: ' . $chucvu, ['bold' => false]);
         $section->addText(
             "Sau khi thương lượng, hai bên đồng ý ký kết hợp đồng cung cấp dịch vụ thẩm định giá tài sản với các điều kiện và điều khoản như sau:",
             null,
@@ -325,16 +331,16 @@ class HopDongTDG
         $appraiseAssetName = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
-                $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
             }
         } else {
             if ($isApartment) {
                 foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
                 }
             } else {
                 foreach ($certificate->appraises as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
+                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
                 }
             }
         }
@@ -423,7 +429,7 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row1->addCell(2900, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(5900, $cellVTop)->addText($addressHSTD, null,  $alignBoth);
+        $row1->addCell(5900, $cellVTop)->addText(htmlspecialchars($addressHSTD), null,  $alignBoth);
 
         $appraise_date_formatted = $certificate->appraise_date
             ? 'Tháng ' . date('m/Y', strtotime($certificate->appraise_date))
@@ -462,7 +468,7 @@ class HopDongTDG
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(2900, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(5900, $cellVTop)->addText('Phương pháp so sánh quy định theo Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
+        $row4->addCell(5900, $cellVTop)->addText('Các phương pháp phù hợp theo Hệ thống Chuẩn mực Thẩm định giá Việt Nam hiện hành.', null,  $alignBoth);
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -475,7 +481,8 @@ class HopDongTDG
         $row5->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row5->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row5->addCell(3600, $cellVTop)->addText('Bên sử dụng kết quả thẩm định giá: ', null, ['align' => 'left']);
-        $row5->addCell(5100, $cellVTop)->addText($certificate->petitioner_name . '.', null,  $alignBoth);
+        // $row5->addCell(5100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name) . '.', null,  $alignBoth);
+        $row5->addCell(5100, $cellVTop)->addText('Khách hàng thẩm định giá.', null,  $alignBoth);
 
         $row6 = $table->addRow(100, array(
             'tblHeader' => false,
@@ -505,11 +512,11 @@ class HopDongTDG
         ]);
         $row = $table->addRow();
         $row->addCell(600)->addText("2.1.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Bên A yêu cầu bên B thẩm định tài sản bằng điện thoại, bằng văn bản yêu cầu thẩm định.", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Bên A yêu cầu bên B thẩm định tài sản theo giấy yêu cầu thẩm định giá có xác nhận đồng ý nhận thẩm định giá của bên B.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("2.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Bên A cung cấp đầy đủ hồ sơ pháp lý của tài sản và hướng dẫn người của Bên B thẩm định hiện trạng tài sản tại hiện trường. Bên A thanh toán đợt 1 cho bên B làm chi phí để bên B cử cán bộ và phương tiện phối hợp với bên A đi khảo sát thu thập thông tin và thẩm định hiện trường. Mức chi phí trên do hai bên thỏa thuận tùy thuộc vào loại tài sản và vị trí tài sản và được tính là chi phí không hoàn lại. Hình thức chi bằng chuyển khoản hoặc thanh toán tiền mặt tại thời điểm hiện trường.", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Bên A cung cấp đầy đủ hồ sơ pháp lý của tài sản và hướng dẫn người của Bên B thẩm định hiện trạng tài sản tại hiện trường. Bên A thanh toán tiền đợt 1 cho bên B làm chi phí để bên B cử cán bộ và phương tiện phối hợp với bên A đi khảo sát thu thập thông tin và thẩm định hiện trường. Mức chi phí trên do hai bên thỏa thuận tùy thuộc vào loại tài sản và vị trí tài sản và được tính là chi phí không hoàn lại. Hình thức thanh toán bằng chuyển khoản hoặc thanh toán tiền mặt tại thời điểm hiện trường.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("2.3.", null, ['align' => 'right']);
@@ -562,7 +569,7 @@ class HopDongTDG
                 $textServiceFee,
                 ['bold' => true]
             );
-            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee ?? 0)) . ').', ['italic' => true]);
+            $textRun->addText(' (Bằng chữ: ' . ucfirst(CommonService::convertNumberToWords($certificate->service_fee ?? 0)) . ' đồng chẵn).', ['italic' => true]);
         }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
@@ -778,7 +785,7 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText($daidien, ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(mb_strtoupper($daidien), ['bold' => true], ['align' => 'center']);
 
 
 

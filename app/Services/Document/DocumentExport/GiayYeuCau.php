@@ -171,8 +171,8 @@ class GiayYeuCau
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
         $section->addListItem("Số thẻ CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', []);
         $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', []);
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address, 0, [], 'bullets', []);
-        $section->addListItem("Số điện thoại: " . $certificate->petitioner_phone, 0, [], 'bullets', []);
+        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
+        $section->addListItem("Số điện thoại: " . htmlspecialchars($certificate->petitioner_phone), 0, [], 'bullets', []);
 
         //2
         $textRun = $section->addTextRun('Heading2');
@@ -286,14 +286,14 @@ class GiayYeuCau
                 $dt = 0;
                 $table->addRow(400, $cantSplit);
                 $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
-                $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
+                $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->full_address), ['bold' => true], $cellHJustify);
                 $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                 $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                 $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                 $dt = isset($asset->total_area) ? $this->formatNumberFunction($asset->total_area, 2, ',', '.') : '';
                 $table->addRow(400, $cantSplit);
                 $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-                $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
+                $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->appraise_asset), ['bold' => false], $cellHJustify);
                 $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
                 $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
                 $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
@@ -304,14 +304,14 @@ class GiayYeuCau
                     $dt = 0;
                     $table->addRow(400, $cantSplit);
                     $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
+                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->full_address), ['bold' => true], $cellHJustify);
                     $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                     $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                     $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                     $dt = isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->area) ? $this->formatNumberFunction($asset->apartmentAssetProperties->area, 2, ',', '.') : '';
                     $table->addRow(400, $cantSplit);
                     $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
+                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->appraise_asset), ['bold' => false], $cellHJustify);
                     $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
                     $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
                     $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
@@ -323,7 +323,7 @@ class GiayYeuCau
                     $dt = 0;
                     $table->addRow(400, $cantSplit);
                     $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText($asset->full_address, ['bold' => true], $cellHJustify);
+                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->full_address), ['bold' => true], $cellHJustify);
                     $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                     $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
                     $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
@@ -334,7 +334,7 @@ class GiayYeuCau
                     }
                     $table->addRow(400, $cantSplit);
                     $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText($asset->appraise_asset, ['bold' => false], $cellHJustify);
+                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->appraise_asset), ['bold' => false], $cellHJustify);
                     $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
                     $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
                     $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);

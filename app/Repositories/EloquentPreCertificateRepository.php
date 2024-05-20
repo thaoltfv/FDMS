@@ -1176,12 +1176,21 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return DB::transaction(function () use ($id, $request) {
             try {
                 $result = [];
-                // # đang tắt khối block xác thực
-                $check = $this->beforeUpdateStatus($id);
-                if (isset($check)) {
-                    return $check;
-                }
                 $preCertificate = $this->model->query()->where('id', $id)->first();
+                if ($preCertificate->status ==  $request['status']) {
+                    $check = $this->beforeUpdateStatusRedistribute($id);
+                    if (isset($check)) {
+                        return $check;
+                    }
+                } else {
+                    // # đang tắt khối block xác thực
+                    $check = $this->beforeUpdateStatus($id);
+                    if (isset($check)) {
+                        return $check;
+                    }
+                }
+
+
 
                 if (isset($preCertificate->certificate_id)) {
                     return  ['message' => ErrorMessage::PRE_CERTIFICATE_HAVE_CERTIFICATE, 'exception' => ''];
@@ -1246,6 +1255,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         if ($logDescription == "từ chối Hủy") {
                             $logDescription = "Khôi phục YCSB";
                         }
+                    } elseif ($current == $next) {
+                        $logDescription = 'phân lại hồ sơ ';
                     } else {
                         $description = $nextConfig !== false ? $nextConfig['description'] : '';
                         $logDescription = 'cập nhật trạng thái ' . $description;
@@ -1423,6 +1434,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         } else {
             $result = ['message' => ErrorMessage::PRE_CERTIFICATE_NOTEXISTS, 'exception' => ''];
+        }
+        return $result;
+    }
+
+    private function beforeUpdateStatusRedistribute(int $id)
+    {
+        $result = null;
+
+        if (PreCertificate::where('id', $id)->exists()) {
+            $user = CommonService::getUser();
+            $data = PreCertificate::where('id', $id)->get()->first();
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+                if (!($data->appraiserBusinessManager->user_id == $user->id)) {
+                    $result = ['message' => 'Chỉ có quản lý nghiệp vụ mới có quyền phân lại hồ sơ này.', 'exception' => ''];
+                }
+            }
+        } else {
+            $result = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS, 'exception' => ''];
         }
         return $result;
     }
