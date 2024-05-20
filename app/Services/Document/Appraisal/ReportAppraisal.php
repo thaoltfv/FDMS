@@ -124,9 +124,9 @@ class ReportAppraisal extends Report
         foreach ($assets as $index => $item) {
             $address_assets .= ($index > 0) ? " và " : "";
             if ($item->assetType->acronym == 'CC') {
-                $address_assets .= ($item->apartment && $item->apartment->full_address) ?  htmlspecialchars($item->apartment->full_address) : '';
+                $address_assets .= ($item->apartment && $item->apartment->full_address) ?  $item->apartment->full_address : '';
             } else {
-                $address_assets .= ($item->appraises && $item->appraises->full_address) ?  htmlspecialchars($item->appraises->full_address) : '';
+                $address_assets .= ($item->appraises && $item->appraises->full_address) ?  $item->appraises->full_address : '';
             }
         }
 
