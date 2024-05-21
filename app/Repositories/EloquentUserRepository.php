@@ -164,8 +164,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ]);
         }
         $user = $this->model->query()->find($id);
-        $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
-        $user->assignRole($getRole->id);
+        $user->assignRole($objects['role']);
         return $user;
     }
 
@@ -195,12 +194,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $user = $this->model->query()->find($id);
         $user->getRoleNames();
         $roles = $user['roles'];
-
-        if (!($roles[0]['role_name'] == $objects['role'])) {
+        if (!($roles[0]['name'] == $roleUpdate)) {
             $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
-            $user->syncRoles($getRole->id);
+            $user->syncRoles($getRole);
         }
-        // $user->syncRoles($objects['role']);
         if (isset($objects['appraiser'])) {
             Appraiser::query()->where('user_id', $id)
                 ->update([
