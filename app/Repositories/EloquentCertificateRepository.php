@@ -2687,6 +2687,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'administrative_id',
             'business_manager_id',
             'customer_id',
+            'customer_group_id',
             DB::raw("case status
                     when 1
                     then 'Mới'
@@ -2710,6 +2711,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
+
             'document_type',
             'status_expired_at',
             'status_updated_at',
@@ -2728,8 +2730,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'administrative:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'customer:id,name,phone,address',
-
-
+            'customerGroup:id,description',
             'realEstate.appraises',
             'realEstate.appraises.certificateAppraiseLaw',
             'realEstate.apartment',
@@ -2901,7 +2902,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             //     else
             //         $result=  $result->orderBy('created_by', 'ASC');
         }
-
+        if (request()->has('is_guest')) {
+            if (isset($user->customer_group_id)) {
+                $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+            }
+        }
         $result = $result->orderByDesc('certificates.updated_at');
 
         $result = $result
