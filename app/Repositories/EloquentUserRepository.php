@@ -196,7 +196,11 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $roles = $user['roles'];
         if (!($roles[0]['name'] == $roleUpdate)) {
             $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
-            $user->syncRoles($getRole);
+            if (isset($getRole)) {
+                $user->syncRoles($getRole);
+            } else {
+                $user->syncRoles('SUB_ADMIN');
+            }
         }
         if (isset($objects['appraiser'])) {
             Appraiser::query()->where('user_id', $id)
