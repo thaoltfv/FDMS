@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\UserRepository;
 use App\Enum\ValueDefault;
 use App\Models\Appraiser;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -163,7 +164,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ]);
         }
         $user = $this->model->query()->find($id);
-        $user->assignRole($objects['role']);
+        $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
+        $user->assignRole($getRole->id);
         return $user;
     }
 
@@ -193,8 +195,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $user = $this->model->query()->find($id);
         $user->getRoleNames();
         $roles = $user['roles'];
-        if (!($roles[0]['name'] == $objects['role'])) {
-            $user->syncRoles($objects['role']);
+
+        if (!($roles[0]['role_name'] == $objects['role'])) {
+            $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
+            $user->syncRoles($getRole->id);
         }
         // $user->syncRoles($objects['role']);
         if (isset($objects['appraiser'])) {
