@@ -73,6 +73,7 @@ class User extends Authenticatable implements JWTSubject
         'role',
         'token',
         'created_at',
+        'customer_group_id',
     ];
 
     public function branch(): BelongsTo
@@ -83,6 +84,10 @@ class User extends Authenticatable implements JWTSubject
     public function appraiser(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'id', 'user_id');
+    }
+    public function customerGroup(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'customer_group_id', 'id');
     }
 
     /**
