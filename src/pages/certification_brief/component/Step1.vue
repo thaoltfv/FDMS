@@ -251,6 +251,13 @@
 				</div>
 				<div class="card-body card-info" v-show="showCardDetailTraffic">
 					<div class="d-flex-column">
+						<InputCategory
+							v-model="data.customer_group_id"
+							vid="customer_group_id"
+							label="Nhóm đối tác"
+							class="form-group-container"
+							:options="optionsCustomerGroup"
+						/>
 						<InputCategorySearch
 							vid="appraiser"
 							class="form-group-container"
@@ -450,6 +457,7 @@ export default {
 		"appraisersControl",
 		"administratives",
 		"customers",
+		"customerGroups",
 		"idData",
 		"render_price_fee",
 		"employeeBusiness",
@@ -604,6 +612,13 @@ export default {
 				// // console.log('newwww', newValue)
 				this.data.appraiser_sale_id = newValue;
 			}
+		},
+		optionsCustomerGroup() {
+			return {
+				data: this.customerGroups,
+				id: "id",
+				key: "description"
+			};
 		},
 		optionsLoaiHs() {
 			return {

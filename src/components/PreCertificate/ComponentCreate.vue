@@ -157,6 +157,13 @@
 				</div>
 				<div class="card-body card-info" v-show="showCardDetailTraffic">
 					<div class="d-flex-column">
+						<!-- <InputCategory
+							v-model="dataPC.customer_group_id"
+							vid="customer_group_id"
+							label="Nhóm đối tác"
+							class="form-group-container col-12"
+							:options="optionsCustomerGroup"
+						/> -->
 						<InputCategorySearch
 							vid="appraiser"
 							class="form-group-container"
@@ -354,6 +361,7 @@ export default {
 			topographic: "",
 			land_no_old: "",
 			doc_no_old: "",
+			customer_group_id: "",
 			status: 1,
 			sub_status: 1
 		});

@@ -48,14 +48,14 @@ export const COMPARISON_APARTMENT = [{
 	visible: true
 },
 {
-	id: 7,
+	id: 8,
 	name: 'Hướng chính',
 	slug: 'huong_chinh',
 	disable: false,
 	visible: true
 },
 {
-	id: 8,
+	id: 9,
 	name: 'Tình trạng nội thất',
 	slug: 'tinh_trang_noi_that',
 	disable: false,

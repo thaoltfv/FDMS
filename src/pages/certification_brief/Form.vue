@@ -17,6 +17,7 @@
 					:appraisers="appraisers"
 					:signAppraisers="signAppraisers"
 					:customers="customers"
+					:customerGroups="customerGroups"
 					:employeePerformance="employeePerformance"
 					:businessManagers="businessManagers"
 					:employeeBusiness="employeeBusiness"
@@ -178,6 +179,7 @@ export default {
 					commission_fee: 0,
 					note: "",
 					petitioner_identity_card: "",
+					customer_group_id: "",
 					customer: {
 						name: "",
 						address: "",
@@ -195,6 +197,7 @@ export default {
 			employeePerformance: [],
 			businessManagers: [],
 			customers: [],
+			customerGroups: [],
 			appraisersManager: [],
 			appraisersControl: [],
 			administratives: [],
@@ -323,6 +326,9 @@ export default {
 				resp = await WareHouse.getDictionaries();
 				store.commit(types.SET_DICTIONARIES, { ...resp });
 			}
+			this.customerGroups = resp.data.nhom_doi_tac
+				? [...resp.data.nhom_doi_tac]
+				: [];
 			this.typeAppraiseProperty = [...resp.data.loai_tai_san];
 			this.typeAppraiseProperty.forEach(item => {
 				item.description = this.formatSentenceCase(item.description);

@@ -538,6 +538,7 @@ export default {
 			formData.append("type", type);
 			let check = true;
 			let files = e.target.files;
+			console.log(files);
 			if (!files.length) {
 				return;
 			}
@@ -555,12 +556,13 @@ export default {
 						formData.append("files[" + i + "]", files[i]);
 					}
 					let res = null;
-					if (this.dataId) {
+					if (this.idData) {
 						res = await File.uploadFilePreCertificateExport(
 							formData,
-							this.dataId
+							this.idData
 						);
 						if (res.data) {
+							console.log("Có data nè", res.data);
 							const tempList = [];
 							for (let index = 0; index < res.data.data.length; index++) {
 								const element = res.data.data[index];
