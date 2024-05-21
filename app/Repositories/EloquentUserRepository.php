@@ -164,7 +164,11 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ]);
         }
         $user = $this->model->query()->find($id);
-        $user->assignRole($objects['role']);
+        // $user->assignRole($objects['role']);
+        $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
+        if (isset($getRole)) {
+            $user->assignRole($getRole);
+        }
         return $user;
     }
 
@@ -194,15 +198,13 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $user = $this->model->query()->find($id);
         $user->getRoleNames();
         $roles = $user['roles'];
-        $user->syncRoles('SUB_ADMIN');
-        // if (!($roles[0]['role_name'] == $roleUpdate)) {
-        //     $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
-        //     if (isset($getRole)) {
-        //         $user->syncRoles($getRole);
-        //     } else {
-        //     $user->syncRoles('SUB_ADMIN');
-        //     }
-        // }
+
+        if (count($roles) > 0 &&  !($roles[0]['role_name'] == $roleUpdate)) {
+            $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
+            if (isset($getRole)) {
+                $user->syncRoles($getRole);
+            }
+        }
         if (isset($objects['appraiser'])) {
             Appraiser::query()->where('user_id', $id)
                 ->update([
