@@ -513,13 +513,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (request()->has('is_guest')) {
             if (isset($user->customer_group_id)) {
                 $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+
+                $result = $result->orderByDesc('pre_certificates.updated_at');
+                // dd(DB::getQueryLog());
+                $result = $result
+                    ->forPage($page, $perPage)
+                    ->paginate($perPage);
+            } else {
+                $result = [];
             }
         }
-        $result = $result->orderByDesc('pre_certificates.updated_at');
-        // dd(DB::getQueryLog());
-        $result = $result
-            ->forPage($page, $perPage)
-            ->paginate($perPage);
+
 
         // foreach ($result as $stt => $item) {
         //     $result[$stt]->append('detail_list_id');

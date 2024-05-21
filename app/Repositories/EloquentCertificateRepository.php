@@ -545,13 +545,20 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $result = $result->orderByDesc($this->allowedSorts);
         }
 
-        $result = $result
-            ->forPage($page, $perPage)
-            ->paginate($perPage);
+        if (request()->has('is_guest')) {
+            if (isset($user->customer_group_id)) {
+                $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+                $result = $result
+                    ->forPage($page, $perPage)
+                    ->paginate($perPage);
 
-        foreach ($result as $stt => $item) {
-            $result[$stt]->append('total_asset_price');
-            //$result[$stt]->append('total_asset_price_round');
+                foreach ($result as $stt => $item) {
+                    $result[$stt]->append('total_asset_price');
+                    //$result[$stt]->append('total_asset_price_round');
+                }
+            } else {
+                $result = [];
+            }
         }
 
         return $result;
@@ -2746,6 +2753,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             // },
         ];
         \DB::enableQueryLog();
+
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select)
@@ -2902,21 +2910,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             //     else
             //         $result=  $result->orderBy('created_by', 'ASC');
         }
+
+        $result = $result->orderByDesc('certificates.updated_at');
         if (request()->has('is_guest')) {
             if (isset($user->customer_group_id)) {
                 $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+                $result = $result
+                    ->forPage($page, $perPage)
+                    ->paginate($perPage);
+
+                foreach ($result as $stt => $item) {
+                    $result[$stt]->append('detail_list_id');
+                    // $result[$stt]->append('certificate_asset_price');
+                }
+            } else {
+                $result = [];
             }
         }
-        $result = $result->orderByDesc('certificates.updated_at');
 
-        $result = $result
-            ->forPage($page, $perPage)
-            ->paginate($perPage);
 
-        foreach ($result as $stt => $item) {
-            $result[$stt]->append('detail_list_id');
-            // $result[$stt]->append('certificate_asset_price');
-        }
         return $result;
     }
 
