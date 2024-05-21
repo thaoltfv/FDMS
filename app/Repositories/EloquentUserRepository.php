@@ -150,7 +150,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'address' => $objects['address'] ?? "",
             'appraisers_number' => $objects['appraisers_number'] ?? "",
             'mailing_address' => mb_strtolower($objects['mailing_address']) ?? "",
-            'customer_group_id' => $objects['customer_group_id'] ?? "",
+            'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
         $id = $this->model->query()->insertGetId($array);
         if (isset($objects['appraiser'])) {
@@ -183,7 +183,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'appraisers_number' => $objects['appraisers_number'] ?? "",
             'image' => $objects['image'] ?? "",
             'mailing_address' => $objects['mailing_address'] ?? "",
-            'customer_group_id' => $objects['customer_group_id'] ?? "",
+            'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
 
         $this->model->query()
