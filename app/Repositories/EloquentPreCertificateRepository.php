@@ -371,6 +371,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraise_purpose_id',
             'pre_certificates.created_at',
             'customer_id',
+            'customer_group_id',
 
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
@@ -407,6 +408,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'priceEstimates',
             'priceEstimates.landFinalEstimate',
             'customer:id,name,phone,address',
+            'customerGroup:id,description',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
@@ -564,6 +566,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_sale_id',
             'appraiser_perform_id',
             'certificate_id',
+            'customer_group_id',
             'customer_id',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
@@ -635,6 +638,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'cancelReason:id,description',
+            'customerGroup:id,description',
             'otherDocuments' => function ($query) {
                 $query->whereNull('deleted_at');
             },
@@ -941,6 +945,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
+            'customer_group_id',
         ];
         $with = [
             'appraiserSale:id,name,user_id',
@@ -954,6 +959,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'createdBy:id,name',
             'payments',
             'cancelReason:id,description',
+            'customerGroup:id,description',
             'preType:id,description',
             'exportDocuments',
 
@@ -1048,6 +1054,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'deleted_at',
                     'commission_fee',
                     'pre_type_id',
+                    'customer_group_id',
                 ];
                 $certificateKey = [
                     'petitioner_name',
@@ -1077,6 +1084,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'document_type',
                     'total_preliminary_value',
                     'pre_type_id',
+                    'customer_group_id',
                 ];
 
                 $user = CommonService::getUser();
@@ -1691,6 +1699,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
+            'customer_group_id',
             DB::raw(" CASE status
                 WHEN 1 THEN 'Yêu cầu sơ bộ'
                 WHEN 2 THEN 'Định giá sơ bộ'
@@ -1713,6 +1722,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'payments',
             'cancelReason:id,description',
             'preType:id,description',
+            'customerGroup:id,description',
         ];
         $result = PreCertificate::with($with)
             ->select($select);
@@ -1963,6 +1973,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //     return $check;
         $select = ['*'];
         $with = [
+            'customerGroup:id,description',
             'createdBy:id,name',
             'lastVersion',
             'apartmentProperties',

@@ -28,6 +28,11 @@ class addColumnCustomerGroup extends Migration
                 $table->integer('customer_group_id')->nullable();
             });
         }
+        if (!Schema::hasColumn('pre_certificates', 'customer_group_id')) {
+            Schema::table('pre_certificates', function (Blueprint $table) {
+                $table->integer('customer_group_id')->nullable();
+            });
+        }
     }
 
     /**
@@ -49,6 +54,11 @@ class addColumnCustomerGroup extends Migration
         }
         if (Schema::hasColumn('certificates', 'customer_group_id')) {
             Schema::table('certificates', function (Blueprint $table) {
+                $table->dropColumn('customer_group_id');
+            });
+        }
+        if (Schema::hasColumn('pre_certificates', 'customer_group_id')) {
+            Schema::table('pre_certificates', function (Blueprint $table) {
                 $table->dropColumn('customer_group_id');
             });
         }
