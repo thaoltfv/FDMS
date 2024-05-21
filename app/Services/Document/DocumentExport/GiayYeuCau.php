@@ -164,13 +164,17 @@ class GiayYeuCau
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText(" ", ['size' => '10'], ['align' => 'center']);
-
+        $stringTimeSoc = "";
+        if (isset($certificate->issue_date_card) && !empty(trim($certificate->issue_date_card))) {
+            $issue_date_card = date_create($certificate->issue_date_card);
+            $stringTimeSoc =  $issue_date_card->format('d') . "/" . $issue_date_card->format('m') . "/" . $issue_date_card->format('Y');
+        }
         // 1
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
         $section->addListItem("Số thẻ CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', []);
-        $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', []);
+        $section->addListItem("Ngày cấp: " . $stringTimeSoc . "   ; Nơi cấp: " . ($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : ""), 0, [], 'bullets', []);
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
         $section->addListItem("Số điện thoại: " . htmlspecialchars($certificate->petitioner_phone), 0, [], 'bullets', []);
 
