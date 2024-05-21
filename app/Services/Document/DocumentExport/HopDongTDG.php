@@ -483,7 +483,7 @@ class HopDongTDG
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(2900, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(5900, $cellVTop)->addText('Các phương pháp phù hợp theo Hệ thống Chuẩn mực Thẩm định giá Việt Nam hiện hành.', null,  $alignBoth);
+        $row4->addCell(5900, $cellVTop)->addText('Các phương pháp phù hợp theo Hệ thống Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
