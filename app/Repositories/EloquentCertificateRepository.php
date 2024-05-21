@@ -3400,7 +3400,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name,user_id',
             'customer:id,name,phone,address',
-            'customerGroup:id:description'
+            'customerGroup:id,description',
 
         ];
         $result = $this->model->query()
@@ -3471,7 +3471,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserPerform:id,name,user_id',
             'appraisePurpose:id,name',
             'customer:id,name,phone,address',
-            'customerGroup:id:description',
+            'customerGroup:id,description',
             'otherDocuments',
             'saleDocuments' => function ($q) {
                 $q->where('description', '=', 'other');
@@ -5294,7 +5294,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ];
             $with = [
                 'appraisePurpose:id,name',
-                'customerGroup:id:description'
+                'customerGroup:id,description',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
         }
