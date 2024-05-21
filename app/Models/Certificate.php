@@ -69,7 +69,9 @@ class Certificate extends Model
         'survey_location',
         'survey_time',
         'issue_date_card',
-        'issue_place_card'
+        'issue_place_card',
+        'customer_group_id',
+
     ];
 
     public function getStatusTextAttribute()
@@ -134,7 +136,10 @@ class Certificate extends Model
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_id', 'id');
     }
-
+    public function customerGroup(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'customer_group_id', 'id');
+    }
     public function appraiserManager(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_manager_id', 'id');

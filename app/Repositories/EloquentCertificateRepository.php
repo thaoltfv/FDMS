@@ -3387,6 +3387,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'name_contact',
             'survey_location',
             'survey_time',
+            'customer_group_id',
             'issue_date_card',
             'issue_place_card'
         ];
@@ -3455,6 +3456,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'name_contact',
             'survey_location',
             'survey_time',
+            'customer_group_id',
             'issue_date_card',
             'issue_place_card'
         ];
@@ -5284,6 +5286,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'name_contact',
                 'survey_location',
                 'survey_time',
+                'customer_group_id',
                 'issue_date_card',
                 'issue_place_card'
             ];
