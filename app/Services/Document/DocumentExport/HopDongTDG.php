@@ -245,12 +245,17 @@ class HopDongTDG
         $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
         $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row3->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card), null,  $alignBoth);
-        $row3->addCell(1800, $cellVTop)->addText('-    Ngày cấp', null,  $alignBoth);
-        $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row3->addCell(8100, $cellVTop)->addText($stringTimeSoc, null,  $alignBoth);
-        $row3->addCell(1800, $cellVTop)->addText('-    Nơi cấp', null,  $alignBoth);
-        $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row3->addCell(8100, $cellVTop)->addText($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : "", null,  $alignBoth);
+
+        $row31 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row31->addCell(1800, $cellVTop)->addText('-    Ngày cấp', null,  $alignBoth);
+        $row31->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row31->addCell(8100, $cellVTop)->addText($stringTimeSoc, null,  $alignBoth);
+
+        $row32 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row32->addCell(1800, $cellVTop)->addText('-    Nơi cấp', null,  $alignBoth);
+        $row32->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row32->addCell(8100, $cellVTop)->addText($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : "", null,  $alignBoth);
+
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
