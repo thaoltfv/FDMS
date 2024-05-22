@@ -466,7 +466,8 @@ class CertificateAssetController extends Controller
                     File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
                 }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD' . $id . '.zip';
-                $name = $path . $zipFileName;
+                // $name = $path . $zipFileName;
+                $name = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
                 $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
@@ -480,7 +481,7 @@ class CertificateAssetController extends Controller
                 // Đóng file zip
                 $zip->close();
                 $response =  response()->download($name)->deleteFileAfterSend(true);
-                File::delete($name);
+                // File::delete($name);
                 return $response;
 
                 // Trả về file zip cho người dùng download
