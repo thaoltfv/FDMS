@@ -690,19 +690,19 @@ class CertificateAssetController extends Controller
             }
             $company = $this->appraiserCompanyRepository->getCompany();
             $realEstate = Certificate::query()->where('id', $id)->select($select)->with($with)->first();
+            dd($realEstate->realEstate, $realEstate->realEstate->apartment, $realEstate->realEstate->apartment->apartmentHasAssets);
 
             if (isset($realEstate->realEstate) &&  isset($realEstate->realEstate->appraises) && isset($realEstate->realEstate->appraises->appraiseHasAssets) && count($realEstate->realEstate->appraises->appraiseHasAssets) > 0) {
                 foreach ($realEstate->realEstate->appraises->appraiseHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
                 }
             }
-            dd($realEstate->realEstate, $realEstate->realEstate->apartment, $realEstate->realEstate->apartment->apartmentHasAssets);
             if (isset($realEstate->realEstate) && isset($realEstate->realEstate->apartment) && isset($realEstate->realEstate->apartment->apartmentHasAssets) && count($realEstate->realEstate->apartment->apartmentHasAssets) > 0) {
                 foreach ($realEstate->realEstate->apartment->apartmentHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
                 }
             }
-            dd(json_encode($arrayAsset));
+
             $result = (new AssetReport())->generateDocx($company, ($this->compareAssetGeneralRepository->findByIds(json_encode($arrayAsset))), $format);
             return $result;
         } catch (\Exception $exception) {
