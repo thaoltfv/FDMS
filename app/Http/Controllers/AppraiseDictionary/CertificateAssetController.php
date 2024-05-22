@@ -486,11 +486,12 @@ class CertificateAssetController extends Controller
                 'assetType',
 
             ];
-            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
-            dd($realEstate);
-            if ($realEstate->assetType && $realEstate->assetType->acronym != 'CC') {
+            $cert = Certificate::where('id', $certificateId)->first()->toArray();
+            if ($cert['document_type'] && $cert['document_type'][0] != 'CC') {
                 $tempTLTDCT[] = 'Appendix2';
             }
+            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+
             foreach ($tempTLTDCT as  $value) {
                 $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
                 if ($value != 'TSSS') {
