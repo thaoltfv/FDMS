@@ -448,6 +448,39 @@ class CertificateAssetController extends Controller
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
         return $this->printDocument($id, $is_pc, $service);
     }
+    public function downloadAllOfficial($id)
+    {
+        $certificate = $this->certificateRepository->findById($id);
+        if ($certificate->otherDocumnents && count($certificate->otherDocumnents) > 0) {
+            $arrayLink = [];
+            foreach ($certificate->otherDocumnents as  $document) {
+                if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
+                    $arrayLink[] = $document->link;
+                }
+            }
+            if (count($arrayLink) > 0) {
+                // Tạo file zip mới
+                $zipFileName = 'TaiLieuChinhThuc_HSTD' . $id . '.zip';
+                $zip = new ZipArchive;
+                $zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+                // Tải các file về và thêm vào zip
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = basename($fileLink);
+                    $fileContent = file_get_contents($fileLink);
+                    $zip->addFromString($fileName, $fileContent);
+                }
+
+                // Đóng file zip
+                $zip->close();
+
+                // Trả về file zip cho người dùng download
+                return Response::download($zipFileName)->deleteFileAfterSend(true);
+            } else {
+                return ['message' => 'Có lỗi xảy ra trong quá trình tải xuống'];
+            }
+        }
+    }
 
     public function printDocument($id, $is_pc, $service): JsonResponse
     {
