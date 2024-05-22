@@ -420,6 +420,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('print/bien-ban-thanh-ly/{id}/{is_pc?}', [CertificateAssetController::class, 'printBienBanThanhLy']);
 
         Route::get('download-all-official/{id}', [CertificateAssetController::class, 'downloadAllOfficial']);
+        Route::post('delete-file-after-download', [CertificateAssetController::class, 'deleteAfterDownload']);
 
         Route::get('print/test1/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest1']);
         Route::get('print/test2/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest2']);

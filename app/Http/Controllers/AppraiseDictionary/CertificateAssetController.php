@@ -492,7 +492,12 @@ class CertificateAssetController extends Controller
             return ['message' => 'Không có tài liệu chính thức nào để tải xuống.'];
         }
     }
-
+    public function deleteAfterDownload(Request $objects)
+    {
+        $name = sys_get_temp_dir() . '/' . $objects['name_link'];
+        Storage::disk(env('FILESYSTEM_DRIVER'))->delete($name);
+        return ['message' => 'Xóa link thành công'];
+    }
     public function printDocument($id, $is_pc, $service): JsonResponse
     {
         $format = '.docx';
