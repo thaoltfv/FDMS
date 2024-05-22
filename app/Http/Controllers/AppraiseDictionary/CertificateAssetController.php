@@ -479,7 +479,7 @@ class CertificateAssetController extends Controller
                 $zip->close();
                 Storage::put($name, file_get_contents($name));
                 $fileUrl = Storage::url($name);
-                $response = response()->download($fileUrl, $zipFileName, [
+                $response = response()->download($name, $zipFileName, [
                     'Content-Type' => 'application/zip',
 
                 ])->deleteFileAfterSend(true);
