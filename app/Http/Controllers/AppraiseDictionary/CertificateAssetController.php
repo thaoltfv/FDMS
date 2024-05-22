@@ -636,7 +636,7 @@ class CertificateAssetController extends Controller
         $report = new $service;
         return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint));
     }
-    public function printDocumentAll($id, $service): JsonResponse
+    public function printDocumentAll($id, $service)
     {
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
@@ -656,7 +656,7 @@ class CertificateAssetController extends Controller
             return $report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint);
         }
     }
-    public function printDocumentOfficialAll($id, $service): JsonResponse
+    public function printDocumentOfficialAll($id, $service)
     {
         $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $format = '.docx';
