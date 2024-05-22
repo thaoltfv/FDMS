@@ -470,16 +470,18 @@ class CertificateAssetController extends Controller
                 // $name = $path . $zipFileName;
                 $name = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
-                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-                // Tải các file về và thêm vào zip
-                foreach ($arrayLink as $fileLink) {
-
-                    $zip->addFile($fileLink['link'], $fileLink['name']);
+                if ($zip->open($name, ZipArchive::CREATE) === TRUE) {
+                    // Tải các file về và thêm vào zip
+                    foreach ($arrayLink as $fileLink) {
+                        $zip->addFile($fileLink['link'], $fileLink['name']);
+                    }
+                    $zip->close();
                 }
 
-                // Đóng file zip
-                $zip->close();
+
+
+
+
                 $response = response()->download($name, $zipFileName, array('Content-Type: application/zip'))->deleteFileAfterSend(true);
 
                 return $response;
