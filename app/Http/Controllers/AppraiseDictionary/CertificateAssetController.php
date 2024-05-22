@@ -450,13 +450,16 @@ class CertificateAssetController extends Controller
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
         return $this->printDocument($id, $is_pc, $service);
     }
-    public function downloadAllOfficial($id)
+    public function downloadAllOfficial($id, $type)
     {
         $certificate = $this->certificateRepository->findById($id);
-        if ($certificate->otherDocuments && count($certificate->otherDocuments) > 0) {
-            $arrayLink = [];
-            foreach ($certificate->otherDocuments as  $document) {
-                if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
+        $arrayLink = [];
+        $zipFileName = $type . '_HSTD_' . $id . '.zip';
+        $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('His');
+        $zipFileNameLink = $type . '_HSTD_' . $id . '_' . $downloadTime . '.zip';
+        if ($type == 'TaiLieuHanhChinh') {
+            if ($certificate->exportDocuments && count($certificate->exportDocuments) > 0) {
+                foreach ($certificate->exportDocuments as  $document) {
                     $item = [
                         'link' => $document->link,
                         'name' => $document->name
@@ -464,32 +467,75 @@ class CertificateAssetController extends Controller
                     $arrayLink[] =  $item;
                 }
             }
-            if (count($arrayLink) > 0) {
-                $zipFileName = 'TaiLieuChinhThuc_HSTD_' . $id . '.zip';
-                $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
-                $zipFileNameLink = 'TaiLieuChinhThuc_HSTD_' . $id . '_' . $downloadTime . '.zip';
-                $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
-                $zip = new ZipArchive;
-                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-                foreach ($arrayLink as $fileLink) {
-                    $fileName = $fileLink['name'];
-                    $fileContent = file_get_contents($fileLink['link']);
-                    $zip->addFromString($fileName, $fileContent);
+        } else if ($type == 'TaiLieuTuDong') {
+            $tempTLTD = ['GiayYeuCau', 'HopDongTDG', 'KeHoachTDG', 'BienBanThanhLy'];
+            foreach ($tempTLTD as  $value) {
+                $service = 'App\\Services\\Document\\DocumentExport\\' . $value;
+                $item =  $this->printDocumentAll($id, $service);
+                if (!empty($item)) {
+                    $arrayLink[] = $item;
                 }
-                $zip->close();
-                Storage::put($name, file_get_contents($name));
-                $fileUrl = Storage::url($name);
-                // $response = response()->download($fileUrl, $zipFileName, [
-                //     'Content-Type' => 'application/zip',
-
-                // ])->deleteFileAfterSend(true);
-                // return $response;
-                return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
-            } else {
-                return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống.']);
             }
         } else {
-            return  $this->respondWithErrorData(['message' => 'Không có tài liệu chính thức nào để tải xuống.']);
+            if ($certificate->otherDocuments && count($certificate->otherDocuments) > 0) {
+                // Tài liệu chính thức
+                if ($type == 'TaiLieuChinhThuc') {
+                    foreach ($certificate->otherDocuments as  $document) {
+                        if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
+                            $item = [
+                                'link' => $document->link,
+                                'name' => $document->name
+                            ];
+                            $arrayLink[] =  $item;
+                        }
+                    }
+                }
+                // Tài liệu đính kèm
+                if ($type == 'TaiLieuDinhKem') {
+                    foreach ($certificate->otherDocuments as  $document) {
+                        if ($document->description == 'appendix' || $document->description == 'other') {
+                            $item = [
+                                'link' => $document->link,
+                                'name' => $document->name
+                            ];
+                            $arrayLink[] =  $item;
+                        }
+                    }
+                }
+                // Tài liệu gốc
+                if ($type == 'TaiLieuGoc') {
+                    foreach ($certificate->otherDocuments as  $document) {
+                        if ($document->description == 'original') {
+                            $item = [
+                                'link' => $document->link,
+                                'name' => $document->name
+                            ];
+                            $arrayLink[] =  $item;
+                        }
+                    }
+                }
+            }
+        }
+        if (count($arrayLink) > 0) {
+            $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
+            $zip = new ZipArchive;
+            $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            foreach ($arrayLink as $fileLink) {
+                $fileName = $fileLink['name'];
+                $fileContent = file_get_contents(isset($fileLink['url']) ? $fileLink['url'] : $fileLink['link']);
+                $zip->addFromString($fileName, $fileContent);
+            }
+            $zip->close();
+            Storage::put($name, file_get_contents($name));
+            $fileUrl = Storage::url($name);
+            // $response = response()->download($fileUrl, $zipFileName, [
+            //     'Content-Type' => 'application/zip',
+
+            // ])->deleteFileAfterSend(true);
+            // return $response;
+            return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
+        } else {
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống.']);
         }
     }
     public function deleteAfterDownload($nameLink)
@@ -571,7 +617,25 @@ class CertificateAssetController extends Controller
         $report = new $service;
         return $this->respondWithCustomData($report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint));
     }
-
+    public function printDocumentAll($id, $service): JsonResponse
+    {
+        $format = '.docx';
+        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
+        // $certificate = Certificate::where('id', $id)->first();
+        $select = ['*'];
+        $with = [
+            'assetType:id,acronym,description',
+        ];
+        $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+        $certificate = $this->certificateRepository->dataPrintExport($id);
+        $priceEstimatePrint = null;
+        if ($certificate === null) {
+            $data = [];
+            return  $data;
+        }
+        $report = new $service;
+        return $report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint);
+    }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
         try {
