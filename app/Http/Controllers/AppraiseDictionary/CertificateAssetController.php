@@ -487,7 +487,7 @@ class CertificateAssetController extends Controller
 
             ];
             $cert = Certificate::where('id', $certificateId)->first()->toArray();
-            if ($cert['document_type'] && $cert['document_type'][0] != 'CC') {
+            if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
                 $tempTLTDCT[] = 'Appendix2';
             }
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
