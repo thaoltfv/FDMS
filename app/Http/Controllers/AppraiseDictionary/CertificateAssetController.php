@@ -680,8 +680,8 @@ class CertificateAssetController extends Controller
         $select = ['id'];
         $with = [
             'assetType:id,acronym,description',
-            'appraises.appraiseHasAssets',
-            'apartment.apartmentHasAssets'
+            'appraises',
+            'apartment'
         ];
         try {
             $format = 'docx';
