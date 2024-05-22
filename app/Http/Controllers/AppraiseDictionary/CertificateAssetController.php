@@ -461,13 +461,14 @@ class CertificateAssetController extends Controller
             }
             if (count($arrayLink) > 0) {
                 // Tạo file zip mới
+                $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
                 $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/';
                 if (!File::exists(storage_path('app/public/' . $path))) {
                     File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
                 }
-                $zipFileName = 'TaiLieuChinhThuc_HSTD' . $id . '.zip';
-                // $filePath = $path . $zipFileName;
-                $filePath = sys_get_temp_dir() . '/' . $zipFileName;
+                $zipFileName = 'TaiLieuChinhThuc_HSTD_' . $id . '.zip';
+                $filePath = $path . $downloadTime . '_' . $zipFileName;
+                // $filePath = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
                 $zip->open($filePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
