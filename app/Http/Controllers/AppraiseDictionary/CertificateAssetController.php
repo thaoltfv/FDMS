@@ -484,19 +484,19 @@ class CertificateAssetController extends Controller
 
                 // ])->deleteFileAfterSend(true);
                 // return $response;
-                return ['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink];
+                return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
             } else {
-                return ['message' => 'Có lỗi xảy ra trong quá trình tải xuống.'];
+                return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống.']);
             }
         } else {
-            return ['message' => 'Không có tài liệu chính thức nào để tải xuống.'];
+            return  $this->respondWithErrorData(['message' => 'Không có tài liệu chính thức nào để tải xuống.']);
         }
     }
     public function deleteAfterDownload($nameLink)
     {
         $name = sys_get_temp_dir() . '/' . $nameLink . '.zip';
         Storage::disk(env('FILESYSTEM_DRIVER'))->delete($name);
-        return ['message' => 'Xóa link thành công'];
+        return $this->respondWithCustomData(['message' => 'Xóa link thành công']);
     }
     public function printDocument($id, $is_pc, $service): JsonResponse
     {
