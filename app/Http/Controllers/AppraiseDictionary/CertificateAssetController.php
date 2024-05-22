@@ -17,6 +17,7 @@ use App\Contracts\UserRepository;
 use App\Services\AppraiseAsset\AppraiseAsset;
 use App\Services\Document\CertificateAsset\PhuLuc2;
 use App\Services\Document\BaoCaoTest;
+use App\Services\Document\AssetReport;
 
 use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
@@ -25,6 +26,7 @@ use App\Models\Certificate;
 use App\Models\Appraiser;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
+
 use App\Models\RealEstate;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
@@ -467,13 +469,30 @@ class CertificateAssetController extends Controller
                     $arrayLink[] =  $item;
                 }
             }
-        } else if ($type == 'TaiLieuTuDong') {
+        } else if ($type == 'TaiLieuTuDongHanhChinh') {
             $tempTLTD = ['GiayYeuCau', 'HopDongTDG', 'KeHoachTDG', 'BienBanThanhLy'];
             foreach ($tempTLTD as  $value) {
                 $service = 'App\\Services\\Document\\DocumentExport\\' . $value;
                 $item =  $this->printDocumentAll($id, $service);
                 if (!empty($item)) {
                     $arrayLink[] = $item;
+                }
+            }
+        } else if ($type == 'TaiLieuTuDong') {
+
+            $tempTLTDCT = ['Appendix1', 'Appendix2', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            foreach ($tempTLTDCT as  $value) {
+                $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . '\\' . $value . $this->envDocument;
+                if ($value != 'TSSS') {
+                    $item =  $this->printDocumentAll($id, $service);
+                    if (!empty($item)) {
+                        $arrayLink[] = $item;
+                    }
+                } else {
+                    $item =  $this->printOfficialTSSS($id);
+                    if (!empty($item)) {
+                        $arrayLink[] = $item;
+                    }
                 }
             }
         } else {
@@ -632,9 +651,61 @@ class CertificateAssetController extends Controller
         if ($certificate === null) {
             $data = [];
             return  $data;
+        } else {
+            $report = new $service;
+            return $report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint);
         }
+    }
+    public function printDocumentOfficialAll($id, $service): JsonResponse
+    {
+        $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
+        $format = '.docx';
+        $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $report = new $service;
-        return $report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint);
+        $documentConfig = DocumentDictionary::query()->get();
+        $result = $report->generateDocx($company, $certificate, $format, $documentConfig);
+        return $result;
+    }
+    public function printOfficialTSSS($id): JsonResponse
+    {
+        $arrayAsset = [];
+        $select = ['*'];
+        $with = [
+            'assetType:id,acronym,description',
+            'realEstate',
+            'realEstate.appraises',
+            'realEstate.appraises.lastVersion',
+            'realEstate.appraises.appraiseHasAssets',
+            'realEstate.appraises.assetPrice',
+            'realEstate.apartment',
+            'realEstate.apartment.apartmentAssetProperties',
+            'realEstate.apartment.apartmentHasAssets',
+            'realEstate.apartment.lastVersion',
+            'realEstate.apartment.assetPrice',
+        ];
+        try {
+            $format = 'docx';
+            if (request()->get('format') == 'pdf') {
+                $format = 'pdf';
+            }
+            $company = $this->appraiserCompanyRepository->getCompany();
+            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            if (isset($realEstate->appraises) && isset($realEstate->appraises->appraiseHasAssets) && count($realEstate->appraises->appraiseHasAssets) > 0) {
+                foreach ($realEstate->appraises->appraiseHasAssets as  $appraise) {
+                    $arrayAsset[] = $appraise->asset_general_id;
+                }
+            }
+            if (isset($realEstate->apartment) && isset($realEstate->apartment->apartmentHasAssets) && count($realEstate->apartment->apartmentHasAssets) > 0) {
+                foreach ($realEstate->apartment->apartmentHasAssets as  $appraise) {
+                    $arrayAsset[] = $appraise->asset_general_id;
+                }
+            }
+            $result = (new AssetReport())->generateDocx($company, ($this->compareAssetGeneralRepository->findByIds(json_encode($arrayAsset))), $format);
+            return $result;
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            return [];
+        }
     }
     public function printBaoCaoTest1(Request $request, $id): JsonResponse
     {
