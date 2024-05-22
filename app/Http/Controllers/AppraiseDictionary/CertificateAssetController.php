@@ -453,7 +453,7 @@ class CertificateAssetController extends Controller
         $certificate = $this->certificateRepository->findById($id);
         if ($certificate->otherDocuments && count($certificate->otherDocuments) > 0) {
             $arrayLink = [];
-            foreach ($certificate->otherDocumnents as  $document) {
+            foreach ($certificate->otherDocuments as  $document) {
                 if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
                     $arrayLink[] = $document->link;
                 }
