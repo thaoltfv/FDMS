@@ -483,9 +483,11 @@ class CertificateAssetController extends Controller
             $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
             $select = ['id'];
             $with = [
-                'assetType:id,acronym,description',
+                'assetType',
+
             ];
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            dd($realEstate);
             if ($realEstate->assetType && $realEstate->assetType->acronym != 'CC') {
                 $tempTLTDCT[] = 'Appendix2';
             }
