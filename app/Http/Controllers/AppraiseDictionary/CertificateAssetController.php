@@ -696,6 +696,7 @@ class CertificateAssetController extends Controller
                     $arrayAsset[] = $appraise->asset_general_id;
                 }
             }
+            dd($realEstate->realEstate, $realEstate->realEstate->apartment, $realEstate->realEstate->apartment->apartmentHasAssets);
             if (isset($realEstate->realEstate) && isset($realEstate->realEstate->apartment) && isset($realEstate->realEstate->apartment->apartmentHasAssets) && count($realEstate->realEstate->apartment->apartmentHasAssets) > 0) {
                 foreach ($realEstate->realEstate->apartment->apartmentHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
