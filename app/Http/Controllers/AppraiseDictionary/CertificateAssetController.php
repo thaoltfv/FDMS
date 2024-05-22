@@ -690,18 +690,23 @@ class CertificateAssetController extends Controller
             }
             $company = $this->appraiserCompanyRepository->getCompany();
             $realEstate = Certificate::query()->where('id', $id)->select($select)->with($with)->first();
-            dd($realEstate->realEstate, $realEstate->realEstate->apartment, $realEstate->realEstate->apartment->apartmentHasAssets);
 
-            if (isset($realEstate->realEstate) &&  isset($realEstate->realEstate->appraises) && isset($realEstate->realEstate->appraises->appraiseHasAssets) && count($realEstate->realEstate->appraises->appraiseHasAssets) > 0) {
-                foreach ($realEstate->realEstate->appraises->appraiseHasAssets as  $appraise) {
-                    $arrayAsset[] = $appraise->asset_general_id;
+
+            if (isset($realEstate->realEstate) && count($realEstate->realEstate) > 0) {
+                foreach ($realEstate->realEstate as $estate) {
+                    if (isset($estate->appraises) && isset($estate->appraises->appraiseHasAssets) && count($estate->appraises->appraiseHasAssets) > 0) {
+                        foreach ($estate->appraises->appraiseHasAssets as  $appraise) {
+                            $arrayAsset[] = $appraise->asset_general_id;
+                        }
+                    }
+                    if (isset($estate->apartment) && isset($estate->apartment->apartmentHasAssets) && count($estate->apartment->apartmentHasAssets) > 0) {
+                        foreach ($estate->apartment->apartmentHasAssets as  $appraise) {
+                            $arrayAsset[] = $appraise->asset_general_id;
+                        }
+                    }
                 }
             }
-            if (isset($realEstate->realEstate) && isset($realEstate->realEstate->apartment) && isset($realEstate->realEstate->apartment->apartmentHasAssets) && count($realEstate->realEstate->apartment->apartmentHasAssets) > 0) {
-                foreach ($realEstate->realEstate->apartment->apartmentHasAssets as  $appraise) {
-                    $arrayAsset[] = $appraise->asset_general_id;
-                }
-            }
+
 
             $result = (new AssetReport())->generateDocx($company, ($this->compareAssetGeneralRepository->findByIds(json_encode($arrayAsset))), $format);
             return $result;
