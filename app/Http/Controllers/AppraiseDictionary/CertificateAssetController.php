@@ -690,14 +690,14 @@ class CertificateAssetController extends Controller
             }
             $company = $this->appraiserCompanyRepository->getCompany();
             $realEstate = Certificate::query()->where('id', $id)->select($select)->with($with)->first();
-            dd($realEstate);
-            if (isset($realEstate->appraises) && isset($realEstate->appraises->appraiseHasAssets) && count($realEstate->appraises->appraiseHasAssets) > 0) {
-                foreach ($realEstate->appraises->appraiseHasAssets as  $appraise) {
+
+            if (isset($realEstate->realEstate) &&  isset($realEstate->realEstate->appraises) && isset($realEstate->realEstate->appraises->appraiseHasAssets) && count($realEstate->realEstate->appraises->appraiseHasAssets) > 0) {
+                foreach ($realEstate->realEstate->appraises->appraiseHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
                 }
             }
-            if (isset($realEstate->apartment) && isset($realEstate->apartment->apartmentHasAssets) && count($realEstate->apartment->apartmentHasAssets) > 0) {
-                foreach ($realEstate->apartment->apartmentHasAssets as  $appraise) {
+            if (isset($realEstate->realEstate) && isset($realEstate->realEstate->apartment) && isset($realEstate->realEstate->apartment->apartmentHasAssets) && count($realEstate->realEstate->apartment->apartmentHasAssets) > 0) {
+                foreach ($realEstate->realEstate->apartment->apartmentHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
                 }
             }
