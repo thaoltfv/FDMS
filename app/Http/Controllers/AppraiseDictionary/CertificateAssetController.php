@@ -31,7 +31,7 @@ use App\Services\Document\CertificateAsset\PhuLuc1;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
+use File;
 use Ramsey\Uuid\Uuid;
 use Storage;
 
@@ -460,7 +460,12 @@ class CertificateAssetController extends Controller
             }
             if (count($arrayLink) > 0) {
                 // Tạo file zip mới
+                $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/';
+                if (!File::exists(storage_path('app/public/' . $path))) {
+                    File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
+                }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD' . $id . '.zip';
+                $name = $path . $zipFileName;
                 $zip = new ZipArchive;
                 $zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
@@ -474,11 +479,14 @@ class CertificateAssetController extends Controller
                 // Đóng file zip
                 $zip->close();
 
+
                 // Trả về file zip cho người dùng download
-                return Response::download($zipFileName)->deleteFileAfterSend(true);
+                return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
             } else {
-                return ['message' => 'Có lỗi xảy ra trong quá trình tải xuống'];
+                return response()->make('Có lỗi xảy ra trong quá trình tải xuống.', 404);
             }
+        } else {
+            return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
         }
     }
 
