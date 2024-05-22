@@ -35,7 +35,6 @@ use File;
 use ZipArchive;
 use Ramsey\Uuid\Uuid;
 use Storage;
-use Carbon\Carbon;
 
 class CertificateAssetController extends Controller
 {
@@ -462,16 +461,15 @@ class CertificateAssetController extends Controller
             }
             if (count($arrayLink) > 0) {
                 // Tạo file zip mới
-                $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
                 $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/';
                 if (!File::exists(storage_path('app/public/' . $path))) {
                     File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
                 }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD_' . $id . '.zip';
-                $filePath = $path . $downloadTime . '_' . $zipFileName;
-                // $filePath = sys_get_temp_dir() . '/' . $zipFileName;
+                // $name = $path . $zipFileName;
+                $name = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
-                $zip->open($filePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
                 // Tải các file về và thêm vào zip
                 foreach ($arrayLink as $fileLink) {
@@ -482,21 +480,18 @@ class CertificateAssetController extends Controller
 
                 // Đóng file zip
                 $zip->close();
-                // $response =  response()->download($name, $zipFileName, [
-                //     'Content-Type' => 'application/zip',
-                //     'Content-Disposition' => 'attachment; filename="' . $zipFileName . '"',
-                // ])->deleteFileAfterSend(true);
+                $response = response()->download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
                 // $response =  response()->download($name)->deleteFileAfterSend(true);
                 // File::delete($name);
-                return ['message' => 'Tạo file thành công', 'link' => $filePath, 'file_name' => $zipFileName];
+                return $response;
 
                 // Trả về file zip cho người dùng download
                 // return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
             } else {
-                return ['error' => 'Không có tài liệu phù hợp để tải.'];;
+                return response()->make('Có lỗi xảy ra trong quá trình tải xuống.', 404);
             }
         } else {
-            return ['error' => 'Không có tài liệu chính thức nào để tải xuống.'];
+            return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
         }
     }
 
