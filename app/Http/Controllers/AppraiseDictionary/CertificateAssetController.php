@@ -466,10 +466,10 @@ class CertificateAssetController extends Controller
                     File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
                 }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD' . $id . '.zip';
-                // $name = $path . $zipFileName;
-                $name = sys_get_temp_dir() . '/' . $zipFileName;
+                $filePath = $path . $zipFileName;
+                // $name = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
-                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                $zip->open($filePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
                 // Tải các file về và thêm vào zip
                 foreach ($arrayLink as $fileLink) {
@@ -480,21 +480,21 @@ class CertificateAssetController extends Controller
 
                 // Đóng file zip
                 $zip->close();
-                $response =  response()->download($name, $zipFileName, [
-                    'Content-Type' => 'application/zip',
-                    'Content-Disposition' => 'attachment; filename="' . $zipFileName . '"',
-                ])->deleteFileAfterSend(true);
+                // $response =  response()->download($name, $zipFileName, [
+                //     'Content-Type' => 'application/zip',
+                //     'Content-Disposition' => 'attachment; filename="' . $zipFileName . '"',
+                // ])->deleteFileAfterSend(true);
                 // $response =  response()->download($name)->deleteFileAfterSend(true);
                 // File::delete($name);
-                return $response;
+                return ['message' => 'Tạo file thành công', 'link' => $filePath, 'file_name' => $zipFileName];
 
                 // Trả về file zip cho người dùng download
                 // return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
             } else {
-                return response()->make('Có lỗi xảy ra trong quá trình tải xuống.', 404);
+                return ['error' => 'Không có tài liệu phù hợp để tải.'];;
             }
         } else {
-            return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
+            return ['error' => 'Không có tài liệu chính thức nào để tải xuống.'];
         }
     }
 
