@@ -550,7 +550,7 @@ class CertificateAssetController extends Controller
             $zip = new ZipArchive;
             $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
             foreach ($arrayLink as $fileLink) {
-                $fileName = isset($fileLink['url']) ? end(explode('/', $fileLink['url'])) : $fileLink['name'];
+                $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
                 $fileContent = file_get_contents(isset($fileLink['url']) ? $fileLink['url'] : $fileLink['link']);
                 $zip->addFromString($fileName, $fileContent);
             }
