@@ -480,7 +480,15 @@ class CertificateAssetController extends Controller
             }
         } else if ($type == 'TaiLieuTuDong') {
 
-            $tempTLTDCT = ['Appendix1', 'Appendix2', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            $select = ['id'];
+            $with = [
+                'assetType:id,acronym,description',
+            ];
+            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            if ($realEstate->assetType && $realEstate->assetType->acronym != 'CC') {
+                $tempTLTDCT[] = 'Appendix2';
+            }
             foreach ($tempTLTDCT as  $value) {
                 $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
                 if ($value != 'TSSS') {
@@ -672,16 +680,15 @@ class CertificateAssetController extends Controller
         $select = ['*'];
         $with = [
             'assetType:id,acronym,description',
-            'realEstate',
-            'realEstate.appraises',
-            'realEstate.appraises.lastVersion',
-            'realEstate.appraises.appraiseHasAssets',
-            'realEstate.appraises.assetPrice',
-            'realEstate.apartment',
-            'realEstate.apartment.apartmentAssetProperties',
-            'realEstate.apartment.apartmentHasAssets',
-            'realEstate.apartment.lastVersion',
-            'realEstate.apartment.assetPrice',
+            'appraises',
+            'appraises.lastVersion',
+            'appraises.appraiseHasAssets',
+            'appraises.assetPrice',
+            'apartment',
+            'apartment.apartmentAssetProperties',
+            'apartment.apartmentHasAssets',
+            'apartment.lastVersion',
+            'apartment.assetPrice',
         ];
         try {
             $format = 'docx';
