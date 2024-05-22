@@ -326,6 +326,11 @@ class KeHoachTDG
             '',
             $reportName
         ); // replace invalid characters with underscore
+        $reportName = str_replace(
+            ' ',
+            '_',
+            $reportName
+        ); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
