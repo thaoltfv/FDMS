@@ -477,8 +477,12 @@ class CertificateAssetController extends Controller
                 $zip->close();
                 Storage::put($name, file_get_contents($name));
                 $fileUrl = Storage::url($name);
+                $response = response()->download($fileUrl, $zipFileName, [
+                    'Content-Type' => 'application/zip',
 
-                return ['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink];
+                ])->deleteFileAfterSend(true);
+                return $response;
+                // return ['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink];
             } else {
                 return ['message' => 'Có lỗi xảy ra trong quá trình tải xuống.'];
             }
