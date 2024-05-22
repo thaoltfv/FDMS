@@ -666,7 +666,7 @@ class CertificateAssetController extends Controller
         $result = $report->generateDocx($company, $certificate, $format, $documentConfig);
         return $result;
     }
-    public function printOfficialTSSS($id): JsonResponse
+    public function printOfficialTSSS($id)
     {
         $arrayAsset = [];
         $select = ['*'];
