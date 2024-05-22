@@ -33,6 +33,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use File;
 use ZipArchive;
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Storage;
 
@@ -456,42 +457,33 @@ class CertificateAssetController extends Controller
             $arrayLink = [];
             foreach ($certificate->otherDocuments as  $document) {
                 if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
-                    $arrayLink[] = $document->link;
+                    $item = [
+                        'link' => $document->link,
+                        'name' => $document->name
+                    ];
+                    $arrayLink[] =  $item;
                 }
             }
             if (count($arrayLink) > 0) {
-                // Tạo file zip mới
-                $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/';
-                if (!File::exists(storage_path('app/public/' . $path))) {
-                    File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
-                }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD_' . $id . '.zip';
-                // $name = $path . $zipFileName;
-                $name = sys_get_temp_dir() . '/' . $zipFileName;
+                $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
+                $zipFileNameLink = 'TaiLieuChinhThuc_HSTD_' . $id . '_' . $downloadTime . '.zip';
+                $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
                 $zip = new ZipArchive;
                 $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-                // Tải các file về và thêm vào zip
                 foreach ($arrayLink as $fileLink) {
-                    $fileName = basename($fileLink);
-                    $fileContent = file_get_contents($fileLink);
-                    $zip->addFromString($fileName, $fileContent);
+                    $zip->addFile($fileLink['link'], $fileLink['name']);
                 }
-
-                // Đóng file zip
                 $zip->close();
                 Storage::put($name, file_get_contents($name));
                 $fileUrl = Storage::url($name);
 
-                return ['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName];
-
-                // Trả về file zip cho người dùng download
-                // return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
+                return ['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink];
             } else {
-                return response()->make('Có lỗi xảy ra trong quá trình tải xuống.', 404);
+                return ['message' => 'Có lỗi xảy ra trong quá trình tải xuống.'];
             }
         } else {
-            return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
+            return ['message' => 'Không có tài liệu chính thức nào để tải xuống.'];
         }
     }
 
