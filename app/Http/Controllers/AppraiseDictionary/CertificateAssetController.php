@@ -456,30 +456,33 @@ class CertificateAssetController extends Controller
             $arrayLink = [];
             foreach ($certificate->otherDocuments as  $document) {
                 if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
-                    $item = [
-                        'link' => $document->link,
-                        'name' => $document->name,
-                    ];
-
-                    $arrayLink[] = $item;
+                    $arrayLink[] = $document->link;
                 }
             }
             if (count($arrayLink) > 0) {
                 // Tạo file zip mới
+                $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/';
+                if (!File::exists(storage_path('app/public/' . $path))) {
+                    File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
+                }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD_' . $id . '.zip';
                 // $name = $path . $zipFileName;
-                $name = storage_path('app/public/' . $zipFileName);
+                $name = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
-                if ($zip->open($name, ZipArchive::CREATE) === TRUE) {
-                    // Tải các file về và thêm vào zip
-                    foreach ($arrayLink as $fileLink) {
-                        $zip->addFile($fileLink['link'], $fileLink['name']);
-                    }
-                    $zip->close();
+                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+                // Tải các file về và thêm vào zip
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = basename($fileLink);
+                    $fileContent = file_get_contents($fileLink);
+                    $zip->addFromString($fileName, $fileContent);
                 }
 
-                $response = response()->download($name, $zipFileName, array('Content-Type: application/zip'))->deleteFileAfterSend(true);
-
+                // Đóng file zip
+                $zip->close();
+                $response = response()->download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
+                // $response =  response()->download($name)->deleteFileAfterSend(true);
+                // File::delete($name);
                 return $response;
 
                 // Trả về file zip cho người dùng download
