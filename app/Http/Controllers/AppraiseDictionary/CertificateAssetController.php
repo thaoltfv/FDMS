@@ -473,7 +473,6 @@ class CertificateAssetController extends Controller
                 if ($zip->open($name, ZipArchive::CREATE) === TRUE) {
                     // Tải các file về và thêm vào zip
                     foreach ($arrayLink as $fileLink) {
-                        dd($fileLink);
                         $zip->addFile($fileLink['link'], $fileLink['name']);
                     }
                     $zip->close();
