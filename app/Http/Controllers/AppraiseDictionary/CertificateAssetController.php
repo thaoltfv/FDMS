@@ -482,7 +482,7 @@ class CertificateAssetController extends Controller
 
             $tempTLTDCT = ['Appendix1', 'Appendix2', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
             foreach ($tempTLTDCT as  $value) {
-                $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . '\\' . $value . $this->envDocument;
+                $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
                 if ($value != 'TSSS') {
                     $item =  $this->printDocumentAll($id, $service);
                     if (!empty($item)) {
