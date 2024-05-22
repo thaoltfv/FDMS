@@ -559,6 +559,15 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             } else {
                 $result = [];
             }
+        } else {
+            $result = $result
+                ->forPage($page, $perPage)
+                ->paginate($perPage);
+
+            foreach ($result as $stt => $item) {
+                $result[$stt]->append('total_asset_price');
+                //$result[$stt]->append('total_asset_price_round');
+            }
         }
 
         return $result;
@@ -2925,6 +2934,15 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 }
             } else {
                 $result = [];
+            }
+        } else {
+            $result = $result
+                ->forPage($page, $perPage)
+                ->paginate($perPage);
+
+            foreach ($result as $stt => $item) {
+                $result[$stt]->append('detail_list_id');
+                // $result[$stt]->append('certificate_asset_price');
             }
         }
 

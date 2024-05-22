@@ -522,6 +522,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             } else {
                 $result = [];
             }
+        } else {
+            $result = $result->orderByDesc('pre_certificates.updated_at');
+            // dd(DB::getQueryLog());
+            $result = $result
+                ->forPage($page, $perPage)
+                ->paginate($perPage);
         }
 
 
