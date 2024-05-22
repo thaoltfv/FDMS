@@ -512,7 +512,17 @@ export const routes = [
 			gtm: "Trang lịch sử tài sản sơ bộ"
 		}
 	},
-
+	// menu theo dõi hồ sơ
+	{
+		path: "/menu_certification",
+		name: "menu_certification.index",
+		component: page("menu_certification/Index.vue"),
+		beforeEnter: ResolveGuard([AuthGuard]),
+		meta: {
+			permissions: [PERMISSIONS.VIEW_PRICE],
+			gtm: "Trang theo dõi hồ sơ"
+		}
+	},
 	// staff
 	{
 		path: "/manage",

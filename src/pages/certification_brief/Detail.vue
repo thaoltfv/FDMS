@@ -893,7 +893,25 @@
 				</div>
 				<div class="card w-100">
 					<div class="card-title text-center">
-						<h3 class="title title_input_content">Tài liệu chính thức</h3>
+						<h3 class="title title_input_content">
+							Tài liệu chính thức
+							<b-tooltip :target="'download_all_official'" placement="top"
+								>Tải xuống tất cả
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_official'"
+								@click="handleDownloadAll('official_document')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+						</h3>
 					</div>
 					<div class="card-body card-info">
 						<div class="column">
@@ -1360,8 +1378,26 @@
 				class="d-flex flex-column flex-lg-row justify-content-around align-items-center"
 			>
 				<div class="card w-100">
-					<div class="card-title text-center">
-						<h3 class="title title_input_content">Tài liệu chính thức</h3>
+					<div class="card-title text-center ">
+						<h3 class="title title_input_content">
+							Tài liệu chính thức
+							<b-tooltip :target="'download_all_official'" placement="auto"
+								>Tải xuống tất cả
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_official'"
+								@click="handleDownloadAll('official_document')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+						</h3>
 					</div>
 					<div class="card-body card-info">
 						<div class=" mt-2 row">
@@ -2826,6 +2862,7 @@ export default {
 		updateSendAppraiser() {
 			this.$router.push({ name: "certification_brief.index" }).catch(_ => {});
 		},
+		handleDownloadAll(type) {},
 		handleCancel() {
 			this.openNotification = false;
 			if (this.cancel_certificate) {

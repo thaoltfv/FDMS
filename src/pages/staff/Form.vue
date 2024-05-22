@@ -289,6 +289,8 @@ export default {
 			let data = this.form;
 			const role = this.roles.find(role => role.id === data.role_id);
 			data.role = role.name;
+			data.role = role.role_name;
+			// console.log(role);
 			if (this.$route.name === "staff.edit") {
 				this.updateStaff(data);
 			} else {
