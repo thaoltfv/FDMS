@@ -486,7 +486,8 @@ class CertificateAssetController extends Controller
                 return response()->make('Có lỗi xảy ra trong quá trình tải xuống.', 404);
             }
         } else {
-            return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
+            // return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
+            return ['data' => $certificate];
         }
     }
 
