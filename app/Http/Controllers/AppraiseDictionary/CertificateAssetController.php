@@ -677,18 +677,11 @@ class CertificateAssetController extends Controller
     public function printOfficialTSSS($id)
     {
         $arrayAsset = [];
-        $select = ['*'];
+        $select = ['id'];
         $with = [
             'assetType:id,acronym,description',
-            'appraises',
-            'appraises.lastVersion',
             'appraises.appraiseHasAssets',
-            'appraises.assetPrice',
-            'apartment',
-            'apartment.apartmentAssetProperties',
-            'apartment.apartmentHasAssets',
-            'apartment.lastVersion',
-            'apartment.assetPrice',
+            'apartment.apartmentHasAssets'
         ];
         try {
             $format = 'docx';
@@ -696,7 +689,7 @@ class CertificateAssetController extends Controller
                 $format = 'pdf';
             }
             $company = $this->appraiserCompanyRepository->getCompany();
-            $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            $realEstate = RealEstate::query()->where('certificate_id', $id)->select($select)->with($with)->first();
             dd($realEstate);
             if (isset($realEstate->appraises) && isset($realEstate->appraises->appraiseHasAssets) && count($realEstate->appraises->appraiseHasAssets) > 0) {
                 foreach ($realEstate->appraises->appraiseHasAssets as  $appraise) {
