@@ -484,7 +484,7 @@ class CertificateAssetController extends Controller
             foreach ($tempTLTDCT as  $value) {
                 $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
                 if ($value != 'TSSS') {
-                    $item =  $this->printDocumentAll($id, $service);
+                    $item =  $this->printDocumentOfficialAll($id, $service);
                     if (!empty($item)) {
                         $arrayLink[] = $item;
                     }
