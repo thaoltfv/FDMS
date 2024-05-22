@@ -480,10 +480,10 @@ class CertificateAssetController extends Controller
 
                 // Đóng file zip
                 $zip->close();
-                $response = response()->download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
-                // $response =  response()->download($name)->deleteFileAfterSend(true);
-                // File::delete($name);
-                return $response;
+                Storage::put($name, file_get_contents($name));
+                $fileUrl = Storage::url($name);
+
+                return ['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName];
 
                 // Trả về file zip cho người dùng download
                 // return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
