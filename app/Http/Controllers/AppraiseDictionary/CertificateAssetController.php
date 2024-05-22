@@ -680,8 +680,8 @@ class CertificateAssetController extends Controller
         $select = ['id'];
         $with = [
             'assetType:id,acronym,description',
-            'appraises',
-            'apartment'
+            'appraises.appraiseHasAssets',
+            'apartment.apartmentHasAssets'
         ];
         try {
             $format = 'docx';
@@ -690,7 +690,6 @@ class CertificateAssetController extends Controller
             }
             $company = $this->appraiserCompanyRepository->getCompany();
             $realEstate = RealEstate::query()->where('certificate_id', $id)->select($select)->with($with)->first();
-            dd($realEstate);
             if (isset($realEstate->appraises) && isset($realEstate->appraises->appraiseHasAssets) && count($realEstate->appraises->appraiseHasAssets) > 0) {
                 foreach ($realEstate->appraises->appraiseHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
