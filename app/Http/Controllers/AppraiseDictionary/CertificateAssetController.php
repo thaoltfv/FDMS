@@ -32,6 +32,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use File;
+use ZipArchive;
 use Ramsey\Uuid\Uuid;
 use Storage;
 
