@@ -701,6 +701,7 @@ class CertificateAssetController extends Controller
                     $arrayAsset[] = $appraise->asset_general_id;
                 }
             }
+            dd(json_encode($arrayAsset));
             $result = (new AssetReport())->generateDocx($company, ($this->compareAssetGeneralRepository->findByIds(json_encode($arrayAsset))), $format);
             return $result;
         } catch (\Exception $exception) {
