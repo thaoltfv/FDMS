@@ -610,7 +610,25 @@
 			>
 				<div class="card w-100 mr-lg-2">
 					<div class="card-title text-center">
-						<h3 class="title title_input_content">Tài liệu tự động</h3>
+						<h3 class="title title_input_content">
+							Tài liệu tự động
+							<b-tooltip :target="'download_all_official_auto'" placement="top"
+								>Tải xuống tất cả tài liệu tự động
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_official_auto'"
+								@click="handleDownloadAll('TaiLieuTuDong')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+						</h3>
 					</div>
 					<div class="card-body card-info">
 						<div class="column">
@@ -896,11 +914,11 @@
 						<h3 class="title title_input_content">
 							Tài liệu chính thức
 							<b-tooltip :target="'download_all_official'" placement="top"
-								>Tải xuống tất cả
+								>Tải xuống tất cả tài liệu chính thức
 							</b-tooltip>
 							<font-awesome-icon
 								:id="'download_all_official'"
-								@click="handleDownloadAll('official_document')"
+								@click="handleDownloadAll('TaiLieuChinhThuc')"
 								:style="{
 									color: '#2682bfad',
 									height: '1.5rem',
@@ -1382,11 +1400,11 @@
 						<h3 class="title title_input_content">
 							Tài liệu chính thức
 							<b-tooltip :target="'download_all_official'" placement="auto"
-								>Tải xuống tất cả
+								>Tải xuống tất cả tài liệu chính thức
 							</b-tooltip>
 							<font-awesome-icon
 								:id="'download_all_official'"
-								@click="handleDownloadAll('official_document')"
+								@click="handleDownloadAll('TaiLieuChinhThuc')"
 								:style="{
 									color: '#2682bfad',
 									height: '1.5rem',
@@ -1667,6 +1685,7 @@
 				:permission="{ allowExport: exportAction }"
 				:toast="$toast"
 				@handleDownloadAutoDocument="handleDownloadAutoDocument"
+				@handleDownloadAll="handleDownloadAll"
 			/>
 		</div>
 		<div
@@ -1685,6 +1704,22 @@
 						<h3 class="title">Tài liệu đính kèm</h3>
 
 						<div class="d-flex align-items-center">
+							<b-tooltip :target="'download_all_other_document'" placement="top"
+								>Tải xuống tất cả tài liệu đính kèm
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_other_document'"
+								@click="handleDownloadAll('TaiLieuDinhKem')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
 							<font-awesome-icon
 								@click="openUploadFile('documnent')"
 								:style="{
@@ -1787,6 +1822,24 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Hồ sơ gốc</h3>
 						<div class="d-flex align-items-center">
+							<b-tooltip
+								:target="'download_all_original_document'"
+								placement="auto"
+								>Tải xuống tất cả hồ sơ gốc
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_original_document'"
+								@click="handleDownloadAll('TaiLieuGoc')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
 							<font-awesome-icon
 								@click="openUploadFile('original')"
 								:style="{
@@ -2862,7 +2915,30 @@ export default {
 		updateSendAppraiser() {
 			this.$router.push({ name: "certification_brief.index" }).catch(_ => {});
 		},
-		handleDownloadAll(type) {},
+		async handleDownloadAll(type) {
+			await Certificate.downloadAllOfficial(this.idData, type).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.link;
+					fileLink.setAttribute("download", file.name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+					const nameLink = file.name_link.split(".");
+					const deleteLink = Certificate.deleteAfterDownload(nameLink[0]);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+
 		handleCancel() {
 			this.openNotification = false;
 			if (this.cancel_certificate) {

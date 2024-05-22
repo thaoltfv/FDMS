@@ -251,21 +251,24 @@
 				</div>
 				<div class="card-body card-info" v-show="showCardDetailTraffic">
 					<div class="d-flex-column">
-						<InputCategory
-							v-model="data.customer_group_id"
-							vid="customer_group_id"
-							label="Nhóm đối tác"
-							class="form-group-container"
-							:options="optionsCustomerGroup"
-						/>
-						<InputCategorySearch
-							vid="appraiser"
-							class="form-group-container"
-							label="Tìm đối tác"
-							@change="handleChangeCustomer"
-							@search="debounceSearchCustomer"
-							:options="optionsCustomer"
-						/>
+						<div class="row">
+							<InputCategory
+								v-model="data.customer_group_id"
+								vid="customer_group_id"
+								label="Nhóm đối tác"
+								class="form-group-container col-6"
+								:options="optionsCustomerGroup"
+							/>
+							<InputCategorySearch
+								vid="appraiser"
+								class="form-group-container col-6"
+								label="Tìm đối tác"
+								@change="handleChangeCustomer"
+								@search="debounceSearchCustomer"
+								:options="optionsCustomer"
+							/>
+						</div>
+
 						<InputTextPrefixCustom
 							id="customer_name"
 							placeholder="Ông / Bà"

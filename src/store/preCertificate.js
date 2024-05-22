@@ -46,6 +46,7 @@ export const usePreCertificateStore = defineStore(
 				id: null
 			},
 			pre_type_id: null,
+			customer_group_id: null,
 			commission_fee: 0,
 			pre_date: null,
 			pre_asset_name: `- Địa chỉ tài sản: \n- Tọa độ: \n- Thông tin khác:`,
@@ -113,6 +114,7 @@ export const usePreCertificateStore = defineStore(
 			appraiser_purposes: [],
 			customers: [],
 			preTypes: [],
+			customerGroups: [],
 			workflow: null,
 			cancelPCReasons: []
 		});
@@ -154,6 +156,7 @@ export const usePreCertificateStore = defineStore(
 			if (resp.data) {
 				lstDataConfig.value.cancelPCReasons = resp.data.li_do_huy_so_bo;
 				lstDataConfig.value.preTypes = resp.data.loai_so_bo;
+				lstDataConfig.value.customerGroups = resp.data.nhom_doi_tac ? resp.data.nhom_doi_tac : []
 			}
 			return;
 		}
@@ -623,6 +626,7 @@ export const usePreCertificateStore = defineStore(
 				},
 
 				pre_type_id: null,
+				customer_group_id: null,
 				commission_fee: 0,
 				pre_date: null,
 				pre_asset_name: `- Địa chỉ tài sản: \n- Tọa độ: \n- Thông tin khác:`,

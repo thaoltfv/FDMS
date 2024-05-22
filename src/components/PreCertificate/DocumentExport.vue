@@ -18,23 +18,59 @@
 			@action="openUploadFile"
 		/>
 		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
-			<!-- <div class="card-title">
-				<div class="d-flex justify-content-between align-items-center">
-					<div class="row d-flex justify-content-between align-items-center">
-						<h3 class="title ml-1">
-							Tài liệu sơ bộ
+			<div class="card-title">
+				<div class=" align-items-center">
+					<div class="text-center">
+						<h3 class="title ml-1 text-center">
+							Tải xuống tất cả
+							<b-tooltip
+								:target="'download_all_auto_export_document'"
+								placement="auto"
+								>Tải xuống tất cả tài liệu tự động
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_auto_export_document'"
+								@click="handleDownloadAll('TaiLieuTuDongHanhChinh')"
+								:style="{
+									color: 'orange',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+							<b-tooltip
+								:target="'download_all_export_document'"
+								placement="auto"
+								>Tải xuống tất cả tài liệu
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_export_document'"
+								@click="handleDownloadAll('TaiLieuHanhChinh')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
 						</h3>
 					</div>
 
-					<img
+					<!-- <img
 						class="img-dropdown"
 						:class="!showCardDetailFile ? 'img-dropdown__hide' : ''"
 						src="@/assets/images/icon-btn-down.svg"
 						alt="dropdown"
 						@click="showCardDetailFile = !showCardDetailFile"
-					/>
+					/> -->
 				</div>
-			</div> -->
+			</div>
 
 			<div class="card-body card-info">
 				<div class="ml-n3 mt-2 row" :key="keyRefresh">
@@ -496,6 +532,9 @@ export default {
 		},
 		handleDownloadAutoDocument(type) {
 			this.$emit("handleDownloadAutoDocument", type);
+		},
+		handleDownloadAll(type) {
+			this.$emit("handleDownloadAll", type);
 		},
 		truncateFilename(filename, limit) {
 			if (!filename) return "";

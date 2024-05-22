@@ -157,21 +157,24 @@
 				</div>
 				<div class="card-body card-info" v-show="showCardDetailTraffic">
 					<div class="d-flex-column">
-						<!-- <InputCategory
-							v-model="dataPC.customer_group_id"
-							vid="customer_group_id"
-							label="Nhóm đối tác"
-							class="form-group-container col-12"
-							:options="optionsCustomerGroup"
-						/> -->
-						<InputCategorySearch
-							vid="appraiser"
-							class="form-group-container"
-							label="Tìm đối tác"
-							@change="handleChangeCustomer"
-							@search="debounceSearchCustomer"
-							:options="optionsCustomer"
-						/>
+						<div class="row">
+							<InputCategory
+								v-model="dataPC.customer_group_id"
+								vid="customer_group_id"
+								label="Nhóm đối tác"
+								class="form-group-container col-6"
+								:options="optionsCustomerGroup"
+							/>
+							<InputCategorySearch
+								vid="appraiser"
+								class="form-group-container col-6"
+								label="Tìm đối tác"
+								@change="handleChangeCustomer"
+								@search="debounceSearchCustomer"
+								:options="optionsCustomer"
+							/>
+						</div>
+
 						<div class="row">
 							<div class="col-lg-6">
 								<InputTextPrefixCustom
@@ -469,6 +472,13 @@ export default {
 		optionsPreTypes() {
 			return {
 				data: this.lstDataConfig.preTypes,
+				id: "id",
+				key: "description"
+			};
+		},
+		optionsCustomerGroup() {
+			return {
+				data: this.lstDataConfig.customerGroups,
 				id: "id",
 				key: "description"
 			};
