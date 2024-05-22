@@ -697,6 +697,7 @@ class CertificateAssetController extends Controller
             }
             $company = $this->appraiserCompanyRepository->getCompany();
             $realEstate = RealEstate::with($with)->where('certificate_id', $id)->select($select)->first();
+            dd($realEstate);
             if (isset($realEstate->appraises) && isset($realEstate->appraises->appraiseHasAssets) && count($realEstate->appraises->appraiseHasAssets) > 0) {
                 foreach ($realEstate->appraises->appraiseHasAssets as  $appraise) {
                     $arrayAsset[] = $appraise->asset_general_id;
