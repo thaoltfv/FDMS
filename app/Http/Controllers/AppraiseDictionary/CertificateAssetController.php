@@ -456,15 +456,16 @@ class CertificateAssetController extends Controller
             $arrayLink = [];
             foreach ($certificate->otherDocuments as  $document) {
                 if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
-                    $arrayLink[] = $document->link;
+                    $item = [
+                        'link' => $document->link,
+                        'name' => $document->name,
+                    ];
+
+                    $arrayLink[] = $item;
                 }
             }
             if (count($arrayLink) > 0) {
                 // Tạo file zip mới
-                $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/';
-                if (!File::exists(storage_path('app/public/' . $path))) {
-                    File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
-                }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD_' . $id . '.zip';
                 // $name = $path . $zipFileName;
                 $name = sys_get_temp_dir() . '/' . $zipFileName;
@@ -473,16 +474,14 @@ class CertificateAssetController extends Controller
 
                 // Tải các file về và thêm vào zip
                 foreach ($arrayLink as $fileLink) {
-                    $fileName = basename($fileLink);
-                    $fileContent = file_get_contents($fileLink);
-                    $zip->addFromString($fileName, $fileContent);
+
+                    $zip->addFile($fileLink['link'], $fileLink['name']);
                 }
 
                 // Đóng file zip
                 $zip->close();
                 $response = response()->download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
-                // $response =  response()->download($name)->deleteFileAfterSend(true);
-                // File::delete($name);
+
                 return $response;
 
                 // Trả về file zip cho người dùng download
