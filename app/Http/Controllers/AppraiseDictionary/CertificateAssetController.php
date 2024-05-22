@@ -466,8 +466,8 @@ class CertificateAssetController extends Controller
                     File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
                 }
                 $zipFileName = 'TaiLieuChinhThuc_HSTD' . $id . '.zip';
-                $filePath = $path . $zipFileName;
-                // $name = sys_get_temp_dir() . '/' . $zipFileName;
+                // $filePath = $path . $zipFileName;
+                $filePath = sys_get_temp_dir() . '/' . $zipFileName;
                 $zip = new ZipArchive;
                 $zip->open($filePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
