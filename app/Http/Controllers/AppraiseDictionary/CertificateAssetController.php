@@ -451,7 +451,7 @@ class CertificateAssetController extends Controller
     public function downloadAllOfficial($id)
     {
         $certificate = $this->certificateRepository->findById($id);
-        if ($certificate->otherDocumnents && count($certificate->otherDocumnents) > 0) {
+        if ($certificate->otherDocuments && count($certificate->otherDocuments) > 0) {
             $arrayLink = [];
             foreach ($certificate->otherDocumnents as  $document) {
                 if ($document->description != 'appendix' && $document->description != 'other' && $document->description != 'original') {
@@ -478,16 +478,15 @@ class CertificateAssetController extends Controller
 
                 // Đóng file zip
                 $zip->close();
-
+                return Response::download($zipFileName)->deleteFileAfterSend(true);
 
                 // Trả về file zip cho người dùng download
-                return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
+                // return Response::download($name, $zipFileName, array('Content-Type: application/octet-stream', 'Content-Length: ' . filesize($name)))->deleteFileAfterSend(true);
             } else {
                 return response()->make('Có lỗi xảy ra trong quá trình tải xuống.', 404);
             }
         } else {
-            // return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
-            return ['data' => $certificate];
+            return response()->make('Không có tài liệu chính thức nào để tải xuống.', 404);
         }
     }
 
