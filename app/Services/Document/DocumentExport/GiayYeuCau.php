@@ -165,9 +165,14 @@ class GiayYeuCau
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText(" ", ['size' => '10'], ['align' => 'center']);
         $stringTimeSoc = "";
+        $surveyTime = "";
         if (isset($certificate->issue_date_card) && !empty(trim($certificate->issue_date_card))) {
             $issue_date_card = date_create($certificate->issue_date_card);
             $stringTimeSoc =  $issue_date_card->format('d') . "/" . $issue_date_card->format('m') . "/" . $issue_date_card->format('Y');
+        }
+        if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
+            $survey_time = date_create($certificate->survey_time);
+            $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
         }
         // 1
         $textRun = $section->addTextRun('Heading2');
@@ -349,13 +354,13 @@ class GiayYeuCau
         $appraise_date = date_create($certificate->appraise_date);
         $bien101 = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
 
-
+        $stringContact = $certificate->name_contact . ' - ' . $certificate->phone_contact;
         $section->addListItem("Mục đích yêu cầu thẩm định giá: " . $bien101 . ".", 0, [], 'bullets', []);
         $section->addListItem("Thời điểm thẩm định giá: Tháng "  . date_format($appraise_date, "m/Y") . '.', 0, [], 'bullets', []);
         $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
         $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', []);
-        $section->addListItem("Ngày giờ, địa điểm khảo sát: ", 0, [], 'bullets', []);
-        $section->addListItem("Tên, điện thoại người liên hệ: ", 0, [], 'bullets', []);
+        $section->addListItem("Ngày giờ, địa điểm khảo sát: " . $surveyTime . ' tại ' . $certificate->survey_location, 0, [], 'bullets', []);
+        $section->addListItem("Tên, điện thoại người liên hệ: " . $stringContact, 0, [], 'bullets', []);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Các hồ sơ, dữ liệu cá nhân, cung cấp gồm: ");
         $listItemRun->addText($appraise_law, ['italic' => true]);
