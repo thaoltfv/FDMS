@@ -326,6 +326,7 @@ class GiayYeuCau
                     $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
                 }
             } else {
+                dd($certificate->appraises);
                 foreach ($certificate->appraises as $stt => $asset) {
                     // Thông tin tài sản
 
