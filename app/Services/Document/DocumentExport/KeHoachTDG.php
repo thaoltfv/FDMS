@@ -197,16 +197,16 @@ class KeHoachTDG
         $addressHSTD = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
-                $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
             }
         } else {
             if ($isApartment) {
                 foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                    $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
                 }
             } else {
                 foreach ($certificate->appraises as $index => $item) {
-                    $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                    $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
                 }
             }
         }
