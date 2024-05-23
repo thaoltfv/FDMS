@@ -519,7 +519,7 @@ export const routes = [
 		component: page("menu_certification/Index.vue"),
 		beforeEnter: ResolveGuard([AuthGuard]),
 		meta: {
-			permissions: [PERMISSIONS.VIEW_PRICE],
+			permissions: [PERMISSIONS.VIEW_MENU_FOLLOW_PROFILE],
 			gtm: "Trang theo dõi hồ sơ"
 		}
 	},

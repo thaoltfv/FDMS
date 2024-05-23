@@ -333,6 +333,8 @@
 											{{
 												item.land_type_purpose_data
 													? item.land_type_purpose_data.acronym
+													: item.land_type_purpose
+													? item.land_type_purpose.acronym
 													: ""
 											}}
 											:
@@ -341,6 +343,32 @@
 											{{
 												item.price_land
 													? formatNumber(item.price_land) + "đ"
+													: location.dataDetail.asset_price &&
+													  location.dataDetail.asset_price.length > 0 &&
+													  location.dataDetail.asset_price.filter(
+															e =>
+																e.slug ===
+																`land_asset_purpose_${
+																	item.land_type_purpose_data
+																		? item.land_type_purpose_data.acronym
+																		: item.land_type_purpose
+																		? item.land_type_purpose.acronym
+																		: ""
+																}_price`
+													  ).length > 0
+													? formatNumber(
+															location.dataDetail.asset_price.filter(
+																e =>
+																	e.slug ===
+																	`land_asset_purpose_${
+																		item.land_type_purpose_data
+																			? item.land_type_purpose_data.acronym
+																			: item.land_type_purpose
+																			? item.land_type_purpose.acronym
+																			: ""
+																	}_price`
+															)[0].value
+													  ) + "đ"
 													: ""
 											}}
 										</p>
@@ -708,6 +736,8 @@
 											{{
 												item.land_type_purpose_data
 													? item.land_type_purpose_data.acronym
+													: item.land_type_purpose
+													? item.land_type_purpose.acronym
 													: ""
 											}}
 											:
@@ -716,6 +746,32 @@
 											{{
 												item.price_land
 													? formatNumber(item.price_land) + "đ"
+													: location.dataDetail.asset_price &&
+													  location.dataDetail.asset_price.length > 0 &&
+													  location.dataDetail.asset_price.filter(
+															e =>
+																e.slug ===
+																`land_asset_purpose_${
+																	item.land_type_purpose_data
+																		? item.land_type_purpose_data.acronym
+																		: item.land_type_purpose
+																		? item.land_type_purpose.acronym
+																		: ""
+																}_price`
+													  ).length > 0
+													? formatNumber(
+															location.dataDetail.asset_price.filter(
+																e =>
+																	e.slug ===
+																	`land_asset_purpose_${
+																		item.land_type_purpose_data
+																			? item.land_type_purpose_data.acronym
+																			: item.land_type_purpose
+																			? item.land_type_purpose.acronym
+																			: ""
+																	}_price`
+															)[0].value
+													  ) + "đ"
 													: ""
 											}}
 										</p>
