@@ -374,6 +374,8 @@ import { COMPARISON } from "@/enum/comparison-factor.enum";
 import { Timeline, Drawer } from "ant-design-vue";
 import PriceEstimateModel from "@/models/PriceEstimates";
 import CertificateAsset from "@/models/CertificateAsset";
+import PreCertificate from "@/models/PreCertificate";
+
 import moment from "moment";
 import ModalPrintEstimateAssets from "@/components/Modal/ModalPrintEstimateAssetNew";
 import ModalNotificationAppraisal from "@/components/Modal/ModalNotificationAppraisal";
@@ -536,7 +538,7 @@ export default {
 						factory_type_id: "",
 						created_at: new Date(),
 						contruction_description:
-						"+ Móng cột:\n+ Dầm, sàn BTCT chịu lực: \n+ Tường xây: \n+ Mái BTCT: \n+ Tầng: \n- Tầng hầm \n- Tầng lửng \n- Sân thượng \n- Mái che cầu thang\n+ Nền lát: \n+ Cửa đi, cửa sổ: \n+ Khu vệ sinh: \n+ Khu bếp: \n+ Cầu thang: \n+ Hiện trạng: \n"
+							"+ Móng cột:\n+ Dầm, sàn BTCT chịu lực: \n+ Tường xây: \n+ Mái BTCT: \n+ Tầng: \n- Tầng hầm \n- Tầng lửng \n- Sân thượng \n- Mái che cầu thang\n+ Nền lát: \n+ Cửa đi, cửa sổ: \n+ Khu vệ sinh: \n+ Khu bếp: \n+ Cầu thang: \n+ Hiện trạng: \n"
 					}
 				},
 				step_4: {
@@ -611,6 +613,7 @@ export default {
 				planning_violation_price_value: "",
 				certificate: {}
 			},
+			statusPC: null,
 			comparison_edit: [],
 			comparison: COMPARISON,
 			housingTypes: [],
@@ -787,7 +790,16 @@ export default {
 		this.miscInfo.key_step_3 += 1;
 	},
 	methods: {
-		getProfiles() {
+		async getProfiles() {
+			if (this.priceEstimates.pre_certificate_id) {
+				const getData = await PreCertificate.getDetailPreCertificate(
+					this.priceEstimates.pre_certificate_id
+				);
+				if (getData.data) {
+					this.statusPC = getData.data.status;
+				}
+			}
+
 			const profile = this.$store.getters.profile;
 			this.checkRole =
 				(this.priceEstimates &&
@@ -1034,8 +1046,12 @@ export default {
 		},
 		isEditStatus() {
 			let check = true;
-
-			return this.checkRole;
+			if (this.statusPC && this.statusPC != 8 && this.statusPC >= 3) {
+				check = false;
+			} else {
+				check = this.checkRole;
+			}
+			return check;
 		}
 	}
 };
