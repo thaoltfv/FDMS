@@ -4221,9 +4221,11 @@ export default {
 			}
 		},
 		deleteOtherFile(file, index) {
-			this.openModalDelete = true;
-			this.indexDelete = index;
+			this.indexDelete = this.form.other_documents.findIndex(
+				i => i.id === file.id
+			);
 			this.id_file_delete = file.id;
+			this.openModalDelete = true;
 		},
 		async handleDelete() {
 			const res = await File.deleteFileCertificate(this.id_file_delete);
