@@ -216,25 +216,29 @@
 			:fill="iconColor"
 		/>
 	</svg>
-	<svg
+	<!-- <svg
 		xmlns="http://www.w3.org/2000/svg"
 		:width="width"
 		:height="height"
 		v-else-if="name === 'nav_tdhs'"
 		viewBox="0 0 24 24"
 		fill="none"
-		stroke="#000000"
-		stroke-width="2"
-		stroke-linecap="round"
-		stroke-linejoin="round"
+	>
+		<path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z" />
+		<path d="M14 3v5h5M16 13H8M16 17H8M10 9H8" />
+	</svg> -->
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		:width="width"
+		:height="height"
+		v-else-if="name === 'nav_tdhs'"
+		viewBox="0 0 384 512"
 	>
 		<path
-			d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"
+			d="M64 464c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16H224v80c0 17.7 14.3 32 32 32h80V448c0 8.8-7.2 16-16 16H64zM64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V154.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0H64zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24H264c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24H264c13.3 0 24-10.7 24-24s-10.7-24-24-24H120z"
 			:fill="iconColor"
 		/>
-		<path d="M14 3v5h5M16 13H8M16 17H8M10 9H8" :fill="iconColor" />
 	</svg>
-
 	<svg
 		:width="width"
 		:height="height"
