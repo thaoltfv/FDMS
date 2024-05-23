@@ -1706,6 +1706,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             ];
 
             $result = CompareAssetGeneral::searchByQuery($array, null, $sourceField, 10000, null, $sortBy);
+            dd($result);
             return $result;
         } catch (Exception $exception) {
             Log::error($exception);
