@@ -346,16 +346,16 @@ class HopDongTDG
         $appraiseAssetName = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
-                $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
             }
         } else {
             if ($isApartment) {
                 foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
                 }
             } else {
                 foreach ($certificate->appraises as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
                 }
             }
         }
