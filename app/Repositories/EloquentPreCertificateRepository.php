@@ -1987,7 +1987,6 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //     return $check;
         $select = ['*'];
         $with = [
-            'customerGroup:id,description',
             'createdBy:id,name',
             'lastVersion',
             'apartmentProperties',
