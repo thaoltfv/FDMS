@@ -616,6 +616,7 @@
 								>Tải xuống tất cả tài liệu tự động
 							</b-tooltip>
 							<font-awesome-icon
+								v-if="isViewAutomationDocument"
 								:id="'download_all_official_auto'"
 								@click="handleDownloadAll('TaiLieuTuDong')"
 								:style="{
@@ -917,6 +918,14 @@
 								>Tải xuống tất cả tài liệu chính thức
 							</b-tooltip>
 							<font-awesome-icon
+								v-if="
+									isCertificateReport ||
+										isAppraisalReport ||
+										isAppendix1Report ||
+										isAppendix2Report ||
+										isAppendix3Report ||
+										isComparisionAssetReport
+								"
 								:id="'download_all_official'"
 								@click="handleDownloadAll('TaiLieuChinhThuc')"
 								:style="{
@@ -1708,6 +1717,14 @@
 								>Tải xuống tất cả tài liệu đính kèm
 							</b-tooltip>
 							<font-awesome-icon
+								v-if="
+									form.other_documents &&
+										form.other_documents.filter(
+											i =>
+												i.description === 'appendix' ||
+												i.description === 'other'
+										).length > 0
+								"
 								:id="'download_all_other_document'"
 								@click="handleDownloadAll('TaiLieuDinhKem')"
 								:style="{
@@ -1828,6 +1845,12 @@
 								>Tải xuống tất cả hồ sơ gốc
 							</b-tooltip>
 							<font-awesome-icon
+								v-if="
+									form.other_documents &&
+										form.other_documents.filter(
+											i => i.description === 'original'
+										).length > 0
+								"
 								:id="'download_all_original_document'"
 								@click="handleDownloadAll('TaiLieuGoc')"
 								:style="{
@@ -2916,27 +2939,38 @@ export default {
 			this.$router.push({ name: "certification_brief.index" }).catch(_ => {});
 		},
 		async handleDownloadAll(type) {
-			await Certificate.downloadAllOfficial(this.idData, type).then(resp => {
-				const file = resp.data;
-				if (file) {
-					const fileLink = document.createElement("a");
-					fileLink.href = file.link;
-					fileLink.setAttribute("download", file.name);
-					document.body.appendChild(fileLink);
-					fileLink.click();
-					fileLink.remove();
-					window.URL.revokeObjectURL(fileLink);
-					const nameLink = file.name_link.split(".");
-					const deleteLink = Certificate.deleteAfterDownload(nameLink[0]);
-				} else {
-					this.$toast.open({
-						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
-						type: "error",
-						position: "top-right",
-						duration: 3000
-					});
-				}
-			});
+			try {
+				await Certificate.downloadAllOfficial(this.idData, type).then(resp => {
+					const file = resp.data;
+					if (file) {
+						const fileLink = document.createElement("a");
+						fileLink.href = file.link;
+						fileLink.setAttribute("download", file.name);
+						document.body.appendChild(fileLink);
+						fileLink.click();
+						fileLink.remove();
+						window.URL.revokeObjectURL(fileLink);
+						const nameLink = file.name_link.split(".");
+						setTimeout(() => {
+							Certificate.deleteAfterDownload(nameLink[0]);
+						}, 5000);
+					} else {
+						this.$toast.open({
+							message: resp.error.message,
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+					}
+				});
+			} catch (error) {
+				this.$toast.open({
+					message: error,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+			}
 		},
 
 		handleCancel() {
