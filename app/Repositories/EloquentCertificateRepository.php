@@ -3727,6 +3727,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
+                        if ($logDescription == "từ chối Phân hồ sơ") {
+                            $description = $nextConfig !== false ? $nextConfig['description'] : '';
+                            $logDescription = 'cập nhật trạng thái ' . $description;
+                        }
                     } elseif ($current == $next) {
                         // Phân lại hồ sơ
                         $logDescription = 'phân lại hồ sơ ';
