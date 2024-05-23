@@ -6,7 +6,7 @@ use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-class UpdateNewPermissionSeeder extends Seeder
+class UpdateNewPermissionViewMenuSeeder extends Seeder
 {
     /**
      * Run the database seeds.
