@@ -1270,12 +1270,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
-                    if ($next != 8 && $current > $next) {
+                    if ($next != 8  && $current > $next) {
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
                         if ($logDescription == "từ chối Hủy") {
                             $logDescription = "Khôi phục YCSB";
+                        }
+                        if ($logDescription == "từ chối Phân hồ sơ") {
+                            $description = $nextConfig !== false ? $nextConfig['description'] : '';
+                            $logDescription = 'cập nhật trạng thái ' . $description;
                         }
                     } elseif ($current == $next) {
                         $logDescription = 'phân lại hồ sơ ';

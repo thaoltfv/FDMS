@@ -563,6 +563,9 @@ class CertificateAssetController extends Controller
 
                 // ])->deleteFileAfterSend(true);
                 // return $response;
+
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống tất cả ' . $this->getTypeDownload($type));
+
                 return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
             } else {
                 return  $this->respondWithErrorData(['message' => 'Không có file phù hợp để tiến hành tải xuống']);
@@ -570,6 +573,34 @@ class CertificateAssetController extends Controller
         } catch (\Throwable $th) {
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
+    }
+    public function getTypeDownload($type)
+    {
+        $returnType = "";
+        switch ($type) {
+            case 'TaiLieuChinhThuc':
+                $returnType = 'tài liệu chính thức';
+                break;
+            case 'TaiLieuTuDong':
+                $returnType = 'tài liệu tự động';
+                break;
+            case 'TaiLieuGoc':
+                $returnType = 'hồ sơ gốc';
+                break;
+            case 'TaiLieuDinhKem':
+                $returnType = 'tài liệu đính kèm';
+                break;
+            case 'TaiLieuHanhChinh':
+                $returnType = 'tài liệu hành chính';
+                break;
+            case 'TaiLieuTuDongHanhChinh':
+                $returnType = 'tài liệu tự động hành chính';
+                break;
+            default:
+                $returnType = 'tài liệu';
+                break;
+        }
+        return $returnType;
     }
     public function deleteAfterDownload($nameLink)
     {
