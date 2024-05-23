@@ -7263,7 +7263,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             'properties:id,appraise_id,front_side_width,insight_width,land_shape_id,appraise_land_sum_area,front_side,main_road_length',
             'properties.landShape:id,description',
             'properties.propertyTurningTime',
-            'properties.propertyDetail:id,appraise_property_id,land_type_purpose_id,price_land',
+            'properties.propertyDetail',
             'properties.propertyDetail.landTypePurpose:id,description,acronym',
             'certificate:id,appraiser_perform_id,appraise_date,certificate_num,certificate_date',
             'certificate.appraiserPerform:id,name',
