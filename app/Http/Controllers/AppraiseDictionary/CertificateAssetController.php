@@ -602,7 +602,7 @@ class CertificateAssetController extends Controller
         }
         return $returnType;
     }
-    public function deleteAfterDownload($nameLink)
+    public function deleteAfterDownload($nameLink): JsonResponse
     {
         $name = sys_get_temp_dir() . '/' . $nameLink . '.zip';
         Storage::disk(env('FILESYSTEM_DRIVER'))->delete($name);
