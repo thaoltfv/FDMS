@@ -133,7 +133,7 @@
 								v-for="(apartment, index) in locationApartments"
 								:key="index"
 								:lat-lng="apartment.center"
-								@click="handleMarker($event)"
+								@click="handleMarker(index, apartment, 'locationApartments')"
 								@mouseover="handleMarkerHover(apartment.id)"
 							>
 								<l-icon class-name="someExtraClass">
@@ -197,10 +197,34 @@
 											{{ formatNumber(apartment.total_area) }} m<sup>2</sup>
 										</p>
 									</div>
-									<div class="d-flex justify-content-between">
+									<!-- <div class="d-flex justify-content-between">
 										<p class="popup-name">Tổng giá trị:</p>
 										<p class="popup-content">
 											{{ formatNumber(apartment.total_amount) }} đ
+										</p>
+									</div> -->
+									<div
+										v-show="apartment.dataDetail"
+										class="d-flex justify-content-between"
+									>
+										<p class="popup-name">Đơn giá:</p>
+										<p class="popup-content">
+											{{
+												apartment.dataDetail &&
+												apartment.dataDetail.room_details &&
+												apartment.dataDetail.room_details.length > 0 &&
+												apartment.dataDetail.room_details[0].unit_price
+													? formatNumber(
+															apartment.dataDetail.room_details[0].unit_price
+													  ) + "đ"
+													: ""
+											}}
+										</p>
+									</div>
+									<div class="d-flex justify-content-between">
+										<p class="popup-name">Địa chỉ:</p>
+										<p class="popup-content">
+											{{ apartment.full_filter ? apartment.full_filter : "" }}
 										</p>
 									</div>
 									<p class="popup-link" @click="handleDetail(apartment)">
@@ -213,7 +237,7 @@
 							v-for="(location, index) in locationLand"
 							:key="index"
 							:lat-lng="location.center"
-							@click="handleMarker($event)"
+							@click="handleMarker(index, location, 'locationLand')"
 							@mouseover="handleMarkerHover(location.id)"
 						>
 							<l-icon class-name="someExtraClass">
@@ -236,7 +260,12 @@
 									}}
 								</div>
 							</l-icon>
-							<l-popup class="sp-custom-popup" ref="popup">
+
+							<l-popup
+								v-show="location.dataDetail"
+								class="sp-custom-popup"
+								ref="popup"
+							>
 								<img
 									class="popup-img"
 									v-if="location.pic.length > 0"
@@ -278,10 +307,49 @@
 										{{ formatNumber(location.total_area) }} m<sup>2</sup>
 									</p>
 								</div>
-								<div class="d-flex justify-content-between">
+								<!-- <div class="d-flex justify-content-between">
 									<p class="popup-name">Tổng giá trị:</p>
 									<p class="popup-content">
 										{{ formatNumber(location.total_amount) }} đ
+									</p>
+								</div> -->
+								<div
+									v-if="
+										location.dataDetail &&
+											location.dataDetail.properties &&
+											location.dataDetail.properties.length > 0 &&
+											location.dataDetail.properties[0].property_detail &&
+											location.dataDetail.properties[0].property_detail.length >
+												0
+									"
+								>
+									<div
+										v-for="(item, index) in location.dataDetail.properties[0]
+											.property_detail"
+										class="d-flex justify-content-between"
+									>
+										<p class="popup-name">
+											Đơn giá
+											{{
+												item.land_type_purpose_data
+													? item.land_type_purpose_data.acronym
+													: ""
+											}}
+											:
+										</p>
+										<p class="popup-content">
+											{{
+												item.price_land
+													? formatNumber(item.price_land) + "đ"
+													: ""
+											}}
+										</p>
+									</div>
+								</div>
+								<div class="d-flex justify-content-between">
+									<p class="popup-name">Địa chỉ:</p>
+									<p class="popup-content">
+										{{ location.full_address ? location.full_address : "" }}
 									</p>
 								</div>
 								<p class="popup-link" @click="handleDetail(location)">
@@ -445,7 +513,7 @@
 								v-for="(apartment, index) in locationApartments"
 								:key="index"
 								:lat-lng="apartment.center"
-								@click="handleMarker($event)"
+								@click="handleMarker(index, apartment, 'locationApartments')"
 								@mouseover="handleMarkerHover(apartment.id)"
 							>
 								<l-icon class-name="someExtraClass">
@@ -509,12 +577,36 @@
 											{{ formatNumber(apartment.total_area) }} m<sup>2</sup>
 										</p>
 									</div>
-									<div class="d-flex justify-content-between">
+									<!-- <div class="d-flex justify-content-between">
 										<p class="popup-name">Tổng giá trị:</p>
 										<p class="popup-content">
 											{{ formatNumber(apartment.total_amount) }} đ
 										</p>
+									</div> -->
+									<div
+										v-show="apartment.dataDetail"
+										class="d-flex justify-content-between"
+									>
+										<p class="popup-name">Đơn giá:</p>
+										<p class="popup-content">
+											{{
+												apartment.dataDetai.room_details &&
+												apartment.dataDetai.room_details.length > 0 &&
+												apartment.dataDetai.room_details[0].unit_price
+													? formatNumber(
+															apartment.dataDetai.room_details[0].unit_price
+													  ) + "đ"
+													: ""
+											}}
+										</p>
 									</div>
+									<div class="d-flex justify-content-between">
+										<p class="popup-name">Địa chỉ:</p>
+										<p class="popup-content">
+											{{ apartment.full_filter ? apartment.full_filter : "" }}
+										</p>
+									</div>
+
 									<p class="popup-link" @click="handleDetail(apartment)">
 										Xem chi tiết
 									</p>
@@ -525,7 +617,7 @@
 							v-for="(location, index) in locationLand"
 							:key="index"
 							:lat-lng="location.center"
-							@click="handleMarker($event)"
+							@click="handleMarker(index, location, 'locationLand')"
 							@mouseover="handleMarkerHover(location.id)"
 						>
 							<l-icon class-name="someExtraClass">
@@ -590,10 +682,53 @@
 										{{ formatNumber(location.total_area) }} m<sup>2</sup>
 									</p>
 								</div>
-								<div class="d-flex justify-content-between">
+								<!-- <div class="d-flex justify-content-between">
 									<p class="popup-name">Tổng giá trị:</p>
 									<p class="popup-content">
 										{{ formatNumber(location.total_amount) }} đ
+									</p>
+								</div> -->
+								<div
+									v-if="
+										location.dataDetail &&
+											location.dataDetail.properties &&
+											location.dataDetail.properties.length > 0 &&
+											location.dataDetail.properties[0].property_detail &&
+											location.dataDetail.properties[0].property_detail.length >
+												0
+									"
+								>
+									<div
+										v-for="(item, index) in location.dataDetail.properties[0]
+											.property_detail"
+										class="d-flex justify-content-between"
+									>
+										<p class="popup-name">
+											Đơn giá
+											{{
+												item.land_type_purpose_data
+													? item.land_type_purpose_data.acronym
+													: ""
+											}}
+											:
+										</p>
+										<p class="popup-content">
+											{{
+												item.price_land
+													? formatNumber(item.price_land) + "đ"
+													: ""
+											}}
+										</p>
+									</div>
+								</div>
+								<div class="d-flex justify-content-between">
+									<p class="popup-name">Địa chỉ:</p>
+									<p class="popup-content">
+										{{
+											location.dataDetail
+												? location.dataDetail.full_address
+												: ""
+										}}
 									</p>
 								</div>
 								<p class="popup-link" @click="handleDetail(location)">
@@ -686,6 +821,8 @@ import store from "@/store";
 import * as types from "@/store/mutation-types";
 import moment from "moment";
 import { isEmpty } from "lodash-es";
+import _ from "lodash";
+
 Vue.use(Icon);
 export default {
 	name: "Map",
@@ -932,7 +1069,6 @@ export default {
 			this.zoom = zoom;
 		},
 		async handleDetail(property) {
-			console.log("property 23", property);
 			if (property.transaction_type_id && property.transaction_type_id !== 0) {
 				await this.getAssetGeneralDetail(property.id);
 				this.pic = property.pic;
@@ -1019,6 +1155,55 @@ export default {
 				});
 			}
 			this.marker_id = id;
+		},
+		async handleMarker(index, property, list) {
+			if (property.transaction_type_id && property.transaction_type_id !== 0) {
+				const res = await WareHouse.getAssetGeneralDetail(property.id);
+				if (res.data) {
+					if (list === "locationLand") {
+						const clone = _.cloneDeep(this.locationLand);
+						clone[index].dataDetail = res.data;
+						this.locationLand = clone;
+					} else {
+						// const clone = _.cloneDeep(this.locationApartments);
+						// clone[index].dataDetail = res.data;
+						// this.locationApartments = clone;
+						this.locationApartments[index].dataDetail = res.data;
+					}
+				}
+			} else if (property.transaction_type_id === 0) {
+				if (property.loaitaisan !== "CC") {
+					const res = await WareHouse.getAppraiseDetail(property.id);
+					if (res.data) {
+						if (list === "locationLand") {
+							const clone = _.cloneDeep(this.locationLand);
+							clone[index].dataDetail = res.data;
+							this.locationLand = clone;
+						} else {
+							// const clone = _.cloneDeep(this.locationApartments);
+							// clone[index].dataDetail = res.data;
+							// this.locationApartments = clone;
+							this.locationApartments[index].dataDetail = res.data;
+						}
+					}
+				} else {
+					const res = await WareHouse.getApartmentDetail(property.id);
+					if (res.data) {
+						if (list === "locationLand") {
+							const clone = _.cloneDeep(this.locationLand);
+							clone[index].dataDetail = res.data;
+							this.locationLand = clone;
+						} else {
+							// const clone = _.cloneDeep(this.locationApartments);
+							// clone[index].dataDetail = res.data;
+							// this.locationApartments = clone;
+							this.locationApartments[index].dataDetail = res.data;
+						}
+					}
+				}
+			}
+			console.log("data", this.locationApartments);
+			console.log(index);
 		},
 		handleMarkerHover(id) {
 			this.marker_id = id;
