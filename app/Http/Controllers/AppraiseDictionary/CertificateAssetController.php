@@ -564,7 +564,7 @@ class CertificateAssetController extends Controller
                 // ])->deleteFileAfterSend(true);
                 // return $response;
 
-                // $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống tất cả ' . $this->getTypeDownload($type));
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống tất cả ' . $this->getTypeDownload($type));
 
                 return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
             } else {

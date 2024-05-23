@@ -1277,10 +1277,10 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         if ($logDescription == "từ chối Hủy") {
                             $logDescription = "Khôi phục YCSB";
                         }
-                        // if ($logDescription == "từ chối Phân hồ sơ") {
-                        //     $description = $nextConfig !== false ? $nextConfig['description'] : '';
-                        //     $logDescription = 'cập nhật trạng thái ' . $description;
-                        // }
+                        if ($logDescription == "từ chối Phân hồ sơ") {
+                            $description = $nextConfig !== false ? $nextConfig['description'] : '';
+                            $logDescription = 'cập nhật trạng thái ' . $description;
+                        }
                     } elseif ($current == $next) {
                         $logDescription = 'phân lại hồ sơ ';
                     } else {
