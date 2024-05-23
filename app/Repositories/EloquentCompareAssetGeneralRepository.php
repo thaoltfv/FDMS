@@ -1257,6 +1257,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'asset_type_id',
                 'total_estimate_amount',
                 'updated_at',
+                'land_type_purpose_price',
+                'land_type_purpose_price_search',
+                'room_details',
                 '*'
             ];
 
@@ -1697,9 +1700,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'asset_type_id',
                 'total_estimate_amount',
                 'updated_at',
-                'properties.property_detail.price_land',
-                'properties.property_detail.land_type_purpose_data.description',
-                'room_details.unit_price'
+                'land_type_purpose_price',
+                'land_type_purpose_price_search',
+                'room_details',
             ];
 
             $result = CompareAssetGeneral::searchByQuery($array, null, $sourceField, 10000, null, $sortBy);
