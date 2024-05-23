@@ -260,12 +260,13 @@ class KeHoachTDG
 
         if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
             $survey_time = date_create($certificate->survey_time);
-            $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+            // $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+            $surveyTime =   $survey_time->format('d') . "/" . $survey_time->format('m') . "/" . $survey_time->format('Y');
         }
         $row5 = $table->addRow();
         $row5->addCell(200)->addText("", null, ['align' => 'left']);
         $row5->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row5->addCell(8200)->addText("Khảo sát hiện trạng tài sản: " .  $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, null, $indentleftSymbol);
+        $row5->addCell(8200)->addText("Khảo sát hiện trạng tài sản: " .  $surveyTime, null, $indentleftSymbol);
 
         // $row6 = $table->addRow();
         // $row6->addCell(200)->addText("", null, ['align' => 'left']);
