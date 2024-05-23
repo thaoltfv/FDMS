@@ -255,7 +255,7 @@
 								</button>
 								<button
 									v-if="
-										this.isEditStatus &&
+										isEditStatusCCT &&
 											!this.priceEstimates.appraise_id &&
 											!this.priceEstimates.apartment_asset_id &&
 											priceEstimates.step_3.id
@@ -1043,6 +1043,9 @@ export default {
 				!this.priceEstimates.appraise_id &&
 				!this.priceEstimates.apartment_asset_id
 			);
+		},
+		isEditStatusCCT() {
+			return this.checkRole;
 		},
 		isEditStatus() {
 			let check = true;
