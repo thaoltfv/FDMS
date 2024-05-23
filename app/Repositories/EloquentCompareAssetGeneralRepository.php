@@ -105,7 +105,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $frontSide = request()->get('front_side');
             $user = CommonService::getUser();
             $status = request()->get('status');
-            $array ['bool']['must'] = [];
+            $array['bool']['must'] = [];
             if (!empty($search) && ((mb_substr($search, 0, 4) != DONAVA_REMOVE_SEARCH_TEXT) || (mb_substr($search, 0, 4) != DONAVA_REMOVE_SEARCH_OLD_TEXT))) {
                 $temp = str_replace(DONAVA_REMOVE_SEARCH_OLD_TEXT, '', urldecode(mb_strtoupper($search)));
                 $array['bool']['must'][0]['bool']['should'] = [[
@@ -266,8 +266,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'range' => [
                         'total_area' => [
-                            'gte' => !empty($totalAreaFrom) ? (integer)$totalAreaFrom : 0,
-                            'lte' => (integer)$totalAreaTo
+                            'gte' => !empty($totalAreaFrom) ? (int)$totalAreaFrom : 0,
+                            'lte' => (int)$totalAreaTo
                         ]
                     ]
                 ];
@@ -476,7 +476,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $isCheckFrontside = request()->get('is_check_frontside');
 
             $status = request()->get('status');
-            $array ['bool']['must'] = [];
+            $array['bool']['must'] = [];
             if (!empty($search) && (mb_substr($search, 0, 5) != DONAVA_REMOVE_SEARCH_TEXT)) {
                 $array['bool']['must'][0]['bool']['should'] = [[
                     'wildcard' => [
@@ -642,8 +642,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'range' => [
                         'total_area' => [
-                            'gte' => !empty($totalAreaFrom) ? (integer)$totalAreaFrom : 0,
-                            'lte' => (integer)$totalAreaTo
+                            'gte' => !empty($totalAreaFrom) ? (int)$totalAreaFrom : 0,
+                            'lte' => (int)$totalAreaTo
                         ]
                     ]
                 ];
@@ -750,7 +750,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                         ]
                     ]
                 ];
-
             }
 
             if (!empty($transactionTypeIds)) {
@@ -774,9 +773,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     ]
                 ];
             }
-            if(isset($isCheckFrontside)) {
+            if (isset($isCheckFrontside)) {
                 $isCheckFrontside = filter_var($isCheckFrontside, FILTER_VALIDATE_BOOLEAN);
-                if(!$isCheckFrontside) {
+                if (!$isCheckFrontside) {
                     if (isset($frontSide)) {
                         $array['bool']['must'][] = [
                             'match' => [
@@ -877,7 +876,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $isCheckFrontside = request()->get('is_check_frontside');
 
             $status = request()->get('status');
-            $array ['bool']['must'] = [];
+            $array['bool']['must'] = [];
             if (!empty($search) && (mb_substr($search, 0, 5) != DONAVA_REMOVE_SEARCH_TEXT)) {
                 $array['bool']['must'][0]['bool']['should'] = [[
                     'wildcard' => [
@@ -1043,8 +1042,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'range' => [
                         'total_area' => [
-                            'gte' => !empty($totalAreaFrom) ? (integer)$totalAreaFrom : 0,
-                            'lte' => (integer)$totalAreaTo
+                            'gte' => !empty($totalAreaFrom) ? (int)$totalAreaFrom : 0,
+                            'lte' => (int)$totalAreaTo
                         ]
                     ]
                 ];
@@ -1173,7 +1172,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                         ]
                     ]
                 ];
-
             }
 
             if (!empty($transactionTypeIds)) {
@@ -1197,9 +1195,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     ]
                 ];
             }
-            if(isset($isCheckFrontside)) {
+            if (isset($isCheckFrontside)) {
                 $isCheckFrontside = filter_var($isCheckFrontside, FILTER_VALIDATE_BOOLEAN);
-                if(!$isCheckFrontside) {
+                if (!$isCheckFrontside) {
                     if (isset($frontSide)) {
                         $array['bool']['must'][] = [
                             'match' => [
@@ -1315,7 +1313,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $publicDateTo = request()->get('public_date_to');
             $year = request()->get('year');
             // if(isset($year))
-                // $year =  Carbon::parse($year)->format('Y');
+            // $year =  Carbon::parse($year)->format('Y');
             $transactionTypeIds = request()->get('transaction_type');
             $location = request()->get('location');
             $distance = request()->get('distance');
@@ -1324,16 +1322,16 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
 
             $status = request()->get('status');
             $property_type = request()->get('property_type');
-            if($property_type == null){
-                $whereIn = ['DCN','DT','CC'];
-            }elseif($property_type == 0){
-                $whereIn = ['DCN','DT'];
-            }else{
+            if ($property_type == null) {
+                $whereIn = ['DCN', 'DT', 'CC'];
+            } elseif ($property_type == 0) {
+                $whereIn = ['DCN', 'DT'];
+            } else {
                 $whereIn = ['CC'];
             }
-            $assetType = Dictionary::query()->whereIn('acronym',$whereIn)->get('id')->toArray();
-            $assetTypeIds = json_encode(Arr::pluck($assetType,'id'));
-            $array ['bool']['must'] = [];
+            $assetType = Dictionary::query()->whereIn('acronym', $whereIn)->get('id')->toArray();
+            $assetTypeIds = json_encode(Arr::pluck($assetType, 'id'));
+            $array['bool']['must'] = [];
             if (!empty($search) && (mb_substr($search, 0, 5) != DONAVA_REMOVE_SEARCH_TEXT)) {
                 $array['bool']['must'][0]['bool']['should'] = [[
                     'wildcard' => [
@@ -1499,8 +1497,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $array['bool']['must'][] = [
                     'range' => [
                         'total_area' => [
-                            'gte' => !empty($totalAreaFrom) ? (integer)$totalAreaFrom : 0,
-                            'lte' => (integer)$totalAreaTo
+                            'gte' => !empty($totalAreaFrom) ? (int)$totalAreaFrom : 0,
+                            'lte' => (int)$totalAreaTo
                         ]
                     ]
                 ];
@@ -1612,7 +1610,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                         ]
                     ]
                 ];
-
             }
 
             if (!empty($transactionTypeIds)) {
@@ -1636,9 +1633,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     ]
                 ];
             }
-            if(isset($isCheckFrontside)) {
+            if (isset($isCheckFrontside)) {
                 $isCheckFrontside = filter_var($isCheckFrontside, FILTER_VALIDATE_BOOLEAN);
-                if(!$isCheckFrontside) {
+                if (!$isCheckFrontside) {
                     if (isset($frontSide)) {
                         $array['bool']['must'][] = [
                             'match' => [
@@ -1700,6 +1697,9 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 'asset_type_id',
                 'total_estimate_amount',
                 'updated_at',
+                'properties.property_detail.price_land',
+                'properties.property_detail.land_type_purpose_data.description',
+                'room_details.unit_price'
             ];
 
             $result = CompareAssetGeneral::searchByQuery($array, null, $sourceField, 10000, null, $sortBy);
@@ -1785,7 +1785,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
     {
         $version = request()->get('version');
         $result = null;
-        if($version && !is_array($version)){
+        if ($version && !is_array($version)) {
             $result = $this->findVersionById($id, $version);
         }
         if (!$result) {
@@ -1919,7 +1919,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             ->get();
     }
 
-    private function checkDuplicateCoordinate($coordinates, $id = null) {
+    private function checkDuplicateCoordinate($coordinates, $id = null)
+    {
         if (empty($coordinates)) {
             return ['message' => 'Chưa có tọa đồ. Vui lòng kiểm tra lại.', 'exception' => ''];
         }
@@ -1931,13 +1932,13 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             if ($this->model->query()->where($where)->exists()) {
                 $list = $this->model->query()->where($where)->get('id');
                 $ids = Arr::pluck($list, 'id');
-                $check = ['message' => 'Tọa độ ' . $coordinates . ' đã tồn tại ở TSSS ('. implode(', ', $ids) . '). Vui lòng chọn tọa độ khác.', 'exception' => ''];
+                $check = ['message' => 'Tọa độ ' . $coordinates . ' đã tồn tại ở TSSS (' . implode(', ', $ids) . '). Vui lòng chọn tọa độ khác.', 'exception' => ''];
             }
         } else {
             if ($this->model->query()->where($where)->whereKeyNot($id)->exists()) {
                 $list = $this->model->query()->where($where)->whereKeyNot($id)->get('id');
                 $ids = Arr::pluck($list, 'id');
-                $check = ['message' => 'Tọa độ ' . $coordinates . ' đã tồn tại ở TSSS ('. implode(', ', $ids) . '). Vui lòng chọn tọa độ khác.', 'exception' => ''];
+                $check = ['message' => 'Tọa độ ' . $coordinates . ' đã tồn tại ở TSSS (' . implode(', ', $ids) . '). Vui lòng chọn tọa độ khác.', 'exception' => ''];
             }
         }
 
@@ -2020,7 +2021,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                                     ->insert($pic->attributesToArray());
                             }
                         }
-
                     }
                 }
 
@@ -2058,11 +2058,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     }
                 }
                 $assetType = Dictionary::query()->where('id', $objects['asset_type_id'])->first('acronym');
-                if(isset($assetType->acronym) && $assetType->acronym == 'CC'){
+                if (isset($assetType->acronym) && $assetType->acronym == 'CC') {
                     // if (isset($objects['block_specification'])) {
                     //     foreach ($objects['block_specification'] as $blockSpecification) {
                     //         $blockSpecification['asset_general_id'] = $generalId;
-                            // $blockSpecificationObject = new BlockSpecification($blockSpecification);
+                    // $blockSpecificationObject = new BlockSpecification($blockSpecification);
                     //         $blockSpecificationId = QueryBuilder::for($blockSpecificationObject)
                     //             ->insertGetId($blockSpecificationObject->attributesToArray());
                     //         if (isset($blockSpecification['basic_utilities'])) {
@@ -2094,12 +2094,12 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                         }
                     }
                     if (isset($objects['apartment_specification'])) {
-                        $block = Block::query()->where('id',$objects['block_id'])->first();
+                        $block = Block::query()->where('id', $objects['block_id'])->first();
                         $apartmentSpecification = $block;
                         $apartmentSpecification['asset_general_id'] = $generalId;
-                        $apartmentSpecification['utilities'] = $objects['apartment_specification']['utilities']??$block->utilities;
-                        $apartmentSpecification['handover_year'] = $objects['apartment_specification']['handover_year']??$block->handover_year;
-                        $apartmentSpecification['apartment_name'] = $objects['apartment_specification']['apartment_name']?? '';
+                        $apartmentSpecification['utilities'] = $objects['apartment_specification']['utilities'] ?? $block->utilities;
+                        $apartmentSpecification['handover_year'] = $objects['apartment_specification']['handover_year'] ?? $block->handover_year;
+                        $apartmentSpecification['apartment_name'] = $objects['apartment_specification']['apartment_name'] ?? '';
                         $apartmentSpecificationArr = new ApartmentSpecification($apartmentSpecification->toArray());
                         ApartmentSpecification::query()->create($apartmentSpecificationArr->attributesToArray());
                     }
@@ -2116,7 +2116,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 Log::error($exception);
                 throw $exception;
             }
-
         });
     }
 
@@ -2199,7 +2198,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                                     ->insert($pic->attributesToArray());
                             }
                         }
-
                     }
                 }
 
@@ -2239,7 +2237,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     }
                 }
                 $assetType = Dictionary::query()->where('id', $objects['asset_type_id'])->first('acronym');
-                if(isset($assetType->acronym) && $assetType->acronym == 'CC'){
+                if (isset($assetType->acronym) && $assetType->acronym == 'CC') {
 
                     // BlockSpecification::query()->where('asset_general_id', '=', $id)->delete();
                     // if (isset($objects['block_specification'])) {
@@ -2281,12 +2279,12 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
 
                     ApartmentSpecification::query()->where('asset_general_id', '=', $id)->delete();
                     if (isset($objects['apartment_specification'])) {
-                        $block = Block::query()->where('id',$objects['block_id'])->first();
+                        $block = Block::query()->where('id', $objects['block_id'])->first();
                         $apartmentSpecification = $block;
                         $apartmentSpecification['asset_general_id'] = $id;
-                        $apartmentSpecification['utilities'] = $objects['apartment_specification']['utilities']??$block->utilities;
-                        $apartmentSpecification['handover_year'] = $objects['apartment_specification']['handover_year']??$block->handover_year;
-                        $apartmentSpecification['apartment_name'] = $objects['apartment_specification']['apartment_name']?? '';
+                        $apartmentSpecification['utilities'] = $objects['apartment_specification']['utilities'] ?? $block->utilities;
+                        $apartmentSpecification['handover_year'] = $objects['apartment_specification']['handover_year'] ?? $block->handover_year;
+                        $apartmentSpecification['apartment_name'] = $objects['apartment_specification']['apartment_name'] ?? '';
                         $apartmentSpecificationArr = new ApartmentSpecification($apartmentSpecification->toArray());
                         ApartmentSpecification::query()->create($apartmentSpecificationArr->attributesToArray());
                     }
@@ -2338,8 +2336,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         $landTypePurpose = [];
         $mainRoadLength = null;
         $bedroom_num = null;
-        isset($data->total_area) ? $data->total_area = (double)$data->total_area : null;
-        isset($data->total_construction_area) ? $data->total_construction_area = (double)$data->total_construction_area : null;
+        isset($data->total_area) ? $data->total_area = (float)$data->total_area : null;
+        isset($data->total_construction_area) ? $data->total_construction_area = (float)$data->total_construction_area : null;
         isset($data->full_address) ? $data->full_address_search = mb_strtolower($data->full_address) : $data->full_address_search = '';
         isset($data->public_date) ? $data->public_date = Carbon::createFromFormat('d-m-Y', $data->public_date) : $data->public_date = '';
         foreach ($data->pic as $pic) {
@@ -2369,7 +2367,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                             'circular_unit_price' => $propertyDetail->circular_unit_price,
                         ];
                     }
-
                 }
                 foreach ($propertyData->pic as $pic) {
                     $pics[] = ($pic)->toArray();
@@ -2403,7 +2400,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         $assetVersion = 1;
         if (isset($data->version)) {
             foreach ($data->version as $version) {
-                $assetVersion = $assetVersion>$version->version ? $assetVersion : $version->version;
+                $assetVersion = $assetVersion > $version->version ? $assetVersion : $version->version;
                 if (isset($version->asset_general_data))
                     unset($version->asset_general_data);
             }
@@ -2569,7 +2566,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                                     ->insert($pic->attributesToArray());
                             }
                         }
-
                     }
                 }
                 if (isset($objects['tangible_assets'])) {
@@ -2643,7 +2639,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 Log::error($exception);
                 throw $exception;
             }
-
         });
     }
 
@@ -3042,7 +3037,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     ];
                     $result['status'] = ValueDefault::STATUS_SUCCESS;
                     $result['error_message'] = null;
-
                 } else {
                     $result['recognized'][] = [
                         'land_type_purpose' => $value['land_type_purpose'],
@@ -3184,7 +3178,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                                 'land_type_purpose' => $value['land_type_purpose'],
                                 'area' => $value['area'],
                                 'average_land_unit_price' => $averageLandUnitPrice,
-                                'estimate_price' => $averageLandUnitPrice * $value['area'],];
+                                'estimate_price' => $averageLandUnitPrice * $value['area'],
+                            ];
                         }
 
 
@@ -3381,7 +3376,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                                 'land_type_purpose' => $value['land_type_purpose'],
                                 'area' => $value['area'],
                                 'average_land_unit_price' => $averageLandUnitPrice,
-                                'estimate_price' => $averageLandUnitPrice * $value['area'],];
+                                'estimate_price' => $averageLandUnitPrice * $value['area'],
+                            ];
                         }
                         $result['reliability'] = $reliability;
                         $result['assets'] = $this->findAssetEstimate(['ids' => $ids]);
@@ -3647,7 +3643,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         $assets = $this->findApartmentAsset(array_merge($searchDefault, $search));
         $asset = array_values(array_map("unserialize", array_unique(array_map("serialize", $assets->toArray()))));
         $returnAsset = array_merge($returnAsset, $asset);
-        if (count($asset) < 3){
+        if (count($asset) < 3) {
             $ids = Arr::pluck($returnAsset, 'id');
             $search = [
                 'project_id' => $projectId,
@@ -3659,7 +3655,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $asset = array_values(array_map("unserialize", array_unique(array_map("serialize", $assets->toArray()))));
             $limit = $limit - count($asset);
             $returnAsset = array_merge($returnAsset, $asset);
-            if ($limit > 0 ){
+            if ($limit > 0) {
                 $ids = Arr::pluck($returnAsset, 'id');
                 $search = [
                     'project_id' => $projectId,
@@ -3670,7 +3666,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                 $asset = array_values(array_map("unserialize", array_unique(array_map("serialize", $assets->toArray()))));
                 $limit = $limit - count($asset);
                 $returnAsset = array_merge($returnAsset, $asset);
-                if($limit >0){
+                if ($limit > 0) {
                     $ids = Arr::pluck($returnAsset, 'id');
                     $search = [
                         'project_id' => $projectId,
@@ -3680,7 +3676,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                     $asset = array_values(array_map("unserialize", array_unique(array_map("serialize", $assets->toArray()))));
                     $limit = $limit - count($asset);
                     $returnAsset = array_merge($returnAsset, $asset);
-                    if ($limit > 0){
+                    if ($limit > 0) {
                         $ids = Arr::pluck($returnAsset, 'id');
                         $search = [
                             'distance' => $distance,
@@ -3694,7 +3690,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                         $limit = $limit - count($asset);
                         $returnAsset = array_merge($returnAsset, $asset);
 
-                        if ($limit > 0){
+                        if ($limit > 0) {
                             $ids = Arr::pluck($returnAsset, 'id');
                             $search = [
                                 'distance' => $distance,
@@ -3706,7 +3702,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                             $asset = array_values(array_map("unserialize", array_unique(array_map("serialize", $assets->toArray()))));
                             $limit = $limit - count($asset);
                             $returnAsset = array_merge($returnAsset, $asset);
-                            if ($limit > 0){
+                            if ($limit > 0) {
                                 $ids = Arr::pluck($returnAsset, 'id');
                                 $search = [
                                     'distance' => $distance,
@@ -3718,7 +3714,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
                                 $asset = array_values(array_map("unserialize", array_unique(array_map("serialize", $assets->toArray()))));
                                 $limit = $limit - count($asset);
                                 $returnAsset = array_merge($returnAsset, $asset);
-                                if ($limit > 0){
+                                if ($limit > 0) {
                                     $ids = Arr::pluck($returnAsset, 'id');
                                     $search = [
                                         'distance' => $distance,
@@ -3745,7 +3741,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
     public function estimateApartmentAsset($objects): array
     {
         $search = [
-//            'location' => $objects['location'] ?? null,
+            //            'location' => $objects['location'] ?? null,
             'asset_types' => EstimateAssetDefault::APARTMENT_ASSET_TYPE,
             'apartment_id' => $objects['apartment_id'] ?? null,
             'transaction_type' => EstimateAssetDefault::TRANSACTION_TYPE,
@@ -3951,7 +3947,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $bedroomNum = $search['bedroom_num'] ?? null;
             $apartmentId = $search['apartment_id'] ?? null;
             $ids = $search['ids'] ?? null;
-            $array ['bool']['must'] = [];
+            $array['bool']['must'] = [];
             $array['bool']['must'][] = [
                 'match' => [
                     'status' => 1
@@ -4343,33 +4339,34 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         }
     }
 
-    public function getTotalAssetByProvince(){
+    public function getTotalAssetByProvince()
+    {
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
-        if(isset($fromDate) && isset($toDate)){
+        if (isset($fromDate) && isset($toDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
-        }else{
+        } else {
             return ['message' => 'Vui lòng chọn ngày.', 'exeption' => ''];
-
         }
         $result = $this->model->with('province:id,name')
-                    ->whereBetween('created_at', [$fromDate, $toDate])
-                    ->selectRaw("province_id, count(id) as total_assets")
-                    ->groupBy('province_id')
-                    ->get();
+            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->selectRaw("province_id, count(id) as total_assets")
+            ->groupBy('province_id')
+            ->get();
         return $result;
     }
 
-    public function getTotalAssetByMonthOfYear(){
+    public function getTotalAssetByMonthOfYear()
+    {
         $year = request()->get('year');
-        if(! isset($year) )
+        if (!isset($year))
             return ['message' => 'Bạn chưa chọn năm', 'exeption' => ''];
         $result = $this->model
-                    ->selectRaw("date_part('month',created_at)::integer as month, count(id) as total_assets")
-                    ->whereYear('created_at', $year)
-                    ->groupByRaw("date_part('month',created_at)")
-                    ->get();
+            ->selectRaw("date_part('month',created_at)::integer as month, count(id) as total_assets")
+            ->whereYear('created_at', $year)
+            ->groupByRaw("date_part('month',created_at)")
+            ->get();
         return $result;
     }
     public function countCompareAssetGeneral()
@@ -4381,11 +4378,11 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         //     return ['message' => 'Vui lòng chọn ngày', 'exception' => ''];
         // }
         $result = $this->model->query()
-        //->whereBetween('created_at', [$date_from, $date_to] )
-        ->select('province_id', DB::raw('count(*) as total'))
-        ->groupBy('province_id')
-        ->with('province:id,name')
-        ->get();
+            //->whereBetween('created_at', [$date_from, $date_to] )
+            ->select('province_id', DB::raw('count(*) as total'))
+            ->groupBy('province_id')
+            ->with('province:id,name')
+            ->get();
 
         return $result;
     }
@@ -4470,7 +4467,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             $projectId = $search['project_id'] ?? null;
             $floorName = $search['floor_name'] ?? null;
             $ids =  $search['ids'] ?? null;
-            $array ['bool']['must'] = [];
+            $array['bool']['must'] = [];
             // $array['bool']['must'][] = [
             //     'match' => [
             //         'id' => 17191
@@ -4620,19 +4617,19 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         DB::enableQueryLog();
         $result = $this->model->query()->with($with)->where($where)->select($select);
         if (!empty($search)) {
-            $result = $result->where(function($query) use ($search) {
+            $result = $result->where(function ($query) use ($search) {
                 $query->where('full_address', 'ilike', '%' . $search . '%');
                 $query->orWhereHas('createdBy', function ($has) use ($search) {
-                    $has->where('name', 'ilike' , '%' . $search . '%');
+                    $has->where('name', 'ilike', '%' . $search . '%');
                 });
                 $query->orWhereHas('assetType', function ($has) use ($search) {
-                    $has->where('description', 'ilike' , '%' . $search . '%');
+                    $has->where('description', 'ilike', '%' . $search . '%');
                 });
                 $query->orWhereHas('transactionType', function ($has) use ($search) {
-                    $has->where('description', 'ilike' , '%' . $search . '%');
+                    $has->where('description', 'ilike', '%' . $search . '%');
                 });
                 $query->orWhereHas('project', function ($has) use ($search) {
-                    $has->where('name', 'ilike' , '%' . $search . '%');
+                    $has->where('name', 'ilike', '%' . $search . '%');
                 });
                 if (intval($search))
                     $query->orWhere('id', intval($search));
@@ -4645,7 +4642,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         }
         if (!empty($createdBy)) {
             $result->WhereHas('createdBy', function ($has) use ($createdBy) {
-                $has->where('name', 'ilike' , '%' . $createdBy . '%');
+                $has->where('name', 'ilike', '%' . $createdBy . '%');
             });
         }
         if (!empty($coordinates)) {
@@ -4719,10 +4716,10 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         $result = $result->orderBy('transaction_type_id', 'desc');
         $result = $result->forPage($page, $perPage)
             ->paginate($perPage);
-            // dd(DB::getQueryLog());
+        // dd(DB::getQueryLog());
         foreach ($result as $item) {
             $item->append('area_total');
-            if (isset($item['project_id'])){
+            if (isset($item['project_id'])) {
                 $name_project_result = Project::query()->where('id', '=', $item['project_id'])->first();
                 if ($name_project_result) {
                     $item['full_address'] = $name_project_result['name'] . ', ' . $item['full_address'];
@@ -4731,7 +4728,6 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         }
 
         return $result;
-
     }
 
     public function exportAsset()
@@ -4800,7 +4796,7 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
             });
         }
         if (!empty($createdBy)) {
-            $list_user = explode(',',$createdBy);
+            $list_user = explode(',', $createdBy);
             $result = $result->whereIn('created_by', $list_user);
         }
         if (!empty($fromDate) && $fromDate != 'Invalid date') {
@@ -4812,5 +4808,4 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         // dd($result->limit(5)->get()->append(['area_total', 'front_side_text', 'land_type_text'])->toArray());
         return $result->get()->append(['area_total', 'front_side_text', 'land_type_text']);
     }
-
 }
