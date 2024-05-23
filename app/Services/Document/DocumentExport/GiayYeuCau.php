@@ -357,7 +357,9 @@ class GiayYeuCau
         $stringContact = $certificate->name_contact . ' - ' . $certificate->phone_contact;
         $section->addListItem("Mục đích yêu cầu thẩm định giá: " . $bien101 . ".", 0, [], 'bullets', []);
         $section->addListItem("Thời điểm thẩm định giá: Tháng "  . date_format($appraise_date, "m/Y") . '.', 0, [], 'bullets', []);
-        $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
+        // $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
+        $section->addListItem("Bên sử dụng kết quả thẩm định giá: Khách hàng thẩm định giá", 0, [], 'bullets', []);
+
         $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', []);
         $section->addListItem("Ngày giờ, địa điểm khảo sát: " . $surveyTime . ' tại ' . $certificate->survey_location, 0, [], 'bullets', []);
         $section->addListItem("Tên, điện thoại người liên hệ: " . $stringContact, 0, [], 'bullets', []);
