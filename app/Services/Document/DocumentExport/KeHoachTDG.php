@@ -261,10 +261,20 @@ class KeHoachTDG
         $row5->addCell(1500)->addText("o", null, ['align' => 'right']);
         $row5->addCell(8200)->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
 
+        // $row6 = $table->addRow();
+        // $row6->addCell(200)->addText("", null, ['align' => 'left']);
+        // $row6->addCell(1500)->addText("o", null, ['align' => 'right']);
+        // $row6->addCell(8200)->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
+        $surveyTime = "";
+
+        if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
+            $survey_time = date_create($certificate->survey_time);
+            $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+        }
         $row6 = $table->addRow();
         $row6->addCell(200)->addText("", null, ['align' => 'left']);
         $row6->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row6->addCell(8200)->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
+        $row6->addCell(8200)->addText("Ngày giờ khảo sát:" .  $surveyTime, null, $indentleftSymbol);
 
         $row7 = $table->addRow();
         $row7->addCell(200)->addText("", null, ['align' => 'left']);
