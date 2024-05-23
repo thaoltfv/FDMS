@@ -5739,7 +5739,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             else
                 $item->pic = $pic[$find]['pic'];
         }
-        dd($data);
+        // dd($data);
         return $data;
     }
 
