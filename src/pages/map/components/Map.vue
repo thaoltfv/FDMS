@@ -1258,8 +1258,6 @@ export default {
 					}
 				}
 			}
-			console.log("data", this.locationApartments);
-			console.log(index);
 		},
 		handleMarkerHover(id) {
 			this.marker_id = id;
