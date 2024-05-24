@@ -41,6 +41,8 @@ class CertificateBriefController extends Controller
 
     public function findPaging(Request $request)
     {
+        Log::info('request',['request'=>$request]);
+        Log::info('vô check quyền',['permission'=>CommonService::checkUserPermission($this->permissionView)]);
         if (!CommonService::checkUserPermission($this->permissionView))
             return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
         $result =  $this->certificateRepository->findPaging_v2();
