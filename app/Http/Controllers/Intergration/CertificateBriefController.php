@@ -41,10 +41,12 @@ class CertificateBriefController extends Controller
 
     public function findPaging(Request $request)
     {
-        if (request()->has('is_guest')) {
-            $result =  $this->certificateRepository->findPaging_v2();
-        } else if (!CommonService::checkUserPermission($this->permissionView))
-            return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
+        if (!request()->has('is_guest')) {
+            $check = CommonService::checkUserPermission($this->permissionView);
+            if (!$check) {
+                return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
+            }
+        }
         $result =  $this->certificateRepository->findPaging_v2();
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
