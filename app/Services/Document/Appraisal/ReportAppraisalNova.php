@@ -1118,25 +1118,28 @@ class ReportAppraisalNova extends ReportAppraisal
         //4
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('4', null, $this->cellHCentered);
-        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số phòng ngủ ');
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('');
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số phòng');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Phòng WC');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($apartment->apartmentAssetProperties->wc_num ? $apartment->apartmentAssetProperties->wc_num . ' phòng' : '');
-
-
         $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('5', null, $this->cellHCentered);
-        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số phòng WC ');
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('');
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Phòng ngủ');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($apartment->apartmentAssetProperties->bedroom_num ? $apartment->apartmentAssetProperties->bedroom_num . ' phòng' : '');
+
+
+
+
+
         //4
         $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('5', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Hướng nhìn');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Hướng chính');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->direction->description));
         //5
         $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Nội thất');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tình trạng');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->furnitureQuality->description));
@@ -1149,7 +1152,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $utiDescriptionArr = CommonService::getUtilitiesDescription($apartment->apartmentAssetProperties->utilities);
         $utiDescriptionStr = implode(', ', $utiDescriptionArr);
         $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Tiện ích');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tiện ích nội khu');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($utiDescriptionStr);
