@@ -462,7 +462,7 @@ class CertificateAssetController extends Controller
             $zipFileNameLink = $type . '_HSTD_' . $id . '_' . $downloadTime . '.zip';
             if ($type == 'TaiLieuHanhChinh') {
                 if ($certificate->exportDocuments && count($certificate->exportDocuments) > 0) {
-                    dd($certificate->exportDocuments);
+                    // dd($certificate->exportDocuments);
                     foreach ($certificate->exportDocuments as  $document) {
                         $item = [
                             'link' => $document->link,

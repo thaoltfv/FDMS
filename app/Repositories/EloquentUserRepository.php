@@ -168,6 +168,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
         if (isset($getRole)) {
             $user->assignRole($getRole);
+        } else {
+            $user->assignRole('USER');
         }
         return $user;
     }
@@ -205,7 +207,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
                 $user->syncRoles($getRole);
             }
         } else {
-            $user->syncRoles("ADMIN");
+            $user->syncRoles("USER");
         }
         if (isset($objects['appraiser'])) {
             Appraiser::query()->where('user_id', $id)
