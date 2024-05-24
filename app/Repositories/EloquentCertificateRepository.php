@@ -430,7 +430,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     public function findPaging(): LengthAwarePaginator
     {
         $user = CommonService::getUser();
-
+        dd($user);
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
         $search = request()->get('search');
@@ -465,19 +465,19 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->with('assetPrice')
             //->with('constructionCompany')
             ->with('comparisonFactor')
-            // ->whereHas('createdBy', function ($q) use ($query, $user) {
-            //     if (request()->has('is_guest')) {
-            //     } else {
-            //         if (isset($query->created_by) && ($query->created_by != 'Tất cả người tạo')) {
-            //             return $q->where('name', '=', $query->created_by);
-            //         }
+            ->whereHas('createdBy', function ($q) use ($query, $user) {
+                if (request()->has('is_guest')) {
+                } else {
+                    if (isset($query->created_by) && ($query->created_by != 'Tất cả người tạo')) {
+                        return $q->where('name', '=', $query->created_by);
+                    }
 
-            //         $role = $user->roles->last();
-            //         if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
-            //             return $q->where('id', $user->id);
-            //         }
-            //     }
-            // })
+                    $role = $user->roles->last();
+                    if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+                        return $q->where('id', $user->id);
+                    }
+                }
+            })
             ->whereHas('assetPrice', function ($q) use ($query) {
                 if (isset($query->total_amount_from)) {
                     $q->where('slug', '=', 'total_asset_price')->where('value', '>=', $query->total_amount_from);
