@@ -430,7 +430,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     public function findPaging(): LengthAwarePaginator
     {
         $user = CommonService::getUser();
-        Log::info($user);
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
         $search = request()->get('search');
@@ -467,7 +466,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->with('comparisonFactor')
             ->whereHas('createdBy', function ($q) use ($query, $user) {
                 if (request()->has('is_guest')) {
-                    Log::info('Vào điều kiện 1');
                 } else {
                     if (isset($query->created_by) && ($query->created_by != 'Tất cả người tạo')) {
                         return $q->where('name', '=', $query->created_by);
@@ -552,8 +550,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (request()->has('is_guest')) {
             if (isset($user->customer_group_id)) {
                 $result = $result->where('customer_group_id', '=', $user->customer_group_id);
-                Log::info('Vào điều kiện 2 customer_group_id');
-                Log::info($result);
                 $result = $result
                     ->forPage($page, $perPage)
                     ->paginate($perPage);
@@ -2681,7 +2677,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
     public function findPaging_v2()
     {
         $user = CommonService::getUser();
-        Log::info($user);
         $perPage = (int)request()->get('limit');
         $page = (int)request()->get('page');
         $sortField = request()->get('sortField');
@@ -2933,7 +2928,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             Log::info('vào điều kiện 2 customer_group_id');
             if (isset($user->customer_group_id)) {
                 $result = $result->where('customer_group_id', '=', $user->customer_group_id);
-                Log::info($result);
                 $result = $result
                     ->forPage($page, $perPage)
                     ->paginate($perPage);
