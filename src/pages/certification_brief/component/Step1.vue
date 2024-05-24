@@ -251,14 +251,24 @@
 				</div>
 				<div class="card-body card-info" v-show="showCardDetailTraffic">
 					<div class="d-flex-column">
-						<InputCategorySearch
-							vid="appraiser"
-							class="form-group-container"
-							label="Tìm đối tác"
-							@change="handleChangeCustomer"
-							@search="debounceSearchCustomer"
-							:options="optionsCustomer"
-						/>
+						<div class="row">
+							<InputCategory
+								v-model="data.customer_group_id"
+								vid="customer_group_id"
+								label="Nhóm đối tác"
+								class="form-group-container col-6"
+								:options="optionsCustomerGroup"
+							/>
+							<InputCategorySearch
+								vid="appraiser"
+								class="form-group-container col-6"
+								label="Tìm đối tác"
+								@change="handleChangeCustomer"
+								@search="debounceSearchCustomer"
+								:options="optionsCustomer"
+							/>
+						</div>
+
 						<InputTextPrefixCustom
 							id="customer_name"
 							placeholder="Ông / Bà"
@@ -450,6 +460,7 @@ export default {
 		"appraisersControl",
 		"administratives",
 		"customers",
+		"customerGroups",
 		"idData",
 		"render_price_fee",
 		"employeeBusiness",
@@ -604,6 +615,13 @@ export default {
 				// // console.log('newwww', newValue)
 				this.data.appraiser_sale_id = newValue;
 			}
+		},
+		optionsCustomerGroup() {
+			return {
+				data: this.customerGroups,
+				id: "id",
+				key: "description"
+			};
 		},
 		optionsLoaiHs() {
 			return {

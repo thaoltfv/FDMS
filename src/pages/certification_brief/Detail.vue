@@ -13,7 +13,7 @@
 								{{ idData ? `HSTD_${idData}` : "HSTD" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="showExportDocument">
+							<!-- <a-dropdown v-if="showExportDocument">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -25,7 +25,7 @@
 										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
 									</a-menu>
 								</template>
-							</a-dropdown>
+							</a-dropdown> -->
 							<div
 								v-if="form.pre_certificate_id"
 								id="pre_certificate_id"
@@ -202,6 +202,18 @@
 							<div class="row">
 								<div class="col-12">
 									<div class="detail_certificate_2">
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
+												>Nhóm đối tác:</strong
+											>
+											<p>
+												{{
+													form.customer_group
+														? form.customer_group.description
+														: ""
+												}}
+											</p>
+										</div>
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline">Đối tác:</strong>
 											<p>{{ form.customer ? form.customer.name : "" }}</p>
@@ -585,7 +597,11 @@
 			</div>
 		</div>
 		<div
-			v-if="form.general_asset.length > 0 && printConfig"
+			v-if="
+				form.general_asset.length > 0 &&
+					printConfig &&
+					statusDescription !== 'In hồ sơ'
+			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
@@ -594,7 +610,26 @@
 			>
 				<div class="card w-100 mr-lg-2">
 					<div class="card-title text-center">
-						<h3 class="title title_input_content">Tài liệu tự động</h3>
+						<h3 class="title title_input_content">
+							Tài liệu tự động
+							<b-tooltip :target="'download_all_official_auto'" placement="top"
+								>Tải xuống tất cả tài liệu tự động
+							</b-tooltip>
+							<font-awesome-icon
+								v-if="isViewAutomationDocument"
+								:id="'download_all_official_auto'"
+								@click="handleDownloadAll('TaiLieuTuDong')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+						</h3>
 					</div>
 					<div class="card-body card-info">
 						<div class="column">
@@ -877,7 +912,33 @@
 				</div>
 				<div class="card w-100">
 					<div class="card-title text-center">
-						<h3 class="title title_input_content">Tài liệu chính thức</h3>
+						<h3 class="title title_input_content">
+							Tài liệu chính thức
+							<b-tooltip :target="'download_all_official'" placement="top"
+								>Tải xuống tất cả tài liệu chính thức
+							</b-tooltip>
+							<font-awesome-icon
+								v-if="
+									isCertificateReport ||
+										isAppraisalReport ||
+										isAppendix1Report ||
+										isAppendix2Report ||
+										isAppendix3Report ||
+										isComparisionAssetReport
+								"
+								:id="'download_all_official'"
+								@click="handleDownloadAll('TaiLieuChinhThuc')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+						</h3>
 					</div>
 					<div class="card-body card-info">
 						<div class="column">
@@ -1332,6 +1393,295 @@
 			</div>
 		</div>
 		<div
+			v-if="
+				form.general_asset.length > 0 &&
+					printConfig &&
+					statusDescription === 'In hồ sơ'
+			"
+			class="col-12"
+			:style="isMobile() ? { padding: '0' } : {}"
+		>
+			<div
+				class="d-flex flex-column flex-lg-row justify-content-around align-items-center"
+			>
+				<div class="card w-100">
+					<div class="card-title text-center ">
+						<h3 class="title title_input_content">
+							Tài liệu chính thức
+							<b-tooltip :target="'download_all_official'" placement="auto"
+								>Tải xuống tất cả tài liệu chính thức
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_official'"
+								@click="handleDownloadAll('TaiLieuChinhThuc')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+						</h3>
+					</div>
+					<div class="card-body card-info">
+						<div class=" mt-2 row">
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[0] }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isCertificateReport }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isCertificateReport"
+												@click="downloadDocumentFile('certificate_report')"
+											>
+												{{ certificatReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[0] }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppraisalReport }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppraisalReport"
+												@click="downloadDocumentFile('appraisal_report')"
+											>
+												{{ appraisalReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppendix1Report }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppendix1Report"
+												@click="downloadDocumentFile('appendix1_report')"
+											>
+												{{ appendix1ReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppendix2Report }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppendix2Report"
+												@click="downloadDocumentFile('appendix2_report')"
+											>
+												{{ appendix2ReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isAppendix3Report }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isAppendix3Report"
+												@click="downloadDocumentFile('appendix3_report')"
+											>
+												{{ appendix3ReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4 col-4 ">
+								<div
+									class="d-flex flex-column input_download_certificate mx-1 justify-content-between"
+									style="height: auto "
+								>
+									<div class="d-flex flex-column">
+										<div
+											class="d-flex ml-1 row justify-content-between align-items-center w-100"
+										>
+											<div
+												class="title_input_content title_input_download col-10"
+											>
+												{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+											</div>
+										</div>
+										<hr
+											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
+										/>
+										<!-- Divider -->
+										<div class="d-flex ml-2">
+											<img
+												class="img_input_download"
+												src="@/assets/icons/ic_document.svg"
+												alt="document"
+												:class="{ img_filter: !isComparisionAssetReport }"
+											/>
+											<div
+												class="title_input_content title_input_download cursor_pointer text-truncate"
+												v-if="isComparisionAssetReport"
+												@click="
+													downloadDocumentFile('comparision_asset_report')
+												"
+											>
+												{{ comparisionAssetReportName }}
+											</div>
+
+											<div class="title_input_content title_color" v-else>
+												{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
 			v-if="idData && showExportDocument"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
@@ -1339,10 +1689,12 @@
 			<DocumentExport
 				:allow-edit="editExportDocument"
 				:is_pc="false"
-				:data-id="idData"
+				:idData="idData"
 				:lstFileExport="form.export_documents || []"
 				:permission="{ allowExport: exportAction }"
 				:toast="$toast"
+				@handleDownloadAutoDocument="handleDownloadAutoDocument"
+				@handleDownloadAll="handleDownloadAll"
 			/>
 		</div>
 		<div
@@ -1361,6 +1713,30 @@
 						<h3 class="title">Tài liệu đính kèm</h3>
 
 						<div class="d-flex align-items-center">
+							<b-tooltip :target="'download_all_other_document'" placement="top"
+								>Tải xuống tất cả tài liệu đính kèm
+							</b-tooltip>
+							<font-awesome-icon
+								v-if="
+									form.other_documents &&
+										form.other_documents.filter(
+											i =>
+												i.description === 'appendix' ||
+												i.description === 'other'
+										).length > 0
+								"
+								:id="'download_all_other_document'"
+								@click="handleDownloadAll('TaiLieuDinhKem')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
 							<font-awesome-icon
 								@click="openUploadFile('documnent')"
 								:style="{
@@ -1463,6 +1839,30 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Hồ sơ gốc</h3>
 						<div class="d-flex align-items-center">
+							<b-tooltip
+								:target="'download_all_original_document'"
+								placement="auto"
+								>Tải xuống tất cả hồ sơ gốc
+							</b-tooltip>
+							<font-awesome-icon
+								v-if="
+									form.other_documents &&
+										form.other_documents.filter(
+											i => i.description === 'original'
+										).length > 0
+								"
+								:id="'download_all_original_document'"
+								@click="handleDownloadAll('TaiLieuGoc')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
 							<font-awesome-icon
 								@click="openUploadFile('original')"
 								:style="{
@@ -2272,6 +2672,17 @@ export default {
 				type === "original" ? "certificate_original" : "certificate_document";
 			document.getElementById(id).click();
 		},
+		handleDownloadAutoDocument(type) {
+			if (type === "GYC") {
+				this.exportGYC();
+			} else if (type === "HDTDG") {
+				this.exportHDTDG();
+			} else if (type === "KHTDG") {
+				this.exportKHTDG();
+			} else if (type === "BBTL") {
+				this.exportBBTL();
+			}
+		},
 		handleMenuClick(e) {
 			if (e.key === "1") {
 				this.exportGYC();
@@ -2527,6 +2938,41 @@ export default {
 		updateSendAppraiser() {
 			this.$router.push({ name: "certification_brief.index" }).catch(_ => {});
 		},
+		async handleDownloadAll(type) {
+			try {
+				await Certificate.downloadAllOfficial(this.idData, type).then(resp => {
+					const file = resp.data;
+					if (file) {
+						const fileLink = document.createElement("a");
+						fileLink.href = file.link;
+						fileLink.setAttribute("download", file.name);
+						document.body.appendChild(fileLink);
+						fileLink.click();
+						fileLink.remove();
+						window.URL.revokeObjectURL(fileLink);
+						const nameLink = file.name_link.split(".");
+						setTimeout(() => {
+							Certificate.deleteAfterDownload(nameLink[0]);
+						}, 5000);
+					} else {
+						this.$toast.open({
+							message: resp.error.message,
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+					}
+				});
+			} catch (error) {
+				this.$toast.open({
+					message: error,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+			}
+		},
+
 		handleCancel() {
 			this.openNotification = false;
 			if (this.cancel_certificate) {
@@ -3775,9 +4221,11 @@ export default {
 			}
 		},
 		deleteOtherFile(file, index) {
-			this.openModalDelete = true;
-			this.indexDelete = index;
+			this.indexDelete = this.form.other_documents.findIndex(
+				i => i.id === file.id
+			);
 			this.id_file_delete = file.id;
+			this.openModalDelete = true;
 		},
 		async handleDelete() {
 			const res = await File.deleteFileCertificate(this.id_file_delete);
@@ -4306,6 +4754,7 @@ export default {
 	height: 3.85rem;
 	padding: 0.85rem 0px;
 }
+
 .title_input_download {
 	color: #00507c;
 	font-weight: 600;

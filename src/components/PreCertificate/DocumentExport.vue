@@ -5,6 +5,12 @@
 			@cancel="openModalDelete = false"
 			@action="handleDelete"
 		/>
+		<ModalViewDocument
+			v-if="isShowPreview"
+			@cancel="isShowPreview = false"
+			:filePrint="filePreview"
+			:title="title"
+		/>
 		<ModalNotificationCertificate
 			v-if="isReUpload"
 			@cancel="isReUpload = false"
@@ -12,28 +18,64 @@
 			@action="openUploadFile"
 		/>
 		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
-			<!-- <div class="card-title">
-				<div class="d-flex justify-content-between align-items-center">
-					<div class="row d-flex justify-content-between align-items-center">
-						<h3 class="title ml-1">
-							Tài liệu sơ bộ
+			<div class="card-title">
+				<div class=" align-items-center">
+					<div class="text-center">
+						<h3 class="title ml-1 text-center">
+							Tải xuống tất cả
+							<b-tooltip
+								:target="'download_all_auto_export_document'"
+								placement="auto"
+								>Tải xuống tất cả tài liệu tự động
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_auto_export_document'"
+								@click="handleDownloadAll('TaiLieuTuDongHanhChinh')"
+								:style="{
+									color: 'orange',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
+							<b-tooltip
+								:target="'download_all_export_document'"
+								placement="auto"
+								>Tải xuống tất cả tài liệu
+							</b-tooltip>
+							<font-awesome-icon
+								:id="'download_all_export_document'"
+								@click="handleDownloadAll('TaiLieuHanhChinh')"
+								:style="{
+									color: '#2682bfad',
+									height: '1.5rem',
+									width: '2rem',
+									cursor: 'pointer'
+								}"
+								icon="download"
+								size="1x"
+								class="mr-2"
+							/>
 						</h3>
 					</div>
 
-					<img
+					<!-- <img
 						class="img-dropdown"
 						:class="!showCardDetailFile ? 'img-dropdown__hide' : ''"
 						src="@/assets/images/icon-btn-down.svg"
 						alt="dropdown"
 						@click="showCardDetailFile = !showCardDetailFile"
-					/>
+					/> -->
 				</div>
-			</div> -->
+			</div>
 
 			<div class="card-body card-info">
 				<div class="ml-n3 mt-2 row" :key="keyRefresh">
 					<div
-						class="mb-4 col-3 "
+						class="mb-4 col-4 "
 						v-for="(file, index) in lstFile"
 						:key="index"
 					>
@@ -48,13 +90,62 @@
 									<div class="title_input_content title_input_download col-10">
 										{{ file.nameTitle }}
 									</div>
-
-									<label
-										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
+									<div
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
-										<div class="d-flex align-items-center">
+										<!-- <label
+										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
+										class="d-flex align-items-center justify-content-end col-1 pr-3"
+									> -->
+										<b-tooltip
+											:target="'preview_' + file.type_document"
+											placement="auto"
+											>Xem trước tài liệu tự động
+											{{ " " + file.nameTitle }}</b-tooltip
+										>
+										<font-awesome-icon
+											v-if="file.isAutoExport"
+											:id="'preview_' + file.type_document"
+											@click="handleViewDocument(file.type_document)"
+											:style="{
+												color: '#2682bfad',
+												height: '1.5rem',
+												width: '2rem',
+												cursor: 'pointer'
+											}"
+											icon="search"
+											size="1x"
+											class="mr-2"
+										/>
+										<b-tooltip
+											:target="'download_' + file.type_document"
+											placement="auto"
+											>Tải xuống tài liệu tự động
+											{{ " " + file.nameTitle }}</b-tooltip
+										>
+										<font-awesome-icon
+											v-if="file.isAutoExport"
+											:id="'download_' + file.type_document"
+											@click="handleDownloadAutoDocument(file.type_document)"
+											:style="{
+												color: '#2682bfad',
+												height: '1.5rem',
+												width: '2rem',
+												cursor: 'pointer'
+											}"
+											icon="download"
+											size="1x"
+											class="mr-2"
+										/>
+										<div v-if="allowEdit" class="d-flex align-items-center">
+											<b-tooltip
+												:target="'upload_' + file.type_document"
+												placement="auto"
+												>Tải lên tài liệu {{ " " + file.nameTitle }}</b-tooltip
+											>
 											<font-awesome-icon
+												:id="'upload_' + file.type_document"
+												@click="checkFileUpload(file)"
 												:style="{
 													color: '#2682bfad',
 													height: '2rem',
@@ -64,10 +155,10 @@
 												icon="cloud-upload-alt"
 												size="2x"
 											/>
-											<input
+											<!-- <input
 												class="btn-upload-mini"
 												@click="checkFileUpload(file)"
-											/>
+											/> -->
 											<input
 												type="file"
 												:ref="file.type_document"
@@ -77,7 +168,8 @@
 												hidden
 											/>
 										</div>
-									</label>
+										<!-- </label> -->
+									</div>
 								</div>
 								<hr
 									v-if="file.name"
@@ -129,13 +221,15 @@
 <script>
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
-
+import Certificate from "@/models/Certificate";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
-import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
+// import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
+import ModalViewDocument from "@/pages/certification_brief/component/modals/ModalViewDocument";
 import Vue from "vue";
 import Icon from "buefy";
 import _ from "lodash";
 import ModalDelete from "@/components/Modal/ModalDelete";
+import { BTooltip } from "bootstrap-vue";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
 import formMixin from "@/mixins/form.mixin";
@@ -149,7 +243,7 @@ export default {
 			type: Boolean,
 			default: true
 		},
-		dataId: {
+		idData: {
 			type: Number
 		},
 		lstFileExport: {
@@ -162,7 +256,19 @@ export default {
 			type: Object
 		}
 	},
-	components: { ModalNotificationCertificate, ModalDelete, ModalViewDocument },
+	data() {
+		return {
+			isShowPreview: false,
+			filePreview: "",
+			title: ""
+		};
+	},
+	components: {
+		ModalNotificationCertificate,
+		ModalDelete,
+		ModalViewDocument,
+		"b-tooltip": BTooltip
+	},
 	setup(props, context) {
 		const checkMobile = () => {
 			if (
@@ -178,16 +284,52 @@ export default {
 		const showCardDetailFile = ref(true);
 		const isMobile = ref(checkMobile());
 		const lstFile = ref([
-			{ type_document: "GYC", nameTitle: "Giấy yêu cầu TĐG" },
-			{ type_document: "HDTDG", nameTitle: "Hợp đồng" },
-			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG" },
-			{ type_document: "BBTL", nameTitle: "Thanh lý hợp đồng" }
+			{
+				type_document: "GYC",
+				nameTitle: "Giấy yêu cầu TĐG",
+				isAutoExport: true
+			},
+			{ type_document: "HDTDG", nameTitle: "Hợp đồng", isAutoExport: true },
+			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
+			{
+				type_document: "BBTL",
+				nameTitle: "Thanh lý hợp đồng",
+				isAutoExport: true
+			},
+			{
+				type_document: "HSPL",
+				nameTitle: "Hồ sơ pháp lý",
+				isAutoExport: false
+			},
+			{
+				type_document: "BBKSHT",
+				nameTitle: "Biên bản khảo sát hiện trạng",
+				isAutoExport: false
+			}
 		]);
 		const lstFileOriginal = ref([
-			{ type_document: "GYC", nameTitle: "Giấy yêu cầu TĐG" },
-			{ type_document: "HDTDG", nameTitle: "Hợp đồng" },
-			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG" },
-			{ type_document: "BBTL", nameTitle: "Thanh lý hợp đồng" }
+			{
+				type_document: "GYC",
+				nameTitle: "Giấy yêu cầu TĐG",
+				isAutoExport: true
+			},
+			{ type_document: "HDTDG", nameTitle: "Hợp đồng", isAutoExport: true },
+			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
+			{
+				type_document: "BBTL",
+				nameTitle: "Thanh lý hợp đồng",
+				isAutoExport: true
+			},
+			{
+				type_document: "HSPL",
+				nameTitle: "Hồ sơ pháp lý",
+				isAutoExport: false
+			},
+			{
+				type_document: "BBKSHT",
+				nameTitle: "Biên bản khảo sát hiện trạng",
+				isAutoExport: false
+			}
 		]);
 		if (props.lstFileExport) {
 			lstFile.value = lstFile.value.map(file => {
@@ -309,6 +451,91 @@ export default {
 		};
 	},
 	methods: {
+		handleViewDocument(type) {
+			if (type === "GYC") {
+				this.viewGYC();
+			} else if (type === "HDTDG") {
+				this.viewHDTDG();
+			} else if (type === "KHTDG") {
+				this.viewKHTDG();
+			} else if (type === "BBTL") {
+				this.viewBBTL();
+			}
+		},
+		async viewGYC() {
+			await Certificate.getPrintGYC(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					this.filePreview = file.url;
+					this.isShowPreview = true;
+					this.title = "Giấy yêu cầu TĐG";
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async viewHDTDG() {
+			await Certificate.getPrintHDTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					this.filePreview = file.url;
+					this.isShowPreview = true;
+					this.title = "Hợp đồng TĐG";
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async viewBBTL() {
+			await Certificate.getPrintBBTL(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					this.filePreview = file.url;
+					this.isShowPreview = true;
+					this.title = "Biên bản thanh lý hợp đồng";
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async viewKHTDG() {
+			await Certificate.getPrintKHTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					this.filePreview = file.url;
+					this.isShowPreview = true;
+					this.title = "Kế hoạch TĐG";
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		handleDownloadAutoDocument(type) {
+			this.$emit("handleDownloadAutoDocument", type);
+		},
+		handleDownloadAll(type) {
+			this.$emit("handleDownloadAll", type);
+		},
 		truncateFilename(filename, limit) {
 			if (!filename) return "";
 			if (filename.length > limit) {
@@ -350,6 +577,7 @@ export default {
 			formData.append("type", type);
 			let check = true;
 			let files = e.target.files;
+			console.log(files);
 			if (!files.length) {
 				return;
 			}
@@ -367,12 +595,13 @@ export default {
 						formData.append("files[" + i + "]", files[i]);
 					}
 					let res = null;
-					if (this.dataId) {
+					if (this.idData) {
 						res = await File.uploadFilePreCertificateExport(
 							formData,
-							this.dataId
+							this.idData
 						);
 						if (res.data) {
+							console.log("Có data nè", res.data);
 							const tempList = [];
 							for (let index = 0; index < res.data.data.length; index++) {
 								const element = res.data.data[index];

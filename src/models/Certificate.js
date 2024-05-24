@@ -133,6 +133,21 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async deleteAfterDownload($name) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/delete-file-after-download/${$name}`,
+			isStatic: true
+		});
+	}
+	static async downloadAllOfficial(id, type) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/download-all-official/${id}/${type}`,
+			isStatic: true
+		});
+	}
+
 	static async postData(payloadData) {
 		return new this().request({
 			method: "POST",

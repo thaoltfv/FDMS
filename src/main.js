@@ -41,7 +41,9 @@ import {
 	faPrint,
 	faCloudUploadAlt,
 	faTrashAlt,
-	faStickyNote
+	faStickyNote,
+	faDownload,
+	faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -92,7 +94,9 @@ library.add(
 	faPrint,
 	faCloudUploadAlt,
 	faTrashAlt,
-	faStickyNote
+	faStickyNote,
+	faDownload,
+	faSearch
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);

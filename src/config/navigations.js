@@ -80,6 +80,14 @@ navigations = [
 		routeName: "warehouse.index",
 		customImage: true
 	},
+	{
+		id: "menu_certification",
+		type: "item",
+		icon: "nav_tdhs",
+		title: "Theo dõi hồ sơ",
+		routeName: "menu_certification.index",
+		customImage: true
+	},
 	// {
 	// 	id: "price_estimate",
 	// 	type: "item",

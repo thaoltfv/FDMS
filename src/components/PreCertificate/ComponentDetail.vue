@@ -13,7 +13,7 @@
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
 								<span>{{ statusDescription }}</span>
 							</div>
-							<a-dropdown v-if="showExportDocument && dataPC.status !== 1">
+							<!-- <a-dropdown v-if="showExportDocument && dataPC.status !== 1">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -25,7 +25,7 @@
 										<a-menu-item key="4"> Biên bản thanh lý </a-menu-item>
 									</a-menu>
 								</template>
-							</a-dropdown>
+							</a-dropdown> -->
 							<div
 								v-if="dataPC.certificate_id"
 								@click="handleDetailCertificate(dataPC.certificate_id)"
@@ -156,6 +156,18 @@
 							<div class="row">
 								<div class="col-12">
 									<div class="detail_certificate_2">
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
+												>Nhóm đối tác:</strong
+											>
+											<p>
+												{{
+													dataPC.customer_group
+														? dataPC.customer_group.description
+														: ""
+												}}
+											</p>
+										</div>
 										<div class="d-flex container_content">
 											<strong class="margin_content_inline">Đối tác:</strong>
 											<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
@@ -508,7 +520,7 @@
 				</div>
 			</div>
 		</div>
-		<div
+		<!-- <div
 			v-if="dataPC.id && showExportDocument && dataPC.status !== 1"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
@@ -521,7 +533,7 @@
 				:permission="{ allowExport: exportAction }"
 				:toast="$toast"
 			/>
-		</div>
+		</div> -->
 		<div
 			v-if="dataPC.id"
 			class="col-12"

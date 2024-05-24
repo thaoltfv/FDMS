@@ -604,6 +604,9 @@ export default {
 					if (screen.name == "DASHBOARD") {
 						screen.name_vietsub = "BÁO CÁO QUẢN TRỊ";
 					}
+					if (screen.name == "MENU_FOLLOW_PROFILE") {
+						screen.name_vietsub = "THEO DÕI HỒ SƠ";
+					}
 					if (screen.name == "USER") {
 						screen.name_vietsub = "NHÂN VIÊN";
 					}
