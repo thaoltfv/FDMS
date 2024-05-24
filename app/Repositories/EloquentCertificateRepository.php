@@ -553,15 +553,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (isset($user->customer_group_id)) {
                 $result = $result->where('customer_group_id', '=', $user->customer_group_id);
                 Log::info('Vào điều kiện 2 customer_group_id');
-                Log::info($result);
+                Log::info('result 1',['result'=>$result]);
                 $result = $result
                     ->forPage($page, $perPage)
                     ->paginate($perPage);
-
+                Log::info('result 2',['result'=>$result]);
                 foreach ($result as $stt => $item) {
                     $result[$stt]->append('total_asset_price');
                     //$result[$stt]->append('total_asset_price_round');
                 }
+                Log::info('result 3',['result'=>$result]);
             } else {
                 $result = [];
             }
