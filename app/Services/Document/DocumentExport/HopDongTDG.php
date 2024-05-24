@@ -348,14 +348,18 @@ class HopDongTDG
             foreach ($priceEstimatePrint as $index => $item) {
                 $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
             }
-        } else {
+        } elseif ($certificate->realEstate && count($certificate->realEstate) > 0) {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->apartment->appraise_asset) : ' và ' . htmlspecialchars($item->apartment->appraise_asset));
+                    }
                 }
             } else {
-                foreach ($certificate->appraises as $index => $item) {
-                    $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
+                        $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraises->appraise_asset) : ' và ' . htmlspecialchars($item->appraises->appraise_asset));
+                    }
                 }
             }
         }
@@ -399,31 +403,35 @@ class HopDongTDG
             }
         } else {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $addressHSTD = $item->full_address;
-                    $appraiseAssetNameApartment =  $item->appraise_asset;
-                    $row2 = $table->addRow(100, array(
-                        'tblHeader' => false,
-                        'cantSplit' => false
-                    ));
-                    $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
-                    $row2->addCell(7500, $cellVTop)->addText($appraiseAssetNameApartment ? $appraiseAssetNameApartment : '', null, ['align' => 'left']);
-                    $row2->addCell(1600, $cellVTop)->addText(isset($item->apartmentAssetProperties) && isset($item->apartmentAssetProperties->area) ? $this->formatNumberFunction($item->apartmentAssetProperties->area, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $addressHSTD = $item->apartment->full_address;
+                        $appraiseAssetNameApartment =  $item->apartment->appraise_asset;
+                        $row2 = $table->addRow(100, array(
+                            'tblHeader' => false,
+                            'cantSplit' => false
+                        ));
+                        $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
+                        $row2->addCell(7500, $cellVTop)->addText($appraiseAssetNameApartment ? $appraiseAssetNameApartment : '', null, ['align' => 'left']);
+                        $row2->addCell(1600, $cellVTop)->addText(isset($item->apartment->apartmentAssetProperties) && isset($item->apartment->apartmentAssetProperties->area) ? $this->formatNumberFunction($item->apartment->apartmentAssetProperties->area, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                    }
                 }
             } else {
-                foreach ($certificate->appraises as $index => $item) {
-                    $addressHSTD = $item->full_address;
-                    $appraiseAssetNameAppraise =  $item->appraise_asset;
-                    if ($item->tangibleAssets) {
-                        foreach ($item->tangibleAssets as $index2 => $item2) {
-                            $row2 = $table->addRow(100, array(
-                                'tblHeader' => false,
-                                'cantSplit' => false
-                            ));
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
+                        $addressHSTD = $item->appraises->full_address;
+                        $appraiseAssetNameAppraise =  $item->appraises->appraise_asset;
+                        if ($item->appraises->tangibleAssets) {
+                            foreach ($item->appraises->tangibleAssets as $index2 => $item2) {
+                                $row2 = $table->addRow(100, array(
+                                    'tblHeader' => false,
+                                    'cantSplit' => false
+                                ));
 
-                            $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
-                            $row2->addCell(7500, $cellVTop)->addText($appraiseAssetNameAppraise ? $appraiseAssetNameAppraise : '', null, ['align' => 'left']);
-                            $row2->addCell(1600, $cellVTop)->addText(isset($item2->total_construction_base) ? $this->formatNumberFunction($item2->total_construction_base, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                                $row2->addCell(800, $cellVTop)->addText('-', null,  $alignCenter);
+                                $row2->addCell(7500, $cellVTop)->addText($appraiseAssetNameAppraise ? $appraiseAssetNameAppraise : '', null, ['align' => 'left']);
+                                $row2->addCell(1600, $cellVTop)->addText(isset($item2->total_construction_base) ? $this->formatNumberFunction($item2->total_construction_base, 2, ',', '.') : '', null, ['align' => 'right', 'indentation' => ['right' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.15)]]);
+                            }
                         }
                     }
                 }

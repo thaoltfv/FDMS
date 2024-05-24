@@ -396,55 +396,59 @@ class BienBanThanhLy
                 $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
                 $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
             }
-        } else {
+        } elseif ($certificate->realEstate && count($certificate->realEstate) > 0) {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $row3 = $table->addRow();
-                    $total += $certificate->service_fee ?? 0;
-                    $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
-                    $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $row3 = $table->addRow();
+                        $total = $certificate->service_fee ?? 0;
+                        $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+                        $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
 
-                    $cell = $row3->addCell(3200, $cellVCentered)->addText($item->appraise_asset, null, $alignBoth);;
-                    // $table = $cell->addTable();
-                    // $row = $table->addRow();
-                    // $row->addCell(100)->addText('');
-                    // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                    // $row->addCell(100)->addText('');
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText($item->apartment->appraise_asset, null, $alignBoth);;
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                    // $table = $cell->addTable();
-                    // $row = $table->addRow();
-                    // $row->addCell(100)->addText('');
-                    // $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                    // $row->addCell(100)->addText('');
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
-                    $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
-                    $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                        $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+                        $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+                        $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                    }
                 }
             } else {
-                foreach ($certificate->appraises as $index => $item) {
-                    $row3 = $table->addRow();
-                    $total += $certificate->service_fee ?? 0;
-                    $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
-                    $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-                    $cell = $row3->addCell(3200, $cellVCentered)->addText($item->appraise_asset, null, $alignBoth);
-                    // $table = $cell->addTable();
-                    // $row = $table->addRow();
-                    // $row->addCell(100)->addText('');
-                    // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                    // $row->addCell(100)->addText('');
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
+                        $row3 = $table->addRow();
+                        $total = $certificate->service_fee ?? 0;
+                        $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+                        $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText($item->appraises->appraise_asset, null, $alignBoth);
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                    // $table = $cell->addTable();
-                    // $row = $table->addRow();
-                    // $row->addCell(100)->addText('');
-                    // $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                    // $row->addCell(100)->addText('');
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
-                    $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
-                    $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                        $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+                        $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+                        $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                    }
                 }
             }
         }
