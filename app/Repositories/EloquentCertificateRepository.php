@@ -2778,7 +2778,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $role = $user->roles->last();
         // dd($role->name);
         if (request()->has('is_guest')) {
-            Log::info('vào điều kiện 1  ko lấy createdBy');
         } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
@@ -2925,7 +2924,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
         $result = $result->orderByDesc('certificates.updated_at');
         if (request()->has('is_guest')) {
-            Log::info('vào điều kiện 2 customer_group_id');
+
             if (isset($user->customer_group_id)) {
                 $result = $result->where('customer_group_id', '=', $user->customer_group_id);
                 $result = $result

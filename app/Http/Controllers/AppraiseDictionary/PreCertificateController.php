@@ -208,9 +208,11 @@ class PreCertificateController extends Controller
 
     public function findPaging(Request $request)
     {
-        if (!CommonService::checkUserPermission($this->permissionView))
+        if (request()->has('is_guest')) {
+            $result =  $this->preCertificateRepository->findPaging_v2();
+        } elseif (!CommonService::checkUserPermission($this->permissionView))
             return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_VIEW, 'exception' => ''], 403);
-        $result =  $this->preCertificateRepository->findPaging_v2();
+
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
