@@ -19,7 +19,7 @@ class ReportCertificateNova extends ReportCertificate
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets', $this->indentFistLine);
+        // $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', $this->indentFistLine);
         $appraise_date = date_create($certificate->appraise_date);
         $textRun = $section->addTextRun('Heading2');
@@ -62,45 +62,45 @@ class ReportCertificateNova extends ReportCertificate
 
         $section->addTextBreak(null, null, $this->keepNext);
     }
-    protected function signature(Section $section, $certificate)
-    {
-        $section->addTextBreak(null, null, $this->keepNext);
-        $table3 = $section->addTable($this->tableBasicStyle);
-        $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
-        $cell31 = $table3->addCell(Converter::inchToTwip(4));
-        $cell31->addText("Chuyên Viên Thẩm Định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-        $cell31 = $table3->addCell(Converter::inchToTwip(4));
-        $cell31->addText("Thẩm Định Viên Về Giá", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-        $cell32 = $table3->addCell(Converter::inchToTwip(4));
-        if (isset($certificate->appraiserConfirm->name)) {
-            $cell32->addText("KT. Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-            $cell32->addText($certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-        } else {
-            $cell32->addText("Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-        }
-        $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
-        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $this->keepNext);
-        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $this->keepNext);
-        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $this->keepNext);
+    // protected function signature(Section $section, $certificate)
+    // {
+    //     $section->addTextBreak(null, null, $this->keepNext);
+    //     $table3 = $section->addTable($this->tableBasicStyle);
+    //     $table3->addRow(Converter::inchToTwip(.1), $this->cantSplit);
+    //     $cell31 = $table3->addCell(Converter::inchToTwip(4));
+    //     $cell31->addText("Chuyên Viên Thẩm Định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     $cell31 = $table3->addCell(Converter::inchToTwip(4));
+    //     $cell31->addText("Thẩm Định Viên Về Giá", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     $cell32 = $table3->addCell(Converter::inchToTwip(4));
+    //     if(isset($certificate->appraiserConfirm->name)) {
+    //         $cell32->addText("KT. Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //         $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     } else {
+    //         $cell32->addText("Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     }
+    //     $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
+    //     $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
+    //     $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
+    //     $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
 
-        $table3->addRow(Converter::inchToTwip(.1));
-        $cell33 = $table3->addCell(Converter::inchToTwip(4));
-        $bien170 = (isset($certificate->appraiserPerform) && isset($certificate->appraiserPerform->name)) ? $certificate->appraiserPerform->name : '';
-        $cell33->addText($bien170, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     $table3->addRow(Converter::inchToTwip(.1));
+    //     $cell33 = $table3->addCell(Converter::inchToTwip(4));
+    //     $bien170 = (isset($certificate->appraiserPerform) && isset($certificate->appraiserPerform->name)) ? $certificate->appraiserPerform->name : '';
+    //     $cell33->addText($bien170, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
 
-        $cell33 = $table3->addCell(Converter::inchToTwip(4));
-        $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
-        $cell33->addText($bien171, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-        $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
-        $cell33->addText("Số thẻ TĐV về giá: " . $appraiserNumber, ['bold' => true], ['align' => 'center']);
-        $cell34 = $table3->addCell(Converter::inchToTwip(4));
+    //     $cell33 = $table3->addCell(Converter::inchToTwip(4));
+    //     $bien171 = (isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '';
+    //     $cell33->addText($bien171, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
+    //     $cell33->addText("Số thẻ TĐV về giá: " . $appraiserNumber, ['bold' => true], ['align' => 'center']);
+    //     $cell34 = $table3->addCell(Converter::inchToTwip(4));
 
-        $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
-        $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
-        $bien172 = $appraiserManager;
-        $cell34->addText($bien172, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-        $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
-    }
+    //     $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
+    //     $appraiserManagerNumber = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->appraiser_number : $certificate->appraiserManager->appraiser_number;
+    //     $bien172 = $appraiserManager;
+    //     $cell34->addText($bien172, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+    //     $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
+    // }
     protected function nationalName(PhpWord $phpWord, $data)
     {
         if ($this->isPrintNational) {
