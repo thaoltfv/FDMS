@@ -313,6 +313,7 @@ class Certificate extends Model
                 $data[$stt]['id'] = $item->id;
                 $data[$stt]['asset_type_id'] = $item->asset_type_id;
                 $data[$stt]['general_asset_id'] = $item->real_estate_id;
+                $data[$stt]['full_address'] = $item->full_address;
                 $data[$stt]['name'] = $item->appraise_asset;
                 $data[$stt]['created_by'] = $item->createdBy;
                 $data[$stt]['asset_type'] = $item->assetType;
@@ -335,6 +336,7 @@ class Certificate extends Model
                 $data[$stt]['asset_type_id'] = $item->asset_type_id;
                 $data[$stt]['general_asset_id'] = $item->personal_property_id;
                 $data[$stt]['name'] = $item->name;
+                $data[$stt]['full_address'] = $item->full_address;
                 $data[$stt]['created_by'] = $item->createdBy;
                 $data[$stt]['asset_type'] = $item->assetType;
                 $data[$stt]['asset'] = null;
