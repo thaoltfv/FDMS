@@ -153,6 +153,7 @@
 								v-model="data.document_num"
 								vid="document_num"
 								label="Số hợp đồng"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 							/>
 							<InputDatePicker
@@ -162,6 +163,7 @@
 								:formatDate="'DD/MM/YYYY'"
 								@change="changeDocumentDate"
 								placeholder="Ngày / tháng / năm"
+								rules="required"
 								class="form-group-container col-sm-12 col-md-6"
 							/>
 						</div>

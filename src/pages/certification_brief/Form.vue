@@ -161,7 +161,7 @@ export default {
 					appraise_purpose_id: "",
 					appraiser_id: "",
 					appraiser: "",
-					document_num: "",
+					document_num: "/HĐ-TĐG",
 					document_date: "",
 					document_type: [],
 					appraise_date: "",
@@ -257,6 +257,14 @@ export default {
 			this.form.step_1.appraise_date = this.form.step_1.appraise_date
 				? moment(this.form.step_1.appraise_date).format("DD/MM/YYYY")
 				: "";
+			if (
+				(this.form.step_1.document_num &&
+					this.form.step_1.document_num.trim() === "") ||
+				!this.form.step_1.document_num
+			) {
+				this.form.step_1.document_num = "/HĐ-TĐG";
+			}
+
 			// Data mới
 			this.form.step_1.survey_time = this.form.step_1.survey_time
 				? moment(this.form.step_1.survey_time).format("DD-MM-YYYY HH:mm")

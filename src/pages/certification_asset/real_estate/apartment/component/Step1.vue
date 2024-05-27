@@ -530,7 +530,7 @@
 							</div>
 						</div>
 					</TabItem>
-					<TabItem name="Biên bản khảo sát hiện trạng">
+					<!-- <TabItem name="Biên bản khảo sát hiện trạng">
 						<div class="mt-2">
 							<div class="d-flex justify-content-between align-items-end mb-2">
 								<h3 class="mb-0"></h3>
@@ -570,7 +570,7 @@
 								</div>
 							</div>
 						</div>
-					</TabItem>
+					</TabItem> -->
 					<TabItem name="Khác">
 						<div class="mt-2">
 							<div class="d-flex justify-content-between align-items-end mb-2">
@@ -1170,7 +1170,7 @@
 							</div>
 						</div>
 					</TabItem>
-					<TabItem name="Biên bản khảo sát hiện trạng">
+					<!-- <TabItem name="Biên bản khảo sát hiện trạng">
 						<div class="mt-2">
 							<div class="d-flex justify-content-between align-items-end mb-2">
 								<h3 class="mb-0"></h3>
@@ -1210,7 +1210,7 @@
 								</div>
 							</div>
 						</div>
-					</TabItem>
+					</TabItem> -->
 					<TabItem name="Khác">
 						<div class="mt-2">
 							<div class="d-flex justify-content-between align-items-end mb-2">

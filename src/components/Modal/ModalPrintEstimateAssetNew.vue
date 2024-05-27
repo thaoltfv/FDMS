@@ -782,7 +782,9 @@ export default {
 				popTitle:
 					"TSSB_" +
 					this.data.id +
-					(this.data.createdBy ? "_" + this.data.createdBy : "") +
+					(this.data.step_3.petitioner_name
+						? "_" + this.data.step_3.petitioner_name.replaceAll(" ", "_")
+						: "") +
 					(this.data.createdAtString ? "_" + this.data.createdAtString : "")
 			},
 			apartment_name: "",
@@ -805,7 +807,9 @@ export default {
 			popTitle:
 				"TSSB_" +
 				this.data.id +
-				(this.data.createdBy ? "_" + this.data.createdBy : "") +
+				(this.data.step_3.petitioner_name
+					? "_" + this.data.step_3.petitioner_name.replaceAll(" ", "_")
+					: "") +
 				(this.data.createdAtString ? "_" + this.data.createdAtString : "")
 		};
 	},
@@ -877,7 +881,9 @@ export default {
 				popTitle:
 					"TSSB_" +
 					this.data.id +
-					(this.data.createdBy ? "_" + this.data.createdBy : "") +
+					(this.data.step_3.petitioner_name
+						? "_" + this.data.step_3.petitioner_name.replaceAll(" ", "_")
+						: "") +
 					(this.data.createdAtString ? "_" + this.data.createdAtString : "")
 			};
 

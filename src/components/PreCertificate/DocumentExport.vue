@@ -20,15 +20,16 @@
 		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
 			<div class="card-title">
 				<div class=" align-items-center">
-					<div class="text-center">
-						<h3 class="title ml-1 text-center">
-							Tải xuống tất cả
-							<b-tooltip
+					<div class="d-flex justify-content-between">
+						<h3 class="title ml-3 mt-2">
+							Giấy tờ liên quan
+							<!-- <b-tooltip
 								:target="'download_all_auto_export_document'"
 								placement="auto"
-								>Tải xuống tất cả tài liệu tự động
-							</b-tooltip>
-							<font-awesome-icon
+								>Tải xuống tất cả Giấy tờ liên quan
+							</b-tooltip> -->
+
+							<!-- <font-awesome-icon
 								:id="'download_all_auto_export_document'"
 								@click="handleDownloadAll('TaiLieuTuDongHanhChinh')"
 								:style="{
@@ -58,8 +59,23 @@
 								icon="download"
 								size="1x"
 								class="mr-2"
-							/>
+							/> -->
 						</h3>
+						<a-dropdown>
+							<a-button class="mr-3">
+								<a-icon type="download" />
+							</a-button>
+							<template #overlay>
+								<a-menu @click="handleMenuClick">
+									<a-menu-item key="1">
+										Tải xuống tất cả Giấy tờ liên quan chính thức
+									</a-menu-item>
+									<a-menu-item key="2">
+										Tải xuống tất cả Giấy tờ liên quan tự động
+									</a-menu-item>
+								</a-menu>
+							</template>
+						</a-dropdown>
 					</div>
 
 					<!-- <img
@@ -84,15 +100,11 @@
 							style="height: auto "
 						>
 							<div class="d-flex flex-column">
-								<div
-									class="d-flex ml-1 row justify-content-between align-items-center w-100"
-								>
-									<div class="title_input_content title_input_download col-10">
+								<div class="d-flex justify-content-between  w-100">
+									<div class="ml-3 title_input_content title_input_download">
 										{{ file.nameTitle }}
 									</div>
-									<div
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
-									>
+									<div class="d-flex mr-3">
 										<!-- <label
 										:style="{ visibility: allowEdit ? 'visible' : 'hidden' }"
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
@@ -103,7 +115,20 @@
 											>Xem trước tài liệu tự động
 											{{ " " + file.nameTitle }}</b-tooltip
 										>
-										<font-awesome-icon
+
+										<div
+											v-if="file.isAutoExport"
+											:id="'preview_' + file.type_document"
+											@click="handleViewDocument(file.type_document)"
+											class="mr-2"
+										>
+											<img
+												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<!-- <font-awesome-icon
 											v-if="file.isAutoExport"
 											:id="'preview_' + file.type_document"
 											@click="handleViewDocument(file.type_document)"
@@ -116,14 +141,26 @@
 											icon="search"
 											size="1x"
 											class="mr-2"
-										/>
+										/> -->
 										<b-tooltip
 											:target="'download_' + file.type_document"
 											placement="auto"
 											>Tải xuống tài liệu tự động
 											{{ " " + file.nameTitle }}</b-tooltip
 										>
-										<font-awesome-icon
+										<div
+											v-if="file.isAutoExport"
+											:id="'download_' + file.type_document"
+											@click="handleDownloadAutoDocument(file.type_document)"
+											class="mr-2"
+										>
+											<img
+												src="@/assets/icons/ic_download_3.png"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<!-- <font-awesome-icon
 											v-if="file.isAutoExport"
 											:id="'download_' + file.type_document"
 											@click="handleDownloadAutoDocument(file.type_document)"
@@ -136,14 +173,24 @@
 											icon="download"
 											size="1x"
 											class="mr-2"
-										/>
+										/> -->
 										<div v-if="allowEdit" class="d-flex align-items-center">
 											<b-tooltip
 												:target="'upload_' + file.type_document"
 												placement="auto"
 												>Tải lên tài liệu {{ " " + file.nameTitle }}</b-tooltip
 											>
-											<font-awesome-icon
+											<div
+												:id="'upload_' + file.type_document"
+												@click="checkFileUpload(file)"
+											>
+												<img
+													src="@/assets/icons/ic_upload.png"
+													alt="search"
+													class="img_document_action"
+												/>
+											</div>
+											<!-- <font-awesome-icon
 												:id="'upload_' + file.type_document"
 												@click="checkFileUpload(file)"
 												:style="{
@@ -154,7 +201,7 @@
 												}"
 												icon="cloud-upload-alt"
 												size="2x"
-											/>
+											/> -->
 											<!-- <input
 												class="btn-upload-mini"
 												@click="checkFileUpload(file)"
@@ -569,6 +616,13 @@ export default {
 		openUploadFile() {
 			const id = "image_property" + this.reportType;
 			document.getElementById(id).click();
+		},
+		handleMenuClick(e) {
+			if (e.key === "1") {
+				this.handleDownloadAll("TaiLieuHanhChinh");
+			} else {
+				this.handleDownloadAll("TaiLieuTuDongHanhChinh");
+			}
 		},
 		async onImageChange(e, type) {
 			this.reportType = type;

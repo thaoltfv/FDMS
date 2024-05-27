@@ -132,7 +132,7 @@
 						</div>
 						<div class="row justify-content-between">
 							<InputTextarea
-								:rows="1"
+								:rows="4"
 								:disableInput="false"
 								v-model="dataForm.pre_asset_name"
 								label="Ghi chú"

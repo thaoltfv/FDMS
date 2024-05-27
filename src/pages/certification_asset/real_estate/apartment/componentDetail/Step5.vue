@@ -3609,7 +3609,7 @@ export default {
 		showPriceApartment() {
 			if (this.form.apartment_asset_properties) {
 				return (
-					+this.formatCurrent(parseFloat(this.mgtn).toFixed(0)) *
+					+this.formatCurrent(parseFloat(this.mgtn).toFixed(2)) *
 					this.form.apartment_asset_properties.area
 				);
 			} else return 0;
