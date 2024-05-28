@@ -5,9 +5,12 @@
 				class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
 			>
 				<div
-					class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
+					class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 				>
-					<Search @filter-changed="onFilterQuickSearchChange($event)" />
+					<Search
+						class="col-10"
+						@filter-changed="onFilterQuickSearchChange($event)"
+					/>
 					<!-- <router-link v-if="add" :to="{ name: 'certification_asset.create' }" class="btn text-nowrap index-screen-button ml-md-2">
             <img src="@/assets/icons/ic_new.svg" style="margin-right: 8px" alt="search">Tạo mới
           </router-link> -->

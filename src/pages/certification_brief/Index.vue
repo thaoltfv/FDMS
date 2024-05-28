@@ -1307,7 +1307,11 @@ export default {
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
-				if (this.detailData.payments && this.detailData.payments.length === 0) {
+				if (
+					this.detailData.service_fee !== 0 &&
+					this.detailData.payments &&
+					this.detailData.payments.length === 0
+				) {
 					this.$toast.open({
 						message:
 							"Vui lòng thanh toán hết dư nợ để chuyển sang trạng thái hoàn thành !",

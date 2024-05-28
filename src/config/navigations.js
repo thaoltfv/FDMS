@@ -84,7 +84,7 @@ navigations = [
 		id: "menu_certification",
 		type: "item",
 		icon: "nav_tdhs",
-		title: "Theo dõi hồ sơ",
+		title: "CSM",
 		routeName: "menu_certification.index",
 		customImage: true
 	},

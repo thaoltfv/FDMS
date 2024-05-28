@@ -200,128 +200,128 @@
 							</div>
 						</div>
 					</div>
+				</div>
+				<div
+					v-if="!isMobile"
+					class=" d-flex justify-content-between align-items-center m-2"
+				>
 					<div
-						v-if="!isMobile"
-						class=" d-flex justify-content-between align-items-center m-2"
+						style="cursor:pointer"
+						@click="handleDetail(idData)"
+						class="btn-edit"
 					>
-						<div
-							style="cursor:pointer"
-							@click="handleDetail(idData)"
-							class="btn-edit"
+						<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
+						<span class="color_content content_btn_edit">Xem chi tiết</span>
+					</div>
+					<div class="button-contain">
+						<button
+							v-if="!dataPC.certificate_id"
+							v-for="(target, index) in getTargetDescription()"
+							:key="index"
+							class="btn "
+							:class="target.css"
+							@click="handleFooterAccept(target)"
 						>
-							<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
-							<span class="color_content content_btn_edit">Xem chi tiết</span>
-						</div>
-						<div class="button-contain">
+							<img
+								class="img"
+								:src="require(`@/assets/icons/${target.img}`)"
+								alt="edit"
+							/>{{ target.btnDescription || target.description }}
+						</button>
+						<button
+							class="btn btn-white btn-action-modal"
+							type="button"
+							@click="handleCancel"
+						>
+							<img
+								src="@/assets/icons/ic_cancel.svg"
+								style="margin-right: 12px"
+								alt="save"
+							/>Trở lại
+						</button>
+					</div>
+				</div>
+				<div v-else class="row" style="padding: 0;">
+					<div
+						style="cursor:pointer"
+						@click="handleDetail(idData)"
+						class="btn-edit col-12"
+					>
+						<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
+						<span class="color_content content_btn_edit">Xem chi tiết</span>
+					</div>
+					<div class="button-contain row">
+						<div class="col-6">
 							<button
-								v-if="!dataPC.certificate_id"
-								v-for="(target, index) in getTargetDescription()"
-								:key="index"
-								class="btn "
-								:class="target.css"
-								@click="handleFooterAccept(target)"
-							>
-								<img
-									class="img"
-									:src="require(`@/assets/icons/${target.img}`)"
-									alt="edit"
-								/>{{ target.btnDescription || target.description }}
-							</button>
-							<button
-								class="btn btn-white btn-action-modal"
+								class="btn btn-white"
 								type="button"
 								@click="handleCancel"
+								style="width: fit-content;"
 							>
 								<img
 									src="@/assets/icons/ic_cancel.svg"
 									style="margin-right: 12px"
 									alt="save"
-								/>Trở lại
+								/>
+								<span style="font-size: 15px;">Trở lại</span>
 							</button>
 						</div>
-					</div>
-					<div v-else class="row" style="padding: 0;">
-						<div
-							style="cursor:pointer"
-							@click="handleDetail(idData)"
-							class="btn-edit col-12"
-						>
-							<!-- <img src="@/assets/icons/ic_edit_3.svg" alt="add"/> -->
-							<span class="color_content content_btn_edit">Xem chi tiết</span>
-						</div>
-						<div class="button-contain row">
-							<div class="col-6">
-								<button
-									class="btn btn-white"
-									type="button"
-									@click="handleCancel"
-									style="width: fit-content;"
-								>
-									<img
-										src="@/assets/icons/ic_cancel.svg"
-										style="margin-right: 12px"
-										alt="save"
-									/>
-									<span style="font-size: 15px;">Trở lại</span>
-								</button>
-							</div>
-							<div class="col-6" style="text-align: right;">
-								<!-- <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
+						<div class="col-6" style="text-align: right;">
+							<!-- <button v-for="(target, index) in getTargetDescription()" :key="index" class="btn" :class="target.css" @click="handleFooterAccept(target)">
 										<img class="img" :src="require(`@/assets/icons/${target.img}`)" alt="edit"/>
 										<span style="font-size: 15px;">{{target.description}}</span>
 									</button> -->
-								<!-- <button style="margin-right: 2px" class="btn btn-white" type="button">
+							<!-- <button style="margin-right: 2px" class="btn btn-white" type="button">
 										<img class="img" src="@/assets/icons/ic_more.svg" alt="cancel">Hành động
 									</button> -->
-								<!-- <b-button-group  class="btn_group" > -->
-								<b-dropdown
-									v-if="getTargetDescription().length > 0"
-									class="btn_dropdown"
-									no-caret
-									right
-									dropup
-									style="margin-top: 5px;"
-								>
-									<template #button-content>
-										<button
-											style="margin-right: 2px"
-											class="btn btn-white"
-											type="button"
-										>
-											<img
-												class="img"
-												src="@/assets/icons/ic_more.svg"
-												alt="cancel"
-											/>Hành động
-										</button>
-									</template>
-									<b-dropdown-item
-										style="margin-right:0;width: 150px;padding: 0;"
-										v-for="(target, index) in getTargetDescription()"
-										:key="index"
-										class="btn"
-										:class="target.css"
-										@click="handleFooterAccept(target)"
+							<!-- <b-button-group  class="btn_group" > -->
+							<b-dropdown
+								v-if="getTargetDescription().length > 0"
+								class="btn_dropdown"
+								no-caret
+								right
+								dropup
+								style="margin-top: 5px;"
+							>
+								<template #button-content>
+									<button
+										style="margin-right: 2px"
+										class="btn btn-white"
+										type="button"
 									>
-										<div class="div_item_dropdown">
-											<img
-												class="img"
-												:src="require(`@/assets/icons/${target.img}`)"
-												alt="edit"
-											/>
-											<span style="font-size: 15px;">{{
-												target.btnDescription || target.description
-											}}</span>
-											<!-- {{target.description}} -->
-										</div>
-									</b-dropdown-item>
-								</b-dropdown>
-								<!-- </b-button-group> -->
-							</div>
-
-							<!-- <div class="col-3" style="padding: 0"></div>
-								<div class="col-3" style="padding: 0"></div> -->
+										<img
+											class="img"
+											src="@/assets/icons/ic_more.svg"
+											alt="cancel"
+										/>Hành động
+									</button>
+								</template>
+								<b-dropdown-item
+									style="margin-right:0;width: 150px;padding: 0;"
+									v-for="(target, index) in getTargetDescription()"
+									:key="index"
+									class="btn"
+									:class="target.css"
+									@click="handleFooterAccept(target)"
+								>
+									<div class="div_item_dropdown">
+										<img
+											class="img"
+											:src="require(`@/assets/icons/${target.img}`)"
+											alt="edit"
+										/>
+										<span style="font-size: 15px;">{{
+											target.btnDescription || target.description
+										}}</span>
+										<!-- {{target.description}} -->
+									</div>
+								</b-dropdown-item>
+							</b-dropdown>
+							<!-- </b-button-group> -->
 						</div>
+
+						<!-- <div class="col-3" style="padding: 0"></div>
+								<div class="col-3" style="padding: 0"></div> -->
 					</div>
 				</div>
 			</div>

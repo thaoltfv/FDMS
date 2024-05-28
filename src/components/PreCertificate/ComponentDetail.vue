@@ -48,7 +48,7 @@
 				</div>
 				<div class="card-body card-info">
 					<div class="row justify-content-between">
-						<div class="col-md-12 col-lg-6 mt-1">
+						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
 							<div class="detail_certificate_1 h-100">
 								<div class="d-flex container_content justify-content-between">
 									<div class="d-flex container_content">
@@ -128,16 +128,22 @@
 										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
 									</p>
 								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong
-									><span id="pre_asset_name" class="text-left">{{
-										dataPC.pre_asset_name && dataPC.pre_asset_name.length > 25
-											? dataPC.pre_asset_name.substring(25, 0) + "..."
-											: dataPC.pre_asset_name
-									}}</span>
-									<b-tooltip target="pre_asset_name" placement="top-right">{{
+								<div class="d-flex flex-column container_content">
+									<strong class="margin_content_inline">Ghi chú:</strong>
+									<!-- <span id="pre_asset_name" class="text-left"
+										>{{ // dataPC.pre_asset_name && dataPC.pre_asset_name.length
+										// > 25 ? dataPC.pre_asset_name.substring(25, 0) + "..." //
+										// : dataPC.pre_asset_name dataPC.pre_asset_name ?
+										dataPC.pre_asset_name.replace("\n", "<br />") : "" }}</span
+									> -->
+									<div
+										id="pre_asset_name"
+										class="text-left"
+										v-html="formattedText"
+									></div>
+									<!-- <b-tooltip target="pre_asset_name" placement="top-right">{{
 										dataPC.pre_asset_name
-									}}</b-tooltip>
+									}}</b-tooltip> -->
 								</div>
 								<div
 									v-if="dataPC.cancel_reason_string"
@@ -152,8 +158,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12 col-lg-6 mt-1">
-							<div class="row">
+						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+							<div class="row h-100">
 								<div class="col-12">
 									<div class="detail_certificate_2">
 										<div class="d-flex container_content">
@@ -184,7 +190,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-12 mt-1 mt-lg-4">
+								<div class="col-12 mt-1 mt-lg-4 ">
 									<div class="detail_certificate_2">
 										<div
 											class="d-flex container_content justify-content-between"
@@ -448,7 +454,6 @@
 							class="col-12 mt-2 table-wrapper"
 						>
 							<a-table
-								bordered
 								:columns="columnAssets"
 								:data-source="dataPC.price_estimates"
 								table-layout="top"
@@ -457,7 +462,7 @@
 							>
 								<template slot="asset" slot-scope="asset">
 									<p :id="asset.id" class="text-none mb-0">
-										{{ asset.appraise_asset }}
+										{{ asset.full_address }}
 									</p>
 									<!-- <b-tooltip :target="(asset.id).toString()">{{asset.name}}</b-tooltip> -->
 								</template>
@@ -473,6 +478,11 @@
 								<template slot="price" slot-scope="price">
 									<p class="text-none mb-0">
 										{{ price ? formatNumber(price) : 0 }} đ
+									</p>
+								</template>
+								<template slot="asset_type" slot-scope="asset_type">
+									<p class="text-none mb-0">
+										{{ asset_type ? formatCapitalize(asset_type) : "" }}
 									</p>
 								</template>
 								<template slot="data" slot-scope="data">
@@ -1040,6 +1050,11 @@ export default {
 		}
 	},
 	computed: {
+		formattedText() {
+			return this.dataPC.pre_asset_name
+				? this.dataPC.pre_asset_name.replace(/\n/g, "<br>")
+				: "";
+		},
 		statusDescription() {
 			if (this.jsonConfig) {
 				const status = this.jsonConfig.principle.find(
@@ -1081,11 +1096,12 @@ export default {
 				{
 					title: "Loại tài sản",
 					align: "left",
+					scopedSlots: { customRender: "asset_type" },
 					dataIndex: "asset_type.description",
 					hiddenItem: false
 				},
 				{
-					title: "Tên tài sản",
+					title: "Địa chỉ tài sản",
 					align: "left",
 					scopedSlots: { customRender: "asset" },
 					hiddenItem: false
@@ -1991,6 +2007,11 @@ export default {
 		viewAppraiseListVersion() {
 			this.isShowAppraiseListVersion = true;
 		},
+		formatCapitalize(word) {
+			return word.toLowerCase().replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+				return x.toUpperCase();
+			});
+		},
 		setDocumentViewStatus() {
 			let isExportAutomatic = true;
 			let isCheckRealEstate = true;
@@ -2541,6 +2562,14 @@ export default {
 	background-color: #eef9ff;
 }
 .detail_certificate_2 {
+	padding: 0.75rem;
+	border-radius: 5px;
+	border: 1px solid #e8e8e8;
+	background-color: #f6f7fb;
+}
+
+.detail_certificate_3 {
+	height: inherit;
 	padding: 0.75rem;
 	border-radius: 5px;
 	border: 1px solid #e8e8e8;

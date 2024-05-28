@@ -11,20 +11,20 @@
 						</div>
 					</div>
 					<div class="contain-detail">
-						<iframe
+						<!-- <iframe
 							v-if="filePrint.type === 'pdf'"
 							:srcdoc="filePrint.link"
 							width="100%"
 							height="100%"
 							frameborder="0"
-						/>
+						/> -->
 						<div
 							class="contain-detail"
 							style="display: flex; justify-content: center;"
 						>
 							<iframe
 								v-if="filePrint.type === 'pdf'"
-								:srcdoc="filePrint.link"
+								:src="filePrint.link"
 								width="100%"
 								height="100%"
 								frameborder="0"

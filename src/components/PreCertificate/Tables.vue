@@ -240,10 +240,10 @@
 					slot-scope="{ appraiser_sale, appraiser_perform }"
 				>
 					<p class="text-main ml-0 pl-0">
-						NVKD: {{ appraiser_sale ? appraiser_sale.name : "-" }}
+						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
 					</p>
 					<p class="text-secondary ml-0 pl-0">
-						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
+						NVKD: {{ appraiser_sale ? appraiser_sale.name : "-" }}
 					</p>
 				</template>
 			</a-table>

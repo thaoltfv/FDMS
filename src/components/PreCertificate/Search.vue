@@ -4,7 +4,7 @@
 			<InputText
 				id="search_input"
 				v-model="filter.search"
-				class="input-flash"
+				class="input-flash w-100"
 				placeholder="Tìm kiếm nhanh"
 				vid="search"
 			/>

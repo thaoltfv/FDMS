@@ -32,10 +32,13 @@
 						class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
 					>
 						<div
-							class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
+							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
-							<DropdownFilter class="mr-5" @notifi-kanban="notifiKanban()" />
-							<Search @filter-changed="onFilterQuickSearchChange($event)" />
+							<DropdownFilter class="mr-5 " @notifi-kanban="notifiKanban()" />
+							<Search
+								class="col-10"
+								@filter-changed="onFilterQuickSearchChange($event)"
+							/>
 							<router-link
 								v-if="add"
 								:to="{ name: 'pre_certification.create' }"

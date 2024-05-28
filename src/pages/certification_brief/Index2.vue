@@ -39,10 +39,13 @@
 							/>
 						</div>
 						<div
-							class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
+							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
 							<DropdownFilter class="mr-5" @search="onChangeStatus" />
-							<Search @filter-changed="onFilterQuickSearchChange($event)" />
+							<Search
+								class="col-10"
+								@filter-changed="onFilterQuickSearchChange($event)"
+							/>
 							<router-link
 								v-if="add"
 								:to="{ name: 'certification_brief.create' }"

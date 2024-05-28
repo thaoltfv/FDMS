@@ -221,7 +221,7 @@
 				<tab-content title="Giá trị tài sản" icon=""
 					><ValidationObserver tag="div" ref="step_3">
 						<!-- <Step6 /> -->
-						<Step3 :isEdit="isEdit" :key="miscInfo.key_step_3" />
+						<Step3 :isEdit="isEditStatus" :key="miscInfo.key_step_3" />
 						<div
 							class="btn-footer d-md-flex d-block justify-content-end align-items-center"
 						>
@@ -805,7 +805,8 @@ export default {
 				(this.priceEstimates &&
 					this.priceEstimates.created_by &&
 					profile.data.user.id === this.priceEstimates.created_by.id) ||
-				["ROOT_ADMIN", "SUB_ADMIN"].includes(profile.data.user.roles[0].name);
+				["ROOT_ADMIN"].includes(profile.data.user.roles[0].name);
+			// ["ROOT_ADMIN", "SUB_ADMIN"].includes(profile.data.user.roles[0].name);
 		},
 		showHistoryDrawer() {
 			this.visibleHistoryDrawer = true;

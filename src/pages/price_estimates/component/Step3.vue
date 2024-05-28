@@ -77,6 +77,7 @@
 										nonLabel="Đơn giá"
 										:required="true"
 										class="w-100"
+										:disabled="!isEdit"
 										@change="handleChangePriceMainArea($event, index)"
 									/>
 
@@ -163,6 +164,7 @@
 										:vid="'unit_price' + index"
 										:max="999999999"
 										nonLabel="Đơn giá"
+										:disabled="!isEdit"
 										:required="true"
 										class="w-100"
 										@change="handleChangePricePlanningArea($event, index)"
@@ -228,6 +230,7 @@
 										nonLabel="Loại CTXD"
 										rules="required"
 										:options="optionsHousingType"
+										:disabled="!isEdit"
 										@change="tangible.building_type_id = $event"
 									/>
 									<span class="text-style-input" v-else>
@@ -248,6 +251,7 @@
 										:max="100"
 										:decimal="0"
 										rules="required"
+										:disabled="!isEdit"
 										@change="handleChangeTangible(tangible, index)"
 									/>
 									<span class="number-style-input" v-else>
@@ -271,6 +275,7 @@
 										:sufix="false"
 										:text_center="true"
 										nonLabel="Diện tích sàn"
+										:disabled="!isEdit"
 										@change="handleChangeTangible(tangible, index)"
 										:errorCustom="validateContructionArea()"
 									/><span class="number-style-input" v-else>
@@ -291,6 +296,7 @@
 										nonLabel="Đơn giá"
 										:required="true"
 										class="w-100"
+										:disabled="!isEdit"
 										@change="handleChangeTangible(tangible, index)"
 									/><span class="number-style-input" v-else>
 										{{
@@ -313,7 +319,7 @@
 								</div>
 								<div
 									class="col-custom-0-5 px-3 d-flex align-items-end"
-									v-if="!priceEstimates.isTransfer"
+									v-if="isEdit && !priceEstimates.isTransfer"
 								>
 									<div
 										@click="handleDeleteTangibleAsset(index)"
@@ -324,7 +330,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="d-flex mt-n2" v-if="!priceEstimates.isTransfer">
+						<div
+							class="d-flex mt-n2"
+							v-if="isEdit && !priceEstimates.isTransfer"
+						>
 							<div class="d-flex justify-content-end">
 								<button
 									class="btn text-warning btn-ghost btn-add"
