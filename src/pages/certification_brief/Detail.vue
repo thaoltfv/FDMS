@@ -3523,6 +3523,7 @@ export default {
 					this.form.certificate_date &&
 					this.form.certificate_date.trim() !== ""
 				) {
+				} else {
 					this.$toast.open({
 						message:
 							"Vui lòng nhập đầy đủ số chứng thư và ngày chứng thư trước khi chuyển sang bước in hồ sơ",
@@ -3532,7 +3533,6 @@ export default {
 					});
 
 					return;
-				} else {
 				}
 				// Nhà đất
 				if (!this.isApartment) {
