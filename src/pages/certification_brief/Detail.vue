@@ -3565,6 +3565,7 @@ export default {
 			let message = "";
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
 				if (
+					this.form.service_fee !== 0 &&
 					this.form.payments &&
 					(this.form.payments.length === 0 ||
 						(this.form.payments.length === 1 && !this.form.payments[0].id))
