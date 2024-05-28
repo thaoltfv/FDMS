@@ -2177,12 +2177,6 @@
 							<!-- <img style="cursor: pointer" class="mr-1" @click="downloadOtherFile(file)" src="@/assets/icons/ic_taglink.svg" alt="tag_2"/>
 							<div class="mr-3">{{file.name}}</div> -->
 							<img
-								v-if="
-									deleted &&
-										(form.status === 1 ||
-											form.status === 2 ||
-											form.status === 3)
-								"
 								style="cursor: pointer; width: 1rem"
 								@click="deleteOtherFile(file, index)"
 								src="@/assets/icons/ic_delete_2.svg"
