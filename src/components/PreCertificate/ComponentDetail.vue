@@ -480,6 +480,11 @@
 										{{ price ? formatNumber(price) : 0 }} đ
 									</p>
 								</template>
+								<template slot="asset_type" slot-scope="asset_type">
+									<p class="text-none mb-0">
+										{{ asset_type ? formatCapitalize(asset_type) : "" }}
+									</p>
+								</template>
 								<template slot="data" slot-scope="data">
 									<button
 										class="link-detail text-none mb-0"
@@ -1091,6 +1096,7 @@ export default {
 				{
 					title: "Loại tài sản",
 					align: "left",
+					scopedSlots: { customRender: "asset_type" },
 					dataIndex: "asset_type.description",
 					hiddenItem: false
 				},
@@ -2000,6 +2006,11 @@ export default {
 		},
 		viewAppraiseListVersion() {
 			this.isShowAppraiseListVersion = true;
+		},
+		formatCapitalize(word) {
+			return word.toLowerCase().replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+				return x.toUpperCase();
+			});
 		},
 		setDocumentViewStatus() {
 			let isExportAutomatic = true;

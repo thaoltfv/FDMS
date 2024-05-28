@@ -3516,6 +3516,24 @@ export default {
 				}
 			}
 			if (target.description.toUpperCase() === "IN HỒ SƠ") {
+				//
+				if (
+					this.form.certificate_num &&
+					this.form.certificate_num.trim() !== "" &&
+					this.form.certificate_date &&
+					this.form.certificate_date.trim() !== ""
+				) {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập đầy đủ số chứng thư và ngày chứng thư trước khi chuyển sang bước in hồ sơ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				} else {
+				}
 				// Nhà đất
 				if (!this.isApartment) {
 					if (
