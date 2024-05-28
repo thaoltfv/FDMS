@@ -1439,7 +1439,7 @@
 											:class="{ img_filter: !isComparisionAssetReport }"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer"
+											class="title_input_content title_input_download cursor_pointer text-truncate"
 											v-if="isComparisionAssetReport"
 											@click="downloadDocumentFile('comparision_asset_report')"
 										>
