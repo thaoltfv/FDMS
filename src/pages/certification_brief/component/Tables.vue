@@ -88,7 +88,7 @@
 							v-for="(law, index) in item.apartment ? item.apartment.law : []"
 							:key="law.id"
 						>
-							<p class="text-secondary">
+							<p class="text-secondary text-wrap">
 								Chủ sở hữu:
 								{{
 									item.apartment.law.lemgth > 1
@@ -108,7 +108,7 @@
 								: []"
 							:key="law.id"
 						>
-							<p class="text-secondary">
+							<p class="text-secondary text-wrap">
 								Chủ sở hữu:
 								{{
 									item.appraises.certificate_appraise_law.lemgth > 1
@@ -123,7 +123,7 @@
 					<p
 						:id="`content_appraised_asset`"
 						class="appraised_asset text-none text-wrap"
-						style="width: 250px !important;"
+						style="width: 360px !important;"
 					>
 						<span v-html="showAddressAppraise(detail_appraise)"></span>
 					</p>
@@ -160,8 +160,10 @@
 					slot="petitioner_name"
 					slot-scope="{ petitioner_name, customer }"
 				>
-					<p class="text-main">KH: {{ petitioner_name }}</p>
-					<p class="text-secondary">
+					<p class="name_detail text-main text-wrap">
+						KH: {{ petitioner_name }}
+					</p>
+					<p class="name_detail text-secondary text-wrap">
 						Đối tác: {{ customer ? customer.name : " " }}
 					</p>
 				</template>
@@ -643,7 +645,7 @@ export default {
 					hiddenItem: false
 				},
 				{
-					title: "Địa chỉ ",
+					title: "Địa chỉ tài sản",
 					align: "left",
 					scopedSlots: { customRender: "appraised_asset" },
 					hiddenItem: false
@@ -1581,17 +1583,20 @@ export default {
 		}
 	}
 }
+.name_detail {
+	width: 270px !important;
+}
 .appraise_detail {
-	@media (max-width: 1600px) {
-		max-height: 60px;
-	}
-	@media (min-width: 1600px) {
-		max-height: 60px;
-	}
-	@media (min-width: 1900px) {
-		max-height: 60px;
-	}
-	min-width: 120px;
+	// @media (max-width: 1600px) {
+	// 	max-height: 60px;
+	// }
+	// @media (min-width: 1600px) {
+	// 	max-height: 60px;
+	// }
+	// @media (min-width: 1900px) {
+	// 	max-height: 60px;
+	// }
+	width: 270px !important;
 	white-space: nowrap;
 	-webkit-line-clamp: 2 !important;
 	overflow: hidden;

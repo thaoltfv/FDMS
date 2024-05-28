@@ -15,6 +15,14 @@
 			@close="closeDrawer"
 			:headerStyle="{ 'margin-left': '15px', 'margin-right': '15px' }"
 		>
+			<ModalConfirm
+				v-if="showPopupComfirm"
+				:textConfirm="
+					`Số tiền thanh toán vượt quá số tiền cần thanh toán, vẫn tiếp tục ?`
+				"
+				@cancel="showPopupComfirm = false"
+				@action="handleAction"
+			/>
 			<ModalDelete
 				v-if="openModalDelete"
 				@cancel="openModalDelete = false"
@@ -180,6 +188,7 @@ import InputCurrencyNegative from "@/components/Form/InputCurrencyNegative";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputTextPrefixCustom from "@/components/Form/InputTextPrefixCustom";
+import ModalConfirm from "@/components/Modal/ModalConfirmDownload";
 import ModalDelete from "@/components/Modal/ModalDelete";
 import CertificationBrief from "@/models/CertificationBrief";
 import moment from "moment";
@@ -210,6 +219,7 @@ export default {
 	components: {
 		InputCurrencyNegative,
 		ModalDelete,
+		ModalConfirm,
 		InputDatePicker,
 		InputCurrency,
 		InputTextPrefixCustom
@@ -218,6 +228,7 @@ export default {
 		const preCertificateStore = usePreCertificateStore();
 		const drawer = ref(false);
 		const openModalDelete = ref(false);
+		const showPopupComfirm = ref(false);
 		const paymentDelete = ref({ id: null, isUpload: false });
 		const dataForm = ref(props.form);
 		const dataOriginal = ref(null);
@@ -352,15 +363,15 @@ export default {
 			}
 			dataForm.value.debtRemain = debt_remain;
 			dataForm.value.amountPaid = paid;
-			if (debt_remain < 0) {
-				props.toast.open({
-					message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
-					type: "error",
-					position: "top-right",
-					duration: 3000
-				});
-				// return;
-			}
+			// if (debt_remain < 0) {
+			// 	props.toast.open({
+			// 		message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
+			// 		type: "error",
+			// 		position: "top-right",
+			// 		duration: 3000
+			// 	});
+			// 	// return;
+			// }
 
 			keyRender.value++;
 		};
@@ -392,6 +403,7 @@ export default {
 			isSubmit,
 			permissionNotAllowEditHere,
 			openModalDelete,
+			showPopupComfirm,
 			keyRender,
 			drawer,
 			dataForm,
@@ -420,23 +432,19 @@ export default {
 			this.isSubmit = true;
 			const isValid = await this.$refs.paymentsForm.validate();
 			if (isValid) {
-				this.handleAction();
+				if (this.dataForm.debtRemain < 0) {
+					this.showPopupComfirm = true;
+					this.isSubmit = false;
+				} else {
+					this.handleAction();
+				}
 			} else {
 				this.isSubmit = false;
 			}
 		},
 		async handleAction() {
 			this.isSubmit = true;
-			// if (this.dataForm.debtRemain < 0) {
-			// 	this.$toast.open({
-			// 		message: "Số tiền thanh toán vượt quá số tiền cần thanh toán",
-			// 		type: "error",
-			// 		position: "top-right",
-			// 		duration: 3000
-			// 	});
-			// 	this.isSubmit = false;
-			// 	return;
-			// }
+
 			const temp = _.differenceWith(
 				this.dataForm.payments,
 				this.dataOriginal,

@@ -973,6 +973,13 @@
 								class="img_document_action"
 							/>
 						</div>
+						<div v-else>
+							<img
+								src="@/assets/icons/ic_download_3.svg"
+								alt="search"
+								class="img_document_action"
+							/>
+						</div>
 					</div>
 					<div class="card-body card-info">
 						<div class="column">
@@ -1024,6 +1031,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
+												v-if="statusDescription !== 'Hoàn thành'"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1110,6 +1118,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
+												v-if="statusDescription !== 'Hoàn thành'"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1196,6 +1205,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
+												v-if="statusDescription !== 'Hoàn thành'"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1288,6 +1298,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
+												v-if="statusDescription !== 'Hoàn thành'"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1374,6 +1385,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
+												v-if="statusDescription !== 'Hoàn thành'"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1464,6 +1476,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
+												v-if="statusDescription !== 'Hoàn thành'"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1816,6 +1829,7 @@
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
 			<DocumentExport
+				:statusText="statusDescription"
 				:allow-edit="editExportDocument"
 				:is_pc="false"
 				:idData="idData"
@@ -1836,7 +1850,12 @@
 			class="col-6"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
-			<div class="card" :style="isMobile() ? { 'margin-bottom': '150px' } : {}">
+			<div
+				class="card h-100"
+				:style="
+					isMobile() ? { 'margin-bottom': '150px' } : { 'max-height': '95%' }
+				"
+			>
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title ml-1">Tài liệu đính kèm</h3>
@@ -1900,6 +1919,7 @@
 								/>
 							</div>
 							<div
+								v-if="statusDescription !== 'Hoàn thành'"
 								:id="'upload_other_document'"
 								class="mr-1"
 								@click="openUploadFile('documnent')"
@@ -2020,7 +2040,14 @@
 			class="col-6"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
-			<div class="card" :style="isMobile() ? { 'margin-bottom': '150px' } : {}">
+			<div
+				class="card h-100"
+				:style="
+					isMobile()
+						? { 'margin-bottom': '150px', 'max-height': '96%' }
+						: { 'max-height': '95%' }
+				"
+			>
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Hồ sơ scan lưu trữ</h3>
@@ -2237,6 +2264,10 @@
 		<!-- <ModalCustomer v-if="showCustomerDialog"/> -->
 		<ModalConfirmDownload
 			v-if="showPopupComfirmDownloadAutoDocument"
+			:textConfirm="
+				`Hồ sơ chưa có đầy đủ ngày hợp đồng và số hợp đồng, vẫn tiếp tục tải
+					xuống ?`
+			"
 			@cancel="showPopupComfirmDownloadAutoDocument = false"
 			@action="handleDownloadConfirm"
 		/>

@@ -20,8 +20,7 @@
 
 			<div class="card-body">
 				<p class="font-weight-bold" style="font-size: 18px">
-					Hồ sơ chưa có đầy đủ ngày hợp đồng và số hợp đồng, vẫn tiếp tục tải
-					xuống ?
+					{{ textConfirm }}
 				</p>
 
 				<div class="btn__group">
@@ -43,6 +42,7 @@
 
 <script>
 export default {
+	props: ["textConfirm"],
 	name: "ModalDelete",
 
 	methods: {

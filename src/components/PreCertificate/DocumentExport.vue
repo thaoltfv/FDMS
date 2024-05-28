@@ -174,7 +174,10 @@
 											size="1x"
 											class="mr-2"
 										/> -->
-										<div v-if="allowEdit" class="d-flex align-items-center">
+										<div
+											v-if="allowEdit && statusText !== 'Hoàn thành'"
+											class="d-flex align-items-center"
+										>
 											<b-tooltip
 												:target="'upload_' + file.type_document"
 												placement="auto"
@@ -246,7 +249,7 @@
 										</div>
 									</div>
 									<div
-										v-if="allowEdit"
+										v-if="allowEdit && statusText !== 'Hoàn thành'"
 										class="d-flex align-items-center  justify-content-end col-1 pr-3"
 									>
 										<img
@@ -301,6 +304,9 @@ export default {
 		},
 		toast: {
 			type: Object
+		},
+		statusText: {
+			type: String
 		}
 	},
 	data() {

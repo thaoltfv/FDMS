@@ -33,7 +33,7 @@
 					</p>
 				</template>
 				<template slot="property_name" slot-scope="property_name, data">
-					<p :id="data.id + 'all'" class="full-address text-left">
+					<p :id="data.id + 'all'" class="full-address text-wrap">
 						{{ property_name }}
 					</p>
 					<b-tooltip :target="(data.id + 'all').toString()">{{
@@ -331,11 +331,11 @@ export default {
 					hiddenItem: false
 				},
 				{
-					title: "Tên tài sản",
+					title: "Địa chỉ tài sản",
 					class: "optional-data",
 					align: "left",
 					scopedSlots: { customRender: "property_name" },
-					dataIndex: "appraise_asset",
+					dataIndex: "full_address",
 					width: "220px",
 					hiddenItem: false
 				},
@@ -527,7 +527,7 @@ export default {
 // }
 
 .full-address {
-	width: 800px;
+	width: 500px;
 	white-space: nowrap;
 	-webkit-line-clamp: 2 !important;
 	overflow: hidden;
