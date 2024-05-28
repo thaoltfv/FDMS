@@ -2067,7 +2067,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 // activity-log cập nhật thông tin chi tiết
-                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin chi tiết');
+                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin kết quả thẩm định');
             } else {
                 $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHOOSE_PRICE_ESTIMATE, 'exception' => ''];
                 return $result;

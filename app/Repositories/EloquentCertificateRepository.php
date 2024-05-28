@@ -5048,7 +5048,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 }
                 $edited = Certificate::where('id', $certificateId)->first();
                 // activity-log cập nhật thông tin chi tiết
-                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin chi tiết');
+                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin kết quả thẩm định');
             } else {
                 $result = ['message' => ErrorMessage::CERTIFICATE_CHOOSE_APPRAISE, 'exception' => ''];
                 return $result;
