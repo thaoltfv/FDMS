@@ -25,11 +25,21 @@
 						>
 							<template slot="asset" slot-scope="asset">
 								<p :id="asset.id" class="full-address mb-0">
-									{{ asset.full_address ? asset.full_address : asset.name }}
+									{{
+										asset.address_nd
+											? asset.address_nd
+											: asset.address_cc
+											? asset.address_cc
+											: asset.name
+									}}
 								</p>
 								<b-tooltip :target="asset.id.toString()">
 									{{
-										asset.full_address ? asset.full_address : asset.name
+										asset.address_nd
+											? asset.address_nd
+											: asset.address_cc
+											? asset.address_cc
+											: asset.name
 									}}</b-tooltip
 								>
 							</template>
