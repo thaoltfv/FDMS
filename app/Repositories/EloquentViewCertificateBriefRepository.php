@@ -576,7 +576,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
 
         $result = [];
         $stt = 0;
-        foreach ($year as $item) {
+        foreach ($statusOutput as $item) {
             $indexOfItem = array_search($item, $year);
             $count = Arr::pluck($data[$item], 'count');
             $result[$stt]['label'] = $item;
