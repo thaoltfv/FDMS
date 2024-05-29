@@ -3769,14 +3769,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'real_estates.created_at',
             'appraises.full_address as address_nd',
             'apartment_assets.full_address as address_cc',
-            DB::raw("appraise_asset as name, total_area,
+            DB::raw("real_estates.appraise_asset as name, total_area,
                 coalesce(case
-                    when  round_total > 0
-                    then ceil(total_price / power(10, round_total)) * power(10, round_total)
-                    when   round_total < 0
-                        then floor( total_price * abs(power(10, round_total))  ) / abs(power(10, round_total))
+                    when  real_estates.round_total > 0
+                    then ceil(real_estates.total_price / power(10, real_estates.round_total)) * power(10, real_estates.round_total)
+                    when   real_estates.round_total < 0
+                        then floor( real_estates.total_price * abs(power(10, real_estates.round_total))  ) / abs(power(10, real_estates.round_total))
                     else
-                        total_price
+                        real_estates.total_price
                 end, 0) as total_price
                 "),
             'users.name as created_by.name'
