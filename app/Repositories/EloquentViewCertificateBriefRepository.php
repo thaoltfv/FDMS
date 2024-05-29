@@ -302,9 +302,9 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         }
 
         $result =
-            PreCertificate::query()->select(['status_text', 'status', DB::Raw("count(id)")])
+            PreCertificate::query()->select(['status', DB::Raw("count(id)")])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->groupby(['status_text', 'status'])
+            ->groupby(['status'])
             ->orderBy('status')
             ->get();
 
