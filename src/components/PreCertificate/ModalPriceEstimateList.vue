@@ -26,10 +26,18 @@
 						>
 							<template slot="asset" slot-scope="asset">
 								<p :id="asset.id" class="full-address mb-0">
-									{{ asset.appraise_asset }}
+									{{
+										asset.full_address
+											? asset.full_address
+											: asset.appraise_asset
+									}}
 								</p>
 								<b-tooltip :target="asset.id.toString()">
-									{{ asset.appraise_asset }}</b-tooltip
+									{{
+										asset.full_address
+											? asset.full_address
+											: asset.appraise_asset
+									}}</b-tooltip
 								>
 							</template>
 							<!-- <template slot="land" slot-scope="land">
@@ -127,7 +135,7 @@ export default {
 					hiddenItem: false
 				},
 				{
-					title: "Tên tài sản",
+					title: "Địa chỉ tài sản",
 					align: "left",
 					scopedSlots: { customRender: "asset" },
 					hiddenItem: false

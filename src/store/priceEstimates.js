@@ -132,7 +132,7 @@ export const usePriceEstimatesStore = defineStore(
 
 		function formatCapitalize(word) {
 			if (word)
-				return word.replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+				return word.replace(/(?:^|\s|[-"'([{])+\S/g, function (x) {
 					return x.toUpperCase();
 				});
 			else return word;
@@ -144,7 +144,7 @@ export const usePriceEstimatesStore = defineStore(
 		}
 		function toTitleCase(str) {
 			if (!str) return str;
-			return str.replace(/\w\S*/g, function(txt) {
+			return str.replace(/\w\S*/g, function (txt) {
 				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 			});
 		}
@@ -273,7 +273,7 @@ export const usePriceEstimatesStore = defineStore(
 			if (
 				priceEstimates.value.step_1.general_infomation.street_id !== "" &&
 				priceEstimates.value.step_1.general_infomation.street_id !==
-					undefined &&
+				undefined &&
 				priceEstimates.value.step_1.general_infomation.street_id !== null
 			) {
 				getDistanceByStreetId(
@@ -304,65 +304,56 @@ export const usePriceEstimatesStore = defineStore(
 				return;
 			}
 			miscInfo.value.full_address =
-				`${
-					priceEstimates.value.step_1.general_infomation.land_no
-						? "Thửa đất số " +
-						  priceEstimates.value.step_1.general_infomation.land_no +
-						  ", "
-						: ""
+				`${priceEstimates.value.step_1.general_infomation.land_no
+					? "Thửa đất số " +
+					priceEstimates.value.step_1.general_infomation.land_no +
+					", "
+					: ""
 				}` +
-				`${
-					priceEstimates.value.step_1.general_infomation.doc_no
-						? "Tờ bản đồ số " +
-						  priceEstimates.value.step_1.general_infomation.doc_no +
-						  ", "
-						: ""
+				`${priceEstimates.value.step_1.general_infomation.doc_no
+					? "Tờ bản đồ số " +
+					priceEstimates.value.step_1.general_infomation.doc_no +
+					", "
+					: ""
 				}` +
-				`${
-					priceEstimates.value.step_1.general_infomation.address_number
-						? "số " +
-						  priceEstimates.value.step_1.general_infomation.address_number +
-						  ", "
-						: ""
+				`${priceEstimates.value.step_1.general_infomation.address_number
+					? "Số " +
+					priceEstimates.value.step_1.general_infomation.address_number +
+					", "
+					: ""
 				}` +
 				`${dataInfo.value.streetName ? dataInfo.value.streetName + ", " : ""}` +
 				`${dataInfo.value.wardName ? dataInfo.value.wardName + ", " : ""}` +
-				`${
-					dataInfo.value.districtName ? dataInfo.value.districtName + ", " : ""
+				`${dataInfo.value.districtName ? dataInfo.value.districtName + ", " : ""
 				}` +
-				`${
-					dataInfo.value.provinceName
-						? dataInfo.value.provinceName.includes("Thành phố")
-							? dataInfo.value.provinceName
-							: "Tỉnh " + dataInfo.value.provinceName.trim()
-						: ""
+				`${dataInfo.value.provinceName
+					? dataInfo.value.provinceName.includes("Thành phố")
+						? dataInfo.value.provinceName
+						: "Tỉnh " + dataInfo.value.provinceName.trim()
+					: ""
 				}`;
 			miscInfo.value.full_address_street =
-				`${
-					priceEstimates.value.step_1.general_infomation.land_no
-						? "Thửa đất số " +
-						  priceEstimates.value.step_1.general_infomation.land_no +
-						  ", "
-						: ""
+				`${priceEstimates.value.step_1.general_infomation.land_no
+					? "Thửa đất số " +
+					priceEstimates.value.step_1.general_infomation.land_no +
+					", "
+					: ""
 				}` +
-				`${
-					priceEstimates.value.step_1.general_infomation.doc_no
-						? "Tờ bản đồ số " +
-						  priceEstimates.value.step_1.general_infomation.doc_no +
-						  ", "
-						: ""
+				`${priceEstimates.value.step_1.general_infomation.doc_no
+					? "Tờ bản đồ số " +
+					priceEstimates.value.step_1.general_infomation.doc_no +
+					", "
+					: ""
 				}` +
-				`${
-					priceEstimates.value.step_1.general_infomation.address_number
-						? "số " +
-						  priceEstimates.value.step_1.general_infomation.address_number +
-						  ", "
-						: ""
+				`${priceEstimates.value.step_1.general_infomation.address_number
+					? "Số " +
+					priceEstimates.value.step_1.general_infomation.address_number +
+					", "
+					: ""
 				}` +
 				`${dataInfo.value.streetName ? dataInfo.value.streetName + ", " : ""}` +
 				`${dataInfo.value.wardName ? dataInfo.value.wardName + ", " : ""}` +
-				`${
-					dataInfo.value.districtName ? dataInfo.value.districtName + ", " : ""
+				`${dataInfo.value.districtName ? dataInfo.value.districtName + ", " : ""
 				}` +
 				`${dataInfo.value.provinceName ? dataInfo.value.provinceName : ""}`;
 			priceEstimates.value.step_1.general_infomation.full_address =
@@ -489,7 +480,7 @@ export const usePriceEstimatesStore = defineStore(
 					streetName =
 						project[0].street.name
 							.toLowerCase()
-							.replace(/(^|\s)\S/g, function(l) {
+							.replace(/(^|\s)\S/g, function (l) {
 								return l.toUpperCase();
 							}) + ", ";
 				}
@@ -653,12 +644,11 @@ export const usePriceEstimatesStore = defineStore(
 				(priceEstimates.value.step_1.general_infomation.land_no
 					? "Thửa " + step1.general_infomation.land_no + ", "
 					: "") +
-				`${
-					streetName.length > 0
-						? (streetName.substring(0, 5) === "đường" ? "" : "Đường ") +
-						  formatCapitalize(streetName) +
-						  ", "
-						: ""
+				`${streetName.length > 0
+					? (streetName.substring(0, 5) === "đường" ? "" : "Đường ") +
+					formatCapitalize(streetName) +
+					", "
+					: ""
 				}` +
 				miscInfo.value.full_address;
 			priceEstimates.value.step_3.full_address = fullAddress;
@@ -802,7 +792,7 @@ export const usePriceEstimatesStore = defineStore(
 				} else {
 					await configThis.value.router
 						.push({ name: "price_estimates.index" })
-						.catch(_ => {});
+						.catch(_ => { });
 				}
 			} else if (res.error) {
 				isSubmit.value = false;
@@ -1273,7 +1263,7 @@ export const usePriceEstimatesStore = defineStore(
 					bindDataStep.general_infomation &&
 					bindDataStep.general_infomation.asset_type &&
 					bindDataStep.general_infomation.asset_type.description ===
-						"ĐẤT CÓ NHÀ"
+					"ĐẤT CÓ NHÀ"
 				) {
 					miscVariable.value.isHaveContruction = true;
 				} else {
