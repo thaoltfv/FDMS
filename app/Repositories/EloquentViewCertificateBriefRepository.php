@@ -304,13 +304,17 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $result =
             PreCertificate::query()->select(['status', DB::Raw("count(id)")])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->groupby(['status'])
+            ->groupby('status')
+            ->whereHas('customerGroup', function ($q) use ($user) {
+                if ($user->customer_group_id) {
+                    return $q->where('id', $user->customer_group_id);
+                }
+            })
             ->orderBy('status')
             ->get();
 
-        if ($user->customer_group_id) {
-            $result = $result->where('customer_group_id', '=', $user->customer_group_id);
-        }
+
+
         $result = $result->toArray();
 
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
