@@ -7,6 +7,9 @@ use App\Contracts\ViewCertificateBrieftRepository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\PreCertificate;
+use App\Models\Certificate;
+use App\Services\CommonService;
 
 class EloquentViewCertificateBriefRepository extends EloquentRepository implements ViewCertificateBrieftRepository
 {
@@ -283,6 +286,64 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->groupBy(['status', 'status_text'])
             ->get()->toArray();
         $result = array('label' => Arr::pluck($data, 'status_text'), 'data' => Arr::pluck($data, 'count'), 'status' => Arr::pluck($data, 'status'));
+        return $result;
+    }
+
+    public function countBriefInProcessingPreCertificate()
+    {
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        $user = CommonService::getUser();
+        if (isset($fromDate) && isset($toDate)) {
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
+        } else {
+            return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
+        }
+
+        $result =
+            PreCertificate::query()->select(['status_text', 'status', DB::Raw("count(id)")])
+            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
+            ->groupby(['status_text', 'status'])
+            ->orderBy('status')
+            ->get();
+
+        if ($user->customer_group_id) {
+            $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+        }
+        $result = $result->toArray();
+
+        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
+
+        return $result;
+    }
+
+    public function countBriefInProcessingCertificate()
+    {
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        $user = CommonService::getUser();
+        if (isset($fromDate) && isset($toDate)) {
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
+        } else {
+            return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
+        }
+
+        $result =
+            Certificate::query()->select(['status_text', 'status', DB::Raw("count(id)")])
+            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
+            ->groupby(['status_text', 'status'])
+            ->orderBy('status')
+            ->get();
+
+        if ($user->customer_group_id) {
+            $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+        }
+        $result = $result->toArray();
+
+        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
+
         return $result;
     }
 

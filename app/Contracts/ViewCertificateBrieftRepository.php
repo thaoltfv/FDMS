@@ -16,6 +16,10 @@ interface ViewCertificateBrieftRepository extends BaseRepository
 
     public function countBriefInProcessing();
 
+    public function countBriefInProcessingPreCertificate();
+
+    public function countBriefInProcessingCertificate();
+
     public function countBriefFinishByQuarters();
 
     public function countBriefCancelByQuarters();
@@ -27,5 +31,4 @@ interface ViewCertificateBrieftRepository extends BaseRepository
     public function countBriefFinishByMonth();
 
     public function countBriefCancelByMonth();
-
 }
