@@ -3767,8 +3767,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'real_estates.updated_at',
             'asset_type_id',
             'real_estates.created_at',
-            'real_estates.appraises.full_address as address_nd',
-            'real_estates.apartment.full_address as address_cc',
+            'appraises.full_address as address_nd',
+            'apartment_assets.full_address as address_cc',
             DB::raw("appraise_asset as name, total_area,
                 coalesce(case
                     when  round_total > 0
@@ -3784,6 +3784,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result = RealEstate::query()
             ->select($select)
             ->join('users', 'users.id', '=', 'real_estates.created_by')
+            ->join('appraises', 'appraises.id', '=', 'real_estates.real_estate_id')
+            ->join('apartment_assets', 'apartment_assets.id', '=', 'real_estates.real_estate_id')
             ->where($where)
             ->whereNull('certificate_id');
 
