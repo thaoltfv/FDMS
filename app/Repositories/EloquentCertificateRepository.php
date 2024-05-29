@@ -3784,8 +3784,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result = RealEstate::query()
             ->select($select)
             ->join('users', 'users.id', '=', 'real_estates.created_by')
-            ->join('appraises', 'appraises.id', '=', 'real_estates.real_estate_id')
-            ->join('apartment_assets', 'apartment_assets.id', '=', 'real_estates.real_estate_id')
+            ->join('appraises', 'appraises.real_estate_id', '=', 'real_estates.id')
+            ->join('apartment_assets', 'apartment_assets.real_estate_id', '=', 'real_estates.id')
             ->where($where)
             ->whereNull('certificate_id');
 
