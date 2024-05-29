@@ -516,11 +516,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $dataRaw = PreCertificate::query()
             ->select([
                 DB::raw("count(id)"),
-                DB::raw("case certificate_id
-                        when null
-                            then 'ChuaChuyenDoi'
-                        else 'DaChuyenDoi' end as rate_text
-                            "),
+                DB::raw("CASE WHEN certificate_id IS NULL THEN 'ChuaChuyenDoi' ELSE 'DaChuyenDoi' END AS rate_text"),
                 DB::raw("case status
                         when 1
                             then 'Yêu cầu sơ bộ'
