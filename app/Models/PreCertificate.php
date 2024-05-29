@@ -77,7 +77,9 @@ class PreCertificate extends Model
         'pre_asset_name',
         'pre_type_id',
         'total_service_fee',
-        'certificate_id'
+        'certificate_id',
+
+        'customer_group_id',
 
     ];
 
@@ -168,5 +170,9 @@ class PreCertificate extends Model
     public function priceEstimates(): HasMany
     {
         return $this->hasMany(PreCertificatePriceEstimate::class, 'pre_certificate_id');
+    }
+    public function customerGroup(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'customer_group_id', 'id');
     }
 }

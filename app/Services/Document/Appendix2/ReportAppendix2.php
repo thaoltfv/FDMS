@@ -163,7 +163,7 @@ class ReportAppendix2 extends Report
         $table->addCell(1500, $this->cellRowSpan)->addText('Đơn giá trung bình', ['bold' => true], $this->cellHCentered);
         $table->addCell(1500, $this->cellRowSpan)->addText('Đơn giá quyết định', ['bold' => true], $this->cellHCentered);
         foreach ($tangibleAssets as $tangibleAsset) {
-            $name = $tangibleAsset->tangible_name;
+            $name = htmlspecialchars($tangibleAsset->tangible_name);
             $startUsingYear = $tangibleAsset->start_using_year;
             $unitPrice1 = isset($tangibleAsset->constructionCompany[0]) ? $tangibleAsset->constructionCompany[0]->unit_price_m2 : 0;
             $unitPrice2 = isset($tangibleAsset->constructionCompany[1]) ? $tangibleAsset->constructionCompany[1]->unit_price_m2 : 0;
@@ -229,7 +229,7 @@ class ReportAppendix2 extends Report
             $usefulYear = isset($tangibleAsset->duration) ? CommonService::mbUcfirst($tangibleAsset->duration) : '';
             $clcl = $tangibleAsset->remaining_quality ?? 0;
             $table->addRow();
-            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst(htmlspecialchars($tangibleAsset->tangible_name)), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(1500, $this->cellRowSpan)->addText($startUsingYear, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(2250, $this->cellRowSpan)->addText($usingYear, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(2250, $this->cellRowSpan)->addText($usefulYear, ['bold' => false], ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
@@ -282,7 +282,7 @@ class ReportAppendix2 extends Report
             $p5 = $tangibleAsset->comparisonTangibleFactor->p5 ?? 0;
             $h5 = $tangibleAsset->comparisonTangibleFactor->h5 ?? 0;
             $table->addRow(400, $this->cantSplit);
-            $table->addCell(1500, $this->cellRowSpan)->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(1500, $this->cellRowSpan)->addText(CommonService::mbUcfirst(htmlspecialchars($tangibleAsset->tangible_name)), null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($p1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($h1 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(750, $this->cellVCentered)->addText($p2 . '%', null, ($stt = $countTangible) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
@@ -317,7 +317,7 @@ class ReportAppendix2 extends Report
             $clcl2 = $this->total[$tangibleAsset->id]['clcl2'];
             $cltb = CommonService::roundPrice(($clcl1 + $clcl2) / 2, 0);
             $table->addRow();
-            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst($this->total[$tangibleAsset->id]['name']), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
+            $table->addCell(3000, $this->cellRowSpan)->addText(CommonService::mbUcfirst(htmlspecialchars($this->total[$tangibleAsset->id]['name'])), null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(1500, $this->cellRowSpan)->addText($this->total[$tangibleAsset->id]['start_using_year'], null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(1500, $this->cellRowSpan)->addText($clcl1, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);
             $table->addCell(1500, $this->cellRowSpan)->addText($clcl2, null, ($stt = $count) ? $this->cellHCentered : $this->cellHCenteredKeepNext);

@@ -176,7 +176,7 @@ class KeHoachTDG
         );
         $row3->addCell(5700, $cellVCentered)->addText('----------o0o---------', null, $cellHCentered);
         $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row4->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num  : ''), null, $cellHCentered);
+        $row4->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->certificate_num) ? $certificate->certificate_num  : ''), null, $cellHCentered);
         $row4->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
@@ -197,16 +197,16 @@ class KeHoachTDG
         $addressHSTD = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
-                $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
             }
         } else {
             if ($isApartment) {
                 foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                    $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
                 }
             } else {
                 foreach ($certificate->appraises as $index => $item) {
-                    $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : 'và ' . htmlspecialchars($item->appraise_asset));
+                    $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
                 }
             }
         }
@@ -222,7 +222,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText("Tài sản thẩm định giá: " . $addressHSTD, null, $indentleftSymbol);
+        $row2->addCell(9700)->addText("Tài sản thẩm định giá: Giá trị " . $addressHSTD, null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
@@ -256,15 +256,24 @@ class KeHoachTDG
         $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
         $row4->addCell(9700, array('gridSpan' => 2))->addText("Tiến độ thực hiện công việc dự kiến như sau:", null, $indentleftSymbol);
 
+        $surveyTime = "";
+
+        if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
+            $survey_time = date_create($certificate->survey_time);
+            // $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+            $surveyTime =   $survey_time->format('d') . "/" . $survey_time->format('m') . "/" . $survey_time->format('Y');
+        }
         $row5 = $table->addRow();
         $row5->addCell(200)->addText("", null, ['align' => 'left']);
         $row5->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row5->addCell(8200)->addText("Khảo sát hiện trạng tài sản:", null, $indentleftSymbol);
+        $row5->addCell(8200)->addText("Khảo sát hiện trạng tài sản: " .  $surveyTime, null, $indentleftSymbol);
 
-        $row6 = $table->addRow();
-        $row6->addCell(200)->addText("", null, ['align' => 'left']);
-        $row6->addCell(1500)->addText("o", null, ['align' => 'right']);
-        $row6->addCell(8200)->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
+        // $row6 = $table->addRow();
+        // $row6->addCell(200)->addText("", null, ['align' => 'left']);
+        // $row6->addCell(1500)->addText("o", null, ['align' => 'right']);
+        // $row6->addCell(8200)->addText("Thu thập thông tin thị trường:", null, $indentleftSymbol);
+
+
 
         $row7 = $table->addRow();
         $row7->addCell(200)->addText("", null, ['align' => 'left']);
@@ -311,7 +320,7 @@ class KeHoachTDG
         $row14 = $table->addRow();
         $row14->addCell(3300)->addText('Tổng Giám đốc', ['bold' => true], ['align' => 'center']);
         $row14->addCell(3300)->addText('Thẩm Định viên', ['bold' => true], ['align' => 'center']);
-        $row14->addCell(3300)->addText('Chuyên viên thẩm định', ['bold' => true], ['align' => 'center']);
+        $row14->addCell(3300)->addText('Chuyên viên thẩm định giá', ['bold' => true], ['align' => 'center']);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
@@ -324,6 +333,11 @@ class KeHoachTDG
         $reportName = str_replace(
             ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
             '',
+            $reportName
+        ); // replace invalid characters with underscore
+        $reportName = str_replace(
+            ' ',
+            '_',
             $reportName
         ); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');

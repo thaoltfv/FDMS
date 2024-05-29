@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\UserRepository;
 use App\Enum\ValueDefault;
 use App\Models\Appraiser;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -52,7 +53,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         foreach ($result as $key => $value) {
             $result[$key]['role'] = $value->getRoleNames();
             $appraiser = Appraiser::where('user_id', $result[$key]->id)->first();
-            if ($appraiser){
+            if ($appraiser) {
                 $result[$key]['is_legal_representative'] = $appraiser->is_legal_representative;
                 $result[$key]['appraiser_number'] = $appraiser->appraiser_number;
             }
@@ -76,15 +77,16 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
     {
         $user = $this->model->query()
             ->with([
-                    'branch',
-                    'appraiser:id,branch_id,appraiser_number,appraise_position_id,name,user_id' ,
-                    'appraiser.appraisePosition:id,acronym,description',
-                    'appraiser.appraiserBranch:id,acronym,address,name'])
+                'branch',
+                'appraiser:id,branch_id,appraiser_number,appraise_position_id,name,user_id',
+                'appraiser.appraisePosition:id,acronym,description',
+                'appraiser.appraiserBranch:id,acronym,address,name'
+            ])
             ->where('id', '=', $id)
             ->orderByDesc($this->allowedSorts)
             ->whereNull('deleted_at')
             ->first();
-        if(isset($user)) {
+        if (isset($user)) {
             $user['role'] = $user->getRoleNames();
         } else {
             $user = null;
@@ -102,7 +104,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             //->where('email', $email)
             ->whereRaw('LOWER(email) = ?', [mb_strtolower($email)])
             ->first();
-        if(isset($user)) {
+        if (isset($user)) {
             $user['role'] = $user->getRoleNames();
         } else {
             $user = null;
@@ -148,20 +150,27 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'branch_id' => $objects['appraiser']['branch_id'] ?? null,
             'address' => $objects['address'] ?? "",
             'appraisers_number' => $objects['appraisers_number'] ?? "",
-            'mailing_address' => mb_strtolower($objects['mailing_address']) ?? ""
+            'mailing_address' => mb_strtolower($objects['mailing_address']) ?? "",
+            'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
         $id = $this->model->query()->insertGetId($array);
-        if(isset($objects['appraiser'])){
+        if (isset($objects['appraiser'])) {
             Appraiser::insert([
                 'name' => $objects['name'] ?? "",
                 'appraiser_number' => $objects['appraiser']['appraiser_number'] ?? "",
                 'appraise_position_id' => $objects['appraiser']['appraise_position_id'] ?? null,
                 'branch_id' => $objects['appraiser']['branch_id'] ?? null,
                 'user_id' => $id,
-                ]);
+            ]);
         }
         $user = $this->model->query()->find($id);
-        $user->assignRole($objects['role']);
+        // $user->assignRole($objects['role']);
+        $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
+        if (isset($getRole)) {
+            $user->assignRole($getRole);
+        } else {
+            $user->assignRole('USER');
+        }
         return $user;
     }
 
@@ -180,7 +189,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'address' => $objects['address'] ?? "",
             'appraisers_number' => $objects['appraisers_number'] ?? "",
             'image' => $objects['image'] ?? "",
-            'mailing_address' => $objects['mailing_address'] ?? ""
+            'mailing_address' => $objects['mailing_address'] ?? "",
+            'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
 
         $this->model->query()
@@ -190,17 +200,23 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $user = $this->model->query()->find($id);
         $user->getRoleNames();
         $roles = $user['roles'];
-        if (!($roles[0]['name'] == $roleUpdate)) {
-            $user->syncRoles($roleUpdate);
+
+        if (count($roles) > 0 &&  !($roles[0]['role_name'] == $roleUpdate)) {
+            $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
+            if (isset($getRole)) {
+                $user->syncRoles($getRole);
+            }
+        } else {
+            $user->syncRoles("USER");
         }
-        if(isset($objects['appraiser'])){
-            Appraiser::query()->where('user_id',$id)
-                    ->update([
-                        'name' => $objects['name'] ?? "",
-                        'branch_id' => $objects['appraiser']['branch_id'] ?? null,
-                        'appraise_position_id' => $objects['appraiser']['appraise_position_id'] ?? null,
-                        'appraiser_number' => $objects['appraiser']['appraiser_number'] ?? "",
-                        ]);
+        if (isset($objects['appraiser'])) {
+            Appraiser::query()->where('user_id', $id)
+                ->update([
+                    'name' => $objects['name'] ?? "",
+                    'branch_id' => $objects['appraiser']['branch_id'] ?? null,
+                    'appraise_position_id' => $objects['appraiser']['appraise_position_id'] ?? null,
+                    'appraiser_number' => $objects['appraiser']['appraiser_number'] ?? "",
+                ]);
         }
         return $user;
     }
@@ -211,8 +227,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
      */
     public function deleteUser($id): int
     {
-        if(Appraiser::where('user_id',$id)->exists())
-            Appraiser::where('user_id',$id)->delete();
+        if (Appraiser::where('user_id', $id)->exists())
+            Appraiser::where('user_id', $id)->delete();
 
         return $this->model->query()
             ->where('id', $id)
@@ -223,7 +239,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
     public function validateToken($token)
     {
         return $this->model->query()
-            ->where('token', '=',$token)
+            ->where('token', '=', $token)
             ->first();
     }
 
@@ -235,8 +251,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
     {
         // if(Appraiser::where('user_id',$id)->exists())
         //     Appraiser::where('user_id',$id)->delete();
-        
-            return $this->model->query()
+
+        return $this->model->query()
             ->where('id', $id)
             ->update(['status_user' => 'deactive']);
     }
@@ -258,8 +274,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
      */
     public function isntLegalUser($id): int
     {
-        return Appraiser::where('user_id',$id)
-        ->update(['is_legal_representative' => 0]);
+        return Appraiser::where('user_id', $id)
+            ->update(['is_legal_representative' => 0]);
     }
 
     /**
@@ -268,8 +284,8 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
      */
     public function isLegalUser($id): int
     {
-        return Appraiser::where('user_id',$id)
-        ->update(['is_legal_representative' => 1]);
+        return Appraiser::where('user_id', $id)
+            ->update(['is_legal_representative' => 1]);
     }
 
 

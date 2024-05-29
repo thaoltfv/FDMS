@@ -229,6 +229,11 @@ class BienBanThanhLy
         ]);
         $alignBoth = ['align' => 'both'];
         $cellVTop = ['valign' => 'top'];
+        $stringTimeSoc = '';
+        if (isset($certificate->issue_date_card) && !empty(trim($certificate->issue_date_card))) {
+            $issue_date_card = date_create($certificate->issue_date_card);
+            $stringTimeSoc =  $issue_date_card->format('d') . "/" . $issue_date_card->format('m') . "/" . $issue_date_card->format('Y');
+        }
         $row1 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row1->addCell(1800, $cellVTop)->addText('BÊN A', ['bold' => true,],  $alignBoth);
         $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
@@ -242,15 +247,37 @@ class BienBanThanhLy
 
         $row3 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
-        $row3->addCell(1800, $cellVTop)->addText('-    Mã số thuế', null,  $alignBoth);
+        $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
         $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row3->addCell(8000, $cellVTop)->addText('', null,  $alignBoth);
+        $row3->addCell(8000, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card), null,  $alignBoth);
 
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
-        $row4->addCell(1800, $cellVTop)->addText('-    Đại diện', null,  $alignBoth);
+        $row4->addCell(1800, $cellVTop)->addText('-    Ngày cấp', null,  $alignBoth);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(8000, $cellVTop)->addText('', null,  $alignBoth);
+        $row4->addCell(8000, $cellVTop)->addText($stringTimeSoc, null,  $alignBoth);
+
+        $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        => false));
+        $row5->addCell(1800, $cellVTop)->addText('-    Nơi cấp', null,  $alignBoth);
+        $row5->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row5->addCell(8000, $cellVTop)->addText($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : "", null,  $alignBoth);
+
+        $row6 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
+        $row6->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
+        $row6->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        $row6->addCell(8000, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_phone), null,  $alignBoth);
+        // $row3 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        // => false));
+        // $row3->addCell(1800, $cellVTop)->addText('-    Mã số thuế', null,  $alignBoth);
+        // $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        // $row3->addCell(8000, $cellVTop)->addText('', null,  $alignBoth);
+
+        // $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+        // => false));
+        // $row4->addCell(1800, $cellVTop)->addText('-    Đại diện', null,  $alignBoth);
+        // $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+        // $row4->addCell(8000, $cellVTop)->addText('', null,  $alignBoth);
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false, 'spaceBefore' => 300));
         $row5->addCell(1800, $cellVTop)->addText('BÊN B', ['bold' => true,],  $alignBoth);
@@ -369,54 +396,59 @@ class BienBanThanhLy
                 $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
                 $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
             }
-        } else {
+        } elseif ($certificate->realEstate && count($certificate->realEstate) > 0) {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $row3 = $table->addRow();
-                    $total += $certificate->service_fee ?? 0;
-                    $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
-                    $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-                    $cell = $row3->addCell(3200, $cellVCentered);
-                    $table = $cell->addTable();
-                    $row = $table->addRow();
-                    $row->addCell(100)->addText('');
-                    $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                    $row->addCell(100)->addText('');
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $row3 = $table->addRow();
+                        $total = $certificate->service_fee ?? 0;
+                        $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+                        $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
 
-                    $cell = $row3->addCell(3200, $cellVCentered);
-                    $table = $cell->addTable();
-                    $row = $table->addRow();
-                    $row->addCell(100)->addText('');
-                    $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                    $row->addCell(100)->addText('');
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText($item->apartment->appraise_asset, null, $alignBoth);;
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
-                    $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
-                    $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $row->addCell(100)->addText('');
+
+                        $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+                        $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+                        $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                    }
                 }
             } else {
-                foreach ($certificate->appraises as $index => $item) {
-                    $row3 = $table->addRow();
-                    $total += $certificate->service_fee ?? 0;
-                    $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
-                    $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-                    $cell = $row3->addCell(3200, $cellVCentered);
-                    $table = $cell->addTable();
-                    $row = $table->addRow();
-                    $row->addCell(100)->addText('');
-                    $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
-                    $row->addCell(100)->addText('');
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
+                        $row3 = $table->addRow();
+                        $total = $certificate->service_fee ?? 0;
+                        $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
+                        $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText($item->appraises->appraise_asset, null, $alignBoth);
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $cell = $row3->addCell(3200, $cellVCentered);
-                    $table = $cell->addTable();
-                    $row = $table->addRow();
-                    $row->addCell(100)->addText('');
-                    $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
-                    $row->addCell(100)->addText('');
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $table = $cell->addTable();
+                        // $row = $table->addRow();
+                        // $row->addCell(100)->addText('');
+                        // $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        // $row->addCell(100)->addText('');
 
-                    $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
-                    $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
-                    $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                        $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
+                        $row3->addCell(1400, $cellVCentered)->addText('Kèm theo CT', null, $alignCenter);
+                        $row3->addCell(1600, $cellVCentered)->addText($textServiceFee, null, $alignCenter);
+                    }
                 }
             }
         }
@@ -430,6 +462,7 @@ class BienBanThanhLy
         $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row4->addCell(3400, $cellVCentered)->addText('Tổng số tiền phải thanh toán', null,  $alignBoth);
         $row4->addCell(100, $cellVCentered)->addText(':', null,  $alignBoth);
+        // $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') . ' đồng' : '', ['bold' => true],  $alignBoth);
         $row4->addCell(6300, $cellVCentered)->addText(isset($total) ? $this->formatNumberFunction($total, 2, ',', '.') . ' đồng' : '', ['bold' => true],  $alignBoth);
 
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
@@ -472,7 +505,7 @@ class BienBanThanhLy
 
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
-        $reportName = 'Bien Ban Thanh Ly' . (isset($filename) ? '_CT' . htmlspecialchars($filename) : '');
+        $reportName = 'Bien_Ban_Thanh_Ly' . (isset($filename) ? '_CT' . htmlspecialchars($filename) : '');
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;

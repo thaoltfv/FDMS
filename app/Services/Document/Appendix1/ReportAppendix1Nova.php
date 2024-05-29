@@ -54,7 +54,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         // $address = $landNo . $docNo . $item->ward->name . ', ' . $item->district->name . ', ' . $item->province->name;
         // $address = $landNo . $docNo . $item->full_address;
         $address = $item->full_address;
-        return $address;
+        return htmlspecialchars($address);
     }
 
     protected function collectInfoLoaiCanHo($stt, $title, $asset)
@@ -84,7 +84,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         ];
         return $data;
     }
-    
+
     protected function collectInfomationApartmentData($asset)
     {
         $data = [];
@@ -187,11 +187,11 @@ class ReportAppendix1Nova extends ReportAppendix1
         }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
-            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
-            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
-            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
+            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất ' . $this->notbaseAcronym . '/đất ' . $this->baseAcronym . '', $asset);
+            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất ' . $this->notbaseAcronym . ' quy về đất ' . $this->baseAcronym . '(' . $this->m2 . ')', $asset);
+            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất ' . $this->baseAcronym . ' sau khi quy đổi (' . $this->m2 . ')', $asset);
         }
-        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/'. $this->m2 .')', $asset);
+        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/' . $this->m2 . ')', $asset);
         return $data;
     }
 
@@ -227,7 +227,7 @@ class ReportAppendix1Nova extends ReportAppendix1
             }
             // $textRun->addText($asset->appraise_asset ?? '', ['size' => 13, 'bold' => false]);
             $assetName = $asset->appraise_asset;
-            $address = $asset->full_address;
+            $address = htmlspecialchars($asset->full_address);
             $this->printAssetInfo($section, $assetName, $address);
 
             $this->surveyDescription($section, $asset);
@@ -327,7 +327,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
-                $stt ++;
+                $stt++;
             }
         }
 
@@ -339,18 +339,18 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         if ($panType == '2-1') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.') . '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.') . '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.') . '%', ['bold' => $isBold], $this->cellHCentered);
         } elseif ($panType == '2-3') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
-            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, $this->countDecimals($col2), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, $this->countDecimals($col3), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, $this->countDecimals($col4), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold], $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.') . '%', null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.') . '%', null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.') . '%', null, $this->cellHCenteredKeepNext);
         }
     }
 
@@ -423,7 +423,7 @@ class ReportAppendix1Nova extends ReportAppendix1
     {
         $fNumber = floatval($fNumber);
 
-        for ( $iDecimals = 0; $fNumber != round($fNumber, $iDecimals); $iDecimals++ );
+        for ($iDecimals = 0; $fNumber != round($fNumber, $iDecimals); $iDecimals++);
 
         return $iDecimals;
     }
@@ -446,12 +446,11 @@ class ReportAppendix1Nova extends ReportAppendix1
             $stt,
             $title,
             '-',
-            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.').' m'  : '-',
-            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.').' m'  : '-',
-            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.').' m'  : '-',
+            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') . ' m'  : '-',
+            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') . ' m'  : '-',
+            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') . ' m'  : '-',
             false
         ];
         return $data;
     }
-
 }

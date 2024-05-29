@@ -164,13 +164,22 @@ class GiayYeuCau
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText(" ", ['size' => '10'], ['align' => 'center']);
-
+        $stringTimeSoc = "";
+        $surveyTime = "";
+        if (isset($certificate->issue_date_card) && !empty(trim($certificate->issue_date_card))) {
+            $issue_date_card = date_create($certificate->issue_date_card);
+            $stringTimeSoc =  $issue_date_card->format('d') . "/" . $issue_date_card->format('m') . "/" . $issue_date_card->format('Y');
+        }
+        if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
+            $survey_time = date_create($certificate->survey_time);
+            $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+        }
         // 1
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thông tin cá nhân yêu cầu thẩm định: ", ['bold' => false]);
         $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
         $section->addListItem("Số thẻ CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', []);
-        $section->addListItem("Ngày cấp:                   ; Nơi cấp:  ", 0, [], 'bullets', []);
+        $section->addListItem("Ngày cấp: " . $stringTimeSoc . "   ; Nơi cấp: " . ($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : ""), 0, [], 'bullets', []);
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
         $section->addListItem("Số điện thoại: " . htmlspecialchars($certificate->petitioner_phone), 0, [], 'bullets', []);
 
@@ -220,33 +229,38 @@ class GiayYeuCau
                 $name_assets .= ($index == 0 ?  $item->appraise_asset : 'và ' . $item->appraise_asset);
                 $count += 1;
             }
-        } else {
+        } elseif ($certificate->realEstate && count($certificate->realEstate) > 0) {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $name_assets .= ($index) ? " và " : "";
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $name_assets .= ($index) ? " và " : "";
 
-                    $name_assets .= $item->appraise_asset;
-                    if ($item->law) {
-                        foreach ($item->law as $index2 => $item2) {
-                            $appraise_law .= ($index2) ? " và " : "";
-                            $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                        $name_assets .= $item->apartment->appraise_asset;
+                        if ($item->apartment->law) {
+                            foreach ($item->apartment->law as $index2 => $item2) {
+                                $appraise_law .= ($index2) ? " và " : "";
+                                $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                            }
                         }
+                        $count += 1;
                     }
-                    $count += 1;
                 }
             } else {
-                foreach ($certificate->appraises as $index => $item) {
-                    $name_assets .= ($index) ? " và " : "";
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
 
-                    $name_assets .= $item->appraise_asset;
-                    $check = $item->tangibleAssets;
-                    if ($item->appraiseLaw) {
-                        foreach ($item->appraiseLaw as $index2 => $item2) {
-                            $appraise_law .= ($index2) ? " và " : "";
-                            $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                        $name_assets .= ($index) ? " và " : "";
+
+                        $name_assets .= $item->appraises->appraise_asset;
+                        $check = $item->appraises->tangibleAssets;
+                        if ($item->appraises->appraiseLaw) {
+                            foreach ($item->appraises->appraiseLaw as $index2 => $item2) {
+                                $appraise_law .= ($index2) ? " và " : "";
+                                $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                            }
                         }
+                        $count += 1;
                     }
-                    $count += 1;
                 }
             }
         }
@@ -271,7 +285,8 @@ class GiayYeuCau
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
         if ((isset($certificate->apartmentAssetPrint) && count($certificate->apartmentAssetPrint) > 0) ||
             (isset($certificate->appraises) && count($certificate->appraises) > 0) ||
-            (isset($priceEstimatePrint) && count($priceEstimatePrint) > 0)
+            (isset($priceEstimatePrint) && count($priceEstimatePrint) > 0) ||
+            (isset($certificate->realEstate) && count($certificate->realEstate) > 0)
         ) {
             $table = $section->addTable($styleTable);
             $table->addRow(400, $rowHeader);
@@ -298,46 +313,49 @@ class GiayYeuCau
                 $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
                 $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
             }
-        } else {
+        } elseif ($certificate->realEstate && count($certificate->realEstate) > 0) {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $stt => $asset) {
-                    $dt = 0;
-                    $table->addRow(400, $cantSplit);
-                    $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->full_address), ['bold' => true], $cellHJustify);
-                    $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                    $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                    $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                    $dt = isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->area) ? $this->formatNumberFunction($asset->apartmentAssetProperties->area, 2, ',', '.') : '';
-                    $table->addRow(400, $cantSplit);
-                    $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->appraise_asset), ['bold' => false], $cellHJustify);
-                    $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
-                    $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
-                    $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
+                foreach ($certificate->realEstate as $stt => $asset) {
+                    if ($asset->apartment) {
+                        $dt = 0;
+                        $table->addRow(400, $cantSplit);
+                        $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
+                        $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->apartment->full_address), ['bold' => true], $cellHJustify);
+                        $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                        $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                        $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                        $dt = isset($asset->apartment->apartmentAssetProperties) && isset($asset->apartment->apartmentAssetProperties->area) ? $this->formatNumberFunction($asset->apartment->apartmentAssetProperties->area, 2, ',', '.') : '';
+                        $table->addRow(400, $cantSplit);
+                        $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
+                        $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->apartment->appraise_asset), ['bold' => false], $cellHJustify);
+                        $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
+                        $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
+                        $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
+                    }
                 }
             } else {
-                foreach ($certificate->appraises as $stt => $asset) {
+                foreach ($certificate->realEstate as $stt => $realestate) {
                     // Thông tin tài sản
-
-                    $dt = 0;
-                    $table->addRow(400, $cantSplit);
-                    $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->full_address), ['bold' => true], $cellHJustify);
-                    $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                    $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                    $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
-                    if ($item->tangibleAssets) {
-                        foreach ($item->tangibleAssets as $tangible) {
-                            $dt = $tangible->total_construction_area ? $this->formatNumberFunction($tangible->total_construction_area, 2, ',', '.') : '';
+                    if ($realestate->appraises) {
+                        $dt = 0;
+                        $table->addRow(400, $cantSplit);
+                        $table->addCell(600, $cellVCentered)->addText($stt + 1, ['bold' => true], array_merge($cellHCentered, $keepNext));
+                        $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($realestate->appraises->full_address), ['bold' => true], $cellHJustify);
+                        $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                        $table->addCell(1000, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                        $table->addCell(1800, $cellVCentered)->addText('', ['bold' => true], $cellHCentered);
+                        if ($realestate->appraises->tangibleAssets) {
+                            foreach ($realestate->appraises->tangibleAssets as $tangible) {
+                                $dt = $tangible->total_construction_area ? $this->formatNumberFunction($tangible->total_construction_area, 2, ',', '.') : '';
+                            }
                         }
+                        $table->addRow(400, $cantSplit);
+                        $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
+                        $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($realestate->appraises->appraise_asset), ['bold' => false], $cellHJustify);
+                        $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
+                        $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
+                        $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
                     }
-                    $table->addRow(400, $cantSplit);
-                    $table->addCell(600, $cellVCentered)->addText('', ['bold' => false], array_merge($cellHCentered, $keepNext));
-                    $table->addCell(4500, $cellVJustify)->addText(htmlspecialchars($asset->appraise_asset), ['bold' => false], $cellHJustify);
-                    $table->addCell(1000, $cellVCentered)->addText($dt, ['bold' => false], $cellHCentered);
-                    $table->addCell(1000, $cellVCentered)->addText($m2, ['bold' => false], $cellHCentered);
-                    $table->addCell(1800, $cellVCentered)->addText('', ['bold' => false], $cellHCentered);
                 }
             }
         }
@@ -345,13 +363,15 @@ class GiayYeuCau
         $appraise_date = date_create($certificate->appraise_date);
         $bien101 = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
 
-
+        $stringContact = $certificate->name_contact . ($certificate->phone_contact != '' ? ' - ' : '') . $certificate->phone_contact;
         $section->addListItem("Mục đích yêu cầu thẩm định giá: " . $bien101 . ".", 0, [], 'bullets', []);
         $section->addListItem("Thời điểm thẩm định giá: Tháng "  . date_format($appraise_date, "m/Y") . '.', 0, [], 'bullets', []);
-        $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
+        // $section->addListItem("Bên sử dụng kết quả thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
+        $section->addListItem("Bên sử dụng kết quả thẩm định giá: Khách hàng thẩm định giá", 0, [], 'bullets', []);
+
         $section->addListItem("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước", 0, [], 'bullets', []);
-        $section->addListItem("Ngày giờ, địa điểm khảo sát: ", 0, [], 'bullets', []);
-        $section->addListItem("Tên, điện thoại người liên hệ: ", 0, [], 'bullets', []);
+        $section->addListItem("Ngày giờ, địa điểm khảo sát: " . $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, 0, [], 'bullets', []);
+        $section->addListItem("Tên, điện thoại người liên hệ: " . $stringContact, 0, [], 'bullets', []);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Các hồ sơ, dữ liệu cá nhân, cung cấp gồm: ");
         $listItemRun->addText($appraise_law, ['italic' => true]);
@@ -395,6 +415,7 @@ class GiayYeuCau
         $reportUserName = CommonService::getUserReport();
         $reportName = 'GYC' . '_' . htmlspecialchars($certificate->petitioner_name);
         $reportName = str_replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], '', $reportName); // replace invalid characters with underscore
+        $reportName = str_replace(' ', '_', $reportName); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
         $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;

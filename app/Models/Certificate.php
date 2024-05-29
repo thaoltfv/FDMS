@@ -69,7 +69,9 @@ class Certificate extends Model
         'survey_location',
         'survey_time',
         'issue_date_card',
-        'issue_place_card'
+        'issue_place_card',
+        'customer_group_id',
+
     ];
 
     public function getStatusTextAttribute()
@@ -134,7 +136,10 @@ class Certificate extends Model
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_id', 'id');
     }
-
+    public function customerGroup(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'customer_group_id', 'id');
+    }
     public function appraiserManager(): BelongsTo
     {
         return $this->belongsTo(Appraiser::class, 'appraiser_manager_id', 'id');
@@ -308,6 +313,13 @@ class Certificate extends Model
                 $data[$stt]['id'] = $item->id;
                 $data[$stt]['asset_type_id'] = $item->asset_type_id;
                 $data[$stt]['general_asset_id'] = $item->real_estate_id;
+                $data[$stt]['full_address'] = '';
+                if ($item->appraises) {
+                    $data[$stt]['full_address'] = $item->appraises->full_address;
+                }
+                if ($item->apartment) {
+                    $data[$stt]['full_address'] = $item->apartment->full_address;
+                }
                 $data[$stt]['name'] = $item->appraise_asset;
                 $data[$stt]['created_by'] = $item->createdBy;
                 $data[$stt]['asset_type'] = $item->assetType;
@@ -330,6 +342,7 @@ class Certificate extends Model
                 $data[$stt]['asset_type_id'] = $item->asset_type_id;
                 $data[$stt]['general_asset_id'] = $item->personal_property_id;
                 $data[$stt]['name'] = $item->name;
+                $data[$stt]['full_address'] = $item->name;
                 $data[$stt]['created_by'] = $item->createdBy;
                 $data[$stt]['asset_type'] = $item->assetType;
                 $data[$stt]['asset'] = null;

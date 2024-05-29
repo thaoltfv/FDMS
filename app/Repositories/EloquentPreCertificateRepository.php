@@ -371,6 +371,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraise_purpose_id',
             'pre_certificates.created_at',
             'customer_id',
+            'pre_certificates.customer_group_id',
 
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
@@ -407,6 +408,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'priceEstimates',
             'priceEstimates.landFinalEstimate',
             'customer:id,name,phone,address',
+            'customerGroup:id,description',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
@@ -418,7 +420,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
+        if (request()->has('is_guest')) {
+        } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
@@ -508,12 +511,26 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 else
                     $result =  $result->orderBy('petitioner_name', 'ASC');
         }
+        if (request()->has('is_guest')) {
+            if (isset($user->customer_group_id)) {
+                $result = $result->where('customer_group_id', '=', $user->customer_group_id);
 
-        $result = $result->orderByDesc('pre_certificates.updated_at');
-        // dd(DB::getQueryLog());
-        $result = $result
-            ->forPage($page, $perPage)
-            ->paginate($perPage);
+                $result = $result->orderByDesc('pre_certificates.updated_at');
+                // dd(DB::getQueryLog());
+                $result = $result
+                    ->forPage($page, $perPage)
+                    ->paginate($perPage);
+            } else {
+                $result = [];
+            }
+        } else {
+            $result = $result->orderByDesc('pre_certificates.updated_at');
+            // dd(DB::getQueryLog());
+            $result = $result
+                ->forPage($page, $perPage)
+                ->paginate($perPage);
+        }
+
 
         // foreach ($result as $stt => $item) {
         //     $result[$stt]->append('detail_list_id');
@@ -564,6 +581,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiser_sale_id',
             'appraiser_perform_id',
             'certificate_id',
+            'pre_certificates.customer_group_id',
             'customer_id',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
@@ -635,6 +653,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraiserPerform:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'cancelReason:id,description',
+            'customerGroup:id,description',
             'otherDocuments' => function ($query) {
                 $query->whereNull('deleted_at');
             },
@@ -941,6 +960,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
+            'customer_group_id',
         ];
         $with = [
             'appraiserSale:id,name,user_id',
@@ -954,6 +974,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'createdBy:id,name',
             'payments',
             'cancelReason:id,description',
+            'customerGroup:id,description',
             'preType:id,description',
             'exportDocuments',
 
@@ -1048,6 +1069,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'deleted_at',
                     'commission_fee',
                     'pre_type_id',
+                    'customer_group_id',
                 ];
                 $certificateKey = [
                     'petitioner_name',
@@ -1077,6 +1099,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'document_type',
                     'total_preliminary_value',
                     'pre_type_id',
+                    'customer_group_id',
                 ];
 
                 $user = CommonService::getUser();
@@ -1248,12 +1271,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                     # Chuyển status từ số sang text
                     $edited = PreCertificate::where('id', $id)->first();
-                    if ($next != 8 && $current > $next) {
+                    if ($next != 8  && $current > $next) {
                         // $logDescription = $request['status_description'] . ' '.  $request['status_config']['description'];
                         $description = $currentConfig !== false ? $currentConfig['description'] : '';
                         $logDescription = 'từ chối ' .  $description;
                         if ($logDescription == "từ chối Hủy") {
                             $logDescription = "Khôi phục YCSB";
+                        }
+                        if ($logDescription == "từ chối Phân hồ sơ") {
+                            $description = $nextConfig !== false ? $nextConfig['description'] : '';
+                            $logDescription = 'cập nhật trạng thái ' . $description;
                         }
                     } elseif ($current == $next) {
                         $logDescription = 'phân lại hồ sơ ';
@@ -1691,6 +1718,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'pre_asset_name',
             'total_service_fee',
             'pre_type_id',
+            'customer_group_id',
             DB::raw(" CASE status
                 WHEN 1 THEN 'Yêu cầu sơ bộ'
                 WHEN 2 THEN 'Định giá sơ bộ'
@@ -1713,6 +1741,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'payments',
             'cancelReason:id,description',
             'preType:id,description',
+            'customerGroup:id,description',
         ];
         $result = PreCertificate::with($with)
             ->select($select);
@@ -2038,7 +2067,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
                 $edited = PreCertificate::where('id', $preCertificateId)->first();
                 // activity-log cập nhật thông tin chi tiết
-                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin chi tiết');
+                $this->CreateActivityLog($edited, $edited, 'update_data', 'cập nhật thông tin kết quả thẩm định');
             } else {
                 $result = ['message' => ErrorMessage::PRE_CERTIFICATE_CHOOSE_PRICE_ESTIMATE, 'exception' => ''];
                 return $result;
