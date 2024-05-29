@@ -73,6 +73,13 @@ class CertificateBriefReportController extends Controller
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
+    public function countBriefConversionRateCustomerGroup()
+    {
+        $result = $this->viewBrief->countBriefConversionRateCustomerGroup();
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        return $this->respondWithCustomData($result);
+    }
 
     public function countBriefInProcessingCertificate(Request $request)
     {

@@ -370,8 +370,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
     }
     public function countBriefFinishByMonthCustomerGroup()
     {
-        $this->model->refresh();
-
         $toYear = Carbon::now()->year;
         $fromYear = $toYear - 1;
         $user = CommonService::getUser();
@@ -478,7 +476,112 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         }
         $result = array_merge(['label' => $label], ['data' => $result]);
 
-        $database = $this->model->getTable();
+        return $result;
+    }
+
+    public function countBriefConversionRateCustomerGroup()
+    {
+        $toYear = Carbon::now()->year;
+        $fromYear = $toYear;
+        $user = CommonService::getUser();
+        $fromDate = '1/1/' . $fromYear;
+        $toDate = '31/12/' . $toYear;
+        $year = [$fromYear, $toYear];
+        $statusOutput = ['ChuaChuyenDoi', 'DaChuyenDoi'];
+
+        if (isset($fromDate) && isset($toDate)) {
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
+        } else {
+            return ['message' => 'Lỗi, không xác định được khoảng thời gian cần tìm', 'exception' => ''];
+        }
+
+        $date = $fromDate;
+        $monthList = [];
+        $stt = 0;
+        while ($stt < 12) {
+            $monthList[$stt]['month'] = $date->month;
+            $monthList[$stt]['label'] = 'Tháng ' . $date->month;
+            $date = $date->addMonth(1);
+            $stt++;
+        }
+
+        $fromDate = '1/1/' . $fromYear;
+        $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
+
+        $monthPluck = Arr::pluck($monthList, 'month');
+        $label = Arr::pluck($monthList, 'label');
+
+        $stt = 0;
+        $dataRaw = PreCertificate::query()
+            ->select([
+                DB::raw("count(id)"),
+                'certificate_id',
+                DB::raw("case status
+                        when 1
+                            then 'Yêu cầu sơ bộ'
+                        when 2
+                            then 'Định giá sơ bộ'
+                        when 3
+                            then 'Duyệt giá sơ bộ'
+                        when 4
+                            then 'Thương thảo'
+                        when 5
+                            then 'Phát hành KQSB'
+                        when 6
+                            then 'Hoàn thành'
+                        when 7
+                            then 'Hủy'
+                        when 8
+                            then 'Phân hồ sơ'
+                    end as status_text
+                "),
+                'status',
+                DB::raw("date_part('month', status_updated_at) as month"),
+                DB::raw("date_part('year', status_updated_at) as year"),
+            ])
+            ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
+            ->whereHas('customerGroup', function ($q) use ($user) {
+                if ($user->customer_group_id) {
+                    return $q->where('id', $user->customer_group_id);
+                }
+            })
+            ->groupBy(['status_text', 'status', 'month', 'year'])
+            ->orderBy('month')
+            ->orderBy('year')
+            ->orderBy('status')
+            ->get()->toArray();
+        $data = [];
+        $stt = 0;
+        foreach ($monthPluck as $month) {
+            foreach ($statusOutput as $item) {
+                $filter = array_filter($dataRaw, function ($value) use ($month, $item) {
+                    return $value['month'] == $month and ($value['certificate_id'] ? 'DaChuyenDoi' : 'ChuaChuyenDoi') === $item;
+                });
+                if (empty($filter)) {
+                    $addData = ['count' => 0, 'status' => '', 'month' => $month, 'year' => ''];
+                    $data[$item][$stt] = $addData;
+                } else {
+                    foreach ($filter as $fil) {
+                        $data[$item][$stt] =  $fil;
+                    }
+                }
+                $stt++;
+            }
+        }
+
+        $result = [];
+        $stt = 0;
+        foreach ($year as $item) {
+            $indexOfItem = array_search($item, $year);
+            $count = Arr::pluck($data[$item], 'count');
+            $result[$stt]['label'] = $item;
+            $result[$stt]['count'] = $count;
+            $result[$stt]['status'] = $statusOutput[$indexOfItem];
+
+            $stt++;
+        }
+        $result = array_merge(['label' => $label], ['data' => $result]);
         return $result;
     }
 

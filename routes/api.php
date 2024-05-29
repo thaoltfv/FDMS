@@ -538,6 +538,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('report/certificate-brieft/doughnut-chart-in-processing-pre-certificate', [CertificateBriefReportController::class, 'countBriefInProcessingPreCertificate']);
     Route::get('report/certificate-brieft/doughnut-chart-in-processing-certificate', [CertificateBriefReportController::class, 'countBriefInProcessingCertificate']);
     Route::get('report/certificate-brieft/bar-chart-finish-byMonth-customer', [CertificateBriefReportController::class, 'countBriefFinishByMonthCustomerGroup']);
+    Route::get('report/certificate-brieft/bar-chart-conversion-rate', [CertificateBriefReportController::class, 'countBriefConversionRateCustomerGroup']);
 
 
     Route::get('report/certificate-brieft/bar-chart-finish-byQuarters', [CertificateBriefReportController::class, 'countBriefFinishByQuarters']);
