@@ -3765,7 +3765,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $select = [
             'real_estates.id',
             'real_estates.updated_at',
-            'asset_type_id',
+            'real_estates.asset_type_id',
             'real_estates.created_at',
             'appraises.full_address as address_nd',
             'apartment_assets.full_address as address_cc',
