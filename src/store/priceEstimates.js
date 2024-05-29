@@ -132,7 +132,7 @@ export const usePriceEstimatesStore = defineStore(
 
 		function formatCapitalize(word) {
 			if (word)
-				return word.replace(/(?:^|\s|[-"'([{])+\S/g, function (x) {
+				return word.toLowerCase().replace(/(?:^|\s|[-"'([{])+\S/g, function (x) {
 					return x.toUpperCase();
 				});
 			else return word;
@@ -144,7 +144,7 @@ export const usePriceEstimatesStore = defineStore(
 		}
 		function toTitleCase(str) {
 			if (!str) return str;
-			return str.replace(/\w\S*/g, function (txt) {
+			return str.toLowerCase().replace(/\w\S*/g, function (txt) {
 				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 			});
 		}
@@ -268,7 +268,7 @@ export const usePriceEstimatesStore = defineStore(
 			let streets = miscInfo.value.districts.filter(item => item.id === id);
 			miscInfo.value.streets = streets[0].streets;
 			miscInfo.value.streets.forEach(item => {
-				item.name = toTitleCase(item.name);
+				item.name = formatCapitalize(item.name);
 			});
 			if (
 				priceEstimates.value.step_1.general_infomation.street_id !== "" &&
