@@ -317,7 +317,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
 
         $result = $result->toArray();
 
-        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
+        $result = array('data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
 
         return $result;
     }
