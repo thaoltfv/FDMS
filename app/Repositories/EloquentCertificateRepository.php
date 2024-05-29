@@ -3787,7 +3787,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->join('appraises', 'appraises.real_estate_id', '=', 'real_estates.id')
             ->join('apartment_assets', 'apartment_assets.real_estate_id', '=', 'real_estates.id')
             ->where($where)
-            ->whereNull('certificate_id');
+            ->whereNull('real_estates.certificate_id');
 
         if (!empty($realEstateIds) && ($page == 1)) {
             $result = $result->orWhereIn('real_estates.id', $realEstateIds);
