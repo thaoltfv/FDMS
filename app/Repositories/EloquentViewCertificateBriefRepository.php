@@ -557,6 +557,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->get()->toArray();
         $data = [];
         $stt = 0;
+        Log::info($dataRaw);
         foreach ($monthPluck as $month) {
             foreach ($statusOutput as $item) {
                 $filter = array_filter($dataRaw, function ($value) use ($month, $item) {
