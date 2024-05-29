@@ -16,6 +16,7 @@ class RealEstate extends Model
         'total_area' => 'float',
     ];
     protected $fillable = [
+        'real_estate_id',
         'asset_type_id',
         'appraise_asset',
         'total_area',
