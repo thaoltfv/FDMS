@@ -335,15 +335,41 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         }
 
         $result =
-            Certificate::query()->select(['status_text', 'status', DB::Raw("count(id)")])
+            Certificate::query()->select([
+                DB::raw("case status
+                            when 1
+                            then 'Mới'
+                        when 2
+                            then 'Thẩm định'
+                        when 3
+                            then 'Duyệt giá'
+                        when 4
+                            then 'Hoàn thành'
+                        when 5
+                            then 'Huỷ'
+                        when 7
+                            then 'Duyệt phát hành'
+                        when 8
+                            then 'In hồ sơ'
+                        when 9
+                            then 'Bàn giao khách hàng'
+                        when 10
+                            then 'Phân hồ sơ'
+                    end as status_text
+                    "),
+                'status',
+                DB::Raw("count(id)")
+            ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->groupby(['status_text', 'status'])
+            ->whereHas('customerGroup', function ($q) use ($user) {
+                if ($user->customer_group_id) {
+                    return $q->where('id', $user->customer_group_id);
+                }
+            })->groupby(['status_text', 'status'])
             ->orderBy('status')
             ->get();
 
-        if ($user->customer_group_id) {
-            $result = $result->where('customer_group_id', '=', $user->customer_group_id);
-        }
+
         $result = $result->toArray();
 
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
