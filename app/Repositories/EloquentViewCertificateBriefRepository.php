@@ -562,6 +562,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 $filter = array_filter($dataRaw, function ($value) use ($month, $item) {
                     return $value['month'] == $month and $value['rate_text']  === $item;
                 });
+                Log::info($item, $filter);
                 if (empty($filter)) {
                     $addData = ['count' => 0, 'status' => '', 'month' => $month, 'year' => ''];
                     $data[$item][$stt] = $addData;
