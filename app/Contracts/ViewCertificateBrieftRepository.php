@@ -20,6 +20,9 @@ interface ViewCertificateBrieftRepository extends BaseRepository
 
     public function countBriefInProcessingCertificate();
 
+    public function countBriefFinishByMonthCustomerGroup();
+
+
     public function countBriefFinishByQuarters();
 
     public function countBriefCancelByQuarters();
