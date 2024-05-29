@@ -3803,8 +3803,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'asset_type_id',
             'personal_properties.created_at',
             'personal_properties.name as name',
-            DB::raw("'' as address_nd"),
-            DB::raw("'' as address_cc"),
+            DB::raw("null as address_nd"),
+            DB::raw("null as address_cc"),
             DB::raw("0 as total_area"),
             'total_price',
             'users.name as created_by.name'

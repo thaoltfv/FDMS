@@ -847,7 +847,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
         $popup = $request->query('popup');
         $preCertificateId = $request->query('pre_certificate_id');
 
-        $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id'];
+        $select = ['id', 'step', 'status', 'coordinates', 'asset_type_id', 'created_by', 'land_no', 'doc_no', 'address_number', 'appraise_asset', 'filter_year', 'updated_at', 'created_at', 'appraise_id', 'apartment_asset_id', 'full_address'];
         $user = CommonService::getUser();
         $with = [
             'createdBy:id,name',
