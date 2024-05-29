@@ -56,16 +56,6 @@
 						</div>
 						<div class="col-12">
 							<InputCategory
-								v-model="appraiser_control_compute"
-								vid="appraiser_control_id"
-								label="Kiểm soát viên"
-								class="form-group-container"
-								@change="handleChangeAppraiserControl"
-								:options="optionsAppraiserControl"
-							/>
-						</div>
-						<div class="col-12">
-							<InputCategory
 								v-model="appraiser_compute"
 								vid="appraiser_id"
 								label="Thẩm định viên"
@@ -75,6 +65,17 @@
 								:options="optionsAppraiser"
 							/>
 						</div>
+						<div class="col-12">
+							<InputCategory
+								v-model="appraiser_control_compute"
+								vid="appraiser_control_id"
+								label="Kiểm soát viên"
+								class="form-group-container"
+								@change="handleChangeAppraiserControl"
+								:options="optionsAppraiserControl"
+							/>
+						</div>
+
 						<div class="col-12">
 							<InputCategory
 								v-model="administrative_compute"
@@ -398,16 +399,16 @@ export default {
 		business_manager_compute: {
 			get: function() {
 				if (this.businessManagers.length > 0) {
-					 console.log('vô đây trước businessManagers',this.businessManagers)
+					console.log("vô đây trước businessManagers", this.businessManagers);
 					return this.form.business_manager_id;
 				} else {
-					 console.log('vô đây trước 2',this.form.business_manager.name)
+					console.log("vô đây trước 2", this.form.business_manager.name);
 					return this.form.business_manager.name;
 				}
 			},
 			// setter
 			set: function(newValue) {
-				 console.log('newwww', newValue)
+				console.log("newwww", newValue);
 				this.form.business_manager_id = newValue;
 			}
 		},
@@ -541,7 +542,7 @@ export default {
 				id: "id",
 				key: "name"
 			};
-		},
+		}
 	}
 };
 </script>

@@ -993,7 +993,7 @@
 											:class="{ img_filter: !isCertificateReport }"
 										/>
 										<div
-											class=" title_input_content title_input_download cursor_pointer text-truncate"
+											class=" title_input_content title_input_file cursor_pointer text-truncate"
 											v-if="isCertificateReport"
 											@click="downloadDocumentFile('certificate_report')"
 										>
@@ -1081,7 +1081,7 @@
 											:class="{ img_filter: !isAppraisalReport }"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer text-truncate"
+											class="title_input_content title_input_file cursor_pointer text-truncate"
 											v-if="isAppraisalReport"
 											@click="downloadDocumentFile('appraisal_report')"
 										>
@@ -1168,7 +1168,7 @@
 											:class="{ img_filter: !isAppendix1Report }"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer text-truncate"
+											class="title_input_content title_input_file cursor_pointer text-truncate"
 											v-if="isAppendix1Report"
 											@click="downloadDocumentFile('appendix1_report')"
 										>
@@ -1261,7 +1261,7 @@
 											:class="{ img_filter: !isAppendix2Report }"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer text-truncate"
+											class="title_input_content title_input_file cursor_pointer text-truncate"
 											v-if="isAppendix2Report"
 											@click="downloadDocumentFile('appendix2_report')"
 										>
@@ -1348,7 +1348,7 @@
 											:class="{ img_filter: !isAppendix3Report }"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer text-truncate"
+											class="title_input_content title_input_file cursor_pointer text-truncate"
 											v-if="isAppendix3Report"
 											@click="downloadDocumentFile('appendix3_report')"
 										>
@@ -1439,7 +1439,7 @@
 											:class="{ img_filter: !isComparisionAssetReport }"
 										/>
 										<div
-											class="title_input_content title_input_download cursor_pointer text-truncate"
+											class="title_input_content title_input_file cursor_pointer text-truncate"
 											v-if="isComparisionAssetReport"
 											@click="downloadDocumentFile('comparision_asset_report')"
 										>
