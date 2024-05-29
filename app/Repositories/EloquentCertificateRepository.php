@@ -3841,7 +3841,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $propertyIds[] = $personal->personal_property_id;
             }
         }
-        $whereR = ['real_estates.created_by' => $user->id, 'status' => $status];
+        $whereR = ['real_estates.created_by' => $user->id, 'real_estates.status' => $status];
         $where = ['created_by' => $user->id, 'status' => $status];
         $result = null;
 
