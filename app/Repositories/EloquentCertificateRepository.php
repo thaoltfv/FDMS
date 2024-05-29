@@ -3767,6 +3767,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'real_estates.updated_at',
             'asset_type_id',
             'real_estates.created_at',
+            'real_estates.appraises.full_address as address_nd',
+            'real_estates.apartment.full_address as address_cc',
             DB::raw("appraise_asset as name, total_area,
                 coalesce(case
                     when  round_total > 0
@@ -3799,6 +3801,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'asset_type_id',
             'personal_properties.created_at',
             'personal_properties.name as name',
+            DB::raw("'' as address_nd"),
+            DB::raw("'' as address_cc"),
             DB::raw("0 as total_area"),
             'total_price',
             'users.name as created_by.name'
