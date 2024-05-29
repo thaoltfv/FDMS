@@ -516,7 +516,11 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $dataRaw = PreCertificate::query()
             ->select([
                 DB::raw("count(id)"),
-                'certificate_id',
+                DB::raw("case certificate_id
+                        when null
+                            then 'ChuaChuyenDoi'
+                        else 'DaChuyenDoi' end as rate_text
+                            "),
                 DB::raw("case status
                         when 1
                             then 'Yêu cầu sơ bộ'
@@ -546,7 +550,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                     return $q->where('id', $user->customer_group_id);
                 }
             })
-            ->groupBy(['status_text', 'status', 'month', 'year'])
+            ->groupBy(['status_text', 'rate_text', 'status', 'month', 'year'])
             ->orderBy('month')
             ->orderBy('year')
             ->orderBy('status')
@@ -556,7 +560,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         foreach ($monthPluck as $month) {
             foreach ($statusOutput as $item) {
                 $filter = array_filter($dataRaw, function ($value) use ($month, $item) {
-                    return $value['month'] == $month and ($value['certificate_id'] ? 'DaChuyenDoi' : 'ChuaChuyenDoi') === $item;
+                    return $value['month'] == $month and $value['rate_text']  === $item;
                 });
                 if (empty($filter)) {
                     $addData = ['count' => 0, 'status' => '', 'month' => $month, 'year' => ''];
