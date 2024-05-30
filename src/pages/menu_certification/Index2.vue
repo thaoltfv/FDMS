@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="container-fluid appraise-container">
+		<div class="container-fluid appraise-container" style="height: 87vh;">
 			<a-tabs default-active-key="1" style="height: 100%;">
 				<a-tab-pane key="1">
 					<span slot="tab">
@@ -8,17 +8,49 @@
 					</span>
 					<div class="row" style="margin: 0;padding-top:0;">
 						<div class="col-6 row">
-							<ProcessProgressChartCertificate
-								ref="ProcessProgressChartCertificate"
-								name="Thống kê theo tiến độ"
-								:fromDate="fromDate"
-								:toDate="toDate"
-							/>
+							<!-- <div class="col-12">
+								<div class="row mt-2 mb-2 mr-1 d-flex justify-content-end">
+									<InputCategory
+							v-if="isAdmin"
+							v-model="customerGroup"
+							class="col-3 col-lg-3 input-content"
+							vid="customer_group_id"
+							label="Nhóm đối tác"
+							:options="optionsCustomerGroup"
+						/>
+									<InputDatePickerRangeCondition
+										class="col-8 col-md-8 col-lg-8 form-group-container marginTop"
+										vid="search"
+										format-date="DD/MM/YYYY"
+										:startDateValue="fromDate"
+										:endDateValue="toDate"
+										@startDate="fromDate = $event"
+										@endDate="toDate = $event"
+										label="Từ ngày - đến ngày"
+									/>
+									<button
+										style="height:35px; margin-top: 28px;"
+										class="btn btn-orange btn-action-modal"
+										type="button"
+										@click="handleAction"
+									>
+										Tìm kiếm
+									</button>
+								</div>
+							</div> -->
+							<div class="col-12">
+								<ProcessProgressChart
+									ref="ProcessProgressChart"
+									name="Thống kê theo tiến độ"
+									:fromDate="fromDate"
+									:toDate="toDate"
+								/>
+							</div>
 						</div>
 						<div class="col-6">
-							<FinishByMonthChart
-								ref="FinishByMonthChart"
-								name="Hồ sơ hoàn thành theo tháng"
+							<ConversionRateByMonthChart
+								ref="ConversionRateByMonthChart"
+								name="Tỉ lệ chuyển đổi chính thức"
 							/>
 						</div>
 					</div>
@@ -35,20 +67,35 @@
 								<div
 									class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
 								>
-									<DropdownFilter class="mr-5" @search="onChangeStatus" />
-									<Search @filter-changed="onFilterQuickSearchChange($event)" />
+									<DropdownFilterPreCertificate
+										class="mr-5"
+										@search="onChangeStatusPreCertificate"
+									/>
+									<SearchPreCertificate
+										@filter-changed="
+											onFilterQuickSearchChangePreCertificate($event)
+										"
+									/>
 								</div>
 							</div>
 						</div>
-						<TableCertificate
-							:listCertificates="listCertificatesAll"
-							:isLoading="isLoading"
-							:pagination="paginationAll"
-							@handleChange="onPageChange"
+						<TablePreCertificate
+							:listCertificates="listCertificatesAllPreCertificate"
+							:isLoading="isLoadingPreCertificate"
+							:pagination="paginationAllPreCertificate"
+							@handleChange="onPageChangePreCertificate"
 						/>
 					</div>
 				</a-tab-pane>
 			</a-tabs>
+			<!-- <Tabs :theme="theme" :navAuto="true">
+				<TabItem name="Thống kê">
+				
+				</TabItem>
+				<TabItem name="Yêu cầu sơ bộ">
+					
+				</TabItem>
+			</Tabs> -->
 		</div>
 	</div>
 </template>
@@ -254,8 +301,8 @@ export default {
 		this.customerGroups = lstDataConfig.value.customerGroups;
 	},
 	beforeMount() {
-		this.getCertificateAll();
-		// this.getCertificateAllPreCertificate();
+		// this.getCertificateAll();
+		this.getCertificateAllPreCertificate();
 	}
 };
 </script>

@@ -85,7 +85,21 @@ navigations = [
 		type: "item",
 		icon: "nav_tdhs",
 		title: "CSM",
-		routeName: "menu_certification.index",
+		dropdown: [
+			{
+				id: "menu_pre_certificate",
+				title: "Yêu cầu sơ bộ",
+				routeName: "menu_pre_certification.index",
+				exact: true
+			},
+			{
+				id: "menu_certificate",
+				title: "Hồ sơ thẩm định",
+				routeName: "menu_certification.index",
+				exact: true
+			},
+		],
+		// routeName: "menu_certification.index",
 		customImage: true
 	},
 	// {

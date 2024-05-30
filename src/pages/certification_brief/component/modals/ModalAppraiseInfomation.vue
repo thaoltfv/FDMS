@@ -75,7 +75,7 @@
 										v-model="form.document_alter_by_bank"
 										class="w-50 form-group-container input_right"
 										vid="document_alter_by_bank"
-										label="Loại hồ sơ"
+										label="Loại biểu mẩu"
 										rules="required"
 										:options="optionsLoaiHs"
 										:disabled="editDocument"
@@ -359,8 +359,8 @@ export default {
 		optionsLoaiHs() {
 			return {
 				data: [
-					{ id: 0, name: "Hồ sơ mẫu" },
-					{ id: 1, name: "Hồ sơ Shinhan" }
+					{ id: 0, name: "Biểu mẫu gốc" },
+					{ id: 1, name: "Biểu mẫu Shinhan" }
 				],
 				id: "id",
 				key: "name"

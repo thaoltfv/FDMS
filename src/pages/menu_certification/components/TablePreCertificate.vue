@@ -3,6 +3,7 @@
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				ref="table"
+				bordered
 				class="table-property"
 				@change="handleTableChange"
 				:columns="columns"
@@ -15,27 +16,142 @@
 				"
 				:pagination="false"
 			>
+				<!-- <template
+					slot="filterDropdown"
+					slot-scope="{
+						filters,
+						setSelectedKeys,
+						selectedKeys,
+						confirm,
+						clearFilters
+					}"
+				>
+					<div class="custom-filter-dropdown">
+						<a-select
+							v-model="selectedKeys"
+							@change="setSelectedKeys"
+							style="width: 100%; margin-bottom: 8px;"
+						>
+							<a-select-option
+								v-for="filter in filters"
+								:key="filter.value"
+								:value="filter.value"
+							>
+								{{ filter.text }}
+							</a-select-option>
+						</a-select>
+						<div style="margin-top: 8px; text-align: right;">
+							<a-button
+								@click="filterData(selectedKeys, 'status')"
+								type="primary"
+								size="small"
+								icon="search"
+							>
+								Tìm
+							</a-button>
+							<a-button @click="clearFilters" size="small">
+								Xóa
+							</a-button>
+						</div>
+					</div>
+				</template>
+				<template
+					slot="filterDropdownOfficially"
+					slot-scope="{
+						filters,
+						setSelectedKeys,
+						selectedKeys,
+						confirm,
+						clearFilters
+					}"
+				>
+					<div class="custom-filter-dropdown">
+						<a-select
+							v-model="selectedKeys"
+							@change="setSelectedKeys"
+							style="width: 100%; margin-bottom: 8px;"
+						>
+							<a-select-option
+								v-for="filter in filters"
+								:key="filter.value"
+								:value="filter.value"
+							>
+								{{ filter.text }}
+							</a-select-option>
+						</a-select>
+						<div style="margin-top: 8px; text-align: right;">
+							<a-button
+								@click="filterData(selectedKeys, 'officially')"
+								type="primary"
+								size="small"
+								icon="search"
+							>
+								Tìm
+							</a-button>
+							<a-button @click="clearFilters" size="small">
+								Xóa
+							</a-button>
+						</div>
+					</div>
+				</template>
+				<template
+					slot="filterDropdownCreatedAt"
+					slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters }"
+				>
+					<div class="custom-filter-dropdown">
+						<div>
+							<span>Từ ngày:</span>
+							<a-date-picker
+								placeholder="Tìm ngày"
+								:value="selectedKeys[0] ? selectedKeys[0] : null"
+								@change="date => setSelectedKeys(date ? [date] : [])"
+							/>
+						</div>
+						<div>
+							<span>Đến ngày:</span>
+							<a-date-picker
+								placeholder="Tìm ngày"
+								:value="selectedKeys[1] ? selectedKeys[1] : null"
+								@change="date => setSelectedKeys(date ? date : [])"
+							/>
+						</div>
+						<a-button
+							type="primary"
+							size="small"
+							@click="filterData(selectedKeys, 'date')"
+							icon="search"
+						>
+							Tìm
+						</a-button>
+						<a-button size="small" @click="clearFilters">
+							Xóa
+						</a-button>
+					</div>
+				</template> -->
 				<template slot="id" slot-scope="id, property">
 					<div class="position-relative">
-						<button class="link-detail">
+						<p class="text-main">
 							{{ "YCSB_" + id }}
-						</button>
+						</p>
 					</div>
 				</template>
 				<template slot="status" slot-scope="status, data">
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<!-- <div
+						<div
 							:id="(data.id + 'status').toString()"
 							:class="['status-color', 'bg-' + getStatusColor(status)]"
 						/>
 						<b-tooltip :target="(data.id + 'status').toString()">
 							{{ getStatusDescription(status) }}
-						</b-tooltip> -->
-						<p class="text-main">
-							{{ getStatusDescription(status) }}
-						</p>
+						</b-tooltip>
+						<!-- <b-dropdown class="dropdown-container" no-caret>
+							<template #button-content>
+								<img src="@/assets/icons/ic_more.svg" alt="" />
+							</template>
+							<b-dropdown-item>Action</b-dropdown-item>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template
@@ -77,11 +193,11 @@
 					slot-scope="{ price_estimates }"
 				>
 					<div v-for="(price_estimate, index) in price_estimates" :key="index">
-						<p class="text-main__blue text-wrap ">
+						<p class="text-main__blue text-wrap text-capitalize">
 							{{ price_estimate.full_address || "-" }}
 						</p>
 						<p class="text-secondary text-wrap ">
-							Giá trị tài sản:
+							Giá trị sơ bộ:
 							{{
 								price_estimate.land_final_estimate &&
 								price_estimate.land_final_estimate[0] &&
@@ -121,10 +237,10 @@
 					slot-scope="{ appraiser_sale, appraiser_perform }"
 				>
 					<p class="text-main ml-0 pl-0">
-						NVKD: {{ appraiser_sale ? appraiser_sale.name : "-" }}
+						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
 					</p>
 					<p class="text-secondary ml-0 pl-0">
-						CV: {{ appraiser_perform ? appraiser_perform.name : "-" }}
+						NVKD: {{ appraiser_sale ? appraiser_sale.name : "-" }}
 					</p>
 				</template>
 			</a-table>
@@ -146,7 +262,7 @@
 					:total="Number(pagination.total)"
 					:show-total="
 						(total, range) =>
-							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} yêu cầu sơ bộ`
+							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`
 					"
 					@change="onPaginationChange"
 				>
@@ -580,6 +696,11 @@ export default {
 	},
 	mounted() {},
 	methods: {
+		formatCapitalize(word) {
+			return word.toLowerCase().replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+				return x.toUpperCase();
+			});
+		},
 		getStatusDescription(status) {
 			const item = this.principleConfig.find(item => item.status === status);
 			return item ? item.description : "";

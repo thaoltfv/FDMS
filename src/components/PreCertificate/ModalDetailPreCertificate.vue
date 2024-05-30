@@ -176,24 +176,24 @@
 							</div>
 							<div class="d-flex container_content">
 								<strong class="margin_content_inline"
-									>Chuyên viên thực hiện:</strong
-								>
-								<p>
-									{{
-										dataPC.appraiser_perform
-											? dataPC.appraiser_perform.name
-											: ""
-									}}
-								</p>
-							</div>
-							<div class="d-flex container_content">
-								<strong class="margin_content_inline"
 									>Quản lý nghiệp vụ:</strong
 								>
 								<p>
 									{{
 										dataPC.appraiser_business_manager
 											? dataPC.appraiser_business_manager.name
+											: ""
+									}}
+								</p>
+							</div>
+							<div class="d-flex container_content">
+								<strong class="margin_content_inline"
+									>Chuyên viên thực hiện:</strong
+								>
+								<p>
+									{{
+										dataPC.appraiser_perform
+											? dataPC.appraiser_perform.name
 											: ""
 									}}
 								</p>
