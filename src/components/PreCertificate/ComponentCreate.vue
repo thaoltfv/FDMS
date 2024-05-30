@@ -249,17 +249,6 @@
 								:options="optionsAppraiserSales"
 							/>
 							<InputCategory
-								v-model="appraiser_perform_compute"
-								vid="appraiser_perform_id"
-								label="Chuyên viên thực hiện"
-								:rules="dataPC.status > 1 ? 'required' : ''"
-								:requiredIcon="dataPC.status > 1"
-								class="form-group-container col-12"
-								:options="optionsAppraiserPerformance"
-							/>
-						</div>
-						<div class="row justify-content-between">
-							<InputCategory
 								v-model="business_manager_compute"
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
@@ -267,6 +256,17 @@
 								:requiredIcon="true"
 								class="form-group-container col-12"
 								:options="optionsBusinessManager"
+							/>
+						</div>
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="appraiser_perform_compute"
+								vid="appraiser_perform_id"
+								label="Chuyên viên thực hiện"
+								:rules="dataPC.status > 1 ? 'required' : ''"
+								:requiredIcon="dataPC.status > 1"
+								class="form-group-container col-12"
+								:options="optionsAppraiserPerformance"
 							/>
 						</div>
 					</div>

@@ -142,7 +142,7 @@
 								v-model="data.document_alter_by_bank"
 								class="form-group-container col-sm-12 col-md-3"
 								vid="document_alter_by_bank"
-								label="Loại hồ sơ"
+								label="Loại biểu mẫu"
 								rules="required"
 								:options="optionsLoaiHs"
 								@change="data.document_alter_by_bank = $event"
@@ -357,20 +357,20 @@
             </div> -->
 						<div class="row justify-content-between">
 							<InputCategory
-								v-model="administrative_compute"
-								vid="administrative_id"
-								label="Hành chính viên"
-								class="form-group-container col-sm-12 col-md-6"
-								@change="handleChangeAppraiser"
-								:options="optionsAdministratives"
-							/>
-							<InputCategory
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
 								label="Chuyên viên thực hiện"
 								class="form-group-container col-sm-12 col-md-6"
 								@change="handleChangeAppraiserPerform"
 								:options="optionsPeformance"
+							/>
+							<InputCategory
+								v-model="appraiser_compute"
+								vid="appraiser_id"
+								label="Thẩm định viên"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="handleChangeAppraiser"
+								:options="optionsAppraiser"
 							/>
 						</div>
 						<div class="row justify-content-between">
@@ -383,12 +383,12 @@
 								:options="optionsAppraiserControl"
 							/>
 							<InputCategory
-								v-model="appraiser_compute"
-								vid="appraiser_id"
-								label="Thẩm định viên"
+								v-model="administrative_compute"
+								vid="administrative_id"
+								label="Hành chính viên"
 								class="form-group-container col-sm-12 col-md-6"
 								@change="handleChangeAppraiser"
-								:options="optionsAppraiser"
+								:options="optionsAdministratives"
 							/>
 						</div>
 
@@ -628,8 +628,8 @@ export default {
 		optionsLoaiHs() {
 			return {
 				data: [
-					{ id: 0, name: "Hồ sơ mẫu" },
-					{ id: 1, name: "Hồ sơ Shinhan" }
+					{ id: 0, name: "Biểu mẫu gốc" },
+					{ id: 1, name: "Biểu mẫu Shinhan" }
 				],
 				id: "id",
 				key: "name"

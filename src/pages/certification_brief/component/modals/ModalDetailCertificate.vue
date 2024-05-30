@@ -109,13 +109,13 @@
 							<p>{{ form.commission_fee ? form.commission_fee : 0 }}%</p>
 						</div>
 						<div class="d-flex container_content">
-							<strong class="margin_content_inline">Loại hồ sơ:</strong>
+							<strong class="margin_content_inline">Loại biểu mẫu:</strong>
 							<p>
 								{{
 									form.document_alter_by_bank === 0
-										? "Hồ sơ mẫu"
+										? "Biểu mẫu gốc"
 										: form.document_alter_by_bank === 1
-										? "Hồ sơ shinnhan"
+										? "Biểu mẫu Shinhan"
 										: ""
 								}}
 							</p>

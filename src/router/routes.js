@@ -513,15 +513,61 @@ export const routes = [
 		}
 	},
 	// menu theo dõi hồ sơ
+	// {
+	// 	path: "/menu_certification",
+	// 	name: "menu_certification.index",
+	// 	component: page("menu_certification/Index.vue"),
+	// 	beforeEnter: ResolveGuard([AuthGuard]),
+	// 	meta: {
+	// 		permissions: [PERMISSIONS.VIEW_MENU_FOLLOW_PROFILE],
+	// 		gtm: "Trang theo dõi hồ sơ"
+	// 	}
+	// },
 	{
 		path: "/menu_certification",
-		name: "menu_certification.index",
-		component: page("menu_certification/Index.vue"),
-		beforeEnter: ResolveGuard([AuthGuard]),
-		meta: {
-			permissions: [PERMISSIONS.VIEW_MENU_FOLLOW_PROFILE],
-			gtm: "Trang theo dõi hồ sơ"
-		}
+		component: Resource,
+		children: [
+			{
+				path: "/menu_certification/pre_certificate",
+				name: "menu_pre_certification.index",
+				component: page("menu_certification/Index2.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "CSM",
+					permissions: [PERMISSIONS.VIEW_MENU_FOLLOW_PROFILE],
+					breadcrumbs: [
+						{
+							title: "CSM",
+							name: "menu_pre_certification.index"
+						},
+						{
+							title: "Yêu cầu sơ bộ",
+							name: "menu_pre_certification.index"
+						}
+					],
+					gtm: "Yêu cầu sơ bộ"
+				}
+			},
+			{
+				path: "/menu_certification/certificate",
+				name: "menu_certification.index",
+				component: page("menu_certification/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "CSM",
+					permissions: [PERMISSIONS.VIEW_MENU_FOLLOW_PROFILE],
+					breadcrumbs: [
+						{
+							title: "CSM",
+							name: "menu_certification.index"
+						},
+						{ title: "Hồ sơ thẩm định", name: "menu_certification.index" }
+					],
+					gtm: "Hồ sơ thẩm định"
+				}
+			},
+
+		]
 	},
 	// staff
 	{

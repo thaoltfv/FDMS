@@ -2,6 +2,7 @@
 	<div v-if="!isMobile()" class="table-wrapper">
 		<div class="table-detail position-relative empty-data">
 			<a-table
+				bordered
 				class="table-property"
 				@change="handleTableChange"
 				:columns="columns"
@@ -17,25 +18,28 @@
 				<!--Custom type table-->
 				<template slot="id" slot-scope="id, property">
 					<div class="position-relative">
-						<button class="link-detail">
+						<p class="text-main">
 							{{ "HSTD_" + id }}
-						</button>
+						</p>
 					</div>
 				</template>
 				<template slot="status" slot-scope="status, data">
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<!-- <div
+						<div
 							:id="(data.id + 'status').toString()"
 							:class="['status-color', 'bg-' + getStatusColor(status)]"
-						/> -->
-						<!-- <b-tooltip :target="(data.id + 'status').toString()">
+						/>
+						<b-tooltip :target="(data.id + 'status').toString()">
 							{{ getStatusDescription(status) }}
-						</b-tooltip> -->
-						<p class="public_date">
-							{{ getStatusDescription(status) }}
-						</p>
+						</b-tooltip>
+						<!-- <b-dropdown class="dropdown-container" no-caret>
+							<template #button-content>
+								<img src="@/assets/icons/ic_more.svg" alt="" />
+							</template>
+							<b-dropdown-item>Action</b-dropdown-item>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template slot="created_at" slot-scope="created_at">
@@ -81,7 +85,7 @@
 							v-for="(law, index) in item.apartment ? item.apartment.law : []"
 							:key="law.id"
 						>
-							<p class="text-secondary">
+							<p class="text-secondary text-wrap">
 								Chủ sở hữu:
 								{{
 									item.apartment.law.lemgth > 1
@@ -101,7 +105,7 @@
 								: []"
 							:key="law.id"
 						>
-							<p class="text-secondary">
+							<p class="text-secondary text-wrap">
 								Chủ sở hữu:
 								{{
 									item.appraises.certificate_appraise_law.lemgth > 1
@@ -116,7 +120,7 @@
 					<p
 						:id="`content_appraised_asset`"
 						class="appraised_asset text-none text-wrap"
-						style="width: 250px !important;"
+						style="width: 360px !important;"
 					>
 						<span v-html="showAddressAppraise(detail_appraise)"></span>
 					</p>
@@ -127,17 +131,59 @@
 							props.total_price ? formatNumber(props.total_price) + " đ" : "-"
 						}}
 					</p>
+					<!-- <p
+						:class="
+							isShowPrice(props)
+								? 'text-main__blue'
+								: 'text-secondary d-inline-block text-truncate'
+						"
+						style="max-width: 220px"
+						:id="`content_appraise_purpose_${props.id}`"
+					>
+						Mục đích:
+						{{ props.appraise_purpose ? props.appraise_purpose.name : "-" }}
+					</p>
+					<b-tooltip
+						v-if="props.appraise_purpose"
+						:target="('content_appraise_purpose_' + props.id).toString()"
+						placement="top"
+						triggers="hover"
+						>{{
+							props.appraise_purpose ? props.appraise_purpose.name : ""
+						}}</b-tooltip
+					> -->
 				</template>
 				<template
 					slot="petitioner_name"
 					slot-scope="{ petitioner_name, customer }"
 				>
-					<p class="text-main">KH: {{ petitioner_name }}</p>
-					<p class="text-secondary">
+					<p class="name_detail text-main text-wrap">
+						KH: {{ petitioner_name }}
+					</p>
+					<p class="name_detail text-secondary text-wrap">
 						Đối tác: {{ customer ? customer.name : " " }}
 					</p>
 				</template>
-
+				<!-- <template slot="appraise_land_sum_area" slot-scope="appraise_land_sum_area">
+          <p class="text-none">
+            {{
+                appraise_land_sum_area ? formatNumber(appraise_land_sum_area) : 0
+            }}
+            m
+            <sup>2</sup>
+          </p>
+        </template> -->
+				<!-- <template slot="total_construction_area" slot-scope="total_construction_area">
+          <p class="text-none">
+            {{
+                total_construction_area
+                  ? formatNumber(total_construction_area)
+                  : 0
+            }}
+            m
+            <sup>2</sup>
+          </p>
+        </template> -->
 				<template slot="created_by" slot-scope="{ created_by, created_at }">
 					<p class="text-main">
 						{{ created_by ? created_by.name : " " }}
@@ -176,7 +222,7 @@
 					:total="Number(pagination.total)"
 					:show-total="
 						(total, range) =>
-							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} hồ sơ thẩm định`
+							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`
 					"
 					@change="onPaginationChange"
 				>
@@ -1022,6 +1068,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// .total {
+//   color: #000000;
+//   bottom: 17px;
+//   right: 0;
+
+//   @media (max-width: 418px) {
+//     position: relative !important;
+//     text-align: center;
+//     margin-top: 20px;
+//   }
+// }
+
+// .full-address {
+//   width: 200px;
+//   white-space: nowrap;
+//   -webkit-line-clamp: 2 !important;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   margin-bottom: 0;
+//   text-transform: none;
+
+//   &:first-letter {
+//     text-transform: none;
+//   }
+// }
+
 /deep/ .optional-data {
 	@media (max-width: 1024px) {
 		display: none;
@@ -1088,13 +1160,13 @@ export default {
 	background: transparent;
 	border: none;
 
-	&:hover,
-	&:focus,
-	&:active {
-		color: #faa831;
-		border: none;
-		outline: none;
-	}
+	// &:hover,
+	// &:focus,
+	// &:active {
+	// 	color: #faa831;
+	// 	border: none;
+	// 	outline: none;
+	// }
 }
 
 .dropdown-container {
@@ -1214,17 +1286,20 @@ export default {
 		}
 	}
 }
+.name_detail {
+	width: 270px !important;
+}
 .appraise_detail {
-	@media (max-width: 1600px) {
-		max-height: 60px;
-	}
-	@media (min-width: 1600px) {
-		max-height: 60px;
-	}
-	@media (min-width: 1900px) {
-		max-height: 60px;
-	}
-	min-width: 120px;
+	// @media (max-width: 1600px) {
+	// 	max-height: 60px;
+	// }
+	// @media (min-width: 1600px) {
+	// 	max-height: 60px;
+	// }
+	// @media (min-width: 1900px) {
+	// 	max-height: 60px;
+	// }
+	width: 270px !important;
 	white-space: nowrap;
 	-webkit-line-clamp: 2 !important;
 	overflow: hidden;

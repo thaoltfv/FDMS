@@ -196,11 +196,11 @@
 					slot-scope="{ price_estimates }"
 				>
 					<div v-for="(price_estimate, index) in price_estimates" :key="index">
-						<p class="text-main__blue text-wrap ">
+						<p class="text-main__blue text-wrap text-capitalize">
 							{{ price_estimate.full_address || "-" }}
 						</p>
-						<p class="text-secondary text-wrap ">
-							Giá trị tài sản:
+						<p class="text-secondary text-wrap">
+							Giá trị sơ bộ:
 							{{
 								price_estimate.land_final_estimate &&
 								price_estimate.land_final_estimate[0] &&
