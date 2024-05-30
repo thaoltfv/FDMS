@@ -67,7 +67,8 @@ class CompareAssetGeneral extends Model
         'project_id',
         'block_id',
         'floor_id',
-
+        'created_at',
+        'updated_at',
     ];
 
     function getTypeName()

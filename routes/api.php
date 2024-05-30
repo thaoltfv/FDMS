@@ -534,6 +534,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('report/certificate-brieft/status-by-appraiser', [CertificateBriefReportController::class, 'countBrieftStatusByAppraiser']);
     Route::get('report/certificate-brieft/doughnut-chart-backlog', [CertificateBriefReportController::class, 'countBrieftBacklog']);
     Route::get('report/certificate-brieft/doughnut-chart-in-processing', [CertificateBriefReportController::class, 'countBriefInProcessing']);
+
+    Route::get('report/certificate-brieft/doughnut-chart-in-processing-pre-certificate', [CertificateBriefReportController::class, 'countBriefInProcessingPreCertificate']);
+    Route::get('report/certificate-brieft/doughnut-chart-in-processing-certificate', [CertificateBriefReportController::class, 'countBriefInProcessingCertificate']);
+    Route::get('report/certificate-brieft/bar-chart-finish-byMonth-customer', [CertificateBriefReportController::class, 'countBriefFinishByMonthCustomerGroup']);
+    Route::get('report/certificate-brieft/bar-chart-conversion-rate', [CertificateBriefReportController::class, 'countBriefConversionRateCustomerGroup']);
+
+
     Route::get('report/certificate-brieft/bar-chart-finish-byQuarters', [CertificateBriefReportController::class, 'countBriefFinishByQuarters']);
     Route::get('report/certificate-brieft/bar-chart-cancel-byQuarters', [CertificateBriefReportController::class, 'countBriefCancelByQuarters']);
     Route::get('report/certificate-brieft/doughnut-chart-branch-revenue', [CertificateBriefReportController::class, 'totalBriefBranchRevenue']);

@@ -3765,16 +3765,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $select = [
             'real_estates.id',
             'real_estates.updated_at',
-            'asset_type_id',
+            'real_estates.asset_type_id',
             'real_estates.created_at',
-            DB::raw("appraise_asset as name, total_area,
+            'appraises.full_address as address_nd',
+            'apartment_assets.full_address as address_cc',
+            DB::raw("real_estates.appraise_asset as name, total_area,
                 coalesce(case
-                    when  round_total > 0
-                    then ceil(total_price / power(10, round_total)) * power(10, round_total)
-                    when   round_total < 0
-                        then floor( total_price * abs(power(10, round_total))  ) / abs(power(10, round_total))
+                    when  real_estates.round_total > 0
+                    then ceil(real_estates.total_price / power(10, real_estates.round_total)) * power(10, real_estates.round_total)
+                    when   real_estates.round_total < 0
+                        then floor( real_estates.total_price * abs(power(10, real_estates.round_total))  ) / abs(power(10, real_estates.round_total))
                     else
-                        total_price
+                        real_estates.total_price
                 end, 0) as total_price
                 "),
             'users.name as created_by.name'
@@ -3782,8 +3784,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result = RealEstate::query()
             ->select($select)
             ->join('users', 'users.id', '=', 'real_estates.created_by')
+            ->leftjoin('appraises', 'appraises.real_estate_id', '=', 'real_estates.id')
+            ->leftjoin('apartment_assets', 'apartment_assets.real_estate_id', '=', 'real_estates.id')
             ->where($where)
-            ->whereNull('certificate_id');
+            ->whereNull('real_estates.certificate_id');
 
         if (!empty($realEstateIds) && ($page == 1)) {
             $result = $result->orWhereIn('real_estates.id', $realEstateIds);
@@ -3799,6 +3803,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'asset_type_id',
             'personal_properties.created_at',
             'personal_properties.name as name',
+            DB::raw("null as address_nd"),
+            DB::raw("null as address_cc"),
             DB::raw("0 as total_area"),
             'total_price',
             'users.name as created_by.name'
@@ -3835,11 +3841,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $propertyIds[] = $personal->personal_property_id;
             }
         }
+        $whereR = ['real_estates.created_by' => $user->id, 'real_estates.status' => $status];
         $where = ['created_by' => $user->id, 'status' => $status];
         $result = null;
 
         $realEstateTyeIds = [];
-        $sqlRealEstate = $this->sqlRealEstate($realEstateIds, $realEstateTyeIds, $where, $perPage, $page);
+        $sqlRealEstate = $this->sqlRealEstate($realEstateIds, $realEstateTyeIds, $whereR, $perPage, $page);
 
         $personalTypeIds = [];
         $sqlPersonal = $this->sqlPersonalProperty($propertyIds, $personalTypeIds, $where, $perPage, $page);
