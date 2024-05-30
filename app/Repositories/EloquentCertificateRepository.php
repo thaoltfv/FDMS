@@ -2730,6 +2730,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'commission_fee',
 
             'document_type',
+            'service_fee',
             'status_expired_at',
             'status_updated_at',
             'sub_status'
@@ -2752,6 +2753,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate.appraises.certificateAppraiseLaw',
             'realEstate.apartment',
             'realEstate.apartment.law',
+            'payments',
 
             // 'appraises:id,appraise_id',
             // 'appraises.appraiseLaw:id,appraise_id',
