@@ -291,6 +291,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
     // Chart cho nhóm đối tác
     public function countBriefInProcessingPreCertificate()
     {
+        $this->model->refresh();
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $user = CommonService::getUser();
@@ -355,6 +356,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
 
     public function countBriefInProcessingCertificate()
     {
+        $this->model->refresh();
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $user = CommonService::getUser();
@@ -423,6 +425,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
     }
     public function countBriefFinishByMonthCustomerGroup()
     {
+        $this->model->refresh();
         $toYear = Carbon::now()->year;
         $fromYear = $toYear - 1;
         $user = CommonService::getUser();
@@ -554,6 +557,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
 
     public function countBriefConversionRateCustomerGroup()
     {
+        $this->model->refresh();
         $toYear = Carbon::now()->year;
         $fromYear = $toYear;
         $user = CommonService::getUser();
