@@ -1806,7 +1806,7 @@ class CommonService
 	public static function getCompareWithId($id)
 	{
 		$dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->first();
-		return $dataAppraise->updated_at ?? $dataAppraise->created_at;
+		return $dataAppraise->updated_at;
 	}
 
 	public static function getCompareWithIdNote($id)
