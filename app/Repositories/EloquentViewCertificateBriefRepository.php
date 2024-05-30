@@ -406,7 +406,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                         then 2
                     when 10
                         then 2
-                end as status
+                end as status_group
             "),
                 DB::Raw("count(id)")
             ])
@@ -415,10 +415,10 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 if ($user->customer_group_id) {
                     return $q->where('id', $user->customer_group_id);
                 }
-            })->groupby(['status_text', 'status'])
-            ->orderBy('status')
+            })->groupby(['status_text', 'status_group'])
+            ->orderBy('status_group')
             ->get()->toArray();
-        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
+        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
         return $result;
     }
     public function countBriefFinishByMonthCustomerGroup()
@@ -500,7 +500,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                             then 2
                         when 10
                             then 2
-                    end as status
+                    end as status_group
                 "),
                 DB::raw("date_part('month', status_updated_at) as month"),
                 DB::raw("date_part('year', status_updated_at) as year"),
@@ -511,17 +511,17 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                     return $q->where('id', $user->customer_group_id);
                 }
             })
-            ->groupBy(['status_text', 'status', 'month', 'year'])
+            ->groupBy(['status_text', 'status_group', 'month', 'year'])
             ->orderBy('month')
             ->orderBy('year')
-            ->orderBy('status')
+            ->orderBy('status_group')
             ->get()->toArray();
         $data = [];
         $stt = 0;
         foreach ($monthPluck as $month) {
             foreach ($year as $item) {
                 $filter = array_filter($dataRaw, function ($value) use ($month, $item, $status) {
-                    return $value['month'] == $month and $value['year'] == $item and $value['status'] == $status[0];
+                    return $value['month'] == $month and $value['year'] == $item and $value['status_group'] == $status[0];
                 });
                 if (empty($filter)) {
                     $addData = ['count' => 0, 'status' => $status[0], 'month' => $month, 'year' => $item];
