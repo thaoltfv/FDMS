@@ -337,19 +337,19 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                     then 7
                 when 8
                     then 2
-                end as status"),
+                end as status_group"),
                 DB::Raw("count(id)")
             ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->groupby(['status_text', 'status'])
+            ->groupby(['status_text', 'status_group'])
             ->whereHas('customerGroup', function ($q) use ($user) {
                 if ($user->customer_group_id) {
                     return $q->where('id', $user->customer_group_id);
                 }
             })
-            ->orderBy('status')
+            ->orderBy('status_group')
             ->get()->toArray();
-        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status'));
+        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
         return $result;
     }
 
