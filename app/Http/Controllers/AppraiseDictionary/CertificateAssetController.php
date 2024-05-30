@@ -572,6 +572,7 @@ class CertificateAssetController extends Controller
                 return  $this->respondWithErrorData(['message' => 'Không có file phù hợp để tiến hành tải xuống']);
             }
         } catch (\Throwable $th) {
+            Log::info($th);
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
     }
