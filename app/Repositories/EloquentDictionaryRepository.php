@@ -120,7 +120,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
     {
         return $this->model->query()
             ->where('id', $id)
-            ->update('status',  $status);
+            ->update(['status' =>  $status]);
     }
 
 
