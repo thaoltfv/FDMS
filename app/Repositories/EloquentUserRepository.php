@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Ramsey\Uuid\Uuid;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\Log;
 
 class EloquentUserRepository extends EloquentRepository implements UserRepository
 {
@@ -201,9 +202,11 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $user->getRoleNames();
         $roles = $user['roles'];
 
-        if (count($roles) > 0 &&  !($roles[0]['role_name'] == $roleUpdate)) {
+        if (count($roles) > 0 &&  !($roles[0]['role_name'] == $objects['role'])) {
+            Log::info('Không trùng quyền', $roles[0]['role_name']);
             $getRole = Role::query()->where('role_name', '=', $objects['role'])->first();
             if (isset($getRole)) {
+
                 $user->syncRoles($getRole);
             }
         } else {
