@@ -38,7 +38,10 @@
 									class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
 								>
 									<DropdownFilter class="mr-5" @search="onChangeStatus" />
-									<Search @filter-changed="onFilterQuickSearchChange($event)" />
+									<Search
+										@filter-changed="onFilterQuickSearchChange($event)"
+										class="col-12"
+									/>
 								</div>
 							</div>
 						</div>
