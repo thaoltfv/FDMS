@@ -60,7 +60,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function findByType($type)
     {
-        return $this->model->query()->where('type', $type)->where('status', '=', 1)->orderBy('id')->get();
+        return $this->model->query()->where('type', $type)->orderBy('id')->get();
     }
 
     /**
