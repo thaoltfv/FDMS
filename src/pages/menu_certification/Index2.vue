@@ -41,7 +41,7 @@
 							<div class="col-12">
 								<ProcessProgressChart
 									ref="ProcessProgressChart"
-									name="Thống kê theo tiến độ"
+									name="Tổng quan"
 									:fromDate="fromDate"
 									:toDate="toDate"
 								/>
@@ -50,7 +50,7 @@
 						<div class="col-6">
 							<ConversionRateByMonthChart
 								ref="ConversionRateByMonthChart"
-								name="Tỉ lệ chuyển đổi chính thức"
+								name="Yêu cầu sơ bộ đã hoàn thành"
 							/>
 						</div>
 					</div>

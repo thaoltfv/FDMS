@@ -162,12 +162,12 @@
 								v-model="dataPC.customer_group_id"
 								vid="customer_group_id"
 								label="Nhóm đối tác"
-								class="form-group-container col-6"
+								class="form-group-container col-12"
 								:options="optionsCustomerGroup"
 							/>
 							<InputCategorySearch
 								vid="appraiser"
-								class="form-group-container col-6"
+								class="form-group-container col-12"
 								label="Tìm đối tác"
 								@change="handleChangeCustomer"
 								@search="debounceSearchCustomer"
@@ -203,7 +203,7 @@
 						</div>
 						<InputTextPrefixCustom
 							id="customer_address"
-							placeholder="Nhập địa chỉ của khách hàng"
+							placeholder="Nhập địa chỉ của đối tác"
 							v-model="dataPC.customer.address"
 							vid="customer_address"
 							:iconLocation="true"

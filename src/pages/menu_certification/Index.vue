@@ -10,7 +10,7 @@
 						<div class="col-6 row">
 							<ProcessProgressChartCertificate
 								ref="ProcessProgressChartCertificate"
-								name="Thống kê theo tiến độ"
+								name="Tổng quan"
 								:fromDate="fromDate"
 								:toDate="toDate"
 							/>
@@ -18,7 +18,7 @@
 						<div class="col-6">
 							<FinishByMonthChart
 								ref="FinishByMonthChart"
-								name="Hồ sơ hoàn thành theo tháng"
+								name="Hồ sơ thẩm định đã hoàn thành"
 							/>
 						</div>
 					</div>

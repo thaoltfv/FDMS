@@ -12,7 +12,7 @@
 		>
 			<router-link :to="{ name: item.name }" tag="a" class="d-flex">
 				<template v-if="item.name === 'home'">
-					<img src="@/assets/icons/ic_home.svg" :alt="item.title">
+					<img src="@/assets/icons/ic_home.svg" :alt="item.title" />
 				</template>
 				<template v-else>{{ $t(`${item.title}`) }}</template>
 			</router-link>
@@ -21,26 +21,41 @@
 </template>
 
 <script>
+import store from "@/store";
 export default {
-	name: 'Breadcrumb',
+	name: "Breadcrumb",
 
-	data () {
+	data() {
 		return {
 			breadcrumbs: []
-		}
+		};
 	},
 	watch: {
-		'$route.meta.breadcrumbs': {
-			handler: function (newVal) {
+		"$route.meta.breadcrumbs": {
+			handler: function(newVal) {
+				const isGuest = true;
+				if (store.getters.profile !== null) {
+					const profile = store.getters.profile.data.user;
+					if (
+						profile &&
+						profile.roles &&
+						(profile.roles[0].role_name.toUpperCase() === "KHÁCH" ||
+							profile.roles[0].role_name.toUpperCase() === "KHÁCH HÀNG" ||
+							profile.roles[0].role_name.toUpperCase() === "ĐỐI TÁC")
+					) {
+						this.breadcrumbs = [
+							{ title: "Trang chủ", name: "home" },
+							...newVal
+						];
+					}
+				}
+				if (!isGuest) {
+					this.breadcrumbs.push({ title: "Trang chủ", name: "home" });
+				}
 				if (newVal) {
-					this.breadcrumbs = [
-						{ title: 'Trang chủ', name: 'home' },
-						...newVal
-					]
+					this.breadcrumbs = [...newVal];
 				} else {
-					this.breadcrumbs = [
-						{ title: 'Trang chủ', name: 'home' }
-					]
+					// this.breadcrumbs = [{ title: "Trang chủ", name: "home" }];
 				}
 			},
 			deep: true,
@@ -48,13 +63,13 @@ export default {
 		}
 	},
 	methods: {
-		isActive (name) {
+		isActive(name) {
 			return {
 				active: name === this.$route.name
-			}
+			};
 		}
 	}
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -70,9 +85,8 @@ export default {
 	}
 
 	.breadcrumb-item a {
-		color: #617F9E !important;
+		color: #617f9e !important;
 		font-weight: 500 !important;
 	}
 }
-
 </style>

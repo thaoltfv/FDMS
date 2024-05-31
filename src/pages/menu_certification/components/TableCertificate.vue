@@ -27,13 +27,16 @@
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<div
+						<p class="text-main">
+							{{ getStatusDescription(status) }}
+						</p>
+						<!-- <div
 							:id="(data.id + 'status').toString()"
 							:class="['status-color', 'bg-' + getStatusColor(status)]"
 						/>
 						<b-tooltip :target="(data.id + 'status').toString()">
 							{{ getStatusDescription(status) }}
-						</b-tooltip>
+						</b-tooltip> -->
 						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />

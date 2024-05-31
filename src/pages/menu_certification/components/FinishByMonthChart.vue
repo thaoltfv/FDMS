@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="card">
-			<div class="card-title" style="height: 96px;">
+			<div class="card-title" style="height: 66px;">
 				<div class="d-flex justify-content-between align-items-center">
-					<h3 class="title mt-4">{{ name }}</h3>
+					<h3 class="title mt-2">{{ name }}</h3>
 				</div>
 			</div>
 			<div class="card-body card-info">
@@ -30,7 +30,7 @@ export default {
 	props: {
 		name: {
 			type: String,
-			default: "Hồ sơ hoàn thành theo tháng"
+			default: "Hồ sơ thẩm định đã hoàn thành"
 		}
 	},
 	data() {

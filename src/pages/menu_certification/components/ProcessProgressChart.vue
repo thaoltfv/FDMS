@@ -3,10 +3,10 @@
 		<div class="card">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
-					<h3 class="title mt-2 text-nowrap">{{ name }}</h3>
+					<h3 class="title text-nowrap">{{ name }}</h3>
 					<div class="row d-flex mr-1 justify-content-end">
 						<InputDatePickerRangeCondition
-							class="col-8 col-md-8 col-lg-8 form-group-container"
+							class="col-8 col-md-8 col-lg-8 form-group-container label-none"
 							vid="search"
 							format-date="DD/MM/YYYY"
 							:startDateValue="form.fromDate"
@@ -16,12 +16,12 @@
 							label="Từ ngày - đến ngày"
 						/>
 						<button
-							style="height:35px; margin-top: 28px;"
+							style="height:35px"
 							class="btn btn-orange btn-action-modal"
 							type="button"
 							@click="handleSearch"
 						>
-							Tìm kiếm
+							Lọc
 						</button>
 					</div>
 				</div>
