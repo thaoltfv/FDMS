@@ -11,6 +11,7 @@ use App\Notifications\BroadcastNotification;
 use App\Services\AppraiseVersionService;
 use App\Services\CommonService;
 use App\Services\Excel\ExportCertificateBriefs;
+use App\Services\Excel\ExportAccountant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -125,6 +126,19 @@ class CertificateBriefController extends Controller
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
             return $this->respondWithErrorData($data);
         }
+    }
+    // private array $permissionExportAccount = ['EXPORT_ACCOUNTING'];
+    public function exportCustomizeCertificateBriefsAccountant(Request $request)
+    {
+        // if (!CommonService::checkUserPermission($this->permissionExportAccount))
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::ACCOUNTANT_CHECK_EXPORT, 'exception' => ''], 403);
+
+        $result =  $this->certificateRepository->exportCertificateAccounting();
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        // return $this->respondWithCustomData($result);
+
+        return $this->respondWithCustomData((new ExportAccountant())->exportCertificateAccountant($result));
     }
     #endregion
 

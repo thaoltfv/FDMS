@@ -2955,6 +2955,48 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         return $result;
     }
 
+    public function exportCertificateAccounting()
+    {
+        $status = request()->get('status');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        if (isset($fromDate) && isset($toDate)) {
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
+            $diff = $toDate->diff($fromDate);
+            if ($diff->days > 186) {
+                return ['message' => 'Chỉ được tìm kiếm tối đa 6 tháng.', 'exception' => ''];
+            }
+        } else {
+            return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
+        }
+
+        if (!empty($status)) {
+            $status = explode(',', $status);
+        }
+
+        $select = ['*'];
+        $with = [
+            'preCertificate', 'certificate',
+            'preCertificate.payments', 'certificate.payments'
+        ];
+        $result = PreCertificatePayments::with($with)->select($select);
+        $result = $result->whereNotNull('certificate_id');
+
+        if (isset($status)) {
+            $result = $result->whereHas('certificate', function ($query) use ($status) {
+                $query->whereIn('status', $status);
+            });
+        }
+
+        if (isset($fromDate) && isset($toDate)) {
+            $result = $result->whereBetween('pay_date', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
+        }
+
+        $result = $result->orderBy('pay_date', 'desc')->get();
+        return $result;
+    }
+
     public function getCertificateWorkFlow()
     {
         $user = CommonService::getUser();

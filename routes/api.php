@@ -516,6 +516,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certification_brief/comparison-appraise', [CertificateBriefController::class, 'getComparisonAppraise']);
     Route::get('certification_brief/brief-export', [CertificateBriefController::class, 'exportCertificateBriefs']);
     Route::get('certification_brief/brief-customize-export', [CertificateBriefController::class, 'exportCustomizeCertificateBriefs']);
+    Route::get('certification_brief/brief-customize-export-accountant', [CertificateBriefController::class, 'exportCustomizeCertificateBriefsAccountant']);
+
 
     Route::post('certificate/sale-document/upload/{id}', [CertificateController::class, 'saleDocumentUpload']);
     Route::get('/DistrictAll', [DistrictController::class, 'findAllByProvince']);
