@@ -132,6 +132,22 @@ export default class CertificateBrief extends Model {
 			isStatic: true
 		});
 	}
+	static async exportDataCertificationAccountant(data) {
+		const {
+			fromDate,
+			toDate,
+			appraiser_perform_id,
+			appraiser_id,
+			customer_id,
+			createdBy,
+			status
+		} = data;
+		return new this().request({
+			method: "GET",
+			url: `certification_brief/brief-customize-export-accountant?fromDate=${fromDate}&toDate=${toDate}&status=${status}&created_by=${createdBy}&appraiser_id=${appraiser_id}&appraiser_perform_id=${appraiser_perform_id}&customer_id=${customer_id}`,
+			isStatic: true
+		});
+	}
 	static async exportDataCertificationBriefCustomize(data) {
 		// if (process.env.CLIENT_ENV === 'trial') {
 		// 	return {

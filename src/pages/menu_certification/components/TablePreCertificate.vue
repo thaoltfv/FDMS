@@ -137,15 +137,18 @@
 				</template>
 				<template slot="status" slot-scope="status, data">
 					<div
-						class="d-flex justify-content-center align-items-center position-relative"
+						class="d-flex justify-content-center align-items-center position-relative text-capitalize"
 					>
-						<div
+						<!-- <div
 							:id="(data.id + 'status').toString()"
 							:class="['status-color', 'bg-' + getStatusColor(status)]"
-						/>
-						<b-tooltip :target="(data.id + 'status').toString()">
+						/> -->
+						<!-- <b-tooltip :target="(data.id + 'status').toString()"> -->
+						<p class="text-main">
 							{{ getStatusDescription(status) }}
-						</b-tooltip>
+						</p>
+
+						<!-- </b-tooltip> -->
 						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />

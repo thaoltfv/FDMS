@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="card">
-			<div class="card-title" style="height: 96px;">
+			<div class="card-title" style="height: 66px;">
 				<div class="d-flex justify-content-between align-items-center">
-					<h3 class="title mt-4">{{ name }}</h3>
+					<h3 class="mt-2 title">{{ name }}</h3>
 				</div>
 			</div>
 			<div class="card-body card-info">
@@ -91,7 +91,7 @@ export default {
 					if (item.label === "DaChuyenDoi") {
 						dataset.push({
 							data: item.count,
-							label: "Đã chuyển dổi",
+							label: "Đã chuyển chính thức",
 							borderColor: "#33a853",
 							backgroundColor: "#33a853",
 							fill: false
@@ -99,7 +99,7 @@ export default {
 					} else {
 						dataset.push({
 							data: item.count,
-							label: "Chưa chuyển đổi",
+							label: "Chưa chuyển chính thức",
 							borderColor: "#b6d7a8",
 							backgroundColor: "#b6d7a8",
 							fill: false

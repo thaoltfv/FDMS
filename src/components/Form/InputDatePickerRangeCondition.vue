@@ -1,134 +1,139 @@
 <template>
-    <div class="date-picker-range">
-      <!--label-->
-      <label v-if="label"
-             class="form-label font-weight-bold d-flex align-items-start">
-        {{ $t(label) }}
-        <span v-if="required"
-              class="required">
-          {{$t('required')}}
-        </span>
-      </label>
+	<div class="date-picker-range">
+		<!--label-->
+		<label
+			v-if="label"
+			class="form-label font-weight-bold d-flex align-items-start"
+		>
+			{{ $t(label) }}
+			<span v-if="required" class="required">
+				{{ $t("required") }}
+			</span>
+		</label>
 
-      <div class="d-flex justify-content-between align-items-start">
-        <ValidationProvider tag="div"
-                            class="w-100"
-                            :name="nameStart"
-                            :vid="vidStartDatetime"
-                            :rules="rulesStart"
-                            v-slot="{ errors }">
-          <!--datepicker from - to-->
-          <div :class="{'has__error': errors[0]}">
-            <a-date-picker
-              show-time
-              v-model="startValue"
-              :format="formatDate"
-              :disabled-date="disabledStartDate"
-              :locale="locale"
-              :placeholder="$t('start_time')"
-              @openChange="handleStartOpenChange"
-              @change="chooseStartDate"/>
+		<div class="d-flex justify-content-between align-items-start">
+			<ValidationProvider
+				tag="div"
+				class="w-100"
+				:name="nameStart"
+				:vid="vidStartDatetime"
+				:rules="rulesStart"
+				v-slot="{ errors }"
+			>
+				<!--datepicker from - to-->
+				<div :class="{ has__error: errors[0] }">
+					<a-date-picker
+						show-time
+						v-model="startValue"
+						:format="formatDate"
+						:disabled-date="disabledStartDate"
+						:locale="locale"
+						placeholder="Từ ngày"
+						@openChange="handleStartOpenChange"
+						@change="chooseStartDate"
+					/>
 
-            <!--Message Error-->
-            <span v-if="errors[0]"
-                  class="errors">
-                  {{ errors[0] }}
-            </span>
-          </div>
-        </ValidationProvider>
+					<!--Message Error-->
+					<span v-if="errors[0]" class="errors">
+						{{ errors[0] }}
+					</span>
+				</div>
+			</ValidationProvider>
 
-        <span class="tilde mt-2">-</span>
+			<span class="tilde mt-2">-</span>
 
-        <ValidationProvider tag="div"
-                            class="w-100"
-                            :name="nameEnd"
-                            :vid="vidEndDatetime"
-                            :rules="rulesEnd"
-                            v-slot="{ errors }">
-          <!--datepicker from - to-->
-          <div :class="{'has__error': errors[0]}">
-            <a-date-picker
-              show-time
-              v-model="endValue"
-              :format="formatDate"
-              :disabled-date="disabledEndDate"
-              :locale="locale"
-              :placeholder="$t('end_time')"
-              :open="endOpen"
-              @openChange="handleEndOpenChange"
-              @change="chooseEndDate"/>
+			<ValidationProvider
+				tag="div"
+				class="w-100"
+				:name="nameEnd"
+				:vid="vidEndDatetime"
+				:rules="rulesEnd"
+				v-slot="{ errors }"
+			>
+				<!--datepicker from - to-->
+				<div :class="{ has__error: errors[0] }">
+					<a-date-picker
+						show-time
+						v-model="endValue"
+						:format="formatDate"
+						:disabled-date="disabledEndDate"
+						:locale="locale"
+						placeholder="Đến ngày"
+						:open="endOpen"
+						@openChange="handleEndOpenChange"
+						@change="chooseEndDate"
+					/>
 
-            <!--Message Error-->
-            <span v-if="errors[0]"
-                  class="errors">
-                  {{ errors[0] }}
-            </span>
-          </div>
-        </ValidationProvider>
-      </div>
-    </div>
+					<!--Message Error-->
+					<span v-if="errors[0]" class="errors">
+						{{ errors[0] }}
+					</span>
+				</div>
+			</ValidationProvider>
+		</div>
+	</div>
 </template>
 
 <script>
-import locale from 'ant-design-vue/es/date-picker/locale/vi_VN'
-import moment from 'moment'
+import locale from "ant-design-vue/es/date-picker/locale/vi_VN";
+import moment from "moment";
 
 export default {
-	name: 'InputDatePickerRangeCondition',
+	name: "InputDatePickerRangeCondition",
 
-	data () {
+	data() {
 		return {
 			locale,
 			startValue: null,
 			endValue: null,
 			endOpen: false
-		}
+		};
 	},
 
 	model: {
-		prop: 'value',
-		event: 'change'
+		prop: "value",
+		event: "change"
 	},
 
 	props: {
 		formatDate: {
 			type: String,
-			default: 'DD-MM-YYYY'
+			default: "DD-MM-YYYY"
 		},
 
 		label: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		nameStart: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		nameEnd: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		vidStartDatetime: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		vidEndDatetime: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		rulesStart: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		rulesEnd: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		required: {
@@ -138,7 +143,7 @@ export default {
 
 		placeholder: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		startDateValue: {
@@ -152,60 +157,62 @@ export default {
 		}
 	},
 
-	created () {
+	created() {
 		if (this.startDateValue && this.endDateValue) {
-			this.startValue = moment(this.startDateValue, 'DD-MM-YYYY')
-			this.endValue = moment(this.endDateValue, 'DD-MM-YYYY')
+			this.startValue = moment(this.startDateValue, "DD-MM-YYYY");
+			this.endValue = moment(this.endDateValue, "DD-MM-YYYY");
 		}
 	},
 
 	methods: {
-		disabledStartDate (startValue) {
-			const endValue = this.endValue
+		disabledStartDate(startValue) {
+			const endValue = this.endValue;
 			if (!startValue || !endValue) {
-				return false
+				return false;
 			}
-			return startValue.valueOf() > endValue.valueOf()
+			return startValue.valueOf() > endValue.valueOf();
 		},
 
-		disabledEndDate (endValue) {
-			const startValue = this.startValue
-			let startValueTemp = new Date(new Date(startValue).setMonth(new Date(startValue).getMonth() + 6))
+		disabledEndDate(endValue) {
+			const startValue = this.startValue;
+			let startValueTemp = new Date(
+				new Date(startValue).setMonth(new Date(startValue).getMonth() + 6)
+			);
 			if (!endValue || !startValue) {
-				return false
+				return false;
 			} else if (endValue && endValue.valueOf() > startValueTemp) {
-				return true
-			} else return startValue.valueOf() >= endValue.valueOf()
+				return true;
+			} else return startValue.valueOf() >= endValue.valueOf();
 		},
 
-		handleStartOpenChange (open) {
+		handleStartOpenChange(open) {
 			if (!open) {
-				this.endOpen = true
+				this.endOpen = true;
 			}
 		},
 
-		handleEndOpenChange (open) {
-			this.endOpen = open
+		handleEndOpenChange(open) {
+			this.endOpen = open;
 		},
 
-		chooseStartDate (date, dateString) {
-			this.$emit('startDate', dateString)
+		chooseStartDate(date, dateString) {
+			this.$emit("startDate", dateString);
 		},
 
-		chooseEndDate (date, dateString) {
-			this.$emit('endDate', dateString)
+		chooseEndDate(date, dateString) {
+			this.$emit("endDate", dateString);
 		}
 	}
-}
+};
 </script>
 
-  <style lang="scss" scoped>
-    /deep/.ant-calendar-picker {
-      .anticon-close-circle {
-        opacity: 1;
-        color: #c7c6c6;
-        right: 10px;
-        font-size: 15px;
-      }
-    }
-  </style>
+<style lang="scss" scoped>
+/deep/.ant-calendar-picker {
+	.anticon-close-circle {
+		opacity: 1;
+		color: #c7c6c6;
+		right: 10px;
+		font-size: 15px;
+	}
+}
+</style>

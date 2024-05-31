@@ -30,13 +30,16 @@
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<div
+						<p class="text-main">
+							{{ getStatusDescription(status) }}
+						</p>
+						<!-- <div
 							:id="(data.id + 'status').toString()"
 							:class="['status-color', 'bg-' + getStatusColor(status)]"
 						/>
 						<b-tooltip :target="(data.id + 'status').toString()">
 							{{ getStatusDescription(status) }}
-						</b-tooltip>
+						</b-tooltip> -->
 						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />
@@ -134,6 +137,27 @@
 							props.total_price ? formatNumber(props.total_price) + " đ" : "-"
 						}}
 					</p>
+				</template>
+				<template slot="service_fee" slot-scope="props">
+					<p class="text-main">
+						{{
+							props.service_fee ? formatNumber(props.service_fee) + " đ" : "-"
+						}}
+					</p>
+
+					<p
+						v-if="props.payments && props.payments.length > 0"
+						class="text-secondary"
+					>
+						Đã thanh toán:
+						{{
+							calcDemain(props.payments) !== 0
+								? formatNumber(calcDemain(props.payments)) + " đ"
+								: "-"
+						}}
+					</p>
+					<p v-else class="text-secondary"></p>
+
 					<!-- <p
 						:class="
 							isShowPrice(props)
@@ -665,6 +689,13 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Tổng phí dịch vụ (VNĐ)",
+					align: "left",
+					scopedSlots: { customRender: "service_fee" },
+
+					hiddenItem: false
+				},
+				{
 					title: "Tổ thẩm định",
 					align: "left",
 					scopedSlots: { customRender: "appraiser" },
@@ -722,6 +753,14 @@ export default {
 		getStatusColor(status) {
 			const item = this.lstFilterStatus.find(item => item.status === status);
 			return item && item.css ? item.css.color : "info";
+		},
+		calcDemain(listPayment) {
+			let demain = 0;
+			for (let index = 0; index < listPayment.length; index++) {
+				const element = listPayment[index];
+				demain += Number(element.amount);
+			}
+			return demain;
 		},
 		handleCancelAccept2() {
 			this.isMoved = false;

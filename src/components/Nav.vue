@@ -25,6 +25,7 @@
 			<div class="collapse navbar-collapse" id="navbar-menu">
 				<ul class="navbar-nav">
 					<li
+						v-if="!isGuest"
 						v-for="item of getNav"
 						:key="item.id"
 						@click="
@@ -79,7 +80,80 @@
 								</span>
 							</div>
 						</router-link>
-						<ul v-if="item.dropdown" class="dropdown-item">
+						<ul v-if="item.dropdown" class="dropdown-item ">
+							<li
+								v-for="dropdown in item.dropdown"
+								:key="dropdown.id"
+								class="nav-link-title nav-dropdown"
+							>
+								<router-link
+									v-if="hasPermission(dropdown)"
+									:exact="dropdown.exact"
+									:to="{ name: dropdown.routeName }"
+									class="nav-link"
+								>
+									{{ dropdown.title }}
+								</router-link>
+							</li>
+						</ul>
+					</li>
+					<li
+						v-if="isGuest"
+						v-for="item of getNav"
+						:key="item.id"
+						@click="
+							item.dropdown
+								? dropdownClick($event)
+								: !item.dropdown
+								? removeDropdown()
+								: () => {}
+						"
+						class="nav-item isDropdown"
+						:id="item.id"
+						:class="{ dropdown: item.dropdown }"
+					>
+						<svg
+							width="11"
+							height="6"
+							viewBox="0 0 11 6"
+							xmlns="http://www.w3.org/2000/svg"
+							class="icon-dropdown"
+						>
+							<path
+								d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z"
+								fill="currentColor"
+							/>
+						</svg>
+						<!--navigation normal-->
+						<router-link
+							v-if="hasPermission(item)"
+							:exact="item.exact"
+							:to="{ name: item.routeName }"
+							class="nav-link"
+						>
+							<div class="nav-contain-wrapper">
+								<div class="contain-icon">
+									<icon-base
+										:name="item.icon"
+										v-if="item.customImage"
+										width="20px"
+										height="20px"
+										class="item-icon svg-inline--fa"
+									/>
+									<font-awesome-icon
+										:icon="item.icon"
+										class="item-icon"
+										width="20px"
+										height="20px"
+										v-else
+									/>
+								</div>
+								<span class="nav-link-title">
+									{{ $t(`${item.title}`) }}
+								</span>
+							</div>
+						</router-link>
+						<ul v-if="item.dropdown" class="dropdown-item ">
 							<li
 								v-for="dropdown in item.dropdown"
 								:key="dropdown.id"
@@ -189,6 +263,7 @@
 			>
 				<ul class="navbar-nav" style="margin-top: 40px;">
 					<li
+						v-if="isGuest === false"
 						v-for="item of getNav"
 						:key="item.id"
 						@click="
@@ -199,6 +274,81 @@
 								: () => {}
 						"
 						class="nav-item"
+						:id="item.id"
+						:class="{ dropdown: item.dropdown }"
+					>
+						<svg
+							width="11"
+							height="6"
+							viewBox="0 0 11 6"
+							xmlns="http://www.w3.org/2000/svg"
+							class="icon-dropdown"
+						>
+							<path
+								d="M5.49999 3.78132L9.00624 0.481323L10.0078 1.42399L5.49999 5.66666L0.992157 1.42399L1.99374 0.481323L5.49999 3.78132Z"
+								fill="currentColor"
+							/>
+						</svg>
+						<!--navigation normal-->
+						<router-link
+							v-if="hasPermission(item)"
+							:exact="item.exact"
+							:to="{ name: item.routeName }"
+							class="nav-link"
+							style="justify-content: left;"
+						>
+							<div class="nav-contain-wrapper">
+								<div class="contain-icon">
+									<icon-base
+										:name="item.icon"
+										v-if="item.customImage"
+										width="20px"
+										height="20px"
+										class="item-icon svg-inline--fa"
+									/>
+									<font-awesome-icon
+										:icon="item.icon"
+										class="item-icon"
+										width="20px"
+										height="20px"
+										v-else
+									/>
+								</div>
+								<span class="nav-link-title nav-mobile">
+									{{ $t(`${item.title}`) }}
+								</span>
+							</div>
+						</router-link>
+						<ul v-if="item.dropdown" class="dropdown-item">
+							<li
+								v-for="dropdown in item.dropdown"
+								:key="dropdown.id"
+								class="nav-link-title nav-dropdown"
+							>
+								<router-link
+									v-if="hasPermission(dropdown)"
+									:exact="dropdown.exact"
+									:to="{ name: dropdown.routeName }"
+									class="nav-link"
+									style="justify-content: left;"
+								>
+									{{ dropdown.title }}
+								</router-link>
+							</li>
+						</ul>
+					</li>
+					<li
+						v-if="isGuest === true"
+						v-for="item of getNav"
+						:key="item.id"
+						@click="
+							item.dropdown
+								? dropdownClick($event)
+								: !item.dropdown
+								? removeDropdown()
+								: () => {}
+						"
+						class="nav-item isDropdown"
 						:id="item.id"
 						:class="{ dropdown: item.dropdown }"
 					>
@@ -342,6 +492,18 @@ export default {
 		},
 		currentUser() {
 			if (store.getters.profile !== null) {
+				const profile = store.getters.profile.data.user;
+				if (
+					profile &&
+					profile.roles &&
+					(profile.roles[0].role_name.toUpperCase() === "KHÁCH" ||
+						profile.roles[0].role_name.toUpperCase() === "KHÁCH HÀNG" ||
+						profile.roles[0].role_name.toUpperCase() === "ĐỐI TÁC")
+				) {
+					this.isGuest = true;
+					this.toggleItem = false;
+					console.log("Vào đây");
+				}
 				return store.getters.profile.data.user;
 			}
 		},
@@ -352,6 +514,7 @@ export default {
 					nav.push(item);
 				}
 			});
+
 			return nav;
 		}
 	},
@@ -365,7 +528,8 @@ export default {
 			toggleDropdown: false,
 			isLogout: false,
 			logo: `${process.env.API_URL}/storage/images/company_logo.png`,
-			minimize_key: false
+			minimize_key: false,
+			isGuest: false
 		};
 	},
 	// mounted() {
