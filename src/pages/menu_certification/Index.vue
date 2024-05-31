@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="main-wrapper-new mt-n2" style="height: 89vh;">
+		<div class="main-wrapper-new mt-n2" style="height: 88vh;">
 			<a-tabs default-active-key="1" style="height: 100%;" class="mt-n3">
 				<a-tab-pane key="1">
 					<span slot="tab">
