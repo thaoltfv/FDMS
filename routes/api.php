@@ -152,6 +152,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('dictionary', DictionaryController::class);
 
+    Route::get('/dictionaries/change-status-customer-group/{id}/{status}', [DictionaryController::class, 'changeStatusCustomerGroup']);
+
+
     Route::get('/dictionaries', [DictionaryController::class, 'findAll']);
 
     Route::get('/dictionaries/all/{type}', [DictionaryController::class, 'findAllByType']);
