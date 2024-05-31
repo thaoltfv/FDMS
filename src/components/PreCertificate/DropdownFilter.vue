@@ -164,7 +164,7 @@ export default {
 				.filter(option => option.checked === true)
 				.map(option => option.value);
 			await this.preCertificateStore.getPreCertificateAll();
-			this.$emit("notifi-kanban");
+			this.$emit("notifi-kanban", this.filterKanban);
 		},
 		closeMe() {
 			this.isCloseable = true;

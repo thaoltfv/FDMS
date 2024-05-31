@@ -1,19 +1,21 @@
 <template>
 	<div>
-		<div class="container-fluid appraise-container">
-			<a-tabs default-active-key="1" style="height: 100%;">
+		<div class="main-wrapper-new mt-n2" style="height: 89vh;">
+			<a-tabs default-active-key="1" style="height: 100%;" class="mt-n3">
 				<a-tab-pane key="1">
 					<span slot="tab">
 						<img src="@/assets/icons/ic_chart_lg.svg" alt="table" />
 					</span>
-					<div class="row" style="margin: 0;padding-top:0;">
+					<div class="row mt-2" style="margin: 0;padding-top:0;">
 						<div class="col-6 row">
-							<ProcessProgressChartCertificate
-								ref="ProcessProgressChartCertificate"
-								name="Tổng quan"
-								:fromDate="fromDate"
-								:toDate="toDate"
-							/>
+							<div class="col-12">
+								<ProcessProgressChartCertificate
+									ref="ProcessProgressChartCertificate"
+									name="Tổng quan"
+									:fromDate="fromDate"
+									:toDate="toDate"
+								/>
+							</div>
 						</div>
 						<div class="col-6">
 							<FinishByMonthChart
@@ -27,7 +29,7 @@
 					<span slot="tab">
 						<img src="@/assets/icons/ic_table.svg" alt="board" />
 					</span>
-					<div class="" style="margin: 0;padding-top:0;">
+					<div class="mt-n5" style="margin: 0;padding-top:0;">
 						<div class="container-button appraise-container">
 							<div
 								class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"

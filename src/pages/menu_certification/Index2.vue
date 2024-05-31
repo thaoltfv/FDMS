@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<div class="container-fluid appraise-container" style="height: 87vh;">
-			<a-tabs default-active-key="1" style="height: 100%;">
+		<div class="main-wrapper-new mt-n2" style="height: 89vh;">
+			<a-tabs default-active-key="1" style="height: 100%;" class="mt-n3">
 				<a-tab-pane key="1">
 					<span slot="tab">
 						<img src="@/assets/icons/ic_chart_lg.svg" alt="table" />
 					</span>
-					<div class="row" style="margin: 0;padding-top:0;">
+					<div class="row m-2" style="margin: 0;padding-top:0;">
 						<div class="col-6 row">
 							<!-- <div class="col-12">
 								<div class="row mt-2 mb-2 mr-1 d-flex justify-content-end">
@@ -48,10 +48,12 @@
 							</div>
 						</div>
 						<div class="col-6">
-							<ConversionRateByMonthChart
-								ref="ConversionRateByMonthChart"
-								name="Yêu cầu sơ bộ đã hoàn thành"
-							/>
+							<div class="col-12">
+								<ConversionRateByMonthChart
+									ref="ConversionRateByMonthChart"
+									name="Yêu cầu sơ bộ đã hoàn thành"
+								/>
+							</div>
 						</div>
 					</div>
 				</a-tab-pane>
@@ -59,7 +61,7 @@
 					<span slot="tab">
 						<img src="@/assets/icons/ic_table.svg" alt="board" />
 					</span>
-					<div class="" style="margin: 0;padding-top:0;">
+					<div class="mt-n5" style="margin: 0;padding-top:0;">
 						<div class="container-button appraise-container">
 							<div
 								class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
@@ -69,7 +71,7 @@
 								>
 									<DropdownFilterPreCertificate
 										class="mr-5"
-										@search="onChangeStatusPreCertificate"
+										@notifi-kanban="onChangeStatusPreCertificate"
 									/>
 									<SearchPreCertificate
 										@filter-changed="
@@ -155,6 +157,17 @@ export default {
 		isAdmin: false,
 		filter: {},
 		filterPreCertificate: {},
+		filterSearch: {
+			search: "",
+			selectedOfficialTransferStatus: [],
+			selectedStatus: [],
+			status: [],
+			ots: null,
+			timeFilter: {
+				from: null,
+				to: null
+			}
+		},
 		isLoadingPreCertificate: false,
 		isLoading: false,
 		listCertificatesAll: [],
@@ -198,12 +211,12 @@ export default {
 						page: 1,
 						limit: 20,
 						...params,
-						...this.filterPreCertificate,
-						status: this.selectedStatusPreCertificate,
+						...this.filterSearch,
 						is_guest: true
 					}
 				});
-				this.listCertificatesAllPreCertificate = [...resp.data.data];
+				const temp = [...resp.data.data];
+				this.listCertificatesAllPreCertificate = temp;
 				this.paginationAllPreCertificate = convertPagination(resp.data);
 				this.isLoadingPreCertificate = false;
 			} catch (e) {
@@ -223,7 +236,7 @@ export default {
 				page: pagination.current,
 				limit: pagination.pageSize
 			};
-			await this.getCertificateAllPreCertificate("table", params);
+			await this.getCertificateAllPreCertificate(params);
 		},
 		onChangeStatus(value) {
 			this.selectedStatus = value;
@@ -234,9 +247,43 @@ export default {
 			// }
 			this.getCertificateAll();
 		},
-		onChangeStatusPreCertificate(value) {
-			this.selectedStatusPreCertificate = value;
-			this.getCertificateAllPreCertificate();
+		async onChangeStatusPreCertificate(value) {
+			this.isLoadingPreCertificate = true;
+			let tempots = [];
+			if (
+				value.selectedOfficialTransferStatus[0] == true &&
+				value.selectedOfficialTransferStatus[1] == true
+			) {
+				tempots = null;
+			} else if (value.selectedOfficialTransferStatus[0] == true) {
+				tempots = 0;
+			} else if (value.selectedOfficialTransferStatus[1] == true) {
+				tempots = 1;
+			}
+			const temp = {
+				search: value.search,
+				data: {
+					status: value.selectedStatus,
+					ots: tempots,
+					timeFilter: {
+						from: value.timeFilter.from,
+						to: value.timeFilter.to
+					}
+				}
+			};
+			this.filterSearch = temp;
+			const resp = await PreCertificate.paginate({
+				query: {
+					page: 1,
+					limit: 20,
+					is_guest: true,
+					...temp
+				}
+			});
+
+			this.listCertificatesAllPreCertificate = [...resp.data.data];
+			this.paginationAllPreCertificate = convertPagination(resp.data);
+			this.isLoadingPreCertificate = false;
 		},
 		async onFilterQuickSearchChange($event) {
 			this.filter = { ...$event };
