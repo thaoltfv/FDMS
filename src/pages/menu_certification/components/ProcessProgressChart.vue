@@ -160,7 +160,7 @@ export default {
 			} else {
 				await this.$toast.open({
 					message: "Hiện không có dữ liệu báo cáo",
-					type: "error",
+					type: "warning",
 					position: "top-right",
 					duration: 4000
 				});

@@ -77,6 +77,7 @@
 										@filter-changed="
 											onFilterQuickSearchChangePreCertificate($event)
 										"
+										class="col-12"
 									/>
 								</div>
 							</div>
@@ -261,7 +262,9 @@ export default {
 				tempots = 1;
 			}
 			const temp = {
-				search: value.search,
+				search: this.filterSearch.search
+					? this.filterSearch.search
+					: value.search,
 				data: {
 					status: value.selectedStatus,
 					ots: tempots,
@@ -290,7 +293,8 @@ export default {
 			await this.getCertificateAll();
 		},
 		async onFilterQuickSearchChangePreCertificate($event) {
-			this.filterPreCertificate = { ...$event };
+			const temp = { ...$event };
+			this.filterSearch.search = temp.search ? temp.search : "";
 			await this.getCertificateAllPreCertificate();
 		},
 		handleAction() {
