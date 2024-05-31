@@ -46,7 +46,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function findAll(): array
     {
-        $dictionaries = $this->model->query()->select()->where('status', '=', 1)->orderBy($this->defaultSort)->get();
+        $dictionaries = $this->model->query()->select()->orderBy($this->defaultSort)->get();
         $result = [];
         foreach ($dictionaries as $dictionary => $value) {
             $result[mb_strtolower($value->type)][] = $value;
