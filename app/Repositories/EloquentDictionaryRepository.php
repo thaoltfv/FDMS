@@ -35,7 +35,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         // }
         return QueryBuilder::for($this->model)
             ->where('type', $search)
-            ->whereIn('status', $searchStatus)
+            // ->whereIn('status', $searchStatus)
             ->orderBy($this->allowedSorts)
             ->forPage($page, $perPage)
             ->paginate($perPage);
