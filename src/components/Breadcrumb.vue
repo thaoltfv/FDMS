@@ -33,7 +33,7 @@ export default {
 	watch: {
 		"$route.meta.breadcrumbs": {
 			handler: function(newVal) {
-				const isGuest = true;
+				let isGuest = false;
 				if (store.getters.profile !== null) {
 					const profile = store.getters.profile.data.user;
 					if (
@@ -43,10 +43,7 @@ export default {
 							profile.roles[0].role_name.toUpperCase() === "KHÁCH HÀNG" ||
 							profile.roles[0].role_name.toUpperCase() === "ĐỐI TÁC")
 					) {
-						this.breadcrumbs = [
-							{ title: "Trang chủ", name: "home" },
-							...newVal
-						];
+						isGuest = true;
 					}
 				}
 				if (!isGuest) {
