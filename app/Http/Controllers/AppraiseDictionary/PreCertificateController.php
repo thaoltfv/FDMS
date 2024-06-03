@@ -396,6 +396,18 @@ class PreCertificateController extends Controller
         // dd($HSTD);
         return $this->respondWithCustomData($result);
     }
+    public function exportPreCertificateAccountant(Request $request)
+    {
+        // if (!CommonService::checkUserPermission($this->permissionExportAccount))
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::ACCOUNTANT_CHECK_EXPORT, 'exception' => ''], 403);
+
+        $result =  $this->preCertificateRepository->exportPayment();
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        // return $this->respondWithCustomData($result);
+
+        return $this->respondWithCustomData((new ExportAccountant())->exportPreAccountant($result));
+    }
     public function exportPreCertificate(Request $request)
     {
         if (!CommonService::checkUserPermission($this->permissionExport))
