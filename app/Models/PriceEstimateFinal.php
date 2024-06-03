@@ -31,7 +31,9 @@ class PriceEstimateFinal extends Model
         'description',
         'img_map',
         'created_by',
-        'total_price'
+        'total_price',
+        'difference_amplitude',
+        'note',
     ];
 
 

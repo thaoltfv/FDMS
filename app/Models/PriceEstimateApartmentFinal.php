@@ -21,6 +21,6 @@ class PriceEstimateApartmentFinal extends Model
         'unit_price',
         'name',
         'total_price',
-        'total_area',
+        'total_area'
     ];
 }
