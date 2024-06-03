@@ -141,8 +141,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-6">
-			<div class="card" :style="isMobile ? { 'margin-bottom': '70px' } : {}">
+		<div class="col-6 h-100">
+			<div
+				class="card"
+				:style="isMobile ? { 'margin-bottom': '70px' } : { height: '56vh' }"
+			>
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Đối tác</h3>
