@@ -81,6 +81,14 @@
 							>
 								Xuất dữ liệu
 							</button>
+							<button
+								:class="{ 'btn_loading disabled': isSubmit }"
+								class="btn text-nowrap col-4"
+								style="background-color: #007ec6;color: white;"
+								@click.prevent="exportDataAccountant(form)"
+							>
+								Xuất dữ liệu thanh toán
+							</button>
 						</div>
 					</div>
 				</div>
@@ -174,6 +182,39 @@ export default {
 		}
 	},
 	methods: {
+		async exportDataAccountant(data) {
+			await this.handleExportDataAccountant(data);
+		},
+		async handleExportDataAccountant(data) {
+			this.isSubmit = true;
+			const res = await PreCertificate.exportDataPreCertificationAccountant(
+				data
+			);
+			if (res.data) {
+				const fileLink = document.createElement("a");
+				fileLink.href = res.data.url;
+				fileLink.setAttribute("download", res.data.file_name);
+				document.body.appendChild(fileLink);
+				fileLink.click();
+				fileLink.remove();
+				window.URL.revokeObjectURL(fileLink);
+				this.$toast.open({
+					message: "Xuất dữ liệu thành công",
+					type: "success",
+					duration: 3000,
+					position: "top-right"
+				});
+				await this.$emit("cancel");
+			} else if (res.error) {
+				this.$toast.open({
+					message: res.error.message,
+					type: "error",
+					duration: 3000,
+					position: "top-right"
+				});
+			}
+			this.isSubmit = false;
+		},
 		async getProfiles() {
 			const profile = this.$store.getters.profile;
 			if (profile && profile.data.user.roles[0].name.slice(-5) === "ADMIN") {

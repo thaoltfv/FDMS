@@ -139,7 +139,7 @@
 					</p>
 				</template>
 				<template slot="service_fee" slot-scope="props">
-					<p class="text-main">
+					<p class="text-main text-lowercase">
 						{{
 							props.service_fee ? formatNumber(props.service_fee) + " đ" : "-"
 						}}
