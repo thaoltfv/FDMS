@@ -409,6 +409,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'priceEstimates.landFinalEstimate',
             'customer:id,name,phone,address',
             'customerGroup:id,description',
+            'payments',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
