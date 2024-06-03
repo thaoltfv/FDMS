@@ -402,6 +402,34 @@
 						</div>
 					</div>
 				</div>
+				<div class="container-fluid mb-2 ">
+					<div class="row">
+						<div class="col-custom-11-5">
+							<div class="select-group sub_header_title">
+								<div class="d-flex">
+									<label class="select-title pr-2">Thông tin khác</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-custom-11-5 mt-3">
+							<InputPercentNegative
+								v-model="step_3.difference_amplitude"
+								vid="difference_amplitude"
+								:disabled="!isEdit"
+								label="Biên độ chệnh lệch (%)"
+								class="form-group-container"
+							/>
+							<InputTextarea
+								rows="5"
+								v-model="step_3.note"
+								vid="note"
+								:disableInput="!isEdit"
+								label="Ghi chú"
+								class="form-group-container"
+							/>
+						</div>
+					</div>
+				</div>
 				<!-- <div class="container-fluid color_content">
 					<div class="row mt-3">
 						<div class="col-custom-11-5">
@@ -524,7 +552,34 @@
 						</div>
 					</div>
 				</div>
-
+				<div class="container-fluid mb-2 ">
+					<div class="row">
+						<div class="col-custom-11-5">
+							<div class="select-group sub_header_title">
+								<div class="d-flex">
+									<label class="select-title pr-2">Thông tin khác</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-custom-11-5 mt-3">
+							<InputPercentNegative
+								v-model="step_3.difference_amplitude"
+								vid="difference_amplitude"
+								:disabled="!isEdit"
+								label="Biên độ chệnh lệch (%)"
+								class="form-group-container"
+							/>
+							<InputTextarea
+								rows="5"
+								v-model="step_3.note"
+								vid="note"
+								:disableInput="!isEdit"
+								label="Ghi chú"
+								class="form-group-container"
+							/>
+						</div>
+					</div>
+				</div>
 				<!-- <div class="container-fluid color_content">
 					<div class="row">
 						<div class="col-custom-11-5">
@@ -635,6 +690,7 @@ import {
 import Vue from "vue";
 import Icon from "buefy";
 import InputLengthArea from "@/components/Form/InputLengthArea.vue";
+import InputPercentNegative from "@/components/Form/InputPercentNegative";
 import _ from "lodash";
 
 Vue.use(Icon);
@@ -646,6 +702,7 @@ export default {
 		InputCurrencyUnit,
 		InputTextPrefixCustom,
 		InputAreaCustom,
+		InputPercentNegative,
 		InputCategoryCustom,
 		InputCategoryBoolean,
 		InputCategory,
@@ -767,6 +824,14 @@ export default {
 						  }))
 						: [];
 				}
+				if (!step_3.value.difference_amplitude) {
+					step_3.value.difference_amplitude = 0;
+				}
+				if (!step_3.value.note) {
+					step_3.value.note = `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`;
+				}
 			} else {
 				if (
 					step1.general_infomation &&
@@ -788,6 +853,7 @@ export default {
 					// 	? "Thửa " + step1.general_infomation.land_no + ", "
 					// 	: "") +
 					step1.general_infomation.full_address_street;
+
 				if (priceEstimates.value.step_3.reInit) {
 					priceEstimates.value.step_3 = {
 						petitioner_name: priceEstimates.value.step_3.petitioner_name,
@@ -812,7 +878,10 @@ export default {
 							  }))
 							: [],
 						tangible_assets: [],
-						appraise_land_sum_area: step1.land_details.appraise_land_sum_area
+						appraise_land_sum_area: step1.land_details.appraise_land_sum_area,
+						difference_amplitude:
+							priceEstimates.value.step_3.difference_amplitude,
+						note: priceEstimates.value.step_3.note
 					};
 				} else {
 					priceEstimates.value.step_3 = {
@@ -837,7 +906,11 @@ export default {
 							  }))
 							: [],
 						tangible_assets: [],
-						appraise_land_sum_area: step1.land_details.appraise_land_sum_area
+						appraise_land_sum_area: step1.land_details.appraise_land_sum_area,
+						difference_amplitude: 0,
+						note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
 					};
 				}
 				step_3.value = priceEstimates.value.step_3;
@@ -868,6 +941,14 @@ export default {
 						}
 					];
 				}
+				if (!step_3.value.difference_amplitude) {
+					step_3.value.difference_amplitude = 0;
+				}
+				if (!step_3.value.note) {
+					step_3.value.note = `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`;
+				}
 			} else {
 				const address = step1.general_infomation.full_address;
 				if (priceEstimates.value.step_3.reInit) {
@@ -892,7 +973,10 @@ export default {
 								total_price: totalPrice
 							}
 						],
-						appraise_land_sum_area: null
+						appraise_land_sum_area: null,
+						difference_amplitude:
+							priceEstimates.value.step_3.difference_amplitude,
+						note: priceEstimates.value.step_3.note
 					};
 				} else {
 					priceEstimates.value.step_3 = {
@@ -915,13 +999,18 @@ export default {
 								total_price: totalPrice
 							}
 						],
-						appraise_land_sum_area: null
+						appraise_land_sum_area: null,
+						difference_amplitude: 0,
+						note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+				- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+				- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
 					};
 				}
 				step_3.value = priceEstimates.value.step_3;
 			}
 		};
 		if (!miscVariable.value.isApartment) {
+			console.log("Check");
 			getStartedLand();
 		} else {
 			getStartedApartment();
