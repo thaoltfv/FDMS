@@ -2977,8 +2977,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
         $select = ['*'];
         $with = [
-            'preCertificate', 'certificate',
-            'preCertificate.payments', 'certificate.payments'
+            'certificate',
+            'certificate.appraiserSale',
+            'certificate.appraiserPerform',
+            'certificate.appraiser',
+            'certificate.appraiserManager',
+            'certificate.payments',
+            'preCertificate.payments',
+            'preCertificate',
         ];
         $result = PreCertificatePayments::with($with)->select($select);
         $result = $result->whereNotNull('certificate_id');

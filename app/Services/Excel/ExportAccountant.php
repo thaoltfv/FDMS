@@ -122,6 +122,11 @@ class ExportAccountant
 
                     return [
                         'Mã HS' => $data->certificate_id,
+                        'Tên khách hàng' => $data->certificate->petitioner_name,
+                        'Nhân viên kinh doanh' => $data->certificate->appraiserSale ? $data->certificate->appraiserSale->name : '',
+                        'Chuyên viên thẩm định' => $data->certificate->appraiserPerform ? $data->certificate->appraiserPerform->name : '',
+                        'Thẩm định viên' => $data->certificate->appraiser ? $data->certificate->appraiser->name : '',
+                        'Đại diện pháp luật' => $data->certificate->appraiserManager ? $data->certificate->appraiserManager->name : '',
                         'Giá trị thanh toán' => $data->amount,
                         'Nội dung' => $data->for_payment_of,
                         'Ngày thanh toán' => \Carbon\Carbon::parse($data->pay_date)->format('d-m-Y'),

@@ -344,6 +344,9 @@ class HopDongTDG
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $textRun = $row1->addCell(8700, $cellVTop)->addTextRun($alignBoth);
         $appraiseAssetName = '';
+        $appraiseApproaches = [];
+        $appraiseMethodUsed = [];
+        $appraiseMethodUsedStr = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
                 $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
@@ -353,14 +356,28 @@ class HopDongTDG
                 foreach ($certificate->realEstate as $index => $item) {
                     if ($item->apartment) {
                         $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->apartment->appraise_asset) : ' và ' . htmlspecialchars($item->apartment->appraise_asset));
+                        $apartment = $item->apartment;
+                        $appraiseApproaches[$apartment->apartmentAppraisalBase->approach->id] = $apartment->apartmentAppraisalBase;
                     }
                 }
+                foreach ($appraiseApproaches as $item) {
+                    array_push($appraiseMethodUsed, $item->methodUsed->name);
+                }
+                $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+                $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
             } else {
                 foreach ($certificate->realEstate as $index => $item) {
                     if ($item->appraises) {
                         $appraiseAssetName .= ($index == 0 ?  htmlspecialchars($item->appraises->appraise_asset) : ' và ' . htmlspecialchars($item->appraises->appraise_asset));
+                        $appraise = $item->appraises;
+                        $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
                     }
                 }
+                foreach ($appraiseApproaches as $item) {
+                    array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
+                }
+                $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+                $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
             }
         }
 
@@ -491,7 +508,7 @@ class HopDongTDG
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
         $row4->addCell(2900, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
         $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(5900, $cellVTop)->addText('Các phương pháp phù hợp theo Hệ thống Tiêu chuẩn thẩm định giá Việt Nam.', null,  $alignBoth);
+        $row4->addCell(5900, $cellVTop)->addText('Sử dụng ' . $appraiseMethodUsedStr, null,  $alignBoth);
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
