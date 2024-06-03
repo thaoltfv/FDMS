@@ -1101,6 +1101,9 @@ export const usePriceEstimatesStore = defineStore(
 			}
 			tempUpdate.total_price = temp + temp1 + temp2;
 			tempUpdate.price_estimate_id = priceEstimates.value.id;
+			if (tempUpdate.note.trim() === '' || !tempUpdate.note) {
+				priceEstimates.value.step_3.note = " ";
+			}
 			if (moment(tempUpdate.request_date, "DD/MM/YYYY", true).isValid()) {
 				tempUpdate.request_date = moment(
 					tempUpdate.request_date,
@@ -1249,10 +1252,14 @@ export const usePriceEstimatesStore = defineStore(
 
 				// step 3
 				if (bindDataStep.final_estimate) {
+
 					priceEstimates.value.step_3 = bindDataStep.final_estimate;
 					priceEstimates.value.step_3.petitioner_name = null;
 					priceEstimates.value.step_3.request_date = null;
 					priceEstimates.value.step_3.appraise_purpose = null;
+					if (!bindDataStep.final_estimate.note) {
+						priceEstimates.value.step_3.note = " ";
+					}
 					if (bindDataStep.pre_certificate) {
 						priceEstimates.value.step_3.petitioner_name =
 							bindDataStep.pre_certificate.petitioner_name;
