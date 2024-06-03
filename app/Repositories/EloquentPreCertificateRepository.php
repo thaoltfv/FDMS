@@ -371,6 +371,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraise_purpose_id',
             'pre_certificates.created_at',
             'customer_id',
+            'total_service_fee',
             'pre_certificates.customer_group_id',
 
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
