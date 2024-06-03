@@ -63,9 +63,9 @@ class ExportAccountant
                 function ($data) {
                     return [
                         'Mã HS' => $data->pre_certificate_id,
-                        'Tên khách hàng' => $data->pre_certificate->petitioner_name,
-                        'Nhân viên kinh doanh' => $data->pre_certificate->appraiserSale ? $data->pre_certificate->appraiserSale->name : '',
-                        'Chuyên viên thẩm định' => $data->pre_certificate->appraiserPerform ? $data->pre_certificate->appraiserPerform->name : '',
+                        'Tên khách hàng' => $data->preCertificate->petitioner_name,
+                        'Nhân viên kinh doanh' => $data->preCertificate->appraiserSale ? $data->preCertificate->appraiserSale->name : '',
+                        'Chuyên viên thẩm định' => $data->preCertificate->appraiserPerform ? $data->preCertificate->appraiserPerform->name : '',
                         'Giá trị thanh toán' => $data->amount,
                         'Nội dung' => $data->for_payment_of,
                         'Ngày thanh toán' => \Carbon\Carbon::parse($data->pay_date)->format('d-m-Y'),
