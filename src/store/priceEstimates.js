@@ -1119,6 +1119,10 @@ export const usePriceEstimatesStore = defineStore(
 					position: "top-right",
 					duration: 3000
 				});
+				if (!res.data.note) {
+
+					priceEstimates.value.step_3.note = " ";
+				}
 				priceEstimates.value.step_3.id = res.data.id;
 				configThis.value.router.push({
 					name: "price_estimates.detail",

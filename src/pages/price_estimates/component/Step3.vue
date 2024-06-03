@@ -808,6 +808,7 @@ export default {
 
 			if (priceEstimates.value.step_3 && priceEstimates.value.step_3.id) {
 				step_3.value = priceEstimates.value.step_3;
+
 				if (step_3.value.asset_type_id === 38) {
 					miscVariable.value.isHaveContruction = true;
 				} else {
@@ -827,6 +828,7 @@ export default {
 				if (!step_3.value.difference_amplitude) {
 					step_3.value.difference_amplitude = 0;
 				}
+
 				if (!step_3.value.note) {
 					step_3.value.note = `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
 - Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
@@ -1010,7 +1012,6 @@ export default {
 			}
 		};
 		if (!miscVariable.value.isApartment) {
-			console.log("Check");
 			getStartedLand();
 		} else {
 			getStartedApartment();
