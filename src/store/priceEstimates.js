@@ -1103,6 +1103,8 @@ export const usePriceEstimatesStore = defineStore(
 			tempUpdate.price_estimate_id = priceEstimates.value.id;
 			if (tempUpdate.note.trim() === '' || !tempUpdate.note) {
 				priceEstimates.value.step_3.note = " ";
+			} else {
+				priceEstimates.value.step_3.note = priceEstimates.value.step_3.note
 			}
 			if (moment(tempUpdate.request_date, "DD/MM/YYYY", true).isValid()) {
 				tempUpdate.request_date = moment(
@@ -1122,10 +1124,6 @@ export const usePriceEstimatesStore = defineStore(
 					position: "top-right",
 					duration: 3000
 				});
-				if (!res.data.note) {
-
-					priceEstimates.value.step_3.note = " ";
-				}
 				priceEstimates.value.step_3.id = res.data.id;
 				configThis.value.router.push({
 					name: "price_estimates.detail",

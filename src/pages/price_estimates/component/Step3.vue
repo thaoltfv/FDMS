@@ -1151,6 +1151,7 @@ export default {
 			};
 		}
 	},
+	watch: {},
 	data() {
 		return {
 			key_render: 10002,
