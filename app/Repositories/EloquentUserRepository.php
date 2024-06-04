@@ -154,7 +154,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
         $id = $this->model->query()->insertGetId($array);
-        if (isset($objects['appraiser'])) {
+        if (isset($objects['appraiser']) && !$objects['is_guest']) {
             Appraiser::insert([
                 'name' => $objects['name'] ?? "",
                 'appraiser_number' => $objects['appraiser']['appraiser_number'] ?? "",
@@ -210,7 +210,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         } else {
             $user->syncRoles("USER");
         }
-        if (isset($objects['appraiser'])) {
+        if (isset($objects['appraiser']) && !$objects['is_guest']) {
             Appraiser::query()->where('user_id', $id)
                 ->update([
                     'name' => $objects['name'] ?? "",
