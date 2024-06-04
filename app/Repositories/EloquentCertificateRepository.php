@@ -2748,7 +2748,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'administrative:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'customer:id,name,phone,address',
-            'customerGroup:id,description',
+            'customerGroup:id,description,name_lv_1,name_lv_2,name_lv_3,name_lv_4',
             'realEstate.appraises',
             'realEstate.appraises.certificateAppraiseLaw',
             'realEstate.apartment',
@@ -2926,9 +2926,25 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
         $result = $result->orderByDesc('certificates.updated_at');
         if (request()->has('is_guest')) {
+            if (isset($user->name_lv_1)) {
+                // $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+                $result = $result->where(function ($q) use ($user) {
+                    $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                        if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                            $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                        }
+                        if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                            $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                        }
+                        if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                            $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                        }
+                        if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                            $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                        }
+                    });
+                });
 
-            if (isset($user->customer_group_id)) {
-                $result = $result->where('customer_group_id', '=', $user->customer_group_id);
                 $result = $result
                     ->forPage($page, $perPage)
                     ->paginate($perPage);
