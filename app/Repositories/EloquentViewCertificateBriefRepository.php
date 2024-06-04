@@ -428,7 +428,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         });
 
         $result =
-            $result->select([
+            $result->get()->select([
                 DB::raw("case status
                             when 1
                             then 'Tiếp nhận hồ sơ'
@@ -496,7 +496,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->orderBy('status_group')
             ->get()->toArray();
 
-        dd($result);
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
 
 
