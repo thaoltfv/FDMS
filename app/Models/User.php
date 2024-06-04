@@ -74,6 +74,11 @@ class User extends Authenticatable implements JWTSubject
         'token',
         'created_at',
         'customer_group_id',
+        'is_guest',
+        'name_lv_1',
+        'name_lv_2',
+        'name_lv_3',
+        'name_lv_4',
     ];
 
     public function branch(): BelongsTo
