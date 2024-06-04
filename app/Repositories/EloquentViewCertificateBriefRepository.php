@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\PreCertificate;
 use App\Models\Certificate;
 use App\Services\CommonService;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class EloquentViewCertificateBriefRepository extends EloquentRepository implements ViewCertificateBrieftRepository
 {
@@ -301,11 +302,31 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
         }
+        $select = ['*'];
         $with = [
             'customerGroup'
         ];
+        $result = QueryBuilder::for(PreCertificate::class)
+            ->with($with)
+            ->select($select);
+        $result = $result->where(function ($q) use ($user) {
+            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+            });
+        });
         $result =
-            PreCertificate::query()->with($with)->select([
+            $result->select([
                 DB::raw("case status
                 when 1
                     then 'Tiếp nhận yêu cầu'
@@ -345,24 +366,24 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 DB::Raw("count(id)")
             ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->whereHas('customerGroup', function ($q) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
-                }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
-                }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
-                }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
-                }
-                return $q;
-                // if ($user->customer_group_id) {
-                //     return $q->where('id', $user->customer_group_id);
-                // }
-            })
+            // ->whereHas('customerGroup', function ($q) use ($user) {
+            //     if ($user->name_lv_1 && $user->name_lv_1 != '') {
+            //         $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+            //     }
+            //     if ($user->name_lv_2 && $user->name_lv_2 != '') {
+            //         $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+            //     }
+            //     if ($user->name_lv_3 && $user->name_lv_3 != '') {
+            //         $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+            //     }
+            //     if ($user->name_lv_4 && $user->name_lv_4 != '') {
+            //         $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+            //     }
+            //     return $q;
+            //     // if ($user->customer_group_id) {
+            //     //     return $q->where('id', $user->customer_group_id);
+            //     // }
+            // })
             ->groupby(['status_text', 'status_group'])
             ->orderBy('status_group')
             ->get()->toArray();
@@ -677,7 +698,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 if ($user->name_lv_4 && $user->name_lv_4 != '') {
                     $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
                 }
-                dd($q);
             })
             ->groupBy(['status_text', 'rate_text', 'status', 'month', 'year'])
             ->orderBy('month')
