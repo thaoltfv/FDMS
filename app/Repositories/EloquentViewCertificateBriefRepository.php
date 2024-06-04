@@ -403,8 +403,31 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
         }
+        $select = ['*'];
+        $with = [
+            'customerGroup'
+        ];
+        $result = QueryBuilder::for(Certificate::class)
+            ->with($with)
+            ->select($select);
+        $result = $result->where(function ($q) use ($user) {
+            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+            });
+        });
         $result =
-            Certificate::query()->select([
+            $result->select([
                 DB::raw("case status
                             when 1
                             then 'Tiếp nhận hồ sơ'
@@ -450,24 +473,25 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 DB::Raw("count(id)")
             ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->whereHas('customerGroup', function ($q) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
-                }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
-                }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
-                }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
-                }
-                return $q;
-                // if ($user->customer_group_id) {
-                //     return $q->where('id', $user->customer_group_id);
-                // }
-            })->groupby(['status_text', 'status_group'])
+            // ->whereHas('customerGroup', function ($q) use ($user) {
+            //     if ($user->name_lv_1 && $user->name_lv_1 != '') {
+            //         $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+            //     }
+            //     if ($user->name_lv_2 && $user->name_lv_2 != '') {
+            //         $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+            //     }
+            //     if ($user->name_lv_3 && $user->name_lv_3 != '') {
+            //         $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+            //     }
+            //     if ($user->name_lv_4 && $user->name_lv_4 != '') {
+            //         $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+            //     }
+            //     return $q;
+            //     // if ($user->customer_group_id) {
+            //     //     return $q->where('id', $user->customer_group_id);
+            //     // }
+            // })
+            ->groupby(['status_text', 'status_group'])
             ->orderBy('status_group')
             ->get()->toArray();
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
@@ -510,7 +534,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $label = Arr::pluck($monthList, 'label');
 
         $stt = 0;
-        $dataRaw = Certificate::query()
+        $select = ['*'];
+        $with = [
+            'customerGroup'
+        ];
+        $dataRaw = QueryBuilder::for(Certificate::class)
+            ->with($with)
+            ->select($select);
+        $dataRaw = $dataRaw->where(function ($q) use ($user) {
+            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+            });
+        });
+        $dataRaw = $dataRaw
             ->select([
                 DB::raw("count(id)"),
                 DB::raw("case status
@@ -653,7 +700,31 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $label = Arr::pluck($monthList, 'label');
 
         $stt = 0;
-        $dataRaw = PreCertificate::query()
+
+        $select = ['*'];
+        $with = [
+            'customerGroup'
+        ];
+        $dataRaw = QueryBuilder::for(PreCertificate::class)
+            ->with($with)
+            ->select($select);
+        $dataRaw = $dataRaw->where(function ($q) use ($user) {
+            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+            });
+        });
+        $dataRaw = $dataRaw
             ->select([
                 DB::raw("count(id)"),
                 DB::raw("CASE WHEN certificate_id IS NULL THEN 'ChuaChuyenDoi' ELSE 'DaChuyenDoi' END AS rate_text"),
