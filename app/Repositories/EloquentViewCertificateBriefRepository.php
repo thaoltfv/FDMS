@@ -427,9 +427,9 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             });
         });
 
-        $result =
-            $result->get()->select([
-                DB::raw("case status
+        $result = $result->get();
+        $dataRaw =    $result->select([
+            DB::raw("case status
                             when 1
                             then 'Tiếp nhận hồ sơ'
                         when 2
@@ -450,7 +450,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                             then 'Đang thực hiện'
                     end as status_text
                     "),
-                DB::raw("case status
+            DB::raw("case status
                     when 1
                         then 1
                     when 2
@@ -471,8 +471,8 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                         then 2
                 end as status_group
             "),
-                DB::Raw("count(id)")
-            ])
+            DB::Raw("count(id)")
+        ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
             // ->whereHas('customerGroup', function ($q) use ($user) {
             //     if ($user->name_lv_1 && $user->name_lv_1 != '') {
@@ -496,10 +496,10 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->orderBy('status_group')
             ->get()->toArray();
 
-        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
+        $dataRaw = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
 
 
-        return $result;
+        return $dataRaw;
     }
     public function countBriefFinishByMonthCustomerGroup()
     {
