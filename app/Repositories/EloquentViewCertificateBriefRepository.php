@@ -301,8 +301,11 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
         }
+        $with = [
+            'customerGroup'
+        ];
         $result =
-            PreCertificate::query()->select([
+            PreCertificate::query()->with($with)->select([
                 DB::raw("case status
                 when 1
                     then 'Tiếp nhận yêu cầu'
