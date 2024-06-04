@@ -141,7 +141,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="card">
+		<div class="card" v-if="form.is_guest">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<h3 class="title">Thông tin khách hàng</h3>
