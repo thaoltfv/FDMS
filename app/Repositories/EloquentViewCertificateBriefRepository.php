@@ -426,7 +426,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 }
             });
         });
-        dd($result->get());
+
         $result =
             $result->select([
                 DB::raw("case status
@@ -495,7 +495,11 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->groupby(['status_text', 'status_group'])
             ->orderBy('status_group')
             ->get()->toArray();
+
+        dd($result->get());
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
+
+
         return $result;
     }
     public function countBriefFinishByMonthCustomerGroup()
