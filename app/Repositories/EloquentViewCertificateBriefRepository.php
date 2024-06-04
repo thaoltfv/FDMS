@@ -342,7 +342,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 DB::Raw("count(id)")
             ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
-            ->groupby(['status_text', 'status_group'])
             ->whereHas('customerGroup', function ($q) use ($user) {
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
                     $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
@@ -361,6 +360,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 //     return $q->where('id', $user->customer_group_id);
                 // }
             })
+            ->groupby(['status_text', 'status_group'])
             ->orderBy('status_group')
             ->get()->toArray();
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
@@ -664,7 +664,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 // }
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
                     $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
-                    Log::info($q->toArray());
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
                     $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
