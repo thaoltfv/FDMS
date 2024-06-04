@@ -605,24 +605,25 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         });
         $dataRaw = $dataRaw
             ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
-            ->whereIn('status', $status)->whereHas('customerGroup', function ($q) use ($user) {
-                // if ($user->customer_group_id) {
-                //     return $q->where('id', $user->customer_group_id);
-                // }
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
-                }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
-                }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
-                }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
-                }
-                return $q;
-            })
+            ->whereIn('status', $status)
+            // ->whereHas('customerGroup', function ($q) use ($user) {
+            //     // if ($user->customer_group_id) {
+            //     //     return $q->where('id', $user->customer_group_id);
+            //     // }
+            //     if ($user->name_lv_1 && $user->name_lv_1 != '') {
+            //         $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+            //     }
+            //     if ($user->name_lv_2 && $user->name_lv_2 != '') {
+            //         $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+            //     }
+            //     if ($user->name_lv_3 && $user->name_lv_3 != '') {
+            //         $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+            //     }
+            //     if ($user->name_lv_4 && $user->name_lv_4 != '') {
+            //         $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+            //     }
+            //     return $q;
+            // })
             ->groupBy(['status_text', 'status_group', 'month', 'year'])
             ->orderBy('month')
             ->orderBy('year')
