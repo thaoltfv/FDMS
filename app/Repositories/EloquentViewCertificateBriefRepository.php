@@ -664,6 +664,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 // }
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
                     $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                    dd($q->get()->toArray());
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
                     $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
