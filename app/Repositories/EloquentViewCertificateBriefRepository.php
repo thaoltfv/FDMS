@@ -360,9 +360,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             });
         });
         Log::info($result);
-        $result->groupby(['status_text', 'status_group'])
-            ->orderBy('status_group')
-            ->get()->toArray();
+        $result->groupby(['status_text', 'status_group'])->orderBy('status_group')->get()->toArray();
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
         return $result;
     }
@@ -442,9 +440,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 }
             });
         });
-        $result->groupby(['status_text', 'status_group'])
-            ->orderBy('status_group')
-            ->get()->toArray();
+        $result->groupby(['status_text', 'status_group'])->orderBy('status_group')->get()->toArray();
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
         return $result;
     }
@@ -552,12 +548,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 }
             });
         });
-        $dataRaw
-            ->groupBy(['status_text', 'status_group', 'month', 'year'])
-            ->orderBy('month')
-            ->orderBy('year')
-            ->orderBy('status_group')
-            ->get()->toArray();
+        $dataRaw->groupBy(['status_text', 'status_group', 'month', 'year'])->orderBy('month')->orderBy('year')->orderBy('status_group')->get()->toArray();
         $data = [];
         $stt = 0;
         foreach ($monthPluck as $month) {
