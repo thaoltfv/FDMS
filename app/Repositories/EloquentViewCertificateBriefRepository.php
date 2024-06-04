@@ -663,9 +663,11 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 //     return $q->where('id', $user->customer_group_id);
                 // }
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    Log::info($user->name_lv_1);
                     $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    Log::info($user->name_lv_2);
                     $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
                 }
                 if ($user->name_lv_3 && $user->name_lv_3 != '') {
