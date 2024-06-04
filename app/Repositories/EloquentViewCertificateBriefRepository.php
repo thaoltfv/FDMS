@@ -426,6 +426,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 }
             });
         });
+        Log::info($result);
         $result =
             $result->select([
                 DB::raw("case status
