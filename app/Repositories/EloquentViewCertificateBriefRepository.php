@@ -674,13 +674,14 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 if ($user->name_lv_4 && $user->name_lv_4 != '') {
                     $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
                 }
+                dd($q);
             })
             ->groupBy(['status_text', 'rate_text', 'status', 'month', 'year'])
             ->orderBy('month')
             ->orderBy('year')
             ->orderBy('status')
             ->get()->toArray();
-        Log::info($dataRaw);
+
         $data = [];
         $stt = 0;
         foreach ($monthPluck as $month) {
