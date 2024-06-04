@@ -342,7 +342,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 DB::Raw("count(id)")
             ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
-        Log::info('1', $result);
+        Log::info($result);
         $result = $result->where(function ($q) use ($user) {
             $q = $q->whereHas('customerGroup', function ($has) use ($user) {
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
