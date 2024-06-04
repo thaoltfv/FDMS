@@ -341,26 +341,28 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 end as status_group"),
                 DB::Raw("count(id)")
             ])
-            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
-        Log::info($result);
-        $result = $result->where(function ($q) use ($user) {
-            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
+            ->whereHas('customerGroup', function ($q) use ($user) {
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
                 }
                 if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
                 }
                 if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
                 }
-            });
-        });
-        Log::info($result);
-        $result->groupby(['status_text', 'status_group'])->orderBy('status_group')->get()->toArray();
+                return $q;
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
+            })
+            ->groupby(['status_text', 'status_group'])
+            ->orderBy('status_group')
+            ->get()->toArray();
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
         return $result;
     }
@@ -423,24 +425,27 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             "),
                 DB::Raw("count(id)")
             ])
-            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
-        $result = $result->where(function ($q) use ($user) {
-            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
+            ->whereHas('customerGroup', function ($q) use ($user) {
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
                 }
                 if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
                 }
                 if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
                 }
-            });
-        });
-        $result->groupby(['status_text', 'status_group'])->orderBy('status_group')->get()->toArray();
+                return $q;
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
+            })->groupby(['status_text', 'status_group'])
+            ->orderBy('status_group')
+            ->get()->toArray();
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
         return $result;
     }
@@ -530,25 +535,29 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 DB::raw("date_part('year', status_updated_at) as year"),
             ])
             ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
-            ->whereIn('status', $status);
-
-        $dataRaw = $dataRaw->where(function ($q) use ($user) {
-            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+            ->whereIn('status', $status)->whereHas('customerGroup', function ($q) use ($user) {
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
                 }
                 if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
                 }
                 if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
                 }
-            });
-        });
-        $dataRaw->groupBy(['status_text', 'status_group', 'month', 'year'])->orderBy('month')->orderBy('year')->orderBy('status_group')->get()->toArray();
+                return $q;
+            })
+            ->groupBy(['status_text', 'status_group', 'month', 'year'])
+            ->orderBy('month')
+            ->orderBy('year')
+            ->orderBy('status_group')
+            ->get()->toArray();
         $data = [];
         $stt = 0;
         foreach ($monthPluck as $month) {
@@ -648,28 +657,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 DB::raw("date_part('year', status_updated_at) as year"),
             ])
             ->where('status', 6)
-            ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'");
-        $dataRaw = $dataRaw->where(function ($q) use ($user) {
-            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+            ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
+            ->whereHas('customerGroup', function ($q) use ($user) {
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
                 if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
                 if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
                 }
                 if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
                 }
                 if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
                 }
-            });
-        });
-        $dataRaw->groupBy(['status_text', 'rate_text', 'status', 'month', 'year'])
+            })
+            ->groupBy(['status_text', 'rate_text', 'status', 'month', 'year'])
             ->orderBy('month')
             ->orderBy('year')
             ->orderBy('status')
             ->get()->toArray();
+        Log::info($dataRaw);
         $data = [];
         $stt = 0;
         foreach ($monthPluck as $month) {
