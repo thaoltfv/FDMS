@@ -403,32 +403,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
         }
-        $select = ['*'];
-        $with = [
-            'customerGroup'
-        ];
-        $result = QueryBuilder::for(Certificate::class)
-            ->with($with)
-            ->select($select);
-        $result = $result->where(function ($q) use ($user) {
-            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
-                }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
-                }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
-                }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
-                }
-            });
-        });
-
-        $result = $result->get();
-        $dataRaw =    $result->select([
+        $select = [
             DB::raw("case status
                             when 1
                             then 'Tiếp nhận hồ sơ'
@@ -472,8 +447,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
                 end as status_group
             "),
             DB::Raw("count(id)")
-        ])
-            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
+        ];
+        $with = [
+            'customerGroup'
+        ];
+        $result = QueryBuilder::for(Certificate::class)
+            ->with($with)
+            ->select($select);
+        $result = $result->where(function ($q) use ($user) {
+            $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+            });
+        });
+        $result = $result->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
             // ->whereHas('customerGroup', function ($q) use ($user) {
             //     if ($user->name_lv_1 && $user->name_lv_1 != '') {
             //         $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
@@ -496,10 +493,10 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->orderBy('status_group')
             ->get()->toArray();
 
-        $dataRaw = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
+        $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
 
 
-        return $dataRaw;
+        return $result;
     }
     public function countBriefFinishByMonthCustomerGroup()
     {
