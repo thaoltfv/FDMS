@@ -4,10 +4,6 @@
 			<div
 				class="pannel__content d-md-flex d-block justify-content-end align-items-end"
 			>
-				<Search
-					:filter_search="filter_search"
-					@filter-changed="onFilterChange($event)"
-				/>
 				<button
 					@click.prevent="handleCreate(type)"
 					:class="
@@ -18,7 +14,7 @@
 					v-if="add"
 				>
 					<img
-						src="../../../assets/icons/ic_add.svg"
+						src="@/assets/icons/ic_add.svg"
 						style="margin-right: 8px"
 						alt="icon add"
 					/>
@@ -118,7 +114,7 @@ export default {
 	data() {
 		return {
 			filter_search: "",
-			type: "",
+			type: "NHOM_DOI_TAC",
 			totalRecord: 0,
 			isLoading: false,
 			list_apartments: [],
@@ -131,12 +127,10 @@ export default {
 			deleted: false
 		};
 	},
-	created() {
+	async created() {
 		// this.list_apartments = this.$route.query['list']
 		if ("search" in this.$route.query) {
-			if (!this.$route.query.search === "NHOM_DOI_TAC") {
-				this.filter_search = this.$route.query.search;
-			}
+			this.filter_search = this.$route.query.search;
 		} else {
 		}
 		this.pagination = this.$route.meta["pagination"];
@@ -152,6 +146,18 @@ export default {
 				this.deleted = true;
 			}
 		});
+		const params = {
+			search: this.type,
+			query: this.type,
+			status: "ALL"
+		};
+		this.$router.push({
+			query: {
+				search: this.type,
+				status: "ALL"
+			}
+		});
+		await this.getDictionaries(params);
 	},
 	computed: {
 		columns() {
@@ -204,7 +210,11 @@ export default {
 				data.status === 0 ? 1 : 0
 			);
 			if (resp.data) {
-				await this.getDictionaries();
+				const params = {
+					search: "NHOM_DOI_TAC",
+					status: "ALL"
+				};
+				await this.getDictionaries(params);
 			} else {
 				this.$toast.open({
 					message: "Kích hoạt/Tạm ngưng thất bại",
@@ -286,6 +296,7 @@ export default {
 					query: {
 						page: 1,
 						limit: 20,
+						query: this.type,
 						...params,
 						...filter
 					}

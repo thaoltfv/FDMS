@@ -241,7 +241,7 @@ navigations = [
 			{
 				id: "staff",
 				type: "item",
-				title: "Quản lý Nhân viên",
+				title: "Quản lý Tài khoản",
 				routeName: "staff.index",
 				exact: true
 			}
@@ -256,7 +256,24 @@ navigations = [
 		type: "item",
 		icon: "users",
 		title: "Quản lý đối tác",
-		routeName: "customer.index",
+		// routeName: "customer.index",
+		dropdown: [
+			{
+				id: "customer_group",
+				title: "Nhóm đối tác",
+				type: "item",
+				routeName: "customer.index2",
+				exact: true
+			},
+			{
+				id: "customer_private",
+				title: "Cá nhân",
+				type: "item",
+				routeName: "customer.index",
+				exact: true
+			},
+
+		],
 		customImage: false
 	},
 	{

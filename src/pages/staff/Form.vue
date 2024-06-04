@@ -64,11 +64,13 @@
 							:class="this.$route.name === 'staff.edit' ? 'd-none' : ''"
 						/> -->
 						<InputCategory
+							v-show="!form.is_guest"
 							v-model="form.role_id"
 							vid="role"
 							label="Phân quyền"
 							rules="required"
 							:options="optionsRole"
+							:disabled="form.is_guest"
 							class="col-12 col-lg-6 input-content"
 						/>
 						<InputText
@@ -79,18 +81,18 @@
 							:max-length="300"
 							class="col-12 col-lg-6 input-content"
 						/>
-						<InputCategory
+						<!-- <InputCategory
 							v-model="form.customer_group_id"
 							class="col-12 col-lg-6 input-content"
 							vid="customer_group_id"
 							label="Nhóm đối tác"
 							:options="optionsCustomerGroup"
-						/>
+						/> -->
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="card">
+		<div class="card" v-if="!form.is_guest">
 			<div class="card-title">
 				<div class="d-flex justify-content-between align-items-center">
 					<h3 class="title">Thông tin nhân viên</h3>
@@ -100,6 +102,7 @@
 				<div class="container-fluid color_content">
 					<div class="row">
 						<InputCategory
+							v-if="form.appraiser"
 							class="col-12 col-lg-6 input-content"
 							v-model="form.appraiser.appraise_position_id"
 							:options="optionRoles"
@@ -107,6 +110,7 @@
 							rules="required"
 						/>
 						<InputText
+							v-if="form.appraiser"
 							v-model="form.appraiser.appraiser_number"
 							placeholder="Nhập số thẩm định viên"
 							rules="max:200"
@@ -115,6 +119,7 @@
 							class="col-12 col-lg-6 input-content"
 						/>
 						<InputCategory
+							v-if="form.appraiser"
 							v-model="form.appraiser.branch_id"
 							class="col-12 col-lg-6 input-content"
 							vid="branch"
@@ -131,6 +136,44 @@
 							autocomplete="off"
 							:max-length="200"
 							class="col-12 col-lg-6 input-content"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card" v-if="form.is_guest">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Thông tin khách hàng</h3>
+				</div>
+			</div>
+			<div class="card-body card-info">
+				<div class="container-fluid color_content">
+					<div class="row">
+						<InputCategory
+							class="col-12 col-lg-6 input-content"
+							v-model="name_lv_1"
+							:options="optionsLV1"
+							label="Phân cấp 1"
+							rules="required"
+						/>
+						<InputCategory
+							class="col-12 col-lg-6 input-content"
+							v-model="name_lv_2"
+							:options="optionsLV2"
+							label="Phân cấp 2"
+						/>
+						<InputCategory
+							class="col-12 col-lg-6 input-content"
+							v-model="name_lv_3"
+							:options="optionsLV3"
+							label="Phân cấp 3"
+						/>
+						<InputCategory
+							class="col-12 col-lg-6 input-content"
+							v-model="name_lv_4"
+							:options="optionsLV4"
+							label="Phân cấp 4"
 						/>
 					</div>
 				</div>
@@ -189,7 +232,16 @@ export default {
 			roles: [],
 			branches: [],
 			positions: [],
+			listLV1: [],
+			listLV2: [],
+			listLV3: [],
+			listLV4: [],
+			name_lv_1: "",
+			name_lv_2: "",
+			name_lv_3: "",
+			name_lv_4: "",
 			form: {
+				is_guest: false,
 				appraiser: {
 					appraise_position_id: "",
 					appraiser_number: "",
@@ -222,10 +274,22 @@ export default {
 	// },
 	created() {
 		// console.log('dsadsađâs',this.$route.meta['detail'])
+		if ("is_guest" in this.$route.query) {
+			if (this.$route.query.is_guest === "true") {
+				this.form.is_guest = true;
+			} else {
+				this.form.is_guest = false;
+			}
+		} else {
+		}
 		if ("id" in this.$route.query && this.$route.name === "staff.edit") {
 			this.form = Object.assign(this.form, {
 				...this.$route.meta["detail"]
 			});
+			this.name_lv_1 = this.$route.meta["detail"].name_lv_1;
+			this.name_lv_2 = this.$route.meta["detail"].name_lv_2;
+			this.name_lv_3 = this.$route.meta["detail"].name_lv_3;
+			this.name_lv_4 = this.$route.meta["detail"].name_lv_4;
 			this.branch = this.$route.meta["detail"].branch;
 			this.role_id = this.$route.meta["detail"].roles[0].id;
 		} else {
@@ -235,6 +299,34 @@ export default {
 		}
 	},
 	computed: {
+		optionsLV1() {
+			return {
+				data: this.listLV1,
+				id: "description",
+				key: "description"
+			};
+		},
+		optionsLV2() {
+			return {
+				data: this.listLV2,
+				id: "description",
+				key: "description"
+			};
+		},
+		optionsLV3() {
+			return {
+				data: this.listLV3,
+				id: "description",
+				key: "description"
+			};
+		},
+		optionsLV4() {
+			return {
+				data: this.listLV4,
+				id: "description",
+				key: "description"
+			};
+		},
 		optionsCustomerGroup() {
 			return {
 				data: this.customerGroups,
@@ -272,6 +364,73 @@ export default {
 				this.customerGroups = reps.data.nhom_doi_tac
 					? [...reps.data.nhom_doi_tac]
 					: [];
+
+				if (this.customerGroups.length > 0) {
+					for (let index = 0; index < this.customerGroups.length; index++) {
+						const element = this.customerGroups[index];
+						console.log(element);
+						if (element.name_lv_1) {
+							if (this.listLV1.length === 0) {
+								this.listLV1.push({ description: element.name_lv_1 });
+							} else {
+								const temp = this.listLV1.filter(
+									e =>
+										e.name_lv_1 &&
+										e.name_lv_1.toUpperCase() ===
+											element.name_lv_1.toUpperCase()
+								);
+								if (temp.length === 0) {
+									this.listLV1.push({ description: element.name_lv_1 });
+								}
+							}
+						}
+						if (element.name_lv_1) {
+							if (this.listLV2.length === 0) {
+								this.listLV2.push({ description: element.name_lv_2 });
+							} else {
+								const temp = this.listLV2.filter(
+									e =>
+										e.name_lv_2 &&
+										e.name_lv_2.toUpperCase() ===
+											element.name_lv_2.toUpperCase()
+								);
+								if (temp.length === 0) {
+									this.listLV2.push({ description: element.name_lv_2 });
+								}
+							}
+						}
+						if (element.name_lv_1) {
+							if (this.listLV3.length === 0) {
+								this.listLV3.push({ description: element.name_lv_3 });
+							} else {
+								const temp = this.listLV3.filter(
+									e =>
+										e.name_lv_3 &&
+										e.name_lv_3.toUpperCase() ===
+											element.name_lv_3.toUpperCase()
+								);
+								if (temp.length === 0) {
+									this.listLV3.push({ description: element.name_lv_3 });
+								}
+							}
+						}
+						if (element.name_lv_4) {
+							if (this.listLV4.length === 0) {
+								this.listLV4.push({ description: element.name_lv_4 });
+							} else {
+								const temp = this.listLV4.filter(
+									e =>
+										e.name_lv_4 &&
+										e.name_lv_4.toUpperCase() ===
+											element.name_lv_4.toUpperCase()
+								);
+								if (temp.length === 0) {
+									this.listLV4.push({ description: element.name_lv_4 });
+								}
+							}
+						}
+					}
+				}
 			} catch (err) {
 				this.isSubmit = false;
 				throw err;
@@ -290,6 +449,12 @@ export default {
 			const role = this.roles.find(role => role.id === data.role_id);
 			data.role = role.name;
 			data.role = role.role_name;
+			if (data.is_guest) {
+				data.name_lv_1 = this.name_lv_1;
+				data.name_lv_2 = this.name_lv_2;
+				data.name_lv_3 = this.name_lv_3;
+				data.name_lv_4 = this.name_lv_4;
+			}
 			// console.log(role);
 			if (this.$route.name === "staff.edit") {
 				this.updateStaff(data);
@@ -306,6 +471,14 @@ export default {
 				const resp = await User.getRoles();
 				this.roles = [...resp.data.data];
 				this.form.role_id = this.role_id;
+				if (this.form.is_guest) {
+					const temp = this.roles.find(
+						e => e.role_name.toUpperCase() === "KHÁCH"
+					);
+					if (temp) {
+						this.form.role_id = temp.id;
+					}
+				}
 			} catch (err) {
 				this.isSubmit = false;
 				throw err;
