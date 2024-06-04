@@ -368,15 +368,14 @@ export default {
 				if (this.customerGroups.length > 0) {
 					for (let index = 0; index < this.customerGroups.length; index++) {
 						const element = this.customerGroups[index];
-						console.log(element);
 						if (element.name_lv_1) {
 							if (this.listLV1.length === 0) {
 								this.listLV1.push({ description: element.name_lv_1 });
 							} else {
 								const temp = this.listLV1.filter(
 									e =>
-										e.name_lv_1 &&
-										e.name_lv_1.toUpperCase() ===
+										e.description &&
+										e.description.toUpperCase() ===
 											element.name_lv_1.toUpperCase()
 								);
 								if (temp.length === 0) {
@@ -384,14 +383,14 @@ export default {
 								}
 							}
 						}
-						if (element.name_lv_1) {
+						if (element.name_lv_2) {
 							if (this.listLV2.length === 0) {
 								this.listLV2.push({ description: element.name_lv_2 });
 							} else {
 								const temp = this.listLV2.filter(
 									e =>
-										e.name_lv_2 &&
-										e.name_lv_2.toUpperCase() ===
+										e.description &&
+										e.description.toUpperCase() ===
 											element.name_lv_2.toUpperCase()
 								);
 								if (temp.length === 0) {
@@ -399,14 +398,14 @@ export default {
 								}
 							}
 						}
-						if (element.name_lv_1) {
+						if (element.name_lv_3) {
 							if (this.listLV3.length === 0) {
 								this.listLV3.push({ description: element.name_lv_3 });
 							} else {
 								const temp = this.listLV3.filter(
 									e =>
-										e.name_lv_3 &&
-										e.name_lv_3.toUpperCase() ===
+										e.description &&
+										e.description.toUpperCase() ===
 											element.name_lv_3.toUpperCase()
 								);
 								if (temp.length === 0) {
@@ -420,8 +419,8 @@ export default {
 							} else {
 								const temp = this.listLV4.filter(
 									e =>
-										e.name_lv_4 &&
-										e.name_lv_4.toUpperCase() ===
+										e.description &&
+										e.description.toUpperCase() ===
 											element.name_lv_4.toUpperCase()
 								);
 								if (temp.length === 0) {
