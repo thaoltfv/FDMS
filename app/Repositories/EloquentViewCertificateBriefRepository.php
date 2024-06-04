@@ -344,9 +344,22 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
             ->groupby(['status_text', 'status_group'])
             ->whereHas('customerGroup', function ($q) use ($user) {
-                if ($user->customer_group_id) {
-                    return $q->where('id', $user->customer_group_id);
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+                return $q;
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
             })
             ->orderBy('status_group')
             ->get()->toArray();
@@ -414,9 +427,22 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ])
             ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
             ->whereHas('customerGroup', function ($q) use ($user) {
-                if ($user->customer_group_id) {
-                    return $q->where('id', $user->customer_group_id);
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+                return $q;
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
             })->groupby(['status_text', 'status_group'])
             ->orderBy('status_group')
             ->get()->toArray();
@@ -510,9 +536,22 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ])
             ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
             ->whereIn('status', $status)->whereHas('customerGroup', function ($q) use ($user) {
-                if ($user->customer_group_id) {
-                    return $q->where('id', $user->customer_group_id);
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+                return $q;
             })
             ->groupBy(['status_text', 'status_group', 'month', 'year'])
             ->orderBy('month')
@@ -620,9 +659,22 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->where('status', 6)
             ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
             ->whereHas('customerGroup', function ($q) use ($user) {
-                if ($user->customer_group_id) {
-                    return $q->where('id', $user->customer_group_id);
+                // if ($user->customer_group_id) {
+                //     return $q->where('id', $user->customer_group_id);
+                // }
+                if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                    $q->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
                 }
+                if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                    $q->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                }
+                if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                    $q->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                }
+                if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                    $q->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                }
+                return $q;
             })
             ->groupBy(['status_text', 'rate_text', 'status', 'month', 'year'])
             ->orderBy('month')
