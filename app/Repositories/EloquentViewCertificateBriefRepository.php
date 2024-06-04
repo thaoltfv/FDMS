@@ -496,7 +496,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->orderBy('status_group')
             ->get()->toArray();
 
-        dd($result->get());
+        dd($result);
         $result = array('label' => Arr::pluck($result, 'status_text'), 'data' => Arr::pluck($result, 'count'), 'status' => Arr::pluck($result, 'status_group'));
 
 
