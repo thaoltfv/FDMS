@@ -21,6 +21,23 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async exportDataPreCertificationAccountant(data) {
+		const {
+			fromDate,
+			toDate,
+			appraiser_perform_id,
+			appraiser_sale_id,
+			business_manager_id,
+			customer_id,
+			createdBy,
+			status
+		} = data;
+		return new this().request({
+			method: "GET",
+			url: `pre-certificates/pre-export-accountant?fromDate=${fromDate}&toDate=${toDate}&status=${status}&created_by=${createdBy}&appraiser_sale_id=${appraiser_sale_id}&appraiser_perform_id=${appraiser_perform_id}&business_manager_id=${business_manager_id}&customer_id=${customer_id}`,
+			isStatic: true
+		});
+	}
 	static async updatePayments(data, id = "") {
 		return new this().request({
 			method: "POST",

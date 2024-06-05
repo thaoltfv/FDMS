@@ -394,16 +394,45 @@
 							style="color: #000; font-size: 12px !important; line-height: 1.8;"
 							v-bind:class="['w-50']"
 						>
-							*Kết quả ước tính sơ bộ chỉ có giá trị tham khảo dựa trên các
+							<!-- *Kết quả ước tính sơ bộ chỉ có giá trị tham khảo dựa trên các
 							thông tin khách hàng cung cấp và chưa phải là kết quả thẩm định
-							giá trên Chứng thư.
+							giá trên Chứng thư. -->
+
+							* Biên độ chênh lệch: {{ data.step_3.difference_amplitude }} %
+							<br />
+							* Ghi chú khác: <br />
+							<div
+								style="color: #000; font-size: 12px !important; line-height: 1.8;"
+								v-html="formattedText"
+							></div>
 						</div>
 
-						<div
-							style="break-inside: avoid"
-							class="w-50 d-flex justify-content-end"
-						>
-							<table>
+						<div class="w-50 d-flex flex-column">
+							<div class="row">
+								<div class="text-left col-1"></div>
+								<div class="text-left col-4 textPrint">Chữ ký</div>
+								<div class="text-left col-1 textPrint">:</div>
+								<div class="text-right col-6 textPrint">
+									---------------------
+								</div>
+							</div>
+							<div class="row">
+								<div class="text-left col-1"></div>
+								<div class="text-left col-4 textPrint">Người ước tính</div>
+								<div class="text-left col-1 textPrint ">:</div>
+								<div class="text-right col-6 textPrint">
+									{{ data.created_by ? data.created_by.name : "" }}
+								</div>
+							</div>
+							<div class="row">
+								<div class="text-left col-1"></div>
+								<div class="text-left col-4 textPrint">Thời điểm</div>
+								<div class="text-left col-1 textPrint">:</div>
+								<div class="text-right col-6 textPrint">
+									{{ data.updated_at ? formatDate(data.updated_at) : "" }}
+								</div>
+							</div>
+							<!-- <table>
 								<tbody class="infoFooter">
 									<tr>
 										<td>
@@ -439,7 +468,7 @@
 										</td>
 									</tr>
 								</tbody>
-							</table>
+							</table> -->
 
 							<!-- <div class="report-info">
 								<div class="report-label">Chữ ký:</div>
@@ -899,6 +928,13 @@ export default {
 			this.$emit("action", event);
 			this.$emit("cancel", event);
 		}
+	},
+	computed: {
+		formattedText() {
+			return this.data.step_3.note
+				? this.data.step_3.note.replaceAll(/\n/g, "<br>")
+				: "";
+		}
 	}
 };
 </script>
@@ -986,12 +1022,21 @@ export default {
 			}
 		}
 	}
+	.textPrint {
+		border: 0;
+		line-height: 1.8;
+		font-size: 12px !important;
+		font-style: italic;
+		color: #000000;
+	}
 	.infoFooter {
 		tr {
 			border: 0;
+			padding: 0 !important;
+			line-height: 0 !important;
 			td {
-				line-height: 0.5 !important;
-				padding: 5px;
+				line-height: 0 !important;
+				// padding: 5px;
 				border: 0;
 				font-size: 12px !important;
 				font-style: italic;

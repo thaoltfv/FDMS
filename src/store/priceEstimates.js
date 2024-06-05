@@ -126,7 +126,11 @@ export const usePriceEstimatesStore = defineStore(
 				total_area: [],
 				planning_area: [],
 				tangible_assets: [],
-				appraise_land_sum_area: 0
+				appraise_land_sum_area: 0,
+				difference_amplitude: 0,
+				note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+				- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+				- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`,
 			}
 		});
 
@@ -1097,6 +1101,11 @@ export const usePriceEstimatesStore = defineStore(
 			}
 			tempUpdate.total_price = temp + temp1 + temp2;
 			tempUpdate.price_estimate_id = priceEstimates.value.id;
+			if (tempUpdate.note.trim() === '' || !tempUpdate.note) {
+				priceEstimates.value.step_3.note = " ";
+			} else {
+				priceEstimates.value.step_3.note = priceEstimates.value.step_3.note
+			}
 			if (moment(tempUpdate.request_date, "DD/MM/YYYY", true).isValid()) {
 				tempUpdate.request_date = moment(
 					tempUpdate.request_date,
@@ -1241,10 +1250,14 @@ export const usePriceEstimatesStore = defineStore(
 
 				// step 3
 				if (bindDataStep.final_estimate) {
+
 					priceEstimates.value.step_3 = bindDataStep.final_estimate;
 					priceEstimates.value.step_3.petitioner_name = null;
 					priceEstimates.value.step_3.request_date = null;
 					priceEstimates.value.step_3.appraise_purpose = null;
+					if (!bindDataStep.final_estimate.note) {
+						priceEstimates.value.step_3.note = " ";
+					}
 					if (bindDataStep.pre_certificate) {
 						priceEstimates.value.step_3.petitioner_name =
 							bindDataStep.pre_certificate.petitioner_name;
@@ -1444,7 +1457,11 @@ export const usePriceEstimatesStore = defineStore(
 					],
 					planning_area: [],
 					tangible_assets: [],
-					appraise_land_sum_area: 0
+					appraise_land_sum_area: 0,
+					difference_amplitude: 0,
+					note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+					- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+					- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`,
 				}
 			};
 		}

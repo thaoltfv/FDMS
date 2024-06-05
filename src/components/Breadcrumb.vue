@@ -33,6 +33,7 @@ export default {
 	watch: {
 		"$route.meta.breadcrumbs": {
 			handler: function(newVal) {
+				this.breadcrumbs = [];
 				let isGuest = false;
 				if (store.getters.profile !== null) {
 					const profile = store.getters.profile.data.user;
@@ -50,7 +51,7 @@ export default {
 					this.breadcrumbs.push({ title: "Trang chủ", name: "home" });
 				}
 				if (newVal) {
-					this.breadcrumbs = [...newVal];
+					this.breadcrumbs.push(...newVal);
 				} else {
 					// this.breadcrumbs = [{ title: "Trang chủ", name: "home" }];
 				}

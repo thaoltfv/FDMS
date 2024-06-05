@@ -270,17 +270,29 @@
 								:options="optionsCustomer"
 							/>
 						</div>
+						<div class="row">
+							<InputTextPrefixCustom
+								id="customer_name"
+								placeholder="Ông / Bà"
+								v-model="data.customer.name"
+								vid="customer_name"
+								:iconUser="true"
+								:showIcon="true"
+								label="Họ tên đối tác"
+								class="form-group-container input_certification_brief col-6"
+							/>
+							<InputTextPrefixCustom
+								id="customer_phone"
+								placeholder="Nhập số điện thoại"
+								v-model="data.customer.phone"
+								class="form-group-container input_certification_brief col-6"
+								vid="customer_phone"
+								:iconPhone="true"
+								:showIcon="true"
+								label="Điện thoại"
+							/>
+						</div>
 
-						<InputTextPrefixCustom
-							id="customer_name"
-							placeholder="Ông / Bà"
-							v-model="data.customer.name"
-							vid="customer_name"
-							:iconUser="true"
-							:showIcon="true"
-							label="Họ tên đối tác"
-							class="form-group-container input_certification_brief"
-						/>
 						<InputTextPrefixCustom
 							id="customer_address"
 							placeholder="Nhập địa chỉ của đối tác"
@@ -290,16 +302,6 @@
 							:showIcon="true"
 							label="Địa chỉ"
 							class="form-group-container input_certification_brief"
-						/>
-						<InputTextPrefixCustom
-							id="customer_phone"
-							placeholder="Nhập số điện thoại"
-							v-model="data.customer.phone"
-							class="form-group-container input_certification_brief"
-							vid="customer_phone"
-							:iconPhone="true"
-							:showIcon="true"
-							label="Điện thoại"
 						/>
 					</div>
 				</div>

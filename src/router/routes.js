@@ -432,6 +432,7 @@ export const routes = [
 		path: "/customer",
 		component: Resource,
 		children: [
+
 			{
 				path: "",
 				name: "customer.index",
@@ -442,6 +443,18 @@ export const routes = [
 					permissions: [PERMISSIONS.VIEW_CUSTOMER],
 					breadcrumbs: [{ title: "Khách hàng", name: "customer.index" }],
 					gtm: "Trang khách hàng"
+				}
+			},
+			{
+				path: "/customer/group",
+				name: "customer.index2",
+				component: page("customer/Index2.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Nhóm đối tác",
+					permissions: [PERMISSIONS.VIEW_CUSTOMER],
+					breadcrumbs: [{ title: "Nhóm đối tác", name: "customer.index2" }],
+					gtm: "Trang nhóm đối tác"
 				}
 			},
 			{
@@ -580,10 +593,10 @@ export const routes = [
 				component: page("staff/Index.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Nhân viên",
+					title: "Tài khoản",
 					permissions: [PERMISSIONS.ADD_ROLE], // Force need role permision
-					breadcrumbs: [{ title: "Nhân viên", name: "staff.index" }],
-					gtm: "Trang nhân viên"
+					breadcrumbs: [{ title: "Tài khoản", name: "staff.index" }],
+					gtm: "Trang Tài khoản"
 				}
 			},
 			{
@@ -592,13 +605,13 @@ export const routes = [
 				component: page("staff/Create.vue"),
 				beforeEnter: ResolveGuard([AuthGuard]),
 				meta: {
-					title: "Nhân viên",
+					title: "Tài khoản",
 					permissions: [PERMISSIONS.ADD_ROLE], // Force need role permision
 					breadcrumbs: [
-						{ title: "Nhân viên", name: "staff.index" },
-						{ title: "Tạo nhân viên", name: "staff.create" }
+						{ title: "Tài khoản", name: "staff.index" },
+						{ title: "Tạo tài khoản", name: "staff.create" }
 					],
-					gtm: "Trang tạo nhân viên"
+					gtm: "Trang tạo tài khoản"
 				}
 			},
 			{
@@ -610,10 +623,10 @@ export const routes = [
 					title: "Chỉnh sửa",
 					permissions: [PERMISSIONS.EDIT_ROLE], // Force need role permision
 					breadcrumbs: [
-						{ title: "Nhân viên", name: "staff.index" },
+						{ title: "Tài khoản", name: "staff.index" },
 						{ title: "Chỉnh sửa", name: "staff.edit" }
 					],
-					gtm: "Trang chỉnh sửa nhân viên"
+					gtm: "Trang chỉnh sửa tài khoản"
 				}
 			},
 			// role
@@ -976,8 +989,8 @@ export const routes = [
 					title: "Thêm Danh mục",
 					permissions: [PERMISSIONS.ADD_CATEGORY],
 					breadcrumbs: [
-						{ title: "Danh mục", name: "dictionary.index" },
-						{ title: "Thêm danh mục", name: "dictionary.create" }
+						// { title: "Danh mục", name: "dictionary.index" },
+						{ title: "Thêm mới", name: "dictionary.create" }
 					],
 					gtm: "Trang thêm danh mục"
 				}

@@ -216,6 +216,28 @@
 						</p>
 					</div>
 				</template>
+				<template slot="service_fee" slot-scope="props">
+					<p class="text-main text-lowercase">
+						{{
+							props.total_service_fee
+								? formatNumber(props.total_service_fee) + " đ"
+								: "-"
+						}}
+					</p>
+
+					<p
+						v-if="props.payments && props.payments.length > 0"
+						class="text-secondary"
+					>
+						Đã thanh toán:
+						{{
+							calcDemain(props.payments) !== 0
+								? formatNumber(calcDemain(props.payments)) + " đ"
+								: "-"
+						}}
+					</p>
+					<p v-else class="text-secondary"></p>
+				</template>
 				<template
 					slot="petitioner_name"
 					slot-scope="{ petitioner_name, customer }"
@@ -728,6 +750,14 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Tổng phí dịch vụ (VNĐ)",
+					align: "left",
+					scopedSlots: { customRender: "service_fee" },
+					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
+					// sortDirections: ['descend', 'ascend'],
+					hiddenItem: false
+				},
+				{
 					title: "Thời gian",
 					class: "optional-data",
 					align: "left",
@@ -773,6 +803,14 @@ export default {
 		getStatusColor(status) {
 			const item = this.principleConfig.find(item => item.status === status);
 			return item && item.css ? item.css.color : "info";
+		},
+		calcDemain(listPayment) {
+			let demain = 0;
+			for (let index = 0; index < listPayment.length; index++) {
+				const element = listPayment[index];
+				demain += Number(element.amount);
+			}
+			return demain;
 		},
 		filterData(data, type) {
 			if (type === "status") {

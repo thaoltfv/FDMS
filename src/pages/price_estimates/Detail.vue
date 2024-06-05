@@ -843,15 +843,16 @@ export default {
 			});
 		},
 		async handlePrint() {
-			const response = await this.priceEstimateStore.getDataAllStep(
-				this.$route.query.id
-			);
-			if (response.error) {
-				this.$toast.open({
-					message: `${response.error.message}`,
-					type: "error",
-					position: "top-right"
-				});
+			// const response = await this.priceEstimateStore.getDataAllStep(
+			// 	this.$route.query.id
+			// );
+			// if (response.error) {
+			if (1 === 2) {
+				// this.$toast.open({
+				// 	message: `${response.error.message}`,
+				// 	type: "error",
+				// 	position: "top-right"
+				// });
 			} else {
 				this.priceEstimates.assets = [];
 				this.priceEstimates.totalLandPrice = 0;
