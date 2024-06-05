@@ -154,11 +154,11 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
         if ($objects['is_guest']) {
-            $array['is_guest'] =   true;
-            $array['name_lv_1'] =   $objects['name_lv_1'] ?? null;
-            $array['name_lv_2'] =   $objects['name_lv_2'] ?? null;
-            $array['name_lv_3'] =   $objects['name_lv_3'] ?? null;
-            $array['name_lv_4'] =   $objects['name_lv_4'] ?? null;
+            $array['is_guest'] = true;
+            $array['name_lv_1'] = $objects['name_lv_1'] ?? null;
+            $array['name_lv_2'] = $objects['name_lv_2'] ?? null;
+            $array['name_lv_3'] = $objects['name_lv_3'] ?? null;
+            $array['name_lv_4'] = $objects['name_lv_4'] ?? null;
         }
         $id = $this->model->query()->insertGetId($array);
         if (isset($objects['appraiser']) && !$objects['is_guest']) {
