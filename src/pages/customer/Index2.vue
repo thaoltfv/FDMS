@@ -174,12 +174,12 @@ export default {
 					scopedSlots: { customRender: "description" },
 					dataIndex: "description"
 				},
-				{
-					title: "Viết tắt",
-					class: "text-none",
-					align: "left",
-					dataIndex: "acronym"
-				},
+				// {
+				// 	title: "Viết tắt",
+				// 	class: "text-none",
+				// 	align: "left",
+				// 	dataIndex: "acronym"
+				// },
 				{
 					title: "Trạng thái",
 					align: "center",
