@@ -153,8 +153,15 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'mailing_address' => mb_strtolower($objects['mailing_address']) ?? "",
             'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
+        if ($objects['is_guest']) {
+            $array['is_guest'] = true;
+            $array['name_lv_1'] = $objects['name_lv_1'] ?? null;
+            $array['name_lv_2'] = $objects['name_lv_2'] ?? null;
+            $array['name_lv_3'] = $objects['name_lv_3'] ?? null;
+            $array['name_lv_4'] = $objects['name_lv_4'] ?? null;
+        }
         $id = $this->model->query()->insertGetId($array);
-        if (isset($objects['appraiser'])) {
+        if (isset($objects['appraiser']) && !$objects['is_guest']) {
             Appraiser::insert([
                 'name' => $objects['name'] ?? "",
                 'appraiser_number' => $objects['appraiser']['appraiser_number'] ?? "",
@@ -191,7 +198,16 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'image' => $objects['image'] ?? "",
             'mailing_address' => $objects['mailing_address'] ?? "",
             'customer_group_id' => $objects['customer_group_id'] ?? null,
+
+
         ];
+        if ($objects['is_guest']) {
+            $array['is_guest'] =   $objects['is_guest'] ?? null;
+            $array['name_lv_1'] =   $objects['name_lv_1'] ?? null;
+            $array['name_lv_2'] =   $objects['name_lv_2'] ?? null;
+            $array['name_lv_3'] =   $objects['name_lv_3'] ?? null;
+            $array['name_lv_4'] =   $objects['name_lv_4'] ?? null;
+        }
 
         $this->model->query()
             ->where('id', $id)
@@ -206,10 +222,11 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             if (isset($getRole)) {
                 $user->syncRoles($getRole);
             }
+        } else if (count($roles) > 0 &&  ($roles[0]['role_name'] == $roleUpdate)) {
         } else {
             $user->syncRoles("USER");
         }
-        if (isset($objects['appraiser'])) {
+        if (isset($objects['appraiser']) && !$objects['is_guest']) {
             Appraiser::query()->where('user_id', $id)
                 ->update([
                     'name' => $objects['name'] ?? "",

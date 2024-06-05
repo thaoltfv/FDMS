@@ -152,6 +152,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('dictionary', DictionaryController::class);
 
+    Route::get('/dictionaries/change-status-customer-group/{id}/{status}', [DictionaryController::class, 'changeStatusCustomerGroup']);
+
+
     Route::get('/dictionaries', [DictionaryController::class, 'findAll']);
 
     Route::get('/dictionaries/all/{type}', [DictionaryController::class, 'findAllByType']);
@@ -337,6 +340,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pre-certificates/pre-certificate-update-payment/{id}', [PreCertificateController::class, 'updatePayments']);
     Route::post('pre-certificates/other-document/upload/{id}/{typeDocument}', [PreCertificateController::class, 'otherDocumentUpload']);
     Route::get('pre-certificates/pre-export', [PreCertificateController::class, 'exportPreCertificate']);
+    Route::get('pre-certificates/pre-export-accountant', [PreCertificateController::class, 'exportPreCertificateAccountant']);
     Route::post('pre-certificates/other-document/remove/{id}', [PreCertificateController::class, 'otherDocumentRemove']);
     Route::get('pre-certificates/other-document/download/{id}', [PreCertificateController::class, 'otherDocumentDownload']);
     Route::post('pre-certificates/pre-certificate-update-price-estimate/{id}', [PreCertificateController::class, 'updatePreCertificateV3']);
@@ -516,6 +520,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certification_brief/comparison-appraise', [CertificateBriefController::class, 'getComparisonAppraise']);
     Route::get('certification_brief/brief-export', [CertificateBriefController::class, 'exportCertificateBriefs']);
     Route::get('certification_brief/brief-customize-export', [CertificateBriefController::class, 'exportCustomizeCertificateBriefs']);
+    Route::get('certification_brief/brief-customize-export-accountant', [CertificateBriefController::class, 'exportCustomizeCertificateBriefsAccountant']);
+
 
     Route::post('certificate/sale-document/upload/{id}', [CertificateController::class, 'saleDocumentUpload']);
     Route::get('/DistrictAll', [DistrictController::class, 'findAllByProvince']);

@@ -27,9 +27,18 @@ class PreCertificatePayments extends Model
         'for_payment_of',
         'certificate_id'
     ];
-	
-	public function createdBy(): BelongsTo
+
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+    public function preCertificate(): BelongsTo
+    {
+        return $this->belongsTo(PreCertificate::class, 'pre_certificate_id', 'id');
+    }
+
+    public function certificate(): BelongsTo
+    {
+        return $this->belongsTo(Certificate::class, 'certificate_id', 'id');
     }
 }

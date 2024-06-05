@@ -8,6 +8,7 @@ use App\Contracts\UserRepository;
 use App\Enum\ErrorMessage;
 use App\Http\Controllers\Controller;
 use App\Services\Excel\ExportPreCertificate;
+use App\Services\Excel\ExportAccountant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -395,6 +396,18 @@ class PreCertificateController extends Controller
         $result = ['HSTD' => $HSTD];
         // dd($HSTD);
         return $this->respondWithCustomData($result);
+    }
+    public function exportPreCertificateAccountant(Request $request)
+    {
+        // if (!CommonService::checkUserPermission($this->permissionExportAccount))
+        //     return $this->respondWithErrorData(['message' => ErrorMessage::ACCOUNTANT_CHECK_EXPORT, 'exception' => ''], 403);
+
+        $result =  $this->preCertificateRepository->exportPayment();
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+        // return $this->respondWithCustomData($result);
+
+        return $this->respondWithCustomData((new ExportAccountant())->exportPreAccountant($result));
     }
     public function exportPreCertificate(Request $request)
     {

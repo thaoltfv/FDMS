@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,7 +28,11 @@ class Dictionary extends Model
         'description',
         'useful_year',
         'created_by',
-        'dictionary_acronym'
+        'dictionary_acronym',
+        'name_lv_1',
+        'name_lv_2',
+        'name_lv_3',
+        'name_lv_4'
         // 'description_capitalize',
     ];
     // protected $appends = [

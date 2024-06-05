@@ -371,6 +371,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'appraise_purpose_id',
             'pre_certificates.created_at',
             'customer_id',
+            'total_service_fee',
             'pre_certificates.customer_group_id',
 
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
@@ -408,7 +409,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'priceEstimates',
             'priceEstimates.landFinalEstimate',
             'customer:id,name,phone,address',
-            'customerGroup:id,description',
+            'customerGroup:id,description,name_lv_1,name_lv_2,name_lv_3,name_lv_4',
+            'payments',
         ];
         DB::enableQueryLog();
         // dd($this->model)->with($with)->select($select);
@@ -512,9 +514,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result =  $result->orderBy('petitioner_name', 'ASC');
         }
         if (request()->has('is_guest')) {
-            if (isset($user->customer_group_id)) {
-                $result = $result->where('customer_group_id', '=', $user->customer_group_id);
-
+            if (isset($user->name_lv_1)) {
+                // $result = $result->where('customer_group_id', '=', $user->customer_group_id);
+                $result = $result->where(function ($q) use ($user) {
+                    $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                        if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                            $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                        }
+                        if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                            $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                        }
+                        if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                            $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                        }
+                        if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                            $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                        }
+                    });
+                });
                 $result = $result->orderByDesc('pre_certificates.updated_at');
                 // dd(DB::getQueryLog());
                 $result = $result
@@ -1772,6 +1789,49 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         return $result;
     }
 
+    public function exportPayment()
+    {
+        $status = request()->get('status');
+        $fromDate = request()->get('fromDate');
+        $toDate = request()->get('toDate');
+        if (isset($fromDate) && isset($toDate)) {
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
+            $diff = $toDate->diff($fromDate);
+            if ($diff->days > 186) {
+                return ['message' => 'Chỉ được tìm kiếm tối đa 6 tháng.', 'exception' => ''];
+            }
+        } else {
+            return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
+        }
+
+        if (!empty($status)) {
+            $status = explode(',', $status);
+        }
+
+        $select = ['*'];
+        $with = [
+            'preCertificate',
+            'preCertificate.appraiserSale',
+            'preCertificate.appraiserPerform',
+            'preCertificate.payments',  'certificate', 'certificate.payments'
+        ];
+        $result = PreCertificatePayments::with($with)->select($select);
+        $result = $result->whereNotNull('pre_certificate_id');
+
+        if (isset($status)) {
+            $result = $result->whereHas('preCertificate', function ($query) use ($status) {
+                $query->whereIn('status', $status);
+            });
+        }
+
+        if (isset($fromDate) && isset($toDate)) {
+            $result = $result->whereBetween('pay_date', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
+        }
+
+        $result = $result->orderBy('pay_date', 'desc')->get();
+        return $result;
+    }
 
     private function checkAuthorizationPreCertificate($id)
     {

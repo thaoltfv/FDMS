@@ -195,19 +195,40 @@ class KeHoachTDG
         $isApartment = in_array('CC', $certificate->document_type ?? []);
         // $addressHSTD = 'Bất động sản là ';
         $addressHSTD = '';
+        $appraiseApproaches = [];
+        $appraiseMethodUsed = [];
+        $appraiseMethodUsedStr = '';
         if (isset($priceEstimatePrint)) {
             foreach ($priceEstimatePrint as $index => $item) {
                 $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
             }
-        } else {
+        } elseif ($certificate->realEstate && count($certificate->realEstate) > 0) {
             if ($isApartment) {
-                foreach ($certificate->apartmentAssetPrint as $index => $item) {
-                    $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->apartment->appraise_asset) : ' và ' . htmlspecialchars($item->apartment->appraise_asset));
+                        $apartment = $item->apartment;
+                        $appraiseApproaches[$apartment->apartmentAppraisalBase->approach->id] = $apartment->apartmentAppraisalBase;
+                    }
                 }
+                foreach ($appraiseApproaches as $item) {
+                    array_push($appraiseMethodUsed, $item->methodUsed->name);
+                }
+                $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+                $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
             } else {
-                foreach ($certificate->appraises as $index => $item) {
-                    $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraise_asset) : ' và ' . htmlspecialchars($item->appraise_asset));
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
+                        $addressHSTD .=  ($index == 0 ?  htmlspecialchars($item->appraises->appraise_asset) : ' và ' . htmlspecialchars($item->appraises->appraise_asset));
+                        $appraise = $item->appraises;
+                        $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
+                    }
                 }
+                foreach ($appraiseApproaches as $item) {
+                    array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
+                }
+                $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+                $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
             }
         }
 
@@ -246,7 +267,7 @@ class KeHoachTDG
 
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Phương pháp so sánh.", null, $indentleftSymbol);
+        $row2->addCell(9700, array('gridSpan' => 2))->addText("Phương pháp thẩm định giá: Sử dụng " . $appraiseMethodUsedStr, null, $indentleftSymbol);
 
         $row3 = $table->addRow();
         $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
