@@ -90,6 +90,21 @@ class ExportPreCertificate
                         $totalDebt += $item->amount;
                     }
                     $totalRemain = $data->total_service_fee - $totalDebt;
+                    $totalPrice = 0;
+                    $addressFull = '';
+                    if (isset($data->priceEstimates) && count($data->priceEstimates) > 0) {
+                        foreach ($data->priceEstimates as $index => $value) {
+                            if (
+                                $value->landFinalEstimate &&
+                                $value->landFinalEstimate[0] &&
+                                $value->landFinalEstimate[0]->total_price
+                            ) {
+                                $totalPrice += $value->landFinalEstimate[0]->total_price;
+                                $addressFull += ($index > 0) ? ' và ' : '';
+                                $addressFull += $value->full_address;
+                            }
+                        }
+                    }
                     return [
                         'Mã YCSB' => 'YCSB_' . $data->id,
                         'Giai đoạn' =>  $status_text,
@@ -98,11 +113,13 @@ class ExportPreCertificate
                         'Địa chỉ' => $data->petitioner_address,
                         'Mục đích thẩm định' => $data->appraisePurpose->name ?? '',
                         'Loại sơ bộ' => $data->preType->description ?? '',
-                        'Tên tài sản sơ bộ' => $data->pre_asset_name,
-                        'Tổng giá trị sơ bộ' => $data->total_preliminary_value,
-                        'Đối tác' => $data->customer->name ?? '',
-                        'Địa chỉ' => $data->customer->address ?? '',
-                        'Liên hệ' =>  $data->customer->phone ?? '',
+                        'Ghi chú' => $data->pre_asset_name,
+                        'Tổng giá trị sơ bộ' => $totalPrice,
+                        'Địa chỉ tài sản' => $addressFull,
+                        'Tên đối tác' => $data->customer->name ?? '',
+                        // 'Địa chỉ' => $data->customer->address ?? '',
+                        'SĐT liên hệ' =>  $data->customer->phone ?? '',
+                        'Nhóm đối tác' => $data->customerGroup ? $data->customerGroup->description : '',
                         'Tổng phí dịch vụ' => $data->total_service_fee,
                         'Chiết khấu' => $data->commission_fee,
                         'Đã thanh toán' => $totalDebt,
@@ -124,6 +141,7 @@ class ExportPreCertificate
         $data['file_name'] = $fileName;
         return $data;
     }
+
     private function formatColumn($path, $fileName)
     {
         $reader = new Xlsx();

@@ -1759,6 +1759,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'cancelReason:id,description',
             'preType:id,description',
             'customerGroup:id,description',
+            'priceEstimates',
+            'priceEstimates.landFinalEstimate'
         ];
         $result = PreCertificate::with($with)
             ->select($select);
