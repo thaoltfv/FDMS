@@ -3079,7 +3079,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         when 3
                             then u1.image
                         when 4
-                            then u1.image
+                            then u3.image
                         when 5
                             then users.image
                         when 7
@@ -3101,14 +3101,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 when 3
                     then u1.name
                 when 4
-                    then u1.name
+                    then u3.name
                 when 5
                     then users.name
                 when 7
                     then u4.name
                 when 8
                     then u5.name
-                    
                 when 9
                     then u2.name
                 when 10
