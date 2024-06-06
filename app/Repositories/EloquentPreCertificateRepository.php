@@ -423,7 +423,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $role = $user->roles->last();
         // dd($role->name);
         if (request()->has('is_guest')) {
-        } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
+        } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
@@ -727,7 +727,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //     $permissionViewAccount = true;
         // }
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
+        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
