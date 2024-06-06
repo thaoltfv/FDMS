@@ -5300,8 +5300,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             }
             if (isset($object['business_manager_id'])) {
                 $updateArray['business_manager_id'] = $object['business_manager_id'];
-            } else {
-                $updateArray['business_manager_id'] = null;
             }
 
             Certificate::where('id', $id)->update($updateArray);
