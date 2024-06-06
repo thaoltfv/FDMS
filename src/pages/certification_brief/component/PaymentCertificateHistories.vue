@@ -181,6 +181,7 @@
 </template>
 <script>
 import { ref } from "vue";
+import Vue from 'vue';
 import { usePreCertificateStore } from "@/store/preCertificate";
 import _ from "lodash";
 import InputCurrency from "@/components/Form/InputCurrency";
