@@ -100,8 +100,8 @@ class ExportPreCertificate
                                 $value->landFinalEstimate[0]->total_price
                             ) {
                                 $totalPrice += $value->landFinalEstimate[0]->total_price;
-                                $addressFull += ($index > 0) ? ' và ' : '';
-                                $addressFull += $value->full_address;
+                                $addressFull .= ($index > 0) ? ' và ' : '';
+                                $addressFull .= $value->full_address;
                             }
                         }
                     }
