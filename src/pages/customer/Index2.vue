@@ -64,10 +64,10 @@
          </div> -->
 				</template>
 				<template slot="status" slot-scope="status">
-					<p class="status" :class="status === 'inactive' ? 'orange' : ''">
+					<p :class="status === 0 ? '' : 'status'">
 						{{
 							status === 0
-								? "Đang vô hiệu hóa"
+								? "Đã vô hiệu hóa"
 								: status === 1
 								? "Đang hoạt động"
 								: ""

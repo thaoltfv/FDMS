@@ -13,7 +13,7 @@
 						</div>
 					</div>
 					<div class="card-body card-info">
-						<div class="container-filter">
+						<!-- <div class="container-filter">
 							<div class="row align-items-center">
 								<div class="col-12 col-lg-3">
 									<div class="card-body__avatar">
@@ -96,10 +96,10 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 						<div class="container-fluid">
 							<div class="row justify-content-between">
-								<div class="col-12 col-md-6 col-lg-3 form-group-container">
+								<div class="col-12 col-md-4 col-lg-4 form-group-container">
 									<label class="font-weight-bold color-black">Mã đối tác</label>
 									<div
 										class="form-control form-control__id disabled"
@@ -116,42 +116,33 @@
 										</p>
 									</div>
 								</div>
-								<div class="col-lg-3">
-									<!-- <InputCategory
-										v-model="form.customer_group_id"
-										vid="customer_group_id"
-										label="Nhóm đối tác"
-										class="form-group-container col-12"
-										:options="optionsCustomerGroup"
-									/> -->
-								</div>
-								<div class="col-lg-4"></div>
+
 								<InputText
 									v-model="form.name"
 									vid="name"
-									label="Tên đối tác"
+									label="Họ và tên đối tác"
 									rules="required"
-									class="col-12 col-md-4 col-lg-3 form-group-container"
+									class="col-12 col-md-4 col-lg-4 form-group-container"
 								/>
 								<InputText
 									v-model="form.phone"
 									vid="phone"
-									label="SĐT người liên hệ"
+									label="Số điện thoại"
 									type="number"
 									:max-length="10"
 									:min="0"
 									rules="required"
-									class="col-12 col-md-4 col-lg-3 form-group-container"
+									class="col-12 col-md-4 col-lg-4 form-group-container"
 								/>
-								<InputText
+								<!-- <InputText
 									v-model="form.tax_code"
 									vid="tax_code"
 									label="Mã số thuế"
 									type="number"
 									:max-length="15"
 									class="col-12 col-md-4 col-lg-4 form-group-container"
-								/>
-								<div class="col-12 col-md-6 col-lg-3 form-group-container">
+								/> -->
+								<!-- <div class="col-12 col-md-6 col-lg-3 form-group-container">
 									<label class="font-weight-bold color-black">Ngày tạo</label>
 									<div class="form-control disabled">
 										<p class="mb-0">{{ form.created_date }}</p>
@@ -176,7 +167,7 @@
 											}}
 										</p>
 									</div>
-								</div>
+								</div> -->
 							</div>
 							<div class="card-info">
 								<div class="row">
