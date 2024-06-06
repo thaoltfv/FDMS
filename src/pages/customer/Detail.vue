@@ -11,7 +11,7 @@
 					</div>
 				</div>
 				<div class="card-body card-info">
-					<div class="container-filter">
+					<!-- <div class="container-filter">
 						<div class="row align-items-center">
 							<div class="col-12 col-lg-3">
 								<div class="card-body__avatar">
@@ -68,7 +68,8 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
+
 					<div class="d-grid">
 						<div class="content-detail content-code">
 							<p class="content-title">Mã đối tác:</p>
@@ -76,11 +77,8 @@
 								{{ "DT_" + form.id }}
 							</p>
 						</div>
-					</div>
-
-					<div class="d-grid">
 						<div class="content-detail" v-if="form.name != null">
-							<p class="content-title">Tên đối tác:</p>
+							<p class="content-title">Họ và tên đối tác:</p>
 							<p class="content-name" v-if="form.name != null">
 								{{ form.name }}
 							</p>
@@ -91,12 +89,12 @@
 								{{ form.phone }}
 							</p>
 						</div>
-						<div class="content-detail" v-if="form.tax_code !== null">
+						<!-- <div class="content-detail" v-if="form.tax_code !== null">
 							<p class="content-title">Mã số thuế:</p>
 							<p class="content-name">{{ form.tax_code }}</p>
-						</div>
+						</div> -->
 					</div>
-					<div class="d-grid">
+					<!-- <div class="d-grid">
 						<div class="content-detail">
 							<p class="content-title">Ngày tạo:</p>
 							<p class="content-name">{{ form.created_date }}</p>
@@ -117,7 +115,7 @@
 								}}
 							</p>
 						</div>
-						<!-- <div class="d-grid">
+						 <div class="d-grid">
 							<div class="content-detail content-code">
 								<p class="content-title">Nhóm đối tác:</p>
 								<p class="content-name">
@@ -126,8 +124,8 @@
 									}}
 								</p>
 							</div>
-						</div> -->
-					</div>
+						</div> 
+					</div> -->
 					<div class="content-detail">
 						<p class="content-title">Địa chỉ đầy đủ:</p>
 						<p class="content-name">

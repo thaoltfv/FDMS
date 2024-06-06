@@ -190,7 +190,17 @@
 					</p>
 					<!-- <b-tooltip v-if="showDetailAppraise(detail_appraise)" class="text-none" :target="('content' + detail_appraise.id).toString()"><pre>{{ showDetailAppraise(detail_appraise) }}</pre></b-tooltip> -->
 				</template>
-
+				<template
+					slot="customer_group"
+					slot-scope="{ customer_group, customer }"
+				>
+					<p class="text-main text-wrap">
+						{{ customer_group ? customer_group.description : "" }}
+					</p>
+					<p class="text-secondary">
+						{{ customer ? customer.name : " " }}
+					</p>
+				</template>
 				<template
 					slot="total_preliminary_value"
 					slot-scope="{ price_estimates }"
@@ -217,10 +227,10 @@
 					slot="petitioner_name"
 					slot-scope="{ petitioner_name, customer }"
 				>
-					<p class="text-main">KH: {{ petitioner_name }}</p>
-					<p class="text-secondary">
+					<p class="text-main">{{ petitioner_name }}</p>
+					<!-- <p class="text-secondary">
 						Đối tác: {{ customer ? customer.name : " " }}
-					</p>
+					</p> -->
 				</template>
 				<template slot="created_by" slot-scope="{ created_by, created_at }">
 					<p class="text-main">
@@ -632,8 +642,17 @@ export default {
 					scopedSlots: { customRender: "petitioner_name" },
 					// sorter: (a, b) => a.petitioner_name - b.petitioner_name,
 					// sortDirections: ['descend', 'ascend'],
+					width: "15dvw",
 					hiddenItem: false
 				},
+				{
+					title: "Nhóm đối tác",
+					align: "left",
+					scopedSlots: { customRender: "customer_group" },
+					width: "15dvw",
+					hiddenItem: false
+				},
+
 				{
 					title: "Địa chỉ tài sản",
 					align: "left",

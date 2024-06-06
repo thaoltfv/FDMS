@@ -175,7 +175,13 @@
 											class="mr-2"
 										/> -->
 										<div
-											v-if="allowEdit && statusText !== 'Hoàn thành'"
+											v-if="
+												allowEdit &&
+													statusText !== 'Hoàn thành' &&
+													statusText !== 'In hồ sơ' &&
+													statusText !== 'Bàn giao khách hàng' &&
+													statusText !== 'Hủy'
+											"
 											class="d-flex align-items-center"
 										>
 											<b-tooltip
@@ -249,7 +255,13 @@
 										</div>
 									</div>
 									<div
-										v-if="allowEdit && statusText !== 'Hoàn thành'"
+										v-if="
+											allowEdit &&
+												statusText !== 'Hoàn thành' &&
+												statusText !== 'In hồ sơ' &&
+												statusText !== 'Bàn giao khách hàng' &&
+												statusText !== 'Hủy'
+										"
 										class="d-flex align-items-center  justify-content-end col-1 pr-3"
 									>
 										<img

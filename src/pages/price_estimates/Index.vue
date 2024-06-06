@@ -24,13 +24,13 @@
 							alt="search"
 						/>Tạo mới
 					</button>
-					<b-dropdown class="dropdown-container" no-caret v-if="this.export">
+					<!-- <b-dropdown class="dropdown-container" no-caret v-if="this.export">
 						<template #button-content>
 							<div class="container_image">
 								<img src="@/assets/icons/ic_more.svg" alt="" />
 							</div>
 						</template>
-						<!-- <b-dropdown-item @click.prevent="export30daysBefore"
+						 <b-dropdown-item @click.prevent="export30daysBefore"
 							>Xuất dữ liệu 30 ngày trước</b-dropdown-item
 						>
 						<b-dropdown-item @click.prevent="exportMonthBefore"
@@ -38,11 +38,11 @@
 						>
 						<b-dropdown-item @click.prevent="exportQuarter"
 							>Xuất dữ liệu quý trước</b-dropdown-item
-						> -->
+						> 
 						<b-dropdown-item @click.prevent="exportAdjust"
 							>Xuất dữ liệu tùy chỉnh</b-dropdown-item
 						>
-					</b-dropdown>
+					</b-dropdown> -->
 				</div>
 			</div>
 		</div>

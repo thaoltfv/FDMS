@@ -412,10 +412,12 @@
 							</div>
 						</div>
 						<div class="col-custom-11-5 mt-3">
-							<InputPercentNegative
+							<InputPercent
 								v-model="step_3.difference_amplitude"
 								vid="difference_amplitude"
 								:disabled="!isEdit"
+								:min="0"
+								:max="100"
 								label="Biên độ chệnh lệch (%)"
 								class="form-group-container"
 							/>
@@ -562,10 +564,12 @@
 							</div>
 						</div>
 						<div class="col-custom-11-5 mt-3">
-							<InputPercentNegative
+							<InputPercent
 								v-model="step_3.difference_amplitude"
 								vid="difference_amplitude"
 								:disabled="!isEdit"
+								:min="0"
+								:max="100"
 								label="Biên độ chệnh lệch (%)"
 								class="form-group-container"
 							/>

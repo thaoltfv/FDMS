@@ -398,7 +398,7 @@
 							thông tin khách hàng cung cấp và chưa phải là kết quả thẩm định
 							giá trên Chứng thư. -->
 
-							* Biên độ chênh lệch: {{ data.step_3.difference_amplitude }} %
+							* Biên độ chênh lệch: +/- {{ data.step_3.difference_amplitude }} %
 							<br />
 							* Ghi chú khác: <br />
 							<div

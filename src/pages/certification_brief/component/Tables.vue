@@ -185,10 +185,22 @@
 					slot-scope="{ petitioner_name, customer }"
 				>
 					<p class="name_detail text-main text-wrap">
-						KH: {{ petitioner_name }}
+						{{ petitioner_name }}
+					</p>
+					<!-- <p class="name_detail text-secondary text-wrap">
+						Đối tác: {{ customer ? customer.name : " " }}
+					</p> -->
+				</template>
+
+				<template
+					slot="customer_group"
+					slot-scope="{ customer_group, customer }"
+				>
+					<p class="name_detail text-main text-wrap">
+						{{ customer_group ? customer_group.description : "" }}
 					</p>
 					<p class="name_detail text-secondary text-wrap">
-						Đối tác: {{ customer ? customer.name : " " }}
+						{{ customer ? customer.name : " " }}
 					</p>
 				</template>
 				<!-- <template slot="appraise_land_sum_area" slot-scope="appraise_land_sum_area">
@@ -666,6 +678,14 @@ export default {
 					scopedSlots: { customRender: "petitioner_name" },
 					// sorter: (a, b) => a.petitioner_name - b.petitioner_name,
 					// sortDirections: ['descend', 'ascend'],
+					width: "15dvw",
+					hiddenItem: false
+				},
+				{
+					title: "Nhóm đối tác",
+					align: "left",
+					width: "15dvw",
+					scopedSlots: { customRender: "customer_group" },
 					hiddenItem: false
 				},
 				{

@@ -448,7 +448,7 @@ export default {
 				if (this.appraisersControl.length > 0) {
 					return this.form.administrative_id;
 				} else {
-					return this.form.administrative.name;
+					return this.form.administrative ? this.form.administrative.name : "";
 				}
 			},
 			// setter
@@ -478,7 +478,9 @@ export default {
 				if (this.signAppraisers.length > 0) {
 					return this.form.appraiser_confirm_id;
 				} else {
-					return this.form.appraiser_confirm.name;
+					return this.form.appraiser_confirm
+						? this.form.appraiser_confirm.name
+						: "";
 				}
 			},
 			// setter
