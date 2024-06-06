@@ -276,6 +276,17 @@ export default {
 		if (configData) {
 			this.loadConfigData(configData);
 			this.isPermission = this.checkPermission(configData);
+			if (
+				this.profile.data.permissions &&
+				this.profile.data.permissions.length > 0
+			) {
+				const check = this.profile.data.permissions.find(
+					e => e === "ACCEPT_CERTIFICATE_BRIEF"
+				);
+				if (!check) {
+					this.isPermission = false;
+				}
+			}
 		}
 	},
 	methods: {
