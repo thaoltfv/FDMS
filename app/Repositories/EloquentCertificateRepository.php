@@ -2683,10 +2683,19 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $sortOrder = request()->get('sortOrder');
         $filter = request()->get('search');
         $status = request()->get('status');
-        $timeFilterFrom = request()->get('fromDate');
-        $timeFilterTo = request()->get('toDate');
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
-
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            if (isset($dataTemp) && isset($dataTemp->fromDate)) {
+                $timeFilterFrom = $dataTemp->fromDate;
+            }
+            if (isset($dataTemp) && isset($dataTemp->toDate)) {
+                $timeFilterFrom = $dataTemp->toDate;
+            }
+        }
         $select = [
             'certificates.id',
             'petitioner_name',
@@ -3045,8 +3054,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $page = request()->get('page');
         $limit = request()->get('limit');
         $status = request()->get('status');
-        $timeFilterFrom = request()->get('fromDate');
-        $timeFilterTo = request()->get('toDate');
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            if (isset($dataTemp) && isset($dataTemp->fromDate)) {
+                $timeFilterFrom = $dataTemp->fromDate;
+            }
+            if (isset($dataTemp) && isset($dataTemp->toDate)) {
+                $timeFilterFrom = $dataTemp->toDate;
+            }
+        }
         if (!empty($query)) {
             $query = json_decode($query);
         } else {
