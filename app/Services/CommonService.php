@@ -1479,54 +1479,55 @@ class CommonService
 				$asset_general_id = $asset->asset_general_id;
 				$data[$asset_general_id]['asset_general_id'] = $asset_general_id;
 				$asset_general = $compareAssetGeneralRepository->findVersionById_v2($asset_general_id, $asset->version);
+				if ($asset_general) {
+					$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
+					$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
+					$comparisonFactor =  $appraise->comparisonFactor->where('asset_general_id', $asset_general_id);
+					$totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area']);
+					$violateArea = floatval(0);
+					$purposeArea = floatval(0);
+					$data[$asset_general_id]['total_area'] = $totalArea;
+					foreach ($unitAreas as $unitArea) {
 
-				$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
-				$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
-				$comparisonFactor =  $appraise->comparisonFactor->where('asset_general_id', $asset_general_id);
-				$totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area'] ?? 0);
-				$violateArea = floatval(0);
-				$purposeArea = floatval(0);
-				$data[$asset_general_id]['total_area'] = $totalArea;
-				foreach ($unitAreas as $unitArea) {
+						$violateArea += $unitArea->violation_asset_area;
+					}
+					$total_amount = $asset_general['total_amount'];
+					$percent = $adapter->percent ?? 0;
+					$estimate_amount =  ($percent *  $total_amount) / 100;
+					$construction_amount = $asset_general['total_construction_amount'];
+					$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
+					$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
 
-					$violateArea += $unitArea->violation_asset_area;
-				}
-				$total_amount = $asset_general['total_amount'];
-				$percent = $adapter->percent ?? 0;
-				$estimate_amount =  ($percent *  $total_amount) / 100;
-				$construction_amount = $asset_general['total_construction_amount'];
-				$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
-				$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
+					$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
+					$purposeArea = $totalArea - $violateArea;
+					$average_price = round($calculate_price / $purposeArea, 0);
 
-				$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
-				$purposeArea = $totalArea - $violateArea;
-				$average_price = round($calculate_price / $purposeArea, 0);
-
-				$legalRate = 0;
-				$diffRateTotal = floatval(0);
-				foreach ($comparisonFactor as $factor) {
-					if ($factor->type == 'phap_ly') {
-						$legalRate = $factor->adjust_percent ?? 0;
-					} else {
-						if ($factor->adjust_percent != 0) {
-							$diffRateTotal = $diffRateTotal + $factor->adjust_percent ?? 0;
+					$legalRate = 0;
+					$diffRateTotal = floatval(0);
+					foreach ($comparisonFactor as $factor) {
+						if ($factor->type == 'phap_ly') {
+							$legalRate = $factor->adjust_percent ?? 0;
+						} else {
+							if ($factor->adjust_percent != 0) {
+								$diffRateTotal = $diffRateTotal + $factor->adjust_percent ?? 0;
+							}
 						}
 					}
+					//Price after ajust by legal factor
+					$legalAmount = round($average_price *  $legalRate / 100, 0);
+					$averate_price_legal = $average_price + $legalAmount;
+
+					//Price after ajust by other factor
+					$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
+					$indicative_amount = $averate_price_legal + $diffRateAmount;
+					$data[$asset_general_id]['indicative_price'] = $indicative_amount;
+
+					if ($diffRateTotal + $legalRate > ValueDefault::TOTAL_ADJUST_RATE) {
+						$appraise->checkMaxAvg = true;
+					}
+
+					$sumPrice += $indicative_amount;
 				}
-				//Price after ajust by legal factor
-				$legalAmount = round($average_price *  $legalRate / 100, 0);
-				$averate_price_legal = $average_price + $legalAmount;
-
-				//Price after ajust by other factor
-				$diffRateAmount = round($averate_price_legal * $diffRateTotal / 100, 0);
-				$indicative_amount = $averate_price_legal + $diffRateAmount;
-				$data[$asset_general_id]['indicative_price'] = $indicative_amount;
-
-				if ($diffRateTotal + $legalRate > ValueDefault::TOTAL_ADJUST_RATE) {
-					$appraise->checkMaxAvg = true;
-				}
-
-				$sumPrice += $indicative_amount;
 			}
 
 			$avg_adjust_price = round($sumPrice / 3, 0);
