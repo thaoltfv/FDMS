@@ -1533,7 +1533,7 @@ class CommonService
 			$avg_adjust_price = round($sumPrice / 3, 0);
 			if ($data && count($data) > 0) {
 				foreach ($data as $item) {
-					$diff = $item['indicative_price'] ? round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0) : 0;
+					$diff = isset($item['indicative_price']) ? round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0) : 0;
 
 					if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
 						$appraise->checkAdjustRate = true;
