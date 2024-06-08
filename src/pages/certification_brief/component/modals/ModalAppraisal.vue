@@ -40,6 +40,7 @@
 								label="Quản lý nghiệp vụ"
 								class="form-group-container"
 								@change="handleBusinessManager"
+								rules="required"
 								:options="optionsBusinessManager"
 							/>
 						</div>
@@ -387,7 +388,9 @@ export default {
 				if (this.employeePerformance.length > 0) {
 					return this.form.appraiser_perform_id;
 				} else {
-					return this.form.appraiser_perform.name;
+					return this.form.appraiser_perform
+						? this.form.appraiser_perform.name
+						: "";
 				}
 			},
 			// setter
@@ -399,16 +402,18 @@ export default {
 		business_manager_compute: {
 			get: function() {
 				if (this.businessManagers.length > 0) {
-					console.log("vô đây trước businessManagers", this.businessManagers);
+					// console.log("vô đây trước businessManagers", this.businessManagers);
 					return this.form.business_manager_id;
 				} else {
-					console.log("vô đây trước 2", this.form.business_manager.name);
-					return this.form.business_manager.name;
+					// console.log("vô đây trước 2", this.form.business_manager.name);
+					return this.form.business_manager
+						? this.form.business_manager.name
+						: "";
 				}
 			},
 			// setter
 			set: function(newValue) {
-				console.log("newwww", newValue);
+				// console.log("newwww", newValue);
 				this.form.business_manager_id = newValue;
 			}
 		},
@@ -418,7 +423,9 @@ export default {
 				if (this.appraisersControl.length > 0) {
 					return this.form.appraiser_control_id;
 				} else {
-					return this.form.appraiser_control.name;
+					return this.form.appraiser_control
+						? this.form.appraiser_control.name
+						: "";
 				}
 			},
 			// setter
@@ -433,7 +440,7 @@ export default {
 				if (this.appraisers.length > 0) {
 					return this.form.appraiser_id;
 				} else {
-					return this.form.appraiser.name;
+					return this.form.appraiser ? this.form.appraiser.name : "";
 				}
 			},
 			// setter
@@ -463,7 +470,9 @@ export default {
 				if (this.appraisersManager.length > 0) {
 					return this.form.appraiser_manager_id;
 				} else {
-					return this.form.appraiser_manager.name;
+					return this.form.appraiser_manager
+						? this.form.appraiser_manager.name
+						: "";
 				}
 			},
 			// setter

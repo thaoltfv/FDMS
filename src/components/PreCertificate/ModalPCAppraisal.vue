@@ -157,7 +157,9 @@ export default {
 					return this.dataPC.appraiser_perform_id;
 				} else {
 					// // console.log('vô đây trước 2')
-					return this.dataPC.appraiser_performance.name;
+					return this.dataPC.appraiser_performance
+						? this.dataPC.appraiser_performance.name
+						: "";
 				}
 			},
 			// setter
@@ -172,7 +174,9 @@ export default {
 				if (this.lstDataConfig.appraiser_business_managers.length > 0) {
 					return this.dataPC.business_manager_id;
 				} else {
-					return this.dataPC.appraiser_business_manager.name;
+					return this.dataPC.appraiser_business_manager
+						? this.dataPC.appraiser_business_manager.name
+						: "";
 				}
 			},
 			// setter
@@ -187,7 +191,9 @@ export default {
 				if (this.lstDataConfig.appraiser_sales.length > 0) {
 					return this.dataPC.appraiser_sale_id;
 				} else {
-					return this.dataPC.appraiser_sale.name;
+					return this.dataPC.appraiser_sale
+						? this.dataPC.appraiser_sale.name
+						: "";
 				}
 			},
 			// setter

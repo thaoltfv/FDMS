@@ -2670,8 +2670,15 @@ export default {
 		if (profile.data.user) {
 			this.user = profile.data.user;
 			this.position_profile =
-				profile.data.user.appraiser.appraise_position.acronym;
-			this.appraiser_number = profile.data.user.appraiser.appraiser_number;
+				profile.data.user.appraiser &&
+				profile.data.user.appraiser.appraise_position
+					? profile.data.user.appraiser.appraise_position.acronym
+					: null;
+			this.appraiser_number =
+				profile.data.user.appraiser &&
+				profile.data.user.appraiser.appraiser_number
+					? profile.data.user.appraiser.appraiser_number
+					: null;
 		}
 		this.user_id = profile.data.user.id;
 		if (
