@@ -17,7 +17,7 @@ class UpdateNewPermissionSeeder extends Seeder
     {
         $lstInsertPRELIMINARYASSET = ['VIEW_PRELIMINARY_ASSET', 'ADD_PRELIMINARY_ASSET', 'EDIT_PRELIMINARY_ASSET', 'DELETE_PRELIMINARY_ASSET', 'IMPORT_PRELIMINARY_ASSET', 'EXPORT_PRELIMINARY_ASSET', 'ACCEPT_PRELIMINARY_ASSET'];
 
-        $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN'];
+        $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN', 'SUPER_ADMIN'];
 
         foreach ($lstInsertPRELIMINARYASSET as $permissionName) {
             $retryCount = 0;

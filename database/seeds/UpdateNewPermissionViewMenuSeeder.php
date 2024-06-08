@@ -17,7 +17,7 @@ class UpdateNewPermissionViewMenuSeeder extends Seeder
     {
         $lstInsertPRELIMINARYASSET = ['VIEW_MENU_FOLLOW_PROFILE', 'ADD_MENU_FOLLOW_PROFILE', 'EDIT_MENU_FOLLOW_PROFILE', 'DELETE_MENU_FOLLOW_PROFILE', 'IMPORT_MENU_FOLLOW_PROFILE', 'EXPORT_MENU_FOLLOW_PROFILE', 'ACCEPT_MENU_FOLLOW_PROFILE'];
 
-        $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN'];
+        $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN', 'SUPER_ADMIN'];
 
         foreach ($lstInsertPRELIMINARYASSET as $permissionName) {
             $retryCount = 0;

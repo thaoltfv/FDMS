@@ -17,7 +17,7 @@ class UpdatePermissionPreCertificateSeeder extends Seeder
     {
         $lstInsertPRELIMINARYASSET = ['VIEW_PRE_CERTIFICATE', 'ADD_PRE_CERTIFICATE', 'EDIT_PRE_CERTIFICATE', 'DELETE_PRE_CERTIFICATE', 'IMPORT_PRE_CERTIFICATE', 'EXPORT_PRE_CERTIFICATE', 'ACCEPT_PRE_CERTIFICATE'];
 
-        $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN'];
+        $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN', 'SUPER_ADMIN'];
 
         foreach ($lstInsertPRELIMINARYASSET as $permissionName) {
             $retryCount = 0;
