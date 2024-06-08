@@ -6,7 +6,7 @@ use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-class UpdateNewPermissionViewMenuSeeder extends Seeder
+class UpdatePermissionPreCertificateSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class UpdateNewPermissionViewMenuSeeder extends Seeder
      */
     public function run()
     {
-        $lstInsertPRELIMINARYASSET = ['VIEW_MENU_FOLLOW_PROFILE', 'ADD_MENU_FOLLOW_PROFILE', 'EDIT_MENU_FOLLOW_PROFILE', 'DELETE_MENU_FOLLOW_PROFILE', 'IMPORT_MENU_FOLLOW_PROFILE', 'EXPORT_MENU_FOLLOW_PROFILE', 'ACCEPT_MENU_FOLLOW_PROFILE'];
+        $lstInsertPRELIMINARYASSET = ['VIEW_PRE_CERTIFICATE', 'ADD_PRE_CERTIFICATE', 'EDIT_PRE_CERTIFICATE', 'DELETE_PRE_CERTIFICATE', 'IMPORT_PRE_CERTIFICATE', 'EXPORT_PRE_CERTIFICATE', 'ACCEPT_PRE_CERTIFICATE'];
 
         $lstRoleInsertAutoPermission = ['ADMIN', 'USER', 'ROOT_ADMIN', 'SUB_ADMIN', 'SUPER_ADMIN'];
 

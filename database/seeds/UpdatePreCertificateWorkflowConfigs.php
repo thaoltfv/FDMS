@@ -558,15 +558,6 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     'old_config' => null,
                     // Add any other fields required for a new record
                 ]);
-
-                if ($newRecord) {
-                    // If the new record was created successfully, delete the old record
-                    $record->delete();
-                } else {
-                    // Handle the case where the new record could not be created
-                    // For example, throw an exception or log an error message
-                    throw new \Exception("Could not create new record");
-                }
             }
         }
     }
