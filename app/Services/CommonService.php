@@ -1483,7 +1483,7 @@ class CommonService
 				$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
 				$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
 				$comparisonFactor =  $appraise->comparisonFactor->where('asset_general_id', $asset_general_id);
-				$totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area']);
+				$totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area'] ?? 0);
 				$violateArea = floatval(0);
 				$purposeArea = floatval(0);
 				$data[$asset_general_id]['total_area'] = $totalArea;
