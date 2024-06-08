@@ -108,6 +108,8 @@ export default {
 			slider: "#FAA831",
 			arrow: "#000000"
 		},
+		fromDateList: "",
+		toDateList: "",
 		paginationAll: {},
 		paginationAllPreCertificate: {},
 		isAdmin: false,
@@ -138,6 +140,10 @@ export default {
 						...params,
 						...this.filter,
 						status: this.selectedStatus,
+						data: {
+							fromDate: this.fromDateList ? this.fromDateList : null,
+							toDate: this.toDateList ? this.toDateList : null
+						},
 						is_guest: true
 					}
 				});
@@ -158,6 +164,10 @@ export default {
 						...params,
 						...this.filterPreCertificate,
 						status: this.selectedStatusPreCertificate,
+						// data: {
+						// 	fromDate: this.fromDate ? this.fromDate : null,
+						// 	toDate: this.toDate ? this.toDate : null
+						// },
 						is_guest: true
 					}
 				});
@@ -183,15 +193,16 @@ export default {
 			};
 			await this.getCertificateAllPreCertificate("table", params);
 		},
-		onChangeStatus(value) {
-			this.selectedStatus = value;
-			// if (this.search_kanban) {
-			// 	this.search_kanban.status = value;
-			// } else {
-			this.search_kanban = { status: value };
-			// }
+		onChangeStatus(statusArray, fromDate, toDate) {
+			this.fromDateList = fromDate;
+			this.toDateList = toDate;
+			this.selectedStatus = statusArray;
 			this.getCertificateAll();
 		},
+		// onChangeStatus(value) {
+		// 	this.selectedStatus = value;
+		// 	this.getCertificateAll();
+		// },
 		onChangeStatusPreCertificate(value) {
 			this.selectedStatusPreCertificate = value;
 			this.getCertificateAllPreCertificate();

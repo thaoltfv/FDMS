@@ -76,8 +76,8 @@ export default class CertificateBrief extends Model {
 			isStatic: true
 		});
 	}
-	static async getListKanbanCertificate(search = "", status) {
-		let searchInput = { search_input: search };
+	static async getListKanbanCertificate(search = "", status, timeFilter) {
+		let searchInput = { search_input: search, data: timeFilter };
 		if (status) {
 			searchInput.status = status;
 		}
