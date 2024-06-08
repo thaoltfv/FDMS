@@ -19,6 +19,8 @@
 					<img src="@/assets/icons/ic_board.svg" alt="board" />
 				</span>
 				<board
+					:fromDate="fromDate"
+					:toDate="toDate"
 					:search_kanban="search_kanban"
 					:key="render_kanban"
 					ref="kanban"
@@ -186,6 +188,8 @@ export default {
 				slider: "#FAA831",
 				arrow: "#000000"
 			},
+			fromDate: "",
+			toDate: "",
 			listCertificatesAll: [],
 			listCertificatesOpen: [],
 			listCertificatesLock: [],
@@ -330,6 +334,10 @@ export default {
 						limit: 20,
 						...params,
 						...this.filter,
+						data: {
+							fromDate: this.fromDate ? this.fromDate : null,
+							toDate: this.toDate ? this.toDate : null
+						},
 						status: this.selectedStatus
 					}
 				});
@@ -349,12 +357,14 @@ export default {
 
 			await this.getCertificateAll(params);
 		},
-		onChangeStatus(value) {
-			this.selectedStatus = value;
+		onChangeStatus(statusArray, fromDate, toDate) {
+			this.fromDate = fromDate;
+			this.toDate = toDate;
+			this.selectedStatus = statusArray;
 			if (this.search_kanban) {
-				this.search_kanban.status = value;
+				this.search_kanban.status = statusArray;
 			} else {
-				this.search_kanban = { status: value };
+				this.search_kanban = { status: statusArray };
 			}
 			this.getCertificateAll();
 			this.render_kanban += 1;

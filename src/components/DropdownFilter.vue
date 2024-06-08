@@ -13,7 +13,42 @@
 			no-flip
 		>
 			<template v-slot:default>
-				<a-menu
+				<a-menu mode="inline" style="width:320px">
+					<a-sub-menu key="status">
+						<span slot="title"> <span>Trạng thái HSTĐ</span></span>
+						<a-menu-item
+							v-if="lstFilterStatus && lstFilterStatus.length > 0"
+							v-for="(option, index) in lstFilterStatus"
+							:key="index"
+						>
+							<a-checkbox v-model="option.checked" :value="option.value">{{
+								option.text
+							}}</a-checkbox>
+						</a-menu-item>
+					</a-sub-menu>
+					<a-sub-menu key="time">
+						<span slot="title"> <span>Thời gian</span></span>
+						<a-menu-item>
+							<div class="row" style="width:250px">
+								<a-date-picker
+									placeholder="Từ ngày"
+									v-model="timeFilter.from"
+									format="DD-MM-YYYY"
+								></a-date-picker>
+							</div> </a-menu-item
+						><a-menu-item>
+							<div class="row" style="width:250px">
+								<a-date-picker
+									placeholder="Đến ngày"
+									v-model="timeFilter.to"
+									:disabledDate="disabledToDate"
+									format="DD-MM-YYYY"
+								></a-date-picker>
+							</div>
+						</a-menu-item>
+					</a-sub-menu>
+				</a-menu>
+				<!-- <a-menu
 					:default-selected-keys="['1']"
 					:default-open-keys="['status']"
 					mode="inline"
@@ -21,7 +56,7 @@
 				>
 					<a-sub-menu key="status">
 						<span slot="title">
-							<!-- <a-icon type="appstore" /> -->
+						
 							<span>{{ title || "" }}</span></span
 						>
 						<a-menu-item
@@ -34,7 +69,7 @@
 							}}</a-checkbox>
 						</a-menu-item>
 					</a-sub-menu>
-				</a-menu>
+				</a-menu> -->
 				<div
 					class="row"
 					style="width:100%;margin-top:10px; display: flex; justify-content: space-between;"
@@ -61,6 +96,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useWorkFlowConfig } from "@/store/workFlowConfig";
 import { BDropdown, BDropdownItem, BButton } from "bootstrap-vue";
+import moment from "moment";
 export default {
 	components: {
 		"b-dropdown": BDropdown,
@@ -71,7 +107,7 @@ export default {
 		title: String
 	},
 	data() {
-		return { isCloseable: false };
+		return { isCloseable: false, timeFilter: { from: "", to: "" } };
 	},
 	setup() {
 		const workFlowConfigStore = useWorkFlowConfig();
@@ -108,6 +144,12 @@ export default {
 	},
 
 	methods: {
+		disabledToDate(current) {
+			// Disable dates before the "from" date
+			if (!this.timeFilter.from) return false;
+			let endOfDay = moment(this.timeFilter.from).endOf("day");
+			return current && current < endOfDay;
+		},
 		handleHide(bvEvent) {
 			if (!this.isCloseable) {
 				bvEvent.preventDefault();
@@ -120,7 +162,7 @@ export default {
 				.filter(option => option.checked === true)
 				.map(option => String(option.value));
 
-			this.$emit("search", result);
+			this.$emit("search", result, this.timeFilter.from, this.timeFilter.to);
 		},
 		closeMe() {
 			this.isCloseable = true;

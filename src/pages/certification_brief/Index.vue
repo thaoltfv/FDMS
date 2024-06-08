@@ -274,7 +274,7 @@ import IconBase from "@/components/IconBase.vue";
 Vue.component("downloadExcel", JsonExcel);
 export default {
 	name: "Index",
-	props: ["search_kanban"],
+	props: ["search_kanban", "fromDate", "toDate"],
 	data() {
 		return {
 			theme: {
@@ -1118,7 +1118,11 @@ export default {
 			try {
 				const resp = await CertificationBrief.getListKanbanCertificate(
 					search,
-					this.search_kanban ? this.search_kanban.status : null
+					this.search_kanban ? this.search_kanban.status : null,
+					{
+						fromDate: this.fromDate ? this.fromDate : null,
+						toDate: this.toDate ? this.toDate : null
+					}
 				);
 				if (resp.data) {
 					this.listCertificate = resp.data.HSTD;
