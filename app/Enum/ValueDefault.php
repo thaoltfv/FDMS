@@ -34,7 +34,7 @@ class ValueDefault
     public const BETWEEN_VALUE = 1000000;
     public const TOTAL_PRICE_PERCENT = 0.05;
 
-    public const ALPHA = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    public const ALPHA = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     public const CERTIFICATION_ASSET_COLUMN_LIST = [
         'id' => 'Mã TSTĐ',
         'assetType.description' => 'Loại tài sản',
@@ -73,8 +73,10 @@ class ValueDefault
         'petitioner_name' => 'Tên khách hàng',
         'petitioner_phone' => 'Số điện thoại',
         'petitioner_address' => 'Địa chỉ',
-        'customer_name' => 'Tên đối tác',
+        'customer_name' => 'Họ tên đối tác',
+        'customer_phone' => 'SĐT đối tác',
         'customer_address' => 'Địa chỉ đối tác',
+        'customer_group_name' => 'Nhóm đối tác',
         'appraise_asset' => 'Tên Tài Sản',
         'gcn' => 'GCN',
         'front_side' => 'Mặt tiền',
@@ -108,8 +110,7 @@ class ValueDefault
         'agricultural_unit_price_2' => 'Đơn giá đất khác 2 (đồng/m2)',
         'agricultural_price_2' => 'Giá trị đất khác 2 (đồng)',
     ];
-    public const CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST = [
-    ];
+    public const CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_ZONING_COLUMN_LIST = [];
     public const CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST = [
         'tangible_type' => 'Loại CTXD',
         'tangible_area' => 'Diện tích sàn',
@@ -127,4 +128,3 @@ class ValueDefault
         6 => 'Đang kiểm soát',
     ];
 }
-

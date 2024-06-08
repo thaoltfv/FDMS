@@ -2683,8 +2683,19 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $sortOrder = request()->get('sortOrder');
         $filter = request()->get('search');
         $status = request()->get('status');
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
-
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            if (isset($dataTemp) && isset($dataTemp->fromDate)) {
+                $timeFilterFrom = $dataTemp->fromDate;
+            }
+            if (isset($dataTemp) && isset($dataTemp->toDate)) {
+                $timeFilterFrom = $dataTemp->toDate;
+            }
+        }
         $select = [
             'certificates.id',
             'petitioner_name',
@@ -2887,6 +2898,21 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             }
         }
 
+        if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate])
+                ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
+        } elseif (isset($timeFilterFrom)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $result = $result->where('certificates.created_at', '>=', $startDate)
+                ->where('certificates.updated_at', '>=', $startDate);
+        } elseif (isset($timeFilterTo)) {
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->where('certificates.created_at', '<=', $endDate)
+                ->where('certificates.updated_at', '<=', $endDate);
+        }
+
         if (!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
@@ -3028,7 +3054,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $page = request()->get('page');
         $limit = request()->get('limit');
         $status = request()->get('status');
-
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            if (isset($dataTemp) && isset($dataTemp->fromDate)) {
+                $timeFilterFrom = $dataTemp->fromDate;
+            }
+            if (isset($dataTemp) && isset($dataTemp->toDate)) {
+                $timeFilterFrom = $dataTemp->toDate;
+            }
+        }
         if (!empty($query)) {
             $query = json_decode($query);
         } else {
@@ -3079,7 +3116,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         when 3
                             then u1.image
                         when 4
-                            then u1.image
+                            then u3.image
                         when 5
                             then users.image
                         when 7
@@ -3101,14 +3138,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 when 3
                     then u1.name
                 when 4
-                    then u1.name
+                    then u3.name
                 when 5
                     then users.name
                 when 7
                     then u4.name
                 when 8
                     then u5.name
-                    
                 when 9
                     then u2.name
                 when 10
@@ -3260,6 +3296,20 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
         if (isset($query->public_date_to) && !empty($query->public_date_to)) {
             $result = $result->where('updated_at', '<=', date('Y-m-d', strtotime($query->public_date_to)) . ' 00:00:00');
+        }
+        if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate])
+                ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
+        } elseif (isset($timeFilterFrom)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $result = $result->where('certificates.created_at', '>=', $startDate)
+                ->where('certificates.updated_at', '>=', $startDate);
+        } elseif (isset($timeFilterTo)) {
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->where('certificates.created_at', '<=', $endDate)
+                ->where('certificates.updated_at', '<=', $endDate);
         }
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
@@ -5296,6 +5346,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
             if (isset($object['administrative_id'])) {
                 $updateArray['administrative_id'] = $object['administrative_id'];
+            } else {
+                $updateArray['administrative_id'] = null;
             }
             if (isset($object['business_manager_id'])) {
                 $updateArray['business_manager_id'] = $object['business_manager_id'];

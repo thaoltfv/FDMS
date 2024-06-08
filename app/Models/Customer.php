@@ -44,6 +44,7 @@ class Customer extends Model
 
     public function getFullInfoAttribute()
     {
-        return "{$this->name} {$this->phone} {$this->address}";
+        // return "{$this->name} {$this->phone} {$this->address}";
+        return "{$this->name} {$this->phone}";
     }
 }

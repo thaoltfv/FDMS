@@ -82,7 +82,7 @@ class CertificateBriefController extends Controller
             //'certificate_date' => 'string|max:255',
             'customer' => 'array|sometimes',
             'customer.name' => 'nullable|string|max:255',
-            'customer.address' => 'required_with:customer.name|nullable|string|max:255',
+            'customer.address' => 'nullable|string|max:255',
             'customer.phone' => 'required_with:customer.name|nullable|numeric',
             'commission_fee' => 'numeric',
             'note' => 'nullable|string',
