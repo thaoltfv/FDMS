@@ -5418,37 +5418,53 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $appraiser = Appraiser::query()
                     ->where('id', '=', $result['appraiser_sale_id'])
                     ->first();
-                $user = User::query()
-                    ->where('id', '=', $appraiser->user_id)
-                    ->first();
-                $result['image'] = $user->image;
+                if (isset($appraiser)) {
+                    $user = User::query()
+                        ->where('id', '=', $appraiser->user_id)
+                        ->first();
+                    $result['image'] = $user->image;
+                } else {
+                    $result['image'] = '';
+                }
             }
             if ($result['status'] == 2) {
                 $appraiser = Appraiser::query()
                     ->where('id', '=', $result['appraiser_perform_id'])
                     ->first();
-                $user = User::query()
-                    ->where('id', '=', $appraiser->user_id)
-                    ->first();
-                $result['image'] = $user->image;
+                if (isset($appraiser)) {
+                    $user = User::query()
+                        ->where('id', '=', $appraiser->user_id)
+                        ->first();
+                    $result['image'] = $user->image;
+                } else {
+                    $result['image'] = '';
+                }
             }
             if ($result['status'] == 3 || $result['status'] == 4) {
                 $appraiser = Appraiser::query()
                     ->where('id', '=', $result['appraiser_id'])
                     ->first();
-                $user = User::query()
-                    ->where('id', '=', $appraiser->user_id)
-                    ->first();
-                $result['image'] = $user->image;
+                if (isset($appraiser)) {
+                    $user = User::query()
+                        ->where('id', '=', $appraiser->user_id)
+                        ->first();
+                    $result['image'] = $user->image;
+                } else {
+                    $result['image'] = '';
+                }
             }
             if ($result['status'] == 6) {
                 $appraiser = Appraiser::query()
                     ->where('id', '=', $result['appraiser_control_id'])
                     ->first();
-                $user = User::query()
-                    ->where('id', '=', $appraiser->user_id)
-                    ->first();
-                $result['image'] = $user->image;
+                if (isset($appraiser)) {
+                    $user = User::query()
+                        ->where('id', '=', $appraiser->user_id)
+                        ->first();
+                    $result['image'] = $user->image;
+                } else {
+                    $result['image'] = '';
+                }
             }
         }
         return $result;
