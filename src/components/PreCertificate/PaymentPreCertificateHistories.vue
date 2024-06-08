@@ -178,6 +178,7 @@
 	</div>
 </template>
 <script>
+import Vue from 'vue';
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
