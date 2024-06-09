@@ -9984,9 +9984,15 @@ export default {
 				this.priceVitri3;
 
 			// tính mức giá chỉ dẫn của TSSS
-			this.mgcd1 = Math.round(this.dgd1 + this.tldc1);
-			this.mgcd2 = Math.round(this.dgd2 + this.tldc2);
-			this.mgcd3 = Math.round(this.dgd3 + this.tldc3);
+			// this.mgcd1 = Math.round(this.dgd1 + this.tldc1)
+			// this.mgcd2 = Math.round(this.dgd2 + this.tldc2)
+			// this.mgcd3 = Math.round(this.dgd3 + this.tldc3)
+			this.mgcd1 = this.roundPrice(this.dgd1) + this.roundPrice(this.tldc1)
+			this.mgcd2 = this.roundPrice(this.dgd2) + this.roundPrice(this.tldc2)
+			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3)
+			console.log('adjustpricedata',this.adjustPriceData)
+			console.log('price_other',this.price_other_comparison)
+			console.log('this.mgcd1',this.mgcd1,this.mgcd2,this.mgcd3)
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true;
