@@ -11,6 +11,7 @@ use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\JcTable;
+use Log;
 
 class ReportAppendix1 extends Report
 {
@@ -107,7 +108,6 @@ class ReportAppendix1 extends Report
 
     protected function processAssetData($asset)
     {
-        // dd($asset);
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         // dd($method);
         $this->asset1 = $asset->assetGeneral[0];
@@ -565,6 +565,7 @@ class ReportAppendix1 extends Report
         $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
         $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
         $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
+        $data[] = $this->collectInfoDirection($stt++, 'Hướng chính', $asset);
         $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
         $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
         // yếu tố khác
@@ -1467,6 +1468,19 @@ class ReportAppendix1 extends Report
             ($this->asset1->room_details[0] && $this->asset1->room_details[0]->wc_num) ? $this->asset1->room_details[0]->wc_num : '-',
             ($this->asset2->room_details[0] && $this->asset2->room_details[0]->wc_num) ? $this->asset2->room_details[0]->wc_num : '-',
             ($this->asset3->room_details[0] && $this->asset3->room_details[0]->wc_num) ? $this->asset3->room_details[0]->wc_num : '-',
+            false
+        ];
+        return $data;
+    }
+    protected function collectInfoDirection($stt, $title, $asset)
+    {
+        $data = [
+            $stt,
+            $title,
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->direction && $asset->apartmentAssetProperties->direction->description) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->direction->description) : '-',
+            ($this->asset1->room_details[0] && $this->asset1->room_details[0]->direction && $this->asset1->room_details[0]->direction->description) ? CommonService::mbUcfirst($this->asset1->room_details[0]->direction->description) : '-',
+            ($this->asset2->room_details[0] && $this->asset2->room_details[0]->direction && $this->asset2->room_details[0]->direction->description) ? CommonService::mbUcfirst($this->asset2->room_details[0]->direction->description) : '-',
+            ($this->asset3->room_details[0] && $this->asset3->room_details[0]->direction && $this->asset3->room_details[0]->direction->description) ? CommonService::mbUcfirst($this->asset3->room_details[0]->direction->description) : '-',
             false
         ];
         return $data;

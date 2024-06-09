@@ -38,6 +38,18 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
             'updated_at',
             'total_price',
         ];
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            if (isset($dataTemp) && isset($dataTemp->fromDate)) {
+                $timeFilterFrom = $dataTemp->fromDate;
+            }
+            if (isset($dataTemp) && isset($dataTemp->toDate)) {
+                $timeFilterTo = $dataTemp->toDate;
+            }
+        }
         $result = $this->model->query()->with(['createdBy', 'assetType', 'asset:id,real_estate_id', 'appraises', 'apartment'])->select($select);
         $role = $user->roles->last();
         if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN')) {
@@ -104,6 +116,20 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
         }
         if (isset($status)) {
             $result = $result->whereIn('status', $status);
+        }
+        if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->whereBetween('created_at', [$startDate, $endDate])
+                ->whereBetween('updated_at', [$startDate, $endDate]);
+        } elseif (isset($timeFilterFrom)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $result = $result->where('created_at', '>=', $startDate)
+                ->where('updated_at', '>=', $startDate);
+        } elseif (isset($timeFilterTo)) {
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->where('created_at', '<=', $endDate)
+                ->where('updated_at', '<=', $endDate);
         }
         $result = $result->orderByDesc('updated_at');
         $result = $result->orderByDesc('id');
