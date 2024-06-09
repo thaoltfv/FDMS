@@ -2744,7 +2744,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'service_fee',
             'status_expired_at',
             'status_updated_at',
-            'sub_status'
+            'sub_status',
+            'certificates.updated_at'
         ];
         $with = [
             'createdBy:id,name',
