@@ -191,7 +191,14 @@
 						Đối tác: {{ customer ? customer.name : " " }}
 					</p> -->
 				</template>
-
+				<template slot="created_at" slot-scope="{ created_at, updated_at }">
+					<p class="text-main">
+						Ngày tạo: {{ created_at ? formatDate(created_at) : " " }}
+					</p>
+					<p class="text-secondary">
+						Ngày cập nhật: {{ updated_at ? formatDate(updated_at) : " " }}
+					</p>
+				</template>
 				<template
 					slot="customer_group"
 					slot-scope="{ customer_group, customer }"
@@ -723,15 +730,14 @@ export default {
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
-				// {
-				// 	title: "Người tạo",
-				// 	class: "optional-data",
-				// 	align: "left",
-				// 	scopedSlots: { customRender: "created_by" },
-				// 	// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
-				// 	// sortDirections: ['descend', 'ascend'],
-				// 	hiddenItem: false
-				// },
+				{
+					title: "Thời gian",
+					align: "left",
+					scopedSlots: { customRender: "created_at" },
+					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
+					// sortDirections: ['descend', 'ascend'],
+					hiddenItem: false
+				},
 				{
 					title: "Trạng thái",
 					align: "center",

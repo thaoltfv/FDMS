@@ -3552,6 +3552,15 @@ export default {
 						this.isComparisionAssetReport
 					) {
 						// Đã upload đủ
+					} else if (
+						// Đất trống
+						this.form.document_type.find(i => i === "DT") &&
+						this.isCertificateReport &&
+						this.isAppraisalReport &&
+						this.isAppendix1Report &&
+						this.isAppendix3Report &&
+						this.isComparisionAssetReport
+					) {
 					} else {
 						this.$toast.open({
 							message:
@@ -3564,6 +3573,7 @@ export default {
 						return;
 					}
 				} else {
+					console.log("Vào đây");
 					if (
 						this.isCertificateReport &&
 						this.isAppraisalReport &&

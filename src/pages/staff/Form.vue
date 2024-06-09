@@ -102,7 +102,7 @@
 				<div class="container-fluid color_content">
 					<div class="row">
 						<InputCategory
-							v-if="form.appraiser"
+							v-if="form.appraiser && !form.is_guest"
 							class="col-12 col-lg-6 input-content"
 							v-model="form.appraiser.appraise_position_id"
 							:options="optionRoles"
@@ -110,7 +110,7 @@
 							rules="required"
 						/>
 						<InputText
-							v-if="form.appraiser"
+							v-if="form.appraiser && !form.is_guest"
 							v-model="form.appraiser.appraiser_number"
 							placeholder="Nhập số thẩm định viên"
 							rules="max:200"
@@ -119,7 +119,7 @@
 							class="col-12 col-lg-6 input-content"
 						/>
 						<InputCategory
-							v-if="form.appraiser"
+							v-if="form.appraiser && !form.is_guest"
 							v-model="form.appraiser.branch_id"
 							class="col-12 col-lg-6 input-content"
 							vid="branch"
@@ -128,6 +128,7 @@
 							:options="optionsBranch"
 						/>
 						<InputText
+							v-if="!form.is_guest"
 							v-model="form.mailing_address"
 							placeholder="Nhập email thông báo"
 							rules="max:200"
@@ -437,8 +438,11 @@ export default {
 		},
 		async validateBeforeSubmit() {
 			const isValid = await this.$refs.observer.validate();
+
 			if (isValid) {
 				this.handleSubmit();
+			} else {
+				console.log(isValid);
 			}
 		},
 
@@ -472,7 +476,9 @@ export default {
 				this.form.role_id = this.role_id;
 				if (this.form.is_guest) {
 					const temp = this.roles.find(
-						e => e.role_name.toUpperCase() === "KHÁCH"
+						e =>
+							e.role_name.toUpperCase() === "KHÁCH" ||
+							e.role_name.toUpperCase() === "KHÁCH HÀNG"
 					);
 					if (temp) {
 						this.form.role_id = temp.id;

@@ -198,12 +198,13 @@
             <sup>2</sup>
           </p>
         </template> -->
-				<template slot="created_by" slot-scope="{ created_by, created_at }">
+
+				<template slot="created_at" slot-scope="{ created_by, updated_at }">
 					<p class="text-main">
-						{{ created_by ? created_by.name : " " }}
+						Ngày tạo: {{ created_at ? formatDate(created_at) : " " }}
 					</p>
 					<p class="text-secondary">
-						Ngày tạo: {{ created_at ? formatDate(created_at) : " " }}
+						Ngày cập nhật: {{ updated_at ? formatDate(updated_at) : " " }}
 					</p>
 				</template>
 				<template
@@ -314,6 +315,7 @@
 						><span style="font-weight: 500">{{ element.status_text }}</span>
 					</div>
 				</div>
+
 				<div class="property-content d-flex justify-content-between mb-0">
 					<div class="label_container d-flex">
 						<img
@@ -631,6 +633,14 @@ export default {
 					align: "left",
 					scopedSlots: { customRender: "appraiser" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
+					// sortDirections: ['descend', 'ascend'],
+					hiddenItem: false
+				},
+				{
+					title: "Thời gian",
+					align: "left",
+					scopedSlots: { customRender: "created_at" },
+					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},

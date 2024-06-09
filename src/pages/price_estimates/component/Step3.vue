@@ -528,6 +528,7 @@
 										:vid="'unit_price' + index"
 										:max="999999999"
 										nonLabel="Đơn giá"
+										:disabled="!isEdit"
 										:required="true"
 										class="w-100"
 										@change="handleChangePriceApartment($event, index)"

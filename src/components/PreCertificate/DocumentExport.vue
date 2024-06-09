@@ -355,12 +355,13 @@ export default {
 				isAutoExport: true
 			},
 			{ type_document: "HDTDG", nameTitle: "Hợp đồng", isAutoExport: true },
-			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
 			{
 				type_document: "BBTL",
 				nameTitle: "Thanh lý hợp đồng",
 				isAutoExport: true
 			},
+			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
+
 			{
 				type_document: "HSPL",
 				nameTitle: "Hồ sơ pháp lý",
