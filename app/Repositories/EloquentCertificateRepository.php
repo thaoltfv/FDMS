@@ -2693,7 +2693,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $timeFilterFrom = $dataTemp->fromDate;
             }
             if (isset($dataTemp) && isset($dataTemp->toDate)) {
-                $timeFilterFrom = $dataTemp->toDate;
+                $timeFilterTo = $dataTemp->toDate;
             }
         }
         $select = [
@@ -2903,18 +2903,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
             $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate]);
-            Log::info($startDate);
-            Log::info($endDate);
             // ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            Log::info($startDate);
-
             $result = $result->where('certificates.created_at', '>=', $startDate);
             // ->where('certificates.updated_at', '>=', $startDate);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            Log::info($endDate);
             $result = $result->where('certificates.created_at', '<=', $endDate);
             // ->where('certificates.updated_at', '<=', $endDate);
         }
