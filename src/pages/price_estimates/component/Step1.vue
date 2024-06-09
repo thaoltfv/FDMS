@@ -114,7 +114,10 @@
 										@change="changeDistance($event)"
 									/>
 								</div>
-								<div class="col-md-12 col-lg-6">
+								<div
+									class="col-md-12 col-lg-6"
+									v-if="!miscVariable.isApartment"
+								>
 									<InputText
 										v-model="step_1.general_infomation.address_number"
 										vid="number_address"
@@ -124,7 +127,7 @@
 										class="form-group-container"
 									/>
 								</div>
-								<div class="col-md-12 col-lg-6" v-if="miscVariable.isApartment">
+								<!-- <div class="col-md-12 col-lg-6" v-if="miscVariable.isApartment">
 									<InputCategory
 										v-model="step_1.general_infomation.position_by_unbd_id"
 										vid="position_by_unbd_id"
@@ -133,7 +136,7 @@
 										class="form-group-container"
 										:options="optionsPosition"
 									/>
-								</div>
+								</div> -->
 								<div class="col-md-6 col-lg-3" v-if="!miscVariable.isApartment">
 									<InputText
 										v-model="step_1.general_infomation.land_no"
