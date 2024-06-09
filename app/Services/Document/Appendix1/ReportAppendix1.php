@@ -11,6 +11,7 @@ use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\JcTable;
+use Log;
 
 class ReportAppendix1 extends Report
 {
@@ -108,7 +109,6 @@ class ReportAppendix1 extends Report
     protected function processAssetData($asset)
     {
         Log::info($asset);
-        // dd($asset);
         $method = $asset->appraisal->where('slug', 'tinh_gia_dat_hon_hop_con_lai')->first();
         // dd($method);
         $this->asset1 = $asset->assetGeneral[0];
