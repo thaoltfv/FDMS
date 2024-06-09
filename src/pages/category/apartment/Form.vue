@@ -219,8 +219,8 @@
 					</div>
 					<div class="card-body card-info">
 						<div class="container-fluid color_content">
-							<div class="row">
-								<div class="col-12" :key="floorRefreshKey">
+							<div class="row" :key="floorRefreshKey">
+								<div class="col-12">
 									<a-table
 										bordered
 										:columns="columnsFloor"
@@ -779,14 +779,71 @@ export default {
 		},
 		async createApartment(data) {
 			try {
+				if (data.total_blocks === 0) {
+					this.$toast.open({
+						message: "Số block tối thiểu là 1",
+						type: "error",
+						position: "top-right"
+					});
+					this.isSubmit = false;
+					return;
+				}
+				if (data.total_apartments === 0) {
+					this.$toast.open({
+						message: "Số căn hộ tối thiểu là 1",
+						type: "error",
+						position: "top-right"
+					});
+					this.isSubmit = false;
+					return;
+				}
+				if (data.block && data.block.length === 0) {
+					this.$toast.open({
+						message: "Vui lòng khai báo thông tin block chung cư",
+						type: "error",
+						position: "top-right"
+					});
+					this.isSubmit = false;
+					return;
+				}
+				if (data.block && data.block.length > 0) {
+					for (let index = 0; index < data.block.length; index++) {
+						const element = data.block[index];
+						if (element.floor && element.floor.length === 0) {
+							this.$toast.open({
+								message:
+									"Vui lòng khai báo thông tin tầng chung cư block  " +
+									element.name,
+								type: "error",
+								position: "top-right"
+							});
+							this.isSubmit = false;
+							return;
+						} else if (
+							element.floor &&
+							element.floor.length > 0 &&
+							element.floor.length !== element.total_floors
+						) {
+							this.$toast.open({
+								message: `Vui lòng thêm đủ tầng chung cư block
+									${element.name} (${element.total_floors}) `,
+								type: "error",
+								position: "top-right"
+							});
+							this.isSubmit = false;
+							return;
+						}
+					}
+				}
+
 				const res = await Apartment.postProject(data);
 				if (res.data) {
-					this.$router.push({ name: "apartment.index" }).catch(_ => {});
 					this.$toast.open({
 						message: "Thêm mới chung cư thành công",
 						type: "success",
 						position: "top-right"
 					});
+					this.$router.push({ name: "apartment.index" }).catch(_ => {});
 				} else if (res.error) {
 					this.$toast.open({
 						message: res.error.message,
@@ -797,6 +854,11 @@ export default {
 				}
 			} catch (err) {
 				this.isSubmit = false;
+				this.$toast.open({
+					message: err,
+					type: "error",
+					position: "top-right"
+				});
 				throw err;
 			}
 		},
@@ -804,7 +866,62 @@ export default {
 		async updateApartment(data) {
 			try {
 				// console.log('dâta', data)
-
+				if (data.total_blocks === 0) {
+					this.$toast.open({
+						message: "Tổng số block tối thiểu là 1",
+						type: "error",
+						position: "top-right"
+					});
+					this.isSubmit = false;
+					return;
+				}
+				if (data.total_apartments === 0) {
+					this.$toast.open({
+						message: "Tổng số căn hộ tối thiểu là 1",
+						type: "error",
+						position: "top-right"
+					});
+					this.isSubmit = false;
+					return;
+				}
+				if (data.block && data.block.length === 0) {
+					this.$toast.open({
+						message: "Vui lòng khai báo thông tin block chung cư",
+						type: "error",
+						position: "top-right"
+					});
+					this.isSubmit = false;
+					return;
+				}
+				if (data.block && data.block.length > 0) {
+					for (let index = 0; index < data.block.length; index++) {
+						const element = data.block[index];
+						if (element.floor && element.floor.length === 0) {
+							this.$toast.open({
+								message:
+									"Vui lòng khai báo thông tin tầng chung cư block  " +
+									element.name,
+								type: "error",
+								position: "top-right"
+							});
+							this.isSubmit = false;
+							return;
+						} else if (
+							element.floor &&
+							element.floor.length > 0 &&
+							element.floor.length !== element.total_floors
+						) {
+							this.$toast.open({
+								message: `Vui lòng thêm đủ tầng chung cư block
+									${element.name} (${element.total_floors}) `,
+								type: "error",
+								position: "top-right"
+							});
+							this.isSubmit = false;
+							return;
+						}
+					}
+				}
 				const res = await Apartment.postProject(data, this.idData);
 				if (res.data) {
 					await this.$router.push({ name: "apartment.index" }).catch(_ => {});
@@ -817,12 +934,17 @@ export default {
 					this.$toast.open({
 						message: res.error.message,
 						type: "error",
-						position: "top-rormBlockight"
+						position: "top-right"
 					});
 					this.isSubmit = false;
 				}
 			} catch (err) {
 				this.isSubmit = false;
+				this.$toast.open({
+					message: err,
+					type: "error",
+					position: "top-right"
+				});
 				throw err;
 			}
 		},

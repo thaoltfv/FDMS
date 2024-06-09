@@ -1,50 +1,170 @@
-import Model from './Model.js'
+import Model from "./Model.js";
 
 export default class File extends Model {
-	buildUrl (request) {
-		const { params } = request
-		return ['files', ...params]
+	buildUrl(request) {
+		const { params } = request;
+		return ["files", ...params];
 	}
-	static async downloadFileCertificate (id) {
-		return (new this()).makeRequest({ method: 'GET', url: `api/certificate/other-document/download/${id}` })
+	static async downloadFileCertificate(id) {
+		return new this().makeRequest({
+			method: "GET",
+			url: `api/certificate/other-document/download/${id}`
+		});
 	}
-	static async deleteFileCertificate (id) {
-		return (new this()).makeRequest({ method: 'POST', url: `api/certificate/other-document/remove/${id}` })
+	static async deleteFileCertificate(id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `api/certificate/other-document/remove/${id}`
+		});
 	}
-	static async uploadFileCertificate (data, id) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/certificate/other-document/upload/${id}`, data })
+	static async uploadFileCertificate(data, id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certificate/other-document/upload/${id}`,
+			data
+		});
 	}
-	static async saleUploadFileCertificate (data, id) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/certificate/sale-document/upload/${id}`, data })
+	static async uploadFileCertificateOriginal(data, id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certificate/other-document-original/upload/${id}`,
+			data
+		});
 	}
-	static async upload ({ data }) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/asset-generals/image`, data })
+	static async saleUploadFileCertificate(data, id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certificate/sale-document/upload/${id}`,
+			data
+		});
 	}
-	static async uploadCompany ({ data }) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/company-logo`, data })
+	static async upload({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/asset-generals/image`,
+			data
+		});
 	}
-	static async uploadImageProfile ({ data }) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/local-image`, data })
+	static async uploadCompany({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/company-logo`,
+			data
+		});
 	}
-	static async uploadExcel ({ data }) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/store-users`, data })
+	static async uploadImageProfile({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/local-image`,
+			data
+		});
 	}
-	static async uploadExcelApartment ({ data }) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/store-apartments`, data })
+	static async uploadExcel({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/store-users`,
+			data
+		});
 	}
-	static async deleteImageAzure (fileId, pageId, type) {
-		return (new this()).makeRequest({ method: 'DELETE', url: `/api/cms/files/${fileId}/${pageId}?type=${type}`, isStatic: true })
+	static async uploadExcelApartment({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/store-apartments`,
+			data
+		});
 	}
-	static async uploadDocument (data, id, type) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/certification_brief/upload-document/${id}/${type}`, data })
+	static async deleteImageAzure(fileId, pageId, type) {
+		return new this().makeRequest({
+			method: "DELETE",
+			url: `/api/cms/files/${fileId}/${pageId}?type=${type}`,
+			isStatic: true
+		});
 	}
-	static async getToken () {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/get-token` })
+	static async uploadDocument(data, id, type) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certification_brief/upload-document/${id}/${type}`,
+			data
+		});
 	}
-	static async getInfoByCoord ({data}) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/get-info-by-coord`, data })
+	static async uploadDocumentLaw(data) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certification_asset/step4-upload-law-document`,
+			data
+		});
 	}
-	static async getInfoByLand ({data}) {
-		return (new this()).makeRequest({ method: 'POST', url: `/api/get-info-by-land`, data })
+	static async deleteDocumentLaw({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/certification_asset/step4-delete-law-document`,
+			data
+		});
+	}
+	static async getToken() {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/get-token`
+		});
+	}
+	static async getInfoByCoord({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/get-info-by-coord`,
+			data
+		});
+	}
+	static async getInfoByLand({ data }) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/get-info-by-land`,
+			data
+		});
+	}
+	static async downloadFilePreCertificate(id) {
+		return new this().makeRequest({
+			method: "GET",
+			url: `api/pre-certificates/other-document/download/${id}`
+		});
+	}
+	static async deleteFilePreCertificate(id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `api/pre-certificates/other-document/remove/${id}`
+		});
+	}
+	static async uploadFilePreCertificate(data, id, typeDocument) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/pre-certificates/other-document/upload/${id}/${typeDocument}`,
+			data
+		});
+	}
+
+	static async downloadFilePreCertificateExport(id) {
+		return new this().makeRequest({
+			method: "GET",
+			url: `api/pre-certificates/export-document-pc/download/${id}`
+		});
+	}
+	static async downloadFileCertificateExport(id) {
+		return new this().makeRequest({
+			method: "GET",
+			url: `api/pre-certificates/export-document-certificate/download/${id}`
+		});
+	}
+	static async deleteFilePreCertificateExport(data) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `api/pre-certificates/export-document/remove`,
+			data
+		});
+	}
+	static async uploadFilePreCertificateExport(data, id) {
+		return new this().makeRequest({
+			method: "POST",
+			url: `/api/pre-certificates/export-document/upload/${id}`,
+			data
+		});
 	}
 }

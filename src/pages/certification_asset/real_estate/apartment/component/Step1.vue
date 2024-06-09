@@ -1,19 +1,24 @@
 <template>
-  <div v-if="!isMobile()">
-    <div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Thông tin chung về tài sản thẩm định</h3>
-          <img class="img-dropdown" :class="!showCardDetailAppraise ? 'img-dropdown__hide' : ''"
-            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailAppraise = !showCardDetailAppraise">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showCardDetailAppraise">
-        <div class="container-fluid color_content">
-          <div class="row">
-            <div class="col-12 col-lg-7">
-              <div class="row">
-                <!-- <div class="col-md-12 col-lg-6">
+	<div v-if="!isMobile()">
+		<div class="card">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Thông tin chung về tài sản thẩm định</h3>
+					<img
+						class="img-dropdown"
+						:class="!showCardDetailAppraise ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showCardDetailAppraise = !showCardDetailAppraise"
+					/>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showCardDetailAppraise">
+				<div class="container-fluid color_content">
+					<div class="row">
+						<div class="col-12 col-lg-7">
+							<div class="row">
+								<!-- <div class="col-md-12 col-lg-6">
                   <InputCategory
                     v-model="data.asset_type_id"
                     vid="asset_type_id"
@@ -24,32 +29,32 @@
                     @change="changeAssetType($event)" />
                 </div> -->
 
-                <div class="col-md-12 col-lg-6">
-                  <InputCategory
-                    v-model="data.province_id"
-                    vid="province_id"
-                    label="Tỉnh/Thành"
-                    rules="required"
-                    class="form-group-container"
-                    :disabled="false"
-                    :options="optionsProvince"
-                    @change="changeProvince($event)"
-                  />
-                </div>
-                <div class="col-md-12 col-lg-6">
-                  <InputCategory
-                    v-model="data.district_id"
-                    vid="district_id"
-                    label="Quận/Huyện"
-                    rules="required"
-                    :disabled="false"
-                    class="form-group-container"
-                    @change="changeDistrict($event)"
-                    :options="optionsDistrict"
-                  />
-                </div>
-                 <div class="col-md-12">
-                  <InputCategory
+								<div class="col-md-12 col-lg-6">
+									<InputCategory
+										v-model="data.province_id"
+										vid="province_id"
+										label="Tỉnh/Thành"
+										rules="required"
+										class="form-group-container"
+										:disabled="false"
+										:options="optionsProvince"
+										@change="changeProvince($event)"
+									/>
+								</div>
+								<div class="col-md-12 col-lg-6">
+									<InputCategory
+										v-model="data.district_id"
+										vid="district_id"
+										label="Quận/Huyện"
+										rules="required"
+										:disabled="false"
+										class="form-group-container"
+										@change="changeDistrict($event)"
+										:options="optionsDistrict"
+									/>
+								</div>
+								<div class="col-md-12">
+									<InputCategory
 										v-model="data.project_id"
 										vid="project_id"
 										rules="required"
@@ -58,252 +63,313 @@
 										:options="optionsProjects"
 										@change="handleChangeProject"
 									/>
-                </div>
-                <div class="col-md-12 col-lg-6">
-                  <InputCategory
-                    v-model="data.ward_id"
-                    vid="ward_id"
-                    label="Phường/Xã"
-                    :disabled="true"
-                    class="form-group-container"
-                    :options="optionsWard"
-                    @change="changeWard($event)"
-                  />
-                </div>
-                <div class="col-md-12 col-lg-6">
-                  <InputCategory
-                    v-model="data.street_id"
-                    vid="street_id"
-                    label="Đường/Phố"
-                    :disabled="true"
-                    class="form-group-container"
-                    @change="changeStreet($event)"
-                    :options="optionsStreet"
-                  />
-                </div>
-                <div class="col-12">
-                  <InputText
-                    v-model="data.full_address"
-                    vid="full_address"
-                    label="Địa chỉ"
-                    rules="required"
-                    class="form-group-container"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-lg-5">
-              <div class="d-flex flex-column h-100">
-                <div class="form-group-container position-relative w-100">
-                  <InputText
-                    id="coordinate"
-                    :disabledInput="true"
-                    v-model="data.coordinates"
-                    vid="coordinates"
-                    label="Tọa độ"
-                    class="coordinates"
-                    rules="required"
-                    />
-                  <!-- <div class="img-locate">
+								</div>
+								<div class="col-md-12 col-lg-6">
+									<InputCategory
+										v-model="data.ward_id"
+										vid="ward_id"
+										label="Phường/Xã"
+										:disabled="true"
+										class="form-group-container"
+										:options="optionsWard"
+										@change="changeWard($event)"
+									/>
+								</div>
+								<div class="col-md-12 col-lg-6">
+									<InputCategory
+										v-model="data.street_id"
+										vid="street_id"
+										label="Đường/Phố"
+										:disabled="true"
+										class="form-group-container"
+										@change="changeStreet($event)"
+										:options="optionsStreet"
+									/>
+								</div>
+								<div class="col-12">
+									<InputText
+										v-model="data.full_address"
+										vid="full_address"
+										label="Địa chỉ"
+										rules="required"
+										class="form-group-container"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-5">
+							<div class="d-flex flex-column h-100">
+								<div class="form-group-container position-relative w-100">
+									<InputText
+										id="coordinate"
+										:disabledInput="true"
+										v-model="data.coordinates"
+										vid="coordinates"
+										label="Tọa độ"
+										class="coordinates"
+										rules="required"
+									/>
+									<!-- <div class="img-locate">
                     <img src="@/assets/icons/ic_locate.svg" alt="locate" @click="handleOpenModalMap()">
                   </div> -->
-                </div>
-                <!-- Map -->
-                <div class="col-12 w-100 h-100 mt-3 d-none d-lg-block layer-map" style="flex: 1">
-              <div class="d-flex all-map w-100 h-100">
-                <div class="main-map w-100 h-100">
-                  <div id="mapid" class="layer-map w-100 h-100">
-                      <l-map
-                        ref="map_step1"
-                        :zoom="map.zoom"
-                        :center="map.center"
-                        :maxZoom="20"
-                        :options="{zoomControl: false}"
-                      >
-                        <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
-                        <l-control-zoom position="bottomright"></l-control-zoom>
-                        <l-control position="bottomleft">
-                          <button class="btn btn-map" @click="handleView" type="button">
-                            <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
-                            <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
-                          </button>
-                        </l-control>
-                        <l-marker :lat-lng="markerLatLng">
-                          <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
-                            <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
-                          </l-icon>
-                          <l-tooltip>Vị trí tài sản</l-tooltip>
-                        </l-marker>
-                      </l-map>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Chi tiết căn hộ</h3>
-          <img class="img-dropdown" :class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
-            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailTraffic = !showCardDetailTraffic">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showCardDetailTraffic">
-        <div class="container-fluid">
-          <div class="row">
-            <InputCategory
-              v-model="data.apartment_asset_properties.block_id"
-              vid="block_id"
-              rules="required"
-              label="Block (khu)"
-              class="col-12 col-lg-4 form-group-container"
-              :options="optionsBlocks"
-              @change="handleChangeBlock"
-            />
-            <InputCategory
-              v-model="data.apartment_asset_properties.floor_id"
-              vid="floor_id"
-              rules="required"
-              label="Tầng"
-              class="col-12 col-lg-4 form-group-container"
-              :options="optionsFloors"
-              @change="handleChangeFloor"
-            />
-            <InputText
-                v-model="data.apartment_asset_properties.apartment_name"
-                vid="apartment_name"
-                label="Mã căn hộ"
-                rules="required"
-                class="col-12 col-lg-4 form-group-container"
-                @change="changeAparment"
-            />
-            <InputArea
-              v-model="data.apartment_asset_properties.area"
-              vid="area"
-              label="Diện tích (m²)"
-              rules="required"
-              :max="99999999"
-              @change="handleArea($event)"
-              class="col-12 col-lg-4 form-group-container"
-            />
-            <InputNumberNoneFormat
-              v-model="data.apartment_asset_properties.bedroom_num"
-              vid="bedroom_num"
-              label="Số phòng ngủ"
-              rules="required"
-              :max="9999"
-              @change="handleBedroomNum($event)"
-              class="col-12 col-lg-4 form-group-container"
-            />
-            <InputNumberNoneFormat
-              v-model="data.apartment_asset_properties.wc_num"
-              vid="wc_num"
-              label="Số phòng WC"
-              rules="required"
-              :max="9999"
-              @change="handleWCNum($event)"
-              class="col-12 col-lg-4 form-group-container"
-            />
-            <InputCategory
-              v-model="data.apartment_asset_properties.handover_year"
-              class="col-12 col-lg-4 form-group-container"
-              vid="handover_year"
-              label="Năm sử dụng"
-              rules="required"
-              @change="changeUsingYear"
-              :options="optionYearBuild"
-            />
-            <InputCategory
-              v-model='data.apartment_asset_properties.direction_id'
-              vid="direction_id"
-              label="Hướng chính"
-              rules="required"
-              class="col-12 col-lg-4 form-group-container"
-              :options="optionDirection"
-            />
-            <InputCategory
-              v-model='data.apartment_asset_properties.furniture_quality_id'
-              vid="furniture_quality_id"
-              label="Tình trạng nội thất"
-              rules="required"
-              class="col-12 col-lg-4 form-group-container"
-              :options="optionFurniture"
-            />
-            <InputText
-                v-model="data.appraise_asset"
-                vid="data.appraise_asset"
-                label="Tên căn hộ"
-                rules="required"
-                class="col-12 col-lg-8 form-group-container"
-            />
-            <InputCategory
-              v-model='data.apartment_asset_properties.loai_can_ho_id'
-              vid="loai_can_ho_id"
-              label="Loại căn hộ"
-              rules="required"
-              class="col-12 col-lg-4 form-group-container"
-              :options="optionsLoaiCanHo"
-            />
-            <InputTextarea
-              label="Mô tả"
-              v-model="data.apartment_asset_properties.description"
-              vid="description"
-              :rows="4"
-              :maxLength="1000"
-              class="col-12 form-group-container"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Tiện ích nội khu</h3>
-          <img class="img-dropdown" :class="!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''"
-            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showCardDetailEconomicAndSocial">
-        <div class="container-fluid">
-          <div class="row justify-content-flex-start container-utilities">
-            <div class="col-12 col-md-6 text-center form-group-container d-flex" v-for="(basic_utility, index) in basic_utilities" :key="index">
-              <div class="col d-flex justify-content-flex-start align-items-center">
-                <label class="input-checkbox" style="margin-right: 10px;">
-                  <input type="checkbox" :id="basic_utility.id" :value="basic_utility.acronym" v-model="data.apartment_asset_properties.utilities" >
-                  <span class="check-mark"/>
-                </label>
-                <label :for="basic_utility.id" style="cursor:pointer" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+								</div>
+								<!-- Map -->
+								<div
+									class="col-12 w-100 h-100 mt-3 d-none d-lg-block layer-map"
+									style="flex: 1"
+								>
+									<div class="d-flex all-map w-100 h-100">
+										<div class="main-map w-100 h-100">
+											<div id="mapid" class="layer-map w-100 h-100">
+												<l-map
+													ref="map_step1"
+													:zoom="map.zoom"
+													:center="map.center"
+													:maxZoom="20"
+													:options="{ zoomControl: false }"
+												>
+													<l-tile-layer
+														:url="url"
+														:options="{ maxNativeZoom: 19, maxZoom: 20 }"
+													></l-tile-layer>
+													<l-control-zoom
+														position="bottomright"
+													></l-control-zoom>
+													<l-control position="bottomleft">
+														<button
+															class="btn btn-map"
+															@click="handleView"
+															type="button"
+														>
+															<img
+																v-if="!imageMap"
+																src="@/assets/images/im_map.png"
+																alt=""
+															/>
+															<img
+																v-if="imageMap"
+																src="@/assets/images/im_satellite.png"
+																alt=""
+															/>
+														</button>
+													</l-control>
+													<l-marker :lat-lng="markerLatLng">
+														<l-icon
+															class-name="someExtraClass"
+															:iconAnchor="[30, 58]"
+														>
+															<img
+																style="width: 60px !important"
+																class="icon_marker"
+																src="@/assets/images/svg_home.svg"
+																alt=""
+															/>
+														</l-icon>
+														<l-tooltip>Vị trí tài sản</l-tooltip>
+													</l-marker>
+												</l-map>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Thông tin quy hoạch</h3>
-          <img class="img-dropdown" :class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
-               src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showDetailPlanning = !showDetailPlanning">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showDetailPlanning">
-        <div class="container-fluid">
-          <div class="row">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Chi tiết căn hộ</h3>
+					<img
+						class="img-dropdown"
+						:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showCardDetailTraffic = !showCardDetailTraffic"
+					/>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showCardDetailTraffic">
+				<div class="container-fluid">
+					<div class="row">
+						<InputCategory
+							v-model="data.apartment_asset_properties.block_id"
+							vid="block_id"
+							rules="required"
+							label="Block (khu)"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionsBlocks"
+							@change="handleChangeBlock"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.floor_id"
+							vid="floor_id"
+							rules="required"
+							label="Tầng"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionsFloors"
+							@change="handleChangeFloor"
+						/>
+						<InputText
+							v-model="data.apartment_asset_properties.apartment_name"
+							vid="apartment_name"
+							label="Mã căn hộ"
+							rules="required"
+							class="col-12 col-lg-4 form-group-container"
+							@change="changeAparment"
+						/>
+						<InputArea
+							v-model="data.apartment_asset_properties.area"
+							vid="area"
+							label="Diện tích (m²)"
+							rules="required"
+							:max="99999999"
+							@change="handleArea($event)"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+						<InputNumberNoneFormat
+							v-model="data.apartment_asset_properties.bedroom_num"
+							vid="bedroom_num"
+							label="Số phòng ngủ"
+							rules="required"
+							:max="9999"
+							@change="handleBedroomNum($event)"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+						<InputNumberNoneFormat
+							v-model="data.apartment_asset_properties.wc_num"
+							vid="wc_num"
+							label="Số phòng WC"
+							rules="required"
+							:max="9999"
+							@change="handleWCNum($event)"
+							class="col-12 col-lg-4 form-group-container"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.handover_year"
+							class="col-12 col-lg-4 form-group-container"
+							vid="handover_year"
+							label="Năm sử dụng"
+							rules="required"
+							@change="changeUsingYear"
+							:options="optionYearBuild"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.direction_id"
+							vid="direction_id"
+							label="Hướng chính"
+							rules="required"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionDirection"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.furniture_quality_id"
+							vid="furniture_quality_id"
+							label="Tình trạng nội thất"
+							rules="required"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionFurniture"
+						/>
+						<InputText
+							v-model="data.appraise_asset"
+							vid="data.appraise_asset"
+							label="Tên căn hộ"
+							rules="required"
+							class="col-12 col-lg-8 form-group-container"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.loai_can_ho_id"
+							vid="loai_can_ho_id"
+							label="Loại căn hộ"
+							rules="required"
+							class="col-12 col-lg-4 form-group-container"
+							:options="optionsLoaiCanHo"
+						/>
+						<InputTextarea
+							label="Mô tả"
+							v-model="data.apartment_asset_properties.description"
+							vid="description"
+							:rows="4"
+							:maxLength="1000"
+							class="col-12 form-group-container"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Tiện ích nội khu</h3>
+					<img
+						class="img-dropdown"
+						:class="
+							!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''
+						"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="
+							showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial
+						"
+					/>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showCardDetailEconomicAndSocial">
+				<div class="container-fluid">
+					<div class="row justify-content-flex-start container-utilities">
+						<div
+							class="col-12 col-md-6 text-center form-group-container d-flex"
+							v-for="(basic_utility, index) in basic_utilities"
+							:key="index"
+						>
+							<div
+								class="col d-flex justify-content-flex-start align-items-center"
+							>
+								<label class="input-checkbox" style="margin-right: 10px;">
+									<input
+										type="checkbox"
+										:id="basic_utility.id"
+										:value="basic_utility.acronym"
+										v-model="data.apartment_asset_properties.utilities"
+									/>
+									<span class="check-mark" />
+								</label>
+								<label
+									:for="basic_utility.id"
+									style="cursor:pointer"
+									class="color-black font-weight-bold mr-2 mb-2"
+									>{{ basic_utility.description }}</label
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Thông tin quy hoạch</h3>
+					<img
+						class="img-dropdown"
+						:class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showDetailPlanning = !showDetailPlanning"
+					/>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showDetailPlanning">
+				<div class="container-fluid">
+					<div class="row">
 						<div class="col-12 col-lg-6">
 							<InputTextarea
 								v-model="data.real_estate.planning_info"
 								label="Thông tin quy hoạch"
 								class="form-group-container"
-                :autosize="true"
+								:autosize="true"
 							/>
 						</div>
 						<div class="col-12 col-lg-6">
@@ -311,7 +377,7 @@
 								v-model="data.real_estate.planning_source"
 								label="Nguồn thông tin"
 								class="form-group-container"
-                :autosize="true"
+								:autosize="true"
 							/>
 						</div>
 						<div class="col-12 col-lg-6">
@@ -328,120 +394,251 @@
 								class="form-group-container"
 							/>
 						</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title d-flex align-items-center justify-content-between">
-        <form enctype="multipart/form-data" class="d-flex align-items-center">
-          <h3 class="title">Hình ảnh</h3>
-        </form>
-        <img class="img-dropdown" :class="!showCardDetailImage ? 'img-dropdown__hide' : ''"
-          src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailImage = !showCardDetailImage">
-      </div>
-      <div class="card-body" v-show="showCardDetailImage">
-        <Tabs class="tab_contruction" :theme="theme" :navAuto="true">
-          <TabItem name="Đường tiếp giáp tài sản">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imageType">
-                <div class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageType.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
-                <div class="container_input_img">
-                    <input class="input_file_4" type="file" ref="file" id="image_property" multiple
-                      accept="image/png, image/gif, image/jpeg, image/jpg"
-                      @change="onImageChange($event, 'đường tiếp giáp tài sản thẩm định giá')" />
-                </div>
-              </div>
-            </div>
-          </TabItem>
-          <TabItem name="Tổng thể tài sản">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imgOverall">
-                <div class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imgOverall.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
-					<div class="container_input_img">
-						<input class="input_file_4" type="file" ref="file" id="image_property" multiple
-							accept="image/png, image/gif, image/jpeg, image/jpg"
-							@change="onImageChange($event, 'tổng thể tài sản thẩm định giá')" />
 					</div>
-              </div>
-            </div>
-          </TabItem>
-          <TabItem name="Hiện trạng tài sản">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imageCurrentStatus">
-                <div class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageCurrentStatus.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
-								<div class="container_input_img">
-									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
-										accept="image/png, image/gif, image/jpeg, image/jpg"
-										@change="onImageChange($event, 'hiện trạng tài sản thẩm định giá')" />
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-title d-flex align-items-center justify-content-between">
+				<form enctype="multipart/form-data" class="d-flex align-items-center">
+					<h3 class="title">Hình ảnh</h3>
+				</form>
+				<img
+					class="img-dropdown"
+					:class="!showCardDetailImage ? 'img-dropdown__hide' : ''"
+					src="@/assets/images/icon-btn-down.svg"
+					alt="dropdown"
+					@click="showCardDetailImage = !showCardDetailImage"
+				/>
+			</div>
+			<div class="card-body" v-show="showCardDetailImage">
+				<Tabs class="tab_contruction" :theme="theme" :navAuto="true">
+					<TabItem name="Đường tiếp giáp tài sản">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div class="container-img row mr-0 ml-0" v-if="imageType">
+								<div
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageType.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
 								</div>
-              </div>
-            </div>
-          </TabItem>
-          <TabItem name="Khác">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imageJuridical">
-                <div class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageJuridical.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
 								<div class="container_input_img">
-									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
 										accept="image/png, image/gif, image/jpeg, image/jpg"
-										@change="onImageChange($event, 'pháp lý tài sản')" />
+										@change="
+											onImageChange(
+												$event,
+												'đường tiếp giáp tài sản thẩm định giá'
+											)
+										"
+									/>
 								</div>
-              </div>
-            </div>
-          </TabItem>
-        </Tabs>
-      </div>
-    </div>
+							</div>
+						</div>
+					</TabItem>
+					<TabItem name="Tổng thể tài sản">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div class="container-img row mr-0 ml-0" v-if="imgOverall">
+								<div
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imgOverall.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="
+											onImageChange($event, 'tổng thể tài sản thẩm định giá')
+										"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem>
+					<TabItem name="Hiện trạng tài sản">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div
+								class="container-img row mr-0 ml-0"
+								v-if="imageCurrentStatus"
+							>
+								<div
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageCurrentStatus.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="
+											onImageChange($event, 'hiện trạng tài sản thẩm định giá')
+										"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem>
+					<!-- <TabItem name="Biên bản khảo sát hiện trạng">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div
+								class="container-img row mr-0 ml-0"
+								v-if="imageCurrentSurvey"
+							>
+								<div
+									style="width: auto;"
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageCurrentSurvey.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img" style="width: unset;">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="
+											onImageChange($event, 'biên bản khảo sát hiện trạng')
+										"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem> -->
+					<TabItem name="Khác">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div class="container-img row mr-0 ml-0" v-if="imageJuridical">
+								<div
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageJuridical.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'pháp lý tài sản')"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem>
+				</Tabs>
+			</div>
+		</div>
 
-    <ModalMap
-      v-if="openModalMap"
-      @cancel="openModalMap = false"
-      :location="location"
-      :address="full_address_street"
-      :center_map="data.coordinates"
-      @action="handleCoordinates"
-    />
-  </div>
-  <div v-else>
-    <div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Thông tin chung về tài sản thẩm định</h3>
-          <img class="img-dropdown" :class="!showCardDetailAppraise ? 'img-dropdown__hide' : ''"
-            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailAppraise = !showCardDetailAppraise">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showCardDetailAppraise">
-        <div class="container-fluid color_content">
-          <div class="row">
-            <div class="col-12 col-lg-7" style="padding:0;">
-              <div class="row">
-                <!-- <div class="col-md-12 col-lg-6">
+		<ModalMap
+			v-if="openModalMap"
+			@cancel="openModalMap = false"
+			:location="location"
+			:address="full_address_street"
+			:center_map="data.coordinates"
+			@action="handleCoordinates"
+		/>
+	</div>
+	<div v-else>
+		<div class="card">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Thông tin chung về tài sản thẩm định</h3>
+					<img
+						class="img-dropdown"
+						:class="!showCardDetailAppraise ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showCardDetailAppraise = !showCardDetailAppraise"
+					/>
+				</div>
+			</div>
+			<div class="card-body card-info" v-show="showCardDetailAppraise">
+				<div class="container-fluid color_content">
+					<div class="row">
+						<div class="col-12 col-lg-7" style="padding:0;">
+							<div class="row">
+								<!-- <div class="col-md-12 col-lg-6">
                   <InputCategory
                     v-model="data.asset_type_id"
                     vid="asset_type_id"
@@ -452,32 +649,32 @@
                     @change="changeAssetType($event)" />
                 </div> -->
 
-                <div class="col-6">
-                  <InputCategory
-                    v-model="data.province_id"
-                    vid="province_id"
-                    label="Tỉnh/Thành"
-                    rules="required"
-                    class="form-group-container"
-                    :disabled="false"
-                    :options="optionsProvince"
-                    @change="changeProvince($event)"
-                  />
-                </div>
-                <div class="col-6">
-                  <InputCategory
-                    v-model="data.district_id"
-                    vid="district_id"
-                    label="Quận/Huyện"
-                    rules="required"
-                    :disabled="false"
-                    class="form-group-container"
-                    @change="changeDistrict($event)"
-                    :options="optionsDistrict"
-                  />
-                </div>
-                 <div class="col-12">
-                  <InputCategory
+								<div class="col-6">
+									<InputCategory
+										v-model="data.province_id"
+										vid="province_id"
+										label="Tỉnh/Thành"
+										rules="required"
+										class="form-group-container"
+										:disabled="false"
+										:options="optionsProvince"
+										@change="changeProvince($event)"
+									/>
+								</div>
+								<div class="col-6">
+									<InputCategory
+										v-model="data.district_id"
+										vid="district_id"
+										label="Quận/Huyện"
+										rules="required"
+										:disabled="false"
+										class="form-group-container"
+										@change="changeDistrict($event)"
+										:options="optionsDistrict"
+									/>
+								</div>
+								<div class="col-12">
+									<InputCategory
 										v-model="data.project_id"
 										vid="project_id"
 										rules="required"
@@ -486,252 +683,326 @@
 										:options="optionsProjects"
 										@change="handleChangeProject"
 									/>
-                </div>
-                <div class="col-6">
-                  <InputCategory
-                    v-model="data.ward_id"
-                    vid="ward_id"
-                    label="Phường/Xã"
-                    :disabled="true"
-                    class="form-group-container"
-                    :options="optionsWard"
-                    @change="changeWard($event)"
-                  />
-                </div>
-                <div class="col-6">
-                  <InputCategory
-                    v-model="data.street_id"
-                    vid="street_id"
-                    label="Đường/Phố"
-                    :disabled="true"
-                    class="form-group-container"
-                    @change="changeStreet($event)"
-                    :options="optionsStreet"
-                  />
-                </div>
-                <div class="col-12">
-                  <InputText
-                    v-model="data.full_address"
-                    vid="full_address"
-                    label="Địa chỉ"
-                    rules="required"
-                    class="form-group-container"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-lg-5" style="padding:0;">
-              <div class="d-flex flex-column h-100">
-                <div class="form-group-container position-relative w-100">
-                  <InputText
-                    id="coordinate"
-                    :disabledInput="true"
-                    v-model="data.coordinates"
-                    vid="coordinates"
-                    label="Tọa độ"
-                    class="coordinates"
-                    rules="required"
-                    />
-                  <!-- <div class="img-locate">
+								</div>
+								<div class="col-6">
+									<InputCategory
+										v-model="data.ward_id"
+										vid="ward_id"
+										label="Phường/Xã"
+										:disabled="true"
+										class="form-group-container"
+										:options="optionsWard"
+										@change="changeWard($event)"
+									/>
+								</div>
+								<div class="col-6">
+									<InputCategory
+										v-model="data.street_id"
+										vid="street_id"
+										label="Đường/Phố"
+										:disabled="true"
+										class="form-group-container"
+										@change="changeStreet($event)"
+										:options="optionsStreet"
+									/>
+								</div>
+								<div class="col-12">
+									<InputText
+										v-model="data.full_address"
+										vid="full_address"
+										label="Địa chỉ"
+										rules="required"
+										class="form-group-container"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-5" style="padding:0;">
+							<div class="d-flex flex-column h-100">
+								<div class="form-group-container position-relative w-100">
+									<InputText
+										id="coordinate"
+										:disabledInput="true"
+										v-model="data.coordinates"
+										vid="coordinates"
+										label="Tọa độ"
+										class="coordinates"
+										rules="required"
+									/>
+									<!-- <div class="img-locate">
                     <img src="@/assets/icons/ic_locate.svg" alt="locate" @click="handleOpenModalMap()">
                   </div> -->
-                </div>
-                <!-- Map -->
-                <div class="col-12 mt-3 layer-map">
-              <div class="d-flex all-map" style="padding: 0; height: 40vh;margin-top: 10px;">
-                <div class="main-map">
-                  <div id="mapid" class="layer-map">
-                      <l-map
-                        ref="map_step1"
-                        :zoom="map.zoom"
-                        :center="map.center"
-                        :maxZoom="20"
-                        :options="{zoomControl: false}"
-                      >
-                        <l-tile-layer :url="url" :options="{ maxNativeZoom: 19, maxZoom: 20}"></l-tile-layer>
-                        <l-control-zoom position="bottomright"></l-control-zoom>
-                        <l-control position="bottomleft">
-                          <button class="btn btn-map" @click="handleView" type="button">
-                            <img v-if="!imageMap" src="@/assets/images/im_map.png" alt="">
-                            <img v-if="imageMap" src="@/assets/images/im_satellite.png" alt="">
-                          </button>
-                        </l-control>
-                        <l-marker :lat-lng="markerLatLng">
-                          <l-icon class-name="someExtraClass" :iconAnchor="[30, 58]">
-                            <img style="width: 60px !important" class="icon_marker" src="@/assets/images/svg_home.svg" alt="">
-                          </l-icon>
-                          <l-tooltip>Vị trí tài sản</l-tooltip>
-                        </l-marker>
-                      </l-map>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Chi tiết căn hộ</h3>
-          <img class="img-dropdown" :class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
-            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailTraffic = !showCardDetailTraffic">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showCardDetailTraffic" style="padding-left: 0;padding-right: 0;">
-        <div class="container-fluid">
-          <div class="row">
-            <InputCategory
-              v-model="data.apartment_asset_properties.block_id"
-              vid="block_id"
-              rules="required"
-              label="Block (khu)"
-              class="col-6 form-group-container"
-              :options="optionsBlocks"
-              @change="handleChangeBlock"
-            />
-            <InputCategory
-              v-model="data.apartment_asset_properties.floor_id"
-              vid="floor_id"
-              rules="required"
-              label="Tầng"
-              class="col-6 form-group-container"
-              :options="optionsFloors"
-              @change="handleChangeFloor"
-            />
-            <InputText
-                v-model="data.apartment_asset_properties.apartment_name"
-                vid="apartment_name"
-                label="Mã căn hộ"
-                rules="required"
-                class="col-6 form-group-container"
-                @change="changeAparment"
-            />
-            <InputArea
-              v-model="data.apartment_asset_properties.area"
-              vid="area"
-              label="Diện tích (m²)"
-              rules="required"
-              :max="99999999"
-              @change="handleArea($event)"
-              class="col-6 form-group-container"
-            />
-            <InputNumberNoneFormat
-              v-model="data.apartment_asset_properties.bedroom_num"
-              vid="bedroom_num"
-              label="Số phòng ngủ"
-              rules="required"
-              :max="9999"
-              @change="handleBedroomNum($event)"
-              class="col-6 form-group-container"
-            />
-            <InputNumberNoneFormat
-              v-model="data.apartment_asset_properties.wc_num"
-              vid="wc_num"
-              label="Số phòng WC"
-              rules="required"
-              :max="9999"
-              @change="handleWCNum($event)"
-              class="col-6 form-group-container"
-            />
-            <InputCategory
-              v-model="data.apartment_asset_properties.handover_year"
-              class="col-6 form-group-container"
-              vid="handover_year"
-              label="Năm sử dụng"
-              rules="required"
-              @change="changeUsingYear"
-              :options="optionYearBuild"
-            />
-            <InputCategory
-              v-model='data.apartment_asset_properties.direction_id'
-              vid="direction_id"
-              label="Hướng chính"
-              rules="required"
-              class="col-6 form-group-container"
-              :options="optionDirection"
-            />
-            <InputCategory
-              v-model='data.apartment_asset_properties.furniture_quality_id'
-              vid="furniture_quality_id"
-              label="Tình trạng nội thất"
-              rules="required"
-              class="col-6 form-group-container"
-              :options="optionFurniture"
-            />
-            <InputText
-                v-model="data.appraise_asset"
-                vid="data.appraise_asset"
-                label="Tên căn hộ"
-                rules="required"
-                class="col-6 form-group-container"
-            />
-            <InputCategory
-              v-model='data.apartment_asset_properties.loai_can_ho_id'
-              vid="loai_can_ho_id"
-              label="Loại căn hộ"
-              rules="required"
-              class="col-6 form-group-container"
-              :options="optionsLoaiCanHo"
-            />
-            <InputTextarea
-              label="Mô tả"
-              v-model="data.apartment_asset_properties.description"
-              vid="description"
-              :rows="4"
-              :maxLength="1000"
-              class="col-12 form-group-container"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Tiện ích nội khu</h3>
-          <img class="img-dropdown" :class="!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''"
-            src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showCardDetailEconomicAndSocial" style="padding-left: 0;padding-right: 0;">
-        <div class="container-fluid">
-          <div class="row justify-content-flex-start container-utilities">
-            <div style="padding-right: 0;" class="col-6 col-md-6 text-center form-group-container d-flex" v-for="(basic_utility, index) in basic_utilities" :key="index">
-              <div class="col d-flex justify-content-flex-start align-items-center">
-                <label class="input-checkbox" style="margin-right: 10px;">
-                  <input type="checkbox" :id="basic_utility.id" :value="basic_utility.acronym" v-model="data.apartment_asset_properties.utilities" >
-                  <span class="check-mark"/>
-                </label>
-                <label :for="basic_utility.id" style="cursor:pointer;font-size: 14px;" class="color-black font-weight-bold mr-2 mb-2">{{basic_utility.description}}</label>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+								</div>
+								<!-- Map -->
+								<div class="col-12 mt-3 layer-map">
+									<div
+										class="d-flex all-map"
+										style="padding: 0; height: 40vh;margin-top: 10px;"
+									>
+										<div class="main-map">
+											<div id="mapid" class="layer-map">
+												<l-map
+													ref="map_step1"
+													:zoom="map.zoom"
+													:center="map.center"
+													:maxZoom="20"
+													:options="{ zoomControl: false }"
+												>
+													<l-tile-layer
+														:url="url"
+														:options="{ maxNativeZoom: 19, maxZoom: 20 }"
+													></l-tile-layer>
+													<l-control-zoom
+														position="bottomright"
+													></l-control-zoom>
+													<l-control position="bottomleft">
+														<button
+															class="btn btn-map"
+															@click="handleView"
+															type="button"
+														>
+															<img
+																v-if="!imageMap"
+																src="@/assets/images/im_map.png"
+																alt=""
+															/>
+															<img
+																v-if="imageMap"
+																src="@/assets/images/im_satellite.png"
+																alt=""
+															/>
+														</button>
+													</l-control>
+													<l-marker :lat-lng="markerLatLng">
+														<l-icon
+															class-name="someExtraClass"
+															:iconAnchor="[30, 58]"
+														>
+															<img
+																style="width: 60px !important"
+																class="icon_marker"
+																src="@/assets/images/svg_home.svg"
+																alt=""
+															/>
+														</l-icon>
+														<l-tooltip>Vị trí tài sản</l-tooltip>
+													</l-marker>
+												</l-map>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="card">
-      <div class="card-title">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="title">Thông tin quy hoạch</h3>
-          <img class="img-dropdown" :class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
-               src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showDetailPlanning = !showDetailPlanning">
-        </div>
-      </div>
-      <div class="card-body card-info" v-show="showDetailPlanning" style="padding-left: 0;padding-right: 0;">
-        <div class="container-fluid">
-          <div class="row">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Chi tiết căn hộ</h3>
+					<img
+						class="img-dropdown"
+						:class="!showCardDetailTraffic ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showCardDetailTraffic = !showCardDetailTraffic"
+					/>
+				</div>
+			</div>
+			<div
+				class="card-body card-info"
+				v-show="showCardDetailTraffic"
+				style="padding-left: 0;padding-right: 0;"
+			>
+				<div class="container-fluid">
+					<div class="row">
+						<InputCategory
+							v-model="data.apartment_asset_properties.block_id"
+							vid="block_id"
+							rules="required"
+							label="Block (khu)"
+							class="col-6 form-group-container"
+							:options="optionsBlocks"
+							@change="handleChangeBlock"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.floor_id"
+							vid="floor_id"
+							rules="required"
+							label="Tầng"
+							class="col-6 form-group-container"
+							:options="optionsFloors"
+							@change="handleChangeFloor"
+						/>
+						<InputText
+							v-model="data.apartment_asset_properties.apartment_name"
+							vid="apartment_name"
+							label="Mã căn hộ"
+							rules="required"
+							class="col-6 form-group-container"
+							@change="changeAparment"
+						/>
+						<InputArea
+							v-model="data.apartment_asset_properties.area"
+							vid="area"
+							label="Diện tích (m²)"
+							rules="required"
+							:max="99999999"
+							@change="handleArea($event)"
+							class="col-6 form-group-container"
+						/>
+						<InputNumberNoneFormat
+							v-model="data.apartment_asset_properties.bedroom_num"
+							vid="bedroom_num"
+							label="Số phòng ngủ"
+							rules="required"
+							:max="9999"
+							@change="handleBedroomNum($event)"
+							class="col-6 form-group-container"
+						/>
+						<InputNumberNoneFormat
+							v-model="data.apartment_asset_properties.wc_num"
+							vid="wc_num"
+							label="Số phòng WC"
+							rules="required"
+							:max="9999"
+							@change="handleWCNum($event)"
+							class="col-6 form-group-container"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.handover_year"
+							class="col-6 form-group-container"
+							vid="handover_year"
+							label="Năm sử dụng"
+							rules="required"
+							@change="changeUsingYear"
+							:options="optionYearBuild"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.direction_id"
+							vid="direction_id"
+							label="Hướng chính"
+							rules="required"
+							class="col-6 form-group-container"
+							:options="optionDirection"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.furniture_quality_id"
+							vid="furniture_quality_id"
+							label="Tình trạng nội thất"
+							rules="required"
+							class="col-6 form-group-container"
+							:options="optionFurniture"
+						/>
+						<InputText
+							v-model="data.appraise_asset"
+							vid="data.appraise_asset"
+							label="Tên căn hộ"
+							rules="required"
+							class="col-6 form-group-container"
+						/>
+						<InputCategory
+							v-model="data.apartment_asset_properties.loai_can_ho_id"
+							vid="loai_can_ho_id"
+							label="Loại căn hộ"
+							rules="required"
+							class="col-6 form-group-container"
+							:options="optionsLoaiCanHo"
+						/>
+						<InputTextarea
+							label="Mô tả"
+							v-model="data.apartment_asset_properties.description"
+							vid="description"
+							:rows="4"
+							:maxLength="1000"
+							class="col-12 form-group-container"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Tiện ích nội khu</h3>
+					<img
+						class="img-dropdown"
+						:class="
+							!showCardDetailEconomicAndSocial ? 'img-dropdown__hide' : ''
+						"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="
+							showCardDetailEconomicAndSocial = !showCardDetailEconomicAndSocial
+						"
+					/>
+				</div>
+			</div>
+			<div
+				class="card-body card-info"
+				v-show="showCardDetailEconomicAndSocial"
+				style="padding-left: 0;padding-right: 0;"
+			>
+				<div class="container-fluid">
+					<div class="row justify-content-flex-start container-utilities">
+						<div
+							style="padding-right: 0;"
+							class="col-6 col-md-6 text-center form-group-container d-flex"
+							v-for="(basic_utility, index) in basic_utilities"
+							:key="index"
+						>
+							<div
+								class="col d-flex justify-content-flex-start align-items-center"
+							>
+								<label class="input-checkbox" style="margin-right: 10px;">
+									<input
+										type="checkbox"
+										:id="basic_utility.id"
+										:value="basic_utility.acronym"
+										v-model="data.apartment_asset_properties.utilities"
+									/>
+									<span class="check-mark" />
+								</label>
+								<label
+									:for="basic_utility.id"
+									style="cursor:pointer;font-size: 14px;"
+									class="color-black font-weight-bold mr-2 mb-2"
+									>{{ basic_utility.description }}</label
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-title">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3 class="title">Thông tin quy hoạch</h3>
+					<img
+						class="img-dropdown"
+						:class="!showDetailPlanning ? 'img-dropdown__hide' : ''"
+						src="@/assets/images/icon-btn-down.svg"
+						alt="dropdown"
+						@click="showDetailPlanning = !showDetailPlanning"
+					/>
+				</div>
+			</div>
+			<div
+				class="card-body card-info"
+				v-show="showDetailPlanning"
+				style="padding-left: 0;padding-right: 0;"
+			>
+				<div class="container-fluid">
+					<div class="row">
 						<div class="col-6">
 							<InputTextarea
 								v-model="data.real_estate.planning_info"
 								label="Thông tin quy hoạch"
 								class="form-group-container"
-                :autosize="true"
+								:autosize="true"
 							/>
 						</div>
 						<div class="col-6">
@@ -739,7 +1010,7 @@
 								v-model="data.real_estate.planning_source"
 								label="Nguồn thông tin"
 								class="form-group-container"
-                :autosize="true"
+								:autosize="true"
 							/>
 						</div>
 						<div class="col-6">
@@ -756,105 +1027,239 @@
 								class="form-group-container"
 							/>
 						</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title d-flex align-items-center justify-content-between">
-        <form enctype="multipart/form-data" class="d-flex align-items-center">
-          <h3 class="title">Hình ảnh</h3>
-        </form>
-        <img class="img-dropdown" :class="!showCardDetailImage ? 'img-dropdown__hide' : ''"
-          src="@/assets/images/icon-btn-down.svg" alt="dropdown" @click="showCardDetailImage = !showCardDetailImage">
-      </div>
-      <div class="card-body" v-show="showCardDetailImage" style="padding-left: 0;padding-right: 0;">
-        <Tabs class="tab_contruction" :theme="theme" :navAuto="true">
-          <TabItem name="Đường tiếp giáp tài sản">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imageType">
-                <div style="width: auto;" class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageType.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
-                <div class="container_input_img" style="width: unset;">
-                    <input class="input_file_4" type="file" ref="file" id="image_property" multiple
-                      accept="image/png, image/gif, image/jpeg, image/jpg"
-                      @change="onImageChange($event, 'đường tiếp giáp tài sản thẩm định giá')" />
-                </div>
-              </div>
-            </div>
-          </TabItem>
-          <TabItem name="Tổng thể tài sản">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imgOverall">
-                <div style="width: auto;" class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imgOverall.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
-					<div class="container_input_img" style="width: unset;">
-						<input class="input_file_4" type="file" ref="file" id="image_property" multiple
-							accept="image/png, image/gif, image/jpeg, image/jpg"
-							@change="onImageChange($event, 'tổng thể tài sản thẩm định giá')" />
 					</div>
-              </div>
-            </div>
-          </TabItem>
-          <TabItem name="Hiện trạng tài sản">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imageCurrentStatus">
-                <div style="width: auto;" class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageCurrentStatus.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
-								<div class="container_input_img" style="width: unset;">
-									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
-										accept="image/png, image/gif, image/jpeg, image/jpg"
-										@change="onImageChange($event, 'hiện trạng tài sản thẩm định giá')" />
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-title d-flex align-items-center justify-content-between">
+				<form enctype="multipart/form-data" class="d-flex align-items-center">
+					<h3 class="title">Hình ảnh</h3>
+				</form>
+				<img
+					class="img-dropdown"
+					:class="!showCardDetailImage ? 'img-dropdown__hide' : ''"
+					src="@/assets/images/icon-btn-down.svg"
+					alt="dropdown"
+					@click="showCardDetailImage = !showCardDetailImage"
+				/>
+			</div>
+			<div
+				class="card-body"
+				v-show="showCardDetailImage"
+				style="padding-left: 0;padding-right: 0;"
+			>
+				<Tabs class="tab_contruction" :theme="theme" :navAuto="true">
+					<TabItem name="Đường tiếp giáp tài sản">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div class="container-img row mr-0 ml-0" v-if="imageType">
+								<div
+									style="width: auto;"
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageType.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
 								</div>
-              </div>
-            </div>
-          </TabItem>
-          <TabItem name="Khác">
-            <div class="mt-2">
-              <div class="d-flex justify-content-between align-items-end mb-2">
-                <h3 class="mb-0"> </h3>
-              </div>
-              <div class="container-img row mr-0 ml-0" v-if="imageJuridical">
-                <div style="width: auto;" class="contain-img contain-img__property" v-for="(images, index) in data.pic.filter(i => i.type_id === imageJuridical.id)" :key="images.id">
-                  <div class="delete" @click="removeImage(index)">X</div>
-                  <img class="asset-img" :src="images.link" alt="img" @click="openModalImage(images)">
-                </div>
 								<div class="container_input_img" style="width: unset;">
-									<input class="input_file_4" type="file" ref="file" id="image_property" multiple
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
 										accept="image/png, image/gif, image/jpeg, image/jpg"
-										@change="onImageChange($event, 'pháp lý tài sản')" />
+										@change="
+											onImageChange(
+												$event,
+												'đường tiếp giáp tài sản thẩm định giá'
+											)
+										"
+									/>
 								</div>
-              </div>
-            </div>
-          </TabItem>
-        </Tabs>
-      </div>
-    </div>
+							</div>
+						</div>
+					</TabItem>
+					<TabItem name="Tổng thể tài sản">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div class="container-img row mr-0 ml-0" v-if="imgOverall">
+								<div
+									style="width: auto;"
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imgOverall.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img" style="width: unset;">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="
+											onImageChange($event, 'tổng thể tài sản thẩm định giá')
+										"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem>
+					<TabItem name="Hiện trạng tài sản">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div
+								class="container-img row mr-0 ml-0"
+								v-if="imageCurrentStatus"
+							>
+								<div
+									style="width: auto;"
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageCurrentStatus.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img" style="width: unset;">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="
+											onImageChange($event, 'hiện trạng tài sản thẩm định giá')
+										"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem>
+					<!-- <TabItem name="Biên bản khảo sát hiện trạng">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div
+								class="container-img row mr-0 ml-0"
+								v-if="imageCurrentSurvey"
+							>
+								<div
+									style="width: auto;"
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageCurrentSurvey.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img" style="width: unset;">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="
+											onImageChange($event, 'biên bản khảo sát hiện trạng')
+										"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem> -->
+					<TabItem name="Khác">
+						<div class="mt-2">
+							<div class="d-flex justify-content-between align-items-end mb-2">
+								<h3 class="mb-0"></h3>
+							</div>
+							<div class="container-img row mr-0 ml-0" v-if="imageJuridical">
+								<div
+									style="width: auto;"
+									class="contain-img contain-img__property"
+									v-for="(images, index) in data.pic.filter(
+										i => i.type_id === imageJuridical.id
+									)"
+									:key="images.id"
+								>
+									<div class="delete" @click="removeImage(images)">X</div>
+									<img
+										class="asset-img"
+										:src="images.link"
+										alt="img"
+										@click="openModalImage(images)"
+									/>
+								</div>
+								<div class="container_input_img" style="width: unset;">
+									<input
+										class="input_file_4"
+										type="file"
+										ref="file"
+										id="image_property"
+										multiple
+										accept="image/png, image/gif, image/jpeg, image/jpg"
+										@change="onImageChange($event, 'pháp lý tài sản')"
+									/>
+								</div>
+							</div>
+						</div>
+					</TabItem>
+				</Tabs>
+			</div>
+		</div>
 
-    <ModalMap
-      v-if="openModalMap"
-      @cancel="openModalMap = false"
-      :location="location"
-      :address="full_address_street"
-      :center_map="data.coordinates"
-      @action="handleCoordinates"
-    />
-  </div>
+		<ModalMap
+			v-if="openModalMap"
+			@cancel="openModalMap = false"
+			:location="location"
+			:address="full_address_street"
+			:center_map="data.coordinates"
+			@action="handleCoordinates"
+		/>
+	</div>
 </template>
 <style lang="scss">
 @import "../../../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
@@ -862,26 +1267,51 @@
 @import "../../../../../../node_modules/leaflet/dist/leaflet.css";
 </style>
 <script>
-import InputDatePicker from '@/components/Form/InputDatePicker'
-import InputNumberNoneFormat from '@/components/Form/InputNumberNoneFormat'
-import InputCategory from '@/components/Form/InputCategory'
-import InputText from '@/components/Form/InputText'
-import InputTextarea from '@/components/Form/InputTextarea'
-import InputSwitch from '@/components/Form/InputSwitch'
-import InputArea from '@/components/Form/InputArea'
-import ModalDeleteIndex from '@/components/Modal/ModalDeleteIndex'
-import ModalMap from './modals/ModalMap'
-import { Tabs, TabItem } from 'vue-material-tabs'
-import File from '@/models/File'
-import {LMap, LControlZoom, LTileLayer, LMarker, LTooltip, LIcon, LControl} from 'vue2-leaflet'
-import Vue from 'vue'
-import Icon from 'buefy'
-import InputLengthArea from '@/components/Form/InputLengthArea.vue'
-Vue.use(Icon)
+import InputDatePicker from "@/components/Form/InputDatePicker";
+import InputNumberNoneFormat from "@/components/Form/InputNumberNoneFormat";
+import InputCategory from "@/components/Form/InputCategory";
+import InputText from "@/components/Form/InputText";
+import InputTextarea from "@/components/Form/InputTextarea";
+import InputSwitch from "@/components/Form/InputSwitch";
+import InputArea from "@/components/Form/InputArea";
+import ModalDeleteIndex from "@/components/Modal/ModalDeleteIndex";
+import ModalMap from "./modals/ModalMap";
+import { Tabs, TabItem } from "vue-material-tabs";
+import File from "@/models/File";
+import {
+	LMap,
+	LControlZoom,
+	LTileLayer,
+	LMarker,
+	LTooltip,
+	LIcon,
+	LControl
+} from "vue2-leaflet";
+import Vue from "vue";
+import Icon from "buefy";
+import InputLengthArea from "@/components/Form/InputLengthArea.vue";
+Vue.use(Icon);
 export default {
-	name: 'Step1',
-	props: ['data', 'propertyTypes', 'provinces', 'districts', 'wards', 'streets', 'isEdit', 'full_address', 'projects', 'blocks', 'floors', 'apartments', 'furniture_list',
-		'basic_utilities', 'directions', 'imageDescriptions', 'loai_can_ho'],
+	name: "Step1",
+	props: [
+		"data",
+		"propertyTypes",
+		"provinces",
+		"districts",
+		"wards",
+		"streets",
+		"isEdit",
+		"full_address",
+		"projects",
+		"blocks",
+		"floors",
+		"apartments",
+		"furniture_list",
+		"basic_utilities",
+		"directions",
+		"imageDescriptions",
+		"loai_can_ho"
+	],
 	components: {
 		InputCategory,
 		InputText,
@@ -904,103 +1334,103 @@ export default {
 		InputLengthArea
 	},
 	computed: {
-		optionsProjects () {
+		optionsProjects() {
 			return {
 				data: this.projects,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsBlocks () {
+		optionsBlocks() {
 			return {
 				data: this.blocks,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsFloors () {
+		optionsFloors() {
 			return {
 				data: this.floors,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsApartments () {
+		optionsApartments() {
 			return {
 				data: this.apartments,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsType () {
+		optionsType() {
 			return {
 				data: this.propertyTypes,
-				id: 'id',
-				key: 'description'
-			}
+				id: "id",
+				key: "description"
+			};
 		},
-		optionsLoaiCanHo () {
+		optionsLoaiCanHo() {
 			return {
 				data: this.loai_can_ho,
-				id: 'id',
-				key: 'description'
-			}
+				id: "id",
+				key: "description"
+			};
 		},
-		optionsProvince () {
+		optionsProvince() {
 			return {
 				data: this.provinces,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsDistrict () {
+		optionsDistrict() {
 			return {
 				data: this.districts,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsWard () {
+		optionsWard() {
 			return {
 				data: this.wards,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsStreet () {
+		optionsStreet() {
 			return {
 				data: this.streets,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionsDistance () {
+		optionsDistance() {
 			return {
 				data: this.distances,
-				id: 'id',
-				key: 'name'
-			}
+				id: "id",
+				key: "name"
+			};
 		},
-		optionDirection () {
+		optionDirection() {
 			return {
 				data: this.directions,
-				id: 'id',
-				key: 'description'
-			}
+				id: "id",
+				key: "description"
+			};
 		},
-		optionFurniture () {
+		optionFurniture() {
 			return {
 				data: this.furniture_list,
-				id: 'id',
-				key: 'description'
-			}
+				id: "id",
+				key: "description"
+			};
 		},
-		optionYearBuild () {
+		optionYearBuild() {
 			return {
 				data: this.built_years,
-				id: 'year',
-				key: 'year'
-			}
+				id: "year",
+				key: "year"
+			};
 		}
 	},
 	// watch: {
@@ -1011,13 +1441,13 @@ export default {
 	//     deep: true
 	//   }
 	// },
-	data () {
+	data() {
 		return {
 			theme: {
-				navItem: '#000000',
-				navActiveItem: '#FAA831',
-				slider: '#FAA831',
-				arrow: '#000000'
+				navItem: "#000000",
+				navActiveItem: "#FAA831",
+				slider: "#FAA831",
+				arrow: "#000000"
 			},
 			showCardDetailAppraise: true,
 			showCardDetailTraffic: true,
@@ -1027,8 +1457,8 @@ export default {
 			openModalMap: false,
 			imageMap: true,
 			location: {
-				lng: '',
-				lat: ''
+				lng: "",
+				lat: ""
 			},
 			key_render_apartment: 132131241,
 			markerLatLng: [10.964112, 106.856461],
@@ -1036,425 +1466,512 @@ export default {
 				center: [10.964112, 106.856461],
 				zoom: 17
 			},
-			url: 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}',
-			type: '',
-			file: '',
-			material: '',
+			url: "https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}",
+			type: "",
+			file: "",
+			material: "",
 			imageType: null,
 			imgOverall: null,
 			imageCurrentStatus: null,
+			imageCurrentSurvey: null,
 			imageJuridical: null,
 			built_years: []
-		}
+		};
 	},
-	async mounted () {
+	async mounted() {
 		if (this.$refs.map_step1.mapObject) {
 			this.$nextTick(() => {
-				this.$refs.map_step1.mapObject.invalidateSize()
-			})
+				this.$refs.map_step1.mapObject.invalidateSize();
+			});
 		}
-		await this.initMap()
+		await this.initMap();
 		if (this.built_years && this.built_years.length === 0) {
-			this.handleBuiltYear()
+			this.handleBuiltYear();
 		}
-		this.getImageDescriptions(this.imageDescriptions)
+		this.getImageDescriptions(this.imageDescriptions);
 	},
 	methods: {
-		getFullName () {
-			let projectName = ''
-			let blockName = ''
-			let floorName = ''
-			const apartmentName = this.data.apartment_asset_properties.apartment_name ? 'Căn hộ ' + this.data.apartment_asset_properties.apartment_name + ', ' : ''
+		getFullName() {
+			let projectName = "";
+			let blockName = "";
+			let floorName = "";
+			const apartmentName = this.data.apartment_asset_properties.apartment_name
+				? "Căn hộ " + this.data.apartment_asset_properties.apartment_name + ", "
+				: "";
 			if (this.projects.length > 0 && this.data.project_id) {
-				const project = this.projects.find(i => i.id === this.data.project_id)
-				projectName = project.name ? 'chung cư ' + project.name : ''
+				const project = this.projects.find(i => i.id === this.data.project_id);
+				projectName = project.name ? "chung cư " + project.name : "";
 			}
-			if (this.blocks.length > 0 && this.data.apartment_asset_properties.block_id) {
-				const block = this.blocks.find(i => i.id === this.data.apartment_asset_properties.block_id)
-				blockName = block.name ? 'khu ' + block.name + ', ' : ''
+			if (
+				this.blocks.length > 0 &&
+				this.data.apartment_asset_properties.block_id
+			) {
+				const block = this.blocks.find(
+					i => i.id === this.data.apartment_asset_properties.block_id
+				);
+				blockName = block.name ? "khu " + block.name + ", " : "";
 			}
-			if (this.floors.length > 0 && this.data.apartment_asset_properties.floor_id) {
-				const floor = this.floors.find(i => i.id === this.data.apartment_asset_properties.floor_id)
-				floorName = floor.name ? 'tầng ' + floor.name + ', ' : ''
+			if (
+				this.floors.length > 0 &&
+				this.data.apartment_asset_properties.floor_id
+			) {
+				const floor = this.floors.find(
+					i => i.id === this.data.apartment_asset_properties.floor_id
+				);
+				floorName = floor.name ? "tầng " + floor.name + ", " : "";
 			}
-			return apartmentName + floorName + blockName + projectName
+			return apartmentName + floorName + blockName + projectName;
 		},
-		getImageDescriptions (data) {
-			this.imageType = data.find(imageDescription => imageDescription.description.toLowerCase() === 'đường tiếp giáp tài sản thẩm định giá')
-			this.imgOverall = data.find(imageDescription => imageDescription.description.toLowerCase() === 'tổng thể tài sản thẩm định giá')
-			this.imageCurrentStatus = data.find(imageDescription => imageDescription.description.toLowerCase() === 'hiện trạng tài sản thẩm định giá')
-			this.imageJuridical = data.find(imageDescription => imageDescription.description.toLowerCase() === 'pháp lý tài sản')
+		getImageDescriptions(data) {
+			console.log("data", data);
+			this.imageType = data.find(
+				imageDescription =>
+					imageDescription.description.toLowerCase() ===
+					"đường tiếp giáp tài sản thẩm định giá"
+			);
+			this.imgOverall = data.find(
+				imageDescription =>
+					imageDescription.description.toLowerCase() ===
+					"tổng thể tài sản thẩm định giá"
+			);
+			this.imageCurrentStatus = data.find(
+				imageDescription =>
+					imageDescription.description.toLowerCase() ===
+					"hiện trạng tài sản thẩm định giá"
+			);
+			this.imageJuridical = data.find(
+				imageDescription =>
+					imageDescription.description.toLowerCase() === "pháp lý tài sản"
+			);
+			this.imageCurrentSurvey = data.find(
+				imageDescription =>
+					imageDescription.description.toLowerCase() ===
+					"biên bản khảo sát hiện trạng"
+			);
+			console.log("this.imageCurrentSurvey", this.imageCurrentSurvey);
 		},
-		handleClickUtilities (event) {
+		handleClickUtilities(event) {
 			// // console.log(this.data.apartment_asset_properties.utilities, 'event')
 		},
-		handleBuiltYear () {
-			const year = new Date().getFullYear()
+		handleBuiltYear() {
+			const year = new Date().getFullYear();
 			for (let i = 1970; i <= year; i++) {
-				this.built_years.push(
-					{
-						year: i
-					}
-				)
+				this.built_years.push({
+					year: i
+				});
 			}
-			function compare (a, b) {
-				if (a.year > b.year) { return -1 }
-				if (a.year < b.year) { return 1 }
-				return 0
+			function compare(a, b) {
+				if (a.year > b.year) {
+					return -1;
+				}
+				if (a.year < b.year) {
+					return 1;
+				}
+				return 0;
 			}
-			return this.built_years.sort(compare)
+			return this.built_years.sort(compare);
 		},
-		changeUsingYear () {
-
+		changeUsingYear() {},
+		handleWCNum(event) {
+			this.data.apartment_asset_properties.wc_num = event;
 		},
-		handleWCNum (event) {
-			this.data.apartment_asset_properties.wc_num = event
+		handleBedroomNum(event) {
+			this.data.apartment_asset_properties.bedroom_num = event;
 		},
-		handleBedroomNum (event) {
-			this.data.apartment_asset_properties.bedroom_num = event
+		handleArea(event) {
+			this.data.apartment_asset_properties.area = event;
 		},
-		handleArea (event) {
-			this.data.apartment_asset_properties.area = event
+		handleChangeProject(event) {
+			this.data.appraise_asset = this.getFullName();
+			this.$emit("handleChangeProject", event);
 		},
-		handleChangeProject (event) {
-			this.data.appraise_asset = this.getFullName()
-			this.$emit('handleChangeProject', event)
+		handleChangeBlock(event) {
+			this.data.appraise_asset = this.getFullName();
+			this.$emit("handleChangeBlock", event);
 		},
-		handleChangeBlock (event) {
-			this.data.appraise_asset = this.getFullName()
-			this.$emit('handleChangeBlock', event)
+		handleChangeFloor(event) {
+			this.data.appraise_asset = this.getFullName();
+			this.$emit("handleChangeFloor", event);
+			this.key_render_apartment += 1;
 		},
-		handleChangeFloor (event) {
-			this.data.appraise_asset = this.getFullName()
-			this.$emit('handleChangeFloor', event)
-			this.key_render_apartment += 1
-		},
-		changeAparment () {
-			this.data.appraise_asset = this.getFullName()
+		changeAparment() {
+			this.data.appraise_asset = this.getFullName();
 			// this.$emit('changeAparment')
 		},
-		formatSentenceCase (phrase) {
-			let text = phrase.toLowerCase()
-			return text.charAt(0).toUpperCase() + text.slice(1)
+		formatSentenceCase(phrase) {
+			let text = phrase.toLowerCase();
+			return text.charAt(0).toUpperCase() + text.slice(1);
 		},
 
-		async initMap () {
+		async initMap() {
 			// eslint-disable-next-line no-undef
 			if (this.data.coordinates) {
-				this.map.center = [this.data.coordinates.split(',')[0], this.data.coordinates.split(',')[1]]
-				this.markerLatLng = [this.data.coordinates.split(',')[0], this.data.coordinates.split(',')[1]]
-				this.map.zoom = 16
+				this.map.center = [
+					this.data.coordinates.split(",")[0],
+					this.data.coordinates.split(",")[1]
+				];
+				this.markerLatLng = [
+					this.data.coordinates.split(",")[0],
+					this.data.coordinates.split(",")[1]
+				];
+				this.map.zoom = 16;
 			} else {
-				this.markerLatLng = [10.964112, 106.856461]
-				this.map.center = [10.964112, 106.856461]
+				this.markerLatLng = [10.964112, 106.856461];
+				this.map.center = [10.964112, 106.856461];
 			}
 		},
-		changeProvince (provinceId) {
-			this.$emit('getDistrict', provinceId)
+		changeProvince(provinceId) {
+			this.$emit("getDistrict", provinceId);
 		},
-		changeDistrict (id) {
-			this.$emit('getWardStreet', id)
+		changeDistrict(id) {
+			this.$emit("getWardStreet", id);
 		},
-		changeWard (id) {
-			this.$emit('getWard', id)
+		changeWard(id) {
+			this.$emit("getWard", id);
 		},
-		changeStreet (id) {
-			this.$emit('changeStreet', id)
+		changeStreet(id) {
+			this.$emit("changeStreet", id);
 		},
-		changeDistance (id) {
-			this.$emit('changeDistance', id)
+		changeDistance(id) {
+			this.$emit("changeDistance", id);
 		},
-		changeAssetType (id) {
-			this.$emit('getAssetType', id)
+		changeAssetType(id) {
+			this.$emit("getAssetType", id);
 		},
-		handleChangeRoadFrontSide (value) {
-			this.data.traffic_infomation.main_road_length = value
+		handleChangeRoadFrontSide(value) {
+			this.data.traffic_infomation.main_road_length = value;
 		},
 		// handle coordinates from map
-		handleOpenModalMap () {
-			this.openModalMap = true
-			this.key_map += 1
+		handleOpenModalMap() {
+			this.openModalMap = true;
+			this.key_map += 1;
 		},
-		handleCoordinates (coordinates) {
-			this.data.coordinates = coordinates
-			this.location.lat = coordinates.split(',')[0]
-			this.location.lng = coordinates.split(',')[1]
-			this.map.center = [parseFloat(this.location.lat), parseFloat(this.location.lng)]
-			this.markerLatLng = [parseFloat(this.location.lat), parseFloat(this.location.lng)]
+		handleCoordinates(coordinates) {
+			this.data.coordinates = coordinates;
+			this.location.lat = coordinates.split(",")[0];
+			this.location.lng = coordinates.split(",")[1];
+			this.map.center = [
+				parseFloat(this.location.lat),
+				parseFloat(this.location.lng)
+			];
+			this.markerLatLng = [
+				parseFloat(this.location.lat),
+				parseFloat(this.location.lng)
+			];
 		},
-		async handleAddTurning () {
-			await this.$emit('addTurning')
-			await this.getTheLastTurningTime()
+		async handleAddTurning() {
+			await this.$emit("addTurning");
+			await this.getTheLastTurningTime();
 		},
-		async handleDeleteTurning (index) {
-			await this.$emit('deleteTurning', index)
-			await this.getTheLastTurningTime()
+		async handleDeleteTurning(index) {
+			await this.$emit("deleteTurning", index);
+			await this.getTheLastTurningTime();
 		},
-		handleChangeRoadDistance (value, index) {
-			this.$emit('changeRoadDistance', value, index)
+		handleChangeRoadDistance(value, index) {
+			this.$emit("changeRoadDistance", value, index);
 		},
-		async handleChangeRoadAlley (value, index) {
-			await this.$emit('changeRoadAlley', value, index)
-			await this.getTheLastTurningTime()
+		async handleChangeRoadAlley(value, index) {
+			await this.$emit("changeRoadAlley", value, index);
+			await this.getTheLastTurningTime();
 		},
-		handleView () {
-			if (this.url === 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}') {
+		handleView() {
+			if (
+				this.url === "https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}"
+			) {
 				// this.url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-				this.url = 'https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile'
-				this.imageMap = false
+				this.url =
+					"https://mts1.google.com/vt/lyrs=s@186112443&hl=x-local&src=app&x={x}&y={y}&z={z}&s=Galile";
+				this.imageMap = false;
 			} else {
-				this.url = 'https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}'
-				this.imageMap = true
+				this.url = "https://mt0.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}";
+				this.imageMap = true;
 			}
 		},
-		formatFloat (value) {
-			let num = (value / 1).toFixed(2).replace('.', ',')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		formatFloat(value) {
+			let num = (value / 1).toFixed(2).replace(".", ",");
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
-		titleCase (str) {
-			var splitStr = str.toLowerCase().split(' ')
+		titleCase(str) {
+			var splitStr = str.toLowerCase().split(" ");
 			for (var i = 0; i < splitStr.length; i++) {
 				// You do not need to check if i is larger than splitStr length, as your for does that for you
 				// Assign it back to the array
-				splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+				splitStr[i] =
+					splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
 			}
 			// Directly return the joined string
-			return splitStr.join(' ')
+			return splitStr.join(" ");
 		},
-		async handleChangeAlley () {
+		async handleChangeAlley() {
 			if (this.data.traffic_infomation.property_turning_time.length > 0) {
-				await this.getTheLastTurningTime()
+				await this.getTheLastTurningTime();
 			}
 			if (this.data.traffic_infomation.property_turning_time.length === 0) {
-				await this.$emit('addTurning')
+				await this.$emit("addTurning");
 			}
 		},
-		async getTheLastTurningTime () {
+		async getTheLastTurningTime() {
 			if (this.addressName.street) {
-				const last_item = this.data.traffic_infomation.property_turning_time.length - 1
-				let main_road_length = this.data.traffic_infomation.property_turning_time[last_item].main_road_length ? this.data.traffic_infomation.property_turning_time[last_item].main_road_length : 0
-				let streetName = ''
-				let description = ''
-				streetName = this.addressName.street.toLowerCase().includes('đường') ? this.titleCase(this.addressName.street).replace('Đường', 'đường') : `đường ${this.titleCase(this.addressName.street)}`
+				const last_item =
+					this.data.traffic_infomation.property_turning_time.length - 1;
+				let main_road_length = this.data.traffic_infomation
+					.property_turning_time[last_item].main_road_length
+					? this.data.traffic_infomation.property_turning_time[last_item]
+							.main_road_length
+					: 0;
+				let streetName = "";
+				let description = "";
+				streetName = this.addressName.street.toLowerCase().includes("đường")
+					? this.titleCase(this.addressName.street).replace("Đường", "đường")
+					: `đường ${this.titleCase(this.addressName.street)}`;
 				await this.materials.forEach(material => {
-					if (material.id === this.data.traffic_infomation.property_turning_time[last_item].material_id) {
-						this.material = material.description
+					if (
+						material.id ===
+						this.data.traffic_infomation.property_turning_time[last_item]
+							.material_id
+					) {
+						this.material = material.description;
 					}
-				})
-				description = 'Tiếp giáp ' + (this.material ? this.material.toLowerCase() : '') + ' rộng khoảng ' + this.formatFloat(main_road_length) + 'm ' + 'gần tuyến ' + `${streetName}`
-				await this.$emit('changeDescriptionFrontSide', description)
-			} else {}
+				});
+				description =
+					"Tiếp giáp " +
+					(this.material ? this.material.toLowerCase() : "") +
+					" rộng khoảng " +
+					this.formatFloat(main_road_length) +
+					"m " +
+					"gần tuyến " +
+					`${streetName}`;
+				await this.$emit("changeDescriptionFrontSide", description);
+			} else {
+			}
 		},
-		handleChangeFrontSide () {
+		handleChangeFrontSide() {
 			if (this.addressName.street) {
-				let streetName = this.addressName.street.toLowerCase().includes('đường') ? this.titleCase(this.addressName.street).replace('Đường', 'đường') : `đường ${this.titleCase(this.addressName.street)}`
-				let description = 'Tiếp giáp mặt tiền ' + `${streetName}`
-				this.$emit('changeDescriptionFrontSide', description)
+				let streetName = this.addressName.street.toLowerCase().includes("đường")
+					? this.titleCase(this.addressName.street).replace("Đường", "đường")
+					: `đường ${this.titleCase(this.addressName.street)}`;
+				let description = "Tiếp giáp mặt tiền " + `${streetName}`;
+				this.$emit("changeDescriptionFrontSide", description);
 			} else {
 				this.$toast.open({
-					message: 'Vui lòng chọn địa chỉ',
-					type: 'error',
-					position: 'top-right'
-				})
+					message: "Vui lòng chọn địa chỉ",
+					type: "error",
+					position: "top-right"
+				});
 			}
 		},
-		async changeMaterial () {
-			await this.getTheLastTurningTime()
+		async changeMaterial() {
+			await this.getTheLastTurningTime();
 		},
-		onImageChange (e, type) {
-			const typeImage = this.imageDescriptions.find(imageDescription => imageDescription.description.toLowerCase() === type)
-			let files = e.target.files || e.dataTransfer.files
-			if (!files.length) { return }
+		onImageChange(e, type) {
+			const typeImage = this.imageDescriptions.find(
+				imageDescription => imageDescription.description.toLowerCase() === type
+			);
+			let files = e.target.files || e.dataTransfer.files;
+			if (!files.length) {
+				return;
+			}
 			for (let i = 0; i < e.target.files.length; i++) {
-				this.file = e.target.files[i]
-				if (this.file.type === 'image/png' || this.file.type === 'image/jpeg' || this.file.type === 'image/jpg' || this.file.type === 'image/gif') {
-					this.type = typeImage.id
-					this.createImage()
-					this.uploadImage()
+				this.file = e.target.files[i];
+				if (
+					this.file.type === "image/png" ||
+					this.file.type === "image/jpeg" ||
+					this.file.type === "image/jpg" ||
+					this.file.type === "image/gif"
+				) {
+					this.type = typeImage.id;
+					this.createImage();
+					this.uploadImage();
 				} else {
 					this.$toast.open({
-						message: 'Hình không đúng định dạng vui lòng kiểm tra lại',
-						type: 'error',
-						position: 'top-right',
+						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
+						type: "error",
+						position: "top-right",
 						duration: 3000
-					})
+					});
 				}
 			}
 		},
-		createImage () {
-			let reader = new FileReader()
-			let v = this
-			reader.onload = (e) => {
-				v.image = e.target.result
-			}
-			reader.readAsDataURL(this.file)
+		createImage() {
+			let reader = new FileReader();
+			let v = this;
+			reader.onload = e => {
+				v.image = e.target.result;
+			};
+			reader.readAsDataURL(this.file);
 		},
-		uploadImage () {
-			this.isLoading = true
-			const formData = new FormData()
-			formData.append('image', this.file)
-			return File.upload({data: formData}).then(response => {
+		uploadImage() {
+			console.log("vào hàm uploadImage");
+			this.isLoading = true;
+			const formData = new FormData();
+			formData.append("image", this.file);
+			return File.upload({ data: formData }).then(response => {
 				if (response && response.data) {
 					const item = {
 						type_id: this.type,
 						link: response.data.data.link
-					}
+					};
 					// this.$emit('uploadImage', item)
-					this.data.pic.push(item)
-					this.isLoading = false
+					this.data.pic.push(item);
+					this.isLoading = false;
 				} else if (response.data.error) {
-					this.isLoading = false
+					this.isLoading = false;
 					this.$toast.open({
 						message: response.data.error.message,
-						type: 'error',
-						position: 'top-right',
+						type: "error",
+						position: "top-right",
 						duration: 3000
-					})
+					});
 				}
-			})
+			});
 		},
-		removeImage (index) {
-			this.data.pic.splice(index, 1)
+		removeImage(images) {
+			const index = this.data.pic.indexOf(images);
+			if (index !== -1) {
+				this.data.pic.splice(index, 1);
+			}
 		},
-		isMobile () {
-			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-				return true
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
 			} else {
-				return false
+				return false;
 			}
 		}
 	}
-}
+};
 </script>
 <style scoped lang="scss">
-
 .div_radio {
-  margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 .form-map {
-  height: 100%;
-  flex: 1;
+	height: 100%;
+	flex: 1;
 }
 
 .card {
-  border-radius: 5px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-  background: #FFFFFF;
-  margin-bottom: 1rem;
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffffff;
+	margin-bottom: 1rem;
 
-  &-footer {
-    padding: 15px 24px;
-  }
+	&-footer {
+		padding: 15px 24px;
+	}
 
-  &-title {
-    padding: 15px;
-    margin-bottom: 0;
-    color: #E8E8E8;
-    border-bottom: 2px solid;
-    &__img {
-      padding: 8px 20px;
-    }
-    h3 {
-      color: #007EC6;
-    }
-    @media (max-width: 768px) {
-      padding: 12px;
-    }
+	&-title {
+		padding: 15px;
+		margin-bottom: 0;
+		color: #e8e8e8;
+		border-bottom: 2px solid;
+		&__img {
+			padding: 8px 20px;
+		}
+		h3 {
+			color: #007ec6;
+		}
+		@media (max-width: 768px) {
+			padding: 12px;
+		}
 
-    .title {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 0;
-    }
-  }
+		.title {
+			font-size: 1.125rem;
+			font-weight: 600;
+			margin-bottom: 0;
+		}
+	}
 
-  &-body {
+	&-body {
+		@media (max-width: 787px) {
+			padding: 15px;
+		}
+	}
 
-    @media (max-width: 787px) {
-      padding: 15px;
-    }
-  }
+	&-info {
+		.title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			margin-top: 28px;
 
-  &-info {
-    .title {
-      font-size: 1.125rem;
-      font-weight: 700;
-      margin-top: 28px;
+			&-highlight {
+				background: rgba(252, 194, 114, 0.53);
+				text-align: center;
+				padding: 10px 0;
+				border-radius: 2px;
+			}
+		}
+	}
 
-      &-highlight {
-        background: rgba(252, 194, 114, 0.53);
-        text-align: center;
-        padding: 10px 0;
-        border-radius: 2px;
-      }
-    }
-  }
-
-  &-land {
-    position: relative;
-    padding: 0;
-  }
+	&-land {
+		position: relative;
+		padding: 0;
+	}
 }
 
 .form-group-container {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .btn-delete {
-  cursor: pointer;
-  display: flex;
-  align-items: end;
-  background: #FFFFFF;
-  border-radius: 5.88235px;
-  padding: 0.5rem;
-  img {
-    width: 100%;
-    height: auto;
-    min-width: 0.75rem;
-  }
+	cursor: pointer;
+	display: flex;
+	align-items: end;
+	background: #ffffff;
+	border-radius: 5.88235px;
+	padding: 0.5rem;
+	img {
+		width: 100%;
+		height: auto;
+		min-width: 0.75rem;
+	}
 }
 
 .btn {
-  &-orange {
-    background: #FAA831;
-    text-align: center;
-    border-radius: 5px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
-    height: 35px;
-    width: 100px;
-    color: #fff;
-    margin: 15px 0 0;
-    box-sizing: border-box;
+	&-orange {
+		background: #faa831;
+		text-align: center;
+		border-radius: 5px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+		height: 35px;
+		width: 100px;
+		color: #fff;
+		margin: 15px 0 0;
+		box-sizing: border-box;
 
-    &:hover {
-      border-color: #dc8300;
-    }
-  }
+		&:hover {
+			border-color: #dc8300;
+		}
+	}
 }
 
 .img-dropdown {
-  cursor: pointer;
-  width: 18px;
-  &__hide {
-    transform: rotate(90deg);
-    transition: .3s;
-  }
+	cursor: pointer;
+	width: 18px;
+	&__hide {
+		transform: rotate(90deg);
+		transition: 0.3s;
+	}
 }
 
 .img-locate {
-  cursor: pointer;
-  position: absolute;
-  right: 14px;
-  top: 2.1rem;
-  background-color: #f5f5f5;
-  height: 2.1rem;
-  width: 32px;
-  display: grid;
-  place-items: center;
+	cursor: pointer;
+	position: absolute;
+	right: 14px;
+	top: 2.1rem;
+	background-color: #f5f5f5;
+	height: 2.1rem;
+	width: 32px;
+	display: grid;
+	place-items: center;
 
-  img {
-    height: 60%;
-  }
+	img {
+		height: 60%;
+	}
 }
 
 // .text-error {
@@ -1463,191 +1980,190 @@ export default {
 // }
 
 .select-group {
-  background-color: #F6F7FB;
-  border: 1px solid #E8E8E8;
-  border-radius: 3px;
-  padding: 16px 22px;
+	background-color: #f6f7fb;
+	border: 1px solid #e8e8e8;
+	border-radius: 3px;
+	padding: 16px 22px;
 
-  .select-title {
-    color: #00507C;
-    font-weight: 700;
-    white-space: nowrap;
-    margin-bottom: unset !important;
-  }
+	.select-title {
+		color: #00507c;
+		font-weight: 700;
+		white-space: nowrap;
+		margin-bottom: unset !important;
+	}
 }
 .img_add {
-  width: 100%;
-  height: 100% !important;
-  cursor: pointer;
+	width: 100%;
+	height: 100% !important;
+	cursor: pointer;
 }
 .container_input {
-  border-radius: 10px;
-  border: 2px solid #617F9E;
-  width: 100%;
-  height: 100%;
-  position: relative;
+	border-radius: 10px;
+	border: 2px solid #617f9e;
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
 .input_file_4 {
-  left: 0;
-  opacity: 0;
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-  position: absolute;
+	left: 0;
+	opacity: 0;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+	position: absolute;
 }
-  // map
+// map
 .btn-map {
-  background: #FFFFFF;
-  border-radius: 5px;
-  border: 3px solid #FFFFFF;
-  padding: 0;
-  box-sizing: border-box;
-  img{
-    max-width: 50px;
-    height: auto;
-  }
+	background: #ffffff;
+	border-radius: 5px;
+	border: 3px solid #ffffff;
+	padding: 0;
+	box-sizing: border-box;
+	img {
+		max-width: 50px;
+		height: auto;
+	}
 }
-.icon_marker{
-  width: 25px;
+.icon_marker {
+	width: 25px;
 }
 .content_economy {
-  font-weight: 500;
-  margin-left: 1.5rem;
+	font-weight: 500;
+	margin-left: 1.5rem;
 }
 .main-map {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  transition-timing-function: ease;
-  transition-duration: 0.25s;
-  overflow-x: hidden;
-  @media (max-width: 1023px) {
-    width: 100%;
-  }
-  .layer-map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 0;
-    transition-timing-function: ease;
-    transition-duration: 0.25s;
-
-  }
+	position: relative;
+	height: 100%;
+	width: 100%;
+	transition-timing-function: ease;
+	transition-duration: 0.25s;
+	overflow-x: hidden;
+	@media (max-width: 1023px) {
+		width: 100%;
+	}
+	.layer-map {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 0;
+		transition-timing-function: ease;
+		transition-duration: 0.25s;
+	}
 }
 .content_form {
-  padding-left: 1.5rem;
+	padding-left: 1.5rem;
 }
 
 .sub_header_title {
-    background-color: #F6F7FB;
-    border: 1px solid #E8E8E8;
-    border-radius: 3px;
-    padding: 0.85rem 2rem;
-    position: relative;
-    color: #00507C;
-    font-weight: 700;
-    font-size: 1.125rem;
-    .label {
-      margin-right: 15px;
-    }
-    label {
-      margin: 0;
-    }
-    &::before {
-      content: '';
-      position: absolute;
-      height: calc(100% - 16px);
-      width: 3px;
-      background-color: #99D161;
-      border-radius: 3px;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-    }
-  }
+	background-color: #f6f7fb;
+	border: 1px solid #e8e8e8;
+	border-radius: 3px;
+	padding: 0.85rem 2rem;
+	position: relative;
+	color: #00507c;
+	font-weight: 700;
+	font-size: 1.125rem;
+	.label {
+		margin-right: 15px;
+	}
+	label {
+		margin: 0;
+	}
+	&::before {
+		content: "";
+		position: absolute;
+		height: calc(100% - 16px);
+		width: 3px;
+		background-color: #99d161;
+		border-radius: 3px;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+	}
+}
 .delete {
-    background: #617F9E;
-    color: #FFFFFF;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 1.5;
-    cursor: pointer;
-    font-weight: 700;
+	background: #617f9e;
+	color: #ffffff;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	line-height: 1.5;
+	cursor: pointer;
+	font-weight: 700;
 }
 .infor-box {
-  padding: 1rem;
-  border-radius: 12px 15px;
-  background-color: #EEF9FF;
-  border: 1px solid #007EC6;
-  color: #446B92;
-  @media (max-height: 660px) {
-    font-size: 12px;
-  }
-  @media (max-height: 970px) and (min-height: 660px) {
-    font-size: 14px;
-  }
+	padding: 1rem;
+	border-radius: 12px 15px;
+	background-color: #eef9ff;
+	border: 1px solid #007ec6;
+	color: #446b92;
+	@media (max-height: 660px) {
+		font-size: 12px;
+	}
+	@media (max-height: 970px) and (min-height: 660px) {
+		font-size: 14px;
+	}
 }
 .justify-content-space-evenly {
-  justify-content: space-evenly !important;
+	justify-content: space-evenly !important;
 }
 .input-checkbox {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  input {
-    width: 22px;
-    height: 22px;
-    position: absolute;
-    cursor: pointer;
-    opacity: 0;
-    &:checked {
-      & ~ .check-mark {
-        background-color: white;
-        &:after {
-          display: block;
-        }
-      }
-    }
-    &:disabled {
-      & ~ .check-mark {
-        background-color: #DEE6EE;
-      }
-    }
-  }
-  .check-mark {
-    position: absolute;
-    top: 0px;
-    left: 0;
-    cursor: pointer;
-    width: 22px;
-    height: 22px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #617F9E;
-    // background-color: #617F9E;
-    border: 2px solid #617F9E;
-    border-radius: 4px;
-    &:after {
-      content: "\2713";
-      position: absolute;
-      display: none;
-      left: 50%;
-      top: -3px;
-      width: 5px;
-      height: 10px;
-      // border: solid #FFFFFF;
-      // border-width: 0 3px 3px 0;
-      -webkit-transform: rotate(0deg) translate(-125%, -25%);
-      -ms-transform: rotate(0deg) translate(-125%, -25%);
-      transform: rotate(0deg) translate(-125%, -25%);
-    }
-  }
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	input {
+		width: 22px;
+		height: 22px;
+		position: absolute;
+		cursor: pointer;
+		opacity: 0;
+		&:checked {
+			& ~ .check-mark {
+				background-color: white;
+				&:after {
+					display: block;
+				}
+			}
+		}
+		&:disabled {
+			& ~ .check-mark {
+				background-color: #dee6ee;
+			}
+		}
+	}
+	.check-mark {
+		position: absolute;
+		top: 0px;
+		left: 0;
+		cursor: pointer;
+		width: 22px;
+		height: 22px;
+		font-size: 18px;
+		font-weight: bold;
+		color: #617f9e;
+		// background-color: #617F9E;
+		border: 2px solid #617f9e;
+		border-radius: 4px;
+		&:after {
+			content: "\2713";
+			position: absolute;
+			display: none;
+			left: 50%;
+			top: -3px;
+			width: 5px;
+			height: 10px;
+			// border: solid #FFFFFF;
+			// border-width: 0 3px 3px 0;
+			-webkit-transform: rotate(0deg) translate(-125%, -25%);
+			-ms-transform: rotate(0deg) translate(-125%, -25%);
+			transform: rotate(0deg) translate(-125%, -25%);
+		}
+	}
 }
 .asset-img {
 	height: 10rem;
@@ -1659,16 +2175,16 @@ export default {
 	padding-bottom: 5px;
 }
 .container_input_img {
-  background-image: url('../../../../../assets/images/add_img.png');
+	background-image: url("../../../../../assets/images/add_img.png");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-color: transparent;
-  border: 2px solid #617F9E;
-  border-radius: 10px;
+	border: 2px solid #617f9e;
+	border-radius: 10px;
 	min-width: 10rem;
 	min-height: 10rem;
-  // cursor: pointer;
-  position: relative;
+	// cursor: pointer;
+	position: relative;
 	margin-bottom: 5px;
 }
 </style>

@@ -635,16 +635,17 @@ export default {
 	computed: {
 		getApartmentName() {
 			const apartment_name = this.form.step_1.apartment_asset_properties
+				.apartment_name
 				? "Căn hộ số " +
 				  this.form.step_1.apartment_asset_properties.apartment_name
 				: "";
-			const floor_name = this.form.step_1.apartment_asset_properties.floor
+			const floor_name = this.form.step_1.apartment_asset_properties.floor.name
 				? " tầng " + this.form.step_1.apartment_asset_properties.floor.name
 				: "";
-			const block_name = this.form.step_1.apartment_asset_properties.block
+			const block_name = this.form.step_1.apartment_asset_properties.block.name
 				? " khu " + this.form.step_1.apartment_asset_properties.block.name
 				: "";
-			const project_name = this.form.step_1.project
+			const project_name = this.form.step_1.project.name
 				? " chung cư " + this.form.step_1.project.name
 				: "";
 			let apartmentName =
@@ -727,6 +728,9 @@ export default {
 				}
 				if (bindDataStep.real_estate) {
 					this.form.step_1.real_estate = bindDataStep.real_estate;
+				}
+				if (bindDataStep.pic) {
+					this.form.step_1.pic = bindDataStep.pic;
 				}
 
 				// step 2
@@ -1795,7 +1799,7 @@ export default {
 			return text.charAt(0).toUpperCase() + text.slice(1);
 		},
 		formatCapitalize(word) {
-			return word.replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
+			return word.toLowerCase().replace(/(?:^|\s|[-"'([{])+\S/g, function(x) {
 				return x.toUpperCase();
 			});
 		},

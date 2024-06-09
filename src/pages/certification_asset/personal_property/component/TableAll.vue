@@ -2,18 +2,20 @@
 	<div v-if="!isMobile()" class="table-wrapper">
 		<div class="table-detail position-relative empty-data">
 			<a-table
-					ref="table"
-					bordered
-					class="table-property"
-					@change="handleTableChange"
-					:columns="columns"
-					:data-source="listCertificates"
-					:loading="isLoading"
-					:rowKey="record => record.id"
-					:filtered="false"
-					:row-class-name="(_record, index) => (index % 2 === 1 ? 'table-striped' : null)"
-					:pagination="false"
-				>
+				ref="table"
+				bordered
+				class="table-property"
+				@change="handleTableChange"
+				:columns="columns"
+				:data-source="listCertificates"
+				:loading="isLoading"
+				:rowKey="record => record.id"
+				:filtered="false"
+				:row-class-name="
+					(_record, index) => (index % 2 === 1 ? 'table-striped' : null)
+				"
+				:pagination="false"
+			>
 				<!--Custom type table-->
 				<template slot="id" slot-scope="id, data">
 					<button @click.prevent="handleDetail(id, data)" class="link-detail">
@@ -26,8 +28,13 @@
 					</p>
 				</template>
 				<template slot="status" slot-scope="status">
-					<div class="d-flex justify-content-center align-items-center position-relative">
-						<div v-if="status === 1" class="status-color bg-info" />
+					<div
+						class="d-flex justify-content-center align-items-center position-relative"
+					>
+						<p class="text-none mb-0">
+							{{ status === 4 ? "Hoàn thành" : "Đang thực hiện" }}
+						</p>
+						<!-- <div v-if="status === 1" class="status-color bg-info" />
 						<div v-if="status === 2" class="status-color bg-primary" />
 						<div v-if="status === 3" class="status-color bg-warning" />
 						<div v-if="status === 4" class="status-color bg-success" />
@@ -37,29 +44,53 @@
 								<img src="@/assets/icons/ic_more.svg" alt="">
 							</template>
 							<b-dropdown-item>Action</b-dropdown-item>
-						</b-dropdown>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template slot="property_name" slot-scope="property_name, data">
-					<p :id="data.id + 'all'" class="full-address text-left">{{ property_name }}</p>
-					<b-tooltip :target="(data.id + 'all').toString()">{{ property_name }}</b-tooltip>
+					<p :id="data.id + 'all'" class="full-address text-left">
+						{{ property_name }}
+					</p>
+					<b-tooltip :target="(data.id + 'all').toString()">{{
+						property_name
+					}}</b-tooltip>
 				</template>
 				<template slot="created_at" slot-scope="created_at">
 					<p class="public_date mb-0">{{ formatDate(created_at) }}</p>
 				</template>
 				<template slot="total_price" slot-scope="total_price">
-					<p class="text-none mb-0">{{total_price ? formatNumber(total_price) + ' đ' : '-' }}</p>
+					<p class="text-none mb-0">
+						{{ total_price ? formatNumber(total_price) + " đ" : "-" }}
+					</p>
 				</template>
 				<template slot="price" slot-scope="price">
-					<p class="text-none mb-0">{{price ? formatNumber(price.unit_price) + ' đ' : '-' }}</p>
+					<p class="text-none mb-0">
+						{{ price ? formatNumber(price.unit_price) + " đ" : "-" }}
+					</p>
 				</template>
-				<template slot="appraise_land_sum_area" slot-scope="appraise_land_sum_area">
-					<p class="text-none mb-0">{{ appraise_land_sum_area ? formatNumber(appraise_land_sum_area) : 0 }} m
+				<template
+					slot="appraise_land_sum_area"
+					slot-scope="appraise_land_sum_area"
+				>
+					<p class="text-none mb-0">
+						{{
+							appraise_land_sum_area ? formatNumber(appraise_land_sum_area) : 0
+						}}
+						m
 						<sup>2</sup>
 					</p>
 				</template>
-				<template slot="total_construction_area" slot-scope="total_construction_area">
-					<p class="text-none mb-0">{{ total_construction_area ? formatNumber(total_construction_area) : 0 }} m
+				<template
+					slot="total_construction_area"
+					slot-scope="total_construction_area"
+				>
+					<p class="text-none mb-0">
+						{{
+							total_construction_area
+								? formatNumber(total_construction_area)
+								: 0
+						}}
+						m
 						<sup>2</sup>
 					</p>
 				</template>
@@ -70,14 +101,25 @@
 			<div class="pagination-wrapper">
 				<div class="page-size">
 					Hiển thị
-					<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
-						@change="onSizeChange" />
+					<a-select
+						ref="select"
+						:value="Number(pagination.pageSize)"
+						style="width: 71px"
+						:options="pageSizeOptions"
+						@change="onSizeChange"
+					/>
 					hàng
 				</div>
-				<a-pagination :current="Number(pagination.current)" :page-size="Number(pagination.pageSize)"
+				<a-pagination
+					:current="Number(pagination.current)"
+					:page-size="Number(pagination.pageSize)"
 					:total="Number(pagination.total)"
-					:show-total="(total, range) => `Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`"
-					@change="onPaginationChange">
+					:show-total="
+						(total, range) =>
+							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`
+					"
+					@change="onPaginationChange"
+				>
 				</a-pagination>
 			</div>
 			<!-- <div class="total position-absolute">
@@ -86,87 +128,149 @@
 		</div>
 	</div>
 	<div v-else class="table-wrapper" style="margin: 0;">
-		<div class="table-detail position-relative empty-data" style="overflow: scroll;max-height: 76vh;">
-			<b-card :class="{['border-' + configColor(element)]: true}" class="card_container mb-3" v-for="element in listCertificates" :key="element.id+'_'+element.status">
-            <div class="col-12 d-flex mb-2 justify-content-between">
-              <span class="content_id" :class="`bg-${configColor(element)}-15 text-${configColor(element)}`">DS_{{element.id}}</span>
-            </div>
-			<div class="property-content mb-2 d-flex color_content">
-              <div class="label_container d-flex">
-                <div class="d-flex">
-                <span style="font-weight: 500"><strong class="d_inline mr-1">Tên tài sản:</strong><span :id="element.id + 'all'" class="text-left">{{ element.name.length > 25 ? element.name.substring(25,0)+'...' : element.name}}</span></span>
-				<b-tooltip :target="(element.id + 'all').toString()">{{ element.name }}</b-tooltip>
-                </div>
-              </div>
-            </div>
-			<div class="col-12  property-content mb-2 d-flex color_content">
-				<div class="label_container d-flex">
-					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Loại tài sản:</strong><span class="text-capitalize">{{element.asset_type.description.toLowerCase()}}</span></span>
+		<div
+			class="table-detail position-relative empty-data"
+			style="overflow: scroll;max-height: 76vh;"
+		>
+			<b-card
+				:class="{ ['border-' + configColor(element)]: true }"
+				class="card_container mb-3"
+				v-for="element in listCertificates"
+				:key="element.id + '_' + element.status"
+			>
+				<div class="col-12 d-flex mb-2 justify-content-between">
+					<span
+						class="content_id"
+						:class="
+							`bg-${configColor(element)}-15 text-${configColor(element)}`
+						"
+						>DS_{{ element.id }}</span
+					>
+				</div>
+				<div class="property-content mb-2 d-flex color_content">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+							<span style="font-weight: 500"
+								><strong class="d_inline mr-1">Tên tài sản:</strong
+								><span :id="element.id + 'all'" class="text-left">{{
+									element.name.length > 25
+										? element.name.substring(25, 0) + "..."
+										: element.name
+								}}</span></span
+							>
+							<b-tooltip :target="(element.id + 'all').toString()">{{
+								element.name
+							}}</b-tooltip>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-12 property-content mb-2 d-flex color_content">
-				<div class="label_container d-flex">
-					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Đơn giá(VNĐ):</strong><span class="text-none">{{element.price ? formatPrice(element.price.unit_price) : '-' }}</span></span>
+				<div class="col-12  property-content mb-2 d-flex color_content">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+							<span style="font-weight: 500"
+								><strong class="d_inline mr-1">Loại tài sản:</strong
+								><span class="text-capitalize">{{
+									element.asset_type.description.toLowerCase()
+								}}</span></span
+							>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="property-content mb-2 d-flex color_content">
-				<div class="label_container d-flex">
-					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong><span class="text-none">{{element.total_price ? formatPrice(element.total_price) : '-' }}</span></span>
+				<div class="col-12 property-content mb-2 d-flex color_content">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+							<span style="font-weight: 500"
+								><strong class="d_inline mr-1">Đơn giá(VNĐ):</strong
+								><span class="text-none">{{
+									element.price ? formatPrice(element.price.unit_price) : "-"
+								}}</span></span
+							>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="property-content mb-2 d-flex color_content">
-				<div class="label_container d-flex">
-					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Ngày tạo:</strong><span class="public_date">{{ formatDate(element.created_at) }}</span></span>
+				<div class="property-content mb-2 d-flex color_content">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+							<span style="font-weight: 500"
+								><strong class="d_inline mr-1">Tổng giá trị(VNĐ):</strong
+								><span class="text-none">{{
+									element.total_price ? formatPrice(element.total_price) : "-"
+								}}</span></span
+							>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="property-content mb-2 d-flex color_content">
-				<div class="label_container d-flex">
-					<div class="d-flex">
-					<span style="font-weight: 500"><strong class="d_inline mr-1">Người tạo:</strong><span class="text-capitalize">{{element.created_by.name}}</span></span>
+				<div class="property-content mb-2 d-flex color_content">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+							<span style="font-weight: 500"
+								><strong class="d_inline mr-1">Ngày tạo:</strong
+								><span class="public_date">{{
+									formatDate(element.created_at)
+								}}</span></span
+							>
+						</div>
 					</div>
 				</div>
-			</div>
-          </b-card>
-	</div>
-	<div class="pagination-wrapper" style="margin-bottom: 20px;">
+				<div class="property-content mb-2 d-flex color_content">
+					<div class="label_container d-flex">
+						<div class="d-flex">
+							<span style="font-weight: 500"
+								><strong class="d_inline mr-1">Người tạo:</strong
+								><span class="text-capitalize">{{
+									element.created_by.name
+								}}</span></span
+							>
+						</div>
+					</div>
+				</div>
+			</b-card>
+		</div>
+		<div class="pagination-wrapper" style="margin-bottom: 20px;">
 			<div class="page-size">
-			Hiển thị
-			<a-select ref="select" :value="Number(pagination.pageSize)" style="width: 71px" :options="pageSizeOptions"
-				@change="onSizeChange" />
-			hàng
+				Hiển thị
+				<a-select
+					ref="select"
+					:value="Number(pagination.pageSize)"
+					style="width: 71px"
+					:options="pageSizeOptions"
+					@change="onSizeChange"
+				/>
+				hàng
 			</div>
-			<a-pagination :current="Number(pagination.current)" :page-size="Number(pagination.pageSize)"
-			:total="Number(pagination.total)"
-			:show-total="(total, range) => `Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`"
-			@change="onPaginationChange">
+			<a-pagination
+				:current="Number(pagination.current)"
+				:page-size="Number(pagination.pageSize)"
+				:total="Number(pagination.total)"
+				:show-total="
+					(total, range) =>
+						`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`
+				"
+				@change="onPaginationChange"
+			>
 			</a-pagination>
-      	</div>
-			<!-- <div class="total position-absolute">
+		</div>
+		<!-- <div class="total position-absolute">
 				(*) Giá trị chỉ mang tính chất tham khảo
 		</div> -->
-		</div>
+	</div>
 </template>
 <script>
-
-import { BDropdown, BDropdownItem, BTooltip,
+import {
+	BDropdown,
+	BDropdownItem,
+	BTooltip,
 	BCard,
 	BRow,
 	BCol,
 	BFormGroup,
-	BFormInput } from 'bootstrap-vue'
-import moment from 'moment'
+	BFormInput
+} from "bootstrap-vue";
+import moment from "moment";
 export default {
-	name: 'Tables',
-	props: ['listCertificates', 'pagination', 'isLoading'],
-	data () {
+	name: "Tables",
+	props: ["listCertificates", "pagination", "isLoading"],
+	data() {
 		return {
 			selectedRowKeys: [],
 			view: false,
@@ -176,16 +280,16 @@ export default {
 			accept: false,
 			activeStatus: false,
 			pageSizeOptions: [
-				{ value: '10', label: '10' },
-				{ value: '20', label: '20' },
-				{ value: '30', label: '30' }
+				{ value: "10", label: "10" },
+				{ value: "20", label: "20" },
+				{ value: "30", label: "30" }
 			]
-		}
+		};
 	},
 	components: {
-		'b-dropdown': BDropdown,
-		'b-dropdown-item': BDropdownItem,
-		'b-tooltip': BTooltip,
+		"b-dropdown": BDropdown,
+		"b-dropdown-item": BDropdownItem,
+		"b-tooltip": BTooltip,
 		BCard,
 		BRow,
 		BCol,
@@ -193,84 +297,84 @@ export default {
 		BFormInput
 	},
 	computed: {
-		columns () {
+		columns() {
 			let dataColumn = [
 				{
-					title: 'Mã TSTĐ',
-					align: 'center',
-					scopedSlots: { customRender: 'id' },
-					dataIndex: 'id',
-					width: '30px',
+					title: "Mã TSTĐ",
+					align: "center",
+					scopedSlots: { customRender: "id" },
+					dataIndex: "id",
+					width: "30px",
 					// sorter: (a, b) => a.id - b.id,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: 'Loại tài sản',
-					align: 'center',
-					scopedSlots: { customRender: 'description' },
-					dataIndex: 'asset_type.description',
-					width: '30px',
+					title: "Loại tài sản",
+					align: "center",
+					scopedSlots: { customRender: "description" },
+					dataIndex: "asset_type.description",
+					width: "30px",
 					// sorter: (a, b) => a.asset_type.description.length - b.asset_type.description.length,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: 'Tên tài sản',
-					align: 'left',
-					scopedSlots: { customRender: 'property_name' },
-					dataIndex: 'name',
-					width: '140px',
+					title: "Tên tài sản",
+					align: "left",
+					scopedSlots: { customRender: "property_name" },
+					dataIndex: "name",
+					width: "140px",
 					// sorter: (a, b) => a.appraise_asset.length - b.appraise_asset.length,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: 'Đơn giá ',
-					align: 'right',
-					scopedSlots: { customRender: 'price' },
-					dataIndex: 'price',
-					width: '30px',
+					title: "Đơn giá ",
+					align: "right",
+					scopedSlots: { customRender: "price" },
+					dataIndex: "price",
+					width: "30px",
 					// sorter: (a, b) => a.total_price - b.total_price,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: 'Tổng giá trị (VNĐ)',
-					align: 'right',
-					scopedSlots: { customRender: 'total_price' },
-					dataIndex: 'total_price',
-					width: '30px',
+					title: "Tổng giá trị (VNĐ)",
+					align: "right",
+					scopedSlots: { customRender: "total_price" },
+					dataIndex: "total_price",
+					width: "30px",
 					// sorter: (a, b) => a.total_price - b.total_price,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: 'Người tạo',
-					align: 'left',
-					scopedSlots: { customRender: 'created_by' },
-					dataIndex: 'created_by.name',
-					width: '30px',
+					title: "Người tạo",
+					align: "left",
+					scopedSlots: { customRender: "created_by" },
+					dataIndex: "created_by.name",
+					width: "30px",
 					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: !this.activeStatus
 				},
 				{
-					title: 'Ngày tạo',
-					align: 'right',
-					scopedSlots: { customRender: 'created_at' },
-					dataIndex: 'created_at',
-					width: '30px',
+					title: "Ngày tạo",
+					align: "right",
+					scopedSlots: { customRender: "created_at" },
+					dataIndex: "created_at",
+					width: "30px",
 					// sorter: (a, b) => moment(a.created_at).format('YYYYMMDD') - moment(b.created_at).format('YYYYMMDD'),
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
 				{
-					title: 'Trạng thái',
-					align: 'center',
-					scopedSlots: { customRender: 'status' },
-					dataIndex: 'status',
-					width: '30px',
+					title: "Trạng thái",
+					align: "center",
+					scopedSlots: { customRender: "status" },
+					dataIndex: "status",
+					width: "30px",
 					// filters: [
 					//   { text: 'Nháp', value: 1 },
 					//   { text: 'Đã xác nhận', value: 2 },
@@ -283,134 +387,160 @@ export default {
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				}
-			]
-			return dataColumn.filter(item => item.hiddenItem === false)
+			];
+			return dataColumn.filter(item => item.hiddenItem === false);
 		}
 	},
-	created () {
+	created() {
 		// fix_permission
-		const permission = this.$store.getters.currentPermissions
+		const permission = this.$store.getters.currentPermissions;
 		permission.forEach(value => {
-			if (value === 'VIEW_PRICE') {
-				this.view = true
+			if (value === "VIEW_PRICE") {
+				this.view = true;
 			}
-			if (value === 'ADD_PRICE') {
-				this.add = true
+			if (value === "ADD_PRICE") {
+				this.add = true;
 			}
-			if (value === 'EDIT_PRICE') {
-				this.edit = true
+			if (value === "EDIT_PRICE") {
+				this.edit = true;
 			}
-			if (value === 'DELETE_PRICE') {
-				this.deleted = true
+			if (value === "DELETE_PRICE") {
+				this.deleted = true;
 			}
-			if (value === 'ACCEPT_PRICE') {
-				this.accept = true
+			if (value === "ACCEPT_PRICE") {
+				this.accept = true;
 			}
-		})
+		});
 	},
-	mounted () {
-	},
-	beforeMount () {
-		this.getProfiles()
+	mounted() {},
+	beforeMount() {
+		this.getProfiles();
 	},
 	methods: {
-		formatPrice (value) {
-			let num = parseFloat(value / 1).toFixed(0).replace('.', ',')
+		formatPrice(value) {
+			let num = parseFloat(value / 1)
+				.toFixed(0)
+				.replace(".", ",");
 			if (num.length > 3 && num.length <= 6) {
-				return parseFloat(num / 1000).toFixed(1).replace('.', ',') + ' Nghìn'
+				return (
+					parseFloat(num / 1000)
+						.toFixed(1)
+						.replace(".", ",") + " Nghìn"
+				);
 			} else if (num.length > 6 && num.length <= 9) {
-				return parseFloat(num / 1000000).toFixed(1).replace('.', ',') + ' Triệu'
+				return (
+					parseFloat(num / 1000000)
+						.toFixed(1)
+						.replace(".", ",") + " Triệu"
+				);
 			} else if (num.length > 9) {
-				return parseFloat(num / 1000000000).toFixed(1).replace('.', ',') + ' Tỷ'
+				return (
+					parseFloat(num / 1000000000)
+						.toFixed(1)
+						.replace(".", ",") + " Tỷ"
+				);
 			} else if (num < 900) {
-				return num + ' đ' // if value < 1000, nothing to do
+				return num + " đ"; // if value < 1000, nothing to do
 			}
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 		},
-		configColor (element) {
+		configColor(element) {
 			if (element.status == 1) {
-				return 'info'
+				return "info";
 			}
 			if (element.status == 2) {
-				return 'primary'
+				return "primary";
 			}
 			if (element.status == 3) {
-				return 'warning'
+				return "warning";
 			}
 			if (element.status == 4) {
-				return 'success'
+				return "success";
 			}
 			if (element.status == 5) {
-				return 'secondary'
+				return "secondary";
 			}
 			if (element.status == 6) {
-				return 'control'
+				return "control";
 			}
-			return 'red'
+			return "red";
 		},
-		isMobile () {
-			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-				return true
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
 			} else {
-				return false
+				return false;
 			}
 		},
-		showAcronym (acronym) {
-			if (acronym === 'KHAC') {
-				return 'TSK'
-			} else if (acronym === 'DS') {
-				return 'DS'
-			} else return ''
+		showAcronym(acronym) {
+			if (acronym === "KHAC") {
+				return "TSK";
+			} else if (acronym === "DS") {
+				return "DS";
+			} else return "";
 		},
-		async getProfiles () {
-			const profile = this.$store.getters.profile
-			if (profile && profile.data.user.roles[0].name.slice(-5) === 'ADMIN') {
-				this.activeStatus = true
+		async getProfiles() {
+			const profile = this.$store.getters.profile;
+			if (profile && profile.data.user.roles[0].name.slice(-5) === "ADMIN") {
+				this.activeStatus = true;
 			}
 		},
-		handleTableChange (pagination, filters, sorter) {
-			this.$emit('handleChange', pagination, 'All', filters, sorter)
+		handleTableChange(pagination, filters, sorter) {
+			this.$emit("handleChange", pagination, "All", filters, sorter);
 		},
-		onSelectChange (selectedRowKeys) {
-			this.selectedRowKeys = selectedRowKeys
+		onSelectChange(selectedRowKeys) {
+			this.selectedRowKeys = selectedRowKeys;
 		},
-		formatDate (value) {
-			return moment(String(value)).format('DD/MM/YYYY')
+		formatDate(value) {
+			return moment(String(value)).format("DD/MM/YYYY");
 		},
-		format (value) {
-			let num = (value / 1).toFixed(0).replace(',', '.')
-			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+		format(value) {
+			let num = (value / 1).toFixed(0).replace(",", ".");
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
-		formatNumber (num) {
+		formatNumber(num) {
 			// convert number to dot formatNumber
 			if (num) {
-				let formatedNum = num.toString().replace('.', ',')
-				return formatedNum.toString().replace(/^[+-]?\d+/, function (int) {
-					return int.replace(/(\d)(?=(\d{3})+$)/g, '$1.')
-				})
+				let formatedNum = num.toString().replace(".", ",");
+				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
+					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+				});
 			}
 		},
-		async handleDetail (id, data) {
-			if (data.asset_type.dictionary_acronym === 'DS') {
-				if (data.asset_type.acronym === 'MMTB') {
-					this.$router.push({ name: 'certification_asset.machine.detail', query: { id: id, asset_type_id: data.asset_type_id } })
-				} else if (data.asset_type.acronym === 'PTVT') {
-					this.$router.push({ name: 'certification_asset.vehicle.detail', query: { id: id, asset_type_id: data.asset_type_id } })
+		async handleDetail(id, data) {
+			if (data.asset_type.dictionary_acronym === "DS") {
+				if (data.asset_type.acronym === "MMTB") {
+					this.$router.push({
+						name: "certification_asset.machine.detail",
+						query: { id: id, asset_type_id: data.asset_type_id }
+					});
+				} else if (data.asset_type.acronym === "PTVT") {
+					this.$router.push({
+						name: "certification_asset.vehicle.detail",
+						query: { id: id, asset_type_id: data.asset_type_id }
+					});
 				}
 			} else {
-				this.$router.push({ name: 'certification_asset.other_purpose.detail', query: { id: id, asset_type_id: data.asset_type_id } })
+				this.$router.push({
+					name: "certification_asset.other_purpose.detail",
+					query: { id: id, asset_type_id: data.asset_type_id }
+				});
 			}
 		},
-		onSizeChange (pageSize) {
-			const pagination = { ...this.pagination, pageSize: Number(pageSize) }
-			this.handleTableChange(pagination)
+		onSizeChange(pageSize) {
+			const pagination = { ...this.pagination, pageSize: Number(pageSize) };
+			this.handleTableChange(pagination);
 		},
-		onPaginationChange (current) {
-			const pagination = { ...this.pagination, current: Number(current) }
-			this.handleTableChange(pagination)
+		onPaginationChange(current) {
+			const pagination = { ...this.pagination, current: Number(current) };
+			this.handleTableChange(pagination);
 		}
 	}
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -453,7 +583,7 @@ export default {
 	}
 
 	&.orange {
-		color: #FAA831;
+		color: #faa831;
 	}
 }
 
@@ -509,15 +639,15 @@ export default {
 	}
 
 	/deep/ .ant-table-wrapper .ant-spin-container .ant-table {
-		border: 1px solid #DEE6EE;
+		border: 1px solid #dee6ee;
 	}
 
 	/deep/ .ant-table-wrapper .ant-spin-container .ant-table {
-		border: 1px solid #DEE6EE;
+		border: 1px solid #dee6ee;
 	}
 
 	/deep/ .ant-table-column-title {
-		color: #00507C;
+		color: #00507c;
 		// font-family: 'SVN-Gilroy';
 		// font-weight: 600;
 		//
@@ -525,8 +655,8 @@ export default {
 	}
 
 	/deep/ .table-striped td {
-		background-color: #F6F7FB;
-		border-color: #DEE6EE;
+		background-color: #f6f7fb;
+		border-color: #dee6ee;
 		border-width: 0;
 	}
 
@@ -568,16 +698,16 @@ export default {
 				height: unset;
 				flex-grow: 1;
 
-        @media (max-width: 1024px) {
+				@media (max-width: 1024px) {
 					display: none;
-        }
+				}
 			}
 
 			/deep/ .ant-pagination-item-active {
-				background: #007EC6;
+				background: #007ec6;
 
 				a {
-					color: #FFFFFF;
+					color: #ffffff;
 				}
 			}
 
@@ -604,49 +734,49 @@ export default {
 		}
 	}
 	.card_container {
-    border-radius: 5px;
-    &_primary {
-      border: 1px solid #B5E5FF
-    }
-    &_secondary {
-      border: 1px solid #8B94A3
-    }
-    &_warning {
-      border: 1px solid #FFD1AD
-    }
-    &_danger {
-      border: 1px solid #FFC8D3
-    }
-    &_success {
-      border: 1px solid #26BF7F;
-      background-color: #EAFFF6;
-    }
-  }
-  .content_id {
-    border-radius: 5px;
-    padding: 0px 3px;
-    font-weight: 500;
-    cursor: pointer;
-    &_primary {
-      color: #007EC6;
-      background-color: #E3F5FF;
-    }
-    &_secondary {
-      color: #FFFFFF;
-      background-color: #8B94A3;
-    }
-    &_warning {
-      color: #FF963D;
-      background-color: #FFF1E6;
-    }
-    &_danger {
-      color: #FF5E7B;
-      background-color: #FFEBEF;
-    }
-    &_success {
-      color: #FFFFFF;
-      background-color: #26BF7F;
-    }
-  }
+		border-radius: 5px;
+		&_primary {
+			border: 1px solid #b5e5ff;
+		}
+		&_secondary {
+			border: 1px solid #8b94a3;
+		}
+		&_warning {
+			border: 1px solid #ffd1ad;
+		}
+		&_danger {
+			border: 1px solid #ffc8d3;
+		}
+		&_success {
+			border: 1px solid #26bf7f;
+			background-color: #eafff6;
+		}
+	}
+	.content_id {
+		border-radius: 5px;
+		padding: 0px 3px;
+		font-weight: 500;
+		cursor: pointer;
+		&_primary {
+			color: #007ec6;
+			background-color: #e3f5ff;
+		}
+		&_secondary {
+			color: #ffffff;
+			background-color: #8b94a3;
+		}
+		&_warning {
+			color: #ff963d;
+			background-color: #fff1e6;
+		}
+		&_danger {
+			color: #ff5e7b;
+			background-color: #ffebef;
+		}
+		&_success {
+			color: #ffffff;
+			background-color: #26bf7f;
+		}
+	}
 }
 </style>

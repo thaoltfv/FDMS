@@ -1,63 +1,72 @@
 <template>
-  <ValidationProvider tag="div"
-                      :name="label ? label : nonLabel"
-                      :vid="vid"
-                      :rules="rules"
-                      v-slot="{ errors }">
-    <label class="form-label d-flex justify-content-between align-items-center font-weight-bold color_content">
-      <div>
-        {{ $t(label) }}
-        <span v-if="required" class="required">{{$t('required')}}</span>
-      </div>
-      <span v-if="rules.includes('max:')" class="character-count">
-        {{value.length}}/{{maxLength}}
-      </span>
-    </label>
+	<ValidationProvider
+		tag="div"
+		:name="label ? label : nonLabel"
+		:vid="vid"
+		:rules="rules"
+		v-slot="{ errors }"
+	>
+		<label
+			class="form-label d-flex justify-content-between align-items-center font-weight-bold color_content"
+		>
+			<div>
+				{{ $t(label) }} <b v-if="requiredIcon" class="ml-1 text-red">*</b>
+				<span v-if="required" class="required">{{ $t("required") }}</span>
+			</div>
+			<span v-if="rules.includes('max:')" class="character-count">
+				{{ value.length }}/{{ maxLength }}
+			</span>
+		</label>
 
-    <div :class="{'has__error': errors[0]}">
-      <a-textarea :rows="rows"
-                  :placeholder="placeholder"
-                  :max-length="maxLength"
-                  :value="value"
-                  :disabled="disableInput"
-                  :autoSize="autosize"
-                  @input="$emit('change', $event.target.value)"
-                  class="color_content"
-          />
-      <!--Message Error-->
-      <span v-if="errors[0]" class="errors">{{ errors[0] }}</span>
-    </div>
-  </ValidationProvider>
+		<div :class="{ has__error: errors[0] }">
+			<a-textarea
+				:rows="rows"
+				:placeholder="placeholder"
+				:max-length="maxLength"
+				:value="value"
+				:disabled="disableInput"
+				:autoSize="autosize"
+				@input="$emit('change', $event.target.value)"
+				class="color_content"
+			/>
+			<!--Message Error-->
+			<span v-if="errors[0]" class="errors">{{ errors[0] }}</span>
+		</div>
+	</ValidationProvider>
 </template>
 
 <script>
 export default {
-	name: 'InputTextarea',
+	name: "InputTextarea",
 
 	model: {
-		prop: 'value',
-		event: 'change'
+		prop: "value",
+		event: "change"
 	},
 
 	props: {
+		requiredIcon: {
+			type: Boolean,
+			default: false
+		},
 		label: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		rules: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		vid: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		placeholder: {
 			type: String,
-			default: ''
+			default: ""
 		},
 
 		maxLength: {
@@ -71,7 +80,7 @@ export default {
 		value: {
 			type: [String, Number],
 			required: false,
-			default: ''
+			default: ""
 		},
 
 		required: {
@@ -88,16 +97,16 @@ export default {
 		},
 		nonLabel: {
 			type: String,
-			default: ''
+			default: ""
 		}
 	}
-}
+};
 </script>
 
 <style scoped>
-  .character-count {
-    font-size: 12px;
-    font-weight: normal;
-    color: #999999;
-  }
+.character-count {
+	font-size: 12px;
+	font-weight: normal;
+	color: #999999;
+}
 </style>
