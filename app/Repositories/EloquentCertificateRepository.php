@@ -3064,7 +3064,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 $timeFilterFrom = $dataTemp->fromDate;
             }
             if (isset($dataTemp) && isset($dataTemp->toDate)) {
-                $timeFilterFrom = $dataTemp->toDate;
+                $timeFilterTo = $dataTemp->toDate;
             }
         }
         if (!empty($query)) {
