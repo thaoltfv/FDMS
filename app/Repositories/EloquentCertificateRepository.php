@@ -2902,16 +2902,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate])
-                ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate]);
+            // ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('certificates.created_at', '>=', $startDate)
-                ->where('certificates.updated_at', '>=', $startDate);
+            $result = $result->where('certificates.created_at', '>=', $startDate);
+            // ->where('certificates.updated_at', '>=', $startDate);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('certificates.created_at', '<=', $endDate)
-                ->where('certificates.updated_at', '<=', $endDate);
+            $result = $result->where('certificates.created_at', '<=', $endDate);
+            // ->where('certificates.updated_at', '<=', $endDate);
         }
 
         if (!empty($status)) {
