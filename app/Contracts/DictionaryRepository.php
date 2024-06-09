@@ -12,6 +12,8 @@ interface DictionaryRepository extends BaseRepository
 
     public function findAllByType($type);
 
+    public function changeStatusCustomerGroup($id, $status);
+
     public function findByName($name);
 
     public function createDictionary(array $objects);

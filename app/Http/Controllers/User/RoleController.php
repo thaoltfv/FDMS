@@ -83,7 +83,6 @@ class RoleController extends Controller
                 $data = ['message' => ErrorMessage::PERMISSION_ERROR];
                 return $this->respondWithErrorData($data, 403);
             }
-
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
@@ -99,7 +98,7 @@ class RoleController extends Controller
     public function update($id, RoleRequest $request): JsonResponse
     {
         try {
-
+            Log::info($request->toArray());
             if ($this->getUserPermission(PermissionsDefault::EDIT_PERMISSION . '_' . ScreensDefault::ROLE_SCREEN)) {
                 return $this->respondWithCustomData($this->roleRepository
                     ->updateRole($id, $request->toArray()));
@@ -123,7 +122,6 @@ class RoleController extends Controller
         $data = $request->toArray();
         $data['permissions'] = $this->permissionRepository->findByPermissionNames($data['permissions']);
         return $data;
-
     }
 
     /**

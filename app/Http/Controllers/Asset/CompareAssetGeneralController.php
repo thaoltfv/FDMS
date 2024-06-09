@@ -35,6 +35,7 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Google\Cloud\Firestore\FirestoreClient;
 use Kreait\Firebase\Factory;
 use Session;
+use Intervention\Image\Facades\Image;
 
 
 class CompareAssetGeneralController extends Controller
@@ -236,13 +237,36 @@ class CompareAssetGeneralController extends Controller
         try {
             $image = $request->file('image');
             $path =env('STORAGE_IMAGES') .'/'. 'comparison_assets/';
-            $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+            if ($image->getClientOriginalExtension() == 'png') {
+                // Thay đổi driver Intervention Image sang Imagick
+                // config(['image.driver' => 'imagick']);
+
+                // Chuyển đổi tệp PNG thành WebP
+                $webpImage = Image::make($image)->encode('jpg');
+
+                // Lưu tệp WebP vào thư mục tạm thời
+                $tempWebpPath = storage_path('app/public/temporary.jpg');
+                $webpImage->save($tempWebpPath);
+
+                // Upload tệp WebP lên S3
+                $s3Path = $path . Uuid::uuid4()->toString() . '.jpg';
+                Storage::disk('s3')->put($s3Path, file_get_contents($tempWebpPath));
+                $fileUrl = Storage::url($s3Path);
+                $extension = 'jpg';
+
+                // Xóa tệp tạm thời nếu cần
+                // unlink($tempWebpPath);
+
+            } else {
+                $name = $path . Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
+                Storage::put($name, file_get_contents($image));
+            
+                $fileUrl = Storage::url($name);
+                $extension = $image->extension();
+            }
             // $name = Uuid::uuid4()->toString() . '.' . $image->getClientOriginalExtension();
             // dd(Storage::disk('s3'));
-            Storage::put($name, file_get_contents($image));
-            
-            $fileUrl = Storage::url($name);
-
+    
             //test s3
             // Storage::disk('spaces')->put($name, 'public');
             // $fileUrl = Storage::disk('spaces')->url($name);
@@ -265,7 +289,7 @@ class CompareAssetGeneralController extends Controller
             //     $expiresAt = new \DateTime('tomorrow');
             //     $fileUrl = $storage->getBucket()->object($firebase_storage_path . $file)->signedUrl($expiresAt);
             // } 
-            return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $image->extension()]);
+            return $this->respondWithCustomData(['link' => $fileUrl, 'picture_type' => $extension]);
         } catch (\Exception $exception) {
             Log::error($exception);
             $data = ['message' => ErrorMessage::UPLOAD_IMAGE_ERROR, 'exception' => $exception];

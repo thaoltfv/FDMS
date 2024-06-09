@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Customer extends Model
 {
@@ -16,7 +16,7 @@ class Customer extends Model
         'id'        => 'integer',
     ];
 
-    protected $hidden =[
+    protected $hidden = [
         'deleted_at',
     ];
 
@@ -27,6 +27,7 @@ class Customer extends Model
         'address',
         'tax_code',
         'customer_picture',
+        'customer_group_id',
         'created_by',
         'created_date',
         'created_at',
@@ -34,11 +35,16 @@ class Customer extends Model
 
     public function pic(): HasMany
     {
-        return $this->hasMany(CustomerPic::class,'customer_id');
+        return $this->hasMany(CustomerPic::class, 'customer_id');
+    }
+    public function customerGroup(): BelongsTo
+    {
+        return $this->belongsTo(Dictionary::class, 'customer_group_id', 'id');
     }
 
     public function getFullInfoAttribute()
     {
-        return "{$this->name} {$this->phone} {$this->address}";
+        // return "{$this->name} {$this->phone} {$this->address}";
+        return "{$this->name} {$this->phone}";
     }
 }

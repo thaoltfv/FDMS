@@ -177,8 +177,8 @@ class ChungThu
 
         $section->addTitle("Khách hàng thẩm định giá:", 2);
 
-        $section->addListItem("Khách hàng: " . $certificate->petitioner_name,0 , [], 'bullets', $indentFistLine);
-        $section->addListItem("Địa chỉ: " . $certificate->petitioner_address,0 , [], 'bullets', $indentFistLine);
+        $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name),0 , [], 'bullets', $indentFistLine);
+        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address),0 , [], 'bullets', $indentFistLine);
 
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $name_assets = "";
@@ -186,7 +186,7 @@ class ChungThu
             $name_assets .= ($index) ? " và " : "";
             $name_assets .= $item->appraise_asset;
         }
-        $section->addListItem("Tên tài sản: " . $name_assets,0 , [], 'bullets', $indentFistLine);
+        $section->addListItem("Tên tài sản: " . htmlspecialchars($name_assets),0 , [], 'bullets', $indentFistLine);
         $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.",0 , [], 'bullets', $indentFistLine);
 
 

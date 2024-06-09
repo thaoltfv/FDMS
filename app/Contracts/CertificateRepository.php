@@ -14,6 +14,8 @@ interface CertificateRepository extends BaseRepository
 
     public function findById($id);
 
+    public function dataPrintExport($id);
+
     public function getComparisonFactor($id);
 
     public function createCertificate(array $objects);
@@ -30,7 +32,7 @@ interface CertificateRepository extends BaseRepository
 
     public function getCertificateWorkFlow();
 
-    public function postGeneralInfomation(array $object , int $id = null);
+    public function postGeneralInfomation(array $object, int $id = null);
 
     public function getGeneralInfomation(int $id);
 
@@ -38,11 +40,11 @@ interface CertificateRepository extends BaseRepository
 
     public function findAppraisePaging();
 
-    public function updateCertificate_v2(array $object , int $certificateId);
+    public function updateCertificate_v2(array $object, int $certificateId);
 
     public function getCertificate(int $id);
 
-    public function updateCertificateGeneral(int $id , array $object);
+    public function updateCertificateGeneral(int $id, array $object);
 
     public function otherDocumentRemove($id, $request);
 
@@ -50,25 +52,27 @@ interface CertificateRepository extends BaseRepository
 
     public function otherDocumentUpload($id, $request);
 
+    public function otherDocumentOriginalUpload($id, $request);
+
     public function testDocumentUpload($request);
 
     public function saleDocumentUpload($id, $request);
 
     public function getProcessingTime();
 
-    public function updateAppraisersTeam(int $id , $request);
+    public function updateAppraisersTeam(int $id, $request);
 
     public function getFinishCertificateAssets();
 
     public function getFinishCertificateApartment();
 
-    public function getComparisonAppraise( array $ids);
+    public function getComparisonAppraise(array $ids);
 
     public function exportCertificateBriefs();
 
     public function exportSelectedCertificateAssets();
 
-    public function updateCertificateV3(array $object , int $certificateId);
+    public function updateCertificateV3(array $object, int $certificateId);
 
     public function updateCertificateVersion(int $certificateId, array $object);
 
@@ -81,4 +85,6 @@ interface CertificateRepository extends BaseRepository
     public function uploadDocument($id, $description, $request);
 
     public function deleteDocument($id);
+
+    public function exportCertificateAccounting();
 }

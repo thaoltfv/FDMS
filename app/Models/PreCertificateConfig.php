@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class PreCertificateConfig extends Model
 {
-
+    use SoftDeletes;
     public $incrementing = false;
 
 
@@ -16,6 +18,6 @@ class PreCertificateConfig extends Model
     protected $fillable = [
         'name',
         'config',
+        'old_config',
     ];
-
 }

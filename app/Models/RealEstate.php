@@ -29,50 +29,51 @@ class RealEstate extends Model
         'planning_info',
         'planning_source',
         'contact_person',
-        'contact_phone'
+        'contact_phone',
+        'certificate_id',
     ];
 
-    public function createdBy():BelongsTo
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function assetType():BelongsTo
+    public function assetType(): BelongsTo
     {
         return $this->belongsTo(Dictionary::class, 'asset_type_id', 'id');
     }
 
-    public function appraises():HasOne
+    public function appraises(): HasOne
     {
-        return $this->hasOne(Appraise::class, 'real_estate_id','id');
+        return $this->hasOne(Appraise::class, 'real_estate_id', 'id');
     }
 
     public function certificateAsset(): BelongsTo
     {
-        return $this->belongsTo(CertificateAsset::class, 'appraise_id','id');
+        return $this->belongsTo(CertificateAsset::class, 'appraise_id', 'id');
     }
 
-    public function apartment():HasOne
+    public function apartment(): HasOne
     {
-        return $this->hasOne(ApartmentAsset::class, 'real_estate_id','id');
+        return $this->hasOne(ApartmentAsset::class, 'real_estate_id', 'id');
     }
 
-    public function asset():HasOne
+    public function asset(): HasOne
     {
-        $select = ['id','real_estate_id'];
-        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id', 'id')->select( $select);
-        $appraises =  $this->hasOne(Appraise::class, 'id')->select( $select);
+        $select = ['id', 'real_estate_id'];
+        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id', 'id')->select($select);
+        $appraises =  $this->hasOne(Appraise::class, 'id')->select($select);
         return $apartments->unionAll($appraises);
     }
 
-    public function assetUpdate():HasOne
+    public function assetUpdate(): HasOne
     {
-        $select = ['id','real_estate_id','created_at', 'updated_at','status'];
-        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id','id')->select( $select);
-        $appraises =  $this->hasOne(Appraise::class, 'real_estate_id','id')->select( $select);
+        $select = ['id', 'real_estate_id', 'created_at', 'updated_at', 'status'];
+        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id', 'id')->select($select);
+        $appraises =  $this->hasOne(Appraise::class, 'real_estate_id', 'id')->select($select);
         return $apartments->unionAll($appraises);
     }
-    public function assetFull():HasOne
+    public function assetFull(): HasOne
     {
         $with = [
             'createdBy:id,name',
@@ -81,9 +82,9 @@ class RealEstate extends Model
             'ward:id,name',
             'street:id,name'
         ];
-        $select = ['id','full_address','real_estate_id','province_id','district_id','ward_id','street_id'];
-        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id','id')->with($with)->select( $select);
-        $appraises =  $this->hasOne(Appraise::class, 'real_estate_id','id')->with($with)->select( $select);
+        $select = ['id', 'full_address', 'real_estate_id', 'province_id', 'district_id', 'ward_id', 'street_id'];
+        $apartments =  $this->hasOne(ApartmentAsset::class, 'real_estate_id', 'id')->with($with)->select($select);
+        $appraises =  $this->hasOne(Appraise::class, 'real_estate_id', 'id')->with($with)->select($select);
         return $apartments->unionAll($appraises);
     }
     public function getLastVersionAttribute()
@@ -99,7 +100,7 @@ class RealEstate extends Model
         }
         return $version;
     }
-    public function certificate():BelongsTo
+    public function certificate(): BelongsTo
     {
         return $this->belongsTo(Certificate::class, 'certificate_id', 'id');
     }

@@ -35,7 +35,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         // }
         return QueryBuilder::for($this->model)
             ->where('type', $search)
-            ->whereIn('status', $searchStatus)
+            // ->whereIn('status', $searchStatus)
             ->orderBy($this->allowedSorts)
             ->forPage($page, $perPage)
             ->paginate($perPage);
@@ -46,7 +46,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function findAll(): array
     {
-        $dictionaries = $this->model->query()->select()->where('status', '=',1)->orderBy($this->defaultSort)->get();
+        $dictionaries = $this->model->query()->select()->where('status', '=', 1)->orderBy($this->defaultSort)->get();
         $result = [];
         foreach ($dictionaries as $dictionary => $value) {
             $result[mb_strtolower($value->type)][] = $value;
@@ -60,7 +60,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function findByType($type)
     {
-        return $this->model->query()->where('type', $type)->where('status', '=',1)->orderBy('id')->get();
+        return $this->model->query()->where('type', $type)->where('status', '=', 1)->orderBy('id')->get();
     }
 
     /**
@@ -71,6 +71,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
     {
         return $this->model->query()->where('type', $type)->orderBy('id')->get();
     }
+
 
     /**
      * @param $name
@@ -85,13 +86,13 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
             ->first();
     }
 
-    public function findDictionary($type,$name)
+    public function findDictionary($type, $name)
     {
         return $this->model->query()
-        ->where('type', '=', $type)
-        ->where('description', '=', $name)
-        ->where('status', '=',1)
-        ->first();
+            ->where('type', '=', $type)
+            ->where('description', '=', $name)
+            ->where('status', '=', 1)
+            ->first();
     }
 
     /**
@@ -115,6 +116,14 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
             ->update($objects);
     }
 
+    public function changeStatusCustomerGroup($id, $status)
+    {
+        return $this->model->query()
+            ->where('id', $id)
+            ->update(['status' =>  $status]);
+    }
+
+
     public function getToken()
     {
         // production
@@ -133,13 +142,13 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         $header = [
             'Content-type' => 'application/json'
         ];
-        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
-        $statusCode = $response->status();            
-        
+        $response = Http::withHeaders($header)->post($apiUrl, $postinput);
+        $statusCode = $response->status();
+
         // if ($statusCode == 201) {
-            $responseBody = json_decode($response->getBody(), true);
-            $data = $responseBody;
-            return $data;
+        $responseBody = json_decode($response->getBody(), true);
+        $data = $responseBody;
+        return $data;
         // }
     }
 
@@ -160,11 +169,11 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         ];
         $header = [
             'Content-type' => 'application/json',
-            'Authorization' => 'Bearer '.$objects['token']
+            'Authorization' => 'Bearer ' . $objects['token']
         ];
-        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
-        $statusCode = $response->status();            
-        
+        $response = Http::withHeaders($header)->post($apiUrl, $postinput);
+        $statusCode = $response->status();
+
         // if ($statusCode == 201) {
         $responseBody = json_decode($response->getBody(), true);
         $data = $responseBody;
@@ -182,7 +191,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
      */
     public function getInfoByLand(array $objects)
     {
-        if  ($objects['land_plot'] && $objects['land_sheet']) {
+        if ($objects['land_plot'] && $objects['land_sheet']) {
             // production
             $apiUrl = "https://app.estatemanner.com/api/v1/map/feature/landplot";
 
@@ -197,7 +206,7 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
             // $apiUrl = "https://app-stg.estatemanner.com/api/v1/map/feature/cadastral";
 
         }
-        
+
         $postinput =  [
             "city_code" => $objects['city_code'],
             "district_code" => $objects['district_code'],
@@ -207,15 +216,15 @@ class EloquentDictionaryRepository extends EloquentRepository implements Diction
         ];
         $header = [
             'Content-type' => 'application/json',
-            'Authorization' => 'Bearer '.$objects['token']
+            'Authorization' => 'Bearer ' . $objects['token']
         ];
-        $response = Http::withHeaders($header)->post($apiUrl,$postinput);
-        $statusCode = $response->status();            
-        
+        $response = Http::withHeaders($header)->post($apiUrl, $postinput);
+        $statusCode = $response->status();
+
         // if ($statusCode == 201) {
-            $responseBody = json_decode($response->getBody(), true);
-            $data = $responseBody;
-            return $data;
+        $responseBody = json_decode($response->getBody(), true);
+        $data = $responseBody;
+        return $data;
         // }
     }
 

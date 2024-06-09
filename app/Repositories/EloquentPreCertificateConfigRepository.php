@@ -5,11 +5,10 @@ namespace App\Repositories;
 use App\Contracts\PreCertificateConfigRepository;
 use App\Enum\ValueDefault;
 use App\Models\PreCertificateConfig;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\QueryBuilder\QueryBuilder;
-
+use Illuminate\Support\Facades\DB;
+use Exception;
+use App\Enum\ErrorMessage;
+use Illuminate\Support\Facades\Log;
 class EloquentPreCertificateConfigRepository extends EloquentRepository implements PreCertificateConfigRepository
 {
     private string $defaultSort = 'name';
@@ -22,5 +21,25 @@ class EloquentPreCertificateConfigRepository extends EloquentRepository implemen
             ->orderByDesc($this->defaultSort)
             ->get();
     }
-
+    public function findByName($name)
+    {
+        return $this->model->query()
+            ->where('name', $name)
+            ->get();
+    }
+   
+    public function updateConfig($name,$request)
+    {
+        return DB::transaction(function () use ($name,$request) {
+            try {
+                    return $this->model->query()
+                        ->where('name', $name)
+                        ->update(['config' => json_encode($request)]);
+            } catch (Exception $exception) {
+                Log::error($exception);
+                throw $exception;
+            }
+        });
+    }
+    
 }

@@ -32,12 +32,12 @@ class DictionaryController extends Controller
     /**
      * ProvinceController constructor.
      */
-    public function __construct(DictionaryRepository $dictionaryRepository,
-                                UserRepository       $userRepository)
-    {
+    public function __construct(
+        DictionaryRepository $dictionaryRepository,
+        UserRepository       $userRepository
+    ) {
         $this->dictionaryRepository = $dictionaryRepository;
         $this->userRepository = $userRepository;
-
     }
 
     /**
@@ -61,7 +61,7 @@ class DictionaryController extends Controller
     {
         try {
             // return Cache::remember('DICTIONARIES_ALL', 86000, function() {
-                return $this->respondWithCustomData($this->dictionaryRepository->findAll());
+            return $this->respondWithCustomData($this->dictionaryRepository->findAll());
             // });
         } catch (\Exception $exception) {
             Log::error($exception);
@@ -94,7 +94,24 @@ class DictionaryController extends Controller
     {
         try {
             // return Cache::remember('DICTIONARY_' . $type, 86000, function() use ($type) {
-                return $this->respondWithCustomData($this->dictionaryRepository->findAllByType($type));
+            return $this->respondWithCustomData($this->dictionaryRepository->findAllByType($type));
+            // });
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+    /**
+     * @param $type
+     * @return JsonResponse
+     */
+    public function changeStatusCustomerGroup($id, $status): JsonResponse
+    {
+        try {
+            // return Cache::remember('DICTIONARY_' . $type, 86000, function() use ($type) {
+            return $this->respondWithCustomData($this->dictionaryRepository->changeStatusCustomerGroup($id, $status));
             // });
         } catch (\Exception $exception) {
             Log::error($exception);
@@ -176,7 +193,7 @@ class DictionaryController extends Controller
         try {
             $company = AppraiserCompany::query()->get('acronym')->first()->acronym;
             $image = $request->file('image');
-            $path = env('STORAGE_IMAGES') .'/';
+            $path = env('STORAGE_IMAGES') . '/';
             $name = $path . 'company_logo.png';
             Storage::disk('public')->put($name, file_get_contents($image));
             $fileUrl = Storage::disk('public')->url($name);
@@ -241,7 +258,7 @@ class DictionaryController extends Controller
     {
         try {
             $image = $request->file('image');
-            $path = env('STORAGE_IMAGES') .'/' .'avatar/';
+            $path = env('STORAGE_IMAGES') . '/' . 'avatar/';
             $name = $path . Uuid::uuid4()->toString() . '.png';
             Storage::disk('public')->put($name, file_get_contents($image), 'public');
             $fileUrl = Storage::disk('public')->url($name);

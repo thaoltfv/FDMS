@@ -56,7 +56,7 @@ class CertificateRealEstate extends Model
     public function asset()
     {
         $apartment = $this->belongsTo(CertificateApartment::class, 'id', 'real_estate_id')->select(['id', 'real_estate_id', 'asset_type_id', DB::raw("apartment_asset_id as asset_id")]);
-        $appraise = $this->belongsTo(CertificateAsset::class, 'id', 'real_estate_id')->select(['id', 'real_estate_id', 'asset_type_id', DB::raw("appraise_id as asset_id")]);
+        $appraise = $this->belongsTo(CertificateAsset::class, 'id', 'real_estate_id')->select(['id', 'real_estate_id', 'asset_type_id',  DB::raw("appraise_id as asset_id")]);
         return $appraise->unionAll($apartment);
     }
 

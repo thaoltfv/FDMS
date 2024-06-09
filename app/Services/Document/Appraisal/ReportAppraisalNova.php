@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Document\Appraisal;
 
 use App\Services\CommonService;
@@ -22,8 +23,8 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function step1Sub1($section, $certificate)
     {
         $section->addTitle('Thông tin về khách hàng thẩm định giá:', 2);
-        $section->addListItem('Khách hàng: ' . $certificate->petitioner_name, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $certificate->petitioner_address, 0, null, 'bullets');
+        $section->addListItem('Khách hàng: ' .  htmlspecialchars($certificate->petitioner_name), 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($certificate->petitioner_address), 0, null, 'bullets');
         $section->addListItem('Bên sử dụng kết quả thẩm định giá: Khách hàng yêu cầu thẩm định giá', 0, null, 'bullets');
     }
 
@@ -31,16 +32,18 @@ class ReportAppraisalNova extends ReportAppraisal
     {
         $comAcronym = !empty($this->companyAcronym) ?  ' (' . mb_strtoupper($this->companyAcronym) . ')' : '';
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
-        $section->addListItem('Doanh nghiệp: ' . $this->companyName .  $comAcronym, 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' . $this->companyAddress, 0, null, 'bullets');
+        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName), 0, null, 'bullets');
+        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
         $section->addListItem("Điện thoại: " . $this->companyPhone . "\tFax: " . $this->companyFax, 0, null, 'bullets', 'leftTab');
         $section->addListItem('Họ và tên người Đại diện pháp luật: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
-        if(isset($certificate->appraiserConfirm->name)) {
+        if (isset($certificate->appraiserConfirm->name)) {
             $section->addListItem('Họ và tên người được uỷ quyền Đại diện pháp luật: ' . $certificate->appraiserConfirm->name, 0, null, 'bullets');
         }
-        $section->addListItem('Họ và tên Thẩm định viên: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
-        $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
+        $section->addListItem('Họ và tên Thẩm định viên về giá: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
+        // $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
+        $section->addListItem('Người lập báo cáo giá: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? $certificate->appraiserPerform->name : ''), 0, null, 'bullets');
 
+        // appraiserPerform
     }
 
     protected function step1Sub3($section, $certificate)
@@ -55,18 +58,26 @@ class ReportAppraisalNova extends ReportAppraisal
             if ($realEstate->assetType->description == "ĐẤT CÓ NHÀ") $type2 = 1;
             if ($realEstate->assetType->description == "CHUNG CƯ") $type3 = 1;
         }
-        if ($type1 && $type2 && $type3) {
-            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc và căn hộ chung cư";
-        } else if ($type1 && $type3) {
-            $appraiseAssetType = "Quyền sử dụng đất và căn hộ chung cư";
-        } else if (($type1 && $type2) || ($type2)) {
-            $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc";
+        // if ($type1 && $type2 && $type3) {
+        //     $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc và căn hộ chung cư";
+        // } else if ($type1 && $type3) {
+        //     $appraiseAssetType = "Quyền sử dụng đất và căn hộ chung cư";
+        // } else if (($type1 && $type2) || ($type2)) {
+        //     $appraiseAssetType = "Quyền sử dụng đất và nhà cửa vật kiến trúc";
+        // } else if ($type3) {
+        //     $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
+        // }
+
+        if ($type1) {
+            $appraiseAssetType = 'Quyền sử dụng đất';
+        } else if ($type2) {
+            $appraiseAssetType = 'Quyền sử dụng đất và sở hữu công trình xây dựng trên đất';
         } else if ($type3) {
             $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
         }
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Loại tài sản: ', ['bold' => true]);
-        $listTmp->addText('Bất động sản.');
+        $listTmp->addText($appraiseAssetType);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Tên tài sản: ', ['bold' => true]);
         $listTmp->addText($this->getAssetName($certificate) . '.');
@@ -74,7 +85,7 @@ class ReportAppraisalNova extends ReportAppraisal
         if (!empty($address)) {
             $listTmp = $section->addListItemRun(0, 'bullets');
             $listTmp->addText('Địa chỉ: ', ['bold' => true]);
-            $listTmp->addText($address . '.');
+            $listTmp->addText(htmlspecialchars($address) . '.');
         }
     }
     protected function step1Sub4($section, $certificate)
@@ -82,7 +93,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addTitle('Thông tin về cuộc thẩm định giá:', 2);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Hợp đồng thẩm định giá: ', ['bold' => true], []);
-        $listTmp->addText( $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.');
+        $listTmp->addText($this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.');
         $appraiseDate = date_create($certificate->appraise_date);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Thời điểm thẩm định giá: ', ['bold' => true], []);
@@ -115,7 +126,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $listTmp = $cell->addListItemRun(0, 'bullets');
         $listTmp->addText('Hồ sơ pháp lý do khách hàng cung cấp bản photocopy được đính kèm báo cáo kết quả thẩm định giá này.', null, null);
         $listTmp = $cell->addListItemRun(0, 'bullets');
-        $listTmp->addText('Diễn biến và kết quả khảo sát hiện trường được ghi nhận tại Biên bản thẩm định hiện trạng tài sản của '. $this->companyName .' được lưu trữ trong hồ sơ thẩm định giá. ' . '.', null, $this->cellVCentered);
+        $listTmp->addText('Diễn biến và kết quả khảo sát hiện trường được ghi nhận tại Biên bản thẩm định hiện trạng tài sản của ' . $this->companyName . ' được lưu trữ trong hồ sơ thẩm định giá. ' . '.', null, $this->cellVCentered);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(10000, $this->gridSpan2)->addText(' 2. Đối với các giao dịch chào mua / chào bán / thành công của các tài sản tương tự trên thị trường', ['bold' => true, 'italic' => true], $this->cellVCenteredKeepNext);
         $table->addRow(400, $this->cantSplit);
@@ -155,13 +166,13 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Số địa chính', null, $this->styleAlignLeft);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-        ->addText($strToThua . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
+            ->addText($strToThua . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí hành chính', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText($appraise->full_address, null, ['align' => 'left']);
+            ->addText(htmlspecialchars($appraise->full_address), null, ['align' => 'left']);
 
         $positionType1 = "";
         foreach ($appraise->properties as $index => $property) {
@@ -276,30 +287,30 @@ class ReportAppraisalNova extends ReportAppraisal
             $vitri_id = $mucdich->position_type_id;
             $dongiaUBND = $mucdich->circular_unit_price;
             $loaidat = $mucdich->land_type_purpose->description;
-            $street_full = Street::where('id',$appraise->street_id)->first();
+            $street_full = Street::where('id', $appraise->street_id)->first();
             // $section->addText(json_encode($street_full));
-            if ($street_full){
+            if ($street_full) {
                 $street = $street_full->name;
             }
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)).' '.$street, null, ['align' => 'left']);
-            
+                ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)) . ' ' . $street, null, ['align' => 'left']);
+
             $table->addRow(400, $this->cantSplit);
             $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
             $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Đơn giá đất', null, ['align' => 'left']);
 
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(CommonService::mbUcfirst($loaidat).': '.number_format($dongiaUBND, 0, ',', '.').' đồng/'.$this->m2, null, ['align' => 'left']);
-            if ($index + 1 < count($testtt)){
+                ->addText(CommonService::mbUcfirst($loaidat) . ': ' . number_format($dongiaUBND, 0, ',', '.') . ' đồng/' . $this->m2, null, ['align' => 'left']);
+            if ($index + 1 < count($testtt)) {
                 $table->addRow(400, $this->cantSplit);
                 $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
                 $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
             }
         }
 
-        if (CommonService::getPlaningInfo($appraise->appraise_id)){
+        if (CommonService::getPlaningInfo($appraise->appraise_id)) {
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
             $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
@@ -307,8 +318,8 @@ class ReportAppraisalNova extends ReportAppraisal
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->appraise_id)), null, ['align' => 'left']);
         }
-        
-            if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
+
+        if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
             $section->addTitle('Công trình xây dựng:', 3);
             $table = $section->addTable($this->styleTable);
             $table->addRow(400, $this->cantSplit);
@@ -343,8 +354,8 @@ class ReportAppraisalNova extends ReportAppraisal
                 $cellTmp->addListItem('Kết cấu:', 0, null, 'bullets');
                 $cellTmp->addText('   ' . str_replace("\n", '<w:br/>   ', $tangibleAsset->contruction_description), null, ['valign' => 'center', 'align' => 'left']);
                 $c1 = $table->addCell(2000, $this->cellVCentered);
-                $c1->addText('- Diện tích xây dựng: '.number_format(floatval($tangibleAsset->total_construction_area), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
-                $c1->addText('- Diện tích sàn: '.number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
+                $c1->addText('- Diện tích xây dựng: ' . number_format(floatval($tangibleAsset->total_construction_area), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
+                $c1->addText('- Diện tích sàn: ' . number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
             }
         }
     }
@@ -365,22 +376,21 @@ class ReportAppraisalNova extends ReportAppraisal
     {
         $section->addTitle('CÁC GIẢ THIẾT VÀ GIẢ THIẾT ĐẶC BIỆT:', 1);
         if ($this->isApartment) {
-            $apartment = CertificateHasRealEstate::where('certificate_id',$certificate->id)->first();
-            if ($apartment){
-                $asset = CertificateApartment::where('real_estate_id',$apartment->real_estate_id)->first();
+            $apartment = CertificateHasRealEstate::where('certificate_id', $certificate->id)->first();
+            if ($apartment) {
+                $asset = CertificateApartment::where('real_estate_id', $apartment->real_estate_id)->first();
                 if ($asset) {
-                    $description = CertificateApartmentAppraisalBase::where('apartment_asset_id',$asset->id)->first();
-                    if ($description){
+                    $description = CertificateApartmentAppraisalBase::where('apartment_asset_id', $asset->id)->first();
+                    if ($description) {
                         $giathiet = $description->description;
                     }
                 }
             } else {
                 $giathiet = $certificate->document_description;
             }
-            $section->addText('    '.str_replace("\n", '<w:br/>    ', $giathiet), null, ['valign' => 'center', 'align' => 'left']);
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', $giathiet), null, ['valign' => 'center', 'align' => 'left']);
         } else {
-            $section->addText('    '.str_replace("\n", '<w:br/>    ', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
-
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
         }
         // $section->addText('    '.str_replace("\n", '<w:br/>    ', json_encode(json_decode($certificate)->real_estate)), null, ['valign' => 'center', 'align' => 'left']);
         // $section->addText('    '.str_replace("\n", '<w:br/>    ', json_encode(json_decode($certificate)->real_estate[0])), null, ['valign' => 'center', 'align' => 'left']);
@@ -454,7 +464,7 @@ class ReportAppraisalNova extends ReportAppraisal
         // }
         if ($this->isApartment) {
             $this->DCC($section);
-        }else {
+        } else {
             if ($this->isTangibleAsset) {
                 $this->DCN($section);
             } else {
@@ -464,24 +474,26 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addTitle('Xác định giá trị tài sản cần thẩm định giá:', 2);
         foreach ($this->realEstates as $stt =>  $realEstate) {
             if ($realEstate->assetType->acronym == 'CC') {
-               $this->step8Sub4Apartment($section, $stt);
+                $this->step8Sub4Apartment($section, $stt);
             } else {
                 $this->step8Sub4Appraise($section, $stt);
             }
         }
     }
 
-    protected function DCN(Section $section) {
+    protected function DCN(Section $section)
+    {
         $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:');
         $section->addText('   - Đối với phương pháp so sánh: Tài sản thẩm định gồm quyền sử dụng đất và công trình xây dựng trên đất. Tại thời điểm thẩm định, khu vực thẩm định không có các giao dịch trong đó các tài sản so sánh có quyền sử dụng đất và công trình xây dựng trên đất tương đồng với tài sản thẩm định. Do đó, trong trường hợp này tổ thẩm định không áp dụng được phương pháp so sánh để ước tính giá trị của tài sản thẩm định.');
         $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng phương pháp vốn hóa trực tiếp để ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   - Đối với phương pháp thặng dư: Phương pháp này áp dụng đối với trường hợp thửa đất trống có tiềm năng phát triển hoặc đất có CTXD có thể cải tạo, sửa chữa để khai thác có hiệu quả nhất. Do thửa đất hiện tại đã có CTXD phục vụ vào mục đích để ở đang khai thác tốt nhất và hiệu quả nhất và trong tương lai cũng chưa có thông tin quy hoạch phát triển và phương án sử dụng tối ưu hơn. Vì vậy, chưa đủ điều kiện áp dụng được phương pháp thặng dư trong trường hợp này.');
         $section->addText('   - Đối với phương pháp chi phí thay thế: Tổ thẩm định xác định giá trị công trình xây dựng của tài sản thẩm định giá dựa trên cơ sở chênh lệch giữa chi phí thay thế để tạo ra một tài sản công trình xây dựng tương tự tài sản thẩm định giá có cùng chức năng, công dụng theo giá thị trường hiện hành và giá trị hao mòn của công trình xây dựng tài sản thẩm định giá. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp chi phí thay thế để tiến hành ước tính giá trị tài sản cần thẩm định giá là công trình xây dựng trên đất.');
         $section->addText('   Từ các nội dung trên, Tổ thẩm định nhận thấy chỉ áp dụng được phương pháp chi phí thay thế làm phương pháp chính để ước tính giá trị tài sản thẩm định. Không đủ điều kiện để áp dụng các phương pháp khác làm phương pháp kiểm tra, đối chiếu.');
-        $section->addText('   “Phương pháp chi phí thay thế là phương pháp thẩm định giá xác định giá trị của tài sản thẩm định giá dựa trên cơ sở chênh lệch giữa chi phí thay thế để tạo ra một tài sản tương tự tài sản thẩm định giá có cùng chức năng, công dụng theo giá thị trường hiện hành và giá trị hao mòn của tài sản thẩm định giá. Phương pháp chi phí thay thế thuộc cách tiếp cận từ chi phí”.',['italic' => true]);
+        $section->addText('   “Phương pháp chi phí thay thế là phương pháp thẩm định giá xác định giá trị của tài sản thẩm định giá dựa trên cơ sở chênh lệch giữa chi phí thay thế để tạo ra một tài sản tương tự tài sản thẩm định giá có cùng chức năng, công dụng theo giá thị trường hiện hành và giá trị hao mòn của tài sản thẩm định giá. Phương pháp chi phí thay thế thuộc cách tiếp cận từ chi phí”.', ['italic' => true]);
     }
 
-    protected function DTCC(Section $section) {
+    protected function DTCC(Section $section)
+    {
         $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:');
         $section->addText('   - Đối với phương pháp so sánh: Tổ thẩm định đã thu thập được các thông tin giao dịch (tối thiểu 3 giao dịch) trên thị trường của các thửa đất, BĐS tương tự. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp so sánh để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng được phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu để ước tính giá trị tài sản cần thẩm định giá.');
@@ -489,11 +501,11 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định không có công trình xây dựng trên đất nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         // $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định là quyền sở hữu căn hộ nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   Từ các nội dung trên, Tổ thẩm định nhận thấy chỉ áp dụng được phương pháp so sánh làm phương pháp chính để ước tính giá trị tài sản thẩm định. Không đủ điều kiện để áp dụng các phương pháp khác làm phương pháp kiểm tra, đối chiếu.');
-        $section->addText('   “Phương pháp so sánh là phương pháp thẩm định giá, xác định giá trị của tài sản thẩm định giá dựa trên cơ sở phân tích mức giá của các tài sản so sánh để ước tính, xác định giá trị của tài sản thẩm định giá. Phương pháp so sánh thuộc cách tiếp cận từ thị trường”.',['italic' => true]);
-    
+        $section->addText('   “Phương pháp so sánh là phương pháp thẩm định giá, xác định giá trị của tài sản thẩm định giá dựa trên cơ sở phân tích mức giá của các tài sản so sánh để ước tính, xác định giá trị của tài sản thẩm định giá. Phương pháp so sánh thuộc cách tiếp cận từ thị trường”.', ['italic' => true]);
     }
 
-    protected function DCC(Section $section) {
+    protected function DCC(Section $section)
+    {
         $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:');
         $section->addText('   - Đối với phương pháp so sánh: Tổ thẩm định đã thu thập được các thông tin giao dịch (tối thiểu 3 giao dịch) trên thị trường của các thửa đất, BĐS tương tự. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp so sánh để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng được phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu để ước tính giá trị tài sản cần thẩm định giá.');
@@ -501,8 +513,7 @@ class ReportAppraisalNova extends ReportAppraisal
         // $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định không có công trình xây dựng trên đất nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định là quyền sở hữu căn hộ nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   Từ các nội dung trên, Tổ thẩm định nhận thấy chỉ áp dụng được phương pháp so sánh làm phương pháp chính để ước tính giá trị tài sản thẩm định. Không đủ điều kiện để áp dụng các phương pháp khác làm phương pháp kiểm tra, đối chiếu.');
-        $section->addText('   “Phương pháp so sánh là phương pháp thẩm định giá, xác định giá trị của tài sản thẩm định giá dựa trên cơ sở phân tích mức giá của các tài sản so sánh để ước tính, xác định giá trị của tài sản thẩm định giá. Phương pháp so sánh thuộc cách tiếp cận từ thị trường”.',['italic' => true]);
-    
+        $section->addText('   “Phương pháp so sánh là phương pháp thẩm định giá, xác định giá trị của tài sản thẩm định giá dựa trên cơ sở phân tích mức giá của các tài sản so sánh để ước tính, xác định giá trị của tài sản thẩm định giá. Phương pháp so sánh thuộc cách tiếp cận từ thị trường”.', ['italic' => true]);
     }
 
     protected function step8Sub4Appraise(Section $section, $stt)
@@ -528,7 +539,7 @@ class ReportAppraisalNova extends ReportAppraisal
             }
         }
     }
-    protected function step8sub3Appraise (Section $section)
+    protected function step8sub3Appraise(Section $section)
     {
         $section->addText('Căn cứ vào các phương pháp thẩm định giá theo Tiêu chuẩn TĐGVN, Tổ thẩm định nhận thấy:', null, $this->indentFistLine);
         $section->addListItem('Đối với phương pháp so sánh: Tài sản thẩm định giá gồm quyền sử dụng đất, công trình xây dựng trên đất. Tại thời điểm thẩm định, khu vực thẩm định không có các giao dịch trong đó các tài sản so sánh có quyền sử dụng đất, công trình xây dựng trên đất tương đồng với tài sản thẩm định. Trong trường hợp này tổ thẩm định nhận định không đủ điều kiện áp dụng được phương pháp so sánh để ước tính giá trị của tài sản thẩm định là quyền sử dụng đất và công trình xây dựng trên đất. Do đó, tổ thẩm định chỉ áp dụng phương pháp so sánh để ước tính giá trị quyền sử dụng đất.', 0, null, 'bullets', $this->indentFistLine);
@@ -545,11 +556,17 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function step9(Section $section, $certificate)
     {
         $section->addTitle('KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
-        $section->addText('Trên cơ sở các tài liệu do ' . $certificate->petitioner_name . ' cung cấp, với phương pháp thẩm định giá như trên được áp dụng trong tính toán, '. $this->companyName .' thông báo kết quả thẩm định giá như sau:', null, $this->indentFistLine);
+        $section->addText('Trên cơ sở các tài liệu do ' . $certificate->petitioner_name . ' cung cấp, với phương pháp thẩm định giá như trên được áp dụng trong tính toán, ' . $this->companyName . ' thông báo kết quả thẩm định giá như sau:', null, $this->indentFistLine);
         if ($this->isApartment) {
             $this->step9Apartment($section);
         } else {
-            $this->step9Appraise($section, $certificate);
+            if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank != 0) {
+                // Run another method
+                $this->step9AppraiseShinnhan($section, $certificate);
+            } else {
+                // Run step9Appraise
+                $this->step9Appraise($section, $certificate);
+            }
         }
         $section->addText('Căn cứ Tiêu chuẩn thẩm định giá 05 Ban hành kèm theo Thông tư số 28/2015/TT-BTC ngày 06/3/2015 của Bộ Tài chính: Thời hạn sử dụng kết quả thẩm định giá trong chứng thư tính từ ngày phát hành là 06 tháng kể từ ngày phát hành chứng thư thẩm định giá.', null, $this->indentFistLine);
     }
@@ -557,18 +574,18 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function printAppendix(Section $section, $certificate)
     {
         $section->addListItem('Kết quả thẩm định giá trên chỉ xác nhận giá trị thị trường cho tài sản thẩm định có đặc điểm pháp lý và đặc điểm kinh tế - kỹ thuật và hiện trạng được mô tả chi tiết tại thời điểm thẩm định được ghi trong báo cáo thẩm định giá này.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('' . $this->acronym . ' mô tả đặc điểm pháp lý và đặc điểm kinh tế - kỹ thuật của tài sản thẩm định giá dựa trên các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá do khách hàng cung cấp và ghi nhận hiện trạng tài sản theo sự hướng dẫn của khách hàng hoặc người hướng dẫn do khách hàng chỉ định. Trong trường hợp có sự sai khác về các đặc điểm đã mô tả có khả năng dẫn đến sự thay đổi của kết quả thẩm định giá. Khách hàng và các bên liên quan khi sử dụng kết quả thẩm định giá trên xem như đã hiểu rõ về vấn đề này và đưa ra quyết định phù hợp với mục đích thẩm định giá đã ghi trong báo cáo này', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Công ty TNHH Thẩm định giá ' . $this->acronym . ' mô tả đặc điểm pháp lý và đặc điểm kinh tế - kỹ thuật của tài sản thẩm định giá dựa trên các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá do khách hàng cung cấp và ghi nhận hiện trạng tài sản theo sự hướng dẫn của khách hàng hoặc người hướng dẫn do khách hàng chỉ định. Trong trường hợp có sự sai khác về các đặc điểm đã mô tả có khả năng dẫn đến sự thay đổi của kết quả thẩm định giá. Khách hàng và các bên liên quan khi sử dụng kết quả thẩm định giá trên xem như đã hiểu rõ về vấn đề này và đưa ra quyết định phù hợp với mục đích thẩm định giá đã ghi trong báo cáo này', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên được tính toán trong điều kiện thị trường bình thường tại thời điểm thẩm định giá. Những biến động bất thường của thị trường hay chính sách trong tương lai có ảnh hưởng đến giá trị của tài sản không được xem xét trong báo cáo này.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Kết quả thẩm định giá phải được sử dụng đúng đối tượng và mục đích đã ghi trong báo cáo này. ' . $this->acronym . ' không chịu trách nhiệm trong mọi trường hợp khách hàng hoặc bên thứ ba không đúng đối tượng sử dụng kết quả thẩm định giá sai mục đích.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị khi và chỉ khi các bên tham gia tuân thủ và hoàn thành các điều khoản trong hợp đồng cung cấp dịch vụ thẩm định giá. Trong trường hợp khách hàng không thực hiện đầy đủ các nghĩa vụ (bao gồm nghĩa vụ thanh toán) được ghi trong hợp đồng thì ' . $this->acronym . ' mặc nhiên coi là hợp đồng vô hiệu và toàn bộ Chứng thư / Báo cáo thẩm định giá đã thỏa thuận giao trước cho khách hàng (nếu có) sẽ không có giá trị pháp lý.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Chứng thư này phát hành chỉ để tư vấn giá trị tài sản cho khách hàng làm cơ sở tham khảo để xem xét cân nhắc và tự quyết định theo mục đích đã yêu cầu. ' . $this->acronym . ' không đi sâu tìm hiểu kỹ nguồn gốc chủ quyền. Chủ quyền sở hữu tài sản là do các cơ quan có thẩm quyền cấp hoặc được xác định theo quy định của pháp luật hiện hành.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Về pháp lý tài sản thẩm định giá: Khách hàng cung cấp các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá như trên bằng bản sao (bản photo). Khách hàng chịu trách nhiệm về tính chính xác của hồ sơ đã cung cấp. ' . $this->acronym . ' không kiểm tra sự phù hợp giữa bản chính và bản chụp hồ sơ pháp lý khách hàng cung cấp. Kết quả thẩm định giá được nêu trong báo cáo này dựa trên giả định các tài liệu, chứng từ, hồ sơ pháp lý khách hàng cung cấp là trung thực và đúng với hiện trạng pháp lý của tài sản tại thời điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Khách hàng yêu cầu thẩm định giá hoặc người hướng dẫn được khách hàng chỉ định đã hướng dẫn thẩm định viên/ chuyên viên ' . $this->acronym . ' thực hiện khảo sát / thẩm định hiện trạng tài sản phải chịu hoàn toàn trách nhiệm về thông tin liên quan đến đặc điểm kinh tế - kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho ' . $this->acronym . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. ' . $this->acronym . ' không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của nó hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Kết quả thẩm định giá phải được sử dụng đúng đối tượng và mục đích đã ghi trong báo cáo này. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không chịu trách nhiệm trong mọi trường hợp khách hàng hoặc bên thứ ba không đúng đối tượng sử dụng kết quả thẩm định giá sai mục đích.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị khi và chỉ khi các bên tham gia tuân thủ và hoàn thành các điều khoản trong hợp đồng cung cấp dịch vụ thẩm định giá. Trong trường hợp khách hàng không thực hiện đầy đủ các nghĩa vụ (bao gồm nghĩa vụ thanh toán) được ghi trong hợp đồng thì Công ty TNHH Thẩm định giá ' . $this->acronym . ' mặc nhiên coi là hợp đồng vô hiệu và toàn bộ Chứng thư / Báo cáo thẩm định giá đã thỏa thuận giao trước cho khách hàng (nếu có) sẽ không có giá trị pháp lý.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Chứng thư này phát hành chỉ để tư vấn giá trị tài sản cho khách hàng làm cơ sở tham khảo để xem xét cân nhắc và tự quyết định theo mục đích đã yêu cầu. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không đi sâu tìm hiểu kỹ nguồn gốc chủ quyền. Chủ quyền sở hữu tài sản là do các cơ quan có thẩm quyền cấp hoặc được xác định theo quy định của pháp luật hiện hành.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Về pháp lý tài sản thẩm định giá: Khách hàng cung cấp các tài liệu, chứng từ, hồ sơ pháp lý liên quan đến tài sản thẩm định giá như trên bằng bản sao (bản photo). Khách hàng chịu trách nhiệm về tính chính xác của hồ sơ đã cung cấp. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không kiểm tra sự phù hợp giữa bản chính và bản chụp hồ sơ pháp lý khách hàng cung cấp. Kết quả thẩm định giá được nêu trong báo cáo này dựa trên giả định các tài liệu, chứng từ, hồ sơ pháp lý khách hàng cung cấp là trung thực và đúng với hiện trạng pháp lý của tài sản tại thời điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Khách hàng yêu cầu thẩm định giá hoặc người hướng dẫn được khách hàng chỉ định đã hướng dẫn thẩm định viên/ chuyên viên Công ty TNHH Thẩm định giá '  . $this->acronym . ' thực hiện khảo sát / thẩm định hiện trạng tài sản phải chịu hoàn toàn trách nhiệm về thông tin liên quan đến đặc điểm kinh tế - kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho Công ty TNHH Thẩm định giá ' . $this->acronym . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. Công ty TNHH Thẩm định giá ' . $this->acronym . ' không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của nó hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Thẩm định viên và những người tham gia trực tiếp không có quan hệ kinh tế hoặc quyền lợi kinh tế như góp vốn cổ phần, cho vay hoặc vay vốn từ khách hàng, không là cổ đông chi phối của khách hàng hoặc ký kết hợp đồng gia công dịch vụ, đại lý tiêu thụ hàng hóa và không có xảy ra bất kỳ xung đột lợi ích nào', 0, null, 'bullets', $this->indentFistLine);
 
         $section->addTitle('CÁC TÀI LIỆU KÈM THEO:', 1);
-        $section->addListItem('Hồ sơ pháp lý tài sản thẩm định.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Hồ sơ pháp lý tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addText('Báo cáo kết quả thẩm định giá được phát hành 03 bản chính Tiếng Việt, kèm theo Chứng thư thẩm định giá số ' . $this->certificateCode . ' ngày ' . $this->certificateShortDateText . ' tại ' . $this->companyName, ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
     }
     protected function signature(Section $section, $certificate)
@@ -581,16 +598,16 @@ class ReportAppraisalNova extends ReportAppraisal
         $cell31 = $table3->addCell(Converter::inchToTwip(4));
         $cell31->addText("Thẩm Định Viên Về Giá", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         $cell32 = $table3->addCell(Converter::inchToTwip(4));
-        if(isset($certificate->appraiserConfirm->name)) {
+        if (isset($certificate->appraiserConfirm->name)) {
             $cell32->addText("KT. Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-            $cell32->addText( $certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell32->addText($certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         } else {
             $cell32->addText("Tổng Giám Đốc", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         }
         $table3->addRow(Converter::inchToTwip(1.5), $this->cantSplit);
-        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
-        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
-        $table3->addCell(Converter::inchToTwip(4))->addText("",null,  $this->keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $this->keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $this->keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $this->keepNext);
 
         $table3->addRow(Converter::inchToTwip(.1));
         $cell33 = $table3->addCell(Converter::inchToTwip(4));
@@ -611,7 +628,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $cell34->addText("Số thẻ TĐV về giá: " . $appraiserManagerNumber, ['bold' => true], ['align' => 'center']);
     }
 
-    protected function step3 (Section $section, $certificate)
+    protected function step3(Section $section, $certificate)
     {
         $section->addTitle('PHÁP LÝ TÀI SẢN THẨM ĐỊNH GIÁ:', 1);
         $table = $section->addTable($this->styleTable);
@@ -644,15 +661,15 @@ class ReportAppraisalNova extends ReportAppraisal
             // } else {
             //     $table->addCell(2000, $this->cellVCentered)->addText($law['document_num']. $law['document_date'], null, ['keepNext' => true]);
             // }
-            $table->addCell(2000, $this->cellVCentered)->addText(str_replace("\n", '<w:br/>', $law['document_num']). $law['document_date'], null, ['keepNext' => true, 'align' => 'left']);
+            $table->addCell(2000, $this->cellVCentered)->addText(str_replace("\n", '<w:br/>', $law['document_num']) . $law['document_date'], null, ['keepNext' => true, 'align' => 'left']);
             $table->addCell(5000, $this->cellVCentered)->addText($law['content'], null, ['keepNext' => true]);
             $table->addCell(2000, $this->cellVCentered)->addText($law['certifying_agency']);
         }
     }
 
-    protected function step9Appraise (Section $section, $certificate)
+    protected function step9Appraise(Section $section, $certificate)
     {
-        foreach ($this->realEstates as $stt=> $realEstate) {
+        foreach ($this->realEstates as $stt => $realEstate) {
             $appraise = $realEstate->appraises;
             $sttLevel = 2;
             if ($this->isOnlyAsset) {
@@ -859,7 +876,7 @@ class ReportAppraisalNova extends ReportAppraisal
                     if (!$isFirst) {
                         $table->addCell(4000, $this->cellRowSpan)->addText('Phần diện tích đất phù hợp quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
                     } else {
-                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null,null,['keepNext'=> true]);
+                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null, null, ['keepNext' => true]);
                     }
                     $table->addCell(1500, $this->cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
                     $table->addCell(1500, $this->cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
@@ -873,7 +890,7 @@ class ReportAppraisalNova extends ReportAppraisal
                     if (!$isFirst) {
                         $table->addCell(4000, $this->cellRowSpan)->addText('Phần diện tích đất vi phạm quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
                     } else {
-                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null,null,['keepNext'=> true]);
+                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null, null, ['keepNext' => true]);
                     }
                     $table->addCell(1500, $this->cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
                     $table->addCell(1500, $this->cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
@@ -1062,50 +1079,67 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addRow(400, $this->cantSplit);
         $apartment = $realEstate->apartment;
         //1
-        $address = $apartment->full_address?: '';
+        $address = $apartment->full_address ?: '';
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('1', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Pháp lý');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Địa chỉ:');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($address);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(htmlspecialchars($address));
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Diện tích sàn');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(number_format(floatval($realEstate->total_area), 2, ',', '.') . ' '. $this->m2);
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(number_format(floatval($realEstate->total_area), 2, ',', '.') . ' ' . $this->m2);
         //2
         $coordinateArr = explode(',', $realEstate->coordinates);
         $fullName = $apartment->appraise_asset ?: '';
-        $assetName = $fullName . ' tọa lạc tại '. $address;
+        $assetName = $fullName . ' tọa lạc tại ' . htmlspecialchars($address);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('2', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tọa độ X');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($coordinateArr[0]?: '');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($coordinateArr[0] ?: '');
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tọa độ Y');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($coordinateArr[1]?: '');
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($coordinateArr[1] ?: '');
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Khả năng tiếp cận');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($assetName );
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($assetName);
         //3
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('3', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số tầng');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Độ cao');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText('Tầng '. $apartment->apartmentAssetProperties->floor->name);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText('Tầng ' . $apartment->apartmentAssetProperties->floor->name);
+
         //4
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('4', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số phòng');
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Phòng WC');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($apartment->apartmentAssetProperties->wc_num ? $apartment->apartmentAssetProperties->wc_num . ' phòng' : '');
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Phòng ngủ');
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($apartment->apartmentAssetProperties->bedroom_num ? $apartment->apartmentAssetProperties->bedroom_num . ' phòng' : '');
+
+
+
+
+
+        //4
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('5', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Hướng nhìn');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Hướng chính');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->direction->description));
         //5
         $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('5', null, $this->cellHCentered);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Nội thất');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tình trạng');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->furnitureQuality->description));
@@ -1113,17 +1147,17 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Mô tả');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(str_replace("\n", '<w:br/>   ', $apartment->apartmentAssetProperties->description) ?: '' );
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(str_replace("\n", '<w:br/>   ', $apartment->apartmentAssetProperties->description) ?: '');
         //6
         $utiDescriptionArr = CommonService::getUtilitiesDescription($apartment->apartmentAssetProperties->utilities);
         $utiDescriptionStr = implode(', ', $utiDescriptionArr);
         $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Tiện ích');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tiện ích nội khu');
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText($utiDescriptionStr);
         //7
-        if (CommonService::getPlaningInfo($realEstate->real_estate_id)){
+        if (CommonService::getPlaningInfo($realEstate->real_estate_id)) {
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
             $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
@@ -1139,11 +1173,11 @@ class ReportAppraisalNova extends ReportAppraisal
             $table1 = $section->addTable($this->tableBasicStyle);
             $table1->addRow(1000);
             // $cell11 = $table1->addCell(Converter::cmToTwip(1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
-            $imgName = env('STORAGE_IMAGES','images').'/'.'company_logo.png';
+            $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png';
             // $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
             $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
-            $cell12->addImage(storage_path('app/public/'.$imgName), $this->styleImageHeader1);
+            $cell12->addImage(storage_path('app/public/' . $imgName), $this->styleImageHeader1);
             // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell13 = $table1->addCell(Converter::inchToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell13->addText("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM ", ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
@@ -1152,6 +1186,462 @@ class ReportAppraisalNova extends ReportAppraisal
             $indentLeft = $this->marginLeftContent - $this->marginLeftNational;
             $indentRight = $this->marginRightContent - $this->marginRightNational;
             $this->printFooter($section, $data, $indentLeft, $indentRight);
+        }
+    }
+
+    protected function step9AppraiseShinnhan(Section $section, $certificate)
+    {
+        $propertyDetailtotalZoningAll = 0;
+        foreach ($this->realEstates as $stt => $realEstate) {
+            $appraise = $realEstate->appraises;
+            $sttLevel = 2;
+            if ($this->isOnlyAsset) {
+                $sttLevel = 1;
+            } else {
+                $section->addTitle('Tài sản thẩm định giá ' . ($stt + 1), 2);
+            }
+            $onlyLandAsset = 1;
+            if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
+                $onlyLandAsset = 0;
+            }
+            if (isset($appraise->otherAssets) && count($appraise->otherAssets)) {
+                $onlyLandAsset = 0;
+            }
+            if ($onlyLandAsset) {
+                $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                $table = $section->addTable($this->styleTable);
+                $table->addRow(400, $this->rowHeader);
+                $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
+                $propertyDetailTotal = 0;
+                $propertyDetailTotalZoning = 0;
+                $propertyDetailTotalNoZoning = 0;
+                $zoningAppraise = [];
+                $noZoningAppraise = [];
+                $totalArea = 0;
+                $totalAreaZoning = 0;
+                $totalAreaNoZoning = 0;
+
+                foreach ($appraise->properties as $property) {
+                    foreach ($property->propertyDetail as $item) {
+                        if ($item->is_zoning) {
+                            $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
+                            $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
+                            $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
+                            $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
+                            // $donGiaDatRound = CommonService::roundViolationAssetPrice($appraise, $donGiaDat);
+                            $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            // if (!$item->is_transfer_facility) {
+                            //     $donGiaDatRound = CommonService::roundViolationCompositeAssetPrice($appraise, $donGiaDat);
+                            // }
+                            $total = (round($dientich * $donGiaDatRound));
+                            $propertyDetailTotal += $total;
+                            $propertyDetailTotalZoning += $total;
+                            $propertyDetailtotalZoningAll += $total;
+                            $totalArea += $dientich;
+                            $totalAreaZoning += $dientich;
+                            $rowTmp = [];
+                            $rowTmp[] = $landTypePurpose;
+                            $rowTmp[] = number_format($dientich, 2, ',', '.');
+                            $rowTmp[] = number_format($donGiaDatRound, 0, ',', '.');
+                            $rowTmp[] = number_format($total, 0, ',', '.');
+
+                            $zoningAppraise[] = $rowTmp;
+                        }
+                        if (!$item->is_zoning || $item->total_area -  $item->planning_area > 0) {
+                            $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
+                            $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_area');
+                            $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_price');
+                            $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_round');
+                            // $donGiaDatRound = CommonService::roundAssetPrice($appraise, $donGiaDat);
+                            $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            if ($item->is_transfer_facility) {
+                                if ($appraise->layer_cutting_procedure) {
+                                    // $donGiaDatRound = CommonService::roundAssetPrice($appraise, $appraise->layer_cutting_price);
+                                    $donGiaDatRound = CommonService::roundPrice($appraise->layer_cutting_price, $round);
+                                }
+                            } else {
+                                // $donGiaDatRound = CommonService::roundCompositeAssetPrice($appraise, $donGiaDat);
+                                $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            }
+
+                            $total = (round($dientich * $donGiaDatRound));
+                            $propertyDetailTotal += $total;
+                            $propertyDetailTotalNoZoning += $total;
+                            $totalArea += $dientich;
+                            $totalAreaNoZoning += $dientich;
+                            $rowTmp = [];
+                            $rowTmp[] = $landTypePurpose;
+                            $rowTmp[] = number_format($dientich, 2, ',', '.');
+                            $rowTmp[] = number_format($donGiaDatRound, 0, ',', '.');
+                            $rowTmp[] = number_format($total, 0, ',', '.');
+
+                            $noZoningAppraise[] = $rowTmp;
+                        }
+                    }
+                }
+                $isFirst = 0;
+                foreach ($noZoningAppraise as $item) {
+                    $table->addRow(400, $this->cantSplit);
+                    if (!$isFirst) {
+                        $table->addCell(4000, $this->cellRowSpan)->addText('Phần diện tích đất phù hợp quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
+                    } else {
+                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null, null, ['keepNext' => true]);
+                    }
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[2], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[3], null, ['align' => 'right', 'keepNext' => true]);
+                    $isFirst++;
+                }
+                $table->addRow(400, $this->cantSplit);
+                $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalAreaNoZoning, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                //Sumary table
+                // $totalAll = $propertyDetailTotal;
+                $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
+                $totalAllRound = $realEstate->total_price;
+
+
+                if (!$this->isOnlyAsset) {
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left']);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+                } else {
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 5))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($propertyDetailTotalNoZoning) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center', 'keepNext' => true]);
+                }
+
+                $section->addText('', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => true], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                $table = $section->addTable($this->styleTable);
+                $table->addRow(400, $this->rowHeader);
+                $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
+                $isFirst = 0;
+                foreach ($zoningAppraise as $item) {
+                    $table->addRow(400, $this->cantSplit);
+                    if (!$isFirst) {
+                        $table->addCell(4000, $this->cellRowSpan)->addText('Phần diện tích đất vi phạm quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
+                    } else {
+                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered);
+                    }
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[2], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[3], null, ['align' => 'right', 'keepNext' => true]);
+                    $isFirst++;
+                }
+                $table->addRow(400, $this->cantSplit);
+                $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1500, $this->cellVCentered)->addText(number_format($totalAreaZoning, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1500, $this->cellVCentered)->addText('', null, ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+            } else {
+                $section->addTitle('Quyền sử dụng đất:', $sttLevel + 1);
+                $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                $table = $section->addTable($this->styleTable);
+                $table->addRow(400, $this->rowHeader);
+                $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
+                $propertyDetailTotal = 0;
+                $propertyDetailTotalNoZoning = 0;
+                $propertyDetailTotalZoning = 0;
+                $zoningAppraise = [];
+                $noZoningAppraise = [];
+                $totalArea = 0;
+                $totalAreaNoZoning = 0;
+                $totalAreaZoning = 0;
+                // dd($appraise->properties);
+                foreach ($appraise->properties as $property) {
+                    foreach ($property->propertyDetail as $item) {
+                        if ($item->is_zoning) {
+                            $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
+                            $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
+                            $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
+                            $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
+                            // $donGiaDatRound = CommonService::roundViolationAssetPrice($appraise, $donGiaDat);
+                            $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            // if (!$item->is_transfer_facility) {
+                            //     $donGiaDatRound = CommonService::roundViolationCompositeAssetPrice($appraise, $donGiaDat);
+                            // }
+                            $total = (round($dientich * $donGiaDatRound));
+                            // $propertyDetailTotal += $total;
+                            $propertyDetailTotalZoning += $total;
+                            $propertyDetailtotalZoningAll += $total;
+                            $totalArea += $dientich;
+                            $totalAreaZoning += $dientich;
+                            $rowTmp = [];
+                            $rowTmp[] = $landTypePurpose;
+                            $rowTmp[] = number_format($dientich, 2, ',', '.');
+                            $rowTmp[] = number_format($donGiaDatRound, 0, ',', '.');
+                            $rowTmp[] = number_format($total, 0, ',', '.');
+
+                            $zoningAppraise[] = $rowTmp;
+                        }
+                        if (!$item->is_zoning || $item->total_area -  $item->planning_area > 0) {
+                            $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
+                            $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_area');
+                            $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_price');
+                            $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_round');
+                            // $donGiaDatRound = CommonService::roundAssetPrice($appraise, $donGiaDat);
+                            $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            if ($item->is_transfer_facility) {
+                                if ($appraise->layer_cutting_procedure) {
+                                    // $donGiaDatRound = CommonService::roundAssetPrice($appraise, $appraise->layer_cutting_price);
+                                    $donGiaDatRound = CommonService::roundPrice($appraise->layer_cutting_price, $round);
+                                }
+                            } else {
+                                // $donGiaDatRound = CommonService::roundCompositeAssetPrice($appraise, $donGiaDat);
+                                $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            }
+
+                            $total = (round($dientich * $donGiaDatRound));
+                            $propertyDetailTotal += $total;
+                            $propertyDetailTotalNoZoning += $total;
+                            $totalArea += $dientich;
+                            $totalAreaNoZoning += $dientich;
+                            $rowTmp = [];
+                            $rowTmp[] = $landTypePurpose;
+                            $rowTmp[] = number_format($dientich, 2, ',', '.');
+                            $rowTmp[] = number_format($donGiaDatRound, 0, ',', '.');
+                            $rowTmp[] = number_format($total, 0, ',', '.');
+
+                            $noZoningAppraise[] = $rowTmp;
+                        }
+                    }
+                }
+                $isFirst = 0;
+                foreach ($noZoningAppraise as $item) {
+                    $table->addRow(400, $this->cantSplit);
+                    if (!$isFirst) {
+                        $table->addCell(4000, $this->cellRowSpan)->addText('Phần diện tích đất phù hợp quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
+                    } else {
+                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null, null, ['keepNext' => true]);
+                    }
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[2], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[3], null, ['align' => 'right', 'keepNext' => true]);
+                    $isFirst++;
+                }
+                $table->addRow(400, $this->cantSplit);
+                // $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
+
+                $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1000, ['align' => 'right'])->addText(number_format($totalAreaNoZoning, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, ['align' => 'right'])->addText('', ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, ['align' => 'right'])->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+
+                $section->addText('', ['italic' => false], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('Giá trị quyền sử dụng đất phần diện tích đất không phù hợp quy hoạch của bất động sản thẩm định giá (mang tính chất tham khảo) là:', ['italic' => true], ['align' => 'left', 'keepNext' => true]);
+                $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                $table = $section->addTable($this->styleTable);
+                $table->addRow(400, $this->rowHeader);
+                $table->addCell(4000, $this->cellVCentered)->addText('Quyền sử dụng đất', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('MĐSD', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(1500, $this->cellVCentered)->addText('Diện tích (' . $this->m2 . ')', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Đơn giá ', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(2500, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCenteredKeepNext);
+                $isFirst = 0;
+                foreach ($zoningAppraise as $item) {
+                    $table->addRow(400, $this->cantSplit);
+                    if (!$isFirst) {
+                        $table->addCell(4000, $this->cellRowSpan)->addText('Phần diện tích đất vi phạm quy hoạch', null, ['valign' => 'center', 'align' => 'left', 'keepNext' => true]);
+                    } else {
+                        $table->addCell(null, $this->cellRowContinue, [], $this->cellHCentered)->addText(null, null, ['keepNext' => true]);
+                    }
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[0], null, ['align' => 'center', 'keepNext' => true]);
+                    $table->addCell(1500, $this->cellVCentered)->addText($item[1], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[2], null, ['align' => 'right', 'keepNext' => true]);
+                    $table->addCell(2500, $this->cellVCentered)->addText($item[3], null, ['align' => 'right', 'keepNext' => true]);
+                    $isFirst++;
+                }
+
+                $table->addRow(400, $this->cantSplit);
+                // $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
+
+                $table->addCell(1000, array('align' => 'left', 'gridSpan' => 2))->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1000, ['align' => 'right'])->addText(number_format($totalAreaZoning, 2, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, ['align' => 'right'])->addText('', ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+                $table->addCell(1000, ['align' => 'right'])->addText(number_format($propertyDetailTotalZoning, 0, ',', '.'), ['bold' => true], ['align' => 'right', 'keepNext' => true]);
+
+                if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
+                    $section->addTitle('Công trình xây dựng:', $sttLevel + 1);
+                    $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                    $table = $section->addTable($this->styleTable);
+                    $table->addRow(400, $this->rowHeader);
+                    $table->addCell(4000, $this->cellVCentered)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+                    $table->addCell(1000, $this->cellVCentered)->addText('Đvt', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(1000, $this->cellVCentered)->addText('Số lượng', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(1000, $this->cellVCentered)->addText('CLCL (%)', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(2000, $this->cellVCentered)->addText('Đơn giá', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(2000, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCentered);
+                    /*
+                    $unitPrice =  0;
+                    foreach($appraise->constructionCompany as $index=>$constructionCompany) {
+                        $unitPrice += (isset($constructionCompany->constructionCompany)&&isset($constructionCompany->constructionCompany->unit_price_m</w:t></w:r><w:r><w:rPr><w:b w:val="1"/><w:bCs w:val="1"/><w:vertAlign w:val="superscript"/></w:rPr><w:t xml:space="preserve">2</w:t></w:r><w:r><w:rPr><w:b w:val="1"/><w:bCs w:val="1"/></w:rPr><w:t xml:space="preserve">)) ? $constructionCompany->constructionCompany->unit_price_m</w:t></w:r><w:r><w:rPr><w:b w:val="1"/><w:bCs w:val="1"/><w:vertAlign w:val="superscript"/></w:rPr><w:t xml:space="preserve">2</w:t></w:r><w:r><w:rPr><w:b w:val="1"/><w:bCs w:val="1"/></w:rPr><w:t xml:space="preserve"> : 0;
+                    }
+                    */
+
+                    //if(!empty($appraise->constructionCompany)) $unitPrice =  round($unitPrice/count($appraise->constructionCompany));
+                    $appraisalCLCL = $appraise->appraisal_clcl;
+                    $appraisalDgxd = $appraise->appraisal_dgxd;
+                    foreach ($appraise->tangibleAssets as $index => $tangibleAsset) {
+                        $table->addRow(400, $this->cantSplit);
+                        $building_type =  isset($tangibleAsset->tangible_name) ? $tangibleAsset->tangible_name : '';
+                        //$total = (round($tangibleAsset->total_construction_area*$tangibleAsset->remaining_quality/100*$unitPrice));
+                        $unitPrice =  CommonService::getDgxdChoosed($tangibleAsset, $appraisalDgxd);
+                        $clcl =  CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
+                        $total = (round($tangibleAsset->total_construction_base * $clcl / 100 * $unitPrice));
+                        $table->addCell(1000, $this->cellVCentered)->addText(CommonService::mbUcfirst($building_type), null, ['align' => 'left']);
+                        $table->addCell(1000, $this->cellVCentered)->addText($this->m2, null, $this->cellHCentered);
+                        $table->addCell(1000, $this->cellVCentered)->addText(number_format($tangibleAsset->total_construction_base, 2, ',', '.'), null, ['align' => 'right']);
+                        //$table->addCell(1000, $this->cellVCentered)->addText($tangibleAsset->remaining_quality, null, $this->cellHCentered);
+                        $table->addCell(1000, $this->cellVCentered)->addText($clcl, null, ['align' => 'right']);
+                        if ($unitPrice) {
+                            $table->addCell(1000, $this->cellVCentered)->addText(number_format($unitPrice, 0, ',', '.'), null, ['align' => 'right']);
+                        } else {
+                            $table->addCell(1000, $this->cellVCentered)->addText("Không biết", null, ['align' => 'right']);
+                        }
+
+                        $table->addCell(1000, $this->cellVCentered)->addText(number_format($total, 0, ',', '.'), null, ['align' => 'right', 'keepNext' => true]);
+                    }
+                    //get from database
+                    $tangibleAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'tangible_asset_price');
+                    $table->addRow(400, $this->cantSplit);
+                    //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->cellHCentered);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 5))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
+                    $table->addCell(1000, array('align' => 'right'))->addText(number_format($tangibleAssetTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
+                }
+                if (isset($appraise->otherAssets) && count($appraise->otherAssets)) {
+                    $section->addTitle('Tài sản khác', $sttLevel + 1);
+                    $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                    $table = $section->addTable($this->styleTable);
+                    $table->addRow(400, $this->rowHeader);
+                    $table->addCell(4000, $this->cellVCentered)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+                    $table->addCell(1000, $this->cellVCentered)->addText('Đvt', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(1000, $this->cellVCentered)->addText('Số lượng', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(2000, $this->cellVCentered)->addText('Đơn giá', ['bold' => true], $this->cellHCentered);
+                    $table->addCell(2000, $this->cellVCentered)->addText('Thành tiền', ['bold' => true], $this->cellHCentered);
+
+                    foreach ($appraise->otherAssets as $index => $otherAsset) {
+                        $table->addRow(400, $this->cantSplit);
+                        $table->addCell(1000, $this->cellVCentered)->addText($otherAsset->name, null, ['align' => 'left']);
+                        $table->addCell(1000, $this->cellVCentered)->addText(strtolower($otherAsset->dvt), null, $this->cellHCentered);
+                        $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->total, 2, ',', '.'), null, ['align' => 'right']);
+                        $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->unit_price, 0, ',', '.'), null, ['align' => 'right']);
+                        $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->total_price, 0, ',', '.'), null, ['align' => 'right', 'keepNext' => true]);
+                    }
+                    //get from database
+                    $otherAssetTotal = CommonService::getCertificateAssetPrice($appraise, 'other_asset_price');
+                    $table->addRow(400, $this->cantSplit);
+                    //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->cellHCentered);
+                    $table->addCell(1000, array('align' => 'left', 'gridSpan' => 4))->addText('Tổng cộng', ['bold' => true], ['align' => 'left']);
+                    $table->addCell(1000, array('align' => 'right'))->addText(number_format($otherAssetTotal, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
+                }
+
+                $section->addTitle('Tổng giá trị tài sản thẩm định giá:', $sttLevel + 1);
+                $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+                $table = $section->addTable($this->styleTable);
+                $table->addRow(400, $this->rowHeader);
+                //$table->addCell(1000, $this->cellVCentered)->addText('Stt', ['bold' => true], $this->cellHCentered);
+                $table->addCell(6000, $this->cellVCentered)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+                $table->addCell(4000, $this->cellVCentered)->addText('Giá trị thẩm định', ['bold' => true], $this->cellHCentered);
+                $table->addRow(400, $this->cantSplit);
+                //$table->addCell(1000, $this->cellVCentered)->addText('1', null, $this->cellHCentered);
+                $table->addCell(1000, $this->cellVCentered)->addText('Quyền sử dụng đất', null, ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($propertyDetailTotalNoZoning, 0, ',', '.'), null, array('align' => 'right'));
+                if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
+                    $table->addRow(400, $this->cantSplit);
+                    //$table->addCell(1000, $this->cellVCentered)->addText('2', null, $this->cellHCentered);
+                    $table->addCell(1000, $this->cellVCentered)->addText('Công trình xây dựng', null, ['align' => 'left', 'keepNext' => true]);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($tangibleAssetTotal, 0, ',', '.'), null, ['align' => 'right']);
+                }
+                if (isset($appraise->otherAssets) && count($appraise->otherAssets)) {
+                    $table->addRow(400, $this->cantSplit);
+                    //$table->addCell(1000, $this->cellVCentered)->addText('2', null, $this->cellHCentered);
+                    $table->addCell(1000, $this->cellVCentered)->addText('Tài sản khác', null, ['align' => 'left', 'keepNext' => true]);
+                    $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAssetTotal, 0, ',', '.'), null, ['align' => 'right']);
+                }
+
+                //Sumary table
+                // $totalAll = $propertyDetailTotal + $tangibleAssetTotal + $otherAssetTotal;
+                $totalAll = CommonService::getCertificateAssetPrice($appraise, 'total_asset_price');
+
+                $totalAllRound = $realEstate->total_price - $propertyDetailTotalZoning;
+
+                $table->addRow(400, $this->cantSplit);
+                $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
+
+                $table->addRow(400, $this->cantSplit);
+                if ($this->isOnlyAsset) {
+                    $table->addCell(1000, $this->cellVCentered)->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
+                } else {
+                    $table->addCell(1000, $this->cellVCentered)->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left']);
+                }
+                $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+
+                if ($this->isOnlyAsset) {
+                    $table->addRow(400, $this->cantSplit);
+                    $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 2))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($totalAllRound) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center']);
+                }
+            }
+        }
+        if (isset($this->realEstates) && (count($this->realEstates) > 1)) {
+            $section->addTitle('Tổng giá trị tài sản thẩm định giá:', 2);
+            $section->addText('Đvt: đồng.', ['italic' => true], ['align' => 'right', 'keepNext' => true]);
+            $table = $section->addTable($this->styleTable);
+            $table->addRow(400, $this->rowHeader);
+            //$table->addCell(1000, $this->cellVCentered)->addText('Stt', ['bold' => true], $cellHCentered);
+            $table->addCell(6000, $this->cellVCentered)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
+            $table->addCell(4000, $this->cellVCentered)->addText('Giá trị thẩm định', ['bold' => true], $this->cellHCentered);
+            $totalAll = 0;
+            foreach ($this->realEstates as $stt => $realEstate) {
+                $table->addRow(400, $this->cantSplit);
+                //$table->addCell(1000, $this->cellVCentered)->addText($stt + 1, null, $this->);
+                if ($this->isOnlyAsset) {
+                    $table->addCell(1000, array('align' => 'left'))->addText('Tài sản thẩm định giá ', null, ['align' => 'left']);
+                } else {
+                    $table->addCell(1000, array('align' => 'left'))->addText('Tài sản thẩm định giá ' . ($stt + 1), null, ['align' => 'left', 'keepNext' => true]);
+                }
+                $totalAll += $realEstate->total_price;
+                $table->addCell(1000, array('align' => 'right'))->addText(number_format($realEstate->total_price, 0, ',', '.'), null, array('align' => 'right', 'keepNext' => true));
+            }
+
+            // Disable round total amount due to Front-End having a summary table which is showing the sum amount of multiple assets.
+            // If enabled, it will raise confusion for the client as they may not be able to understand the exact amount
+
+            // $totalAllRound = CommonService::roundCertificatePrice($certificate, $totalAll);
+
+            $totalAllRound = $totalAll - $propertyDetailtotalZoningAll;
+
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(1000, $this->cellVCentered)->addText('Tổng cộng', ['bold' => true], ['align' => 'left', 'keepNext' => true]);
+            $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true], ['align' => 'right']);
+            $table->addRow(400, $this->cantSplit);
+            //$table->addCell(1000, $this->cellVCentered)->addText('', null, $this->);
+            $table->addCell(1000, $this->cellVCentered)->addText('Làm tròn', ['bold' => true, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
+            //PHP_ROUND_HALF_DOWN
+            $table->addCell(1000, $this->cellVCentered)->addText(number_format($totalAllRound, 0, ',', '.'), ['bold' => true, 'italic' => true], ['align' => 'right']);
+            $table->addRow(400, $this->cantSplit);
+            $table->addCell(1000, array('valign' => 'center', 'gridSpan' => 2))->addText('Bằng chữ: ' . CommonService::convertNumberToWords($totalAllRound) . ' đồng', ['bold' => true, 'italic' => true], ['align' => 'center']);
         }
     }
 }

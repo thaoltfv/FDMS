@@ -15,9 +15,10 @@ class ReportAppendix1Nova extends ReportAppendix1
     protected function surveyDescription(Section $section, $asset)
     {
         $textRun = $section->addTextRun();
-        $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . mb_strtoupper($this->companyAcronym) . ' nhận thấy có ');
-        $textRun->addText(count($asset->assetGeneral), $this->styleBold);
-        $textRun->addText(' tài sản so sánh có các yếu tố tương đồng nhất với tài sản thẩm định, và sử dụng làm cơ sở điều chỉnh để tiến hành ước tính giá trị tài sản thẩm định, cụ thể như sau: ');
+        // $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . mb_strtoupper($this->companyAcronym) . ' nhận thấy có ');
+        // $textRun->addText(count($asset->assetGeneral), $this->styleBold);
+        // $textRun->addText(' tài sản so sánh có các yếu tố tương đồng nhất với tài sản thẩm định, và sử dụng làm cơ sở điều chỉnh để tiến hành ước tính giá trị tài sản thẩm định, cụ thể như sau: ');
+        $textRun->addText('           Tại thời điểm thẩm định giá, qua khảo sát hiện trạng thực tế và thu thập thông tin thị trường tại khu vực thẩm định giá. Do thị trường khu vực tài sản thẩm định hạn chế thu thập được giao dịch thành công, nên tổ thẩm định thu thập thông tin rao bán có phỏng vấn và ghi nhận mức giá thương lượng phù hợp khi tiến hành giao dịch mua bán tài sản. Các thông tin tài sản so sánh tương đồng do Tổ thẩm định thu thập được như sau: ');
     }
     protected function conclusion1($section)
     {
@@ -53,7 +54,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         // $address = $landNo . $docNo . $item->ward->name . ', ' . $item->district->name . ', ' . $item->province->name;
         // $address = $landNo . $docNo . $item->full_address;
         $address = $item->full_address;
-        return $address;
+        return htmlspecialchars($address);
     }
 
     protected function collectInfoLoaiCanHo($stt, $title, $asset)
@@ -83,7 +84,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         ];
         return $data;
     }
-    
+
     protected function collectInfomationApartmentData($asset)
     {
         $data = [];
@@ -102,10 +103,11 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data[] = $this->collectInfoFloor($stt++, 'Tầng', $asset);
         $data[] = $this->collectInfoApartmentName($stt++, 'Mã căn hộ', $asset);
         $data[] = $this->collectInfoLoaiCanHo($stt++, 'Loại căn hộ', $asset);
-        $data[] = $this->collectInfoArea($stt++, "Diện tích (đ/$this->m2)", $asset);
+        $data[] = $this->collectInfoArea($stt++, "Diện tích ($this->m2)", $asset);
         $data[] = $this->collectInfoBedroomNum($stt++, 'Số phòng ngủ', $asset);
         $data[] = $this->collectInfoWcNum($stt++, 'Số phòng vệ sinh', $asset);
         $data[] = $this->collectInfoFurnitureQuality($stt++, 'Tình trạng nội thất', $asset);
+        $data[] = $this->collectInfoDirection($stt++, 'Hướng chính', $asset);
         $data[] = $this->collectInfoDescription($stt++, 'Mô tả căn hộ', $asset);
         $data[] = $this->collectInfoUtilities($stt++, 'Tiện ích', $asset);
         // yếu tố khác
@@ -186,11 +188,11 @@ class ReportAppendix1Nova extends ReportAppendix1
         }
         $data[] = $this->collectInfoAppraiseEstimateAmount($stt++, 'Giá trị QSDĐ ' . $this->baseAcronym . ' ước tính (đ)', $asset);
         if ($method->slug_value === 'theo-ty-le-gia-dat-co-so-chinh') {
-            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất '. $this->notbaseAcronym.'/đất '. $this->baseAcronym.'', $asset);
-            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất '. $this->notbaseAcronym.' quy về đất '. $this->baseAcronym.'('.$this->m2.')', $asset);
-            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất '. $this->baseAcronym.' sau khi quy đổi ('.$this->m2.')', $asset);
+            $data[] = $this->tiledatquydoi($stt++, 'Tỉ lệ đất ' . $this->notbaseAcronym . '/đất ' . $this->baseAcronym . '', $asset);
+            $data[] = $this->dientichdatquydoi($stt++, 'Diện tích đất ' . $this->notbaseAcronym . ' quy về đất ' . $this->baseAcronym . '(' . $this->m2 . ')', $asset);
+            $data[] = $this->dientichdatcuoicung($stt++, 'Diện tích đất ' . $this->baseAcronym . ' sau khi quy đổi (' . $this->m2 . ')', $asset);
         }
-        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/'. $this->m2 .')', $asset);
+        $data[] = $this->collectInfoAppraiseAvgPrice($stt++, 'Đơn giá QSDĐ ' . $this->baseAcronym . '(đ/' . $this->m2 . ')', $asset);
         return $data;
     }
 
@@ -226,7 +228,7 @@ class ReportAppendix1Nova extends ReportAppendix1
             }
             // $textRun->addText($asset->appraise_asset ?? '', ['size' => 13, 'bold' => false]);
             $assetName = $asset->appraise_asset;
-            $address = $asset->full_address;
+            $address = htmlspecialchars($asset->full_address);
             $this->printAssetInfo($section, $assetName, $address);
 
             $this->surveyDescription($section, $asset);
@@ -326,7 +328,7 @@ class ReportAppendix1Nova extends ReportAppendix1
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
-                $stt ++;
+                $stt++;
             }
         }
 
@@ -338,18 +340,18 @@ class ReportAppendix1Nova extends ReportAppendix1
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
         if ($panType == '2-1') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.'). '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.') . '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.') . '%', ['bold' => $isBold], $this->cellHCentered);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.') . '%', ['bold' => $isBold], $this->cellHCentered);
         } elseif ($panType == '2-3') {
             $table->addCell($this->columnWidthThird, ['gridSpan' => 2, 'valign' => 'center'])->addText($title, ['bold' => $isBold], ['align' => 'left']);
             $table->addCell($this->columnWidthFourth, ['gridSpan' => 3, 'valign' => 'center'])->addText($col1 . $ext, null, $this->cellHCentered);
         } else {
-            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold],$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col2, $this->countDecimals($col2), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col3, $this->countDecimals($col3), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
-            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText( number_format($col4, $this->countDecimals($col4), ',', '.'). '%', null,$this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold], $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText($col1 != '-' ?  $col1 . $ext : $col1, null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col2, $this->countDecimals($col2), ',', '.') . '%', null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col3, $this->countDecimals($col3), ',', '.') . '%', null, $this->cellHCenteredKeepNext);
+            $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(number_format($col4, $this->countDecimals($col4), ',', '.') . '%', null, $this->cellHCenteredKeepNext);
         }
     }
 
@@ -422,7 +424,7 @@ class ReportAppendix1Nova extends ReportAppendix1
     {
         $fNumber = floatval($fNumber);
 
-        for ( $iDecimals = 0; $fNumber != round($fNumber, $iDecimals); $iDecimals++ );
+        for ($iDecimals = 0; $fNumber != round($fNumber, $iDecimals); $iDecimals++);
 
         return $iDecimals;
     }
@@ -445,12 +447,11 @@ class ReportAppendix1Nova extends ReportAppendix1
             $stt,
             $title,
             '-',
-            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.').' m'  : '-',
-            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.').' m'  : '-',
-            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.').' m'  : '-',
+            $compare1 ? number_format($compare1->asset_title, $this->countDecimals($compare1->asset_title), ',', '.') . ' m'  : '-',
+            $compare2 ? number_format($compare2->asset_title, $this->countDecimals($compare2->asset_title), ',', '.') . ' m'  : '-',
+            $compare3 ? number_format($compare3->asset_title, $this->countDecimals($compare3->asset_title), ',', '.') . ' m'  : '-',
             false
         ];
         return $data;
     }
-
 }

@@ -32,7 +32,8 @@ class AppraiseLaw extends Model
         'content',
         'duration',
         'law_date',
-        'note'
+        'note',
+        'document_file'
     ];
 
     public function law(): BelongsTo
