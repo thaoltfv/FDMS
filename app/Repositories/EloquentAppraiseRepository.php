@@ -147,7 +147,18 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         $sortField = request()->get('sortField');
         $sortOrder = request()->get('sortOrder');
         $popup = request()->get('popup');
-
+        $timeFilterFrom = null;
+        $timeFilterTo = null;
+        if (request()->has('data')) {
+            $dataJson = request()->get('data');
+            $dataTemp = json_decode($dataJson);
+            if (isset($dataTemp) && isset($dataTemp->fromDate)) {
+                $timeFilterFrom = $dataTemp->fromDate;
+            }
+            if (isset($dataTemp) && isset($dataTemp->toDate)) {
+                $timeFilterTo = $dataTemp->toDate;
+            }
+        }
         $query = request()->get('query');
         if (!empty($query)) {
             $query = json_decode($query);
@@ -323,7 +334,20 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                 $result = $result->orWhereIn('status', $filters->status);
             }
         }
-
+        if (isset($timeFilterFrom) && isset($timeFilterTo)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->whereBetween('created_at', [$startDate, $endDate]);
+            // ->whereBetween('updated_at', [$startDate, $endDate]);
+        } elseif (isset($timeFilterFrom)) {
+            $startDate = date('Y-m-d', strtotime($timeFilterFrom));
+            $result = $result->where('created_at', '>=', $startDate);
+            // ->where('updated_at', '>=', $startDate);
+        } elseif (isset($timeFilterTo)) {
+            $endDate = date('Y-m-d', strtotime($timeFilterTo));
+            $result = $result->where('created_at', '<=', $endDate);
+            // ->where('updated_at', '<=', $endDate);
+        }
         $result = $result->orderByDesc('updated_at');
 
         if (!empty($sortField)) {
