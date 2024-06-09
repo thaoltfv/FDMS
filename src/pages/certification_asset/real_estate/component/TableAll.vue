@@ -35,18 +35,21 @@
 					<div
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
-						<div v-if="status === 1" class="status-color bg-info" />
+						<p class="text-none mb-0">
+							{{ status === 4 ? "Hoàn thành" : "Đang thực hiện" }}
+						</p>
+						<!-- <div v-if="status === 1" class="status-color bg-info" />
 						<div v-if="status === 2" class="status-color bg-primary" />
 						<div v-if="status === 3" class="status-color bg-warning" />
 						<div v-if="status === 4" class="status-color bg-success" />
 						<div v-if="status === 5" class="status-color bg-secondary" />
-						<div v-if="status === 6" class="status-color bg-control" />
-						<b-dropdown class="dropdown-container" no-caret>
+						<div v-if="status === 6" class="status-color bg-control" /> -->
+						<!-- <b-dropdown class="dropdown-container" no-caret>
 							<template #button-content>
 								<img src="@/assets/icons/ic_more.svg" alt="" />
 							</template>
 							<b-dropdown-item>Action</b-dropdown-item>
-						</b-dropdown>
+						</b-dropdown> -->
 					</div>
 				</template>
 				<template slot="property_name" slot-scope="property_name, data">

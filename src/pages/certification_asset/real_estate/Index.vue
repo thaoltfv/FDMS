@@ -375,6 +375,10 @@ export default {
 						limit: 20,
 						...params,
 						...this.filter,
+						data: {
+							fromDate: this.form.fromDate ? this.form.fromDate : null,
+							toDate: this.form.toDate ? this.form.toDate : null
+						},
 						status: this.selectedStatus
 					}
 				});
@@ -412,7 +416,9 @@ export default {
 					await this.getDataAll(params);
 			}
 		},
-		onChangeStatus(value) {
+		onChangeStatus(value, fromDate, toDate) {
+			this.form.fromDate = fromDate;
+			this.form.toDate = toDate;
 			this.selectedStatus = value;
 			// console.log('00o0',this.selectedStatus)
 			this.getDataAll();
