@@ -45,12 +45,14 @@ class MigrationComparationAssetToElastic extends Command
             $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
             // $compareAssetGeneralRepository->createIndex();
             // $compareAssetGeneralRepository->createVersionIndex();
-			$compareAssetGeneralIds = CompareAssetGeneral::select('id')
-            // ->whereMigrateStatus('TSS')
+			// Lấy tất cả ID của tài sản so sánh cần di chuyển
+            $compareAssetGeneralIds = CompareAssetGeneral::select('id')
+            ->whereMigrateStatus('TSS')
             // ->whereStatus(1)
             ->whereIsSyncedEls(0)
-            ->orderBy('id','desc')
+            ->orderBy('id')
             ->pluck('id');
+    
     
         $nb = count($compareAssetGeneralIds);
         $interval = intval(ceil($nb / 50)); // Điều chỉnh khoảng thời gian dựa trên kích thước lô mong muốn
@@ -61,6 +63,9 @@ class MigrationComparationAssetToElastic extends Command
                 if ($index > 0 && $index % $interval === 0) { // Cập nhật tiến trình sau mỗi `$interval` mục
                     $this->output->progressAdvance($interval);
                 }
+    
+                // Lấy và lập chỉ mục dữ liệu tài sản so sánh
+                $rows = $compareAssetGeneralRepository->findById($itemId);
     
                 // Lấy và lập chỉ mục dữ liệu tài sản so sánh
                 $rows = $compareAssetGeneralRepository->findById($itemId);
