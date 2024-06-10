@@ -171,7 +171,6 @@
 							<InputText
 								v-model="data.certificate_num"
 								vid="certificate_num"
-								:disabledInput="true"
 								label="Số chứng thư"
 								class="form-group-container col-sm-12 col-md-6"
 							/>
@@ -179,7 +178,6 @@
 								v-model="data.certificate_date"
 								vid="certificate_date"
 								label="Ngày chứng thư"
-								:disabled="true"
 								placeholder="Ngày / tháng / năm"
 								class="form-group-container col-sm-12 col-md-6"
 								:formatDate="'DD/MM/YYYY'"
