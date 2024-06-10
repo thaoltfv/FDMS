@@ -256,11 +256,13 @@ class FirebaseClient
                 $data = [
                     'subject' => 'CẤP LẠI MẬT KHẨU',
                     'message' => 'Tài khoản ' . $email . ' trên hệ thống FastValue đã được đặt lại mật khẩu thành "' . $defaultPassword . '". Vui lòng đăng nhập vào hệ thống và tiến hành đổi lại mật khẩu mới để đảm bảo an toàn.',
-                    'user' => $loginUser,
-                    'id' => $id
+                    'email' => $email,
+                    'new_password' => $defaultPassword,
+                    // 'user' => $loginUser,
+                    // 'id' => $id
                 ];
 
-                CommonService::callNotification([$userSend], $data);
+                CommonService::callNotificationReset([$userSend], $data);
                 return $this->respondWithCustomData($user);
             }
         } catch (FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
