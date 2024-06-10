@@ -257,13 +257,13 @@ class FirebaseClient
                     'subject' => 'CẤP LẠI MẬT KHẨU',
                     'message' => `<p>Xin chào,</p>
 
-                    <p>Yêu cầu cấp lại mật khẩu của bạn trên phần mềm quản lý doanh nghiệp thẩm định giá trial.fastvalue.com.vn đã được thực hiện.</p>
+                    <p>Yêu cầu cấp lại mật khẩu của bạn trên phần mềm quản lý doanh nghiệp thẩm định giá nova.fastvalue.vn đã được thực hiện.</p>
                     
-                    <p>Tên tài khoản: lehuyhoang05022017@gmail.com</p>
+                    <p>Tên tài khoản: $email 
                     
                     <p>Mật khẩu mới: DQqj4b55</p>
                     
-                    <p>Đường dẫn truy cập: https://trial.fastvalue.com.vn</p>
+                    <p>Đường dẫn truy cập: https://nova.fastvalue.vn</p>
                     
                     <p>Trân trọng.</p>
                     
