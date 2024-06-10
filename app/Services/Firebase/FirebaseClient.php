@@ -254,8 +254,20 @@ class FirebaseClient
                 $eloquenUser = new EloquentUserRepository(new User());
                 $userSend = $eloquenUser->getUser($id);
                 $data = [
-                    'subject' => 'RESET MẬT KHẨU TÀI KHOẢN FAST VALUE',
-                    'message' => 'Tài khoản ' . $email . ' trên hệ thống FastValue đã được đặt lại mật khẩu thành "' . $defaultPassword . '". Vui lòng đăng nhập vào hệ thống và tiến hành đổi lại mật khẩu mới để đảm bảo an toàn.',
+                    'subject' => 'CẤP LẠI MẬT KHẨU',
+                    'message' => `<p>Xin chào,</p>
+
+                    <p>Yêu cầu cấp lại mật khẩu của bạn trên phần mềm quản lý doanh nghiệp thẩm định giá trial.fastvalue.com.vn đã được thực hiện.</p>
+                    
+                    <p>Tên tài khoản: lehuyhoang05022017@gmail.com</p>
+                    
+                    <p>Mật khẩu mới: DQqj4b55</p>
+                    
+                    <p>Đường dẫn truy cập: https://trial.fastvalue.com.vn</p>
+                    
+                    <p>Trân trọng.</p>
+                    
+                    <p>Tin nhắn tự động, vui lòng không trả lời.</p>`,
                     'user' => $loginUser,
                     'id' => $id
                 ];
