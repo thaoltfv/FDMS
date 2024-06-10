@@ -28,7 +28,7 @@
 
 		<div class="color_content" :class="{ has__error: errors[0] }">
 			<a-select
-				class="color_content"
+				class="color_content wrap_text"
 				show-search
 				style="width: 100%"
 				:value="value === '' ? undefined : value"
@@ -44,6 +44,8 @@
 				</a-select-option>
 
 				<a-select-option
+					:class="index % 2 === 0 ? 'backgroud_style' : ''"
+					class="text-wrap"
 					v-for="(item, index) in options.data"
 					:key="index"
 					:value="item[options.id]"
@@ -165,6 +167,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.backgroud_style {
+	background-color: beige !important;
+	/deep/ .ant-select-item {
+		background-color: beige !important;
+	}
+	/deep/ .ant-select-selection {
+		background-color: beige !important;
+	}
+	/deep/ .ant-select-selection-item {
+		background-color: beige !important;
+	}
+}
 .text-popover {
 	opacity: 0;
 	padding: 0;
@@ -178,5 +192,25 @@ export default {
 	margin: 0;
 	width: 0;
 	height: 0;
+}
+.wrap-text {
+	/deep/ .ant-select-selection-selected-value {
+		line-height: 1.2;
+		min-height: 54px;
+	}
+	/deep/ .ant-select-item {
+		line-height: 1.2;
+	}
+	/deep/ .ant-select-selection {
+		overflow: hidden;
+		line-height: 1.2;
+		white-space: normal;
+	}
+	/deep/ .ant-select-selection-item {
+		display: inline-block;
+		width: 100%;
+		white-space: normal;
+		line-height: 1.2;
+	}
 }
 </style>
