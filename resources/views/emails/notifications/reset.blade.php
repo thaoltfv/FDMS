@@ -33,7 +33,7 @@
 
     <p>Tên tài khoản: {{ $email }}</p>
 
-    <p>Mật khẩu mới: {{ $new_password }}</p>
+    <p>Mật khẩu mới: <span style="font-weight: bold;">{{ $new_password }}<span></p>
 
     <p>Đường dẫn truy cập: https://nova.fastvalue.vn</p>
 
