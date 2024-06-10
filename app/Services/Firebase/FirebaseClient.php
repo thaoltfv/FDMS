@@ -249,8 +249,10 @@ class FirebaseClient
                 $email = $user->email;
                 $auth = $this->getFirebaseClient()->createAuth();
                 $user = $auth->getUserByEmail($email);
-                $uid = $user->uid;
-                $user = $auth->changeUserPassword($uid, $defaultPassword);
+                // $uid = $user->uid;
+                $user = $auth->updateUser($email,  [
+                    'password' => $defaultPassword,
+                ]);
                 $eloquenUser = new EloquentUserRepository(new User());
                 $userSend = $eloquenUser->getUser($user->id);
                 $data = [
