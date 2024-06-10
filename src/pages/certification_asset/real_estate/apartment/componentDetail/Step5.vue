@@ -2592,7 +2592,6 @@
 															}}</strong>
 														</td>
 													</tr>
-
 													<tr
 														v-if="
 															showOtherFactor &&
@@ -2876,13 +2875,25 @@
 														<td>6</td>
 														<td colspan="2">Tổng số lần điều chỉnh (lần)</td>
 														<td>
-															{{ comparisonFactorChange1 }}
+															{{
+																formatNumber(
+																	parseFloat(comparisonFactorChange1).toFixed(0)
+																)
+															}}
 														</td>
 														<td>
-															{{ comparisonFactorChange2 }}
+															{{
+																formatNumber(
+																	parseFloat(comparisonFactorChange2).toFixed(0)
+																)
+															}}
 														</td>
 														<td>
-															{{ comparisonFactorChange3 }}
+															{{
+																formatNumber(
+																	parseFloat(comparisonFactorChange3).toFixed(0)
+																)
+															}}
 														</td>
 													</tr>
 													<tr>
@@ -3609,7 +3620,7 @@ export default {
 		showPriceApartment() {
 			if (this.form.apartment_asset_properties) {
 				return (
-					+this.formatCurrent(parseFloat(this.mgtn).toFixed(2)) *
+					+this.formatCurrent(parseFloat(this.mgtn).toFixed(0)) *
 					this.form.apartment_asset_properties.area
 				);
 			} else return 0;
@@ -4654,9 +4665,12 @@ export default {
 				mgcd_price_other[2];
 
 			// tính mức giá chỉ dẫn của TSSS
-			this.mgcd1 = this.dgcc1 + this.tldc1;
-			this.mgcd2 = this.dgcc2 + this.tldc2;
-			this.mgcd3 = this.dgcc3 + this.tldc3;
+			this.mgcd1 = this.roundPrice(this.dgcc1) + this.roundPrice(this.tldc1);
+			this.mgcd2 = this.roundPrice(this.dgcc2) + this.roundPrice(this.tldc2);
+			this.mgcd3 = this.roundPrice(this.dgcc3) + this.roundPrice(this.tldc3);
+			console.log("adjustpricedata", this.adjustPriceData);
+			console.log("price_other", this.price_other_comparison);
+			console.log("this.mgcd1", this.mgcd1, this.mgcd2, this.mgcd3);
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true;

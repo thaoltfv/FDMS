@@ -105,7 +105,6 @@
 								:max="99999999999999"
 								:min="0"
 								:decimal="0"
-								rules="required"
 								@change="changeTotalBlock($event)"
 							/>
 							<InputNumberNoneFormat
@@ -117,7 +116,6 @@
 								:max="99999999999999"
 								:min="0"
 								:decimal="0"
-								rules="required"
 								@change="changeTotalApartment($event)"
 							/>
 						</div>
