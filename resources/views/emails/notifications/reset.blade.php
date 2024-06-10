@@ -1,4 +1,28 @@
 <!DOCTYPE html>
+
+<head>
+    <style>
+        /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+        html {
+            line-height: 1.15;
+            -webkit-text-size-adjust: 100%
+        }
+
+        body {
+            margin: 0
+        }
+
+        html {
+            /*  box-sizing: border-box;*/
+            font-family: sans-serif
+        }
+
+
+        .bg-white {
+            background-color: #fff
+        }
+    </style>
+</head>
 <html lang="en">
 
 
