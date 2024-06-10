@@ -261,7 +261,7 @@ class FirebaseClient
                     
                     <p>Tên tài khoản: $email 
                     
-                    <p>Mật khẩu mới: DQqj4b55</p>
+                    <p>Mật khẩu mới: $defaultPassword</p>
                     
                     <p>Đường dẫn truy cập: https://nova.fastvalue.vn</p>
                     

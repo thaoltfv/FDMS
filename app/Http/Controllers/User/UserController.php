@@ -383,7 +383,8 @@ class UserController extends Controller
         try {
             if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
                 // return $this->respondWithCustomData($this->userRepository->resetUserPasswordNew($id));
-                $defaultPassword = 'ThamDinh' . ucfirst(env('DOCUMENT_MODULE', '')) . '@' .  Carbon::now()->format('Y');
+                // $defaultPassword = 'ThamDinh' . ucfirst(env('DOCUMENT_MODULE', '')) . '@' .  Carbon::now()->format('Y');
+                $defaultPassword = $this->randomPassword();
                 if ($this->getUserPermission(PermissionsDefault::EDIT_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
                     return (new FirebaseClient())->resetUserPassword($id, $defaultPassword);
                 } else {
@@ -400,7 +401,7 @@ class UserController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-    function randomPassword()
+    public function randomPassword()
     {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789!@#$%^&*()-_=+\|[]{};:/?.>";
         for ($i = 0; $i < 8; $i++) {
