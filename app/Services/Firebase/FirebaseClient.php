@@ -249,10 +249,10 @@ class FirebaseClient
                 $email = $user->email;
                 $auth = $this->getFirebaseClient()->createAuth();
                 $user = $auth->getUserByEmail($email);
-                $uid = $user->id;
+                $uid = $user->uid;
                 $user = $auth->changeUserPassword($uid, $defaultPassword);
                 $eloquenUser = new EloquentUserRepository(new User());
-                $userSend = $eloquenUser->getUser($uid);
+                $userSend = $eloquenUser->getUser($user->id);
                 $data = [
                     'subject' => 'RESET MẬT KHẨU TÀI KHOẢN FASTVALUE',
                     'message' => 'Tài khoản ' . $email . ' trên hệ thống FastValue đã được đặt lại mật khẩu thành "' . $defaultPassword . '". Vui lòng đăng nhập vào hệ thống và tiến hành đổi lại mật khẩu mới để đảm bảo an toàn.',
