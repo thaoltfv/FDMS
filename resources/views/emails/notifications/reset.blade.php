@@ -2,7 +2,7 @@
 <html lang="en">
 
 
-<body class="bg-grey-light">
+<body class="">
     <p>Xin chào,</p>
 
     <p>Yêu cầu cấp lại mật khẩu của bạn trên phần mềm quản lý doanh nghiệp thẩm định giá nova.fastvalue.vn đã được thực hiện.</p>
