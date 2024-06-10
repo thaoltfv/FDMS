@@ -3,6 +3,9 @@
 namespace App\Services\Firebase;
 
 use App\Http\ResponseTrait;
+use App\Repositories\EloquentUserRepository;
+use App\Models\User;
+use App\Services\CommonService;
 use Firebase\Auth\Token\Exception\ExpiredToken;
 use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
@@ -18,6 +21,7 @@ use \Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use \Kreait\Firebase\Exception\InvalidArgumentException;
 use \Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class FirebaseClient
 {
@@ -205,7 +209,7 @@ class FirebaseClient
             $auth = $this->getFirebaseClient()->createAuth();
             $user = $auth->createUserWithEmailAndPassword($email, $password);
             return $this->respondWithCustomData($user);
-        } catch ( FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
+        } catch (FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
             return $this->respondWithCustomData(['message' => $exception->getMessage()], 400);
         }
     }
@@ -219,22 +223,48 @@ class FirebaseClient
             $uid = $verifiedIdToken->claims()->get('sub');
             $user = $auth->changeUserPassword($uid, $newPassword);
             return $this->respondWithCustomData($user);
-        } catch ( FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
+        } catch (FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
             return $this->respondWithCustomData(['message' => $exception->getMessage()], 400);
         }
     }
 
-    public function resetUserPassword($email,$defaultPassword): JsonResponse
+    // public function resetUserPassword($email,$defaultPassword): JsonResponse
+    // {
+    //     try {
+    //         $auth = $this->getFirebaseClient()->createAuth();
+    //         $user = $auth->getUserByEmail($email);
+    //         $uid = $user->uid;
+    //         $user = $auth->changeUserPassword($uid, $defaultPassword);
+    //         return $this->respondWithCustomData($user);
+    //     } catch ( FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
+    //         return $this->respondWithCustomData(['message' => $exception->getMessage()], 400);
+    //     }
+    // }
+    public function resetUserPassword($id, $defaultPassword): JsonResponse
     {
         try {
-            $auth = $this->getFirebaseClient()->createAuth();
-            $user = $auth->getUserByEmail($email);
-            $uid = $user->uid;
-            $user = $auth->changeUserPassword($uid, $defaultPassword);
-            return $this->respondWithCustomData($user);
-        } catch ( FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
+            $loginUser = CommonService::getUser();
+            $user = User::query()->where('id', $id)->first();
+            if (isset($user)) {
+                $email = $user->email;
+                $auth = $this->getFirebaseClient()->createAuth();
+                $user = $auth->getUserByEmail($email);
+                $uid = $user->id;
+                $user = $auth->changeUserPassword($uid, $defaultPassword);
+                $eloquenUser = new EloquentUserRepository(new User());
+                $userSend = $eloquenUser->getUser($uid);
+                $data = [
+                    'subject' => 'RESET MẬT KHẨU TÀI KHOẢN FASTVALUE',
+                    'message' => 'Tài khoản ' . $email . ' trên hệ thống FastValue đã được đặt lại mật khẩu thành "' . $defaultPassword . '". Vui lòng đăng nhập vào hệ thống và tiến hành đổi lại mật khẩu mới để đảm bảo an toàn.',
+                    'user' => $loginUser,
+                    'id' => $id
+                ];
+
+                CommonService::callNotification([$userSend], $data);
+                return $this->respondWithCustomData($user);
+            }
+        } catch (FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
             return $this->respondWithCustomData(['message' => $exception->getMessage()], 400);
         }
     }
-
 }

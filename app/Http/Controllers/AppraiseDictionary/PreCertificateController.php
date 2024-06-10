@@ -244,7 +244,7 @@ class PreCertificateController extends Controller
             'customer' => 'array|sometimes',
             'customer.name' => 'nullable|string|max:255',
             'customer.address' => 'nullable|string|max:255',
-            'customer.phone' => 'required_with:customer.name|nullable|numeric',
+            'customer.phone' => 'nullable|numeric',
             'total_preliminary_value' => 'nullable|integer|min:0',
             'note' => 'nullable|string',
             'cancel_reason' => 'nullable|string',

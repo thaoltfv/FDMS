@@ -382,7 +382,14 @@ class UserController extends Controller
     {
         try {
             if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
-                return $this->respondWithCustomData($this->userRepository->resetUserPasswordNew($id));
+                // return $this->respondWithCustomData($this->userRepository->resetUserPasswordNew($id));
+                $defaultPassword = 'ThamDinh' . ucfirst(env('DOCUMENT_MODULE', '')) . '@' .  Carbon::now()->format('Y');
+                if ($this->getUserPermission(PermissionsDefault::EDIT_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                    return (new FirebaseClient())->resetUserPassword($id, $defaultPassword);
+                } else {
+                    $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                    return $this->respondWithErrorData($data, 403);
+                }
             } else {
                 $data = ['message' => ErrorMessage::PERMISSION_ERROR];
                 return $this->respondWithErrorData($data, 403);

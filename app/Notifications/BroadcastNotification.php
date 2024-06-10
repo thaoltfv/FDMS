@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class BroadcastNotification extends Notification implements ShouldQueue
 {
@@ -37,7 +38,7 @@ class BroadcastNotification extends Notification implements ShouldQueue
     {
         return [
             'database',
-            // 'mail',
+            'mail',
             'broadcast',
         ];
     }
@@ -50,6 +51,7 @@ class BroadcastNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        Log::info($notifiable);
         return (new MailMessage)
             ->subject($this->object->subject ? $this->object->subject : '[HSTD] Đã chuyển trạng thái')
             ->markdown('emails.notifications.update', [
