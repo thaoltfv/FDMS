@@ -259,7 +259,7 @@ class FirebaseClient
 
                     <p>Yêu cầu cấp lại mật khẩu của bạn trên phần mềm quản lý doanh nghiệp thẩm định giá nova.fastvalue.vn đã được thực hiện.</p>
                     
-                    <p>Tên tài khoản: $email 
+                    <p>Tên tài khoản: $email</p>
                     
                     <p>Mật khẩu mới: $defaultPassword</p>
                     
