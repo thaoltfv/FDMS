@@ -5684,7 +5684,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 }
             }
             //Check role and permision
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
                         if (!($data->appraiserSale && $data->appraiserSale->user_id == $user->id))
@@ -5753,7 +5753,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 return ['message' => ErrorMessage::CERTIFICATE_APPRAISERTEAM, 'exception' => ''];
             }
             //Check role and permision
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 if (!($data->appraiserBusinessManager->user_id == $user->id)) {
                     $result = ['message' => 'Chỉ có quản lý nghiệp vụ mới có quyền phân lại hồ sơ này.', 'exception' => ''];
                 }

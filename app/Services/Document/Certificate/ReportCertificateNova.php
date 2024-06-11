@@ -61,14 +61,8 @@ class ReportCertificateNova extends ReportCertificate
         ));
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
-        // $section->addTitle("Kết quả thẩm định giá: ", 2);
-        // $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
-        $textRun = $section->addTextRun(array(
-            'styleName' => 'Heading2',
-            'keepNext' => false
-        ));
-        $textRun->addText("Kết quả thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
-        $textRun->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", ['bold' => false], ['keepNext' => false]);
+        $section->addTitle("Kết quả thẩm định giá: ", 2);
+        $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
