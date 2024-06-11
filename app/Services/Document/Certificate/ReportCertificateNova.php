@@ -46,7 +46,7 @@ class ReportCertificateNova extends ReportCertificate
         $section->addTitle("Kết quả thẩm định giá: ", 2);
         $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
-        $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
+        $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], $this->styleAlignCenter);
         $section->addText("(Chi tiết xem tại phần IX, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], $this->styleAlignCenter);
         $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
