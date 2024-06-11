@@ -67,7 +67,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         7
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [
@@ -120,7 +122,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         7
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [
@@ -186,7 +190,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         7
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [
@@ -252,7 +258,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         7
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [
@@ -319,7 +327,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         7
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [
@@ -383,7 +393,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         7
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [
@@ -441,7 +453,9 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                         1
                     ],
                     "put_require_roles" => [
-                        "ROOT_ADMIN"
+                        "ROOT_ADMIN",
+                        "SUB_ADMIN",
+                        "ADMIN"
                     ],
                     "target_description" => [
                         [

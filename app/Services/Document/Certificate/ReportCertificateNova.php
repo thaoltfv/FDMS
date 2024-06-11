@@ -12,53 +12,71 @@ class ReportCertificateNova extends ReportCertificate
 {
     protected function content1(Section $section, $certificate)
     {
-        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Khách hàng thẩm định giá:", 2);
-        $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
-        $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge(['keepNext' => false]));
         $appraise_date = date_create($certificate->appraise_date);
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Thời điểm thẩm định giá: ", ['bold' => true]);
-        $textRun->addText('Tháng ' . date_format($appraise_date, "m/Y") . '.', ['bold' => false]);
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Thời điểm thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
+        $textRun->addText('Tháng ' . date_format($appraise_date, "m/Y") . '.', ['bold' => false], ['keepNext' => false]);
         $appraisePurpose = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Mục đích thẩm định giá: ", ['bold' => true]);
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Mục đích thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         if ($appraisePurpose === 'Vay vốn ngân hàng')
             $appraisePurpose = 'Tư vấn giá trị tài sản để ngân hàng tham khảo và xem xét quyết định hạn mức để cấp tín dụng';
-        $textRun->addText($appraisePurpose, ['bold' => false]);
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Căn cứ pháp lý: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục II, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Cơ sở giá trị của tài sản thẩm định giá: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Giả thiết và giả thiết đặc biệt: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục VII, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", ['bold' => false]);
+        $textRun->addText($appraisePurpose, ['bold' => false], ['keepNext' => false]);
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Căn cứ pháp lý: ", ['bold' => true], ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục II, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Cơ sở giá trị của tài sản thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Giả thiết và giả thiết đặc biệt: ", ['bold' => true], ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục VII, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
         $section->addTitle("Kết quả thẩm định giá: ", 2);
-        $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine));
+        $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
-        $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
-        $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], $this->styleAlignCenter);
-        $section->addText("(Chi tiết xem tại phần IX, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], $this->styleAlignCenter);
+        $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
+        $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
+        $section->addText("(Chi tiết xem tại phần IX, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
-        $section->addListItem("Nội dung chi tiết xem tại Mục X, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Nội dung chi tiết xem tại Mục X, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Thời hạn có hiệu lực của kết quả thẩm định giá:", 2);
-        $section->addListItem("Kết quả thẩm định giá có hiệu lực trong thời hạn 06 tháng kể từ ngày phát hành chứng thư (nếu thị trường không có biến động nhiều).", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Kết quả thẩm định giá có hiệu lực trong thời hạn 06 tháng kể từ ngày phát hành chứng thư (nếu thị trường không có biến động nhiều).", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Các tài liệu kèm theo:", 2);
-        $section->addListItem("Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ngày ' . $this->certificateShortDateText, 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ngày ' . $this->certificateShortDateText, 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addText('', [], ['borderBottomSize' => 6, 'underline' => 'dash']);
-        $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo kết quả TĐG và các phụ lục.", 0, ['italic' => true], 'bullets', $this->indentFistLine);
-        $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt, cấp cho khách hàng 02 bản, lưu tại " . $this->companyName . " 01 bản và có giá trị pháp lý như nhau.", 0, ['italic' => true], 'bullets', $this->indentFistLine);
-        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine));
+        $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo kết quả TĐG và các phụ lục.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt, cấp cho khách hàng 02 bản, lưu tại " . $this->companyName . " 01 bản và có giá trị pháp lý như nhau.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
 
         $section->addTextBreak(null, null);
     }
