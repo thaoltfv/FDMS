@@ -23,10 +23,10 @@ class ReportCertificateNova extends ReportCertificate
         $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge(['keepNext' => false]));
         $appraise_date = date_create($certificate->appraise_date);
         $textRun = $section->addTextRun('Heading2');
-        $textRun->getStyle()->setKeepNext(false);
         $textRun->addText("Thời điểm thẩm định giá: ", ['bold' => true]);
         $textRun->addText('Tháng ' . date_format($appraise_date, "m/Y") . '.', ['bold' => false]);
         $appraisePurpose = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
+        $textRun->getStyle()->setKeepNext(false);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Mục đích thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         if ($appraisePurpose === 'Vay vốn ngân hàng')
