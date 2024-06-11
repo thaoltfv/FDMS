@@ -5515,7 +5515,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
         if (Certificate::where('id', $id)->exists()) {
             $user = CommonService::getUser();
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 $data = Certificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
@@ -5774,7 +5774,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $user = CommonService::getUser();
             $data = Certificate::where('id', $id)->get()->first();
             if (
-                $user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])
+                $user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])
                 || ((isset($data->appraiser) && $data->appraiser->user_id == $user->id)
                     || (isset($data->appraiserManager) && $data->appraiserManager->user_id == $user->id)
                     || (isset($data->appraiserControl) && $data->appraiserControl->user_id == $user->id)

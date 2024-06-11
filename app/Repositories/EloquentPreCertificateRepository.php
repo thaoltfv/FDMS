@@ -1387,7 +1387,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         if (PreCertificate::where('id', $id)->exists()) {
             $user = CommonService::getUser();
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 $data = PreCertificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
