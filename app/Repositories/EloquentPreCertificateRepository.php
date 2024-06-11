@@ -1387,7 +1387,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
 
         if (PreCertificate::where('id', $id)->exists()) {
             $user = CommonService::getUser();
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 $data = PreCertificate::where('id', $id)->get()->first();
                 switch ($data['status']) {
                     case 1:
@@ -1458,7 +1458,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             //     }
             // }
             //Check role and permision
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 switch ($data['status']) {
                     case 1:
                         if (!($data->appraiserSale->user_id == $user->id))
@@ -1501,7 +1501,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (PreCertificate::where('id', $id)->exists()) {
             $user = CommonService::getUser();
             $data = PreCertificate::where('id', $id)->get()->first();
-            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'])) {
+            if (!$user->hasRole(['ROOT_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'ADMIN'])) {
                 if (!($data->appraiserBusinessManager->user_id == $user->id)) {
                     $result = ['message' => 'Chỉ có quản lý nghiệp vụ mới có quyền phân lại hồ sơ này.', 'exception' => ''];
                 }
