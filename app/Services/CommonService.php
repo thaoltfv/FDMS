@@ -25,6 +25,7 @@ use App\Models\CompareAssetGeneral;
 use App\Models\Dictionary;
 use App\Models\RealEstate;
 use App\Notifications\BroadcastNotification;
+use App\Notifications\ResetPassword;
 use App\Repositories\EloquentCompareAssetGeneralRepository;
 use App\Repositories\EloquentUserRepository;
 use Exception;
@@ -1731,6 +1732,17 @@ class CommonService
 	public static function registerShutdowncallNotification($users, $data)
 	{
 		$broadcast = new BroadcastNotification((object)$data);
+		Notification::send($users, $broadcast);
+	}
+
+	public static function callNotificationReset($users, $data)
+	{
+		register_shutdown_function([self::class, 'registerShutdowncallNotificationReset'], $users, $data);
+		return;
+	}
+	public static function registerShutdowncallNotificationReset($users, $data)
+	{
+		$broadcast = new ResetPassword((object)$data);
 		Notification::send($users, $broadcast);
 	}
 	public static function convertStatusText($status)

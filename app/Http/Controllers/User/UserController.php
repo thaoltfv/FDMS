@@ -382,7 +382,15 @@ class UserController extends Controller
     {
         try {
             if ($this->getUserPermission(PermissionsDefault::DELETE_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
-                return $this->respondWithCustomData($this->userRepository->resetUserPasswordNew($id));
+                // return $this->respondWithCustomData($this->userRepository->resetUserPasswordNew($id));
+                // $defaultPassword = 'ThamDinh' . ucfirst(env('DOCUMENT_MODULE', '')) . '@' .  Carbon::now()->format('Y');
+                $defaultPassword = $this->randomPassword();
+                if ($this->getUserPermission(PermissionsDefault::EDIT_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
+                    return (new FirebaseClient())->resetUserPassword($id, $defaultPassword);
+                } else {
+                    $data = ['message' => ErrorMessage::PERMISSION_ERROR];
+                    return $this->respondWithErrorData($data, 403);
+                }
             } else {
                 $data = ['message' => ErrorMessage::PERMISSION_ERROR];
                 return $this->respondWithErrorData($data, 403);
@@ -392,5 +400,15 @@ class UserController extends Controller
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
         }
+    }
+    public function randomPassword()
+    {
+
+        $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789!@#$";
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, strlen($alphabet) - 1);
+            $pass[$i] = $alphabet[$n];
+        }
+        return implode('', $pass);
     }
 }

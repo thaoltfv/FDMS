@@ -5,12 +5,11 @@ namespace App\Notifications;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
-class BroadcastNotification extends Notification implements ShouldQueue
+class ResetPassword extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -37,9 +36,7 @@ class BroadcastNotification extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         return [
-            'database',
-            // 'mail',
-            'broadcast',
+            'mail',
         ];
     }
 
@@ -52,41 +49,13 @@ class BroadcastNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject($this->object->subject ? $this->object->subject : '[HSTD] Đã chuyển trạng thái')
-            ->markdown('emails.notifications.update', [
+            ->subject($this->object->subject ? $this->object->subject : 'CẤP LẠI MẬT KHẨU')
+            ->markdown('emails.notifications.reset', [
                 'name' => $notifiable->name ? $notifiable->name : '',
+                'email' => $this->object->email ? $this->object->email : '',
+                'new_password' => $this->object->new_password ? $this->object->new_password : '',
                 'message' => $this->object->message ? $this->object->message : '',
                 'link' => ''
             ]);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param mixed $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return (array)$this->object;
-    }
-
-    /**
-     * Get the broadcastable representation of the notification.
-     * @param mixed $notifiable
-     * @return BroadcastMessage
-     */
-    public function toBroadcast($notifiable)
-    {
-        $timestamp = Carbon::now()->addSecond()->toDateTimeString();
-
-        return new BroadcastMessage([
-            'notifiable_id' => $notifiable->id,
-            'notifiable_type' => get_class($notifiable),
-            'data' => $this->object,
-            'read_at' => null,
-            'created_at' => $timestamp,
-            'updated_at' => $timestamp,
-        ]);
     }
 }
