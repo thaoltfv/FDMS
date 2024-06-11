@@ -48,7 +48,6 @@ class ResetPassword extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        Log::info($notifiable);
         return (new MailMessage)
             ->subject($this->object->subject ? $this->object->subject : 'CẤP LẠI MẬT KHẨU')
             ->markdown('emails.notifications.reset', [

@@ -51,7 +51,6 @@ class BroadcastNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        Log::info($notifiable);
         return (new MailMessage)
             ->subject($this->object->subject ? $this->object->subject : '[HSTD] Đã chuyển trạng thái')
             ->markdown('emails.notifications.update', [
