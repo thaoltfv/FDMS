@@ -20,7 +20,7 @@ class ReportCertificateNova extends ReportCertificate
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge(['keepNext' => false]));
         $appraise_date = date_create($certificate->appraise_date);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời điểm thẩm định giá: ", ['bold' => true]);
