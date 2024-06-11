@@ -153,7 +153,7 @@ class ReportCertificate extends Report
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', $this->indentFistLine);
-        // $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate),0 , [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets', $this->indentFistLine);
         $address = $this->getAssetAddress($certificate);
         if (!empty($address)) {
             $listTmp = $section->addListItemRun(0, 'bullets');
@@ -182,7 +182,7 @@ class ReportCertificate extends Report
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true]);
         $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", null, ['keepNext' => false]);
         $section->addTitle("Kết quả thẩm định giá: ", 2);
-        $section->addText("Trên cơ sở các tài liệu do khách hàng cung cấp, dựa trên cách tiếp cận và phương pháp thẩm định giá được áp dụng trong tính toán, " . $this->companyName . " ước tính giá trị tài sản " . $this->getAssetName($certificate) . " như sau:", [], array_merge($this->indentFistLine, $this->keepNext));
+        $section->addText("Trên cơ sở các tài liệu do khách hàng cung cấp, dựa trên cách tiếp cận và phương pháp thẩm định giá được áp dụng trong tính toán, " . $this->companyName . " ước tính giá trị tài sản " . $this->getAssetName($certificate) . " như sau:", [], array_merge($this->indentFistLine));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->keepNext, $this->styleAlignCenter));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng./.)", ['italic' => true, 'bold' => true], $this->styleAlignCenter);
@@ -194,9 +194,9 @@ class ReportCertificate extends Report
         $section->addText('', [], ['borderBottomSize' => 6, 'underline' => 'dash']);
         $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo kết quả TĐG và các phụ lục.", 0, ['italic' => true], 'bullets', $this->indentFistLine);
         $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt, cấp cho khách hàng 02 bản, lưu tại " . $this->companyName . " 01 bản.", 0, ['italic' => true], 'bullets', $this->indentFistLine);
-        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, $this->keepNext));
+        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine));
 
-        $section->addTextBreak(null, null, $this->keepNext);
+        $section->addTextBreak(null, null);
     }
     protected function signature(Section $section, $certificate)
     {
