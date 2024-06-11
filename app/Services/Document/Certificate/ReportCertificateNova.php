@@ -12,8 +12,8 @@ class ReportCertificateNova extends ReportCertificate
 {
     protected function content1(Section $section, $certificate)
     {
-        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Khách hàng thẩm định giá:", 2);
         $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
@@ -61,8 +61,14 @@ class ReportCertificateNova extends ReportCertificate
         ));
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
-        $section->addTitle("Kết quả thẩm định giá: ", 2);
-        $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
+        // $section->addTitle("Kết quả thẩm định giá: ", 2);
+        // $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
+        $textRun->addText("Kết quả thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
+        $textRun->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", ['bold' => false], ['keepNext' => false]);
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
