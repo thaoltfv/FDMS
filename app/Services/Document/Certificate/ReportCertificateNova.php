@@ -22,25 +22,43 @@ class ReportCertificateNova extends ReportCertificate
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge(['keepNext' => false]));
         $appraise_date = date_create($certificate->appraise_date);
-        $textRun = $section->addTextRun('Heading2');
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
         $textRun->addText("Thời điểm thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText('Tháng ' . date_format($appraise_date, "m/Y") . '.', ['bold' => false], ['keepNext' => false]);
         $appraisePurpose = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
-        $textRun = $section->addTextRun('Heading2');
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
         $textRun->addText("Mục đích thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         if ($appraisePurpose === 'Vay vốn ngân hàng')
             $appraisePurpose = 'Tư vấn giá trị tài sản để ngân hàng tham khảo và xem xét quyết định hạn mức để cấp tín dụng';
         $textRun->addText($appraisePurpose, ['bold' => false], ['keepNext' => false]);
-        $textRun = $section->addTextRun('Heading2');
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
         $textRun->addText("Căn cứ pháp lý: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục II, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
-        $textRun = $section->addTextRun('Heading2');
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
         $textRun->addText("Cơ sở giá trị của tài sản thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
-        $textRun = $section->addTextRun('Heading2');
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
         $textRun->addText("Giả thiết và giả thiết đặc biệt: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục VII, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
-        $textRun = $section->addTextRun('Heading2');
+        $textRun = $section->addTextRun(array(
+            'styleName' => 'Heading2',
+            'keepNext' => false
+        ));
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
         $section->addTitle("Kết quả thẩm định giá: ", 2);
