@@ -233,7 +233,7 @@ class PreCertificateController extends Controller
                 return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
         }
         $rules = [
-            'petitioner_name' => 'string|max:255',
+            'petitioner_name' => 'string',
             'petitioner_phone' => 'nullable|numeric',
             'petitioner_address' => 'nullable|string',
             'petitioner_identity_card' => 'nullable|string',
@@ -242,15 +242,15 @@ class PreCertificateController extends Controller
             'business_manager_id' => 'nullable',
             'appraiser_perform_id' => 'nullable',
             'customer' => 'array|sometimes',
-            'customer.name' => 'nullable|string|max:255',
-            'customer.address' => 'nullable|string|max:255',
+            'customer.name' => 'nullable|string',
+            'customer.address' => 'nullable|string',
             'customer.phone' => 'nullable|numeric',
             'total_preliminary_value' => 'nullable|integer|min:0',
             'note' => 'nullable|string',
             'cancel_reason' => 'nullable|string',
             'commission_fee' => 'numeric',
-            'pre_date' => 'required|string|max:255',
-            'pre_asset_name' => 'string|max:255',
+            'pre_date' => 'required|string',
+            'pre_asset_name' => 'string',
             'total_service_fee' => 'nullable|integer|min:0',
             'pre_type_id' => 'required',
         ];
