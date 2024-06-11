@@ -153,7 +153,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'mailing_address' => mb_strtolower($objects['mailing_address']) ?? "",
             'customer_group_id' => $objects['customer_group_id'] ?? null,
         ];
-        if ($objects['is_guest']) {
+        if (isset($objects['is_guest']) && $objects['is_guest']) {
             $array['is_guest'] = true;
             $array['name_lv_1'] = $objects['name_lv_1'] ?? null;
             $array['name_lv_2'] = $objects['name_lv_2'] ?? null;
@@ -201,7 +201,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
 
 
         ];
-        if ($objects['is_guest']) {
+        if (isset($objects['is_guest']) && $objects['is_guest']) {
             $array['is_guest'] =   $objects['is_guest'] ?? null;
             $array['name_lv_1'] =   $objects['name_lv_1'] ?? null;
             $array['name_lv_2'] =   $objects['name_lv_2'] ?? null;
