@@ -610,12 +610,10 @@ class CertificateAssetController extends Controller
 
                 foreach ($arrayLink as $fileLink) {
                     $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
-
-
                     $item = [
                         'certificate_id' => $id,
                         'name' => $fileName,
-                        'link' => $fileLink['link'] ? $fileLink['link'] : $fileLink['url'],
+                        'link' =>  isset($fileLink['link']) ? $fileLink['link'] : $fileLink['url'],
                         'type' => 'docx',
                         'size' => null,
                         'description' => $this->getOtherDescription($fileLink['typeDocument']),
