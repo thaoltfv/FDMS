@@ -9156,16 +9156,6 @@ export default {
 					}
 
 					// console.log('check 2', arr_arena2.length,this.form.asset_unit_price.length,this.form.appraise_adapter[1])
-
-					if (
-						indexPrice &&
-						indexPrice === 2 &&
-						isChangeMDSD &&
-						arr_arena3.length > 0 &&
-						this.form.asset_unit_price.length > 0
-					) {
-						console.log("Vào else mới 3");
-					}
 				} else {
 					if (!isChangeMDSD && (indexPrice || indexPrice === 0)) {
 						await this.calculationChangePrice(asset, indexPrice);
