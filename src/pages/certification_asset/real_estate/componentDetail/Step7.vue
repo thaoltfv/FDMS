@@ -7140,9 +7140,11 @@ export default {
 			} else this.form.appraise_adapter[index].change_violate_price = 0;
 		},
 		changePurposePrice(event, index) {
+			console.log("THAY ĐỔI", event);
+			console.log("INDEX", index);
 			if (event) {
 				this.form.appraise_adapter[index].change_purpose_price = event;
-			} else this.form.appraise_adapter[index].change_purpose_price = 0;
+			}
 			this.calculation(this.form);
 		},
 		async dialogDeleteComparisionDefault(type) {
@@ -9987,12 +9989,12 @@ export default {
 			// this.mgcd1 = Math.round(this.dgd1 + this.tldc1)
 			// this.mgcd2 = Math.round(this.dgd2 + this.tldc2)
 			// this.mgcd3 = Math.round(this.dgd3 + this.tldc3)
-			this.mgcd1 = this.roundPrice(this.dgd1) + this.roundPrice(this.tldc1)
-			this.mgcd2 = this.roundPrice(this.dgd2) + this.roundPrice(this.tldc2)
-			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3)
-			console.log('adjustpricedata',this.adjustPriceData)
-			console.log('price_other',this.price_other_comparison)
-			console.log('this.mgcd1',this.mgcd1,this.mgcd2,this.mgcd3)
+			this.mgcd1 = this.roundPrice(this.dgd1) + this.roundPrice(this.tldc1);
+			this.mgcd2 = this.roundPrice(this.dgd2) + this.roundPrice(this.tldc2);
+			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3);
+			console.log("adjustpricedata", this.adjustPriceData);
+			console.log("price_other", this.price_other_comparison);
+			console.log("this.mgcd1", this.mgcd1, this.mgcd2, this.mgcd3);
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true;

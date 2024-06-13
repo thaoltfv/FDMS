@@ -244,7 +244,11 @@
 												</p>
 											</div>
 											<div
-												v-if="(editAppraiser && edit) || isBusinessManager"
+												v-if="
+													(editAppraiser && edit) ||
+														isBusinessManager ||
+														byPassAdmin
+												"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -603,7 +607,8 @@
 			v-if="
 				form.general_asset.length > 0 &&
 					printConfig &&
-					statusDescription !== 'In hồ sơ'
+					statusDescription !== 'In hồ sơ' &&
+					statusDescription !== 'Bàn giao khách hàng'
 			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
@@ -617,6 +622,9 @@
 							Bộ Chứng thư tự động
 							<b-tooltip :target="'download_all_official_auto'" placement="top"
 								>Tải xuống tất cả Bộ Chứng thư tự động
+							</b-tooltip>
+							<b-tooltip :target="'convert_all_official_auto'" placement="top"
+								>Chuyển Bộ Chứng thư tự động thành Bộ chứng thư chính thức
 							</b-tooltip>
 							<!-- <font-awesome-icon
 								v-if="isViewAutomationDocument"
@@ -633,17 +641,37 @@
 								class="mr-2"
 							/> -->
 						</h3>
-						<div
-							class="mr-4"
-							v-if="isViewAutomationDocument"
-							:id="'download_all_official_auto'"
-							@click="handleDownloadAll('TaiLieuTuDong')"
-						>
-							<img
-								src="@/assets/icons/ic_download_3.png"
-								alt="search"
-								class="img_document_action"
-							/>
+						<div class="d-flex mr-4">
+							<div
+								class=""
+								v-if="isViewAutomationDocument"
+								:id="'download_all_official_auto'"
+								@click="handleDownloadAll('TaiLieuTuDong')"
+							>
+								<img
+									src="@/assets/icons/ic_download_3.png"
+									alt="search"
+									class="img_document_action"
+								/>
+							</div>
+							<div
+								class=""
+								v-if="
+									isViewAutomationDocument &&
+										statusText !== 'Hoàn thành' &&
+										statusText !== 'In hồ sơ' &&
+										statusText !== 'Bàn giao khách hàng' &&
+										statusText !== 'Hủy'
+								"
+								:id="'convert_all_official_auto'"
+								@click="handleDownloadAll('TaiLieuTuDong')"
+							>
+								<img
+									src="@/assets/icons/arrow-right-solid.svg"
+									alt="search"
+									class="img_document_action"
+								/>
+							</div>
 						</div>
 					</div>
 					<div class="card-body card-info">
@@ -1527,7 +1555,8 @@
 			v-if="
 				form.general_asset.length > 0 &&
 					printConfig &&
-					statusDescription === 'In hồ sơ'
+					statusDescription === 'In hồ sơ' &&
+					statusDescription === 'Bàn giao khách hàng'
 			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
@@ -2509,6 +2538,7 @@ export default {
 	},
 	data() {
 		return {
+			byPassAdmin: false,
 			showPopupComfirmDownloadAutoDocument: false,
 			typeConfirm: "",
 			theme: {
@@ -2684,9 +2714,20 @@ export default {
 		if (
 			this.form &&
 			this.form.appraiser_business_manager &&
-			this.form.appraiser_business_manager.user_id === this.user.id
+			this.form.appraiser_business_manager.user_id === this.user.id &&
+			this.form.status &&
+			(this.form.status !== 4 || this.form.status !== 5)
 		) {
 			this.isBusinessManager = true;
+		}
+		if (
+			this.form.status &&
+			this.form.status !== 4 &&
+			this.form.status !== 5 &&
+			(profile.data.user.roles[0].name === "ROOT_ADMIN" ||
+				profile.data.user.roles[0].name === "ADMIN")
+		) {
+			this.byPassAdmin = true;
 		}
 		if (
 			this.form.status &&

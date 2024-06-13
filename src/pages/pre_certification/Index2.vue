@@ -34,9 +34,34 @@
 						<div
 							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
-							<DropdownFilter class="mr-5 " @notifi-kanban="notifiKanban()" />
+							<div
+								class="d-flex col-6 justify-content-between align-items-center"
+							>
+								<div class="col-5 ">
+									<a-date-picker
+										placeholder="Từ ngày"
+										v-model="filterKanban.timeFilter.from"
+										format="DD-MM-YYYY"
+									></a-date-picker>
+								</div>
+								<div class="col-2 text-center pa-0">-</div>
+								<div class="col-5 mr-2">
+									<a-date-picker
+										placeholder="Đến ngày"
+										v-model="filterKanban.timeFilter.to"
+										:disabledDate="disabledToDate"
+										format="DD-MM-YYYY"
+									></a-date-picker>
+								</div>
+							</div>
+							<DropdownFilter
+								:fromDate="form.fromDate"
+								:toDate="form.toDate"
+								class="mr-4 "
+								@notifi-kanban="notifiKanban()"
+							/>
 							<Search
-								class="col-10"
+								class="col-9"
 								@filter-changed="onFilterQuickSearchChange($event)"
 							/>
 							<router-link
@@ -280,7 +305,8 @@ export default {
 			filter,
 			isLoading,
 			paginationAll,
-			jsonConfig
+			jsonConfig,
+			filterKanban
 		} = storeToRefs(preCertificateStore);
 		const statusOptions = ref({
 			data: [
@@ -321,7 +347,7 @@ export default {
 		return {
 			isMobile,
 			statusOptions,
-
+			filterKanban,
 			filter,
 			lstPreCertificateTable,
 			selectedStatus,
@@ -353,7 +379,12 @@ export default {
 				this.activeStatus = true;
 			}
 		},
-
+		disabledToDate(current) {
+			// Disable dates before the "from" date
+			if (!this.filterKanban.timeFilter.from) return false;
+			let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
+			return current && current < endOfDay;
+		},
 		async onFilterQuickSearchChange($event) {
 			this.search_kanban = { ...$event };
 			this.filter.search = $event.search;

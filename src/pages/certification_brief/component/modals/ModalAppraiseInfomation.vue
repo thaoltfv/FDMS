@@ -170,7 +170,7 @@
 							<div class="col-6">
 								<InputText
 									v-model="form.certificate_num"
-									:disabledInput="editDocument"
+									:disabledInput="form.status === 7 ? false : editDocument"
 									vid="certificate_num"
 									label="Số chứng thư"
 									class="form-group-container"
@@ -195,7 +195,7 @@
 									vid="certificate_date"
 									label="Ngày chứng thư"
 									placeholder="Ngày / tháng / năm"
-									:disabled="editDocument"
+									:disabled="form.status === 7 ? false : editDocument"
 									class="form-group-container"
 									:formatDate="'DD/MM/YYYY'"
 									:date="disabledDate"

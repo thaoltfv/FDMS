@@ -43,9 +43,29 @@
 						<div
 							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
-							<DropdownFilter class="mr-5" @search="onChangeStatus" />
+							<div
+								class="d-flex col-6 justify-content-between align-items-center"
+							>
+								<div class="col-5">
+									<a-date-picker
+										placeholder="Từ ngày"
+										v-model="fromDate"
+										format="DD-MM-YYYY"
+									></a-date-picker>
+								</div>
+								<div class="col-2 text-center pa-0">-</div>
+								<div class="col-5">
+									<a-date-picker
+										placeholder="Đến ngày"
+										v-model="toDate"
+										:disabledDate="disabledToDate"
+										format="DD-MM-YYYY"
+									></a-date-picker>
+								</div>
+							</div>
+							<DropdownFilter class="mr-4" @search="onChangeStatus" />
 							<Search
-								class="col-10"
+								class="col-9"
 								@filter-changed="onFilterQuickSearchChange($event)"
 							/>
 							<router-link
@@ -281,6 +301,16 @@ export default {
 			this.selectedStatus = ["3"];
 		}
 	},
+	watch: {
+		fromDate() {
+			this.getCertificateAll();
+			this.render_kanban += 1;
+		},
+		toDate() {
+			this.getCertificateAll();
+			this.render_kanban += 1;
+		}
+	},
 	methods: {
 		isMobile() {
 			if (
@@ -358,8 +388,8 @@ export default {
 			await this.getCertificateAll(params);
 		},
 		onChangeStatus(statusArray, fromDate, toDate) {
-			this.fromDate = fromDate;
-			this.toDate = toDate;
+			// this.fromDate = fromDate;
+			// this.toDate = toDate;
 			this.selectedStatus = statusArray;
 			if (this.search_kanban) {
 				this.search_kanban.status = statusArray;
@@ -474,10 +504,18 @@ export default {
 		},
 		exportAdjust() {
 			this.showAdjustModal = true;
+		},
+		disabledToDate(current) {
+			// Disable dates before the "from" date
+			if (!this.fromDate) return false;
+			let endOfDay = moment(this.fromDate).endOf("day");
+			return current && current < endOfDay;
 		}
 	},
 
 	beforeMount() {
+		this.fromDate = moment().subtract(1, "months");
+		this.toDate = moment();
 		this.getCertificateAll();
 		this.getProfiles();
 	}
