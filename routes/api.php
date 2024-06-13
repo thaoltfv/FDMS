@@ -425,6 +425,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('download-all-official/{id}/{type}', [CertificateAssetController::class, 'downloadAllOfficial']);
         Route::get('delete-file-after-download/{name}', [CertificateAssetController::class, 'deleteAfterDownload']);
+        Route::post('convert-auto-document-to-official/{id}', [CertificateAssetController::class, 'convertAutoDocumentToOffical']);
 
         Route::get('print/test1/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest1']);
         Route::get('print/test2/bao-cao/{id}', [CertificateAssetController::class, 'printBaoCaoTest2']);

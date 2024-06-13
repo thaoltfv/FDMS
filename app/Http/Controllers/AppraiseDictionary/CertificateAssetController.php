@@ -577,6 +577,58 @@ class CertificateAssetController extends Controller
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
     }
+
+    public function convertAutoDocumentToOffical($id, $type)
+    {
+        try {
+            $certificate = $this->certificateRepository->findById($id);
+            $arrayLink = [];
+            $zipFileName = $type . '_HSTD_' . $id . '.zip';
+            $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('His');
+            $zipFileNameLink = $type . '_HSTD_' . $id . '_' . $downloadTime . '.zip';
+            if ($type == 'TaiLieuTuDong') {
+
+                $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+                $cert = Certificate::where('id', $id)->first()->toArray();
+                if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
+                    $tempTLTDCT[] = 'Appendix2';
+                }
+
+                foreach ($tempTLTDCT as  $value) {
+
+                    $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
+                    if ($value != 'TSSS') {
+                        $item =  $this->printDocumentOfficialAll($id, $service);
+
+                        if (!empty($item)) {
+                            $arrayLink[] = $item;
+                        }
+                    } else {
+                        $item =  $this->printOfficialTSSS($id);
+                        if (!empty($item)) {
+                            $arrayLink[] = $item;
+                        }
+                    }
+                }
+            }
+            if (count($arrayLink) > 0) {
+
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                }
+
+
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống tất cả ' . $this->getTypeDownload($type));
+
+                return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => '']);
+            } else {
+                return  $this->respondWithErrorData(['message' => 'Chuyển bộ chứng thư tự động thất bại']);
+            }
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
+        }
+    }
     public function getTypeDownload($type)
     {
         $returnType = "";
