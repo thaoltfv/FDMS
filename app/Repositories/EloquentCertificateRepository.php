@@ -2792,9 +2792,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $role = $user->roles->last();
         // dd($role->name);
         if (request()->has('is_guest')) {
-        } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('createdBy', function ($q) use ($user) {
+                $query = $query->whereHas('branch', function ($q) use ($user) {
+                    if ($user->branch_id) {
+                        return $q->where('id', $user->branch_id);
+                    }
+                });
+                $query = $query->orWhereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiser', function ($q) use ($user) {
@@ -3258,8 +3263,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
+                $query = $query->whereHas('branch', function ($q) use ($user) {
+                    if ($user->branch_id) {
+                        return $q->where('id', $user->branch_id);
+                    }
+                });
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
@@ -6648,8 +6658,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            if ($role->name !== 'ROOT_ADMIN'  && $role->name !== 'ADMIN' && $role->name !== 'Accounting') {
                 $result = $result->where(function ($query) use ($userId) {
+                    $query = $query->whereHas('branch', function ($q) use ($user) {
+                        if ($user->branch_id) {
+                            return $q->where('id', $user->branch_id);
+                        }
+                    });
                     $query = $query->whereHas('createdBy', function ($q) use ($userId) {
                         return $q->where('id', $userId);
                     });
