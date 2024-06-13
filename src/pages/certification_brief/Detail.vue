@@ -658,13 +658,13 @@
 								class=""
 								v-if="
 									isViewAutomationDocument &&
-										statusText !== 'Hoàn thành' &&
-										statusText !== 'In hồ sơ' &&
-										statusText !== 'Bàn giao khách hàng' &&
-										statusText !== 'Hủy'
+										statusDescription !== 'Hoàn thành' &&
+										statusDescription !== 'In hồ sơ' &&
+										statusDescription !== 'Bàn giao khách hàng' &&
+										statusDescription !== 'Hủy'
 								"
 								:id="'convert_all_official_auto'"
-								@click="handleDownloadAll('TaiLieuTuDong')"
+								@click="showPopupComfirmConvertDocument = true"
 							>
 								<img
 									src="@/assets/icons/arrow-right-solid.svg"
@@ -2294,6 +2294,14 @@
 			@cancel="showPopupComfirmDownloadAutoDocument = false"
 			@action="handleDownloadConfirm"
 		/>
+		<ModalConfirmDownload
+			v-if="showPopupComfirmConvertDocument"
+			:textConfirm="
+				`Bạn có muốn chuyển bộ chứng thư tự động thành bộ chứng thư chính thức ?`
+			"
+			@cancel="showPopupComfirmConvertDocument = false"
+			@action="handleConvertConfirm"
+		/>
 		<ModalAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
@@ -2455,7 +2463,6 @@ import PaymentCertificateHistories from "./component/PaymentCertificateHistories
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalPreviewDocument from "@/components/PreCertificate/ModalViewDocument";
-
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationWithAssignHSTD from "@/components/Modal/ModalNotificationWithAssignHSTD";
 
@@ -2540,6 +2547,7 @@ export default {
 		return {
 			byPassAdmin: false,
 			showPopupComfirmDownloadAutoDocument: false,
+			showPopupComfirmConvertDocument: false,
 			typeConfirm: "",
 			theme: {
 				navItem: "#000000",
@@ -3273,7 +3281,31 @@ export default {
 				});
 			}
 		},
-
+		async handleConvertConfirm() {
+			try {
+				await Certificate.convertAutoDocumentToOfficial(this.idData).then(
+					resp => {
+						const res = resp.data;
+						if (res) {
+						} else {
+							this.$toast.open({
+								message: resp.error.message,
+								type: "error",
+								position: "top-right",
+								duration: 3000
+							});
+						}
+					}
+				);
+			} catch (error) {
+				this.$toast.open({
+					message: error,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+			}
+		},
 		handleCancel() {
 			this.openNotification = false;
 			if (this.cancel_certificate) {

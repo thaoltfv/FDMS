@@ -32,14 +32,14 @@
 					<div
 						class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
 					>
-						<div class="col-12 col-md-6 col-xl-8">
+						<!-- <div class="col-12 col-md-6 col-xl-8">
 							<button-checkbox
 								v-show="showFilter"
 								:options="statusOptions"
 								:value="selectedStatus"
 								@change="onChangeStatus"
 							/>
-						</div>
+						</div> -->
 						<div
 							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
@@ -157,11 +157,11 @@
 						</b-dropdown>
 					</div>
 					<div class="col-12 col-md-6 col-xl-8">
-						<button-checkbox
+						<!-- <button-checkbox
 							:options="statusOptions"
 							:value="selectedStatus"
 							@change="onChangeStatus"
-						/>
+						/> -->
 					</div>
 				</div>
 			</div>
@@ -236,15 +236,16 @@ export default {
 			showFilter: false,
 			statusOptions: {
 				data: [
-					// { label: 'Tiếp nhận hồ sơ', value: '1', class: 'bg-info' },
-					// { label: 'Thẩm định', value: '2', class: 'bg-primary' },
-					// { label: 'Kiểm soát', value: '6', class: 'bg-control' },
-					// { label: 'Duyệt giá', value: '3', class: 'bg-warning' },
-					// { label: 'Duyệt phát hành', value: '7', class: 'bg-warning' },
-					// { label: 'In hồ sơ', value: '8', class: 'bg-warning' },
-					// { label: 'Bàn giao khách hàng', value: '9', class: 'bg-warning' },
-					// { label: 'Hoàn thành', value: '4', class: 'bg-success' },
-					// { label: 'Hủy', value: '5', class: 'bg-secondary' }
+					{ label: "Tiếp nhận hồ sơ", value: "1", class: "bg-info" },
+					{ label: "Phân hồ sơ", value: "10", class: "bg-info" },
+					{ label: "Thẩm định", value: "2", class: "bg-primary" },
+					{ label: "Kiểm soát", value: "6", class: "bg-control" },
+					{ label: "Duyệt giá", value: "3", class: "bg-warning" },
+					{ label: "Duyệt phát hành", value: "7", class: "bg-warning" },
+					{ label: "In hồ sơ", value: "8", class: "bg-warning" },
+					{ label: "Bàn giao khách hàng", value: "9", class: "bg-warning" },
+					{ label: "Hoàn thành", value: "4", class: "bg-success" },
+					{ label: "Hủy", value: "5", class: "bg-secondary" }
 				],
 				value: "value",
 				label: "label"
@@ -514,8 +515,8 @@ export default {
 	},
 
 	beforeMount() {
-		this.fromDate = moment().subtract(1, "months");
-		this.toDate = moment();
+		this.fromDate = moment(new Date()).subtract(1, "months");
+		this.toDate = moment(new Date());
 		this.getCertificateAll();
 		this.getProfiles();
 	}

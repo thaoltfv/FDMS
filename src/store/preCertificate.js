@@ -374,8 +374,8 @@ export const usePreCertificateStore = defineStore(
 			status: [],
 			ots: null,
 			timeFilter: {
-				from: moment().subtract(1, "months"),
-				to: moment(),
+				from: moment(new Date()).subtract(1, "months"),
+				to: moment(new Date()),
 			}
 		});
 		const selectedStatus = ref([]);
