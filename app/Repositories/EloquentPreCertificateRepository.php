@@ -423,14 +423,18 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $role = $user->roles->last();
         // dd($role->name);
         if (request()->has('is_guest')) {
-        } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        } elseif ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('branch', function ($q) use ($user) {
                     if ($user->branch_id) {
                         return $q->where('id', $user->branch_id);
                     }
                 });
-                $query = $query->orwhereHas('createdBy', function ($q) use ($user) {
+            });
+        } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            $result = $result->where(function ($query) use ($user) {
+
+                $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
@@ -732,14 +736,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //     $permissionViewAccount = true;
         // }
         // dd($role->name);
-        if (($role->name !== 'ROOT_ADMIN'  && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        if ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('branch', function ($q) use ($user) {
                     if ($user->branch_id) {
                         return $q->where('id', $user->branch_id);
                     }
                 });
-                $query = $query->orwhereHas('createdBy', function ($q) use ($user) {
+            });
+        } elseif (($role->name !== 'ROOT_ADMIN'  && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            $result = $result->where(function ($query) use ($user) {
+                $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {

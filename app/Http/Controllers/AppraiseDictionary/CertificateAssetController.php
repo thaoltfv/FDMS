@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\AppraiseDictionary;
 
 use App\Http\Controllers\Controller;
-
 use App\Contracts\AppraiseAssetRepository;
 use App\Contracts\CertificateAssetRepository;
 use App\Contracts\AppraiserCompanyRepository;
@@ -13,7 +12,7 @@ use App\Contracts\CompareAssetGeneralRepository;
 use App\Contracts\DictionaryRepository;
 use App\Contracts\PreCertificateRepository;
 use App\Contracts\UserRepository;
-
+use App\Services\CommonService;
 use App\Services\AppraiseAsset\AppraiseAsset;
 use App\Services\Document\CertificateAsset\PhuLuc2;
 use App\Services\Document\BaoCaoTest;
@@ -26,7 +25,7 @@ use App\Models\Certificate;
 use App\Models\Appraiser;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
-
+use App\Models\CertificateOtherDocuments;
 use App\Models\RealEstate;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
@@ -578,73 +577,60 @@ class CertificateAssetController extends Controller
         }
     }
 
-    public function convertAutoDocumentToOffical($id, $type)
+    public function convertAutoDocumentToOffical($id)
     {
         try {
             $certificate = $this->certificateRepository->findById($id);
             $arrayLink = [];
-            $zipFileName = $type . '_HSTD_' . $id . '.zip';
-            $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('His');
-            $zipFileNameLink = $type . '_HSTD_' . $id . '_' . $downloadTime . '.zip';
-            if ($type == 'TaiLieuTuDong') {
+            $user = CommonService::getUser();
+            $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            $cert = Certificate::where('id', $id)->first()->toArray();
+            if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
+                $tempTLTDCT[] = 'Appendix2';
+            }
+            foreach ($tempTLTDCT as  $value) {
 
-                $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
-                $cert = Certificate::where('id', $id)->first()->toArray();
-                if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
-                    $tempTLTDCT[] = 'Appendix2';
-                }
-
-                foreach ($tempTLTDCT as  $value) {
-
-                    $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
-                    if ($value != 'TSSS') {
-                        $item =  $this->printDocumentOfficialAll($id, $service);
-
-                        if (!empty($item)) {
-                            $arrayLink[] = $item;
-                        }
-                    } else {
-                        $item =  $this->printOfficialTSSS($id);
-                        if (!empty($item)) {
-                            $arrayLink[] = $item;
-                        }
+                $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
+                if ($value != 'TSSS') {
+                    $item =  $this->printDocumentOfficialAll($id, $service);
+                    $item['typeDocument'] = $value;
+                    if (!empty($item)) {
+                        $arrayLink[] = $item;
+                    }
+                } else {
+                    $item =  $this->printOfficialTSSS($id);
+                    $item['typeDocument'] = $value;
+                    if (!empty($item)) {
+                        $arrayLink[] = $item;
                     }
                 }
             }
+
             if (count($arrayLink) > 0) {
 
                 foreach ($arrayLink as $fileLink) {
                     $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
-                    if (isset($files) && !empty($files)) {
-                        foreach ($files as $file) {
-                            $fileName = $file->getClientOriginalName();
-                            $fileType = $file->getClientOriginalExtension();
-                            $fileSize = $file->getSize();
-                            // $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
-                            // Storage::put($name, file_get_contents($file));
-                            // $fileUrl = Storage::url($name);
-                            // $item = [
-                            //     'certificate_id' => $id,
-                            //     'name' => $fileName,
-                            //     'link' => $fileUrl,
-                            //     'type' => $fileType,
-                            //     'size' => $fileSize,
-                            //     'description' => $description,
-                            //     'created_by' => $user->id,
-                            // ];
-                            // $item = new CertificateOtherDocuments($item);
-                            // CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $description], $item->attributesToArray());
-                        }
-                    }
+
+
+                    $item = [
+                        'certificate_id' => $id,
+                        'name' => $fileName,
+                        'link' => $fileLink['link'] ? $fileLink['link'] : $fileLink['url'],
+                        'type' => 'docx',
+                        'size' => null,
+                        'description' => $this->getOtherDescription($fileLink['typeDocument']),
+                        'created_by' => $user->id,
+                    ];
+                    $item = new CertificateOtherDocuments($item);
+                    CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $this->getOtherDescription($fileLink['typeDocument'])], $item->attributesToArray());
                 }
 
-                // $result = CertificateOtherDocuments::where('certificate_id', $id)
-                //     ->with('createdBy')
-                //     ->get();
-                // return $result;
+                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                    ->with('createdBy')
+                    ->get();
                 $this->CreateActivityLog($certificate, $certificate, 'download', 'Chuyển đổi bộ chứng thư tự động thành bộ chứng thư chính thức');
 
-                return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => '']);
+                return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => $result]);
             } else {
                 return  $this->respondWithErrorData(['message' => 'Chuyển bộ chứng thư tự động thất bại']);
             }
@@ -652,6 +638,20 @@ class CertificateAssetController extends Controller
             Log::info($th);
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
+    }
+    private function getOtherDescription($description)
+    {
+        $array = [
+            'Certificate' => 'certificate_report',
+            'Appraisal' => 'appraisal_report',
+            'Appendix1' => 'appendix1_report',
+            'Appendix2' => 'appendix2_report',
+            'Appendix3' => 'appendix3_report',
+        ];
+        if (isset($array[$description]))
+            return $array[$description];
+        else
+            return 'comparision_asset_report';
     }
     public function getTypeDownload($type)
     {
