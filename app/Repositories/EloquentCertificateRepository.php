@@ -6106,7 +6106,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $users[] =  $eloquenUser->getUser($certificate->appraiserPerform->user_id);
                 }
             if (isset($certificate->appraiser) && isset($certificate->appraiser->user_id))
-                if ($certificate->appraiser->user_id != $loginUser->id && $certificate->appraiser->user_id != $certificate->appraiserPerform->user_id) {
+                if ($certificate->appraiser->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiser->user_id);
                 }
             if (isset($certificate->appraiserControl) && isset($certificate->appraiserControl->user_id))
