@@ -2912,15 +2912,15 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
             $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate])
-            ->whereBetween('certificates.updated_at', [$startDate, $endDate])
+                ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $result = $result->where('certificates.created_at', '>=', $startDate)
-            ->where('certificates.updated_at', '>=', $startDate);
+                ->where('certificates.updated_at', '>=', $startDate);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
             $result = $result->where('certificates.created_at', '<=', $endDate)
-            ->where('certificates.updated_at', '<=', $endDate);
+                ->where('certificates.updated_at', '<=', $endDate);
         }
 
         if (!empty($status)) {
@@ -3325,11 +3325,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $result = $result->where('certificates.created_at', '>=', $timeFilterFrom)
-            ->where('certificates.updated_at', '>=', $timeFilterFrom);
+                ->where('certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
             $result = $result->where('certificates.created_at', '<=', $timeFilterTo)
-            ->where('certificates.updated_at', '<=', $timeFilterTo);
+                ->where('certificates.updated_at', '<=', $timeFilterTo);
         }
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
