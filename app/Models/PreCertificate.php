@@ -175,4 +175,8 @@ class PreCertificate extends Model
     {
         return $this->belongsTo(Dictionary::class, 'customer_group_id', 'id');
     }
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
 }

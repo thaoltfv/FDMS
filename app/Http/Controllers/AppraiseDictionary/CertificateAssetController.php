@@ -615,10 +615,34 @@ class CertificateAssetController extends Controller
 
                 foreach ($arrayLink as $fileLink) {
                     $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                    if (isset($files) && !empty($files)) {
+                        foreach ($files as $file) {
+                            $fileName = $file->getClientOriginalName();
+                            $fileType = $file->getClientOriginalExtension();
+                            $fileSize = $file->getSize();
+                            // $name = $path . Uuid::uuid4()->toString() . '.' . $fileType;
+                            // Storage::put($name, file_get_contents($file));
+                            // $fileUrl = Storage::url($name);
+                            // $item = [
+                            //     'certificate_id' => $id,
+                            //     'name' => $fileName,
+                            //     'link' => $fileUrl,
+                            //     'type' => $fileType,
+                            //     'size' => $fileSize,
+                            //     'description' => $description,
+                            //     'created_by' => $user->id,
+                            // ];
+                            // $item = new CertificateOtherDocuments($item);
+                            // CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $description], $item->attributesToArray());
+                        }
+                    }
                 }
 
-
-                $this->CreateActivityLog($certificate, $certificate, 'download', 'tải xuống tất cả ' . $this->getTypeDownload($type));
+                // $result = CertificateOtherDocuments::where('certificate_id', $id)
+                //     ->with('createdBy')
+                //     ->get();
+                // return $result;
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'Chuyển đổi bộ chứng thư tự động thành bộ chứng thư chính thức');
 
                 return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => '']);
             } else {

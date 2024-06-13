@@ -430,7 +430,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         return $q->where('id', $user->branch_id);
                     }
                 });
-                $query = $query->whereHas('createdBy', function ($q) use ($user) {
+                $query = $query->orwhereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
@@ -739,7 +739,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         return $q->where('id', $user->branch_id);
                     }
                 });
-                $query = $query->whereHas('createdBy', function ($q) use ($user) {
+                $query = $query->orwhereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
