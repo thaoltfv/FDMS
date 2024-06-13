@@ -1093,6 +1093,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ];
                 }
                 $preCertificateKey = [
+                    'branch_id',
                     'certificate_id',
                     'petitioner_name',
                     'petitioner_phone',
@@ -1146,6 +1147,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'total_preliminary_value',
                     'pre_type_id',
                     'customer_group_id',
+                    'branch_id'
                 ];
 
                 $user = CommonService::getUser();
