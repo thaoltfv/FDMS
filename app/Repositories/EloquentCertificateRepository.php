@@ -3161,6 +3161,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         ];
         $with = [
             'appraiser:id,name,user_id',
+            'branch',
             // 'appraiser.appraiserUser:id,appraisers_number,image',
             // 'appraiserManager:id,name,appraiser_number',
             // 'appraiserManager.appraiserUser:id,appraisers_number,image',
@@ -3265,6 +3266,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // dd($role->name);
         if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
+                Log::info($user->branch_id);
                 $query = $query->whereHas('branch', function ($q) use ($user) {
                     if ($user->branch_id) {
                         return $q->where('id', $user->branch_id);
