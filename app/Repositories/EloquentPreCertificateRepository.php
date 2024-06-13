@@ -493,16 +493,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
-                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('pre_certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+                ->whereBetween('pre_certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('pre_certificates.created_at', '>=', $startDate)
-                ->where('pre_certificates.updated_at', '>=', $startDate);
+            $result = $result->where('pre_certificates.created_at', '>=', $timeFilterFrom)
+                ->where('pre_certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('pre_certificates.created_at', '<=', $endDate)
-                ->where('pre_certificates.updated_at', '<=', $endDate);
+            $result = $result->where('pre_certificates.created_at', '<=', $timeFilterTo)
+                ->where('pre_certificates.updated_at', '<=', $timeFilterTo);
         }
 
         if (isset($selectedStatus) && !empty($selectedStatus)) {
@@ -803,16 +803,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
-                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('pre_certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+                ->whereBetween('pre_certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('pre_certificates.created_at', '>=', $startDate)
-                ->where('pre_certificates.updated_at', '>=', $startDate);
+            $result = $result->where('pre_certificates.created_at', '>=', $timeFilterFrom)
+                ->where('pre_certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('pre_certificates.created_at', '<=', $endDate)
-                ->where('pre_certificates.updated_at', '<=', $endDate);
+            $result = $result->where('pre_certificates.created_at', '<=', $timeFilterTo)
+                ->where('pre_certificates.updated_at', '<=', $timeFilterTo);
         }
 
         if (isset($selectedStatus) && !empty($selectedStatus)) {
