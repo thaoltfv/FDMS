@@ -121,10 +121,14 @@ class ValueDefault
 
     public const STATUSES = [
         1 => 'Mới',
-        2 => 'Đang thẩm định',
-        3 => 'Đang duyệt',
+        2 => 'Thẩm định',
+        3 => 'Duyệt giá',
         4 => 'Hoàn thành',
         5 => 'Hủy',
         6 => 'Đang kiểm soát',
+        7 => 'Duyệt phát hành',
+        8 => 'In hồ sơ',
+        9 => 'Bàn giao khách hàng',
+        10 => 'Phân hồ sơ',
     ];
 }
