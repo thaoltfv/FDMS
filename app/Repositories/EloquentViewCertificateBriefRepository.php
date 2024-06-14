@@ -279,7 +279,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $select = [
             DB::raw("status,status_text, count(id) as count")
         ];
-        $data =  $this->model->query()
+        $data = QueryBuilder::for(Certificate::class)
             ->select($select)
             ->whereIn('status', [1, 10, 2, 3, 7, 8, 9])
             ->groupBy(['status', 'status_text'])
