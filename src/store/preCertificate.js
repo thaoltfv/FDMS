@@ -416,7 +416,7 @@ export const usePreCertificateStore = defineStore(
 					const resp = await PreCertificate.paginate({
 						query: {
 							page: 1,
-							limit: 20,
+							limit: 30,
 							...param,
 							...temp
 						}
