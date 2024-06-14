@@ -637,6 +637,68 @@ class CertificateAssetController extends Controller
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
     }
+    public function convertAutoDocumentToOfficalFollowType($id, $type)
+    {
+        try {
+            $certificate = $this->certificateRepository->findById($id);
+            $arrayLink = [];
+            $user = CommonService::getUser();
+            $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            $cert = Certificate::where('id', $id)->first()->toArray();
+            if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
+                $tempTLTDCT[] = 'Appendix2';
+            }
+            foreach ($tempTLTDCT as  $value) {
+                if ($type === $this->getOtherDescription($value)) {
+                    $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
+                    if ($value != 'TSSS') {
+                        $item =  $this->printDocumentOfficialAll($id, $service);
+                        $item['typeDocument'] = $value;
+                        if (!empty($item)) {
+                            $arrayLink[] = $item;
+                        }
+                    } else {
+                        $item =  $this->printOfficialTSSS($id);
+                        $item['typeDocument'] = $value;
+                        if (!empty($item)) {
+                            $arrayLink[] = $item;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (count($arrayLink) > 0) {
+
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                    $item = [
+                        'certificate_id' => $id,
+                        'name' => $fileName,
+                        'link' =>  isset($fileLink['link']) ? $fileLink['link'] : $fileLink['url'],
+                        'type' => 'docx',
+                        'size' => null,
+                        'description' => $this->getOtherDescription($fileLink['typeDocument']),
+                        'created_by' => $user->id,
+                    ];
+                    $item = new CertificateOtherDocuments($item);
+                    CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $this->getOtherDescription($fileLink['typeDocument'])], $item->attributesToArray());
+                }
+
+                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                    ->with('createdBy')
+                    ->get();
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'Chuyển đổi bộ chứng thư tự động thành bộ chứng thư chính thức');
+
+                return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => $result]);
+            } else {
+                return  $this->respondWithErrorData(['message' => 'Chuyển bộ chứng thư tự động thất bại']);
+            }
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
+        }
+    }
     private function getOtherDescription($description)
     {
         $array = [
