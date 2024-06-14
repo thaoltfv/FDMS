@@ -273,13 +273,11 @@
 									:key="'building' + index"
 								>
 									<td class="text-left">
-										<div class="text-left">
-											{{
-												item.building_type
-													? formatSentenceCase(item.building_type.description)
-													: ""
-											}}
-										</div>
+										{{
+											item.building_type
+												? formatSentenceCase(item.building_type.description)
+												: ""
+										}}
 									</td>
 									<td class="text-center">
 										{{ formatArea(item.total_construction_area) }}
