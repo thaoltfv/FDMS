@@ -262,7 +262,6 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->whereIn('status', [1, 10, 2, 3, 7, 8, 9]);
 
         $data = QueryBuilder::for(Certificate::class)
-            ->query()
             ->select($newlogSelect)
             ->where('created_at', '>=', $date)
             ->whereIn('status', [1, 10, 2, 3, 7, 8, 9])
