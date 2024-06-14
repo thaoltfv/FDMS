@@ -2410,7 +2410,9 @@
 		<ModalConfirmDownload
 			v-if="showPopupComfirmConvertDocument"
 			:textConfirm="
-				`Bạn có muốn chuyển bộ chứng thư tự động thành bộ chứng thư chính thức ?`
+				`Bạn có muốn chuyển ${getNameConvert(
+					this.typeConvert
+				)} tự động thành ${getNameConvert(this.typeConvert)} chính thức ?`
 			"
 			@cancel="showPopupComfirmConvertDocument = false"
 			@action="handleConvertConfirm"
@@ -4247,6 +4249,36 @@ export default {
 					}
 				}
 			}
+		},
+		getNameConvert(type) {
+			let message = "";
+			switch (type) {
+				case "certificate_report":
+					message = "Chứng thư thẩm định";
+
+					break;
+				case "appraisal_report":
+					message = "Báo cáo thẩm định";
+
+					break;
+				case "appendix1_report":
+					message = "Bảng điều chỉnh QSDĐ";
+
+					break;
+				case "appendix2_report":
+					message = "Bảng điều chỉnh CTXD";
+
+					break;
+				case "appendix3_report":
+					message = "Hình ảnh hiện trạng";
+
+					break;
+				case "comparision_asset_report":
+					message = "Phiếu thu thập TSSS";
+
+					break;
+			}
+			return message;
 		},
 		checkFileUpload(type) {
 			let message = "";
