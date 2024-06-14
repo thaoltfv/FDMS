@@ -65,12 +65,12 @@
 			<div class="card-body card-info" v-show="showCardDetailFile">
 				<div class="ml-n3 mt-2 row">
 					<div
-						class="mb-4 col-3 "
+						class="mb-4 col-lg-3 col-md-4 col-sm-12"
 						v-for="(file, index) in lstFile"
 						:key="index"
 					>
 						<div
-							class="row input_download_certificate mx-1  d-flex justify-content-between"
+							class="input_download_certificate mx-1 d-flex justify-content-between"
 						>
 							<div
 								class="d-flex align-items-center"
@@ -170,7 +170,11 @@
 				/>
 			</div>
 			<div class="ml-n4 mt-2 row">
-				<div class="mb-4 col-3 " v-for="(file, index) in lstFile" :key="index">
+				<div
+					class="mb-4 col-lg-3 col-md-4 col-sm-12 "
+					v-for="(file, index) in lstFile"
+					:key="index"
+				>
 					<div
 						class="row input_download_certificate mx-1  d-flex justify-content-between"
 					>
