@@ -259,13 +259,13 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->query()
             ->select($backlogSelect)
             ->where('created_at', '<', $date)
-            ->whereIn('status', [1, 2, 3, 6]);
+            ->whereIn('status', [1, 10, 2, 3, 7, 8, 9]);
 
         $data = $this->model
             ->query()
             ->select($newlogSelect)
             ->where('created_at', '>=', $date)
-            ->whereIn('status', [1, 2, 3, 6])
+            ->whereIn('status', [1, 10, 2, 3, 7, 8, 9])
             ->unionAll($backlog)
             ->get()->toArray();
         // ->get()->toArray();
