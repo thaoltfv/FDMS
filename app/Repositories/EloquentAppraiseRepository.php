@@ -4438,7 +4438,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
                         'asset_general_id' => $asset_general_id,
                         'percent' => floatval($asset['adjust_percent']) + 100,
                         // 'change_purpose_price' => $cpcmdsd,
-                        'change_purpose_price' => 0,
+                        'change_purpose_price' => null,
                         'change_violate_price' => 0,
                         'change_negotiated_price' => $asset['adjust_amount'],
                     ];
@@ -7398,7 +7398,7 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         if (isset($result)) {
             AppraiseAdapter::query()
                 ->where('asset_general_id', $result->asset_general_id)
-                ->update(['change_purpose_price' => 0]);
+                ->update(['change_purpose_price' => null]);
         }
         return $result;
     }
