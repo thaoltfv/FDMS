@@ -329,7 +329,7 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData(['message' => ErrorMessage::PAYMENT_CHECK_UPDATE, 'exception' => ''], 403);
 
         $rules = [
-            '*.pay_date' => 'required|string|max:255',
+            '*.pay_date' => 'required|string',
             '*.amount' => 'integer',
         ];
 
