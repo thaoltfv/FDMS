@@ -65,7 +65,7 @@ class CertificateBriefController extends Controller
                 return $this->respondWithErrorData(['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
         }
         $rules = [
-            'petitioner_name' => 'string|max:255',
+            'petitioner_name' => 'string',
             'petitioner_phone' => 'nullable|numeric',
             'petitioner_identity_card' => 'nullable|string',
             'appraise_purpose_id' => 'required',
@@ -77,12 +77,12 @@ class CertificateBriefController extends Controller
             'appraiser_control_id' => 'nullable',
             'appraiser_id' => 'nullable',
             'service_fee' => 'integer|max:2000000000|min:0',
-            'appraise_date' => 'required|string|max:255',
+            'appraise_date' => 'required|string',
             //'document_date' => 'string|max:255',
             //'certificate_date' => 'string|max:255',
             'customer' => 'array|sometimes',
-            'customer.name' => 'nullable|string|max:255',
-            'customer.address' => 'nullable|string|max:255',
+            'customer.name' => 'nullable|string',
+            'customer.address' => 'nullable|string',
             'customer.phone' => 'nullable|numeric',
             'commission_fee' => 'numeric',
             'note' => 'nullable|string',

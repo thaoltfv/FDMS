@@ -19,13 +19,13 @@ class ApartmentAssetController extends Controller
 {
     protected ApartmentAssetRepository $apartment;
     private CompareAssetGeneralRepository $compareAssetGeneral;
-    private array $permissionView =['VIEW_CERTIFICATE_ASSET'];
-    private array $permissionAdd =['ADD_CERTIFICATE_ASSET'];
-    private array $permissionEdit =['EDIT_CERTIFICATE_ASSET'];
-    public function __construct(ApartmentAssetRepository $apartment,
-                                CompareAssetGeneralRepository $compareAssetGeneralRepository
-    )
-    {
+    private array $permissionView = ['VIEW_CERTIFICATE_ASSET'];
+    private array $permissionAdd = ['ADD_CERTIFICATE_ASSET'];
+    private array $permissionEdit = ['EDIT_CERTIFICATE_ASSET'];
+    public function __construct(
+        ApartmentAssetRepository $apartment,
+        CompareAssetGeneralRepository $compareAssetGeneralRepository
+    ) {
         $this->apartment = $apartment;
         $this->compareAssetGeneral = $compareAssetGeneralRepository;
     }
@@ -35,8 +35,8 @@ class ApartmentAssetController extends Controller
     public function show(int $id): JsonResponse
     {
         try {
-            if(! CommonService::checkUserPermission($this->permissionView)){
-                return $this->respondWithErrorData( ['message' => ErrorMessage::APPRAISE_CHECK_VIEW ,'exception' =>''], 403);
+            if (!CommonService::checkUserPermission($this->permissionView)) {
+                return $this->respondWithErrorData(['message' => ErrorMessage::APPRAISE_CHECK_VIEW, 'exception' => ''], 403);
             }
             $result = $this->apartment->getApartmentAssetById($id);
             if (isset($result['message']) && isset($result['exception']))
@@ -54,7 +54,7 @@ class ApartmentAssetController extends Controller
         $rules = [
             'asset_type_id' => 'integer|required',
             'project_id' => 'integer|required',
-            'appraise_asset' => 'string|required|max:255',
+            'appraise_asset' => 'string|required',
             'province_id' => 'integer|required',
             'district_id' => 'integer|nullable',
             'ward_id' => 'integer|nullable',
@@ -101,9 +101,9 @@ class ApartmentAssetController extends Controller
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
-            if(isset($id)){
+            if (isset($id)) {
                 $result = $this->apartment->updateApartmentAsset($id, $request->toArray());
-            }else{
+            } else {
                 $result = $this->apartment->createApartmentAsset($request->toArray());
             }
             if (isset($result['message']) && isset($result['exception']))
@@ -116,10 +116,10 @@ class ApartmentAssetController extends Controller
         }
     }
 
-    public function postApartmentAssetLaw(int $id, Request $request )
+    public function postApartmentAssetLaw(int $id, Request $request)
     {
         $rules = [
-            'law'=>'required|array',
+            'law' => 'required|array',
             'law.*.appraise_law_id' => 'integer|nullable',
             'law.*.legal_name_holder' => 'nullable|required_unless:law.*.appraise_law_id,0|string',
             'law.*.certifying_agency' => 'nullable|string',
@@ -158,27 +158,27 @@ class ApartmentAssetController extends Controller
     public function postApartmentAssetAppraisal(Request $request, int $id)
     {
         $rules = [
-            'appraisal_methods'=>'required|array|min:3|max:3',
+            'appraisal_methods' => 'required|array|min:3|max:3',
             'appraisal_methods.thong_nhat_muc_gia_chi_dan' => 'array|required|min:2',
-            'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => ['string','required',Rule::in(['cao-nhat','thap-nhat','trung-binh'])],
-            'value_base_and_approach'=>'required|array',
-            'value_base_and_approach.basis_property_id'=>'required_with:value_base_and_approach|integer',
-            'value_base_and_approach.principle_id'=>'required_with:value_base_and_approach|integer',
-            'value_base_and_approach.approach_id'=>'required_with:value_base_and_approach|integer',
-            'value_base_and_approach.method_used_id'=>'required_with:value_base_and_approach|integer',
-            'value_base_and_approach.description'=>'required_with:value_base_and_approach|string',
-            ];
+            'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => ['string', 'required', Rule::in(['cao-nhat', 'thap-nhat', 'trung-binh'])],
+            'value_base_and_approach' => 'required|array',
+            'value_base_and_approach.basis_property_id' => 'required_with:value_base_and_approach|integer',
+            'value_base_and_approach.principle_id' => 'required_with:value_base_and_approach|integer',
+            'value_base_and_approach.approach_id' => 'required_with:value_base_and_approach|integer',
+            'value_base_and_approach.method_used_id' => 'required_with:value_base_and_approach|integer',
+            'value_base_and_approach.description' => 'required_with:value_base_and_approach|string',
+        ];
         $customAttributes = [
             'appraisal_methods' => 'Phương pháp tính toán',
             'appraisal_methods.thong_nhat_muc_gia_chi_dan' => 'Thống nhất mức giá chỉ dẫn',
             'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => 'Thống nhất mức giá chỉ dẫn',
-            'value_base_and_approach'=>'Cơ sở giá trị và cách tiếp cận',
-            'value_base_and_approach.basis_property_id'=>'Cơ sở giá trị của tài sản thẩm định giá',
-            'value_base_and_approach.principle_id'=>'Nguyên tắc thẩm định',
-            'value_base_and_approach.approach_id'=>'Cách tiếp cận',
-            'value_base_and_approach.method_used_id'=>'Phương pháp sử dụng',
-            'value_base_and_approach.description'=>'Giả thiết và giả thiết đặc biệt',
-            ];
+            'value_base_and_approach' => 'Cơ sở giá trị và cách tiếp cận',
+            'value_base_and_approach.basis_property_id' => 'Cơ sở giá trị của tài sản thẩm định giá',
+            'value_base_and_approach.principle_id' => 'Nguyên tắc thẩm định',
+            'value_base_and_approach.approach_id' => 'Cách tiếp cận',
+            'value_base_and_approach.method_used_id' => 'Phương pháp sử dụng',
+            'value_base_and_approach.description' => 'Giả thiết và giả thiết đặc biệt',
+        ];
 
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
@@ -202,7 +202,7 @@ class ApartmentAssetController extends Controller
             'assets_general.*.id' => 'required|integer',
             'assets_general.*.version' => 'required|integer',
             'map_img' => 'required|url'
-            ];
+        ];
 
         $customAttributes = [
             'comparison_factor' => 'Yếu tố so sánh',
@@ -211,7 +211,7 @@ class ApartmentAssetController extends Controller
             'assets_general.*.id' => 'Id tài sản so sánh',
             'assets_general.*.version' => 'Version tài sản so sánh',
             // 'map_img' => 'Hình bản đồ',
-            ];
+        ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
@@ -229,14 +229,14 @@ class ApartmentAssetController extends Controller
     public function getApartmentVersionById(Request $request)
     {
         $result = [];
-        if(isset($request['assets'])){
-            $stt=0;
-            foreach($request['assets'] as $req){
+        if (isset($request['assets'])) {
+            $stt = 0;
+            foreach ($request['assets'] as $req) {
                 $id = $req['id'];
                 $version =  isset($req['version']) ? $req['version'] : 1;
-                if(isset($id)){
-                    $result[$stt] = $this->compareAssetGeneral->findApartmentVersionById($id,$version);
-                    if(isset($result[$stt]))
+                if (isset($id)) {
+                    $result[$stt] = $this->compareAssetGeneral->findApartmentVersionById($id, $version);
+                    if (isset($result[$stt]))
                         $result[$stt]['version'] =  $version;
                 }
                 $stt++;
@@ -266,7 +266,7 @@ class ApartmentAssetController extends Controller
             'other_assets.*.unit' => 'required_with:other_assets|string',
             'other_assets.*.unit_price' => 'required_with:other_assets|integer',
             'other_assets.*.total_price' => 'required_with:other_assets|integer',
-            ];
+        ];
 
         $customAttributes = [
             'other_assets' => 'Tài sản khác',
@@ -275,7 +275,7 @@ class ApartmentAssetController extends Controller
             'other_assets.*.unit' => 'Đơn vị tính',
             'other_assets.*.unit_price' => 'Đơn giá',
             'other_assets.*.total_price' => 'Thành tiền',
-            ];
+        ];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
@@ -292,10 +292,8 @@ class ApartmentAssetController extends Controller
 
     public function updateComparisonFactor(Request $request, int $id)
     {
-        $rules = [
-            ];
-        $customAttributes = [
-            ];
+        $rules = [];
+        $customAttributes = [];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
@@ -312,10 +310,8 @@ class ApartmentAssetController extends Controller
 
     public function updateRoundTotal(Request $request, int $id)
     {
-        $rules = [
-            ];
-        $customAttributes = [
-            ];
+        $rules = [];
+        $customAttributes = [];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
@@ -335,35 +331,35 @@ class ApartmentAssetController extends Controller
         $data = $this->apartment->getApartmentAllStep($id);
         $search['project_id'] = $data->project_id;
         $search['asset_type'] = array($data->asset_type_id);
-        $search['bedroom_num'] = $data->apartmentAssetProperties->bedroom_num??0;
-        $search['floor_name'] = $data->apartmentAssetProperties->floor->name??'';
+        $search['bedroom_num'] = $data->apartmentAssetProperties->bedroom_num ?? 0;
+        $search['floor_name'] = $data->apartmentAssetProperties->floor->name ?? '';
         $search['distance'] = ValueDefault::RADIUS_SCAN;
         $search['location'] = $data->coordinates;
         $result = $this->compareAssetGeneral->autoApartmentAsset($search);
         $total = $result['total'];
         $distanceMax = ValueDefault::RADIUS_SCAN;
-        if (isset($result['assets'])){
+        if (isset($result['assets'])) {
             $stt = 0;
-            foreach ($result['assets'] as $key => $asset){
+            foreach ($result['assets'] as $key => $asset) {
                 $assetId = $asset['id'];
                 $version = $asset['version'];
                 $item = $this->compareAssetGeneral->findApartmentVersionById($assetId, $version);
                 $result['assets'][$key] = $item;
                 $asset = $item;
                 $assetLocation =  $asset['coordinates'];
-                if ($data->coordinates != $assetLocation){
+                if ($data->coordinates != $assetLocation) {
                     $calDistance =  CommonService::calAppraiseAssetDistance($data->coordinates, $assetLocation);
-                    if ($calDistance > $distanceMax){
+                    if ($calDistance > $distanceMax) {
                         $distanceMax = $calDistance;
                     }
                 }
                 $asset['version'] = $version;
-                $stt ++;
+                $stt++;
             }
         }
-        if ($total > 0){
-            $result['message'] = 'Đã tìm được ' . $total .' tài sản so sánh';
-        }else {
+        if ($total > 0) {
+            $result['message'] = 'Đã tìm được ' . $total . ' tài sản so sánh';
+        } else {
             $result['message'] = ErrorMessage::APPRAISE_AUTOMATIC_ASSET;
         }
         $result['distance_max'] = $distanceMax;
@@ -371,23 +367,21 @@ class ApartmentAssetController extends Controller
         return $this->respondWithCustomData($result);
     }
 
-    public function updateEstimateAssetPrice(Request $request, int $id){
-        $rules = [
-
-        ];
-        $customAttributes = [
-        ];
+    public function updateEstimateAssetPrice(Request $request, int $id)
+    {
+        $rules = [];
+        $customAttributes = [];
         $validator = Validator::make($request->toArray(), $rules, $this->messages, $customAttributes);
         if ($validator->passes()) {
             //TODO Handle your data
             $result = $this->apartment->updateEstimateAssetPrice($id);
-            if(isset($result['message']) && isset($result['exception']))
-                return $this->respondWithErrorData( $result);
+            if (isset($result['message']) && isset($result['exception']))
+                return $this->respondWithErrorData($result);
             return $this->respondWithCustomData($result);
         } else {
             //TODO Handle your error
             $data = ['message' => $validator->errors()->all(), 'exception' => null];
-            return $this->respondWithErrorData( $data);
+            return $this->respondWithErrorData($data);
         }
     }
 }
