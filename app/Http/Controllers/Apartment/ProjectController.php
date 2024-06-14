@@ -42,7 +42,7 @@ class ProjectController extends Controller
     public function createProject(Request $request)
     {
         $rules = [
-            'name' => 'string|required|max:255',
+            'name' => 'string|required',
             'province_id' => 'integer|required',
             'district_id' => 'integer|nullable',
             'ward_id' => 'integer|nullable',
@@ -113,7 +113,7 @@ class ProjectController extends Controller
     public function updateProject(int $id, Request $request)
     {
         $rules = [
-            'name' => 'string|required|max:255',
+            'name' => 'string|required',
             'province_id' => 'integer|required',
             'district_id' => 'integer|nullable',
             'ward_id' => 'integer|nullable',
@@ -169,7 +169,7 @@ class ProjectController extends Controller
     public function updateOrCreateBlock(int $projectId, Request $request)
     {
         $rules = [
-            'name' => 'string|required|max:255',
+            'name' => 'string|required',
             'total_floors' => 'integer|required',
             'first_floor' => 'integer|required',
             'last_floor' => 'integer|required',
@@ -199,7 +199,7 @@ class ProjectController extends Controller
     public function updateOrCreateFloor(int $blockId, Request $request)
     {
         $rules = [
-            'name' => 'string|required|max:255',
+            'name' => 'string|required',
         ];
 
         $customAttributes = [
@@ -221,7 +221,7 @@ class ProjectController extends Controller
     public function updateOrCreateApartment(int $floorId, Request $request)
     {
         $rules = [
-            'name' => 'string|required|max:255',
+            'name' => 'string|required',
         ];
         $customAttributes = [
             'name' => 'Tên căn hộ',
@@ -241,28 +241,28 @@ class ProjectController extends Controller
     }
     public function updateStatusProject(int $id, bool $status)
     {
-        $result = $this->project->updateStatus($id, $status,'project');
+        $result = $this->project->updateStatus($id, $status, 'project');
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
     public function updateStatusBlock(int $id, bool $status)
     {
-        $result = $this->project->updateStatus($id, $status,'block');
+        $result = $this->project->updateStatus($id, $status, 'block');
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
     public function updateStatuFloor(int $id, bool $status)
     {
-        $result = $this->project->updateStatus($id, $status,'floor');
+        $result = $this->project->updateStatus($id, $status, 'floor');
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
     }
     public function updateStatuApartment(int $id, bool $status)
     {
-        $result = $this->project->updateStatus($id, $status,'apartment');
+        $result = $this->project->updateStatus($id, $status, 'apartment');
         if (isset($result['message']) && isset($result['exception']))
             return $this->respondWithErrorData($result);
         return $this->respondWithCustomData($result);
@@ -307,7 +307,7 @@ class ProjectController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-    public function getProjectByDistrictId ()
+    public function getProjectByDistrictId()
     {
         try {
             $result =  $this->project->getProjectByDistrictId();
