@@ -277,14 +277,14 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
         $this->model->refresh();
 
         $select = [
-            DB::raw("status,status_text, count(id) as count")
+            DB::raw("status, count(id) as count")
         ];
         $data = QueryBuilder::for(Certificate::class)
             ->select($select)
             ->whereIn('status', [1, 10, 2, 3, 7, 8, 9])
             // ->groupBy(['status', 'status_text'])
             ->get()->toArray();
-        $result = array('label' => Arr::pluck($data, 'status_text'), 'data' => Arr::pluck($data, 'count'), 'status' => Arr::pluck($data, 'status'));
+        $result = array('label' => Arr::pluck($data, 'status'), 'data' => Arr::pluck($data, 'count'), 'status' => Arr::pluck($data, 'status'));
         return $result;
     }
     // Chart cho nhóm đối tác
