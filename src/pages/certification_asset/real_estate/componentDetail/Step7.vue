@@ -5804,7 +5804,10 @@ export default {
 				}
 				console.log("chiphichuyendoi1", chiphichuyendoi);
 				// Chưa default -> set default
-				if (!this.form.appraise_adapter[0].change_purpose_price) {
+				if (
+					this.form.appraise_adapter[0].change_purpose_price === null ||
+					this.form.appraise_adapter[0].change_purpose_price === undefined
+				) {
 					this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi.toFixed(
 						0
 					);
@@ -5861,7 +5864,10 @@ export default {
 				}
 				console.log("chiphichuyendoi2", chiphichuyendoi);
 				// Chưa default -> set default
-				if (!this.form.appraise_adapter[1].change_purpose_price) {
+				if (
+					this.form.appraise_adapter[1].change_purpose_price === null ||
+					this.form.appraise_adapter[1].change_purpose_price === undefined
+				) {
 					this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi.toFixed(
 						0
 					);
@@ -5918,7 +5924,10 @@ export default {
 				}
 				console.log("chiphichuyendoi3", chiphichuyendoi);
 				// Chưa default -> set default
-				if (!this.form.appraise_adapter[2].change_purpose_price) {
+				if (
+					this.form.appraise_adapter[2].change_purpose_price === null ||
+					this.form.appraise_adapter[2].change_purpose_price === undefined
+				) {
 					this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi.toFixed(
 						0
 					);
