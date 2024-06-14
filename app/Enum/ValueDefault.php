@@ -120,7 +120,7 @@ class ValueDefault
     ];
 
     public const STATUSES = [
-        1 => 'Mới',
+        1 => 'Tiếp nhận yêu cầu',
         2 => 'Thẩm định',
         3 => 'Duyệt giá',
         4 => 'Hoàn thành',
