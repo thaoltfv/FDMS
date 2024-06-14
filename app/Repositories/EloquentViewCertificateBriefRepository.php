@@ -246,7 +246,7 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
 
     public function countBrieftBacklog()
     {
-        $date = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-01');
+        $date = Carbon::now('Asia/Ho_Chi_Minh');
         // dd($date);
         $this->model->refresh();
         $backlogSelect = [
