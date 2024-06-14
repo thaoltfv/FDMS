@@ -624,7 +624,7 @@
 								>Tải xuống tất cả Bộ Chứng thư tự động
 							</b-tooltip>
 							<b-tooltip :target="'convert_all_official_auto'" placement="top"
-								>Chuyển Bộ Chứng thư tự động thành Bộ chứng thư chính thức
+								>Chuyển sang tài liệu chính thức
 							</b-tooltip>
 							<!-- <font-awesome-icon
 								v-if="isViewAutomationDocument"
@@ -654,7 +654,7 @@
 									class="img_document_action"
 								/>
 							</div>
-							<div
+							<!-- <div
 								class=""
 								v-if="
 									isViewAutomationDocument &&
@@ -667,11 +667,11 @@
 								@click="showPopupComfirmConvertDocument = true"
 							>
 								<img
-									src="@/assets/icons/arrow-right-solid.svg"
+									src="@/assets/icons/right-arrow.svg.svg"
 									alt="search"
 									class="img_document_action"
 								/>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<div class="card-body card-info">
@@ -705,11 +705,32 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewCertificate(idData)">
+										<div @click="viewCertificate(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											:id="'convert_all_official_auto'"
+											@click="
+												showPopupComfirmConvertDocumentView(
+													'certificate_report'
+												)
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -749,11 +770,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewReportCertificate(idData)">
+										<div @click="viewReportCertificate(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appraisal_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -793,11 +832,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix1(idData)">
+										<div @click="viewAppendix1(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appendix1_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -843,11 +900,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix2(idData)">
+										<div @click="viewAppendix2(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appendix2_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -887,11 +962,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix3(idData)">
+										<div @click="viewAppendix3(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appendix3_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -935,11 +1028,31 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAssetDocument(idData)">
+										<div @click="viewAssetDocument(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView(
+													'comparision_asset_report'
+												)
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -2548,6 +2661,7 @@ export default {
 			byPassAdmin: false,
 			showPopupComfirmDownloadAutoDocument: false,
 			showPopupComfirmConvertDocument: false,
+			typeConvert: "",
 			typeConfirm: "",
 			theme: {
 				navItem: "#000000",
@@ -2950,6 +3064,10 @@ export default {
 		}
 	},
 	methods: {
+		showPopupComfirmConvertDocumentView(type) {
+			this.typeConvert = type;
+			this.showPopupComfirmConvertDocument = true;
+		},
 		async getDetail() {
 			await CertificationBrief.getDetailCertificateBrief(this.form.id)
 				.then(resp => {
@@ -3283,20 +3401,36 @@ export default {
 		},
 		async handleConvertConfirm() {
 			try {
-				await Certificate.convertAutoDocumentToOfficial(this.idData).then(
-					resp => {
-						const res = resp.data;
-						if (res) {
-						} else {
-							this.$toast.open({
-								message: resp.error.message,
-								type: "error",
-								position: "top-right",
-								duration: 3000
-							});
-						}
+				// await Certificate.convertAutoDocumentToOfficial(this.idData).then(
+				// 	resp => {
+				// 		const res = resp.data;
+				// 		if (res) {
+				// 		} else {
+				// 			this.$toast.open({
+				// 				message: resp.error.message,
+				// 				type: "error",
+				// 				position: "top-right",
+				// 				duration: 3000
+				// 			});
+				// 		}
+				// 	}
+				// );
+				await Certificate.convertAutoDocumentToOfficialFollowType(
+					this.idData,
+					this.typeConvert
+				).then(resp => {
+					const res = resp.data;
+					if (res) {
+						this.form.other_documents = res.data;
+					} else {
+						this.$toast.open({
+							message: resp.error.message,
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
 					}
-				);
+				});
 			} catch (error) {
 				this.$toast.open({
 					message: error,

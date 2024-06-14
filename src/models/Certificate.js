@@ -154,6 +154,13 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async convertAutoDocumentToOfficialFollowType(id, type) {
+		return new this().request({
+			method: "POST",
+			url: `certificate-asset/convert-auto-document-to-official-type/${id}/${type}`,
+			isStatic: true
+		});
+	}
 	static async postData(payloadData) {
 		return new this().request({
 			method: "POST",

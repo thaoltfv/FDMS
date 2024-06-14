@@ -35,7 +35,7 @@
 							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
 							<div
-								class="d-flex col-6 justify-content-between align-items-center"
+								class="d-flex col-7 justify-content-between align-items-center"
 							>
 								<div class="col-5 ">
 									<a-date-picker
@@ -44,7 +44,7 @@
 										format="DD-MM-YYYY"
 									></a-date-picker>
 								</div>
-								<div class="col-2 text-center pa-0">-</div>
+								<div class="col-1 text-center pa-0">-</div>
 								<div class="col-5 mr-2">
 									<a-date-picker
 										placeholder="Đến ngày"
@@ -511,7 +511,16 @@ export default {
 			this.showAdjustModal = true;
 		}
 	},
-
+	watch: {
+		async "filterKanban.timeFilter.from"() {
+			await this.preCertificateStore.getPreCertificateAll();
+			this.render_kanban += 1;
+		},
+		async "filterKanban.timeFilter.to"() {
+			await this.preCertificateStore.getPreCertificateAll();
+			this.render_kanban += 1;
+		}
+	},
 	beforeMount() {
 		this.getProfiles();
 	}
