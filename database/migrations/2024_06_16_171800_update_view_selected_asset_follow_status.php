@@ -45,10 +45,10 @@ class UpdateViewSelectedAssetFollowStatus extends Migration
                 CAST(cap_o_p.value AS BIGINT) AS other_asset_price,
                 CAST(cr.total_price AS BIGINT) AS total_price
             FROM certificates c
-                JOIN certificate_has_real_estates chr ON chr.certificate_id = c.id
-                JOIN certificate_real_estates cr ON cr.id = chr.real_estate_id
-                JOIN certificate_assets ca ON ca.real_estate_id = cr.id
-                JOIN certificate_asset_properties cap ON cap.appraise_id = ca.id and cap.deleted_at IS NULL
+                LEFT OUTER JOIN certificate_has_real_estates chr ON chr.certificate_id = c.id
+                LEFT OUTER JOIN certificate_real_estates cr ON cr.id = chr.real_estate_id
+                LEFT OUTER JOIN certificate_assets ca ON ca.real_estate_id = cr.id
+                LEFT OUTER JOIN certificate_asset_properties cap ON cap.appraise_id = ca.id and cap.deleted_at IS NULL
                 LEFT OUTER JOIN dictionaries dt ON dt.id = c.customer_group_id
                 LEFT OUTER JOIN customers ct ON c.customer_id = ct.id
                 LEFT OUTER JOIN appraisers t3 ON c.appraiser_id = t3.id AND t3.deleted_at IS NULL
