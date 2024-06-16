@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AlterViewCertificateBriefsV4 extends Migration
+class AlterViewCertificateBriefsV5 extends Migration
 {
     /**
      * Run the migrations.
