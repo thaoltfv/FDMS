@@ -17,7 +17,7 @@ use App\Services\AppraiseAsset\AppraiseAsset;
 use App\Services\Document\CertificateAsset\PhuLuc2;
 use App\Services\Document\BaoCaoTest;
 use App\Services\Document\AssetReport;
-
+use App\Models\PreCertificateOtherDocuments;
 use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
@@ -576,7 +576,52 @@ class CertificateAssetController extends Controller
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
     }
+    public function downloadAllOfficialPreCertificate($id, $type)
+    {
+        try {
+            $otherDocuments = PreCertificateOtherDocuments::query()->where(['pre_certificate_id' => $id, 'type_document' => $type])->get();
+            $arrayLink = [];
+            $zipFileName = $type . '_YCSB_' . $id . '.zip';
+            $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('His');
+            $zipFileNameLink = 'TaiLieuDinhKem' . '_YCSB_' . $id . '_' . $downloadTime . '.zip';
+            if ($otherDocuments && count($otherDocuments) > 0) {
+                foreach ($otherDocuments as $document) {
+                    if ($document->description == 'appendix' || $document->description == 'other') {
+                        $item = [
+                            'link' => $document->link,
+                            'name' => $document->name
+                        ];
+                        $arrayLink[] =  $item;
+                    }
+                }
+            }
+            if (count($arrayLink) > 0) {
+                $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
+                $zip = new ZipArchive;
+                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                    $fileContent = file_get_contents(isset($fileLink['url']) ? $fileLink['url'] : $fileLink['link']);
+                    $zip->addFromString($fileName, $fileContent);
+                }
+                $zip->close();
+                Storage::put($name, file_get_contents($name));
+                $fileUrl = Storage::url($name);
+                // $response = response()->download($fileUrl, $zipFileName, [
+                //     'Content-Type' => 'application/zip',
 
+                // ])->deleteFileAfterSend(true);
+                // return $response;
+
+                return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
+            } else {
+                return  $this->respondWithErrorData(['message' => 'Không có file phù hợp để tiến hành tải xuống']);
+            }
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
+        }
+    }
     public function convertAutoDocumentToOffical($id)
     {
         try {
