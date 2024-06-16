@@ -20,15 +20,18 @@ class ViewSelectedCertificateApartment extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+    protected $appends = [
+        'status_text',
+    ];
 
-    public function price():HasMany
+    public function price(): HasMany
     {
         return $this->hasMany(CertificateApartmentPrice::class, 'apartment_asset_id');
     }
     public function getResidentialAreaAttribute()
     {
         // dd($this->price);
-        if (isset ($this->price)) {
+        if (isset($this->price)) {
             foreach ($this->price as $detail) {
                 if ($detail->slug === 'apartment_area') {
                     return $detail->value;
@@ -40,7 +43,7 @@ class ViewSelectedCertificateApartment extends Model
 
     public function getResidentialUnitPriceAttribute()
     {
-        if (isset ($this->price)) {
+        if (isset($this->price)) {
             foreach ($this->price as $detail) {
                 if ($detail->slug === 'apartment_asset_price') {
                     return CommonService::roundPrice($detail->value, 0);
@@ -91,12 +94,10 @@ class ViewSelectedCertificateApartment extends Model
     public function getTangibleUnitPriceAttribute()
     {
         return '';
-
     }
     public function getTangibleRemainAttribute()
     {
         return '';
-
     }
     public function getOtherTangiblePriceAttribute()
     {
