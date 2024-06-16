@@ -6321,8 +6321,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query = $query->whereIn('status', $status);
             $query1 = $query1->whereIn('status', $status);
         }
-        Log::info($query->get());
-        Log::info($query1->get());
         if (isset($fromDate) && isset($toDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
@@ -6337,6 +6335,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
             $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
+        Log::info($query->get());
+        Log::info($query1->get());
         // $result = $query->with($with)->limit(5)->get();
         $result = $query->with($with)->get();
         $result1 = $query1->get();
