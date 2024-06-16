@@ -147,6 +147,13 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async downloadAllDocumentPreCertificate(id, type) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/download-all-official-pre-certificate/${id}/Appendix`,
+			isStatic: true
+		});
+	}
 	static async convertAutoDocumentToOfficial(id) {
 		return new this().request({
 			method: "POST",
