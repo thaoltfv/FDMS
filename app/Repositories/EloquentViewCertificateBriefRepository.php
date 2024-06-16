@@ -256,12 +256,14 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             DB::raw("'New' as type,'Mới trong tháng' as description, count(id) as count")
         ];
 
-        $backlog = QueryBuilder::for(Certificate::class)
+        // $backlog = QueryBuilder::for(Certificate::class)
+        $backlog = $this->model->query()
             ->select($backlogSelect)
             ->where('created_at', '<', $date)
             ->whereIn('status', [1, 10, 2, 3, 7, 8, 9]);
 
-        $data = QueryBuilder::for(Certificate::class)
+        // $data = QueryBuilder::for(Certificate::class)
+        $data = $this->model->query()
             ->select($newlogSelect)
             ->where('created_at', '>=', $date)
             ->whereIn('status', [1, 10, 2, 3, 7, 8, 9])
