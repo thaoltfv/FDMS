@@ -6357,9 +6357,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // dd($final_result);
         // return $result->merge($result1)->sortBy('certificate_id');
 
-        $result = $result->merge($result1, function ($item1, $item2) {
-            return $item1->certificate_id == $item2->certificate_id && $item1->status ==  $item2->status;
-        });
+        // $result = $result->merge($result1, function ($item1, $item2) {
+        //     return $item1->certificate_id == $item2->certificate_id && $item1->status ==  $item2->status;
+        // });
         return $result->sortByDesc('created_at');
     }
 
