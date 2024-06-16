@@ -6354,11 +6354,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // $result1 = $result1->toArray();
 
         // dd($final_result);
-        // return $result->merge($result1)->sortBy('certificate_id');
-        $mergedResults = $result->mergeRecursive($result1, function ($item1, $item2) {
-            return $item1['certificate_id'] == $item2['certificate_id'];
-        });
-        return $mergedResults->sortByDesc('created_at');
+        return $result->merge($result1)->sortBy('created_at');
+        // $mergedResults = $result->mergeRecursive($result1, function ($item1, $item2) {
+        //     return $item1['certificate_id'] == $item2['certificate_id'];
+        // });
+        // return $mergedResults->sortByDesc('created_at');
     }
 
     private function updatePersonaltyPrice(int $id)
