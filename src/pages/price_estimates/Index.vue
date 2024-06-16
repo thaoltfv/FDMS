@@ -7,7 +7,7 @@
 				<div
 					class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 				>
-					<DropdownFilter class="mr-5" @search="onChangeStatus" />
+					<!-- <DropdownFilter class="mr-5" @search="onChangeStatus" /> -->
 					<Search
 						class="col-10"
 						@filter-changed="onFilterQuickSearchChange($event)"
@@ -168,7 +168,7 @@ import CertificateAsset from "@/models/CertificateAsset";
 import { BDropdown, BDropdownItem, BTooltip } from "bootstrap-vue";
 import moment from "moment";
 import ModalSelectTypeProperty from "./modals/ModalSelectTypeProperty";
-import DropdownFilter from "@/components/DropdownFilterNew.vue";
+// import DropdownFilter from "@/components/DropdownFilterNew.vue";
 export default {
 	name: "Index",
 	data() {
@@ -218,7 +218,7 @@ export default {
 		Search,
 		TableAll,
 		ButtonCheckbox,
-		DropdownFilter,
+		// DropdownFilter,
 		"b-dropdown": BDropdown,
 		"b-dropdown-item": BDropdownItem,
 		"b-tooltip": BTooltip,
