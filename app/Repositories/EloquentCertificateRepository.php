@@ -6350,13 +6350,13 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
             $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_TANGIBLE_DETAIL_COLUMN_LIST));
         }
-        $result = $result->toArray();
-        $result1 = $result1->toArray();
+        // $result = $result->toArray();
+        // $result1 = $result1->toArray();
 
-        $final_result = array_merge($result, $result1);
+        // $final_result = array_merge($result, $result1);
         // dd($final_result);
         // return $result->merge($result1)->sortBy('certificate_id');
-        Log::info($final_result);
+        Log::info($result->merge($result1)->sortByDesc('created_at'));
 
         return $result->merge($result1)->sortByDesc('created_at');
     }
