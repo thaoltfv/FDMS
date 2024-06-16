@@ -6322,8 +6322,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query1 = $query1->whereIn('status', $status);
         }
         if (isset($fromDate) && isset($toDate)) {
+            Log::info($fromDate, $toDate);
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
+            Log::info($fromDate, $toDate);
             $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
             $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
         }
