@@ -6322,10 +6322,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query1 = $query1->whereIn('status', $status);
         }
         if (isset($fromDate) && isset($toDate)) {
-            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
-            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
-            $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'");
-            $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'");
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
+            $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
+            $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
         }
         if (isset($fromDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
