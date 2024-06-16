@@ -28,6 +28,10 @@ class ViewSelectedCertificateApartment extends Model
     {
         return $this->hasMany(CertificateApartmentPrice::class, 'apartment_asset_id');
     }
+    public function getStatusTextAttribute()
+    {
+        return isset(ValueDefault::STATUSES[$this->status]) ? ValueDefault::STATUSES[$this->status] : 'Không rõ';
+    }
     public function getResidentialAreaAttribute()
     {
         // dd($this->price);

@@ -6353,7 +6353,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
         // $final_result = array_merge($result, $result1);
         // dd($final_result);
-        return $result->merge($result1)->sortBy('certificate_id');
+        // return $result->merge($result1)->sortBy('certificate_id');
+        return $result->merge($result1)->sortByDesc('created_at');
     }
 
     private function updatePersonaltyPrice(int $id)
