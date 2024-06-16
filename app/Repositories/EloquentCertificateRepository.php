@@ -6336,8 +6336,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
         // $result = $query->with($with)->limit(5)->get();
-        $result = $query->with($with)->sortBy('certificate_id')->get();
-        $result1 = $query1->sortBy('certificate_id')->get();
+        $result = $query->with($with)->get()->sortBy('certificate_id');
+        $result1 = $query1->get()->sortBy('certificate_id');
         if ($isExportLandDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
             $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
