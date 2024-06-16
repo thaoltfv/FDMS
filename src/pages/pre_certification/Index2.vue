@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!isMobile" class="main-wrapper-new">
-		<a-tabs @change="callback" default-active-key="2" style="height: 100%;">
+		<a-tabs @change="callback" default-active-key="1" style="height: 100%;">
 			<a-tab-pane key="1">
 				<span slot="tab">
 					<img src="@/assets/icons/ic_table.svg" alt="table" />
@@ -34,9 +34,34 @@
 						<div
 							class="search-block col-12 col-md-6 col-xl-6 d-flex justify-content-end align-items-center"
 						>
-							<DropdownFilter class="mr-5 " @notifi-kanban="notifiKanban()" />
+							<div
+								class="d-flex col-7 justify-content-between align-items-center"
+							>
+								<div class="col-5 ">
+									<a-date-picker
+										placeholder="Từ ngày"
+										v-model="filterKanban.timeFilter.from"
+										format="DD-MM-YYYY"
+									></a-date-picker>
+								</div>
+								<div class="col-1 text-center pa-0">-</div>
+								<div class="col-5 mr-2">
+									<a-date-picker
+										placeholder="Đến ngày"
+										v-model="filterKanban.timeFilter.to"
+										:disabledDate="disabledToDate"
+										format="DD-MM-YYYY"
+									></a-date-picker>
+								</div>
+							</div>
+							<DropdownFilter
+								:fromDate="form.fromDate"
+								:toDate="form.toDate"
+								class="mr-4 "
+								@notifi-kanban="notifiKanban()"
+							/>
 							<Search
-								class="col-10"
+								class="col-9"
 								@filter-changed="onFilterQuickSearchChange($event)"
 							/>
 							<router-link
@@ -280,7 +305,8 @@ export default {
 			filter,
 			isLoading,
 			paginationAll,
-			jsonConfig
+			jsonConfig,
+			filterKanban
 		} = storeToRefs(preCertificateStore);
 		const statusOptions = ref({
 			data: [
@@ -321,7 +347,7 @@ export default {
 		return {
 			isMobile,
 			statusOptions,
-
+			filterKanban,
 			filter,
 			lstPreCertificateTable,
 			selectedStatus,
@@ -353,7 +379,12 @@ export default {
 				this.activeStatus = true;
 			}
 		},
-
+		disabledToDate(current) {
+			// Disable dates before the "from" date
+			if (!this.filterKanban.timeFilter.from) return false;
+			let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
+			return current && current < endOfDay;
+		},
 		async onFilterQuickSearchChange($event) {
 			this.search_kanban = { ...$event };
 			this.filter.search = $event.search;
@@ -480,7 +511,16 @@ export default {
 			this.showAdjustModal = true;
 		}
 	},
-
+	watch: {
+		async "filterKanban.timeFilter.from"() {
+			await this.preCertificateStore.getPreCertificateAll();
+			this.render_kanban += 1;
+		},
+		async "filterKanban.timeFilter.to"() {
+			await this.preCertificateStore.getPreCertificateAll();
+			this.render_kanban += 1;
+		}
+	},
 	beforeMount() {
 		this.getProfiles();
 	}

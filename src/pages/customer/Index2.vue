@@ -136,13 +136,13 @@ export default {
 		this.pagination = this.$route.meta["pagination"];
 		const permission = this.$store.getters.currentPermissions;
 		permission.forEach(value => {
-			if (value === "ADD_CATEGORY") {
+			if (value === "ADD_CUSTOMER") {
 				this.add = true;
 			}
-			if (value === "EDIT_CATEGORY") {
+			if (value === "EDIT_CUSTOMER") {
 				this.edit = true;
 			}
-			if (value === "DELETE_CATEGORY") {
+			if (value === "DELETE_CUSTOMER") {
 				this.deleted = true;
 			}
 		});

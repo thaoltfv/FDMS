@@ -147,7 +147,27 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
-
+	static async downloadAllDocumentPreCertificate(id, type) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/download-all-official-pre-certificate/${id}/Appendix`,
+			isStatic: true
+		});
+	}
+	static async convertAutoDocumentToOfficial(id) {
+		return new this().request({
+			method: "POST",
+			url: `certificate-asset/convert-auto-document-to-official/${id}`,
+			isStatic: true
+		});
+	}
+	static async convertAutoDocumentToOfficialFollowType(id, type) {
+		return new this().request({
+			method: "POST",
+			url: `certificate-asset/convert-auto-document-to-official-type/${id}/${type}`,
+			isStatic: true
+		});
+	}
 	static async postData(payloadData) {
 		return new this().request({
 			method: "POST",

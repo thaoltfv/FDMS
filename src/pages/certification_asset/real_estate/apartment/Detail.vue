@@ -2346,6 +2346,7 @@ export default {
 				let provinceName = "";
 				let districtName = "";
 				let wardName = "";
+				let streetName = "";
 				if (project[0].province) {
 					provinceName = project[0].province.name;
 				}
@@ -2355,8 +2356,11 @@ export default {
 				if (project[0].ward) {
 					wardName = project[0].ward.name;
 				}
+				if (project[0].street) {
+					streetName = this.formatCapitalize(project[0].street.name);
+				}
 				this.form.step_1.appraise_asset =
-					`${wardName}, ` + `${districtName}, ` + provinceName;
+					`${streetName}, ${wardName}, ` + `${districtName}, ` + provinceName;
 				this.getBlocks(+projectId);
 				this.key_step_1 += 1;
 			}
