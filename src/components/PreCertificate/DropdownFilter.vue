@@ -49,9 +49,9 @@
 							}}</a-checkbox>
 						</a-menu-item>
 					</a-sub-menu>
-					<a-sub-menu key="time">
+					<!-- <a-sub-menu key="time">
 						<span slot="title">
-							<!-- <a-icon type="setting" /> -->
+						
 							<span>Thời gian</span></span
 						>
 						<a-menu-item>
@@ -72,7 +72,7 @@
 								></a-date-picker>
 							</div>
 						</a-menu-item>
-					</a-sub-menu>
+					</a-sub-menu> -->
 				</a-menu>
 				<div
 					class="row"
@@ -111,13 +111,12 @@ export default {
 	data() {
 		return { isCloseable: false };
 	},
-	setup() {
+	setup(props) {
 		const preCertificateStore = usePreCertificateStore();
 		const { filter, jsonConfig, filterKanban } = storeToRefs(
 			preCertificateStore
 		);
 		const lstFilterStatus = ref([]);
-
 		const startSetup = async () => {
 			if (!jsonConfig.value) {
 				jsonConfig.value = await preCertificateStore.getConfig();
@@ -153,12 +152,12 @@ export default {
 				this.$refs.dropdown.hide();
 			}
 		},
-		disabledToDate(current) {
-			// Disable dates before the "from" date
-			if (!this.filterKanban.timeFilter.from) return false;
-			let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
-			return current && current < endOfDay;
-		},
+		// disabledToDate(current) {
+		// 	// Disable dates before the "from" date
+		// 	if (!this.filterKanban.timeFilter.from) return false;
+		// 	let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
+		// 	return current && current < endOfDay;
+		// },
 		async searchFunction() {
 			this.filterKanban.selectedStatus = this.lstFilterStatus
 				.filter(option => option.checked === true)

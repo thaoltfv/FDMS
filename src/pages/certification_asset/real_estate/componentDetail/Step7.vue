@@ -5804,7 +5804,10 @@ export default {
 				}
 				console.log("chiphichuyendoi1", chiphichuyendoi);
 				// Chưa default -> set default
-				if (!this.form.appraise_adapter[0].change_purpose_price) {
+				if (
+					this.form.appraise_adapter[0].change_purpose_price === null ||
+					this.form.appraise_adapter[0].change_purpose_price === undefined
+				) {
 					this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi.toFixed(
 						0
 					);
@@ -5861,7 +5864,10 @@ export default {
 				}
 				console.log("chiphichuyendoi2", chiphichuyendoi);
 				// Chưa default -> set default
-				if (!this.form.appraise_adapter[1].change_purpose_price) {
+				if (
+					this.form.appraise_adapter[1].change_purpose_price === null ||
+					this.form.appraise_adapter[1].change_purpose_price === undefined
+				) {
 					this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi.toFixed(
 						0
 					);
@@ -5918,7 +5924,10 @@ export default {
 				}
 				console.log("chiphichuyendoi3", chiphichuyendoi);
 				// Chưa default -> set default
-				if (!this.form.appraise_adapter[2].change_purpose_price) {
+				if (
+					this.form.appraise_adapter[2].change_purpose_price === null ||
+					this.form.appraise_adapter[2].change_purpose_price === undefined
+				) {
 					this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi.toFixed(
 						0
 					);
@@ -7287,7 +7296,7 @@ export default {
 				await this.calculationViolationPrice(this.form, indexPrice);
 				// await this.calculationChangePrice(this.form, indexPrice)
 			}
-			await this.calculationMDSD(this.form);
+			await this.calculationMDSD(this.form, indexPrice);
 			this.key_render_1 += 1;
 		},
 		async changeDistanceLand(event, comparator, m, n) {
@@ -7362,8 +7371,7 @@ export default {
 			if (event) {
 				this.form.appraise_adapter[index].change_purpose_price = event;
 			} else this.form.appraise_adapter[index].change_purpose_price = 0;
-
-			this.calculation(this.form, index, true);
+			this.calculation(this.form);
 		},
 		async dialogDeleteComparisionDefault(type) {
 			this.openMdodalDeleteDefault = true;
@@ -10331,7 +10339,7 @@ export default {
 			}
 			this.key_render_around += 1;
 		},
-		calculationMDSD(asset) {
+		calculationMDSD(asset, indexPrice) {
 			let asset1 =
 				typeof asset.asset_general[0] !== "undefined"
 					? asset.asset_general[0]
@@ -10378,7 +10386,11 @@ export default {
 					item.asset_general_id == asset3.id
 			);
 
-			if (arr_arena1.length > 0 && this.form.asset_unit_price.length > 0) {
+			if (
+				indexPrice === 0 &&
+				arr_arena1.length > 0 &&
+				this.form.asset_unit_price.length > 0
+			) {
 				let giatienchinh = this.form.asset_unit_price.filter(
 					item =>
 						item.asset_general_id == asset1.id &&
@@ -10425,13 +10437,17 @@ export default {
 				this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi.toFixed(
 					0
 				);
-			} else {
+			} else if (indexPrice === 0) {
 				this.form.appraise_adapter[0].change_purpose_price = this.form
 					.appraise_adapter[0].change_purpose_price
 					? this.form.appraise_adapter[0].change_purpose_price
 					: 0;
 			}
-			if (arr_arena2.length > 0 && this.form.asset_unit_price.length > 0) {
+			if (
+				indexPrice === 1 &&
+				arr_arena2.length > 0 &&
+				this.form.asset_unit_price.length > 0
+			) {
 				let giatienchinh = this.form.asset_unit_price.filter(
 					item =>
 						item.asset_general_id == asset2.id &&
@@ -10478,13 +10494,17 @@ export default {
 				this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi.toFixed(
 					0
 				);
-			} else {
+			} else if (indexPrice === 1) {
 				this.form.appraise_adapter[1].change_purpose_price = this.form
 					.appraise_adapter[1].change_purpose_price
 					? this.form.appraise_adapter[1].change_purpose_price
 					: 0;
 			}
-			if (arr_arena3.length > 0 && this.form.asset_unit_price.length > 0) {
+			if (
+				indexPrice === 2 &&
+				arr_arena3.length > 0 &&
+				this.form.asset_unit_price.length > 0
+			) {
 				let giatienchinh = this.form.asset_unit_price.filter(
 					item =>
 						item.asset_general_id == asset3.id &&
@@ -10531,7 +10551,7 @@ export default {
 				this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi.toFixed(
 					0
 				);
-			} else {
+			} else if (indexPrice === 2) {
 				this.form.appraise_adapter[2].change_purpose_price = this.form
 					.appraise_adapter[2].change_purpose_price
 					? this.form.appraise_adapter[2].change_purpose_price

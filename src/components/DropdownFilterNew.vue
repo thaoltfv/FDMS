@@ -13,9 +13,9 @@
 			no-flip
 		>
 			<template v-slot:default>
-				<!-- <a-menu mode="inline" style="width:320px">
+				<a-menu mode="inline" style="width:320px">
 					<a-sub-menu key="status">
-						<span slot="title"> <span>Trạng thái HSTĐ</span></span>
+						<span slot="title"> <span>Trạng thái tài sản</span></span>
 						<a-menu-item
 							v-if="lstFilterStatus && lstFilterStatus.length > 0"
 							v-for="(option, index) in lstFilterStatus"
@@ -47,8 +47,8 @@
 							</div>
 						</a-menu-item>
 					</a-sub-menu>
-				</a-menu> -->
-				<a-menu
+				</a-menu>
+				<!-- <a-menu
 					:default-selected-keys="['1']"
 					:default-open-keys="['status']"
 					mode="inline"
@@ -68,7 +68,7 @@
 							}}</a-checkbox>
 						</a-menu-item>
 					</a-sub-menu>
-				</a-menu>
+				</a-menu> -->
 				<div
 					class="row"
 					style="width:100%;margin-top:10px; display: flex; justify-content: space-between;"
@@ -109,25 +109,30 @@ export default {
 		return { isCloseable: false, timeFilter: { from: "", to: "" } };
 	},
 	setup() {
-		const workFlowConfigStore = useWorkFlowConfig();
-		const { configs } = storeToRefs(workFlowConfigStore);
 		const jsonConfig = ref({});
 		const filter = ref([]);
 		const lstFilterStatus = ref([]);
 		const lstStatusChosen = ref([]);
 		const startFunction = async () => {
-			if (!configs.value.hstdConfig)
-				await workFlowConfigStore.getConfigByName("workflowHSTD");
-			jsonConfig.value = configs.value.hstdConfig;
-			if (jsonConfig.value && jsonConfig.value.principle) {
-				lstFilterStatus.value = jsonConfig.value.principle
-					.filter(element => element.isActive === 1)
-					.map(element => ({
-						...element,
-						value: element.status,
-						text: element.description
-					}));
-			}
+			lstFilterStatus.value = [
+				{
+					checked: false,
+					value: 1,
+					text: "Hoàn thành"
+				},
+				{
+					checked: false,
+					value: 0,
+					text: "Đang thực hiện "
+				}
+			];
+			// lstFilterStatus.value = jsonConfig.value.principle
+			// 	.filter(element => element.isActive === 1)
+			// 	.map(element => ({
+			// 		...element,
+			// 		value: element.status,
+			// 		text: element.description
+			// 	}));
 		};
 		startFunction();
 

@@ -242,7 +242,7 @@
 					slot="petitioner_name"
 					slot-scope="{ petitioner_name, customer }"
 				>
-					<p class="text-main">{{ petitioner_name }}</p>
+					<p class="text-main text-wrap">{{ petitioner_name }}</p>
 					<!-- <p class="text-secondary">
 						Đối tác: {{ customer ? customer.name : " " }}
 					</p> -->
@@ -254,7 +254,7 @@
 					<p class="text-main text-wrap">
 						{{ customer_group ? customer_group.description : "" }}
 					</p>
-					<p class="text-secondary">
+					<p class="text-secondary text-wrap">
 						{{ customer ? customer.name : " " }}
 					</p>
 				</template>

@@ -927,6 +927,7 @@ export default {
 				this.priceEstimates.totalAllPrice =
 					Number(this.priceEstimates.totalLandPrice) +
 					Number(this.priceEstimates.totalTangibleAssetPrice);
+
 				this.openPrint = true;
 			}
 

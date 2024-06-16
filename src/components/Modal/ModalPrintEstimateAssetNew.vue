@@ -319,7 +319,11 @@
 										style="border-bottom-right-radius: 15px;"
 										class="text-right font-weight-bold"
 									>
-										{{ formatNumber(data.totalAllPrice - data.totalLandPrice) }}
+										{{
+											formatNumber(
+												Number(data.totalAllPrice) - Number(data.totalLandPrice)
+											)
+										}}
 									</td>
 								</tr>
 							</tbody>

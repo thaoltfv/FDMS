@@ -33,7 +33,9 @@
 								/>
 							</label>
 						</h3>
-
+						<b-tooltip :target="'download_all_other_document'" placement="auto"
+							>Tải xuống tất cả tài liệu đính kèm
+						</b-tooltip>
 						<input
 							v-if="allowEdit"
 							class="btn-upload "
@@ -50,7 +52,20 @@
 							style="display: none;"
 						/>
 					</div>
-
+					<div
+						v-if="
+							lstFile.length > 0 && fromComponent && fromComponent === 'Detail'
+						"
+						class="mr-2"
+						:id="'download_all_other_document'"
+						@click="handleDownloadAll('TaiLieuDinhKem')"
+					>
+						<img
+							src="@/assets/icons/ic_download_3.png"
+							alt="search"
+							class="img_document_action"
+						/>
+					</div>
 					<img
 						v-if="!fromComponent"
 						class="img-dropdown"
@@ -65,12 +80,12 @@
 			<div class="card-body card-info" v-show="showCardDetailFile">
 				<div class="ml-n3 mt-2 row">
 					<div
-						class="mb-4 col-3 "
+						class="mb-4 col-lg-3 col-md-4 col-sm-12"
 						v-for="(file, index) in lstFile"
 						:key="index"
 					>
 						<div
-							class="row input_download_certificate mx-1  d-flex justify-content-between"
+							class="input_download_certificate mx-1 d-flex justify-content-between"
 						>
 							<div
 								class="d-flex align-items-center"
@@ -170,7 +185,11 @@
 				/>
 			</div>
 			<div class="ml-n4 mt-2 row">
-				<div class="mb-4 col-3 " v-for="(file, index) in lstFile" :key="index">
+				<div
+					class="mb-4 col-lg-3 col-md-4 col-sm-12 "
+					v-for="(file, index) in lstFile"
+					:key="index"
+				>
 					<div
 						class="row input_download_certificate mx-1  d-flex justify-content-between"
 					>
@@ -376,12 +395,13 @@ import { storeToRefs } from "pinia";
 import { usePreCertificateStore } from "@/store/preCertificate";
 import InputCurrency from "@/components/Form/InputCurrency";
 import InputTextarea from "@/components/Form/InputTextarea";
-
+import { BTooltip } from "bootstrap-vue";
+import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "@/components/PreCertificate/ModalViewDocument";
 import Vue from "vue";
 import Icon from "buefy";
 import _ from "lodash";
-import ModalDelete from "@/components/Modal/ModalDelete";
+import Certificate from "@/models/Certificate";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
 Vue.use(Icon);
@@ -399,6 +419,7 @@ export default {
 		}
 	},
 	components: {
+		"b-tooltip": BTooltip,
 		InputCurrency,
 		InputTextarea,
 		ModalDelete,
@@ -656,6 +677,43 @@ export default {
 				let formatedNum = num.toString().replace(".", ",");
 				return formatedNum.toString().replace(/^[+-]?\d+/, function(int) {
 					return int.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+				});
+			}
+		},
+		async handleDownloadAll(type) {
+			try {
+				await Certificate.downloadAllDocumentPreCertificate(
+					this.dataPC.id,
+					type
+				).then(resp => {
+					const file = resp.data;
+					if (file) {
+						const fileLink = document.createElement("a");
+						fileLink.href = file.link;
+						fileLink.setAttribute("download", file.name);
+						document.body.appendChild(fileLink);
+						fileLink.click();
+						fileLink.remove();
+						window.URL.revokeObjectURL(fileLink);
+						const nameLink = file.name_link.split(".");
+						setTimeout(() => {
+							Certificate.deleteAfterDownload(nameLink[0]);
+						}, 5000);
+					} else {
+						this.$toast.open({
+							message: resp.error.message,
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+					}
+				});
+			} catch (error) {
+				this.$toast.open({
+					message: error,
+					type: "error",
+					position: "top-right",
+					duration: 3000
 				});
 			}
 		},
