@@ -1018,10 +1018,10 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->select([
                 DB::raw("count(id)"),
                 'status',
-                DB::raw("date_part('month', status_updated_at) as month"),
-                DB::raw("date_part('year', status_updated_at) as year"),
+                DB::raw("date_part('month', created_at) as month"),
+                DB::raw("date_part('year', created_at) as year"),
             ])
-            ->whereRaw("to_char(status_updated_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
+            ->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate->format('Y-m-d') . "' and '" . $toDate->format('Y-m-d') . "'")
             ->whereIn('status', $status)
             ->groupBy(['status_text', 'status', 'month', 'year'])
             ->orderBy('month')
