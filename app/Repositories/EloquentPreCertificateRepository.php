@@ -423,8 +423,17 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $role = $user->roles->last();
         // dd($role->name);
         if (request()->has('is_guest')) {
-        } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'Accounting')) {
+        } elseif ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
+                $query = $query->whereHas('branch', function ($q) use ($user) {
+                    if ($user->branch_id) {
+                        return $q->where('id', $user->branch_id);
+                    }
+                });
+            });
+        } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            $result = $result->where(function ($query) use ($user) {
+
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
@@ -484,16 +493,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
-                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('pre_certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+                ->whereBetween('pre_certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('pre_certificates.created_at', '>=', $startDate)
-                ->where('pre_certificates.updated_at', '>=', $startDate);
+            $result = $result->where('pre_certificates.created_at', '>=', $timeFilterFrom)
+                ->where('pre_certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('pre_certificates.created_at', '<=', $endDate)
-                ->where('pre_certificates.updated_at', '<=', $endDate);
+            $result = $result->where('pre_certificates.created_at', '<=', $timeFilterTo)
+                ->where('pre_certificates.updated_at', '<=', $timeFilterTo);
         }
 
         if (isset($selectedStatus) && !empty($selectedStatus)) {
@@ -727,7 +736,15 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         //     $permissionViewAccount = true;
         // }
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        if ($role->name == 'SUB_ADMIN') {
+            $result = $result->where(function ($query) use ($user) {
+                $query = $query->whereHas('branch', function ($q) use ($user) {
+                    if ($user->branch_id) {
+                        return $q->where('id', $user->branch_id);
+                    }
+                });
+            });
+        } elseif (($role->name !== 'ROOT_ADMIN'  && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
@@ -786,16 +803,16 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('pre_certificates.created_at', [$startDate, $endDate])
-                ->whereBetween('pre_certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('pre_certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+                ->whereBetween('pre_certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('pre_certificates.created_at', '>=', $startDate)
-                ->where('pre_certificates.updated_at', '>=', $startDate);
+            $result = $result->where('pre_certificates.created_at', '>=', $timeFilterFrom)
+                ->where('pre_certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('pre_certificates.created_at', '<=', $endDate)
-                ->where('pre_certificates.updated_at', '<=', $endDate);
+            $result = $result->where('pre_certificates.created_at', '<=', $timeFilterTo)
+                ->where('pre_certificates.updated_at', '<=', $timeFilterTo);
         }
 
         if (isset($selectedStatus) && !empty($selectedStatus)) {
@@ -1076,6 +1093,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     ];
                 }
                 $preCertificateKey = [
+                    'branch_id',
                     'certificate_id',
                     'petitioner_name',
                     'petitioner_phone',
@@ -1129,6 +1147,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     'total_preliminary_value',
                     'pre_type_id',
                     'customer_group_id',
+                    'branch_id'
                 ];
 
                 $user = CommonService::getUser();
@@ -1855,8 +1874,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            if (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
                 $result = $result->where(function ($query) use ($userId) {
+                    // $query = $query->whereHas('branch', function ($q) use ($user) {
+                    //     if ($user->branch_id) {
+                    //         return $q->where('id', $user->branch_id);
+                    //     }
+                    // });
                     $query = $query->whereHas('createdBy', function ($q) use ($userId) {
                         return $q->where('id', $userId);
                     });

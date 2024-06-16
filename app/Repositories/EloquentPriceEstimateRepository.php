@@ -190,7 +190,13 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             }
         }
         if (isset($status)) {
-            $result = $result->whereIn('status', $status);
+            // Lấy all
+            if (count($status) === 2) {
+            } else if ($status[0] === 0) {
+                $result = $result->where('status', '!=', 4);
+            } else if ($status[0] === 1) {
+                $result = $result->where('status', '=', 4);
+            }
         }
         $result = $result->orderByDesc('updated_at');
         $result = $result->orderByDesc('id');
