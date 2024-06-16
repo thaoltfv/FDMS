@@ -585,7 +585,7 @@ class CertificateAssetsController extends Controller
         }
         $rules = [
             'appraise_adapter' => 'nullable|array|sometimes',
-            'appraise_adapter.*.change_purpose_price' => 'required_with:appraise_adapter|numeric',
+            // 'appraise_adapter.*.change_purpose_price' => 'required_with:appraise_adapter|numeric',
             'appraise_adapter.*.percent' => 'required_with:appraise_adapter|numeric',
             'appraise_adapter.*.change_violate_price' => 'required_with:appraise_adapter|numeric|min:0',
             'asset_unit_area' => 'nullable|array|sometimes',
@@ -643,7 +643,7 @@ class CertificateAssetsController extends Controller
         }
         $rules = [
             'appraise_adapter' => 'nullable|array|sometimes',
-            'appraise_adapter.*.change_purpose_price' => 'required_with:appraise_adapter|numeric',
+            // 'appraise_adapter.*.change_purpose_price' => 'required_with:appraise_adapter|numeric',
             'appraise_adapter.*.percent' => 'required_with:appraise_adapter|numeric',
             'appraise_adapter.*.change_violate_price' => 'required_with:appraise_adapter|numeric|min:0',
             'asset_unit_area' => 'nullable|array|sometimes',

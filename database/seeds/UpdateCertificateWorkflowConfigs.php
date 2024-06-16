@@ -511,7 +511,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "info" => false,
                             "asset" => false,
                             "payments" => true,
-                            "appraiser" => false,
+                            "appraiser" => true,
                             "other_document" => false,
                             "export_document" => true,
                             "appraise_item_list" => false

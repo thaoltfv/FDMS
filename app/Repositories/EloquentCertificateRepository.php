@@ -2792,8 +2792,17 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $role = $user->roles->last();
         // dd($role->name);
         if (request()->has('is_guest')) {
-        } elseif (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        } elseif ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
+                $query = $query->whereHas('branch', function ($q) use ($user) {
+                    if ($user->branch_id) {
+                        return $q->where('id', $user->branch_id);
+                    }
+                });
+            });
+        } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            $result = $result->where(function ($query) use ($user) {
+
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
@@ -2902,16 +2911,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate]);
-            // ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+                ->whereBetween('certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('certificates.created_at', '>=', $startDate);
-            // ->where('certificates.updated_at', '>=', $startDate);
+            $result = $result->where('certificates.created_at', '>=', $timeFilterFrom)
+                ->where('certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('certificates.created_at', '<=', $endDate);
-            // ->where('certificates.updated_at', '<=', $endDate);
+            $result = $result->where('certificates.created_at', '<=', $timeFilterTo)
+                ->where('certificates.updated_at', '<=', $timeFilterTo);
         }
 
         if (!empty($status)) {
@@ -3156,6 +3165,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         ];
         $with = [
             'appraiser:id,name,user_id',
+            'branch',
             // 'appraiser.appraiserUser:id,appraisers_number,image',
             // 'appraiserManager:id,name,appraiser_number',
             // 'appraiserManager.appraiserUser:id,appraisers_number,image',
@@ -3258,8 +3268,17 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+        if ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
+                $query = $query->whereHas('branch', function ($q) use ($user) {
+                    if ($user->branch_id) {
+                        return $q->where('id', $user->branch_id);
+                    }
+                });
+            });
+        } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            $result = $result->where(function ($query) use ($user) {
+
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
                     return $q->where('id', $user->id);
                 });
@@ -3301,16 +3320,16 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('certificates.created_at', [$startDate, $endDate])
-                ->whereBetween('certificates.updated_at', [$startDate, $endDate]);
+            $result = $result->whereBetween('certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+                ->whereBetween('certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('certificates.created_at', '>=', $startDate)
-                ->where('certificates.updated_at', '>=', $startDate);
+            $result = $result->where('certificates.created_at', '>=', $timeFilterFrom)
+                ->where('certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('certificates.created_at', '<=', $endDate)
-                ->where('certificates.updated_at', '<=', $endDate);
+            $result = $result->where('certificates.created_at', '<=', $timeFilterTo)
+                ->where('certificates.updated_at', '<=', $timeFilterTo);
         }
         if (isset($filter) && !empty($filter)) {
             $filterSubstr = substr($filter, 0, 1);
@@ -6087,7 +6106,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $users[] =  $eloquenUser->getUser($certificate->appraiserPerform->user_id);
                 }
             if (isset($certificate->appraiser) && isset($certificate->appraiser->user_id))
-                if ($certificate->appraiser->user_id != $loginUser->id && $certificate->appraiser->user_id != $certificate->appraiserPerform->user_id) {
+                if ($certificate->appraiser->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiser->user_id);
                 }
             if (isset($certificate->appraiserControl) && isset($certificate->appraiserControl->user_id))
@@ -6302,21 +6321,23 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query = $query->whereIn('status', $status);
             $query1 = $query1->whereIn('status', $status);
         }
-
-        if (isset($fromDate)) {
+        if (isset($fromDate) && isset($toDate)) {
+            $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate)->format('Y-m-d');
+            $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate)->format('Y-m-d');
+            $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
+            $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'");
+        } elseif (isset($fromDate)) {
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
             $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') >= '" . $fromDate->format('Y-m-d') . "'");
-        }
-
-        if (isset($toDate)) {
+        } elseif (isset($toDate)) {
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
             $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
         // $result = $query->with($with)->limit(5)->get();
-        $result = $query->with($with)->get();
-        $result1 = $query1->get();
+        $result = $query->with($with)->get()->sortBy('certificate_id');
+        $result1 = $query1->get()->sortBy('certificate_id');
         if ($isExportLandDetail) {
             $result->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
             $result1->append(array_keys(ValueDefault::CERTIFICATION_BRIEF_CUSTOMIZE_LAND_DETAIL_COLUMN_LIST));
@@ -6332,9 +6353,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // $result = $result->toArray();
         // $result1 = $result1->toArray();
 
-        // $final_result = array_merge($result, $result1);
         // dd($final_result);
-        return $result->merge($result1)->sortBy('certificate_id');
+        return $result->merge($result1)->sortBy('created_at');
+        // $mergedResults = $result->mergeRecursive($result1, function ($item1, $item2) {
+        //     return $item1['certificate_id'] == $item2['certificate_id'];
+        // });
+        // return $mergedResults->sortByDesc('created_at');
     }
 
     private function updatePersonaltyPrice(int $id)
@@ -6648,7 +6672,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $role = $user->roles->last();
             $result = $this->model->query()->where('id', $id);
             $userId = $user->id;
-            if (($role->name !== 'SUPER_ADMIN' && $role->name !== 'ROOT_ADMIN' && $role->name !== 'SUB_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
+            if ($role->name !== 'ROOT_ADMIN'  && $role->name !== 'ADMIN' && $role->name !== 'Accounting') {
                 $result = $result->where(function ($query) use ($userId) {
                     $query = $query->whereHas('createdBy', function ($q) use ($userId) {
                         return $q->where('id', $userId);

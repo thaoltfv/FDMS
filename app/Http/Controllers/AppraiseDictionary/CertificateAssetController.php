@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\AppraiseDictionary;
 
 use App\Http\Controllers\Controller;
-
 use App\Contracts\AppraiseAssetRepository;
 use App\Contracts\CertificateAssetRepository;
 use App\Contracts\AppraiserCompanyRepository;
@@ -13,12 +12,12 @@ use App\Contracts\CompareAssetGeneralRepository;
 use App\Contracts\DictionaryRepository;
 use App\Contracts\PreCertificateRepository;
 use App\Contracts\UserRepository;
-
+use App\Services\CommonService;
 use App\Services\AppraiseAsset\AppraiseAsset;
 use App\Services\Document\CertificateAsset\PhuLuc2;
 use App\Services\Document\BaoCaoTest;
 use App\Services\Document\AssetReport;
-
+use App\Models\PreCertificateOtherDocuments;
 use App\Http\Requests\Appraise\CreateAppraiseRequest;
 use App\Http\Requests\Appraise\UpdateAppraiseRequest;
 use App\Enum\ErrorMessage;
@@ -26,7 +25,7 @@ use App\Models\Certificate;
 use App\Models\Appraiser;
 use App\Models\CertificateRealEstate;
 use App\Models\DocumentDictionary;
-
+use App\Models\CertificateOtherDocuments;
 use App\Models\RealEstate;
 use App\Notifications\ActivityLog;
 use App\Services\Document\CertificateAsset\PhuLuc1;
@@ -576,6 +575,188 @@ class CertificateAssetController extends Controller
             Log::info($th);
             return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
         }
+    }
+    public function downloadAllOfficialPreCertificate($id, $type)
+    {
+        try {
+            $otherDocuments = PreCertificateOtherDocuments::query()->where(['pre_certificate_id' => $id, 'type_document' => $type])->get();
+            $arrayLink = [];
+            $zipFileName = $type . '_YCSB_' . $id . '.zip';
+            $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('His');
+            $zipFileNameLink = 'TaiLieuDinhKem' . '_YCSB_' . $id . '_' . $downloadTime . '.zip';
+            if ($otherDocuments && count($otherDocuments) > 0) {
+                foreach ($otherDocuments as $document) {
+                    if ($document->description == 'appendix' || $document->description == 'other') {
+                        $item = [
+                            'link' => $document->link,
+                            'name' => $document->name
+                        ];
+                        $arrayLink[] =  $item;
+                    }
+                }
+            }
+            if (count($arrayLink) > 0) {
+                $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
+                $zip = new ZipArchive;
+                $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                    $fileContent = file_get_contents(isset($fileLink['url']) ? $fileLink['url'] : $fileLink['link']);
+                    $zip->addFromString($fileName, $fileContent);
+                }
+                $zip->close();
+                Storage::put($name, file_get_contents($name));
+                $fileUrl = Storage::url($name);
+                // $response = response()->download($fileUrl, $zipFileName, [
+                //     'Content-Type' => 'application/zip',
+
+                // ])->deleteFileAfterSend(true);
+                // return $response;
+
+                return  $this->respondWithCustomData(['message' => 'Tạo file zip thành công', 'link' => $fileUrl, 'name' => $zipFileName, 'name_link' => $zipFileNameLink]);
+            } else {
+                return  $this->respondWithErrorData(['message' => 'Không có file phù hợp để tiến hành tải xuống']);
+            }
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
+        }
+    }
+    public function convertAutoDocumentToOffical($id)
+    {
+        try {
+            $certificate = $this->certificateRepository->findById($id);
+            $arrayLink = [];
+            $user = CommonService::getUser();
+            $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            $cert = Certificate::where('id', $id)->first()->toArray();
+            if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
+                $tempTLTDCT[] = 'Appendix2';
+            }
+            foreach ($tempTLTDCT as  $value) {
+
+                $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
+                if ($value != 'TSSS') {
+                    $item =  $this->printDocumentOfficialAll($id, $service);
+                    $item['typeDocument'] = $value;
+                    if (!empty($item)) {
+                        $arrayLink[] = $item;
+                    }
+                } else {
+                    $item =  $this->printOfficialTSSS($id);
+                    $item['typeDocument'] = $value;
+                    if (!empty($item)) {
+                        $arrayLink[] = $item;
+                    }
+                }
+            }
+
+            if (count($arrayLink) > 0) {
+
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                    $item = [
+                        'certificate_id' => $id,
+                        'name' => $fileName,
+                        'link' =>  isset($fileLink['link']) ? $fileLink['link'] : $fileLink['url'],
+                        'type' => 'docx',
+                        'size' => null,
+                        'description' => $this->getOtherDescription($fileLink['typeDocument']),
+                        'created_by' => $user->id,
+                    ];
+                    $item = new CertificateOtherDocuments($item);
+                    CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $this->getOtherDescription($fileLink['typeDocument'])], $item->attributesToArray());
+                }
+
+                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                    ->with('createdBy')
+                    ->get();
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'Chuyển đổi bộ chứng thư tự động thành bộ chứng thư chính thức');
+
+                return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => $result]);
+            } else {
+                return  $this->respondWithErrorData(['message' => 'Chuyển bộ chứng thư tự động thất bại']);
+            }
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
+        }
+    }
+    public function convertAutoDocumentToOfficalFollowType($id, $type)
+    {
+        try {
+            $certificate = $this->certificateRepository->findById($id);
+            $arrayLink = [];
+            $user = CommonService::getUser();
+            $tempTLTDCT = ['Appendix1', 'Appendix3', 'Certificate', 'Appraisal', 'TSSS'];
+            $cert = Certificate::where('id', $id)->first()->toArray();
+            if ($cert['document_type'] && $cert['document_type'][0] == 'DCN') {
+                $tempTLTDCT[] = 'Appendix2';
+            }
+            foreach ($tempTLTDCT as  $value) {
+                if ($type === $this->getOtherDescription($value)) {
+                    $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
+                    if ($value != 'TSSS') {
+                        $item =  $this->printDocumentOfficialAll($id, $service);
+                        $item['typeDocument'] = $value;
+                        if (!empty($item)) {
+                            $arrayLink[] = $item;
+                        }
+                    } else {
+                        $item =  $this->printOfficialTSSS($id);
+                        $item['typeDocument'] = $value;
+                        if (!empty($item)) {
+                            $arrayLink[] = $item;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (count($arrayLink) > 0) {
+
+                foreach ($arrayLink as $fileLink) {
+                    $fileName = isset($fileLink['url']) ? explode('/', $fileLink['url'])[count(explode('/', $fileLink['url'])) - 1] : $fileLink['name'];
+                    $item = [
+                        'certificate_id' => $id,
+                        'name' => $fileName,
+                        'link' =>  isset($fileLink['link']) ? $fileLink['link'] : $fileLink['url'],
+                        'type' => 'docx',
+                        'size' => null,
+                        'description' => $this->getOtherDescription($fileLink['typeDocument']),
+                        'created_by' => $user->id,
+                    ];
+                    $item = new CertificateOtherDocuments($item);
+                    CertificateOtherDocuments::query()->updateOrCreate(['certificate_id' => $id, 'description' => $this->getOtherDescription($fileLink['typeDocument'])], $item->attributesToArray());
+                }
+
+                $result = CertificateOtherDocuments::where('certificate_id', $id)
+                    ->with('createdBy')
+                    ->get();
+                $this->CreateActivityLog($certificate, $certificate, 'download', 'Chuyển đổi bộ chứng thư tự động thành bộ chứng thư chính thức');
+
+                return  $this->respondWithCustomData(['message' => 'Chuyển bộ chứng thư tự động thành chính thức thành công', 'data' => $result]);
+            } else {
+                return  $this->respondWithErrorData(['message' => 'Chuyển bộ chứng thư tự động thất bại']);
+            }
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return  $this->respondWithErrorData(['message' => 'Có lỗi xảy ra trong quá trình tải xuống']);
+        }
+    }
+    private function getOtherDescription($description)
+    {
+        $array = [
+            'Certificate' => 'certificate_report',
+            'Appraisal' => 'appraisal_report',
+            'Appendix1' => 'appendix1_report',
+            'Appendix2' => 'appendix2_report',
+            'Appendix3' => 'appendix3_report',
+        ];
+        if (isset($array[$description]))
+            return $array[$description];
+        else
+            return 'comparision_asset_report';
     }
     public function getTypeDownload($type)
     {

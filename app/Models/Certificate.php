@@ -80,19 +80,19 @@ class Certificate extends Model
         $statusText = "";
         switch ($status) {
             case 1:
-                $statusText = "Mới";
+                $statusText = "Tiếp nhận hồ sơ";
                 break;
             case 2:
-                $statusText = "Đang Thẩm Định";
+                $statusText = "Thẩm định";
                 break;
             case 3:
-                $statusText = "Đang Duyệt";
+                $statusText = "Duyệt giá";
                 break;
             case 4:
                 $statusText = "Hoàn Thành";
                 break;
-            case 6:
-                return 'Đang Kiểm Soát';
+            case 10:
+                $statusText = 'Phân hồ sơ';
                 break;
             case 5:
                 $statusText = "Huỷ";
