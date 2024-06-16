@@ -6335,8 +6335,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $query = $query->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
             $query1 = $query1->whereRaw("to_char(created_at , 'YYYY-MM-dd') <= '" . $toDate->format('Y-m-d') . "'");
         }
-        Log::info($query->get());
-        Log::info($query1->get());
         // $result = $query->with($with)->limit(5)->get();
         $result = $query->with($with)->get();
         $result1 = $query1->get();
@@ -6358,6 +6356,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // $final_result = array_merge($result, $result1);
         // dd($final_result);
         // return $result->merge($result1)->sortBy('certificate_id');
+        Log::info($result->merge($result1)->sortByDesc('created_at'));
+
         return $result->merge($result1)->sortByDesc('created_at');
     }
 
