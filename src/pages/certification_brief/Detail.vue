@@ -1668,8 +1668,8 @@
 			v-if="
 				form.general_asset.length > 0 &&
 					printConfig &&
-					statusDescription === 'In hồ sơ' &&
-					statusDescription === 'Bàn giao khách hàng'
+					(statusDescription === 'In hồ sơ' ||
+						statusDescription === 'Bàn giao khách hàng')
 			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
