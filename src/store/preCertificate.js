@@ -374,8 +374,8 @@ export const usePreCertificateStore = defineStore(
 			status: [],
 			ots: null,
 			timeFilter: {
-				from: null,
-				to: null
+				from: moment(new Date()).subtract(1, "months"),
+				to: moment(new Date()),
 			}
 		});
 		const selectedStatus = ref([]);
@@ -416,7 +416,7 @@ export const usePreCertificateStore = defineStore(
 					const resp = await PreCertificate.paginate({
 						query: {
 							page: 1,
-							limit: 20,
+							limit: 30,
 							...param,
 							...temp
 						}
@@ -585,8 +585,8 @@ export const usePreCertificateStore = defineStore(
 				status: [],
 				ots: null,
 				timeFilter: {
-					from: null,
-					to: null
+					from: moment().subtract(1, "months"),
+					to: moment(),
 				}
 			};
 			dataPC.value = {

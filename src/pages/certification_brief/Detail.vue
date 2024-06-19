@@ -244,7 +244,11 @@
 												</p>
 											</div>
 											<div
-												v-if="(editAppraiser && edit) || isBusinessManager"
+												v-if="
+													(editAppraiser && edit) ||
+														isBusinessManager ||
+														byPassAdmin
+												"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -603,7 +607,8 @@
 			v-if="
 				form.general_asset.length > 0 &&
 					printConfig &&
-					statusDescription !== 'In hồ sơ'
+					statusDescription !== 'In hồ sơ' &&
+					statusDescription !== 'Bàn giao khách hàng'
 			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
@@ -617,6 +622,9 @@
 							Bộ Chứng thư tự động
 							<b-tooltip :target="'download_all_official_auto'" placement="top"
 								>Tải xuống tất cả Bộ Chứng thư tự động
+							</b-tooltip>
+							<b-tooltip :target="'convert_all_official_auto'" placement="top"
+								>Chuyển sang tài liệu chính thức
 							</b-tooltip>
 							<!-- <font-awesome-icon
 								v-if="isViewAutomationDocument"
@@ -633,17 +641,37 @@
 								class="mr-2"
 							/> -->
 						</h3>
-						<div
-							class="mr-4"
-							v-if="isViewAutomationDocument"
-							:id="'download_all_official_auto'"
-							@click="handleDownloadAll('TaiLieuTuDong')"
-						>
-							<img
-								src="@/assets/icons/ic_download_3.png"
-								alt="search"
-								class="img_document_action"
-							/>
+						<div class="d-flex mr-4">
+							<div
+								class=""
+								v-if="isViewAutomationDocument"
+								:id="'download_all_official_auto'"
+								@click="handleDownloadAll('TaiLieuTuDong')"
+							>
+								<img
+									src="@/assets/icons/ic_download_3.png"
+									alt="search"
+									class="img_document_action"
+								/>
+							</div>
+							<!-- <div
+								class=""
+								v-if="
+									isViewAutomationDocument &&
+										statusDescription !== 'Hoàn thành' &&
+										statusDescription !== 'In hồ sơ' &&
+										statusDescription !== 'Bàn giao khách hàng' &&
+										statusDescription !== 'Hủy'
+								"
+								:id="'convert_all_official_auto'"
+								@click="showPopupComfirmConvertDocument = true"
+							>
+								<img
+									src="@/assets/icons/right-arrow.svg.svg"
+									alt="search"
+									class="img_document_action"
+								/>
+							</div> -->
 						</div>
 					</div>
 					<div class="card-body card-info">
@@ -677,11 +705,32 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewCertificate(idData)">
+										<div @click="viewCertificate(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											:id="'convert_all_official_auto'"
+											@click="
+												showPopupComfirmConvertDocumentView(
+													'certificate_report'
+												)
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -721,11 +770,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewReportCertificate(idData)">
+										<div @click="viewReportCertificate(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appraisal_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -765,11 +832,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix1(idData)">
+										<div @click="viewAppendix1(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appendix1_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -815,11 +900,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix2(idData)">
+										<div @click="viewAppendix2(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appendix2_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -859,11 +962,29 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix3(idData)">
+										<div @click="viewAppendix3(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView('appendix3_report')
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -907,11 +1028,31 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAssetDocument(idData)">
+										<div @click="viewAssetDocument(idData)" class="mr-2">
 											<img
 												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											class=""
+											v-if="
+												statusDescription !== 'Hoàn thành' &&
+													statusDescription !== 'In hồ sơ' &&
+													statusDescription !== 'Bàn giao khách hàng' &&
+													statusDescription !== 'Hủy'
+											"
+											@click="
+												showPopupComfirmConvertDocumentView(
+													'comparision_asset_report'
+												)
+											"
+										>
+											<img
+												src="@/assets/icons/right-arrow-new.svg"
 												alt="search"
 												class="img_document_action"
 											/>
@@ -1527,7 +1668,8 @@
 			v-if="
 				form.general_asset.length > 0 &&
 					printConfig &&
-					statusDescription === 'In hồ sơ'
+					(statusDescription === 'In hồ sơ' ||
+						statusDescription === 'Bàn giao khách hàng')
 			"
 			class="col-12"
 			:style="isMobile() ? { padding: '0' } : {}"
@@ -2265,6 +2407,16 @@
 			@cancel="showPopupComfirmDownloadAutoDocument = false"
 			@action="handleDownloadConfirm"
 		/>
+		<ModalConfirmDownload
+			v-if="showPopupComfirmConvertDocument"
+			:textConfirm="
+				`Bạn có muốn chuyển ${getNameConvert(
+					this.typeConvert
+				)} tự động thành ${getNameConvert(this.typeConvert)} chính thức ?`
+			"
+			@cancel="showPopupComfirmConvertDocument = false"
+			@action="handleConvertConfirm"
+		/>
 		<ModalAppraisal
 			:key="key_render_appraisal"
 			v-if="showAppraisalDialog"
@@ -2426,7 +2578,6 @@ import PaymentCertificateHistories from "./component/PaymentCertificateHistories
 import ModalDelete from "@/components/Modal/ModalDelete";
 import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalPreviewDocument from "@/components/PreCertificate/ModalViewDocument";
-
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationWithAssignHSTD from "@/components/Modal/ModalNotificationWithAssignHSTD";
 
@@ -2509,7 +2660,10 @@ export default {
 	},
 	data() {
 		return {
+			byPassAdmin: false,
 			showPopupComfirmDownloadAutoDocument: false,
+			showPopupComfirmConvertDocument: false,
+			typeConvert: "",
 			typeConfirm: "",
 			theme: {
 				navItem: "#000000",
@@ -2684,9 +2838,20 @@ export default {
 		if (
 			this.form &&
 			this.form.appraiser_business_manager &&
-			this.form.appraiser_business_manager.user_id === this.user.id
+			this.form.appraiser_business_manager.user_id === this.user.id &&
+			this.form.status &&
+			(this.form.status !== 4 || this.form.status !== 5)
 		) {
 			this.isBusinessManager = true;
+		}
+		if (
+			this.form.status &&
+			this.form.status !== 4 &&
+			this.form.status !== 5 &&
+			(profile.data.user.roles[0].name === "ROOT_ADMIN" ||
+				profile.data.user.roles[0].name === "ADMIN")
+		) {
+			this.byPassAdmin = true;
 		}
 		if (
 			this.form.status &&
@@ -2901,6 +3066,10 @@ export default {
 		}
 	},
 	methods: {
+		showPopupComfirmConvertDocumentView(type) {
+			this.typeConvert = type;
+			this.showPopupComfirmConvertDocument = true;
+		},
 		async getDetail() {
 			await CertificationBrief.getDetailCertificateBrief(this.form.id)
 				.then(resp => {
@@ -3232,7 +3401,47 @@ export default {
 				});
 			}
 		},
-
+		async handleConvertConfirm() {
+			try {
+				// await Certificate.convertAutoDocumentToOfficial(this.idData).then(
+				// 	resp => {
+				// 		const res = resp.data;
+				// 		if (res) {
+				// 		} else {
+				// 			this.$toast.open({
+				// 				message: resp.error.message,
+				// 				type: "error",
+				// 				position: "top-right",
+				// 				duration: 3000
+				// 			});
+				// 		}
+				// 	}
+				// );
+				await Certificate.convertAutoDocumentToOfficialFollowType(
+					this.idData,
+					this.typeConvert
+				).then(resp => {
+					const res = resp.data;
+					if (res) {
+						this.form.other_documents = res.data;
+					} else {
+						this.$toast.open({
+							message: resp.error.message,
+							type: "error",
+							position: "top-right",
+							duration: 3000
+						});
+					}
+				});
+			} catch (error) {
+				this.$toast.open({
+					message: error,
+					type: "error",
+					position: "top-right",
+					duration: 3000
+				});
+			}
+		},
 		handleCancel() {
 			this.openNotification = false;
 			if (this.cancel_certificate) {
@@ -4040,6 +4249,36 @@ export default {
 					}
 				}
 			}
+		},
+		getNameConvert(type) {
+			let message = "";
+			switch (type) {
+				case "certificate_report":
+					message = "Chứng thư thẩm định";
+
+					break;
+				case "appraisal_report":
+					message = "Báo cáo thẩm định";
+
+					break;
+				case "appendix1_report":
+					message = "Bảng điều chỉnh QSDĐ";
+
+					break;
+				case "appendix2_report":
+					message = "Bảng điều chỉnh CTXD";
+
+					break;
+				case "appendix3_report":
+					message = "Hình ảnh hiện trạng";
+
+					break;
+				case "comparision_asset_report":
+					message = "Phiếu thu thập TSSS";
+
+					break;
+			}
+			return message;
 		},
 		checkFileUpload(type) {
 			let message = "";

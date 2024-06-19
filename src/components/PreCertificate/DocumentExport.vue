@@ -255,21 +255,32 @@
 										</div>
 									</div>
 									<div
-										v-if="
-											allowEdit &&
-												statusText !== 'Hoàn thành' &&
-												statusText !== 'In hồ sơ' &&
-												statusText !== 'Bàn giao khách hàng' &&
-												statusText !== 'Hủy'
-										"
-										class="d-flex align-items-center  justify-content-end col-1 pr-3"
+										class="d-flex align-items-center justify-content-end col-2"
 									>
-										<img
-											@click="deleteOtherFile(file, index)"
-											src="@/assets/icons/ic_delete_2.svg"
-											alt="tag_2"
-											class="img_document_action"
-										/>
+										<div @click="handleViewDocumentUpload(file)" class="mr-2">
+											<img
+												src="@/assets/icons/ic_search_3.svg"
+												alt="search"
+												class="img_document_action"
+											/>
+										</div>
+										<div
+											v-if="
+												allowEdit &&
+													statusText !== 'Hoàn thành' &&
+													statusText !== 'In hồ sơ' &&
+													statusText !== 'Bàn giao khách hàng' &&
+													statusText !== 'Hủy'
+											"
+											class=""
+										>
+											<img
+												@click="deleteOtherFile(file, index)"
+												src="@/assets/icons/ic_delete_2.svg"
+												alt="tag_2"
+												class="img_document_action"
+											/>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -527,6 +538,11 @@ export default {
 			} else if (type === "BBTL") {
 				this.viewBBTL();
 			}
+		},
+		handleViewDocumentUpload(file) {
+			this.filePreview = file.link;
+			this.title = file.nameTitle;
+			this.isShowPreview = true;
 		},
 		async viewGYC() {
 			await Certificate.getPrintGYC(this.idData).then(resp => {

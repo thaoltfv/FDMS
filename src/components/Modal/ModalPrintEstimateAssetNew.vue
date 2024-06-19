@@ -273,13 +273,11 @@
 									:key="'building' + index"
 								>
 									<td class="text-left">
-										<div class="text-left">
-											{{
-												item.building_type
-													? formatSentenceCase(item.building_type.description)
-													: ""
-											}}
-										</div>
+										{{
+											item.building_type
+												? formatSentenceCase(item.building_type.description)
+												: ""
+										}}
 									</td>
 									<td class="text-center">
 										{{ formatArea(item.total_construction_area) }}
@@ -321,7 +319,11 @@
 										style="border-bottom-right-radius: 15px;"
 										class="text-right font-weight-bold"
 									>
-										{{ formatNumber(data.totalAllPrice - data.totalLandPrice) }}
+										{{
+											formatNumber(
+												Number(data.totalAllPrice) - Number(data.totalLandPrice)
+											)
+										}}
 									</td>
 								</tr>
 							</tbody>

@@ -918,7 +918,8 @@ export default {
 						this.priceEstimates.step_3.tangible_assets.length > 0
 					)
 						this.priceEstimates.totalTangibleAssetPrice = this.priceEstimates.step_3.tangible_assets.reduce(
-							(total, asset) => total + (asset.total_price || 0),
+							(total, asset) =>
+								total + (asset.total_price ? Number(asset.total_price) : 0),
 							0
 						);
 				}
@@ -926,6 +927,7 @@ export default {
 				this.priceEstimates.totalAllPrice =
 					Number(this.priceEstimates.totalLandPrice) +
 					Number(this.priceEstimates.totalTangibleAssetPrice);
+
 				this.openPrint = true;
 			}
 

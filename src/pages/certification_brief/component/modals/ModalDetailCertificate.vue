@@ -135,6 +135,14 @@
 					<div class="col-12 mb-2">
 						<div class="detail_certificate_2">
 							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Nhóm đối tác:</strong>
+								<p>
+									{{
+										form.customer_group ? form.customer_group.description : ""
+									}}
+								</p>
+							</div>
+							<div class="d-flex container_content">
 								<strong class="margin_content_inline">Đối tác:</strong>
 								<p>{{ form.customer ? form.customer.name : "" }}</p>
 							</div>

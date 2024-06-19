@@ -129,9 +129,8 @@
 									vid="phone"
 									label="Số điện thoại"
 									type="number"
-									:max-length="10"
+									:max-length="11"
 									:min="0"
-									rules="required"
 									class="col-12 col-md-4 col-lg-4 form-group-container"
 								/>
 								<!-- <InputText

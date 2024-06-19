@@ -208,7 +208,11 @@
 												</p>
 											</div>
 											<div
-												v-if="(editAppraiser && edit) || isBusinessManager"
+												v-if="
+													(editAppraiser && edit) ||
+														isBusinessManager ||
+														byPassAdmin
+												"
 												@click="handleShowAppraisal"
 												class="btn-edit"
 											>
@@ -797,6 +801,7 @@ export default {
 			indexDelete: "",
 			id_file_delete: "",
 			isBusinessManager: false,
+			byPassAdmin: false,
 			showDetailAppraise: false,
 			dataDetailAppraise: [],
 			appraiser_number: "",
@@ -947,12 +952,30 @@ export default {
 		const checkRole = ref(false);
 		const exportAction = ref(false);
 		const user_id = ref("");
-
+		const isBusinessManager = ref(false);
+		const byPassAdmin = ref(false);
 		const permissionFunction = async () => {
 			profile.value = vueStoree.value.profile;
 			user_id.value = vueStoree.value.user.id;
 			if (user_id.value === dataPC.value.created_by) {
 				checkRole.value = true;
+			}
+			if (
+				dataPC.value &&
+				dataPC.value.appraiser_business_manager &&
+				dataPC.value.appraiser_business_manager.user_id ===
+					vueStoree.value.user.id
+			) {
+				isBusinessManager.value = true;
+			}
+			if (
+				dataPC.value &&
+				dataPC.value.status !== 6 &&
+				dataPC.value.status !== 7 &&
+				(vueStoree.value.user.roles[0].name === "ADMIN" ||
+					vueStoree.value.user.roles[0].name === "ROOT_ADMIN")
+			) {
+				byPassAdmin.value = true;
 			}
 			const permission = vueStoree.value.currentPermissions;
 			permission.forEach(value => {
@@ -1040,15 +1063,19 @@ export default {
 		};
 	},
 
-	created() {
-		if (
-			this.dataPC &&
-			this.dataPC.appraiser_business_manager &&
-			this.dataPC.appraiser_business_manager.user_id === this.user_id
-		) {
-			this.isBusinessManager = true;
-		}
-	},
+	// created() {
+	// 	if (
+	// 		this.dataPC &&
+	// 		this.dataPC.appraiser_business_manager &&
+	// 		this.dataPC.appraiser_business_manager.user_id === this.user_id
+	// 	) {
+	// 		this.isBusinessManager = true;
+	// 	}
+	// 	if (this.dataPC && this.dataPC.status !== 4 && this.dataPC.status !== 5) {
+	// 		console.log(this.profile);
+	// 		this.byPassAdmin = true;
+	// 	}
+	// },
 	computed: {
 		formattedText() {
 			return this.dataPC.pre_asset_name
@@ -2286,7 +2313,8 @@ export default {
 						this.priceEstimates.step_3.tangible_assets.length > 0
 					)
 						this.priceEstimates.totalTangibleAssetPrice = this.priceEstimates.step_3.tangible_assets.reduce(
-							(total, asset) => total + (asset.total_price || 0),
+							(total, asset) =>
+								total + (asset.total_price ? Number(asset.total_price) : 0),
 							0
 						);
 				}
