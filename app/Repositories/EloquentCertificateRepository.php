@@ -2794,9 +2794,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (request()->has('is_guest')) {
         } elseif ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('branch', function ($q) use ($user) {
+                $query = $query->whereHas('appraiserBusinessManager', function ($q) use ($user) {
                     if ($user->branch_id) {
-                        return $q->where('id', $user->branch_id);
+                        return $q->where('branch_id', $user->branch_id);
                     }
                 });
             });
@@ -3270,9 +3270,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // dd($role->name);
         if ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('branch', function ($q) use ($user) {
+                $query = $query->whereHas('appraiserBusinessManager', function ($q) use ($user) {
                     if ($user->branch_id) {
-                        return $q->where('id', $user->branch_id);
+                        return $q->where('branch_id', $user->branch_id);
                     }
                 });
             });

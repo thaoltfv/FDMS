@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\User;
+use App\Models\UserLogs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -42,13 +43,25 @@ class LoginController extends Controller
      */
     protected function login(LoginRequest $request): JsonResponse
     {
+        $ip = $request->ip(); // Get IP address before converting request to array
+        $browserInfo = $request->header('User-Agent') ?? 'Unknown';
+        $request = $request->toArray();
         try {
-            $request = $request->toArray();
+
             $user = $this->userRepository->checkExitUserByEmail($request['email']);
             if ($user) {
                 $user->token = $request['token'];
                 unset($user['role']);
                 $user->save();
+                // Save login time, IP address, and browser info
+                UserLogs::create([
+                    'user_id' => $user->id,
+                    'email' => $request['email'],
+                    'last_login_at' => now()->addHours(7), // Add 7 hours
+                    'last_login_ip' => $ip,
+                    'browser_info' => $browserInfo, // Save browser info
+                    'error_message' => null,
+                ]);
                 $response['status'] = 200;
                 $response['token'] = $request['token'];
                 $response['tokenType'] = 'Bearer';
@@ -60,6 +73,14 @@ class LoginController extends Controller
             return $this->respondWithCustomData('Token invalidate', 401);
         } catch (\Exception $exception) {
             Log::error($exception);
+            UserLogs::create([
+                'user_id' => null,
+                'email' => $request['email'],
+                'last_login_at' => now()->addHours(7), // Add 7 hours
+                'last_login_ip' => $ip,
+                'browser_info' => $browserInfo, // Save browser info
+                'error_message' => 'Đăng nhập thất bại, error tài khoản đã bị khóa client'
+            ]);
             $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
             return $this->respondWithErrorData($data);
         }
@@ -114,4 +135,29 @@ class LoginController extends Controller
         }
     }
 
+    /**
+     * @param  LoginRequest $request
+     * @return JsonResponse
+     */
+    public function logLoginUser(LoginRequest $request): JsonResponse
+    {
+        $ip = $request->ip(); // Get IP address before converting request to array
+        $browserInfo = $request->header('User-Agent') ?? 'Unknown';
+        $request = $request->toArray();
+        try {
+            UserLogs::create([
+                'user_id' => null,
+                'email' => $request['email'],
+                'last_login_at' => now()->addHours(7), // Add 7 hours
+                'last_login_ip' => $ip,
+                'browser_info' => $browserInfo, // Save browser info
+                'error_message' => $request['message'],
+            ]);
+            return $this->respondWithCustomData(['message' => 'Lưu log thành công']);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }
