@@ -3045,19 +3045,28 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'payments',
         ];
         $result = Certificate::with($with)->select($select);
-        // $result = $result->whereNotNull('certificate_id');
-
         if (isset($status)) {
-            $result = $result->whereHas('certificate', function ($query) use ($status) {
-                $query->whereIn('status', $status);
-            });
+            $result = $result->whereIn('status', $status);
         }
 
         if (isset($fromDate) && isset($toDate)) {
-            $result = $result->whereBetween('pay_date', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
+            $result = $result->whereBetween('created_at', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
         }
 
-        $result = $result->orderBy('pay_date', 'desc')->get();
+        $result = $result->orderBy('created_at', 'desc')->get();
+        // $result = $result->whereNotNull('certificate_id');
+
+        // if (isset($status)) {
+        //     $result = $result->whereHas('certificate', function ($query) use ($status) {
+        //         $query->whereIn('status', $status);
+        //     });
+        // }
+
+        // if (isset($fromDate) && isset($toDate)) {
+        //     $result = $result->whereBetween('pay_date', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
+        // }
+
+        // $result = $result->orderBy('pay_date', 'desc')->get();
         return $result;
     }
 
