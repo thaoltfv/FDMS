@@ -3028,18 +3028,24 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
 
         $select = ['*'];
+        // $with = [
+        //     'certificate',
+        //     'certificate.appraiserSale',
+        //     'certificate.appraiserPerform',
+        //     'certificate.appraiser',
+        //     'certificate.appraiserManager',
+        //     'certificate.payments',
+        // ];
+        // $result = PreCertificatePayments::with($with)->select($select);
         $with = [
-            'certificate',
-            'certificate.appraiserSale',
-            'certificate.appraiserPerform',
-            'certificate.appraiser',
-            'certificate.appraiserManager',
-            'certificate.payments',
-            'preCertificate.payments',
-            'preCertificate',
+            'appraiserSale',
+            'appraiserPerform',
+            'appraiser',
+            'appraiserManager',
+            'payments',
         ];
-        $result = PreCertificatePayments::with($with)->select($select);
-        $result = $result->whereNotNull('certificate_id');
+        $result = Certificate::with($with)->select($select);
+        // $result = $result->whereNotNull('certificate_id');
 
         if (isset($status)) {
             $result = $result->whereHas('certificate', function ($query) use ($status) {

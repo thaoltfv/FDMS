@@ -75,7 +75,7 @@ use App\Http\Controllers\PriceEstimate\PriceEstimateController;
 Route::group(['middleware' => 'guest'], function () {
     Route::post('auth/login', [LoginController::class, 'login']);
 
-    Route::post('auth/log-login-user', [LoginController::class, 'logLoginUser']);
+    // Route::post('auth/log-login-user', [LoginController::class, 'logLoginUser']);
 
     Route::post('auth/refresh', [LoginController::class, 'refreshToken']);
 

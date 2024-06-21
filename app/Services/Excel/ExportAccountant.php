@@ -103,6 +103,8 @@ class ExportAccountant
         $header_style = (new StyleBuilder())
             ->setFontName('Times New Roman')
             ->setFontBold()
+            ->setFontColor(Color::RGB(255, 0, 0))
+            ->setBackgroundColor(Color::RGB(217, 217, 217))
             ->setBorder($border)
             ->build();
 
@@ -119,18 +121,37 @@ class ExportAccountant
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
-
-
                     return [
                         'Mã HS' => $data->certificate_id,
-                        'Tên khách hàng' => $data->certificate->petitioner_name,
-                        'Nhân viên kinh doanh' => $data->certificate->appraiserSale ? $data->certificate->appraiserSale->name : '',
-                        'Chuyên viên thẩm định' => $data->certificate->appraiserPerform ? $data->certificate->appraiserPerform->name : '',
-                        'Thẩm định viên' => $data->certificate->appraiser ? $data->certificate->appraiser->name : '',
-                        'Đại diện pháp luật' => $data->certificate->appraiserManager ? $data->certificate->appraiserManager->name : '',
-                        'Giá trị thanh toán' => $data->amount,
-                        'Nội dung' => $data->for_payment_of,
-                        'Ngày thanh toán' => \Carbon\Carbon::parse($data->pay_date)->format('d-m-Y'),
+                        'Số chứng thư' => $data->certificate_num ?? '',
+                        'Ngày phát hành' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
+                        'Số hợp đồng' => $data->document_num ?? '',
+                        'Ngày phát hành' =>  isset($data->document_date) ?  \Carbon\Carbon::parse($data->document_date)->format('d-m-Y') : '',
+                        'Đơn vị yêu cầu' => $data->petitioner_name,
+                        'Thời điểm TĐG' => isset($data->appraise_date) ?  'Tháng ' . date_format(date_create($data->appraise_date), "m/Y")  : '',
+                        'Tổng giá dịch vụ TĐG' => isset($data->service_fee) ?  $data->service_fee  : '',
+                        'Giá dịch vụ TĐG gồm VAT' => '',
+                        'Giá dịch vụ TĐG chưa VAT' => '',
+                        'Thuế VAT' => '',
+                        'Đại diện pháp luật' => $data->appraiserManager ? $data->appraiserManager->name : '',
+                        'Thẩm định viên' => $data->appraiser ? $data->appraiser->name : '',
+                        'Người khai thác' => $data->appraiserSale ? $data->appraiserSale->name : '',
+                        'Chi nhánh MSB' => '',
+                        'NV thực hiện' => $data->appraiserPerform ? $data->appraiserPerform->name : '',
+                        'Địa điểm thẩm định' => $data->survey_location ?? '',
+                        'Phương tiện di chuyển' =>  '',
+                        'Ghi chú' =>  '',
+                        'Tạm ứng' => isset($data->payments) && count($data->payments) ? $this->calcAdvancePayment($data->payments) : '',
+                        'CÔNG NỢ (Bao gồm VAT)' => isset($data->payments) && count($data->payments) ? $data->service_fee -  $this->calcAdvancePayment($data->payments) : '',
+                        'Tình trạng thanh toán' => '',
+                        'Xuất hóa đơn' => '',
+                        'Tháng tiền về' => '',
+                        'Số hóa đơn' => '',
+                        'Thuế suất' => '',
+                        'Tình trạng hợp đồng' => '',
+                        'BBTL' => '',
+                        'Đã chi lương khoán' => '',
+                        'Tháng quyết toán' => ''
                     ];
                 }
             );
@@ -142,6 +163,14 @@ class ExportAccountant
         $data['url'] = Storage::disk('public')->url($path . '/' . $fileName);
         $data['file_name'] = $fileName;
         return $data;
+    }
+    private function calcAdvancePayment($listPayment)
+    {
+        $totalAdvance = 0;
+        foreach ($listPayment as  $payment) {
+            $totalAdvance += $payment->amount;
+        }
+        return $totalAdvance;
     }
     private function formatColumn($path, $fileName)
     {
