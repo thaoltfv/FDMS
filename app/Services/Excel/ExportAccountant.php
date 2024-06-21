@@ -122,11 +122,11 @@ class ExportAccountant
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
                     return [
-                        'Mã HS' => $data->certificate_id,
+                        'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
-                        'Ngày phát hành' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
+                        'Ngày phát hành chứng thư' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
                         'Số hợp đồng' => $data->document_num ?? '',
-                        'Ngày phát hành' =>  isset($data->document_date) ?  \Carbon\Carbon::parse($data->document_date)->format('d-m-Y') : '',
+                        'Ngày phát hành hợp đồng' =>  isset($data->document_date) ?  \Carbon\Carbon::parse($data->document_date)->format('d-m-Y') : '',
                         'Đơn vị yêu cầu' => $data->petitioner_name,
                         'Thời điểm TĐG' => isset($data->appraise_date) ?  'Tháng ' . date_format(date_create($data->appraise_date), "m/Y")  : '',
                         'Tổng giá dịch vụ TĐG' => isset($data->service_fee) ?  $data->service_fee  : '',
@@ -142,7 +142,7 @@ class ExportAccountant
                         'Phương tiện di chuyển' =>  '',
                         'Ghi chú' =>  '',
                         'Tạm ứng' => isset($data->payments) && count($data->payments) ? $this->calcAdvancePayment($data->payments) : '',
-                        'CÔNG NỢ (Bao gồm VAT)' => isset($data->payments) && count($data->payments) ? $data->service_fee -  $this->calcAdvancePayment($data->payments) : '',
+                        'CÔNG NỢ (Bao gồm VAT)' => isset($data->payments) && count($data->payments) ? $data->service_fee -  $this->calcAdvancePayment($data->payments) :  $data->service_fee,
                         'Tình trạng thanh toán' => '',
                         'Xuất hóa đơn' => '',
                         'Tháng tiền về' => '',
