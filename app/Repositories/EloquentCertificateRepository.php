@@ -2794,10 +2794,34 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (request()->has('is_guest')) {
         } elseif ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('branch', function ($q) use ($user) {
+                $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
                     if ($user->branch_id) {
-                        return $q->where('id', $user->branch_id);
+                        return $q->where('branch_id', $user->branch_id);
                     }
+                });
+                $query = $query->orwhereHas('appraiser', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserManager', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserConfirm', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('administrative', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
                 });
             });
         } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
@@ -3028,30 +3052,45 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         }
 
         $select = ['*'];
+        // $with = [
+        //     'certificate',
+        //     'certificate.appraiserSale',
+        //     'certificate.appraiserPerform',
+        //     'certificate.appraiser',
+        //     'certificate.appraiserManager',
+        //     'certificate.payments',
+        // ];
+        // $result = PreCertificatePayments::with($with)->select($select);
         $with = [
-            'certificate',
-            'certificate.appraiserSale',
-            'certificate.appraiserPerform',
-            'certificate.appraiser',
-            'certificate.appraiserManager',
-            'certificate.payments',
-            'preCertificate.payments',
-            'preCertificate',
+            'appraiserSale',
+            'appraiserPerform',
+            'appraiser',
+            'appraiserManager',
+            'payments',
         ];
-        $result = PreCertificatePayments::with($with)->select($select);
-        $result = $result->whereNotNull('certificate_id');
-
+        $result = Certificate::with($with)->select($select);
         if (isset($status)) {
-            $result = $result->whereHas('certificate', function ($query) use ($status) {
-                $query->whereIn('status', $status);
-            });
+            $result = $result->whereIn('status', $status);
         }
 
         if (isset($fromDate) && isset($toDate)) {
-            $result = $result->whereBetween('pay_date', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
+            $result = $result->whereBetween('created_at', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
         }
 
-        $result = $result->orderBy('pay_date', 'desc')->get();
+        $result = $result->orderBy('created_at', 'desc')->get();
+        // $result = $result->whereNotNull('certificate_id');
+
+        // if (isset($status)) {
+        //     $result = $result->whereHas('certificate', function ($query) use ($status) {
+        //         $query->whereIn('status', $status);
+        //     });
+        // }
+
+        // if (isset($fromDate) && isset($toDate)) {
+        //     $result = $result->whereBetween('pay_date', [$fromDate->format('Y-m-d'), $toDate->format('Y-m-d')]);
+        // }
+
+        // $result = $result->orderBy('pay_date', 'desc')->get();
         return $result;
     }
 
@@ -3270,10 +3309,37 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         // dd($role->name);
         if ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('branch', function ($q) use ($user) {
+                // $query = $query->whereHas('createdBy', function ($q) use ($user) {
+                //     return $q->where('id', $user->id);
+                // });
+                $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
                     if ($user->branch_id) {
-                        return $q->where('id', $user->branch_id);
+                        return $q->where('branch_id', $user->branch_id);
                     }
+                });
+                $query = $query->orwhereHas('appraiser', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserManager', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserConfirm', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserControl', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('administrative', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
                 });
             });
         } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
