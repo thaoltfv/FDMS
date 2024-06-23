@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Excel;
 
 use App\Enum\ValueDefault;
@@ -22,16 +23,17 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 class ExportCertificateBriefs
 {
     use ResponseTrait;
-    public function exportBrieft($data){
+    public function exportBrieft($data)
+    {
         // $data = CommonService::exportCertificateAssets();
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
-        if(!File::exists(storage_path('app/public/'. $path))){
-            File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        if (!File::exists(storage_path('app/public/' . $path))) {
+            File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
         $downloadDate = $now->format('dmY');
         $downloadTime = $now->format('Hi');
-        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate . '.xlsx';
         $border = (new BorderBuilder())
             ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
             ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
@@ -40,34 +42,38 @@ class ExportCertificateBriefs
             ->build();
 
         $header_style = (new StyleBuilder())
-                            ->setFontName('Times New Roman')
-                            ->setFontBold()
-                            ->setBorder($border)
-                            ->build();
+            ->setFontName('Times New Roman')
+            ->setFontBold()
+            ->setBorder($border)
+            ->build();
 
         $rows_style = (new StyleBuilder())
-                        ->setFontName('Times New Roman')
-                        ->setFontSize(11)
-                        ->setBorder($border)
-                        ->build();
+            ->setFontName('Times New Roman')
+            ->setFontSize(11)
+            ->setBorder($border)
+            ->build();
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
-            ->export(storage_path('app/public/'. $path. '/'. $fileName ) ,function($data){
-                return [
-                    'Mã HSTĐ' => 'HSTD_'. $data->id,
-                    'Số hợp đồng' => $data->document_num,
-                    'Số chứng thư' => $data->certificate_num,
-                    'Khách hàng' => $data->petitioner_name,
-                    'Tổng giá trị (VNĐ)' => isset($data->assetPrice[0]->value) ? $data->assetPrice[0]->value : 0,
-                    'Nhân viên kinh doanh' => isset($data->appraiserSale->name) ? $data->appraiserSale->name : '',
-                    'Chuyên viên thẩm định' => $data->appraiserPerform->name??'',
-                    'Thẩm định viên' => $data->appraiser->name??'',
-                    'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
-                    'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d')  ,
-                    'Trạng thái' =>  $data->status_text,
-                ];}
+            ->addAutoIncrementColumn('STT')
+            ->export(
+                storage_path('app/public/' . $path . '/' . $fileName),
+                function ($data) {
+                    return [
+                        'Mã HSTĐ' => 'HSTD_' . $data->id,
+                        'Số hợp đồng' => $data->document_num,
+                        'Số chứng thư' => $data->certificate_num,
+                        'Khách hàng' => $data->petitioner_name,
+                        'Tổng giá trị (VNĐ)' => isset($data->assetPrice[0]->value) ? $data->assetPrice[0]->value : 0,
+                        'Nhân viên kinh doanh' => isset($data->appraiserSale->name) ? $data->appraiserSale->name : '',
+                        'Chuyên viên thẩm định' => $data->appraiserPerform->name ?? '',
+                        'Thẩm định viên' => $data->appraiser->name ?? '',
+                        'Người tạo' => isset($data->createdBy->name) ? $data->createdBy->name : '',
+                        'Ngày tạo' => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d'),
+                        'Trạng thái' =>  $data->status_text,
+                    ];
+                }
             );
         $styleBorderArray = [
             'borders' => [
@@ -77,9 +83,9 @@ class ExportCertificateBriefs
                 ],
             ],
         ];
-        $reader= new Xlsx();
-        $spreadSheet= new Spreadsheet();
-        $spreadSheet= $reader->load(storage_path('app/public/'. $path. $fileName));
+        $reader = new Xlsx();
+        $spreadSheet = new Spreadsheet();
+        $spreadSheet = $reader->load(storage_path('app/public/' . $path . $fileName));
         $spreadSheet->setActiveSheetIndex(0);
         $activeSheet = $spreadSheet->getActiveSheet();
         $headers = ValueDefault::CERTIFICATION_BRIEF_COLUMN_LIST;
@@ -89,9 +95,9 @@ class ExportCertificateBriefs
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
         $title = 'Thống Kê Hồ Sơ Thẩm Định';
-        $date = 'Từ ngày '. $fromDate .' đến ngày '. $toDate;
+        $date = 'Từ ngày ' . $fromDate . ' đến ngày ' . $toDate;
         $appraiseTeam = 'Tổ thẩm định';
-        $activeSheet->insertNewRowBefore(1,3);
+        $activeSheet->insertNewRowBefore(1, 3);
         $activeSheet->mergeCells('A2:K2');
         $activeSheet->setCellValue('A2', $title);
         $activeSheet->getStyle('A2:K2')->getFont()->setBold(true)->setName($fontName)->setSize(16);
@@ -100,7 +106,7 @@ class ExportCertificateBriefs
         $activeSheet->setCellValue('A3', $date);
         $activeSheet->getStyle('A3:K3')->getFont()->setItalic(true)->setName($fontName);
         $activeSheet->getStyle('A3:K3')->getAlignment()->setHorizontal('center');
-        $activeSheet->insertNewRowBefore(4,1);
+        $activeSheet->insertNewRowBefore(4, 1);
         // $value = $activeSheet->getCell("A4")->getValue();
         $activeSheet->mergeCells('F4:I4');
         $activeSheet->setCellValue('F4', $appraiseTeam);
@@ -119,12 +125,12 @@ class ExportCertificateBriefs
         $activeSheet->getColumnDimension('J')->setWidth(10.30);
         $activeSheet->getColumnDimension('K')->setWidth(13.80);
 
-        $countData = count($data)+5;
-        foreach($headers as $item){
+        $countData = count($data) + 5;
+        foreach ($headers as $item) {
             $cellAddress = "$alpha[$stt]6:$alpha[$stt]$countData";
             $cellAddressMerge = "$alpha[$stt]4:$alpha[$stt]5";
 
-            switch($item){
+            switch ($item) {
                 case 'Nhân viên kinh doanh':
                 case 'Chuyên viên thẩm định':
                 case 'Thẩm định viên':
@@ -135,46 +141,46 @@ class ExportCertificateBriefs
                 default:
                     $value = $activeSheet->getCell("$alpha[$stt]5")->getValue();
                     $activeSheet->mergeCells($cellAddressMerge);
-                    $activeSheet->setCellValue("$alpha[$stt]4",$value);
+                    $activeSheet->setCellValue("$alpha[$stt]4", $value);
                     $activeSheet->getStyle($cellAddressMerge)->getFont()->setBold(true)->setItalic(false);
                     $activeSheet->getStyle($cellAddressMerge)->getAlignment()->setHorizontal('center')->setVertical('center')->setWrapText(true);
                     $activeSheet->getStyle($cellAddressMerge)->applyFromArray($styleBorderArray);
-
             }
-            if(Str::contains($item, 'Tổng')){
-                if(Str::contains($item, 'Tổng giá trị')){
-                    $activeSheet->getStyle( $cellAddress)
+            if (Str::contains($item, 'Tổng')) {
+                if (Str::contains($item, 'Tổng giá trị')) {
+                    $activeSheet->getStyle($cellAddress)
                         ->getNumberFormat()->setFormatCode('###,###');
-                }else{
-                    $activeSheet->getStyle( $cellAddress)
-                    ->getNumberFormat()->setFormatCode('###,##0.#0');
+                } else {
+                    $activeSheet->getStyle($cellAddress)
+                        ->getNumberFormat()->setFormatCode('###,##0.#0');
                 }
             }
-            if(Str::contains($item, 'Ngày')){
+            if (Str::contains($item, 'Ngày')) {
                 $activeSheet->getStyle($cellAddress)
                     ->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_DDMMYYYY);
             }
-            if(Str::contains($item, 'Khách hàng')){
-                $activeSheet->getStyle( $cellAddress)->getAlignment()->setWrapText(true);
+            if (Str::contains($item, 'Khách hàng')) {
+                $activeSheet->getStyle($cellAddress)->getAlignment()->setWrapText(true);
             }
             // $activeSheet->getColumnDimension($alpha[$stt])->setAutoSize(true);
             $stt++;
         }
 
         $objWriter = IOFactory::createWriter($spreadSheet, 'Xlsx');
-        $objWriter->save(storage_path('app/public/'. $path. '/'. $fileName ));
+        $objWriter->save(storage_path('app/public/' . $path . '/' . $fileName));
 
         //Cleanup
         $spreadSheet->disconnectWorksheets();
         unset($spreadSheet);
 
         $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName );
+        $data['url'] = Storage::disk('public')->url($path . '/' . $fileName);
         $data['file_name'] = $fileName;
         return $data;
     }
 
-    public function exportCustomizeBrieft($data, $selectedHeader = []) {
+    public function exportCustomizeBrieft($data, $selectedHeader = [])
+    {
         $selectedHeader = [
             'basic_info',
             'land_detail',
@@ -249,13 +255,13 @@ class ExportCertificateBriefs
 
         // Generate excel
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
-        if(!File::exists(storage_path('app/public/'. $path))){
-            File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        if (!File::exists(storage_path('app/public/' . $path))) {
+            File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
         $downloadDate = $now->format('dmY');
         $downloadTime = $now->format('Hi');
-        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate .'.xlsx';
+        $fileName = 'Export Data' . '_' . $downloadTime . '_' . $downloadDate . '.xlsx';
         $border = (new BorderBuilder())
             ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
             ->setBorderLeft(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
@@ -264,23 +270,23 @@ class ExportCertificateBriefs
             ->build();
 
         $header_style = (new StyleBuilder())
-                            ->setFontName('Times New Roman')
-                            ->setFontBold()
-                            ->setBorder($border)
-                            ->build();
+            ->setFontName('Times New Roman')
+            ->setFontBold()
+            ->setBorder($border)
+            ->build();
 
         $rows_style = (new StyleBuilder())
-                        ->setFontName('Times New Roman')
-                        ->setFontSize(11)
-                        ->setBorder($border)
-                        ->build();
+            ->setFontName('Times New Roman')
+            ->setFontSize(11)
+            ->setBorder($border)
+            ->build();
         (new FastExcel($reducedData))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
-            ->export(storage_path('app/public/'. $path. '/'. $fileName ));
+            ->export(storage_path('app/public/' . $path . '/' . $fileName));
 
         $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName );
+        $data['url'] = Storage::disk('public')->url($path . '/' . $fileName);
         $data['file_name'] = $fileName;
         return $data;
     }
