@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!isMobile" class="main-wrapper-new">
-		<a-tabs @change="callback" default-active-key="1" style="height: 100%;">
+		<a-tabs @change="callback" default-active-key="2" style="height: 100%;">
 			<a-tab-pane key="1">
 				<span slot="tab">
 					<img src="@/assets/icons/ic_table.svg" alt="table" />
