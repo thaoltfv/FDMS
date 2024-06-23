@@ -79,6 +79,20 @@
 			class="table-detail position-relative mt-3"
 			:class="totalRecord === 0 ? 'empty-data' : ''"
 		>
+			<!-- <a-table
+				bordered
+				:columns="columns"
+				:data-source="listWarehouses"
+				:loading="isLoading"
+				class="table-property"
+				:rowKey="record => record.id"
+				:pagination="{
+					...pagination,
+					showSizeChanger: true,
+					pageSizeOptions: ['10', '20', '30']
+				}"
+				@change="onPageChange"
+			> -->
 			<a-table
 				bordered
 				:columns="columns"
@@ -86,10 +100,6 @@
 				:loading="isLoading"
 				class="table-property"
 				:rowKey="record => record.id"
-				:filtered="false"
-				:row-class-name="
-					(_record, index) => (index % 2 === 1 ? 'table-striped' : null)
-				"
 				:pagination="false"
 				@change="onPageChange"
 			>
@@ -294,8 +304,8 @@
 				</a-pagination>
 			</div>
 			<!-- <div class="total position-absolute" v-if="totalRecord > 0">
-        Tổng cộng: {{ totalRecord }} tin đăng
-      </div> -->
+				Tổng cộng: {{ totalRecord }} tin đăng
+			</div> -->
 		</div>
 		<ModalSearchAdvanced
 			v-if="showModalSearch"
@@ -958,7 +968,6 @@ export default {
 		formatDate(value) {
 			return moment(String(value)).format("DD/MM/YYYY");
 		},
-
 		async openPrint(id) {
 			this.isSubmit = true;
 			await WareHouse.getPrint(id).then(resp => {

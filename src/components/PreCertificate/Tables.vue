@@ -734,12 +734,28 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Trạng thái",
+					align: "center",
+
+					dataIndex: "status",
+					scopedSlots: {
+						customRender: "status"
+						// 	filterDropdown: "filterDropdown"
+					},
+					// filters:
+					// 	this.jsonConfig && this.jsonConfig.filterStatus
+					// 		? this.jsonConfig.filterStatus
+					// 		: [],
+					// onFilter: (value, record) => record.status === value,
+					hiddenItem: false
+				},
+				{
 					title: "Khách hàng",
 					align: "left",
 					scopedSlots: { customRender: "petitioner_name" },
 					// sorter: (a, b) => a.petitioner_name - b.petitioner_name,
 					// sortDirections: ['descend', 'ascend'],
-					width: "15dvw",
+					width: "13dvw",
 					hiddenItem: false
 				},
 				{
@@ -755,7 +771,7 @@ export default {
 					scopedSlots: { customRender: "total_preliminary_value" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
 					// sortDirections: ['descend', 'ascend'],
-					width: "30dvw",
+					width: "20dvw",
 					hiddenItem: false
 				},
 				{
@@ -766,23 +782,23 @@ export default {
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
-				{
-					title: "Người tạo",
-					class: "optional-data",
-					align: "left",
-					scopedSlots: { customRender: "created_by" },
-					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
-				{
-					title: "Tổng phí dịch vụ (VNĐ)",
-					align: "left",
-					scopedSlots: { customRender: "service_fee" },
-					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
+				// {
+				// 	title: "Người tạo",
+				// 	class: "optional-data",
+				// 	align: "left",
+				// 	scopedSlots: { customRender: "created_by" },
+				// 	// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
+				// 	// sortDirections: ['descend', 'ascend'],
+				// 	hiddenItem: false
+				// },
+				// {
+				// 	title: "Tổng phí dịch vụ (VNĐ)",
+				// 	align: "left",
+				// 	scopedSlots: { customRender: "service_fee" },
+				// 	// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
+				// 	// sortDirections: ['descend', 'ascend'],
+				// 	hiddenItem: false
+				// },
 				{
 					title: "Thời gian",
 					class: "optional-data",
@@ -792,22 +808,6 @@ export default {
 						// filterDropdown: "filterDropdownCreatedAt"
 					},
 
-					hiddenItem: false
-				},
-				{
-					title: "Trạng thái",
-					align: "center",
-
-					dataIndex: "status",
-					scopedSlots: {
-						customRender: "status"
-						// 	filterDropdown: "filterDropdown"
-					},
-					// filters:
-					// 	this.jsonConfig && this.jsonConfig.filterStatus
-					// 		? this.jsonConfig.filterStatus
-					// 		: [],
-					// onFilter: (value, record) => record.status === value,
 					hiddenItem: false
 				}
 			];
