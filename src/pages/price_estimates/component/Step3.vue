@@ -441,7 +441,13 @@
 										v-for="(images, index) in step_3.image_planning_info"
 										:key="images.id"
 									>
-										<div class="delete" @click="removeImage(images)">X</div>
+										<div
+											v-if="isEdit"
+											class="delete"
+											@click="removeImage(images)"
+										>
+											X
+										</div>
 										<img
 											class="asset-img"
 											:src="images.link"
@@ -449,7 +455,7 @@
 											@click="openModalImage(images)"
 										/>
 									</div>
-									<div class="container_input_img">
+									<div v-if="isEdit" class="container_input_img">
 										<input
 											class="input_file_4"
 											type="file"
@@ -615,6 +621,45 @@
 								label="Ghi chú"
 								class="form-group-container"
 							/>
+							<div class="mt-2">
+								<div
+									class="d-flex justify-content-between align-items-end mb-2"
+								>
+									<h3 class="mb-0 font-weight-bold">Ảnh thông tin quy hoạch</h3>
+								</div>
+								<div class="container-img row mr-0 ml-0">
+									<div
+										class="contain-img contain-img__property"
+										v-for="(images, index) in step_3.image_planning_info"
+										:key="images.id"
+									>
+										<div
+											v-if="isEdit"
+											class="delete"
+											@click="removeImage(images)"
+										>
+											X
+										</div>
+										<img
+											class="asset-img"
+											:src="images.link"
+											alt="img"
+											@click="openModalImage(images)"
+										/>
+									</div>
+									<div v-if="isEdit" class="container_input_img">
+										<input
+											class="input_file_4"
+											type="file"
+											ref="file"
+											id="image_property"
+											multiple
+											accept="image/png, image/gif, image/jpeg, image/jpg"
+											@change="onImageChange($event)"
+										/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
