@@ -1812,8 +1812,8 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 }
             }
 
-            if (isset($data['image_planning'])) {
-                foreach ($data['image_planning'] as $image) {
+            if (isset($data['image_planning_info'])) {
+                foreach ($data['image_planning_info'] as $image) {
                     $image['price_estimate_final_id'] = $priceEstimateFinal->id;
                     $priceEstimateFinal->imagePlanningInfo()->create($image);
                 }
@@ -1865,8 +1865,8 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     $priceEstimateFinal->apartmentFinals()->create($apartment);
                 }
             }
-            if (isset($data['image_planning'])) {
-                foreach ($data['image_planning'] as $image) {
+            if (isset($data['image_planning_info'])) {
+                foreach ($data['image_planning_info'] as $image) {
                     $image['price_estimate_final_id'] = $priceEstimateFinal->id;
                     $priceEstimateFinal->imagePlanningInfo()->create($image);
                 }
