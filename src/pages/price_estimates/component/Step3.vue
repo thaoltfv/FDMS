@@ -429,6 +429,39 @@
 								label="Ghi chú"
 								class="form-group-container"
 							/>
+							<div class="mt-2">
+								<div
+									class="d-flex justify-content-between align-items-end mb-2"
+								>
+									<h3 class="mb-0 font-weight-bold">Ảnh thông tin quy hoạch</h3>
+								</div>
+								<div class="container-img row mr-0 ml-0">
+									<div
+										class="contain-img contain-img__property"
+										v-for="(images, index) in step_3.image_planning_info"
+										:key="images.id"
+									>
+										<div class="delete" @click="removeImage(images)">X</div>
+										<img
+											class="asset-img"
+											:src="images.link"
+											alt="img"
+											@click="openModalImage(images)"
+										/>
+									</div>
+									<div class="container_input_img">
+										<input
+											class="input_file_4"
+											type="file"
+											ref="file"
+											id="image_property"
+											multiple
+											accept="image/png, image/gif, image/jpeg, image/jpg"
+											@change="onImageChange($event)"
+										/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -885,6 +918,7 @@ export default {
 							  }))
 							: [],
 						tangible_assets: [],
+						image_planning_info: [],
 						appraise_land_sum_area: step1.land_details.appraise_land_sum_area,
 						difference_amplitude:
 							priceEstimates.value.step_3.difference_amplitude,
@@ -913,6 +947,7 @@ export default {
 							  }))
 							: [],
 						tangible_assets: [],
+						image_planning_info: [],
 						appraise_land_sum_area: step1.land_details.appraise_land_sum_area,
 						difference_amplitude: 0,
 						note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
@@ -972,6 +1007,7 @@ export default {
 						total_area: [],
 						planning_area: [],
 						tangible_assets: [],
+						image_planning_info: [],
 						apartment_finals: [
 							{
 								name: address,
@@ -998,6 +1034,7 @@ export default {
 						total_area: [],
 						planning_area: [],
 						tangible_assets: [],
+						image_planning_info: [],
 						apartment_finals: [
 							{
 								name: address,
@@ -1009,8 +1046,8 @@ export default {
 						appraise_land_sum_area: null,
 						difference_amplitude: 0,
 						note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
-				- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
-				- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
+- Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
+- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
 					};
 				}
 				step_3.value = priceEstimates.value.step_3;
@@ -1172,6 +1209,7 @@ export default {
 			showCardDetailImage: true,
 			openModalMap: false,
 			imageMap: true,
+			isLoading: false,
 			location: {
 				lng: "",
 				lat: ""
@@ -1227,6 +1265,69 @@ export default {
 		await this.getImageDescriptions(this.miscInfo.imageDescriptions);
 	},
 	methods: {
+		onImageChange(e) {
+			let files = e.target.files || e.dataTransfer.files;
+			if (!files.length) {
+				return;
+			}
+			for (let i = 0; i < e.target.files.length; i++) {
+				this.file = e.target.files[i];
+				if (
+					this.file.type === "image/png" ||
+					this.file.type === "image/jpeg" ||
+					this.file.type === "image/jpg" ||
+					this.file.type === "image/gif"
+				) {
+					this.createImage();
+					this.uploadImage();
+				} else {
+					this.$toast.open({
+						message: "Hình không đúng định dạng vui lòng kiểm tra lại",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			}
+		},
+		createImage() {
+			let reader = new FileReader();
+			let v = this;
+			reader.onload = e => {
+				v.image = e.target.result;
+			};
+			reader.readAsDataURL(this.file);
+		},
+		uploadImage() {
+			this.isLoading = true;
+			const formData = new FormData();
+			formData.append("image", this.file);
+			return File.upload({ data: formData }).then(response => {
+				if (response && response.data) {
+					const item = {
+						link: response.data.data.link,
+						picture_type: response.data.data.picture_type
+					};
+					// this.$emit('uploadImage', item)
+					this.step_3.image_planning_info.push(item);
+					this.isLoading = false;
+				} else if (response.data.error) {
+					this.isLoading = false;
+					this.$toast.open({
+						message: response.data.error.message,
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		removeImage(images) {
+			const index = this.step_3.image_planning_info.indexOf(images);
+			if (index !== -1) {
+				this.step_3.image_planning_info.splice(index, 1);
+			}
+		},
 		formatSentenceCase(phrase) {
 			let text = phrase.toLowerCase();
 			return text.charAt(0).toUpperCase() + text.slice(1);

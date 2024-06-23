@@ -118,12 +118,12 @@
 									}}
 								</div>
 							</div>
-							<div class="data-row">
+							<!-- <div class="data-row">
 								<div class="data-label">Sơ đồ vị trí:</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
-					<div class="main-map">
+					<!-- <div class="main-map">
 						<div class="layer-map">
 							<l-map
 								ref="lmap"
@@ -146,7 +146,7 @@
 									:url="url"
 									:options="{ maxNativeZoom: 19, maxZoom: 20 }"
 								></l-tile-layer>
-								<!-- <l-control-zoom position="bottomright"></l-control-zoom> -->
+								
 								<l-marker
 									:lat-lng="[
 										data.step_1.general_infomation.coordinates.split(',')[0],
@@ -161,13 +161,13 @@
 											alt=""
 										/>
 									</l-icon>
-									<!-- <l-tooltip :options="{ permanent: true, interactive: true }">Vị trí tài sản</l-tooltip> -->
+								
 								</l-marker>
 							</l-map>
 						</div>
-					</div>
-					<img src="@/assets/images/header-kqsb.png" class="mt-2" />
-					<div class="vendorListHeading mt-3 mb-3">
+					</div> -->
+					<!-- <img src="@/assets/images/header-kqsb.png" class="mt-2" /> -->
+					<div class="card-header vendorListHeading mt-3 mb-3">
 						KẾT QUẢ ƯỚC TÍNH SƠ BỘ
 					</div>
 					<div
@@ -390,51 +390,75 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="d-flex mt-5">
-						<div
-							class="text-justify mb-2 mr-5 font-italic "
-							style="color: #000; font-size: 12px !important; line-height: 1.8;"
-							v-bind:class="['w-50']"
-						>
-							<!-- *Kết quả ước tính sơ bộ chỉ có giá trị tham khảo dựa trên các
+
+					<div
+						v-if="
+							data.step_3.image_planning_info &&
+								data.step_3.image_planning_info.length > 0
+						"
+						style="margin-top: 150px;"
+					>
+						<img src="@/assets/images/header-kqsb.png" />
+						<div class="" style="color: #000; font-size: 12px !important">
+							* Ảnh thông tin quy hoạch:
+						</div>
+						<div class="d-flex flex-column">
+							<img
+								v-for="image in data.step_3.image_planning_info"
+								:src="image.link"
+								height="390px"
+								style="margin:0 auto"
+								class="mt-1"
+							/>
+						</div>
+						<div style="margin-top: 500px;">
+							<img src="@/assets/images/header-kqsb.png" class="" />
+							<div class="d-flex">
+								<div
+									class="text-justify mb-2 mr-5 font-italic "
+									style="color: #000; font-size: 12px !important; line-height: 1.8;"
+									v-bind:class="['w-50']"
+								>
+									<!-- *Kết quả ước tính sơ bộ chỉ có giá trị tham khảo dựa trên các
 							thông tin khách hàng cung cấp và chưa phải là kết quả thẩm định
 							giá trên Chứng thư. -->
 
-							* Biên độ chênh lệch: +/- {{ data.step_3.difference_amplitude }} %
-							<br />
-							* Ghi chú khác: <br />
-							<div
-								style="color: #000; font-size: 12px !important; line-height: 1.8;"
-								v-html="formattedText"
-							></div>
-						</div>
+									* Biên độ chênh lệch: +/-
+									{{ data.step_3.difference_amplitude }} %
+									<br />
+									* Ghi chú khác: <br />
+									<div
+										style="color: #000; font-size: 12px !important; line-height: 1.8;"
+										v-html="formattedText"
+									></div>
+								</div>
 
-						<div class="w-50 d-flex flex-column">
-							<div class="row">
-								<div class="text-left col-1"></div>
-								<div class="text-left col-4 textPrint">Chữ ký</div>
-								<div class="text-left col-1 textPrint">:</div>
-								<div class="text-right col-6 textPrint">
-									---------------------
-								</div>
-							</div>
-							<div class="row">
-								<div class="text-left col-1"></div>
-								<div class="text-left col-4 textPrint">Người ước tính</div>
-								<div class="text-left col-1 textPrint ">:</div>
-								<div class="text-right col-6 textPrint">
-									{{ data.created_by ? data.created_by.name : "" }}
-								</div>
-							</div>
-							<div class="row">
-								<div class="text-left col-1"></div>
-								<div class="text-left col-4 textPrint">Thời điểm</div>
-								<div class="text-left col-1 textPrint">:</div>
-								<div class="text-right col-6 textPrint">
-									{{ data.updated_at ? formatDate(data.updated_at) : "" }}
-								</div>
-							</div>
-							<!-- <table>
+								<div class="w-50 d-flex flex-column">
+									<div class="row">
+										<div class="text-left col-1"></div>
+										<div class="text-left col-4 textPrint">Chữ ký</div>
+										<div class="text-left col-1 textPrint">:</div>
+										<div class="text-right col-6 textPrint">
+											---------------------
+										</div>
+									</div>
+									<div class="row">
+										<div class="text-left col-1"></div>
+										<div class="text-left col-4 textPrint">Người ước tính</div>
+										<div class="text-left col-1 textPrint ">:</div>
+										<div class="text-right col-6 textPrint">
+											{{ data.created_by ? data.created_by.name : "" }}
+										</div>
+									</div>
+									<div class="row">
+										<div class="text-left col-1"></div>
+										<div class="text-left col-4 textPrint">Thời điểm</div>
+										<div class="text-left col-1 textPrint">:</div>
+										<div class="text-right col-6 textPrint">
+											{{ data.updated_at ? formatDate(data.updated_at) : "" }}
+										</div>
+									</div>
+									<!-- <table>
 								<tbody class="infoFooter">
 									<tr>
 										<td>
@@ -472,14 +496,14 @@
 								</tbody>
 							</table> -->
 
-							<!-- <div class="report-info">
+									<!-- <div class="report-info">
 								<div class="report-label">Chữ ký:</div>
 
 								<div class="report-value" style="text-align: right!important;">
 							
 								</div>
 							</div> -->
-							<!-- <div class="report-info">
+									<!-- <div class="report-info">
 								<div class="report-label">Người ước tính:</div>
 
 								<div class="report-value" style="text-align: right!important;">
@@ -493,7 +517,7 @@
 									{{ data.updated_at ? formatDate(data.updated_at) : "" }}
 								</div>
 							</div> -->
-							<!-- <div>
+									<!-- <div>
 								<div class="text-right result-total">TỔNG GIÁ TRỊ TÀI SẢN</div>
 								<div
 									class="text-right result-total-amount"
@@ -502,35 +526,186 @@
 									{{ format(data.total) }} VND
 								</div>
 							</div> -->
+								</div>
+							</div>
+							<div class="d-flex mt-3 justify-content-end ">
+								<table>
+									<tbody class="infoSignature">
+										<tr>
+											<td class="text-center font-weight-bold">
+												ĐẠI DIỆN PHÁP LUẬT
+											</td>
+										</tr>
+										<tr class="mt-3">
+											<td></td>
+										</tr>
+										<tr class="mt-3">
+											<td></td>
+										</tr>
+										<tr class="mt-3">
+											<td></td>
+										</tr>
+										<tr class="mt-3">
+											<td></td>
+										</tr>
+										<tr>
+											<td class="text-center font-weight-bold">
+												Huỳnh Văn Ngoãn
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
-					<div class="d-flex mt-5 justify-content-end ">
-						<table>
-							<tbody class="infoSignature">
-								<tr>
-									<td class="text-center font-weight-bold">
-										ĐẠI DIỆN PHÁP LUẬT
-									</td>
-								</tr>
-								<tr class="mt-3">
-									<td></td>
-								</tr>
-								<tr class="mt-3">
-									<td></td>
-								</tr>
-								<tr class="mt-3">
-									<td></td>
-								</tr>
-								<tr class="mt-3">
-									<td></td>
-								</tr>
-								<tr>
-									<td class="text-center font-weight-bold">
-										Huỳnh Văn Ngoãn
-									</td>
-								</tr>
-							</tbody>
-						</table>
+					<div v-else>
+						<img
+							src="@/assets/images/header-kqsb.png"
+							style="margin-top: 75px;"
+						/>
+						<div class="d-flex">
+							<div
+								class="text-justify mt-1 mb-2 mr-5 font-italic "
+								style="color: #000; font-size: 12px !important; line-height: 1.8;"
+								v-bind:class="['w-50']"
+							>
+								<!-- *Kết quả ước tính sơ bộ chỉ có giá trị tham khảo dựa trên các
+							thông tin khách hàng cung cấp và chưa phải là kết quả thẩm định
+							giá trên Chứng thư. -->
+
+								* Biên độ chênh lệch: +/-
+								{{ data.step_3.difference_amplitude }} %
+								<br />
+								* Ghi chú khác: <br />
+								<div
+									style="color: #000; font-size: 12px !important; line-height: 1.8;"
+									v-html="formattedText"
+								></div>
+							</div>
+
+							<div class="w-50 d-flex flex-column">
+								<div class="row">
+									<div class="text-left col-1"></div>
+									<div class="text-left col-4 textPrint">Chữ ký</div>
+									<div class="text-left col-1 textPrint">:</div>
+									<div class="text-right col-6 textPrint">
+										---------------------
+									</div>
+								</div>
+								<div class="row">
+									<div class="text-left col-1"></div>
+									<div class="text-left col-4 textPrint">Người ước tính</div>
+									<div class="text-left col-1 textPrint ">:</div>
+									<div class="text-right col-6 textPrint">
+										{{ data.created_by ? data.created_by.name : "" }}
+									</div>
+								</div>
+								<div class="row">
+									<div class="text-left col-1"></div>
+									<div class="text-left col-4 textPrint">Thời điểm</div>
+									<div class="text-left col-1 textPrint">:</div>
+									<div class="text-right col-6 textPrint">
+										{{ data.updated_at ? formatDate(data.updated_at) : "" }}
+									</div>
+								</div>
+								<!-- <table>
+								<tbody class="infoFooter">
+									<tr>
+										<td>
+											Chữ ký
+										</td>
+										<td>
+											:
+										</td>
+										<td>
+											---------------------
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Người ước tính
+										</td>
+										<td>
+											:
+										</td>
+										<td class="text-right">
+											{{ data.created_by ? data.created_by.name : "" }}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Thời điểm
+										</td>
+										<td>
+											:
+										</td>
+										<td class="text-right">
+											{{ data.updated_at ? formatDate(data.updated_at) : "" }}
+										</td>
+									</tr>
+								</tbody>
+							</table> -->
+
+								<!-- <div class="report-info">
+								<div class="report-label">Chữ ký:</div>
+
+								<div class="report-value" style="text-align: right!important;">
+							
+								</div>
+							</div> -->
+								<!-- <div class="report-info">
+								<div class="report-label">Người ước tính:</div>
+
+								<div class="report-value" style="text-align: right!important;">
+									{{ data.created_by ? data.created_by.name : "" }}
+								</div>
+							</div>
+							<div class="report-info">
+								<div class="report-label">Thời điểm:</div>
+
+								<div class="report-value" style="text-align: right !important">
+									{{ data.updated_at ? formatDate(data.updated_at) : "" }}
+								</div>
+							</div> -->
+								<!-- <div>
+								<div class="text-right result-total">TỔNG GIÁ TRỊ TÀI SẢN</div>
+								<div
+									class="text-right result-total-amount"
+									style="text-align: right!important;"
+								>
+									{{ format(data.total) }} VND
+								</div>
+							</div> -->
+							</div>
+						</div>
+						<div class="d-flex mt-3 justify-content-end ">
+							<table>
+								<tbody class="infoSignature">
+									<tr>
+										<td class="text-center font-weight-bold">
+											ĐẠI DIỆN PHÁP LUẬT
+										</td>
+									</tr>
+									<tr class="mt-3">
+										<td></td>
+									</tr>
+									<tr class="mt-3">
+										<td></td>
+									</tr>
+									<tr class="mt-3">
+										<td></td>
+									</tr>
+									<tr class="mt-3">
+										<td></td>
+									</tr>
+									<tr>
+										<td class="text-center font-weight-bold">
+											Huỳnh Văn Ngoãn
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
