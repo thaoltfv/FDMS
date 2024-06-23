@@ -118,11 +118,11 @@ class ExportAccountant
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
+            ->addAutoIncrementColumn('STT')
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
-                function ($data, $index) {
+                function ($data) {
                     return [
-                        'STT' => $index + 1,
                         'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
                         'Ngày phát hành chứng thư' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
