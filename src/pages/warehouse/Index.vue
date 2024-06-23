@@ -79,7 +79,7 @@
 			class="table-detail position-relative mt-3"
 			:class="totalRecord === 0 ? 'empty-data' : ''"
 		>
-			<a-table
+			<!-- <a-table
 				bordered
 				:columns="columns"
 				:data-source="listWarehouses"
@@ -91,6 +91,16 @@
 					showSizeChanger: true,
 					pageSizeOptions: ['10', '20', '30']
 				}"
+				@change="onPageChange"
+			> -->
+			<a-table
+				bordered
+				:columns="columns"
+				:data-source="listWarehouses"
+				:loading="isLoading"
+				class="table-property"
+				:rowKey="record => record.id"
+				:pagination="false"
 				@change="onPageChange"
 			>
 				<div
@@ -269,9 +279,33 @@
 					<p class="public_date mb-0">{{ formatDate(created_at) }}</p>
 				</template>
 			</a-table>
-			<div class="total position-absolute" v-if="totalRecord > 0">
-				Tổng cộng: {{ totalRecord }} tin đăng
+			<div class="pagination-wrapper" style="margin-bottom: 20px;">
+				<div class="page-size">
+					Hiển thị
+					<a-select
+						ref="select"
+						:value="Number(pagination.pageSize)"
+						style="width: 71px"
+						:options="pageSizeOptions"
+						@change="onSizeChange"
+					/>
+					hàng
+				</div>
+				<a-pagination
+					:current="Number(pagination.current)"
+					:page-size="Number(pagination.pageSize)"
+					:total="Number(pagination.total)"
+					:show-total="
+						(total, range) =>
+							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`
+					"
+					@change="onPaginationChange"
+				>
+				</a-pagination>
 			</div>
+			<!-- <div class="total position-absolute" v-if="totalRecord > 0">
+				Tổng cộng: {{ totalRecord }} tin đăng
+			</div> -->
 		</div>
 		<ModalSearchAdvanced
 			v-if="showModalSearch"
