@@ -80,7 +80,7 @@
 				</template>
 				<template slot="description" slot-scope="description">
 					<p class="mb-0 text-capitalize">
-						{{ description.toLowerCase() }}
+						{{ description }}
 					</p>
 				</template>
 				<template slot="created_at" slot-scope="created_at">

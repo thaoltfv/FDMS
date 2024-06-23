@@ -24,7 +24,6 @@
 		</div>
 		<div :class="totalRecord === 0 ? 'empty-data' : ''">
 			<a-table
-				bordered
 				:columns="columns"
 				:data-source="list_apartments"
 				:loading="isLoading"
@@ -76,7 +75,7 @@
 				</template>
 				<template slot="description" slot-scope="description">
 					<p class="mb-0 text-capitalize">
-						{{ description.toLowerCase() }}
+						{{ description }}
 					</p>
 				</template>
 				<template slot="created_at" slot-scope="created_at">
@@ -172,7 +171,8 @@ export default {
 					title: "Tên",
 					align: "left",
 					scopedSlots: { customRender: "description" },
-					dataIndex: "description"
+					dataIndex: "description",
+					width: "30%"
 				},
 				// {
 				// 	title: "Viết tắt",
@@ -198,7 +198,7 @@ export default {
 					title: "Thao tác",
 					scopedSlots: { customRender: "action" },
 					align: "right",
-					width: "100px"
+					width: "10%"
 				}
 			];
 		}

@@ -86,11 +86,11 @@
 				:loading="isLoading"
 				class="table-property"
 				:rowKey="record => record.id"
-				:filtered="false"
-				:row-class-name="
-					(_record, index) => (index % 2 === 1 ? 'table-striped' : null)
-				"
-				:pagination="false"
+				:pagination="{
+					...pagination,
+					showSizeChanger: true,
+					pageSizeOptions: ['10', '20', '30']
+				}"
 				@change="onPageChange"
 			>
 				<div
@@ -269,33 +269,9 @@
 					<p class="public_date mb-0">{{ formatDate(created_at) }}</p>
 				</template>
 			</a-table>
-			<div class="pagination-wrapper" style="margin-bottom: 20px;">
-				<div class="page-size">
-					Hiển thị
-					<a-select
-						ref="select"
-						:value="Number(pagination.pageSize)"
-						style="width: 71px"
-						:options="pageSizeOptions"
-						@change="onSizeChange"
-					/>
-					hàng
-				</div>
-				<a-pagination
-					:current="Number(pagination.current)"
-					:page-size="Number(pagination.pageSize)"
-					:total="Number(pagination.total)"
-					:show-total="
-						(total, range) =>
-							`Kết quả hiển thị ${range[0]} - ${range[1]} của ${pagination.total} tài sản`
-					"
-					@change="onPaginationChange"
-				>
-				</a-pagination>
+			<div class="total position-absolute" v-if="totalRecord > 0">
+				Tổng cộng: {{ totalRecord }} tin đăng
 			</div>
-			<!-- <div class="total position-absolute" v-if="totalRecord > 0">
-        Tổng cộng: {{ totalRecord }} tin đăng
-      </div> -->
 		</div>
 		<ModalSearchAdvanced
 			v-if="showModalSearch"
@@ -958,7 +934,6 @@ export default {
 		formatDate(value) {
 			return moment(String(value)).format("DD/MM/YYYY");
 		},
-
 		async openPrint(id) {
 			this.isSubmit = true;
 			await WareHouse.getPrint(id).then(resp => {
