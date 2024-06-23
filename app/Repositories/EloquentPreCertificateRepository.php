@@ -425,10 +425,19 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         if (request()->has('is_guest')) {
         } elseif ($role->name == 'SUB_ADMIN') {
             $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('appraiserBusinessManager', function ($q) use ($user) {
+                $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
                     if ($user->branch_id) {
                         return $q->where('branch_id', $user->branch_id);
                     }
+                });
+                $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
                 });
             });
         } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
