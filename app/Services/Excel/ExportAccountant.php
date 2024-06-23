@@ -113,16 +113,19 @@ class ExportAccountant
             ->setFontSize(11)
             ->setBorder($border)
             ->build();
-
+        $data = collect($data)->each(function ($item, $key) {
+            $item->STT = $key + 1;
+            return $item;
+        })->toArray();
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
-            ->addAutoIncrementColumn('STT')
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
                     return [
+                        'STT' => $data->STT,
                         'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
                         'Ngày phát hành chứng thư' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
