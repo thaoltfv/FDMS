@@ -114,7 +114,11 @@ class ExportAccountant
             ->setBorder($border)
             ->build();
         $data = collect($data)->map(function ($item, $key) {
-            return array_merge(['STT' => $key + 1], $item);
+            if (is_array($item)) {
+                return array_merge(['STT' => $key + 1], $item);
+            } else {
+                return ['STT' => $key + 1, 'value' => $item];
+            }
         })->toArray();
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
