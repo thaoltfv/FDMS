@@ -113,9 +113,8 @@ class ExportAccountant
             ->setFontSize(11)
             ->setBorder($border)
             ->build();
-        $data = collect($data)->each(function ($item, $key) {
-            $item->STT = $key + 1;
-            return $item;
+        $data = collect($data)->map(function ($item, $key) {
+            return array_merge(['STT' => $key + 1], $item);
         })->toArray();
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
