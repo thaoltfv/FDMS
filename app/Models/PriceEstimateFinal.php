@@ -55,6 +55,11 @@ class PriceEstimateFinal extends Model
             ->where('total_area', '>', 0);
     }
 
+    public function imagePlanningInfo(): HasMany
+    {
+        return $this->hasMany(PriceEstimateFinalImage::class, 'price_estimate_final_id');
+    }
+
     public function planningArea(): HasMany
     {
         return $this->hasMany(PriceEstimateFinalLand::class, 'price_estimate_final_id')
