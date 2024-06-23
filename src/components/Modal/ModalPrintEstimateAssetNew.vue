@@ -396,23 +396,21 @@
 							data.step_3.image_planning_info &&
 								data.step_3.image_planning_info.length > 0
 						"
-						style="margin-top: 150px;"
+						style="margin-top: 300px;"
 					>
-						<img src="@/assets/images/header-kqsb.png" />
-						<div class="" style="color: #000; font-size: 12px !important">
+						<div class="mt-5" style="color: #000; font-size: 12px !important">
 							* Ảnh thông tin quy hoạch:
 						</div>
 						<div class="d-flex flex-column">
 							<img
 								v-for="image in data.step_3.image_planning_info"
 								:src="image.link"
-								height="390px"
-								style="margin:0 auto"
-								class="mt-1"
+								height="300px"
+								width="100%"
+								style="margin:5px auto"
 							/>
 						</div>
-						<div style="margin-top: 500px;">
-							<img src="@/assets/images/header-kqsb.png" class="" />
+						<div>
 							<div class="d-flex">
 								<div
 									class="text-justify mb-2 mr-5 font-italic "
@@ -528,7 +526,7 @@
 							</div> -->
 								</div>
 							</div>
-							<div class="d-flex mt-3 justify-content-end ">
+							<div class="d-flex mt-n5 justify-content-end ">
 								<table>
 									<tbody class="infoSignature">
 										<tr>
@@ -558,11 +556,7 @@
 							</div>
 						</div>
 					</div>
-					<div v-else>
-						<img
-							src="@/assets/images/header-kqsb.png"
-							style="margin-top: 75px;"
-						/>
+					<div v-else style="margin-top: 300px;">
 						<div class="d-flex">
 							<div
 								class="text-justify mt-1 mb-2 mr-5 font-italic "
@@ -678,7 +672,7 @@
 							</div> -->
 							</div>
 						</div>
-						<div class="d-flex mt-3 justify-content-end ">
+						<div class="d-flex  justify-content-end ">
 							<table>
 								<tbody class="infoSignature">
 									<tr>
