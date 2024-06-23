@@ -21,6 +21,7 @@ class CreatePriceEstimateFinalImageTable extends Migration
                 $table->text('picture_type');
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->useCurrent();
+                $table->softDeletes();
             });
         }
     }
