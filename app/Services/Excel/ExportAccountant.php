@@ -113,17 +113,16 @@ class ExportAccountant
             ->setFontSize(11)
             ->setBorder($border)
             ->build();
-        $data = $data->map(function ($item, $key) {
-            return array_merge(['STT' => $key + 1], $item);
-        })->toArray();
         // dd( new JsonResponse($data) );
+        $stt = 1;
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
-                function ($data) {
+                function ($data) use (&$stt) {
                     return [
+                        'STT' => $stt,
                         'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
                         'Ngày phát hành chứng thư' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
@@ -155,6 +154,8 @@ class ExportAccountant
                         'Đã chi lương khoán' => '',
                         'Tháng quyết toán' => ''
                     ];
+                    $stt++;
+                    return $result;
                 }
             );
 
