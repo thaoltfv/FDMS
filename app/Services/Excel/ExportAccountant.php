@@ -121,7 +121,7 @@ class ExportAccountant
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) use (&$stt) {
-                    return [
+                    $result = [
                         'STT' => $stt,
                         'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
