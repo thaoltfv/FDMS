@@ -113,12 +113,8 @@ class ExportAccountant
             ->setFontSize(11)
             ->setBorder($border)
             ->build();
-        $data = collect($data)->map(function ($item, $key) {
-            if (is_array($item)) {
-                return array_merge(['STT' => $key + 1], $item);
-            } else {
-                return ['STT' => $key + 1, 'value' => $item];
-            }
+        $data = $data->map(function ($item, $key) {
+            return array_merge(['STT' => $key + 1], $item);
         })->toArray();
         // dd( new JsonResponse($data) );
         (new FastExcel($data))
@@ -128,7 +124,6 @@ class ExportAccountant
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data) {
                     return [
-                        'STT' => $data->STT,
                         'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
                         'Ngày phát hành chứng thư' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
