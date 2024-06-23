@@ -56,11 +56,11 @@ class ExportCertificateBriefs
         (new FastExcel($data))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
-            ->addAutoIncrementColumn('STT')
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
-                function ($data) {
+                function ($data, $index) {
                     return [
+                        'STT' => $index + 1,
                         'Mã HSTĐ' => 'HSTD_' . $data->id,
                         'Số hợp đồng' => $data->document_num,
                         'Số chứng thư' => $data->certificate_num,
