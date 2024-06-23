@@ -60,7 +60,7 @@ class ExportCertificateBriefs
                 storage_path('app/public/' . $path . '/' . $fileName),
                 function ($data, $index) {
                     return [
-                        'STT' => $index + 1,
+                        'STT' => '',
                         'Mã HSTĐ' => 'HSTD_' . $data->id,
                         'Số hợp đồng' => $data->document_num,
                         'Số chứng thư' => $data->certificate_num,
