@@ -120,8 +120,9 @@ class ExportAccountant
             ->rowsStyle($rows_style)
             ->export(
                 storage_path('app/public/' . $path . '/' . $fileName),
-                function ($data) {
+                function ($data, $index) {
                     return [
+                        'STT' => $index + 1,
                         'Mã HS' => $data->id,
                         'Số chứng thư' => $data->certificate_num ?? '',
                         'Ngày phát hành chứng thư' => isset($data->certificate_date) ?  \Carbon\Carbon::parse($data->certificate_date)->format('d-m-Y') : '',
