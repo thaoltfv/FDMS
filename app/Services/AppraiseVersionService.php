@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\ApartmentAssetVersion;
@@ -12,13 +13,15 @@ use Illuminate\Support\Facades\DB;
 
 class AppraiseVersionService
 {
-    public static function getCertificateByRealEstateId (int $realEstateId) {
-        $check = Certificate::query()->with('realEstate:id,real_estate_id')->whereHas('realEstate', function($has) use($realEstateId) {
+    public static function getCertificateByRealEstateId(int $realEstateId)
+    {
+        $check = Certificate::query()->with('realEstate:id,real_estate_id')->whereHas('realEstate', function ($has) use ($realEstateId) {
             $has->where('certificate_real_estates.real_estate_id', $realEstateId);
         })->first(['id', 'status', 'sub_status']);
         return $check;
     }
-    public static function checkVersionByRealEstate (int $realEstateId) {
+    public static function checkVersionByRealEstate(int $realEstateId)
+    {
         $check = false;
         $certificate = self::getCertificateByRealEstateId($realEstateId);
         if (isset($certificate)) {
@@ -33,13 +36,14 @@ class AppraiseVersionService
         }
         return $check;
     }
-    public static function checkVersionByCertificate (int $certificateId) {
+    public static function checkVersionByCertificate(int $certificateId)
+    {
         $listVersion = [];
         $ids = [];
         $realEstateIdList = [];
-        $certificate = Certificate::query()->where('id', $certificateId)->with('realEstate')->whereHas('appraises')->first();
+        $certificate = Certificate::query()->where('id', $certificateId)->with('realEstate')->first();
         if (!empty($certificate) && !empty($certificate->realEstate)) {
-            foreach($certificate->realEstate as $item) {
+            foreach ($certificate->realEstate as $item) {
                 $realEstateId = $item->real_estate_id;
                 if (!empty($item->appraises)) {
                     $certificateRealEstateId = $item->appraises->id;
@@ -52,7 +56,7 @@ class AppraiseVersionService
                         $realEstateIdList[$realEstateId] = $item->id;
                     }
                 }
-                if(!empty($item->apartment)) {
+                if (!empty($item->apartment)) {
                     $certificateRealEstateId = $item->apartment->id;
                     $version1 = self::getVersionApartment($realEstateId);
                     $version2 = self::getVersionCertificateApartment($certificateRealEstateId);
@@ -62,7 +66,6 @@ class AppraiseVersionService
                         $realEstateIdList[]['id'] = $realEstateId;
                         $realEstateIdList[$realEstateId] = $item->id;
                     }
-
                 }
             }
             if (!empty($ids)) {
@@ -71,20 +74,24 @@ class AppraiseVersionService
         }
         return $listVersion;
     }
-    public static function getVersionAppraise ($RealEstateId) {
+    public static function getVersionAppraise($RealEstateId)
+    {
         return AppraiseVersion::query()->where('appraise_id', $RealEstateId)->orderBy('updated_at', 'desc')->first()->version ?? 0;
     }
-    
-    public static function getVersionCertificateAsset ($certificateRealEstateId) {
+
+    public static function getVersionCertificateAsset($certificateRealEstateId)
+    {
         return CertificateAssetVersion::query()->where('appraise_id', $certificateRealEstateId)->orderBy('version', 'desc')->first()->version ?? 0;
     }
-    public static function getVersionApartment ($RealEstateId) {
+    public static function getVersionApartment($RealEstateId)
+    {
         return ApartmentAssetVersion::query()->where('apartment_asset_id', $RealEstateId)->orderBy('id', 'desc')->first()->version ?? 0;
     }
-    public static function getVersionCertificateApartment ($certificateRealEstateId) {
+    public static function getVersionCertificateApartment($certificateRealEstateId)
+    {
         return CertificateApartmentVersion::query()->where('apartment_asset_id', $certificateRealEstateId)->orderBy('version', 'desc')->first()->version ?? 0;
     }
-    public static function getRealEstate ($ids, $realEstateIdList)
+    public static function getRealEstate($ids, $realEstateIdList)
     {
         $select = [
             'id',
@@ -113,8 +120,8 @@ class AppraiseVersionService
         }
         return $result;
     }
-    public static function getVersionAppraises ($ids) {
+    public static function getVersionAppraises($ids)
+    {
         return Appraise::query()->whereIn('id', $ids)->with('lastVerion')->get('id');
     }
-    
 }

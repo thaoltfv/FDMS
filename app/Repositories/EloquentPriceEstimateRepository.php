@@ -1737,6 +1737,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 // Delete related records
                 $priceEstimateFinal->lands()->delete();
                 $priceEstimateFinal->tangibleAssets()->delete();
+                $priceEstimateFinal->imagePlanningInfo()->delete();
                 $priceEstimateFinal->apartmentFinals()->delete();
                 // Delete the record itself
             }
@@ -1780,7 +1781,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     // Delete related records
                     $priceEstimateFinal->lands()->delete();
                     $priceEstimateFinal->tangibleAssets()->delete();
-
+                    $priceEstimateFinal->imagePlanningInfo()->delete();
                     // Delete the record itself
                     $priceEstimateFinal->delete();
                 }
@@ -1810,6 +1811,13 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     $priceEstimateFinal->tangibleAssets()->create($tangibleAsset);
                 }
             }
+
+            if (isset($data['image_planning_info'])) {
+                foreach ($data['image_planning_info'] as $image) {
+                    $image['price_estimate_final_id'] = $priceEstimateFinal->id;
+                    $priceEstimateFinal->imagePlanningInfo()->create($image);
+                }
+            }
             $this->CreateActivityLog(
                 $priceEstimateFinal,
                 $priceEstimateFinal,
@@ -1819,7 +1827,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
             $this->updatePriceEstimateStep($id, 3);
             $this->processAfterSave($id);
             DB::commit();
-            $priceEstimateFinal = $priceEstimateFinal->load('planningArea', 'totalArea', 'tangibleAssets', 'appraisePurpose', 'assetType');
+            $priceEstimateFinal = $priceEstimateFinal->load('planningArea', 'totalArea', 'tangibleAssets', 'appraisePurpose', 'assetType', 'imagePlanningInfo');
 
 
             return $priceEstimateFinal;
@@ -1841,7 +1849,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 foreach ($priceEstimateFinals as $priceEstimateFinal) {
                     // Delete related records
                     $priceEstimateFinal->apartmentFinals()->delete();
-
+                    $priceEstimateFinal->imagePlanningInfo()->delete();
                     // Delete the record itself
                     $priceEstimateFinal->delete();
                 }
@@ -1855,6 +1863,12 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 foreach ($data['apartment_finals'] as $apartment) {
                     $apartment['price_estimate_final_id'] = $priceEstimateFinal->id;
                     $priceEstimateFinal->apartmentFinals()->create($apartment);
+                }
+            }
+            if (isset($data['image_planning_info'])) {
+                foreach ($data['image_planning_info'] as $image) {
+                    $image['price_estimate_final_id'] = $priceEstimateFinal->id;
+                    $priceEstimateFinal->imagePlanningInfo()->create($image);
                 }
             }
 
@@ -2094,7 +2108,7 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
     }
     public function getPriceEstimateFinal($price_estimate_id)
     {
-        return PriceEstimateFinal::with('planningArea', 'totalArea', 'tangibleAssets', 'appraisePurpose', 'assetType')
+        return PriceEstimateFinal::with('planningArea', 'totalArea', 'tangibleAssets', 'appraisePurpose', 'assetType', 'imagePlanningInfo')
             ->where('price_estimate_id', $price_estimate_id)
             ->get();
     }

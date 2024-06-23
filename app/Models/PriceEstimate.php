@@ -123,6 +123,7 @@ class PriceEstimate extends Model
             'totalArea',
             'totalArea.landTypePurpose:id,description,acronym',
             'tangibleAssets',
+            'imagePlanningInfo',
             'tangibleAssets.buildingType:id,description',
             'appraisePurpose',
             'assetType',
