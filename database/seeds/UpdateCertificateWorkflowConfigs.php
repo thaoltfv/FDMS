@@ -697,6 +697,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraiser" => false,
                             "check_legal" => false,
                             "check_price" => false,
+                            "check_version" => false,
                             "appraise_item_list" => false
                         ],
                         "isActive" => 1,
