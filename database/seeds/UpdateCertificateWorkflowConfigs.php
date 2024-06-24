@@ -652,18 +652,26 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         "isCancel" => false,
                         "sub_status" => 1,
                         "description" => "Hoàn thành",
-                        "put_require" => [],
+                        "put_require" => [
+                            "appraiser_control_id"
+                        ],
                         "process_time" => null,
                         "put_draggable" => [
-                            6
+                            9
                         ],
                         "isExportDocument" => true,
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
                             "ADMIN"
                         ],
-                        "target_description" => []
+                        "target_description" => [
+                            [
+                                "id" => 9,
+                                "css" => "btn-white",
+                                "img" => "ic_cancel-1.svg",
+                                "description" => "Hủy hồ sơ"
+                            ],
+                        ]
                     ],
                     [
                         "id" => 9,
