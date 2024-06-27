@@ -373,7 +373,43 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'customer_id',
             'total_service_fee',
             'pre_certificates.customer_group_id',
-
+            DB::raw("case status
+                when 1
+                    then u1.image
+                when 2
+                    then u2.image
+                when 3
+                    then u3.image
+                when 4
+                    then u1.image
+                when 5
+                    then u1.image
+                when 6
+                    then u1.image
+                when 7
+                    then u3.image
+                when 8
+                    then u3.image
+                end as image
+            "),
+            DB::raw("case status
+                when 1
+                    then u1.name
+                when 2
+                    then u2.name
+                when 3
+                    then u3.name
+                when 4
+                    then u1.name
+                when 5
+                    then u1.name
+                when 6
+                    then u1.name
+                when 7
+                    then u3.name
+                when 8
+                    then u3.name
+            end as name_nv"),
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                         when 1
