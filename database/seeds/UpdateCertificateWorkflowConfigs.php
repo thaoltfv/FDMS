@@ -344,7 +344,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraise_item_list" => false
                         ],
                         "isActive" => 1,
-                        "isCancel" => false,
+                        "isCancel" => true,
                         "re_assign" => "appraiser_perform_id",
                         "sub_status" => 3,
                         "description" => "Thẩm định",
@@ -405,7 +405,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraise_item_list" => true
                         ],
                         "isActive" => 1,
-                        "isCancel" => false,
+                        "isCancel" => true,
                         "re_assign" => "appraiser_id",
                         "sub_status" => 1,
                         "description" => "Duyệt giá",
@@ -466,7 +466,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraise_item_list" => true
                         ],
                         "isActive" => 1,
-                        "isCancel" => false,
+                        "isCancel" => true,
                         "re_assign" => "appraiser_control_id",
                         "sub_status" => 1,
                         "description" => "Duyệt phát hành",
@@ -527,7 +527,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraise_item_list" => true
                         ],
                         "isActive" => 1,
-                        "isCancel" => false,
+                        "isCancel" => true,
                         "re_assign" => "administrative_id",
                         "sub_status" => 1,
                         "description" => "In hồ sơ",
@@ -588,7 +588,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraise_item_list" => true
                         ],
                         "isActive" => 1,
-                        "isCancel" => false,
+                        "isCancel" => true,
                         "re_assign" => "appraiser_sale_id",
                         "sub_status" => 1,
                         "description" => "Bàn giao khách hàng",
@@ -649,29 +649,18 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                             "appraise_item_list" => true
                         ],
                         "isActive" => 1,
-                        "isCancel" => false,
+                        "isCancel" => true,
                         "sub_status" => 1,
                         "description" => "Hoàn thành",
-                        "put_require" => [
-                            "appraiser_control_id"
-                        ],
+                        "put_require" => [],
                         "process_time" => null,
-                        "put_draggable" => [
-                            9
-                        ],
+                        "put_draggable" => [],
                         "isExportDocument" => true,
                         "put_require_roles" => [
                             "ROOT_ADMIN",
                             "ADMIN"
                         ],
-                        "target_description" => [
-                            [
-                                "id" => 9,
-                                "css" => "btn-white",
-                                "img" => "ic_cancel-1.svg",
-                                "description" => "Hủy hồ sơ"
-                            ],
-                        ]
+                        "target_description" => []
                     ],
                     [
                         "id" => 9,
