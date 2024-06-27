@@ -452,6 +452,45 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         // dd($this->model)->with($with)->select($select);
         $result = QueryBuilder::for($this->model)
             ->with($with)
+            ->leftjoin('users', function ($join) {
+                $join->on('pre_certificates.created_by', '=', 'users.id')
+                    ->select(['id', 'image'])
+                    ->limit(1);
+            })
+            ->leftjoin(
+                DB::raw('(select pre_certificate_id , count(pre_certificate_id) as document_count
+                                    from pre_certificate_other_documents
+                                    where deleted_at is null
+                                    group by pre_certificate_id) as "tbCount"'),
+                function ($join) {
+                    $join->on('pre_certificates.id', '=', 'tbCount.pre_certificate_id')
+                        ->select(['pre_certificate_id', 'document_count']);
+                }
+            )
+            ->leftjoin('appraisers as sale', function ($join) {
+                $join->on('sale.id', '=', 'pre_certificates.appraiser_sale_id')
+                    ->join('users as u1', function ($j) {
+                        $j->on('sale.user_id', '=', 'u1.id');
+                    })
+                    ->select('u1.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as perform', function ($join) {
+                $join->on('perform.id', '=', 'pre_certificates.appraiser_perform_id')
+                    ->join('users as u2', function ($j) {
+                        $j->on('perform.user_id', '=', 'u2.id');
+                    })
+                    ->select('u2.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as buinesss', function ($join) {
+                $join->on('buinesss.id', '=', 'pre_certificates.business_manager_id')
+                    ->join('users as u3', function ($j) {
+                        $j->on('buinesss.user_id', '=', 'u3.id');
+                    })
+                    ->select('u3.image')
+                    ->limit(1);
+            })
             ->select($select);
         // dd($result->toSql());
         // dd($result->forPage($page, $perPage)->paginate($perPage));
