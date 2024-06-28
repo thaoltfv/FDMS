@@ -63,7 +63,7 @@ class ReportAppendix1 extends Report
         else $reportID = 'TSTD_' . $data->id;
 
         // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
-        return $this->acronym . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return mb_strtoupper($this->acronym) . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -679,7 +679,7 @@ class ReportAppendix1 extends Report
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, $this->cellVCentered)->addText('+', $this->styleBold, $this->cellHCentered);
         $cell = $table->addCell(10000, $this->cellColSpan);
-        $cell->addText('Căn cứ vào bảng thông tin các tài sản so sánh (TSSS) mà ' . mb_strtoupper($this->acronym) . ' đã thu thập trong vòng 02 năm so với thời điểm định giá.', ['bold' => false]);
+        $cell->addText('Căn cứ vào bảng thông tin các tài sản so sánh (TSSS) mà Công ty TNHH Thẩm định giá NOVA đã thu thập trong vòng 02 năm so với thời điểm định giá.', ['bold' => false]);
     }
     protected function comparisonDescription(Section $section, $asset)
     {
@@ -978,7 +978,7 @@ class ReportAppendix1 extends Report
     protected function conclusionApartment($section, $asset)
     {
         $priceRound = number_format($this->total['price_round'], 0, ',', '.');
-        $section->addText('     - Làm tròn: ' . $priceRound . 'đ/' . $this->m2);
+        $section->addText('     - Đơn giá tham chiếu của TSTĐG: ' . $priceRound . ' đ/' . $this->m2);
     }
     protected function conclusion1($section)
     {
@@ -993,7 +993,7 @@ class ReportAppendix1 extends Report
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tổng hợp các nguồn thông tin, điều chỉnh các TSSS, mức giá chênh lệch với mức giá trung bình của các mức giá chỉ dẫn không quá ±15%.', ['bold' => false]);
         $textRun = $section->addTextRun();
-        $textRun->addText('     - Mức giá sau khi điều chỉnh từ các TSSS về mức giá ước tính của TSTĐ dao động từ khoảng Mức giá chỉ dẫn thấp nhất ' . $mgcdMin . 'đ/' . $this->m2 . ' đến mức giá chỉ dẫn cao nhất ' . $mgcdMax . 'đ/' . $this->m2 . '. Tổ thẩm định lựa chọn đơn giá đất sau điều chỉnh ' . $namePP . ' trên làm mức giá chỉ dẫn cho TSTĐ: ' . $price . 'đ/' . $this->m2);
+        $textRun->addText('     - Mức giá sau khi điều chỉnh từ các TSSS về mức giá ước tính của TSTĐ dao động từ khoảng Mức giá chỉ dẫn thấp nhất ' . $mgcdMin . 'đ/' . $this->m2 . ' đến mức giá chỉ dẫn cao nhất ' . $mgcdMax . 'đ/' . $this->m2 . '. Tổ thẩm định giá lựa chọn đơn giá đất sau điều chỉnh ' . $namePP . ' trên làm mức giá chỉ dẫn cho TSTĐ: ' . $price . 'đ/' . $this->m2);
     }
     protected function conclusionAppraise($section, $asset)
     {
