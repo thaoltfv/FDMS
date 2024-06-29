@@ -63,7 +63,7 @@ class ReportAppendix1 extends Report
         else $reportID = 'TSTD_' . $data->id;
 
         // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
-        return mb_strtoupper($this->acronym) . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return $this->acronym . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -502,7 +502,7 @@ class ReportAppendix1 extends Report
     protected function surveyDescription(Section $section, $asset)
     {
         $textRun = $section->addTextRun();
-        $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . mb_strtoupper($this->acronym) . ' nhận thấy có ');
+        $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . $this->acronym . ' nhận thấy có ');
         $textRun->addText(count($asset->assetGeneral), $this->styleBold);
         $textRun->addText(' tài sản so sánh có các yếu tố tương đồng nhất với tài sản thẩm định, và sử dụng làm cơ sở điều chỉnh để tiến hành xác định giá trị tài sản thẩm định, cụ thể như sau: ');
     }
@@ -1135,13 +1135,13 @@ class ReportAppendix1 extends Report
                     if ($method->slug_value == 'theo-gia-dat-qd-ubnd') {
                         if (!$sttTmp) {
                             $textRun = $section->addTextRun();
-                            $textRun->addText('     - Phần diện tích đất thuộc ' . $item->type_zoning . ' (hạn chế khả năng sử dụng) nên ' . mb_strtoupper($this->acronym) . ' ước tính theo đơn giá đất quyết định UBND:', ['bold' => false]);
+                            $textRun->addText('     - Phần diện tích đất thuộc ' . $item->type_zoning . ' (hạn chế khả năng sử dụng) nên ' . $this->acronym . ' ước tính theo đơn giá đất quyết định UBND:', ['bold' => false]);
                         }
                     }
                     if ($method->slug_value == 'theo-ty-le-gia-dat-thi-truong') {
                         if (!$sttTmp) {
                             $textRun = $section->addTextRun();
-                            $textRun->addText('     - Phần diện tích đất vi phạm quy hoạch (hạn chế khả năng sử dụng) nên ' . mb_strtoupper($this->acronym) . ' ước tính bằng ' . $method->value . '% đơn giá đất theo thị trường:', ['bold' => false]);
+                            $textRun->addText('     - Phần diện tích đất vi phạm quy hoạch (hạn chế khả năng sử dụng) nên ' . $this->acronym . ' ước tính bằng ' . $method->value . '% đơn giá đất theo thị trường:', ['bold' => false]);
                         }
                         $priceTmp = isset($this->gdtt[$index]) ? $this->gdtt[$index] : 0;
                         $resultTmp = number_format($priceTmp * $method->value / 100, 0, ',', '.');

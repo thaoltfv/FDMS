@@ -26,7 +26,7 @@ class AssetReport
      * @throws \Exception
      */
 
-     protected $styleMapImage = [
+    protected $styleMapImage = [
         'width' => 488,
         'align' => 'left',
         'space' => [
@@ -51,10 +51,10 @@ class AssetReport
         $m2 = 'm</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t xml:space="preserve">2</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
 
         $phpWord->setDefaultParagraphStyle([
-			'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(2),
-			'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(2),
-			'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5))
-		]);
+            'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(2),
+            'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(2),
+            'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5))
+        ]);
         $tableBasicStyle = array(
             'borderSize' => 'none',
             'cellMargin'  => Converter::inchToTwip(0),
@@ -65,7 +65,7 @@ class AssetReport
         $cantSplit = ['cantSplit' => true];
 
         $section = $phpWord->addSection([
-            'footerHeight'=>300,
+            'footerHeight' => 300,
             'marginTop' => Converter::cmToTwip(2),
             'marginBottom' => Converter::cmToTwip(2),
             'marginRight' => Converter::cmToTwip(2),
@@ -73,18 +73,19 @@ class AssetReport
         ]);
         $print_watermask = DocumentDictionary::where('slug', 'print_watermask')->first() ?: '';
         # watermark
-        if($print_watermask and $print_watermask->value === 'yes') {
-            $imgName = env('STORAGE_IMAGES','images') .'/'.'company_logo.png';
+        if ($print_watermask and $print_watermask->value === 'yes') {
+            $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png';
             $header = $section->addHeader();
-            $header->addWatermark(storage_path('app/public/'.$imgName),
-                                    array(
-                                        'width' => 200,
-                                        'marginTop' => 200,
-                                        'marginLeft' => 120,
-                                        'posHorizontal' => 'absolute',
-                                        'posVertical' => 'absolute',
-                                    )
-                                );
+            $header->addWatermark(
+                storage_path('app/public/' . $imgName),
+                array(
+                    'width' => 200,
+                    'marginTop' => 200,
+                    'marginLeft' => 120,
+                    'posHorizontal' => 'absolute',
+                    'posVertical' => 'absolute',
+                )
+            );
         }
 
         $currentAsset = 1;
@@ -92,24 +93,23 @@ class AssetReport
         foreach ($objects as $object) {
             if ($currentAsset > 1) {
                 $section->addPageBreak();
-            }else{
+            } else {
                 $footer = $section->addFooter();
                 $textRun = $footer->addTextRun();
-                $textRun->addText('Người tạo: ',['size'=>8]);
-                $textRun->addText($object->createdBy->name??'', ['bold' => true,'size'=>8], ['align' => JcTable::CENTER]);
+                $textRun->addText('Người tạo: ', ['size' => 8]);
+                $textRun->addText($object->createdBy->name ?? '', ['bold' => true, 'size' => 8], ['align' => JcTable::CENTER]);
             }
             $currentAsset += 1;
             $count = 0;
             $coordinates = explode(',', $object->coordinates);
             $table = $section->addTable($tableBasicStyle);
             $table->addRow(400);
-            
+
             $table->addCell(5000)->addText(CommonService::formatCompanyName($company), ['bold' => true], ['align' => JcTable::CENTER]);
             if ($object->migrate_status == ValueDefault::MIGRATION_STATUS_DEFAULT) {
                 $table->addCell(5000)->addText('Phiếu số: TSC_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
             } else {
                 $table->addCell(5000)->addText('Phiếu số: TSS_' . $object->id, ['italic' => true], ['align' => JcTable::END]);
-
             }
             $section->addText('PHIẾU THU THẬP THÔNG TIN VỀ TÀI SẢN SO SÁNH ', ['bold' => true, 'size' => 13], ['align' => JcTable::CENTER]);
             $section->addText("(Áp dụng đối với BĐS – Quyền sử dụng đất + Công trình xây dựng)", ['italic' => true], ['align' => JcTable::CENTER]);
@@ -223,7 +223,7 @@ class AssetReport
                 foreach ($object->roomDetails as $roomDetail) {
 
                     $textRun = $section->addTextRun();
-                    $textRun->addText('- Diện tích ('.$m2.'): ');
+                    $textRun->addText('- Diện tích (' . $m2 . '): ');
                     $textRun->addText(number_format($roomDetail->area, 2, ',', '.'), ['bold' => true]);
                     $textRun->addText($m2);
 
@@ -316,7 +316,6 @@ class AssetReport
                             $size = $property->front_side_width . 'm' . 'x' . $property->insight_width . 'm';
                             $comparePropertyTurningTime = $property->comparePropertyTurningTime;
                             $position[] = (isset($detail->positionType->description) && isset($detail->landTypePurposeData->description)) ? ($this->mb_ucfirst(mb_strtolower($detail->landTypePurposeData->description)) . ' - ' . $this->mb_ucfirst(mb_strtolower($detail->positionType->description))) : '';
-
                         }
                     }
                 }
@@ -325,7 +324,7 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Diện tích: ');
-                $cellRun->addText(number_format($object->total_area, 2, ',' , '.'), ['bold' => true]);
+                $cellRun->addText(number_format($object->total_area, 2, ',', '.'), ['bold' => true]);
                 $cellRun->addText($m2);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
@@ -388,7 +387,7 @@ class AssetReport
 
                     foreach ($comparePropertyTurningTime as $turning) {
                         $table->addRow(400);
-                        $table->addCell(3000)->addText( $turning->turning, null, ['align' => JcTable::CENTER]);
+                        $table->addCell(3000)->addText($turning->turning, null, ['align' => JcTable::CENTER]);
                         $table->addCell(3000)->addText(isset($turning->material->description) ? $this->mb_ucfirst(mb_strtolower($turning->material->description)) : '', null, ['align' => JcTable::CENTER]);
                         $table->addCell(3000)->addText($turning->main_road_length . 'm', null, ['align' => JcTable::CENTER]);
                     }
@@ -418,7 +417,7 @@ class AssetReport
                     $textRun->addText("Số tầng: ");
                     $textRun->addText($tangibleAsset->floor, ['bold' => true]);
 
-                    if ($tangibleAsset->other_building){
+                    if ($tangibleAsset->other_building) {
                         $table = $section->addTable('docTable');
                         $table->addRow(250);
                         $cell = $table->addCell(4000);
@@ -449,7 +448,7 @@ class AssetReport
                     $textRun = $cell->addTextRun();
                     $textRun->addText('- Diện tích sàn xây dựng: ');
                     $textRun->addText(number_format($tangibleAsset->total_construction_base, 2, ',', '.'), ['bold' => true]);
-                    $textRun->addText(" ".$m2);
+                    $textRun->addText(" " . $m2);
                     $cell = $table->addCell(5000);
                     $textRun = $cell->addTextRun();
                     $gpxd = $tangibleAsset->gpxd ? 'Có' : 'Không';
@@ -473,8 +472,6 @@ class AssetReport
                         $textRun->addText(number_format($otherAssets->total_amount, 0, ',', '.'), ['bold' => true]);
                         $textRun->addText(' đồng');
                         $count += count($otherAssets->pic);
-
-
                     }
                 } else {
                     $textRun = $section->addTextRun();
@@ -496,8 +493,7 @@ class AssetReport
                 foreach ($object->pic as $key) {
                     $section->addImage($key->link, $this->styleMapImage);
                 }
-            }
-            else {
+            } else {
                 $textRun->addText('Không có');
             }
             $section->addTextBreak(1);
@@ -509,52 +505,55 @@ class AssetReport
             // $cell2->addText('Ngày ' . date('d') . ' tháng ' . date('m') . ' năm ' . date('Y'), ['italic' => true], ['align' => 'center', 'keepNext' => true]);
             $cell2->addText('Ngày ' . '     ' . ' tháng ' . '     ' . ' năm ' . '       ', ['italic' => true], ['align' => 'center', 'keepNext' => true]);
             $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
+            // $cell3 = $table3->addCell($cellWidth);
+            // $cell3->addText("Chuyên viên thẩm định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            // $cell4 = $table3->addCell($cellWidth);
+            // $cell4->addText("Thẩm định viên", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            // if (!empty($certificate)) {
+            //     $table3->addRow(Converter::inchToTwip(1.5), $cantSplit);
+            //     $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);
+            //     $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);;
+            //     $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
+            //     $cell5 = $table3->addCell($cellWidth);
+            //     $cell5->addText($certificate->appraiserPerform->name ?? '', ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            //     $cell6 = $table3->addCell($cellWidth);
+            //     $cell6->addText($certificate->appraiser->name ?? '', ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            // }
             $cell3 = $table3->addCell($cellWidth);
-            $cell3->addText("Chuyên viên thẩm định", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+            $cell3->addText("", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
             $cell4 = $table3->addCell($cellWidth);
-            $cell4->addText("Thẩm định viên", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-            if (!empty($certificate)) {
-                $table3->addRow(Converter::inchToTwip(1.5), $cantSplit);
-                $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);
-                $table3->addCell($cellWidth)->addText("", null, ['keepNext' => true]);;
-                $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
-                $cell5 = $table3->addCell($cellWidth);
-                $cell5->addText($certificate->appraiserPerform->name ?? '', ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-                $cell6 = $table3->addCell($cellWidth);
-                $cell6->addText($certificate->appraiser->name ?? '', ['bold' => true], ['align' => 'center', 'keepNext' => true]);
-            }
+            $cell4->addText("Người thu thập thông tin", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         }
 
         try {
 
             $comName = mb_strtoupper($company->acronym ? $company->acronym : env('DOCUMENT_MODULE'));
-            if(!empty($certificateId)) {
-                $reportID = 'HSTD_'. $certificateId;
+            if (!empty($certificateId)) {
+                $reportID = 'HSTD_' . $certificateId;
                 $reportUserName = CommonService::getUserReport();
-		        $reportName = '6_TSSS' . '_' . $reportUserName . '_' . $reportID . '_' . $comName;
+                $reportName = '6_TSSS' . '_' . $reportUserName . '_' . $reportID . '_' . $comName;
                 $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
                 $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
                 $fileName = $reportName . '_' . $downloadTime . '_' . $downloadDate;
             } else {
-                $fileName = $comName . '_TSSS_'. $object->id .'_'. Carbon::now()->format('Y_m_d');
+                $fileName = $comName . '_TSSS_' . $object->id . '_' . Carbon::now()->format('Y_m_d');
             }
 
             $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-            $path =  env('STORAGE_DOCUMENTS') . '/'. 'comparison_assets/' . $now->format('Y') . '/' . $now->format('m') . '/';
-            if(!File::exists(storage_path('app/public/'. $path))){
-                File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+            $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_assets/' . $now->format('Y') . '/' . $now->format('m') . '/';
+            if (!File::exists(storage_path('app/public/' . $path))) {
+                File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
             }
             $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-            $objWriter->save(storage_path('app/public/'. $path. $fileName .'.docx'));
-
+            $objWriter->save(storage_path('app/public/' . $path . $fileName . '.docx'));
         } catch (\Exception $e) {
             throw $e;
         }
         $data = [];
-        if ($format =='pdf'){
-            shell_exec('export HOME=/tmp/ ; libreoffice --headless --convert-to '. $format . ' ' . storage_path('app/public/'. $path. $fileName .'.docx') . ' --outdir ' . storage_path('app/public/'. $path));
+        if ($format == 'pdf') {
+            shell_exec('export HOME=/tmp/ ; libreoffice --headless --convert-to ' . $format . ' ' . storage_path('app/public/' . $path . $fileName . '.docx') . ' --outdir ' . storage_path('app/public/' . $path));
         }
-        $data['url'] = Storage::disk('public')->url($path . $fileName .'.' . $format);
+        $data['url'] = Storage::disk('public')->url($path . $fileName . '.' . $format);
         $data['file_name'] = $fileName;
         return $data;
     }

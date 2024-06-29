@@ -77,7 +77,7 @@ class ReportCertificateNova extends ReportCertificate
         $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
         $section->addListItem("Nội dung chi tiết xem tại Mục VII, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Thời hạn có hiệu lực của chứng thư thẩm định giá:", 2);
-        $section->addListItem("Chứng thư thẩm định giá có hiệu lực trong thời hạn 06 tháng kể từ ngày phát hành chứng thư (nếu thị trường không có biến động nhiều).", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Chứng thư thẩm định giá có hiệu lực trong thời hạn 06 tháng kể từ ngày phát hành chứng thư.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Các tài liệu kèm theo:", 2);
         // $section->addListItem("Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ngày ' . $this->certificateShortDateText, 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Báo cáo kết quả thẩm định giá. ", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));

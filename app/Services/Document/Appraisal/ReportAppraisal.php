@@ -33,7 +33,7 @@ class ReportAppraisal extends Report
         }
         $reportID = 'HSTD_' . $data->id;
         // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
-        return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return $this->acronym  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -63,11 +63,11 @@ class ReportAppraisal extends Report
     public function printContent(Section $section, $data)
     {
         $this->step1($section, $data);
-        $this->step2($section, $data);
+        // $this->step2($section, $data);
         $this->step3($section, $data);
         $this->step4($section, $data);
-        $this->step5($section, $data);
-        $this->step6($section, $data);
+        // $this->step5($section, $data);
+        // $this->step6($section, $data);
         $this->step7($section, $data);
         $this->step8($section, $data);
         $this->step9($section, $data);
@@ -149,7 +149,7 @@ class ReportAppraisal extends Report
         $section->addListItem('Họ và tên Tổng Giám đốc: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : ''), 0, null, 'bullets');
         $section->addListItem('Họ và tên Thẩm định viên về giá: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : ''), 0, null, 'bullets');
         // $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
-        $section->addListItem('Người lập báo cáo giá: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? $certificate->appraiserPerform->name : ''), 0, null, 'bullets');
+        $section->addListItem('Trợ lý thẩm định viên: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? $certificate->appraiserPerform->name : ''), 0, null, 'bullets');
     }
     protected function step1Sub3($section, $certificate)
     {
@@ -407,7 +407,7 @@ class ReportAppraisal extends Report
         $address = $apartment->full_address ? htmlspecialchars($apartment->full_address) : '';
         $coordinateArr = explode(',', $realEstate->coordinates);
         $fullName = $apartment->appraise_asset ?: '';
-        $assetName = $fullName . ' tọa lạc tại ' . $address;
+        $assetName = 'Tài sản thẩm định giá là ' . $fullName . $address;
         //1
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('1', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Pháp lý');
@@ -1522,9 +1522,10 @@ class ReportAppraisal extends Report
     protected function step10(Section $section, $certificate)
     {
         $section->addTitle('NHỮNG ĐIỀU KHOẢN LOẠI TRỪ VÀ HẠN CHẾ CỦA KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
-        $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị cho tài sản có đặc điểm pháp lý, đặc điểm kỹ thuật được mô tả tại mục IV của báo cáo này, theo yêu cầu thẩm định giá của ' . (isset($certificate->petitioner_name) ? $certificate->petitioner_name : '') . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('- Tại thời điểm thẩm định, tổ thẩm định giá đã nỗ lực hết mức nhưng không tìm được thông tin giao dịch thành tại khu vực tài sản thẩm định. Kết quả thẩm định giá trên được ước tính dựa trên thông tin giao dịch của các tài sản đang rao bán trên thị trường.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị cho tài sản có đặc điểm pháp lý, đặc điểm kỹ thuật được mô tả tại mục III của báo cáo này, theo yêu cầu thẩm định giá của ' . (isset($certificate->petitioner_name) ? $certificate->petitioner_name : '') . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Các số liệu về tài sản ' . $this->companyName . ' căn cứ vào hồ sơ do khách hàng cung cấp và kết hợp khảo sát thực tế tại hiện trường dưới sự hướng dẫn của khách hàng và các bên có liên quan.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('Báo cáo chỉ có hiệu lực trong phạm vi số lượng và giá trị tài sản ghi tại mục IX của báo cáo này.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Báo cáo chỉ có hiệu lực trong phạm vi số lượng và giá trị tài sản ghi tại mục III của báo cáo này.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên chỉ được sử dụng cho một “mục đích thẩm định giá” duy nhất theo hợp đồng thẩm định giá đã ký kết Khách hàng phải hoàn toàn chịu trách nhiệm khi sử dụng sai mục đích đã yêu cầu.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Khách hàng là chủ tài sản hoặc bên thứ ba yêu cầu thẩm định giá phải chịu hoàn toàn trách nhiệm về tính chính xác, hợp pháp các thông tin liên quan đến đặc điểm kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho ' . $this->companyName . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('' . $this->companyName . ' không có trách nhiệm kiểm tra thông tin của những bản sao các giấy tờ liên quan đến tính chất pháp lý của tài sản yêu cầu thẩm định giá so với bản gốc. ', 0, null, 'bullets', array_merge($this->indentFistLine, $this->keepNext));
