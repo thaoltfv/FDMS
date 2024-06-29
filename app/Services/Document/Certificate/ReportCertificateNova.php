@@ -68,7 +68,7 @@ class ReportCertificateNova extends ReportCertificate
         ));
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
-        $section->addTitle("Kết quả thẩm định giá: ", 2);
+        $section->addTitle("Giá trị tài sản thẩm định giá: ", 2);
         $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));

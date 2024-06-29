@@ -91,7 +91,8 @@ class ReportAppraisal extends Report
         $table2 = $section->addTable($this->tableBasicStyle);
         $table2->addRow(Converter::inchToTwip(.1));
         $cell21 = $table2->addCell(Converter::inchToTwip(2.5));
-        $cell21->addText('Số: ' . $this->reportCode, null, array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
+        // $cell21->addText('Số: ' . $this->reportCode, null, array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
+        $cell21->addText('', null, array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
         $cell22 = $table2->addCell(Converter::inchToTwip(4));
         $cell22->addText(ucfirst($this->certificateLongDateText), null, array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
         $section->addText("BÁO CÁO KẾT QUẢ THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '18'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
