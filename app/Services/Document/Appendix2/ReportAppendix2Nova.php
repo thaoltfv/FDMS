@@ -343,7 +343,8 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected function printRemainQualityFunc1($section, $tangibleAssets)
     {
-        $section->addText('✔ Phương pháp 1: Phương pháp tuổi đời (PP1):', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left']);
+        // $section->addText('✔ Phương pháp 1: Phương pháp tuổi đời (PP1):', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left']);
+        $section->addText('Ước tính giá trị hao mòn của CTXD bằng kỹ thuật tuổi đời: ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
         $table->addCell(3000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
