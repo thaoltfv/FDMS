@@ -47,7 +47,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             }
         }
 
-        $section->addText('❖ Về chi phí của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
+        $section->addText('❖ Về chi phí thay thế của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         if (isset($local_law) && count($local_law) > 0) {
             // $section->addText(json_encode($local_law));

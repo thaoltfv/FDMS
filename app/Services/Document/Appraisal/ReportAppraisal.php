@@ -1523,7 +1523,7 @@ class ReportAppraisal extends Report
     protected function step10(Section $section, $certificate)
     {
         $section->addTitle('NHỮNG ĐIỀU KHOẢN LOẠI TRỪ VÀ HẠN CHẾ CỦA KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
-        $section->addListItem('- Tại thời điểm thẩm định, tổ thẩm định giá đã nỗ lực hết mức nhưng không tìm được thông tin giao dịch thành tại khu vực tài sản thẩm định. Kết quả thẩm định giá trên được ước tính dựa trên thông tin giao dịch của các tài sản đang rao bán trên thị trường.', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Tại thời điểm thẩm định, tổ thẩm định giá đã nỗ lực hết mức nhưng không tìm được thông tin giao dịch thành tại khu vực tài sản thẩm định. Kết quả thẩm định giá trên được ước tính dựa trên thông tin giao dịch của các tài sản đang rao bán trên thị trường.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị cho tài sản có đặc điểm pháp lý, đặc điểm kỹ thuật được mô tả tại mục III của báo cáo này, theo yêu cầu thẩm định giá của ' . (isset($certificate->petitioner_name) ? $certificate->petitioner_name : '') . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Các số liệu về tài sản ' . $this->companyName . ' căn cứ vào hồ sơ do khách hàng cung cấp và kết hợp khảo sát thực tế tại hiện trường dưới sự hướng dẫn của khách hàng và các bên có liên quan.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Báo cáo chỉ có hiệu lực trong phạm vi số lượng và giá trị tài sản ghi tại mục III của báo cáo này.', 0, null, 'bullets', $this->indentFistLine);
