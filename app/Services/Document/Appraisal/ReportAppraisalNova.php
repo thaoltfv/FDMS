@@ -80,7 +80,8 @@ class ReportAppraisalNova extends ReportAppraisal
             $appraiseAssetType = 'Quyền sở hữu căn hộ chung cư';
         }
         $listTmp = $section->addListItemRun(0, 'bullets');
-        $listTmp->addText('Loại tài sản: Bất động sản', ['bold' => true]);
+        $listTmp->addText('Loại tài sản: ', ['bold' => true]);
+        $listTmp->addText('Bất động sản', ['bold' => false]);
         // $listTmp->addText($appraiseAssetType);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Tên tài sản: ', ['bold' => true]);
