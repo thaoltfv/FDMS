@@ -24,7 +24,7 @@
 						@submit.prevent="validateAppraiseInformation"
 					>
 						<div class="row">
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputTextPrefixCustom
 									id="petitioner_name"
 									placeholder="Ông / Bà"
@@ -38,7 +38,7 @@
 									class="form-group-container input_certification_brief"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputText
 									v-model="form.document_num"
 									vid="document_num"
@@ -46,7 +46,7 @@
 									class="form-group-container"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputTextPrefixCustom
 									id="petitioner_address"
 									placeholder="Nhập địa chỉ của khách hàng"
@@ -59,7 +59,7 @@
 									class="form-group-container input_certification_brief"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<div class="row justify-content-around">
 									<InputDatePicker
 										v-model="form.document_date"
@@ -83,7 +83,7 @@
 									/>
 								</div>
 							</div>
-							<div class="col-6 row">
+							<div class="col-lg-6 col-sm-12 row">
 								<InputTextPrefixCustomIcon
 									id="petitioner_identity_card"
 									placeholder="Nhập MST/CMND/CCCD/Passport"
@@ -106,7 +106,7 @@
 									:disabled="editDocument"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<div class="row justify-content-around">
 									<InputCurrency
 										v-model="form.service_fee"
@@ -132,7 +132,7 @@
 									/>
 								</div>
 							</div>
-							<div class="col-6 row">
+							<div class="col-lg-6 col-sm-12 row">
 								<InputTextPrefixCustom
 									id="petitioner_phone"
 									placeholder="Nhập số điện thoại"
@@ -154,7 +154,7 @@
 								/>
 							</div>
 
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputCategory
 									v-model="form.appraise_purpose_id"
 									class="form-group-container"
@@ -167,7 +167,7 @@
 								/>
 							</div>
 
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputText
 									v-model="form.certificate_num"
 									:disabledInput="form.status === 7 ? false : editDocument"
@@ -176,7 +176,7 @@
 									class="form-group-container"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputDatePicker
 									v-model="form.appraise_date"
 									vid="appraise_date"
@@ -189,7 +189,7 @@
 									@change="changeAppraiseDate"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputDatePicker
 									v-model="form.certificate_date"
 									vid="certificate_date"
@@ -202,7 +202,7 @@
 									@change="changeCertificateDate"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-lg-6 col-sm-12">
 								<InputTextarea
 									:autosize="true"
 									v-model="form.note"
@@ -213,7 +213,7 @@
 									class="form-group-container"
 								/>
 							</div>
-							<div class="col-6 row">
+							<div class="col-lg-6 col-sm-12 row">
 								<InputDatePickerV2
 									v-model="form.survey_time"
 									vid="survey_time"
@@ -231,7 +231,7 @@
 									:disabledInput="editDocument"
 								/>
 							</div>
-							<div class="col-6 row">
+							<div class="col-lg-6 col-sm-12 row">
 								<InputTextPrefixCustom
 									id="name_contact"
 									placeholder="Nhập tên người liên hệ"
@@ -256,7 +256,7 @@
 								/>
 							</div>
 
-							<!-- <div class="col-6">
+							<!-- <div class="col-lg-6 col-sm-12">
                  <InputCategoryMulti
                     v-model="form.document_type"
                     :maxTagCount="3"

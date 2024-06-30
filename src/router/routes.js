@@ -1869,6 +1869,24 @@ export const routes = [
 			}
 		]
 	},
+	// Menu mobile
+	{
+		path: "/menu",
+		component: Resource,
+		children: [
+			{
+				path: "",
+				name: "menu",
+				component: page("HomeMobile.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					permissions: [PERMISSIONS.VIEW_USER],
+					title: "Menu danh mục",
+					gtm: "Menu danh mục"
+				}
+			}
+		]
+	},
 	// certification_brief
 	{
 		path: "/certification_brief",

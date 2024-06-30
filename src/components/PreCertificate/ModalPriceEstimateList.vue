@@ -62,7 +62,9 @@
 						</a-table>
 					</div>
 					<div class="container-title container-title__footer">
-						<div class="d-flex justify-content-between justify-content-lg-end">
+						<div
+							class="d-flex justify-content-sm-between justify-content-lg-end"
+						>
 							<button
 								class="btn btn-white btn-action-modal"
 								type="button"

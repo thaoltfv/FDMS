@@ -1406,6 +1406,141 @@ header {
         z-index: 10;
     }
 }
+.steps-transparent-mobile {
+    &.vue-form-wizard {
+        background-color: #FFFFFF;
+        box-shadow: none;
+        padding-bottom: 0;
+        // position: relative;
+        .wizard-header {
+            display: none;
+            @media (min-width: 1024px) {
+                display: flex;
+            }
+            align-items: center;
+            justify-content: space-between;
+            background-color: #F8F8F8;
+            border: 1px solid #DEE6EE;
+            padding: 10px !important;
+            border-radius: 3px;
+            position: absolute;
+            top: 1rem;
+            z-index: 1;
+            width: 13rem;
+            .wizard-title {
+                color: #F28C1C;
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .category {
+                color: #617F9E;
+                font-size: 14px;
+                font-weight: 600;
+            }
+        }
+        .wizard-custom-info {
+            display: none;
+            @media (min-width: 1024px) {
+                display: flex;
+            }
+            align-items: center;
+            justify-content: space-between;
+            background-color: #EEF9FF;
+            border: 1px solid #007EC6;
+            color: #446B92;
+            padding: 10px !important;
+            border-radius: 3px;
+            position: absolute;
+            top: 24rem;
+            left: 0.6rem;
+            z-index: 1;
+            width: 13rem;
+            font-size: 13px;
+        }
+        .wizard-custom-info-apartment {
+            display: none;
+            @media (min-width: 1024px) {
+                display: flex;
+            }
+            align-items: center;
+            justify-content: space-between;
+            background-color: #EEF9FF;
+            border: 1px solid #007EC6;
+            color: #446B92;
+            padding: 10px !important;
+            border-radius: 3px;
+            position: absolute;
+            top: 19rem;
+            left: 0.6rem;
+            z-index: 1;
+            width: 13rem;
+            font-size: 13px;
+        }
+        .wizard-navigation {
+            overflow: auto;
+            .wizard-nav {
+                width: 500px !important;
+                border: none;
+                background-color: #FFFFFF;
+                border-radius: 5px;
+                position: fixed;
+                width: 4rem;
+                padding-top: 10px;
+                @media (min-width: 1024px) {
+                    width: 16rem;
+                    padding-top: 70px;
+                }
+                box-shadow: 0 1px 4px rgba(0,
+                0,
+                0,
+                0.25);
+            }
+            .wizard-icon {
+                color: #99D161 !important;
+            }
+            .wizard-icon.active {
+                color: #CED4DA;
+            }
+            .wizard-nav-pills {
+                margin-top: 5px;
+                margin-left: 5px;
+            }
+        }
+    }
+    .wizard-tab-content {
+        // box-shadow: 0px 4px 25px 0px;
+        // box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        // border-bottom: 1px solid #EBE9F1;
+        margin-left: 16px;
+        // max-height: calc(100vh - 200px);
+        width: 100% !important;
+        padding: 5px 5px 60px 0px !important;
+        overflow: auto;
+    }
+    .wizard-card-footer {
+        // border-bottom: 1px solid #EBE9F1;
+        display: none !important;
+        box-shadow: 0px 0px 7px rgba(0, 80, 124, 0.12);
+        background-color: #FFFFFF;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        display: flex !important;
+        justify-content: flex-end;
+        .wizard-footer-left {
+            margin-right: 16px;
+        }
+    }
+    .wizard-card-footer {
+        // box-shadow: -1px 16px 25px 0px;
+        // padding-bottom: 2.5rem;
+        display: none !important;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        z-index: 10;
+    }
+}
 
 .tab_details {
     // background-color: red !important;

@@ -61,7 +61,7 @@
 							rules="required"
 							disabled
 							:requiredIcon="true"
-							class="col-6"
+							class="col-6-lg col-6-md col-12-sm"
 						/>
 						<InputNumberMinute
 							@changeHour="changeEstimateComplete"
@@ -70,7 +70,7 @@
 							label="Thời gian gia hạn"
 							rules="required"
 							:requiredIcon="true"
-							class="col-6"
+							class="col-6-lg col-6-md col-12-sm"
 						/>
 					</div>
 
@@ -112,17 +112,17 @@
 						v-text="$t('popup_btn_yes')"
 					/>
 				</div>
-				<div v-else class="btn__group row" style="padding: 0">
-					<div class="col-6" style="padding: 0; margin-top: 8px">
+				<div v-else class="d-flex justify-content-between">
+					<div class="col-5">
 						<button
-							class="btn btn-white font-weight-normal font-weight-bold"
+							class="btn btn-black font-weight-bold"
 							@click.prevent="handleCancel"
 							v-text="$t('popup_btn_no')"
 						/>
 					</div>
-					<div class="col-6" style="padding: 0">
+					<div class="col-5">
 						<button
-							class="btn btn-white btn-orange font-weight-bold mt-md-0 mt-2"
+							class="btn btn-orange font-weight-bold"
 							@click.prevent="handleAction(note, reason_id)"
 							v-text="$t('popup_btn_yes')"
 						/>
@@ -391,6 +391,12 @@ export default {
 	&-orange {
 		background: #faa831;
 		color: #ffffff;
+		font-weight: bold !important;
+	}
+	&-black {
+		border: 1px solid black;
+		background: #ffffff;
+		color: black;
 		font-weight: bold !important;
 	}
 }

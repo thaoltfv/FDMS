@@ -684,10 +684,7 @@
 					@handleChangeFloor="handleChangeFloor"
 				/>
 				<!-- <div class="btn-footer d-md-flex d-block" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;"> -->
-				<div
-					class="btn-footer row"
-					style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;"
-				>
+				<div class="btn-footer row" style="">
 					<div class="col-6">
 						<button
 							@click.prevent="handleChangeBack"

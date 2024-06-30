@@ -326,7 +326,26 @@ export default {
 		},
 		loadConfigData(configData) {
 			this.config = configData;
-			this.isCancel = configData.isCancel;
+
+			let checkRole = false;
+			if (
+				this.user.roles[0].name === "ADMIN" ||
+				this.user.roles[0].name === "ROOT_ADMIN"
+			) {
+				checkRole = true;
+			} else if (configData.put_require && configData.put_require.length > 0) {
+				configData.put_require.forEach(key_required => {
+					if (
+						key_required !== "created_by" &&
+						this.form[key_required] === this.user.appraiser.id &&
+						this.form.status !== 9 &&
+						this.form.status !== 4
+					) {
+						checkRole = true;
+					}
+				});
+			}
+			this.isCancel = configData.isCancel && checkRole;
 			this.editForm = configData.edit.form;
 			this.isGrossCheck = configData.require.check_price;
 			this.requireData = configData.require;

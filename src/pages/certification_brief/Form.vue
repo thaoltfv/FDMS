@@ -58,7 +58,7 @@
 					</button>
 				</div>
 			</div>
-			<div v-else class="btn-footer d-md-flex d-block" style="bottom: 60px;">
+			<div v-else class="btn-footer d-md-flex d-block">
 				<div
 					class="d-lg-flex d-block button-contain row"
 					style="justify-content: space-around;display: flex!important;"

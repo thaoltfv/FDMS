@@ -17,7 +17,7 @@
 			v-bind:notification="reUploadMessage"
 			@action="openUploadFile"
 		/>
-		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
+		<div class="card" :style="isMobile ? {} : {}">
 			<div class="card-title">
 				<div class=" align-items-center">
 					<div class="d-flex justify-content-between">
@@ -91,7 +91,7 @@
 			<div class="card-body card-info">
 				<div class="ml-n3 mt-2 row" :key="keyRefresh">
 					<div
-						class="mb-4 col-4 "
+						class="mb-4 col-lg-4 col-md-6 col-sm-12"
 						v-for="(file, index) in lstFile"
 						:key="index"
 					>

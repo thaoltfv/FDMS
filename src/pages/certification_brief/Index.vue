@@ -203,7 +203,8 @@
 				:notification="
 					confirm_message == 'Từ chối' ||
 					confirm_message == 'Duyệt' ||
-					confirm_message == 'Hủy'
+					confirm_message == 'Hủy' ||
+					confirm_message == 'Hủy hồ sơ'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 				"
@@ -221,7 +222,8 @@
 				:notification="
 					confirm_message == 'Từ chối' ||
 					confirm_message == 'Duyệt' ||
-					confirm_message == 'Hủy'
+					confirm_message == 'Hủy' ||
+					confirm_message == 'Hủy hồ sơ'
 						? `Bạn có muốn '${confirm_message}' hồ sơ này?`
 						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
 				"

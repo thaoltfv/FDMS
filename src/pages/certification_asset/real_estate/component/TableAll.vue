@@ -1,5 +1,8 @@
 <template>
-	<div v-if="!isMobile()" class="table-wrapper">
+	<div
+		v-if="!isMobile()"
+		class="container-fluid position-relative table-wrapper"
+	>
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				ref="table"

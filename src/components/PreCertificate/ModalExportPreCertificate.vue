@@ -81,14 +81,14 @@
 							>
 								Xuất dữ liệu
 							</button>
-							<button
+							<!-- <button
 								:class="{ 'btn_loading disabled': isSubmit }"
 								class="btn text-nowrap col-4"
 								style="background-color: #007ec6;color: white;"
 								@click.prevent="exportDataAccountant(form)"
 							>
 								Xuất dữ liệu thanh toán
-							</button>
+							</button> -->
 						</div>
 					</div>
 				</div>

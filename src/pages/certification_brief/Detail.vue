@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="card-body card-info" v-show="showCardDetailAppraise">
-					<div class="row justify-content-between">
+					<div v-if="!isMobile()" class="row justify-content-between">
 						<div class="col-md-12 col-lg-6 mt-1">
 							<div class="detail_certificate_1 h-100">
 								<div class="d-flex container_content justify-content-between">
@@ -56,7 +56,7 @@
 										<p>{{ form.petitioner_name }}</p>
 									</div>
 									<div
-										v-if="edit && (editInfo || editDocument)"
+										v-if="(edit && (editInfo || editDocument)) || isAccounting"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit"
 									>
@@ -321,6 +321,291 @@
 											</p>
 										</div>
 										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
+												>Đại diện ủy quyền:</strong
+											>
+											<p>
+												{{
+													form.appraiser_confirm
+														? form.appraiser_confirm.name
+														: ""
+												}}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div v-else class="row justify-content-between">
+						<div class="col-md-12 col-lg-6 mt-1">
+							<div class="detail_certificate_1 h-100">
+								<div class="d-flex container_content justify-content-between">
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline">Khách hàng:</strong>
+										<p>{{ form.petitioner_name }}</p>
+									</div>
+									<div
+										v-if="(edit && (editInfo || editDocument)) || isAccounting"
+										@click="handleShowAppraiseInformation"
+										class="btn-edit d-flex align-items-start"
+									>
+										<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+									</div>
+								</div>
+								<div class="row d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>MST/CMND/CCCD/Passport:</strong
+									>
+									<p>{{ form.petitioner_identity_card }}</p>
+									<strong class="margin_content_inline">Điện thoại:</strong>
+									<p>{{ form.petitioner_phone }}</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Ngày cấp:</strong>
+									<p>
+										{{
+											form.issue_date_card
+												? formatDate(form.issue_date_card)
+												: ""
+										}}
+									</p>
+									<strong class="margin_content_inline ml-2">Nơi cấp:</strong>
+									<p>
+										{{ form.issue_place_card ? form.issue_place_card : "" }}
+									</p>
+								</div>
+								<!-- <div class="d-flex container_content">
+											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{form.petitioner_phone}}</p>
+										</div> -->
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Địa chỉ:</strong>
+									<p>{{ form.petitioner_address }}</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Mục đích thẩm định:</strong
+									>
+									<p>
+										{{
+											form.appraise_purpose ? form.appraise_purpose.name : ""
+										}}
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Thời điểm thẩm định:</strong
+									>
+									<p>
+										{{
+											form.appraise_date ? formatDate(form.appraise_date) : ""
+										}}
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Hợp đồng:</strong>
+									<p class="margin_content_inline">
+										Số: {{ form.document_num }}
+									</p>
+									<p>
+										Ngày:
+										{{
+											form.document_date ? formatDate(form.document_date) : ""
+										}}
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Chứng thư:</strong>
+									<p class="margin_content_inline">
+										Số: {{ form.certificate_num }}
+									</p>
+									<p>
+										Ngày:
+										{{
+											form.certificate_date
+												? formatDate(form.certificate_date)
+												: ""
+										}}
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Tổng phí dịch vụ:</strong
+									>
+									<p>
+										{{ form.service_fee ? formatNumber(form.service_fee) : 0 }}đ
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Chiết khấu:</strong>
+									<p>{{ form.commission_fee ? form.commission_fee : 0 }}%</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Loại biểu mẫu:</strong>
+									<p>
+										{{
+											form.document_alter_by_bank === 0
+												? "Biểu mẫu gốc"
+												: form.document_alter_by_bank === 1
+												? "Biểu mẫu Shinhan"
+												: ""
+										}}
+									</p>
+								</div>
+
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Ghi chú:</strong
+									><span id="note" class="text-left">{{
+										form.note ? form.note : ""
+									}}</span>
+								</div>
+								<div class="row d-flex container_content flex-column">
+									<strong class="margin_content_inline">Người liên hệ:</strong>
+									<p>{{ form.name_contact }}</p>
+									<strong class="margin_content_inline">Điện thoại:</strong>
+									<p>{{ form.phone_contact }}</p>
+								</div>
+								<div class="row d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Ngày giờ khảo sát:</strong
+									>
+									<p>
+										{{
+											form.survey_time ? formatDateTime(form.survey_time) : ""
+										}}
+									</p>
+								</div>
+								<div class="row d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Địa điểm khảo sát:</strong
+									>
+									<p>{{ form.survey_location ? form.survey_location : "" }}</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12 col-lg-6 mt-1">
+							<div class="row">
+								<div class="col-12">
+									<div class="detail_certificate_2">
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Nhóm đối tác:</strong
+											>
+											<p>
+												{{
+													form.customer_group
+														? form.customer_group.description
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Đối tác:</strong>
+											<p>{{ form.customer ? form.customer.name : "" }}</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Địa chỉ:</strong>
+											<p>{{ form.customer ? form.customer.address : "" }}</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Liên hệ:</strong>
+											<p>{{ form.customer ? form.customer.phone : "" }}</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 mt-1 mt-lg-4">
+									<div class="detail_certificate_2">
+										<div
+											class="d-flex container_content justify-content-between"
+										>
+											<div class="d-flex flex-column">
+												<strong class="margin_content_inline"
+													>Nhân viên kinh doanh:</strong
+												>
+												<p>
+													{{
+														form.appraiser_sale ? form.appraiser_sale.name : ""
+													}}
+												</p>
+											</div>
+											<div
+												v-if="
+													(editAppraiser && edit) ||
+														isBusinessManager ||
+														byPassAdmin
+												"
+												@click="handleShowAppraisal"
+												class="btn-edit d-flex align-items-start"
+											>
+												<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+											</div>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Quản lý nghiệp vụ:</strong
+											>
+											<p>
+												{{
+													form.appraiser_business_manager
+														? form.appraiser_business_manager.name
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Chuyên viên thực hiện:</strong
+											>
+											<p>
+												{{
+													form.appraiser_perform
+														? form.appraiser_perform.name
+														: ""
+												}}
+											</p>
+										</div>
+
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Thẩm định viên:</strong
+											>
+											<p>{{ form.appraiser ? form.appraiser.name : "" }}</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Kiểm soát viên:</strong
+											>
+											<p>
+												{{
+													form.appraiser_control
+														? form.appraiser_control.name
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Hành chính viên:</strong
+											>
+											<p>
+												{{
+													form.administrative ? form.administrative.name : ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Đại diện theo pháp luật:</strong
+											>
+											<p>
+												{{
+													form.appraiser_manager
+														? form.appraiser_manager.name
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
 											<strong class="margin_content_inline"
 												>Đại diện ủy quyền:</strong
 											>
@@ -1989,14 +2274,12 @@
 					form.status === 2 ||
 					form.status === 10
 			"
-			class="col-6"
-			:style="isMobile() ? { padding: '0' } : {}"
+			class="col-lg-6 col-md-6 col-sm-12"
+			:style="isMobile() ? { marginBottom: '10px', padding: '0' } : {}"
 		>
 			<div
 				class="card h-100"
-				:style="
-					isMobile() ? { 'margin-bottom': '150px' } : { 'max-height': '95%' }
-				"
+				:style="isMobile() ? {} : { 'max-height': '95%' }"
 			>
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
@@ -2113,10 +2396,10 @@
 								i => i.description === 'appendix' || i.description === 'other'
 							)"
 							:key="index"
-							class="mb-2 mt-2 col-6 "
+							class="mb-2 mt-2 col-lg-6 col-md-12 col-sm-12"
 						>
 							<div
-								class="row mx-1 input_download_certificate d-flex justify-content-between"
+								class="mx-1 input_download_certificate d-flex justify-content-lg-between"
 							>
 								<div
 									class="d-flex align-items-center"
@@ -2141,7 +2424,7 @@
 									</div>
 								</div>
 								<div
-									class="d-flex align-items-center justify-content-end col-1 pr-3"
+									class="d-flex align-items-center justify-content-lg-end col-lg-1 col-sm-3 pr-3"
 								>
 									<div v-if="file.type && file.link">
 										<img
@@ -2179,7 +2462,7 @@
 					form.status === 2 ||
 					form.status === 10
 			"
-			class="col-6"
+			class="col-lg-6 col-md-6 col-sm-12"
 			:style="isMobile() ? { padding: '0' } : {}"
 		>
 			<div
@@ -2331,7 +2614,7 @@
 		</div>
 		<Footer
 			v-if="jsonConfig"
-			:style="isMobile() ? { bottom: '60px' } : {}"
+			:style="isMobile() ? {} : {}"
 			:key="form.status + '_' + form.sub_status"
 			:form="form"
 			:jsonConfig="jsonConfig"
@@ -2454,6 +2737,7 @@
 				message == 'Từ chối' ||
 				message == 'Duyệt' ||
 				message == 'Hủy' ||
+				message == 'Hủy hồ sơ' ||
 				message == 'Phân lại'
 					? `Bạn có muốn '${message}' hồ sơ này ${
 							message == 'Phân lại'
@@ -2532,6 +2816,7 @@
 				message == 'Từ chối' ||
 				message == 'Duyệt' ||
 				message == 'Hủy' ||
+				message == 'Hủy hồ sơ' ||
 				message == 'Phân lại'
 					? `Bạn có muốn '${message}' hồ sơ này?`
 					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
@@ -2660,6 +2945,7 @@ export default {
 	},
 	data() {
 		return {
+			isAccounting: false,
 			byPassAdmin: false,
 			showPopupComfirmDownloadAutoDocument: false,
 			showPopupComfirmConvertDocument: false,
@@ -2852,6 +3138,13 @@ export default {
 				profile.data.user.roles[0].name === "ADMIN")
 		) {
 			this.byPassAdmin = true;
+		}
+		if (
+			this.form.status &&
+			this.form.status === 9 &&
+			profile.data.user.roles[0].role_name.toUpperCase().includes("KẾ TOÁN")
+		) {
+			this.isAccounting = true;
 		}
 		if (
 			this.form.status &&
@@ -3497,6 +3790,8 @@ export default {
 		},
 		updateAppraisal(dataAppraisal) {
 			console.log("dataAppraisal", dataAppraisal);
+			this.form.appraiser_sale = dataAppraisal.appraiser_sale;
+			this.form.appraiser_sale_id = dataAppraisal.appraiser_sale_id;
 			this.form.appraiser_perform = dataAppraisal.appraiser_perform;
 			this.form.appraiser_perform_id = dataAppraisal.appraiser_perform_id;
 			this.form.appraiser_confirm_id = dataAppraisal.appraiser_confirm_id;
