@@ -96,7 +96,8 @@ class ReportCertificate extends Report
         }
         $reportID = 'HSTD_' . $data->id;
         // return mb_strtoupper($this->envDocument)  .'/'. $createdName.'/'.$yearCVD.'/'.$reportID;
-        return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        // return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return 'CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA'  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -151,7 +152,13 @@ class ReportCertificate extends Report
         $section->addTitle("Khách hàng thẩm định giá:", 2);
         $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Số điện thoại: " . (isset($certificate->petitioner_phone) ? $certificate->petitioner_phone : ''), 0, [], 'bullets', $this->indentFistLine);
+        $section->addTitle("Thông tin về doanh nghiệp thẩm định giá:", 2);
+        $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá NOVA", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Địa chỉ: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP. Hồ Chí Minh", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Điện thoại: 02839206779	    Fax: 02839206778", 0, [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
+        $section->addListItem("Loại tài sản: Bất động sản", 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets', $this->indentFistLine);
         $address = $this->getAssetAddress($certificate);
@@ -160,7 +167,7 @@ class ReportCertificate extends Report
             $listTmp->addText('Địa chỉ: ', ['bold' => true], []);
             $listTmp->addText(htmlspecialchars($address) . '.');
         }
-        $section->addListItem("Nội dung chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Nội dung chi tiết xem tại Mục III, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', $this->indentFistLine);
         $appraise_date = date_create($certificate->appraise_date);
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời điểm thẩm định giá: ", ['bold' => true]);
@@ -169,18 +176,19 @@ class ReportCertificate extends Report
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Mục đích thẩm định giá: ", ['bold' => true]);
         $textRun->addText(htmlspecialchars($bien101));
-        $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Căn cứ pháp lý: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục II, Báo cáo kết quả thẩm định giá.");
+        // $textRun = $section->addTextRun('Heading2');
+        // $textRun->addText("Căn cứ pháp lý: ", ['bold' => true]);
+        // $textRun->addText("Chi tiết xem tại Mục II, Báo cáo kết quả thẩm định giá.");
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Cơ sở giá trị của tài sản thẩm định giá: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.");
+        // $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.");
+        $textRun->addText("Giá trị thị trường");
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Giả thiết và giả thiết đặc biệt: ", ['bold' => true]);
         $textRun->addText(htmlspecialchars($certificate->document_description));
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true]);
-        $textRun->addText("Chi tiết xem tại Mục VIII, Báo cáo kết quả thẩm định giá.", null, ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", null, ['keepNext' => false]);
         $section->addTitle("Kết quả thẩm định giá: ", 2);
         $section->addText("Trên cơ sở các tài liệu do khách hàng cung cấp, dựa trên cách tiếp cận và phương pháp thẩm định giá được áp dụng trong tính toán, " . $this->companyName . " ước tính giá trị tài sản " . $this->getAssetName($certificate) . " như sau:", [], array_merge($this->indentFistLine));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);

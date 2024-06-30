@@ -18,7 +18,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         // $textRun->addText('           Qua khảo sát hiện trạng thực tế tại khu vực thẩm định giá và tham khảo thông tin từ thị trường, ' . mb_strtoupper($this->companyAcronym) . ' nhận thấy có ');
         // $textRun->addText(count($asset->assetGeneral), $this->styleBold);
         // $textRun->addText(' tài sản so sánh có các yếu tố tương đồng nhất với tài sản thẩm định, và sử dụng làm cơ sở điều chỉnh để tiến hành ước tính giá trị tài sản thẩm định, cụ thể như sau: ');
-        $textRun->addText('           Tại thời điểm thẩm định giá, qua khảo sát hiện trạng thực tế và thu thập thông tin thị trường tại khu vực thẩm định giá. Do thị trường khu vực tài sản thẩm định hạn chế thu thập được giao dịch thành công, nên tổ thẩm định thu thập thông tin rao bán có phỏng vấn và ghi nhận mức giá thương lượng phù hợp khi tiến hành giao dịch mua bán tài sản. Các thông tin tài sản so sánh tương đồng do Tổ thẩm định thu thập được như sau: ');
+        $textRun->addText('           Tại thời điểm thẩm định giá, qua khảo sát hiện trạng thực tế và thu thập thông tin thị trường tại khu vực thẩm định giá. Do thị trường khu vực tài sản thẩm định giá hạn chế thu thập được giao dịch thành công, nên tổ thẩm định giá thu thập thông tin rao bán có phỏng vấn và ghi nhận mức giá thương lượng phù hợp khi tiến hành giao dịch mua bán tài sản. Các thông tin tài sản so sánh tương đồng do Tổ thẩm định giá thu thập được như sau: ');
     }
     protected function conclusion1($section)
     {
@@ -29,7 +29,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         $textRun = $section->addTextRun();
         $textRun->addText('     - Tổng hợp các nguồn thông tin, điều chỉnh các TSSS, mức giá chênh lệch với mức giá trung bình của các mức giá chỉ dẫn không quá ±15%.', ['bold' => false]);
         $textRun = $section->addTextRun();
-        $textRun->addText('     - Tổ thẩm định nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định sử dụng mức giá chỉ dẫn ' . $namePP . ' làm mức giá của tài sản thẩm định giá.');
+        $textRun->addText('     - Tổ thẩm định giá nhận thấy chất lượng thông tin về các tài sản so sánh là tương đương nhau, đồng thời nhận thấy mức giá chỉ dẫn, tổng giá trị điều chỉnh gộp, tổng giá trị điều chỉnh thuần, tổng số lần điều chỉnh, biên độ điều chỉnh của các tài sản không đáng kể. Do đó tổ thẩm định giá sử dụng mức giá chỉ dẫn ' . $namePP . ' làm mức giá tham chiếu của tài sản thẩm định giá.');
     }
 
     protected function collectInfoExploreTime($stt, $title, $asset)
