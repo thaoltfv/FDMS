@@ -1283,7 +1283,7 @@
         </button>
       </div>
     </div>
-    <div v-else class="btn-footer row" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;">
+    <div v-else class="btn-footer row" style="">
       <div class="col-6">
         <button class="btn btn-white text-nowrap" @click="onCancel" type="button" style="width: fit-content;">
           <img class="img" src="../../assets/icons/ic_cancel.svg" style="margin-right: 12px" alt="cancel">

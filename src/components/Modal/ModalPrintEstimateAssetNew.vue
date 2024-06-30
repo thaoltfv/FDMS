@@ -1,5 +1,6 @@
 <template>
 	<div
+		v-if="!isMobile()"
 		class="modal-delete d-flex justify-content-center align-items-center"
 		@click.self="handleCancel"
 	>
@@ -405,8 +406,7 @@
 							<img
 								v-for="image in data.step_3.image_planning_info"
 								:src="image.link"
-								height="300px"
-								width="100%"
+								height="200px"
 								style="margin:5px auto"
 							/>
 						</div>
@@ -711,6 +711,33 @@
 			</div>
 		</div>
 	</div>
+	<div
+		v-else
+		class="modal-delete d-flex justify-content-center align-items-center"
+		@click.self="handleCancel"
+	>
+		<div class="card">
+			<div class="card-header d-flex justify-content-end align-items-center">
+				<img
+					@click="handleCancel"
+					src="../../assets/icons/ic_cancel-1.svg"
+					alt="icon"
+				/>
+			</div>
+			<iframe
+				id="printf"
+				v-if="pdfsrc"
+				:src="pdfsrc"
+				width="100%"
+				height="100%"
+			></iframe>
+			<div class="card-footer footer-print">
+				<button @click="pdfgen" class="btn btn-orange">
+					In
+				</button>
+			</div>
+		</div>
+	</div>
 	<!-- <div
 		v-else
 		class="modal-delete"
@@ -956,6 +983,7 @@ import {
 import print from "vue-print-nb";
 import InputText from "../Form/InputText.vue";
 import moment from "moment";
+import pdfFonts from "@/assets/resources/vfs_fonts_open";
 export default {
 	name: "ModalPrintEstimateAsset",
 	props: ["data", "isApartment"],
@@ -977,6 +1005,7 @@ export default {
 
 	data() {
 		return {
+			pdfsrc: "",
 			printObj: {
 				id: "printBody",
 				popTitle:
@@ -1012,8 +1041,1098 @@ export default {
 					: "") +
 				(this.data.createdAtString ? "_" + this.data.createdAtString : "")
 		};
+		if (this.isMobile()) {
+			this.pdfgen();
+			this.handleCancel();
+		}
 	},
 	methods: {
+		async pdfgen() {
+			const pdfMake = require("pdfmake/build/pdfmake.js");
+			const PdfRes = require("@/assets/resources/pdf-images").default;
+			let listAssets = [];
+			let listTangibleAssets = [];
+			let listApartments = [];
+			let listPlanningImage = [];
+			let totalPriceAsset = 0;
+			let totalTangibleAsset = 0;
+			let totalApartment = 0;
+
+			if (
+				!this.isApartment &&
+				this.data.assets &&
+				this.data.assets.length > 0
+			) {
+				for (let index = 0; index < this.data.assets.length; index++) {
+					const element = this.data.assets[index];
+					totalPriceAsset += Number(element.total);
+					listAssets.push([
+						{
+							text: element.description,
+							fontSize: 9,
+							alignment: "left",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: element.land_type_description,
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.area),
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.price),
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.total),
+							fontSize: 9,
+							alignment: "right",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						}
+					]);
+				}
+			}
+			if (
+				!this.isApartment &&
+				this.data.step_3.tangible_assets &&
+				this.data.step_3.tangible_assets.length > 0
+			) {
+				for (
+					let index = 0;
+					index < this.data.step_3.tangible_assets.length;
+					index++
+				) {
+					const element = this.data.step_3.tangible_assets[index];
+					totalTangibleAsset += Number(element.total_price);
+					listTangibleAssets.push([
+						{
+							text: element.building_type
+								? this.formatSentenceCase(element.building_type.description)
+								: "",
+							fontSize: 9,
+							alignment: "left",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatArea(element.total_construction_area),
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.unit_price),
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: element.remaining_quality,
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.total_price),
+							fontSize: 9,
+							alignment: "right",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						}
+					]);
+				}
+			}
+			if (
+				this.isApartment &&
+				this.data.step_3.apartment_finals &&
+				this.data.step_3.apartment_finals.length > 0
+			) {
+				for (
+					let index = 0;
+					index < this.data.step_3.apartment_finals.length;
+					index++
+				) {
+					const element = this.data.step_3.apartment_finals[index];
+					totalApartment += Number(element.total_price);
+					listApartments.push([
+						{
+							text: element.name,
+							fontSize: 9,
+							alignment: "left",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.unit_price),
+							fontSize: 9,
+							alignment: "center",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						},
+						{
+							text: this.formatNumber(element.total_price),
+							fontSize: 9,
+							alignment: "right",
+							border: [false, false, false, false],
+							margin: [0, 5, 0, 5],
+							fillColor: "#F7F7F7"
+						}
+					]);
+				}
+				<div
+					class="card mb-4"
+					v-if="
+							isApartment &&
+								data.step_3.apartment_finals &&
+								data.step_3.apartment_finals.length > 0
+						"
+				>
+					<table cellspacing="0" cellpadding="0">
+						<thead class="vendorListHeadingResult p-0">
+							<tr>
+								<th style="border-top-left-radius: 15px;" class="text-left">
+									Tên tài sản
+								</th>
+								<th class="text-center">
+									Diện tích (m<sup style="font-size: 9px !important">2</sup>)
+								</th>
+								<th class="text-center">Đơn giá (đ)</th>
+								<th style="border-top-right-radius: 15px;" class="text-right">
+									Thành tiền (đ)
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>;
+			}
+			if (
+				this.data.step_3.image_planning_info &&
+				this.data.step_3.image_planning_info.length > 0
+			) {
+				for (
+					let index = 0;
+					index < this.data.step_3.image_planning_info.length;
+					index++
+				) {
+					const element = this.data.step_3.image_planning_info[index];
+					listPlanningImage.push({
+						image: await this.getBase64ImageFromURL(element.link),
+						fit: [400, 200],
+						alignment: "center",
+						// height: 200,
+						// width: 600,
+						margin: [0, 5, 0, 0]
+					});
+				}
+			}
+			const info1 = [
+				{
+					text: [
+						{
+							text: "Mã sơ bộ: ",
+							fontSize: 9
+						},
+						{
+							text: "TSSB_" + this.data.id,
+							fontSize: 9,
+							bold: true
+						}
+					],
+					alignment: "right"
+				},
+				{
+					layout: {
+						hLineColor: i => "#0685B2",
+						vLineWidth: i => 1.5,
+						hLineWidth: i => 1.5
+					},
+					alignment: "left",
+					table: {
+						widths: ["*"],
+						body: [
+							[
+								{
+									text: "THÔNG TIN VỀ NGƯỜI YÊU CẦU",
+									border: [false, false, false, true],
+									bold: true,
+									fontSize: 11,
+									color: "#0685B2",
+									margin: [-5, 0, 0, 0]
+								}
+							]
+						]
+					}
+				},
+				{
+					layout: {
+						hLineColor: i => "#0685B2",
+						vLineWidth: i => 0,
+						hLineWidth: i => 0
+					},
+					alignment: "left",
+					table: {
+						widths: [90, "*"],
+						body: [
+							[
+								{
+									text: "Tên người yêu cầu: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 3, 0, 3]
+								},
+								{
+									text: this.data.step_3.petitioner_name
+										? this.data.step_3.petitioner_name.toUpperCase()
+										: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 3, 0, 3]
+								}
+							],
+							[
+								{
+									text: "Ngày yêu cầu: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 0, 0, 3]
+								},
+								{
+									text: this.data.step_3.request_date,
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 0, 0, 3]
+								}
+							],
+							[
+								{
+									text: "Mục đích thẩm định: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 0, 0, 3]
+								},
+								{
+									text: this.data.step_3.appraise_purpose
+										? this.data.step_3.appraise_purpose.name
+										: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 0, 0, 3]
+								}
+							]
+						]
+					}
+				},
+				{
+					layout: {
+						hLineColor: i => "#0685B2",
+						vLineWidth: i => 1.5,
+						hLineWidth: i => 1.5
+					},
+					alignment: "left",
+					table: {
+						widths: ["*"],
+						body: [
+							[
+								{
+									text: "THÔNG TIN SƠ BỘ VỀ TÀI SẢN",
+									border: [false, false, false, true],
+									bold: true,
+									fontSize: 11,
+									color: "#0685B2",
+									margin: [-5, 0, 0, 0]
+								}
+							]
+						]
+					}
+				},
+				{
+					layout: {
+						hLineColor: i => "#0685B2",
+						vLineWidth: i => 0,
+						hLineWidth: i => 0
+					},
+					alignment: "left",
+					table: {
+						widths: [90, "*"],
+						body: [
+							[
+								{
+									text: "Loại tài sản: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 3, 0, 3]
+								},
+								{
+									text: this.data.step_1.general_infomation.asset_type
+										? this.formatSentenceCase(
+												this.data.step_1.general_infomation.asset_type
+													.description
+										  )
+										: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 3, 0, 3]
+								}
+							],
+							[
+								{
+									text: "Tên tài sản: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 0, 0, 3]
+								},
+								{
+									text: this.data.step_1.general_infomation.appraise_asset
+										? this.data.step_1.general_infomation.appraise_asset
+										: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 0, 0, 3]
+								}
+							],
+							[
+								{
+									text: "Địa chỉ tài sản: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 0, 0, 3]
+								},
+								{
+									text: this.data.step_1.general_infomation.full_address_street
+										? this.data.step_1.general_infomation.full_address_street
+										: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 0, 0, 3]
+								}
+							],
+							[
+								{
+									text: "Tọa độ: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 0, 0, 3]
+								},
+								{
+									text: this.data.step_1.general_infomation.coordinates
+										? this.data.step_1.general_infomation.coordinates
+										: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 0, 0, 3]
+								}
+							],
+							[
+								{
+									text: "Mô tả vị trí: ",
+									border: [false, false, false, false],
+									bold: false,
+									fontSize: 9,
+									margin: [-5, 0, 0, 3]
+								},
+								{
+									text:
+										!this.isApartment &&
+										this.data.step_1.traffic_infomation.description
+											? this.data.step_1.traffic_infomation.description
+											: this.data.step_1.apartment_properties.description
+											? this.data.step_1.apartment_properties.description
+											: "",
+									border: [false, false, false, false],
+									bold: true,
+									fontSize: 9,
+									margin: [0, 0, 0, 3]
+								}
+							]
+						]
+					}
+				},
+				{
+					layout: {
+						hLineColor: i => "#0685B2",
+						vLineWidth: i => 1.5,
+						hLineWidth: i => 1.5
+					},
+					alignment: "left",
+					table: {
+						widths: ["*"],
+						body: [
+							[
+								{
+									text: "KẾT QUẢ ƯỚC TÍNH SƠ BỘ",
+									border: [false, false, false, true],
+									bold: true,
+									fontSize: 11,
+									color: "#0685B2",
+									margin: [-5, 0, 0, 0]
+								}
+							]
+						]
+					}
+				},
+				listAssets.length > 0
+					? {
+							layout: {
+								hLineColor: i => "white",
+								vLineWidth: i => 1,
+								hLineWidth: i => 1
+							},
+							table: {
+								widths: [200, 50, 70, 80, 88],
+								body: [
+									[
+										{
+											text: "Quyền sử dụng đất",
+											fontSize: 9,
+											bold: true,
+											alignment: "left",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "MĐSD",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Diện tích (m²)",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Đơn giá (đ)",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Thành tiền (đ)",
+											fontSize: 9,
+											bold: true,
+											alignment: "right",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										}
+									],
+									...listAssets,
+									[
+										{
+											text: "TỔNG CỘNG",
+											fontSize: 9,
+											bold: true,
+											alignment: "left",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: this.formatNumber(totalPriceAsset),
+											fontSize: 9,
+											bold: true,
+											alignment: "right",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										}
+									]
+								]
+							},
+							margin: [0, 15, 0, 0]
+					  }
+					: {},
+				listTangibleAssets.length > 0
+					? {
+							layout: {
+								hLineColor: i => "white",
+								vLineWidth: i => 1,
+								hLineWidth: i => 1
+							},
+							table: {
+								widths: [150, 100, 70, 80, 88],
+								body: [
+									[
+										{
+											text: "Công trình xây dựng",
+											fontSize: 9,
+											bold: true,
+											alignment: "left",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Diện tích sàn (m²)",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Đơn giá (đ)",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "CLCL (%)",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Thành tiền (đ)",
+											fontSize: 9,
+											bold: true,
+											alignment: "right",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										}
+									],
+									...listTangibleAssets,
+									[
+										{
+											text: "TỔNG CỘNG",
+											fontSize: 9,
+											bold: true,
+											alignment: "left",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 3, 0, 0],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: this.formatNumber(totalTangibleAsset),
+											fontSize: 9,
+											bold: true,
+											alignment: "right",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										}
+									]
+								]
+							},
+							margin: [0, 15, 0, 0]
+					  }
+					: {},
+				listApartments.length > 0
+					? {
+							layout: {
+								hLineColor: i => "white",
+								vLineWidth: i => 1,
+								hLineWidth: i => 1
+							},
+							table: {
+								widths: [300, 100, 105],
+								body: [
+									[
+										{
+											text: "Tên tài sản",
+											fontSize: 9,
+											bold: true,
+											alignment: "left",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "Đơn giá (m²)",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+
+										{
+											text: "Thành tiền (đ)",
+											fontSize: 9,
+											bold: true,
+											alignment: "right",
+											border: [false, false, false, true],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										}
+									],
+									...listApartments
+									// [
+									// 	{
+									// 		text: "TỔNG CỘNG",
+									// 		fontSize: 9,
+									// 		bold: true,
+									// 		alignment: "left",
+									// 		border: [false, false, false, false],
+									// 		margin: [0, 5, 0, 5],
+									// 		fillColor: "#F7F7F7"
+									// 	},
+
+									// 	{
+									// 		text: "",
+									// 		fontSize: 9,
+									// 		bold: true,
+									// 		alignment: "center",
+									// 		border: [false, false, false, false],
+									// 		margin: [0, 3, 0, 0],
+									// 		fillColor: "#F7F7F7"
+									// 	},
+									// 	{
+									// 		text: this.formatNumber(totalApartment),
+									// 		fontSize: 9,
+									// 		bold: true,
+									// 		alignment: "right",
+									// 		border: [false, false, false, false],
+									// 		margin: [0, 5, 0, 5],
+									// 		fillColor: "#F7F7F7"
+									// 	}
+									// ]
+								]
+							},
+							margin: [0, 15, 0, 0]
+					  }
+					: {},
+
+				!this.isApartment
+					? {
+							layout: {
+								hLineColor: i => "white",
+								vLineWidth: i => 1,
+								hLineWidth: i => 1
+							},
+							table: {
+								widths: [150, 100, 70, 60, 108],
+								body: [
+									[
+										{
+											text: "TỔNG CỘNG",
+											fontSize: 9,
+											bold: true,
+											alignment: "left",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7",
+											color: "#0685B2"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: "",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7"
+										},
+										{
+											text: this.formatNumber(Number(this.data.totalAllPrice)),
+											fontSize: 9,
+											bold: true,
+											alignment: "right",
+											border: [false, false, false, false],
+											margin: [0, 5, 0, 5],
+											fillColor: "#F7F7F7",
+											color: "#0685B2"
+										}
+									]
+								]
+							},
+							margin: [0, 15, 0, 0]
+					  }
+					: {},
+				{
+					text: "",
+					pageBreak: "after"
+				},
+				listPlanningImage.length > 0
+					? {
+							text: "* Ảnh thông tin quy hoạch: ",
+							fontSize: 9,
+							bold: true
+					  }
+					: {},
+				listPlanningImage.length > 0 ? [...listPlanningImage] : {},
+				{
+					margin: [0, 10, 0, 0],
+					columns: [
+						{
+							width: "50%",
+							stack: [
+								{
+									text:
+										"* Biên độ chênh lệch : +/- " +
+										this.data.step_3.difference_amplitude +
+										" %",
+									fontSize: 9,
+									italics: true
+								},
+								{
+									text: "* Ghi chú khác ",
+									fontSize: 9,
+									italics: true
+								},
+								{
+									text: this.data.step_3.note,
+									fontSize: 9,
+									italics: true,
+									alignment: "justify"
+								}
+							]
+						},
+						{
+							width: "50%",
+							margin: [35, 0, 0, 0],
+							columns: [
+								{
+									width: "30%",
+									stack: [
+										{
+											text: "Chữ ký",
+											fontSize: 9,
+											italics: true
+										},
+										{
+											text: "Người ước tính",
+											fontSize: 9,
+											italics: true
+										},
+										{
+											text: "Thời điểm",
+											fontSize: 9,
+											italics: true,
+											alignment: "justify"
+										}
+									]
+								},
+								{
+									width: "5%",
+									stack: [
+										{
+											text: ":",
+											fontSize: 9,
+											italics: true
+										},
+										{
+											text: ":",
+											fontSize: 9,
+											italics: true
+										},
+										{
+											text: ":",
+											fontSize: 9,
+											italics: true,
+											alignment: "justify"
+										}
+									]
+								},
+								{
+									width: "*",
+									stack: [
+										{
+											text: "---------------------",
+											fontSize: 9,
+											italics: true,
+											alignment: "right"
+										},
+										{
+											text: this.data.created_by
+												? this.data.created_by.name
+												: "",
+											fontSize: 9,
+											italics: true,
+											alignment: "right"
+										},
+										{
+											text: this.data.updated_at
+												? this.formatDate(this.data.updated_at)
+												: "",
+											fontSize: 9,
+											italics: true,
+											alignment: "right"
+										},
+										{
+											text: " ",
+											fontSize: 9,
+											italics: true,
+											alignment: "right",
+											margin: [0, 50, 0, 0]
+										},
+										{
+											text: "ĐẠI DIỆN PHÁP LUẬT",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											margin: [0, 0, 0, 0]
+										},
+										{
+											text: " ",
+											fontSize: 9,
+											italics: true,
+											alignment: "right",
+											margin: [0, 30, 0, 0]
+										},
+										{
+											text: "Huỳnh Văn Ngoãn",
+											fontSize: 9,
+											bold: true,
+											alignment: "center",
+											margin: [0, 0, 0, 0]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			];
+
+			pdfMake.vfs = pdfFonts.pdfMake.vfs;
+			pdfMake.fonts = {
+				Opensans: {
+					normal: "Opensans-Regular.ttf",
+					bold: "Opensans-Bold.ttf",
+					italics: "Opensans-Italic.ttf",
+					bolditalics: "Opensans-BoldItalic.ttf"
+				}
+			};
+			const docDefinition = {
+				info: {
+					title: "Phiếu tài sản sơ bộ",
+					author: "",
+					subject: "",
+					keywords: ""
+				},
+				pageMargins: [30, 130, 30, 100],
+
+				footer: (currentPage, pageCount, pageSize) => {
+					return [
+						{
+							widths: ["*"],
+							margin: [31, 0, 31],
+							layout: {
+								hLineColor: i => (i === 0 ? "white" : ""),
+								vLineWidth: i => 0,
+								hLineWidth: i => (i === 0 ? 1 : 0)
+							},
+							table: {
+								body: [
+									[
+										[
+											{},
+											{
+												text: currentPage + "/" + pageCount,
+												fontSize: 9,
+												margin: [0, 210, 0, 0],
+												alignment: "center"
+											},
+											{}
+										]
+									]
+								]
+							}
+						}
+					];
+				},
+				header: (currentPage, pageCount, pageSize) => {
+					return [
+						{
+							image: "imageHeader",
+							width: 600,
+							height: 120
+						}
+					];
+				},
+
+				content: info1,
+
+				images: {
+					imageHeader: PdfRes.image
+				},
+				styles: {},
+				defaultStyle: {
+					font: "Opensans"
+				}
+			};
+			const title =
+				"TSSB_" +
+				this.data.id +
+				(this.data.step_3.petitioner_name
+					? "_" + this.data.step_3.petitioner_name.replaceAll(" ", "_")
+					: "") +
+				(this.data.createdAtString ? "_" + this.data.createdAtString : "");
+			const pdfDocGenerator = pdfMake.createPdf(docDefinition).download(title);
+			pdfDocGenerator.getDataUrl(dataUrl => {
+				this.pdfsrc = dataUrl;
+				let blobUrl = null;
+				fetch(dataUrl)
+					.then(res => res.blob())
+					.then(URL.createObjectURL)
+					.then(ret => {
+						blobUrl = ret;
+						this.pdfsrc = blobUrl || dataUrl;
+						return blobUrl;
+					})
+					.then(console.log);
+			});
+		},
+		getBase64ImageFromURL(url) {
+			if (!url) return "";
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.setAttribute("crossOrigin", "anonymous");
+				img.onload = () => {
+					const canvas = document.createElement("canvas");
+					canvas.width = img.width;
+					canvas.height = img.height;
+
+					const ctx = canvas.getContext("2d");
+					ctx.drawImage(img, 0, 0);
+
+					const dataURL = canvas.toDataURL("image/png");
+
+					resolve(dataURL);
+				};
+
+				img.onerror = error => {
+					reject(error);
+				};
+
+				img.src = url + "?r=" + Math.floor(Math.random() * 100000);
+			});
+		},
 		isMobile() {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(

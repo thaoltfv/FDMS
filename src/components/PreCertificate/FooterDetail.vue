@@ -115,9 +115,13 @@
 			</b-dropdown> -->
 		</b-button-group>
 	</div>
-	<div v-else class="btn-footer row" style="margin: 0;padding-top: 0;">
+	<div
+		v-else
+		class="btn-footer d-flex justify-content-between"
+		style="margin: 0;padding-top: 0;"
+	>
 		<!--hiện full -->
-		<div class="col-6">
+		<div class="col-5">
 			<button
 				class="btn btn-white"
 				type="button"
@@ -132,7 +136,7 @@
 				<span style="font-size: 15px;">Trở lại</span>
 			</button>
 		</div>
-		<div class="col-6" style="text-align: right;">
+		<div class="col-5" style="text-align: right;">
 			<b-dropdown
 				v-if="getTargetDescription().length > 0"
 				class="btn_dropdown"

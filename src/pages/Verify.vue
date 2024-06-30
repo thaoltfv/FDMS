@@ -80,9 +80,10 @@ export default {
 						) {
 							nameRoute = "menu_certification.index";
 						}
+
 						if (this.isMobile()) {
 							return await this.$router.push({
-								name: nameRoute
+								name: "menu"
 							});
 						} else {
 							return await this.$router.push({

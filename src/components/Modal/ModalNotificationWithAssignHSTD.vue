@@ -25,6 +25,7 @@
 							status_text != 'Phân lại' &&
 							status_text != 'Khôi phục' &&
 							status_text != 'Hủy' &&
+							status_text != 'Hủy hồ sơ' &&
 							status_text != 'Từ chối'
 								? '<br>&quot;' + status_text + '&quot;'
 								: ''
@@ -50,6 +51,7 @@
 								status_text &&
 								status_text != 'Khôi phục' &&
 								status_text != 'Hủy' &&
+								status_text != 'Hủy hồ sơ' &&
 								status_text != 'Từ chối'
 						"
 						class="form-group-container row"
