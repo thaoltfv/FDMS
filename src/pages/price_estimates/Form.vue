@@ -227,6 +227,235 @@
 			@action="priceEstimateStore.confirmEditStep"
 		/>
 	</div>
+	<div v-else class="certification-asset">
+		<form-wizard
+			:key="key_render_formwizard"
+			ref="wizard"
+			color="#99D161"
+			:title="`TSSB${dataForm.id ? `_${dataForm.id}` : ''}`"
+			:subtitle="status_text"
+			layout="horizontal"
+			finish-button-text="Hoàn Thành"
+			back-button-text="Trở lại"
+			next-button-text="Lưu"
+			:startIndex="miscVariable.step_active || 0"
+			@on-change="handleChange"
+			class="vertical-steps steps-transparent-mobile"
+			:class="{ step3: isStep3Active }"
+			style="width: 100vw !important;"
+		>
+			<div
+				class="wizard-custom-info"
+				v-if="
+					dataForm.appraise_id ||
+						dataForm.pre_certificate_id ||
+						dataForm.apartment_asset_id
+				"
+			>
+				<div class="col-12">
+					<!-- <div class="row d-flex">
+						<p class="mb-1">Version :</p>
+						<p class="mb-1">{{ dataForm.max_version }}</p>
+					</div> -->
+					<div
+						class="row d-flex"
+						v-if="dataForm.appraise_id || dataForm.apartment_asset_id"
+					>
+						<p class="mb-1">Mã TSTĐ :</p>
+						<a
+							class="mb-1"
+							:href="
+								dataForm.appraise_id
+									? `/certification_asset/real-estate/detail?id=${dataForm.appraise_id}`
+									: dataForm.apartment_asset_id
+									? `/certification_asset/apartment/detail?id=${dataForm.apartment_asset_id}`
+									: ''
+							"
+							target="_blank"
+							>{{ dataForm.appraise_id || dataForm.apartment_asset_id }}</a
+						>
+					</div>
+					<div class="row d-flex" v-if="dataForm.pre_certificate_id">
+						<p class="mb-1">Mã HSSB :</p>
+						<a
+							class="mb-1"
+							:href="
+								`/pre_certification/detail?id=${dataForm.pre_certificate_id}`
+							"
+							target="_blank"
+							>{{ dataForm.pre_certificate_id }}</a
+						>
+					</div>
+					<!-- <div class="">
+						<p class="mb-1">Người được chỉnh sửa :</p>
+						<div>
+							<p class="mb-1">
+								-
+								{{ dataForm.createdBy ? dataForm.createdBy.name : "" }}
+							</p>
+						</div>
+					</div> -->
+				</div>
+			</div>
+			<tab-content title="Thông tin chung" icon="">
+				<ValidationObserver
+					tag="div"
+					ref="step_1"
+					@submit.prevent="priceEstimateStore.validateSubmitStep1;"
+				>
+					<Step1 class="mt-6" :isEdit="isEdit" :key="miscInfo.key_step_1" />
+					<div
+						class="btn-footer d-md-flex d-block justify-content-end align-items-center"
+					>
+						<div class="d-lg-flex d-block button-contain">
+							<button
+								@click.prevent="handleChangeBack"
+								class="btn btn-white text-nowrap"
+							>
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Trở lại
+							</button>
+							<button
+								v-if="!dataForm.appraise_id && !dataForm.apartment_id"
+								class="btn btn-white btn-orange text-nowrap"
+								:class="{ 'btn_loading disabled': isSubmit }"
+								@click.prevent="priceEstimateStore.validateSubmitStep1"
+								type="submit"
+							>
+								<img
+									src="@/assets/icons/ic_save.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Lưu
+							</button>
+							<!-- <button
+								v-if="isEdit && isCancelEnable"
+								@click.prevent="handleCancelProperty()"
+								class="btn btn-white text-nowrap"
+							>
+								<img
+									src="@/assets/icons/ic_destroy.svg"
+									style="margin-right: 12px"
+									alt="cancel"
+								/>Hủy tài sản
+							</button> -->
+						</div>
+					</div>
+				</ValidationObserver>
+			</tab-content>
+
+			<tab-content title="Tài sản so sánh" icon="">
+				<ValidationObserver tag="div" ref="step_2">
+					<!-- <Step6 /> -->
+					<Step2 :isEdit="isEdit" :key="miscInfo.key_step_2" />
+					<div
+						class="btn-footer d-md-flex d-block justify-content-end align-items-center"
+					>
+						<div class="d-lg-flex d-block button-contain">
+							<button
+								@click.prevent="handleChangeBack"
+								class="btn btn-white text-nowrap"
+							>
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Trở lại
+							</button>
+							<button
+								v-if="
+									(edit || add) &&
+										!dataForm.appraise_id &&
+										!dataForm.apartment_id
+								"
+								class="btn btn-white btn-orange text-nowrap"
+								:class="{ 'btn_loading disabled': isSubmit }"
+								@click.prevent="validateSubmitStep2"
+								type="submit"
+							>
+								<img
+									src="@/assets/icons/ic_save.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Lưu
+							</button>
+							<!-- <button
+								v-if="isEdit && isCancelEnable"
+								@click.prevent="handleCancelProperty()"
+								class="btn btn-white text-nowrap"
+							>
+								<img
+									src="@/assets/icons/ic_destroy.svg"
+									style="margin-right: 12px"
+									alt="cancel"
+								/>Hủy tài sản
+							</button> -->
+						</div>
+					</div>
+				</ValidationObserver>
+			</tab-content>
+
+			<tab-content title="Giá trị tài sản" icon=""
+				><ValidationObserver tag="div" ref="step_3">
+					<!-- <Step6 /> -->
+					<Step3 :isEdit="isEdit" :key="miscInfo.key_step_3" />
+					<div
+						class="btn-footer d-md-flex d-block justify-content-end align-items-center"
+					>
+						<div class="d-lg-flex d-block button-contain">
+							<button
+								@click.prevent="handleChangeBack"
+								class="btn btn-white text-nowrap"
+							>
+								<img
+									src="@/assets/icons/ic_cancel.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Trở lại
+							</button>
+							<button
+								v-if="
+									(edit || add) &&
+										!dataForm.appraise_id &&
+										!dataForm.apartment_id
+								"
+								class="btn btn-white btn-orange text-nowrap"
+								:class="{ 'btn_loading disabled': isSubmit }"
+								@click.prevent="validateSubmitStep3"
+								type="submit"
+							>
+								<img
+									src="@/assets/icons/ic_save.svg"
+									style="margin-right: 12px"
+									alt="save"
+								/>Lưu
+							</button>
+							<!-- <button
+								v-if="isEdit && isCancelEnable"
+								@click.prevent="handleCancelProperty()"
+								class="btn btn-white text-nowrap"
+							>
+								<img
+									src="@/assets/icons/ic_destroy.svg"
+									style="margin-right: 12px"
+									alt="cancel"
+								/>Hủy tài sản
+							</button> -->
+						</div>
+					</div>
+				</ValidationObserver>
+			</tab-content>
+		</form-wizard>
+		<ModalNotificationAppraisal
+			v-if="miscVariable.showConfirmEdit"
+			@cancel="miscVariable.showConfirmEdit = false"
+			v-bind:notification="miscVariable.messageConfirm"
+			@action="priceEstimateStore.confirmEditStep"
+		/>
+	</div>
 </template>
 
 <script>

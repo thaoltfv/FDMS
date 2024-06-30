@@ -973,8 +973,14 @@ export default {
 			this.showDetailPopUp = false;
 		},
 		handleDetailCertificate(id) {
-			this.idData = id;
-			this.getDetailCertificate(id);
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
 		},
 		async getDetailCertificate(id) {
 			const res = await CertificationBrief.getDetailCertificateBrief(id);

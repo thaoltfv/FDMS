@@ -24,7 +24,7 @@
 						@submit.prevent="validateAppraiseInformation"
 					>
 						<div class="row">
-							<div class="col-6">
+							<div class="col-6-lg  col-6-md col-12-sm">
 								<InputTextPrefixCustom
 									id="petitioner_name"
 									placeholder="Ông / Bà"
@@ -38,7 +38,7 @@
 								/>
 							</div>
 
-							<div class="col-6">
+							<div class="col-6-lg  col-6-md col-12-sm">
 								<InputTextPrefixCustom
 									id="petitioner_address"
 									placeholder="Nhập địa chỉ của khách hàng"
@@ -51,7 +51,7 @@
 								/>
 							</div>
 
-							<div class="col-6">
+							<div class="col-6-lg  col-6-md col-12-sm">
 								<InputTextPrefixCustomIcon
 									id="petitioner_identity_card"
 									placeholder="Nhập MST/CMND/CCCD/Passport"
@@ -64,7 +64,7 @@
 								/>
 							</div>
 
-							<div class="col-6">
+							<div class="col-6-lg  col-6-md col-12-sm">
 								<InputTextPrefixCustom
 									id="petitioner_phone"
 									placeholder="Nhập số điện thoại"
@@ -76,7 +76,7 @@
 									label="Điện thoại"
 								/>
 							</div>
-							<div class="col-6">
+							<div class="col-6-lg  col-6-md col-12-sm">
 								<InputCategory
 									v-model="dataForm.appraise_purpose_id"
 									class="form-group-container"
@@ -143,6 +143,7 @@
 						</div>
 
 						<div
+							v-if="!isMobile"
 							class=" d-lg-flex d-block justify-content-end align-items-center mt-3 mb-2"
 						>
 							<div class="d-lg-flex d-block button-contain">
@@ -163,6 +164,24 @@
 										style="margin-right: 12px"
 										alt="save"
 									/>
+									Lưu
+								</button>
+							</div>
+						</div>
+						<div v-else class="mt-3 mb-5">
+							<div class="d-flex">
+								<button
+									class="col-6 btn btn-white btn-action-modal"
+									type="button"
+									@click="handleCancel"
+								>
+									<img src="@/assets/icons/ic_cancel.svg" alt="save" />Trở lại
+								</button>
+								<button
+									class="col-6 btn btn-orange btn-action-modal"
+									type="submit"
+								>
+									<img src="@/assets/icons/ic_save.svg" alt="save" />
 									Lưu
 								</button>
 							</div>
@@ -322,6 +341,17 @@ export default {
 					type: "error",
 					position: "top-right"
 				});
+			}
+		},
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 	},

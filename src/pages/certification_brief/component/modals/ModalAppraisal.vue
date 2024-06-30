@@ -35,6 +35,17 @@
 						</div>
 						<div class="col-12">
 							<InputCategory
+								v-model="appraiser_sale_compute"
+								vid="appraiser_sale_id"
+								label="Nhân viên kinh doanh"
+								rules="required"
+								class="form-group-container"
+								@change="handleChangeAppraiserSale"
+								:options="optionsBusiness"
+							/>
+						</div>
+						<div class="col-12">
+							<InputCategory
 								v-model="business_manager_compute"
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
@@ -114,7 +125,7 @@
 							/>
 						</div>
 					</div>
-					<div class="btn__group">
+					<div class="btn__group mb-5">
 						<button
 							class="btn btn-white font-weight-normal font-weight-bold"
 							@click.prevent="handleCancel"
@@ -173,6 +184,7 @@ export default {
 			signAppraisers: [],
 			appraisersManager: [],
 			appraisersControl: [],
+			employeeBusiness: [],
 			users: [],
 			positions: [],
 			employeePerformance: [],
@@ -305,6 +317,7 @@ export default {
 			);
 			const data = {
 				status: this.status,
+				appraiser_sale_id: this.form.appraiser_sale_id,
 				appraiser_perform_id: this.form.appraiser_perform_id,
 				business_manager_id: this.form.business_manager_id,
 				appraiser_id: this.form.appraiser_id,
@@ -382,6 +395,20 @@ export default {
 		}
 	},
 	computed: {
+		appraiser_sale_compute: {
+			// getter
+			get: function() {
+				if (this.employeeBusiness.length > 0) {
+					return this.form.appraiser_sale_id;
+				} else {
+					return this.form.appraiser_sale.name;
+				}
+			},
+			// setter
+			set: function(newValue) {
+				this.form.appraiser_sale_id = newValue;
+			}
+		},
 		appraiser_perform_compute: {
 			// getter
 			get: function() {
@@ -519,6 +546,7 @@ export default {
 				key: "name"
 			};
 		},
+
 		optionsAppraiser() {
 			return {
 				data: this.appraisers,

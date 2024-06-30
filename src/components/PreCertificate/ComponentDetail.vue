@@ -7,7 +7,9 @@
 			<div class="card">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">Thông tin chung</h3>
+						<h3 class="title">
+							{{ isMobile ? "Thông tin" : "Thông tin chung" }}
+						</h3>
 						<div class="row" style="display: flex; align-items: center">
 							<div class="color_content card-status-pre-certificate">
 								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
@@ -46,7 +48,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card-body card-info">
+				<div v-if="!isMobile" class="card-body card-info">
 					<div class="row justify-content-between">
 						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
 							<div class="detail_certificate_1 h-100">
@@ -232,6 +234,205 @@
 											</p>
 										</div>
 										<div class="d-flex container_content">
+											<strong class="margin_content_inline"
+												>Chuyên viên thực hiện:</strong
+											>
+											<p>
+												{{
+													dataPC.appraiser_perform
+														? dataPC.appraiser_perform.name
+														: ""
+												}}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div v-else class="card-body card-info">
+					<div class="row justify-content-between">
+						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+							<div class="detail_certificate_1 h-100">
+								<div class="d-flex justify-content-between">
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline">Khách hàng:</strong>
+										<p>{{ dataPC.petitioner_name }}</p>
+									</div>
+									<div
+										v-if="editInfo && edit"
+										@click="handleShowAppraiseInformation"
+										class="btn-edit d-flex align-items-start"
+									>
+										<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+									</div>
+								</div>
+								<div class="row d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>MST/CMND/CCCD/Passport:</strong
+									>
+									<p>{{ dataPC.petitioner_identity_card }}</p>
+									<strong class="margin_content_inline">Điện thoại:</strong>
+									<p>{{ dataPC.petitioner_phone }}</p>
+								</div>
+								<!-- <div class="d-flex container_content">
+											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{dataPC.petitioner_phone}}</p>
+										</div> -->
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Địa chỉ:</strong>
+									<p>{{ dataPC.petitioner_address }}</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Mục đích thẩm định:</strong
+									><span id="appraise_purpose" class="text-left">{{
+										dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
+									}}</span>
+									<b-tooltip
+										v-if="dataPC.appraise_purpose"
+										target="appraise_purpose"
+										placement="top-right"
+										>{{ dataPC.appraise_purpose.name }}</b-tooltip
+									>
+								</div>
+
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Loại sơ bộ:</strong>
+									<p>
+										{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Thời điểm sơ bộ:</strong
+									>
+									<p>
+										{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Tổng phí dịch vụ:</strong
+									>
+									<p>
+										{{
+											dataPC.total_service_fee
+												? formatNumber(dataPC.total_service_fee)
+												: 0
+										}}đ
+									</p>
+								</div>
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline">Chiết khấu:</strong>
+									<p>
+										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
+									</p>
+								</div>
+								<div class="d-flex flex-column container_content">
+									<strong class="margin_content_inline">Ghi chú:</strong>
+									<!-- <span id="pre_asset_name" class="text-left"
+										>{{ // dataPC.pre_asset_name && dataPC.pre_asset_name.length
+										// > 25 ? dataPC.pre_asset_name.substring(25, 0) + "..." //
+										// : dataPC.pre_asset_name dataPC.pre_asset_name ?
+										dataPC.pre_asset_name.replace("\n", "<br />") : "" }}</span
+									> -->
+									<div
+										id="pre_asset_name"
+										class="text-left"
+										v-html="formattedText"
+									></div>
+									<!-- <b-tooltip target="pre_asset_name" placement="top-right">{{
+										dataPC.pre_asset_name
+									}}</b-tooltip> -->
+								</div>
+								<div
+									v-if="dataPC.cancel_reason_string"
+									class="d-flex container_content"
+								>
+									<strong class="margin_content_inline"
+										>Lý do hủy sơ bộ:</strong
+									>
+									<p>
+										{{ dataPC.cancel_reason_string }}
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+							<div class="row h-100">
+								<div class="col-12">
+									<div class="detail_certificate_2">
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Nhóm đối tác:</strong
+											>
+											<p>
+												{{
+													dataPC.customer_group
+														? dataPC.customer_group.description
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Đối tác:</strong>
+											<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Địa chỉ:</strong>
+											<p>
+												{{ dataPC.customer ? dataPC.customer.address : "" }}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Liên hệ:</strong>
+											<p>{{ dataPC.customer ? dataPC.customer.phone : "" }}</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 mt-1 mt-lg-4 ">
+									<div class="detail_certificate_2">
+										<div
+											class="d-flex container_content justify-content-between "
+										>
+											<div class="d-flex flex-column">
+												<strong class="margin_content_inline"
+													>Nhân viên kinh doanh:</strong
+												>
+												<p>
+													{{
+														dataPC.appraiser_sale
+															? dataPC.appraiser_sale.name
+															: ""
+													}}
+												</p>
+											</div>
+											<div
+												v-if="
+													(editAppraiser && edit) ||
+														isBusinessManager ||
+														byPassAdmin
+												"
+												@click="handleShowAppraisal"
+												class="btn-edit d-flex align-items-start"
+											>
+												<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+											</div>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline"
+												>Quản lý nghiệp vụ:</strong
+											>
+											<p>
+												{{
+													dataPC.appraiser_business_manager
+														? dataPC.appraiser_business_manager.name
+														: ""
+												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
 											<strong class="margin_content_inline"
 												>Chuyên viên thực hiện:</strong
 											>
@@ -490,18 +691,36 @@
 									</p>
 								</template>
 								<template slot="data" slot-scope="data">
-									<button
-										class="link-detail text-none mb-0"
-										@click.prevent="handleDetail(data)"
+									<div
+										:style="isMobile ? { 'margin-top': '35px' } : {}"
+										class="d-flex flex-column align-items-center"
 									>
-										{{
-											`${showAcronym(data.asset_type.dictionary_acronym)}_` +
-												data.price_estimate_id
-										}}
-									</button>
+										<button
+											class="link-detail text-none mb-0"
+											@click.prevent="handleDetail(data)"
+										>
+											{{
+												`${showAcronym(data.asset_type.dictionary_acronym)}_` +
+													data.price_estimate_id
+											}}
+										</button>
+
+										<button
+											v-if="isMobile"
+											class="btn btn-orange btn-print btn-extra"
+											@click="handlePrint(data.price_estimate_id)"
+										>
+											<!-- <font-awesome-icon icon="print" /> -->
+											<img
+												src="@/assets/icons/ic_printer_white.svg"
+												alt="print"
+											/>
+										</button>
+									</div>
 								</template>
 								<template slot="action" slot-scope="text, record">
 									<button
+										v-if="!isMobile"
 										class="btn btn-orange btn-print btn-extra"
 										@click="handlePrint(record.price_estimate_id)"
 									>
@@ -562,7 +781,7 @@
 
 		<Footer
 			v-if="jsonConfig && profile && dataPC && dataPC.id"
-			:style="isMobile ? { bottom: '60px' } : {}"
+			:style="isMobile ? {} : {}"
 			:key="dataPC.status"
 			:form="dataPC"
 			:jsonConfig="jsonConfig"
@@ -2322,6 +2541,7 @@ export default {
 				this.priceEstimates.totalAllPrice =
 					Number(this.priceEstimates.totalLandPrice) +
 					Number(this.priceEstimates.totalTangibleAssetPrice);
+
 				this.openPrint = true;
 			}
 

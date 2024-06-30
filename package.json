@@ -39,6 +39,7 @@
         "module": "^1.2.5",
         "moment": "^2.29.4",
         "moment-timezone": "^0.5.31",
+        "pdfmake": "^0.2.10",
         "pinia": "^2.1.7",
         "pusher-js": "^7.4.0",
         "sass-loader": "7.3.1",

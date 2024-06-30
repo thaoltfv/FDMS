@@ -329,10 +329,7 @@
 				@handleChangeBlock="handleChangeBlock"
 				@handleChangeFloor="handleChangeFloor"
 			/>
-			<div
-				class="btn-footer d-md-flex d-block"
-				style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;"
-			>
+			<div class="btn-footer d-md-flex d-block" style="">
 				<div
 					class="d-lg-flex d-block button-contain row"
 					style="justify-content: space-around;display: flex!important;"

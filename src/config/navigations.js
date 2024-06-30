@@ -6,6 +6,7 @@ navigations = [
 		type: "item",
 		icon: "chart-line",
 		title: "Dashboard",
+		image: require('@/assets/icons/Dashboard.png'),
 		routeName: "dashboard.index",
 		exact: true
 	},
@@ -14,6 +15,7 @@ navigations = [
 		type: "item",
 		icon: "nav_ycsb",
 		title: "Yêu cầu sơ bộ",
+		image: require('@/assets/icons/yeu-cau-so-bo.png'),
 		routeName: "pre_certification.index",
 		customImage: true
 	},
@@ -22,6 +24,7 @@ navigations = [
 		type: "item",
 		icon: "nav_utg",
 		title: "Tài sản sơ bộ",
+		image: require('@/assets/icons/tai-san-so-bo.png'),
 		routeName: "price_estimates.index",
 		customImage: true
 	},
@@ -30,6 +33,7 @@ navigations = [
 		type: "item",
 		icon: "nav_hstd",
 		title: "Hồ sơ thẩm định",
+		image: require('@/assets/icons/ho-so-tham-dinh.png'),
 		routeName: "certification_brief.index",
 		customImage: true
 	},
@@ -38,6 +42,7 @@ navigations = [
 		type: "item",
 		icon: "nav_tstd",
 		title: "Tài sản thẩm định",
+		image: require('@/assets/icons/tai-san-tham-dinh.png'),
 		dropdown: [
 			{
 				id: "real_estate",
@@ -59,6 +64,7 @@ navigations = [
 		type: "item",
 		icon: "nav_bdg",
 		title: "Bản đồ giá",
+		image: require('@/assets/icons/ban-do-gia.png'),
 		routeName: "home",
 		exact: true,
 		customImage: true
@@ -68,6 +74,7 @@ navigations = [
 		type: "item",
 		icon: "nav_bddc",
 		title: "Bản đồ địa chính",
+		image: require('@/assets/icons/quy-hoach-dia-chinh.png'),
 		routeName: "map_dia_chinh",
 		exact: true,
 		customImage: true
@@ -77,6 +84,7 @@ navigations = [
 		type: "item",
 		icon: "nav_kg",
 		title: "Kho giá",
+		image: require('@/assets/icons/kho-gia.png'),
 		routeName: "warehouse.index",
 		customImage: true
 	},
@@ -85,6 +93,7 @@ navigations = [
 		type: "item",
 		icon: "nav_tdhs",
 		title: "CSM",
+		image: require('@/assets/icons/CSM.png'),
 		dropdown: [
 			{
 				id: "menu_pre_certificate",
@@ -127,6 +136,7 @@ navigations = [
 		type: "item",
 		icon: "nav_dltd",
 		title: "Dữ liệu thẩm định",
+		image: require('@/assets/icons/du-lieu-tham-dinh.png'),
 		dropdown: [
 			{
 				id: "appraise-law",
@@ -178,6 +188,7 @@ navigations = [
 		type: "item",
 		icon: "nav_dmql",
 		title: "Danh mục hành chính",
+		image: require('@/assets/icons/danh-muc-hanh-chinh.png'),
 		dropdown: [
 			{
 				id: "province",
@@ -218,6 +229,7 @@ navigations = [
 		type: "item",
 		icon: "users-cog",
 		title: "HRM",
+		image: require('@/assets/icons/quan-ly-noi-bo.png'),
 		dropdown: [
 			{
 				id: "role",
@@ -256,6 +268,7 @@ navigations = [
 		type: "item",
 		icon: "users",
 		title: "Quản lý đối tác",
+		image: require('@/assets/icons/quan-ly-doi-tac.png'),
 		// routeName: "customer.index",
 		dropdown: [
 			{

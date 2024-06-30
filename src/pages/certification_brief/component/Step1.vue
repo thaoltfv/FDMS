@@ -277,13 +277,13 @@
 								:iconUser="true"
 								:showIcon="true"
 								label="Họ tên đối tác"
-								class="form-group-container input_certification_brief col-6"
+								class="form-group-container input_certification_brief col-lg-6 col-sm-12"
 							/>
 							<InputTextPrefixCustom
 								id="customer_phone"
 								placeholder="Nhập số điện thoại"
 								v-model="data.customer.phone"
-								class="form-group-container input_certification_brief col-6"
+								class="form-group-container input_certification_brief col-lg-6 col-sm-12"
 								vid="customer_phone"
 								:iconPhone="true"
 								:showIcon="true"
@@ -306,7 +306,7 @@
 			</div>
 		</div>
 		<div class="col-md-12 col-lg-6">
-			<div class="card" :style="isMobile() ? { 'margin-bottom': '70px' } : {}">
+			<div class="card" :style="isMobile() ? {} : {}">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tổ thẩm định</h3>
