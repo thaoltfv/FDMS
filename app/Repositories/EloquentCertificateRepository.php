@@ -5462,6 +5462,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (isset($object['business_manager_id'])) {
                 $updateArray['business_manager_id'] = $object['business_manager_id'];
             }
+            if (isset($object['appraiser_sale_id'])) {
+                $updateArray['appraiser_sale_id'] = $object['appraiser_sale_id'];
+            }
 
             Certificate::where('id', $id)->update($updateArray);
         }
@@ -5486,6 +5489,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ];
             $with = [
                 'appraiser:id,name,user_id',
+                'appraiserSale:id,name,user_id',
                 'appraiserPerform:id,name,user_id',
                 'appraiserManager:id,name,user_id',
                 'appraiserConfirm:id,name,user_id',

@@ -47,7 +47,7 @@ class ReportAppendix2Nova extends ReportAppendix2
             }
         }
 
-        $section->addText('❖ Về nguyên giá của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
+        $section->addText('❖ Về chi phí thay thế của công trình xây dựng:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         if (isset($local_law) && count($local_law) > 0) {
             // $section->addText(json_encode($local_law));
@@ -153,14 +153,14 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected function printRemainQualityDescription($section)
     {
-        $section->addText('❖ Chất lượng còn lại công trình xây dựng: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
+        $section->addText('❖ Giá trị hao mòn của công trình xây dựng: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
         $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
     }
 
     protected function printNew1($section, $tangibleAssets)
     {
-        $section->addText('     Căn cứ Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn của công trình xây dựng được ước tính bằng phương pháp tổng cộng theo công thức:');
+        $section->addText('     Căn cứ Chuẩn mực thẩm định giá Việt Nam về cách tiếp cận từ chi phí, giá trị hao mòn của CTXD được ước tính theo công thức:');
         $table = $section->addTable();
         $table->addRow();
         $c0 = $table->addCell(2200);
@@ -178,11 +178,11 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c06 = $table->addCell(2200);
         $c06->addText('Giá trị hao mòn ngoại biên', null, ['align' => 'center']);
         $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'congthuc-PL2.png';
-        $section->addText('     Tổ thẩm định nhận định:');
-        $section->addText('     ❖    Tài sản thẩm định giá chịu hao mòn vật lý và có thể sử dụng phương pháp chuyên gia để ước tính giá trị hao mòn vật lý của tài sản');
-        $section->addText('     ❖    Tổ thẩm định giá ước tính giá trị của tài sản thẩm định giá bằng phương pháp chi phí thay thế, do đó, hao mòn chức năng của tài sản được xác định bằng 0. ');
-        $section->addText('     ❖    Tài sản thẩm định giá không chịu hao mòn ngoại biên.');
-        $section->addText('     Căn cứ hướng dẫn tại Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn vật lý của công trình xây dựng được ước tính bằng phương pháp chuyên gia theo công thức:');
+        $section->addText('     Tổ thẩm định giá nhận định:');
+        $section->addText('     ❖    Tài sản thẩm định giá chịu hao mòn vật lý và có thể xác định tỷ lệ hao mòn vật lý của CTXD căn cứ vào đánh giá mức độ hao mòn các kết cấu chính của CTXD.');
+        // $section->addText('     ❖    Tổ thẩm định giá ước tính giá trị của tài sản thẩm định giá bằng phương pháp chi phí thay thế, do đó, hao mòn chức năng của tài sản được xác định bằng 0. ');
+        $section->addText('     ❖    Tài sản thẩm định giá không chịu hao mòn chức năng và hao mòn ngoại biên.');
+        // $section->addText('     Căn cứ hướng dẫn tại Tiêu chuẩn thẩm định giá Việt Nam số 09, tỷ lệ hao mòn vật lý của công trình xây dựng được ước tính bằng phương pháp chuyên gia theo công thức:');
         $section->addImage(storage_path('app/public/' . $imgName), array(
             'width' => 400,
             'align' => 'center',
@@ -282,7 +282,7 @@ class ReportAppendix2Nova extends ReportAppendix2
     protected function printNew2($section, $realEstate)
     {
         $section->addText('     ❖ Giá trị công trình xây dựng:', ['bold' => true]);
-        $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá VN số 09, chi phí thay thế công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
+        $section->addText('     Căn cứ Chuẩn mực thẩm định giá Việt Nam về cách tiếp cận từ chi phí, chi phí thay thế công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
 
         $table3 = $section->addTable();
         $table3->addRow();
@@ -297,7 +297,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c04 = $table3->addCell(3000);
         $c04->addText('Diện tích sàn xây dựng', ['italic' => true], ['align' => 'center']);
 
-        $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá VN số 09, giá trị hao mòn công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
+        $section->addText('     Căn cứ Chuẩn mực thẩm định giá Việt Nam về cách tiếp cận từ chi phí, giá trị hao mòn công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
 
         $table4 = $section->addTable();
         $table4->addRow();
@@ -312,7 +312,7 @@ class ReportAppendix2Nova extends ReportAppendix2
         $c04 = $table4->addCell(3000);
         $c04->addText('Tỷ lệ hao mòn', ['italic' => true], ['align' => 'center']);
 
-        $section->addText('     Căn cứ Tiêu chuẩn Thẩm định giá Việt Nam số 09, giá trị công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
+        $section->addText('     Căn cứ Chuẩn mực thẩm định giá Việt Nam về cách tiếp cận từ chi phí, giá trị công trình xây dựng ước tính bằng phương pháp chi phí thay thế theo công thức:');
 
         $table5 = $section->addTable();
         $table5->addRow();
@@ -343,7 +343,8 @@ class ReportAppendix2Nova extends ReportAppendix2
 
     protected function printRemainQualityFunc1($section, $tangibleAssets)
     {
-        $section->addText('✔ Phương pháp 1: Phương pháp tuổi đời (PP1):', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left']);
+        // $section->addText('✔ Phương pháp 1: Phương pháp tuổi đời (PP1):', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left']);
+        $section->addText('Ước tính giá trị hao mòn của CTXD bằng kỹ thuật tuổi đời: ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
         $table->addCell(3000, $this->cellRowSpan)->addText('Tên tài sản', ['bold' => true], $this->cellHCenteredKeepNext);
@@ -376,7 +377,8 @@ class ReportAppendix2Nova extends ReportAppendix2
     protected function printRemainQualityFunc2($section, $tangibleAssets)
     {
         $ki = '</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t xml:space="preserve">ki</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
-        $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
+        // $section->addText('✔ Phương pháp 2: Phương pháp chuyên gia (PP2): ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
+        $section->addText('Ước tính giá trị hao mòn của CTXD bằng kỹ thuật tổng cộng: ', ['bold' => true, 'size' => 13, 'italic' => true], ['align' => 'left', 'keepNext' => true]);
         $this->printNew1($section, $tangibleAssets);
         $table = $section->addTable($this->styleTable);
         $table->addRow(400, $this->rowHeader);
