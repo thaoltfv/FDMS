@@ -58,7 +58,7 @@ class CreateAdminCustomerGroupTable extends Migration
         }
 
         if (!Schema::hasTable('customer_groups_fourth')) {
-            Schema::create('distances', function (Blueprint $table) {
+            Schema::create('customer_groups_fourth', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
                 $table->integer('first_id')->nullable();
