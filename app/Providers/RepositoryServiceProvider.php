@@ -50,6 +50,10 @@ use App\Contracts\RealEstateRepository;
 use App\Contracts\TechnologyCertificateAssetRepository;
 use App\Contracts\VerhicleCertificateAssetRepository;
 use App\Contracts\ViewCertificateBrieftRepository;
+use App\Contracts\CustomerGroupFirstRepository;
+use App\Contracts\CustomerGroupSecondRepository;
+use App\Contracts\CustomerGroupThirdRepository;
+use App\Contracts\CustomerGroupFourthRepository;
 use App\Http\Controllers\OtherCertificateAssetController;
 use App\Models\AddressLog;
 use App\Models\Apartment;
@@ -98,6 +102,11 @@ use App\Models\RealEstate;
 use App\Models\TechnologicalLineCertificateAsset;
 use App\Models\VerhicleCertificateAsset;
 use App\Models\ViewCertificateBrief;
+use App\Models\CustomerGroupFirst;
+use App\Models\CustomerGroupSecond;
+use App\Models\CustomerGroupThird;
+use App\Models\CustomerGroupFourth;
+
 use App\Repositories\EloquentAddressLogRepository;
 use App\Repositories\EloquentApartmentAssetRepository;
 use App\Repositories\EloquentApartmentRepository;
@@ -147,6 +156,11 @@ use App\Repositories\EloquentViewCertificateBriefRepository;
 use App\Repositories\EloquentPreCertificateRepository;
 use App\Repositories\EloquentPreCertificateConfigRepository;
 use App\Repositories\EloquentPriceEstimateRepository;
+use App\Repositories\EloquentCustomerGroupFirstRepository;
+use App\Repositories\EloquentCustomerGroupSecondRepository;
+use App\Repositories\EloquentCustomerGroupThirdRepository;
+use App\Repositories\EloquentCustomerGroupFourthRepository;
+
 use App\Services\Document\Certificate\ReportCertificate;
 use App\Services\Document\Certificate\ReportCertificateInterface;
 use App\Services\Document\DocumentInterface\Report;
@@ -369,6 +383,19 @@ class RepositoryServiceProvider extends ServiceProvider
         });
         $this->app->singleton(ReportInterface::class, function () {
             return new Report();
+        });
+
+        $this->app->singleton(CustomerGroupFirstRepository::class, function () {
+            return new EloquentCustomerGroupFirstRepository(new CustomerGroupFirst());
+        });
+        $this->app->singleton(CustomerGroupSecondRepository::class, function () {
+            return new EloquentCustomerGroupSecondRepository(new CustomerGroupSecond());
+        });
+        $this->app->singleton(CustomerGroupThirdRepository::class, function () {
+            return new EloquentCustomerGroupThirdRepository(new CustomerGroupThird());
+        });
+        $this->app->singleton(CustomerGroupFourthRepository::class, function () {
+            return new EloquentCustomerGroupFourthRepository(new CustomerGroupFourth());
         });
         //:end-bindings:
     }
