@@ -30,7 +30,7 @@ class CustomerGroupThird extends Model
         'second_id',
     ];
 
-    public function fisrtGroup(): BelongsTo
+    public function firstGroup(): BelongsTo
     {
         return $this->belongsTo(CustomerGroupFirst::class, 'first_id', 'id');
     }
