@@ -246,6 +246,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('customer-group-first', CustomerGroupFirstController::class);
 
+    Route::get('customer-group-first-all', [CustomerGroupFirstController::class, 'getAllFirstGroup']);
+
     Route::apiResource('customer-group-second', CustomerGroupSecondController::class);
 
     Route::apiResource('customer-group-third', CustomerGroupThirdController::class);
