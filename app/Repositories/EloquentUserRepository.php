@@ -155,10 +155,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         ];
         if (isset($objects['is_guest']) && $objects['is_guest']) {
             $array['is_guest'] = true;
-            $array['name_lv_1'] = $objects['name_lv_1'] ?? null;
-            $array['name_lv_2'] = $objects['name_lv_2'] ?? null;
-            $array['name_lv_3'] = $objects['name_lv_3'] ?? null;
-            $array['name_lv_4'] = $objects['name_lv_4'] ?? null;
+            $array['first_id'] = $objects['first_id'] ?? null;
+            $array['second_id'] = $objects['second_id'] ?? null;
+            $array['third_id'] = $objects['third_id'] ?? null;
+            $array['fourth_id'] = $objects['fourth_id'] ?? null;
         }
         $id = $this->model->query()->insertGetId($array);
         if (isset($objects['appraiser']) && !$objects['is_guest']) {
@@ -203,10 +203,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         ];
         if (isset($objects['is_guest']) && $objects['is_guest']) {
             $array['is_guest'] =   $objects['is_guest'] ?? null;
-            $array['name_lv_1'] =   $objects['name_lv_1'] ?? null;
-            $array['name_lv_2'] =   $objects['name_lv_2'] ?? null;
-            $array['name_lv_3'] =   $objects['name_lv_3'] ?? null;
-            $array['name_lv_4'] =   $objects['name_lv_4'] ?? null;
+            $array['first_id'] = $objects['first_id'] ?? null;
+            $array['second_id'] = $objects['second_id'] ?? null;
+            $array['third_id'] = $objects['third_id'] ?? null;
+            $array['fourth_id'] = $objects['fourth_id'] ?? null;
         }
 
         $this->model->query()

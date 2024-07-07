@@ -350,18 +350,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->select($select);
         $result = $result->where(function ($q) use ($user) {
             $q = $q->whereHas('customerGroup', function ($has) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                if ($user->first_id) {
+                    $has->where('first_id', '=', $user->first_id);
                 }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                if ($user->second_id) {
+                    $has->where('second_id', '=', $user->second_id);
                 }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                if ($user->third_id) {
+                    $has->where('third_id', '=', $user->third_id);
                 }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                if ($user->fourth_id) {
+                    $has->where('fourth_id', '=', $user->fourth_id);
                 }
+                // if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                //     $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                // }
+                // if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                //     $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                // }
+                // if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                //     $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                // }
+                // if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                //     $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                // }
             });
         });
         $result =
@@ -456,18 +468,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->select($select);
         $result = $result->where(function ($q) use ($user) {
             $q = $q->whereHas('customerGroup', function ($has) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                if ($user->first_id) {
+                    $has->where('first_id', '=', $user->first_id);
                 }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                if ($user->second_id) {
+                    $has->where('second_id', '=', $user->second_id);
                 }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                if ($user->third_id) {
+                    $has->where('third_id', '=', $user->third_id);
                 }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                if ($user->fourth_id) {
+                    $has->where('fourth_id', '=', $user->fourth_id);
                 }
+                // if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                //     $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                // }
+                // if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                //     $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                // }
+                // if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                //     $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                // }
+                // if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                //     $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                // }
             });
         });
         $result = $result->whereRaw("to_char(created_at , 'YYYY-MM-dd') between '" . $fromDate . "' and '" . $toDate . "'")
@@ -590,18 +614,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->select($select);
         $dataRaw = $dataRaw->where(function ($q) use ($user) {
             $q = $q->whereHas('customerGroup', function ($has) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                if ($user->first_id) {
+                    $has->where('first_id', '=', $user->first_id);
                 }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                if ($user->second_id) {
+                    $has->where('second_id', '=', $user->second_id);
                 }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                if ($user->third_id) {
+                    $has->where('third_id', '=', $user->third_id);
                 }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                if ($user->fourth_id) {
+                    $has->where('fourth_id', '=', $user->fourth_id);
                 }
+                // if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                //     $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                // }
+                // if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                //     $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                // }
+                // if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                //     $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                // }
+                // if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                //     $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                // }
             });
         });
         $dataRaw = $dataRaw
@@ -736,18 +772,30 @@ class EloquentViewCertificateBriefRepository extends EloquentRepository implemen
             ->select($select);
         $dataRaw = $dataRaw->where(function ($q) use ($user) {
             $q = $q->whereHas('customerGroup', function ($has) use ($user) {
-                if ($user->name_lv_1 && $user->name_lv_1 != '') {
-                    $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                if ($user->first_id) {
+                    $has->where('first_id', '=', $user->first_id);
                 }
-                if ($user->name_lv_2 && $user->name_lv_2 != '') {
-                    $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                if ($user->second_id) {
+                    $has->where('second_id', '=', $user->second_id);
                 }
-                if ($user->name_lv_3 && $user->name_lv_3 != '') {
-                    $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                if ($user->third_id) {
+                    $has->where('third_id', '=', $user->third_id);
                 }
-                if ($user->name_lv_4 && $user->name_lv_4 != '') {
-                    $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                if ($user->fourth_id) {
+                    $has->where('fourth_id', '=', $user->fourth_id);
                 }
+                // if ($user->name_lv_1 && $user->name_lv_1 != '') {
+                //     $has->where('name_lv_1', 'ILIKE', '%' . $user->name_lv_1 . '%');
+                // }
+                // if ($user->name_lv_2 && $user->name_lv_2 != '') {
+                //     $has->where('name_lv_2', 'ILIKE', '%' . $user->name_lv_2 . '%');
+                // }
+                // if ($user->name_lv_3 && $user->name_lv_3 != '') {
+                //     $has->where('name_lv_3', 'ILIKE', '%' . $user->name_lv_3 . '%');
+                // }
+                // if ($user->name_lv_4 && $user->name_lv_4 != '') {
+                //     $has->where('name_lv_4', 'ILIKE', '%' . $user->name_lv_4 . '%');
+                // }
             });
         });
         $dataRaw = $dataRaw

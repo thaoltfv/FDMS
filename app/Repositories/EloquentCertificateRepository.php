@@ -2986,7 +2986,31 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
 
         $result = $result->orderByDesc('certificates.updated_at');
         if (request()->has('is_guest')) {
-            if (isset($user->name_lv_1)) {
+            if (isset($user->first_id)) {
+                $result = $result->where(function ($q) use ($user) {
+                    $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                        if ($user->first_id && $user->first_id != '') {
+                            $has->where('first_id', '=', $user->first_id);
+                        }
+                        if ($user->second_id && $user->second_id != '') {
+                            $has->where('second_id', '=', $user->second_id);
+                        }
+                        if ($user->third_id && $user->third_id != '') {
+                            $has->where('third_id', '=', $user->third_id);
+                        }
+                        if ($user->fourth_id && $user->fourth_id != '') {
+                            $has->where('fourth_id', '=', $user->fourth_id);
+                        }
+                    });
+                });
+
+                $result = $result
+                    ->forPage($page, $perPage)
+                    ->paginate($perPage);
+                foreach ($result as $stt => $item) {
+                    $result[$stt]->append('detail_list_id');
+                }
+            } elseif (isset($user->name_lv_1)) {
                 // $result = $result->where('customer_group_id', '=', $user->customer_group_id);
                 $result = $result->where(function ($q) use ($user) {
                     $q = $q->whereHas('customerGroup', function ($has) use ($user) {
