@@ -649,7 +649,10 @@ class GiayYeuCau
                         $secondRow[] = '';
                         $secondRow[] = htmlspecialchars($item->appraises->appraise_asset);
                         $secondRow[] = (isset($item->total_area) ? $this->formatNumberFunction($item->total_area, 2, ',', '.') : '');
-                        $secondRow[] = (isset($item->assetType) && isset($item->assetType->description)  ? CommonService::mbCaseTitle($item->assetType->description) : '');
+                        $secondRow[] =
+                            isset($item->assetType) && isset($item->assetType->description)
+                            ?   ($item->assetType->description == "ĐẤT TRỐNG" ? 'Đất trống' : ($item->assetType->description == "ĐẤT CÓ NHÀ" ? 'Đất có CTXD' : '')) : '';
+
                         $arrayTable[] = $secondRow;
                         // Dòng CTXD
                         $checktangibleAsset = $item->appraises->tangibleAssets;
@@ -659,7 +662,7 @@ class GiayYeuCau
                                 $tempRow[] = '';
                                 $tempRow[] = $tangible->tangible_name;
                                 $tempRow[] = (isset($tangible->total_construction_area) ? $this->formatNumberFunction($tangible->total_construction_area, 2, ',', '.') : '');
-                                $tempRow[] = "CLCL: " . $tangible->remaining_quality . '%';
+                                $tempRow[] = $tangible->remaining_quality == 100 ? 'Mới' : 'Đã qua sử dụng';
 
                                 $arrayTable[] = $tempRow;
                             }
