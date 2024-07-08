@@ -487,7 +487,7 @@ class GiayYeuCau
 
         // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
-        $indentFistLine = ['indentation' => ['firstLine' => 360]]
+        $indentFistLine = ['indentation' => ['firstLine' => 360]];
         $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
         $cellRowContinue = array('vMerge' => 'continue');
         $cellColSpan = array('gridSpan' => 2, 'valign' => 'center');
