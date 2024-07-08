@@ -489,6 +489,7 @@ class GiayYeuCau
         $keepNext = ['keepNext' => true];
         $indentFistLine = ['indentation' => ['firstLine' => 360]];
         $indentPara = ['indentation' => ['left' => 360]];
+        $indentPara2 = ['indentation' => ['left' => 400]];
         $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
         $cellRowContinue = array('vMerge' => 'continue');
         $cellColSpan = array('gridSpan' => 2, 'valign' => 'center');
@@ -720,9 +721,9 @@ class GiayYeuCau
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
-        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $indentPara);
-        $section->addListItem("Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', $indentPara);
-        $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara);
+        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $indentPara2);
+        $section->addListItem("Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', $indentPara2);
+        $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara2);
 
         // 3
         $textRun = $section->addTextRun('Heading2');
