@@ -754,7 +754,7 @@ class GiayYeuCau
         $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
 
 
-        $section->addTextBreak(null, null, $keepNext);
+        $section->addTextBreak(null, null, null);
 
         $table3 = $section->addTable($tableBasicStyle);
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
