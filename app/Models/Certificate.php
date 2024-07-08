@@ -64,6 +64,7 @@ class Certificate extends Model
         'administrative_id',
         'business_manager_id',
         'document_alter_by_bank',
+        'is_company',
         'phone_contact',
         'name_contact',
         'survey_location',

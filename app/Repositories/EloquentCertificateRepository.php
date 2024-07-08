@@ -3717,6 +3717,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'administrative_id',
             'business_manager_id',
             'document_alter_by_bank',
+            'is_company',
             'phone_contact',
             'name_contact',
             'survey_location',
@@ -5453,6 +5454,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'commission_fee' => $object['commission_fee'],
                 'document_type' => $object['document_type'],
                 'document_alter_by_bank' => isset($object['document_alter_by_bank']) ? $object['document_alter_by_bank'] : 0,
+                'is_company' => isset($object['is_company']) ? $object['is_company'] : 0,
                 'note' => $object['note']
             ]);
 
