@@ -604,7 +604,7 @@ class GiayYeuCau
                         if ($item->apartment->law) {
                             foreach ($item->apartment->law as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy  " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
                             }
                         }
                         // Dòng địa chỉ
@@ -636,7 +636,7 @@ class GiayYeuCau
                         if ($item->appraises->appraiseLaw) {
                             foreach ($item->appraises->appraiseLaw as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 Bản Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy  " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
                             }
                         }
                         // Dòng địa chỉ
@@ -684,13 +684,13 @@ class GiayYeuCau
         if (!empty($arrayTable)) {
             $table = $section->addTable($styleTable);
             $table->addRow(400, $rowHeader);
-            $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered, $keepNext));
+            $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered));
             $table->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
             $table->addCell(1800, $cellVCentered)->addText('Diện tích (' . $m2 . ')', ['bold' => true], $cellHCentered);
             $table->addCell(2000, $cellVCentered)->addText('Hiện trạng', ['bold' => true], $cellHCentered);
             foreach ($arrayTable as $index => $item) {
                 $table->addRow(400, $cantSplit);
-                $table->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered, $keepNext));
+                $table->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered));
                 $table->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => false], $cellHJustify);
                 $table->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => false], $cellHCentered);
                 $table->addCell(2000, $cellVCentered)->addText($item[3], ['bold' => false], $cellHCentered);
