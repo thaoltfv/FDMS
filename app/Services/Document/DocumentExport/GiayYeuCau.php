@@ -711,17 +711,21 @@ class GiayYeuCau
         $textRun = $section->addTextRun('Heading3');
         $textRun->addText("Các Hồ sơ, tài liệu, dữ liệu cá nhân ", ['bold' => false]);
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
-        $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova để Công ty lập Hồ sơ Thẩm định giá tài sản gồm:", ['bold' => false]);
+        $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova để Công ty lập Hồ sơ Thẩm định giá tài sản gồm: ", ['bold' => false]);
         $textRun->addText($appraise_law, ['italic' => true]);
-        $listItemRun  = $section->addListItemRun(1, 'bullets', $indentFistLine);
-        $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address));
-        $listItemRun  = $section->addListItemRun(1, 'bullets', []);
-        $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
-        $listItemRun  = $section->addListItemRun(1, 'bullets', []);
-        $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
+        // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
+        // $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address));
+        // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
+        // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
+        // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
+        // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
+        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 1, [], 'bullets', []);
+        $section->addListItem("Họ tên, số điện thoại người cung cấp hồ sơ: ", 1, [], 'bullets', []);
+        $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 1, [], 'bullets', []);
+
         // 3
         $textRun = $section->addTextRun('Heading2');
-        $textRun->addText("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước");
+        $textRun->addText("Nguồn gốc tài sản (Nhà nước/ không phải thuộc Nhà nước): Không phải thuộc Nhà nước.");
         // 4
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời gian địa điểm và thông tin người liên hệ khảo sát hiện trạng tài sản: ");
