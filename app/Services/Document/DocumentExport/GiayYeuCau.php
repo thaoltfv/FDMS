@@ -488,6 +488,7 @@ class GiayYeuCau
         // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
         $indentFistLine = ['indentation' => ['firstLine' => 360]];
+        $indentPara = ['indentation' => ['left' => 360]];
         $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
         $cellRowContinue = array('vMerge' => 'continue');
         $cellColSpan = array('gridSpan' => 2, 'valign' => 'center');
@@ -543,7 +544,7 @@ class GiayYeuCau
         }
         if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
             $survey_time = date_create($certificate->survey_time);
-            $surveyTime =  'Ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+            $surveyTime =  'ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
         }
         // 1
         $textRun = $section->addTextRun('Heading2');
@@ -719,9 +720,9 @@ class GiayYeuCau
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
-        $section->addListItem("         - Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 1, [], 'bullets', []);
-        $section->addListItem("         - Họ tên, số điện thoại người cung cấp hồ sơ: ", 1, [], 'bullets', []);
-        $section->addListItem("         - Họ tên, số điện thoại người nhận hồ sơ: ", 1, [], 'bullets', []);
+        $section->addListItem("         - Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
+        $section->addListItem("         - Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', []);
+        $section->addListItem("         - Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', []);
 
         // 3
         $textRun = $section->addTextRun('Heading2');
@@ -729,7 +730,7 @@ class GiayYeuCau
         // 4
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời gian địa điểm và thông tin người liên hệ khảo sát hiện trạng tài sản: ");
-        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentFistLine);
+        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentPara);
         $section->addListItem("Họ tên người liên hệ: " .  $certificate->name_contact . '        Điện thoại: ' . $certificate->phone_contact, 0, [], 'bullets', []);
         // 5
         $textRun = $section->addTextRun('Heading2');
