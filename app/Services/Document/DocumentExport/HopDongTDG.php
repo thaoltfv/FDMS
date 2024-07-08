@@ -1288,7 +1288,6 @@ class HopDongTDG
                 'align' => JcTable::START,
                 'width' => 100 * 50,
                 'unit' => 'pct',
-                'indent' => 400,
 
             ]);
             $rowHeader = [
@@ -1317,7 +1316,7 @@ class HopDongTDG
             'align' => JcTable::START,
             'width' => 100 * 50,
             'unit' => 'pct',
-            'indent' => 400,
+
         ]);
 
 
