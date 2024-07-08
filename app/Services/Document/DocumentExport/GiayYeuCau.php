@@ -545,7 +545,7 @@ class GiayYeuCau
         }
         if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
             $survey_time = date_create($certificate->survey_time);
-            $surveyTime =  'ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+            $surveyTime = $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút, ' . 'ngày ' . $survey_time->format('d') . " tháng " . $survey_time->format('m') . " năm " . $survey_time->format('Y');
         }
         // 1
         $textRun = $section->addTextRun('Heading2');
@@ -731,7 +731,7 @@ class GiayYeuCau
         // 4
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời gian địa điểm và thông tin người liên hệ khảo sát hiện trạng tài sản: ");
-        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentPara);
+        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentPara);
         $section->addListItem("Họ tên người liên hệ: " .  $certificate->name_contact . '        Điện thoại: ' . $certificate->phone_contact, 0, [], 'bullets', []);
         // 5
         $textRun = $section->addTextRun('Heading2');
