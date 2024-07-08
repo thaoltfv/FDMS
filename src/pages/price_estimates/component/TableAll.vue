@@ -306,7 +306,7 @@ export default {
 		columns() {
 			let dataColumn = [
 				{
-					title: "Mã TSTĐ",
+					title: "Mã TSSB",
 					align: "center",
 					scopedSlots: { customRender: "id" },
 					dataIndex: "id",

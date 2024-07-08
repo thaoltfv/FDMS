@@ -285,6 +285,30 @@ navigations = [
 				routeName: "customer.index",
 				exact: true
 			},
+			{
+				id: "customer_group_first",
+				title: "Quản lý Phân cấp 1",
+				routeName: "customer_group_first.index",
+				exact: true
+			},
+			{
+				id: "customer_group_second",
+				title: "Quản lý Phân cấp 2",
+				routeName: "customer_group_second.index",
+				exact: true
+			},
+			{
+				id: "customer_group_third",
+				title: "Quản lý Phân cấp 3",
+				routeName: "customer_group_third.index",
+				exact: true
+			},
+			{
+				id: "customer_group_fourth",
+				title: "Quản lý Phân cấp 4",
+				routeName: "customer_group_fourth.index",
+				exact: true
+			},
 
 		],
 		customImage: false

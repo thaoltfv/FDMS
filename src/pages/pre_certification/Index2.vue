@@ -152,13 +152,19 @@
 							>
 						</b-dropdown>
 					</div>
-					<div class="col-12 col-md-6 col-xl-8">
-						<button-checkbox
+					<div class="col-12">
+						<DropdownFilter
+							:fromDate="form.fromDate"
+							:toDate="form.toDate"
+							class="mr-5"
+							@notifi-kanban="notifiKanban()"
+						/>
+						<!-- <button-checkbox
 							v-show="showFilter"
 							:options="statusOptions"
 							:value="selectedStatus"
 							@change="onChangeStatus"
-						/>
+						/> -->
 					</div>
 				</div>
 			</div>

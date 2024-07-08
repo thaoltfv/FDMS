@@ -1,21 +1,22 @@
 <template>
-	<div
-		class="detail_pre_certification row"
-		:style="isMobile ? { margin: '0' } : {}"
-	>
-		<div class="col-12" :style="isMobile ? { padding: '0' } : {}">
-			<div class="card">
-				<div class="card-title">
-					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">
-							{{ isMobile ? "Thông tin" : "Thông tin chung" }}
-						</h3>
-						<div class="row" style="display: flex; align-items: center">
-							<div class="color_content card-status-pre-certificate">
-								{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
-								<span>{{ statusDescription }}</span>
-							</div>
-							<!-- <a-dropdown v-if="showExportDocument && dataPC.status !== 1">
+	<b-overlay :show="showLoadingPrint" rounded="sm">
+		<div
+			class="detail_pre_certification row"
+			:style="isMobile ? { margin: '0' } : {}"
+		>
+			<div class="col-12" :style="isMobile ? { padding: '0' } : {}">
+				<div class="card">
+					<div class="card-title">
+						<div class="d-flex justify-content-between align-items-center">
+							<h3 class="title">
+								{{ isMobile ? "Thông tin" : "Thông tin chung" }}
+							</h3>
+							<div class="row" style="display: flex; align-items: center">
+								<div class="color_content card-status-pre-certificate">
+									{{ dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} |
+									<span>{{ statusDescription }}</span>
+								</div>
+								<!-- <a-dropdown v-if="showExportDocument && dataPC.status !== 1">
 								<a-button class="btn-export">
 									<a-icon type="download" />
 								</a-button>
@@ -28,421 +29,429 @@
 									</a-menu>
 								</template>
 							</a-dropdown> -->
-							<div
-								v-if="dataPC.certificate_id"
-								@click="handleDetailCertificate(dataPC.certificate_id)"
-								id="certificate_id"
-								class="ml-3 mr-4 arrowBox arrow-right"
-							>
-								<icon-base
-									name="nav_hstd_2"
-									width="20px"
-									height="20px"
-									class="item-icon svg-inline--fa"
-								/>
-								{{ `HTSD_${dataPC.certificate_id}` }}
-								<b-tooltip target="certificate_id" placement="top-right">{{
-									`Đã chuyển chính thức HTSD_${dataPC.certificate_id}`
-								}}</b-tooltip>
+								<div
+									v-if="dataPC.certificate_id"
+									@click="handleDetailCertificate(dataPC.certificate_id)"
+									id="certificate_id"
+									class="ml-3 mr-4 arrowBox arrow-right"
+								>
+									<icon-base
+										name="nav_hstd_2"
+										width="20px"
+										height="20px"
+										class="item-icon svg-inline--fa"
+									/>
+									{{ `HTSD_${dataPC.certificate_id}` }}
+									<b-tooltip target="certificate_id" placement="top-right">{{
+										`Đã chuyển chính thức HTSD_${dataPC.certificate_id}`
+									}}</b-tooltip>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div v-if="!isMobile" class="card-body card-info">
-					<div class="row justify-content-between">
-						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
-							<div class="detail_certificate_1 h-100">
-								<div class="d-flex container_content justify-content-between">
+					<div v-if="!isMobile" class="card-body card-info">
+						<div class="row justify-content-between">
+							<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+								<div class="detail_certificate_1 h-100">
+									<div class="d-flex container_content justify-content-between">
+										<div class="d-flex container_content">
+											<strong class="margin_content_inline">Khách hàng:</strong>
+											<p>{{ dataPC.petitioner_name }}</p>
+										</div>
+										<div
+											v-if="editInfo && edit"
+											@click="handleShowAppraiseInformation"
+											class="btn-edit"
+										>
+											<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+										</div>
+									</div>
+									<div class="row d-flex container_content">
+										<strong class="margin_content_inline"
+											>MST/CMND/CCCD/Passport:</strong
+										>
+										<p>{{ dataPC.petitioner_identity_card }}</p>
+										<strong class="margin_content_inline">Điện thoại:</strong>
+										<p>{{ dataPC.petitioner_phone }}</p>
+									</div>
+									<!-- <div class="d-flex container_content">
+											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{dataPC.petitioner_phone}}</p>
+										</div> -->
 									<div class="d-flex container_content">
-										<strong class="margin_content_inline">Khách hàng:</strong>
-										<p>{{ dataPC.petitioner_name }}</p>
+										<strong class="margin_content_inline">Địa chỉ:</strong>
+										<p>{{ dataPC.petitioner_address }}</p>
 									</div>
-									<div
-										v-if="editInfo && edit"
-										@click="handleShowAppraiseInformation"
-										class="btn-edit"
-									>
-										<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+									<div class="d-flex container_content">
+										<strong class="margin_content_inline"
+											>Mục đích thẩm định:</strong
+										><span id="appraise_purpose" class="text-left">{{
+											dataPC.appraise_purpose
+												? dataPC.appraise_purpose.name.length > 60
+													? dataPC.appraise_purpose.name.substring(60, 0) +
+													  "..."
+													: dataPC.appraise_purpose.name
+												: ""
+										}}</span>
+										<b-tooltip
+											v-if="dataPC.appraise_purpose"
+											target="appraise_purpose"
+											placement="top-right"
+											>{{ dataPC.appraise_purpose.name }}</b-tooltip
+										>
 									</div>
-								</div>
-								<div class="row d-flex container_content">
-									<strong class="margin_content_inline"
-										>MST/CMND/CCCD/Passport:</strong
-									>
-									<p>{{ dataPC.petitioner_identity_card }}</p>
-									<strong class="margin_content_inline">Điện thoại:</strong>
-									<p>{{ dataPC.petitioner_phone }}</p>
-								</div>
-								<!-- <div class="d-flex container_content">
-											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{dataPC.petitioner_phone}}</p>
-										</div> -->
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Địa chỉ:</strong>
-									<p>{{ dataPC.petitioner_address }}</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Mục đích thẩm định:</strong
-									><span id="appraise_purpose" class="text-left">{{
-										dataPC.appraise_purpose
-											? dataPC.appraise_purpose.name.length > 60
-												? dataPC.appraise_purpose.name.substring(60, 0) + "..."
-												: dataPC.appraise_purpose.name
-											: ""
-									}}</span>
-									<b-tooltip
-										v-if="dataPC.appraise_purpose"
-										target="appraise_purpose"
-										placement="top-right"
-										>{{ dataPC.appraise_purpose.name }}</b-tooltip
-									>
-								</div>
 
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Loại sơ bộ:</strong>
-									<p>
-										{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
-									</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Thời điểm sơ bộ:</strong
-									>
-									<p>
-										{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
-									</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline"
-										>Tổng phí dịch vụ:</strong
-									>
-									<p>
-										{{
-											dataPC.total_service_fee
-												? formatNumber(dataPC.total_service_fee)
-												: 0
-										}}đ
-									</p>
-								</div>
-								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Chiết khấu:</strong>
-									<p>
-										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
-									</p>
-								</div>
-								<div class="d-flex flex-column container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong>
-									<!-- <span id="pre_asset_name" class="text-left"
+									<div class="d-flex container_content">
+										<strong class="margin_content_inline">Loại sơ bộ:</strong>
+										<p>
+											{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
+										</p>
+									</div>
+									<div class="d-flex container_content">
+										<strong class="margin_content_inline"
+											>Thời điểm sơ bộ:</strong
+										>
+										<p>
+											{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+										</p>
+									</div>
+									<div class="d-flex container_content">
+										<strong class="margin_content_inline"
+											>Tổng phí dịch vụ:</strong
+										>
+										<p>
+											{{
+												dataPC.total_service_fee
+													? formatNumber(dataPC.total_service_fee)
+													: 0
+											}}đ
+										</p>
+									</div>
+									<div class="d-flex container_content">
+										<strong class="margin_content_inline">Chiết khấu:</strong>
+										<p>
+											{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
+										</p>
+									</div>
+									<div class="d-flex flex-column container_content">
+										<strong class="margin_content_inline">Ghi chú:</strong>
+										<!-- <span id="pre_asset_name" class="text-left"
 										>{{ // dataPC.pre_asset_name && dataPC.pre_asset_name.length
 										// > 25 ? dataPC.pre_asset_name.substring(25, 0) + "..." //
 										// : dataPC.pre_asset_name dataPC.pre_asset_name ?
 										dataPC.pre_asset_name.replace("\n", "<br />") : "" }}</span
 									> -->
-									<div
-										id="pre_asset_name"
-										class="text-left"
-										v-html="formattedText"
-									></div>
-									<!-- <b-tooltip target="pre_asset_name" placement="top-right">{{
+										<div
+											id="pre_asset_name"
+											class="text-left"
+											v-html="formattedText"
+										></div>
+										<!-- <b-tooltip target="pre_asset_name" placement="top-right">{{
 										dataPC.pre_asset_name
 									}}</b-tooltip> -->
-								</div>
-								<div
-									v-if="dataPC.cancel_reason_string"
-									class="d-flex container_content"
-								>
-									<strong class="margin_content_inline"
-										>Lý do hủy sơ bộ:</strong
+									</div>
+									<div
+										v-if="dataPC.cancel_reason_string"
+										class="d-flex container_content"
 									>
-									<p>
-										{{ dataPC.cancel_reason_string }}
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
-							<div class="row h-100">
-								<div class="col-12">
-									<div class="detail_certificate_2">
-										<div class="d-flex container_content">
-											<strong class="margin_content_inline"
-												>Nhóm đối tác:</strong
-											>
-											<p>
-												{{
-													dataPC.customer_group
-														? dataPC.customer_group.description
-														: ""
-												}}
-											</p>
-										</div>
-										<div class="d-flex container_content">
-											<strong class="margin_content_inline">Đối tác:</strong>
-											<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
-										</div>
-										<div class="d-flex container_content">
-											<strong class="margin_content_inline">Địa chỉ:</strong>
-											<p>
-												{{ dataPC.customer ? dataPC.customer.address : "" }}
-											</p>
-										</div>
-										<div class="d-flex container_content">
-											<strong class="margin_content_inline">Liên hệ:</strong>
-											<p>{{ dataPC.customer ? dataPC.customer.phone : "" }}</p>
-										</div>
+										<strong class="margin_content_inline"
+											>Lý do hủy sơ bộ:</strong
+										>
+										<p>
+											{{ dataPC.cancel_reason_string }}
+										</p>
 									</div>
 								</div>
-								<div class="col-12 mt-1 mt-lg-4 ">
-									<div class="detail_certificate_2">
-										<div
-											class="d-flex container_content justify-content-between"
-										>
-											<div class="d-flex">
+							</div>
+							<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+								<div class="row h-100">
+									<div class="col-12">
+										<div class="detail_certificate_2">
+											<div class="d-flex container_content">
 												<strong class="margin_content_inline"
-													>Nhân viên kinh doanh:</strong
+													>Nhóm đối tác:</strong
 												>
 												<p>
 													{{
-														dataPC.appraiser_sale
-															? dataPC.appraiser_sale.name
+														dataPC.customer_group
+															? dataPC.customer_group.description
 															: ""
 													}}
 												</p>
 											</div>
-											<div
-												v-if="
-													(editAppraiser && edit) ||
-														isBusinessManager ||
-														byPassAdmin
-												"
-												@click="handleShowAppraisal"
-												class="btn-edit"
-											>
-												<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+											<div class="d-flex container_content">
+												<strong class="margin_content_inline">Đối tác:</strong>
+												<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
+											</div>
+											<div class="d-flex container_content">
+												<strong class="margin_content_inline">Địa chỉ:</strong>
+												<p>
+													{{ dataPC.customer ? dataPC.customer.address : "" }}
+												</p>
+											</div>
+											<div class="d-flex container_content">
+												<strong class="margin_content_inline">Liên hệ:</strong>
+												<p>
+													{{ dataPC.customer ? dataPC.customer.phone : "" }}
+												</p>
 											</div>
 										</div>
-										<div class="d-flex container_content">
-											<strong class="margin_content_inline"
-												>Quản lý nghiệp vụ:</strong
+									</div>
+									<div class="col-12 mt-1 mt-lg-4 ">
+										<div class="detail_certificate_2">
+											<div
+												class="d-flex container_content justify-content-between"
 											>
-											<p>
-												{{
-													dataPC.appraiser_business_manager
-														? dataPC.appraiser_business_manager.name
-														: ""
-												}}
-											</p>
-										</div>
-										<div class="d-flex container_content">
-											<strong class="margin_content_inline"
-												>Chuyên viên thực hiện:</strong
-											>
-											<p>
-												{{
-													dataPC.appraiser_perform
-														? dataPC.appraiser_perform.name
-														: ""
-												}}
-											</p>
+												<div class="d-flex">
+													<strong class="margin_content_inline"
+														>Nhân viên kinh doanh:</strong
+													>
+													<p>
+														{{
+															dataPC.appraiser_sale
+																? dataPC.appraiser_sale.name
+																: ""
+														}}
+													</p>
+												</div>
+												<div
+													v-if="
+														(editAppraiser && edit) ||
+															isBusinessManager ||
+															byPassAdmin
+													"
+													@click="handleShowAppraisal"
+													class="btn-edit"
+												>
+													<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+												</div>
+											</div>
+											<div class="d-flex container_content">
+												<strong class="margin_content_inline"
+													>Quản lý nghiệp vụ:</strong
+												>
+												<p>
+													{{
+														dataPC.appraiser_business_manager
+															? dataPC.appraiser_business_manager.name
+															: ""
+													}}
+												</p>
+											</div>
+											<div class="d-flex container_content">
+												<strong class="margin_content_inline"
+													>Chuyên viên thực hiện:</strong
+												>
+												<p>
+													{{
+														dataPC.appraiser_perform
+															? dataPC.appraiser_perform.name
+															: ""
+													}}
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div v-else class="card-body card-info">
-					<div class="row justify-content-between">
-						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
-							<div class="detail_certificate_1 h-100">
-								<div class="d-flex justify-content-between">
-									<div class="d-flex container_content flex-column">
-										<strong class="margin_content_inline">Khách hàng:</strong>
-										<p>{{ dataPC.petitioner_name }}</p>
+					<div v-else class="card-body card-info">
+						<div class="row justify-content-between">
+							<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+								<div class="detail_certificate_1 h-100">
+									<div class="d-flex justify-content-between">
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Khách hàng:</strong>
+											<p>{{ dataPC.petitioner_name }}</p>
+										</div>
+										<div
+											v-if="editInfo && edit"
+											@click="handleShowAppraiseInformation"
+											class="btn-edit d-flex align-items-start"
+										>
+											<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+										</div>
 									</div>
-									<div
-										v-if="editInfo && edit"
-										@click="handleShowAppraiseInformation"
-										class="btn-edit d-flex align-items-start"
-									>
-										<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+									<div class="row d-flex container_content flex-column">
+										<strong class="margin_content_inline"
+											>MST/CMND/CCCD/Passport:</strong
+										>
+										<p>{{ dataPC.petitioner_identity_card }}</p>
+										<strong class="margin_content_inline">Điện thoại:</strong>
+										<p>{{ dataPC.petitioner_phone }}</p>
 									</div>
-								</div>
-								<div class="row d-flex container_content flex-column">
-									<strong class="margin_content_inline"
-										>MST/CMND/CCCD/Passport:</strong
-									>
-									<p>{{ dataPC.petitioner_identity_card }}</p>
-									<strong class="margin_content_inline">Điện thoại:</strong>
-									<p>{{ dataPC.petitioner_phone }}</p>
-								</div>
-								<!-- <div class="d-flex container_content">
+									<!-- <div class="d-flex container_content">
 											<strong class="margin_content_inline">Điện thoại:</strong> <p>{{dataPC.petitioner_phone}}</p>
 										</div> -->
-								<div class="d-flex container_content flex-column">
-									<strong class="margin_content_inline">Địa chỉ:</strong>
-									<p>{{ dataPC.petitioner_address }}</p>
-								</div>
-								<div class="d-flex container_content flex-column">
-									<strong class="margin_content_inline"
-										>Mục đích thẩm định:</strong
-									><span id="appraise_purpose" class="text-left">{{
-										dataPC.appraise_purpose ? dataPC.appraise_purpose.name : ""
-									}}</span>
-									<b-tooltip
-										v-if="dataPC.appraise_purpose"
-										target="appraise_purpose"
-										placement="top-right"
-										>{{ dataPC.appraise_purpose.name }}</b-tooltip
-									>
-								</div>
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline">Địa chỉ:</strong>
+										<p>{{ dataPC.petitioner_address }}</p>
+									</div>
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline"
+											>Mục đích thẩm định:</strong
+										><span id="appraise_purpose" class="text-left">{{
+											dataPC.appraise_purpose
+												? dataPC.appraise_purpose.name
+												: ""
+										}}</span>
+										<b-tooltip
+											v-if="dataPC.appraise_purpose"
+											target="appraise_purpose"
+											placement="top-right"
+											>{{ dataPC.appraise_purpose.name }}</b-tooltip
+										>
+									</div>
 
-								<div class="d-flex container_content flex-column">
-									<strong class="margin_content_inline">Loại sơ bộ:</strong>
-									<p>
-										{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
-									</p>
-								</div>
-								<div class="d-flex container_content flex-column">
-									<strong class="margin_content_inline"
-										>Thời điểm sơ bộ:</strong
-									>
-									<p>
-										{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
-									</p>
-								</div>
-								<div class="d-flex container_content flex-column">
-									<strong class="margin_content_inline"
-										>Tổng phí dịch vụ:</strong
-									>
-									<p>
-										{{
-											dataPC.total_service_fee
-												? formatNumber(dataPC.total_service_fee)
-												: 0
-										}}đ
-									</p>
-								</div>
-								<div class="d-flex container_content flex-column">
-									<strong class="margin_content_inline">Chiết khấu:</strong>
-									<p>
-										{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
-									</p>
-								</div>
-								<div class="d-flex flex-column container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong>
-									<!-- <span id="pre_asset_name" class="text-left"
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline">Loại sơ bộ:</strong>
+										<p>
+											{{ dataPC.pre_type ? dataPC.pre_type.description : "" }}
+										</p>
+									</div>
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline"
+											>Thời điểm sơ bộ:</strong
+										>
+										<p>
+											{{ dataPC.pre_date ? formatDate(dataPC.pre_date) : "" }}
+										</p>
+									</div>
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline"
+											>Tổng phí dịch vụ:</strong
+										>
+										<p>
+											{{
+												dataPC.total_service_fee
+													? formatNumber(dataPC.total_service_fee)
+													: 0
+											}}đ
+										</p>
+									</div>
+									<div class="d-flex container_content flex-column">
+										<strong class="margin_content_inline">Chiết khấu:</strong>
+										<p>
+											{{ dataPC.commission_fee ? dataPC.commission_fee : 0 }}%
+										</p>
+									</div>
+									<div class="d-flex flex-column container_content">
+										<strong class="margin_content_inline">Ghi chú:</strong>
+										<!-- <span id="pre_asset_name" class="text-left"
 										>{{ // dataPC.pre_asset_name && dataPC.pre_asset_name.length
 										// > 25 ? dataPC.pre_asset_name.substring(25, 0) + "..." //
 										// : dataPC.pre_asset_name dataPC.pre_asset_name ?
 										dataPC.pre_asset_name.replace("\n", "<br />") : "" }}</span
 									> -->
-									<div
-										id="pre_asset_name"
-										class="text-left"
-										v-html="formattedText"
-									></div>
-									<!-- <b-tooltip target="pre_asset_name" placement="top-right">{{
+										<div
+											id="pre_asset_name"
+											class="text-left"
+											v-html="formattedText"
+										></div>
+										<!-- <b-tooltip target="pre_asset_name" placement="top-right">{{
 										dataPC.pre_asset_name
 									}}</b-tooltip> -->
-								</div>
-								<div
-									v-if="dataPC.cancel_reason_string"
-									class="d-flex container_content"
-								>
-									<strong class="margin_content_inline"
-										>Lý do hủy sơ bộ:</strong
+									</div>
+									<div
+										v-if="dataPC.cancel_reason_string"
+										class="d-flex container_content"
 									>
-									<p>
-										{{ dataPC.cancel_reason_string }}
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
-							<div class="row h-100">
-								<div class="col-12">
-									<div class="detail_certificate_2">
-										<div class="d-flex container_content flex-column">
-											<strong class="margin_content_inline"
-												>Nhóm đối tác:</strong
-											>
-											<p>
-												{{
-													dataPC.customer_group
-														? dataPC.customer_group.description
-														: ""
-												}}
-											</p>
-										</div>
-										<div class="d-flex container_content flex-column">
-											<strong class="margin_content_inline">Đối tác:</strong>
-											<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
-										</div>
-										<div class="d-flex container_content flex-column">
-											<strong class="margin_content_inline">Địa chỉ:</strong>
-											<p>
-												{{ dataPC.customer ? dataPC.customer.address : "" }}
-											</p>
-										</div>
-										<div class="d-flex container_content flex-column">
-											<strong class="margin_content_inline">Liên hệ:</strong>
-											<p>{{ dataPC.customer ? dataPC.customer.phone : "" }}</p>
-										</div>
+										<strong class="margin_content_inline"
+											>Lý do hủy sơ bộ:</strong
+										>
+										<p>
+											{{ dataPC.cancel_reason_string }}
+										</p>
 									</div>
 								</div>
-								<div class="col-12 mt-1 mt-lg-4 ">
-									<div class="detail_certificate_2">
-										<div
-											class="d-flex container_content justify-content-between "
-										>
-											<div class="d-flex flex-column">
+							</div>
+							<div class="col-md-12 col-lg-6 mt-1 d-grid h-100">
+								<div class="row h-100">
+									<div class="col-12">
+										<div class="detail_certificate_2">
+											<div class="d-flex container_content flex-column">
 												<strong class="margin_content_inline"
-													>Nhân viên kinh doanh:</strong
+													>Nhóm đối tác:</strong
 												>
 												<p>
 													{{
-														dataPC.appraiser_sale
-															? dataPC.appraiser_sale.name
+														dataPC.customer_group
+															? dataPC.customer_group.description
 															: ""
 													}}
 												</p>
 											</div>
-											<div
-												v-if="
-													(editAppraiser && edit) ||
-														isBusinessManager ||
-														byPassAdmin
-												"
-												@click="handleShowAppraisal"
-												class="btn-edit d-flex align-items-start"
-											>
-												<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+											<div class="d-flex container_content flex-column">
+												<strong class="margin_content_inline">Đối tác:</strong>
+												<p>{{ dataPC.customer ? dataPC.customer.name : "" }}</p>
+											</div>
+											<div class="d-flex container_content flex-column">
+												<strong class="margin_content_inline">Địa chỉ:</strong>
+												<p>
+													{{ dataPC.customer ? dataPC.customer.address : "" }}
+												</p>
+											</div>
+											<div class="d-flex container_content flex-column">
+												<strong class="margin_content_inline">Liên hệ:</strong>
+												<p>
+													{{ dataPC.customer ? dataPC.customer.phone : "" }}
+												</p>
 											</div>
 										</div>
-										<div class="d-flex container_content flex-column">
-											<strong class="margin_content_inline"
-												>Quản lý nghiệp vụ:</strong
+									</div>
+									<div class="col-12 mt-1 mt-lg-4 ">
+										<div class="detail_certificate_2">
+											<div
+												class="d-flex container_content justify-content-between "
 											>
-											<p>
-												{{
-													dataPC.appraiser_business_manager
-														? dataPC.appraiser_business_manager.name
-														: ""
-												}}
-											</p>
-										</div>
-										<div class="d-flex container_content flex-column">
-											<strong class="margin_content_inline"
-												>Chuyên viên thực hiện:</strong
-											>
-											<p>
-												{{
-													dataPC.appraiser_perform
-														? dataPC.appraiser_perform.name
-														: ""
-												}}
-											</p>
+												<div class="d-flex flex-column">
+													<strong class="margin_content_inline"
+														>Nhân viên kinh doanh:</strong
+													>
+													<p>
+														{{
+															dataPC.appraiser_sale
+																? dataPC.appraiser_sale.name
+																: ""
+														}}
+													</p>
+												</div>
+												<div
+													v-if="
+														(editAppraiser && edit) ||
+															isBusinessManager ||
+															byPassAdmin
+													"
+													@click="handleShowAppraisal"
+													class="btn-edit d-flex align-items-start"
+												>
+													<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+												</div>
+											</div>
+											<div class="d-flex container_content flex-column">
+												<strong class="margin_content_inline"
+													>Quản lý nghiệp vụ:</strong
+												>
+												<p>
+													{{
+														dataPC.appraiser_business_manager
+															? dataPC.appraiser_business_manager.name
+															: ""
+													}}
+												</p>
+											</div>
+											<div class="d-flex container_content flex-column">
+												<strong class="margin_content_inline"
+													>Chuyên viên thực hiện:</strong
+												>
+												<p>
+													{{
+														dataPC.appraiser_perform
+															? dataPC.appraiser_perform.name
+															: ""
+													}}
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -451,136 +460,140 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<PaymentPreCertificateHistories @updatePayments="updatePayments" />
-		<div class="btn-history">
-			<button class="btn btn-orange btn-history" @click="showDrawer">
-				<img src="@/assets/icons/ic_log_history.svg" alt="history" />
-			</button>
-		</div>
-		<a-drawer
-			v-if="!isMobile"
-			width="400"
-			title="Lịch sử hoạt động"
-			placement="right"
-			:visible="visible"
-			@close="onClose"
-		>
-			<a-timeline>
-				<a-timeline-item
-					v-for="(item, index) in historyList"
-					:key="index"
-					color="red"
-				>
-					<template #dot>
-						<img
-							class="dot-image"
-							:src="
-								item.causer && item.causer.image
-									? item.causer.image
-									: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
-							"
-							style="width: 2em"
-						/>
-					</template>
-					<p>
-						<strong>{{
-							item.causer && item.causer.name
-								? item.causer.name
-								: "Không xác	định"
-						}}</strong>
-					</p>
-					<p>{{ item.description }}</p>
-					<p
-						:class="`${getHistoryTextColor[index]}`"
-						v-if="item.properties.reason_id && item.reason_description"
+			<PaymentPreCertificateHistories
+				v-if="!isMobile"
+				@updatePayments="updatePayments"
+			/>
+			<div class="btn-history">
+				<button class="btn btn-orange btn-history" @click="showDrawer">
+					<img src="@/assets/icons/ic_log_history.svg" alt="history" />
+				</button>
+			</div>
+			<a-drawer
+				v-if="!isMobile"
+				width="400"
+				title="Lịch sử hoạt động"
+				placement="right"
+				:visible="visible"
+				@close="onClose"
+			>
+				<a-timeline>
+					<a-timeline-item
+						v-for="(item, index) in historyList"
+						:key="index"
+						color="red"
 					>
-						Lí do : {{ item.reason_description }}
-					</p>
-					<p
-						:class="`${getHistoryTextColor[index]}`"
-						v-if="item.properties.note"
-					>
-						Ghi chú : {{ item.properties.note }}
-					</p>
-					<p>{{ formatDateTime(item.updated_at) }}</p>
-				</a-timeline-item>
-			</a-timeline>
-		</a-drawer>
-		<a-drawer
-			v-else
-			width="100%"
-			title="Lịch sử hoạt động"
-			placement="right"
-			:visible="visible"
-			@close="onClose"
-		>
-			<a-timeline style="padding-bottom: 10px">
-				<a-timeline-item
-					v-for="(item, index) in historyList"
-					:key="index"
-					color="red"
-				>
-					<template #dot>
-						<img
-							class="dot-image"
-							:src="
-								item.causer && item.causer.image
-									? item.causer.image
-									: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
-							"
-							style="width: 2em"
-						/>
-					</template>
-					<p>
-						<strong>{{
-							item.causer && item.causer.name
-								? item.causer.name
-								: "Không xác	định"
-						}}</strong>
-					</p>
-					<p>{{ item.description }}</p>
-					<p
-						:class="`${getHistoryTextColor[index]}`"
-						v-if="item.properties.reason_id && item.reason_description"
-					>
-						Lí do : {{ item.reason_description }}
-					</p>
-					<p
-						:class="`${getHistoryTextColor[index]}`"
-						v-if="item.properties.note"
-					>
-						Ghi chú : {{ item.properties.note }}
-					</p>
-					<p>{{ formatDateTime(item.updated_at) }}</p>
-				</a-timeline-item>
-			</a-timeline>
-		</a-drawer>
-		<div
-			v-if="dataPC.id && dataPC.status >= 2 && dataPC.status != 8"
-			class="col-12"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<div class="card">
-				<div class="card-title">
-					<div class="d-flex justify-content-between align-items-center">
-						<div class="row d-flex justify-content-between align-items-center">
-							<h3 class="title">Kết quả sơ bộ</h3>
-						</div>
-						<div
-							v-if="
-								dataPC.price_estimates.length > 0 &&
-									allowEditFile.result &&
-									edit
-							"
-							@click="showPriceEstimateListDialog = true"
-							class="btn-edit"
+						<template #dot>
+							<img
+								class="dot-image"
+								:src="
+									item.causer && item.causer.image
+										? item.causer.image
+										: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
+								"
+								style="width: 2em"
+							/>
+						</template>
+						<p>
+							<strong>{{
+								item.causer && item.causer.name
+									? item.causer.name
+									: "Không xác	định"
+							}}</strong>
+						</p>
+						<p>{{ item.description }}</p>
+						<p
+							:class="`${getHistoryTextColor[index]}`"
+							v-if="item.properties.reason_id && item.reason_description"
 						>
-							<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+							Lí do : {{ item.reason_description }}
+						</p>
+						<p
+							:class="`${getHistoryTextColor[index]}`"
+							v-if="item.properties.note"
+						>
+							Ghi chú : {{ item.properties.note }}
+						</p>
+						<p>{{ formatDateTime(item.updated_at) }}</p>
+					</a-timeline-item>
+				</a-timeline>
+			</a-drawer>
+			<a-drawer
+				v-else
+				width="100%"
+				title="Lịch sử hoạt động"
+				placement="right"
+				:visible="visible"
+				@close="onClose"
+			>
+				<a-timeline style="padding-bottom: 10px">
+					<a-timeline-item
+						v-for="(item, index) in historyList"
+						:key="index"
+						color="red"
+					>
+						<template #dot>
+							<img
+								class="dot-image"
+								:src="
+									item.causer && item.causer.image
+										? item.causer.image
+										: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
+								"
+								style="width: 2em"
+							/>
+						</template>
+						<p>
+							<strong>{{
+								item.causer && item.causer.name
+									? item.causer.name
+									: "Không xác	định"
+							}}</strong>
+						</p>
+						<p>{{ item.description }}</p>
+						<p
+							:class="`${getHistoryTextColor[index]}`"
+							v-if="item.properties.reason_id && item.reason_description"
+						>
+							Lí do : {{ item.reason_description }}
+						</p>
+						<p
+							:class="`${getHistoryTextColor[index]}`"
+							v-if="item.properties.note"
+						>
+							Ghi chú : {{ item.properties.note }}
+						</p>
+						<p>{{ formatDateTime(item.updated_at) }}</p>
+					</a-timeline-item>
+				</a-timeline>
+			</a-drawer>
+			<div
+				v-if="dataPC.id && dataPC.status >= 2 && dataPC.status != 8"
+				class="col-12"
+				:style="isMobile ? { padding: '0' } : {}"
+			>
+				<div class="card">
+					<div class="card-title">
+						<div class="d-flex justify-content-between align-items-center">
+							<div
+								class="row d-flex justify-content-between align-items-center"
+							>
+								<h3 class="title">Kết quả sơ bộ</h3>
+							</div>
+							<div
+								v-if="
+									dataPC.price_estimates.length > 0 &&
+										allowEditFile.result &&
+										edit
+								"
+								@click="showPriceEstimateListDialog = true"
+								class="btn-edit"
+							>
+								<img src="@/assets/icons/ic_edit_3.svg" alt="add" />
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- <div class="card-body card-info">
+					<!-- <div class="card-body card-info">
 					<div class="row">
 						<div class="col-12 mt-2 table-wrapper">
 							<a-table
@@ -617,98 +630,121 @@
 					type="Result"
 					:allow-edit="false"
 				/> -->
-				<div class="card-body card-info">
-					<div class="row">
-						<div
-							v-if="
-								dataPC.price_estimates.length === 0 &&
-									dataPC.appraiser_perform &&
-									dataPC.status === 2 &&
-									(edit || add) &&
-									user_id === dataPC.appraiser_perform.user_id
-							"
-							class="col-12 d-flex mt-2 justify-content-center"
-						>
-							<button
-								class="btn btn_list_appraise-orange text-nowrap mr-3"
-								@click.prevent="handleShowAppraiseList"
+					<div class="card-body card-info">
+						<div class="row">
+							<div
+								v-if="
+									dataPC.price_estimates.length === 0 &&
+										dataPC.appraiser_perform &&
+										dataPC.status === 2 &&
+										(edit || add) &&
+										user_id === dataPC.appraiser_perform.user_id
+								"
+								class="col-12 d-flex mt-2 justify-content-center"
 							>
-								Chọn tài sản sơ bộ
-							</button>
-						</div>
-						<div class="col-12" v-if="checkNoticeMessage()">
-							<div class="infor-box">
-								<svg
-									style="margin-right: 1rem"
-									width="12"
-									height="13"
-									viewBox="0 0 12 13"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
+								<button
+									class="btn btn_list_appraise-orange text-nowrap mr-3"
+									@click.prevent="handleShowAppraiseList"
 								>
-									<path
-										d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z"
-										fill="#007EC6"
-									/>
-								</svg>
-								Hồ sơ chưa khai báo thông tin tài sản sơ bộ
+									Chọn tài sản sơ bộ
+								</button>
 							</div>
-						</div>
-						<div
-							v-if="dataPC.price_estimates.length > 0"
-							class="col-12 mt-2 table-wrapper"
-						>
-							<a-table
-								:columns="columnAssets"
-								:data-source="dataPC.price_estimates"
-								table-layout="top"
-								class="table_appraise_list"
-								:rowKey="record => record.id"
-							>
-								<template slot="asset" slot-scope="asset">
-									<p :id="asset.id" class="text-none mb-0">
-										{{ asset.full_address }}
-									</p>
-									<!-- <b-tooltip :target="(asset.id).toString()">{{asset.name}}</b-tooltip> -->
-								</template>
-
-								<template slot="version" slot-scope="version">
-									<p class="text-none mb-0">{{ version }}</p>
-								</template>
-								<template slot="area" slot-scope="area">
-									<p class="text-none mb-0">
-										{{ area ? formatNumber(area) : 0 }} m <sup>2</sup>
-									</p>
-								</template>
-								<template slot="price" slot-scope="price">
-									<p class="text-none mb-0">
-										{{ price ? formatNumber(price) : 0 }} đ
-									</p>
-								</template>
-								<template slot="asset_type" slot-scope="asset_type">
-									<p class="text-none mb-0">
-										{{ asset_type ? formatCapitalize(asset_type) : "" }}
-									</p>
-								</template>
-								<template slot="data" slot-scope="data">
-									<div
-										:style="isMobile ? { 'margin-top': '35px' } : {}"
-										class="d-flex flex-column align-items-center"
+							<div class="col-12" v-if="checkNoticeMessage()">
+								<div class="infor-box">
+									<svg
+										style="margin-right: 1rem"
+										width="12"
+										height="13"
+										viewBox="0 0 12 13"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
 									>
-										<button
-											class="link-detail text-none mb-0"
-											@click.prevent="handleDetail(data)"
-										>
-											{{
-												`${showAcronym(data.asset_type.dictionary_acronym)}_` +
-													data.price_estimate_id
-											}}
-										</button>
+										<path
+											d="M12 6.64429C12 9.95873 9.31348 12.6443 6 12.6443C2.68652 12.6443 0 9.95873 0 6.64429C0 3.33178 2.68652 0.644287 6 0.644287C9.31348 0.644287 12 3.33178 12 6.64429ZM6 7.85396C5.38536 7.85396 4.8871 8.35223 4.8871 8.96687C4.8871 9.5815 5.38536 10.0798 6 10.0798C6.61464 10.0798 7.1129 9.5815 7.1129 8.96687C7.1129 8.35223 6.61464 7.85396 6 7.85396ZM4.9434 3.85366L5.12286 7.14398C5.13126 7.29795 5.25856 7.41848 5.41275 7.41848H6.58725C6.74144 7.41848 6.86874 7.29795 6.87714 7.14398L7.0566 3.85366C7.06568 3.68735 6.93327 3.54751 6.76672 3.54751H5.23326C5.06671 3.54751 4.93432 3.68735 4.9434 3.85366Z"
+											fill="#007EC6"
+										/>
+									</svg>
+									Hồ sơ chưa khai báo thông tin tài sản sơ bộ
+								</div>
+							</div>
+							<div
+								v-if="dataPC.price_estimates.length > 0"
+								class="col-12 mt-2 table-wrapper"
+							>
+								<a-table
+									:columns="columnAssets"
+									:data-source="dataPC.price_estimates"
+									table-layout="top"
+									class="table_appraise_list"
+									:rowKey="record => record.id"
+								>
+									<template slot="asset" slot-scope="asset">
+										<p :id="asset.id" class="text-none mb-0">
+											{{ asset.full_address }}
+										</p>
+										<!-- <b-tooltip :target="(asset.id).toString()">{{asset.name}}</b-tooltip> -->
+									</template>
 
+									<template slot="version" slot-scope="version">
+										<p class="text-none mb-0">{{ version }}</p>
+									</template>
+									<template slot="area" slot-scope="area">
+										<p class="text-none mb-0">
+											{{ area ? formatNumber(area) : 0 }} m <sup>2</sup>
+										</p>
+									</template>
+									<template slot="price" slot-scope="price">
+										<p class="text-none mb-0">
+											{{ price ? formatNumber(price) : 0 }} đ
+										</p>
+									</template>
+									<template slot="asset_type" slot-scope="asset_type">
+										<p class="text-none mb-0">
+											{{ asset_type ? formatCapitalize(asset_type) : "" }}
+										</p>
+									</template>
+									<template slot="data" slot-scope="data">
+										<div
+											:style="isMobile ? { 'margin-top': '35px' } : {}"
+											class="d-flex flex-column align-items-center"
+										>
+											<button
+												v-if="!isMobile"
+												class="link-detail text-none mb-0"
+												@click.prevent="handleDetail(data)"
+											>
+												{{
+													`${showAcronym(
+														data.asset_type.dictionary_acronym
+													)}_` + data.price_estimate_id
+												}}
+											</button>
+											<button v-else class="link-detail-mobile text-none mb-0">
+												{{
+													`${showAcronym(
+														data.asset_type.dictionary_acronym
+													)}_` + data.price_estimate_id
+												}}
+											</button>
+
+											<button
+												v-if="isMobile"
+												class="btn btn-orange btn-print btn-extra"
+												@click="handlePrint(data.price_estimate_id)"
+											>
+												<!-- <font-awesome-icon icon="print" /> -->
+												<img
+													src="@/assets/icons/ic_printer_white.svg"
+													alt="print"
+												/>
+											</button>
+										</div>
+									</template>
+									<template slot="action" slot-scope="text, record">
 										<button
-											v-if="isMobile"
+											v-if="!isMobile"
 											class="btn btn-orange btn-print btn-extra"
-											@click="handlePrint(data.price_estimate_id)"
+											@click="handlePrint(record.price_estimate_id)"
 										>
 											<!-- <font-awesome-icon icon="print" /> -->
 											<img
@@ -716,44 +752,30 @@
 												alt="print"
 											/>
 										</button>
+									</template>
+								</a-table>
+							</div>
+							<div
+								v-if="dataPC.price_estimates.length > 0"
+								class="d-flex col-12 justify-content-end mt-3"
+							>
+								<span class="total mt-1">Tổng cộng</span>
+								<div class="d-flex container_total justify-content-between">
+									<div>
+										{{
+											totalPricePriceEstimate
+												? formatNumber(totalPricePriceEstimate)
+												: 0
+										}}
 									</div>
-								</template>
-								<template slot="action" slot-scope="text, record">
-									<button
-										v-if="!isMobile"
-										class="btn btn-orange btn-print btn-extra"
-										@click="handlePrint(record.price_estimate_id)"
-									>
-										<!-- <font-awesome-icon icon="print" /> -->
-										<img
-											src="@/assets/icons/ic_printer_white.svg"
-											alt="print"
-										/>
-									</button>
-								</template>
-							</a-table>
-						</div>
-						<div
-							v-if="dataPC.price_estimates.length > 0"
-							class="d-flex col-12 justify-content-end mt-3"
-						>
-							<span class="total mt-1">Tổng cộng</span>
-							<div class="d-flex container_total justify-content-between">
-								<div>
-									{{
-										totalPricePriceEstimate
-											? formatNumber(totalPricePriceEstimate)
-											: 0
-									}}
+									<div class="ml-1">VNĐ</div>
 								</div>
-								<div class="ml-1">VNĐ</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- <div
+			<!-- <div
 			v-if="dataPC.id && showExportDocument && dataPC.status !== 1"
 			class="col-12"
 			:style="isMobile ? { padding: '0' } : {}"
@@ -767,109 +789,125 @@
 				:toast="$toast"
 			/>
 		</div> -->
-		<div
-			v-if="dataPC.id"
-			class="col-12"
-			:style="isMobile ? { padding: '0' } : {}"
-		>
-			<OtherFile
-				:type="'Appendix'"
-				:allow-edit="allowEditFile.appendix"
-				:from-component="'Detail'"
+			<div
+				v-if="dataPC.id"
+				class="col-12"
+				:style="isMobile ? { padding: '0' } : {}"
+			>
+				<OtherFile
+					:type="'Appendix'"
+					:allow-edit="allowEditFile.appendix"
+					:from-component="'Detail'"
+				/>
+			</div>
+
+			<Footer
+				v-if="jsonConfig && profile && dataPC && dataPC.id"
+				:style="isMobile ? {} : {}"
+				:key="dataPC.status"
+				:form="dataPC"
+				:jsonConfig="jsonConfig"
+				:status="dataPC.status"
+				:profile="profile"
+				:idData="dataPC.id"
+				:checkVersion="checkVersion"
+				:certificateId="dataPC.certificate_id"
+				@handleFooterAccept="handleFooterAccept"
+				@handleFooterRedistributeRecord="handleFooterRedistributeRecord"
+				@handleEdit="handleEdit"
+				@onCancel="onCancel"
+				@viewAppraiseListVersion="viewAppraiseListVersion"
+			/>
+			<ModalPCAppraisal
+				:key="key_render_appraisal"
+				v-if="showAppraisalDialog"
+				@cancel="showAppraisalDialog = false"
+				@updateAppraisal="updateAppraisal"
+			/>
+
+			<ModalPCAppraiseInfomation
+				v-if="showAppraiseInformationDialog"
+				@cancel="showAppraiseInformationDialog = false"
+				@updateAppraiseInformation="updateAppraiseInformation"
+			/>
+			<ModalViewDocument
+				v-if="isShowPrint"
+				@cancel="isShowPrint = false"
+				:filePrint="filePrint"
+				:title="title"
+			/>
+			<ModalDelete
+				v-if="openModalDelete"
+				@cancel="openModalDelete = false"
+				@action="handleDelete"
+			/>
+			<ModalNotificationWithAssign
+				v-if="isHandleAction"
+				@cancel="isHandleAction = false"
+				:notification="
+					message == 'Từ chối' ||
+					message == 'Khôi phục' ||
+					message == 'Hủy' ||
+					message == 'Phân lại'
+						? `Bạn có muốn '${message}' hồ sơ này ${
+								message == 'Phân lại'
+									? ` ở bước '` + statusDescription + `' `
+									: ''
+						  }? `
+						: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
+				"
+				workflowName="ycsbConfig"
+				:status_text="message"
+				:status_next="targetStatus"
+				:dataHSTD="dataPC"
+				:appraiser="appraiserChangeStage"
+				@action="handleAction2"
+			/>
+
+			<ModalDelete
+				v-if="deleteUploadDocument"
+				@cancel="deleteUploadDocument = false"
+				@action="deleteDocument"
+			/>
+			<ModalRequireForStage3
+				v-if="dialogRequireForStage3"
+				:notification="
+					`Bạn có muốn chuyển yêu cầu này sang trạng thái 'Định giá sơ bộ'?`
+				"
+				@cancel="dialogRequireForStage3 = false"
+			/>
+
+			<ModalPriceEstimateList
+				v-if="showPriceEstimateListDialog"
+				:data="dataPC"
+				:idData="dataPC.id"
+				@updatePriceEstimateList="updatePriceEstimateList"
+				@cancel="showPriceEstimateListDialog = false"
+			/>
+
+			<ModalPrintEstimateAssets
+				v-if="openPrint"
+				@cancel="openPrint = false"
+				:data="priceEstimates"
+				:isApartment="miscVariable.isApartment"
 			/>
 		</div>
-
-		<Footer
-			v-if="jsonConfig && profile && dataPC && dataPC.id"
-			:style="isMobile ? {} : {}"
-			:key="dataPC.status"
-			:form="dataPC"
-			:jsonConfig="jsonConfig"
-			:status="dataPC.status"
-			:profile="profile"
-			:idData="dataPC.id"
-			:checkVersion="checkVersion"
-			:certificateId="dataPC.certificate_id"
-			@handleFooterAccept="handleFooterAccept"
-			@handleFooterRedistributeRecord="handleFooterRedistributeRecord"
-			@handleEdit="handleEdit"
-			@onCancel="onCancel"
-			@viewAppraiseListVersion="viewAppraiseListVersion"
-		/>
-		<ModalPCAppraisal
-			:key="key_render_appraisal"
-			v-if="showAppraisalDialog"
-			@cancel="showAppraisalDialog = false"
-			@updateAppraisal="updateAppraisal"
-		/>
-
-		<ModalPCAppraiseInfomation
-			v-if="showAppraiseInformationDialog"
-			@cancel="showAppraiseInformationDialog = false"
-			@updateAppraiseInformation="updateAppraiseInformation"
-		/>
-		<ModalViewDocument
-			v-if="isShowPrint"
-			@cancel="isShowPrint = false"
-			:filePrint="filePrint"
-			:title="title"
-		/>
-		<ModalDelete
-			v-if="openModalDelete"
-			@cancel="openModalDelete = false"
-			@action="handleDelete"
-		/>
-		<ModalNotificationWithAssign
-			v-if="isHandleAction"
-			@cancel="isHandleAction = false"
-			:notification="
-				message == 'Từ chối' ||
-				message == 'Khôi phục' ||
-				message == 'Hủy' ||
-				message == 'Phân lại'
-					? `Bạn có muốn '${message}' hồ sơ này ${
-							message == 'Phân lại'
-								? ` ở bước '` + statusDescription + `' `
-								: ''
-					  }? `
-					: `Bạn có muốn chuyển hồ sơ này sang trạng thái`
-			"
-			workflowName="ycsbConfig"
-			:status_text="message"
-			:status_next="targetStatus"
-			:dataHSTD="dataPC"
-			:appraiser="appraiserChangeStage"
-			@action="handleAction2"
-		/>
-
-		<ModalDelete
-			v-if="deleteUploadDocument"
-			@cancel="deleteUploadDocument = false"
-			@action="deleteDocument"
-		/>
-		<ModalRequireForStage3
-			v-if="dialogRequireForStage3"
-			:notification="
-				`Bạn có muốn chuyển yêu cầu này sang trạng thái 'Định giá sơ bộ'?`
-			"
-			@cancel="dialogRequireForStage3 = false"
-		/>
-
-		<ModalPriceEstimateList
-			v-if="showPriceEstimateListDialog"
-			:data="dataPC"
-			:idData="dataPC.id"
-			@updatePriceEstimateList="updatePriceEstimateList"
-			@cancel="showPriceEstimateListDialog = false"
-		/>
-
-		<ModalPrintEstimateAssets
-			v-if="openPrint"
-			@cancel="openPrint = false"
-			:data="priceEstimates"
-			:isApartment="miscVariable.isApartment"
-		/>
-	</div>
+		<template #overlay>
+			<div class="text-center">
+				<b-icon font-scale="3" animation="cylon"></b-icon>
+				<p id="cancel-label">Đang in...</p>
+				<b-button
+					ref="cancel"
+					variant="outline-danger"
+					size="sm"
+					aria-describedby="cancel-label"
+					@click="showLoadingPrint = false"
+				>
+					Thoát
+				</b-button>
+			</div>
+		</template>
+	</b-overlay>
 </template>
 <style lang="scss">
 @import "../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
@@ -917,13 +955,18 @@ import DocumentExport from "@/components/PreCertificate/DocumentExport";
 import File from "@/models/File";
 import axios from "@/plugins/axios";
 import {
+	BIconStopwatch,
+	BIcon,
+	BButton,
 	BTooltip,
+	BOverlay,
 	BDropdown,
 	BDropdownItem,
 	BButtonGroup
 } from "bootstrap-vue";
 import Footer from "@/components/PreCertificate/FooterDetail.vue";
 import IconBase from "./../IconBase.vue";
+import pdfFonts from "@/assets/resources/vfs_fonts_open";
 
 Vue.use(Icon);
 export default {
@@ -964,6 +1007,9 @@ export default {
 		"b-dropdown-item": BDropdownItem,
 		"b-button-group": BButtonGroup,
 		"b-dropdown": BDropdown,
+		"b-overlay": BOverlay,
+		"b-icon": BIconStopwatch,
+		"b-button": BButton,
 		Footer,
 		ModalNotificationPreCertificateNote,
 		ModalRequireForStage3
@@ -998,6 +1044,7 @@ export default {
 			key_render_appraisal: 10000,
 			openModalDelete: false,
 			showCustomerDialog: false,
+			showLoadingPrint: false,
 			showAppraiseInformationDialog: false,
 			showAppraisalDialog: false,
 			showPriceEstimateListDialog: false,
@@ -1510,6 +1557,9 @@ export default {
 		},
 		formatDate(value) {
 			return moment(String(value)).format("DD/MM/YYYY");
+		},
+		formatDatePDF(value) {
+			return moment(String(value)).format("HH:mm [Ngày] DD/MM/YYYY");
 		},
 		formatDateTime(value) {
 			return moment(String(value)).format("HH:mm DD/MM/YYYY");
@@ -2542,10 +2592,1134 @@ export default {
 					Number(this.priceEstimates.totalLandPrice) +
 					Number(this.priceEstimates.totalTangibleAssetPrice);
 
-				this.openPrint = true;
+				if (!this.isMobile) {
+					this.openPrint = true;
+				} else {
+					this.showLoadingPrint = true;
+					await this.pdfgen();
+				}
 			}
 
 			// this.printEstimateAssetPrice();
+		},
+		async pdfgen() {
+			try {
+				const pdfMake = require("pdfmake/build/pdfmake.js");
+				const PdfRes = require("@/assets/resources/pdf-images").default;
+				let listAssets = [];
+				let listTangibleAssets = [];
+				let listApartments = [];
+				let listPlanningImage = [];
+				let totalPriceAsset = 0;
+				let totalTangibleAsset = 0;
+				let totalApartment = 0;
+
+				if (
+					!this.isApartment &&
+					this.priceEstimates.assets &&
+					this.priceEstimates.assets.length > 0
+				) {
+					for (
+						let index = 0;
+						index < this.priceEstimates.assets.length;
+						index++
+					) {
+						const element = this.priceEstimates.assets[index];
+						totalPriceAsset += Number(element.total);
+						listAssets.push([
+							{
+								text: element.description,
+								fontSize: 9,
+								alignment: "left",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: element.land_type_description,
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.area),
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.price),
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.total),
+								fontSize: 9,
+								alignment: "right",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							}
+						]);
+					}
+				}
+				if (
+					!this.isApartment &&
+					this.priceEstimates.step_3.tangible_assets &&
+					this.priceEstimates.step_3.tangible_assets.length > 0
+				) {
+					for (
+						let index = 0;
+						index < this.priceEstimates.step_3.tangible_assets.length;
+						index++
+					) {
+						const element = this.priceEstimates.step_3.tangible_assets[index];
+						totalTangibleAsset += Number(element.total_price);
+						listTangibleAssets.push([
+							{
+								text: element.building_type
+									? this.formatSentenceCase(element.building_type.description)
+									: "",
+								fontSize: 9,
+								alignment: "left",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatArea(element.total_construction_area),
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.unit_price),
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: element.remaining_quality,
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.total_price),
+								fontSize: 9,
+								alignment: "right",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							}
+						]);
+					}
+				}
+				if (
+					this.isApartment &&
+					this.priceEstimates.step_3.apartment_finals &&
+					this.priceEstimates.step_3.apartment_finals.length > 0
+				) {
+					for (
+						let index = 0;
+						index < this.priceEstimates.step_3.apartment_finals.length;
+						index++
+					) {
+						const element = this.priceEstimates.step_3.apartment_finals[index];
+						totalApartment += Number(element.total_price);
+						listApartments.push([
+							{
+								text: element.name,
+								fontSize: 9,
+								alignment: "left",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.unit_price),
+								fontSize: 9,
+								alignment: "center",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							},
+							{
+								text: this.formatNumber(element.total_price),
+								fontSize: 9,
+								alignment: "right",
+								border: [false, false, false, false],
+								margin: [0, 5, 0, 5],
+								fillColor: "#F7F7F7"
+							}
+						]);
+					}
+					<div
+						class="card mb-4"
+						v-if="
+							isApartment &&
+								data.step_3.apartment_finals &&
+								data.step_3.apartment_finals.length > 0
+						"
+					>
+						<table cellspacing="0" cellpadding="0">
+							<thead class="vendorListHeadingResult p-0">
+								<tr>
+									<th style="border-top-left-radius: 15px;" class="text-left">
+										Tên tài sản
+									</th>
+									<th class="text-center">
+										Diện tích (m<sup style="font-size: 9px !important">2</sup>)
+									</th>
+									<th class="text-center">Đơn giá (đ)</th>
+									<th style="border-top-right-radius: 15px;" class="text-right">
+										Thành tiền (đ)
+									</th>
+								</tr>
+							</thead>
+						</table>
+					</div>;
+				}
+				if (
+					this.priceEstimates.step_3.image_planning_info &&
+					this.priceEstimates.step_3.image_planning_info.length > 0
+				) {
+					for (
+						let index = 0;
+						index < this.priceEstimates.step_3.image_planning_info.length;
+						index++
+					) {
+						const element = this.priceEstimates.step_3.image_planning_info[
+							index
+						];
+						listPlanningImage.push({
+							image: await this.getBase64ImageFromURL(element.link),
+							fit: [400, 200],
+							alignment: "center",
+							// height: 200,
+							// width: 600,
+							margin: [0, 5, 0, 0]
+						});
+					}
+				}
+				const info1 = [
+					{
+						text: [
+							{
+								text: "Mã sơ bộ: ",
+								fontSize: 9
+							},
+							{
+								text: "TSSB_" + this.priceEstimates.id,
+								fontSize: 9,
+								bold: true
+							}
+						],
+						alignment: "right"
+					},
+					{
+						layout: {
+							hLineColor: i => "#0685B2",
+							vLineWidth: i => 1.5,
+							hLineWidth: i => 1.5
+						},
+						alignment: "left",
+						table: {
+							widths: ["*"],
+							body: [
+								[
+									{
+										text: "THÔNG TIN VỀ NGƯỜI YÊU CẦU",
+										border: [false, false, false, true],
+										bold: true,
+										fontSize: 11,
+										color: "#0685B2",
+										margin: [-5, 0, 0, 0]
+									}
+								]
+							]
+						}
+					},
+					{
+						layout: {
+							hLineColor: i => "#0685B2",
+							vLineWidth: i => 0,
+							hLineWidth: i => 0
+						},
+						alignment: "left",
+						table: {
+							widths: [90, "*"],
+							body: [
+								[
+									{
+										text: "Tên người yêu cầu: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 3, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_3.petitioner_name
+											? this.priceEstimates.step_3.petitioner_name.toUpperCase()
+											: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 3, 0, 3]
+									}
+								],
+								[
+									{
+										text: "Ngày yêu cầu: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 0, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_3.request_date,
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 0, 0, 3]
+									}
+								],
+								[
+									{
+										text: "Mục đích thẩm định: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 0, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_3.appraise_purpose
+											? this.priceEstimates.step_3.appraise_purpose.name
+											: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 0, 0, 3]
+									}
+								]
+							]
+						}
+					},
+					{
+						layout: {
+							hLineColor: i => "#0685B2",
+							vLineWidth: i => 1.5,
+							hLineWidth: i => 1.5
+						},
+						alignment: "left",
+						table: {
+							widths: ["*"],
+							body: [
+								[
+									{
+										text: "THÔNG TIN SƠ BỘ VỀ TÀI SẢN",
+										border: [false, false, false, true],
+										bold: true,
+										fontSize: 11,
+										color: "#0685B2",
+										margin: [-5, 0, 0, 0]
+									}
+								]
+							]
+						}
+					},
+					{
+						layout: {
+							hLineColor: i => "#0685B2",
+							vLineWidth: i => 0,
+							hLineWidth: i => 0
+						},
+						alignment: "left",
+						table: {
+							widths: [90, "*"],
+							body: [
+								[
+									{
+										text: "Loại tài sản: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 3, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_1.general_infomation
+											.asset_type
+											? this.formatSentenceCase(
+													this.priceEstimates.step_1.general_infomation
+														.asset_type.description
+											  )
+											: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 3, 0, 3]
+									}
+								],
+								[
+									{
+										text: "Tên tài sản: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 0, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_1.general_infomation
+											.appraise_asset
+											? this.priceEstimates.step_1.general_infomation
+													.appraise_asset
+											: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 0, 0, 3]
+									}
+								],
+								[
+									{
+										text: "Địa chỉ tài sản: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 0, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_1.general_infomation
+											.full_address_street
+											? this.priceEstimates.step_1.general_infomation
+													.full_address_street
+											: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 0, 0, 3]
+									}
+								],
+								[
+									{
+										text: "Tọa độ: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 0, 0, 3]
+									},
+									{
+										text: this.priceEstimates.step_1.general_infomation
+											.coordinates
+											? this.priceEstimates.step_1.general_infomation
+													.coordinates
+											: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 0, 0, 3]
+									}
+								],
+								[
+									{
+										text: "Mô tả vị trí: ",
+										border: [false, false, false, false],
+										bold: false,
+										fontSize: 9,
+										margin: [-5, 0, 0, 3]
+									},
+									{
+										text:
+											!this.isApartment &&
+											this.priceEstimates.step_1.traffic_infomation.description
+												? this.priceEstimates.step_1.traffic_infomation
+														.description
+												: this.priceEstimates.step_1.apartment_properties
+														.description
+												? this.priceEstimates.step_1.apartment_properties
+														.description
+												: "",
+										border: [false, false, false, false],
+										bold: true,
+										fontSize: 9,
+										margin: [0, 0, 0, 3]
+									}
+								]
+							]
+						}
+					},
+					{
+						layout: {
+							hLineColor: i => "#0685B2",
+							vLineWidth: i => 1.5,
+							hLineWidth: i => 1.5
+						},
+						alignment: "left",
+						table: {
+							widths: ["*"],
+							body: [
+								[
+									{
+										text: "KẾT QUẢ ƯỚC TÍNH SƠ BỘ",
+										border: [false, false, false, true],
+										bold: true,
+										fontSize: 11,
+										color: "#0685B2",
+										margin: [-5, 0, 0, 0]
+									}
+								]
+							]
+						}
+					},
+					listAssets.length > 0
+						? {
+								layout: {
+									hLineColor: i => "white",
+									vLineWidth: i => 1,
+									hLineWidth: i => 1
+								},
+								table: {
+									widths: [200, 50, 70, 80, 88],
+									body: [
+										[
+											{
+												text: "Quyền sử dụng đất",
+												fontSize: 9,
+												bold: true,
+												alignment: "left",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "MĐSD",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Diện tích (m²)",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Đơn giá (đ)",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Thành tiền (đ)",
+												fontSize: 9,
+												bold: true,
+												alignment: "right",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											}
+										],
+										...listAssets,
+										[
+											{
+												text: "TỔNG CỘNG",
+												fontSize: 9,
+												bold: true,
+												alignment: "left",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: this.formatNumber(totalPriceAsset),
+												fontSize: 9,
+												bold: true,
+												alignment: "right",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											}
+										]
+									]
+								},
+								margin: [0, 15, 0, 0]
+						  }
+						: {},
+					listTangibleAssets.length > 0
+						? {
+								layout: {
+									hLineColor: i => "white",
+									vLineWidth: i => 1,
+									hLineWidth: i => 1
+								},
+								table: {
+									widths: [150, 100, 70, 80, 88],
+									body: [
+										[
+											{
+												text: "Công trình xây dựng",
+												fontSize: 9,
+												bold: true,
+												alignment: "left",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Diện tích sàn (m²)",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Đơn giá (đ)",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "CLCL (%)",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Thành tiền (đ)",
+												fontSize: 9,
+												bold: true,
+												alignment: "right",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											}
+										],
+										...listTangibleAssets,
+										[
+											{
+												text: "TỔNG CỘNG",
+												fontSize: 9,
+												bold: true,
+												alignment: "left",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 3, 0, 0],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: this.formatNumber(totalTangibleAsset),
+												fontSize: 9,
+												bold: true,
+												alignment: "right",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											}
+										]
+									]
+								},
+								margin: [0, 15, 0, 0]
+						  }
+						: {},
+					listApartments.length > 0
+						? {
+								layout: {
+									hLineColor: i => "white",
+									vLineWidth: i => 1,
+									hLineWidth: i => 1
+								},
+								table: {
+									widths: [300, 100, 105],
+									body: [
+										[
+											{
+												text: "Tên tài sản",
+												fontSize: 9,
+												bold: true,
+												alignment: "left",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "Đơn giá (m²)",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+
+											{
+												text: "Thành tiền (đ)",
+												fontSize: 9,
+												bold: true,
+												alignment: "right",
+												border: [false, false, false, true],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											}
+										],
+										...listApartments
+										// [
+										// 	{
+										// 		text: "TỔNG CỘNG",
+										// 		fontSize: 9,
+										// 		bold: true,
+										// 		alignment: "left",
+										// 		border: [false, false, false, false],
+										// 		margin: [0, 5, 0, 5],
+										// 		fillColor: "#F7F7F7"
+										// 	},
+
+										// 	{
+										// 		text: "",
+										// 		fontSize: 9,
+										// 		bold: true,
+										// 		alignment: "center",
+										// 		border: [false, false, false, false],
+										// 		margin: [0, 3, 0, 0],
+										// 		fillColor: "#F7F7F7"
+										// 	},
+										// 	{
+										// 		text: this.formatNumber(totalApartment),
+										// 		fontSize: 9,
+										// 		bold: true,
+										// 		alignment: "right",
+										// 		border: [false, false, false, false],
+										// 		margin: [0, 5, 0, 5],
+										// 		fillColor: "#F7F7F7"
+										// 	}
+										// ]
+									]
+								},
+								margin: [0, 15, 0, 0]
+						  }
+						: {},
+
+					!this.isApartment
+						? {
+								layout: {
+									hLineColor: i => "white",
+									vLineWidth: i => 1,
+									hLineWidth: i => 1
+								},
+								table: {
+									widths: [150, 100, 70, 60, 108],
+									body: [
+										[
+											{
+												text: "TỔNG CỘNG",
+												fontSize: 9,
+												bold: true,
+												alignment: "left",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7",
+												color: "#0685B2"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: "",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7"
+											},
+											{
+												text: this.formatNumber(
+													Number(this.priceEstimates.totalAllPrice)
+												),
+												fontSize: 9,
+												bold: true,
+												alignment: "right",
+												border: [false, false, false, false],
+												margin: [0, 5, 0, 5],
+												fillColor: "#F7F7F7",
+												color: "#0685B2"
+											}
+										]
+									]
+								},
+								margin: [0, 15, 0, 0]
+						  }
+						: {},
+					{
+						text: "",
+						pageBreak: "after"
+					},
+					listPlanningImage.length > 0
+						? {
+								text: "* Ảnh thông tin quy hoạch: ",
+								fontSize: 9,
+								bold: true
+						  }
+						: {},
+					listPlanningImage.length > 0 ? [...listPlanningImage] : {},
+					{
+						margin: [0, 10, 0, 0],
+						columns: [
+							{
+								width: "50%",
+								stack: [
+									{
+										text:
+											"* Biên độ chênh lệch : +/- " +
+											this.priceEstimates.step_3.difference_amplitude +
+											" %",
+										fontSize: 9,
+										italics: true
+									},
+									{
+										text: "* Ghi chú khác ",
+										fontSize: 9,
+										italics: true
+									},
+									{
+										text: this.priceEstimates.step_3.note,
+										fontSize: 9,
+										italics: true,
+										alignment: "justify"
+									}
+								]
+							},
+							{
+								width: "50%",
+								margin: [35, 0, 0, 0],
+								columns: [
+									{
+										width: "30%",
+										stack: [
+											{
+												text: "Chữ ký",
+												fontSize: 9,
+												italics: true
+											},
+											{
+												text: "Người ước tính",
+												fontSize: 9,
+												italics: true
+											},
+											{
+												text: "Thời điểm",
+												fontSize: 9,
+												italics: true,
+												alignment: "justify"
+											}
+										]
+									},
+									{
+										width: "5%",
+										stack: [
+											{
+												text: ":",
+												fontSize: 9,
+												italics: true
+											},
+											{
+												text: ":",
+												fontSize: 9,
+												italics: true
+											},
+											{
+												text: ":",
+												fontSize: 9,
+												italics: true,
+												alignment: "justify"
+											}
+										]
+									},
+									{
+										width: "*",
+										stack: [
+											{
+												text: "---------------------",
+												fontSize: 9,
+												italics: true,
+												alignment: "right"
+											},
+											{
+												text: this.priceEstimates.created_by
+													? this.priceEstimates.created_by.name
+													: "",
+												fontSize: 9,
+												italics: true,
+												alignment: "right"
+											},
+											{
+												text: this.priceEstimates.updated_at
+													? this.formatDatePDF(this.priceEstimates.updated_at)
+													: "",
+												fontSize: 9,
+												italics: true,
+												alignment: "right"
+											},
+											{
+												text: " ",
+												fontSize: 9,
+												italics: true,
+												alignment: "right",
+												margin: [0, 50, 0, 0]
+											},
+											{
+												text: "ĐẠI DIỆN PHÁP LUẬT",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												margin: [0, 0, 0, 0]
+											},
+											{
+												text: " ",
+												fontSize: 9,
+												italics: true,
+												alignment: "right",
+												margin: [0, 30, 0, 0]
+											},
+											{
+												text: "Huỳnh Văn Ngoãn",
+												fontSize: 9,
+												bold: true,
+												alignment: "center",
+												margin: [0, 0, 0, 0]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				];
+
+				pdfMake.vfs = pdfFonts.pdfMake.vfs;
+				pdfMake.fonts = {
+					Opensans: {
+						normal: "Opensans-Regular.ttf",
+						bold: "Opensans-Bold.ttf",
+						italics: "Opensans-Italic.ttf",
+						bolditalics: "Opensans-BoldItalic.ttf"
+					}
+				};
+				const docDefinition = {
+					info: {
+						title: "Phiếu tài sản sơ bộ",
+						author: "",
+						subject: "",
+						keywords: ""
+					},
+					pageMargins: [30, 130, 30, 100],
+
+					footer: (currentPage, pageCount, pageSize) => {
+						return [
+							{
+								widths: ["*"],
+								margin: [31, 0, 31],
+								layout: {
+									hLineColor: i => (i === 0 ? "white" : ""),
+									vLineWidth: i => 0,
+									hLineWidth: i => (i === 0 ? 1 : 0)
+								},
+								table: {
+									body: [
+										[
+											[
+												{},
+												{
+													text: currentPage + "/" + pageCount,
+													fontSize: 9,
+													margin: [0, 210, 0, 0],
+													alignment: "center"
+												},
+												{}
+											]
+										]
+									]
+								}
+							}
+						];
+					},
+					header: (currentPage, pageCount, pageSize) => {
+						return [
+							{
+								image: "imageHeader",
+								width: 600,
+								height: 120
+							}
+						];
+					},
+
+					content: info1,
+
+					images: {
+						imageHeader: PdfRes.image
+					},
+					styles: {},
+					defaultStyle: {
+						font: "Opensans"
+					}
+				};
+				const title =
+					"TSSB_" +
+					this.priceEstimates.id +
+					(this.priceEstimates.step_3.petitioner_name
+						? "_" +
+						  this.priceEstimates.step_3.petitioner_name.replaceAll(" ", "_")
+						: "") +
+					(this.priceEstimates.createdAtString
+						? "_" + this.priceEstimates.createdAtString
+						: "");
+				const pdfDocGenerator = pdfMake
+					.createPdf(docDefinition)
+					.download(title);
+				this.showLoadingPrint = false;
+			} catch (e) {
+				console.log(e);
+				this.showLoadingPrint = false;
+			}
+			// pdfDocGenerator.getDataUrl(dataUrl => {
+			// 	this.pdfsrc = dataUrl;
+			// 	let blobUrl = null;
+			// 	fetch(dataUrl)
+			// 		.then(res => res.blob())
+			// 		.then(URL.createObjectURL)
+			// 		.then(ret => {
+			// 			blobUrl = ret;
+			// 			this.pdfsrc = blobUrl || dataUrl;
+			// 			return blobUrl;
+			// 		})
+			// 		.then(console.log);
+			// });
+		},
+		getBase64ImageFromURL(url) {
+			if (!url) return "";
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.setAttribute("crossOrigin", "anonymous");
+				img.onload = () => {
+					const canvas = document.createElement("canvas");
+					canvas.width = img.width;
+					canvas.height = img.height;
+
+					const ctx = canvas.getContext("2d");
+					ctx.drawImage(img, 0, 0);
+
+					const dataURL = canvas.toDataURL("image/png");
+
+					resolve(dataURL);
+				};
+
+				img.onerror = error => {
+					reject(error);
+				};
+
+				img.src = url + "?r=" + Math.floor(Math.random() * 100000);
+			});
+		},
+		formatArea(value) {
+			let num = (value / 1).toFixed(2).replace(",", ".");
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}
 	},
 	beforeMount() {
@@ -3126,6 +4300,12 @@ export default {
 		border: none;
 		outline: none;
 	}
+}
+.link-detail-mobile {
+	white-space: nowrap;
+	text-transform: uppercase;
+	background: transparent;
+	border: none;
 }
 .btn_dropdown {
 	border: white;

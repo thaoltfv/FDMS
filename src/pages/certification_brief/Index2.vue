@@ -162,6 +162,7 @@
 							:value="selectedStatus"
 							@change="onChangeStatus"
 						/> -->
+						<DropdownFilter class="mr-5" @search="onChangeStatus" />
 					</div>
 				</div>
 			</div>
