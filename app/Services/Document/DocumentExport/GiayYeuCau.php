@@ -741,7 +741,7 @@ class GiayYeuCau
 
         // 
         $textRun = $section->addTextRun();
-        $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
+        $textRun->addText("   BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đồng ý cung cấp các Hồ sơ, tài liệu, dữ liệu như trên cho ", ['bold' => false]);
         $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
         $textRun->addText(", Công ty được phép sử dụng tất cả các Hồ sơ, tài liệu, dữ liệu được cung cấp để Công ty Nova tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này. ", ['bold' => false]);
@@ -749,7 +749,7 @@ class GiayYeuCau
         $textRun->addText("đã được thông báo, trao đổi và thống nhất các giả thiết, giả thiết đặc biệt của tài sản, cơ sở giá trị thẩm định giá; các hạn chế và loại trừ trách nhiệm (nếu có) trong hồ sơ thẩm định giá.", ['bold' => false]);
         // 
         $textRun = $section->addTextRun();
-        $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
+        $textRun->addText("   BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("cam kết thanh toán đủ phí dịch vụ cho ", ['bold' => false]);
         $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
 
@@ -759,7 +759,7 @@ class GiayYeuCau
         $table3 = $section->addTable($tableBasicStyle);
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
         $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $keepNext);;
-        $table3->addCell(Converter::inchToTwip(4))->addText("TP.HCM, ngày        tháng         năm   ", null,  $keepNext);
+        $table3->addCell(Converter::inchToTwip(4))->addText("TP.HCM, ngày        tháng         năm " . Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Y'), null,  $keepNext);
 
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
         $cell31 = $table3->addCell(Converter::inchToTwip(4));
@@ -769,9 +769,9 @@ class GiayYeuCau
 
         $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
         $cell33 = $table3->addCell(Converter::inchToTwip(4));
-        $cell33->addText("Công ty TNHH Thẩm Định Giá Nova", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell33->addText("Công ty TNHH Thẩm Định Giá Nova", ['bold' => false], ['align' => 'center', 'keepNext' => true]);
         $cell34 = $table3->addCell(Converter::inchToTwip(4));
-        $cell34->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        $cell34->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => false], ['align' => 'center', 'keepNext' => true]);
 
         //Footer
         // $comName =  !empty($company->acronym) ? mb_strtoupper($company->acronym) : mb_strtoupper($company->name);
