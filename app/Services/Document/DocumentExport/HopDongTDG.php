@@ -1040,10 +1040,7 @@ class HopDongTDG
             $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
             $row2->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_address), null,  $alignBoth);
 
-            $row3 = $table->addRow(100, array(
-                'tblHeader' => false,
-                'cantSplit' => false
-            ));
+
             $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
             $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
             $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
@@ -1330,12 +1327,8 @@ class HopDongTDG
         ));
         $row3->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row3->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row3->addCell(2900, $cellVTop)->addText('Mục đích thẩm định giá', null,  $alignBoth);
-        $row3->addCell(
-            100,
-            $cellVTop
-        )->addText(':', null,  $alignBoth);
-        $row3->addCell(5900, $cellVTop)->addText((isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
+        $row3->addCell(8800, $cellVTop)->addText('Mục đích thẩm định giá: ' . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null,  $alignBoth);
+
 
 
         $appraise_date_formatted = $certificate->appraise_date
@@ -1347,12 +1340,8 @@ class HopDongTDG
         ));
         $row2->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row2->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row2->addCell(2900, $cellVTop)->addText('Thời điểm thẩm định giá ', null,  $alignBoth);
-        $row2->addCell(
-            100,
-            $cellVTop
-        )->addText(':', null,  $alignBoth);
-        $row2->addCell(5900, $cellVTop)->addText($appraise_date_formatted ? $appraise_date_formatted . '.' : '', null,  $alignBoth);
+        $row2->addCell(8800, $cellVTop)->addText('Thời điểm thẩm định giá: ' . ($appraise_date_formatted ? $appraise_date_formatted . '.' : ''), null,  $alignBoth);
+
 
 
         $row1 = $table->addRow(100, array(
@@ -1361,9 +1350,7 @@ class HopDongTDG
         ));
         $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2900, $cellVTop)->addText('Địa điểm thẩm định giá', null,  $alignBoth);
-        $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(5900, $cellVTop)->addText(htmlspecialchars($addressHSTD), null,  $alignBoth);
+        $row1->addCell(8800, $cellVTop)->addText('Địa điểm thẩm định giá: ' . htmlspecialchars($addressHSTD), null,  $alignBoth);
 
 
         $row1 = $table->addRow(100, array(
@@ -1372,9 +1359,8 @@ class HopDongTDG
         ));
         $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2900, $cellVTop)->addText('Bên sử dụng Chứng thư, Báo cáo thẩm định giá', null,  $alignBoth);
-        $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(5900, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name), null,  $alignBoth);
+        $row1->addCell(8800, $cellVTop)->addText('Bên sử dụng Chứng thư, Báo cáo thẩm định giá: ' . htmlspecialchars($certificate->petitioner_name), null,  $alignBoth);
+
 
 
         $row1 = $table->addRow(100, array(
@@ -1383,9 +1369,8 @@ class HopDongTDG
         ));
         $row1->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row1->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row1->addCell(2900, $cellVTop)->addText('Các Hồ sơ, tài liệu, dữ liệu cá nhân do Bên A cung cấp cho bên B để bên B được sử dụng lập Hồ sơ Thẩm định giá tài sản gồm: ' .  $appraise_law, null,  $alignBoth);
-        $row1->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row1->addCell(5900, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name), null,  $alignBoth);
+        $row1->addCell(8800, $cellVTop)->addText('Các Hồ sơ, tài liệu, dữ liệu cá nhân do Bên A cung cấp cho bên B để bên B được sử dụng lập Hồ sơ Thẩm định giá tài sản gồm: ' .  $appraise_law, null,  $alignBoth);
+
 
 
         $row4 = $table->addRow(100, array(
@@ -1394,10 +1379,7 @@ class HopDongTDG
         ));
         $row4->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row4->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row4->addCell(2900, $cellVTop)->addText('Phương pháp thẩm định giá', null, ['align' => 'left']);
-        $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row4->addCell(5900, $cellVTop)->addText('Quy định theo chuẩn mực thẩm định giá Việt Nam hiện hành.', null,  $alignBoth);
-
+        $row4->addCell(2900, $cellVTop)->addText('Phương pháp thẩm định giá: Quy định theo chuẩn mực thẩm định giá Việt Nam hiện hành.', null, ['align' => 'left']);
 
 
         $row6 = $table->addRow(100, array(
@@ -1406,8 +1388,7 @@ class HopDongTDG
         ));
         $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row6->addCell(3600, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu: ', null, ['align' => 'left']);
-        $row6->addCell(5100, $cellVTop)->addText('02 bản chính bằng tiếng Việt.', null,  $alignBoth);
+        $row6->addCell(8800, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu: 02 bản chính bằng tiếng Việt.', null, ['align' => 'left']);
 
         $section->addText(
             "1.2.  Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
@@ -1571,25 +1552,25 @@ class HopDongTDG
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        // $row = $table->addRow();
-        // $row->addCell(600)->addText("6.1.", null, ['align' => 'right']);
-        // $row->addCell(9300)->addText("Yêu cầu bên A cung cấp hồ sơ pháp lý, các tài liệu, dữ liệu của cá nhân và của tài sản để bên B thu thập thông tin và lập hồ sơ thẩm định giá.", null, $indentleftNumber);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.1.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Yêu cầu bên A cung cấp hồ sơ pháp lý, các tài liệu, dữ liệu của cá nhân và của tài sản để bên B thu thập thông tin và lập hồ sơ thẩm định giá.", null, $indentleftNumber);
 
-        // $row = $table->addRow();
-        // $row->addCell(600)->addText("6.2.", null, ['align' => 'right']);
-        // $row->addCell(9300)->addText("Bên B và người lao động của bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu bên A hoặc người của bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực. ", null, $indentleftNumber);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.2.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Bên B và người lao động của bên B sẽ được miễn trừ toàn bộ trách nhiệm đối với kết quả thẩm định giá nếu bên A hoặc người của bên A cung cấp sai lệch hồ sơ pháp lý tài sản, thông tin tài sản không chính xác và không trung thực. ", null, $indentleftNumber);
 
-        // $row = $table->addRow();
-        // $row->addCell(600)->addText("6.3.", null, ['align' => 'right']);
-        // $row->addCell(9300)->addText("Bên B được miễn trừ hoàn toàn trách nhiệm đối với chứng thư, báo cáo thẩm định giá bên A đã nhận mà chưa thanh toán đủ 100% phí dịch vụ ghi tại đồng này. ", null, $indentleftNumber);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.3.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Bên B được miễn trừ hoàn toàn trách nhiệm đối với chứng thư, báo cáo thẩm định giá bên A đã nhận mà chưa thanh toán đủ 100% phí dịch vụ ghi tại đồng này. ", null, $indentleftNumber);
 
-        // $row = $table->addRow();
-        // $row->addCell(600)->addText("6.4.", null, ['align' => 'right']);
-        // $row->addCell(9300)->addText("Từ chối thực hiện thẩm định giá tài sản theo yêu cầu của bên A khi nhận thấy tài sản đó không đủ điều kiện pháp lý để thực hiện việc thẩm định.", null, $indentleftNumber);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.4.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Từ chối thực hiện thẩm định giá tài sản theo yêu cầu của bên A khi nhận thấy tài sản đó không đủ điều kiện pháp lý để thực hiện việc thẩm định.", null, $indentleftNumber);
 
-        // $row = $table->addRow();
-        // $row->addCell(600)->addText("6.5.", null, ['align' => 'right']);
-        // $row->addCell(9300)->addText("Bên A đã nhận chứng thư mà bên A không sử dụng, bên B sẽ không hoàn trả chi phí dịch vụ bên A đã thanh toán trước đó.", null, $indentleftNumber);
+        $row = $table->addRow();
+        $row->addCell(600)->addText("6.5.", null, ['align' => 'right']);
+        $row->addCell(9300)->addText("Bên A đã nhận chứng thư mà bên A không sử dụng, bên B sẽ không hoàn trả chi phí dịch vụ bên A đã thanh toán trước đó.", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("6.6.", null, ['align' => 'right']);
