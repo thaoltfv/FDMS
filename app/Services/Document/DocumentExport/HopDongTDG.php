@@ -1288,12 +1288,8 @@ class HopDongTDG
                 'align' => JcTable::START,
                 'width' => 100 * 50,
                 'unit' => 'pct',
-                'indentation' => [
-                    'left' => 400, // lùi vào từ lề trái 400 twip (đơn vị đo của Word)
-                    'right' => 0, // không lùi từ lề phải
-                    'top' => 0, // không lùi từ lề trên
-                    'bottom' => 0 // không lùi từ lề dưới
-                ]
+                'indent' => 400,
+
             ]);
             $rowHeader = [
                 'tblHeader' => false,
@@ -1321,12 +1317,7 @@ class HopDongTDG
             'align' => JcTable::START,
             'width' => 100 * 50,
             'unit' => 'pct',
-            'indentation' => [
-                'left' => 200, // lùi vào từ lề trái 400 twip (đơn vị đo của Word)
-                'right' => 0, // không lùi từ lề phải
-                'top' => 0, // không lùi từ lề trên
-                'bottom' => 0 // không lùi từ lề dưới
-            ]
+            'indent' => 400,
         ]);
 
 
