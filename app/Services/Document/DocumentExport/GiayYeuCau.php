@@ -487,6 +487,7 @@ class GiayYeuCau
 
         // [] = ['indentation' => ['firstLine' => 360]];
         $keepNext = ['keepNext' => true];
+        $indentFistLine = ['indentation' => ['firstLine' => 360]]
         $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
         $cellRowContinue = array('vMerge' => 'continue');
         $cellColSpan = array('gridSpan' => 2, 'valign' => 'center');
@@ -646,7 +647,7 @@ class GiayYeuCau
                         $secondRow[] = '';
                         $secondRow[] = htmlspecialchars($item->appraises->appraise_asset);
                         $secondRow[] = (isset($item->total_area) ? $this->formatNumberFunction($item->total_area, 2, ',', '.') : '');
-                        $secondRow[] = (isset($item->assetType) && isset($item->assetType->description)  ? ucfirst(strtolower($item->assetType->description)) : '');
+                        $secondRow[] = (isset($item->assetType) && isset($item->assetType->description)  ? CommonService::mbCaseTitle($data->assetType->description) : '');
                         $arrayTable[] = $secondRow;
                         // Dòng CTXD
                         $checktangibleAsset = $item->appraises->tangibleAssets;
@@ -687,10 +688,10 @@ class GiayYeuCau
             $table->addCell(2000, $cellVCentered)->addText('Hiện trạng', ['bold' => true], $cellHCentered);
             foreach ($arrayTable as $index => $item) {
                 $table->addRow(400, $cantSplit);
-                $table->addCell(600, $cellVCentered)->addText($item[0], ['bold' => true], array_merge($cellHCentered, $keepNext));
-                $table->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => true], $cellHJustify);
-                $table->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => true], $cellHCentered);
-                $table->addCell(2000, $cellVCentered)->addText($item[3], ['bold' => true], $cellHCentered);
+                $table->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered, $keepNext));
+                $table->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => false], $cellHJustify);
+                $table->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => false], $cellHCentered);
+                $table->addCell(2000, $cellVCentered)->addText($item[3], ['bold' => false], $cellHCentered);
             }
         }
 
@@ -708,15 +709,15 @@ class GiayYeuCau
         $textRun = $section->addTextRun('Heading3');
         $textRun->addText("Bên sử dụng Chứng thư, Báo cáo thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), ['bold' => false]);
         $textRun = $section->addTextRun('Heading3');
-        $textRun->addText("Các Hồ sơ, tài liệu, dữ liệu cá nhân", ['bold' => false]);
-        $textRun->addText("BÊN YÊU CẦU", ['bold' => true]);
+        $textRun->addText("Các Hồ sơ, tài liệu, dữ liệu cá nhân ", ['bold' => false]);
+        $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova để Công ty lập Hồ sơ Thẩm định giá tài sản gồm:", ['bold' => false]);
         $textRun->addText($appraise_law, ['italic' => true]);
-        $listItemRun  = $section->addListItemRun(2, 'bullets', []);
+        $listItemRun  = $section->addListItemRun(1, 'bullets', $indentFistLine);
         $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address));
-        $listItemRun  = $section->addListItemRun(2, 'bullets', []);
+        $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
-        $listItemRun  = $section->addListItemRun(2, 'bullets', []);
+        $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
         // 3
         $textRun = $section->addTextRun('Heading2');
@@ -724,7 +725,7 @@ class GiayYeuCau
         // 4
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời gian địa điểm và thông tin người liên hệ khảo sát hiện trạng tài sản: ");
-        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, 0, [], 'bullets', []);
+        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại địa chỉ ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentFistLine);
         $section->addListItem("Họ tên người liên hệ: " .  $certificate->name_contact . '        Điện thoại: ' . $certificate->phone_contact, 0, [], 'bullets', []);
         // 5
         $textRun = $section->addTextRun('Heading2');
