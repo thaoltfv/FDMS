@@ -1285,9 +1285,15 @@ class HopDongTDG
 
             $table = $section->addTable([
                 'borderSize' => 1,
-                'align' => JcTable::CENTER,
+                'align' => JcTable::START,
                 'width' => 100 * 50,
-                'unit' => 'pct'
+                'unit' => 'pct',
+                'indentation' => [
+                    'left' => 400, // lùi vào từ lề trái 400 twip (đơn vị đo của Word)
+                    'right' => 0, // không lùi từ lề phải
+                    'top' => 0, // không lùi từ lề trên
+                    'bottom' => 0 // không lùi từ lề dưới
+                ]
             ]);
             $rowHeader = [
                 'tblHeader' => false,
@@ -1314,7 +1320,13 @@ class HopDongTDG
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
-            'unit' => 'pct'
+            'unit' => 'pct',
+            'indentation' => [
+                'left' => 200, // lùi vào từ lề trái 400 twip (đơn vị đo của Word)
+                'right' => 0, // không lùi từ lề phải
+                'top' => 0, // không lùi từ lề trên
+                'bottom' => 0 // không lùi từ lề dưới
+            ]
         ]);
 
 
@@ -1638,7 +1650,7 @@ class HopDongTDG
         $row8->addCell(
             50
         )->addText("", null, ['align' => 'right']);
-        $row8->addCell(9250)->addText("a.	Bên A không hướng hướng dẫn bên B thẩm định tài sản hiện trường.", null, $indentleftword);
+        $row8->addCell(9250)->addText("Bên A không hướng hướng dẫn bên B thẩm định tài sản hiện trường.", null, $indentleftword);
 
         $row9 = $table->addRow();
         $row9->addCell(600)->addText("b.", null, ['align' => 'right']);
