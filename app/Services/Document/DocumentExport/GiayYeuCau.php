@@ -647,7 +647,7 @@ class GiayYeuCau
                         $secondRow[] = '';
                         $secondRow[] = htmlspecialchars($item->appraises->appraise_asset);
                         $secondRow[] = (isset($item->total_area) ? $this->formatNumberFunction($item->total_area, 2, ',', '.') : '');
-                        $secondRow[] = (isset($item->assetType) && isset($item->assetType->description)  ? CommonService::mbCaseTitle($data->assetType->description) : '');
+                        $secondRow[] = (isset($item->assetType) && isset($item->assetType->description)  ? CommonService::mbCaseTitle($item->assetType->description) : '');
                         $arrayTable[] = $secondRow;
                         // Dòng CTXD
                         $checktangibleAsset = $item->appraises->tangibleAssets;
