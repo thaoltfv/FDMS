@@ -720,9 +720,9 @@ class GiayYeuCau
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
-        $section->addListItem("         - Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
-        $section->addListItem("         - Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', []);
-        $section->addListItem("         - Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', []);
+        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $indentPara);
+        $section->addListItem("Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', $indentPara);
+        $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara);
 
         // 3
         $textRun = $section->addTextRun('Heading2');
