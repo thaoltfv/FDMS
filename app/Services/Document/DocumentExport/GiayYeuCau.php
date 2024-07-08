@@ -582,7 +582,7 @@ class GiayYeuCau
         $textRun->addText("Tên tài sản: Quyền sử dụng đất và tài sản trên đất. Số lượng, khối lượng tài sản yêu cầu thẩm định giá:", ['bold' => false]);
         $isApartment =  in_array('CC', $certificate->document_type ?? []);
         $arrayTable = [];
-        $name_assets = "";
+        $checktangibleAsset = "";
         $appraise_law = "";
 
         if ($certificate->realEstate && count($certificate->realEstate) > 0) {
@@ -806,7 +806,7 @@ class GiayYeuCau
         $data['url'] = Storage::disk('public')->url($path .  $fileName . '.docx');
         $data['file_name'] = $fileName;
         $data['certificate'] = $certificate;
-        $data['appraises'] = $check;
+        $data['appraises'] = $checktangibleAsset;
         return $data;
     }
 }
