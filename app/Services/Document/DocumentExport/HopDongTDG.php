@@ -1078,7 +1078,7 @@ class HopDongTDG
 
         $row6 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
-        $row6->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
+        $row6->addCell(1800, $cellVTop)->addText('-   Địa chỉ', null,  $alignBoth);
         $row6->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $row6->addCell(8100, $cellVTop)->addText('Số 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM', null,  $alignBoth);
 
@@ -1285,7 +1285,7 @@ class HopDongTDG
 
             $table = $section->addTable([
                 'borderSize' => 1,
-                'align' => JcTable::START,
+                'align' => JcTable::CENTER,
                 'width' => 100 * 50,
                 'unit' => 'pct'
             ]);
@@ -1467,7 +1467,7 @@ class HopDongTDG
         }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, ['align' => 'center']);
+        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, ['align' => 'center', 'italic' => true]);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.2.", null, ['align' => 'right']);
@@ -1479,11 +1479,11 @@ class HopDongTDG
 
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Lần 1: Thanh toán số tiền ", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Lần 1: Thanh toán số tiền: ", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Lần 2: Thanh toán số tiền ", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Lần 2: Thanh toán số tiền: ", null, $indentleftNumber);
 
 
         $row = $table->addRow();
