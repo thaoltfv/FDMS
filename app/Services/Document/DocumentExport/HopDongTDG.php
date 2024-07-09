@@ -1283,14 +1283,14 @@ class HopDongTDG
             }
         }
         if (!empty($arrayTable)) {
-            $tblWidth = new TblWidth();
-            $tblWidth->setW(1440); // Thiết lập khoảng cách lề trái 1 inch (1440 twips)
+
             $table = $section->addTable([
                 'borderSize' => 1,
                 'align' => JcTable::CENTER,
                 'width' => 80 * 50,
                 'unit' => 'pct',
-                'indent' => $tblWidth
+                'indent' => \PhpOffice\PhpWord\ComplexType\TblWidth::setValue(1400),
+
 
             ]);
 
