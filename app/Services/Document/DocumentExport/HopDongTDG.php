@@ -1017,12 +1017,6 @@ class HopDongTDG
         $row1->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true],  $alignBoth);
 
         if ($certificate->is_company == 0) {
-            $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
-            => false));
-            $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
-            $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-            $row2->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_address), null,  $alignBoth);
-
             $row3 = $table->addRow(100, array(
                 'tblHeader' => false,
                 'cantSplit' => false
@@ -1030,6 +1024,12 @@ class HopDongTDG
             $row3->addCell(1800, $cellVTop)->addText('-    Số CCCD', null,  $alignBoth);
             $row3->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
             $row3->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card) . '   -    Ngày cấp: ' . $stringTimeSoc, null,  $alignBoth);
+            $row2 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
+            => false));
+            $row2->addCell(1800, $cellVTop)->addText('-    Địa chỉ', null,  $alignBoth);
+            $row2->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
+            $row2->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_address), null,  $alignBoth);
+
             $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
             $row4->addCell(1800, $cellVTop)->addText('-    Số điện thoại', null,  $alignBoth);
             $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
@@ -1100,7 +1100,7 @@ class HopDongTDG
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
         $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo.', null,  $alignBoth);
+        $row9->addCell(8100, $cellVTop)->addText('3102427729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo.', null,  $alignBoth);
 
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
