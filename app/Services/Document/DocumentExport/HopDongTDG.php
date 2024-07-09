@@ -1286,10 +1286,9 @@ class HopDongTDG
 
             $table = $section->addTable([
                 'borderSize' => 1,
-                'align' => 'center',
-                'width' => 80 * 50,
+                'align' => 'end',
+                'width' => 50 * 50,
                 'unit' => 'pct',
-
             ]);
 
             $rowHeader = [
