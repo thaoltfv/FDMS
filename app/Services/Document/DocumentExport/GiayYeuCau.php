@@ -606,7 +606,7 @@ class GiayYeuCau
                         if ($item->apartment->law) {
                             foreach ($item->apartment->law as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 bản photo Giấy  " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
                             }
                         }
                         // Dòng địa chỉ
@@ -638,7 +638,7 @@ class GiayYeuCau
                         if ($item->appraises->appraiseLaw) {
                             foreach ($item->appraises->appraiseLaw as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 bản photo Giấy  " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
                             }
                         }
                         // Dòng địa chỉ
