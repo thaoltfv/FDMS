@@ -680,7 +680,7 @@ class GiayYeuCau
         // $onlyOneAsset = (count($assets) > 1) ? false : true;
         $rowHeader = [
             'tblHeader' => true,
-            'cantSplit' => true
+            'cantSplit' => false
         ];
         $cantSplit = ['cantSplit' => true];
         $phpWord->addTableStyle('Colspan Rowspan', $styleTable);
@@ -692,7 +692,7 @@ class GiayYeuCau
             $table->addCell(1800, $cellVCentered)->addText('Diện tích (' . $m2 . ')', ['bold' => true], $cellHCentered);
             $table->addCell(2000, $cellVCentered)->addText('Hiện trạng', ['bold' => true], $cellHCentered);
             foreach ($arrayTable as $index => $item) {
-                $table->addRow(400, $cantSplit);
+                $table->addRow(400, false);
                 $table->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered));
                 $table->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => false], $cellHJustify);
                 $table->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => false], $cellHCentered);
@@ -739,7 +739,7 @@ class GiayYeuCau
         // 5
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Các nội dung yêu cầu và thống nhất:");
-        $section->addListItem("Sản phẩm: Chứng thư, Báo cáo thẩm định giá.", 0, [], 'bullets', []);
+        $section->addListItem("Sản phẩm: " . ($certificate->is_company == 0 ? 'Chứng thư và Báo cáo Thẩm định giá kèm theo cơ sở giá trị thẩm định giá; hạn chế và loại trừ trách nhiệm.' : 'Chứng thư, Báo cáo thẩm định giá.'), 0, [], 'bullets', []);
         $section->addListItem("Số lượng: 02 bản chính bằng tiếng Việt.", 0, [], 'bullets', []);
 
         // 
