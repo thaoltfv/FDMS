@@ -529,16 +529,16 @@ class GiayYeuCau
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '15'], ['align' => 'center']);
 
         $textRun = $section->addTextRun("alignItemCenter");
-        if ($certificate->is_company == 0) {
-            $textRun->addText(' ', array('spaceAfter' => 240));
-        }
+        $textRun->addText(' ', array('spaceAfter' => 240));
         $textRun->addText("Kính gửi", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
         $textRun->addText(": ", ['size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
         $textRun->addText(' ', array('spaceAfter' => 240));
         $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
         $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
-        $section->addText(" ", ['size' => '10'], ['align' => 'center']);
+        if ($certificate->is_company == 0) {
+            $section->addText(" ", ['size' => '10'], ['align' => 'center']);
+        }
         $stringTimeSoc = "";
         $surveyTime = "";
         if (isset($certificate->issue_date_card) && !empty(trim($certificate->issue_date_card))) {
