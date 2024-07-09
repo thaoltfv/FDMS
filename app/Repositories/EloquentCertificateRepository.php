@@ -2737,6 +2737,49 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     then 'Phân hồ sơ'
             end as status_text
             "),
+            DB::raw("case status
+            when 1
+                then u2.image
+            when 2
+                then u3.image
+            when 3
+                then u1.image
+            when 4
+                then u3.image
+            when 5
+                then users.image
+            when 7
+                then u4.image
+            when 8
+                then u5.image
+                
+            when 9
+                then u2.image
+            when 10
+                then u6.image    
+        end as image
+    "),
+            DB::raw("case status
+                when 1
+                    then u2.name
+                when 2
+                    then u3.name
+                when 3
+                    then u1.name
+                when 4
+                    then u3.name
+                when 5
+                    then users.name
+                when 7
+                    then u4.name
+                when 8
+                    then u5.name
+                when 9
+                    then u2.name
+                when 10
+                    then u6.name
+            end as name_nv
+            "),
             Db::raw("cast(certificate_prices.value as bigint) as total_price"),
             'commission_fee',
 
@@ -2781,6 +2824,59 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result = QueryBuilder::for($this->model)
             ->with($with)
             ->select($select)
+            ->leftjoin('users', function ($join) {
+                $join->on('certificates.created_by', '=', 'users.id')
+                    ->select(['id', 'image'])
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers', function ($join) {
+                $join->on('appraisers.id', '=', 'certificates.appraiser_id')
+                    ->join('users as u1', function ($j) {
+                        $j->on('appraisers.user_id', '=', 'u1.id');
+                    })
+                    ->select('u1.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as sale', function ($join) {
+                $join->on('sale.id', '=', 'certificates.appraiser_sale_id')
+                    ->join('users as u2', function ($j) {
+                        $j->on('sale.user_id', '=', 'u2.id');
+                    })
+                    ->select('u2.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as perform', function ($join) {
+                $join->on('perform.id', '=', 'certificates.appraiser_perform_id')
+                    ->join('users as u3', function ($j) {
+                        $j->on('perform.user_id', '=', 'u3.id');
+                    })
+                    ->select('u3.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as control', function ($join) {
+                $join->on('control.id', '=', 'certificates.appraiser_control_id')
+                    ->join('users as u4', function ($j) {
+                        $j->on('control.user_id', '=', 'u4.id');
+                    })
+                    ->select('u4.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as administrative', function ($join) {
+                $join->on('administrative.id', '=', 'certificates.administrative_id')
+                    ->join('users as u5', function ($j) {
+                        $j->on('administrative.user_id', '=', 'u5.id');
+                    })
+                    ->select('u5.image')
+                    ->limit(1);
+            })
+            ->leftjoin('appraisers as businessmanager', function ($join) {
+                $join->on('businessmanager.id', '=', 'certificates.business_manager_id')
+                    ->join('users as u6', function ($j) {
+                        $j->on('businessmanager.user_id', '=', 'u6.id');
+                    })
+                    ->select('u6.image')
+                    ->limit(1);
+            })
             ->leftjoin('certificate_prices', function ($join) {
                 $join->on('certificates.id', '=', 'certificate_prices.certificate_id')
                     ->where('slug', '=', 'total_asset_price')
