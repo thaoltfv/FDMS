@@ -577,7 +577,7 @@ class GiayYeuCau
         $textRun->addText("Nội dung yêu cầu: ", ['bold' => false]);
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đề nghị ", ['bold' => false]);
-        $textRun->addText("Công ty TNHH Thẩm định giá NOVA ", ['bold' => true]);
+        $textRun->addText("Công ty TNHH Thẩm định giá Nova ", ['bold' => true]);
         $textRun->addText('thẩm định giá tài sản sau:', ['bold' => false]);
 
         //2.1
@@ -724,7 +724,7 @@ class GiayYeuCau
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
-        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $indentPara2);
+        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova. ", 0, [], 'bullets', $indentPara2);
         $section->addListItem("Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', $indentPara2);
         $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara2);
 
