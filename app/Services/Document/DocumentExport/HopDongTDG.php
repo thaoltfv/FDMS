@@ -1142,7 +1142,7 @@ class HopDongTDG
         $row->addCell(9300)->addText("Bên A đồng ý để Bên B thực hiện việc tư vấn thẩm định giá tài sản cho Bên A, cụ thể như sau:", null, $indentleftNumber);
 
         $table = $section->addTable([
-            'align' => JcTable::START,
+            'align' => JcTable::CENTER,
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
@@ -1285,7 +1285,7 @@ class HopDongTDG
         if (!empty($arrayTable)) {
 
             $table = $section->addTable([
-                'cellMarginLeft' => Converter::inchToTwip(0.4),
+
                 'borderSize' => 1,
                 'align' => 'end',
                 'width' => 50 * 50,
@@ -1315,7 +1315,7 @@ class HopDongTDG
 
 
         $table = $section->addTable([
-            'align' => JcTable::START,
+            'align' => JcTable::CENTER,
             'width' => 100 * 50,
             'unit' => 'pct',
 
