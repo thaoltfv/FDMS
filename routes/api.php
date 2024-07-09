@@ -30,6 +30,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Branch\BranchController;
 use App\Http\Controllers\BuildingPrice\BuildingPriceController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\CustomerGroup\CustomerGroupFirstController;
+use App\Http\Controllers\CustomerGroup\CustomerGroupSecondController;
+use App\Http\Controllers\CustomerGroup\CustomerGroupThirdController;
+use App\Http\Controllers\CustomerGroup\CustomerGroupFourthController;
 use App\Http\Controllers\Dictionary\DictionaryController;
 use App\Http\Controllers\Intergration\CertificateAssetsController;
 use App\Http\Controllers\Intergration\CertificateBriefController;
@@ -56,6 +60,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppraiseDictionary\PreCertificateController;
 use App\Http\Controllers\PreCertificateConfig\PreCertificateConfigController;
 use App\Http\Controllers\PriceEstimate\PriceEstimateController;
+use App\Models\CustomerGroupFirst;
+use App\Models\CustomerGroupFourth;
+
 // use App\Http\Controllers\PreCertificateConfig\PreCertificateBriefController;
 /*
 |--------------------------------------------------------------------------
@@ -236,6 +243,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/estimate-logs/create-index', [EstimatePriceLogController::class, 'createIndex']);
 
     Route::apiResource('customer', CustomerController::class);
+
+    Route::apiResource('customer-group-first', CustomerGroupFirstController::class);
+
+    Route::get('customer-group-first-all', [CustomerGroupFirstController::class, 'getAllFirstGroup']);
+
+    Route::apiResource('customer-group-second', CustomerGroupSecondController::class);
+
+    Route::apiResource('customer-group-third', CustomerGroupThirdController::class);
+
+    Route::apiResource('customer-group-fourth', CustomerGroupFourthController::class);
 
     Route::get('/customers', [CustomerController::class, 'findAll']);
 

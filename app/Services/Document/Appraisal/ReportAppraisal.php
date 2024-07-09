@@ -95,7 +95,7 @@ class ReportAppraisal extends Report
         $cell21->addText('', null, array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
         $cell22 = $table2->addCell(Converter::inchToTwip(4));
         $cell22->addText(ucfirst($this->certificateLongDateText), null, array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
-        $section->addText("BÁO CÁO KẾT QUẢ THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '18'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
+        $section->addText("BÁO CÁO THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '18'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
         $section->addText('(Kèm theo Chứng thư Thẩm định giá số ' . $this->certificateCode . ', ngày ' . $this->certificateShortDateText . ')', ['italic' => true], ['align' => 'center', 'spaceAfter' => 300]);
     }
     protected function getAssetName($certificate)
@@ -962,28 +962,28 @@ class ReportAppraisal extends Report
         if (!$this->isOnlyAsset) {
             $section->addTitle('Tài sản thẩm định giá ' . ($stt + 1), 3);
         }
-        $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+        $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
     }
     protected function step8Sub4Appraise(Section $section, $stt)
     {
         if ($this->isOnlyAsset) {
             if ($this->isTangibleAsset) {
                 $section->addTitle('Quyền sử dụng đất:', 3);
-                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
                 $section->addTitle('Nhà cửa, vật kiến trúc:', 3);
-                $section->addText('- Chi tiết xem Phụ lục 2 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem Phụ lục 2 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             } else {
-                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             }
         } else {
             $section->addTitle('Tài sản thẩm định giá ' . ($stt + 1), 3);
             if ($this->isTangibleAsset) {
                 $section->addText('a) Quyền sử dụng đất:', ['italic' => true], $this->indentFistLine);
-                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
                 $section->addText('b) Nhà cửa, vật kiến trúc:', ['italic' => true], $this->indentFistLine);
-                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 2 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 2 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             } else {
-                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             }
         }
     }
@@ -1523,13 +1523,15 @@ class ReportAppraisal extends Report
     protected function step10(Section $section, $certificate)
     {
         $section->addTitle('NHỮNG ĐIỀU KHOẢN LOẠI TRỪ VÀ HẠN CHẾ CỦA KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
-        $section->addListItem('Tại thời điểm thẩm định, tổ thẩm định giá đã nỗ lực hết mức nhưng không tìm được thông tin giao dịch thành tại khu vực tài sản thẩm định. Kết quả thẩm định giá trên được ước tính dựa trên thông tin giao dịch của các tài sản đang rao bán trên thị trường.', 0, null, 'bullets', $this->indentFistLine);
+        // $section->addListItem('Tại thời điểm thẩm định, tổ thẩm định giá đã nỗ lực hết mức nhưng không tìm được thông tin giao dịch thành tại khu vực tài sản thẩm định. Kết quả thẩm định giá trên được ước tính dựa trên thông tin giao dịch của các tài sản đang rao bán trên thị trường.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên chỉ có giá trị cho tài sản có đặc điểm pháp lý, đặc điểm kỹ thuật được mô tả tại mục III của báo cáo này, theo yêu cầu thẩm định giá của ' . (isset($certificate->petitioner_name) ? $certificate->petitioner_name : '') . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Các số liệu về tài sản ' . $this->companyName . ' căn cứ vào hồ sơ do khách hàng cung cấp và kết hợp khảo sát thực tế tại hiện trường dưới sự hướng dẫn của khách hàng và các bên có liên quan.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Báo cáo chỉ có hiệu lực trong phạm vi số lượng và giá trị tài sản ghi tại mục III của báo cáo này.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Kết quả thẩm định giá trên chỉ được sử dụng cho một “mục đích thẩm định giá” duy nhất theo hợp đồng thẩm định giá đã ký kết Khách hàng phải hoàn toàn chịu trách nhiệm khi sử dụng sai mục đích đã yêu cầu.', 0, null, 'bullets', $this->indentFistLine);
         $section->addListItem('Khách hàng là chủ tài sản hoặc bên thứ ba yêu cầu thẩm định giá phải chịu hoàn toàn trách nhiệm về tính chính xác, hợp pháp các thông tin liên quan đến đặc điểm kỹ thuật, tính năng và tính pháp lý của tài sản thẩm định giá đã cung cấp cho ' . $this->companyName . ' tại thời điểm và địa điểm thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addListItem('' . $this->companyName . ' không có trách nhiệm kiểm tra thông tin của những bản sao các giấy tờ liên quan đến tính chất pháp lý của tài sản yêu cầu thẩm định giá so với bản gốc. ', 0, null, 'bullets', array_merge($this->indentFistLine, $this->keepNext));
+        $section->addListItem('Chứng thư thẩm định giá và báo cáo thẩm định giá được sử dụng làm một trong những cơ sở để khách hàng xem xét, quyết định hoặc phê duyệt giá của tài sản. Chứng thư, báo cáo thẩm định giá chỉ có giá trị sử dụng trong thời gian hiệu lực theo đúng mục đích thẩm định giá gắn với đúng thông tin tài sản, số lượng tài sản như trên. ', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem('Khách hàng chịu trách nhiệm về việc sử dụng chứng thư thẩm định giá, báo cáo thẩm định giá trong việc quyết định, phê duyệt giá tài sản. Việc sử dụng chứng thư, báo cáo thẩm định giá phải trong thời gian hiệu lực của chứng thư thẩm định giá theo đúng mục đích thẩm định giá gắn với đúng thông tin tài sản, số lượng tài sản như trên. ', 0, null, 'bullets', $this->indentFistLine);
+        $section->addListItem($this->companyName . ' không có trách nhiệm kiểm tra thông tin của những bản sao các giấy tờ liên quan đến tính chất pháp lý của tài sản yêu cầu thẩm định giá so với bản gốc. ', 0, null, 'bullets', array_merge($this->indentFistLine, $this->keepNext));
     }
     //X
     protected function printAppendix(Section $section, $certificate)
