@@ -529,7 +529,9 @@ class GiayYeuCau
         $section->addText("GIẤY YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '15'], ['align' => 'center']);
 
         $textRun = $section->addTextRun("alignItemCenter");
-        $textRun->addText(' ', array('spaceAfter' => 240));
+        if ($certificate->is_company == 0) {
+            $textRun->addText(' ', array('spaceAfter' => 240));
+        }
         $textRun->addText("Kính gửi", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
         $textRun->addText(": ", ['size' => '13'], ['align' => 'center']);
         $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
