@@ -1295,7 +1295,6 @@ class HopDongTDG
                 'tblHeader' => false,
                 'cantSplit' => false
             ];
-            $table = $section->addTable();
             $cantSplit = ['cantSplit' => false];
             $table->addRow(400, $rowHeader);
             $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered));
