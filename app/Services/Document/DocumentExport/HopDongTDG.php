@@ -1473,7 +1473,7 @@ class HopDongTDG
         }
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", null, ['align' => 'center', 'italic' => true]);
+        $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", ['italic' => true], ['align' => 'center']);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.2.", null, ['align' => 'right']);
@@ -1702,7 +1702,7 @@ class HopDongTDG
         $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
-        $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText(strtoupper($chucvu), ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
         $row3->addCell(4950)->addText("\n\n\n\n\n");
