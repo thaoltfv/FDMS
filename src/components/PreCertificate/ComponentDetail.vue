@@ -3670,7 +3670,8 @@ export default {
 					(this.priceEstimates.createdAtString
 						? "_" + this.priceEstimates.createdAtString
 						: "");
-				const pdfDocGenerator = pdfMake
+
+				const pdfDocGenerator = await pdfMake
 					.createPdf(docDefinition)
 					.download(title);
 				this.showLoadingPrint = false;

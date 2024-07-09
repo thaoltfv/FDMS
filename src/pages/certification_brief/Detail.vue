@@ -162,7 +162,20 @@
 										}}
 									</p>
 								</div>
-
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline"
+										>Loại khách hàng:</strong
+									>
+									<p>
+										{{
+											form.is_company === 0
+												? "Khách hàng cá nhân"
+												: form.is_company === 1
+												? "Khách hàng doanh nghiệp"
+												: ""
+										}}
+									</p>
+								</div>
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
@@ -452,7 +465,20 @@
 										}}
 									</p>
 								</div>
-
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Loại khách hàng:</strong
+									>
+									<p>
+										{{
+											form.is_company === 0
+												? "Khách hàng cá nhân"
+												: form.is_company === 1
+												? "Khách hàng doanh nghiệp"
+												: ""
+										}}
+									</p>
+								</div>
 								<div class="d-flex container_content flex-column">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
@@ -4840,7 +4866,7 @@ export default {
 			if (
 				this.form.document_num &&
 				this.form.document_num.trim() !== "" &&
-				this.form.document_num.trim() !== "/HĐ-TĐG" &&
+				// this.form.document_num.trim() !== "/HĐ-TĐG" &&
 				this.form.document_date &&
 				this.form.document_date.trim() !== ""
 			) {

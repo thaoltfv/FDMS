@@ -284,9 +284,9 @@ export default {
 			}
 		});
 
-		if (this.isMobile) {
-			this.selectedStatus = ["3"];
-		}
+		// if (this.isMobile) {
+		// 	this.selectedStatus = ["3"];
+		// }
 	},
 	setup() {
 		const checkMobile = () => {

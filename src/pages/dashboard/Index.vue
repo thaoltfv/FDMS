@@ -3,19 +3,19 @@
 		<div v-for="item in dashboard" :key="item.id" :class="item.class">
 			<CertificationBacklogChart
 				:name="item.name"
-				v-if="item.slug === 'backlog_report' && !isMobile"
+				v-if="item.slug === 'backlog_report' && !isMobile()"
 			/>
 			<ProcessProgressChart
 				:name="item.name"
-				v-if="item.slug === 'process_progress_report' && !isMobile"
+				v-if="item.slug === 'process_progress_report' && !isMobile()"
 			/>
 			<FinishByQuarterChart
 				:name="item.name"
-				v-if="item.slug === 'finish_byquarter_report' && !isMobile"
+				v-if="item.slug === 'finish_byquarter_report' && !isMobile()"
 			/>
 			<CancelByQuarterChart
 				:name="item.name"
-				v-if="item.slug === 'cancel_byquarter_report' && !isMobile"
+				v-if="item.slug === 'cancel_byquarter_report' && !isMobile()"
 			/>
 			<FinishByMonthChart
 				:name="item.name"
@@ -27,35 +27,35 @@
 			/>
 			<BranchRevenueChart
 				:name="item.name"
-				v-if="item.slug === 'branch_revenue_report' && !isMobile"
+				v-if="item.slug === 'branch_revenue_report' && !isMobile()"
 			/>
 			<BranchDeptChart
 				:name="item.name"
-				v-if="item.slug === 'branch_debt_report' && !isMobile"
+				v-if="item.slug === 'branch_debt_report' && !isMobile()"
 			/>
 			<CountCompareAssetChart
 				:name="item.name"
-				v-if="item.slug === 'compare_asset_report' && !isMobile"
+				v-if="item.slug === 'compare_asset_report' && !isMobile()"
 			/>
 			<CountAppraiseAssetChart
 				:name="item.name"
-				v-if="item.slug === 'appraise_asset_report' && !isMobile"
+				v-if="item.slug === 'appraise_asset_report' && !isMobile()"
 			/>
 			<StatusChart
 				:name="item.name"
-				v-if="item.slug === 'status_report' && !isMobile"
+				v-if="item.slug === 'status_report' && !isMobile()"
 				:fromDate="fromDate"
 				:toDate="toDate"
 			/>
 			<ProcessAppraiserChart
 				:name="item.name"
-				v-if="item.slug === 'process_appraiser_report' && !isMobile"
+				v-if="item.slug === 'process_appraiser_report' && !isMobile()"
 				:fromDate="fromDate"
 				:toDate="toDate"
 			/>
 			<CertificationBriefChart
 				:name="item.name"
-				v-if="item.slug === 'certification_brief_report' && !isMobile"
+				v-if="item.slug === 'certification_brief_report' && !isMobile()"
 				:fromDate="fromDateMonth"
 				:toDate="toDateMonth"
 			/>

@@ -20,7 +20,6 @@
 			</div>
 		</div>
 		<a-table
-			bordered
 			:columns="columns"
 			:data-source="list"
 			:loading="isLoading"
@@ -33,7 +32,7 @@
 			<!--Custom type table-->
 			<template slot="action" slot-scope="action_edit, action_delete">
 				<div class="d-flex justify-content-end">
-					<a-tooltip
+					<!-- <a-tooltip
 						placement="bottom"
 						:title="$t('tooltip_edit')"
 						v-if="edit"
@@ -50,7 +49,7 @@
 								alt="icon"
 							/>
 						</a>
-					</a-tooltip>
+					</a-tooltip> -->
 					<!-- <a-tooltip placement="bottom"
                     :title="$t('tooltip_delete')" v-if="deleted">
            <a href="#"
