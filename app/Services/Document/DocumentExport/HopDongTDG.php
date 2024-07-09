@@ -978,12 +978,12 @@ class HopDongTDG
             $indent13
         );
         $section->addText(
-            "- Căn cứ Luật giá số 11/2012/QH13 do Quốc Hội thông qua ngày 20/06/2012, có hiệu lực thi hành từ ngày 01/01/2013;",
+            "- Căn cứ Luật giá số 16/2023/QH15 do Quốc Hội thông qua ngày 19/06/2023, có hiệu lực thi hành từ ngày 01/07/2024;",
             ['italic' => true],
             $indent13
         );
         $section->addText(
-            "- Căn cứ vào chức năng quyền hạn của Công ty TNHH Thẩm định giá Nova và nhu cầu của khách hàng.",
+            $certificate->is_company == 0 ? "- Căn cứ vào nhu cầu của khách hàng và chức năng của Công ty TNHH Thẩm định giá Nova" : "- Căn cứ vào chức năng quyền hạn của Công ty TNHH Thẩm định giá Nova và nhu cầu của khách hàng.",
             ['italic' => true],
             $indent13
         );
@@ -1494,7 +1494,7 @@ class HopDongTDG
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.3.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Phương thức thanh toán: Tiền mặt hoặc Chuyển khoản (Trên 20 triệu tư vấn khách chuyển khoản).", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Phương thức thanh toán: Tiền mặt hoặc Chuyển khoản.", null, $indentleftNumber);
 
 
         $textRun = $section->addTextRun(['align' => 'both']);
@@ -1687,7 +1687,7 @@ class HopDongTDG
 
         $row4 = $table->addRow();
         $row4->addCell(600)->addText("8.4.", null, ['align' => 'right']);
-        $row4->addCell(9300)->addText("Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 04 bản, có giá trị pháp lý như nhau, bên A giữ 02 bản, bên B giữ 02 bản.", null, $indentleftNumber);
+        $row4->addCell(9300)->addText(($certificate->is_company == 0 ? "Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 02 bản, có giá trị pháp lý như nhau, bên A giữ 01 bản, bên B giữ 01 bản." : "Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành 04 bản, có giá trị pháp lý như nhau, bên A giữ 02 bản, bên B giữ 02 bản."), null, $indentleftNumber);
 
         $table = $section->addTable([
             'align' => JcTable::START,
