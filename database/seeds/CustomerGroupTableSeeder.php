@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Distance;
-use App\Models\District;
-use App\Models\Street;
-use App\Models\Ward;
+use App\Models\CustomerGroupFirst;
+use App\Models\CustomerGroupSecond;
+use App\Models\CustomerGroupThird;
+use App\Models\CustomerGroupFourth;
+use App\Models\Dictionary;
 use Illuminate\Database\Seeder;
-use Rap2hpoutre\FastExcel\FastExcel;
 
 
 class CustomerGroupTableSeeder extends Seeder
@@ -19,65 +19,82 @@ class CustomerGroupTableSeeder extends Seeder
     public function run()
     {
         DB::transaction(function () {
-            Distance::query()->where('province_id', '=', 45)->delete();
-            Street::query()
-                ->where('province_id', '=', 45)
-                ->delete();
-            $sheets = (new FastExcel())->configureCsv()->import(database_path('mocks/street_compare.csv'));
-            $sheets->map(function ($value) {
-                if ($value['new_name']) {
-                    if ($value['id']) {
-                        Street::onlyTrashed()
-                            ->where('id', $value['id'])
-                            ->restore();
-                        Street::query()
-                            ->where('id', $value['id'])
-                            ->update(
-                                array(
-                                    'name' => trim($value['new_name']),
-                                )
-                            );
-                        if ($value['distance']) {
-                            $distance = array(
-                                'name' => trim($value['distance']),
-                                'detail' => trim($value['distance']),
-                                'district_id' => trim($value['district_id']),
-                                'province_id' => trim($value['province_id']),
-                                'street_id' => trim($value['id']),
-                            );
-                            Distance::query()->insertGetId($distance);
-                        }
-                    } else {
-                        $exit = Street::query()
-                            ->where('name', '=', trim($value['new_name']))
-                            ->where('district_id', '=', $value['district_id'])
-                            ->where('province_id', '=', $value['province_id'])
-                            ->first();
-                        if ($exit) {
-                            $streetId = $exit->id;
+            $listCustomerGroup = Dictionary::query()->where('type', '=', 'NHOM-DOI-TAC')->get();
+            if (count($listCustomerGroup) > 0) {
+                foreach ($listCustomerGroup as $key => $group) {
+                    $firstId = null;
+                    $secondId = null;
+                    $thirdId = null;
+                    $fourthId = null;
+                    if ($group->name_lv_1) {
+                        $check = CustomerGroupFirst::query()->where('name', 'ILIKE', '%' . $group->name_lv_1 . '%')->first();
+                        if (isset($check) > 0) {
+                            $firstId = $check->id;
+                            Dictionary::query()->where('id', '=', $group->id)->update(['first_id' => $firstId]);
                         } else {
-                            $streetId = Street::query()
-                                ->insertGetId(
-                                    array(
-                                        'name' => trim($value['new_name']),
-                                        'district_id' => trim($value['district_id']),
-                                        'province_id' => trim($value['province_id']),
-                                    )
-                                );
-                        }
-                        if ($value['distance']) {
-                            $distance = array(
-                                'name' => trim($value['distance']),
-                                'detail' => trim($value['distance']),
-                                'district_id' => trim($value['district_id']),
-                                'province_id' => trim($value['province_id']),
-                                'street_id' => $streetId,
+                            $insert = array(
+                                'name' => $group->name_lv_1
                             );
-                            Distance::query()->insertGetId($distance);
+                            $firstId = CustomerGroupFirst::query()->insertGetId($insert);
+                            Dictionary::query()->where('id', '=', $group->id)->update(['first_id' => $firstId]);
+                        }
+                    }
+
+                    if ($group->name_lv_2) {
+                        if ($firstId) {
+                            $check2 = CustomerGroupSecond::query()->where('name', 'ILIKE', '%' . $group->name_lv_2 . '%')->where('first_id', '=', $firstId)->first();
+                            if (isset($check2) > 0) {
+                                $secondId = $check2->id;
+                                Dictionary::query()->where('id', '=', $group->id)->update(['second_id' => $secondId]);
+                            } else {
+                                $insert2 = array(
+                                    'name' => $group->name_lv_2,
+                                    'first_id' => $firstId
+                                );
+                                $secondId = CustomerGroupSecond::query()->insertGetId($insert2);
+                                Dictionary::query()->where('id', '=', $group->id)->update(['second_id' => $secondId]);
+                            }
+                        }
+                    }
+
+                    if ($group->name_lv_3) {
+                        if ($firstId && $secondId) {
+                            $check3 = CustomerGroupThird::query()->where('name', 'ILIKE', '%' . $group->name_lv_3 . '%')->where('first_id', '=', $firstId)->where('second_id', '=', $secondId)->first();
+                            if (isset($check3) > 0) {
+                                $thirdId = $check3->id;
+                                Dictionary::query()->where('id', '=', $group->id)->update(['third_id' => $thirdId]);
+                            } else {
+                                $insert3 = array(
+                                    'name' => $group->name_lv_3,
+                                    'first_id' => $firstId,
+                                    'second_id' => $secondId
+                                );
+                                $thirdId = CustomerGroupThird::query()->insertGetId($insert3);
+                                Dictionary::query()->where('id', '=', $group->id)->update(['third_id' => $thirdId]);
+                            }
+                        }
+                    }
+
+                    if ($group->name_lv_4) {
+                        if ($firstId && $secondId && $thirdId) {
+                            $check4 = CustomerGroupFourth::query()->where('name', 'ILIKE', '%' . $group->name_lv_4 . '%')->where('first_id', '=', $firstId)->where('second_id', '=', $secondId)->where('third_id', '=', $thirdId)->first();
+                            if (isset($check4) > 0) {
+                                $fourthId = $check4->id;
+                                Dictionary::query()->where('id', '=', $group->id)->update(['fourth_id' => $fourthId]);
+                            } else {
+                                $insert4 = array(
+                                    'name' => $group->name_lv_4,
+                                    'first_id' => $firstId,
+                                    'second_id' => $secondId,
+                                    'third_id' => $thirdId
+                                );
+                                $fourthId = CustomerGroupFourth::query()->insertGetId($insert3);
+                                Dictionary::query()->where('id', '=', $group->id)->update(['fourth_id' => $fourthId]);
+                            }
                         }
                     }
                 }
-            });
+            }
         });
     }
 }
