@@ -1284,17 +1284,18 @@ class HopDongTDG
         }
         if (!empty($arrayTable)) {
 
-            $table = $section->addTable([
-                'borderSize' => 0,
-                'alignment' => JcTable::END,
-                'width' => 50 * 50,
-                'unit' => 'pct',
-            ]);
+            // $table = $section->addTable([
+            //     'borderSize' => 0,
+            //     'alignment' => JcTable::END,
+            //     'width' => 50 * 50,
+            //     'unit' => 'pct',
+            // ]);
 
-            $rowHeader = [
-                'tblHeader' => false,
-                'cantSplit' => false
-            ];
+            // $rowHeader = [
+            //     'tblHeader' => false,
+            //     'cantSplit' => false
+            // ];
+            $table = $section->addTable();
             $cantSplit = ['cantSplit' => false];
             $table->addRow(400, $rowHeader);
             $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered));
