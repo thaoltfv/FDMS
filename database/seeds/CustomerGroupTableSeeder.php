@@ -19,7 +19,7 @@ class CustomerGroupTableSeeder extends Seeder
     public function run()
     {
         DB::transaction(function () {
-            $listCustomerGroup = Dictionary::query()->where('type', '=', 'NHOM-DOI-TAC')->get();
+            $listCustomerGroup = Dictionary::query()->where('type', '=', 'NHOM_DOI_TAC')->get();
             if (count($listCustomerGroup) > 0) {
                 foreach ($listCustomerGroup as $key => $group) {
                     $firstId = null;
