@@ -1283,7 +1283,7 @@ class HopDongTDG
             }
         }
         if (!empty($arrayTable)) {
-            $indent = new TblWidth(720, TblWidth::TWIP); // 720 twips ~ 0.5 inch
+            $indent = new TblWidth(720, 'twip'); // 720 twips ~ 0.5 inch
 
             $table2 = $section->addTable([
 
