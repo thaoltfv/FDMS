@@ -1286,10 +1286,10 @@ class HopDongTDG
 
             $table = $section->addTable([
                 'borderSize' => 1,
-                'alignment' => JcTable::END,
+                'align' => 'center',
                 'width' => 80 * 50,
                 'unit' => 'pct',
-                'position' => PhpOffice\PhpWord\Style\TablePosition::XALIGN_CENTER
+
             ]);
 
             $rowHeader = [
