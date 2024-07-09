@@ -140,8 +140,8 @@ export default {
 .btn {
 	&-home {
 		position: fixed;
-		left: 0;
-		top: 110px;
+		right: 0;
+		top: 170px;
 		z-index: 100;
 		opacity: 0.6;
 		border-radius: 50%;

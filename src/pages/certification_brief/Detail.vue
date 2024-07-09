@@ -162,7 +162,20 @@
 										}}
 									</p>
 								</div>
-
+								<div class="d-flex container_content">
+									<strong class="margin_content_inline"
+										>Loại khách hàng:</strong
+									>
+									<p>
+										{{
+											form.is_company === 0
+												? "Khách hàng cá nhân"
+												: form.is_company === 1
+												? "Khách hàng doanh nghiệp"
+												: ""
+										}}
+									</p>
+								</div>
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
@@ -452,7 +465,20 @@
 										}}
 									</p>
 								</div>
-
+								<div class="d-flex container_content flex-column">
+									<strong class="margin_content_inline"
+										>Loại khách hàng:</strong
+									>
+									<p>
+										{{
+											form.is_company === 0
+												? "Khách hàng cá nhân"
+												: form.is_company === 1
+												? "Khách hàng doanh nghiệp"
+												: ""
+										}}
+									</p>
+								</div>
 								<div class="d-flex container_content flex-column">
 									<strong class="margin_content_inline">Ghi chú:</strong
 									><span id="note" class="text-left">{{
@@ -626,7 +652,7 @@
 			</div>
 		</div>
 		<PaymentCertificateHistories
-			v-if="form"
+			v-if="form && !isMobile()"
 			:key="keyRender"
 			@getDetail="getDetail"
 			:form="form"
@@ -929,7 +955,7 @@
 						<div class="d-flex mr-4">
 							<div
 								class=""
-								v-if="isViewAutomationDocument"
+								v-if="isViewAutomationDocument && !isMobile()"
 								:id="'download_all_official_auto'"
 								@click="handleDownloadAll('TaiLieuTuDong')"
 							>
@@ -992,7 +1018,15 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewCertificate(idData)" class="mr-2">
+										<div
+											@click="viewCertificate(idData)"
+											class="mr-2"
+											:style="
+												isMobile()
+													? { marginTop: '-28px', marginLeft: '10px' }
+													: {}
+											"
+										>
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
@@ -1005,7 +1039,8 @@
 												statusDescription !== 'Hoàn thành' &&
 													statusDescription !== 'In hồ sơ' &&
 													statusDescription !== 'Bàn giao khách hàng' &&
-													statusDescription !== 'Hủy'
+													statusDescription !== 'Hủy' &&
+													!isMobile()
 											"
 											:id="'convert_all_official_auto'"
 											@click="
@@ -1057,7 +1092,15 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewReportCertificate(idData)" class="mr-2">
+										<div
+											@click="viewReportCertificate(idData)"
+											class="mr-2"
+											:style="
+												isMobile()
+													? { marginTop: '-28px', marginLeft: '10px' }
+													: {}
+											"
+										>
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
@@ -1070,7 +1113,8 @@
 												statusDescription !== 'Hoàn thành' &&
 													statusDescription !== 'In hồ sơ' &&
 													statusDescription !== 'Bàn giao khách hàng' &&
-													statusDescription !== 'Hủy'
+													statusDescription !== 'Hủy' &&
+													!isMobile()
 											"
 											@click="
 												showPopupComfirmConvertDocumentView('appraisal_report')
@@ -1117,9 +1161,17 @@
 									</div>
 									<div
 										v-if="isViewAutomationDocument"
-										class="d-flex align-items-center justify-content-end pr-3"
+										class="d-flex align-items-center justify-content-end pr-3 "
 									>
-										<div @click="viewAppendix1(idData)" class="mr-2">
+										<div
+											@click="viewAppendix1(idData)"
+											class="mr-2"
+											:style="
+												isMobile()
+													? { marginTop: '-28px', marginLeft: '10px' }
+													: {}
+											"
+										>
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
@@ -1132,7 +1184,8 @@
 												statusDescription !== 'Hoàn thành' &&
 													statusDescription !== 'In hồ sơ' &&
 													statusDescription !== 'Bàn giao khách hàng' &&
-													statusDescription !== 'Hủy'
+													statusDescription !== 'Hủy' &&
+													!isMobile()
 											"
 											@click="
 												showPopupComfirmConvertDocumentView('appendix1_report')
@@ -1187,7 +1240,15 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix2(idData)" class="mr-2">
+										<div
+											@click="viewAppendix2(idData)"
+											class="mr-2"
+											:style="
+												isMobile()
+													? { marginTop: '-28px', marginLeft: '10px' }
+													: {}
+											"
+										>
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
@@ -1200,7 +1261,8 @@
 												statusDescription !== 'Hoàn thành' &&
 													statusDescription !== 'In hồ sơ' &&
 													statusDescription !== 'Bàn giao khách hàng' &&
-													statusDescription !== 'Hủy'
+													statusDescription !== 'Hủy' &&
+													!isMobile()
 											"
 											@click="
 												showPopupComfirmConvertDocumentView('appendix2_report')
@@ -1249,7 +1311,15 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAppendix3(idData)" class="mr-2">
+										<div
+											@click="viewAppendix3(idData)"
+											class="mr-2"
+											:style="
+												isMobile()
+													? { marginTop: '-28px', marginLeft: '10px' }
+													: {}
+											"
+										>
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
@@ -1262,7 +1332,8 @@
 												statusDescription !== 'Hoàn thành' &&
 													statusDescription !== 'In hồ sơ' &&
 													statusDescription !== 'Bàn giao khách hàng' &&
-													statusDescription !== 'Hủy'
+													statusDescription !== 'Hủy' &&
+													!isMobile()
 											"
 											@click="
 												showPopupComfirmConvertDocumentView('appendix3_report')
@@ -1315,7 +1386,15 @@
 										v-if="isViewAutomationDocument"
 										class="d-flex align-items-center justify-content-end pr-3"
 									>
-										<div @click="viewAssetDocument(idData)" class="mr-2">
+										<div
+											@click="viewAssetDocument(idData)"
+											class="mr-2"
+											:style="
+												isMobile()
+													? { marginTop: '-28px', marginLeft: '10px' }
+													: {}
+											"
+										>
 											<img
 												src="@/assets/icons/ic_search_3.svg"
 												alt="search"
@@ -1328,7 +1407,8 @@
 												statusDescription !== 'Hoàn thành' &&
 													statusDescription !== 'In hồ sơ' &&
 													statusDescription !== 'Bàn giao khách hàng' &&
-													statusDescription !== 'Hủy'
+													statusDescription !== 'Hủy' &&
+													!isMobile()
 											"
 											@click="
 												showPopupComfirmConvertDocumentView(
@@ -1383,12 +1463,13 @@
 						<div
 							class="mr-4"
 							v-if="
-								isCertificateReport ||
+								(isCertificateReport ||
 									isAppraisalReport ||
 									isAppendix1Report ||
 									isAppendix2Report ||
 									isAppendix3Report ||
-									isComparisionAssetReport
+									isComparisionAssetReport) &&
+									!isMobile()
 							"
 							:id="'download_all_official'"
 							@click="handleDownloadAll('TaiLieuChinhThuc')"
@@ -1440,6 +1521,7 @@
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<font-awesome-icon
+											v-if="!isMobile()"
 											@click="deletedDocumentFile('certificate_report')"
 											:style="{
 												color: 'lightgray',
@@ -1457,7 +1539,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
-												v-if="statusDescription !== 'Hoàn thành'"
+												v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1527,6 +1609,7 @@
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<font-awesome-icon
+											v-if="!isMobile()"
 											@click="deletedDocumentFile('appraisal_report')"
 											:style="{
 												color: 'lightgray',
@@ -1544,7 +1627,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
-												v-if="statusDescription !== 'Hoàn thành'"
+												v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1614,6 +1697,7 @@
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<font-awesome-icon
+											v-if="!isMobile()"
 											@click="deletedDocumentFile('appendix1_report')"
 											:style="{
 												color: 'lightgray',
@@ -1631,7 +1715,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
-												v-if="statusDescription !== 'Hoàn thành'"
+												v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1707,6 +1791,7 @@
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<font-awesome-icon
+											v-if="!isMobile()"
 											@click="deletedDocumentFile('appendix2_report')"
 											:style="{
 												color: 'lightgray',
@@ -1724,7 +1809,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
-												v-if="statusDescription !== 'Hoàn thành'"
+												v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1794,6 +1879,7 @@
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<font-awesome-icon
+											v-if="!isMobile()"
 											@click="deletedDocumentFile('appendix3_report')"
 											:style="{
 												color: 'lightgray',
@@ -1811,7 +1897,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
-												v-if="statusDescription !== 'Hoàn thành'"
+												v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -1885,6 +1971,7 @@
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
 										<font-awesome-icon
+											v-if="!isMobile()"
 											@click="deletedDocumentFile('comparision_asset_report')"
 											:style="{
 												color: 'lightgray',
@@ -1902,7 +1989,7 @@
 									>
 										<div class="d-flex align-items-center">
 											<font-awesome-icon
-												v-if="statusDescription !== 'Hoàn thành'"
+												v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 												:style="{
 													color: '#2682bfad',
 													position: 'absolute',
@@ -2326,7 +2413,8 @@
 							/> -->
 							<div
 								v-if="
-									form.other_documents &&
+									!isMobile() &&
+										form.other_documents &&
 										form.other_documents.filter(
 											i =>
 												i.description === 'appendix' ||
@@ -2344,7 +2432,7 @@
 								/>
 							</div>
 							<div
-								v-if="statusDescription !== 'Hoàn thành'"
+								v-if="statusDescription !== 'Hoàn thành' && !isMobile()"
 								:id="'upload_other_document'"
 								class="mr-1"
 								@click="openUploadFile('documnent')"
@@ -2399,7 +2487,7 @@
 							class="mb-2 mt-2 col-lg-6 col-md-12 col-sm-12"
 						>
 							<div
-								class="mx-1 input_download_certificate d-flex justify-content-lg-between"
+								class="mx-1 input_download_certificate d-flex justify-content-between"
 							>
 								<div
 									class="d-flex align-items-center"
@@ -2437,7 +2525,8 @@
 									<div>
 										<img
 											v-if="
-												deleted &&
+												!isMobile() &&
+													deleted &&
 													(form.status === 1 ||
 														form.status === 2 ||
 														form.status === 3)
@@ -2517,7 +2606,8 @@
 							/> -->
 							<div
 								v-if="
-									form.other_documents &&
+									!isMobile() &&
+										form.other_documents &&
 										form.other_documents.filter(
 											i => i.description === 'original'
 										).length > 0
@@ -2533,6 +2623,7 @@
 								/>
 							</div>
 							<div
+								v-if="!isMobile()"
 								:id="'upload_original_document'"
 								class="mr-1"
 								@click="openUploadFile('original')"
@@ -4775,7 +4866,7 @@ export default {
 			if (
 				this.form.document_num &&
 				this.form.document_num.trim() !== "" &&
-				this.form.document_num.trim() !== "/HĐ-TĐG" &&
+				// this.form.document_num.trim() !== "/HĐ-TĐG" &&
 				this.form.document_date &&
 				this.form.document_date.trim() !== ""
 			) {
@@ -4784,35 +4875,37 @@ export default {
 			return returnCheck;
 		},
 		checkDownloadDocument(type) {
-			const check = this.checkDocumentNumAndDate();
-			if (check) {
-				// Chứng thư thẩm định
-				if (type === "certificate") {
-					this.downloadCertificate();
+			if (!this.isMobile()) {
+				const check = this.checkDocumentNumAndDate();
+				if (check) {
+					// Chứng thư thẩm định
+					if (type === "certificate") {
+						this.downloadCertificate();
+					}
+					// Báo cáo thẩm định
+					if (type === "report_certificate") {
+						this.downloadReportCertificate();
+					}
+					// QSDĐ
+					if (type === "appendix1") {
+						this.downloadAppendix1();
+					}
+					// CTXD
+					if (type === "appendix2") {
+						this.downloadAppendix2();
+					}
+					// Hình ảnh hiện trạng
+					if (type === "appendix3") {
+						this.downloadAppendix3();
+					}
+					// Tài sản so sánh
+					if (type === "asset_document") {
+						this.downloadAssetDocument();
+					}
+				} else {
+					this.showPopupComfirmDownloadAutoDocument = true;
+					this.typeConfirm = type;
 				}
-				// Báo cáo thẩm định
-				if (type === "report_certificate") {
-					this.downloadReportCertificate();
-				}
-				// QSDĐ
-				if (type === "appendix1") {
-					this.downloadAppendix1();
-				}
-				// CTXD
-				if (type === "appendix2") {
-					this.downloadAppendix2();
-				}
-				// Hình ảnh hiện trạng
-				if (type === "appendix3") {
-					this.downloadAppendix3();
-				}
-				// Tài sản so sánh
-				if (type === "asset_document") {
-					this.downloadAssetDocument();
-				}
-			} else {
-				this.showPopupComfirmDownloadAutoDocument = true;
-				this.typeConfirm = type;
 			}
 		},
 		handleDownloadConfirm() {
@@ -5265,14 +5358,16 @@ export default {
 			this.isApartment = isApartment;
 		},
 		downloadDocumentFile(type) {
-			let file = this.form.other_documents.find(i => i.description === type);
-			if (file) {
-				// this.downloadDocument(file)
-				this.downloadOtherFile(file);
-			} else
-				this.openMessage(
-					"Không tìm thấy file cần tải. Vui lòng xem refesh lại trang."
-				);
+			if (!this.isMobile()) {
+				let file = this.form.other_documents.find(i => i.description === type);
+				if (file) {
+					// this.downloadDocument(file)
+					this.downloadOtherFile(file);
+				} else
+					this.openMessage(
+						"Không tìm thấy file cần tải. Vui lòng xem refesh lại trang."
+					);
+			}
 		},
 		viewDocumentFile(type) {
 			let file = this.form.other_documents.find(i => i.description === type);

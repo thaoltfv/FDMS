@@ -39,12 +39,23 @@
 								/>
 							</div>
 							<div class="col-lg-6 col-sm-12">
-								<InputText
-									v-model="form.document_num"
-									vid="document_num"
-									label="Số hợp đồng"
-									class="form-group-container"
-								/>
+								<div class="row justify-content-around">
+									<InputText
+										v-model="form.document_num"
+										vid="document_num"
+										label="Số hợp đồng"
+										class="w-50 form-group-container input_left"
+									/>
+									<InputDatePicker
+										v-model="form.document_date"
+										vid="document_date"
+										label="Ngày hợp đồng"
+										:formatDate="'DD/MM/YYYY'"
+										@change="changeDocumentDate"
+										placeholder="Ngày / tháng / năm"
+										class="w-50 form-group-container input_right"
+									/>
+								</div>
 							</div>
 							<div class="col-lg-6 col-sm-12">
 								<InputTextPrefixCustom
@@ -61,14 +72,15 @@
 							</div>
 							<div class="col-lg-6 col-sm-12">
 								<div class="row justify-content-around">
-									<InputDatePicker
-										v-model="form.document_date"
-										vid="document_date"
-										label="Ngày hợp đồng"
-										:formatDate="'DD/MM/YYYY'"
-										@change="changeDocumentDate"
-										placeholder="Ngày / tháng / năm"
+									<InputCategory
+										v-model="form.is_company"
 										class="w-50 form-group-container input_left"
+										vid="is_company"
+										label="Loại khách hàng"
+										rules="required"
+										:options="optionsLoaiKH"
+										:disabled="editDocument"
+										@change="data.is_company = $event"
 									/>
 
 									<InputCategory
@@ -356,6 +368,16 @@ export default {
 		InputTextarea
 	},
 	computed: {
+		optionsLoaiKH() {
+			return {
+				data: [
+					{ id: 0, name: "Khách hàng cá nhân" },
+					{ id: 1, name: "Khách hàng doanh nghiệp" }
+				],
+				id: "id",
+				key: "name"
+			};
+		},
 		optionsLoaiHs() {
 			return {
 				data: [
@@ -537,6 +559,7 @@ export default {
 				petitioner_identity_card: form.petitioner_identity_card,
 				document_type: form.document_type,
 				document_alter_by_bank: form.document_alter_by_bank,
+				is_company: form.is_company,
 				note: form.note
 			};
 			// console.log('data',data)

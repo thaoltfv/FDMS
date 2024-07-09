@@ -13,7 +13,7 @@
 			no-flip
 		>
 			<template v-slot:default>
-				<!-- <a-menu mode="inline" style="width:320px">
+				<a-menu v-if="isMobile" mode="inline" style="width:320px">
 					<a-sub-menu key="status">
 						<span slot="title"> <span>Trạng thái HSTĐ</span></span>
 						<a-menu-item
@@ -47,8 +47,9 @@
 							</div>
 						</a-menu-item>
 					</a-sub-menu>
-				</a-menu> -->
+				</a-menu>
 				<a-menu
+					v-else
 					:default-selected-keys="['1']"
 					:default-open-keys="['status']"
 					mode="inline"
@@ -109,6 +110,18 @@ export default {
 		return { isCloseable: false, timeFilter: { from: "", to: "" } };
 	},
 	setup() {
+		const checkMobile = () => {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+		const isMobile = ref(checkMobile());
 		const workFlowConfigStore = useWorkFlowConfig();
 		const { configs } = storeToRefs(workFlowConfigStore);
 		const jsonConfig = ref({});
@@ -138,7 +151,8 @@ export default {
 			jsonConfig,
 			filter,
 			lstFilterStatus,
-			lstStatusChosen
+			lstStatusChosen,
+			isMobile
 		};
 	},
 

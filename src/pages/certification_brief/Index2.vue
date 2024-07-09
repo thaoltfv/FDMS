@@ -162,6 +162,7 @@
 							:value="selectedStatus"
 							@change="onChangeStatus"
 						/> -->
+						<DropdownFilter class="mr-5" @search="onChangeStatus" />
 					</div>
 				</div>
 			</div>
@@ -298,9 +299,9 @@ export default {
 			}
 		});
 
-		if (this.isMobile()) {
-			this.selectedStatus = ["3"];
-		}
+		// if (this.isMobile()) {
+		// 	this.selectedStatus = ["3"];
+		// }
 	},
 	watch: {
 		fromDate() {

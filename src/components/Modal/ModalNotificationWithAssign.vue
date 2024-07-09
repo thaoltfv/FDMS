@@ -61,7 +61,7 @@
 							rules="required"
 							disabled
 							:requiredIcon="true"
-							class="col-6-lg col-6-md col-12-sm"
+							class="col-lg-6 col-md-6 col-sm-12"
 						/>
 						<InputNumberMinute
 							@changeHour="changeEstimateComplete"
@@ -70,7 +70,7 @@
 							label="Thời gian gia hạn"
 							rules="required"
 							:requiredIcon="true"
-							class="col-6-lg col-6-md col-12-sm"
+							class="col-lg-6 col-md-6 col-sm-12"
 						/>
 					</div>
 

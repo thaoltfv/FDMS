@@ -50,8 +50,16 @@
 								v-else
 							/>
 							<span
+								v-if="item.id !== 'price_estimates'"
 								class="text-center wrap-text"
-								style="color:black; font-size: 10px;text-align: center; padding: 2px;"
+								style="color:black; font-size: 0.7rem; padding-left: 5px; padding-right: 5px;"
+							>
+								{{ $t(`${item.title}`) }}
+							</span>
+							<span
+								v-else
+								class="text-center wrap-text"
+								style="color:black; font-size: 0.7rem; padding-left: 7px; padding-right: 7px;"
 							>
 								{{ $t(`${item.title}`) }}
 							</span>
@@ -62,7 +70,7 @@
 			</div>
 		</div>
 		<div v-if="listDropDown.length > 0" class="btn-footer footer-custom">
-			<div class="d-flex justify-content-end">
+			<!-- <div class="d-flex justify-content-end">
 				<img
 					height="25px"
 					@click="listDropDown = []"
@@ -70,8 +78,8 @@
 					src="@/assets/icons/ic_cancel_2.svg"
 					alt="close"
 				/>
-			</div>
-			<div class="d-flex justify-content-center align-items-center">
+			</div> -->
+			<div class="mt-4 d-flex justify-content-center align-items-center">
 				<router-link
 					style="margin: 0 auto;"
 					v-if="hasPermission(item)"
@@ -87,7 +95,7 @@
 </template>
 
 <script>
-import { navigations } from "@/config";
+import { navigationsMobile } from "@/config";
 import store from "@/store";
 import { isEmpty } from "lodash-es";
 import Admin from "@/models/Admin";
@@ -123,7 +131,7 @@ export default {
 		},
 		getNav() {
 			let nav = [];
-			this.navigations.forEach(item => {
+			this.navigationsMobile.forEach(item => {
 				if (this.hasPermission(item)) {
 					nav.push(item);
 				}
@@ -142,7 +150,7 @@ export default {
 	},
 	data() {
 		return {
-			navigations,
+			navigationsMobile,
 			navbar_mini: "navbar-mini",
 			toggle_mini: "toggle-mini",
 			toggle_dropdown: "toggle-dropdown",
@@ -214,13 +222,14 @@ export default {
 		},
 		checkBeforeLink(item) {
 			this.listDropDown = [];
-			const unSupport = [
-				"appraise",
-				"manage",
-				"category",
-				"customer",
-				"menu_certification"
-			];
+			// const unSupport = [
+			// 	"appraise",
+			// 	"manage",
+			// 	"category",
+			// 	"customer",
+			// 	"menu_certification"
+			// ];
+			const unSupport = ["price_estimates", "menu_certification"];
 			if (unSupport.includes(item.id)) {
 				this.$toast.open({
 					message:

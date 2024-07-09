@@ -49,11 +49,8 @@
 							}}</a-checkbox>
 						</a-menu-item>
 					</a-sub-menu>
-					<!-- <a-sub-menu key="time">
-						<span slot="title">
-						
-							<span>Thời gian</span></span
-						>
+					<a-sub-menu key="time" v-if="isMobile">
+						<span slot="title"> <span>Thời gian</span></span>
 						<a-menu-item>
 							<div class="row" style="width:250px">
 								<a-date-picker
@@ -72,7 +69,7 @@
 								></a-date-picker>
 							</div>
 						</a-menu-item>
-					</a-sub-menu> -->
+					</a-sub-menu>
 				</a-menu>
 				<div
 					class="row"
@@ -112,6 +109,18 @@ export default {
 		return { isCloseable: false };
 	},
 	setup(props) {
+		const checkMobile = () => {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+		const isMobile = ref(checkMobile());
 		const preCertificateStore = usePreCertificateStore();
 		const { filter, jsonConfig, filterKanban } = storeToRefs(
 			preCertificateStore
@@ -140,7 +149,8 @@ export default {
 			jsonConfig,
 			filter,
 			preCertificateStore,
-			lstFilterStatus
+			lstFilterStatus,
+			isMobile
 		};
 	},
 
