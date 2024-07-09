@@ -12,7 +12,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\JcTable;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\Style\ListItem;
-use PhpOffice\PhpWord\SimpleType\TblWidth;
+use PhpOffice\PhpWord\ComplexType\TblWidth;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
@@ -1283,8 +1283,8 @@ class HopDongTDG
             }
         }
         if (!empty($arrayTable)) {
-            $indent = new TblWidth();
-            $indent->setWidth(720); // Thụt lề trái cho bảng (720 twips ~ 0.5 inch)
+            $indent = new TblWidth(720, TblWidth::TWIP); // 720 twips ~ 0.5 inch
+
             $table2 = $section->addTable([
 
                 'borderSize' => 1,
