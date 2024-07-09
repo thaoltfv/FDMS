@@ -1282,12 +1282,15 @@ class HopDongTDG
             }
         }
         if (!empty($arrayTable)) {
-
+            $tblWidth = new \PhpOffice\PhpWord\ComplexType\TblWidth();
+            $tblWidth->setType('pct');
+            $tblWidth->setWidth(10);
             $table = $section->addTable([
                 'borderSize' => 1,
                 'align' => JcTable::CENTER,
                 'width' => 80 * 50,
                 'unit' => 'pct',
+                'indent' => $tblWidth
 
             ]);
 
