@@ -54,7 +54,10 @@
 					</div>
 					<div
 						v-if="
-							lstFile.length > 0 && fromComponent && fromComponent === 'Detail'
+							lstFile.length > 0 &&
+								fromComponent &&
+								fromComponent === 'Detail' &&
+								!isMobile
 						"
 						class="mr-2"
 						:id="'download_all_other_document'"

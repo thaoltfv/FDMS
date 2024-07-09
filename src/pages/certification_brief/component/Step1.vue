@@ -230,6 +230,15 @@
 								:showIcon="true"
 								label="Điện thoại người liên hệ"
 							/>
+							<InputCategory
+								v-model="data.is_company"
+								class="form-group-container col-sm-12 col-md-6"
+								vid="is_company"
+								label="Loại khách hàng"
+								rules="required"
+								:options="optionsLoaiKH"
+								@change="data.is_company = $event"
+							/>
 						</div>
 					</div>
 				</div>
@@ -630,6 +639,17 @@ export default {
 				data: [
 					{ id: 0, name: "Biểu mẫu gốc" },
 					{ id: 1, name: "Biểu mẫu Shinhan" }
+				],
+				id: "id",
+				key: "name"
+				// selected: this.userAppraiserId
+			};
+		},
+		optionsLoaiKH() {
+			return {
+				data: [
+					{ id: 0, name: "Khách hàng cá nhân" },
+					{ id: 1, name: "Khách hàng doanh nghiệp" }
 				],
 				id: "id",
 				key: "name"
