@@ -88,7 +88,7 @@ class CustomerGroupTableSeeder extends Seeder
                                     'second_id' => $secondId,
                                     'third_id' => $thirdId
                                 );
-                                $fourthId = CustomerGroupFourth::query()->insertGetId($insert3);
+                                $fourthId = CustomerGroupFourth::query()->insertGetId($insert4);
                                 Dictionary::query()->where('id', '=', $group->id)->update(['fourth_id' => $fourthId]);
                             }
                         }
