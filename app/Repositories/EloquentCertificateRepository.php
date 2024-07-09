@@ -2715,7 +2715,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'administrative_id',
             'business_manager_id',
             'customer_id',
-            'customer_group_id',
+            'certificates.customer_group_id',
             DB::raw("case status
                     when 1
                     then 'Mới'
