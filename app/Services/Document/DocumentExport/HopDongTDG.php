@@ -1477,7 +1477,7 @@ class HopDongTDG
 
         $row = $table->addRow();
         $row->addCell(600)->addText("4.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Phí dịch vụ thẩm định giá được thanh toán ngay sau khi hợp đồng thẩm định giá có hiệu lực.", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Phí dịch vụ thẩm định giá được thanh toán một lần trước khi Bên B tiến hành khảo sát tại hiện trường. ", null, $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
