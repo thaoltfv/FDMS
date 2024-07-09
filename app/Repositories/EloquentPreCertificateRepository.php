@@ -499,22 +499,25 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         // dd($role->name);
         if (request()->has('is_guest')) {
         } elseif ($role->name == 'SUB_ADMIN') {
-            $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
-                    if ($user->branch_id) {
-                        return $q->where('branch_id', $user->branch_id);
-                    }
+            if (isset($user->branch) && $user->branch->acronym === 'HOI_SO') {
+            } else {
+                $result = $result->where(function ($query) use ($user) {
+                    $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
+                        if ($user->branch_id) {
+                            return $q->where('branch_id', $user->branch_id);
+                        }
+                    });
+                    $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
+                    $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
+                    $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
                 });
-                $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-                $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-            });
+            }
         } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
 
@@ -607,7 +610,29 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     $result =  $result->orderBy('petitioner_name', 'ASC');
         }
         if (request()->has('is_guest')) {
-            if (isset($user->name_lv_1)) {
+            if (isset($user->first_id)) {
+                $result = $result->where(function ($q) use ($user) {
+                    $q = $q->whereHas('customerGroup', function ($has) use ($user) {
+                        if ($user->first_id && $user->first_id != '') {
+                            $has->where('first_id', '=', $user->first_id);
+                        }
+                        if ($user->second_id && $user->second_id != '') {
+                            $has->where('second_id', '=', $user->second_id);
+                        }
+                        if ($user->third_id && $user->third_id != '') {
+                            $has->where('third_id', '=', $user->third_id);
+                        }
+                        if ($user->fourth_id && $user->fourth_id != '') {
+                            $has->where('fourth_id', '=', $user->fourth_id);
+                        }
+                    });
+                });
+                $result = $result->orderByDesc('pre_certificates.updated_at');
+                // dd(DB::getQueryLog());
+                $result = $result
+                    ->forPage($page, $perPage)
+                    ->paginate($perPage);
+            } elseif (isset($user->name_lv_1)) {
                 // $result = $result->where('customer_group_id', '=', $user->customer_group_id);
                 $result = $result->where(function ($q) use ($user) {
                     $q = $q->whereHas('customerGroup', function ($has) use ($user) {
@@ -821,22 +846,25 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         // }
         // dd($role->name);
         if ($role->name == 'SUB_ADMIN') {
-            $result = $result->where(function ($query) use ($user) {
-                $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
-                    if ($user->branch_id) {
-                        return $q->where('branch_id', $user->branch_id);
-                    }
+            if (isset($user->branch) && $user->branch->acronym === 'HOI_SO') {
+            } else {
+                $result = $result->where(function ($query) use ($user) {
+                    $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
+                        if ($user->branch_id) {
+                            return $q->where('branch_id', $user->branch_id);
+                        }
+                    });
+                    $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
+                    $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
+                    $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
                 });
-                $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-                $query = $query->orwhereHas('appraiserPerform', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-                $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                });
-            });
+            }
         } elseif (($role->name !== 'ROOT_ADMIN'  && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
             $result = $result->where(function ($query) use ($user) {
                 $query = $query->whereHas('createdBy', function ($q) use ($user) {
