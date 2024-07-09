@@ -1284,7 +1284,7 @@ class HopDongTDG
         }
         if (!empty($arrayTable)) {
 
-            $table = $section->addTable([
+            $table2 = $section->addTable([
 
                 'borderSize' => 1,
                 'align' => 'end',
@@ -1297,17 +1297,17 @@ class HopDongTDG
                 'cantSplit' => false
             ];
             $cantSplit = ['cantSplit' => false];
-            $table->addRow(400, $rowHeader);
-            $table->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered));
-            $table->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
-            $table->addCell(1800, $cellVCentered)->addText('Diện tích (' . $m2 . ')', ['bold' => true], $cellHCentered);
-            $table->addCell(2000, $cellVCentered)->addText('Hiện trạng', ['bold' => true], $cellHCentered);
+            $table2->addRow(400, $rowHeader);
+            $table2->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered));
+            $table2->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
+            $table2->addCell(1800, $cellVCentered)->addText('Diện tích (' . $m2 . ')', ['bold' => true], $cellHCentered);
+            $table2->addCell(2000, $cellVCentered)->addText('Hiện trạng', ['bold' => true], $cellHCentered);
             foreach ($arrayTable as $index => $item) {
-                $table->addRow(400, $cantSplit);
-                $table->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered));
-                $table->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => false], $cellHJustify);
-                $table->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => false], $cellHCentered);
-                $table->addCell(2000, $cellVCentered)->addText($item[3], ['bold' => false], $cellHCentered);
+                $table2->addRow(400, $cantSplit);
+                $table2->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered));
+                $table2->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => false], $cellHJustify);
+                $table2->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => false], $cellHCentered);
+                $table2->addCell(2000, $cellVCentered)->addText($item[3], ['bold' => false], $cellHCentered);
             }
         }
 
