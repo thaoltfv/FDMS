@@ -1700,8 +1700,20 @@ class HopDongTDG
 
         $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
 
-        $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner, 1);
-
+        $firstOngPosition = strpos($textNamePetitioner, "ÔNG ");
+        if ($firstOngPosition !== false) {
+            $textNamePetitioner = substr_replace($textNamePetitioner, "", $firstOngPosition, 5);
+        } else {
+            $firstBaPosition = strpos($textNamePetitioner, "BÀ ");
+            if ($firstBaPosition !== false) {
+                $textNamePetitioner = substr_replace($textNamePetitioner, "", $firstBaPosition, 4);
+            } else {
+                $firstOngBaPosition = strpos($textNamePetitioner, "ÔNG / BÀ");
+                if ($firstOngBaPosition !== false) {
+                    $textNamePetitioner = substr_replace($textNamePetitioner, "", $firstOngBaPosition, 9);
+                }
+            }
+        }
 
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
