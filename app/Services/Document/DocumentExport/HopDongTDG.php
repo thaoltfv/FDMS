@@ -12,6 +12,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\JcTable;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\Style\ListItem;
+use PhpOffice\PhpWord\ComplexType\TblWidth;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
@@ -1282,9 +1283,8 @@ class HopDongTDG
             }
         }
         if (!empty($arrayTable)) {
-            $tblWidth = new \PhpOffice\PhpWord\ComplexType\TblWidth();
-            $tblWidth->setType('pct');
-            $tblWidth->setWidth(10);
+            $tblWidth = new TblWidth();
+            $tblWidth->setW(1440); // Thiết lập khoảng cách lề trái 1 inch (1440 twips)
             $table = $section->addTable([
                 'borderSize' => 1,
                 'align' => JcTable::CENTER,
