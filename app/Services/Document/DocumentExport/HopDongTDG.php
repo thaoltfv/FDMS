@@ -1291,10 +1291,10 @@ class HopDongTDG
             //     'unit' => 'pct',
             // ]);
 
-            // $rowHeader = [
-            //     'tblHeader' => false,
-            //     'cantSplit' => false
-            // ];
+            $rowHeader = [
+                'tblHeader' => false,
+                'cantSplit' => false
+            ];
             $table = $section->addTable();
             $cantSplit = ['cantSplit' => false];
             $table->addRow(400, $rowHeader);
