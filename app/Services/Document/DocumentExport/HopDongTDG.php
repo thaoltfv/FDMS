@@ -1289,7 +1289,9 @@ class HopDongTDG
                 'align' => JcTable::CENTER,
                 'width' => 80 * 50,
                 'unit' => 'pct',
-                'indent' => \PhpOffice\PhpWord\ComplexType\TblWidth::setValue(1400),
+                'indentation' => [
+                    'left' => 720, // Thụt lề trái cho bảng (720 twips ~ 0.5 inch)
+                ]
 
 
             ]);
