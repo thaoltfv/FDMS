@@ -1699,10 +1699,9 @@ class HopDongTDG
         $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
 
         $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
-        $checkName = explode(" ", $textNamePetitioner);
-        if (in_array($checkName[0], ['BÀ', 'ÔNG'])) {
-            $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
-        }
+
+        $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner, 1);
+
 
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
