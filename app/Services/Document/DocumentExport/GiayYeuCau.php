@@ -735,7 +735,7 @@ class GiayYeuCau
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời gian địa điểm và thông tin người liên hệ khảo sát hiện trạng tài sản: ");
         $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentPara);
-        $section->addListItem("Họ tên người liên hệ: " .  $certificate->name_contact . '        Điện thoại: ' . $certificate->phone_contact, 0, [], 'bullets', []);
+        $section->addListItem("Họ tên, số điện thoại người hướng dẫn: " .  $certificate->name_contact . ', điện thoại: ' . $certificate->phone_contact, 0, [], 'bullets', []);
         // 5
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Các nội dung yêu cầu và thống nhất:");
@@ -760,17 +760,17 @@ class GiayYeuCau
         $section->addTextBreak(null, null, null);
 
         $table3 = $section->addTable($tableBasicStyle);
-        $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
-        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  $keepNext);;
+        $table3->addRow(Converter::inchToTwip(.1), null);
+        $table3->addCell(Converter::inchToTwip(4))->addText("", null,  null);;
         $table3->addCell(Converter::inchToTwip(4))->addText("TP.HCM, ngày        tháng         năm " . Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Y'), null,  $keepNext);
 
-        $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
+        $table3->addRow(Converter::inchToTwip(.1), null);
         $cell31 = $table3->addCell(Converter::inchToTwip(4));
         $cell31->addText("ĐƠN VỊ NHẬN YÊU CẦU", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
         $cell32 = $table3->addCell(Converter::inchToTwip(4));
         $cell32->addText("NGƯỜI YÊU CẦU", ['bold' => true], ['align' => 'center', 'keepNext' => true]);
 
-        $table3->addRow(Converter::inchToTwip(.1), $cantSplit);
+        $table3->addRow(Converter::inchToTwip(.1), null);
         $cell33 = $table3->addCell(Converter::inchToTwip(4));
         $cell33->addText("Công ty TNHH Thẩm Định Giá Nova", ['bold' => false], ['align' => 'center', 'keepNext' => true]);
         $cell34 = $table3->addCell(Converter::inchToTwip(4));
