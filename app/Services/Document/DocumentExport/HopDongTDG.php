@@ -1285,7 +1285,7 @@ class HopDongTDG
         if (!empty($arrayTable)) {
 
             $table = $section->addTable([
-                'cellMarginLeft' => Converter::inchToTwip(1.0),
+                'cellMarginLeft' => Converter::inchToTwip(0.4),
                 'borderSize' => 1,
                 'align' => 'end',
                 'width' => 50 * 50,
