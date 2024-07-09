@@ -1702,7 +1702,7 @@ class HopDongTDG
         $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
-        $row2->addCell(4950)->addText(strtoupper($chucvu), ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText(mb_strtoupper($chucvu, 'UTF-8'), ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow();
         $row3->addCell(4950)->addText("\n\n\n\n\n");
