@@ -1286,8 +1286,8 @@ class HopDongTDG
 
             $table = $section->addTable([
                 'borderSize' => 1,
-                'align' => JcTable::CENTER,
-                'width' => 80 * 50,
+                'align' => JcTable::END,
+                'width' => 100 * 50,
                 'unit' => 'pct',
                 'indentation' => [
                     'left' => 720, // Thụt lề trái cho bảng (720 twips ~ 0.5 inch)
