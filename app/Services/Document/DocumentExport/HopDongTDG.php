@@ -1188,7 +1188,7 @@ class HopDongTDG
             }
         }
 
-        $textRun->addText('Quyền sử dụng đất và tài sản trên đất, gồm có: ');
+        $textRun->addText($certificate->is_company == 0 ? 'Quyền sử dụng đất và tài sản trên đất, gồm có: ' : 'Quyền sử dụng đất.');
         // $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
 
         $alignCenter =
@@ -1391,7 +1391,7 @@ class HopDongTDG
         ));
         $row6->addCell(1100, $cellVTop)->addText('➢', null,  ['align' => 'right']);
         $row6->addCell(100, $cellVTop)->addText('', null,  ['align' => 'right']);
-        $row6->addCell(8800, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu: 02 bản chính bằng tiếng Việt.', null, ['align' => 'left']);
+        $row6->addCell(8800, $cellVTop)->addText('Số lượng chứng thư Bên A yêu cầu: 02 bản chính bằng tiếng Việt, cấp cho bên A.', null, ['align' => 'left']);
 
         $section->addText(
             "1.2.  Bên B đồng ý thực hiện tư vấn thẩm định giá tài sản nêu trên cho Bên A.",
@@ -1699,7 +1699,11 @@ class HopDongTDG
         $row->addCell(4950)->addText("ĐẠI DIỆN BÊN B", ['bold' => true], ['align' => 'center']);
 
         $textNamePetitioner = mb_strtoupper($certificate->petitioner_name);
-        $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        $checkName = explode(" ", $textNamePetitioner);
+        if (in_array($checkName[0], ['BÀ', 'ÔNG'])) {
+            $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
+        }
+
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("", ['bold' => true], ['align' => 'center']);
         $row2->addCell(4950)->addText(mb_strtoupper($chucvu, 'UTF-8'), ['bold' => true], ['align' => 'center']);
