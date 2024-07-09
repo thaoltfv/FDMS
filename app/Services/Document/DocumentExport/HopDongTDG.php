@@ -1188,7 +1188,7 @@ class HopDongTDG
             }
         }
 
-        $textRun->addText($certificate->is_company == 0 ? 'Quyền sử dụng đất và tài sản trên đất, gồm có: ' : 'Quyền sử dụng đất.');
+        $textRun->addText("Tài sản thẩm định giá: " . ($certificate->is_company == 0 ? 'Quyền sử dụng đất và tài sản trên đất, gồm có: ' : 'Quyền sử dụng đất.'));
         // $textRun->addText('(Theo Giấy chứng nhận quyền sử dụng đất quyền sở hữu nhà ở và tài sản khác gắn liền với đất số CK 096662 số vào sổ cấp GCN:CS23305/DA ngày 30/05/2018 do Sở Tài Nguyên và Môi Trường thành phố Hồ Chí Minh cấp).', ['italic' => true]);
 
         $alignCenter =
