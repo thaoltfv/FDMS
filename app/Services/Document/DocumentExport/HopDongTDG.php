@@ -1298,12 +1298,14 @@ class HopDongTDG
             ];
             $cantSplit = ['cantSplit' => false];
             $table2->addRow(400, $rowHeader);
+            $table2->addCell(600, $cellVCentered)->addText('', ['bold' => true], ['borderSize' => 0]);
             $table2->addCell(600, $cellVCentered)->addText('Stt', ['bold' => true], array_merge($cellHCentered));
             $table2->addCell(4500, $cellVCentered)->addText('Hạng mục', ['bold' => true], $cellHCentered);
             $table2->addCell(1800, $cellVCentered)->addText('Diện tích (' . $m2 . ')', ['bold' => true], $cellHCentered);
             $table2->addCell(2000, $cellVCentered)->addText('Hiện trạng', ['bold' => true], $cellHCentered);
             foreach ($arrayTable as $index => $item) {
                 $table2->addRow(400, $cantSplit);
+                $table2->addCell(600, $cellVCentered)->addText('', ['bold' => true], ['borderSize' => 0]);
                 $table2->addCell(600, $cellVCentered)->addText($item[0], ['bold' => false], array_merge($cellHCentered));
                 $table2->addCell(4500, $cellVJustify)->addText($item[1], ['bold' => false], $cellHJustify);
                 $table2->addCell(1800, $cellVCentered)->addText($item[2], ['bold' => false], $cellHCentered);
