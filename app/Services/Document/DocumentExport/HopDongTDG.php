@@ -1285,9 +1285,9 @@ class HopDongTDG
         if (!empty($arrayTable)) {
 
             $table = $section->addTable([
-                'borderSize' => 1,
+                'borderSize' => 0,
                 'alignment' => JcTable::END,
-                'width' => 100 * 50,
+                'width' => 50 * 50,
                 'unit' => 'pct',
             ]);
 
