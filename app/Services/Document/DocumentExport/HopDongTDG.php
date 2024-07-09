@@ -1285,12 +1285,12 @@ class HopDongTDG
 
             $table = $section->addTable([
                 'borderSize' => 1,
-                'align' => JcTable::START,
-                'width' => 100 * 50,
+                'align' => JcTable::CENTER,
+                'width' => 80 * 50,
                 'unit' => 'pct',
 
             ]);
-            $table->setIndentation(400, 400);
+
             $rowHeader = [
                 'tblHeader' => false,
                 'cantSplit' => false
