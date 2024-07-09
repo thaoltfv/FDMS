@@ -13,6 +13,7 @@ use PhpOffice\PhpWord\SimpleType\JcTable;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\Style\ListItem;
 use PhpOffice\PhpWord\ComplexType\TblWidth;
+use PhpOffice\PhpWord\SimpleType\TblLayoutType;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
@@ -1287,8 +1288,9 @@ class HopDongTDG
             $table = $section->addTable([
                 'borderSize' => 1,
                 'alignment' => JcTable::END,
-                // 'width' => 80 * 50,
-                // 'unit' => 'pct',
+                'width' => 80 * 50,
+                'unit' => 'pct',
+                'position' => \PhpOffice\PhpWord\SimpleType\TblLayoutType::CENTER
             ]);
 
             $rowHeader = [
