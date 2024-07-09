@@ -134,7 +134,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $listTmp->addText('Tổ thẩm định giá tiến hành khảo sát hiện trạng tài sản thẩm định giá dưới sự hướng dẫn của khách hàng yêu cầu thẩm định giá hoặc người được khách hàng yêu cầu thẩm định giá ủy quyền.' . '.', null, $this->cellVCentered);
         $cell =  $table->addCell(6000, $this->cellVCentered);
         $listTmp = $cell->addListItemRun(0, 'bullets');
-        $listTmp->addText('Hồ sơ pháp lý do khách hàng cung cấp bản photocopy được đính kèm báo cáo kết quả thẩm định giá này.', null, null);
+        $listTmp->addText('Hồ sơ pháp lý do khách hàng cung cấp bản photocopy được đính kèm báo cáo thẩm định giá này.', null, null);
         $listTmp = $cell->addListItemRun(0, 'bullets');
         $listTmp->addText('Diễn biến và kết quả khảo sát hiện trường được ghi nhận tại Biên bản thẩm định hiện trạng tài sản của ' . $this->companyName . ' được lưu trữ trong hồ sơ thẩm định giá. ' . '.', null, $this->cellVCentered);
         $table->addRow(400, $this->cantSplit);
@@ -533,21 +533,21 @@ class ReportAppraisalNova extends ReportAppraisal
         if ($this->isOnlyAsset) {
             if ($this->isTangibleAsset) {
                 $section->addTitle('Quyền sử dụng đất:', 3);
-                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
                 $section->addTitle('Công trình xây dựng:', 3);
-                $section->addText('- Chi tiết xem Phụ lục 2 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem Phụ lục 2 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             } else {
-                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             }
         } else {
             $section->addTitle('Tài sản thẩm định giá ' . ($stt + 1), 3);
             if ($this->isTangibleAsset) {
                 $section->addText('a) Quyền sử dụng đất:', ['italic' => true], $this->indentFistLine);
-                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
                 $section->addText('b) Công trình xây dựng:', ['italic' => true], $this->indentFistLine);
-                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 2 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 2 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             } else {
-                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo kết quả thẩm định giá.', null, $this->indentFistLine);
+                $section->addText('- Chi tiết xem mục ' . ($stt + 1) . ' - Phụ lục 1 kèm theo báo cáo thẩm định giá.', null, $this->indentFistLine);
             }
         }
     }
@@ -598,7 +598,7 @@ class ReportAppraisalNova extends ReportAppraisal
 
         $section->addTitle('CÁC TÀI LIỆU KÈM THEO:', 1);
         $section->addListItem('Hồ sơ pháp lý tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addText('Báo cáo kết quả thẩm định giá được phát hành 03 bản chính Tiếng Việt, kèm theo Chứng thư thẩm định giá số ' . $this->certificateCode . ' ngày ' . $this->certificateShortDateText . ' tại ' . $this->companyName, ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
+        $section->addText('Báo cáo thẩm định giá được phát hành 03 bản chính Tiếng Việt, kèm theo Chứng thư thẩm định giá số ' . $this->certificateCode . ' ngày ' . $this->certificateShortDateText . ' tại ' . $this->companyName, ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
     }
     protected function signature(Section $section, $certificate)
     {

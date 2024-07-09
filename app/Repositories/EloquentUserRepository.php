@@ -257,6 +257,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
     {
         return $this->model->query()
             ->where('token', '=', $token)
+            ->with('branch')
             ->first();
     }
 

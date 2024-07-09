@@ -13,7 +13,7 @@ class ReportCertificateNova extends ReportCertificate
     protected function content1(Section $section, $certificate)
     {
         $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Căn cứ Báo cáo kết quả thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Căn cứ Báo cáo thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Khách hàng thẩm định giá:", 2);
         $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
@@ -26,7 +26,7 @@ class ReportCertificateNova extends ReportCertificate
         $section->addListItem("Loại tài sản: Bất động sản", 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Địa chỉ: " . $this->getAssetAddress($certificate), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Nội dung chi tiết xem tại Mục III, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge(['keepNext' => false]));
+        $section->addListItem("Nội dung chi tiết xem tại Mục III, Báo cáo thẩm định giá.", 0, [], 'bullets', array_merge(['keepNext' => false]));
         $appraise_date = date_create($certificate->appraise_date);
         $textRun = $section->addTextRun(array(
             'styleName' => 'Heading2',
@@ -61,13 +61,13 @@ class ReportCertificateNova extends ReportCertificate
             'keepNext' => false
         ));
         $textRun->addText("Giả thiết và giả thiết đặc biệt: ", ['bold' => true], ['keepNext' => false]);
-        $textRun->addText("Chi tiết xem tại Mục IV, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục IV, Báo cáo thẩm định giá.", ['bold' => false], ['keepNext' => false]);
         $textRun = $section->addTextRun(array(
             'styleName' => 'Heading2',
             'keepNext' => false
         ));
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
-        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo kết quả thẩm định giá.", ['bold' => false], ['keepNext' => false]);
+        $textRun->addText("Chi tiết xem tại Mục V, Báo cáo thẩm định giá.", ['bold' => false], ['keepNext' => false]);
         $section->addTitle("Giá trị tài sản thẩm định giá: ", 2);
         $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
@@ -75,14 +75,14 @@ class ReportCertificateNova extends ReportCertificate
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addText("(Chi tiết xem tại phần VI, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
-        $section->addListItem("Nội dung chi tiết xem tại Mục VII, Báo cáo kết quả thẩm định giá.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Nội dung chi tiết xem tại Mục VII, Báo cáo thẩm định giá.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Thời hạn có hiệu lực của chứng thư thẩm định giá:", 2);
         $section->addListItem("Chứng thư thẩm định giá có hiệu lực trong thời hạn 06 tháng kể từ ngày phát hành chứng thư.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Các tài liệu kèm theo:", 2);
         // $section->addListItem("Báo cáo kết quả thẩm định giá số " . $this->reportCode . ' ngày ' . $this->certificateShortDateText, 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Báo cáo kết quả thẩm định giá. ", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Báo cáo thẩm định giá. ", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addText('', [], ['borderBottomSize' => 6, 'underline' => 'dash']);
-        $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo kết quả TĐG và các phụ lục.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo TĐG và các phụ lục.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         // $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt, cấp cho khách hàng 02 bản, lưu tại " . $this->companyName . " 01 bản và có giá trị pháp lý như nhau.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt tại Công ty TNHH Thẩm định giá Nova. Công ty TNHH Thẩm định giá Nova giữ 01 bản, khách hàng thẩm định giá giữ 02 bản - có giá trị pháp lý như nhau.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
