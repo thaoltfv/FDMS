@@ -1284,12 +1284,12 @@ class HopDongTDG
         }
         if (!empty($arrayTable)) {
 
-            // $table = $section->addTable([
-            //     'borderSize' => 0,
-            //     'alignment' => JcTable::END,
-            //     'width' => 50 * 50,
-            //     'unit' => 'pct',
-            // ]);
+            $table = $section->addTable([
+                'borderSize' => 1,
+                'alignment' => JcTable::END,
+                // 'width' => 80 * 50,
+                // 'unit' => 'pct',
+            ]);
 
             $rowHeader = [
                 'tblHeader' => false,
