@@ -739,7 +739,7 @@ class GiayYeuCau
         // 5
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Các nội dung yêu cầu và thống nhất:");
-        $section->addListItem("Sản phẩm: " . ($certificate->is_company == 0 ? 'Chứng thư và Báo cáo Thẩm định giá kèm theo cơ sở giá trị thẩm định giá; hạn chế và loại trừ trách nhiệm.' : 'Chứng thư, Báo cáo thẩm định giá.'), 0, [], 'bullets', []);
+        $section->addListItem(($certificate->is_company == 0 ? 'Sản phẩm yêu cầu: Chứng thư và Báo cáo Thẩm định giá kèm theo cơ sở giá trị thẩm định giá; hạn chế và loại trừ trách nhiệm.' : 'Sản phẩm: Chứng thư, Báo cáo thẩm định giá.'), 0, [], 'bullets', []);
         $section->addListItem("Số lượng: 02 bản chính bằng tiếng Việt.", 0, [], 'bullets', []);
 
         // 
