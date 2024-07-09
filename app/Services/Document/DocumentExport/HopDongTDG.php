@@ -1290,7 +1290,7 @@ class HopDongTDG
                 'alignment' => JcTable::END,
                 'width' => 80 * 50,
                 'unit' => 'pct',
-                'position' => \PhpOffice\PhpWord\SimpleType\TblLayoutType::CENTER
+                'position' => PhpOffice\PhpWord\Style\TablePosition::XALIGN_CENTER
             ]);
 
             $rowHeader = [
