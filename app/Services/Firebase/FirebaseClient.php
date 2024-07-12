@@ -20,6 +20,7 @@ use Kreait\Firebase\Factory;
 use \Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use \Kreait\Firebase\Exception\InvalidArgumentException;
 use \Kreait\Firebase\Exception\Auth\InvalidPassword;
+use Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
@@ -218,6 +219,7 @@ class FirebaseClient
             ];
             $getUser = User::query()->where('email', $email)->first();
             if ($getUser) {
+                Log::info('Vào gửi mail');
                 $eloquenUser = new EloquentUserRepository(new User());
                 $userSend = $eloquenUser->getUser($getUser->id);
                 CommonService::callNotificationReset([$userSend], $data);
