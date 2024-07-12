@@ -216,7 +216,13 @@ class FirebaseClient
                 'is_create' => true,
                 'is_reset_pass' => false,
             ];
-            CommonService::callNotificationReset([], $data);
+            $getUser = User::query()->where('email', $email)->first();
+            if ($getUser) {
+                $eloquenUser = new EloquentUserRepository(new User());
+                $userSend = $eloquenUser->getUser($getUser->id);
+                CommonService::callNotificationReset([$userSend], $data);
+            }
+
             return $this->respondWithCustomData($user);
         } catch (FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
             return $this->respondWithCustomData(['message' => $exception->getMessage()], 400);
