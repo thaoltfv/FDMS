@@ -5632,6 +5632,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'status',
                 'administrative_id',
                 'business_manager_id',
+                'accounting_id'
             ];
             $with = [
                 'appraiser:id,name,user_id',
@@ -5641,6 +5642,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
                 'administrative:id,name,user_id',
+                'accounting:id,name,user_id',
                 'appraiserBusinessManager:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
