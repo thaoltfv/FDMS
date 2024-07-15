@@ -578,7 +578,9 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             'street:id,name',
             'block',
             'block.rank:id,description,acronym',
-            'block.floor',
+            'block.floor' => function ($query) {
+                $query->where('status', true);
+            },
         ];
         // return \Cache::remember('project_'.$districtId, 3600, function() use($districtId, $with, $select) {
         return $this->model->query()
