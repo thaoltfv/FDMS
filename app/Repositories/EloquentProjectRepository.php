@@ -221,7 +221,7 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                         // add lại floor nếu
                         if (isset($block['floor']) && count($block['floor']) > 0) {
                             // update status floor cũ thành false
-                            Block::query()->where('block_id', '=', $block['floor'][0]['block_id'] ?? $dataBlock->id)->update(['status' => false]);
+                            Block::query()->where('id', '=', $block['floor'][0]['block_id'] ?? $dataBlock->id)->update(['status' => false]);
                             foreach ($block['floor'] as $floor) {
                                 $floor['block_id'] = $floor['block_id'] ?? $dataBlock->id;
                                 $floor['status'] = true;
