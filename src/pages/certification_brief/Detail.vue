@@ -322,6 +322,12 @@
 											</p>
 										</div>
 										<div class="d-flex container_content">
+											<strong class="margin_content_inline">Kế toán:</strong>
+											<p>
+												{{ form.accounting ? form.accounting.name : "" }}
+											</p>
+										</div>
+										<div class="d-flex container_content">
 											<strong class="margin_content_inline"
 												>Đại diện theo pháp luật:</strong
 											>
@@ -617,6 +623,12 @@
 												{{
 													form.administrative ? form.administrative.name : ""
 												}}
+											</p>
+										</div>
+										<div class="d-flex container_content flex-column">
+											<strong class="margin_content_inline">Kế toán:</strong>
+											<p>
+												{{ form.accounting ? form.accounting.name : "" }}
 											</p>
 										</div>
 										<div class="d-flex container_content flex-column">
@@ -1511,29 +1523,7 @@
 											{{ filterDocumentName[0] }}
 										</div>
 									</div>
-									<div
-										v-if="
-											isCertificateReport &&
-												(form.status === 1 ||
-													form.status === 2 ||
-													form.status === 3)
-										"
-										class="d-flex align-items-center justify-content-end col-1 pr-3"
-									>
-										<font-awesome-icon
-											v-if="!isMobile()"
-											@click="deletedDocumentFile('certificate_report')"
-											:style="{
-												color: 'lightgray',
-												position: 'absolute',
-												height: '1.5rem',
-												width: '1.5rem'
-											}"
-											class="cursor_pointer"
-											icon="trash-alt"
-											size="1x"
-										/>
-									</div>
+
 									<div
 										class="d-flex align-items-center justify-content-end col-1 pr-3"
 									>
@@ -2121,6 +2111,16 @@
 											<div class="title_input_content title_color" v-else>
 												{{ filterDocumentName[0] }}
 											</div>
+											<div
+												v-if="isCertificateReport"
+												@click="viewDocumentFile('certificate_report')"
+											>
+												<img
+													src="@/assets/icons/ic_search_3.svg"
+													alt="search"
+													class="img_input_download"
+												/>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -2158,9 +2158,18 @@
 											>
 												{{ appraisalReportName }}
 											</div>
-
 											<div class="title_input_content title_color" v-else>
 												{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+											</div>
+											<div
+												v-if="isAppraisalReport"
+												@click="viewDocumentFile('appraisal_report')"
+											>
+												<img
+													src="@/assets/icons/ic_search_3.svg"
+													alt="search"
+													class="img_input_download"
+												/>
 											</div>
 										</div>
 									</div>
@@ -2203,6 +2212,17 @@
 											<div class="title_input_content title_color" v-else>
 												{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
 											</div>
+
+											<div
+												v-if="isAppendix1Report"
+												@click="viewDocumentFile('appendix1_report')"
+											>
+												<img
+													src="@/assets/icons/ic_search_3.svg"
+													alt="search"
+													class="img_input_download"
+												/>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -2244,6 +2264,17 @@
 											<div class="title_input_content title_color" v-else>
 												{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
 											</div>
+
+											<div
+												v-if="isAppendix2Report"
+												@click="viewDocumentFile('appendix2_report')"
+											>
+												<img
+													src="@/assets/icons/ic_search_3.svg"
+													alt="search"
+													class="img_input_download"
+												/>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -2284,6 +2315,17 @@
 
 											<div class="title_input_content title_color" v-else>
 												{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+											</div>
+
+											<div
+												v-if="isAppendix3Report"
+												@click="viewDocumentFile('appendix3_report')"
+											>
+												<img
+													src="@/assets/icons/ic_search_3.svg"
+													alt="search"
+													class="img_input_download"
+												/>
 											</div>
 										</div>
 									</div>
@@ -2327,6 +2369,17 @@
 
 											<div class="title_input_content title_color" v-else>
 												{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+											</div>
+
+											<div
+												v-if="isComparisionAssetReport"
+												@click="viewDocumentFile('comparision_asset_report')"
+											>
+												<img
+													src="@/assets/icons/ic_search_3.svg"
+													alt="search"
+													class="img_input_download"
+												/>
 											</div>
 										</div>
 									</div>
@@ -3898,6 +3951,8 @@ export default {
 			this.form.appraiser_id = dataAppraisal.appraiser_id;
 			this.form.administrative = dataAppraisal.administrative;
 			this.form.administrative_id = dataAppraisal.administrative_id;
+			this.form.accounting_id = dataAppraisal.accounting_id;
+			this.form.accounting = dataAppraisal.accounting;
 			this.key_render_appraisal += 1;
 			this.form.status = this.status;
 			this.showAppraisalDialog = false;
@@ -4290,7 +4345,9 @@ export default {
 				appraiser_control,
 				appraiser_control_id,
 				administrative_id,
-				administrative
+				administrative,
+				accounting_id,
+				accounting
 			} = this.form;
 			let dataSend = {
 				appraiser_perform,
@@ -4305,6 +4362,8 @@ export default {
 				appraiser,
 				administrative_id,
 				administrative,
+				accounting_id,
+				accounting,
 				status: this.targetStatus,
 				sub_status: this.targetSubStatus,
 				check_price: this.isCheckPrice,

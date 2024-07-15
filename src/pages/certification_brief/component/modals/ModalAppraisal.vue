@@ -124,6 +124,16 @@
 								:options="optionsSignAppraiser"
 							/>
 						</div>
+
+						<div class="col-12">
+							<InputCategory
+								v-model="accounting_compute"
+								vid="accounting_id"
+								label="Kế toán"
+								class="form-group-container"
+								:options="optionsAccounting"
+							/>
+						</div>
 					</div>
 					<div class="btn__group mb-5">
 						<button
@@ -180,6 +190,7 @@ export default {
 		return {
 			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
 			appraisers: [],
+			accounting: [],
 			administratives: [],
 			signAppraisers: [],
 			appraisersManager: [],
@@ -243,6 +254,7 @@ export default {
 			this.businessManagers = await dataAppraise;
 			this.appraisersControl = await dataAppraise;
 			this.administratives = await dataAppraise;
+			this.accounting = await dataAppraise;
 			this.appraisersManager = await dataAppraise.filter(
 				item => item.is_legal_representative === 1
 			);
@@ -302,6 +314,7 @@ export default {
 			// 	this.signAppraisers = this.appraisers
 			// }
 		},
+		handleChangeAppraiserSale() {},
 		handleChangeAppraiserControl() {},
 		handleChangeAppraiserPerform() {},
 		handleBusinessManager() {},
@@ -325,6 +338,7 @@ export default {
 				appraiser_manager_id: this.form.appraiser_manager_id,
 				appraiser_control_id: this.form.appraiser_control_id,
 				administrative_id: this.form.administrative_id,
+				accounting_id: this.form.accounting_id,
 				status_expired_at: this.form.status_expired_at
 			};
 			if (this.ModalEdit) {
@@ -442,6 +456,20 @@ export default {
 			set: function(newValue) {
 				// console.log("newwww", newValue);
 				this.form.business_manager_id = newValue;
+			}
+		},
+		accounting_compute: {
+			// getter
+			get: function() {
+				if (this.accounting.length > 0) {
+					return this.form.accounting_id;
+				} else {
+					return this.form.accounting ? this.form.accounting.name : "";
+				}
+			},
+			// setter
+			set: function(newValue) {
+				this.form.accounting_id = newValue;
 			}
 		},
 		appraiser_control_compute: {
@@ -578,6 +606,13 @@ export default {
 		optionsBusinessManager() {
 			return {
 				data: this.businessManagers,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsAccounting() {
+			return {
+				data: this.accounting,
 				id: "id",
 				key: "name"
 			};

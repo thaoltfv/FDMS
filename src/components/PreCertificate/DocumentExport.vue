@@ -420,7 +420,7 @@ export default {
 		}
 
 		const downloadOtherFile = async file => {
-			if (props.permission.allowExport && file.name && !isMobile) {
+			if (props.permission.allowExport && file.name && !isMobile.value) {
 				axios({
 					url:
 						process.env.API_URL +

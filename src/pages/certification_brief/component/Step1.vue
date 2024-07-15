@@ -418,6 +418,17 @@
 								:options="optionsSignAppraiser"
 							/>
 						</div>
+
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="accounting_compute"
+								vid="accounting_id"
+								label="Kế toán"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="handleChangeAppraiserManager"
+								:options="optionsAccounting"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -470,6 +481,7 @@ export default {
 		"appraisersManager",
 		"appraisersControl",
 		"administratives",
+		"accounting",
 		"customers",
 		"customerGroups",
 		"idData",
@@ -627,6 +639,20 @@ export default {
 				this.data.appraiser_sale_id = newValue;
 			}
 		},
+		accounting_compute: {
+			// getter
+			get: function() {
+				if (this.accounting.length > 0) {
+					return this.data.accounting_id;
+				} else {
+					return this.data.accounting ? this.data.accounting.name : "";
+				}
+			},
+			// setter
+			set: function(newValue) {
+				this.data.accounting_id = newValue;
+			}
+		},
 		optionsCustomerGroup() {
 			return {
 				data: this.customerGroups,
@@ -666,6 +692,13 @@ export default {
 		optionsAppraiserManager() {
 			return {
 				data: this.appraisersManager,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsAccounting() {
+			return {
+				data: this.accounting,
 				id: "id",
 				key: "name"
 			};

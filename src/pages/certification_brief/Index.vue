@@ -773,6 +773,7 @@ export default {
 				appraiser_control_id: this.elementDragger.appraiser_control_id,
 				appraiser_perform_id: this.elementDragger.appraiser_perform_id,
 				administrative_id: this.elementDragger.administrative_id,
+				accounting_id: this.elementDragger.accounting_id,
 				status: this.next_status,
 				sub_status: this.next_sub_status,
 				check_price: this.isCheckPrice,

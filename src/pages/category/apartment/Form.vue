@@ -555,9 +555,11 @@ export default {
 		handleCheckActionBlock(data) {
 			this.openModalBlock = false;
 			if (this.isEdit) {
-				// if (
-				// 	data.total_floors !== this.form.block[this.indexEdit].total_floors
-				// ) {
+				if (
+					data.total_floors !== this.form.block[this.indexEdit].total_floors
+				) {
+					data.floor = this.autoAddFloorFollowTotalFloors(data);
+				}
 				// 	this.openModalActiveFloor = true;
 				// 	this.checkdata = data;
 				// } else {
@@ -566,8 +568,42 @@ export default {
 				this.form.block[this.indexEdit] = data;
 				// }
 			} else {
+				data.floor = this.autoAddFloorFollowTotalFloors(data);
 				this.handleActionBlock(data);
 			}
+		},
+		autoAddFloorFollowTotalFloors(data) {
+			const totalFloors = data.total_floors;
+			let tempFloors = [];
+			if (data.floor && data.floor.length > 0 && totalFloors > 0) {
+				// Không thay đổi tổng số tầng -> gán lại mảng floor cũ
+				if (data.floor.length === totalFloors) {
+					tempFloors = data.floor;
+				}
+				// Thay đổi tổng số tầng -> tiến hành tạo lại floor
+				else {
+					for (let index = 0; index < totalFloors; index++) {
+						const item = {};
+						item.floor_id = data.id ? data.id : null;
+						item.name = "Tầng " + (index + 1);
+						item.status = true;
+						tempFloors.push(item);
+					}
+					this.indexBlock = "";
+				}
+			} else {
+				if (totalFloors > 0) {
+					for (let index = 0; index < totalFloors; index++) {
+						const item = {};
+						item.floor_id = data.id ? data.id : null;
+						item.name = "Tầng " + (index + 1);
+						item.status = true;
+						tempFloors.push(item);
+					}
+				}
+			}
+
+			return tempFloors;
 		},
 		handleActionBlock(data) {
 			if (this.isEdit) {
@@ -581,6 +617,7 @@ export default {
 				// 	this.floors = this.form.block[this.indexEdit].floor;
 				// }
 				this.form.block[this.indexEdit] = data;
+
 				// this.form.block[this.indexEdit].floor = this.floors;
 			} else {
 				this.form.block.push(data);
