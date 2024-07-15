@@ -174,7 +174,9 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             'district:id,name',
             'ward:id,name',
             'block',
-            'block.floor',
+            'block.floor' => function ($query) {
+                $query->where('status', true);
+            },
             'block.floor.apartment'
         ];
         return $this->model->query()->with($with)
@@ -216,18 +218,30 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
                             $blockCheck = ['project_id' => $id, 'name' => $blockAtt->name];
 
                         $dataBlock = Block::query()->updateOrCreate($blockCheck, $blockAtt->attributesToArray());
+                        // add lại floor nếu
                         if (isset($block['floor']) && count($block['floor']) > 0) {
+                            // update status floor cũ thành false
+                            Block::query()->where('block_id', '=', $block['floor'][0]['block_id'] ?? $dataBlock->id)->update(['status' => false]);
                             foreach ($block['floor'] as $floor) {
                                 $floor['block_id'] = $floor['block_id'] ?? $dataBlock->id;
+                                $floor['status'] = true;
                                 $floorAtt = new Floor($floor);
-                                if (isset($floor['id']))
-                                    $floorCheck = ['id' => $floor['id']];
-                                else
-                                    $floorCheck = ['block_id' => $id, 'name' => $floorAtt->name];
-
-                                Floor::query()->updateOrCreate($floorCheck, $floorAtt->attributesToArray());
+                                Floor::query()->create($floorAtt->attributesToArray());
                             }
                         }
+
+                        // if (isset($block['floor']) && count($block['floor']) > 0) {
+                        //     foreach ($block['floor'] as $floor) {
+                        //         $floor['block_id'] = $floor['block_id'] ?? $dataBlock->id;
+                        //         $floorAtt = new Floor($floor);
+                        //         if (isset($floor['id']))
+                        //             $floorCheck = ['id' => $floor['id']];
+                        //         else
+                        //             $floorCheck = ['block_id' => $id, 'name' => $floorAtt->name];
+
+                        //         Floor::query()->updateOrCreate($floorCheck, $floorAtt->attributesToArray());
+                        //     }
+                        // }
                         // else {
                         //     $startFloor = intval($block['first_floor']);
                         //     $endFloor = intval($block['last_floor']);
