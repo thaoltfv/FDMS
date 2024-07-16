@@ -98,6 +98,15 @@
 							/>
 						</div>
 						<div class="col-12">
+							<InputCategory
+								v-model="accounting_compute"
+								vid="accounting_id"
+								label="Kế toán"
+								class="form-group-container"
+								:options="optionsAccounting"
+							/>
+						</div>
+						<div class="col-12">
 							<div
 								style="text-align: left !important;"
 								class="form-group-container"
@@ -122,16 +131,6 @@
 								label="Đại diện ủy quyền"
 								class="form-group-container"
 								:options="optionsSignAppraiser"
-							/>
-						</div>
-
-						<div class="col-12">
-							<InputCategory
-								v-model="accounting_compute"
-								vid="accounting_id"
-								label="Kế toán"
-								class="form-group-container"
-								:options="optionsAccounting"
 							/>
 						</div>
 					</div>

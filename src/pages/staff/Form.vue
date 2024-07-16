@@ -365,75 +365,6 @@ export default {
 			try {
 				const reps = await WareHouse.getDictionaries();
 				this.positions = [...reps.data.chuc_vu];
-				this.customerGroups = reps.data.nhom_doi_tac
-					? [...reps.data.nhom_doi_tac]
-					: [];
-
-				if (this.customerGroups.length > 0) {
-					for (let index = 0; index < this.customerGroups.length; index++) {
-						const element = this.customerGroups[index];
-						if (element.name_lv_1) {
-							if (this.firstGroups.length === 0) {
-								this.firstGroups.push({ description: element.name_lv_1 });
-							} else {
-								const temp = this.firstGroups.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_1.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.firstGroups.push({ description: element.name_lv_1 });
-								}
-							}
-						}
-						if (element.name_lv_2) {
-							if (this.secondGroups.length === 0) {
-								this.secondGroups.push({ description: element.name_lv_2 });
-							} else {
-								const temp = this.secondGroups.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_2.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.secondGroups.push({ description: element.name_lv_2 });
-								}
-							}
-						}
-						if (element.name_lv_3) {
-							if (this.thirdGroups.length === 0) {
-								this.thirdGroups.push({ description: element.name_lv_3 });
-							} else {
-								const temp = this.thirdGroups.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_3.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.thirdGroups.push({ description: element.name_lv_3 });
-								}
-							}
-						}
-						if (element.name_lv_4) {
-							if (this.fourthGroups.length === 0) {
-								this.fourthGroups.push({ description: element.name_lv_4 });
-							} else {
-								const temp = this.fourthGroups.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_4.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.fourthGroups.push({ description: element.name_lv_4 });
-								}
-							}
-						}
-					}
-				}
 			} catch (err) {
 				this.isSubmit = false;
 				throw err;
@@ -669,6 +600,7 @@ export default {
 		this.getRoles();
 		this.getBranches();
 		this.getCustomerGroupFirstList();
+		this.getDictionary();
 		// console.log('this.$route.name',this.$route.name)
 		if (this.$route.name === "staff.create") {
 			this.getStaffsFull();

@@ -2093,23 +2093,25 @@
 											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
 										/>
 										<!-- Divider -->
-										<div class="d-flex ml-2">
-											<img
-												class="img_input_download"
-												src="@/assets/icons/ic_document.svg"
-												alt="document"
-												:class="{ img_filter: !isCertificateReport }"
-											/>
-											<div
-												class="title_input_content title_input_file cursor_pointer text-truncate"
-												v-if="isCertificateReport"
-												@click="downloadDocumentFile('certificate_report')"
-											>
-												{{ certificatReportName }}
-											</div>
+										<div class="d-flex justify-content-between">
+											<div class="w-75 d-flex ml-2">
+												<img
+													class="img_input_download"
+													src="@/assets/icons/ic_document.svg"
+													alt="document"
+													:class="{ img_filter: !isCertificateReport }"
+												/>
+												<div
+													class="title_input_content title_input_file cursor_pointer text-truncate"
+													v-if="isCertificateReport"
+													@click="downloadDocumentFile('certificate_report')"
+												>
+													{{ certificatReportName }}
+												</div>
 
-											<div class="title_input_content title_color" v-else>
-												{{ filterDocumentName[0] }}
+												<div class="title_input_content title_color" v-else>
+													{{ filterDocumentName[0] }}
+												</div>
 											</div>
 											<div
 												v-if="isCertificateReport"
@@ -2144,22 +2146,24 @@
 											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
 										/>
 										<!-- Divider -->
-										<div class="d-flex ml-2">
-											<img
-												class="img_input_download"
-												src="@/assets/icons/ic_document.svg"
-												alt="document"
-												:class="{ img_filter: !isAppraisalReport }"
-											/>
-											<div
-												class="title_input_content title_input_file cursor_pointer text-truncate"
-												v-if="isAppraisalReport"
-												@click="downloadDocumentFile('appraisal_report')"
-											>
-												{{ appraisalReportName }}
-											</div>
-											<div class="title_input_content title_color" v-else>
-												{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+										<div class="d-flex justify-content-between">
+											<div class="w-75 d-flex ml-2">
+												<img
+													class="img_input_download"
+													src="@/assets/icons/ic_document.svg"
+													alt="document"
+													:class="{ img_filter: !isAppraisalReport }"
+												/>
+												<div
+													class="title_input_content title_input_file cursor_pointer text-truncate"
+													v-if="isAppraisalReport"
+													@click="downloadDocumentFile('appraisal_report')"
+												>
+													{{ appraisalReportName }}
+												</div>
+												<div class="title_input_content title_color" v-else>
+													{{ filterDocumentName[1] || "Báo cáo thẩm định" }}
+												</div>
 											</div>
 											<div
 												v-if="isAppraisalReport"
@@ -2194,25 +2198,26 @@
 											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
 										/>
 										<!-- Divider -->
-										<div class="d-flex ml-2">
-											<img
-												class="img_input_download"
-												src="@/assets/icons/ic_document.svg"
-												alt="document"
-												:class="{ img_filter: !isAppendix1Report }"
-											/>
-											<div
-												class="title_input_content title_input_file cursor_pointer text-truncate"
-												v-if="isAppendix1Report"
-												@click="downloadDocumentFile('appendix1_report')"
-											>
-												{{ appendix1ReportName }}
-											</div>
+										<div class="d-flex justify-content-between">
+											<div class="w-75 d-flex ml-2">
+												<img
+													class="img_input_download"
+													src="@/assets/icons/ic_document.svg"
+													alt="document"
+													:class="{ img_filter: !isAppendix1Report }"
+												/>
+												<div
+													class="title_input_content title_input_file cursor_pointer text-truncate"
+													v-if="isAppendix1Report"
+													@click="downloadDocumentFile('appendix1_report')"
+												>
+													{{ appendix1ReportName }}
+												</div>
 
-											<div class="title_input_content title_color" v-else>
-												{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
+												<div class="title_input_content title_color" v-else>
+													{{ filterDocumentName[2] || "Bảng điều chỉnh QSDĐ" }}
+												</div>
 											</div>
-
 											<div
 												v-if="isAppendix1Report"
 												@click="viewDocumentFile('appendix1_report')"
@@ -2246,25 +2251,26 @@
 											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
 										/>
 										<!-- Divider -->
-										<div class="d-flex ml-2">
-											<img
-												class="img_input_download"
-												src="@/assets/icons/ic_document.svg"
-												alt="document"
-												:class="{ img_filter: !isAppendix2Report }"
-											/>
-											<div
-												class="title_input_content title_input_file cursor_pointer text-truncate"
-												v-if="isAppendix2Report"
-												@click="downloadDocumentFile('appendix2_report')"
-											>
-												{{ appendix2ReportName }}
-											</div>
+										<div class="d-flex justify-content-between">
+											<div class="w-75 d-flex ml-2">
+												<img
+													class="img_input_download"
+													src="@/assets/icons/ic_document.svg"
+													alt="document"
+													:class="{ img_filter: !isAppendix2Report }"
+												/>
+												<div
+													class="title_input_content title_input_file cursor_pointer text-truncate"
+													v-if="isAppendix2Report"
+													@click="downloadDocumentFile('appendix2_report')"
+												>
+													{{ appendix2ReportName }}
+												</div>
 
-											<div class="title_input_content title_color" v-else>
-												{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
+												<div class="title_input_content title_color" v-else>
+													{{ filterDocumentName[3] || "Bảng điều chỉnh CTXD" }}
+												</div>
 											</div>
-
 											<div
 												v-if="isAppendix2Report"
 												@click="viewDocumentFile('appendix2_report')"
@@ -2298,25 +2304,26 @@
 											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
 										/>
 										<!-- Divider -->
-										<div class="d-flex ml-2">
-											<img
-												class="img_input_download"
-												src="@/assets/icons/ic_document.svg"
-												alt="document"
-												:class="{ img_filter: !isAppendix3Report }"
-											/>
-											<div
-												class="title_input_content title_input_file cursor_pointer text-truncate"
-												v-if="isAppendix3Report"
-												@click="downloadDocumentFile('appendix3_report')"
-											>
-												{{ appendix3ReportName }}
-											</div>
+										<div class="d-flex justify-content-between">
+											<div class="w-75 d-flex ml-2">
+												<img
+													class="img_input_download"
+													src="@/assets/icons/ic_document.svg"
+													alt="document"
+													:class="{ img_filter: !isAppendix3Report }"
+												/>
+												<div
+													class="title_input_content title_input_file cursor_pointer text-truncate"
+													v-if="isAppendix3Report"
+													@click="downloadDocumentFile('appendix3_report')"
+												>
+													{{ appendix3ReportName }}
+												</div>
 
-											<div class="title_input_content title_color" v-else>
-												{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+												<div class="title_input_content title_color" v-else>
+													{{ filterDocumentName[4] || "Hình ảnh hiện trạng" }}
+												</div>
 											</div>
-
 											<div
 												v-if="isAppendix3Report"
 												@click="viewDocumentFile('appendix3_report')"
@@ -2350,27 +2357,28 @@
 											style="border: none; height: 1px; background: #333; margin: 0.5rem 10px;"
 										/>
 										<!-- Divider -->
-										<div class="d-flex ml-2">
-											<img
-												class="img_input_download"
-												src="@/assets/icons/ic_document.svg"
-												alt="document"
-												:class="{ img_filter: !isComparisionAssetReport }"
-											/>
-											<div
-												class="title_input_content title_input_file cursor_pointer text-truncate"
-												v-if="isComparisionAssetReport"
-												@click="
-													downloadDocumentFile('comparision_asset_report')
-												"
-											>
-												{{ comparisionAssetReportName }}
-											</div>
+										<div class="d-flex justify-content-between">
+											<div class="w-75 d-flex ml-2">
+												<img
+													class="img_input_download"
+													src="@/assets/icons/ic_document.svg"
+													alt="document"
+													:class="{ img_filter: !isComparisionAssetReport }"
+												/>
+												<div
+													class="title_input_content title_input_file cursor_pointer text-truncate"
+													v-if="isComparisionAssetReport"
+													@click="
+														downloadDocumentFile('comparision_asset_report')
+													"
+												>
+													{{ comparisionAssetReportName }}
+												</div>
 
-											<div class="title_input_content title_color" v-else>
-												{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+												<div class="title_input_content title_color" v-else>
+													{{ filterDocumentName[5] || "Phiếu thu thập TSSS" }}
+												</div>
 											</div>
-
 											<div
 												v-if="isComparisionAssetReport"
 												@click="viewDocumentFile('comparision_asset_report')"
