@@ -6308,6 +6308,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
                 'appraiserControl:id,user_id,name',
+                'accounting:id,user_id,name',
+                // 'administrative:id_user_id,name',
                 'createdBy:id,name',
             ];
             $select = [
@@ -6317,6 +6319,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_sale_id',
                 'appraiser_perform_id',
                 'appraiser_control_id',
+                'administrative_id',
+                'accounting_id'
             ];
             $certificate = Certificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
@@ -6341,6 +6345,10 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if ($certificate->accounting->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->accounting->user_id);
                 }
+            // if (isset($certificate->administrative) && isset($certificate->administrative->user_id))
+            //     if ($certificate->administrative->user_id != $loginUser->id) {
+            //         $users[] =  $eloquenUser->getUser($certificate->administrative->user_id);
+            //     }
             switch ($status) {
                 case 2:
                     $statusText = 'Đang thẩm định';
