@@ -539,7 +539,9 @@ class EloquentProjectRepository extends EloquentRepository implements ProjectRep
             'street:id,name',
             'block',
             'block.rank:id,description,acronym',
-            'block.floor',
+            'block.floor' => function ($q) {
+                $q->where('status', true);
+            },
             // 'block.floor.apartment'
         ];
         return $this->model->query()->with($with)->where('status', true)->get($select);
