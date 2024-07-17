@@ -2972,8 +2972,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     break;
                 case '!':
                     $result = $result->where(function ($q) use ($filterData) {
-                        $q->where('certificate_num', $filterData)
-                            ->orWhere('document_num', $filterData);
+                        $q->where('certificate_num', 'ILIKE', '%' .  $filterData . '%')
+                            ->orWhere('document_num', 'ILIKE', '%' . $filterData . '%');
                     });
                     break;
                 case '@':
@@ -3539,8 +3539,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     break;
                 case '!':
                     $result = $result->where(function ($q) use ($filterData) {
-                        $q->where('certificate_num', $filterData)
-                            ->orWhere('document_num', $filterData);
+                        $q->where('certificate_num', 'ILIKE', '%' .  $filterData . '%')
+                            ->orWhere('document_num', 'ILIKE', '%' . $filterData . '%');
                     });
                     break;
                 case '@':
