@@ -3230,12 +3230,25 @@ export default {
 		) {
 			this.byPassAdmin = true;
 		}
+		console.log("Trước khi vào if hiện nút chỉnh sửa status", this.form.status);
 		if (
 			this.form.status &&
 			this.form.status === 9 &&
 			profile.data.user.roles[0].role_name.toUpperCase().includes("KẾ TOÁN")
 		) {
+			console.log("Vào if check hiện nút chỉnh sửa");
 			this.isAccounting = true;
+		} else {
+			console.log("Không vào if check hiện nút chỉnh sửa");
+			console.log("Role name", profile.data.user.roles[0].role_name);
+			console.log(
+				"Role name uppercase",
+				profile.data.user.roles[0].role_name.toUpperCase()
+			);
+			console.log(
+				"Check tên phân quyền có chữ KẾ TOÁN",
+				profile.data.user.roles[0].role_name.toUpperCase().includes("KẾ TOÁN")
+			);
 		}
 		if (
 			this.form.status &&
