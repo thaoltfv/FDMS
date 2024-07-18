@@ -585,7 +585,7 @@ export default {
 					for (let index = 0; index < totalFloors; index++) {
 						const item = {};
 						item.floor_id = data.id ? data.id : null;
-						item.name = "Tầng " + (index + 1);
+						item.name = "" + (index + 1);
 						item.status = true;
 						tempFloors.push(item);
 					}

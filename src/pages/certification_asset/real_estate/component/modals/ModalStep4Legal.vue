@@ -272,7 +272,7 @@
 										<h3 class="title ml-1">
 											Tài liệu đính kèm
 											<label
-												:for="'image_property' + type"
+												:for="'image_property_upload'"
 												style="color: orange; cursor: pointer"
 											>
 												<font-awesome-icon icon="cloud-upload-alt" size="1x" />
@@ -283,7 +283,7 @@
 											class="btn-upload"
 											type="file"
 											ref="file"
-											:id="'image_property' + type"
+											:id="'image_property_upload'"
 											multiple
 											accept="image/png, image/gif, image/jpeg, image/jpg, .doc, .docx, .xlsx, .xls, application/pdf"
 											@change="onUploadDocument($event)"
