@@ -56,7 +56,11 @@
 										<p>{{ form.petitioner_name }}</p>
 									</div>
 									<div
-										v-if="(edit && (editInfo || editDocument)) || isAccounting"
+										v-if="
+											(edit && (editInfo || editDocument)) ||
+												isAccounting ||
+												byPassAdmin
+										"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit"
 									>
@@ -359,7 +363,11 @@
 										<p>{{ form.petitioner_name }}</p>
 									</div>
 									<div
-										v-if="(edit && (editInfo || editDocument)) || isAccounting"
+										v-if="
+											(edit && (editInfo || editDocument)) ||
+												isAccounting ||
+												byPassAdmin
+										"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit d-flex align-items-start"
 									>
