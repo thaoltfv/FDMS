@@ -12,6 +12,7 @@
 					:typeAppraiseProperty="typeAppraiseProperty"
 					:appraisersManager="appraisersManager"
 					:appraisersControl="appraisersControl"
+					:accounting="accounting"
 					:administratives="administratives"
 					:appraisalPurposes="appraisalPurposes"
 					:appraisers="appraisers"
@@ -150,6 +151,10 @@ export default {
 					administrative: {
 						name: ""
 					},
+					accounting_id: null,
+					accounting: {
+						name: ""
+					},
 					business_manager_id: null,
 					appraiser_business_manager: {
 						name: ""
@@ -200,6 +205,7 @@ export default {
 			businessManagers: [],
 			customers: [],
 			customerGroups: [],
+			accounting: [],
 			appraisersManager: [],
 			appraisersControl: [],
 			administratives: [],
@@ -304,6 +310,7 @@ export default {
 			this.businessManagers = dataAppraise;
 			this.employeeBusiness = dataAppraise;
 			this.appraisersControl = dataAppraise;
+			this.accounting = dataAppraise;
 			this.administratives = dataAppraise;
 			this.appraisersManager = dataAppraise.filter(
 				item => item.is_legal_representative === 1

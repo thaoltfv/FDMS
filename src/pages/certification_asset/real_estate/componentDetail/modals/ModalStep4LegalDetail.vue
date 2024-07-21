@@ -36,6 +36,7 @@
 											class="form-group-container"
 											label="Tên pháp lý"
 											rules="required"
+											:disabledInput="true"
 										/>
 									</div>
 									<div class="col">
