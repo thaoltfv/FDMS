@@ -256,8 +256,8 @@
 								<button
 									v-if="
 										isEditStatusCCT &&
-											!this.priceEstimates.appraise_id &&
-											!this.priceEstimates.apartment_asset_id &&
+											!priceEstimates.appraise_id &&
+											!priceEstimates.apartment_asset_id &&
 											priceEstimates.step_3.id
 									"
 									class="btn btn-white  text-nowrap"

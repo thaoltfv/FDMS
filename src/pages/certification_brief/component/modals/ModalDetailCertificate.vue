@@ -209,6 +209,11 @@
 							</div>
 
 							<div class="d-flex container_content">
+								<strong class="margin_content_inline">Kế toán:</strong>
+								<p>{{ form.accounting ? form.accounting.name : "" }}</p>
+							</div>
+
+							<div class="d-flex container_content">
 								<strong class="margin_content_inline"
 									>Đại diện theo pháp luật:</strong
 								>

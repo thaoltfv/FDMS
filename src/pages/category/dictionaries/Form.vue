@@ -6,6 +6,7 @@
 			@submit.prevent="validateBeforeSubmit"
 		>
 			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
 				v-model="form.first_id"
 				class="mb-3"
 				vid="first_id"
@@ -15,29 +16,29 @@
 				@change="changeFirstGroup($event)"
 			/>
 			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
 				v-model="form.second_id"
 				class="mb-3"
-				vid="first_id"
+				vid="second_id"
 				label="Phân cấp 2"
-				rules="required"
 				:options="optionsSecondGroup"
 				@change="changeSecondGroup($event)"
 			/>
 			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
 				v-model="form.third_id"
 				class="mb-3"
 				vid="third_id"
 				label="Phân cấp 3"
-				rules="required"
 				:options="optionsThirdGroup"
 				@change="changeThirdGroup($event)"
 			/>
 			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
 				v-model="form.fourth_id"
 				class="mb-3"
-				vid="first_id"
+				vid="fourth_id"
 				label="Phân cấp 4"
-				rules="required"
 				:options="optionsFourthGroup"
 				@change="changeFourthGroup($event)"
 			/>

@@ -7297,6 +7297,7 @@ export default {
 				// await this.calculationChangePrice(this.form, indexPrice)
 			}
 			await this.calculationMDSD(this.form, indexPrice);
+			await this.calculation(this.form);
 			this.key_render_1 += 1;
 		},
 		async changeDistanceLand(event, comparator, m, n) {
