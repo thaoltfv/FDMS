@@ -2713,6 +2713,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiser_sale_id',
             'appraiser_control_id',
             'administrative_id',
+            'accounting_id',
             'business_manager_id',
             'customer_id',
             'certificates.customer_group_id',
@@ -2801,6 +2802,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'appraiserSale:id,name,user_id',
             'appraiserControl:id,name',
             'administrative:id,name,user_id',
+            'accounting:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'customer:id,name,phone,address',
             'customerGroup:id,description,name_lv_1,name_lv_2,name_lv_3,name_lv_4',
@@ -2918,6 +2920,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $query = $query->orwhereHas('administrative', function ($q) use ($user) {
                         return $q->where('user_id', $user->id);
                     });
+                    $query = $query->orwhereHas('accounting', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
                     $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
                         return $q->where('user_id', $user->id);
                     });
@@ -2948,6 +2953,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('administrative', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('accounting', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
@@ -3250,7 +3258,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'certificates.updated_at', 'status_updated_at',
             'appraiser_perform_id',
             'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
-            'appraiser_sale_id', 'appraiser_control_id', 'administrative_id',
+            'appraiser_sale_id', 'appraiser_control_id', 'administrative_id', 'accounting_id',
             'pre_certificate_id', 'business_manager_id',
             'customer_id',
             // 'users.image',
@@ -3350,6 +3358,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'realEstate:id,real_estate_id',
             'personalProperties:id,personal_property_id',
             'administrative:id,name,user_id',
+            'accounting:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'customer:id,name,phone,address',
         ];
@@ -3466,6 +3475,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
                         return $q->where('user_id', $user->id);
                     });
+                    $query = $query->orwhereHas('accounting', function ($q) use ($user) {
+                        return $q->where('user_id', $user->id);
+                    });
                 });
             }
         } elseif (($role->name !== 'ROOT_ADMIN' && $role->name !== 'ADMIN' && $role->name !== 'Accounting')) {
@@ -3493,6 +3505,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('administrative', function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                });
+                $query = $query->orwhereHas('accounting', function ($q) use ($user) {
                     return $q->where('user_id', $user->id);
                 });
                 $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
@@ -3817,6 +3832,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'total_preliminary_value',
             'pre_type_id',
             'administrative_id',
+            'accounting_id',
             'business_manager_id',
             'document_alter_by_bank',
             'is_company',
@@ -3857,6 +3873,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'payments:id,pay_date,amount,for_payment_of,pre_certificate_id,certificate_id',
             'preType:id,description',
             'administrative:id,name,user_id',
+            'accounting:id,name,user_id',
             'appraiserBusinessManager:id,name,user_id',
             'exportDocuments'
         ];
@@ -4068,6 +4085,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     }
                     if (isset($request['administrative_id'])) {
                         $updateArray['administrative_id'] = $request['administrative_id'];
+                    }
+                    if (isset($request['accounting_id'])) {
+                        $updateArray['accounting_id'] = $request['accounting_id'];
                     }
                     if (isset($request['business_manager_id'])) {
                         $updateArray['business_manager_id'] = $request['business_manager_id'];
@@ -5593,7 +5613,11 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (isset($object['appraiser_sale_id'])) {
                 $updateArray['appraiser_sale_id'] = $object['appraiser_sale_id'];
             }
-
+            if (isset($object['accounting_id'])) {
+                $updateArray['accounting_id'] = $object['accounting_id'];
+            } else {
+                $updateArray['accounting_id'] = null;
+            }
             Certificate::where('id', $id)->update($updateArray);
         }
     }
@@ -5614,6 +5638,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'status',
                 'administrative_id',
                 'business_manager_id',
+                'accounting_id'
             ];
             $with = [
                 'appraiser:id,name,user_id',
@@ -5623,6 +5648,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserConfirm:id,name,user_id',
                 'appraiserControl:id,name,user_id',
                 'administrative:id,name,user_id',
+                'accounting:id,name,user_id',
                 'appraiserBusinessManager:id,name,user_id',
             ];
             $result = Certificate::with($with)->where('id', $id)->select($select)->first();
@@ -6282,6 +6308,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiserSale:id,user_id,name',
                 'appraiserPerform:id,user_id,name',
                 'appraiserControl:id,user_id,name',
+                'accounting:id,user_id,name',
+                // 'administrative:id_user_id,name',
                 'createdBy:id,name',
             ];
             $select = [
@@ -6291,6 +6319,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 'appraiser_sale_id',
                 'appraiser_perform_id',
                 'appraiser_control_id',
+                'administrative_id',
+                'accounting_id'
             ];
             $certificate = Certificate::with($with)->where('id', $id)->get($select)->first();
             $eloquenUser = new EloquentUserRepository(new User());
@@ -6311,6 +6341,14 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 if ($certificate->appraiserControl->user_id != $loginUser->id) {
                     $users[] =  $eloquenUser->getUser($certificate->appraiserControl->user_id);
                 }
+            if (isset($certificate->accounting) && isset($certificate->accounting->user_id))
+                if ($certificate->accounting->user_id != $loginUser->id) {
+                    $users[] =  $eloquenUser->getUser($certificate->accounting->user_id);
+                }
+            // if (isset($certificate->administrative) && isset($certificate->administrative->user_id))
+            //     if ($certificate->administrative->user_id != $loginUser->id) {
+            //         $users[] =  $eloquenUser->getUser($certificate->administrative->user_id);
+            //     }
             switch ($status) {
                 case 2:
                     $statusText = 'Đang thẩm định';

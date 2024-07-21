@@ -1412,7 +1412,7 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            $compare1 ? CommonService::mbUcfirst($compare1->appraise_title) : '-',
+            $compare1 ? CommonService::mbUcfirst($compare1->apartment_title ? $compare1->apartment_title : $compare1->appraise_title) : '-',
             $compare1 ? CommonService::mbUcfirst($compare1->asset_title) : '-',
             $compare2 ? CommonService::mbUcfirst($compare2->asset_title) : '-',
             $compare3 ? CommonService::mbUcfirst($compare3->asset_title) : '-',
