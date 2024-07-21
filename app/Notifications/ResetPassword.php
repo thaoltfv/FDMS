@@ -55,7 +55,10 @@ class ResetPassword extends Notification implements ShouldQueue
                 'email' => $this->object->email ? $this->object->email : '',
                 'new_password' => $this->object->new_password ? $this->object->new_password : '',
                 'message' => $this->object->message ? $this->object->message : '',
-                'link' => ''
+                'link' => '',
+                'is_create' => $this->object->is_create,
+                'is_reset_pass' => $this->object->is_reset_pass,
+
             ]);
     }
 }

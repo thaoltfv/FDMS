@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Document\DocumentInterface;
 
 use App\Http\ResponseTrait;
@@ -74,7 +75,7 @@ class Report implements ReportInterface
             'line' => 1000,
         ],
     ];
-  
+
     protected $styleImageFooter = [
         'width' => 488,
         'align' => 'left',
@@ -115,7 +116,7 @@ class Report implements ReportInterface
     protected $companyPhone = '';
     protected $companyFax = '';
     protected $companyDownLine = '';
-    protected $createdName ='';
+    protected $createdName = '';
     protected $assetName = '';
     protected $logoUrl = '';
     protected $m2 = 'm</w:t></w:r><w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t xml:space="preserve">2</w:t></w:r><w:r><w:rPr></w:rPr><w:t xml:space="preserve">';
@@ -124,7 +125,7 @@ class Report implements ReportInterface
     protected $documentConfig = [];
     protected $certificateNumberSuffix = '';
     protected $certificateNumberPrefix = '';
-    protected $documentWatermask= '';
+    protected $documentWatermask = '';
     protected $documentNumberSuffix = '';
     protected $documentNumberPrefix = '';
     protected $contractCodeSuffix = '';
@@ -158,14 +159,14 @@ class Report implements ReportInterface
         $this->signature($section, $data);
         $this->printHeader($section);
         $this->printFooter($section, $data);
-        $this->getFileName ($data);
+        $this->getFileName($data);
         return $this->saveReport($phpWord, $ext);
     }
-    protected function processData ($data, $documentConfig)
+    protected function processData($data, $documentConfig)
     {
         $this->envDocument = config('services.document_service.document_module');
         $this->createdName = !empty($data->createdBy) ? CommonService::withoutAccents($data->createdBy->name) : '';
-        $this->logoUrl = storage_path('app/public/' . env('STORAGE_IMAGES','images').'/'.'company_logo.png');
+        $this->logoUrl = storage_path('app/public/' . env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png');
         if (!empty($documentConfig)) {
             $this->documentConfig = $documentConfig;
             $this->certificateNumberSuffix = $documentConfig->where('slug', 'certificatte_number_suffix')->first()->value ?: '';
@@ -176,32 +177,31 @@ class Report implements ReportInterface
             $this->contractCodeSuffix =  '';
             $this->contractCodePrefix = $documentConfig->where('slug', 'contract_code_prefix')->first()->value ?: '';
             $this->documentWatermask = $documentConfig->where('slug', 'print_watermask')->first()->value ?: '';
-
         }
         // Report code
-        if(isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
+        if (isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
             $this->reportCode = $this->documentNumberPrefix . $data->certificate_num . $this->documentNumberSuffix;
         } else {
             $this->reportCode = $this->documentNumberPrefix . '            ' . $this->documentNumberSuffix;
         }
         // Certificate code
-        if(isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
+        if (isset($data->certificate_num) && !empty(trim($data->certificate_num))) {
             $this->certificateCode = $this->certificateNumberPrefix . $data->certificate_num . $this->certificateNumberSuffix;
         } else {
             $this->certificateCode = $this->certificateNumberPrefix . '            ' . $this->certificateNumberSuffix;
         }
         //Contract code
-        if(isset($data->document_num) && !empty(trim($data->document_num))) {
+        if (isset($data->document_num) && !empty(trim($data->document_num))) {
             $this->contractCode = $this->contractCodePrefix . $data->document_num . $this->contractCodeSuffix;
         } else {
             $this->contractCode = $this->contractCodePrefix . '            ' . $this->contractCodeSuffix;
         }
-        if(!empty($data->certificate_date)) {
+        if (!empty($data->certificate_date)) {
             $certificateDate = date_create($data->certificate_date);
             $this->certificateShortDateText = $certificateDate->format("d/m/Y");
             $this->certificateLongDateText = "ngày " . $certificateDate->format('d') . " tháng " . $certificateDate->format('m') . " năm " . $certificateDate->format('Y');
         }
-        if(!empty($data->document_date)) {
+        if (!empty($data->document_date)) {
             $documentDate = date_create($data->document_date);
             $this->documentShortDateText = $documentDate->format("d/m/Y");
             $this->documentLongDateText =  "ngày " . $documentDate->format('d') . " tháng " . $documentDate->format('m') . " năm " . $documentDate->format('Y');
@@ -215,7 +215,7 @@ class Report implements ReportInterface
         $result['file_name'] = $fileName;
         return $result;
     }
-    protected function getFileName ($data)
+    protected function getFileName($data)
     {
         $data = (object)$data;
         $reportID = '';
@@ -240,11 +240,11 @@ class Report implements ReportInterface
     {
         $this->waterMark($section);
     }
-    public function waterMark (Section $section)
+    public function waterMark(Section $section)
     {
         if ($this->documentWatermask === 'yes') {
             $header = $section->addHeader();
-            $header->addWatermark($this->logoUrl,[
+            $header->addWatermark($this->logoUrl, [
                 'width' => 200,
                 'marginTop' => 200,
                 'marginLeft' => 120,
@@ -260,8 +260,8 @@ class Report implements ReportInterface
             $table1 = $section->addTable($this->tableBasicStyle);
             $table1->addRow(1000);
             $cell11 = $table1->addCell(Converter::cmToTwip(1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
-            $imgName = env('STORAGE_IMAGES','images').'/'.'company_logo.png';
-            $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
+            $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png';
+            $cell11->addImage(storage_path('app/public/' . $imgName), $this->styleImageLogo);
             $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
             // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
@@ -275,7 +275,6 @@ class Report implements ReportInterface
     }
     public function printContent(Section $section, $data)
     {
-
     }
     public function printFooter(Section $section, $data, $indentLeft = 0, $indentRight = 0)
     {
@@ -329,17 +328,17 @@ class Report implements ReportInterface
         $phpWord->addTitleStyle(
             1,
             array('size' => '13', 'bold' => true, 'allCaps' => true, 'spaceBefore' => 100),
-            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 0, 'spaceBefore' => 300, 'spaceAfter' => 100)
+            array('keepNext' => false, 'numStyle' => 'headingNumbering', 'numLevel' => 0, 'spaceBefore' => 300, 'spaceAfter' => 100)
         );
         $phpWord->addTitleStyle(
             2,
             array('size' => '13', 'bold' => true),
-            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 1, 'spaceBefore' => 200, 'spaceAfter' => 100)
+            array('keepNext' => false, 'numStyle' => 'headingNumbering', 'numLevel' => 1, 'spaceBefore' => 200, 'spaceAfter' => 100)
         );
         $phpWord->addTitleStyle(
             3,
             array('size' => '13', 'bold' => true),
-            array('keepNext' => true, 'numStyle' => 'headingNumbering', 'numLevel' => 2, 'spaceBefore' => 150, 'spaceAfter' => 100)
+            array('keepNext' => false, 'numStyle' => 'headingNumbering', 'numLevel' => 2, 'spaceBefore' => 150, 'spaceAfter' => 100)
         );
 
         $phpWord->addParagraphStyle(
@@ -360,22 +359,20 @@ class Report implements ReportInterface
         ]);
         $phpWord->addTableStyle('Colspan Rowspan', $this->styleTable);
         $phpWord->addTableStyle('Colspan Rowspan Image', $this->styleTableImage);
-
     }
     public function printTitle(Section $section, $data)
     {
-
     }
     public function saveReport(PhpWord $phpWord, string $ext, bool $download = true)
     {
         $reportPath = $this->getReportPath();
         $fileName = $this->fileName;
-        if(!File::exists(storage_path('app/public/'. $reportPath))){
-            File::makeDirectory(storage_path('app/public/'. $reportPath), 0755, true);
+        if (!File::exists(storage_path('app/public/' . $reportPath))) {
+            File::makeDirectory(storage_path('app/public/' . $reportPath), 0755, true);
         }
         try {
             $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-            $objWriter->save(storage_path('app/public/'. $reportPath. '/'. $fileName . $ext));
+            $objWriter->save(storage_path('app/public/' . $reportPath . '/' . $fileName . $ext));
             if ($download)
                 return $this->downloadFile($reportPath, $fileName, $ext);
             else
@@ -392,7 +389,7 @@ class Report implements ReportInterface
     public function getReportPath()
     {
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
         return $path;
     }
     public function getFooterString($data)
@@ -402,6 +399,5 @@ class Report implements ReportInterface
     }
     protected function signature(Section $section, $data)
     {
-
     }
 }

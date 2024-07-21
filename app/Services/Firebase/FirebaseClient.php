@@ -20,6 +20,7 @@ use Kreait\Firebase\Factory;
 use \Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use \Kreait\Firebase\Exception\InvalidArgumentException;
 use \Kreait\Firebase\Exception\Auth\InvalidPassword;
+use Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
@@ -208,6 +209,22 @@ class FirebaseClient
         try {
             $auth = $this->getFirebaseClient()->createAuth();
             $user = $auth->createUserWithEmailAndPassword($email, $password);
+            $data = [
+                'subject' => 'TẠO MỚI TÀI KHOẢN THÀNH CÔNG',
+                'message' => 'Tài khoản của bạn trên phần mềm quản lý doanh nghiệp thẩm định giá nova.fastvalue.vn đã được khởi tạo thành công.',
+                'email' => $email,
+                'new_password' => $password,
+                'is_create' => true,
+                'is_reset_pass' => false,
+            ];
+            $getUser = User::query()->where('email', $email)->first();
+            if ($getUser) {
+                Log::info('Vào gửi mail');
+                $eloquenUser = new EloquentUserRepository(new User());
+                $userSend = $eloquenUser->getUser($getUser->id);
+                CommonService::callNotificationReset([$userSend], $data);
+            }
+
             return $this->respondWithCustomData($user);
         } catch (FirebaseException | AuthException | UnknownKey | InvalidToken | RevokedIdToken $exception) {
             return $this->respondWithCustomData(['message' => $exception->getMessage()], 400);
@@ -258,8 +275,8 @@ class FirebaseClient
                     'message' => 'Tài khoản ' . $email . ' trên hệ thống FastValue đã được đặt lại mật khẩu thành "' . $defaultPassword . '". Vui lòng đăng nhập vào hệ thống và tiến hành đổi lại mật khẩu mới để đảm bảo an toàn.',
                     'email' => $email,
                     'new_password' => $defaultPassword,
-                    // 'user' => $loginUser,
-                    // 'id' => $id
+                    'is_create' => false,
+                    'is_reset_pass' => true,
                 ];
 
                 CommonService::callNotificationReset([$userSend], $data);

@@ -137,7 +137,8 @@ class UserController extends Controller
             if ($this->getUserPermission(PermissionsDefault::ADD_PERMISSION . '_' . ScreensDefault::USER_SCREEN)) {
                 $data = $request->toArray();
                 $user = $this->userRepository->createUser($data);
-                (new FirebaseClient())->createUser($request['email'], $request['password']);
+                $defaultPassword = $this->randomPassword();
+                (new FirebaseClient())->createUser($request['email'], $defaultPassword);
                 return $this->respondWithCustomData($user);
             } else {
                 $data = ['message' => ErrorMessage::PERMISSION_ERROR];

@@ -62,6 +62,7 @@ class Certificate extends Model
         'status_expired_at',
         'note',
         'administrative_id',
+        'accounting_id',
         'business_manager_id',
         'document_alter_by_bank',
         'is_company',
@@ -201,8 +202,11 @@ class Certificate extends Model
     }
     public function administrative(): BelongsTo
     {
-
         return $this->belongsTo(Appraiser::class, 'administrative_id', 'id');
+    }
+    public function accounting(): BelongsTo
+    {
+        return $this->belongsTo(Appraiser::class, 'accounting_id', 'id');
     }
     public function appraises(): belongsToMany
     {
