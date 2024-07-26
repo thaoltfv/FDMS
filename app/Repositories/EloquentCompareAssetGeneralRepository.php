@@ -1924,7 +1924,8 @@ class EloquentCompareAssetGeneralRepository extends EloquentRepository implement
         }
         $check = null;
         $where = [
-            'coordinates' => $coordinates
+            'coordinates' => $coordinates,
+            'status' => 1
         ];
         if (empty($id)) {
             if ($this->model->query()->where($where)->exists()) {

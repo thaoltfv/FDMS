@@ -70,7 +70,27 @@ class ReportCertificateNova extends ReportCertificate
         $textRun->addText("Chi tiết xem tại Mục V, Báo cáo thẩm định giá.", ['bold' => false], ['keepNext' => false]);
         $section->addTitle("Giá trị tài sản thẩm định giá: ", 2);
         $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
-        $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate);
+        $propertyDetailtotalZoningAll = 0;
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank != 0) {
+            foreach ($certificate->realEstate as $stt => $realEstate) {
+                $appraise = $realEstate->appraises;
+                foreach ($appraise->properties as $property) {
+                    foreach ($property->propertyDetail as $item) {
+                        if ($item->is_zoning) {
+                            $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
+                            $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
+                            $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
+                            $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
+                            $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                            $total = (round($dientich * $donGiaDatRound));
+                            $propertyDetailtotalZoningAll += $total;
+                        }
+                    }
+                }
+            }
+        } else {
+        }
+        $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate) - $propertyDetailtotalZoningAll;
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addText("(Chi tiết xem tại phần VI, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
