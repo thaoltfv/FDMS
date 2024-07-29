@@ -1236,8 +1236,8 @@ export default {
 			}
 			if (
 				dataPC.value &&
-				dataPC.value.status !== 6 &&
-				dataPC.value.status !== 7 &&
+				// dataPC.value.status !== 6 &&
+				// dataPC.value.status !== 7 &&
 				(vueStoree.value.user.roles[0].name === "ADMIN" ||
 					vueStoree.value.user.roles[0].name === "ROOT_ADMIN")
 			) {
