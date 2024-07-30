@@ -1737,12 +1737,14 @@ class CommonService
 
 	public static function callNotificationReset($users, $data)
 	{
+		Log::info('Vào gửi mail 1', ['users' => $users, 'data' => $data]);
 		register_shutdown_function([self::class, 'registerShutdowncallNotificationReset'], $users, $data);
 		return;
 	}
 	public static function registerShutdowncallNotificationReset($users, $data)
 	{
 		$broadcast = new ResetPassword((object)$data);
+		Log::info('Vào gửi mail 2', ['broadcast' => $broadcast, 'users' => $users, 'data' => $data]);
 		Notification::send($users, $broadcast);
 	}
 	public static function convertStatusText($status)
