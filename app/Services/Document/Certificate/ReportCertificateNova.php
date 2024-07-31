@@ -73,17 +73,19 @@ class ReportCertificateNova extends ReportCertificate
         $propertyDetailtotalZoningAll = 0;
         if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank != 0) {
             foreach ($certificate->realEstate as $stt => $realEstate) {
-                $appraise = $realEstate->appraises;
-                foreach ($appraise->properties as $property) {
-                    foreach ($property->propertyDetail as $item) {
-                        if ($item->is_zoning) {
-                            $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
-                            $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
-                            $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
-                            $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
-                            $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
-                            $total = (round($dientich * $donGiaDatRound));
-                            $propertyDetailtotalZoningAll += $total;
+                if ($realEstate->appraises) {
+                    $appraise = $realEstate->appraises;
+                    foreach ($appraise->properties as $property) {
+                        foreach ($property->propertyDetail as $item) {
+                            if ($item->is_zoning) {
+                                $landTypePurpose = (isset($item->landTypePurpose) && isset($item->landTypePurpose->acronym)) ? $item->landTypePurpose->acronym : '';
+                                $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
+                                $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
+                                $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
+                                $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                                $total = (round($dientich * $donGiaDatRound));
+                                $propertyDetailtotalZoningAll += $total;
+                            }
                         }
                     }
                 }
