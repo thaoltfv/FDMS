@@ -88,7 +88,6 @@ class ReportCertificateNova extends ReportCertificate
                             }
                         }
                     }
-                } else {
                 }
             }
         } else {
