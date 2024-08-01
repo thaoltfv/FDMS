@@ -1746,6 +1746,7 @@ class CommonService
 		$broadcast = new ResetPassword((object)$data);
 		Log::info('Vào gửi mail 2', ['broadcast' => $broadcast, 'users' => $users, 'data' => $data]);
 		Notification::send($users, $broadcast);
+		Log::info('Vào gửi mail 3', ['Notification' => Notification::send($users, $broadcast)]);
 	}
 	public static function convertStatusText($status)
 	{
