@@ -3619,10 +3619,21 @@ export default {
 		// ---------------------------------------------- TAB_2 --------------------------------------------------------------------//
 		showPriceApartment() {
 			if (this.form.apartment_asset_properties) {
-				return (
-					+this.formatCurrent(parseFloat(this.mgtn).toFixed(0)) *
-					this.form.apartment_asset_properties.area
-				);
+				if (this.form.price && this.form.price.length > 0) {
+					let totalPrice = 0;
+
+					this.form.price.forEach(item => {
+						if (item.slug === "apartment_total_price") {
+							totalPrice = item.value;
+						}
+					});
+					return totalPrice;
+				} else {
+					return (
+						+this.formatCurrent(parseFloat(this.mgtn).toFixed(0)) *
+						this.form.apartment_asset_properties.area
+					);
+				}
 			} else return 0;
 		},
 		formatCurrent(value) {

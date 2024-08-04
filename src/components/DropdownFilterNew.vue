@@ -13,9 +13,17 @@
 			no-flip
 		>
 			<template v-slot:default>
-				<a-menu mode="inline" style="width:320px">
+				<a-menu
+					:default-selected-keys="['1']"
+					:default-open-keys="['status']"
+					mode="inline"
+					style="width:320px"
+				>
 					<a-sub-menu key="status">
-						<span slot="title"> <span>Trạng thái tài sản</span></span>
+						<span slot="title">
+							<span>{{ title || "" }}</span></span
+						>
+						<!-- <span slot="title"> <span>Trạng thái tài sản</span></span> -->
 						<a-menu-item
 							v-if="lstFilterStatus && lstFilterStatus.length > 0"
 							v-for="(option, index) in lstFilterStatus"
@@ -26,7 +34,7 @@
 							}}</a-checkbox>
 						</a-menu-item>
 					</a-sub-menu>
-					<a-sub-menu key="time">
+					<!-- <a-sub-menu key="time">
 						<span slot="title"> <span>Thời gian</span></span>
 						<a-menu-item>
 							<div class="row" style="width:250px">
@@ -46,7 +54,7 @@
 								></a-date-picker>
 							</div>
 						</a-menu-item>
-					</a-sub-menu>
+					</a-sub-menu> -->
 				</a-menu>
 				<!-- <a-menu
 					:default-selected-keys="['1']"
@@ -117,13 +125,18 @@ export default {
 			lstFilterStatus.value = [
 				{
 					checked: false,
-					value: 1,
+					value: "1",
+					text: "Đang thực hiện "
+				},
+				{
+					checked: false,
+					value: "4",
 					text: "Hoàn thành"
 				},
 				{
 					checked: false,
-					value: 0,
-					text: "Đang thực hiện "
+					value: "5",
+					text: "Hủy"
 				}
 			];
 			// lstFilterStatus.value = jsonConfig.value.principle
@@ -165,7 +178,15 @@ export default {
 			let result = this.lstFilterStatus
 				.filter(option => option.checked === true)
 				.map(option => String(option.value));
-
+			if (result.length > 0 && result.includes("1")) {
+				const temp = ["1", "2", "3", "7", "8", "9", "10"];
+				const filter = result.filter(e => e !== "1");
+				if (filter.length > 0) {
+					temp.push(...filter);
+				}
+				result = temp;
+			} else {
+			}
 			this.$emit("search", result, this.timeFilter.from, this.timeFilter.to);
 		},
 		closeMe() {

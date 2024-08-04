@@ -3292,8 +3292,8 @@ export default {
 		}
 		if (
 			this.form.status &&
-			this.form.status !== 4 &&
-			this.form.status !== 5 &&
+			// this.form.status !== 4 &&
+			// this.form.status !== 5 &&
 			(profile.data.user.roles[0].name === "ROOT_ADMIN" ||
 				profile.data.user.roles[0].name === "ADMIN")
 		) {
@@ -3302,7 +3302,7 @@ export default {
 		console.log("Trước khi vào if hiện nút chỉnh sửa status", this.form.status);
 		if (
 			this.form.status &&
-			this.form.status === 9 &&
+			(this.form.status === 8 || this.form.status === 9) &&
 			this.convertToEnglish(profile.data.user.roles[0].role_name)
 				.toUpperCase()
 				.includes("KE TOAN")
