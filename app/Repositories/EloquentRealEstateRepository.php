@@ -274,6 +274,7 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
         $createdBy = request()->get('created_by');
         $fromDate = request()->get('fromDate');
         $toDate = request()->get('toDate');
+        $status = request()->get('status');
         $where = [];
         $select = [
             'id',
@@ -307,6 +308,10 @@ class EloquentRealEstateRepository extends EloquentRepository implements RealEst
         }
         if (!empty($toDate) && $toDate != 'Invalid date') {
             $result->whereRaw("created_at <= to_date('$toDate', 'dd/MM/yyyy') + '1 day'::interval");
+        }
+        if (!empty($status)) {
+            $array_status = explode(',', $status);
+            $result = $result->whereIn('status', $array_status);
         }
         // dd($result->limit(5)->get()->append('total_construction_base')->toArray());
         return $result->get()->append('total_construction_base');
