@@ -91,8 +91,8 @@
 								<div class="data-label">Địa chỉ tài sản:</div>
 								<div class="data-value">
 									{{
-										data.step_1.general_infomation.full_address_street
-											? data.step_1.general_infomation.full_address_street
+										data.step_1.general_infomation.full_address
+											? data.step_1.general_infomation.full_address
 											: ""
 									}}
 								</div>

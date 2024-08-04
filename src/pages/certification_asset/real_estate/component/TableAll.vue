@@ -39,7 +39,13 @@
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
 						<p class="text-none mb-0">
-							{{ status === 4 ? "Hoàn thành" : "Đang thực hiện" }}
+							{{
+								status === 4
+									? "Hoàn thành"
+									: status === 5
+									? "Hủy"
+									: "Đang thực hiện"
+							}}
 						</p>
 						<!-- <div v-if="status === 1" class="status-color bg-info" />
 						<div v-if="status === 2" class="status-color bg-primary" />

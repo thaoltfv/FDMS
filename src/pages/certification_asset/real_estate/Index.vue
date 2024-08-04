@@ -4,13 +4,13 @@
 			<div
 				class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
 			>
-				<div class="col-12 col-md-6 col-xl-8">
+				<!-- <div class="col-12 col-md-6 col-xl-8">
 					<button-checkbox
 						:options="statusOptions"
 						:value="selectedStatus"
 						@change="onChangeStatus"
 					/>
-				</div>
+				</div> -->
 				<div
 					class="search-block col-12 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
 				>
@@ -76,13 +76,13 @@
 			<div
 				class="button__detail row mx-0 justify-content-between justify-content-lg-end align-items-center"
 			>
-				<div class="col-12 col-md-6 col-xl-8">
+				<!-- <div class="col-12 col-md-6 col-xl-8">
 					<button-checkbox
 						:options="statusOptions"
 						:value="selectedStatus"
 						@change="onChangeStatus"
 					/>
-				</div>
+				</div> -->
 				<div
 					class="search-block col-7 col-md-6 col-xl-4 d-flex justify-content-end align-items-center"
 				>
@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import DropdownFilter from "@/components/DropdownFilter";
+import DropdownFilter from "@/components/DropdownFilterNew";
 import { PERMISSIONS } from "@/enum/permissions.enum";
 import AppraisePagingData from "@/models/AppraisePagingData";
 import ButtonCheckbox from "@/components/Form/ButtonCheckbox";
@@ -216,8 +216,9 @@ export default {
 					// { label: "Duyệt phát hành", value: "7", class: "bg-warning" },
 					// { label: "In hồ sơ", value: "8", class: "bg-warning" },
 					// { label: "Bàn giao khách hàng", value: "9", class: "bg-warning" },
-					// { label: "Hoàn thành", value: "4", class: "bg-success" },
-					// { label: "Hủy", value: "5", class: "bg-secondary" }
+					{ label: "Đang thực hiện", value: "1", class: "bg-success" },
+					{ label: "Hoàn thành", value: "4", class: "bg-success" },
+					{ label: "Hủy", value: "5", class: "bg-secondary" }
 				],
 				value: "value",
 				label: "label"
