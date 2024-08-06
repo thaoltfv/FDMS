@@ -337,7 +337,7 @@ class Certificate extends Model
                     foreach ($appraise->properties as $property) {
                         foreach ($property->propertyDetail as $item2) {
                             if ($item2->is_zoning) {
-                                $landTypePurpose = (isset($item->landTypePurpose) && isset($item2->landTypePurpose->acronym)) ? $item2->landTypePurpose->acronym : '';
+                                $landTypePurpose = (isset($item2->landTypePurpose) && isset($item2->landTypePurpose->acronym)) ? $item2->landTypePurpose->acronym : '';
                                 $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
                                 $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
                                 $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
