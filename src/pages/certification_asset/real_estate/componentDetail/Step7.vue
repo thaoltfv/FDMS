@@ -9887,11 +9887,11 @@ export default {
 							this.comparisonFactorChange3 += 1;
 						}
 					}
-					mgcd_price_other[index] +=
-						(dataOther.adjust_percent * arrayPriceTem[index]) / 100;
-					mgcd_price_other_abs[index] += Math.abs(
+					mgcd_price_other[index] +=this.roundPrice(
+						(dataOther.adjust_percent * arrayPriceTem[index]) / 100);
+					mgcd_price_other_abs[index] += this.roundPrice(Math.abs(
 						(dataOther.adjust_percent * arrayPriceTem[index]) / 100
-					);
+					));
 				});
 			});
 
@@ -10001,7 +10001,9 @@ export default {
 			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3);
 			console.log("adjustpricedata", this.adjustPriceData);
 			console.log("price_other", this.price_other_comparison);
-			console.log("this.mgcd1", this.mgcd1, this.mgcd2, this.mgcd3);
+			console.log("this.mgcd1", this.mgcd1, this.roundPrice(this.dgd1), this.roundPrice(this.tldc1));
+			console.log("this.mgcd2", this.mgcd2, this.roundPrice(this.dgd2), this.roundPrice(this.tldc2));
+			console.log("this.mgcd3", this.mgcd3, this.roundPrice(this.dgd3), this.roundPrice(this.tldc3));
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true;
