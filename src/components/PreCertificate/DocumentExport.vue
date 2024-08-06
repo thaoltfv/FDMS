@@ -17,7 +17,7 @@
 			v-bind:notification="reUploadMessage"
 			@action="openUploadFile"
 		/>
-		<div class="card" :style="isMobile ? { 'margin-bottom': '150px' } : {}">
+		<div class="card" :style="isMobile ? {} : {}">
 			<div class="card-title">
 				<div class=" align-items-center">
 					<div class="d-flex justify-content-between">
@@ -61,7 +61,7 @@
 								class="mr-2"
 							/> -->
 						</h3>
-						<a-dropdown>
+						<a-dropdown v-if="!isMobile">
 							<a-button class="mr-3">
 								<a-icon type="download" />
 							</a-button>
@@ -91,7 +91,7 @@
 			<div class="card-body card-info">
 				<div class="ml-n3 mt-2 row" :key="keyRefresh">
 					<div
-						class="mb-4 col-4 "
+						class="mb-4 col-lg-4 col-md-6 col-sm-12"
 						v-for="(file, index) in lstFile"
 						:key="index"
 					>
@@ -149,7 +149,7 @@
 											{{ " " + file.nameTitle }}</b-tooltip
 										>
 										<div
-											v-if="file.isAutoExport"
+											v-if="file.isAutoExport && !isMobile"
 											:id="'download_' + file.type_document"
 											@click="handleDownloadAutoDocument(file.type_document)"
 											class="mr-2"
@@ -180,7 +180,8 @@
 													statusText !== 'Hoàn thành' &&
 													statusText !== 'In hồ sơ' &&
 													statusText !== 'Bàn giao khách hàng' &&
-													statusText !== 'Hủy'
+													statusText !== 'Hủy' &&
+													!isMobile
 											"
 											class="d-flex align-items-center"
 										>
@@ -270,7 +271,8 @@
 													statusText !== 'Hoàn thành' &&
 													statusText !== 'In hồ sơ' &&
 													statusText !== 'Bàn giao khách hàng' &&
-													statusText !== 'Hủy'
+													statusText !== 'Hủy' &&
+													!isMobile
 											"
 											class=""
 										>
@@ -418,7 +420,7 @@ export default {
 		}
 
 		const downloadOtherFile = async file => {
-			if (props.permission.allowExport && file.name) {
+			if (props.permission.allowExport && file.name && !isMobile.value) {
 				axios({
 					url:
 						process.env.API_URL +

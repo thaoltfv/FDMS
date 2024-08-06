@@ -4,7 +4,9 @@
 			<div class="card">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
-						<h3 class="title">Chỉnh sửa yêu cầu sơ bộ</h3>
+						<h3 class="title">
+							{{ isMobile ? "Chỉnh sửa YCSB" : "Chỉnh sửa yêu cầu sơ bộ" }}
+						</h3>
 						<div class="color_content card-status">
 							{{ dataPC && dataPC.id ? `YCSB_${dataPC.id}` : "YCSB" }} | Mới
 						</div>
@@ -131,11 +133,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-6">
-			<div
-				class="card"
-				:style="isMobile ? { 'margin-bottom': '70px' } : { height: '56vh' }"
-			>
+		<div class="col-lg-6 h-100 col-sm-12 col-md-6">
+			<div class="card" :style="isMobile ? {} : { height: '56vh' }">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Đối tác</h3>
@@ -207,11 +206,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-6">
-			<div
-				class="card"
-				:style="isMobile ? { 'margin-bottom': '70px' } : { height: '56vh' }"
-			>
+		<div class="col-lg-6 h-100 col-sm-12 col-md-6">
+			<div class="card" :style="isMobile ? {} : { height: '56vh' }">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tổ thẩm định</h3>

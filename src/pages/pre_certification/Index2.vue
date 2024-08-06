@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!isMobile" class="main-wrapper-new">
-		<a-tabs @change="callback" default-active-key="1" style="height: 100%;">
+		<a-tabs @change="callback" default-active-key="2" style="height: 100%;">
 			<a-tab-pane key="1">
 				<span slot="tab">
 					<img src="@/assets/icons/ic_table.svg" alt="table" />
@@ -152,13 +152,19 @@
 							>
 						</b-dropdown>
 					</div>
-					<div class="col-12 col-md-6 col-xl-8">
-						<button-checkbox
+					<div class="col-12">
+						<DropdownFilter
+							:fromDate="form.fromDate"
+							:toDate="form.toDate"
+							class="mr-5"
+							@notifi-kanban="notifiKanban()"
+						/>
+						<!-- <button-checkbox
 							v-show="showFilter"
 							:options="statusOptions"
 							:value="selectedStatus"
 							@change="onChangeStatus"
-						/>
+						/> -->
 					</div>
 				</div>
 			</div>
@@ -278,9 +284,9 @@ export default {
 			}
 		});
 
-		if (this.isMobile) {
-			this.selectedStatus = ["3"];
-		}
+		// if (this.isMobile) {
+		// 	this.selectedStatus = ["3"];
+		// }
 	},
 	setup() {
 		const checkMobile = () => {

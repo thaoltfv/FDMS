@@ -28,7 +28,7 @@ import {
 	Radio,
 	Checkbox,
 	Drawer,
-	Timeline
+	Timeline,
 } from "ant-design-vue";
 
 Vue.use(Card);

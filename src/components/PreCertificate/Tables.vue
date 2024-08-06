@@ -362,9 +362,7 @@
 					<div class="label_container d-flex">
 						<strong class="d_inline mr-1">Tổng giá trị sơ bộ:</strong
 						><span style="font-weight: 500">{{
-							element.total_preliminary_value
-								? `${formatPrice(element.total_preliminary_value)}`
-								: "-"
+							formatPriceTotal(element)
 						}}</span>
 					</div>
 				</div>
@@ -384,12 +382,13 @@
 				</div>
 				<div class="property-content d-flex justify-content-between mb-0">
 					<div class="label_container d-flex">
-						<img
+						<span class="text-primary">{{ element.name_nv }}</span>
+						<!-- <img
 							width="15px"
 							class="mr-2"
 							src="@/assets/icons/ic_taglink.svg"
 							alt="user"
-						/><span style="color:#8B94A3">{{ element.document_count }}</span>
+						/><span style="color:#8B94A3">{{ element.document_count }}</span> -->
 					</div>
 					<img
 						class="img_user"
@@ -734,12 +733,28 @@ export default {
 					hiddenItem: false
 				},
 				{
+					title: "Trạng thái",
+					align: "center",
+
+					dataIndex: "status",
+					scopedSlots: {
+						customRender: "status"
+						// 	filterDropdown: "filterDropdown"
+					},
+					// filters:
+					// 	this.jsonConfig && this.jsonConfig.filterStatus
+					// 		? this.jsonConfig.filterStatus
+					// 		: [],
+					// onFilter: (value, record) => record.status === value,
+					hiddenItem: false
+				},
+				{
 					title: "Khách hàng",
 					align: "left",
 					scopedSlots: { customRender: "petitioner_name" },
 					// sorter: (a, b) => a.petitioner_name - b.petitioner_name,
 					// sortDirections: ['descend', 'ascend'],
-					width: "15dvw",
+					width: "13dvw",
 					hiddenItem: false
 				},
 				{
@@ -755,7 +770,7 @@ export default {
 					scopedSlots: { customRender: "total_preliminary_value" },
 					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
 					// sortDirections: ['descend', 'ascend'],
-					width: "30dvw",
+					width: "20dvw",
 					hiddenItem: false
 				},
 				{
@@ -766,23 +781,23 @@ export default {
 					// sortDirections: ['descend', 'ascend'],
 					hiddenItem: false
 				},
-				{
-					title: "Người tạo",
-					class: "optional-data",
-					align: "left",
-					scopedSlots: { customRender: "created_by" },
-					// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
-				{
-					title: "Tổng phí dịch vụ (VNĐ)",
-					align: "left",
-					scopedSlots: { customRender: "service_fee" },
-					// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
-					// sortDirections: ['descend', 'ascend'],
-					hiddenItem: false
-				},
+				// {
+				// 	title: "Người tạo",
+				// 	class: "optional-data",
+				// 	align: "left",
+				// 	scopedSlots: { customRender: "created_by" },
+				// 	// sorter: (a, b) => a.created_by.name.length - b.created_by.name.length,
+				// 	// sortDirections: ['descend', 'ascend'],
+				// 	hiddenItem: false
+				// },
+				// {
+				// 	title: "Tổng phí dịch vụ (VNĐ)",
+				// 	align: "left",
+				// 	scopedSlots: { customRender: "service_fee" },
+				// 	// sorter: (a, b) => a.total_asset_price - b.total_asset_price,
+				// 	// sortDirections: ['descend', 'ascend'],
+				// 	hiddenItem: false
+				// },
 				{
 					title: "Thời gian",
 					class: "optional-data",
@@ -792,22 +807,6 @@ export default {
 						// filterDropdown: "filterDropdownCreatedAt"
 					},
 
-					hiddenItem: false
-				},
-				{
-					title: "Trạng thái",
-					align: "center",
-
-					dataIndex: "status",
-					scopedSlots: {
-						customRender: "status"
-						// 	filterDropdown: "filterDropdown"
-					},
-					// filters:
-					// 	this.jsonConfig && this.jsonConfig.filterStatus
-					// 		? this.jsonConfig.filterStatus
-					// 		: [],
-					// onFilter: (value, record) => record.status === value,
 					hiddenItem: false
 				}
 			];
@@ -822,6 +821,54 @@ export default {
 	},
 	mounted() {},
 	methods: {
+		formatPriceTotal(data) {
+			let totalPrice = 0;
+			if (data.price_estimates && data.price_estimates.length > 0) {
+				for (let index = 0; index < data.price_estimates.length; index++) {
+					const element = data.price_estimates[index];
+					if (
+						element.land_final_estimate &&
+						element.land_final_estimate.length > 0
+					) {
+						for (
+							let indexLand = 0;
+							indexLand < element.land_final_estimate.length;
+							indexLand++
+						) {
+							const elementLand = element.land_final_estimate[indexLand];
+							totalPrice += Number(elementLand.total_price);
+						}
+					}
+				}
+			}
+			let num = parseFloat(totalPrice / 1)
+				.toFixed(0)
+				.replace(".", ",");
+			if (num.length > 3 && num.length <= 6) {
+				return (
+					parseFloat(num / 1000)
+						.toFixed(1)
+						.replace(".", ",") + " Nghìn"
+				);
+			} else if (num.length > 6 && num.length <= 9) {
+				return (
+					parseFloat(num / 1000000)
+						.toFixed(1)
+						.replace(".", ",") + " Triệu"
+				);
+			} else if (num.length > 9) {
+				return (
+					parseFloat(num / 1000000000)
+						.toFixed(1)
+						.replace(".", ",") + " Tỷ"
+				);
+			} else if (num < 900) {
+				return num + " đ"; // if value < 1000, nothing to do
+			}
+			return num > 0
+				? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+				: "-";
+		},
 		getStatusDescription(status) {
 			const item = this.principleConfig.find(item => item.status === status);
 			return item ? item.description : "";
@@ -1051,8 +1098,14 @@ export default {
 			this.showDetailPopUp = false;
 		},
 		handleDetailCertificate(id) {
-			this.idData = id;
-			this.getDetailCertificate(id);
+			this.$router
+				.push({
+					name: "pre_certification.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
 		},
 		async getDetailCertificate(id) {
 			const res = await PreCertificate.getDetailPreCertificate(id);

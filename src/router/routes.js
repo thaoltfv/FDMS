@@ -501,7 +501,180 @@ export const routes = [
 					],
 					gtm: "Trang chỉnh sửa khách hàng"
 				}
-			}
+			},
+
+			// first
+			{
+				path: "customer-group-first",
+				name: "customer_group_first.index",
+				component: page("customer/customer_group_first/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Phân cấp 1",
+					permissions: [PERMISSIONS.VIEW_CUSTOMER],
+					breadcrumbs: [{ title: "Phân cấp 1", name: "customer_group_first.index" }],
+					gtm: "Trang quản lý phân cấp 1"
+				}
+			},
+			{
+				path: "customer-group-first/create",
+				name: "customer_group_first.create",
+				component: page("customer/customer_group_first/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Tạo Phân cấp 1",
+					permissions: [PERMISSIONS.ADD_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 1", name: "customer_group_first.index" },
+						{ title: "Tạo mới", name: "customer_group_first.create" }
+					],
+					gtm: "Trang tạo phân cấp 1"
+				}
+			},
+			{
+				path: "customer-group-first/edit",
+				name: "customer_group_first.edit",
+				component: page("customer/customer_group_first/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Chỉnh sửa phân cấp 1",
+					permissions: [PERMISSIONS.EDIT_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 1", name: "customer_group_first.index" },
+						{ title: "Chỉnh sửa", name: "customer_group_first.edit" }
+					],
+					gtm: "Trang chỉnh sửa phân cấp 1"
+				}
+			},
+			// second
+			{
+				path: "customer-group-second",
+				name: "customer_group_second.index",
+				component: page("customer/customer_group_second/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Phân cấp 2",
+					permissions: [PERMISSIONS.VIEW_CUSTOMER],
+					breadcrumbs: [{ title: "Phân cấp 2", name: "customer_group_second.index" }],
+					gtm: "Trang quản lý phân cấp 2"
+				}
+			},
+			{
+				path: "customer-group-second/create",
+				name: "customer_group_second.create",
+				component: page("customer/customer_group_second/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Tạo Phân cấp 2",
+					permissions: [PERMISSIONS.ADD_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 2", name: "customer_group_second.index" },
+						{ title: "Tạo mới", name: "customer_group_second.create" }
+					],
+					gtm: "Trang tạo phân cấp 2"
+				}
+			},
+			{
+				path: "customer-group-second/edit",
+				name: "customer_group_second.edit",
+				component: page("customer/customer_group_second/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Chỉnh sửa phân cấp 2",
+					permissions: [PERMISSIONS.EDIT_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 2", name: "customer_group_second.index" },
+						{ title: "Chỉnh sửa", name: "customer_group_second.edit" }
+					],
+					gtm: "Trang chỉnh sửa phân cấp 2"
+				}
+			},
+			// third
+			{
+				path: "customer-group-third",
+				name: "customer_group_third.index",
+				component: page("customer/customer_group_third/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Phân cấp 3",
+					permissions: [PERMISSIONS.VIEW_CUSTOMER],
+					breadcrumbs: [{ title: "Phân cấp 3", name: "customer_group_third.index" }],
+					gtm: "Trang quản lý phân cấp 3"
+				}
+			},
+			{
+				path: "customer-group-third/create",
+				name: "customer_group_third.create",
+				component: page("customer/customer_group_third/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Tạo mới phân cấp 3",
+					permissions: [PERMISSIONS.ADD_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 3", name: "customer_group_third.index" },
+						{ title: "Tạo mới", name: "customer_group_third.create" }
+					],
+					gtm: "Trang quản lý phân cấp 3"
+				}
+			},
+			{
+				path: "customer-group-third/edit",
+				name: "customer_group_third.edit",
+				component: page("customer/customer_group_third/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Chỉnh sửa phân cấp 3",
+					permissions: [PERMISSIONS.EDIT_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 3", name: "customer_group_third.index" },
+						{ title: "Chỉnh sửa", name: "customer_group_third.edit" }
+					],
+					gtm: "Trang chỉnh sửa phân cấp 3"
+				}
+			},
+			// fourth
+			{
+				path: "customer-group-fourth",
+				name: "customer_group_fourth.index",
+				component: page("customer/customer_group_fourth/Index.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Phân cấp 4",
+					permissions: [PERMISSIONS.VIEW_CUSTOMER],
+					breadcrumbs: [{ title: "Phân cấp 4", name: "customer_group_fourth.index" }],
+					gtm: "Trang quản lý phân cấp 4"
+				}
+			},
+			{
+				path: "customer-group-fourth/create",
+				name: "customer_group_fourth.create",
+				component: page("customer/customer_group_fourth/Create.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Tạo mới phân cấp 4",
+					permissions: [PERMISSIONS.ADD_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 4", name: "customer_group_fourth.index" },
+						{ title: "Tạo mới", name: "customer_group_fourth.create" }
+					],
+					gtm: "Trang tạo mới phân cấp 4"
+				}
+			},
+			{
+				path: "customer-group-fourth/edit",
+				name: "customer_group_fourth.edit",
+				component: page("customer/customer_group_fourth/Edit.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					title: "Chỉnh sửa Phường/Xã",
+					permissions: [PERMISSIONS.EDIT_CUSTOMER],
+					breadcrumbs: [
+						{ title: "Phân cấp 4", name: "customer_group_fourth.index" },
+						{ title: "Chỉnh sửa", name: "customer_group_fourth.edit" }
+					],
+					gtm: "Trang chỉnh sửa phân cấp 4"
+				}
+			},
 		]
 	},
 	// price-estimate
@@ -1865,6 +2038,24 @@ export const routes = [
 						}
 					],
 					gtm: "Trang chỉnh sửa HSTĐ"
+				}
+			}
+		]
+	},
+	// Menu mobile
+	{
+		path: "/menu",
+		component: Resource,
+		children: [
+			{
+				path: "",
+				name: "menu",
+				component: page("HomeMobile.vue"),
+				beforeEnter: ResolveGuard([AuthGuard]),
+				meta: {
+					permissions: [PERMISSIONS.VIEW_USER],
+					title: "Menu danh mục",
+					gtm: "Menu danh mục"
 				}
 			}
 		]

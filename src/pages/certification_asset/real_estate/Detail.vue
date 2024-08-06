@@ -819,10 +819,7 @@
 					@changeDescriptionFrontSide="changeDescriptionFrontSide"
 				/>
 				<!-- <div class="btn-footer d-md-flex d-block" style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;"> -->
-				<div
-					class="btn-footer row"
-					style="bottom: 60px;padding-top: 0px;padding-bottom: 10px;"
-				>
+				<div class="btn-footer row" style="">
 					<div class="col-6">
 						<!-- <button v-if="edit || add" class="btn btn-white btn-orange text-nowrap" @click.prevent="duplicateCertificateAsset" type="submit">
 											<img src="@/assets/icons/ic_duplicate.svg" style="margin-right: 12px; height: 1.25rem" alt="save"/>Nhân bản

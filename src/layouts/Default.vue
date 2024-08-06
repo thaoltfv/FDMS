@@ -5,15 +5,26 @@
 			<Header />
 			<Child />
 		</div>
-		<BottomNav
-			v-if="isMobile()"
+		<div class="btn-home" v-if="isMobile() && !checkRoute">
+			<button class="btn btn-orange btn-home" @click="backToHome">
+				<img
+					width="25px"
+					height="25px"
+					src="@/assets/icons/home-icon.svg"
+					alt="home"
+				/>
+			</button>
+		</div>
+		<!-- <BottomNav
+			v-show="false"
+			v-if="isMobile()
 			foreground-color="#42A5F5"
 			badge-color="#FBC02D"
 			background-color="#FFFFFF"
 			icon-color="#0000008A"
 			:options="options"
 			v-model="selected"
-		/>
+		/> -->
 	</div>
 </template>
 
@@ -47,51 +58,51 @@ export default {
 			// },
 			{
 				id: 1,
-				icon: "nav_hstd",
-				title: "Hồ sơ",
+				icon: "nav_menu",
+				title: "Menu danh mục",
 				customImage: true,
 				isActive: false,
-				path: { name: "certification_brief.index" }
+				path: { name: "menu" }
 			},
-			{
-				id: 2,
-				icon: "nav_tstd",
-				title: "Tài sản",
-				customImage: true,
-				isActive: false,
-				childs: [
-					{
-						id: 201,
-						icon: "icon_bds",
-						title: "BĐS",
-						customImage: true,
-						path: { name: "certification_asset.index" }
-					},
-					{
-						id: 202,
-						icon: "icon_ds",
-						title: "ĐS",
-						customImage: true,
-						path: { name: "certification_personal_property.index" }
-					}
-				]
-			},
-			{
-				id: 3,
-				icon: "nav_bdg",
-				title: "Bản đồ giá",
-				customImage: true,
-				isActive: false,
-				path: { name: "home" }
-			},
-			{
-				id: 4,
-				icon: "nav_kg",
-				title: "Kho giá",
-				isActive: false,
-				customImage: true,
-				path: { name: "warehouse.index" }
-			},
+			// {
+			// 	id: 2,
+			// 	icon: "nav_tstd",
+			// 	title: "Tài sản",
+			// 	customImage: true,
+			// 	isActive: false,
+			// 	childs: [
+			// 		{
+			// 			id: 201,
+			// 			icon: "icon_bds",
+			// 			title: "BĐS",
+			// 			customImage: true,
+			// 			path: { name: "certification_asset.index" }
+			// 		},
+			// 		{
+			// 			id: 202,
+			// 			icon: "icon_ds",
+			// 			title: "ĐS",
+			// 			customImage: true,
+			// 			path: { name: "certification_personal_property.index" }
+			// 		}
+			// 	]
+			// },
+			// {
+			// 	id: 3,
+			// 	icon: "nav_bdg",
+			// 	title: "Bản đồ giá",
+			// 	customImage: true,
+			// 	isActive: false,
+			// 	path: { name: "home" }
+			// },
+			// {
+			// 	id: 4,
+			// 	icon: "nav_kg",
+			// 	title: "Kho giá",
+			// 	isActive: false,
+			// 	customImage: true,
+			// 	path: { name: "warehouse.index" }
+			// },
 			{
 				id: 5,
 				icon: "users-cog",
@@ -102,7 +113,15 @@ export default {
 			}
 		]
 	}),
+	computed: {
+		checkRoute() {
+			return this.$route.name === "menu" ? true : false;
+		}
+	},
 	methods: {
+		backToHome() {
+			this.$router.push({ name: "menu" });
+		},
 		isMobile() {
 			if (
 				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -117,3 +136,16 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+.btn {
+	&-home {
+		position: fixed;
+		right: 0;
+		top: 170px;
+		z-index: 100;
+		opacity: 0.6;
+		border-radius: 50%;
+		padding: 0.2rem 0.2rem;
+	}
+}
+</style>

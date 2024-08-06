@@ -349,12 +349,13 @@
 				</div>
 				<div class="property-content d-flex justify-content-between mb-0">
 					<div class="label_container d-flex">
-						<img
+						<span class="text-primary">{{ element.name_nv }}</span>
+						<!-- <img
 							width="15px"
 							class="mr-2"
 							src="@/assets/icons/ic_taglink.svg"
 							alt="user"
-						/><span style="color: #8b94a3">{{ element.document_count }}</span>
+						/><span style="color: #8b94a3">{{ element.document_count }}</span> -->
 					</div>
 					<img
 						class="img_user"
@@ -973,8 +974,14 @@ export default {
 			this.showDetailPopUp = false;
 		},
 		handleDetailCertificate(id) {
-			this.idData = id;
-			this.getDetailCertificate(id);
+			this.$router
+				.push({
+					name: "certification_brief.detail",
+					query: {
+						id: id.toString()
+					}
+				})
+				.catch(_ => {});
 		},
 		async getDetailCertificate(id) {
 			const res = await CertificationBrief.getDetailCertificateBrief(id);

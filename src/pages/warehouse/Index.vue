@@ -2,7 +2,7 @@
 	<div
 		v-if="!isMobile()"
 		id="wareHouse"
-		class="container-fluid position-relative"
+		class="container-fluid position-relative appraise-container table-wrapper"
 	>
 		<div class="loading" :class="{ loading__true: isSubmit }">
 			<a-spin />
@@ -75,10 +75,21 @@
 				</div>
 			</div>
 		</div>
-		<div
-			class="table-detail position-relative mt-3"
-			:class="totalRecord === 0 ? 'empty-data' : ''"
-		>
+		<div class="table-detail position-relative mt-3 empty-data">
+			<!-- <a-table
+				bordered
+				:columns="columns"
+				:data-source="listWarehouses"
+				:loading="isLoading"
+				class="table-property"
+				:rowKey="record => record.id"
+				:pagination="{
+					...pagination,
+					showSizeChanger: true,
+					pageSizeOptions: ['10', '20', '30']
+				}"
+				@change="onPageChange"
+			> -->
 			<a-table
 				bordered
 				:columns="columns"
@@ -294,8 +305,8 @@
 				</a-pagination>
 			</div>
 			<!-- <div class="total position-absolute" v-if="totalRecord > 0">
-        Tổng cộng: {{ totalRecord }} tin đăng
-      </div> -->
+				Tổng cộng: {{ totalRecord }} tin đăng
+			</div> -->
 		</div>
 		<ModalSearchAdvanced
 			v-if="showModalSearch"
@@ -741,17 +752,17 @@ export default {
 					title: "Mã tin đăng",
 					align: "center",
 					scopedSlots: { customRender: "id" },
-					dataIndex: "id",
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					dataIndex: "id"
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Loại tài sản",
 					align: "center",
-					dataIndex: "asset_type.description",
+					dataIndex: "asset_type.description"
 					// scopedSlots: {customRender: 'transaction_type'},
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Địa chỉ đầy đủ",
@@ -764,51 +775,51 @@ export default {
 					title: "Tổng diện tích",
 					align: "center",
 					scopedSlots: { customRender: "area_total" },
-					dataIndex: "area_total",
-					sorter: false,
-					sortDirections: ["descend", "ascend"]
+					dataIndex: "area_total"
+					// sorter: false,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Đơn giá bình quân",
 					class: "optional-data",
 					align: "center",
 					scopedSlots: { customRender: "average_land_unit_price" },
-					dataIndex: "average_land_unit_price",
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					dataIndex: "average_land_unit_price"
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Tổng giá trị",
 					align: "center",
 					scopedSlots: { customRender: "total_amount" },
-					dataIndex: "total_amount",
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					dataIndex: "total_amount"
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Thời điểm đăng",
 					align: "center",
 					dataIndex: "public_date",
-					scopedSlots: { customRender: "public_date" },
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					scopedSlots: { customRender: "public_date" }
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Ngày cập nhật",
 					align: "center",
 					dataIndex: "updated_at",
-					scopedSlots: { customRender: "updated_at" },
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					scopedSlots: { customRender: "updated_at" }
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Ngày tạo",
 					class: "optional-data",
 					align: "center",
 					dataIndex: "created_at",
-					scopedSlots: { customRender: "created_at" },
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					scopedSlots: { customRender: "created_at" }
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				},
 				{
 					title: "Người tạo",
@@ -839,10 +850,10 @@ export default {
 					title: "Loại giao dịch",
 					class: "optional-data",
 					align: "center",
-					dataIndex: "transaction_type.description",
+					dataIndex: "transaction_type.description"
 					// scopedSlots: {customRender: 'transaction_type'},
-					sorter: true,
-					sortDirections: ["descend", "ascend"]
+					// sorter: true,
+					// sortDirections: ["descend", "ascend"]
 				}
 				// {
 				// 	title: 'Trạng thái',
@@ -958,7 +969,6 @@ export default {
 		formatDate(value) {
 			return moment(String(value)).format("DD/MM/YYYY");
 		},
-
 		async openPrint(id) {
 			this.isSubmit = true;
 			await WareHouse.getPrint(id).then(resp => {
@@ -1654,6 +1664,344 @@ export default {
 	@media (max-width: 1024px) {
 		flex-direction: column;
 		gap: 20px;
+	}
+}
+.table-wrapper {
+	.ant-table-filter-dropdown-btns {
+		background-color: white !important;
+	}
+
+	.ant-table-filter-dropdown-link.confirm {
+		color: red;
+	}
+
+	/deep/ .ant-table-wrapper .ant-spin-container .ant-table {
+		border: 1px solid #dee6ee;
+	}
+
+	/deep/ .ant-table-wrapper .ant-spin-container .ant-table {
+		border: 1px solid #dee6ee;
+	}
+
+	/deep/ .ant-table-column-title {
+		color: #00507c;
+		// font-family: 'SVN-Gilroy';
+		// font-weight: 600;
+		//
+		// line-height: 20px;
+	}
+
+	/deep/ .table-striped td {
+		background-color: #f6f7fb;
+		border-color: #dee6ee;
+		border-width: 0;
+	}
+
+	/deep/ .ant-table-tbody,
+	/deep/ .ant-table-body {
+		box-shadow: none;
+	}
+
+	.pagination-wrapper {
+		margin-top: 18px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.ant-select {
+			margin-left: 11px;
+			margin-right: 11px;
+		}
+
+		.page-size {
+			display: flex;
+			align-items: center;
+			margin-right: 20px;
+			@media (max-width: 1024px) {
+				display: none;
+			}
+		}
+
+		.ant-pagination {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+			row-gap: 10px;
+
+			/deep/ .ant-pagination-total-text {
+				height: unset;
+				flex-grow: 1;
+				@media (max-width: 1024px) {
+					display: none;
+				}
+			}
+
+			/deep/ .ant-pagination-item-active {
+				background: #007ec6;
+
+				a {
+					color: #ffffff;
+				}
+			}
+
+			/deep/ .ant-pagination-prev,
+			/deep/ .ant-pagination-next {
+				border: 1px solid #d9d9d9;
+
+				&:hover {
+					border-color: #1890ff;
+					transition: all 0.3s;
+				}
+
+				a:hover {
+					i {
+						color: #1890ff;
+					}
+				}
+			}
+		}
+
+		@media (max-width: 1024px) {
+			flex-direction: column;
+			gap: 20px;
+		}
+	}
+	.scroll_board {
+		// transform:rotateX(180deg);
+		// -ms-transform:rotateX(180deg); /* IE 9 */
+		// -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+		scroll-snap-align: start;
+		overflow: auto;
+		overflow-y: auto;
+		overflow-x: auto;
+		margin-bottom: 1px;
+		max-height: 71vh !important;
+		@media (max-height: 800px) and (min-height: 660px) {
+			// M-MD Screen
+			max-height: 75vh !important;
+		}
+		@media (max-height: 970px) and (min-height: 800px) {
+			// FD Screen
+			max-height: 78vh !important;
+		}
+		@media (min-height: 970px) {
+			// >2k Screen
+			max-height: 85vh !important;
+		}
+	}
+	.name_card {
+		text-align: left;
+		width: 50%;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+	.badge {
+		border-radius: 10px;
+		display: inline-block;
+		text-transform: none;
+		padding: 0.3rem 0.5rem;
+		font-size: 85%;
+		color: #fff;
+		font-weight: 600;
+		line-height: 1;
+	}
+	.badgeSuccess {
+		background-color: rgba(40, 199, 111, 0.12);
+		color: #28c76f !important;
+	}
+	.badgeWarning {
+		background-color: rgba(255, 159, 67, 0.12);
+		color: #ff9f43 !important;
+	}
+	.badgeDanger {
+		background-color: rgba(234, 84, 85, 0.12);
+		color: #ea5455 !important;
+	}
+	.badgeInfo {
+		background-color: rgba(0, 207, 232, 0.12);
+		color: #00cfe8 !important;
+	}
+	.badgePrimary {
+		background-color: rgba(115, 103, 240, 0.12);
+		color: #7367f0 !important;
+	}
+	.content_id {
+		border-radius: 5px;
+		padding: 0px 3px;
+		font-weight: 500;
+		cursor: pointer;
+		&_primary {
+			color: #007ec6;
+			background-color: #e3f5ff;
+		}
+		&_secondary {
+			color: #ffffff;
+			background-color: #8b94a3;
+		}
+		&_warning {
+			color: #ff963d;
+			background-color: #fff1e6;
+		}
+		&_danger {
+			color: #ff5e7b;
+			background-color: #ffebef;
+		}
+		&_success {
+			color: #ffffff;
+			background-color: #26bf7f;
+		}
+	}
+	.img_user {
+		border-radius: 50%;
+		height: 20px;
+		width: 20px;
+	}
+	.appraise-container {
+		padding: 0 1.25rem;
+	}
+	.kanban-column {
+		min-height: 300px;
+	}
+	.height_icon {
+		height: 1.3rem;
+	}
+	.card-body {
+		padding: 0.75rem 0.75rem !important;
+	}
+	.card_container {
+		border-radius: 5px;
+		&_primary {
+			border: 1px solid #b5e5ff;
+		}
+		&_secondary {
+			border: 1px solid #8b94a3;
+		}
+		&_warning {
+			border: 1px solid #ffd1ad;
+		}
+		&_danger {
+			border: 1px solid #ffc8d3;
+		}
+		&_success {
+			border: 1px solid #26bf7f;
+			background-color: #eafff6;
+		}
+	}
+	.container_kanban {
+		height: fit-content;
+		background-color: #f6f7fb;
+		border-radius: 5px;
+		border: 1px solid #e8e8e8;
+		border-top: 4px solid;
+		border-bottom: none;
+		border-left: none;
+		border-right: none;
+		min-width: 17rem;
+	}
+	// border
+	.border {
+		&_primary {
+			color: #72cdff;
+		}
+		&_secondary {
+			color: #9ea6b4;
+		}
+		&_danger {
+			color: #ff7e9b;
+		}
+		&_warning {
+			color: #ffb880;
+		}
+		&_success {
+			color: #3ddc99;
+		}
+	}
+	// title
+	.title {
+		font-weight: 600;
+		&_primary {
+			color: #00507c;
+		}
+		&_secondary {
+			color: #9ea6b4;
+		}
+		&_warning {
+			color: #ffb880;
+		}
+		&_danger {
+			color: #ff5e7b;
+		}
+		&_success {
+			color: #3ddc99;
+		}
+	}
+	//quatity
+	.quatity {
+		min-width: 32px;
+		height: 22px;
+		padding: 0px 5px;
+		align-items: center;
+		text-align: center;
+		border-radius: 5px;
+		color: white;
+		font-weight: 600;
+		&_primary {
+			background-color: #007ec6;
+		}
+		&_warning {
+			background-color: #ff963d;
+		}
+		&_danger {
+			background-color: #ff5e7b;
+		}
+		&_success {
+			background-color: #26bf7f;
+		}
+		&_secondary {
+			background-color: #8b94a3;
+		}
+	}
+
+	.title_kanban {
+		font-weight: 600;
+	}
+	.title_group {
+		border: 1px solid #d9d9d9;
+		border-radius: 5px;
+		text-align: center;
+	}
+	.kanban_board {
+		font-size: 0.875rem !important;
+		min-width: 1200px;
+	}
+	.d_inline {
+		@media (min-width: 1500px) {
+			display: inline !important;
+			min-width: 4.7rem;
+		}
+	}
+	.label_container {
+		@media (min-width: 1500px) {
+			min-width: 120px;
+		}
+	}
+	.icon_expired {
+		margin-inline-end: 1rem;
+		width: 1rem;
+		justify-content: end;
+	}
+	.container_card_success {
+		background: white;
+		margin-bottom: 1rem;
+		.card {
+			margin-bottom: unset !important;
+		}
+	}
+	.border_expired {
+		border-color: red !important;
 	}
 }
 </style>

@@ -230,6 +230,15 @@
 								:showIcon="true"
 								label="Điện thoại người liên hệ"
 							/>
+							<InputCategory
+								v-model="data.is_company"
+								class="form-group-container col-sm-12 col-md-6"
+								vid="is_company"
+								label="Loại khách hàng"
+								rules="required"
+								:options="optionsLoaiKH"
+								@change="data.is_company = $event"
+							/>
 						</div>
 					</div>
 				</div>
@@ -277,13 +286,13 @@
 								:iconUser="true"
 								:showIcon="true"
 								label="Họ tên đối tác"
-								class="form-group-container input_certification_brief col-6"
+								class="form-group-container input_certification_brief col-lg-6 col-sm-12"
 							/>
 							<InputTextPrefixCustom
 								id="customer_phone"
 								placeholder="Nhập số điện thoại"
 								v-model="data.customer.phone"
-								class="form-group-container input_certification_brief col-6"
+								class="form-group-container input_certification_brief col-lg-6 col-sm-12"
 								vid="customer_phone"
 								:iconPhone="true"
 								:showIcon="true"
@@ -306,7 +315,7 @@
 			</div>
 		</div>
 		<div class="col-md-12 col-lg-6">
-			<div class="card" :style="isMobile() ? { 'margin-bottom': '70px' } : {}">
+			<div class="card" :style="isMobile() ? {} : {}">
 				<div class="card-title">
 					<div class="d-flex justify-content-between align-items-center">
 						<h3 class="title">Tổ thẩm định</h3>
@@ -409,6 +418,17 @@
 								:options="optionsSignAppraiser"
 							/>
 						</div>
+
+						<div class="row justify-content-between">
+							<InputCategory
+								v-model="accounting_compute"
+								vid="accounting_id"
+								label="Kế toán"
+								class="form-group-container col-sm-12 col-md-6"
+								@change="handleChangeAppraiserManager"
+								:options="optionsAccounting"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -461,6 +481,7 @@ export default {
 		"appraisersManager",
 		"appraisersControl",
 		"administratives",
+		"accounting",
 		"customers",
 		"customerGroups",
 		"idData",
@@ -618,6 +639,20 @@ export default {
 				this.data.appraiser_sale_id = newValue;
 			}
 		},
+		accounting_compute: {
+			// getter
+			get: function() {
+				if (this.accounting.length > 0) {
+					return this.data.accounting_id;
+				} else {
+					return this.data.accounting ? this.data.accounting.name : "";
+				}
+			},
+			// setter
+			set: function(newValue) {
+				this.data.accounting_id = newValue;
+			}
+		},
 		optionsCustomerGroup() {
 			return {
 				data: this.customerGroups,
@@ -636,6 +671,17 @@ export default {
 				// selected: this.userAppraiserId
 			};
 		},
+		optionsLoaiKH() {
+			return {
+				data: [
+					{ id: 0, name: "Khách hàng cá nhân" },
+					{ id: 1, name: "Khách hàng doanh nghiệp" }
+				],
+				id: "id",
+				key: "name"
+				// selected: this.userAppraiserId
+			};
+		},
 		optionsAppraisalPurposes() {
 			return {
 				data: this.appraisalPurposes,
@@ -646,6 +692,13 @@ export default {
 		optionsAppraiserManager() {
 			return {
 				data: this.appraisersManager,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsAccounting() {
+			return {
+				data: this.accounting,
 				id: "id",
 				key: "name"
 			};

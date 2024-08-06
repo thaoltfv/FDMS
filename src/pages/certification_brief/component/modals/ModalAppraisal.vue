@@ -35,6 +35,17 @@
 						</div>
 						<div class="col-12">
 							<InputCategory
+								v-model="appraiser_sale_compute"
+								vid="appraiser_sale_id"
+								label="Nhân viên kinh doanh"
+								rules="required"
+								class="form-group-container"
+								@change="handleChangeAppraiserSale"
+								:options="optionsBusiness"
+							/>
+						</div>
+						<div class="col-12">
+							<InputCategory
 								v-model="business_manager_compute"
 								vid="business_manager_id"
 								label="Quản lý nghiệp vụ"
@@ -87,6 +98,15 @@
 							/>
 						</div>
 						<div class="col-12">
+							<InputCategory
+								v-model="accounting_compute"
+								vid="accounting_id"
+								label="Kế toán"
+								class="form-group-container"
+								:options="optionsAccounting"
+							/>
+						</div>
+						<div class="col-12">
 							<div
 								style="text-align: left !important;"
 								class="form-group-container"
@@ -114,7 +134,7 @@
 							/>
 						</div>
 					</div>
-					<div class="btn__group">
+					<div class="btn__group mb-5">
 						<button
 							class="btn btn-white font-weight-normal font-weight-bold"
 							@click.prevent="handleCancel"
@@ -169,10 +189,12 @@ export default {
 		return {
 			form: this.data ? JSON.parse(JSON.stringify(this.data)) : {},
 			appraisers: [],
+			accounting: [],
 			administratives: [],
 			signAppraisers: [],
 			appraisersManager: [],
 			appraisersControl: [],
+			employeeBusiness: [],
 			users: [],
 			positions: [],
 			employeePerformance: [],
@@ -231,6 +253,7 @@ export default {
 			this.businessManagers = await dataAppraise;
 			this.appraisersControl = await dataAppraise;
 			this.administratives = await dataAppraise;
+			this.accounting = await dataAppraise;
 			this.appraisersManager = await dataAppraise.filter(
 				item => item.is_legal_representative === 1
 			);
@@ -290,6 +313,7 @@ export default {
 			// 	this.signAppraisers = this.appraisers
 			// }
 		},
+		handleChangeAppraiserSale() {},
 		handleChangeAppraiserControl() {},
 		handleChangeAppraiserPerform() {},
 		handleBusinessManager() {},
@@ -305,6 +329,7 @@ export default {
 			);
 			const data = {
 				status: this.status,
+				appraiser_sale_id: this.form.appraiser_sale_id,
 				appraiser_perform_id: this.form.appraiser_perform_id,
 				business_manager_id: this.form.business_manager_id,
 				appraiser_id: this.form.appraiser_id,
@@ -312,6 +337,7 @@ export default {
 				appraiser_manager_id: this.form.appraiser_manager_id,
 				appraiser_control_id: this.form.appraiser_control_id,
 				administrative_id: this.form.administrative_id,
+				accounting_id: this.form.accounting_id,
 				status_expired_at: this.form.status_expired_at
 			};
 			if (this.ModalEdit) {
@@ -382,6 +408,20 @@ export default {
 		}
 	},
 	computed: {
+		appraiser_sale_compute: {
+			// getter
+			get: function() {
+				if (this.employeeBusiness.length > 0) {
+					return this.form.appraiser_sale_id;
+				} else {
+					return this.form.appraiser_sale.name;
+				}
+			},
+			// setter
+			set: function(newValue) {
+				this.form.appraiser_sale_id = newValue;
+			}
+		},
 		appraiser_perform_compute: {
 			// getter
 			get: function() {
@@ -415,6 +455,20 @@ export default {
 			set: function(newValue) {
 				// console.log("newwww", newValue);
 				this.form.business_manager_id = newValue;
+			}
+		},
+		accounting_compute: {
+			// getter
+			get: function() {
+				if (this.accounting.length > 0) {
+					return this.form.accounting_id;
+				} else {
+					return this.form.accounting ? this.form.accounting.name : "";
+				}
+			},
+			// setter
+			set: function(newValue) {
+				this.form.accounting_id = newValue;
 			}
 		},
 		appraiser_control_compute: {
@@ -519,6 +573,7 @@ export default {
 				key: "name"
 			};
 		},
+
 		optionsAppraiser() {
 			return {
 				data: this.appraisers,
@@ -550,6 +605,13 @@ export default {
 		optionsBusinessManager() {
 			return {
 				data: this.businessManagers,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsAccounting() {
+			return {
+				data: this.accounting,
 				id: "id",
 				key: "name"
 			};

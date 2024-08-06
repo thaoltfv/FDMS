@@ -1,5 +1,8 @@
 <template>
-	<div v-if="!isMobile()" class="table-wrapper">
+	<div
+		v-if="!isMobile()"
+		class="container-fluid position-relative table-wrapper"
+	>
 		<div class="table-detail position-relative empty-data">
 			<a-table
 				ref="table"
@@ -36,7 +39,13 @@
 						class="d-flex justify-content-center align-items-center position-relative"
 					>
 						<p class="text-none mb-0">
-							{{ status === 4 ? "Hoàn thành" : "Đang thực hiện" }}
+							{{
+								status === 4
+									? "Hoàn thành"
+									: status === 5
+									? "Hủy"
+									: "Đang thực hiện"
+							}}
 						</p>
 						<!-- <div v-if="status === 1" class="status-color bg-info" />
 						<div v-if="status === 2" class="status-color bg-primary" />

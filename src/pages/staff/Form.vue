@@ -153,26 +153,29 @@
 					<div class="row">
 						<InputCategory
 							class="col-12 col-lg-6 input-content"
-							v-model="name_lv_1"
+							v-model="first_id"
 							:options="optionsLV1"
 							label="Phân cấp 1"
 							rules="required"
+							@change="changeFirstGroup($event)"
 						/>
 						<InputCategory
 							class="col-12 col-lg-6 input-content"
-							v-model="name_lv_2"
+							v-model="second_id"
 							:options="optionsLV2"
 							label="Phân cấp 2"
+							@change="changeSecondGroup($event)"
 						/>
 						<InputCategory
 							class="col-12 col-lg-6 input-content"
-							v-model="name_lv_3"
+							v-model="third_id"
 							:options="optionsLV3"
 							label="Phân cấp 3"
+							@change="changeThirdGroup($event)"
 						/>
 						<InputCategory
 							class="col-12 col-lg-6 input-content"
-							v-model="name_lv_4"
+							v-model="fourth_id"
 							:options="optionsLV4"
 							label="Phân cấp 4"
 						/>
@@ -211,7 +214,7 @@ import User from "@/models/User";
 import WareHouse from "@/models/WareHouse";
 import { capitalize } from "lodash-es";
 import AppraiserCompany from "@/models/AppraiserCompany";
-
+import CustomerGroupFirst from "@/models/CustomerGroupFirst";
 export default {
 	props: {
 		detail: {
@@ -233,14 +236,14 @@ export default {
 			roles: [],
 			branches: [],
 			positions: [],
-			listLV1: [],
-			listLV2: [],
-			listLV3: [],
-			listLV4: [],
-			name_lv_1: "",
-			name_lv_2: "",
-			name_lv_3: "",
-			name_lv_4: "",
+			firstGroups: [],
+			secondGroups: [],
+			thirdGroups: [],
+			fourthGroups: [],
+			first_id: "",
+			second_id: "",
+			third_id: "",
+			fourth_id: "",
 			form: {
 				is_guest: false,
 				appraiser: {
@@ -287,10 +290,10 @@ export default {
 			this.form = Object.assign(this.form, {
 				...this.$route.meta["detail"]
 			});
-			this.name_lv_1 = this.$route.meta["detail"].name_lv_1;
-			this.name_lv_2 = this.$route.meta["detail"].name_lv_2;
-			this.name_lv_3 = this.$route.meta["detail"].name_lv_3;
-			this.name_lv_4 = this.$route.meta["detail"].name_lv_4;
+			this.first_id = this.$route.meta["detail"].first_id;
+			this.second_id = this.$route.meta["detail"].second_id;
+			this.third_id = this.$route.meta["detail"].third_id;
+			this.fourth_id = this.$route.meta["detail"].fourth_id;
 			this.branch = this.$route.meta["detail"].branch;
 			this.role_id = this.$route.meta["detail"].roles[0].id;
 		} else {
@@ -302,30 +305,30 @@ export default {
 	computed: {
 		optionsLV1() {
 			return {
-				data: this.listLV1,
-				id: "description",
-				key: "description"
+				data: this.firstGroups,
+				id: "id",
+				key: "name"
 			};
 		},
 		optionsLV2() {
 			return {
-				data: this.listLV2,
-				id: "description",
-				key: "description"
+				data: this.secondGroups,
+				id: "id",
+				key: "name"
 			};
 		},
 		optionsLV3() {
 			return {
-				data: this.listLV3,
-				id: "description",
-				key: "description"
+				data: this.thirdGroups,
+				id: "id",
+				key: "name"
 			};
 		},
 		optionsLV4() {
 			return {
-				data: this.listLV4,
-				id: "description",
-				key: "description"
+				data: this.fourthGroups,
+				id: "id",
+				key: "name"
 			};
 		},
 		optionsCustomerGroup() {
@@ -362,80 +365,80 @@ export default {
 			try {
 				const reps = await WareHouse.getDictionaries();
 				this.positions = [...reps.data.chuc_vu];
-				this.customerGroups = reps.data.nhom_doi_tac
-					? [...reps.data.nhom_doi_tac]
-					: [];
-
-				if (this.customerGroups.length > 0) {
-					for (let index = 0; index < this.customerGroups.length; index++) {
-						const element = this.customerGroups[index];
-						if (element.name_lv_1) {
-							if (this.listLV1.length === 0) {
-								this.listLV1.push({ description: element.name_lv_1 });
-							} else {
-								const temp = this.listLV1.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_1.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.listLV1.push({ description: element.name_lv_1 });
-								}
-							}
-						}
-						if (element.name_lv_2) {
-							if (this.listLV2.length === 0) {
-								this.listLV2.push({ description: element.name_lv_2 });
-							} else {
-								const temp = this.listLV2.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_2.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.listLV2.push({ description: element.name_lv_2 });
-								}
-							}
-						}
-						if (element.name_lv_3) {
-							if (this.listLV3.length === 0) {
-								this.listLV3.push({ description: element.name_lv_3 });
-							} else {
-								const temp = this.listLV3.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_3.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.listLV3.push({ description: element.name_lv_3 });
-								}
-							}
-						}
-						if (element.name_lv_4) {
-							if (this.listLV4.length === 0) {
-								this.listLV4.push({ description: element.name_lv_4 });
-							} else {
-								const temp = this.listLV4.filter(
-									e =>
-										e.description &&
-										e.description.toUpperCase() ===
-											element.name_lv_4.toUpperCase()
-								);
-								if (temp.length === 0) {
-									this.listLV4.push({ description: element.name_lv_4 });
-								}
-							}
-						}
-					}
+			} catch (err) {
+				this.isSubmit = false;
+				throw err;
+			}
+		},
+		getCustomerGroupFull() {
+			if (this.first_id && this.firstGroups.length > 0) {
+				this.secondGroups = this.firstGroups.filter(
+					e => e.id === this.first_id
+				)[0].second_groups;
+			}
+			if (this.second_id && this.secondGroups.length > 0) {
+				this.thirdGroups = this.secondGroups.filter(
+					e => e.id === this.second_id
+				)[0].third_groups;
+			}
+			if (this.third_id && this.thirdGroups.length > 0) {
+				this.fourthGroups = this.thirdGroups.filter(
+					e => e.id === this.third_id
+				)[0].fourth_groups;
+			}
+		},
+		async getCustomerGroupFirstList() {
+			try {
+				const resp = await CustomerGroupFirst.getCustomerGroupFirstList();
+				this.firstGroups = [...resp.data];
+				if (this.first_id && this.firstGroups.length > 0) {
+					this.secondGroups = this.firstGroups.filter(
+						e => e.id === this.first_id
+					)[0].second_groups;
+				}
+				if (this.second_id && this.secondGroups.length > 0) {
+					this.thirdGroups = this.secondGroups.filter(
+						e => e.id === this.second_id
+					)[0].third_groups;
+				}
+				if (this.third_id && this.thirdGroups.length > 0) {
+					this.fourthGroups = this.thirdGroups.filter(
+						e => e.id === this.third_id
+					)[0].fourth_groups;
 				}
 			} catch (err) {
 				this.isSubmit = false;
 				throw err;
 			}
 		},
+		changeFirstGroup(firstId) {
+			this.second_id = "";
+			this.third_id = "";
+			this.fourth_id = "";
+			this.secondGroups = [];
+			this.thirdGroups = [];
+			this.fourthGroups = [];
+			this.secondGroups = this.firstGroups.filter(
+				e => e.id === +firstId
+			)[0].second_groups;
+		},
+		changeSecondGroup(secondId) {
+			this.third_id = "";
+			this.fourth_id = "";
+			this.thirdGroups = [];
+			this.fourthGroups = [];
+			this.thirdGroups = this.secondGroups.filter(
+				e => e.id === +secondId
+			)[0].third_groups;
+		},
+		changeThirdGroup(thirdId) {
+			this.form.fourth_id = "";
+			this.fourthGroups = [];
+			this.fourthGroups = this.thirdGroups.filter(
+				e => e.id === +thirdId
+			)[0].fourth_groups;
+		},
+		changeFourthGroup(fourthId) {},
 		async validateBeforeSubmit() {
 			const isValid = await this.$refs.observer.validate();
 
@@ -453,10 +456,10 @@ export default {
 			data.role = role.name;
 			data.role = role.role_name;
 			if (data.is_guest) {
-				data.name_lv_1 = this.name_lv_1;
-				data.name_lv_2 = this.name_lv_2;
-				data.name_lv_3 = this.name_lv_3;
-				data.name_lv_4 = this.name_lv_4;
+				data.first_id = this.first_id;
+				data.second_id = this.second_id;
+				data.third_id = this.third_id;
+				data.fourth_id = this.fourth_id;
 			}
 			// console.log(role);
 			if (this.$route.name === "staff.edit") {
@@ -596,6 +599,7 @@ export default {
 	beforeMount() {
 		this.getRoles();
 		this.getBranches();
+		this.getCustomerGroupFirstList();
 		this.getDictionary();
 		// console.log('this.$route.name',this.$route.name)
 		if (this.$route.name === "staff.create") {

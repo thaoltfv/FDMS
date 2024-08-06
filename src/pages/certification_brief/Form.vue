@@ -12,6 +12,7 @@
 					:typeAppraiseProperty="typeAppraiseProperty"
 					:appraisersManager="appraisersManager"
 					:appraisersControl="appraisersControl"
+					:accounting="accounting"
 					:administratives="administratives"
 					:appraisalPurposes="appraisalPurposes"
 					:appraisers="appraisers"
@@ -58,7 +59,7 @@
 					</button>
 				</div>
 			</div>
-			<div v-else class="btn-footer d-md-flex d-block" style="bottom: 60px;">
+			<div v-else class="btn-footer d-md-flex d-block">
 				<div
 					class="d-lg-flex d-block button-contain row"
 					style="justify-content: space-around;display: flex!important;"
@@ -150,6 +151,10 @@ export default {
 					administrative: {
 						name: ""
 					},
+					accounting_id: null,
+					accounting: {
+						name: ""
+					},
 					business_manager_id: null,
 					appraiser_business_manager: {
 						name: ""
@@ -161,7 +166,8 @@ export default {
 					appraise_purpose_id: "",
 					appraiser_id: "",
 					appraiser: "",
-					document_num: "/HĐ-TĐG",
+					// document_num: "/HĐ-TĐG",
+					document_num: "",
 					document_date: "",
 					document_type: [],
 					appraise_date: "",
@@ -188,7 +194,8 @@ export default {
 					},
 					status: 1,
 					sub_status: 1,
-					document_alter_by_bank: 0
+					document_alter_by_bank: 0,
+					is_company: 0
 				},
 				status: "2",
 				created_by: ""
@@ -198,6 +205,7 @@ export default {
 			businessManagers: [],
 			customers: [],
 			customerGroups: [],
+			accounting: [],
 			appraisersManager: [],
 			appraisersControl: [],
 			administratives: [],
@@ -257,13 +265,13 @@ export default {
 			this.form.step_1.appraise_date = this.form.step_1.appraise_date
 				? moment(this.form.step_1.appraise_date).format("DD/MM/YYYY")
 				: "";
-			if (
-				(this.form.step_1.document_num &&
-					this.form.step_1.document_num.trim() === "") ||
-				!this.form.step_1.document_num
-			) {
-				this.form.step_1.document_num = "/HĐ-TĐG";
-			}
+			// if (
+			// 	(this.form.step_1.document_num &&
+			// 		this.form.step_1.document_num.trim() === "") ||
+			// 	!this.form.step_1.document_num
+			// ) {
+			// 	this.form.step_1.document_num = "/HĐ-TĐG";
+			// }
 
 			// Data mới
 			this.form.step_1.survey_time = this.form.step_1.survey_time
@@ -302,6 +310,7 @@ export default {
 			this.businessManagers = dataAppraise;
 			this.employeeBusiness = dataAppraise;
 			this.appraisersControl = dataAppraise;
+			this.accounting = dataAppraise;
 			this.administratives = dataAppraise;
 			this.appraisersManager = dataAppraise.filter(
 				item => item.is_legal_representative === 1

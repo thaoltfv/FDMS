@@ -36,6 +36,7 @@
 											class="form-group-container"
 											label="Tên pháp lý"
 											rules="required"
+											:disabledInput="true"
 										/>
 									</div>
 									<div class="col">
@@ -343,7 +344,7 @@ export default {
 				`${
 					this.form.legal_name_holder ? this.form.legal_name_holder + " " : ""
 				}` +
-				"được quyền sử dụng đất thuộc " +
+				"được quyền sử dụng đất và CTXD thuộc " +
 				`${land_description} ` +
 				`${this.full_address ? this.full_address : ""}.`;
 			land_description = "";

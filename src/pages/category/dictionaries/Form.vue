@@ -5,7 +5,54 @@
 			ref="observer"
 			@submit.prevent="validateBeforeSubmit"
 		>
+			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
+				v-model="form.first_id"
+				class="mb-3"
+				vid="first_id"
+				label="Phân cấp 1"
+				rules="required"
+				:options="optionsFirstGroup"
+				@change="changeFirstGroup($event)"
+			/>
+			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
+				v-model="form.second_id"
+				class="mb-3"
+				vid="second_id"
+				label="Phân cấp 2"
+				:options="optionsSecondGroup"
+				@change="changeSecondGroup($event)"
+			/>
+			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
+				v-model="form.third_id"
+				class="mb-3"
+				vid="third_id"
+				label="Phân cấp 3"
+				:options="optionsThirdGroup"
+				@change="changeThirdGroup($event)"
+			/>
+			<InputCategory
+				v-if="form.type == 'NHOM_DOI_TAC'"
+				v-model="form.fourth_id"
+				class="mb-3"
+				vid="fourth_id"
+				label="Phân cấp 4"
+				:options="optionsFourthGroup"
+				@change="changeFourthGroup($event)"
+			/>
 			<InputText
+				:key="keyRender"
+				v-model="form.description"
+				placeholder="Nhập tên chi tiết"
+				rules="required"
+				class="mb-3"
+				vid="description"
+				:disabledInput="form.type == 'NHOM_DOI_TAC'"
+				label="Tên chi tiết"
+			/>
+			<!-- <InputText
 				v-if="form.type == 'NHOM_DOI_TAC'"
 				v-model="form.name_lv_1"
 				placeholder="Nhập phân cấp 1"
@@ -57,7 +104,7 @@
 				vid="description"
 				:disabledInput="form.type == 'NHOM_DOI_TAC'"
 				label="Tên chi tiết"
-			/>
+			/> -->
 			<InputText
 				v-if="form.type == 'LOAI_DAT_CHI_TIET' || form.type == 'CHUC_VU'"
 				v-model="form.acronym"
@@ -101,7 +148,7 @@
 import InputText from "@/components/Form/InputText";
 import InputCategory from "@/components/Form/InputCategory";
 import Dictionary from "@/models/Dictionary";
-
+import CustomerGroupFirst from "@/models/CustomerGroupFirst";
 export default {
 	props: {
 		detail: {
@@ -114,32 +161,111 @@ export default {
 		InputText,
 		InputCategory
 	},
-	computed: {},
+	computed: {
+		optionsFirstGroup() {
+			return {
+				data: this.firstGroups,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsSecondGroup() {
+			return {
+				data: this.secondGroups,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsThirdGroup() {
+			return {
+				data: this.thirdGroups,
+				id: "id",
+				key: "name"
+			};
+		},
+		optionsFourthGroup() {
+			return {
+				data: this.fourthGroups,
+				id: "id",
+				key: "name"
+			};
+		}
+	},
 	data() {
 		return {
+			firstGroups: [],
+			secondGroups: [],
+			thirdGroups: [],
+			fourthGroups: [],
 			form: {
 				description: "",
-				name_lv_1: "",
-				name_lv_2: "",
-				name_lv_3: "",
-				name_lv_4: "",
+				first_id: "",
+				second_id: "",
+				third_id: "",
+				fourth_id: "",
 				type: ""
 			},
 			isSubmit: false,
 			province: null,
 			district: null,
 			ward: null,
-			street: null
+			street: null,
+			keyRender: 1000
 		};
 	},
 	created() {
 		this.form.type = this.$route.query.type;
+		if (this.form.type === "NHOM_DOI_TAC") {
+			this.getCustomerGroupFirstList();
+		}
 	},
 	methods: {
+		changeFirstGroup(firstId) {
+			this.form.second_id = "";
+			this.form.third_id = "";
+			this.form.fourth_id = "";
+			this.getFullCustomerGroupName();
+			this.secondGroups = [];
+			this.thirdGroups = [];
+			this.fourthGroups = [];
+			this.secondGroups = this.firstGroups.filter(
+				e => e.id === +firstId
+			)[0].second_groups;
+		},
+		changeSecondGroup(secondId) {
+			this.form.third_id = "";
+			this.form.fourth_id = "";
+			this.getFullCustomerGroupName();
+			this.thirdGroups = [];
+			this.fourthGroups = [];
+			this.thirdGroups = this.secondGroups.filter(
+				e => e.id === +secondId
+			)[0].third_groups;
+		},
+		changeThirdGroup(thirdId) {
+			this.form.fourth_id = "";
+			this.getFullCustomerGroupName();
+			this.fourthGroups = [];
+			this.fourthGroups = this.thirdGroups.filter(
+				e => e.id === +thirdId
+			)[0].fourth_groups;
+		},
+		changeFourthGroup(fourthId) {
+			this.getFullCustomerGroupName();
+		},
 		async validateBeforeSubmit() {
 			const isValid = await this.$refs.observer.validate();
 			if (isValid) {
 				this.handleSubmit();
+			}
+		},
+		async getCustomerGroupFirstList() {
+			try {
+				const resp = await CustomerGroupFirst.getCustomerGroupFirstList();
+				this.firstGroups = [...resp.data];
+			} catch (err) {
+				this.isSubmit = false;
+				throw err;
 			}
 		},
 		handleSubmit() {
@@ -148,18 +274,35 @@ export default {
 			this.createDictionary(data);
 		},
 		getFullCustomerGroupName() {
+			this.form.description = "";
 			let tempName = "";
-			if (this.form.name_lv_1.trim() !== "") {
-				tempName = this.form.name_lv_1.trim();
+			if (this.form.first_id && this.firstGroups.length > 0) {
+				const temp = this.firstGroups.filter(e => e.id === this.form.first_id);
+				if (temp.length > 0) {
+					tempName = temp[0].name;
+				}
 			}
-			if (this.form.name_lv_2.trim() !== "") {
-				tempName += "_" + this.form.name_lv_2.trim();
+			if (this.form.second_id && this.secondGroups.length > 0) {
+				const temp = this.secondGroups.filter(
+					e => e.id === this.form.second_id
+				);
+				if (temp.length > 0) {
+					tempName += "_" + temp[0].name;
+				}
 			}
-			if (this.form.name_lv_3.trim() !== "") {
-				tempName += "_" + this.form.name_lv_3.trim();
+			if (this.form.third_id && this.thirdGroups.length > 0) {
+				const temp = this.thirdGroups.filter(e => e.id === this.form.third_id);
+				if (temp.length > 0) {
+					tempName += "_" + temp[0].name;
+				}
 			}
-			if (this.form.name_lv_4.trim() !== "") {
-				tempName += "_" + this.form.name_lv_4.trim();
+			if (this.form.fourth_id && this.fourthGroups.length > 0) {
+				const temp = this.fourthGroups.filter(
+					e => e.id === this.form.fourth_id
+				);
+				if (temp.length > 0) {
+					tempName += "_" + temp[0].name;
+				}
 			}
 			this.form.description = tempName;
 		},

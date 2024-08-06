@@ -215,6 +215,11 @@ export default {
 					// console.log('vô 8')
 					e.isActive = true;
 				}
+
+				if (e.path && e.path.name === "menu" && this.$route.name === "menu") {
+					// console.log('vô 8')
+					e.isActive = true;
+				}
 			});
 		}, 3000);
 	},

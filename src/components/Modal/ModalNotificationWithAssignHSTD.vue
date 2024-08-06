@@ -25,6 +25,7 @@
 							status_text != 'Phân lại' &&
 							status_text != 'Khôi phục' &&
 							status_text != 'Hủy' &&
+							status_text != 'Hủy hồ sơ' &&
 							status_text != 'Từ chối'
 								? '<br>&quot;' + status_text + '&quot;'
 								: ''
@@ -50,6 +51,7 @@
 								status_text &&
 								status_text != 'Khôi phục' &&
 								status_text != 'Hủy' &&
+								status_text != 'Hủy hồ sơ' &&
 								status_text != 'Từ chối'
 						"
 						class="form-group-container row"
@@ -61,7 +63,7 @@
 							rules="required"
 							disabled
 							:requiredIcon="true"
-							class="col-6"
+							class="col-lg-6 col-md-6 col-sm-12"
 						/>
 						<InputNumberMinute
 							@changeHour="changeEstimateComplete"
@@ -70,7 +72,7 @@
 							label="Thời gian gia hạn"
 							rules="required"
 							:requiredIcon="true"
-							class="col-6"
+							class="col-lg-6 col-md-6 col-sm-12"
 						/>
 					</div>
 
