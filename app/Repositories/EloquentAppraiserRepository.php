@@ -70,6 +70,7 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
         }
 
         return $result
+            ->with('user')
             ->with('appraisePosition')
             ->select()
             ->orderByDesc($this->defaultSort)
