@@ -733,8 +733,9 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $otherPrice = 0;
             if (isset($assetPrice)) {
                 $priceRound = $assetPrice->where('slug', 'round_total')->first();
-                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first();
+                $apartmentPriceObj = $assetPrice->where('slug', 'apartment_asset_price')->first();
                 $roundTotal = $priceRound->value ?? 0;
+                $apartmentPrice = $apartmentPriceObj->value ?? 0;
             }
             if (isset($otherAssets)) {
                 $otherPrice = $otherAssets->sum('total_price');
