@@ -723,7 +723,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                             $apartmentPrice = $total / 3;
                     }
                     $slug = 'apartment_asset_price';
-                    $this->updateOrCreatePrice($id, $slug, $apartmentPrice ?? 0);
+                    // $this->updateOrCreatePrice($id, $slug, $apartmentPrice ?? 0);
                 }
             }
             $slug = 'apartment_area';
@@ -733,6 +733,7 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $otherPrice = 0;
             if (isset($assetPrice)) {
                 $priceRound = $assetPrice->where('slug', 'round_total')->first();
+                $apartmentPrice = $assetPrice->where('slug', 'apartment_asset_price')->first();
                 $roundTotal = $priceRound->value ?? 0;
             }
             if (isset($otherAssets)) {
