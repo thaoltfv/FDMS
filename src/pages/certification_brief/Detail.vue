@@ -266,6 +266,7 @@
 													(editAppraiser && edit) ||
 														isBusinessManager ||
 														byPassAdmin ||
+														byPassSubAdmin ||
 														isAppraiserControl
 												"
 												@click="handleShowAppraisal"
@@ -374,7 +375,8 @@
 										v-if="
 											(edit && (editInfo || editDocument)) ||
 												isAccounting ||
-												byPassAdmin
+												byPassAdmin ||
+												byPassSubAdmin
 										"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit d-flex align-items-start"
@@ -574,7 +576,9 @@
 												v-if="
 													(editAppraiser && edit) ||
 														isBusinessManager ||
-														byPassAdmin
+														byPassAdmin ||
+														byPassSubAdmin ||
+														isAppraiserControl
 												"
 												@click="handleShowAppraisal"
 												class="btn-edit d-flex align-items-start"
