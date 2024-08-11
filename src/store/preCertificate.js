@@ -146,7 +146,22 @@ export const usePreCertificateStore = defineStore(
 		async function getLstAppraisers() {
 			const resp = await PreCertificate.getAppraisers();
 			let dataAppraise = [...resp.data];
-			lstDataConfig.value.appraiser_business_managers = dataAppraise;
+			lstDataConfig.value.appraiser_business_managers = dataAppraise.filter(
+				item =>
+					item.user &&
+					item.user.roles &&
+					item.user.roles.length > 0 &&
+					item.user.roles[0].name === "SUB_ADMIN"
+			).length > 0
+				? dataAppraise.filter(
+					item =>
+						item.user &&
+						item.user.roles &&
+						item.user.roles.length > 0 &&
+						item.user.roles[0].name === "SUB_ADMIN"
+				)
+				: dataAppraise;
+
 			lstDataConfig.value.appraiser_sales = dataAppraise;
 			lstDataConfig.value.appraiser_performances = dataAppraise;
 			return;

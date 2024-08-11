@@ -1315,11 +1315,138 @@ export default {
 
 			return check;
 		},
+		checkServiceFee() {
+			let returnCheck = false;
+			if (this.detailData.service_fee && this.detailData.service_fee !== 0) {
+				returnCheck = true;
+			}
+			return returnCheck;
+		},
+		checkDocumentNumAndDate() {
+			let returnCheck = false;
+			if (
+				this.detailData.document_num &&
+				this.detailData.document_num.trim() !== "" &&
+				// this.form.document_num.trim() !== "/HĐ-TĐG" &&
+				this.detailData.document_date &&
+				this.detailData.document_date.trim() !== ""
+			) {
+				returnCheck = true;
+			}
+			return returnCheck;
+		},
 		handleFooterAccept(target) {
 			this.appraiserChangeStage = null;
 			let check = true;
 			let config = this.principleConfig.find(i => i.id === target.id);
 			this.elementDragger = this.detailData;
+			if (target.description.toUpperCase() === "PHÂN HỒ SƠ") {
+				const check = this.checkDocumentNumAndDate();
+				if (!check) {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập đầy đủ số hợp đồng và ngày hợp đồng trước khi chuyển sang trạng thái 'Phân hồ sơ'",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				}
+			}
+			if (
+				target.description.toUpperCase() === "DUYỆT GIÁ" ||
+				target.description.toUpperCase() === "DUYỆT PHÁT HÀNH" ||
+				target.description.toUpperCase() === "IN HỒ SƠ" ||
+				target.description.toUpperCase() === "BÀN GIAO KHÁCH HÀNG" ||
+				target.description.toUpperCase() === "HOÀN THÀNH"
+			) {
+				const check = this.checkServiceFee();
+				if (!check) {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập phí dịch vụ thẩm định giá trước khi chuyển sang trạng thái hồ sơ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				}
+			}
+			if (target.description.toUpperCase() === "IN HỒ SƠ") {
+				//
+				if (
+					this.detailData.certificate_num &&
+					this.detailData.certificate_num.trim() !== "" &&
+					this.detailData.certificate_date &&
+					this.detailData.certificate_date.trim() !== ""
+				) {
+				} else {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập đầy đủ số chứng thư và ngày chứng thư trước khi chuyển sang bước in hồ sơ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				}
+				// Nhà đất
+				// if (!this.isApartment) {
+				// 	if (
+				// 		this.isCertificateReport &&
+				// 		this.isAppraisalReport &&
+				// 		this.isAppendix1Report &&
+				// 		this.isAppendix2Report &&
+				// 		this.isAppendix3Report &&
+				// 		this.isComparisionAssetReport
+				// 	) {
+				// 		// Đã upload đủ
+				// 	} else if (
+				// 		// Đất trống
+				// 		this.form.document_type.find(i => i === "DT") &&
+				// 		this.isCertificateReport &&
+				// 		this.isAppraisalReport &&
+				// 		this.isAppendix1Report &&
+				// 		this.isAppendix3Report &&
+				// 		this.isComparisionAssetReport
+				// 	) {
+				// 	} else {
+				// 		this.$toast.open({
+				// 			message:
+				// 				"Vui lòng tải lên đầy đủ tài liệu chính thức trước khi chuyển sang bước in hồ sơ",
+				// 			type: "error",
+				// 			position: "top-right",
+				// 			duration: 3000
+				// 		});
+
+				// 		return;
+				// 	}
+				// } else {
+				// 	console.log("Vào đây");
+				// 	if (
+				// 		this.isCertificateReport &&
+				// 		this.isAppraisalReport &&
+				// 		this.isAppendix1Report &&
+				// 		this.isAppendix3Report &&
+				// 		this.isComparisionAssetReport
+				// 	) {
+				// 		// Đã upload đủ
+				// 	} else {
+				// 		this.$toast.open({
+				// 			message:
+				// 				"Vui lòng tải lên đầy đủ tài liệu chính thức trước khi chuyển sang bước in hồ sơ",
+				// 			type: "error",
+				// 			position: "top-right",
+				// 			duration: 3000
+				// 		});
+
+				// 		return;
+				// 	}
+				// }
+			}
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
 				if (
 					this.detailData.service_fee !== 0 &&

@@ -33,7 +33,7 @@
 								@change="handleChangeDateTime"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="appraiser_sale_compute"
 								vid="appraiser_sale_id"
@@ -44,7 +44,7 @@
 								:options="optionsBusiness"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="business_manager_compute"
 								vid="business_manager_id"
@@ -55,7 +55,7 @@
 								:options="optionsBusinessManager"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="appraiser_perform_compute"
 								vid="appraiser_perform_id"
@@ -66,7 +66,7 @@
 								:options="optionsPeformance"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="appraiser_compute"
 								vid="appraiser_id"
@@ -77,7 +77,7 @@
 								:options="optionsAppraiser"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="appraiser_control_compute"
 								vid="appraiser_control_id"
@@ -87,8 +87,7 @@
 								:options="optionsAppraiserControl"
 							/>
 						</div>
-
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="administrative_compute"
 								vid="administrative_id"
@@ -97,7 +96,7 @@
 								:options="optionsAdministratives"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="accounting_compute"
 								vid="accounting_id"
@@ -106,7 +105,7 @@
 								:options="optionsAccounting"
 							/>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<div
 								style="text-align: left !important;"
 								class="form-group-container"
@@ -124,7 +123,7 @@
 								/>
 							</div>
 						</div>
-						<div class="col-12">
+						<div class="col-6">
 							<InputCategory
 								v-model="appraiser_confirm_compute"
 								vid="appraiser_confirm_id"
@@ -250,7 +249,25 @@ export default {
 			let idManager = await appraiserCompany.data.data[0].appraiser.id;
 			this.employeePerformance = await dataAppraise;
 			this.employeeBusiness = await dataAppraise;
-			this.businessManagers = await dataAppraise;
+			if (dataAppraise) {
+				this.businessManagers =
+					dataAppraise.filter(
+						item =>
+							item.user &&
+							item.user.roles &&
+							item.user.roles.length > 0 &&
+							item.user.roles[0].name === "SUB_ADMIN"
+					).length > 0
+						? dataAppraise.filter(
+								item =>
+									item.user &&
+									item.user.roles &&
+									item.user.roles.length > 0 &&
+									item.user.roles[0].name === "SUB_ADMIN"
+						  )
+						: dataAppraise;
+			}
+
 			this.appraisersControl = await dataAppraise;
 			this.administratives = await dataAppraise;
 			this.accounting = await dataAppraise;

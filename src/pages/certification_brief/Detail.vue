@@ -59,7 +59,8 @@
 										v-if="
 											(edit && (editInfo || editDocument)) ||
 												isAccounting ||
-												byPassAdmin
+												byPassAdmin ||
+												byPassSubAdmin
 										"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit"
@@ -264,7 +265,9 @@
 												v-if="
 													(editAppraiser && edit) ||
 														isBusinessManager ||
-														byPassAdmin
+														byPassAdmin ||
+														byPassSubAdmin ||
+														isAppraiserControl
 												"
 												@click="handleShowAppraisal"
 												class="btn-edit"
@@ -372,7 +375,8 @@
 										v-if="
 											(edit && (editInfo || editDocument)) ||
 												isAccounting ||
-												byPassAdmin
+												byPassAdmin ||
+												byPassSubAdmin
 										"
 										@click="handleShowAppraiseInformation"
 										class="btn-edit d-flex align-items-start"
@@ -572,7 +576,9 @@
 												v-if="
 													(editAppraiser && edit) ||
 														isBusinessManager ||
-														byPassAdmin
+														byPassAdmin ||
+														byPassSubAdmin ||
+														isAppraiserControl
 												"
 												@click="handleShowAppraisal"
 												class="btn-edit d-flex align-items-start"
@@ -898,7 +904,14 @@
 								</template>
 								<template slot="price" slot-scope="price">
 									<p class="text-none mb-0">
-										{{ price ? formatNumber(price) : 0 }} đ
+										{{
+											form.document_alter_by_bank === 1
+												? formatNumber(price.total_price_shinhan)
+												: price.total_price
+												? formatNumber(price.total_price)
+												: 0
+										}}
+										đ
 									</p>
 								</template>
 								<template slot="data" slot-scope="data">
@@ -3106,7 +3119,9 @@ export default {
 	data() {
 		return {
 			isAccounting: false,
+			isAppraiserControl: false,
 			byPassAdmin: false,
+			byPassSubAdmin: false,
 			showPopupComfirmDownloadAutoDocument: false,
 			showPopupComfirmConvertDocument: false,
 			typeConvert: "",
@@ -3292,14 +3307,14 @@ export default {
 		}
 		if (
 			this.form.status &&
-			// this.form.status !== 4 &&
-			// this.form.status !== 5 &&
 			(profile.data.user.roles[0].name === "ROOT_ADMIN" ||
 				profile.data.user.roles[0].name === "ADMIN")
 		) {
 			this.byPassAdmin = true;
 		}
-		console.log("Trước khi vào if hiện nút chỉnh sửa status", this.form.status);
+		if (this.form.status && profile.data.user.roles[0].name === "SUB_ADMIN") {
+			this.byPassSubAdmin = true;
+		}
 		if (
 			this.form.status &&
 			(this.form.status === 8 || this.form.status === 9) &&
@@ -3307,7 +3322,6 @@ export default {
 				.toUpperCase()
 				.includes("KE TOAN")
 		) {
-			console.log("Vào if check hiện nút chỉnh sửa");
 			console.log(
 				"Convert vi to en",
 				this.convertToEnglish(profile.data.user.roles[0].role_name)
@@ -3318,16 +3332,15 @@ export default {
 				"Convert vi to en",
 				this.convertToEnglish(profile.data.user.roles[0].role_name)
 			);
-			console.log("Không vào if check hiện nút chỉnh sửa");
-			console.log("Role name", profile.data.user.roles[0].role_name);
-			console.log(
-				"Role name uppercase",
-				profile.data.user.roles[0].role_name.toUpperCase()
-			);
-			console.log(
-				"Check tên phân quyền có chữ KẾ TOÁN",
-				profile.data.user.roles[0].role_name.toUpperCase().includes("KẾ TOÁN")
-			);
+		}
+		// Kiểm soát viên thay đổi tổ thẩm định ở step duyệt phát hành
+		if (
+			this.form.status &&
+			this.form.status == 7 &&
+			this.form.appraiser_control &&
+			this.form.appraiser_control.user_id === this.user_id
+		) {
+			this.isAppraiserControl = true;
 		}
 		if (
 			this.form.status &&
@@ -3435,7 +3448,7 @@ export default {
 					title: "Tổng giá trị",
 					align: "right",
 					scopedSlots: { customRender: "price" },
-					dataIndex: "total_price",
+					// dataIndex: "total_price",
 					hiddenItem: false
 				}
 				// {
@@ -4324,6 +4337,26 @@ export default {
 					return;
 				}
 			}
+			if (
+				target.description.toUpperCase() === "DUYỆT GIÁ" ||
+				target.description.toUpperCase() === "DUYỆT PHÁT HÀNH" ||
+				target.description.toUpperCase() === "IN HỒ SƠ" ||
+				target.description.toUpperCase() === "BÀN GIAO KHÁCH HÀNG" ||
+				target.description.toUpperCase() === "HOÀN THÀNH"
+			) {
+				const check = this.checkServiceFee();
+				if (!check) {
+					this.$toast.open({
+						message:
+							"Vui lòng nhập phí dịch vụ thẩm định giá trước khi chuyển sang trạng thái hồ sơ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+
+					return;
+				}
+			}
 			if (target.description.toUpperCase() === "IN HỒ SƠ") {
 				//
 				if (
@@ -4397,9 +4430,6 @@ export default {
 					}
 				}
 			}
-			this.appraiserChangeStage = null;
-			let config = this.jsonConfig.principle.find(i => i.id === target.id);
-			let message = "";
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
 				if (
 					this.form.service_fee !== 0 &&
@@ -4443,6 +4473,10 @@ export default {
 					}
 				}
 			}
+			this.appraiserChangeStage = null;
+			let config = this.jsonConfig.principle.find(i => i.id === target.id);
+			let message = "";
+
 			if (config) {
 				this.config = config;
 				let require = config.require;
@@ -5085,6 +5119,13 @@ export default {
 			}
 			return returnCheck;
 		},
+		checkServiceFee() {
+			let returnCheck = false;
+			if (this.form.service_fee && this.form.service_fee !== 0) {
+				returnCheck = true;
+			}
+			return returnCheck;
+		},
 		checkDownloadDocument(type) {
 			if (!this.isMobile()) {
 				const check = this.checkDocumentNumAndDate();
@@ -5447,7 +5488,11 @@ export default {
 		getTotalPrice() {
 			let total_price = 0;
 			this.form.general_asset.forEach(item => {
-				total_price += +item.total_price;
+				if (this.form.document_alter_by_bank === 1) {
+					total_price += +item.total_price_shinhan;
+				} else {
+					total_price += +item.total_price;
+				}
 			});
 			this.total_price_appraise = total_price;
 		},

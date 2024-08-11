@@ -939,6 +939,7 @@ export default {
 	mounted() {
 		this.data.appraiser_sale_id = this.userAppraiserId;
 		this.data.appraiser_perform_id = this.userAppraiserId;
+		this.data.accounting_id = 49;
 	}
 };
 </script>
