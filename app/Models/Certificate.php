@@ -331,6 +331,26 @@ class Certificate extends Model
                 $data[$stt]['asset'] = $item->asset;
                 $data[$stt]['total_area'] = $item->total_area;
                 $data[$stt]['total_price'] = CommonService::roundPrice($item->total_price, $item->round_total);
+                if ($item->appraises) {
+                    $propertyDetailtotalZoningAll = 0;
+                    $appraise = $item->appraises;
+                    foreach ($appraise->properties as $property) {
+                        foreach ($property->propertyDetail as $item2) {
+                            if ($item2->is_zoning) {
+                                $landTypePurpose = (isset($item2->landTypePurpose) && isset($item2->landTypePurpose->acronym)) ? $item2->landTypePurpose->acronym : '';
+                                $dientich = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_area');
+                                $donGiaDat = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_price');
+                                $round = CommonService::getCertificateAssetPrice($appraise, 'land_asset_purpose_' . $landTypePurpose . '_violation_round');
+                                $donGiaDatRound = CommonService::roundPrice($donGiaDat, $round);
+                                $total = (round($dientich * $donGiaDatRound));
+                                $propertyDetailtotalZoningAll += $total;
+                            }
+                        }
+                    }
+                    $data[$stt]['total_price_shinhan'] = CommonService::roundPrice($item->total_price, $item->round_total) - $propertyDetailtotalZoningAll;
+                } else {
+                    $data[$stt]['total_price_shinhan'] = CommonService::roundPrice($item->total_price, $item->round_total);
+                }
                 $data[$stt]['round_total'] = $item->round_total;
                 if (!empty($item->appraises)) {
                     $version = $item->appraises->lastVersion ? $item->appraises->lastVersion->version : '';
