@@ -4430,9 +4430,6 @@ export default {
 					}
 				}
 			}
-			this.appraiserChangeStage = null;
-			let config = this.jsonConfig.principle.find(i => i.id === target.id);
-			let message = "";
 			if (target.description.toUpperCase() === "HOÀN THÀNH") {
 				if (
 					this.form.service_fee !== 0 &&
@@ -4476,6 +4473,10 @@ export default {
 					}
 				}
 			}
+			this.appraiserChangeStage = null;
+			let config = this.jsonConfig.principle.find(i => i.id === target.id);
+			let message = "";
+
 			if (config) {
 				this.config = config;
 				let require = config.require;
