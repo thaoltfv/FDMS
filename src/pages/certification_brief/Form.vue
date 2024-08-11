@@ -307,7 +307,22 @@ export default {
 			let dataAppraise = [...resp.data];
 			let managerId = await appraiserCompany.data.data[0].appraiser.id;
 			this.employeePerformance = dataAppraise;
-			this.businessManagers = dataAppraise;
+			this.businessManagers =
+				dataAppraise.filter(
+					item =>
+						item.user &&
+						item.user.roles &&
+						item.user.roles.length > 0 &&
+						item.user.roles[0].name === "SUB_ADMIN"
+				).length > 0
+					? dataAppraise.filter(
+							item =>
+								item.user &&
+								item.user.roles &&
+								item.user.roles.length > 0 &&
+								item.user.roles[0].name === "SUB_ADMIN"
+					  )
+					: dataAppraise;
 			this.employeeBusiness = dataAppraise;
 			this.appraisersControl = dataAppraise;
 			this.accounting = dataAppraise;
