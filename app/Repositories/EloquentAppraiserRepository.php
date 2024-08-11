@@ -69,11 +69,20 @@ class EloquentAppraiserRepository extends EloquentRepository implements Appraise
             $result = $result->whereRaw($query);
         }
 
-        return $result
+        $resultFinal = $result
+            ->with('user')
             ->with('appraisePosition')
             ->select()
             ->orderByDesc($this->defaultSort)
             ->get();
+        if (isset($resultFinal)) {
+            foreach ($resultFinal as $key => $value) {
+                if ($value->user) {
+                    $resultFinal[$key]['user']['role'] = $value->user->getRoleNames();
+                }
+            }
+        }
+        return $resultFinal;
     }
 
     /**

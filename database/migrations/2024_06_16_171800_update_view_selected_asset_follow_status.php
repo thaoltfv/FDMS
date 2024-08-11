@@ -38,7 +38,7 @@ class UpdateViewSelectedAssetFollowStatus extends Migration
                 COALESCE(t6.name,'unknown') AS created_by,
                 COALESCE(t7.name,'unknown') AS branch_name,
                 ca.appraise_asset, ca.full_address,
-                a_di.name appraise_method_used,
+                a_di.name AS appraise_method_used,
                 CAST(cr.total_area AS BIGINT) AS land_area,
                 CAST(cap_l_p.value AS BIGINT) AS land_price,
                 CAST(cap_t_p.value AS BIGINT) AS tangible_price,
