@@ -251,7 +251,9 @@ export default {
 			this.perPage = pagination.pageSize;
 			const params = {
 				page: pagination.current,
-				per_page: pagination.pageSize
+				per_page: pagination.pageSize,
+				search: this.type,
+				status: "ALL"
 			};
 			await this.getDictionaries(params);
 		},

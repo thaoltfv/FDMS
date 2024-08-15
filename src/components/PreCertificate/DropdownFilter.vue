@@ -162,12 +162,12 @@ export default {
 				this.$refs.dropdown.hide();
 			}
 		},
-		// disabledToDate(current) {
-		// 	// Disable dates before the "from" date
-		// 	if (!this.filterKanban.timeFilter.from) return false;
-		// 	let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
-		// 	return current && current < endOfDay;
-		// },
+		disabledToDate(current) {
+			// Disable dates before the "from" date
+			if (!this.filterKanban.timeFilter.from) return false;
+			let endOfDay = moment(this.filterKanban.timeFilter.from).endOf("day");
+			return current && current < endOfDay;
+		},
 		async searchFunction() {
 			this.filterKanban.selectedStatus = this.lstFilterStatus
 				.filter(option => option.checked === true)
