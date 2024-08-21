@@ -549,9 +549,9 @@ class CertificateAssetController extends Controller
             }
             if (count($arrayLink) > 0) {
 
-                // $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/';
-                $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
-                // $name =  $path . $zipFileNameLink;
+                $path =  env('STORAGE_DOCUMENTS');
+                // $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
+                $name =  $path . '/' . $zipFileNameLink;
                 $zip = new ZipArchive;
                 $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
                 foreach ($arrayLink as $fileLink) {
