@@ -559,6 +559,7 @@ class CertificateAssetController extends Controller
                 $zip->close();
                 Storage::put($name, file_get_contents($name));
                 $fileUrl = Storage::url($name);
+                unlink($name);
                 // $response = response()->download($fileUrl, $zipFileName, [
                 //     'Content-Type' => 'application/zip',
 
@@ -607,6 +608,7 @@ class CertificateAssetController extends Controller
                 $zip->close();
                 Storage::put($name, file_get_contents($name));
                 $fileUrl = Storage::url($name);
+                unlink($name);
                 // $response = response()->download($fileUrl, $zipFileName, [
                 //     'Content-Type' => 'application/zip',
 
