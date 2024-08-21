@@ -560,7 +560,7 @@ class CertificateAssetController extends Controller
                     $zip->addFromString($fileName, $fileContent);
                 }
                 $zip->close();
-                Storage::disk('public')->put($name, file_get_contents($name));
+                // Storage::disk('public')->put($name, file_get_contents($name));
                 $fileUrl = Storage::disk('public')->url($name);
                 // Storage::put($name, file_get_contents($name));
                 // $fileUrl = Storage::url($name);
