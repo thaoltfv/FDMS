@@ -1,5 +1,14 @@
 <template>
-	<div class="test_iframe" style="margin: 0;">
+	<div v-if="!isMobile()" class="test_iframe" style="margin: 0">
+		<iframe
+			:src="url_modal"
+			frameborder="0"
+			width="100%"
+			height="100%"
+			allow="clipboard-write"
+		></iframe>
+	</div>
+	<div v-else class="test_iframe_mobile" style="margin: 0">
 		<iframe
 			:src="url_modal"
 			frameborder="0"
@@ -410,6 +419,17 @@ export default {
 		}
 	},
 	methods: {
+		isMobile() {
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+					navigator.userAgent
+				)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		updateZoom(zoom) {
 			this.map.zoom = zoom;
 			this.seg_key++;
@@ -1140,8 +1160,18 @@ export default {
 }
 
 .test_iframe {
-	height: calc(100vh - 1.5rem);
+	height: calc(100vh - 3.5rem);
+	width: calc(100vw - 4rem);
+	// height: calc(100vh - 1.5rem);
 	// width: calc(100vw - 1.5rem);
+	// width: 100vw;
+	position: fixed;
+	right: 0;
+	overflow: hidden;
+}
+.test_iframe_mobile {
+	height: calc(100vh - 1.5rem);
+	width: calc(100vw - 1.5rem);
 	width: 100vw;
 	position: fixed;
 	// right: 0;
