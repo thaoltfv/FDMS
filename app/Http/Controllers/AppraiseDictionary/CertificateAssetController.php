@@ -551,7 +551,7 @@ class CertificateAssetController extends Controller
 
                 $path =  env('STORAGE_DOCUMENTS');
                 // $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
-                $name =  $path . '/' . $zipFileNameLink;
+                $name =  storage_path('app/public/' . $path . '/' . $zipFileNameLink);
                 $zip = new ZipArchive;
                 $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
                 foreach ($arrayLink as $fileLink) {
