@@ -32,7 +32,7 @@ class updateDataTypeCharacterVarying extends Migration
         foreach ($columns as $column) {
             $table = $column->table_name;
             $col = $column->column_name;
-            DB::statement("ALTER TABLE {$table} ALTER COLUMN {$col} TYPE text");
+            DB::statement("ALTER TABLE {$table} ALTER COLUMN {$table}.{$col} TYPE text");
         }
 
         // Tiến hành tạo lại các view 
