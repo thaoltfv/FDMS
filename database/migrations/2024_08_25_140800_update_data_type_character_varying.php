@@ -17,6 +17,7 @@ class updateDataTypeCharacterVarying extends Migration
         // Xóa view có data lấy từ các cột cần đổi kiểu dữ liệu trước khi đổi để tránh bị lỗi
         DB::statement("DROP VIEW IF EXISTS view_selected_certificate_assets");
         DB::statement("DROP VIEW IF EXISTS view_selected_certificate_apartments");
+        DB::statement("DROP MATERIALIZED VIEW IF EXISTS view_certificate_briefs");
 
 
         // Lấy tất cả các cột có kiểu dữ liệu character varying(255)
@@ -92,41 +93,41 @@ class updateDataTypeCharacterVarying extends Migration
         CREATE VIEW view_selected_certificate_apartments
         AS 
         SELECT ca.apartment_asset_id AS real_estate_id,
-        ca.id,
-        cap.id AS property_id,
-        p.name AS province,
-        d.name AS district,
-        w.name AS ward,
-        s.name AS street,
-        c.id AS certificate_id,
-        c.certificate_num,
-        to_char((c.certificate_date)::timestamp with time zone, 'dd/mm/yyyy'::text) AS certificate_date,
-        c.document_num,
-        to_char((c.document_date)::timestamp with time zone, 'dd/mm/yyyy'::text) AS document_date,
-        c.status,
-        c.sub_status,
-        c.status_updated_at,
-        c.service_fee,
-        c.created_at,
-        c.petitioner_name,
-        c.petitioner_phone,
-        c.petitioner_address,
-        ct.name AS customer_name,
-        ct.address AS customer_address,
-        cap.description AS location_description,
-        COALESCE(t3.name, 'unknown'::character varying) AS appraiser_name,
-        COALESCE(t4.name, 'unknown'::character varying) AS appraiser_sale_name,
-        COALESCE(t5.name, 'unknown'::character varying) AS appraiser_perform_name,
-        COALESCE(t6.name, 'unknown'::character varying) AS created_by,
-        COALESCE(t7.name, 'unknown'::text) AS branch_name,
-        ca.appraise_asset,
-        ca.full_address,
-        a_di.name AS appraise_method_used,
-        (cap_l_p.value)::bigint AS land_area,
-        (cap_t_p.value)::bigint AS total_price,
-        (cap_o_p.value)::bigint AS other_asset_price,
-        cal.document_num AS gcn,
-        (cap_d_p.value)::bigint AS land_price
+            ca.id,
+            cap.id AS property_id,
+            p.name AS province,
+            d.name AS district,
+            w.name AS ward,
+            s.name AS street,
+            c.id AS certificate_id,
+            c.certificate_num,
+            to_char((c.certificate_date)::timestamp with time zone, 'dd/mm/yyyy'::text) AS certificate_date,
+            c.document_num,
+            to_char((c.document_date)::timestamp with time zone, 'dd/mm/yyyy'::text) AS document_date,
+            c.status,
+            c.sub_status,
+            c.status_updated_at,
+            c.service_fee,
+            c.created_at,
+            c.petitioner_name,
+            c.petitioner_phone,
+            c.petitioner_address,
+            ct.name AS customer_name,
+            ct.address AS customer_address,
+            cap.description AS location_description,
+            COALESCE(t3.name, 'unknown'::character varying) AS appraiser_name,
+            COALESCE(t4.name, 'unknown'::character varying) AS appraiser_sale_name,
+            COALESCE(t5.name, 'unknown'::character varying) AS appraiser_perform_name,
+            COALESCE(t6.name, 'unknown'::character varying) AS created_by,
+            COALESCE(t7.name, 'unknown'::text) AS branch_name,
+            ca.appraise_asset,
+            ca.full_address,
+            a_di.name AS appraise_method_used,
+            (cap_l_p.value)::bigint AS land_area,
+            (cap_t_p.value)::bigint AS total_price,
+            (cap_o_p.value)::bigint AS other_asset_price,
+            cal.document_num AS gcn,
+            (cap_d_p.value)::bigint AS land_price
         FROM ((((((((((((((((((((certificates c
             LEFT JOIN certificate_has_real_estates chr ON ((chr.certificate_id = c.id)))
             LEFT JOIN certificate_apartments ca ON ((ca.real_estate_id = chr.real_estate_id)))
@@ -149,6 +150,53 @@ class updateDataTypeCharacterVarying extends Migration
             LEFT JOIN certificate_apartment_prices cap_o_p ON (((cap_o_p.apartment_asset_id = ca.id) AND ((cap_o_p.slug)::text = 'other_asset_price'::text) AND (cap_o_p.deleted_at IS NULL))))
             LEFT JOIN certificate_apartment_prices cap_d_p ON (((cap_d_p.apartment_asset_id = ca.id) AND ((cap_d_p.slug)::text = 'apartment_asset_price'::text) AND (cap_d_p.deleted_at IS NULL))))
         WHERE (c.deleted_at IS NULL);
+        ");
+
+        DB::statement("
+        create MATERIALIZED VIEW view_certificate_briefs
+        AS
+        select t1.id, t1.created_at, t1.updated_at, t1.status,
+                    case t1.status
+                        when 1 then 'Tiếp nhận hồ sơ'
+                        when 10 then 'Phân hồ sơ'
+                        when 2 then 'Thẩm định'
+                        when 3 then 'Duyệt giá'
+                        when 4 then 'Hoàn thành'
+                        when 5 then 'Hủy'
+                        when 7 then 'Duyệt phát hành'
+                        when 8 then 'In hồ sơ'
+                        when 9 then 'Bàn giao khách hàng'
+                    end as status_text,
+					t1.sub_status,
+                    t1.status_expired_at,
+                    t1.status_updated_at,
+                    coalesce(t2.description) as expire_time,
+                    coalesce(t1.appraiser_id,-1) as appraiser_id,
+                    coalesce(t3.name,'unknown') as appraiser_name,
+                    coalesce(t1.appraiser_sale_id,-1) as appraiser_sale_id,
+                    coalesce(t4.name,'unknown') as appraiser_sale_name,
+                    coalesce(t1.appraiser_perform_id,-1) as appraiser_perform_id,
+                    coalesce(t5.name,'unknown') as appraiser_perform_name,
+                    coalesce(t1.branch_id,coalesce(t6.branch_id,-1)) as branch_id,
+                    coalesce(t7.name,coalesce(t8.name, 'unknown')) as branch_name,
+                    coalesce(t1.service_fee, 0) as service_fee
+                from certificates t1
+                    left outer join (select tt1.id , tt2.description
+                                    from certificates tt1 inner join certificate_dictionaries tt2 on tt2.type ='PROCESSING_TIME'
+                                    and (case tt1.status
+                                            when 1 then 'MOI'
+                                            when 2 then 'DANG-THAM-DINH'
+                                            when 3 then 'DANG-DUYET'
+                                            end ) = tt2.acronym and tt2.status =1
+                                    and tt1.deleted_at is null
+                                    ) t2 on t1.id = t2.id
+                    left outer join appraisers t3 on t1.appraiser_id = t3.id and t3.deleted_at is null
+                    left outer join appraisers t4 on t1.appraiser_sale_id = t4.id and t4.deleted_at is null
+                    left outer join appraisers t5 on t1.appraiser_perform_id = t5.id and t5.deleted_at is null
+                    left outer join appraisers t6 on t1.created_by = t6.user_id and t6.deleted_at is null
+                    left outer join branches t7 on t1.branch_id = t7.id and t7.deleted_at is null
+                    left outer join branches t8 on t6.branch_id = t8.id and t8.deleted_at is null
+                where t1.deleted_at is null 
         ");
     }
 
