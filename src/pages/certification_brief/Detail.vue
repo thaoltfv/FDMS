@@ -184,6 +184,7 @@
 								<div class="d-flex container_content">
 									<strong class="margin_content_inline d-flex">
 										<div
+											v-if="isEditNote"
 											@click="handleShowEditNote"
 											class="btn-edit"
 											id="note-edit"
@@ -3578,6 +3579,35 @@ export default {
 			return this.historyList.map(item => {
 				return this.loadColor(item);
 			});
+		},
+		isEditNote() {
+			const configData = this.jsonConfig.principle.find(
+				item =>
+					item.status === this.form.status &&
+					item.sub_status === this.form.sub_status &&
+					item.isActive === 1
+			);
+			let checkRole = false;
+			if (
+				this.user.roles[0].name === "ADMIN" ||
+				this.user.roles[0].name === "ROOT_ADMIN"
+			) {
+				checkRole = true;
+			} else if (
+				configData &&
+				configData.put_require &&
+				configData.put_require.length > 0
+			) {
+				configData.put_require.forEach(key_required => {
+					if (
+						key_required !== "created_by" &&
+						this.form[key_required] === this.user.appraiser.id
+					) {
+						checkRole = true;
+					}
+				});
+			}
+			return checkRole;
 		}
 	},
 	methods: {
@@ -3788,6 +3818,7 @@ export default {
 			}
 			return color;
 		},
+
 		formatSentenceCase(phrase) {
 			let text = phrase.toLowerCase();
 			return text.charAt(0).toUpperCase() + text.slice(1);
