@@ -296,7 +296,7 @@ export default {
 		const permission = this.$store.getters.currentPermissions;
 		// fix_permission
 		permission.forEach(value => {
-			if (value === "EDIT_ROLE") {
+			if (value === "EDIT_CATEGORY") {
 				this.edit = true;
 			}
 		});
