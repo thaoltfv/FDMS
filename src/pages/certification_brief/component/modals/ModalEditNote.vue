@@ -29,7 +29,6 @@
 									:autosize="true"
 									v-model="form.note"
 									vid="note"
-									:disableInput="editDocument"
 									label="Ghi chú"
 									rows="1"
 									class="form-group-container label-none"
