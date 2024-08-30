@@ -18,7 +18,8 @@
 				"@" - Tìm theo tên Người tạo <br />
 				"$" - Tìm theo tổng giá trị<br />
 				"%" - Tìm theo tên Khách hàng<br />
-				"^" - Tìm theo địa chỉ tài sản
+				"^" - Tìm theo địa chỉ tài sản<br />
+				Mặc định - Tìm theo mã HSTĐ (VD: HSTD_25 nhập 25)
 			</b-tooltip>
 			<button class="btn-img btn-img__search">
 				<img class="img" src="../../assets/icons/ic_search.svg" alt="search" />
