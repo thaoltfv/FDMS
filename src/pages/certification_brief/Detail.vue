@@ -182,12 +182,26 @@
 									</p>
 								</div>
 								<div class="d-flex container_content">
-									<strong class="margin_content_inline">Ghi chú:</strong
-									><span id="note" class="text-left">{{
-										form.note && form.note.length > 25
-											? form.note.substring(25, 0) + "..."
-											: form.note
-									}}</span>
+									<strong class="margin_content_inline d-flex">
+										<div
+											v-if="isEditNote"
+											@click="handleShowEditNote"
+											class="btn-edit"
+											id="note-edit"
+										>
+											<b-tooltip target="note-edit" placement="auto">
+												Sửa ghi chú
+											</b-tooltip>
+											<img src="@/assets/icons/ic_edit.svg" alt="add" />
+										</div>
+										Ghi chú:</strong
+									><span id="note" class="text-left d-flex"
+										>{{
+											form.note && form.note.length > 25
+												? form.note.substring(25, 0) + "..."
+												: form.note
+										}}
+									</span>
 									<b-tooltip target="note" placement="top-right">{{
 										form.note
 									}}</b-tooltip>
@@ -2895,6 +2909,16 @@
 			@cancel="showAppraiseInformationDialog = false"
 			@updateAppraiseInformation="updateAppraiseInformation"
 		/>
+		<ModalEditNote
+			v-if="showEditNoteDialog"
+			:data="form"
+			:idData="idData"
+			:editDocument="editDocument"
+			:typeAppraiseProperty="typeAppraiseProperty"
+			@cancel="showEditNoteDialog = false"
+			@updateAppraiseInformation="updateAppraiseInformation"
+		/>
+
 		<ModalAppraiseList
 			v-if="showAppraiseListDialog"
 			:data="form"
@@ -3059,6 +3083,7 @@ import moment from "moment";
 import ModalCustomer from "./component/modals/ModalCustomer";
 import ModalAppraisal from "./component/modals/ModalAppraisal";
 import ModalAppraiseInfomation from "./component/modals/ModalAppraiseInfomation";
+import ModalEditNote from "./component/modals/ModalEditNote.vue";
 import ModalAppraiseList from "./component/modals/ModalAppraiseList";
 import ModalDetailAppraise from "./component/modals/ModalDetailAppraise";
 import DocumentExport from "@/components/PreCertificate/DocumentExport";
@@ -3101,6 +3126,7 @@ export default {
 		ModalCustomer,
 		ModalAppraisal,
 		ModalAppraiseInfomation,
+		ModalEditNote,
 		ModalAppraiseList,
 		ModalDetailAppraise,
 		"b-tooltip": BTooltip,
@@ -3140,6 +3166,7 @@ export default {
 			key_render_appraisal: 10000,
 			openModalDelete: false,
 			showCustomerDialog: false,
+			showEditNoteDialog: false,
 			showAppraiseInformationDialog: false,
 			showAppraisalDialog: false,
 			showAppraiseListDialog: false,
@@ -3552,6 +3579,35 @@ export default {
 			return this.historyList.map(item => {
 				return this.loadColor(item);
 			});
+		},
+		isEditNote() {
+			const configData = this.jsonConfig.principle.find(
+				item =>
+					item.status === this.form.status &&
+					item.sub_status === this.form.sub_status &&
+					item.isActive === 1
+			);
+			let checkRole = false;
+			if (
+				this.user.roles[0].name === "ADMIN" ||
+				this.user.roles[0].name === "ROOT_ADMIN"
+			) {
+				checkRole = true;
+			} else if (
+				configData &&
+				configData.put_require &&
+				configData.put_require.length > 0
+			) {
+				configData.put_require.forEach(key_required => {
+					if (
+						key_required !== "created_by" &&
+						this.form[key_required] === this.user.appraiser.id
+					) {
+						checkRole = true;
+					}
+				});
+			}
+			return checkRole;
 		}
 	},
 	methods: {
@@ -3762,6 +3818,7 @@ export default {
 			}
 			return color;
 		},
+
 		formatSentenceCase(phrase) {
 			let text = phrase.toLowerCase();
 			return text.charAt(0).toUpperCase() + text.slice(1);
@@ -4058,6 +4115,9 @@ export default {
 		},
 		handleShowAppraiseInformation() {
 			this.showAppraiseInformationDialog = true;
+		},
+		handleShowEditNote() {
+			this.showEditNoteDialog = true;
 		},
 		handleShowAppraiseList() {
 			this.showAppraiseListDialog = true;
