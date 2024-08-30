@@ -2759,7 +2759,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             when 10
                 then u6.image    
         end as image
-    "),
+         "),
             DB::raw("case status
                 when 1
                     then u2.name
@@ -3042,15 +3042,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+            $result = $result
+                // ->whereBetween('certificates.created_at', [$timeFilterFrom, $timeFilterTo])
                 ->whereBetween('certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('certificates.created_at', '>=', $timeFilterFrom)
+            $result = $result
+                // ->where('certificates.created_at', '>=', $timeFilterFrom)
                 ->where('certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('certificates.created_at', '<=', $timeFilterTo)
+            $result = $result
+                // ->where('certificates.created_at', '<=', $timeFilterTo)
                 ->where('certificates.updated_at', '<=', $timeFilterTo);
         }
 
@@ -3254,12 +3257,22 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
         $select = [
-            'certificates.id', 'status', 'certificates.created_by', 'petitioner_name',
-            'certificates.updated_at', 'status_updated_at',
+            'certificates.id',
+            'status',
+            'certificates.created_by',
+            'petitioner_name',
+            'certificates.updated_at',
+            'status_updated_at',
             'appraiser_perform_id',
-            'appraiser_manager_id', 'appraiser_confirm_id', 'appraiser_id',
-            'appraiser_sale_id', 'appraiser_control_id', 'administrative_id', 'accounting_id',
-            'pre_certificate_id', 'business_manager_id',
+            'appraiser_manager_id',
+            'appraiser_confirm_id',
+            'appraiser_id',
+            'appraiser_sale_id',
+            'appraiser_control_id',
+            'administrative_id',
+            'accounting_id',
+            'pre_certificate_id',
+            'business_manager_id',
             'customer_id',
             // 'users.image',
             DB::raw("concat('HSTD_', certificates.id) AS slug"),
@@ -3527,15 +3540,18 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         if (isset($timeFilterFrom) && isset($timeFilterTo)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->whereBetween('certificates.created_at', [$timeFilterFrom, $timeFilterTo])
+            $result = $result
+                // ->whereBetween('certificates.created_at', [$timeFilterFrom, $timeFilterTo])
                 ->whereBetween('certificates.updated_at', [$timeFilterFrom, $timeFilterTo]);
         } elseif (isset($timeFilterFrom)) {
             $startDate = date('Y-m-d', strtotime($timeFilterFrom));
-            $result = $result->where('certificates.created_at', '>=', $timeFilterFrom)
+            $result = $result
+                // ->where('certificates.created_at', '>=', $timeFilterFrom)
                 ->where('certificates.updated_at', '>=', $timeFilterFrom);
         } elseif (isset($timeFilterTo)) {
             $endDate = date('Y-m-d', strtotime($timeFilterTo));
-            $result = $result->where('certificates.created_at', '<=', $timeFilterTo)
+            $result = $result
+                // ->where('certificates.created_at', '<=', $timeFilterTo)
                 ->where('certificates.updated_at', '<=', $timeFilterTo);
         }
         if (isset($filter) && !empty($filter)) {
@@ -5508,7 +5524,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         $result = [];
         if (Certificate::where('id', $id)->exists()) {
             $select = [
-                'id', 'status', 'document_type'
+                'id',
+                'status',
+                'document_type'
             ];
             $with = [
                 // 'appraises:id,appraise_id,street_id,ward_id,district_id,province_id,asset_type_id,created_at,appraise_asset',
@@ -5769,9 +5787,23 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                         if (!($data->appraiserPerform->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có chuyên viên thẩm định mới có quyền chỉnh sửa.', 'exception' => ''];
                         break;
+                    case 3:
+                    case 4:
+                        if (!($data->appraiser && $data->appraiser->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có thẩm định viên mới có quyền này.', 'exception' => ''];
+                        break;
+                    case 6:
                     case 7:
                         if (!($data->appraiserControl &&  $data->appraiserControl->user_id == $user->id))
                             $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có kiểm soát viên mới có quyền chỉnh sửa.', 'exception' => ''];
+                        break;
+                    case 8:
+                        if (!($data->administrative && $data->administrative->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có hành chính viên mới có quyền này.', 'exception' => ''];
+                        break;
+                    case 9:
+                        if (!($data->appraiserSale && $data->appraiserSale->user_id == $user->id))
+                            $result = ['message' => ErrorMessage::CERTIFICATE_CHECK_UPDATE . $data->status_text . '. Chỉ có nhân viên kinh doanh mới có quyền này.', 'exception' => ''];
                         break;
                     case 10:
                         if (!($data->appraiserBusinessManager->user_id == $user->id))
