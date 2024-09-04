@@ -561,7 +561,7 @@ class GiayYeuCau
             // $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card, 0, [], 'bullets', []);
             // $section->addListItem("Ngày cấp: " . $stringTimeSoc . "   ; Nơi cấp: " . ($certificate->issue_place_card ? htmlspecialchars($certificate->issue_place_card) : ""), 0, [], 'bullets', []);
             $section->addListItem("Họ và tên: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
-            $section->addListItem("Số CCCD: " . $certificate->petitioner_identity_card . '         ' . " Ngày cấp: " . $stringTimeSoc, 0, [], 'bullets', []);
+            $section->addListItem("Số CCCD: " . htmlspecialchars($certificate->petitioner_identity_card) . '         ' . " Ngày cấp: " . $stringTimeSoc, 0, [], 'bullets', []);
             $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
             $section->addListItem("Số điện thoại: " . htmlspecialchars($certificate->petitioner_phone), 0, [], 'bullets', []);
         }
@@ -570,7 +570,7 @@ class GiayYeuCau
             $section->addListItem("Tên Doanh nghiệp: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets', []);
             $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', []);
             $section->addListItem("Số điện thoại: " . htmlspecialchars($certificate->petitioner_phone) . '        ' . '- Email: ', 0, [], 'bullets', []);
-            $section->addListItem("Mã số thuế: ", 0, [], 'bullets', []);
+            $section->addListItem("Mã số thuế: " . htmlspecialchars($certificate->petitioner_identity_card), 0, [], 'bullets', []);
             $section->addListItem("Người đại diện:                                      - Chức vụ: ", 0, [], 'bullets', []);
         }
 
