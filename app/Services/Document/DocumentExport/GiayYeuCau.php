@@ -585,7 +585,8 @@ class GiayYeuCau
 
         //2.1
         $textRun = $section->addTextRun('Heading3');
-        $textRun->addText("Tên tài sản: Quyền sử dụng đất và tài sản trên đất. Số lượng, khối lượng tài sản yêu cầu thẩm định giá:", ['bold' => false]);
+        $textRun->addText("Tên tài sản: Quyền sử dụng đất và tài sản trên đất. ", ['bold' => false]);
+        $section->addListItem("Số lượng, khối lượng tài sản yêu cầu thẩm định giá: ", 0, [], 'bullets', $indentPara2);
         $isApartment =  in_array('CC', $certificate->document_type ?? []);
         $arrayTable = [];
         $checktangibleAsset = "";
@@ -723,13 +724,13 @@ class GiayYeuCau
         $textRun->addText($appraise_law, ['italic' => true]);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: ");
-        $listItemRun->addText("Email/phần mềm/tên công cụ mạng xã hội", ['bgColor' => 'fbbb10']);
-        $listItemRun->addText(" hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address));
+        $listItemRun->addText("Email/phần mềm/tên công cụ mạng xã hội", ['bgColor' => 'FFFF00']);
+        $listItemRun->addText(" hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova.");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
-        $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova. ", 0, [], 'bullets', $indentPara2);
+        // $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova. ", 0, [], 'bullets', $indentPara2);
         $section->addListItem("Họ tên, số điện thoại của người yêu cầu thẩm định giá: ", 0, [], 'bullets', $indentPara2);
         $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara2);
 
@@ -752,7 +753,7 @@ class GiayYeuCau
         $textRun->addText("   BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đồng ý cung cấp các Hồ sơ, tài liệu, dữ liệu như trên cho ", ['bold' => false]);
         $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
-        $textRun->addText(", Công ty được phép sử dụng tất cả các Hồ sơ, tài liệu, dữ liệu được cung cấp để Công ty Nova tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này. ", ['bold' => false]);
+        $textRun->addText(", Công ty được phép sử dụng tất cả các Hồ sơ, tài liệu, dữ liệu được cung cấp để tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này. ", ['bold' => false]);
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đã được thông báo, trao đổi và thống nhất các giả thiết, giả thiết đặc biệt của tài sản, cơ sở giá trị thẩm định giá; các hạn chế và loại trừ trách nhiệm (nếu có) trong hồ sơ thẩm định giá.", ['bold' => false]);
         // 
