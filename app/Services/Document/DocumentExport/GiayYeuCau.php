@@ -507,7 +507,8 @@ class GiayYeuCau
             'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(6),
             'indentation' => array('left' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5), 'right' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(3.5)),
             'space' => [
-                'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(16), 'rule' => 'exact'
+                'line' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(16),
+                'rule' => 'exact'
             ],
             'align' => 'both'
         ]);
@@ -720,14 +721,16 @@ class GiayYeuCau
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova để Công ty lập Hồ sơ Thẩm định giá tài sản gồm: ", ['bold' => false]);
         $textRun->addText($appraise_law, ['italic' => true]);
-        // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
-        // $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address));
+        $listItemRun  = $section->addListItemRun(0, 'bullets', []);
+        $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: ");
+        $listItemRun->addText("Email/phần mềm/tên công cụ mạng xã hội", ['bgColor' => 'fbbb10']);
+        $listItemRun->addText(" hoặc nhận hồ sơ trực tiếp tại địa chỉ " . htmlspecialchars($certificate->petitioner_address));
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
         $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova. ", 0, [], 'bullets', $indentPara2);
-        $section->addListItem("Họ tên, số điện thoại người cung cấp hồ sơ: ", 0, [], 'bullets', $indentPara2);
+        $section->addListItem("Họ tên, số điện thoại của người yêu cầu thẩm định giá: ", 0, [], 'bullets', $indentPara2);
         $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara2);
 
         // 3
