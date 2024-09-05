@@ -342,10 +342,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('
-        - Diện tích đất thuộc quy hoạch:<w:br/>
-        - Mục đích sử dụng đất phần thuộc quy hoạch:<w:br/>
-        - Loại quy hoạch:<w:br/>
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Diện tích đất thuộc quy hoạch:<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch:<w:br/>- Loại quy hoạch:<w:br/>
         ', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
             ->addText('Tham khảo thông tin quy hoạch tại Đồ án "Đồ án quy hoạch phân khu tỷ lệ 1/2000 Khu dân cư Xã Tân Thông Hội (Khu 4), Huyện Củ Chi (quy hoạch sử dụng đất, kiến trúc, giao thông)" đã được UBND Thành phố Hồ Chí Minh phê duyệt tại Quyết định số 4805/QĐ-UBND ngày 04/09/2013, tài sản có quy hoạch là Đất nhóm nhà ở hiện hữu', null, ['align' => 'bold']);
