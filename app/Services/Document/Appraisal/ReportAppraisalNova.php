@@ -119,7 +119,6 @@ class ReportAppraisalNova extends ReportAppraisal
             $surveyTime =  "Tháng " . $survey_time->format('m') . "/" . $survey_time->format('Y');
             // . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
         }
-        $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Thời điểm khảo sát tài sản thẩm định giá: ', ['bold' => true], []);
         $listTmp->addText($surveyTime, ['bold' => false], []);
 
@@ -187,7 +186,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Số địa chính', null, $this->styleAlignLeft);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText($strToThua . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
+            ->addText(ucfirst($strToThua) . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -344,12 +343,12 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('
-        - Diện tích đất thuộc quy hoạch: 
-        - Mục đích sử dụng đất phần thuộc quy hoạch: 
-        - Loại quy hoạch:
+        - Diện tích đất thuộc quy hoạch:<w:br/>
+        - Mục đích sử dụng đất phần thuộc quy hoạch:<w:br/>
+        - Loại quy hoạch:<w:br/>
         ', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText('Tham khảo thông tin quy hoạch tại Đồ án "Đồ án quy hoạch phân khu tỷ lệ 1/2000 Khu dân cư Xã Tân Thông Hội (Khu 4), Huyện Củ Chi (quy hoạch sử dụng đất, kiến trúc, giao thông)" đã được UBND Thành phố Hồ Chí Minh phê duyệt tại Quyết định số 4805/QĐ-UBND ngày 04/09/2013, tài sản có quy hoạch là Đất nhóm nhà ở hiện hữu', null, ['align' => 'left']);
+            ->addText('Tham khảo thông tin quy hoạch tại Đồ án "Đồ án quy hoạch phân khu tỷ lệ 1/2000 Khu dân cư Xã Tân Thông Hội (Khu 4), Huyện Củ Chi (quy hoạch sử dụng đất, kiến trúc, giao thông)" đã được UBND Thành phố Hồ Chí Minh phê duyệt tại Quyết định số 4805/QĐ-UBND ngày 04/09/2013, tài sản có quy hoạch là Đất nhóm nhà ở hiện hữu', null, ['align' => 'bold']);
         if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
             $section->addTitle('Công trình xây dựng:', 3);
             $table = $section->addTable($this->styleTable);
@@ -543,8 +542,8 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function DCC(Section $section)
     {
         $section->addText('   Căn cứ vào các phương pháp thẩm định giá theo Chuẩn mực Thẩm định giá Việt Nam, Tổ thẩm định giá nhận thấy:');
-        // $section->addText('   - Đối với phương pháp so sánh: Tổ thẩm định giá đã thu thập được các thông tin giao dịch (tối thiểu 3 giao dịch) trên thị trường của các BĐS tương tự TSTĐG. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp so sánh để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
-        $section->addText('   - Đối với phương pháp so sánh: Tài sản thẩm định gồm quyền sử dụng đất và công trình xây dựng trên đất. Tại thời điểm thẩm định, khu vực thẩm định không có các giao dịch trong đó các tài sản so sánh có quyền sử dụng đất và công trình xây dựng trên đất tương đồng với tài sản thẩm định. Do đó, trong trường hợp này tổ thẩm định không áp dụng được phương pháp so sánh để ước tính giá trị của tài sản thẩm định.');
+        $section->addText('   - Đối với phương pháp so sánh: Tổ thẩm định giá đã thu thập được các thông tin giao dịch (tối thiểu 3 giao dịch) trên thị trường của các BĐS tương tự TSTĐG. Do đó, Tổ thẩm định nhận thấy đủ điều kiện để áp dụng phương pháp so sánh để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
+        // $section->addText('   - Đối với phương pháp so sánh: Tài sản thẩm định gồm quyền sử dụng đất và công trình xây dựng trên đất. Tại thời điểm thẩm định, khu vực thẩm định không có các giao dịch trong đó các tài sản so sánh có quyền sử dụng đất và công trình xây dựng trên đất tương đồng với tài sản thẩm định. Do đó, trong trường hợp này tổ thẩm định không áp dụng được phương pháp so sánh để ước tính giá trị của tài sản thẩm định.');
         $section->addText('   - Đối với phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu: Do khách hàng không cung cấp được thông tin dòng thu nhập do bất động sản mang lại. Vì vậy, trong trường hợp này chưa đủ điều kiện áp dụng được phương pháp vốn hóa trực tiếp và dòng tiền chiết khấu để ước tính giá trị tài sản cần thẩm định giá.');
         $section->addText('   - Đối với phương pháp thặng dư: Phương pháp này áp dụng đối với trường hợp thửa đất trống có tiềm năng phát triển hoặc đất có CTXD có thể cải tạo, sửa chữa để khai thác có hiệu quả nhất. Khu vực này có nhiều loại hình kinh doanh, dịch vụ khác nhau, khách hàng cũng chưa có phương án hoạt động kinh doanh trong tương lai, do đó không thể lên phương án hoạt động kinh doanh tối ưu. Vì vậy, chưa đủ điều kiện áp dụng được phương pháp thặng dư trong trường hợp này.');
         // $section->addText('   - Đối với phương pháp chi phí thay thế: Tài sản thẩm định không có công trình xây dựng trên đất nên không ước tính giá trị công trình xây dựng. Do đó, tổ thẩm định giá nhận thấy chưa đủ điều kiện để áp dụng phương pháp chi phí để tiến hành ước tính giá trị tài sản cần thẩm định giá.');
