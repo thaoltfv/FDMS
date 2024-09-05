@@ -116,9 +116,13 @@ class ReportAppraisalNova extends ReportAppraisal
         $surveyTime = "";
         if (isset($certificate->survey_time) && !empty(trim($certificate->survey_time))) {
             $survey_time = date_create($certificate->survey_time);
-            $surveyTime =  "Tháng " . $survey_time->format('m') . "/" . $survey_time->format('Y') . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
+            $surveyTime =  "Tháng " . $survey_time->format('m') . "/" . $survey_time->format('Y');
+            // . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
         }
-        $listTmp->addText('Thời điểm khảo sát tài sản thẩm định giá: ' . $surveyTime, ['bold' => true], []);
+        $listTmp = $section->addListItemRun(0, 'bullets');
+        $listTmp->addText('Thời điểm khảo sát tài sản thẩm định giá: ', ['bold' => true], []);
+        $listTmp->addText($surveyTime, ['bold' => false], []);
+
         $this->step1Sub4NovaInfo($section);
     }
     private function step1Sub4NovaInfo($section)
@@ -298,16 +302,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND', null, ['align' => 'left']);
 
-        $table->addRow(400, $this->cantSplit);
-        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
-        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('
-        - Diện tích đất thuộc quy hoạch: 
-        - Mục đích sử dụng đất phần thuộc quy hoạch: 
-        - Loại quy hoạch:
-        ', null, ['align' => 'left']);
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText('Tham khảo thông tin quy hoạch tại Đồ án "Đồ án quy hoạch phân khu tỷ lệ 1/2000 Khu dân cư Xã Tân Thông Hội (Khu 4), Huyện Củ Chi (quy hoạch sử dụng đất, kiến trúc, giao thông)" đã được UBND Thành phố Hồ Chí Minh phê duyệt tại Quyết định số 4805/QĐ-UBND ngày 04/09/2013, tài sản có quy hoạch là Đất nhóm nhà ở hiện hữu', null, ['align' => 'left']);
+
         $testtt = json_decode($appraise->properties[0])->property_detail;
         foreach ($testtt as $index => $mucdich) {
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
@@ -345,7 +340,16 @@ class ReportAppraisalNova extends ReportAppraisal
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->appraise_id)), null, ['align' => 'left']);
         }
-
+        $table->addRow(400, $this->cantSplit);
+        $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
+        $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('
+        - Diện tích đất thuộc quy hoạch: 
+        - Mục đích sử dụng đất phần thuộc quy hoạch: 
+        - Loại quy hoạch:
+        ', null, ['align' => 'left']);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
+            ->addText('Tham khảo thông tin quy hoạch tại Đồ án "Đồ án quy hoạch phân khu tỷ lệ 1/2000 Khu dân cư Xã Tân Thông Hội (Khu 4), Huyện Củ Chi (quy hoạch sử dụng đất, kiến trúc, giao thông)" đã được UBND Thành phố Hồ Chí Minh phê duyệt tại Quyết định số 4805/QĐ-UBND ngày 04/09/2013, tài sản có quy hoạch là Đất nhóm nhà ở hiện hữu', null, ['align' => 'left']);
         if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
             $section->addTitle('Công trình xây dựng:', 3);
             $table = $section->addTable($this->styleTable);

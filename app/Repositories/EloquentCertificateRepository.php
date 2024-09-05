@@ -6471,12 +6471,12 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $fromDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $fromDate);
             $toDate =  \Carbon\Carbon::createFromFormat('d/m/Y', $toDate);
             $diff = $toDate->diff($fromDate);
-            // if ($diff->days > 93) {
-            //     return ['message' => 'Chỉ được tìm kiếm tối đa 3 tháng.', 'exception' => ''];
-            // }
-            if ($diff->days > 365) {
-                return ['message' => 'Chỉ được tìm kiếm tối đa 1 năm.', 'exception' => ''];
+            if ($diff->days > 93) {
+                return ['message' => 'Chỉ được tìm kiếm tối đa 3 tháng.', 'exception' => ''];
             }
+            // if ($diff->days > 365) {
+            //     return ['message' => 'Chỉ được tìm kiếm tối đa 1 năm.', 'exception' => ''];
+            // }
         } else {
             return ['message' => 'Vui lòng nhập khoảng thời gian cần tìm', 'exception' => ''];
         }
