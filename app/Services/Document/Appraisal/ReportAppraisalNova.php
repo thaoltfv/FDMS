@@ -120,7 +120,7 @@ class ReportAppraisalNova extends ReportAppraisal
             // . ' lúc ' . $survey_time->format('H') . ' giờ ' . $survey_time->format('i') . ' phút';
         }
         $listTmp->addText('Thời điểm khảo sát tài sản thẩm định giá: ', ['bold' => true], []);
-        $listTmp->addText($surveyTime, ['bold' => false], []);
+        $listTmp->addText($surveyTime . '.', ['bold' => false], []);
 
         $this->step1Sub4NovaInfo($section);
     }
