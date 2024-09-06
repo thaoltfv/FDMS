@@ -315,7 +315,7 @@ class ReportAppraisalNova extends ReportAppraisal
             }
             if ($mucdich->is_zoning) {
                 $stringExtraPlanning .=
-                    "- Diện tích đất thuộc quy hoạch: " . number_format($mucdich->planning_area, 2, ',', '.')   . $this->m2 . "<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch: " . CommonService::mbUcfirst($loaidat) . "<w:br/>- Loại quy hoạch:" . $mucdich->type_zoning . "<w:br/>";
+                    "- Diện tích đất thuộc quy hoạch: " . number_format($mucdich->planning_area, 2, ',', '.')   . ' ' . $this->m2 . "<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch: " . CommonService::mbUcfirst($loaidat) . "<w:br/>- Loại quy hoạch: " . $mucdich->type_zoning . "<w:br/>";
             }
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)) . ' ' . $street, null, ['align' => 'left']);
