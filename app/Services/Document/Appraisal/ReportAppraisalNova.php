@@ -301,7 +301,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('7', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí, đơn giá đất theo Quyết định của UBND', null, ['align' => 'left']);
 
-
+        $stringExtraPlanning = "";
         $testtt = json_decode($appraise->properties[0])->property_detail;
         foreach ($testtt as $index => $mucdich) {
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí', null, ['align' => 'left']);
@@ -313,7 +313,10 @@ class ReportAppraisalNova extends ReportAppraisal
             if ($street_full) {
                 $street = $street_full->name;
             }
-
+            if ($mucdich->is_zoning) {
+                $stringExtraPlanning .=
+                    "- Diện tích đất thuộc quy hoạch: " . number_format($mucdich->planning_area, 2, ',', '.')   . $this->m2 . "<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch: " . CommonService::mbUcfirst($loaidat) . "<w:br/>- Loại quy hoạch:" . $mucdich->type_zoning . "<w:br/>";
+            }
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)) . ' ' . $street, null, ['align' => 'left']);
 
@@ -331,21 +334,15 @@ class ReportAppraisalNova extends ReportAppraisal
             }
         }
 
-        if (CommonService::getPlaningInfo($appraise->appraise_id)) {
-            $table->addRow(400, $this->cantSplit);
-            $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
-            $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
-            $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
-            $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->appraise_id)), null, ['align' => 'left']);
-        }
+        // if (CommonService::getPlaningInfo($appraise->appraise_id)) {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('8', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
-        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Diện tích đất thuộc quy hoạch:<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch:<w:br/>- Loại quy hoạch:<w:br/>
-        ', null, ['align' => 'left']);
+        $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText($stringExtraPlanning, null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText('Tham khảo thông tin quy hoạch tại Đồ án "Đồ án quy hoạch phân khu tỷ lệ 1/2000 Khu dân cư Xã Tân Thông Hội (Khu 4), Huyện Củ Chi (quy hoạch sử dụng đất, kiến trúc, giao thông)" đã được UBND Thành phố Hồ Chí Minh phê duyệt tại Quyết định số 4805/QĐ-UBND ngày 04/09/2013, tài sản có quy hoạch là Đất nhóm nhà ở hiện hữu', null, ['align' => 'bold']);
+            ->addText(CommonService::getPlaningInfo($appraise->appraise_id) ? str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->appraise_id)) : '', null, ['align' => 'both']);
+        // }
+
         if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
             $section->addTitle('Công trình xây dựng:', 3);
             $table = $section->addTable($this->styleTable);
