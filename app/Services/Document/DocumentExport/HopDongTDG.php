@@ -1050,7 +1050,7 @@ class HopDongTDG
             $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
             $row4->addCell(1800, $cellVTop)->addText('-    Mã số thuế: ', null,  $alignBoth);
             $row4->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-            $row4->addCell(8100, $cellVTop)->addText('', null,  $alignBoth);
+            $row4->addCell(8100, $cellVTop)->addText(htmlspecialchars($certificate->petitioner_identity_card), null,  $alignBoth);
 
             $row4 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
             $row4->addCell(1800, $cellVTop)->addText('-    Đại diện: ', null,  $alignBoth);
@@ -1476,20 +1476,20 @@ class HopDongTDG
         $row->addCell(9300)->addText("Ghi chú: Phí dịch vụ đã bao gồm thuế giá trị gia tăng.", ['italic' => true], ['align' => 'center']);
 
         $row = $table->addRow();
-        $row->addCell(600)->addText("4.2.", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Phí dịch vụ thẩm định giá được thanh toán một lần trước khi Bên B tiến hành khảo sát tại hiện trường. ", null, $indentleftNumber);
+        $row->addCell(600)->addText("4.2.", ['bgColor' => 'FFFF00'], ['align' => 'right']);
+        $row->addCell(9300)->addText("Phí dịch vụ thẩm định giá được thanh toán một lần trước khi Bên B tiến hành khảo sát tại hiện trường. ", ['bgColor' => 'FFFF00'], $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Hoặc thanh toán 02 lần:", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Hoặc thanh toán 02 lần:", ['bgColor' => 'FFFF00'], $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Lần 1: Thanh toán số tiền: ", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Lần 1: Thanh toán số tiền: ", ['bgColor' => 'FFFF00'], $indentleftNumber);
 
         $row = $table->addRow();
         $row->addCell(600)->addText("", null, ['align' => 'right']);
-        $row->addCell(9300)->addText("Lần 2: Thanh toán số tiền: ", null, $indentleftNumber);
+        $row->addCell(9300)->addText("Lần 2: Thanh toán số tiền: ", ['bgColor' => 'FFFF00'], $indentleftNumber);
 
 
         $row = $table->addRow();

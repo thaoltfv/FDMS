@@ -95,7 +95,8 @@ class ReportCertificateNova extends ReportCertificate
         $totalAll = CommonService::getTotalRealEstatePrice($certificate->realEstate) - $propertyDetailtotalZoningAll;
         $section->addText(number_format($totalAll, 0, ',', '.') . " đồng", ['bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addText("(Bằng chữ: " . ucfirst(CommonService::convertNumberToWords($totalAll)) . " đồng)", ['italic' => true, 'bold' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
-        $section->addText("(Chi tiết xem tại phần VI, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
+        // $section->addText("(Chi tiết xem tại phần VI, Báo cáo kết quả thẩm định giá kèm theo.)", ['italic' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
+        $section->addText("(Chi tiết xem tại mục VI, Báo cáo thẩm định giá kèm theo.)", ['italic' => true], array_merge($this->styleAlignCenter, ['keepNext' => false]));
         $section->addTitle("Những điều khoản loại trừ và hạn chế của kết quả thẩm định giá:", 2);
         $section->addListItem("Nội dung chi tiết xem tại Mục VII, Báo cáo thẩm định giá.", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Thời hạn có hiệu lực của chứng thư thẩm định giá:", 2);
