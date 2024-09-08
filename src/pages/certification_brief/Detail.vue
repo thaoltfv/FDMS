@@ -4181,6 +4181,7 @@ export default {
 			this.key_render_appraisal += 1;
 			this.form.status = this.status;
 			this.showAppraisalDialog = false;
+			this.getTotalPrice();
 		},
 		updateAppraises(data) {
 			this.form.appraises = data.general_asset;
