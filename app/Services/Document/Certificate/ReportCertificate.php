@@ -112,9 +112,9 @@ class ReportCertificate extends Report
     {
         $table2 = $section->addTable($this->tableBasicStyle);
         $table2->addRow(Converter::inchToTwip(.1));
-        $cell21 = $table2->addCell(Converter::inchToTwip(2));
+        $cell21 = $table2->addCell(Converter::inchToTwip(3));
         $cell21->addText("Số: " . $this->certificateCode, null, array_merge($this->styleAlignCenter, ['spaceBefore' => 200]));
-        $cell22 = $table2->addCell(Converter::inchToTwip(5));
+        $cell22 = $table2->addCell(Converter::inchToTwip(4));
         $cell22->addText(ucfirst($this->certificateLongDateText), null, array_merge($this->styleAlignRight, ['spaceBefore' => 200]));
 
         $section->addText("CHỨNG THƯ THẨM ĐỊNH GIÁ", ['bold' => true, 'size' => '18'], array_merge($this->styleAlignCenter, ['spaceBefore' => 320]));
