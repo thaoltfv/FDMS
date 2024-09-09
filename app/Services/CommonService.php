@@ -1500,7 +1500,8 @@ class CommonService
 					$construction_amount = $asset_general['total_construction_amount'];
 					$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
 					$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
-
+					Log::info('thông tin các loại giá', ['mã tsss' => $asset_general_id, 'estimate_amount' => $estimate_amount
+					, 'violatePrice' => $violatePrice, 'construction_amount' => $construction_amount, 'purposePrice' => $purposePrice]);
 					$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
 					$purposeArea = $totalArea - $violateArea;
 					$average_price = round($calculate_price / $purposeArea, 0);
