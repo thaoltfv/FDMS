@@ -1493,7 +1493,7 @@ class CommonService
 						$violateArea += $unitArea->violation_asset_area;
 					}
 					$total_amount = $asset_general['total_amount'];
-					Log::info('thông tin', ['mã tsss' => $asset_general_id, 'giá ban đầu' => $total_amount]);
+					
 					$percent = $adapter->percent ?? 0;
 					$estimate_amount =  ($percent *  $total_amount) / 100;
 					$construction_amount = $asset_general['total_construction_amount'];
@@ -1503,7 +1503,7 @@ class CommonService
 					$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
 					$purposeArea = $totalArea - $violateArea;
 					$average_price = round($calculate_price / $purposeArea, 0);
-
+					Log::info('thông tin', ['mã tsss' => $asset_general_id, 'giá ban đầu' => $average_price]);
 					$legalRate = 0;
 					$diffRateTotal = floatval(0);
 					foreach ($comparisonFactor as $factor) {
