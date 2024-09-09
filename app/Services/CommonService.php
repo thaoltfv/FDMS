@@ -1480,6 +1480,7 @@ class CommonService
 				$asset_general_id = $asset->asset_general_id;
 				$data[$asset_general_id]['asset_general_id'] = $asset_general_id;
 				$asset_general = $compareAssetGeneralRepository->findVersionById_v2($asset_general_id, $asset->version);
+				Log::info('thông tin TSSS', ['asset_general' => $asset_general]);
 				if ($asset_general) {
 					$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
 					$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
