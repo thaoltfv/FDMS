@@ -1480,7 +1480,6 @@ class CommonService
 				$asset_general_id = $asset->asset_general_id;
 				$data[$asset_general_id]['asset_general_id'] = $asset_general_id;
 				$asset_general = $compareAssetGeneralRepository->findVersionById_v2($asset_general_id, $asset->version);
-				Log::info('thông tin TSSS', ['asset_general' => $asset_general]);
 				if ($asset_general) {
 					$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
 					$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
@@ -1494,18 +1493,16 @@ class CommonService
 						$violateArea += $unitArea->violation_asset_area;
 					}
 					$total_amount = $asset_general['total_amount'];
-					
 					$percent = $adapter->percent ?? 0;
 					$estimate_amount =  ($percent *  $total_amount) / 100;
 					$construction_amount = $asset_general['total_construction_amount'];
 					$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
 					$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
-					Log::info('thông tin các loại giá', ['mã tsss' => $asset_general_id, 'estimate_amount' => $estimate_amount
-					, 'violatePrice' => $violatePrice, 'construction_amount' => $construction_amount, 'purposePrice' => $purposePrice]);
+
 					$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
 					$purposeArea = $totalArea - $violateArea;
 					$average_price = round($calculate_price / $purposeArea, 0);
-					Log::info('thông tin', ['mã tsss' => $asset_general_id, 'giá ban đầu' => $average_price]);
+
 					$legalRate = 0;
 					$diffRateTotal = floatval(0);
 					foreach ($comparisonFactor as $factor) {
@@ -1537,7 +1534,6 @@ class CommonService
 			$avg_adjust_price = round($sumPrice / 3, 0);
 			if ($data && count($data) > 0) {
 				foreach ($data as $item) {
-					Log::info('Kết quả', ['mgcd' => $item['indicative_price'], 'trung bình' => $avg_adjust_price, 'diff' => round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0)]);
 					$diff = isset($item['indicative_price']) ? round(($item['indicative_price'] - $avg_adjust_price) / $avg_adjust_price * 100, 0) : 0;
 
 					if (abs($diff) > ValueDefault::MAXIMUM_AVERAGE_RATE) {
