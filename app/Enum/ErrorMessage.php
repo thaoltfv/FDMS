@@ -7,7 +7,7 @@ namespace App\Enum;
 class ErrorMessage
 {
     public const LOGIN_ERROR = "Email hoặc mật khẩu không chính xác";
-    public const CREATE_ASSET_ERROR = "Dữ liệu đầu của bạn chưa chính xác, vui lòng liên hệ để hỗ trợ.";
+    public const CREATE_ASSET_ERROR = "Mất kết nối đến Server, vui lòng thử lại hoặc gọi hỗ trợ.";
     public const UPLOAD_IMAGE_ERROR = "Lưu trữ hình ảnh không thành công, vui lòng liên hệ để hỗ trợ.";
     public const UPLOAD_NOT_SUPPORT_FILE = "Tập tin không được hỗ trợ, vui lòng chỉ lưu trữ hình ảnh.";
     public const SYSTEM_ERROR = "Hệ thống xảy ra lỗi, vui lòng liên hệ để được hỗ trợ.";
