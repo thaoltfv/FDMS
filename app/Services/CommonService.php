@@ -1494,7 +1494,7 @@ class CommonService
 					$percent = $adapter->percent ?? 0;
 					$estimate_amount =  ($percent *  $total_amount) / 100;
 					$construction_amount = $asset_general['total_construction_amount'];
-					$other_amount = isset($asset_general['other_total_amount']) ? $asset_general['other_total_amount'] : 0;
+					$other_amount = isset($asset_general['total_order_amount']) ? $asset_general['total_order_amount'] : 0;
 					$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
 					$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
 
