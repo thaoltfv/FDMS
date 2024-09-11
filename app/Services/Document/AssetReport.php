@@ -116,11 +116,11 @@ class AssetReport
 
             $textRun = $section->addTextRun();
             $textRun->addText('- Loại tài sản: ');
-            $textRun->addText(isset($object->assetType->description) ? $this->mb_ucfirst(mb_strtolower($object->assetType->description)) : '', ['bold' => true]);
+            $textRun->addText(isset($object->assetType->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($object->assetType->description))) : '', ['bold' => true]);
 
             $textRun = $section->addTextRun();
             $textRun->addText('- Địa chỉ (1): ');
-            $textRun->addText($object->full_address, ['bold' => true]);
+            $textRun->addText(htmlspecialchars($object->full_address), ['bold' => true]);
 
             $table = $section->addTable('docTable');
             $table->addRow(250);
@@ -140,7 +140,7 @@ class AssetReport
 
             $textRun = $section->addTextRun();
             $textRun->addText("- Nguồn thông tin: ");
-            $textRun->addText(isset($object->source->description) ? $this->mb_ucfirst(mb_strtolower($object->source->description)) : '', ['bold' => true]);
+            $textRun->addText(isset($object->source->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($object->source->description))) : '', ['bold' => true]);
 
             $textRun = $section->addTextRun();
             $textRun->addText("- Ghi chú: ");
@@ -152,11 +152,11 @@ class AssetReport
             $cell = $table->addCell(4000);
             $textRun = $cell->addTextRun();
             $textRun->addText("- Người liên hệ: ");
-            $textRun->addText($object->contact_person, ['bold' => true]);
+            $textRun->addText(htmlspecialchars($object->contact_person), ['bold' => true]);
             $cell = $table->addCell(5000);
             $textRun = $cell->addTextRun();
             $textRun->addText("Số điện thoại liên hệ: ");
-            $textRun->addText($object->contact_phone, ['bold' => true]);
+            $textRun->addText(htmlspecialchars($object->contact_phone), ['bold' => true]);
 
             if (isset($object->assetType->description) && ($object->assetType->description == 'CHUNG CƯ')) {
 
@@ -164,7 +164,7 @@ class AssetReport
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tên chung cư/dự án: ');
-                $textRun->addText($object->project->name, ['bold' => true]);
+                $textRun->addText(htmlspecialchars($object->project->name), ['bold' => true]);
 
                 $table = $section->addTable('docTable');
                 $table->addRow(250);
@@ -179,14 +179,14 @@ class AssetReport
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Block (khu): ');
-                $textRun->addText(isset($object->block) ? $object->block->name : '', ['bold' => true]);
+                $textRun->addText(isset($object->block) ? htmlspecialchars($object->block->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tầng: ');
-                $textRun->addText(isset($object->floor) ? $object->floor->name : '', ['bold' => true]);
+                $textRun->addText(isset($object->floor) ? htmlspecialchars($object->floor->name) : '', ['bold' => true]);
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Mã căn hộ: ');
-                $textRun->addText(isset($object->apartmentSpecification) ? $object->apartmentSpecification->apartment_name : '', ['bold' => true]);
+                $textRun->addText(isset($object->apartmentSpecification) ? htmlspecialchars($object->apartmentSpecification->apartment_name) : '', ['bold' => true]);
 
 
                 $section->addText('2. Các thông tin về Block ', ['bold' => true]);
@@ -237,15 +237,15 @@ class AssetReport
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Hướng chính: ');
-                    $textRun->addText((isset($roomDetail->direction->description) ? $this->mb_ucfirst(mb_strtolower($roomDetail->direction->description)) : ''), ['bold' => true]);
+                    $textRun->addText((isset($roomDetail->direction->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($roomDetail->direction->description))) : ''), ['bold' => true]);
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Tổng quan chất lượng nội thất: ');
-                    $textRun->addText((isset($roomDetail->furnitureQuality->description) ? $this->mb_ucfirst(mb_strtolower($roomDetail->furnitureQuality->description)) : ''), ['bold' => true]);
+                    $textRun->addText((isset($roomDetail->furnitureQuality->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($roomDetail->furnitureQuality->description))) : ''), ['bold' => true]);
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Mô tả: ');
-                    $textRun->addText((isset($roomDetail->description) ? str_replace("\n", '<w:br/>   ', $roomDetail->description) : ''), ['bold' => true]);
+                    $textRun->addText((isset($roomDetail->description) ? str_replace("\n", '<w:br/>   ', htmlspecialchars($roomDetail->description)) : ''), ['bold' => true]);
                 }
             } else {
                 $section->addText('1. Các thông tin về thửa đất ', ['bold' => true]);
@@ -255,11 +255,11 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('- Tờ bản đồ số: ');
-                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc[0]->doc_num, ['bold' => true]);
+                $cellRun->addText(htmlspecialchars(json_decode($object->properties[0])->compare_property_doc[0]->doc_num), ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $cellRun = $cell->addTextRun();
                 $cellRun->addText('Thửa đất số: ');
-                $cellRun->addText(json_decode($object->properties[0])->compare_property_doc[0]->plot_num, ['bold' => true]);
+                $cellRun->addText(htmlspecialchars(json_decode($object->properties[0])->compare_property_doc[0]->plot_num), ['bold' => true]);
 
 
                 $table = $section->addTable('coordinatesTable');
@@ -280,7 +280,7 @@ class AssetReport
                 $size = '';
                 $position = [];
                 $comparePropertyTurningTime = [];
-                $topographic = isset($object->topographicData->description) ? mb_strtolower($object->topographicData->description) : '';
+                $topographic = isset($object->topographicData->description) ? mb_strtolower(htmlspecialchars($object->topographicData->description)) : '';
                 $frontSide = '';
                 $frontSides = [];
                 $unfrontSides = [];
@@ -341,7 +341,7 @@ class AssetReport
                 $cell = $table->addCell(4000);
                 $textRun = $cell->addTextRun();
                 $textRun->addText('- Giấy chứng nhận QSDĐ: ');
-                $textRun->addText($legal, ['bold' => true]);
+                $textRun->addText(htmlspecialchars($legal), ['bold' => true]);
                 $cell = $table->addCell(5000);
                 $textRun = $cell->addTextRun();
                 $textRun->addText('Hình dáng: ');
@@ -360,11 +360,11 @@ class AssetReport
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tên đường (phố): ');
-                $textRun->addText($object->street->name ?? '', ['bold' => true]);
+                $textRun->addText($object->street->name ? htmlspecialchars($object->street->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Đoạn đường (từ đâu đến đâu): ');
-                $textRun->addText($object->distance->name ?? '', ['bold' => true]);
+                $textRun->addText($object->distance->name ? htmlspecialchars($object->distance->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Vị trí đất theo QĐUBT: ');
@@ -407,7 +407,7 @@ class AssetReport
                     $cell = $table->addCell(4000);
                     $textRun = $cell->addTextRun();
                     $textRun->addText('- Loại nhà: ');
-                    $textRun->addText((isset($tangibleAsset->buildingType->description) ? $this->mb_ucfirst(mb_strtolower($tangibleAsset->buildingType->description)) : ''), ['bold' => true]);
+                    $textRun->addText((isset($tangibleAsset->buildingType->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($tangibleAsset->buildingType->description))) : ''), ['bold' => true]);
                     $cell = $table->addCell(2500);
                     $textRun = $cell->addTextRun();
                     $textRun->addText('Cấp nhà: ');
@@ -415,7 +415,7 @@ class AssetReport
                     $cell = $table->addCell(2500);
                     $textRun = $cell->addTextRun();
                     $textRun->addText("Số tầng: ");
-                    $textRun->addText($tangibleAsset->floor, ['bold' => true]);
+                    $textRun->addText(htmlspecialchars($tangibleAsset->floor), ['bold' => true]);
 
                     if ($tangibleAsset->other_building) {
                         $table = $section->addTable('docTable');
@@ -423,11 +423,11 @@ class AssetReport
                         $cell = $table->addCell(4000);
                         $textRun = $cell->addTextRun();
                         $textRun->addText('- Tên công trình: ');
-                        $textRun->addText($tangibleAsset->other_building, ['bold' => true]);
+                        $textRun->addText(htmlspecialchars($tangibleAsset->other_building), ['bold' => true]);
                         $cell = $table->addCell(5000);
                         $textRun = $cell->addTextRun();
                         $textRun->addText(" Mô tả: ");
-                        $textRun->addText($tangibleAsset->description, ['bold' => true]);
+                        $textRun->addText(htmlspecialchars($tangibleAsset->description), ['bold' => true]);
                     }
 
                     $table = $section->addTable('coordinatesTable');

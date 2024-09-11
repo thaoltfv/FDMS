@@ -608,7 +608,7 @@ class GiayYeuCau
                         if ($item->apartment->law) {
                             foreach ($item->apartment->law as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 bản photo Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy " . htmlspecialchars($item2->content) . " do " . htmlspecialchars($item2->certifying_agency) . " cấp.";
                             }
                         }
                         // Dòng địa chỉ
@@ -640,7 +640,7 @@ class GiayYeuCau
                         if ($item->appraises->appraiseLaw) {
                             foreach ($item->appraises->appraiseLaw as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 bản photo Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy " . htmlspecialchars($item2->content) . " do " . htmlspecialchars($item2->certifying_agency) . " cấp.";
                             }
                         }
                         // Dòng địa chỉ
@@ -664,7 +664,7 @@ class GiayYeuCau
                             foreach ($checktangibleAsset as $key => $tangible) {
                                 $tempRow = [];
                                 $tempRow[] = '';
-                                $tempRow[] = $tangible->tangible_name;
+                                $tempRow[] = htmlspecialchars($tangible->tangible_name);
                                 $tempRow[] = (isset($tangible->total_construction_area) ? $this->formatNumberFunction($tangible->total_construction_area, 2, ',', '.') : '');
                                 $tempRow[] = $tangible->remaining_quality == 100 ? 'Mới' : 'Đã qua sử dụng';
 
@@ -710,7 +710,7 @@ class GiayYeuCau
         $stringContact = $certificate->name_contact . ($certificate->phone_contact != '' ? ' - ' : '') . $certificate->phone_contact;
         // 2.2
         $textRun = $section->addTextRun('Heading3');
-        $textRun->addText("Mục đích thẩm định giá: " . $bien101 . ".", ['bold' => false]);
+        $textRun->addText("Mục đích thẩm định giá: " . htmlspecialchars($bien101) . ".", ['bold' => false]);
         // 2.3
         $textRun = $section->addTextRun('Heading3');
         $textRun->addText("Thời điểm thẩm định giá: Tháng " . date_format($appraise_date, "m/Y") . ".", ['bold' => false]);
@@ -740,8 +740,8 @@ class GiayYeuCau
         // 4
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Thời gian địa điểm và thông tin người liên hệ khảo sát hiện trạng tài sản: ");
-        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại ' : '') . $certificate->survey_location, 0, [], 'bullets', $indentPara);
-        $section->addListItem("Họ tên, số điện thoại người hướng dẫn: " .  $certificate->name_contact . ', điện thoại: ' . $certificate->phone_contact, 0, [], 'bullets', []);
+        $section->addListItem("Thời gian, địa điểm khảo sát hiện trạng tài sản: dự kiến lúc " . $surveyTime . ($surveyTime != '' ? ' tại ' : '') . htmlspecialchars($certificate->survey_location), 0, [], 'bullets', $indentPara);
+        $section->addListItem("Họ tên, số điện thoại người hướng dẫn: " .  htmlspecialchars($certificate->name_contact) . ', điện thoại: ' . htmlspecialchars($certificate->phone_contact), 0, [], 'bullets', []);
         // 5
         $textRun = $section->addTextRun('Heading2');
         $textRun->addText("Các nội dung yêu cầu và thống nhất:");
@@ -800,7 +800,7 @@ class GiayYeuCau
         $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'right'));
 
         $reportUserName = CommonService::getUserReport();
-        $reportName = 'GYC' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $reportName = 'GYC' . '_' . ($certificate->petitioner_name);
         $reportName = str_replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], '', $reportName); // replace invalid characters with underscore
         $reportName = str_replace(' ', '_', $reportName); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');

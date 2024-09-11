@@ -62,10 +62,10 @@ class ReportAppendix1Nova extends ReportAppendix1
         $data = [
             $stt,
             $title,
-            (isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->loaicanho) && isset($asset->apartmentAssetProperties->loaicanho->description)) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->loaicanho->description) : '-',
-            (isset($this->asset1->room_details[0]) && isset($this->asset1->room_details[0]->loaicanho) && isset($this->asset1->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset1->room_details[0]->loaicanho->description) : '-',
-            (isset($this->asset2->room_details[0]) && isset($this->asset2->room_details[0]->loaicanho) && isset($this->asset2->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset2->room_details[0]->loaicanho->description) : '-',
-            (isset($this->asset3->room_details[0]) && isset($this->asset3->room_details[0]->loaicanho) && isset($this->asset3->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst($this->asset3->room_details[0]->loaicanho->description) : '-',
+            (isset($asset->apartmentAssetProperties) && isset($asset->apartmentAssetProperties->loaicanho) && isset($asset->apartmentAssetProperties->loaicanho->description)) ? CommonService::mbUcfirst(htmlspecialchars($asset->apartmentAssetProperties->loaicanho->description)) : '-',
+            (isset($this->asset1->room_details[0]) && isset($this->asset1->room_details[0]->loaicanho) && isset($this->asset1->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst(htmlspecialchars($this->asset1->room_details[0]->loaicanho->description)) : '-',
+            (isset($this->asset2->room_details[0]) && isset($this->asset2->room_details[0]->loaicanho) && isset($this->asset2->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst(htmlspecialchars($this->asset2->room_details[0]->loaicanho->description)) : '-',
+            (isset($this->asset3->room_details[0]) && isset($this->asset3->room_details[0]->loaicanho) && isset($this->asset3->room_details[0]->loaicanho->description)) ? CommonService::mbUcfirst(htmlspecialchars($this->asset3->room_details[0]->loaicanho->description)) : '-',
             false
         ];
         return $data;
@@ -254,14 +254,14 @@ class ReportAppendix1Nova extends ReportAppendix1
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right']);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%');
+            $cell->addText(CommonService::mbUcfirst(htmlspecialchars($description)) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%');
         } else {
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, $this->cellVCentered)->addText('', $this->styleBold, $this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
+            $cell->addText(CommonService::mbUcfirst(htmlspecialchars($description)) . ' TSTĐ ' . number_format(abs($compare->adjust_percent), $this->countDecimals($compare->adjust_percent), ',', '.') . '%', null, $this->keepNext);
         }
     }
 
@@ -320,9 +320,9 @@ class ReportAppendix1Nova extends ReportAppendix1
                 $other2 = $this->comparisonFactor2->where('type', 'yeu_to_khac')->where('position', $position)->first();
                 $other3 = $this->comparisonFactor3->where('type', 'yeu_to_khac')->where('position', $position)->first();
                 if ($this->isApartment) {
-                    $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->apartment_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                    $this->addCompareRowExt($table, $title, $alphas[$stt], htmlspecialchars($other1->apartment_title), htmlspecialchars($other1->asset_title), htmlspecialchars($other2->asset_title), htmlspecialchars($other3->asset_title), true);
                 } else {
-                    $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                    $this->addCompareRowExt($table, $title, $alphas[$stt], htmlspecialchars($other1->appraise_title), htmlspecialchars($other1->asset_title), htmlspecialchars($other2->asset_title), htmlspecialchars($other3->asset_title), true);
                 }
                 $this->addCompareRowExt1($table,  $coefficientTitle, '', '100', $other1->adjust_coefficient, $other2->adjust_coefficient, $other3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');

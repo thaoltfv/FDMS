@@ -72,11 +72,11 @@ class ReportAppendix2Nova extends ReportAppendix2
                 $count1++;
             }
             $diengiai = $diengiai . ' là phù hợp với kết cấu công trình của tài sản thẩm định và đã bao gồm yếu tố lợi nhuận của nhà đầu tư. Tổ thẩm định ước tính đơn giá xây dựng mới của tài sản như sau:';
-            $textRun->addText($diengiai);
+            $textRun->addText(htmlspecialchars($diengiai));
         } else {
             $textRun->addText('Căn cứ vào Quyết định 22/2019/QĐ-UBND ngày 30/08/2019 của UBND TP Hồ Chí Minh về Ban hành bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn thành phố Hồ Chí Minh, công văn số 2189/SXD-KTXD ngày 22 tháng 02 năm 2021 và công văn số 4381/SXD-KTXD ngày 27/04/2022 và Công văn số 980/SXD-KTXD Ngày 17/01/2023 Về việc điều chỉnh, quy đổi về thời điểm tính toán đối với Bảng giá nhà ở, công trình, vật kiến trúc xây dựng mới trên địa bàn Thành phố Hồ Chí Minh');
             if ($dgxdSlug === 'dg-uoc-tinh') {
-                $textRun->addText(' và căn cứ vào tình hình giá thị trường xây dựng nhà ở trên địa bàn TP.HCM. ' . $this->acronym . ' đề xuất đơn giá xây mới cho CTXD của BĐS thẩm định giá (giá CTXD đã bao gồm yếu tố lợi nhuận của nhà đầu tư)');
+                $textRun->addText(' và căn cứ vào tình hình giá thị trường xây dựng nhà ở trên địa bàn TP.HCM. ' . htmlspecialchars($this->acronym) . ' đề xuất đơn giá xây mới cho CTXD của BĐS thẩm định giá (giá CTXD đã bao gồm yếu tố lợi nhuận của nhà đầu tư)');
             }
         }
     }
@@ -144,10 +144,10 @@ class ReportAppendix2Nova extends ReportAppendix2
     {
         $description = '';
         if ($dgxdSlug === 'dg-uoc-tinh') {
-            $description = $this->companyName . ' đề xuất đơn giá xây dựng mới cho TSTĐ theo đơn giá trung bình của các công ty xây dựng đang cung cấp trên thị trường.';
+            $description = htmlspecialchars($this->companyName) . ' đề xuất đơn giá xây dựng mới cho TSTĐ theo đơn giá trung bình của các công ty xây dựng đang cung cấp trên thị trường.';
             $textRun = $section->addTextRun();
             $textRun->addText('Kết luận: ', $this->styleBold, null);
-            $textRun->addText($description, null, null);
+            $textRun->addText(htmlspecialchars($description), null, null);
         }
     }
 
@@ -155,7 +155,7 @@ class ReportAppendix2Nova extends ReportAppendix2
     {
         $section->addText('❖ Giá trị hao mòn của công trình xây dựng: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
-        $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
+        $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . htmlspecialchars($this->acronym) . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
     }
 
     protected function printNew1($section, $tangibleAssets)
@@ -229,7 +229,7 @@ class ReportAppendix2Nova extends ReportAppendix2
 
         $countTangible = count($tangibleAssets);
         foreach ($tangibleAssets as $tangibleAsset) {
-            $section->addText(CommonService::mbUcfirst($tangibleAsset->tangible_name) . ':', ['bold' => true]);
+            $section->addText(CommonService::mbUcfirst(htmlspecialchars($tangibleAsset->tangible_name)) . ':', ['bold' => true]);
             $table2 = $section->addTable($this->styleTable);
             $table2->addRow(400, $this->rowHeader);
             $table2->addCell(500, $this->cellRowSpan)->addText('STT', ['bold' => true], $this->cellHCenteredKeepNext);
