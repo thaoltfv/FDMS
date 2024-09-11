@@ -1818,9 +1818,17 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     $priceEstimateFinal->imagePlanningInfo()->create($image);
                 }
             }
+
+            $dataLog = PriceEstimate::where('id', $id)->first();
             $this->CreateActivityLog(
                 $priceEstimateFinal,
                 $priceEstimateFinal,
+                'update_data',
+                'Cập nhật giá trị tài sản'
+            );
+            $this->CreateActivityLog(
+                $dataLog,
+                $dataLog,
                 'update_data',
                 'Cập nhật giá trị tài sản'
             );
@@ -1871,10 +1879,18 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                     $priceEstimateFinal->imagePlanningInfo()->create($image);
                 }
             }
+            $dataLog = PriceEstimate::where('id', $id)->first();
 
             $this->CreateActivityLog(
                 $priceEstimateFinal,
                 $priceEstimateFinal,
+                'update_data',
+                'Cập nhật giá trị tài sản'
+            );
+
+            $this->CreateActivityLog(
+                $dataLog,
+                $dataLog,
                 'update_data',
                 'Cập nhật giá trị tài sản'
             );

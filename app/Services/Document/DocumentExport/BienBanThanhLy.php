@@ -512,7 +512,7 @@ class BienBanThanhLy
 
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }

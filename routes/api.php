@@ -633,7 +633,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // lấy lịch sử tsss
     Route::get('activity/get-appraise/{id}', [ActivityController::class, 'getAppraiseWithId']);
-
+    // lấy lịch sử tssb
+    Route::get('activity/get-price-estimate/{id}', [ActivityController::class, 'getPriceEstimateWithId']);
     // SUM Total TSSS
     Route::get('report/get-count-compare-asset', [ComparisonAssetController::class, 'countCompareAssetGeneral']);
     // SUM Total TSTD

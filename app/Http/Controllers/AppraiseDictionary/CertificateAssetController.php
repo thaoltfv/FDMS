@@ -548,10 +548,9 @@ class CertificateAssetController extends Controller
                 }
             }
             if (count($arrayLink) > 0) {
-
-                $path =  env('STORAGE_DOCUMENTS');
+                $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/';
                 // $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
-                $name =   storage_path('app/public/' . $zipFileNameLink);
+                $name =   storage_path('app/public/' . $path . $zipFileNameLink);
                 $zip = new ZipArchive;
                 $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
                 foreach ($arrayLink as $fileLink) {
@@ -560,7 +559,7 @@ class CertificateAssetController extends Controller
                     $zip->addFromString($fileName, $fileContent);
                 }
                 $zip->close();
-                $fileUrl = Storage::disk('public')->url($zipFileNameLink);
+                $fileUrl = Storage::disk('public')->url($path . $zipFileNameLink);
                 // Storage::put($name, file_get_contents($name));
                 // $fileUrl = Storage::url($name);
                 // unlink($name);
@@ -602,8 +601,9 @@ class CertificateAssetController extends Controller
                 }
             }
             if (count($arrayLink) > 0) {
+                $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/';
                 // $name = sys_get_temp_dir() . '/' . $zipFileNameLink;
-                $name =   storage_path('app/public/' . $zipFileNameLink);
+                $name =   storage_path('app/public/' . $path . $zipFileNameLink);
                 $zip = new ZipArchive;
                 $zip->open($name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
                 foreach ($arrayLink as $fileLink) {
@@ -612,7 +612,7 @@ class CertificateAssetController extends Controller
                     $zip->addFromString($fileName, $fileContent);
                 }
                 $zip->close();
-                $fileUrl = Storage::disk('public')->url($zipFileNameLink);
+                $fileUrl = Storage::disk('public')->url($path . $zipFileNameLink);
                 // Storage::put($name, file_get_contents($name));
                 // $fileUrl = Storage::url($name);
                 // unlink($name);
@@ -797,8 +797,15 @@ class CertificateAssetController extends Controller
     }
     public function deleteAfterDownload($nameLink): JsonResponse
     {
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/';
+        $nameNew = storage_path('app/public/' . $path . $nameLink . '.zip');
         $name = storage_path('app/public/' . $nameLink . '.zip');
-        unlink($name);
+        if (file_exists($name)) {
+            unlink($name);
+        }
+        if (file_exists($nameNew)) {
+            unlink($nameNew);
+        }
         // $name = sys_get_temp_dir() . '/' . $nameLink . '.zip';
         // Storage::disk(env('FILESYSTEM_DRIVER'))->delete($name);
         return $this->respondWithCustomData(['message' => 'Xóa link thành công']);
