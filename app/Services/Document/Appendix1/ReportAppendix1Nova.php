@@ -290,7 +290,7 @@ class ReportAppendix1Nova extends ReportAppendix1
             if (!empty($compare1)) {
                 $compare2 = $this->comparisonFactor2->where('type', $type)->first();
                 $compare3 = $this->comparisonFactor3->where('type', $type)->first();
-                $title = $compare1->name;
+                $title = htmlspecialchars($compare1->name);
                 if ($this->isApartment) {
                     if ($type == 'dien_tich')
                         $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
