@@ -46,9 +46,7 @@ class CommonService
 {
 
 
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
 	public static function getUserReport()
 	{
@@ -1496,10 +1494,11 @@ class CommonService
 					$percent = $adapter->percent ?? 0;
 					$estimate_amount =  ($percent *  $total_amount) / 100;
 					$construction_amount = $asset_general['total_construction_amount'];
+					$other_amount = isset($asset_general['total_order_amount']) ? $asset_general['total_order_amount'] : 0;
 					$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
 					$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
 
-					$calculate_price = $estimate_amount - $violatePrice - $construction_amount + $purposePrice;
+					$calculate_price = $estimate_amount - $violatePrice - $construction_amount - $other_amount  + $purposePrice;
 					$purposeArea = $totalArea - $violateArea;
 					$average_price = round($calculate_price / $purposeArea, 0);
 
@@ -1619,7 +1618,11 @@ class CommonService
 			'tangibleAssets.buildingType:id,description',
 		];
 		$select = [
-			'appraises.id', 'asset_type_id', 'appraises.created_by', 'appraises.updated_at', 'appraises.created_at',
+			'appraises.id',
+			'asset_type_id',
+			'appraises.created_by',
+			'appraises.updated_at',
+			'appraises.created_at',
 			DB::raw("SPLIT_PART(appraises.coordinates , ',', 1)::float as lat1"),
 			DB::raw("SPLIT_PART(appraises.coordinates , ',', 2)::float as lon1"),
 		];
@@ -1644,7 +1647,11 @@ class CommonService
 			$slug = 'land_asset_purpose_' . $land_type_acronym . '_price';
 
 			$select1 = [
-				'appraises.id', 'asset_type_id', 'appraises.created_by', 'appraises.updated_at', 'appraises.created_at',
+				'appraises.id',
+				'asset_type_id',
+				'appraises.created_by',
+				'appraises.updated_at',
+				'appraises.created_at',
 				DB::raw('cast("tbDistance"."distance" as decimal(10,3)) as distance'),
 				'appraise_prices.value'
 			];
@@ -1747,10 +1754,9 @@ class CommonService
 		Log::info('Vào gửi mail 2', ['broadcast' => $broadcast, 'users' => $users, 'data' => $data]);
 		try {
 			Notification::send($users, $broadcast);
-		
+
 			// Log thành công nếu không có lỗi
 			Log::info('Notifications sent successfully!');
-		
 		} catch (Exception $e) {
 			// Log lỗi nếu có
 			Log::error('Error sending notifications: ' . $e->getMessage());
