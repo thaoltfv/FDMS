@@ -616,11 +616,7 @@ class KeHoachTDG
                 ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'KHTDG' . '_' . ($certificate->petitioner_name);
-        $reportName = str_replace(
-            ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
-            '',
-            $reportName
-        ); // replace invalid characters with underscore
+        $reportName = str_replace(['%', '@', '!', '#', '&', '/', '\\', ':', '*', '?', '"', '<', '>', '|'], ' ', $reportName); // replace invalid characters with underscore
         $reportName = str_replace(
             ' ',
             '_',

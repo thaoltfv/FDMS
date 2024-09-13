@@ -1824,13 +1824,13 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 $priceEstimateFinal,
                 $priceEstimateFinal,
                 'update_data',
-                'Cập nhật giá trị tài sản'
+                'cập nhật giá trị tài sản'
             );
             $this->CreateActivityLog(
                 $dataLog,
                 $dataLog,
                 'update_data',
-                'Cập nhật giá trị tài sản'
+                'cập nhật giá trị tài sản'
             );
             $this->updatePriceEstimateStep($id, 3);
             $this->processAfterSave($id);
@@ -1885,14 +1885,14 @@ class  EloquentPriceEstimateRepository extends EloquentRepository implements Pri
                 $priceEstimateFinal,
                 $priceEstimateFinal,
                 'update_data',
-                'Cập nhật giá trị tài sản'
+                'cập nhật giá trị tài sản'
             );
 
             $this->CreateActivityLog(
                 $dataLog,
                 $dataLog,
                 'update_data',
-                'Cập nhật giá trị tài sản'
+                'cập nhật giá trị tài sản'
             );
             $this->updatePriceEstimateStep($id, 3);
             $this->processAfterSave($id);

@@ -1743,11 +1743,8 @@ class HopDongTDG
         $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
         $reportName = 'HDTDG' . '_' . ($certificate->petitioner_name);
-        $reportName = str_replace(
-            ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
-            '',
-            $reportName
-        ); // replace invalid characters with underscore
+        $reportName = str_replace(['%', '@', '!', '#', '&', '/', '\\', ':', '*', '?', '"', '<', '>', '|'], ' ', $reportName); // replace invalid characters with underscore
+
         $reportName = str_replace(
             ' ',
             '_',

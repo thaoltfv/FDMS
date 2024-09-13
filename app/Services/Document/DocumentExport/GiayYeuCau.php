@@ -801,7 +801,7 @@ class GiayYeuCau
 
         $reportUserName = CommonService::getUserReport();
         $reportName = 'GYC' . '_' . ($certificate->petitioner_name);
-        $reportName = str_replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], '', $reportName); // replace invalid characters with underscore
+        $reportName = str_replace(['%', '@', '!', '#', '&', '/', '\\', ':', '*', '?', '"', '<', '>', '|'], ' ', $reportName); // replace invalid characters with underscore
         $reportName = str_replace(' ', '_', $reportName); // replace invalid characters with underscore
         $downloadDate = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('dmY');
         $downloadTime = Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Hi');
