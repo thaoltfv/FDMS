@@ -41,66 +41,65 @@ class CertificateApartment extends Model
         'deleted_at',
     ];
 
-    public function apartmentAssetProperties():HasOne
+    public function apartmentAssetProperties(): HasOne
     {
         return $this->hasOne(CertificateApartmentProperty::class, 'apartment_asset_id');
     }
-    public function law():HasMany
+    public function law(): HasMany
     {
         return $this->hasMany(CertificateApartmentLaw::class, 'apartment_asset_id');
     }
-    public function apartmentAppraisalBase():HasOne
+    public function apartmentAppraisalBase(): HasOne
     {
         return $this->hasOne(CertificateApartmentAppraisalBase::class, 'apartment_asset_id');
     }
-    public function price():HasMany
+    public function price(): HasMany
     {
         return $this->hasMany(CertificateApartmentPrice::class, 'apartment_asset_id');
     }
     public function getAssetGeneralAttribute()
     {
-		$result = [];
-        try{
-            if (isset($this->id)&&!empty($this->id)) {
+        $result = [];
+        try {
+            if (isset($this->id) && !empty($this->id)) {
                 $items = CertificateApartmentHasAsset::where('apartment_asset_id', $this->id)->get();
-                $stt =0;
+                $stt = 0;
                 $utilities = CommonService::getUtilities();
-                foreach($items as $item) {
+                foreach ($items as $item) {
                     $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
                     $result[$stt] = $compareAssetGeneralRepository->findApartmentVersionById($item->asset_general_id, $item->version);
                     $result[$stt]['version'] = $item->version;
                     $asset = $result[$stt]->apartment_specification;
-                    if (isset($asset))
-                    {
+                    if (isset($asset)) {
                         $utilityDesc = [];
-                        $assetUti = $asset['utilities']??null;
-                        if (isset($assetUti) && ! empty($assetUti)){
-                            foreach($assetUti as $uti){
+                        $assetUti = $asset['utilities'] ?? null;
+                        if (isset($assetUti) && ! empty($assetUti)) {
+                            foreach ($assetUti as $uti) {
                                 $des = $utilities->where('acronym', 'ilike', strval($uti))->first();
-                                if (isset($des)){
-                                    $utilityDesc[] = $des->description??'';
+                                if (isset($des)) {
+                                    $utilityDesc[] = $des->description ?? '';
                                 }
                             }
                         }
                         $asset['utility_description'] = $utilityDesc;
                     }
                     $result[$stt]->apartment_specification = $asset;
-                    $i = json_decode (json_encode ($result[$stt]), FALSE);
-                    $result[$stt] = $i;                    
+                    $i = json_decode(json_encode($result[$stt]), FALSE);
+                    $result[$stt] = $i;
                     $stt++;
                 }
             }
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             Log::error($ex);
             $result = [];
         }
         return $result;
     }
-    public function pic():HasMany
+    public function pic(): HasMany
     {
         return $this->hasMany(CertificateApartmentPic::class, 'apartment_asset_id');
     }
-    public function comparisonFactor():HasMany
+    public function comparisonFactor(): HasMany
     {
         return $this->hasMany(CertificateApartmentComparisonFactor::class, 'apartment_asset_id');
     }
@@ -111,36 +110,37 @@ class CertificateApartment extends Model
 
     public function getAppraisalMethodsAttribute()
     {
-        if (CertificateApartmentAppraisalMethod::query()->where(['apartment_asset_id' => $this->id])->exists()){
+        if (CertificateApartmentAppraisalMethod::query()->where(['apartment_asset_id' => $this->id])->exists()) {
             $datas = CertificateApartmentAppraisalMethod::query()
-            ->where(['apartment_asset_id' => $this->id])
-            ->get(['slug', 'slug_value', 'value', 'description']);
+                ->where(['apartment_asset_id' => $this->id])
+                ->get(['slug', 'slug_value', 'value', 'description']);
 
             $result = null;
-            if(isset($datas)){
-                foreach($datas as $data){
+            if (isset($datas)) {
+                foreach ($datas as $data) {
                     $result[$data->slug]['slug'] = $data->slug;
                     $result[$data->slug]['slug_value'] = $data->slug_value;
                     $result[$data->slug]['value'] = $data->value;
                     $result[$data->slug]['description'] = $data->description;
                 }
             }
-        }else{
-            $result1=[
+        } else {
+            $result1 = [
                 'slug_value' => 'trung-binh',
                 'value' => null,
             ];
-            $result2=[
+            $result2 = [
                 'slug_value' => 'theo-chi-phi-chuyen-mdsd-dat',
                 'value' => null,
             ];
-            $result3=[
+            $result3 = [
                 'slug_value' => 'theo-gia-dat-qd-ubnd',
                 'value' => null,
             ];
-            $result = array_merge(['thong_nhat_muc_gia_chi_dan' => $result1],
-                                ['tinh_gia_dat_hon_hop_con_lai' => $result2],
-                                ['tinh_gia_dat_vi_pham_quy_hoach' => $result3]
+            $result = array_merge(
+                ['thong_nhat_muc_gia_chi_dan' => $result1],
+                ['tinh_gia_dat_hon_hop_con_lai' => $result2],
+                ['tinh_gia_dat_vi_pham_quy_hoach' => $result3]
             );
         }
 
@@ -148,25 +148,25 @@ class CertificateApartment extends Model
     }
     public function apartmentHasAssets(): HasMany
     {
-        return $this->hasMany(CertificateApartmentHasAsset::class,'apartment_asset_id')->orderBy('asset_general_id', 'DESC');
+        return $this->hasMany(CertificateApartmentHasAsset::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC');
     }
-    public function project() :BelongsTo
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
-    public function apartmentAdapter():HasMany
+    public function apartmentAdapter(): HasMany
     {
-        return $this->hasMany(CertificateApartmentAdapter::class, 'apartment_asset_id');
+        return $this->hasMany(CertificateApartmentAdapter::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC');
     }
-    public function version():HasMany
+    public function version(): HasMany
     {
         return $this->hasMany(CertificateApartmentVersion::class, 'apartment_asset_id');
     }
-    public function lastVersion():HasOne
+    public function lastVersion(): HasOne
     {
         return $this->hasOne(CertificateApartmentVersion::class, 'apartment_asset_id')->latest();
     }
-    public function assetPrice():HasMany
+    public function assetPrice(): HasMany
     {
         return $this->hasMany(CertificateApartmentPrice::class, 'apartment_asset_id');
     }
