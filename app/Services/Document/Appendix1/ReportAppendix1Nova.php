@@ -316,7 +316,7 @@ class ReportAppendix1Nova extends ReportAppendix1
         if (!empty($others) && count($others) > 0) {
             foreach ($others as $other1) {
                 $position = $other1->position;
-                $title = $other1->name;
+                $title = htmlspecialchars($other1->name);
                 $other2 = $this->comparisonFactor2->where('type', 'yeu_to_khac')->where('position', $position)->first();
                 $other3 = $this->comparisonFactor3->where('type', 'yeu_to_khac')->where('position', $position)->first();
                 if ($this->isApartment) {
