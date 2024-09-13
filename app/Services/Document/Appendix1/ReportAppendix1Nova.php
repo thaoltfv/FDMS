@@ -295,14 +295,14 @@ class ReportAppendix1Nova extends ReportAppendix1
                     if ($type == 'dien_tich')
                         $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                     else
-                        $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                        $this->addCompareRowDescription($table, $title, $alphas[$stt], htmlspecialchars($compare1->apartment_title), htmlspecialchars($compare1->asset_title), htmlspecialchars($compare2->asset_title), htmlspecialchars($compare3->asset_title), true);
                 } else {
                     if ($type == 'quy_mo')
                         $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                     elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
                         $this->addCompareRowLengh($table, $title . ' (m)', $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                     else
-                        $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                        $this->addCompareRowDescription($table, $title, $alphas[$stt], htmlspecialchars($compare1->appraise_title), htmlspecialchars($compare1->asset_title), htmlspecialchars($compare2->asset_title), htmlspecialchars($compare3->asset_title), true);
                 }
                 $this->addCompareRowExt1($table,  $coefficientTitle, '', '100', $compare1->adjust_coefficient, $compare2->adjust_coefficient, $compare3->adjust_coefficient, false, '%');
                 $this->addCompareRowExt1($table,  $rateTitle, '', '-', $compare1->adjust_percent, $compare2->adjust_percent, $compare3->adjust_percent, false, '%');

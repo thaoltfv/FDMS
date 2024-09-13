@@ -310,11 +310,11 @@ class AssetReportPdf
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tên đường (phố): ');
-                $textRun->addText($object->street->name ? htmlspecialchars($object->street->name) : '', ['bold' => true]);
+                $textRun->addText(isset($object->street->name) ? htmlspecialchars($object->street->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Đoạn đường (từ đâu đến đâu): ');
-                $textRun->addText($object->distance->name ? htmlspecialchars($object->distance->name) : '', ['bold' => true]);
+                $textRun->addText(isset($object->distance->name) ? htmlspecialchars($object->distance->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Vị trí đất theo QĐUBT: ');
