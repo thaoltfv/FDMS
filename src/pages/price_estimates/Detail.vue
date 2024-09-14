@@ -27,13 +27,13 @@
 						<!-- <font-awesome-icon icon="print" /> -->
 						<img src="@/assets/icons/ic_printer_white.svg" alt="print" />
 					</button>
-					<!-- <button
+					<button
 						class="btn btn-orange btn-history btn-extra"
 						@click="showHistoryDrawer"
 					>
 						<img src="@/assets/icons/ic_log_history.svg" alt="history" />
 					</button>
-					<button
+					<!-- <button
 						class="btn btn-orange btn-additional btn-extra"
 						@click="showAdditionalDrawer"
 					>
@@ -823,7 +823,7 @@ export default {
 			return moment(String(value)).format("HH:mm DD/MM/YYYY");
 		},
 		async getHistoryTimeline(id) {
-			const res = await CertificateAsset.getHistoryTimeline(id);
+			const res = await PriceEstimateModel.getHistoryTimeline(id);
 			if (res.data) {
 				this.historyList = res.data;
 			} else if (res.error) {

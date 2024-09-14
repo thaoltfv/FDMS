@@ -51,4 +51,7 @@ export default class priceEstimateModel extends Model {
 			isStatic: true
 		});
 	}
+	static async getHistoryTimeline(id) {
+		return (new this()).request({ method: 'GET', url: `activity/get-price-estimate/${id}`, isStatic: true })
+	}
 }
