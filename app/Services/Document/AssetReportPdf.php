@@ -101,10 +101,10 @@ class AssetReportPdf
 
             $textRun = $section->addTextRun();
             $textRun->addText("- Người liên hệ: ");
-            $textRun->addText($object->contact_person, ['bold' => true]);
+            $textRun->addText(htmlspecialchars($object->contact_person), ['bold' => true]);
             $textRun->addText(str_repeat('&nbsp;', 20));
             $textRun->addText("Số điện thoại liên hệ: ");
-            $textRun->addText($object->contact_phone, ['bold' => true]);
+            $textRun->addText(htmlspecialchars($object->contact_phone), ['bold' => true]);
 
             if (isset($object->assetType->description) && ($object->assetType->description == 'CHUNG CƯ')) {
 
@@ -112,7 +112,7 @@ class AssetReportPdf
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tên chung cư/dự án: ');
-                $textRun->addText($object->apartment->name, ['bold' => true]);
+                $textRun->addText(htmlspecialchars($object->apartment->name), ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tọa độ X: ');
@@ -124,17 +124,17 @@ class AssetReportPdf
                 foreach ($object->blockSpecification as $specification) {
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Block (khu): ');
-                    $textRun->addText(isset($specification->blockLists) ? $specification->blockLists->name : '', ['bold' => true]);
+                    $textRun->addText(isset($specification->blockLists) ? htmlspecialchars($specification->blockLists->name) : '', ['bold' => true]);
                 }
 
                 foreach ($object->roomDetails as $roomDetail) {
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Mã căn hộ: ');
-                    $textRun->addText($roomDetail->room_num, ['bold' => true]);
+                    $textRun->addText(htmlspecialchars($roomDetail->room_num), ['bold' => true]);
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Tầng: ');
-                    $textRun->addText($roomDetail->floor, ['bold' => true]);
+                    $textRun->addText(htmlspecialchars($roomDetail->floor), ['bold' => true]);
                 }
 
                 $section->addText('2. Các thông tin về Block ', ['bold' => true]);
@@ -183,7 +183,7 @@ class AssetReportPdf
                         $textRun->addText($twoSidesRoom, ['bold' => true]);
 
                         $textRun = $section->addTextRun();
-                        $textRun->addText('- Diện tích ('.$m2.'): ');
+                        $textRun->addText('- Diện tích (' . $m2 . '): ');
                         $textRun->addText($roomDetail->area, ['bold' => true]);
                         $textRun->addText($m2);
 
@@ -197,11 +197,11 @@ class AssetReportPdf
 
                         $textRun = $section->addTextRun();
                         $textRun->addText('- Hướng chính: ');
-                        $textRun->addText((isset($roomDetail->direction->description) ? $this->mb_ucfirst(mb_strtolower($roomDetail->direction->description)) : ''), ['bold' => true]);
+                        $textRun->addText((isset($roomDetail->direction->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($roomDetail->direction->description))) : ''), ['bold' => true]);
 
                         $textRun = $section->addTextRun();
                         $textRun->addText('- Tổng quan chất lượng nội thất: ');
-                        $textRun->addText((isset($roomDetail->furnitureQuality->description) ? $this->mb_ucfirst(mb_strtolower($roomDetail->furnitureQuality->description)) : ''), ['bold' => true]);
+                        $textRun->addText((isset($roomDetail->furnitureQuality->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($roomDetail->furnitureQuality->description))) : ''), ['bold' => true]);
 
                         $table = $section->addTable($styleTable);
                         $table->addRow(400);
@@ -210,10 +210,9 @@ class AssetReportPdf
                         $table->addCell(3000)->addText('Mô tả', ['bold' => true], ['align' => JcTable::CENTER]);
                         foreach ($roomDetail->roomFurnitureDetails as $roomFurnitureDetail) {
                             $table->addRow(400);
-                            $table->addCell(3000)->addText((isset($roomFurnitureDetail->name) ? $this->mb_ucfirst(mb_strtolower($roomFurnitureDetail->name)) : ''), null, ['align' => JcTable::START]);
+                            $table->addCell(3000)->addText((isset($roomFurnitureDetail->name) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($roomFurnitureDetail->name))) : ''), null, ['align' => JcTable::START]);
                             $table->addCell(3000)->addText($roomFurnitureDetail->number ?? '', null, ['align' => JcTable::CENTER]);
-                            $table->addCell(3000)->addText((isset($roomFurnitureDetail->description) ? $this->mb_ucfirst(mb_strtolower($roomFurnitureDetail->description)) : ''), null, ['align' => JcTable::CENTER]);
-
+                            $table->addCell(3000)->addText((isset($roomFurnitureDetail->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($roomFurnitureDetail->description))) : ''), null, ['align' => JcTable::CENTER]);
                         }
                     }
                 }
@@ -222,10 +221,10 @@ class AssetReportPdf
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tờ bản đồ số: ');
-                $textRun->addText($object->doc_no, ['bold' => true]);
+                $textRun->addText(htmlspecialchars($object->doc_no), ['bold' => true]);
                 $textRun->addText(str_repeat('&nbsp;', 30));
                 $textRun->addText('Thửa đất số: ');
-                $textRun->addText($object->land_no, ['bold' => true]);
+                $textRun->addText(htmlspecialchars($object->land_no), ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tọa độ X: ');
@@ -295,7 +294,7 @@ class AssetReportPdf
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Giấy chứng nhận QSDĐ: ');
-                $textRun->addText($legal, ['bold' => true]);
+                $textRun->addText(htmlspecialchars($legal), ['bold' => true]);
 
                 $textRun->addText(str_repeat('&nbsp;', 50 - strlen($legal) * 2));
                 $textRun->addText('Hình dáng: ');
@@ -311,11 +310,11 @@ class AssetReportPdf
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Tên đường (phố): ');
-                $textRun->addText($object->street->name ?? '', ['bold' => true]);
+                $textRun->addText(isset($object->street->name) ? htmlspecialchars($object->street->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Đoạn đường (từ đâu đến đâu): ');
-                $textRun->addText($object->distance->name ?? '', ['bold' => true]);
+                $textRun->addText(isset($object->distance->name) ? htmlspecialchars($object->distance->name) : '', ['bold' => true]);
 
                 $textRun = $section->addTextRun();
                 $textRun->addText('- Vị trí đất theo QĐUBT: ');
@@ -339,7 +338,7 @@ class AssetReportPdf
 
                     foreach ($comparePropertyTurningTime as $turning) {
                         $table->addRow(400);
-                        $table->addCell(3000)->addText( $turning->turning, null, ['align' => JcTable::CENTER]);
+                        $table->addCell(3000)->addText($turning->turning, null, ['align' => JcTable::CENTER]);
                         $table->addCell(3000)->addText(isset($turning->material->description) ? $this->mb_ucfirst(mb_strtolower($turning->material->description)) : '', null, ['align' => JcTable::CENTER]);
                         $table->addCell(3000)->addText($turning->main_road_length . 'm', null, ['align' => JcTable::CENTER]);
                     }
@@ -355,25 +354,25 @@ class AssetReportPdf
                     $currenTangibleAssets++;
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Loại nhà: ');
-                    $textRun->addText((isset($tangibleAsset->buildingType->description) ? $this->mb_ucfirst(mb_strtolower($tangibleAsset->buildingType->description)) : ''), ['bold' => true]);
+                    $textRun->addText((isset($tangibleAsset->buildingType->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($tangibleAsset->buildingType->description))) : ''), ['bold' => true]);
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Cấp nhà: ');
-                    $textRun->addText((isset($tangibleAsset->buildingCategory->description) ? $this->mb_ucfirst(mb_strtolower($tangibleAsset->buildingCategory->description)) : ''), ['bold' => true]);
+                    $textRun->addText((isset($tangibleAsset->buildingCategory->description) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($tangibleAsset->buildingCategory->description))) : ''), ['bold' => true]);
 
-                    if ($tangibleAsset->other_building){
+                    if ($tangibleAsset->other_building) {
                         $textRun = $section->addTextRun();
                         $textRun->addText('- Tên công trình: ');
-                        $textRun->addText($tangibleAsset->other_building, ['bold' => true]);
-                        $textRun->addText(str_repeat('&nbsp;', (33 - strlen($tangibleAsset->other_building) * 2)>0?(33 - strlen($tangibleAsset->other_building) * 2):10));
+                        $textRun->addText(htmlspecialchars($tangibleAsset->other_building), ['bold' => true]);
+                        $textRun->addText(str_repeat('&nbsp;', (33 - strlen($tangibleAsset->other_building) * 2) > 0 ? (33 - strlen($tangibleAsset->other_building) * 2) : 10));
                         $textRun->addText(" Mô tả: ");
-                        $textRun->addText($tangibleAsset->description, ['bold' => true]);
+                        $textRun->addText(htmlspecialchars($tangibleAsset->description), ['bold' => true]);
                     }
 
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Năm xây dựng: ');
                     $textRun->addText($tangibleAsset->start_using_year, ['bold' => true]);
-                    $textRun->addText(str_repeat('&nbsp;', (38 - strlen($tangibleAsset->start_using_year) * 2)>0?(38 - strlen($tangibleAsset->start_using_year) * 2):10));
+                    $textRun->addText(str_repeat('&nbsp;', (38 - strlen($tangibleAsset->start_using_year) * 2) > 0 ? (38 - strlen($tangibleAsset->start_using_year) * 2) : 10));
                     $textRun->addText(" Chất lượng còn lại: ");
                     $textRun->addText($tangibleAsset->remaining_quality, ['bold' => true]);
                     $textRun->addText('%');
@@ -381,11 +380,11 @@ class AssetReportPdf
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Diện tích sàn xây dựng: ');
                     $textRun->addText(number_format($tangibleAsset->total_construction_base, 2, ',', '.'), ['bold' => true]);
-                    $textRun->addText(" ".$m2." ");
-                    $textRun->addText(str_repeat('&nbsp;', (19 - strlen($tangibleAsset->total_construction_base) * 2)>0?(19 - strlen($tangibleAsset->total_construction_base) * 2):10));
+                    $textRun->addText(" " . $m2 . " ");
+                    $textRun->addText(str_repeat('&nbsp;', (19 - strlen($tangibleAsset->total_construction_base) * 2) > 0 ? (19 - strlen($tangibleAsset->total_construction_base) * 2) : 10));
                     $textRun->addText("Số tầng: ");
 
-                    $textRun->addText($tangibleAsset->floor, ['bold' => true]);
+                    $textRun->addText(htmlspecialchars($tangibleAsset->floor), ['bold' => true]);
 
                     $gpxd = $tangibleAsset->gpxd ? 'Có' : 'Không';
 
@@ -398,8 +397,8 @@ class AssetReportPdf
                 foreach ($object->otherAssets as $otherAssets) {
                     $textRun = $section->addTextRun();
                     $textRun->addText('- Loại tài sản khác: ');
-                    $textRun->addText(isset($otherAssets->other_asset) ? $this->mb_ucfirst(mb_strtolower($otherAssets->other_asset)) : '', ['bold' => true]);
-                    $textRun->addText(str_repeat('&nbsp;', (70 - strlen($otherAssets->other_asset) * 2)>0?(70 - strlen($otherAssets->other_asset) * 2):10));
+                    $textRun->addText(isset($otherAssets->other_asset) ? $this->mb_ucfirst(mb_strtolower(htmlspecialchars($otherAssets->other_asset))) : '', ['bold' => true]);
+                    $textRun->addText(str_repeat('&nbsp;', (70 - strlen($otherAssets->other_asset) * 2) > 0 ? (70 - strlen($otherAssets->other_asset) * 2) : 10));
                     $textRun->addText("Giá trị: ");
                     $textRun->addText(number_format($otherAssets->total_amount, 0, ',', '.'), ['bold' => true]);
                     $textRun->addText(' đồng');
@@ -432,32 +431,31 @@ class AssetReportPdf
             $section->addTextBreak(3);
             $textRun = $section->addTextRun();
             $textRun->addText(str_repeat('&nbsp;', 20));
-            $textRun->addText($object->createdBy->name??'', ['bold' => true], ['align' => JcTable::CENTER]);
+            $textRun->addText($object->createdBy->name ?? '', ['bold' => true], ['align' => JcTable::CENTER]);
             $textRun->addText(str_repeat('&nbsp;', 70 - strlen($object->createdBy->name)));
             $textRun->addText($user->name ?? '', ['bold' => true], ['align' => JcTable::CENTER]);
 
             $footer = $section->addFooter();
             $textRun = $footer->addTextRun();
             $textRun->addText('Người tạo: ');
-            $textRun->addText($object->createdBy->name??'', ['bold' => true], ['align' => JcTable::CENTER]);
+            $textRun->addText($object->createdBy->name ?? '', ['bold' => true], ['align' => JcTable::CENTER]);
         }
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/'. 'comparison_assets/' . $now->format('Y') . '/' . $now->format('m') ;
-        if(!File::exists(storage_path('app/public/'. $path))){
-            File::makeDirectory(storage_path('app/public/'. $path), 0755, true);
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_assets/' . $now->format('Y') . '/' . $now->format('m');
+        if (!File::exists(storage_path('app/public/' . $path))) {
+            File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }
         $objWriter = IOFactory::createWriter($phpWord, 'PDF');
         try {
             $fileName = 'DONAVA_TSSS_' . Carbon::now()->format('Y_m_d') . '.' . $format;
 
             // $objWriter->save(public_path('uploads/doc/' . $fileName));
-            $objWriter->save(storage_path('app/public/'. $path. '/'. $fileName ));
-
+            $objWriter->save(storage_path('app/public/' . $path . '/' . $fileName));
         } catch (\Exception $e) {
             throw $e;
         }
         $data = [];
-        $data['url'] = Storage::disk('public')->url($path . '/'. $fileName);
+        $data['url'] = Storage::disk('public')->url($path . '/' . $fileName);
 
         $data['file_name'] = $fileName;
         return $data;

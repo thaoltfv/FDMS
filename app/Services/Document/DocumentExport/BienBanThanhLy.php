@@ -168,7 +168,7 @@ class BienBanThanhLy
         $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num  : ''), null, $cellHCentered);
+        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? htmlspecialchars($certificate->document_num)  : ''), null, $cellHCentered);
         $row3->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
@@ -191,7 +191,7 @@ class BienBanThanhLy
             $formattedDateDocumentDate = '';
         }
         $section->addText(
-            "(Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num  : '') .
+            "(Hợp đồng số: " . (isset($certificate->document_num) ? htmlspecialchars($certificate->document_num)  : '') .
                 (isset($formattedDateDocumentDate) ? ' ' . $formattedDateDocumentDate : '') . ")",
             ['italic' => true, 'size' => '12'],
             ['align' => 'center']
@@ -205,7 +205,7 @@ class BienBanThanhLy
 
         $row = $table->addRow();
         $row->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row->addCell(9700)->addText("Căn cứ Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
+        $row->addCell(9700)->addText("Căn cứ Hợp đồng số: " . (isset($certificate->document_num) ? htmlspecialchars($certificate->document_num) . ' '  : '') .
             $formattedDateDocumentDate, null, $indentleftSymbol);
 
         if ($certificate->certificate_date) {
@@ -219,7 +219,7 @@ class BienBanThanhLy
         }
         $row2 = $table->addRow();
         $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
+        $row2->addCell(9700)->addText("Căn cứ Chứng thư Thẩm định giá số: " . (isset($certificate->certificate_num) ? htmlspecialchars($certificate->certificate_num) . ' '  : '') .
             $formattedDateCertificateDate, null, $indentleftSymbol);
 
         $table = $section->addTable([
@@ -312,7 +312,7 @@ class BienBanThanhLy
         $chucvu = isset($certificate->appraiserConfirm) && isset($certificate->appraiserConfirm->appraisePosition)
             ? $certificate->appraiserConfirm->appraisePosition->description
             : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
-                ? $certificate->appraiserManager->appraisePosition->description
+                ? htmlspecialchars($certificate->appraiserManager->appraisePosition->description)
                 : '');
 
         $chucvu = mb_convert_case(mb_strtolower($chucvu), MB_CASE_TITLE, "UTF-8");
@@ -320,18 +320,18 @@ class BienBanThanhLy
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
             : (isset($certificate->appraiserManager)
-                ? $certificate->appraiserManager->name
+                ? htmlspecialchars($certificate->appraiserManager->name)
                 : '');
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);
         $row10->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
         $textRun = $row10->addCell(8000, $cellVTop)->addTextRun($alignBoth);
         $textRun->addText('Ông ', ['bold' => false]);
-        $textRun->addText($daidien, ['bold' => true]);
-        $textRun->addText(' – Chức vụ: ' . $chucvu, ['bold' => false]);
+        $textRun->addText(htmlspecialchars($daidien), ['bold' => true]);
+        $textRun->addText(' – Chức vụ: ' . htmlspecialchars($chucvu), ['bold' => false]);
         $section->addText(
-            "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : '') .
-                $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
+            "Bên A xác nhận đã tiếp nhận và nghiệm thu chứng thư Thẩm định giá số " . (isset($certificate->certificate_num) ? htmlspecialchars($certificate->certificate_num) . ' '  : '') .
+                $formattedDateDocumentDate . '. Hai bên thống nhất cùng tiến hành thanh lý Hợp đồng số: ' . (isset($certificate->document_num) ? htmlspecialchars($certificate->document_num) . ' '  : '') .
                 $formattedDateCertificateDate . '.',
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
@@ -382,14 +382,14 @@ class BienBanThanhLy
                 $table = $cell->addTable();
                 $row = $table->addRow();
                 $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
+                $row->addCell(3000)->addText(htmlspecialchars($item->appraise_asset), null, $alignBoth);
                 $row->addCell(100)->addText('');
 
                 $cell = $row3->addCell(3200, $cellVCentered);
                 $table = $cell->addTable();
                 $row = $table->addRow();
                 $row->addCell(100)->addText('');
-                $row->addCell(3000)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                $row->addCell(3000)->addText((isset($certificate->certificate_num) ? htmlspecialchars($certificate->certificate_num) . ' '  : ''), null, $alignBoth);
                 $row->addCell(100)->addText('');
 
                 $row3->addCell(1200, $cellVCentered)->addText(($certificate->certificate_date ? date('d/m/Y', strtotime($certificate->certificate_date)) : ''), null, $alignCenter);
@@ -405,14 +405,14 @@ class BienBanThanhLy
                         $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
                         $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
 
-                        $cell = $row3->addCell(3200, $cellVCentered)->addText($item->apartment->appraise_asset, null, $alignBoth);;
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText(htmlspecialchars($item->apartment->appraise_asset), null, $alignBoth);;
                         // $table = $cell->addTable();
                         // $row = $table->addRow();
                         // $row->addCell(100)->addText('');
                         // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
                         // $row->addCell(100)->addText('');
 
-                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? htmlspecialchars($certificate->certificate_num) . ' '  : ''), null, $alignBoth);
                         // $table = $cell->addTable();
                         // $row = $table->addRow();
                         // $row->addCell(100)->addText('');
@@ -431,14 +431,14 @@ class BienBanThanhLy
                         $total = $certificate->service_fee ?? 0;
                         $textServiceFee = isset($certificate->service_fee) ? $this->formatNumberFunction($certificate->service_fee, 2, ',', '.') : '';
                         $row3->addCell(400, $cellVCentered)->addText($index + 1, null,  $alignCenter);
-                        $cell = $row3->addCell(3200, $cellVCentered)->addText($item->appraises->appraise_asset, null, $alignBoth);
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText(htmlspecialchars($item->appraises->appraise_asset), null, $alignBoth);
                         // $table = $cell->addTable();
                         // $row = $table->addRow();
                         // $row->addCell(100)->addText('');
                         // $row->addCell(3000)->addText($item->appraise_asset, null, $alignBoth);
                         // $row->addCell(100)->addText('');
 
-                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? $certificate->certificate_num . ' '  : ''), null, $alignBoth);
+                        $cell = $row3->addCell(3200, $cellVCentered)->addText((isset($certificate->certificate_num) ? htmlspecialchars($certificate->certificate_num) . ' '  : ''), null, $alignBoth);
                         // $table = $cell->addTable();
                         // $row = $table->addRow();
                         // $row->addCell(100)->addText('');
@@ -469,7 +469,7 @@ class BienBanThanhLy
         $row5->addCell(9900, array('valign' => 'center', 'gridSpan' => 3))->addText('(Bằng chữ: ' . (isset($total)  ? ucfirst(CommonService::convertNumberToWords($total)) . ' đồng ./.' : '') . ')', ['italic' => true],  $alignCenter);
 
         $section->addText(
-            "Hợp đồng số: " . (isset($certificate->document_num) ? $certificate->document_num . ' '  : '') .
+            "Hợp đồng số: " . (isset($certificate->document_num) ? htmlspecialchars($certificate->document_num) . ' '  : '') .
                 $formattedDateCertificateDate . ' được thanh lý khi bên A thanh toán hết số tiền phải thanh toán cho Bên B thì trách nhiệm và nghĩa vụ của hai bên được chấm dứt.',
             null,
             ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
@@ -493,7 +493,7 @@ class BienBanThanhLy
         $textNamePetitioner = str_replace(['ÔNG / BÀ ', 'BÀ ', 'ÔNG '], '', $textNamePetitioner);
         $row2 = $table->addRow();
         $row2->addCell(4950)->addText("CHẤP HÀNH VIÊN", ['bold' => true], ['align' => 'center']);
-        $row2->addCell(4950)->addText($chucvu, ['bold' => true], ['align' => 'center']);
+        $row2->addCell(4950)->addText(htmlspecialchars($chucvu), ['bold' => true], ['align' => 'center']);
 
         $row3 = $table->addRow(1000);
         $row3->addCell(4950)->addText("");
@@ -501,7 +501,7 @@ class BienBanThanhLy
 
         $row4 = $table->addRow();
         $row4->addCell(4950)->addText('', ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText(mb_strtoupper($daidien), ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(mb_strtoupper(htmlspecialchars($daidien)), ['bold' => true], ['align' => 'center']);
 
 
         $filename = (isset($certificate->certificate_num) ? strstr($certificate->certificate_num, '/', true) : '');
@@ -512,7 +512,7 @@ class BienBanThanhLy
 
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }

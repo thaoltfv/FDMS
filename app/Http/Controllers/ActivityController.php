@@ -19,9 +19,8 @@ class ActivityController extends Controller
     {
         try {
             $dataQuery = Activity::where('subject_type', 'App\Models\Certificate')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataQuery))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataQuery)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataQuery, 200);
@@ -35,9 +34,8 @@ class ActivityController extends Controller
     {
         try {
             $dataQuery = Activity::where('subject_type', 'App\Models\PreCertificate')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataQuery))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataQuery)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataQuery, 200);
@@ -52,9 +50,8 @@ class ActivityController extends Controller
     {
         try {
             $dataAppraise = Activity::where('subject_type', 'App\Models\Appraise')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataAppraise))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataAppraise)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataAppraise, 200);
@@ -68,9 +65,8 @@ class ActivityController extends Controller
     {
         try {
             $dataMachine = Activity::where('subject_type', 'App\Models\MachineCertificateAsset')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataMachine))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataMachine)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataMachine, 200);
@@ -85,9 +81,8 @@ class ActivityController extends Controller
     {
         try {
             $dataVerhicle = Activity::where('subject_type', 'App\Models\VerhicleCertificateAsset')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataVerhicle))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataVerhicle)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataVerhicle, 200);
@@ -102,9 +97,8 @@ class ActivityController extends Controller
     {
         try {
             $dataOther = Activity::where('subject_type', 'App\Models\OtherCertificateAsset')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataOther))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataOther)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataOther, 200);
@@ -119,9 +113,8 @@ class ActivityController extends Controller
     {
         try {
             $data = Activity::where('subject_type', 'App\Models\ApartmentAsset')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($data))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($data)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($data, 200);
@@ -131,14 +124,27 @@ class ActivityController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
-
+    public function getPriceEstimateWithId($id)
+    {
+        try {
+            $dataAppraise = Activity::where('subject_type', 'App\Models\PriceEstimate')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
+            if (!isset($dataAppraise)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
+                return $this->respondWithErrorData($data);
+            }
+            return $this->respondWithCustomData($dataAppraise, 200);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => $exception->getMessage(), 'exception' => $exception];
+            return $this->respondWithErrorData($data);
+        }
+    }
     public function getCompareWithId($id)
     {
         try {
             $dataAppraise = Activity::where('subject_type', 'App\Models\CompareAssetGeneral')->where('subject_id',  $id)->with('causer')->orderBy('id', 'desc')->get();
-            if(!isset($dataAppraise))
-            {
-                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND,'exception' => ''];
+            if (!isset($dataAppraise)) {
+                $data = ['message' => ErrorMessage::LOG_ACTIVITY_NOT_FOUND, 'exception' => ''];
                 return $this->respondWithErrorData($data);
             }
             return $this->respondWithCustomData($dataAppraise, 200);
