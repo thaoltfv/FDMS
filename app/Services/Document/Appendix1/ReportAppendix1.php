@@ -1176,6 +1176,7 @@ class ReportAppendix1 extends Report
                         $description = $ytk->description ?: '';
                         if ($this->isApartment)
                             $data[$ytk->position][$item->id] = ['name' => htmlspecialchars($ytk->name), 'title' => htmlspecialchars($ytk->apartment_title), 'asset_title' => htmlspecialchars($ytk->asset_title), 'description' => htmlspecialchars($description), 'adjust_percent' => $ytk->adjust_percent];
+                            $data[$ytk->position][$item->id] = ['name' => htmlspecialchars($ytk->name), 'title' => htmlspecialchars($ytk->apartment_title), 'asset_title' => htmlspecialchars($ytk->asset_title), 'description' => htmlspecialchars($description), 'adjust_percent' => $ytk->adjust_percent];
                         else
                             $data[$ytk->position][$item->id] = ['name' => htmlspecialchars($ytk->name), 'title' => htmlspecialchars($ytk->appraise_title), 'asset_title' => htmlspecialchars($ytk->asset_title), 'description' =>  htmlspecialchars($description), 'adjust_percent' => $ytk->adjust_percent];
                     }

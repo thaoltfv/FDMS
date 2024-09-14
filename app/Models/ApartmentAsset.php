@@ -37,7 +37,8 @@ class ApartmentAsset extends Model
         'real_estate_id',
         'sub_status',
         'full_address',
-        'price_estimate_id', 'apartment_number'
+        'price_estimate_id',
+        'apartment_number'
     ];
 
     protected $hidden = [
@@ -46,12 +47,12 @@ class ApartmentAsset extends Model
 
     public function comparisonFactor(): HasMany
     {
-        return $this->hasMany(ApartmentAssetComparisonFactor::class, 'apartment_asset_id');
+        return $this->hasMany(ApartmentAssetComparisonFactor::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC')->orderBy('position');;
     }
 
     public function apartmentHasAsset(): HasMany
     {
-        return $this->hasMany(ApartmentAssetHasAsset::class, 'apartment_asset_id');
+        return $this->hasMany(ApartmentAssetHasAsset::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC');
     }
 
     public function pic(): HasMany
@@ -215,7 +216,7 @@ class ApartmentAsset extends Model
 
     public function apartmentAdapter(): HasMany
     {
-        return $this->hasMany(ApartmentAssetAdapter::class, 'apartment_asset_id');
+        return $this->hasMany(ApartmentAssetAdapter::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC');
     }
 
     public function otherAssets(): HasMany
