@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('refesh_materialize_view_certificate_brief:cron')->everyMinute()->name('refeshCertificateBrief');
-        $schedule->command('clear-docx-files-render:cron')->everyFiveMinutes()
+        $schedule->command('clear-docx-files-render:cron')->daily()
             ->name('cleanUpDocxFiles');
     }
 
