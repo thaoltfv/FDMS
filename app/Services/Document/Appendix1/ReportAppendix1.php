@@ -63,7 +63,7 @@ class ReportAppendix1 extends Report
         else $reportID = 'TSTD_' . $data->id;
 
         // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
-        return $this->acronym . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return htmlspecialchars($this->acronym) . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -76,7 +76,7 @@ class ReportAppendix1 extends Report
         $section->addImage($this->logoUrl, $this->styleImageLogo);
         $section->addText('PHỤ LỤC 1 KÈM THEO BÁO CÁO THẨM ĐỊNH GIÁ', ['bold' => true, 'size' => 14], ['align' => 'center']);
         $title = $this->isApartment ? $this->apartmentTitle : $this->appraiseTitle;
-        $section->addText($title, ['italic' => true, 'size' => 14], ['align' => 'center']);
+        $section->addText(htmlspecialchars($title), ['italic' => true, 'size' => 14], ['align' => 'center']);
     }
 
     private function setProperties($data)
@@ -706,13 +706,13 @@ class ReportAppendix1 extends Report
         foreach ($comparison as $i) {
             $type = $i->type;
             $iDesription = $i->description ?: 'TƯƠNG ĐỒNG';
-            $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $i->apartment_title : $i->asset_title . ' so với ' . $i->apartment_title;
-            $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+            $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? htmlspecialchars($i->apartment_title) : htmlspecialchars($i->asset_title . ' so với ' . $i->apartment_title);
+            $description = htmlspecialchars($i->name) . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
             // $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
             if ($type == 'dien_tich')
                 $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->apartment_title, 2, ',', '.') . $this->m2 : number_format($i->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($i->apartment_title, 2, ',', '.') . $this->m2;
             else
-                $strCompare = CommonService::mbUcfirst(($iDesription == 'TƯƠNG ĐỒNG') ? $i->apartment_title : $i->asset_title . ' so với ' . $i->apartment_title);
+                $strCompare = CommonService::mbUcfirst(($iDesription == 'TƯƠNG ĐỒNG') ? htmlspecialchars($i->apartment_title) : htmlspecialchars($i->asset_title . ' so với ' . $i->apartment_title));
 
             $description .= $strCompare . ')';
             $cell->addText($description, ['bold' => false]);
@@ -731,15 +731,15 @@ class ReportAppendix1 extends Report
             $i = $comparison->where('type', $type)->first();
             if (!empty($i)) {
                 $iDesription = $i->description ?: 'TƯƠNG ĐỒNG';
-                $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $i->appraise_title : $i->asset_title . ' so với ' . $i->appraise_title;
-                $description = $i->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? htmlspecialchars($i->appraise_title) : htmlspecialchars($i->asset_title . ' so với ' . $i->appraise_title);
+                $description = htmlspecialchars($i->name) . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
                 // $description = $i->name . ' ' . $iDesription . ' TSTĐ ' . '(';
                 if ($type == 'quy_mo')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->appraise_title, 2, ',', '.') . $this->m2 : number_format($i->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($i->appraise_title, 2, ',', '.') . $this->m2;
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($i->appraise_title, 2, ',', '.') . 'm' : number_format($i->asset_title, 2, ',', '.') . 'm' . ' so với ' . number_format($i->appraise_title, 2, ',', '.') . 'm';
                 else
-                    $strCompare = CommonService::mbUcfirst(($iDesription == 'TƯƠNG ĐỒNG') ? $i->appraise_title : $i->asset_title . ' so với ' . $i->appraise_title);
+                    $strCompare = CommonService::mbUcfirst(($iDesription == 'TƯƠNG ĐỒNG') ? htmlspecialchars($i->appraise_title) : htmlspecialchars($i->asset_title . ' so với ' . $i->appraise_title));
 
                 $description .= $strCompare . ')';
                 $cell->addText($description, ['bold' => false]);
@@ -749,15 +749,15 @@ class ReportAppendix1 extends Report
         if (!empty($otherComparisonFactors) && count($otherComparisonFactors) > 0) {
             foreach ($otherComparisonFactors as $other) {
                 $iDesription = $other->description ?: 'TƯƠNG ĐỒNG';
-                $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $other->appraise_title : $other->asset_title . ' so với ' . $other->appraise_title;
-                $description = $other->name . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
+                $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? htmlspecialchars($other->appraise_title) : htmlspecialchars($other->asset_title . ' so với ' . $other->appraise_title);
+                $description = htmlspecialchars($other->name) . ' ' . mb_strtolower($iDesription) . ' TSTĐ ' . '(';
                 // $description = $other->name . ' ' . $iDesription . ' TSTĐ ' . '(';
                 if ($type == 'quy_mo')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($other->appraise_title, 2, ',', '.') . $this->m2 : number_format($other->asset_title, 2, ',', '.') . $this->m2 . ' so với ' . number_format($other->appraise_title, 2, ',', '.') . $this->m2;
                 elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
                     $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? number_format($other->appraise_title, 2, ',', '.') . 'm' : number_format($other->asset_title, 2, ',', '.') . 'm' . ' so với ' . number_format($other->appraise_title, 2, ',', '.') . 'm';
                 else
-                    $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? $other->appraise_title : $other->asset_title . ' so với ' . $other->appraise_title;
+                    $strCompare = ($iDesription == 'TƯƠNG ĐỒNG') ? htmlspecialchars($other->appraise_title) : htmlspecialchars($other->asset_title . ' so với ' . $other->appraise_title);
 
                 $description .= $strCompare . ')';
                 $cell->addText($description, ['bold' => false]);
@@ -780,7 +780,7 @@ class ReportAppendix1 extends Report
                 $table->addRow(500, $this->cantSplit);
                 $table->addCell(600, $this->cellRowSpan)->addText('+', $this->styleBold, $this->cellHCenteredKeepNext);
                 $cell = $table->addCell(10000, $this->cellColSpan);
-                $cell->addText($compare1->name, $this->styleBold, ['align' => JcTable::START, 'keepNext' => true]);
+                $cell->addText(htmlspecialchars($compare1->name), $this->styleBold, ['align' => JcTable::START, 'keepNext' => true]);
                 $this->getDifferenceAssetByType($table, $compare1, 1);
                 $this->getDifferenceAssetByType($table, $compare2, 2);
                 $this->getDifferenceAssetByType($table, $compare3, 3);
@@ -794,7 +794,7 @@ class ReportAppendix1 extends Report
                 $table->addRow(500, $this->cantSplit);
                 $table->addCell(600, $this->cellRowSpan)->addText('+', $this->styleBold, $this->cellHCenteredKeepNext);
                 $cell = $table->addCell(10000, $this->cellColSpan);
-                $cell->addText($other->name, $this->styleBold, ['align' => JcTable::START, 'keepNext' => true]);
+                $cell->addText(htmlspecialchars($other->name), $this->styleBold, ['align' => JcTable::START, 'keepNext' => true]);
                 $this->getDifferenceAssetByType($table,  $other, 1);
                 $this->getDifferenceAssetByType($table, $compare2, 2);
                 $this->getDifferenceAssetByType($table, $compare3, 3);
@@ -809,14 +809,14 @@ class ReportAppendix1 extends Report
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right']);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . abs($compare->adjust_percent) . '%');
+            $cell->addText(CommonService::mbUcfirst(htmlspecialchars($description)) . ' TSTĐ ' . abs($compare->adjust_percent) . '%');
         } else {
             $table->addRow(400, $this->cantSplit);
             $table->addCell(600, $this->cellVCentered)->addText('', $this->styleBold, $this->cellHCenteredKeepNext);
             $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText('TSSS' . $stt . ':', $this->styleBold, ['align' => 'right', 'keepNext' => true]);
             $cell = $table->addCell(10000 - $this->columnWidthSecond, $this->cellVCentered);
             $description = $compare->description ?: '';
-            $cell->addText(CommonService::mbUcfirst($description) . ' TSTĐ ' . abs($compare->adjust_percent) . '%', null, $this->keepNext);
+            $cell->addText(CommonService::mbUcfirst(htmlspecialchars($description)) . ' TSTĐ ' . abs($compare->adjust_percent) . '%', null, $this->keepNext);
         }
     }
     protected function getAdjustComparisonFactor(Section $section, $asset)
@@ -858,14 +858,14 @@ class ReportAppendix1 extends Report
                     if ($type == 'dien_tich')
                         $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                     else
-                        $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->apartment_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                        $this->addCompareRowDescription($table, $title, $alphas[$stt], htmlspecialchars($compare1->apartment_title), htmlspecialchars($compare1->asset_title), htmlspecialchars($compare2->asset_title), htmlspecialchars($compare3->asset_title), true);
                 } else {
                     if ($type == 'quy_mo')
                         $this->addCompareRowLengh($table, $title . " ($this->m2)", $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                     elseif ($type == 'chieu_rong_mat_tien' || $type == 'chieu_sau_khu_dat' || $type == 'do_rong_duong')
                         $this->addCompareRowLengh($table, $title . ' (m)', $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
                     else
-                        $this->addCompareRowDescription($table, $title, $alphas[$stt], $compare1->appraise_title, $compare1->asset_title, $compare2->asset_title, $compare3->asset_title, true);
+                        $this->addCompareRowDescription($table, $title, $alphas[$stt], htmlspecialchars($compare1->appraise_title), htmlspecialchars($compare1->asset_title), htmlspecialchars($compare2->asset_title), htmlspecialchars($compare3->asset_title), true);
                 }
                 $this->addCompareRowExt($table,  $rateTitle, '', '-', $compare1->adjust_percent, $compare2->adjust_percent, $compare3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $compare1->adjust_price, $compare2->adjust_price, $compare3->adjust_price);
@@ -878,10 +878,10 @@ class ReportAppendix1 extends Report
         if (!empty($others) && count($others) > 0) {
             foreach ($others as $other1) {
                 $position = $other1->position;
-                $title = $other1->name;
+                $title = htmlspecialchars($other1->name);
                 $other2 = $this->comparisonFactor2->where('type', 'yeu_to_khac')->where('position', $position)->first();
                 $other3 = $this->comparisonFactor3->where('type', 'yeu_to_khac')->where('position', $position)->first();
-                $this->addCompareRowExt($table, $title, $alphas[$stt], $other1->appraise_title, $other1->asset_title, $other2->asset_title, $other3->asset_title, true);
+                $this->addCompareRowExt($table, $title, $alphas[$stt], htmlspecialchars($other1->appraise_title), htmlspecialchars($other1->asset_title), htmlspecialchars($other2->asset_title), htmlspecialchars($other3->asset_title), true);
                 $this->addCompareRowExt($table,  $rateTitle, '', '-', $other1->adjust_percent, $other2->adjust_percent, $other3->adjust_percent, false, '%');
                 $this->addCompareRowPriceAjust($table,  $adjustTitle, '', '-', $other1->adjust_price, $other2->adjust_price, $other3->adjust_price);
                 $this->addCompareRowPrice($table,  $priceAfterAdjust, '', '-', $other1->total_price, $other2->total_price, $other3->total_price);
@@ -1135,7 +1135,7 @@ class ReportAppendix1 extends Report
                     if ($method->slug_value == 'theo-gia-dat-qd-ubnd') {
                         if (!$sttTmp) {
                             $textRun = $section->addTextRun();
-                            $textRun->addText('     - Phần diện tích đất thuộc ' . $item->type_zoning . ' (hạn chế khả năng sử dụng) nên ' . $this->acronym . ' ước tính theo đơn giá đất quyết định UBND:', ['bold' => false]);
+                            $textRun->addText('     - Phần diện tích đất thuộc ' . htmlspecialchars($item->type_zoning) . ' (hạn chế khả năng sử dụng) nên ' . $this->acronym . ' ước tính theo đơn giá đất quyết định UBND:', ['bold' => false]);
                         }
                     }
                     if ($method->slug_value == 'theo-ty-le-gia-dat-thi-truong') {
@@ -1175,9 +1175,10 @@ class ReportAppendix1 extends Report
                     foreach ($ytks as $ytk) {
                         $description = $ytk->description ?: '';
                         if ($this->isApartment)
-                            $data[$ytk->position][$item->id] = ['name' => $ytk->name, 'title' => $ytk->apartment_title, 'asset_title' => $ytk->asset_title, 'description' => $description, 'adjust_percent' => $ytk->adjust_percent];
+                            $data[$ytk->position][$item->id] = ['name' => htmlspecialchars($ytk->name), 'title' => htmlspecialchars($ytk->apartment_title), 'asset_title' => htmlspecialchars($ytk->asset_title), 'description' => htmlspecialchars($description), 'adjust_percent' => $ytk->adjust_percent];
+                            $data[$ytk->position][$item->id] = ['name' => htmlspecialchars($ytk->name), 'title' => htmlspecialchars($ytk->apartment_title), 'asset_title' => htmlspecialchars($ytk->asset_title), 'description' => htmlspecialchars($description), 'adjust_percent' => $ytk->adjust_percent];
                         else
-                            $data[$ytk->position][$item->id] = ['name' => $ytk->name, 'title' => $ytk->appraise_title, 'asset_title' => $ytk->asset_title, 'description' => $description, 'adjust_percent' => $ytk->adjust_percent];
+                            $data[$ytk->position][$item->id] = ['name' => htmlspecialchars($ytk->name), 'title' => htmlspecialchars($ytk->appraise_title), 'asset_title' => htmlspecialchars($ytk->asset_title), 'description' =>  htmlspecialchars($description), 'adjust_percent' => $ytk->adjust_percent];
                     }
                 }
                 $stt++;
@@ -1212,9 +1213,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             'Chưa biết',
-            ($this->asset1->contact_person ?: 'Liên hệ:') . "\n" . $this->asset1->contact_phone ?: '',
-            ($this->asset2->contact_person ?: 'Liên hệ:') . "\n" . $this->asset2->contact_phone ?: '',
-            ($this->asset3->contact_person ?: 'Liên hệ:') . "\n" . $this->asset3->contact_phone ?: '',
+            ($this->asset1->contact_person ? htmlspecialchars($this->asset1->contact_person) : 'Liên hệ:') . "\n" . $this->asset1->contact_phone ? htmlspecialchars($this->asset1->contact_phone) : '',
+            ($this->asset2->contact_person ? htmlspecialchars($this->asset2->contact_person) : 'Liên hệ:') . "\n" . $this->asset2->contact_phone ? htmlspecialchars($this->asset2->contact_phone) : '',
+            ($this->asset3->contact_person ? htmlspecialchars($this->asset3->contact_person) : 'Liên hệ:') . "\n" . $this->asset3->contact_phone ? htmlspecialchars($this->asset3->contact_phone) : '',
             false
         ];
         return $data;
@@ -1282,9 +1283,9 @@ class ReportAppendix1 extends Report
             // '-',
             // '-',
             // '-',
-            CommonService::getCompareWithIdNote($this->asset1->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset1->id)) : '-',
-            CommonService::getCompareWithIdNote($this->asset2->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset2->id)) : '-',
-            CommonService::getCompareWithIdNote($this->asset3->id) ? CommonService::mbUcfirst(CommonService::getCompareWithIdNote($this->asset3->id)) : '-',
+            CommonService::getCompareWithIdNote($this->asset1->id) ? CommonService::mbUcfirst(htmlspecialchars(CommonService::getCompareWithIdNote($this->asset1->id))) : '-',
+            CommonService::getCompareWithIdNote($this->asset2->id) ? CommonService::mbUcfirst(htmlspecialchars(CommonService::getCompareWithIdNote($this->asset2->id))) : '-',
+            CommonService::getCompareWithIdNote($this->asset3->id) ? CommonService::mbUcfirst(htmlspecialchars(CommonService::getCompareWithIdNote($this->asset3->id))) : '-',
             false
         ];
         return $data;
@@ -1342,10 +1343,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->block && $asset->apartmentAssetProperties->block->rank && $asset->apartmentAssetProperties->block->rank->description) ? $asset->apartmentAssetProperties->block->rank->description : '-',
-            ($this->asset1->block && $this->asset1->block->rank && $this->asset1->block->rank->description) ? $this->asset1->block->rank->description : '-',
-            ($this->asset2->block && $this->asset2->block->rank && $this->asset2->block->rank->description) ? $this->asset2->block->rank->description : '-',
-            ($this->asset3->block && $this->asset3->block->rank && $this->asset3->block->rank->description) ? $this->asset3->block->rank->description : '-',
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->block && $asset->apartmentAssetProperties->block->rank && $asset->apartmentAssetProperties->block->rank->description) ? htmlspecialchars($asset->apartmentAssetProperties->block->rank->description) : '-',
+            ($this->asset1->block && $this->asset1->block->rank && $this->asset1->block->rank->description) ? htmlspecialchars($this->asset1->block->rank->description) : '-',
+            ($this->asset2->block && $this->asset2->block->rank && $this->asset2->block->rank->description) ? htmlspecialchars($this->asset2->block->rank->description) : '-',
+            ($this->asset3->block && $this->asset3->block->rank && $this->asset3->block->rank->description) ? htmlspecialchars($this->asset3->block->rank->description) : '-',
             false
         ];
         return $data;
@@ -1363,7 +1364,7 @@ class ReportAppendix1 extends Report
             $floorName = ($item->floor && $item->floor->name) ? 'tầng ' . $item->floor->name : '';
             $blockName = ($item->block && $item->block->name) ? 'khu ' . $item->block->name : '';
             $projectName = ($item->project && $item->project->name) ? 'chung cư ' . $item->project->name : '';
-            $data[$index] =  $apartmentName . ' ' . $floorName . ' ' . $blockName . ' ' . $projectName;
+            $data[$index] =  htmlspecialchars($apartmentName . ' ' . $floorName . ' ' . $blockName . ' ' . $projectName);
             $index++;
         }
         return $data;
@@ -1412,10 +1413,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            $compare1 ? CommonService::mbUcfirst($compare1->apartment_title ? $compare1->apartment_title : $compare1->appraise_title) : '-',
-            $compare1 ? CommonService::mbUcfirst($compare1->asset_title) : '-',
-            $compare2 ? CommonService::mbUcfirst($compare2->asset_title) : '-',
-            $compare3 ? CommonService::mbUcfirst($compare3->asset_title) : '-',
+            $compare1 ? CommonService::mbUcfirst($compare1->apartment_title ? htmlspecialchars($compare1->apartment_title) : htmlspecialchars($compare1->appraise_title)) : '-',
+            $compare1 ? CommonService::mbUcfirst(htmlspecialchars($compare1->asset_title)) : '-',
+            $compare2 ? CommonService::mbUcfirst(htmlspecialchars($compare2->asset_title)) : '-',
+            $compare3 ? CommonService::mbUcfirst(htmlspecialchars($compare3->asset_title)) : '-',
             false
         ];
         return $data;
@@ -1425,10 +1426,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->floor && $asset->apartmentAssetProperties->floor->name) ? $asset->apartmentAssetProperties->floor->name : '-',
-            ($this->asset1->floor && $this->asset1->floor->name) ? $this->asset1->floor->name : '-',
-            ($this->asset2->floor && $this->asset2->floor->name) ? $this->asset2->floor->name : '-',
-            ($this->asset3->floor && $this->asset3->floor->name) ? $this->asset3->floor->name : '-',
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->floor && $asset->apartmentAssetProperties->floor->name) ? htmlspecialchars($asset->apartmentAssetProperties->floor->name) : '-',
+            ($this->asset1->floor && $this->asset1->floor->name) ? htmlspecialchars($this->asset1->floor->name) : '-',
+            ($this->asset2->floor && $this->asset2->floor->name) ? htmlspecialchars($this->asset2->floor->name) : '-',
+            ($this->asset3->floor && $this->asset3->floor->name) ? htmlspecialchars($this->asset3->floor->name) : '-',
             false
         ];
         return $data;
@@ -1438,10 +1439,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->apartment_name) ? $asset->apartmentAssetProperties->apartment_name : '-',
-            ($this->asset1->apartment_specification && $this->asset1->apartment_specification->apartment_name) ? $this->asset1->apartment_specification->apartment_name : '-',
-            ($this->asset2->apartment_specification && $this->asset2->apartment_specification->apartment_name) ? $this->asset2->apartment_specification->apartment_name : '-',
-            ($this->asset3->apartment_specification && $this->asset3->apartment_specification->apartment_name) ? $this->asset3->apartment_specification->apartment_name : '-',
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->apartment_name) ? htmlspecialchars($asset->apartmentAssetProperties->apartment_name) : '-',
+            ($this->asset1->apartment_specification && $this->asset1->apartment_specification->apartment_name) ? htmlspecialchars($this->asset1->apartment_specification->apartment_name) : '-',
+            ($this->asset2->apartment_specification && $this->asset2->apartment_specification->apartment_name) ? htmlspecialchars($this->asset2->apartment_specification->apartment_name) : '-',
+            ($this->asset3->apartment_specification && $this->asset3->apartment_specification->apartment_name) ? htmlspecialchars($this->asset3->apartment_specification->apartment_name) : '-',
             false
         ];
         return $data;
@@ -1477,10 +1478,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->direction && $asset->apartmentAssetProperties->direction->description) ? CommonService::mbUcfirst($asset->apartmentAssetProperties->direction->description) : '-',
-            ($this->asset1->room_details[0] && $this->asset1->room_details[0]->direction && $this->asset1->room_details[0]->direction->description) ? CommonService::mbUcfirst($this->asset1->room_details[0]->direction->description) : '-',
-            ($this->asset2->room_details[0] && $this->asset2->room_details[0]->direction && $this->asset2->room_details[0]->direction->description) ? CommonService::mbUcfirst($this->asset2->room_details[0]->direction->description) : '-',
-            ($this->asset3->room_details[0] && $this->asset3->room_details[0]->direction && $this->asset3->room_details[0]->direction->description) ? CommonService::mbUcfirst($this->asset3->room_details[0]->direction->description) : '-',
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->direction && $asset->apartmentAssetProperties->direction->description) ? CommonService::mbUcfirst(htmlspecialchars($asset->apartmentAssetProperties->direction->description)) : '-',
+            ($this->asset1->room_details[0] && $this->asset1->room_details[0]->direction && $this->asset1->room_details[0]->direction->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset1->room_details[0]->direction->description)) : '-',
+            ($this->asset2->room_details[0] && $this->asset2->room_details[0]->direction && $this->asset2->room_details[0]->direction->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset2->room_details[0]->direction->description)) : '-',
+            ($this->asset3->room_details[0] && $this->asset3->room_details[0]->direction && $this->asset3->room_details[0]->direction->description) ? CommonService::mbUcfirst(htmlspecialchars($this->asset3->room_details[0]->direction->description)) : '-',
             false
         ];
         return $data;
@@ -1503,10 +1504,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->description) ? str_replace("\n", '<w:br/>   ', $asset->apartmentAssetProperties->description) : '-',
-            ($this->asset1->room_details[0] && $this->asset1->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', $this->asset1->room_details[0]->description) : '-',
-            ($this->asset2->room_details[0] && $this->asset2->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', $this->asset2->room_details[0]->description) : '-',
-            ($this->asset3->room_details[0] && $this->asset3->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', $this->asset3->room_details[0]->description) : '-',
+            ($asset->apartmentAssetProperties && $asset->apartmentAssetProperties->description) ? str_replace("\n", '<w:br/>   ', htmlspecialchars($asset->apartmentAssetProperties->description)) : '-',
+            ($this->asset1->room_details[0] && $this->asset1->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', htmlspecialchars($this->asset1->room_details[0]->description)) : '-',
+            ($this->asset2->room_details[0] && $this->asset2->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', htmlspecialchars($this->asset2->room_details[0]->description)) : '-',
+            ($this->asset3->room_details[0] && $this->asset3->room_details[0]->description) ? str_replace("\n", '<w:br/>   ', htmlspecialchars($this->asset3->room_details[0]->description)) : '-',
             false
         ];
         return $data;
@@ -1565,10 +1566,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            ($asset->project && $asset->project->name) ? $asset->project->name : '-',
-            ($this->asset1->project && $this->asset1->project->name) ? $this->asset1->project->name : '-',
-            ($this->asset2->project && $this->asset2->project->name) ? $this->asset2->project->name : '-',
-            ($this->asset3->project && $this->asset3->project->name) ? $this->asset3->project->name : '-',
+            ($asset->project && $asset->project->name) ? htmlspecialchars($asset->project->name) : '-',
+            ($this->asset1->project && $this->asset1->project->name) ? htmlspecialchars($this->asset1->project->name) : '-',
+            ($this->asset2->project && $this->asset2->project->name) ? htmlspecialchars($this->asset2->project->name) : '-',
+            ($this->asset3->project && $this->asset3->project->name) ? htmlspecialchars($this->asset3->project->name) : '-',
             false
         ];
         return $data;
@@ -1781,10 +1782,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            (count($asset->properties) > 0 && $asset->properties[0] && $asset->properties[0]->description) ? $asset->properties[0]->description : '-',
-            (count($this->asset1->properties) > 0 && $this->asset1->properties[0] && $this->asset1->properties[0]->description) ? $this->asset1->properties[0]->description : '-',
-            (count($this->asset2->properties) > 0 && $this->asset2->properties[0] && $this->asset2->properties[0]->description) ? $this->asset2->properties[0]->description : '-',
-            (count($this->asset3->properties) > 0 && $this->asset3->properties[0] && $this->asset3->properties[0]->description) ? $this->asset3->properties[0]->description : '-',
+            (count($asset->properties) > 0 && $asset->properties[0] && $asset->properties[0]->description) ? htmlspecialchars($asset->properties[0]->description) : '-',
+            (count($this->asset1->properties) > 0 && $this->asset1->properties[0] && $this->asset1->properties[0]->description) ? htmlspecialchars($this->asset1->properties[0]->description) : '-',
+            (count($this->asset2->properties) > 0 && $this->asset2->properties[0] && $this->asset2->properties[0]->description) ? htmlspecialchars($this->asset2->properties[0]->description) : '-',
+            (count($this->asset3->properties) > 0 && $this->asset3->properties[0] && $this->asset3->properties[0]->description) ? htmlspecialchars($this->asset3->properties[0]->description) : '-',
             false
         ];
         return $data;
@@ -1803,10 +1804,10 @@ class ReportAppendix1 extends Report
         $data = [
             $stt,
             $title,
-            $compare1 ? CommonService::mbUcfirst($compare1->appraise_title) : '-',
-            $compare1 ? CommonService::mbUcfirst($compare1->asset_title) : '-',
-            $compare2 ? CommonService::mbUcfirst($compare2->asset_title) : '-',
-            $compare3 ? CommonService::mbUcfirst($compare3->asset_title) : '-',
+            $compare1 ? CommonService::mbUcfirst(htmlspecialchars($compare1->appraise_title)) : '-',
+            $compare1 ? CommonService::mbUcfirst(htmlspecialchars($compare1->asset_title)) : '-',
+            $compare2 ? CommonService::mbUcfirst(htmlspecialchars($compare2->asset_title)) : '-',
+            $compare3 ? CommonService::mbUcfirst(htmlspecialchars($compare3->asset_title)) : '-',
             false
         ];
         return $data;
@@ -2037,11 +2038,11 @@ class ReportAppendix1 extends Report
     {
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ($alpha == '') ? $this->cellRowContinue : $this->cellRowSpan)->addText($alpha, ['bold' => $isBold], $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText($title, ['bold' => $isBold], $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col1), null, $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col2) . $ext, null, $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col3) . $ext, null, $this->cellHCenteredKeepNext);
-        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst($col4) . $ext, null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthFirst, $this->cellVCentered)->addText(htmlspecialchars($title), ['bold' => $isBold], $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst(htmlspecialchars($col1)), null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst(htmlspecialchars($col2)) . $ext, null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst(htmlspecialchars($col3)) . $ext, null, $this->cellHCenteredKeepNext);
+        $table->addCell($this->columnWidthSecond, $this->cellVCentered)->addText(CommonService::mbUcfirst(htmlspecialchars($col4)) . $ext, null, $this->cellHCenteredKeepNext);
     }
     protected function addCompareRowLengh($table, $title, $alpha, $col1, $col2, $col3, $col4, $isBold = false)
     {

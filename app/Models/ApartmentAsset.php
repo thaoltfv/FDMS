@@ -47,7 +47,7 @@ class ApartmentAsset extends Model
 
     public function comparisonFactor(): HasMany
     {
-        return $this->hasMany(ApartmentAssetComparisonFactor::class, 'apartment_asset_id');
+        return $this->hasMany(ApartmentAssetComparisonFactor::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC')->orderBy('position');;
     }
 
     public function apartmentHasAsset(): HasMany

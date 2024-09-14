@@ -12,12 +12,12 @@ class ReportCertificateNova extends ReportCertificate
 {
     protected function content1(Section $section, $certificate)
     {
-        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . $this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.', 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Căn cứ Báo cáo thẩm định giá, " . $this->companyName . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Căn cứ Hợp đồng thẩm định giá số " . htmlspecialchars($this->contractCode) . ' ' . $this->documentLongDateText . " giữa " . htmlspecialchars($this->companyName) . " và " . htmlspecialchars($certificate->petitioner_name) . '.', 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Căn cứ Báo cáo thẩm định giá, " . htmlspecialchars($this->companyName) . " cung cấp Chứng thư thẩm định giá với các nội dung sau đây:", 0, [], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addTitle("Khách hàng thẩm định giá:", 2);
         $section->addListItem("Khách hàng: " . htmlspecialchars($certificate->petitioner_name), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets',  array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Số điện thoại: " . (isset($certificate->petitioner_phone) ? $certificate->petitioner_phone : ''), 0, [], 'bullets', $this->indentFistLine);
+        $section->addListItem("Số điện thoại: " . (isset($certificate->petitioner_phone) ? htmlspecialchars($certificate->petitioner_phone) : ''), 0, [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về doanh nghiệp thẩm định giá:", 2);
         $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá NOVA", 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Địa chỉ: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP. Hồ Chí Minh", 0, [], 'bullets', $this->indentFistLine);
@@ -42,7 +42,7 @@ class ReportCertificateNova extends ReportCertificate
         $textRun->addText("Mục đích thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         if ($appraisePurpose === 'Vay vốn ngân hàng')
             $appraisePurpose = 'Tư vấn giá trị tài sản để ngân hàng tham khảo và xem xét quyết định hạn mức để cấp tín dụng';
-        $textRun->addText($appraisePurpose, ['bold' => false], ['keepNext' => false]);
+        $textRun->addText(htmlspecialchars($appraisePurpose), ['bold' => false], ['keepNext' => false]);
         $textRun = $section->addTextRun(array(
             'styleName' => 'Heading2',
             'keepNext' => false
@@ -69,7 +69,7 @@ class ReportCertificateNova extends ReportCertificate
         $textRun->addText("Cách tiếp cận, phương pháp thẩm định giá: ", ['bold' => true], ['keepNext' => false]);
         $textRun->addText("Chi tiết xem tại Mục V, Báo cáo thẩm định giá.", ['bold' => false], ['keepNext' => false]);
         $section->addTitle("Giá trị tài sản thẩm định giá: ", 2);
-        $section->addText("Với thông tin như trên, " . $this->companyName . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addText("Với thông tin như trên, " . htmlspecialchars($this->companyName) . " thông báo kết quả ước tính giá trị tài sản như sau:", [], array_merge($this->indentFistLine, ['keepNext' => false]));
         $propertyDetailtotalZoningAll = 0;
         if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank != 0) {
             foreach ($certificate->realEstate as $stt => $realEstate) {
@@ -108,7 +108,7 @@ class ReportCertificateNova extends ReportCertificate
         $section->addListItem("Chứng thư phát hành có kèm theo Báo cáo TĐG và các phụ lục.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         // $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt, cấp cho khách hàng 02 bản, lưu tại " . $this->companyName . " 01 bản và có giá trị pháp lý như nhau.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
         $section->addListItem("Chứng thư thẩm định giá được phát hành 03 bản chính tiếng Việt tại Công ty TNHH Thẩm định giá Nova. Công ty TNHH Thẩm định giá Nova giữ 01 bản, khách hàng thẩm định giá giữ 02 bản - có giá trị pháp lý như nhau.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
-        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . $this->companyName . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
+        $section->addListItem("Mọi hình thức sao chép chứng thư thẩm định giá không có sự đồng ý bằng văn bản của " . htmlspecialchars($this->companyName) . " đều là hành vi vi phạm pháp luật.", 0, ['italic' => true], 'bullets', array_merge($this->indentFistLine, ['keepNext' => false]));
 
         $section->addTextBreak(null, null);
     }
@@ -161,7 +161,7 @@ class ReportCertificateNova extends ReportCertificate
             $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png';
             // $cell11->addImage(storage_path('app/public/'.$imgName), $this->styleImageLogo);
             $cell12 = $table1->addCell(Converter::inchToTwip(3), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
-            $cell12->addText(CommonService::downLineCompanyName($this->companyName, $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
+            $cell12->addText(CommonService::downLineCompanyName(htmlspecialchars($this->companyName), $this->companyDownLine), ['bold' => true, 'size' => '12'], $this->styleAlignCenter);
             $cell12->addImage(storage_path('app/public/' . $imgName), $this->styleImageHeader1);
             // $table1->addCell(Converter::inchToTwip(.1), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);
             $cell13 = $table1->addCell(Converter::inchToTwip(5), ['valign' => 'top', 'borderBottomSize' => 20, 'underline' => 'dash']);

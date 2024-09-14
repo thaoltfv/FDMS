@@ -951,7 +951,7 @@ class HopDongTDG
         $row2->addCell(1000, $cellVCentered)->addText('', ['bold' => true,], $cellHCentered);
         $row2->addCell(5700, $cellVCentered)->addText('Độc lập – Tự do - Hạnh phúc', ['bold' => true,   'underline' => 'single'], $cellHCentered);
         $row3 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? $certificate->document_num . '' : ''), null, $cellHCentered);
+        $row3->addCell(3500, $cellVCentered)->addText('Số: ' . (isset($certificate->document_num) ? htmlspecialchars($certificate->document_num) . '' : ''), null, $cellHCentered);
         $row3->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
@@ -1112,12 +1112,12 @@ class HopDongTDG
             : (isset($certificate->appraiserManager) && isset($certificate->appraiserManager->appraisePosition)
                 ? $certificate->appraiserManager->appraisePosition->description
                 : '');
-        $chucvu = mb_convert_case(mb_strtolower($chucvu), MB_CASE_TITLE, "UTF-8");
+        $chucvu = mb_convert_case(mb_strtolower(htmlspecialchars($chucvu)), MB_CASE_TITLE, "UTF-8");
 
         $daidien = isset($certificate->appraiserConfirm)
             ? $certificate->appraiserConfirm->name
             : (isset($certificate->appraiserManager)
-                ? $certificate->appraiserManager->name
+                ? htmlspecialchars($certificate->appraiserManager->name)
                 : '');
         $textRun->addText('Ông ', ['bold' => false]);
         $textRun->addText(mb_strtoupper($daidien), ['bold' => true]);
@@ -1212,10 +1212,10 @@ class HopDongTDG
                         if ($item->apartment->law) {
                             foreach ($item->apartment->law as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 bản photo Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy " . htmlspecialchars($item2->content) . " do " . htmlspecialchars($item2->certifying_agency) . " cấp.";
                             }
                         }
-                        $addressHSTD = $item->apartment->full_address;
+                        $addressHSTD = htmlspecialchars($item->apartment->full_address);
                         // Dòng địa chỉ
                         $firstRow[] = $stt;
                         $firstRow[] = htmlspecialchars($item->apartment->full_address);
@@ -1246,10 +1246,10 @@ class HopDongTDG
                         if ($item->appraises->appraiseLaw) {
                             foreach ($item->appraises->appraiseLaw as $index2 => $item2) {
                                 $appraise_law .= ($index2) ? " và " : "";
-                                $appraise_law .= "01 bản photo Giấy " . $item2->content . " do " . $item2->certifying_agency . " cấp.";
+                                $appraise_law .= "01 bản photo Giấy " . htmlspecialchars($item2->content) . " do " . htmlspecialchars($item2->certifying_agency) . " cấp.";
                             }
                         }
-                        $addressHSTD = $item->appraises->full_address;
+                        $addressHSTD = htmlspecialchars($item->appraises->full_address);
                         // Dòng địa chỉ
                         $firstRow[] = $stt;
                         $firstRow[] = htmlspecialchars($item->appraises->full_address);
@@ -1271,7 +1271,7 @@ class HopDongTDG
                             foreach ($checktangibleAsset as $key => $tangible) {
                                 $tempRow = [];
                                 $tempRow[] = '';
-                                $tempRow[] = $tangible->tangible_name;
+                                $tempRow[] = htmlspecialchars($tangible->tangible_name);
                                 $tempRow[] = (isset($tangible->total_construction_area) ? $this->formatNumberFunction($tangible->total_construction_area, 2, ',', '.') : '');
                                 $tempRow[] = $tangible->remaining_quality == 100 ? 'Mới' : 'Đã qua sử dụng';
 
@@ -1732,8 +1732,8 @@ class HopDongTDG
         $row6->addCell(4950)->addText("\n\n\n\n\n");
 
         $row4 = $table->addRow();
-        $row4->addCell(4950)->addText($textNamePetitioner, ['bold' => true], ['align' => 'center']);
-        $row4->addCell(4950)->addText(mb_strtoupper($daidien), ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(htmlspecialchars($textNamePetitioner), ['bold' => true], ['align' => 'center']);
+        $row4->addCell(4950)->addText(mb_strtoupper(htmlspecialchars($daidien)), ['bold' => true], ['align' => 'center']);
 
 
 
@@ -1742,12 +1742,9 @@ class HopDongTDG
         $table->addRow();
         $table->addCell(9900)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0));
         $reportUserName = CommonService::getUserReport();
-        $reportName = 'HDTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
-        $reportName = str_replace(
-            ['/', '\\', ':', '*', '?', '"', '<', '>', '|'],
-            '',
-            $reportName
-        ); // replace invalid characters with underscore
+        $reportName = 'HDTDG' . '_' . ($certificate->petitioner_name);
+        $reportName = str_replace(['%', '@', '!', '#', '&', '/', '\\', ':', '*', '?', '"', '<', '>', '|'], ' ', $reportName); // replace invalid characters with underscore
+
         $reportName = str_replace(
             ' ',
             '_',
@@ -1759,7 +1756,7 @@ class HopDongTDG
 
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
-        $path =  env('STORAGE_DOCUMENTS') . '/' . 'comparison_brief/' . $now->format('Y') . '/' . $now->format('m') . '/';
+        $path =  env('STORAGE_DOCUMENTS') . '/' . 'certification_briefs/' . $now->format('Y') . '/' . $now->format('m') . '/';
         if (!File::exists(storage_path('app/public/' . $path))) {
             File::makeDirectory(storage_path('app/public/' . $path), 0755, true);
         }

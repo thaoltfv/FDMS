@@ -32,7 +32,7 @@ class ReportAppendix2 extends Report
         else $reportID = 'TSTD_' . $data->id;
 
         // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
-        return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return mb_strtoupper(htmlspecialchars($this->acronym))  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -138,7 +138,7 @@ class ReportAppendix2 extends Report
     {
         $section->addText('❖ Về nguyên giá của nhà cửa, vật kiến trúc:', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
-        $textRun->addText('- Giá trị công trình xây dựng ' . $this->acronym . ' căn cứ vào đặc điểm kết cấu, kiến trúc, khẩu độ, chiều cao, công năng sử dụng, vật liệu sử dụng…. trên cơ sở những thông tin, tài liệu thu thập và phương pháp thẩm định giá được lựa chọn tại phần 3, mục VIII của Báo cáo này, mức giá ước tính như sau:');
+        $textRun->addText('- Giá trị công trình xây dựng ' . htmlspecialchars($this->acronym) . ' căn cứ vào đặc điểm kết cấu, kiến trúc, khẩu độ, chiều cao, công năng sử dụng, vật liệu sử dụng…. trên cơ sở những thông tin, tài liệu thu thập và phương pháp thẩm định giá được lựa chọn tại phần 3, mục VIII của Báo cáo này, mức giá ước tính như sau:');
     }
     protected function printBuildingComapanyInfo($section, $tangibleAssets, $dgxdSlug)
     {
@@ -191,9 +191,9 @@ class ReportAppendix2 extends Report
     {
         $description = '';
         if ($dgxdSlug == 'dg-uoc-tinh') {
-            $description = $this->companyName . ' đề xuất đơn giá xây dựng mới cho TSTĐ theo đơn giá trung bình của các công ty xây dựng đang cung cấp trên thị trường.';
+            $description = htmlspecialchars($this->companyName) . ' đề xuất đơn giá xây dựng mới cho TSTĐ theo đơn giá trung bình của các công ty xây dựng đang cung cấp trên thị trường.';
         } else {
-            $description = $this->companyName . ' đề xuất đơn giá xây dựng mới cho TSTĐ theo đơn giá quyết định của UBND.';
+            $description = htmlspecialchars($this->companyName) . ' đề xuất đơn giá xây dựng mới cho TSTĐ theo đơn giá quyết định của UBND.';
         }
         $textRun = $section->addTextRun();
         $textRun->addText('Kết luận: ', $this->styleBold, null);
@@ -204,7 +204,7 @@ class ReportAppendix2 extends Report
     {
         $section->addText('❖ Chất lượng còn lại nhà cửa, vật kiến trúc: ', ['bold' => true, 'size' => 13], ['align' => 'left']);
         $textRun = $section->addTextRun();
-        $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . $this->acronym . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
+        $textRun->addText('- Căn cứ theo biên bản kiểm kê và kết quả khảo sát hiện trạng. ' . htmlspecialchars($this->acronym) . ' đánh giá chất lượng còn lại của công trình xây dựng như sau:');
     }
 
     protected function printRemainQualityFunc1($section, $tangibleAssets)

@@ -101,7 +101,7 @@ class CertificateApartment extends Model
     }
     public function comparisonFactor(): HasMany
     {
-        return $this->hasMany(CertificateApartmentComparisonFactor::class, 'apartment_asset_id');
+        return $this->hasMany(CertificateApartmentComparisonFactor::class, 'apartment_asset_id')->orderBy('asset_general_id', 'DESC')->orderBy('position');;
     }
     public function appraisal(): HasMany
     {

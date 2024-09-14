@@ -36,16 +36,16 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
         $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName), 0, null, 'bullets');
         $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
-        $section->addListItem("Điện thoại: " . $this->companyPhone . "\tFax: " . $this->companyFax, 0, null, 'bullets', 'leftTab');
+        $section->addListItem("Điện thoại: " . htmlspecialchars($this->companyPhone) . "\tFax: " . htmlspecialchars($this->companyFax), 0, null, 'bullets', 'leftTab');
         $section->addListItem('Mã số GCN đủ điều kiện kinh doanh dịch vụ TĐG: 260/TĐG ngày 30/08/2017', 0, null, 'bullets');
         $section->addListItem('Số thông báo của Bộ tài chính về việc DN đủ điều kiện hoạt động kinh doanh dịch vụ TĐG: số 1315/TB-BTC ngày 29/12/2023, số 351/TB-BTC ngày 04/03/2024 và số 532/TB-BTC ngày 03/06/2024.', 0, null, 'bullets');
-        $section->addListItem('Họ và tên người Đại diện pháp luật: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? $certificate->appraiserManager->name : '') . '_ số thẻ TĐV về giá ' . $appraiserManagerNumber, 0, null, 'bullets');
+        $section->addListItem('Họ và tên người Đại diện pháp luật: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? htmlspecialchars($certificate->appraiserManager->name) : '') . '_ số thẻ TĐV về giá ' . htmlspecialchars($appraiserManagerNumber), 0, null, 'bullets');
         // if (isset($certificate->appraiserConfirm->name)) {
         //     $section->addListItem('Họ và tên người được uỷ quyền Đại diện pháp luật: ' . $certificate->appraiserConfirm->name, 0, null, 'bullets');
         // }
-        $section->addListItem('Họ và tên Thẩm định viên về giá: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? $certificate->appraiser->name : '') . '_ số thẻ TĐV về giá ' . $appraiserNumber, 0, null, 'bullets');
+        $section->addListItem('Họ và tên Thẩm định viên về giá: ' . ((isset($certificate->appraiser) && isset($certificate->appraiser->name)) ? htmlspecialchars($certificate->appraiser->name) : '') . '_ số thẻ TĐV về giá ' . htmlspecialchars($appraiserNumber), 0, null, 'bullets');
         // $section->addListItem('Người lập báo cáo: ' . (isset($certificate->createdBy->name) ? $certificate->createdBy->name : ''), 0, null, 'bullets');
-        $section->addListItem('Trợ lý thẩm định viên về giá: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? $certificate->appraiserPerform->name : ''), 0, null, 'bullets');
+        $section->addListItem('Trợ lý thẩm định viên về giá: ' . (isset($certificate->appraiserPerform)  && isset($certificate->appraiserPerform->name) ? htmlspecialchars($certificate->appraiserPerform->name) : ''), 0, null, 'bullets');
 
         // appraiserPerform
     }
@@ -98,17 +98,17 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addTitle('Thông tin về cuộc thẩm định giá:', 2);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Hợp đồng thẩm định giá: ', ['bold' => true], []);
-        $listTmp->addText($this->contractCode . ' ' . $this->documentLongDateText . " giữa " . $this->companyName . " và " . $certificate->petitioner_name . '.');
+        $listTmp->addText(htmlspecialchars($this->contractCode) . ' ' . $this->documentLongDateText . " giữa " . htmlspecialchars($this->companyName) . " và " . htmlspecialchars($certificate->petitioner_name) . '.');
         $appraiseDate = date_create($certificate->appraise_date);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Thời điểm thẩm định giá: ', ['bold' => true], []);
         $listTmp->addText('Tháng ' . date_format($appraiseDate, "m/Y") . '.', null, []);
-        $appraisePurpose = isset($certificate->appraisePurpose->name) ? $certificate->appraisePurpose->name : '';
+        $appraisePurpose = isset($certificate->appraisePurpose->name) ? htmlspecialchars($certificate->appraisePurpose->name) : '';
         if ($appraisePurpose === 'Vay vốn ngân hàng')
             $appraisePurpose = 'Tư vấn giá trị tài sản để ngân hàng tham khảo và xem xét quyết định hạn mức để cấp tín dụng';
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Mục đích thẩm định giá: ', ['bold' => true], []);
-        $listTmp->addText($appraisePurpose . '.', null, []);
+        $listTmp->addText(htmlspecialchars($appraisePurpose) . '.', null, []);
         $listTmp = $section->addListItemRun(0, 'bullets');
         $listTmp->addText('Cơ sở giá trị của tài sản thẩm định giá: ', ['bold' => true], []);
         $listTmp->addText('Cơ sở giá trị thị trường.', ['bold' => false], []);
@@ -144,7 +144,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $listTmp = $cell->addListItemRun(0, 'bullets');
         $listTmp->addText('Hồ sơ pháp lý do khách hàng cung cấp bản photocopy được đính kèm báo cáo thẩm định giá này.', null, null);
         $listTmp = $cell->addListItemRun(0, 'bullets');
-        $listTmp->addText('Diễn biến và kết quả khảo sát hiện trường được ghi nhận tại Biên bản thẩm định hiện trạng tài sản của ' . $this->companyName . ' được lưu trữ trong hồ sơ thẩm định giá. ' . '.', null, $this->cellVCentered);
+        $listTmp->addText('Diễn biến và kết quả khảo sát hiện trường được ghi nhận tại Biên bản thẩm định hiện trạng tài sản của ' . htmlspecialchars($this->companyName) . ' được lưu trữ trong hồ sơ thẩm định giá. ' . '.', null, $this->cellVCentered);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(10000, $this->gridSpan2)->addText(' 2. Đối với các giao dịch chào mua / chào bán / thành công của các tài sản tương tự trên thị trường', ['bold' => true, 'italic' => true], $this->cellVCenteredKeepNext);
         $table->addRow(400, $this->cantSplit);
@@ -186,7 +186,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Số địa chính', null, $this->styleAlignLeft);
 
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(ucfirst($strToThua) . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.', null, ['align' => 'left']);
+            ->addText(htmlspecialchars(ucfirst($strToThua) . ', ' . $appraise->ward->name . ', ' . $appraise->district->name . ', ' . $appraise->province->name . '.'), null, ['align' => 'left']);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -197,7 +197,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $positionType1 = "";
         foreach ($appraise->properties as $index => $property) {
             $positionType1 .= ($index) ? ', ' : '';
-            $positionType1 .= (isset($property->geographical_location) ? $property->geographical_location : '');
+            $positionType1 .= (isset($property->geographical_location) ? htmlspecialchars($property->geographical_location) : '');
         }
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -232,7 +232,7 @@ class ReportAppraisalNova extends ReportAppraisal
         }
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Thời hạn sử dụng', null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText($thsd, null, ['align' => 'left']);
+            ->addText(htmlspecialchars($thsd), null, ['align' => 'left']);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -242,7 +242,7 @@ class ReportAppraisalNova extends ReportAppraisal
         if (isset($appraise->appraiseLaw[0])) {
             $appraiseLaw = $appraise->appraiseLaw[0];
             $textRun = $cell->addTextRun(['align' => 'left']);
-            $textRun->addText($appraiseLaw->origin_of_use, null, ['align' => 'left']);
+            $textRun->addText(htmlspecialchars($appraiseLaw->origin_of_use), null, ['align' => 'left']);
         }
         // $table->addRow(400, $this->cantSplit);
         // $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
@@ -280,7 +280,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $positionType = "";
         foreach ($appraise->properties as $index => $property) {
             $positionType .= ($index) ? ', ' : '';
-            $positionType .= (isset($property->description) ? $property->description : '');
+            $positionType .= (isset($property->description) ? htmlspecialchars($property->description) : '');
         }
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Mô tả vị trí', null, ['align' => 'left']);
 
@@ -315,7 +315,7 @@ class ReportAppraisalNova extends ReportAppraisal
             }
             if ($mucdich->is_zoning) {
                 $stringExtraPlanning .=
-                    "- Diện tích đất thuộc quy hoạch: " . number_format($mucdich->planning_area, 2, ',', '.')   . ' ' . $this->m2 . "<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch: " . CommonService::mbUcfirst($loaidat) . "<w:br/>- Loại quy hoạch: " . $mucdich->type_zoning . "<w:br/>";
+                    "- Diện tích đất thuộc quy hoạch: " . number_format($mucdich->planning_area, 2, ',', '.')   . ' ' . $this->m2 . "<w:br/>- Mục đích sử dụng đất phần thuộc quy hoạch: " . CommonService::mbUcfirst($loaidat) . "<w:br/>- Loại quy hoạch: " . htmlspecialchars($mucdich->type_zoning) . "<w:br/>";
             }
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
                 ->addText(CommonService::mbUcfirst(CommonService::getViTri($vitri_id)) . ' ' . $street, null, ['align' => 'left']);
@@ -340,7 +340,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText($stringExtraPlanning, null, ['align' => 'left']);
         $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-            ->addText(CommonService::getPlaningInfo($appraise->appraise_id) ? str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($appraise->appraise_id)) : '', null, ['align' => 'both']);
+            ->addText(CommonService::getPlaningInfo($appraise->appraise_id) ? str_replace("\n", '<w:br/>   ', htmlspecialchars(CommonService::getPlaningInfo($appraise->appraise_id))) : '', null, ['align' => 'both']);
         // }
 
         if (isset($appraise->tangibleAssets) && count($appraise->tangibleAssets)) {
@@ -370,13 +370,13 @@ class ReportAppraisalNova extends ReportAppraisal
                         $structure .= "Công trình khác";
                     }
                 }
-                $buildingType =  isset($tangibleAsset->tangible_name) ? CommonService::mbUcfirst($tangibleAsset->tangible_name) : '';
+                $buildingType =  isset($tangibleAsset->tangible_name) ? CommonService::mbUcfirst(htmlspecialchars($tangibleAsset->tangible_name)) : '';
                 $table->addCell(2000, $this->cellVCentered)->addText($buildingType, null, $this->cellVCentered);
                 $cellTmp = $table->addCell(8000, ['valign' => 'center', 'align' => 'left']);
                 $cellTmp->addListItem('Cấu trúc: ' . $structure, 0, null, 'bullets');
                 if (!empty($rate)) $cellTmp->addListItem('Cấp công trình: ' . htmlspecialchars($rate), 0, null, 'bullets');
                 $cellTmp->addListItem('Kết cấu:', 0, null, 'bullets');
-                $cellTmp->addText('   ' . str_replace("\n", '<w:br/>   ', $tangibleAsset->contruction_description), null, ['valign' => 'center', 'align' => 'left']);
+                $cellTmp->addText('   ' . str_replace("\n", '<w:br/>   ', htmlspecialchars($tangibleAsset->contruction_description)), null, ['valign' => 'center', 'align' => 'left']);
                 $c1 = $table->addCell(2000, $this->cellVCentered);
                 $c1->addText('- Diện tích xây dựng: ' . number_format(floatval($tangibleAsset->total_construction_area), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
                 $c1->addText('- Diện tích sàn: ' . number_format(floatval($tangibleAsset->total_construction_base), 2, ',', '.') . $this->m2, null, ['valign' => 'center', 'align' => 'left']);
@@ -412,9 +412,9 @@ class ReportAppraisalNova extends ReportAppraisal
             } else {
                 $giathiet = $certificate->document_description;
             }
-            $section->addText('    ' . str_replace("\n", '<w:br/>    ', $giathiet), null, ['valign' => 'center', 'align' => 'left']);
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars($giathiet)), null, ['valign' => 'center', 'align' => 'left']);
         } else {
-            $section->addText('    ' . str_replace("\n", '<w:br/>    ', json_decode($certificate)->real_estate[0]->appraises->document_description), null, ['valign' => 'center', 'align' => 'left']);
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, ['valign' => 'center', 'align' => 'left']);
         }
         // $section->addText('    '.str_replace("\n", '<w:br/>    ', json_encode(json_decode($certificate)->real_estate)), null, ['valign' => 'center', 'align' => 'left']);
         // $section->addText('    '.str_replace("\n", '<w:br/>    ', json_encode(json_decode($certificate)->real_estate[0])), null, ['valign' => 'center', 'align' => 'left']);
@@ -586,7 +586,7 @@ class ReportAppraisalNova extends ReportAppraisal
     protected function step9(Section $section, $certificate)
     {
         $section->addTitle('KẾT QUẢ THẨM ĐỊNH GIÁ:', 1);
-        $section->addText('Trên cơ sở các tài liệu do ' . $certificate->petitioner_name . ' cung cấp, với phương pháp thẩm định giá như trên được áp dụng trong tính toán, ' . $this->companyName . ' thông báo kết quả thẩm định giá như sau:', null, $this->indentFistLine);
+        $section->addText('Trên cơ sở các tài liệu do ' . htmlspecialchars($certificate->petitioner_name) . ' cung cấp, với phương pháp thẩm định giá như trên được áp dụng trong tính toán, ' . htmlspecialchars($this->companyName) . ' thông báo kết quả thẩm định giá như sau:', null, $this->indentFistLine);
         if ($this->isApartment) {
             $this->step9Apartment($section);
         } else {
@@ -618,7 +618,7 @@ class ReportAppraisalNova extends ReportAppraisal
         $section->addText('CÁC TÀI LIỆU KÈM THEO:', ['bold' => true], array_merge($this->indentFistLine, $this->keepNext));
 
         $section->addListItem('Hồ sơ pháp lý tài sản thẩm định giá.', 0, null, 'bullets', $this->indentFistLine);
-        $section->addText('Báo cáo thẩm định giá được phát hành 03 bản chính Tiếng Việt, kèm theo Chứng thư thẩm định giá số ' . $this->certificateCode . ' ngày ' . $this->certificateShortDateText . ' tại ' . $this->companyName, ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
+        $section->addText('Báo cáo thẩm định giá được phát hành 03 bản chính Tiếng Việt, kèm theo Chứng thư thẩm định giá số ' . htmlspecialchars($this->certificateCode) . ' ngày ' . $this->certificateShortDateText . ' tại ' . htmlspecialchars($this->companyName), ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
         $section->addText(' Thẩm định viên về giá và những người tham gia trực tiếp công tác thẩm định giá trong hồ sơ này không có quan hệ kinh tế hoặc quyền lợi kinh tế nào liên quan đến khách hàng thẩm định giá, tài sản thẩm định giá, không có xung đột lợi ích trong quá trình thực hiện thẩm định giá.', ['italic' => true], array_merge($this->indentFistLine, $this->keepNext));
     }
     protected function signature(Section $section, $certificate)
@@ -964,7 +964,7 @@ class ReportAppraisalNova extends ReportAppraisal
                     $appraisalDgxd = $appraise->appraisal_dgxd;
                     foreach ($appraise->tangibleAssets as $index => $tangibleAsset) {
                         $table->addRow(400, $this->cantSplit);
-                        $building_type =  isset($tangibleAsset->tangible_name) ? $tangibleAsset->tangible_name : '';
+                        $building_type =  isset($tangibleAsset->tangible_name) ? htmlspecialchars($tangibleAsset->tangible_name) : '';
                         //$total = (round($tangibleAsset->total_construction_area*$tangibleAsset->remaining_quality/100*$unitPrice));
                         $unitPrice =  CommonService::getDgxdChoosed($tangibleAsset, $appraisalDgxd);
                         $clcl =  CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
@@ -1002,7 +1002,7 @@ class ReportAppraisalNova extends ReportAppraisal
 
                     foreach ($appraise->otherAssets as $index => $otherAsset) {
                         $table->addRow(400, $this->cantSplit);
-                        $table->addCell(1000, $this->cellVCentered)->addText($otherAsset->name, null, ['align' => 'left']);
+                        $table->addCell(1000, $this->cellVCentered)->addText(htmlspecialchars($otherAsset->name), null, ['align' => 'left']);
                         $table->addCell(1000, $this->cellVCentered)->addText(strtolower($otherAsset->dvt), null, $this->cellHCentered);
                         $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->total, 2, ',', '.'), null, ['align' => 'right']);
                         $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->unit_price, 0, ',', '.'), null, ['align' => 'right']);
@@ -1126,7 +1126,7 @@ class ReportAppraisalNova extends ReportAppraisal
         //2
         $coordinateArr = explode(',', $realEstate->coordinates);
         $fullName = $apartment->appraise_asset ?: '';
-        $assetName = 'Tài sản thẩm định là: ' . $fullName  . htmlspecialchars($address);
+        $assetName = 'Tài sản thẩm định là: ' . htmlspecialchars($fullName) . htmlspecialchars($address);
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('2', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Vị trí');
@@ -1141,13 +1141,13 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Khả năng tiếp cận');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText($assetName);
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(htmlspecialchars($assetName));
         //3
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('3', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Số tầng');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Vị trí tầng');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText('Tầng ' . $apartment->apartmentAssetProperties->floor->name);
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText('Tầng ' . htmlspecialchars($apartment->apartmentAssetProperties->floor->name));
 
         //4
         $table->addRow(400, $this->cantSplit);
@@ -1170,18 +1170,18 @@ class ReportAppraisalNova extends ReportAppraisal
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('5', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Hướng nhìn');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Hướng chính');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->direction->description));
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(CommonService::mbCaseTitle(htmlspecialchars($apartment->apartmentAssetProperties->direction->description)));
         //5
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, ['valign' => 'center', 'vMerge' => 'restart'])->addText('6', null, $this->cellHCentered);
         $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Nội thất');
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Tình trạng');
-        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(ucfirst(mb_strtolower(CommonService::mbCaseTitle($apartment->apartmentAssetProperties->furnitureQuality->description))));
+        $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])->addText(ucfirst(mb_strtolower(CommonService::mbCaseTitle(htmlspecialchars($apartment->apartmentAssetProperties->furnitureQuality->description)))));
         $table->addRow(400, $this->cantSplit);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell(null, ['valign' => 'center', 'vMerge' => 'continue']);
         $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('- Mô tả');
-        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(str_replace("\n", '<w:br/>   ', $apartment->apartmentAssetProperties->description) ?: '');
+        $table->addCell($this->rowFourthWidth, ['borderRightSize' => 'none'])->addText(str_replace("\n", '<w:br/>   ', ($apartment->apartmentAssetProperties->description)) ? htmlspecialchars($apartment->apartmentAssetProperties->description) : '');
         //6
         $utiDescriptionArr = CommonService::getUtilitiesDescription($apartment->apartmentAssetProperties->utilities);
         $utiDescriptionStr = implode(', ', $utiDescriptionArr);
@@ -1197,7 +1197,7 @@ class ReportAppraisalNova extends ReportAppraisal
             $table->addCell(2000, ['valign' => 'center', 'vMerge' => 'restart'])->addText('Thông tin quy hoạch', null, ['align' => 'left']);
             $table->addCell($this->rowThirdWidth, ['borderRightSize' => 'none'])->addText('', null, ['align' => 'left']);
             $table->addCell($this->rowFourthWidth, ['borderLeftSize' => 'none'])
-                ->addText(str_replace("\n", '<w:br/>   ', CommonService::getPlaningInfo($realEstate->real_estate_id)), null, ['align' => 'left']);
+                ->addText(str_replace("\n", '<w:br/>   ', htmlspecialchars(CommonService::getPlaningInfo($realEstate->real_estate_id))), null, ['align' => 'left']);
         }
     }
     protected function nationalName(PhpWord $phpWord, $data)
@@ -1538,7 +1538,7 @@ class ReportAppraisalNova extends ReportAppraisal
                     $appraisalDgxd = $appraise->appraisal_dgxd;
                     foreach ($appraise->tangibleAssets as $index => $tangibleAsset) {
                         $table->addRow(400, $this->cantSplit);
-                        $building_type =  isset($tangibleAsset->tangible_name) ? $tangibleAsset->tangible_name : '';
+                        $building_type =  isset($tangibleAsset->tangible_name) ? htmlspecialchars($tangibleAsset->tangible_name) : '';
                         //$total = (round($tangibleAsset->total_construction_area*$tangibleAsset->remaining_quality/100*$unitPrice));
                         $unitPrice =  CommonService::getDgxdChoosed($tangibleAsset, $appraisalDgxd);
                         $clcl =  CommonService::getClclChoosed($tangibleAsset, $appraisalCLCL);
@@ -1576,7 +1576,7 @@ class ReportAppraisalNova extends ReportAppraisal
 
                     foreach ($appraise->otherAssets as $index => $otherAsset) {
                         $table->addRow(400, $this->cantSplit);
-                        $table->addCell(1000, $this->cellVCentered)->addText($otherAsset->name, null, ['align' => 'left']);
+                        $table->addCell(1000, $this->cellVCentered)->addText(htmlspecialchars($otherAsset->name), null, ['align' => 'left']);
                         $table->addCell(1000, $this->cellVCentered)->addText(strtolower($otherAsset->dvt), null, $this->cellHCentered);
                         $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->total, 2, ',', '.'), null, ['align' => 'right']);
                         $table->addCell(1000, $this->cellVCentered)->addText(number_format($otherAsset->unit_price, 0, ',', '.'), null, ['align' => 'right']);

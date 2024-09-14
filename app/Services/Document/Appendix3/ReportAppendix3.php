@@ -50,7 +50,7 @@ class ReportAppendix3 extends Report
         else $reportID = 'TSTD_' . $data->id;
 
         // return mb_strtoupper($this->envDocument)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
-        return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        return mb_strtoupper(htmlspecialchars($this->acronym))  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
     {
@@ -87,7 +87,7 @@ class ReportAppendix3 extends Report
         $section->addTextBreak(1);
         $textRun = $section->addTextRun();
         $textRun->addText('Khách hàng yêu cầu TĐG: ', ['bold' => true, 'underLine' => true]);
-        $textRun->addText($certificate->petitioner_name ?? '', ['bold' => true]);
+        $textRun->addText($certificate->petitioner_name ? htmlspecialchars($certificate->petitioner_name) : '', ['bold' => true]);
     }
     protected function getRealEstate($realEstate)
     {
@@ -103,8 +103,8 @@ class ReportAppendix3 extends Report
         }
 
         $result = [
-            'asset_name' => $assetName,
-            'address' => $address,
+            'asset_name' => htmlspecialchars($assetName),
+            'address' => htmlspecialchars($address),
             'pic' => $pics
         ];
         return $result;
