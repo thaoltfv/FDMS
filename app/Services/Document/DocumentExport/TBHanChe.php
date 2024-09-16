@@ -224,7 +224,8 @@ class TBHanChe
         );
         $textRun = $section->addTextRun(['align' => 'center']);
         $textRun->addText('(', ['italic' => true]);
-        $textRun->addText('Địa chỉ:', ['underline' => 'single']);
+        $textRun->addText('Địa chỉ', ['underline' => 'single']);
+        $textRun->addText(':');
         $textRun->addText($certificate->petitioner_address ? ' ' .  htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
         $textRun->addText(')', ['italic' => true]);
 

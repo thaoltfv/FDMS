@@ -203,9 +203,9 @@ class TBGiaThiet
             $cellHCentered
         );
         $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $textRunHead = $row4->addCell(3500, $cellVCentered)->addTextRun();
+        $textRunHead = $row4->addCell(3500, $cellVCentered)->addTextRun(['align' => 'left']);
         $textRunHead->addText('Số: Theo số HĐ/TB-1 <w:br/>', null, ['align' => 'left']);
-        $textRunHead->addText('“Về việc thông báo giả thiết đặc biệt của hồ sơ thẩm định giá tài sản.”');
+        $textRunHead->addText('“Về việc thông báo giả thiết đặc biệt của hồ sơ thẩm định giá tài sản.”', ['italic' => true, []]);
         $row4->addCell(1000, $cellVCentered)->addText(
             '',
             ['bold' => true,],
@@ -226,7 +226,8 @@ class TBGiaThiet
         );
         $textRun = $section->addTextRun(['align' => 'center']);
         $textRun->addText('(', ['italic' => true]);
-        $textRun->addText('Địa chỉ:', ['underline' => 'single']);
+        $textRun->addText('Địa chỉ', ['underline' => 'single']);
+        $textRun->addText(':');
         $textRun->addText($certificate->petitioner_address ? ' ' .  htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
         $textRun->addText(')', ['italic' => true]);
 
