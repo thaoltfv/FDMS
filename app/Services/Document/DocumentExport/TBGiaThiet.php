@@ -293,19 +293,22 @@ class TBGiaThiet
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
         $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
-        $table3 = $section->addTable([
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
+        $section->addText('❖ Giả thiết đặc biệt:', null, 'indentParagraph');
+        $section->addText('- ' . htmlspecialchars($certificate->document_description), null, 'indentParagraph');
 
-        $rowtb3 = $table3->addRow(300);
-        $rowtb3->addCell(500)->addText("❖", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Giả thiết đặc biệt", ['italic' => true, 'bold' => true], ['align' => 'left']);
+        // $table3 = $section->addTable([
+        //     'align' => JcTable::START,
+        //     'width' => 100 * 50,
+        //     'unit' => 'pct'
+        // ]);
 
-        $rowtb3 = $table3->addRow(300);
-        $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText(htmlspecialchars($certificate->document_description), [], ['align' => 'both']);
+        // $rowtb3 = $table3->addRow(300);
+        // $rowtb3->addCell(500)->addText("❖", null, ['align' => 'left']);
+        // $rowtb3->addCell(9400)->addText("Giả thiết đặc biệt", ['italic' => true, 'bold' => true], ['align' => 'left']);
+
+        // $rowtb3 = $table3->addRow(300);
+        // $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
+        // $rowtb3->addCell(9400)->addText(htmlspecialchars($certificate->document_description), [], ['align' => 'both']);
 
 
         $table = $section->addTable([
