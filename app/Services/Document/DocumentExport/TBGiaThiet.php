@@ -213,7 +213,7 @@ class TBGiaThiet
         );
         if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
             $document_date = date_create($certificate->document_date);
-            $document_date_string = ' ngày ' . (date_format($document_date, "d") - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
+            $document_date_string = ' ngày ' . (intval(date_format($document_date, "d")) - 1 < 10 ? '0' . (intval(date_format($document_date, "d")) - 1) : intval(date_format($document_date, "d")) - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, " . $document_date_string, ['italic' => true], $cellHCentered);
         } else {
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
@@ -294,7 +294,7 @@ class TBGiaThiet
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("❖", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Giả thiết đặc biệt", ['italic' => true], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Giả thiết đặc biệt", ['italic' => true, 'bold' => true], ['align' => 'left']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
