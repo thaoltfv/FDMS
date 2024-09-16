@@ -211,13 +211,20 @@ class TBGiaThiet
             ['bold' => true,],
             $cellHCentered
         );
-        if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
-            $document_date = date_create($certificate->document_date);
+        if (isset($certificate->certificate_date) && !empty(trim($certificate->certificate_date))) {
+            $document_date = date_create($certificate->certificate_date);
             $document_date_string = ' ngày ' . (intval(date_format($document_date, "d")) - 1 < 10 ? '0' . (intval(date_format($document_date, "d")) - 1) : intval(date_format($document_date, "d")) - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, " . $document_date_string, ['italic' => true], $cellHCentered);
         } else {
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
         }
+        // if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
+        //     $document_date = date_create($certificate->document_date);
+        //     $document_date_string = ' ngày ' . (intval(date_format($document_date, "d")) - 1 < 10 ? '0' . (intval(date_format($document_date, "d")) - 1) : intval(date_format($document_date, "d")) - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
+        //     $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, " . $document_date_string, ['italic' => true], $cellHCentered);
+        // } else {
+        //     $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
+        // }
 
         $section->addText(
             "KÍNH GỬI: " . mb_strtoupper(htmlspecialchars($certificate->petitioner_name), 'UTF-8'),
