@@ -219,7 +219,7 @@ class TBHanChe
         $textRun = $section->addTextRun(['align' => 'center']);
         $textRun->addText('(', ['italic' => true]);
         $textRun->addText('Địa chỉ:', ['underline' => 'single']);
-        $textRun->addText(' ' . $certificate->petitioner_address ? htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
+        $textRun->addText($certificate->petitioner_address ? ' ' .  htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
         $textRun->addText(')', ['italic' => true]);
 
         $indentleftNumber =
@@ -361,7 +361,7 @@ class TBHanChe
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Không có", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Không có.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("❖", null, ['align' => 'left']);
@@ -369,7 +369,7 @@ class TBHanChe
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Không có", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Không có.", [], ['align' => 'both']);
 
 
         $rowtb3 = $table3->addRow(300);
@@ -382,19 +382,19 @@ class TBHanChe
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Kết quả thẩm định giá trong chứng thư này chỉ có đúng với tài sản có đặc điểm pháp lý, kinh tế – kỹ thuật, số lượng và hiện trạng như đã mô tả trong báo cáo thẩm định giá tại thời điểm và địa điểm thẩm định giá. Khách hàng / bên thứ ba sử dụng kết quả thẩm định giá có trách nhiệm đối chiếu, đặc điểm tài sản thẩm định giá đã mô tả trong báo cáo này với tài sản cần thẩm định giá của mình trước khi sử dụng chứng thư thẩm định giá. Trường hợp có sự sai khác về đặc điểm tài sản cần thẩm định giá thì khách hàng / bên thứ ba sử dụng kết quả thẩm định phải dừng ngay việc sử dụng chứng thư thẩm định giá và thông báo cho Công ty TNHH Thẩm định giá Nova.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Kết quả thẩm định giá trong chứng thư này chỉ có đúng với tài sản có đặc điểm pháp lý, kinh tế – kỹ thuật, số lượng và hiện trạng như đã mô tả trong báo cáo thẩm định giá tại thời điểm và địa điểm thẩm định giá. Khách hàng / bên thứ ba sử dụng kết quả thẩm định giá có trách nhiệm đối chiếu, đặc điểm tài sản thẩm định giá đã mô tả trong báo cáo này với tài sản cần thẩm định giá của mình trước khi sử dụng chứng thư thẩm định giá. Trường hợp có sự sai khác về đặc điểm tài sản cần thẩm định giá thì khách hàng / bên thứ ba sử dụng kết quả thẩm định phải dừng ngay việc sử dụng chứng thư thẩm định giá và thông báo cho Công ty TNHH Thẩm định giá Nova.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Bên yêu cầu thẩm định giá chịu trách nhiệm về tính chính xác, hợp pháp của các hồ sơ pháp lý, thông tin cung cấp cho Công ty TNHH Thẩm định giá Nova. Bên yêu cầu thẩm định giá trực tiếp hoặc ủy quyền hợp pháp cho người có đủ hiểu biết về tài sản thẩm định giá hướng dẫn chuyên viên của công ty TNHH Thẩm định giá Nova thực hiện khảo sát, thu thập thông tin về tài sản thẩm định giá. Công ty TNHH Thẩm định giá Nova không đối chiếu hồ sơ pháp lý khách hàng cung cấp với bản chính, không chịu trách nhiệm về chứng thư thẩm định giá trong trường hợp khách hàng cung cấp thông tin sai lệch dẫn tới sai lệch trong kết quả thẩm định giá.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Bên yêu cầu thẩm định giá chịu trách nhiệm về tính chính xác, hợp pháp của các hồ sơ pháp lý, thông tin cung cấp cho Công ty TNHH Thẩm định giá Nova. Bên yêu cầu thẩm định giá trực tiếp hoặc ủy quyền hợp pháp cho người có đủ hiểu biết về tài sản thẩm định giá hướng dẫn chuyên viên của công ty TNHH Thẩm định giá Nova thực hiện khảo sát, thu thập thông tin về tài sản thẩm định giá. Công ty TNHH Thẩm định giá Nova không đối chiếu hồ sơ pháp lý khách hàng cung cấp với bản chính, không chịu trách nhiệm về chứng thư thẩm định giá trong trường hợp khách hàng cung cấp thông tin sai lệch dẫn tới sai lệch trong kết quả thẩm định giá.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. Công ty TNHH Thẩm định giá NOVA không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của tài sản hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. Công ty TNHH Thẩm định giá NOVA không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của tài sản hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá được lập trong điều kiện thị trường bình thường tại thời điểm thẩm định giá. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm trong trường hợp giá cả thị trường của tài sản có biến động bất thường, bất khả kháng xảy ra tại thời điểm sau thời điểm thẩm định giá.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá được lập trong điều kiện thị trường bình thường tại thời điểm thẩm định giá. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm trong trường hợp giá cả thị trường của tài sản có biến động bất thường, bất khả kháng xảy ra tại thời điểm sau thời điểm thẩm định giá.", [], ['align' => 'both']);
 
 
         $rowtb3 = $table3->addRow(300);
@@ -403,23 +403,23 @@ class TBHanChe
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá, báo cáo thẩm định giá và các phụ lục kèm theo là những phần không thể tách rời trong quá trình sử dụng kết quả tư vấn thẩm định giá. Chứng thư thẩm định giá chỉ có giá trị sử dụng với bản chính, theo số lượng đã phát hành ghi trong chứng thư.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá, báo cáo thẩm định giá và các phụ lục kèm theo là những phần không thể tách rời trong quá trình sử dụng kết quả tư vấn thẩm định giá. Chứng thư thẩm định giá chỉ có giá trị sử dụng với bản chính, theo số lượng đã phát hành ghi trong chứng thư.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá có giá trị sử dụng trong thời gian có hiệu lực, theo mục đích thẩm định giá duy nhất đã thỏa thuận trong hợp đồng / giấy yêu cầu thẩm định giá gắn với đúng thông tin tài sản, số lượng tài sản tại hợp đồng thẩm định giá. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm trong trường hợp khách hàng / bên sử dụng kết quả thẩm định giá sử dụng sai mục đích, thời hiệu của chứng thư thẩm định giá.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá có giá trị sử dụng trong thời gian có hiệu lực, theo mục đích thẩm định giá duy nhất đã thỏa thuận trong hợp đồng / giấy yêu cầu thẩm định giá gắn với đúng thông tin tài sản, số lượng tài sản tại hợp đồng thẩm định giá. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm trong trường hợp khách hàng / bên sử dụng kết quả thẩm định giá sử dụng sai mục đích, thời hiệu của chứng thư thẩm định giá.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Kết quả thẩm định giá trong chứng thư là mức giá Công ty TNHH Thẩm định giá Nova tư vấn để khách hàng hoặc bên thứ ba sử dụng kết quả thẩm định giá tham khảo, ra quyết định theo mục đích thẩm định giá đã yêu cầu. Chứng thư thẩm định giá không phải là văn bản bắt buộc bất cứ bên nào tham gia giao dịch phải thực hiện theo giá trị tư vấn.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Kết quả thẩm định giá trong chứng thư là mức giá Công ty TNHH Thẩm định giá Nova tư vấn để khách hàng hoặc bên thứ ba sử dụng kết quả thẩm định giá tham khảo, ra quyết định theo mục đích thẩm định giá đã yêu cầu. Chứng thư thẩm định giá không phải là văn bản bắt buộc bất cứ bên nào tham gia giao dịch phải thực hiện theo giá trị tư vấn.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Người sử dụng chứng thư thẩm định giá hợp pháp là khách hàng hoặc bên thứ ba đã được chỉ định trong giấy yêu cầu thẩm định giá / hợp đồng thẩm định giá. Các chủ thể khác sử dụng chứng thư thẩm định giá khi chưa có sự đồng ý bằng văn bản của Công ty TNHH Thẩm định giá Nova và khách hàng là hành vi bất hợp pháp.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Người sử dụng chứng thư thẩm định giá hợp pháp là khách hàng hoặc bên thứ ba đã được chỉ định trong giấy yêu cầu thẩm định giá / hợp đồng thẩm định giá. Các chủ thể khác sử dụng chứng thư thẩm định giá khi chưa có sự đồng ý bằng văn bản của Công ty TNHH Thẩm định giá Nova và khách hàng là hành vi bất hợp pháp.", [], ['align' => 'both']);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
-        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá được sử dụng hợp pháp khi khách hàng thực hiện đầy đủ và toàn vẹn các thỏa thuận đã nêu trong hợp đồng tư vấn dịch vụ thẩm định giá tài sản. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm khi khách hàng cố ý sử dụng chứng thư thẩm định giá khi chưa hoàn tất nghĩa vụ thanh toán phí dịch vụ thẩm định giá.", [], ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Chứng thư thẩm định giá được sử dụng hợp pháp khi khách hàng thực hiện đầy đủ và toàn vẹn các thỏa thuận đã nêu trong hợp đồng tư vấn dịch vụ thẩm định giá tài sản. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm khi khách hàng cố ý sử dụng chứng thư thẩm định giá khi chưa hoàn tất nghĩa vụ thanh toán phí dịch vụ thẩm định giá.", [], ['align' => 'both']);
 
 
         $footer = $section->addFooter();
