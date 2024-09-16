@@ -212,14 +212,14 @@ class TBHanChe
         }
 
         $section->addText(
-            "KÍNH GỬI: " . htmlspecialchars($certificate->petitioner_name),
+            "KÍNH GỬI: " . mb_strtoupper(htmlspecialchars($certificate->petitioner_name), 'UTF-8'),
             ['bold' => true, 'size' => '12'],
             ['align' => 'center', 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12), 'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(10)]
         );
         $textRun = $section->addTextRun(['align' => 'center']);
         $textRun->addText('(', ['italic' => true]);
-        $textRun->addText('Địa chỉ: ', ['underline' => 'single']);
-        $textRun->addText($certificate->petitioner_address ? htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
+        $textRun->addText('Địa chỉ:', ['underline' => 'single']);
+        $textRun->addText(' ' . $certificate->petitioner_address ? htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
         $textRun->addText(')', ['italic' => true]);
 
         $indentleftNumber =
@@ -273,7 +273,7 @@ class TBHanChe
             }
         }
 
-        $section->addText('Căn cứ Hợp đồng cung cấp dịch vụ thẩm định giá tài sản số ' . $document_date_string . ' ký kết giữa ' . ($company->name ? htmlspecialchars($company->name) : 'Công ty TNHH Thẩm định giá NOVA ') . ' và ' . htmlspecialchars($certificate->petitioner_name) . ' về việc thẩm định giá tài sản là  ' . htmlspecialchars($addressHSTD), null, $indentleftNumber);
+        $section->addText('Căn cứ Hợp đồng cung cấp dịch vụ thẩm định giá tài sản số ' . $document_date_string . ' ký kết giữa ' . ($company->name ? htmlspecialchars($company->name) : 'Công ty TNHH Thẩm định giá NOVA ') . ' và ' . htmlspecialchars($certificate->petitioner_name) . ' về việc thẩm định giá tài sản là  ' . htmlspecialchars($addressHSTD) . '.', null, $indentleftNumber);
         $section->addText('Căn cứ các Hồ sơ, tài liệu, dữ liệu do khách hàng cung cấp cho Công ty TNHH Thẩm định giá NOVA;', null, $indentleftNumber);
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, $indentleftNumber);
         $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name)  . ' các nội dung như sau:', null, $indentleftNumber);
@@ -318,7 +318,7 @@ class TBHanChe
 
         $row5 = $table->addRow(300);
         $row5->addCell(5000)->addText("", null, ['align' => 'center']);
-        $row5->addCell(5000)->addText($appraiserManager, ['bold' => true], ['align' => 'center']);
+        $row5->addCell(5000)->addText(mb_strtoupper($appraiserManager, 'UTF-8'), ['bold' => true], ['align' => 'center']);
 
         $section->addPageBreak();
 
@@ -338,7 +338,7 @@ class TBHanChe
         $rowtb2->addCell(5000)->addText("", ['bold' => true], ['align' => 'center']);
         $rowtb2 = $table2->addRow(300);
         $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
-        $rowtb2->addCell(5000)->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true], ['align' => 'center']);
+        $rowtb2->addCell(5000)->addText(mb_strtoupper(htmlspecialchars($certificate->petitioner_name), 'UTF-8'), ['bold' => true], ['align' => 'center']);
 
         $section->addPageBreak();
         $section->addText("PHỤ LỤC:", ['bold' => true], ['align' => 'center']);

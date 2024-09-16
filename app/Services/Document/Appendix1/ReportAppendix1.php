@@ -1212,9 +1212,9 @@ class ReportAppendix1 extends Report
             $stt,
             $title,
             'Chưa biết',
-            ($this->asset1->contact_person ? htmlspecialchars($this->asset1->contact_person) : 'Liên hệ:') . "<w:br/>" . ($this->asset1->contact_phone ? htmlspecialchars($this->asset1->contact_phone) : ''),
-            ($this->asset2->contact_person ? htmlspecialchars($this->asset2->contact_person) : 'Liên hệ:') . "<w:br/>" . ($this->asset2->contact_phone ? htmlspecialchars($this->asset2->contact_phone) : ''),
-            ($this->asset3->contact_person ? htmlspecialchars($this->asset3->contact_person) : 'Liên hệ:') . "<w:br/>" . ($this->asset3->contact_phone ? htmlspecialchars($this->asset3->contact_phone) : ''),
+            ($this->asset1->contact_person ? htmlspecialchars($this->asset1->contact_person) : 'Liên hệ:') . "\n" . ($this->asset1->contact_phone ? htmlspecialchars($this->asset1->contact_phone) : ''),
+            ($this->asset2->contact_person ? htmlspecialchars($this->asset2->contact_person) : 'Liên hệ:') . "\n" . ($this->asset2->contact_phone ? htmlspecialchars($this->asset2->contact_phone) : ''),
+            ($this->asset3->contact_person ? htmlspecialchars($this->asset3->contact_person) : 'Liên hệ:') . "\n" . ($this->asset3->contact_phone ? htmlspecialchars($this->asset3->contact_phone) : ''),
             false
         ];
         return $data;
