@@ -231,7 +231,7 @@ class TBHanChe
 
         $textRun = $section->addTextRun('indentParagraph');
         $textRun->addText('Căn cứ khoản 6, Điều 3 tại Chuẩn mực TĐGVN về Phạm vi công việc thẩm định giá và khoản 5, Điều 10 tại Chuẩn mực TĐGVN về Cơ sở giá trị thẩm định giá được ban hành kèm theo', null);
-        $textRun->addText('Thông tư số 30/2024/TT-BTC, Thông tư ban hành các chuẩn mực thẩm định giá Việt Nam về quy tắc đạo đức nghề nghiệp thẩm định giá, phạm vi công việc thẩm định giá, cơ sở giá trị thẩm định giá, hồ sơ thẩm định giá của Bộ trưởng Bộ Tài chính ban ành ngày ngày 16/5/2024;', ['bold' => true, 'italic' => true]);
+        $textRun->addText(' Thông tư số 30/2024/TT-BTC, Thông tư ban hành các chuẩn mực thẩm định giá Việt Nam về quy tắc đạo đức nghề nghiệp thẩm định giá, phạm vi công việc thẩm định giá, cơ sở giá trị thẩm định giá, hồ sơ thẩm định giá của Bộ trưởng Bộ Tài chính ban ành ngày ngày 16/5/2024;', ['bold' => true, 'italic' => true]);
         $document_date_string = "";
 
         if (isset($certificate->document_num)) {
