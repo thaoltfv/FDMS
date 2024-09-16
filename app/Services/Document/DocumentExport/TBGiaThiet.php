@@ -203,8 +203,8 @@ class TBGiaThiet
             $cellHCentered
         );
         $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
-        $textRunHead =   $row4->addCell(3500, $cellVCentered)->addTextRun();
-        $textRunHead->addText('Số: Theo số HĐ/TB-1 <w:br/>', null, null);
+        $textRunHead = $row4->addCell(3500, $cellVCentered)->addTextRun();
+        $textRunHead->addText('Số: Theo số HĐ/TB-1 <w:br/>', null, ['align' => 'left']);
         $textRunHead->addText('“Về việc thông báo giả thiết đặc biệt của hồ sơ thẩm định giá tài sản.”');
         $row4->addCell(1000, $cellVCentered)->addText(
             '',
@@ -213,7 +213,7 @@ class TBGiaThiet
         );
         if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
             $document_date = date_create($certificate->document_date);
-            $document_date_string = ' ngày ' . date_format($document_date, "d") . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
+            $document_date_string = ' ngày ' . (date_format($document_date, "d") - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, " . $document_date_string, ['italic' => true], $cellHCentered);
         } else {
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
@@ -285,10 +285,22 @@ class TBGiaThiet
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
         $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
-        $textRun = $section->addTextRun('indentParagraph');
-        $textRun->addText("❖", null, ['align' => 'left']);
-        $textRun->addText("Giả thiết đặc biệt", null, ['align' => 'left']);
-        $section->addText(htmlspecialchars($certificate->document_description));
+        $table3 = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $rowtb3 = $table3->addRow(300);
+
+        $rowtb3 = $table3->addRow(300);
+        $rowtb3->addCell(500)->addText("❖", null, ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText("Giả thiết đặc biệt", ['italic' => true], ['align' => 'left']);
+
+        $rowtb3 = $table3->addRow(300);
+        $rowtb3->addCell(500)->addText("-", null, ['align' => 'left']);
+        $rowtb3->addCell(9400)->addText(htmlspecialchars($certificate->document_description), [], ['align' => 'both']);
+
+
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -322,23 +334,23 @@ class TBGiaThiet
 
         $section->addPageBreak();
 
-        $section->addText('❖   XÁC NHẬN CỦA BÊN YÊU CẦU THẨM ĐỊNH GIÁ', ['bold' => true]);
+        $section->addText('❖   XÁC NHẬN CỦA KHÁCH HÀNG YÊU CẦU THẨM ĐỊNH GIÁ', ['bold' => true]);
         $section->addText('Xác nhận đã được thông báo và thống nhất các nội dụng nêu trên. ', ['bold' => false]);
 
-        $table2 = $section->addTable([
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $rowtb2 = $table2->addRow(300);
-        $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
-        $rowtb2->addCell(5000)->addText("BÊN YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true], ['align' => 'center']);
-        $rowtb2 = $table2->addRow(1000);
-        $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
-        $rowtb2->addCell(5000)->addText("", ['bold' => true], ['align' => 'center']);
-        $rowtb2 = $table2->addRow(300);
-        $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
-        $rowtb2->addCell(5000)->addText(mb_strtoupper(htmlspecialchars($certificate->petitioner_name), 'UTF-8'), ['bold' => true], ['align' => 'center']);
+        // $table2 = $section->addTable([
+        //     'align' => JcTable::START,
+        //     'width' => 100 * 50,
+        //     'unit' => 'pct'
+        // ]);
+        // $rowtb2 = $table2->addRow(300);
+        // $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
+        // $rowtb2->addCell(5000)->addText("BÊN YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true], ['align' => 'center']);
+        // $rowtb2 = $table2->addRow(1000);
+        // $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
+        // $rowtb2->addCell(5000)->addText("", ['bold' => true], ['align' => 'center']);
+        // $rowtb2 = $table2->addRow(300);
+        // $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
+        // $rowtb2->addCell(5000)->addText(mb_strtoupper(htmlspecialchars($certificate->petitioner_name), 'UTF-8'), ['bold' => true], ['align' => 'center']);
 
 
 
