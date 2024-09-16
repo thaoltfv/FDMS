@@ -228,8 +228,7 @@ class TBHanChe
         $textRun->addText($certificate->petitioner_address ? ' ' .  htmlspecialchars($certificate->petitioner_address) : '...', ['italic' => true]);
         $textRun->addText(')', ['italic' => true]);
 
-        $indentleftNumber =
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.05)]];
+
         $textRun = $section->addTextRun('indentParagraph');
         $textRun->addText('Căn cứ khoản 6, Điều 3 tại Chuẩn mực TĐGVN về Phạm vi công việc thẩm định giá và khoản 5, Điều 10 tại Chuẩn mực TĐGVN về Cơ sở giá trị thẩm định giá được ban hành kèm theo', null);
         $textRun->addText('Thông tư số 30/2024/TT-BTC, Thông tư ban hành các chuẩn mực thẩm định giá Việt Nam về quy tắc đạo đức nghề nghiệp thẩm định giá, phạm vi công việc thẩm định giá, cơ sở giá trị thẩm định giá, hồ sơ thẩm định giá của Bộ trưởng Bộ Tài chính ban ành ngày ngày 16/5/2024;', ['bold' => true, 'italic' => true]);
@@ -284,16 +283,16 @@ class TBHanChe
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name)  . ' các nội dung như sau:', null, 'indentParagraph');
         $textRun = $section->addTextRun();
-        $textRun->addText(' 1.	Cơ sở giá trị thẩm định giá: ', ['bold' => true]);
+        $textRun->addText('   1.	Cơ sở giá trị thẩm định giá: ', ['bold' => true]);
         $textRun->addText('Cơ sở giá trị thị trường.', ['bold' => false]);
         $textRun = $section->addTextRun();
-        $textRun->addText(' 2.	Giả thiết đặc biệt: ', ['bold' => true]);
+        $textRun->addText('   2.	Giả thiết đặc biệt: ', ['bold' => true]);
         $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
         $textRun = $section->addTextRun();
-        $textRun->addText(' 3.	Những điều khoản loại trừ và hạn chế của thẩm định giá: ', ['bold' => true]);
+        $textRun->addText('   3.	Những điều khoản loại trừ và hạn chế của thẩm định giá: ', ['bold' => true]);
         $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
-        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến  ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, $indentleftNumber);
-        $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, $indentleftNumber);
+        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến  ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, 'indentParagraph');
+        $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
 
         $table = $section->addTable([
             'align' => JcTable::START,
