@@ -3768,6 +3768,10 @@ export default {
 				this.exportKHTDG();
 			} else if (type === "BBTL") {
 				this.exportBBTL();
+			} else if (type === "TBGTDB") {
+				this.exportTBGTDB();
+			} else if (type === "TBHCLT") {
+				this.exportTBHCLT();
 			}
 		},
 		handleMenuClick(e) {
@@ -5148,6 +5152,48 @@ export default {
 		},
 		async exportKHTDG() {
 			await Certificate.getPrintKHTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportTBHCLT() {
+			await Certificate.getPrintTBHCLT(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportTBGTDB() {
+			await Certificate.getPrintTBGTDB(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
