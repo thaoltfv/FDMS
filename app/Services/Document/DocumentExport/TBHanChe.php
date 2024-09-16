@@ -240,87 +240,145 @@ class TBHanChe
             $document_date_string .= ' ngày  .../.../...';
         }
 
-        $textRun = $section->addTextRun($indentleftNumber);
-        $textRun->addText('Căn cứ Hợp đồng cung cấp dịch vụ thẩm định giá tài sản số ' . $document_date_string . ' ký kết giữa ' . ($company->name ? htmlspecialchars($company->name) : 'Công ty TNHH Thẩm định giá NOVA ') . ' và ' . htmlspecialchars($certificate->petitioner_name) . ' về việc thẩm định giá tài sản là ', null);
-        $textRun->addText('Thông tư số 30/2024/TT-BTC, Thông tư ban hành các chuẩn mực thẩm định giá Việt Nam về quy tắc đạo đức nghề nghiệp thẩm định giá, phạm vi công việc thẩm định giá, cơ sở giá trị thẩm định giá, hồ sơ thẩm định giá của Bộ trưởng Bộ Tài chính ban hành ngày ngày 16/5/2024;', ['bold' => true, 'italic' => true]);
+        $isApartment = in_array('CC', $certificate->document_type ?? []);
+        $addressHSTD = "";
+        if ($certificate->realEstate && count($certificate->realEstate) > 0) {
+            if ($isApartment) {
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->apartment) {
+                        $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->apartment->appraise_asset) . ' tại ' .  htmlspecialchars($item->apartment->full_address) : ' và ' . htmlspecialchars($item->apartment->appraise_asset)  . ' tại ' .  htmlspecialchars($item->apartment->full_address));
+                        // $apartment = $item->apartment;
+                        // $appraiseApproaches[$apartment->apartmentAppraisalBase->approach->id] = $apartment->apartmentAppraisalBase;
+                    }
+                }
+                // foreach ($appraiseApproaches as $item) {
+                //     array_push($appraiseMethodUsed, $item->methodUsed->name);
+                // }
+                // $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+                // $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
+            } else {
+                foreach ($certificate->realEstate as $index => $item) {
+                    if ($item->appraises) {
+                        $addressHSTD .= ($index == 0 ?  htmlspecialchars($item->appraises->appraise_asset) . ' tại ' .  htmlspecialchars($item->appraises->full_address) : ' và ' . htmlspecialchars($item->appraises->appraise_asset)  . ' tại ' .  htmlspecialchars($item->appraises->full_address));
+                        // $appraise = $item->appraises;
+                        // $appraiseApproaches[$appraise->appraiseApproach->id] = $appraise;
+                    }
+                }
+                // foreach ($appraiseApproaches as $item) {
+                //     array_push($appraiseMethodUsed, $item->appraiseMethodUsed->name);
+                // }
+                // $appraiseMethodUsedStr = implode(', ', $appraiseMethodUsed);
+                // $appraiseMethodUsedStr = mb_strtolower($appraiseMethodUsedStr, 'utf8');
+            }
+        }
+
+        $section->addText('Căn cứ Hợp đồng cung cấp dịch vụ thẩm định giá tài sản số ' . $document_date_string . ' ký kết giữa ' . ($company->name ? htmlspecialchars($company->name) : 'Công ty TNHH Thẩm định giá NOVA ') . ' và ' . htmlspecialchars($certificate->petitioner_name) . ' về việc thẩm định giá tài sản là  ' . htmlspecialchars($addressHSTD), null, $indentleftNumber);
+        $section->addText('Căn cứ các Hồ sơ, tài liệu, dữ liệu do khách hàng cung cấp cho Công ty TNHH Thẩm định giá NOVA;', null, $indentleftNumber);
+        $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, $indentleftNumber);
+        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name)  . ' các nội dung như sau:', null, $indentleftNumber);
+        $textRun = $section->addTextRun();
+        $textRun->addText('1.	Cơ sở giá trị thẩm định giá: ', ['bold' => true]);
+        $textRun->addText('Cơ sở giá trị thị trường.', ['bold' => false]);
+        $textRun = $section->addTextRun();
+        $textRun->addText('2.	Giả thiết đặc biệt: ', ['bold' => true]);
+        $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
+        $textRun = $section->addTextRun();
+        $textRun->addText('3.	Những điều khoản loại trừ và hạn chế của thẩm định giá: ', ['bold' => true]);
+        $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
+        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến  ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, $indentleftNumber);
+        $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, $indentleftNumber);
 
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        $row = $table->addRow();
-        $row->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row->addCell(9700)->addText("Bên yêu cầu thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), null, $indentleftSymbol);
+        $row = $table->addRow(300);
+        $row->addCell(5000)->addText("", null, ['align' => 'center']);
+        $row->addCell(5000)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
 
-        $row2 = $table->addRow();
-        $row2->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row2->addCell(9700)->addText("Tài sản thẩm định giá: " . $addressHSTD, null, $indentleftSymbol);
+        $row2 = $table->addRow(300);
+        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => true],  ['align' => 'left']);
+        $row2->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
-        $row3 = $table->addRow();
-        $row3->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row3->addCell(9700)->addText("Mục đích Thẩm định giá: " . (isset($certificate->appraisePurpose) ? $certificate->appraisePurpose->name . '.' : ''), null, $indentleftSymbol);
+        $row3 = $table->addRow(300);
+        $row3->addCell(5000)->addText("- Như trên;", ['italic' => true],  ['align' => 'left']);
+        $row3->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
-        // $row4 = $table->addRow();
-        // $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
-        // $row4->addCell(9700)->addText("Bên sử dụng Chứng thư thẩm định giá: " . htmlspecialchars($certificate->petitioner_name), null, $indentleftSymbol);
+        $row4 = $table->addRow(300);
+        $row4->addCell(5000)->addText("- Lưu hồ sơ TĐG;", ['italic' => true],  ['align' => 'left']);
+        $row4->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
-        $textRun = $section->addTextRun(['align' => 'both']);
-        $textRun->addText('2.  Tổ thẩm định, các công việc dự kiến', ['bold' => true]);
+        $row5 = $table->addRow(300);
+        $row5->addCell(5000)->addText("", null, ['align' => 'center']);
+        $row5->addCell(5000)->addText("HUỲNH VĂN NGOÃN", ['bold' => true], ['align' => 'center']);
 
-        $table = $section->addTable([
+        $section->addPageBreak();
+
+        $section->addText('❖   XÁC NHẬN CỦA BÊN YÊU CẦU THẨM ĐỊNH GIÁ', ['bold' => true]);
+        $section->addText('Xác nhận đã được thông báo và thống nhất các nội dụng nêu trên. ', ['bold' => false]);
+
+        $table2 = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        $row = $table->addRow();
-        $row->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row->addCell(9700, array('gridSpan' => 2))->addText("Họ, tên người thực hiện hoạt động thẩm định giá: " . (isset($certificate->appraiser) ? $certificate->appraiser->name : ''), null, $indentleftSymbol);
+        $rowtb2 = $table2->addRow(300);
+        $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
+        $rowtb2->addCell(5000)->addText("BÊN YÊU CẦU THẨM ĐỊNH GIÁ", ['bold' => true], ['align' => 'center']);
+        $rowtb2 = $table2->addRow(1000);
+        $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
+        $rowtb2->addCell(5000)->addText("", ['bold' => true], ['align' => 'center']);
+        $rowtb2 = $table2->addRow(300);
+        $rowtb2->addCell(5000)->addText("", null, ['align' => 'center']);
+        $rowtb2->addCell(5000)->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => true], ['align' => 'center']);
 
-        $row2 = $table->addRow();
-        $row2->addCell(200)->addText(" ", null, ['align' => 'left']);
-        $row2->addCell(9700, array('gridSpan' => 2))->addText("Họ, tên người thu thập thông tin: " .  (isset($certificate->appraiserPerform) ? $certificate->appraiserPerform->name : ''), null, $indentleftSymbol);
+        $section->addPageBreak();
+        $section->addText("PHỤ LỤC:", ['bold' => true], ['align' => 'center']);
+        $section->addText("CÁC GIẢ THIẾT, GIẢ THIẾT ĐẶC BIỆT VÀ", ['bold' => true], ['align' => 'center']);
+        $section->addText("NHỮNG LOẠI TRỪ, HẠN CHẾ CỦA THẨM ĐỊNH GIÁ:", ['bold' => true], ['align' => 'center']);
 
-        $row3 = $table->addRow();
-        $row3->addCell(200)->addText(" ", null, ['align' => 'left']);
-        $row3->addCell(9700, array('gridSpan' => 2))->addText("Các công việc thực hiện (dự kiến): Thực hiện toàn bộ công việc Thẩm định giá theo các quy định pháp luật hiện hành: khảo sát hiện trạng tài sản, thu thập thông tin, ước tính giá trị tài sản thẩm định giá, lập hồ sơ thẩm định giá, ký tên Hồ sơ thẩm định giá.", null, $indentleftSymbol);
+        $section->addText("1.	Các giả thiết và giả thiết đặc của thẩm định giá", ['bold' => true], ['align' => 'left']);
+        $textRun = $section->addTextRun();
+        $textRun->addText('❖   ', ['bold' => true]);
+        $textRun->addText('Giả thiết', ['italic' => true]);
+        $section->addText('-    Không có.', []);
+        $textRun = $section->addTextRun();
+        $textRun->addText('❖   ', ['bold' => true]);
+        $textRun->addText('Giả thiết đặc biệt', ['italic' => true]);
+        $section->addText('-    Không có.', []);
 
-        $row4 = $table->addRow();
-        $row4->addCell(200)->addText(" -", ['bgColor' => 'FFFF00'], ['align' => 'left']);
-        $row4->addCell(9700, array('gridSpan' => 2))->addText("Thời gian thực hiện (dự kiến):", ['bgColor' => 'FFFF00'], $indentleftSymbol);
+        $section->addText("2.	Những hạn chế và loại trừ của thẩm định giá", ['bold' => true], ['align' => 'left']);
+        $textRun = $section->addTextRun();
+        $textRun->addText('❖   ', ['bold' => true]);
+        $textRun->addText('Những hạn chế và loại trừ của kết quả thẩm định giá', ['italic' => true]);
 
-        $row4 = $table->addRow();
-        $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row4->addCell(9700, array('gridSpan' => 2))->addText("Các nội dung cần trưng cầu ý kiến chuyên gia (nếu có): Có/Không.", null, $indentleftSymbol);
+        $section->addListItem("Kết quả thẩm định giá trong chứng thư này chỉ có đúng với tài sản có đặc điểm pháp lý, kinh tế – kỹ thuật, số lượng và hiện trạng như đã mô tả trong báo cáo thẩm định giá tại thời điểm và địa điểm thẩm định giá. Khách hàng / bên thứ ba sử dụng kết quả thẩm định giá có trách nhiệm đối chiếu, đặc điểm tài sản thẩm định giá đã mô tả trong báo cáo này với tài sản cần thẩm định giá của mình trước khi sử dụng chứng thư thẩm định giá. Trường hợp có sự sai khác về đặc điểm tài sản cần thẩm định giá thì khách hàng / bên thứ ba sử dụng kết quả thẩm định phải dừng ngay việc sử dụng chứng thư thẩm định giá và thông báo cho Công ty TNHH Thẩm định giá Nova.", 0, [], 'bullets', []);
+        $section->addListItem("Bên yêu cầu thẩm định giá chịu trách nhiệm về tính chính xác, hợp pháp của các hồ sơ pháp lý, thông tin cung cấp cho Công ty TNHH Thẩm định giá Nova. Bên yêu cầu thẩm định giá trực tiếp hoặc ủy quyền hợp pháp cho người có đủ hiểu biết về tài sản thẩm định giá hướng dẫn chuyên viên của công ty TNHH Thẩm định giá Nova thực hiện khảo sát, thu thập thông tin về tài sản thẩm định giá. Công ty TNHH Thẩm định giá Nova không đối chiếu hồ sơ pháp lý khách hàng cung cấp với bản chính, không chịu trách nhiệm về chứng thư thẩm định giá trong trường hợp khách hàng cung cấp thông tin sai lệch dẫn tới sai lệch trong kết quả thẩm định giá.", 0, [], 'bullets', []);
+        $section->addListItem("Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. Công ty TNHH Thẩm định giá NOVA không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của tài sản hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.", 0, [], 'bullets', []);
+        $section->addListItem("Chứng thư thẩm định giá được lập trong điều kiện thị trường bình thường tại thời điểm thẩm định giá. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm trong trường hợp giá cả thị trường của tài sản có biến động bất thường, bất khả kháng xảy ra tại thời điểm sau thời điểm thẩm định giá.", 0, [], 'bullets', []);
 
-        $row4 = $table->addRow();
-        $row4->addCell(200)->addText(" -", null, ['align' => 'left']);
-        $row4->addCell(9700, array('gridSpan' => 2))->addText("Các yêu cầu hỗ trợ khác (nếu có): …………………………………………/Không đề xuất.", null, $indentleftSymbol);
+        $textRun = $section->addTextRun();
+        $textRun->addText('❖   ', ['bold' => true]);
+        $textRun->addText('Những điều khoản loại trừ của chứng thư thẩm định giá', ['italic' => true]);
 
-
-        $table = $section->addTable([
-            'align' => JcTable::START,
-            'width' => 100 * 50,
-            'unit' => 'pct'
-        ]);
-        $row13 = $table->addRow();
-        $row13->addCell(3300)->addText('Người duyệt', ['bold' => true], ['align' => 'center']);
-        $row13->addCell(3300)->addText('Người kiểm tra', ['bold' => true], ['align' => 'center']);
-        $row13->addCell(3300)->addText('Người lập', ['bold' => true], ['align' => 'center']);
-
-        $row14 = $table->addRow();
-        $row14->addCell(3300)->addText('Tổng Giám đốc', ['bold' => true], ['align' => 'center']);
-        $row14->addCell(3300)->addText('Thẩm Định viên', ['bold' => true], ['align' => 'center']);
-        $row14->addCell(3300)->addText('Chuyên viên thẩm định giá', ['bold' => true], ['align' => 'center']);
+        $section->addListItem("Chứng thư thẩm định giá, báo cáo thẩm định giá và các phụ lục kèm theo là những phần không thể tách rời trong quá trình sử dụng kết quả tư vấn thẩm định giá. Chứng thư thẩm định giá chỉ có giá trị sử dụng với bản chính, theo số lượng đã phát hành ghi trong chứng thư.", 0, [], 'bullets', []);
+        $section->addListItem("Chứng thư thẩm định giá có giá trị sử dụng trong thời gian có hiệu lực, theo mục đích thẩm định giá duy nhất đã thỏa thuận trong hợp đồng / giấy yêu cầu thẩm định giá gắn với đúng thông tin tài sản, số lượng tài sản tại hợp đồng thẩm định giá. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm trong trường hợp khách hàng / bên sử dụng kết quả thẩm định giá sử dụng sai mục đích, thời hiệu của chứng thư thẩm định giá.", 0, [], 'bullets', []);
+        $section->addListItem("Kết quả thẩm định giá trong chứng thư là mức giá Công ty TNHH Thẩm định giá Nova tư vấn để khách hàng hoặc bên thứ ba sử dụng kết quả thẩm định giá tham khảo, ra quyết định theo mục đích thẩm định giá đã yêu cầu. Chứng thư thẩm định giá không phải là văn bản bắt buộc bất cứ bên nào tham gia giao dịch phải thực hiện theo giá trị tư vấn.", 0, [], 'bullets', []);
+        $section->addListItem("Người sử dụng chứng thư thẩm định giá hợp pháp là khách hàng hoặc bên thứ ba đã được chỉ định trong giấy yêu cầu thẩm định giá / hợp đồng thẩm định giá. Các chủ thể khác sử dụng chứng thư thẩm định giá khi chưa có sự đồng ý bằng văn bản của Công ty TNHH Thẩm định giá Nova và khách hàng là hành vi bất hợp pháp.", 0, [], 'bullets', []);
+        $section->addListItem("Chứng thư thẩm định giá được sử dụng hợp pháp khi khách hàng thực hiện đầy đủ và toàn vẹn các thỏa thuận đã nêu trong hợp đồng tư vấn dịch vụ thẩm định giá tài sản. Công ty TNHH Thẩm định giá Nova không chịu trách nhiệm khi khách hàng cố ý sử dụng chứng thư thẩm định giá khi chưa hoàn tất nghĩa vụ thanh toán phí dịch vụ thẩm định giá.", 0, [], 'bullets', []);
 
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
-        $table->addCell(9900, array('borderTopSize' => 1, 'borderTopColor' => '000000')) // Add a top border to the cell
-            ->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
-                ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
-        $reportUserName = CommonService::getUserReport();
-        $reportName = 'KHTDG' . '_' . htmlspecialchars($certificate->petitioner_name);
+        $table->addCell(6000)->addPreserveText('Trang {PAGE}/{NUMPAGES}', array('size' => 8), array('align' => 'center'));
+
+        // $table->addCell(9900, array('borderTopSize' => 1, 'borderTopColor' => '000000')) // Add a top border to the cell
+        //     ->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
+        //         ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
+
+
+        $reportName = 'TBHCLT' . '_' . ($certificate->petitioner_name);
         $reportName = str_replace(['%', '@', '!', '#', '&', '/', '\\', ':', '*', '?', '"', '<', '>', '|'], ' ', $reportName); // replace invalid characters with underscore
 
         $reportName = str_replace(
