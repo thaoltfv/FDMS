@@ -324,15 +324,15 @@ class TBGiaThiet
         $row->addCell(5000)->addText($positionName, ['bold' => true], ['align' => 'center']);
 
         $row2 = $table->addRow(300);
-        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => 'single'],  ['align' => 'left']);
+        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => 'single'], 'indentParagraph');
         $row2->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
         $row3 = $table->addRow(300);
-        $row3->addCell(5000)->addText("- Như trên;", ['italic' => true],  ['align' => 'left']);
+        $row3->addCell(5000)->addText("- Như trên;", ['italic' => true], 'indentParagraph');
         $row3->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
         $row4 = $table->addRow(300);
-        $row4->addCell(5000)->addText("- Lưu hồ sơ TĐG;", ['italic' => true],  ['align' => 'left']);
+        $row4->addCell(5000)->addText("- Lưu hồ sơ TĐG;", ['italic' => true], 'indentParagraph');
         $row4->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
         $row5 = $table->addRow(300);
