@@ -78,7 +78,7 @@ class TBGiaThiet
         );
         $phpWord->addParagraphStyle(
             'indentParagraph',
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.13), 'firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.1)]]
+            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23), 'firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
         );
         $phpWord->addParagraphStyle(
             'alignItemCenter',
@@ -317,7 +317,7 @@ class TBGiaThiet
         $row->addCell(5000)->addText($positionName, ['bold' => true], ['align' => 'center']);
 
         $row2 = $table->addRow(300);
-        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => true],  ['align' => 'left']);
+        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => 'single'],  ['align' => 'left']);
         $row2->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
         $row3 = $table->addRow(300);

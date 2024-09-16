@@ -311,7 +311,7 @@ class TBHanChe
         $row->addCell(5000)->addText($positionName, ['bold' => true], ['align' => 'center']);
 
         $row2 = $table->addRow(300);
-        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => true],  ['align' => 'left']);
+        $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => 'single'],  ['align' => 'left']);
         $row2->addCell(5000)->addText("", ['bold' => false], ['align' => 'center']);
 
         $row3 = $table->addRow(300);
