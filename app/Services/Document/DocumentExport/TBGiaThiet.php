@@ -290,7 +290,6 @@ class TBGiaThiet
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
-        $rowtb3 = $table3->addRow(300);
 
         $rowtb3 = $table3->addRow(300);
         $rowtb3->addCell(500)->addText("❖", null, ['align' => 'left']);
