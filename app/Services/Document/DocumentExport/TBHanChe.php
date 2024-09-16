@@ -294,9 +294,15 @@ class TBHanChe
             'width' => 100 * 50,
             'unit' => 'pct'
         ]);
+        $positionName = "TỔNG GIÁM ĐỐC";
+        $appraiserManager = (isset($certificate->appraiserConfirm->name)) ? $certificate->appraiserConfirm->name : $certificate->appraiserManager->name;
+        if (isset($certificate->appraiserConfirm->name)) {
+            $positionName = "KT. TỔNG GIÁM ĐỐC";
+            // $cell32->addText($certificate->appraiserConfirm->appraisePosition->description, ['bold' => true], ['align' => 'center', 'keepNext' => true]);
+        }
         $row = $table->addRow(300);
         $row->addCell(5000)->addText("", null, ['align' => 'center']);
-        $row->addCell(5000)->addText("TỔNG GIÁM ĐỐC", ['bold' => true], ['align' => 'center']);
+        $row->addCell(5000)->addText($positionName, ['bold' => true], ['align' => 'center']);
 
         $row2 = $table->addRow(300);
         $row2->addCell(5000)->addText("Nơi nhận:", ['bold' => true, 'underline' => true],  ['align' => 'left']);
@@ -312,7 +318,7 @@ class TBHanChe
 
         $row5 = $table->addRow(300);
         $row5->addCell(5000)->addText("", null, ['align' => 'center']);
-        $row5->addCell(5000)->addText("HUỲNH VĂN NGOÃN", ['bold' => true], ['align' => 'center']);
+        $row5->addCell(5000)->addText($appraiserManager, ['bold' => true], ['align' => 'center']);
 
         $section->addPageBreak();
 
@@ -346,7 +352,7 @@ class TBHanChe
             'unit' => 'pct'
         ]);
         $rowtb3 = $table3->addRow(300);
-        $rowtb3->addCell(500)->addText("1.", null, ['align' => 'left']);
+        $rowtb3->addCell(500)->addText("1.", ['bold' => true], ['align' => 'left']);
         $rowtb3->addCell(9400)->addText("Các giả thiết và giả thiết đặc của thẩm định giá", ['bold' => true], ['align' => 'left']);
 
         $rowtb3 = $table3->addRow(300);
@@ -367,7 +373,7 @@ class TBHanChe
 
 
         $rowtb3 = $table3->addRow(300);
-        $rowtb3->addCell(500)->addText("2.", null, ['align' => 'left']);
+        $rowtb3->addCell(500)->addText("2.", ['bold' => true], ['align' => 'left']);
         $rowtb3->addCell(9400)->addText("Những hạn chế và loại trừ của thẩm định giá", ['bold' => true], ['align' => 'left']);
 
         $rowtb3 = $table3->addRow(300);
