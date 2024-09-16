@@ -17,7 +17,7 @@ use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
 
-class KeHoachTDG
+class TBGiaThiet
 {
     use ResponseTrait;
     function formatNumberFunction($number, $count = 0, $tenp = ',', $temp2 = '.')
