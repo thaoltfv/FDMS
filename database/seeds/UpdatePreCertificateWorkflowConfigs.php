@@ -68,7 +68,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [
@@ -123,7 +123,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [
@@ -191,7 +191,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [
@@ -259,7 +259,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [
@@ -328,7 +328,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [
@@ -394,7 +394,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [
@@ -454,7 +454,7 @@ class UpdatePreCertificateWorkflowConfigs extends Seeder
                     ],
                     "put_require_roles" => [
                         "ROOT_ADMIN",
-                        "SUB_ADMIN",
+                        // "SUB_ADMIN",
                         "ADMIN"
                     ],
                     "target_description" => [

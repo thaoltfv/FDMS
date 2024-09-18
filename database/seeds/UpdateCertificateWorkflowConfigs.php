@@ -68,7 +68,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -122,7 +122,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -183,7 +183,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN"
+                            // "SUB_ADMIN"
                         ],
                         "target_description" => [
                             [
@@ -241,7 +241,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN"
+                            // "SUB_ADMIN"
                         ],
                         "target_description" => [
                             [
@@ -299,7 +299,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN"
+                            // "SUB_ADMIN"
                         ],
                         "target_description" => [
                             [
@@ -358,7 +358,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -419,7 +419,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         ],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -481,7 +481,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         "isExportDocument" => true,
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -542,7 +542,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         "isExportDocument" => true,
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -603,7 +603,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         "isExportDocument" => true,
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => [
@@ -698,7 +698,7 @@ class UpdateCertificateWorkflowConfigs extends Seeder
                         "put_draggable" => [],
                         "put_require_roles" => [
                             "ROOT_ADMIN",
-                            "SUB_ADMIN",
+                            // "SUB_ADMIN",
                             "ADMIN"
                         ],
                         "target_description" => []
