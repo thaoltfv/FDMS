@@ -236,13 +236,13 @@ class TBHanChe
         $document_date_string = "";
 
         if (isset($certificate->document_num)) {
-            $document_date_string .= ' ' . $certificate->document_num;
+            $document_date_string .=  $certificate->document_num;
         } else {
             $document_date_string .= '...';
         }
         if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
             $document_date = date_create($certificate->document_date);
-            $document_date_string = ' ngày ' . date_format($document_date, "d") . '/' . date_format($document_date, "m") . '/' . date_format($document_date, "Y");
+            $document_date_string .= ' ngày ' . date_format($document_date, "d") . '/' . date_format($document_date, "m") . '/' . date_format($document_date, "Y");
         } else {
             $document_date_string .= ' ngày  .../.../...';
         }

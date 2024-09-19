@@ -206,8 +206,21 @@ class TBGiaThiet
             $cellHCentered
         );
         $row4 = $table->addRow(400, array('tblHeader' => false, 'cantSplit' => false));
+        $document_date_string = "";
+        if (isset($certificate->document_num)) {
+            $document_date_string .=  $certificate->document_num;
+        } else {
+            $document_date_string .= '...';
+        }
+        if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
+            $document_date = date_create($certificate->document_date);
+            $document_date_string .= ' ngày ' . date_format($document_date, "d") . '/' . date_format($document_date, "m") . '/' . date_format($document_date, "Y");
+        } else {
+            $document_date_string .= ' ngày  .../.../...';
+        }
         $textRunHead = $row4->addCell(3500, $cellVCentered)->addTextRun(['align' => 'left']);
-        $textRunHead->addText('Số: Theo số HĐ/TB-1 <w:br/>', null, ['align' => 'left']);
+        // $textRunHead->addText('Số: Theo số HĐ/TB-1 <w:br/>', null, ['align' => 'left']);
+        $textRunHead->addText('Số: Theo số ' . ($certificate->document_num ? $certificate->document_num : 'HĐ/TB-1') . ' <w:br/>', null, ['align' => 'left']);
         $textRunHead->addText('“Về việc thông báo giả thiết đặc biệt của hồ sơ thẩm định giá tài sản.”', ['italic' => true, []]);
         $row4->addCell(1000, $cellVCentered)->addText(
             '',
@@ -245,19 +258,7 @@ class TBGiaThiet
         $textRun = $section->addTextRun('indentParagraph');
         $textRun->addText('Căn cứ khoản 5, Điều 10 tại Chuẩn mực TĐGVN về Cơ sở giá trị thẩm định giá được ban hành kèm theo', null);
         $textRun->addText(' Thông tư số 30/2024/TT-BTC, Thông tư ban hành các chuẩn mực thẩm định giá Việt Nam về quy tắc đạo đức nghề nghiệp thẩm định giá, phạm vi công việc thẩm định giá, cơ sở giá trị thẩm định giá, hồ sơ thẩm định giá của Bộ trưởng Bộ Tài chính ban hành ngày 16/5/2024;', ['bold' => true, 'italic' => true]);
-        $document_date_string = "";
 
-        if (isset($certificate->document_num)) {
-            $document_date_string .= ' ' . $certificate->document_num;
-        } else {
-            $document_date_string .= '...';
-        }
-        if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
-            $document_date = date_create($certificate->document_date);
-            $document_date_string .= ' ngày ' . date_format($document_date, "d") . '/' . date_format($document_date, "m") . '/' . date_format($document_date, "Y");
-        } else {
-            $document_date_string .= ' ngày  .../.../...';
-        }
 
         $isApartment = in_array('CC', $certificate->document_type ?? []);
         $addressHSTD = "";
@@ -312,9 +313,9 @@ class TBGiaThiet
             } else {
                 $giathiet = $certificate->document_description;
             }
-            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars($giathiet)), null, ['valign' => 'center', 'align' => 'left']);
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars($giathiet)), null, 'indentParagraph');
         } else {
-            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, ['valign' => 'center', 'align' => 'left']);
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, 'indentParagraph');
         }
 
         // $section->addText('- ' . htmlspecialchars($certificate->document_description), null, 'indentParagraph');
