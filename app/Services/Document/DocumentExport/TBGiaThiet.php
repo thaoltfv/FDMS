@@ -16,6 +16,9 @@ use PhpOffice\PhpWord\Style\ListItem;
 use App\Services\CommonService;
 use File;
 use Illuminate\Support\Facades\Storage;
+use App\Models\CertificateHasRealEstate;
+use App\Models\CertificateApartment;
+use App\Models\CertificateApartmentAppraisalBase;
 
 class TBGiaThiet
 {
@@ -251,7 +254,7 @@ class TBGiaThiet
         }
         if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
             $document_date = date_create($certificate->document_date);
-            $document_date_string = ' ngày ' . date_format($document_date, "d") . '/' . date_format($document_date, "m") . '/' . date_format($document_date, "Y");
+            $document_date_string .= ' ngày ' . date_format($document_date, "d") . '/' . date_format($document_date, "m") . '/' . date_format($document_date, "Y");
         } else {
             $document_date_string .= ' ngày  .../.../...';
         }
@@ -288,13 +291,33 @@ class TBGiaThiet
             }
         }
 
-        $section->addText('Căn cứ Hợp đồng cung cấp dịch vụ thẩm định giá tài sản số ' . $document_date_string . ' ký kết giữa ' . ($company->name ? htmlspecialchars($company->name) : 'Công ty TNHH Thẩm định giá NOVA ') . ' và ' . htmlspecialchars($certificate->petitioner_name) . ' về việc thẩm định giá tài sản là  ' . htmlspecialchars($addressHSTD) . '.', null, 'indentParagraph');
+        $section->addText('Căn cứ Hợp đồng cung cấp dịch vụ thẩm định giá tài sản số ' . $document_date_string . ' ký kết giữa ' . ($company->name ? htmlspecialchars($company->name) : 'Công ty TNHH Thẩm định giá NOVA ') . ' và ' . htmlspecialchars($certificate->petitioner_name) . ' về việc thẩm định giá tài sản là ' . htmlspecialchars($addressHSTD) . '.', null, 'indentParagraph');
         $section->addText('Căn cứ các Hồ sơ, tài liệu, dữ liệu do khách hàng cung cấp cho Công ty TNHH Thẩm định giá NOVA;', null, 'indentParagraph');
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
+        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' nội dung về Giả thiết đặc biệt của hồ sơ như sau:.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
         $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
         $section->addText('❖ Giả thiết đặc biệt:', null, 'indentParagraph');
-        $section->addText('- ' . htmlspecialchars($certificate->document_description), null, 'indentParagraph');
+        $isApartment = in_array('CC', $certificate->document_type);
+        if ($isApartment) {
+            $apartment = CertificateHasRealEstate::where('certificate_id', $certificate->id)->first();
+            if ($apartment) {
+                $asset = CertificateApartment::where('real_estate_id', $apartment->real_estate_id)->first();
+                if ($asset) {
+                    $description = CertificateApartmentAppraisalBase::where('apartment_asset_id', $asset->id)->first();
+                    if ($description) {
+                        $giathiet = $description->description;
+                    }
+                }
+            } else {
+                $giathiet = $certificate->document_description;
+            }
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars($giathiet)), null, ['valign' => 'center', 'align' => 'left']);
+        } else {
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, ['valign' => 'center', 'align' => 'left']);
+        }
+
+        // $section->addText('- ' . htmlspecialchars($certificate->document_description), null, 'indentParagraph');
 
         // $table3 = $section->addTable([
         //     'align' => JcTable::START,

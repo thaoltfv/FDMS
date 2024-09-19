@@ -292,7 +292,7 @@ class TBHanChe
         $textRun = $section->addTextRun();
         $textRun->addText('   3.  Những điều khoản loại trừ và hạn chế của thẩm định giá: ', ['bold' => true]);
         $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
-        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến  ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, 'indentParagraph');
+        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, 'indentParagraph');
         $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
 
         $table = $section->addTable([
