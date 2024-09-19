@@ -267,6 +267,24 @@
 									label="Điện thoại người liên hệ"
 								/>
 							</div>
+							<div class="col-lg-6 col-sm-12">
+								<InputText
+									v-model="form.info_person_send"
+									vid="info_person_send"
+									label="Họ tên, SĐT người yêu cầu TĐG"
+									class="form-group-container"
+									:disabledInput="editDocument"
+								/>
+							</div>
+							<div class="col-lg-6 col-sm-12">
+								<InputText
+									v-model="form.info_person_receive"
+									vid="info_person_receive"
+									label="Họ tên, SĐT người nhận hồ sơ"
+									class="form-group-container"
+									:disabledInput="editDocument"
+								/>
+							</div>
 
 							<!-- <div class="col-lg-6 col-sm-12">
                  <InputCategoryMulti
@@ -539,6 +557,8 @@ export default {
 			}
 			const data = {
 				// data mới
+				info_person_send: form.info_person_send,
+				info_person_receive: form.info_person_receive,
 				issue_date_card: form.issue_date_card,
 				issue_place_card: form.issue_place_card,
 				name_contact: form.name_contact,
