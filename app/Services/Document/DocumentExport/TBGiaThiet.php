@@ -228,9 +228,9 @@ class TBGiaThiet
             $cellHCentered
         );
         if (isset($certificate->certificate_date) && !empty(trim($certificate->certificate_date))) {
-            $document_date = date_create($certificate->certificate_date);
-            $document_date_string = ' ngày ' . (intval(date_format($document_date, "d")) - 1 < 10 ? '0' . (intval(date_format($document_date, "d")) - 1) : intval(date_format($document_date, "d")) - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
-            $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, " . $document_date_string, ['italic' => true], $cellHCentered);
+            // $document_date = date_create($certificate->certificate_date);
+            $document_date_string_2 = ' ngày ' . (intval(date_format($document_date, "d")) - 1 < 10 ? '0' . (intval(date_format($document_date, "d")) - 1) : intval(date_format($document_date, "d")) - 1) . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
+            $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, " . $document_date_string_2, ['italic' => true], $cellHCentered);
         } else {
             $row4->addCell(5700, $cellVCentered)->addText("TP Hồ Chí Minh, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
         }
@@ -313,9 +313,9 @@ class TBGiaThiet
             }
             $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars($giathiet)), null, 'indentParagraph');
         } else {
-            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, 'indentParagraph');
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, []);
         }
-        $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
+        $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, []);
         $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
 
 
