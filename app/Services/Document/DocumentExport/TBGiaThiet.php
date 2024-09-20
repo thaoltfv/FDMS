@@ -296,7 +296,7 @@ class TBGiaThiet
         $section->addText('Căn cứ các Hồ sơ, tài liệu, dữ liệu do khách hàng cung cấp cho Công ty TNHH Thẩm định giá NOVA;', null, 'indentParagraph');
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' nội dung về Giả thiết đặc biệt của hồ sơ như sau:.', null, 'indentParagraph');
-        $section->addText('❖ Giả thiết đặc biệt:', null, 'indentParagraph');
+        $section->addText('❖ Giả thiết đặc biệt:', ['bold' => true], 'indentParagraph');
         $isApartment = in_array('CC', $certificate->document_type);
         if ($isApartment) {
             $apartment = CertificateHasRealEstate::where('certificate_id', $certificate->id)->first();
