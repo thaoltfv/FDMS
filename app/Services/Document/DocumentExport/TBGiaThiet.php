@@ -296,8 +296,6 @@ class TBGiaThiet
         $section->addText('Căn cứ các Hồ sơ, tài liệu, dữ liệu do khách hàng cung cấp cho Công ty TNHH Thẩm định giá NOVA;', null, 'indentParagraph');
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' nội dung về Giả thiết đặc biệt của hồ sơ như sau:.', null, 'indentParagraph');
-        $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
-        $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
         $section->addText('❖ Giả thiết đặc biệt:', null, 'indentParagraph');
         $isApartment = in_array('CC', $certificate->document_type);
         if ($isApartment) {
@@ -317,6 +315,9 @@ class TBGiaThiet
         } else {
             $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null, 'indentParagraph');
         }
+        $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
+        $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
+
 
         // $section->addText('- ' . htmlspecialchars($certificate->document_description), null, 'indentParagraph');
 
