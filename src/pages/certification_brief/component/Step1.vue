@@ -107,6 +107,15 @@
 							label="Ghi chú"
 							class="form-group-container"
 						/>
+
+						<InputText
+							v-model="data.info_person_send"
+							vid="info_person_send"
+							label="Họ tên, SĐT người yêu cầu TĐG"
+							placeholder="Nhập thông tin người yêu cầu TĐG"
+							class="form-group-container col-sm-12 col-md-12"
+						/>
+
 						<!-- <InputCategoryMulti
               v-model="data.document_type"
               :maxTagCount="1"
@@ -238,6 +247,13 @@
 								rules="required"
 								:options="optionsLoaiKH"
 								@change="data.is_company = $event"
+							/>
+							<InputText
+								v-model="data.info_person_receive"
+								vid="info_person_receive"
+								label="Họ tên, SĐT người nhận hồ sơ"
+								placeholder="Nhập thông tin người nhận hồ sơ"
+								class="form-group-container col-sm-12 col-md-12"
 							/>
 						</div>
 					</div>

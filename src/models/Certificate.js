@@ -119,6 +119,20 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	static async getPrintTBGTDB(id, is_pc = 0) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/print/tb-gia-thiet-dac-biet/${id}/${is_pc}`,
+			isStatic: true
+		});
+	}
+	static async getPrintTBHCLT(id, is_pc = 0) {
+		return new this().request({
+			method: "GET",
+			url: `certificate-asset/print/tb-han-che-loai-tru/${id}/${is_pc}`,
+			isStatic: true
+		});
+	}
 	static async getPrintBBTL(id, is_pc = 0) {
 		return new this().request({
 			method: "GET",

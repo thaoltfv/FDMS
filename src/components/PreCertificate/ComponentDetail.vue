@@ -217,7 +217,8 @@
 													v-if="
 														(editAppraiser && edit) ||
 															isBusinessManager ||
-															byPassAdmin
+															byPassAdmin ||
+															byPassSubAdmin
 													"
 													@click="handleShowAppraisal"
 													class="btn-edit"
@@ -265,7 +266,7 @@
 											<p>{{ dataPC.petitioner_name }}</p>
 										</div>
 										<div
-											v-if="editInfo && edit"
+											v-if="(editInfo && edit) || byPassAdmin"
 											@click="handleShowAppraiseInformation"
 											class="btn-edit d-flex align-items-start"
 										>
@@ -420,7 +421,8 @@
 													v-if="
 														(editAppraiser && edit) ||
 															isBusinessManager ||
-															byPassAdmin
+															byPassAdmin ||
+															byPassSubAdmin
 													"
 													@click="handleShowAppraisal"
 													class="btn-edit d-flex align-items-start"
@@ -1066,8 +1068,6 @@ export default {
 			title: "",
 			indexDelete: "",
 			id_file_delete: "",
-			isBusinessManager: false,
-			byPassAdmin: false,
 			showDetailAppraise: false,
 			dataDetailAppraise: [],
 			appraiser_number: "",
@@ -1220,6 +1220,7 @@ export default {
 		const user_id = ref("");
 		const isBusinessManager = ref(false);
 		const byPassAdmin = ref(false);
+		const byPassSubAdmin = ref(false);
 		const permissionFunction = async () => {
 			profile.value = vueStoree.value.profile;
 			user_id.value = vueStoree.value.user.id;
@@ -1242,6 +1243,9 @@ export default {
 					vueStoree.value.user.roles[0].name === "ROOT_ADMIN")
 			) {
 				byPassAdmin.value = true;
+			}
+			if (dataPC.value && vueStoree.value.user.roles[0].name === "SUB_ADMIN") {
+				byPassSubAdmin.value = true;
 			}
 			const permission = vueStoree.value.currentPermissions;
 			permission.forEach(value => {
@@ -1295,7 +1299,9 @@ export default {
 			priceEstimateStore,
 			priceEstimates,
 			miscVariable,
-
+			byPassSubAdmin,
+			byPassAdmin,
+			isBusinessManager,
 			totalPricePriceEstimate,
 			editExportDocument,
 			showExportDocument,

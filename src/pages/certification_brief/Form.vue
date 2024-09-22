@@ -133,6 +133,8 @@ export default {
 					survey_location: "",
 					name_contact: "",
 					phone_contact: "",
+					info_person_receive: "",
+					info_person_send: "",
 					issue_date_card: "",
 					issue_place_card: "",
 					//

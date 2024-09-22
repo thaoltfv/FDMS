@@ -214,6 +214,18 @@
 								</div>
 								<div class="row d-flex container_content">
 									<strong class="margin_content_inline"
+										>Thông tin người yêu cầu TĐG:</strong
+									>
+									<p>{{ form.info_person_send }}</p>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline"
+										>Thông tin người nhận hồ sơ:</strong
+									>
+									<p>{{ form.info_person_receive }}</p>
+								</div>
+								<div class="row d-flex container_content">
+									<strong class="margin_content_inline"
 										>Ngày giờ khảo sát:</strong
 									>
 									<p>
@@ -3202,6 +3214,8 @@ export default {
 				survey_location: "",
 				name_contact: "",
 				phone_contact: "",
+				info_person_receive: "",
+				info_person_send: "",
 				issue_date_card: "",
 				issue_place_card: ""
 			},
@@ -3768,6 +3782,10 @@ export default {
 				this.exportKHTDG();
 			} else if (type === "BBTL") {
 				this.exportBBTL();
+			} else if (type === "TBGTDB") {
+				this.exportTBGTDB();
+			} else if (type === "TBHCLT") {
+				this.exportTBHCLT();
 			}
 		},
 		handleMenuClick(e) {
@@ -4138,7 +4156,9 @@ export default {
 			this.form.phone_contact = dataAppraiseInformation.phone_contact;
 			this.form.issue_date_card = dataAppraiseInformation.issue_date_card;
 			this.form.issue_place_card = dataAppraiseInformation.issue_place_card;
-
+			this.form.info_person_receive =
+				dataAppraiseInformation.info_person_receive;
+			this.form.info_person_send = dataAppraiseInformation.info_person_send;
 			this.form.appraise_date = dataAppraiseInformation.appraise_date;
 			this.form.appraise_purpose_id =
 				dataAppraiseInformation.appraise_purpose_id;
@@ -5148,6 +5168,48 @@ export default {
 		},
 		async exportKHTDG() {
 			await Certificate.getPrintKHTDG(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportTBHCLT() {
+			await Certificate.getPrintTBHCLT(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					const fileLink = document.createElement("a");
+					fileLink.href = file.url;
+					fileLink.setAttribute("download", file.file_name);
+					document.body.appendChild(fileLink);
+					fileLink.click();
+					fileLink.remove();
+					window.URL.revokeObjectURL(fileLink);
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async exportTBGTDB() {
+			await Certificate.getPrintTBGTDB(this.idData).then(resp => {
 				const file = resp.data;
 				if (file) {
 					const fileLink = document.createElement("a");
