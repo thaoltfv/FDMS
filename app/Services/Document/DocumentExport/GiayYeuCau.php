@@ -731,8 +731,8 @@ class GiayYeuCau
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người nhận hồ sơ: ");
         // $section->addListItem("Phương thức, địa điểm giao nhận hồ sơ: Email/phần mềm/tên công cụ mạng xã hội hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova. ", 0, [], 'bullets', $indentPara2);
-        $section->addListItem("Họ tên, số điện thoại của người yêu cầu thẩm định giá: ", 0, [], 'bullets', $indentPara2);
-        $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: ", 0, [], 'bullets', $indentPara2);
+        $section->addListItem("Họ tên, số điện thoại của người yêu cầu thẩm định giá: " . (isset($certificate->info_person_send) ? htmlspecialchars($certificate->info_person_send) : ''), 0, [], 'bullets', $indentPara2);
+        $section->addListItem("Họ tên, số điện thoại người nhận hồ sơ: " . (isset($certificate->info_person_receive) ? htmlspecialchars($certificate->info_person_receive) : ''), 0, [], 'bullets', $indentPara2);
 
         // 3
         $textRun = $section->addTextRun('Heading2');

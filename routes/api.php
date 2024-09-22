@@ -442,6 +442,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('print/bien-ban-thanh-ly/{id}/{is_pc?}', [CertificateAssetController::class, 'printBienBanThanhLy']);
 
+        Route::get('print/tb-gia-thiet-dac-biet/{id}/{is_pc?}', [CertificateAssetController::class, 'printTBGTDB']);
+
+        Route::get('print/tb-han-che-loai-tru/{id}/{is_pc?}', [CertificateAssetController::class, 'printTBHCLT']);
+
         Route::get('download-all-official/{id}/{type}', [CertificateAssetController::class, 'downloadAllOfficial']);
         Route::get('download-all-official-pre-certificate/{id}/{type}', [CertificateAssetController::class, 'downloadAllOfficialPreCertificate']);
         Route::get('delete-file-after-download/{name}', [CertificateAssetController::class, 'deleteAfterDownload']);
