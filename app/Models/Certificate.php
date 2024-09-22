@@ -68,6 +68,8 @@ class Certificate extends Model
         'is_company',
         'phone_contact',
         'name_contact',
+        'info_person_send',
+        'info_person_receive',
         'survey_location',
         'survey_time',
         'issue_date_card',

@@ -451,6 +451,16 @@ class CertificateAssetController extends Controller
         $service = 'App\\Services\\Document\\DocumentExport\\BienBanThanhLy';
         return $this->printDocument($id, $is_pc, $service);
     }
+    public function printTBGTDB($id, $is_pc = 0)
+    {
+        $service = 'App\\Services\\Document\\DocumentExport\\TBGiaThiet';
+        return $this->printDocument($id, $is_pc, $service);
+    }
+    public function printTBHCLT($id, $is_pc = 0)
+    {
+        $service = 'App\\Services\\Document\\DocumentExport\\TBHanChe';
+        return $this->printDocument($id, $is_pc, $service);
+    }
     public function downloadAllOfficial($id, $type)
     {
         try {
@@ -471,7 +481,8 @@ class CertificateAssetController extends Controller
                     }
                 }
             } else if ($type == 'TaiLieuTuDongHanhChinh') {
-                $tempTLTD = ['GiayYeuCau', 'HopDongTDG', 'KeHoachTDG', 'BienBanThanhLy'];
+                // $tempTLTD = ['GiayYeuCau', 'HopDongTDG', 'KeHoachTDG', 'BienBanThanhLy'];
+                $tempTLTD = ['GiayYeuCau', 'HopDongTDG', 'KeHoachTDG', 'TBHanChe', 'TBGiaThiet'];
                 foreach ($tempTLTD as  $value) {
                     $service = 'App\\Services\\Document\\DocumentExport\\' . $value;
                     $item =  $this->printDocumentAll($id, $service);
