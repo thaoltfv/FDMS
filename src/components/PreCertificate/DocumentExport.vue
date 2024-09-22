@@ -368,13 +368,24 @@ export default {
 				isAutoExport: true
 			},
 			{ type_document: "HDTDG", nameTitle: "Hợp đồng", isAutoExport: true },
+
+			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
+			{
+				type_document: "TBGTDB",
+				nameTitle: "Thông báo giả thiết đặc biệt",
+				isAutoExport: true
+			},
+			{
+				type_document: "TBHCLT",
+				nameTitle: "Thông báo hạn chế và loại trừ",
+				isAutoExport: true
+			},
+
 			{
 				type_document: "BBTL",
 				nameTitle: "Thanh lý hợp đồng",
-				isAutoExport: true
+				isAutoExport: false
 			},
-			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
-
 			{
 				type_document: "HSPL",
 				nameTitle: "Hồ sơ pháp lý",
@@ -395,9 +406,20 @@ export default {
 			{ type_document: "HDTDG", nameTitle: "Hợp đồng", isAutoExport: true },
 			{ type_document: "KHTDG", nameTitle: "Kế hoạch TĐG", isAutoExport: true },
 			{
+				type_document: "TBGTDB",
+				nameTitle: "Thông báo giả thiết đặc biệt",
+				isAutoExport: true
+			},
+			{
+				type_document: "TBHCLT",
+				nameTitle: "Thông báo hạn chế và loại trừ",
+				isAutoExport: true
+			},
+
+			{
 				type_document: "BBTL",
 				nameTitle: "Thanh lý hợp đồng",
-				isAutoExport: true
+				isAutoExport: false
 			},
 			{
 				type_document: "HSPL",
@@ -539,6 +561,10 @@ export default {
 				this.viewKHTDG();
 			} else if (type === "BBTL") {
 				this.viewBBTL();
+			} else if (type === "TBGTDB") {
+				this.viewTBGTDB();
+			} else if (type === "TBHCLT") {
+				this.viewTBHCLT();
 			}
 		},
 		handleViewDocumentUpload(file) {
@@ -604,6 +630,40 @@ export default {
 					this.filePreview = file.url;
 					this.isShowPreview = true;
 					this.title = "Kế hoạch TĐG";
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async viewTBGTDB() {
+			await Certificate.getPrintTBGTDB(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					this.filePreview = file.url;
+					this.isShowPreview = true;
+					this.title = "Thông báo giả thiết đặc biệt";
+				} else {
+					this.$toast.open({
+						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
+						type: "error",
+						position: "top-right",
+						duration: 3000
+					});
+				}
+			});
+		},
+		async viewTBHCLT() {
+			await Certificate.getPrintTBHCLT(this.idData).then(resp => {
+				const file = resp.data;
+				if (file) {
+					this.filePreview = file.url;
+					this.isShowPreview = true;
+					this.title = "Thông báo hạn chế và loại trừ";
 				} else {
 					this.$toast.open({
 						message: "Tải file bị lỗi vui lòng gọi hỗ trợ",
