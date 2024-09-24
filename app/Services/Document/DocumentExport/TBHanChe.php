@@ -286,14 +286,39 @@ class TBHanChe
         $textRun = $section->addTextRun();
         $textRun->addText('   1.  Cơ sở giá trị thẩm định giá: ', ['bold' => true]);
         $textRun->addText('Cơ sở giá trị thị trường.', ['bold' => false]);
-        $textRun = $section->addTextRun();
-        $textRun->addText('   2.  Giả thiết đặc biệt: ', ['bold' => true]);
-        $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
-        $textRun = $section->addTextRun();
-        $textRun->addText('   3.  Những điều khoản loại trừ và hạn chế của thẩm định giá: ', ['bold' => true]);
-        $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
-        $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, 'indentParagraph');
-        $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
+        $section->addText('   2.   Những hạn chế và điều khoản loại trừ trách nhiệm đối với hồ sơ thẩm định giá', ['bold' => true]);
+        $section->addText('   2.1. Những hạn chế của hồ sơ thẩm định giá', ['bold' => true]);
+        $table = $section->addTable([
+            'align' => JcTable::START,
+            'width' => 100 * 50,
+            'unit' => 'pct'
+        ]);
+        $row = $table->addRow(300);
+        $row->addCell(600)->addText("-", null, ['align' => 'left']);
+        $row->addCell(9300)->addText('Bên yêu cầu thẩm định giá chịu trách nhiệm về tính chính xác, hợp pháp của các hồ sơ pháp lý, thông tin cung cấp cho Công ty TNHH Thẩm định giá Nova. Bên yêu cầu thẩm định giá trực tiếp hoặc ủy quyền hợp pháp cho người có đủ hiểu biết về tài sản thẩm định giá hướng dẫn chuyên viên của công ty TNHH Thẩm định giá Nova thực hiện khảo sát, thu thập thông tin về tài sản thẩm định giá. Công ty TNHH Thẩm định giá Nova không đối chiếu hồ sơ pháp lý khách hàng cung cấp với bản chính và không chịu trách nhiệm về chứng thư thẩm định giá trong trường hợp khách hàng cung cấp thông tin sai lệch dẫn tới sai lệch trong kết quả thẩm định giá.', ['bold' => false], ['align' => 'both']);
+
+        $row = $table->addRow(300);
+        $row->addCell(600)->addText("-", null, ['align' => 'left']);
+        $row->addCell(9300)->addText('Hiện trạng của tài sản thẩm định giá được ghi nhận tại thời điểm khảo sát hiện trạng tài sản. Công ty TNHH Thẩm định giá NOVA không chịu trách nhiệm nếu có phát sinh các hư hỏng, phá bỏ, thay đổi kết cấu hiện trạng của tài sản hay thay đổi chủ sở hữu trong quá trình sử dụng sau thời điểm khảo sát hiện trạng tài sản thẩm định giá.', ['bold' => false], ['align' => 'both']);
+
+        $row = $table->addRow(300);
+        $row->addCell(600)->addText("-", null, ['align' => 'left']);
+        $row->addCell(9300)->addText('Chứng thư thẩm định giá, báo cáo thẩm định giá chỉ có giá trị sử dụng trong thời gian hiệu lực theo đúng mục đích thẩm định giá gắn với đúng thông tin tài sản, số lượng tài sản tại Hợp đồng thẩm định giá. Bên yêu cầu hoặc bên thứ ba sử dụng kết quả thẩm định giá có trách nhiệm đối chiếu số lượng, đặc điểm tài sản đã mô tả trong báo cáo thẩm định giá với tài sản yêu cầu thẩm định giá trước khi sử dụng chứng thư thẩm định giá. Trường hợp có sự sai khác về số lượng, đặc điểm tài sản thì khách hàng hoặc bên thứ ba sử dụng kết quả thẩm định giá không được sử dụng chứng thư thẩm định giá và thông báo cho Công ty TNHH Thẩm định giá Nova phối hợp giải quyết.', ['bold' => false], ['align' => 'both']);
+
+        $row = $table->addRow(300);
+        $row->addCell(600)->addText("-", null, ['align' => 'left']);
+        $row->addCell(9300)->addText('Chứng thư thẩm định giá, báo cáo thẩm định giá và các phụ lục kèm theo là những phần không thể tách rời trong quá trình sử dụng kết quả tư vấn thẩm định giá. Chứng thư thẩm định giá chỉ có giá trị sử dụng với bản chính, theo số lượng phát hành ghi trong chứng thư.', ['bold' => false], ['align' => 'both']);
+
+        $row = $table->addRow(300);
+        $row->addCell(600)->addText("-", null, ['align' => 'left']);
+        $row->addCell(9300)->addText('Kết quả thẩm định giá là mức giá Công ty TNHH Thẩm định giá Nova tư vấn giá trị tài sản, được sử dụng làm một trong những căn cứ để Bên yêu cầu hoặc tổ chức, cá nhân có liên quan được ghi tại Hợp đồng thẩm định giá tham khảo, xem xét, phê duyệt giá của tài sản. Chứng thư thẩm định giá, báo cáo thẩm định giá không phải là văn bản bắt buộc bất cứ bên nào tham gia giao dịch phải thực hiện theo giá trị tư vấn.', ['bold' => false], ['align' => 'both']);
+        // $textRun->addText('   2.  Giả thiết đặc biệt: ', ['bold' => true]);
+        // $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
+        // $textRun = $section->addTextRun();
+        // $textRun->addText('   3.  Những điều khoản loại trừ và hạn chế của thẩm định giá: ', ['bold' => true]);
+        // $textRun->addText('Phụ lục kèm theo.', ['bold' => false]);
+        // $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, để thống nhất, xác nhận các nội dung nêu trên.', null, 'indentParagraph');
+        // $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');
 
         $table = $section->addTable([
             'align' => JcTable::START,
