@@ -296,7 +296,7 @@ class TBHanChe
         ]);
 
         $row = $table->addRow(300);
-        $row->addCell(600)->addText("2.1.", ['both' => true], ['align' => 'left']);
+        $row->addCell(600)->addText("2.1.", ['bold' => true], ['align' => 'left']);
         $row->addCell(9300)->addText('Những hạn chế của hồ sơ thẩm định giá', ['bold' => true], ['align' => 'both']);
 
         $row = $table->addRow(300);
@@ -326,7 +326,7 @@ class TBHanChe
         ]);
 
         $row = $table2->addRow(300);
-        $row->addCell(600)->addText("2.2.", ['both' => true], ['align' => 'left']);
+        $row->addCell(600)->addText("2.2.", ['bold' => true], ['align' => 'left']);
         $row->addCell(9300)->addText('Những điều khoản loại trừ trách nhiệm đối với hồ sơ thẩm định giá', ['bold' => true], ['align' => 'both']);
 
         $row = $table2->addRow(300);
