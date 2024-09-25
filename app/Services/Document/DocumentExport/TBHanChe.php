@@ -78,7 +78,9 @@ class TBHanChe
         );
         $phpWord->addParagraphStyle(
             'indentParagraph',
-            ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.13), 'firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
+            // ['align' => 'both', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.13), 'firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
+            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.2)]]
+
         );
         $phpWord->addParagraphStyle(
             'alignItemCenter',
@@ -284,9 +286,9 @@ class TBHanChe
         $section->addText('Căn cứ các thông tin về đặc điểm pháp lý, kinh tế - kỹ thuật, thông tin về thị trường và các thông tin khác liên quan đến tài sản thẩm định giá.', null, 'indentParagraph');
         $section->addText('Công ty TNHH Thẩm định giá NOVA xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name)  . ' các nội dung như sau:', null, 'indentParagraph');
         $textRun = $section->addTextRun();
-        $textRun->addText('   1.  Cơ sở giá trị thẩm định giá: ', ['bold' => true]);
+        $textRun->addText('1.  Cơ sở giá trị thẩm định giá: ', ['bold' => true]);
         $textRun->addText('Cơ sở giá trị thị trường.', ['bold' => false]);
-        $section->addText('   2.   Những hạn chế và điều khoản loại trừ trách nhiệm đối với hồ sơ thẩm định giá', ['bold' => true]);
+        $section->addText('2.   Những hạn chế và điều khoản loại trừ trách nhiệm đối với hồ sơ thẩm định giá', ['bold' => true]);
         $table = $section->addTable([
             'align' => JcTable::START,
             'width' => 100 * 50,
@@ -294,7 +296,7 @@ class TBHanChe
         ]);
 
         $row = $table->addRow(300);
-        $row->addCell(600)->addText("2.1.", null, ['align' => 'left']);
+        $row->addCell(600)->addText("2.1.", ['both' => true], ['align' => 'left']);
         $row->addCell(9300)->addText('Những hạn chế của hồ sơ thẩm định giá', ['bold' => true], ['align' => 'both']);
 
         $row = $table->addRow(300);
@@ -324,7 +326,7 @@ class TBHanChe
         ]);
 
         $row = $table2->addRow(300);
-        $row->addCell(600)->addText("2.2.", null, ['align' => 'left']);
+        $row->addCell(600)->addText("2.2.", ['both' => true], ['align' => 'left']);
         $row->addCell(9300)->addText('Những điều khoản loại trừ trách nhiệm đối với hồ sơ thẩm định giá', ['bold' => true], ['align' => 'both']);
 
         $row = $table2->addRow(300);
