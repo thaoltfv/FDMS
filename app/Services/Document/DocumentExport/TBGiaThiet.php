@@ -313,7 +313,7 @@ class TBGiaThiet
             }
             $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars($giathiet)), null, ['align' => 'left', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]);
         } else {
-            $section->addText('    ' . str_replace("\n", '<w:br/>    ', htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description)), null,  ['align' => 'left', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]);
+            $section->addText('    ' . str_replace("\n", '<w:br/>    ', isset(json_decode($certificate)->real_estate[0]) ? htmlspecialchars(json_decode($certificate)->real_estate[0]->appraises->document_description) : ""), null,  ['align' => 'left', 'indentation' => ['left' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]);
         }
         $section->addText('Công ty TNHH Thẩm định giá Nova xin thông báo đến ' . htmlspecialchars($certificate->petitioner_name) . ' được biết, xem xét thống nhất, ký xác nhận các nội dung nêu trên để Công ty cho cấp, in phát hành chứng thư thẩm định giá, báo cáo thẩm định giá.', null, 'indentParagraph');
         $section->addText('Trân trọng thông báo, kính chào và hợp tác!', null, 'indentParagraph');

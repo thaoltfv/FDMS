@@ -277,9 +277,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
      * @param $id
      * @return void
      */
-    public function comparisonFactor($appraiseId, $datas, $edit = false)
-    {
-    }
+    public function comparisonFactor($appraiseId, $datas, $edit = false) {}
 
     /**
      * @param $id
@@ -363,8 +361,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
         }
         $select = [
-            'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
-            'pre_certificates.updated_at', 'status_updated_at',
+            'pre_certificates.id',
+            'status',
+            'pre_certificates.created_by',
+            'petitioner_name',
+            'pre_certificates.updated_at',
+            'status_updated_at',
             'business_manager_id',
             'appraiser_sale_id',
             'appraiser_perform_id',
@@ -710,8 +712,12 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
         $betweenTotal = ValueDefault::TOTAL_PRICE_PERCENT;
 
         $select = [
-            'pre_certificates.id', 'status', 'pre_certificates.created_by', 'petitioner_name',
-            'pre_certificates.updated_at', 'status_updated_at',
+            'pre_certificates.id',
+            'status',
+            'pre_certificates.created_by',
+            'petitioner_name',
+            'pre_certificates.updated_at',
+            'status_updated_at',
             'business_manager_id',
             'appraiser_sale_id',
             'appraiser_perform_id',
@@ -984,8 +990,8 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             }
 
             $branch_id = null;
-            if (isset($objects['appraiser_sale_id'])) {
-                $branch_id = Appraiser::query()->where('id', $objects['appraiser_sale_id'])->first()->branch_id;
+            if (isset($objects['appraiser_perform_id'])) {
+                $branch_id = Appraiser::query()->where('id', $objects['appraiser_perform_id'])->first()->branch_id;
             } else {
                 $branch_id = Appraiser::query()->where('user_id', $user->id)->first()->branch_id;
             }
@@ -1968,7 +1974,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'preCertificate',
             'preCertificate.appraiserSale',
             'preCertificate.appraiserPerform',
-            'preCertificate.payments',  'certificate', 'certificate.payments'
+            'preCertificate.payments',
+            'certificate',
+            'certificate.payments'
         ];
         $result = PreCertificatePayments::with($with)->select($select);
         $result = $result->whereNotNull('pre_certificate_id');

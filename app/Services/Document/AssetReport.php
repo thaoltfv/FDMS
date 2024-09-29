@@ -34,7 +34,7 @@ class AssetReport
             'rule' => 'single',
         ],
     ];
-    public function generateDocx($company, $objects, $format): array
+    public function generateDocx($company, $objects, $format, $is_offical = false, $id = null): array
     {
         $certificateId = request()->get('certificate_id');
         if (!empty($certificateId)) {
@@ -553,8 +553,16 @@ class AssetReport
         if ($format == 'pdf') {
             shell_exec('export HOME=/tmp/ ; libreoffice --headless --convert-to ' . $format . ' ' . storage_path('app/public/' . $path . $fileName . '.docx') . ' --outdir ' . storage_path('app/public/' . $path));
         }
-        $data['url'] = Storage::disk('public')->url($path . $fileName . '.' . $format);
-        $data['file_name'] = $fileName;
+        if ($is_offical) {
+            $paths3 = env('STORAGE_OTHERS') . '/' . 'comparison_brief/upload/' . $id . '/';
+            $name = $paths3 . $fileName  .  '.' . $format;
+            Storage::put($name, file_get_contents(Storage::disk('public')->url($path . $fileName . '.' . $format)));
+            $data['url'] =  Storage::disk('s3')->url($paths3 .  $fileName . '.' . $format);
+            $data['file_name'] = $fileName;
+        } else {
+            $data['url'] = Storage::disk('public')->url($path . $fileName . '.' . $format);
+            $data['file_name'] = $fileName;
+        }
         return $data;
     }
 

@@ -142,7 +142,7 @@ class Report implements ReportInterface
     protected $isPrintNational = true;
     #endregion
 
-    public function generateDocx($company, $data, $ext, $documentConfig)
+    public function generateDocx($company, $data, $ext, $documentConfig, $is_offical = false)
     {
         $phpWord = new PhpWord();
         $this->getCompanyInfo($company);
@@ -160,7 +160,7 @@ class Report implements ReportInterface
         $this->printHeader($section);
         $this->printFooter($section, $data);
         $this->getFileName($data);
-        return $this->saveReport($phpWord, $ext);
+        return $this->saveReport($phpWord, $ext, true, $is_offical, $data);
     }
     protected function processData($data, $documentConfig)
     {
@@ -212,6 +212,13 @@ class Report implements ReportInterface
     {
         $result = [];
         $result['url'] = Storage::disk('public')->url($path .  $fileName . $ext);
+        $result['file_name'] = $fileName;
+        return $result;
+    }
+    protected function downloadFileOffical($path, $fileName, $ext)
+    {
+        $result = [];
+        $result['url'] =  Storage::disk('s3')->url($path .  $fileName . $ext);
         $result['file_name'] = $fileName;
         return $result;
     }
@@ -273,9 +280,7 @@ class Report implements ReportInterface
             $this->printFooter($section, $data, $indentLeft, $indentRight);
         }
     }
-    public function printContent(Section $section, $data)
-    {
-    }
+    public function printContent(Section $section, $data) {}
     public function printFooter(Section $section, $data, $indentLeft = 0, $indentRight = 0)
     {
         $footer = $section->addFooter();
@@ -360,10 +365,8 @@ class Report implements ReportInterface
         $phpWord->addTableStyle('Colspan Rowspan', $this->styleTable);
         $phpWord->addTableStyle('Colspan Rowspan Image', $this->styleTableImage);
     }
-    public function printTitle(Section $section, $data)
-    {
-    }
-    public function saveReport(PhpWord $phpWord, string $ext, bool $download = true)
+    public function printTitle(Section $section, $data) {}
+    public function saveReport(PhpWord $phpWord, string $ext, bool $download = true, bool $is_offical = false, $data)
     {
         $reportPath = $this->getReportPath();
         $fileName = $this->fileName;
@@ -373,8 +376,19 @@ class Report implements ReportInterface
         try {
             $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
             $objWriter->save(storage_path('app/public/' . $reportPath . '/' . $fileName . $ext));
+            if ($is_offical) {
+                $now = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
+                $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/upload/' . $data->id . '/';
+                $name = $path . $fileName  .  $ext;
+                Storage::put($name, file_get_contents(Storage::disk('public')->url($reportPath .  $fileName . $ext)));
+            }
             if ($download)
-                return $this->downloadFile($reportPath, $fileName, $ext);
+                if ($is_offical) {
+                    $path = env('STORAGE_OTHERS') . '/' . 'comparison_brief/upload/' . $data->id . '/';
+                    return $this->downloadFileOffical($path, $fileName, $ext);
+                } else {
+                    return $this->downloadFile($reportPath, $fileName, $ext);
+                }
             else
                 return true;
         } catch (\Exception $e) {
@@ -397,7 +411,5 @@ class Report implements ReportInterface
         $strFooter = 'report';
         return $strFooter;
     }
-    protected function signature(Section $section, $data)
-    {
-    }
+    protected function signature(Section $section, $data) {}
 }
