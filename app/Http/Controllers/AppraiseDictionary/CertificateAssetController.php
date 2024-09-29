@@ -914,14 +914,14 @@ class CertificateAssetController extends Controller
             return $report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint);
         }
     }
-    public function printDocumentOfficialAll($id, $service)
+    public function printDocumentOfficialAll($id, $service, $is_offical = false)
     {
         $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $report = new $service;
         $documentConfig = DocumentDictionary::query()->get();
-        $result = $report->generateDocx($company, $certificate, $format, $documentConfig);
+        $result = $report->generateDocx($company, $certificate, $format, $documentConfig, $is_offical);
         return $result;
     }
     public function printOfficialTSSS($id)

@@ -3682,8 +3682,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             }
 
             $branch_id = null;
-            if (isset($objects['appraiser_sale_id'])) {
-                $branch_id = Appraiser::query()->where('id', $objects['appraiser_sale_id'])->first()->branch_id;
+            if (isset($objects['appraiser_perform_id'])) {
+                $branch_id = Appraiser::query()->where('id', $objects['appraiser_perform_id'])->first()->branch_id;
             } else {
                 $branch_id = Appraiser::query()->where('user_id', $user->id)->first()->branch_id;
             }
