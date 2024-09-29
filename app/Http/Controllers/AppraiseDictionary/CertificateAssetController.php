@@ -717,13 +717,13 @@ class CertificateAssetController extends Controller
                 if ($type === $this->getOtherDescription($value)) {
                     $service = 'App\\Services\\Document\\' . $value . '\\Report' . $value . $this->envDocument;
                     if ($value != 'TSSS') {
-                        $item =  $this->printDocumentOfficialAll($id, $service);
+                        $item =  $this->printDocumentOfficialAll($id, $service, true);
                         $item['typeDocument'] = $value;
                         if (!empty($item)) {
                             $arrayLink[] = $item;
                         }
                     } else {
-                        $item =  $this->printOfficialTSSS($id);
+                        $item =  $this->printOfficialTSSS($id,  true);
                         $item['typeDocument'] = $value;
                         if (!empty($item)) {
                             $arrayLink[] = $item;
@@ -914,17 +914,17 @@ class CertificateAssetController extends Controller
             return $report->generateDocx($company, $certificate, $format, $realEstate, $priceEstimatePrint);
         }
     }
-    public function printDocumentOfficialAll($id, $service)
+    public function printDocumentOfficialAll($id, $service, $is_offical = false)
     {
         $certificate = $this->certificateRepository->getCertificateAppraiseReportData($id);
         $format = '.docx';
         $company = $this->appraiserCompanyRepository->getOneAppraiserCompany();
         $report = new $service;
         $documentConfig = DocumentDictionary::query()->get();
-        $result = $report->generateDocx($company, $certificate, $format, $documentConfig);
+        $result = $report->generateDocx($company, $certificate, $format, $documentConfig, $is_offical);
         return $result;
     }
-    public function printOfficialTSSS($id)
+    public function printOfficialTSSS($id, $is_offical = false)
     {
         $arrayAsset = [];
         $select = ['id'];
@@ -958,7 +958,7 @@ class CertificateAssetController extends Controller
             }
 
 
-            $result = (new AssetReport())->generateDocx($company, ($this->compareAssetGeneralRepository->findByIds(json_encode($arrayAsset))), $format);
+            $result = (new AssetReport())->generateDocx($company, ($this->compareAssetGeneralRepository->findByIds(json_encode($arrayAsset))), $format, $is_offical, $id);
             return $result;
         } catch (\Exception $exception) {
             Log::error($exception);
