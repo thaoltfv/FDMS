@@ -2889,7 +2889,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         //// command tạm - sẽ xử lý phân quyền sau
         $role = $user->roles->last();
         // dd($role->name);
-        Log::info(['check' => $user]);
+        Log::info(['check' => $user->appraiser]);
         if (request()->has('is_guest')) {
         } elseif ($role->name == 'SUB_ADMIN') {
             if (isset($user->branch) && $user->branch->acronym === 'HOI_SO') {
