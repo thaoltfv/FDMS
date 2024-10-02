@@ -2894,6 +2894,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             if (isset($user->branch) && $user->branch->acronym === 'HOI_SO') {
             } else {
                 $result = $result->where(function ($query) use ($user) {
+                    Log::info(['user' => $user]);
                     $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
                         if ($user->branch_id) {
                             return $q->where('branch_id', $user->branch_id);
