@@ -2895,7 +2895,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             } else {
                 $result = $result->where(function ($query) use ($user) {
                     $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
-                        if ($user->branch_id) {
+                        if (isset($user->appraiser)) {
+                            return $q->where('branch_id', $user->appraiser->branch_id);
+                        } else if ($user->branch_id) {
                             return $q->where('branch_id', $user->branch_id);
                         }
                     });
@@ -3460,7 +3462,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     //     return $q->where('id', $user->id);
                     // });
                     $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
-                        if ($user->branch_id) {
+                        if (isset($user->appraiser)) {
+                            return $q->where('branch_id', $user->appraiser->branch_id);
+                        } else if ($user->branch_id) {
                             return $q->where('branch_id', $user->branch_id);
                         }
                     });
