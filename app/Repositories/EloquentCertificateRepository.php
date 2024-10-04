@@ -2899,11 +2899,6 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                             return $q->where('branch_id', $user->branch_id);
                         }
                     });
-                    $query = $query->orWhereHas('appraiserBusinessManager', function ($q) use ($user) {
-                        if ($user->branch_id) {
-                            return $q->where('branch_id', $user->branch_id);
-                        }
-                    });
                     $query = $query->orwhereHas('appraiser', function ($q) use ($user) {
                         return $q->where('user_id', $user->id);
                     });
