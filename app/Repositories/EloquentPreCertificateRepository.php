@@ -512,6 +512,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                             return $q->where('branch_id', $user->branch_id);
                         }
                     });
+                    $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
+                        if (isset($user->appraiser)) {
+                            return $q->where('branch_id', $user->appraiser->branch_id);
+                        } else if ($user->branch_id) {
+                            return $q->where('branch_id', $user->branch_id);
+                        }
+                    });
                     $query = $query->orwhereHas('appraiserSale', function ($q) use ($user) {
                         return $q->where('user_id', $user->id);
                     });
@@ -859,6 +866,13 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             } else {
                 $result = $result->where(function ($query) use ($user) {
                     $query = $query->whereHas('appraiserPerform', function ($q) use ($user) {
+                        if (isset($user->appraiser)) {
+                            return $q->where('branch_id', $user->appraiser->branch_id);
+                        } else if ($user->branch_id) {
+                            return $q->where('branch_id', $user->branch_id);
+                        }
+                    });
+                    $query = $query->orwhereHas('appraiserBusinessManager', function ($q) use ($user) {
                         if (isset($user->appraiser)) {
                             return $q->where('branch_id', $user->appraiser->branch_id);
                         } else if ($user->branch_id) {
