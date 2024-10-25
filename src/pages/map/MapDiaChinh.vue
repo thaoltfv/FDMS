@@ -70,7 +70,8 @@ export default {
 	},
 	data() {
 		return {
-			// url_modal: 'https://dev-web.fastvalue.com.vn/xem-quy-hoach/?mode=noHeader',
+			// url_modal:
+			// 	"https://dev-web.fastvalue.com.vn/xem-quy-hoach/?mode=noHeader",
 			url_modal: "https://fastvalue.vn/xem-quy-hoach/?mode=noHeader",
 			seg_key: 0,
 			progress: 0,
