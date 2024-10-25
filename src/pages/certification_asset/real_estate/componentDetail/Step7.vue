@@ -6526,6 +6526,11 @@ export default {
 			await this.calculation(this.form);
 		},
 		getDataLand() {
+			this.appropriate_zoning_land = [];
+			this.violation_zoning_land = [];
+			this.asset_appropriate_area_arr = [];
+			this.total_appraise_area = 0;
+			this.total_vio_appraise_area = 0;
 			// dat phu hop quy hoach : appropriate zoning land
 			// dat vi pham quy hoach : violation zoning land
 			let formDataClone = JSON.parse(JSON.stringify(this.form));
@@ -7354,6 +7359,8 @@ export default {
 				await this.calculationViolationPrice(this.form, indexArea);
 				// await this.calculationChangePrice(this.form, indexArea)
 			}
+			await this.getDataLand();
+			await this.calculationUpdateMucDichChinh(this.form);
 			await this.calculation(this.form);
 			this.key_render_1 += 1;
 		},
@@ -9887,11 +9894,12 @@ export default {
 							this.comparisonFactorChange3 += 1;
 						}
 					}
-					mgcd_price_other[index] +=this.roundPrice(
-						(dataOther.adjust_percent * arrayPriceTem[index]) / 100);
-					mgcd_price_other_abs[index] += this.roundPrice(Math.abs(
+					mgcd_price_other[index] += this.roundPrice(
 						(dataOther.adjust_percent * arrayPriceTem[index]) / 100
-					));
+					);
+					mgcd_price_other_abs[index] += this.roundPrice(
+						Math.abs((dataOther.adjust_percent * arrayPriceTem[index]) / 100)
+					);
 				});
 			});
 
@@ -10001,9 +10009,24 @@ export default {
 			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3);
 			console.log("adjustpricedata", this.adjustPriceData);
 			console.log("price_other", this.price_other_comparison);
-			console.log("this.mgcd1", this.mgcd1, this.roundPrice(this.dgd1), this.roundPrice(this.tldc1));
-			console.log("this.mgcd2", this.mgcd2, this.roundPrice(this.dgd2), this.roundPrice(this.tldc2));
-			console.log("this.mgcd3", this.mgcd3, this.roundPrice(this.dgd3), this.roundPrice(this.tldc3));
+			console.log(
+				"this.mgcd1",
+				this.mgcd1,
+				this.roundPrice(this.dgd1),
+				this.roundPrice(this.tldc1)
+			);
+			console.log(
+				"this.mgcd2",
+				this.mgcd2,
+				this.roundPrice(this.dgd2),
+				this.roundPrice(this.tldc2)
+			);
+			console.log(
+				"this.mgcd3",
+				this.mgcd3,
+				this.roundPrice(this.dgd3),
+				this.roundPrice(this.tldc3)
+			);
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true;
@@ -10560,6 +10583,213 @@ export default {
 					? this.form.appraise_adapter[2].change_purpose_price
 					: 0;
 			}
+		},
+		// Fix doi muc dich chinh
+		calculationUpdateMucDichChinh(asset) {
+			let asset1 =
+				typeof asset.asset_general[0] !== "undefined"
+					? asset.asset_general[0]
+					: null;
+			let asset2 =
+				typeof asset.asset_general[1] !== "undefined"
+					? asset.asset_general[1]
+					: null;
+			let asset3 =
+				typeof asset.asset_general[2] !== "undefined"
+					? asset.asset_general[2]
+					: null;
+			let comparisonFactor1 = [];
+			let comparisonFactor2 = [];
+			let comparisonFactor3 = [];
+			// lấy YTSS của TSSS
+			asset.comparison_factor.forEach((comparisonFactor, index) => {
+				if (asset1 && comparisonFactor.asset_general_id === asset1.id) {
+					comparisonFactor1[comparisonFactor.type] = comparisonFactor;
+				}
+				if (asset2 && comparisonFactor.asset_general_id === asset2.id) {
+					comparisonFactor2[comparisonFactor.type] = comparisonFactor;
+				}
+				if (asset3 && comparisonFactor.asset_general_id === asset3.id) {
+					comparisonFactor3[comparisonFactor.type] = comparisonFactor;
+				}
+			});
+
+			let arr_arena1 = this.asset_appropriate_area_arr.filter(
+				item =>
+					item.name_purpose_land_asset !==
+						comparisonFactor1["muc_dich_chinh"].asset_title &&
+					item.asset_general_id == asset1.id
+			);
+			// console.log(
+			// 	"asset_appropriate_area_arr",
+			// 	this.asset_appropriate_area_arr
+			// );
+			// console.log("arr_arena1", arr_arena1);
+			let arr_arena2 = this.asset_appropriate_area_arr.filter(
+				item =>
+					item.name_purpose_land_asset !==
+						comparisonFactor2["muc_dich_chinh"].asset_title &&
+					item.asset_general_id == asset2.id
+			);
+			let arr_arena3 = this.asset_appropriate_area_arr.filter(
+				item =>
+					item.name_purpose_land_asset !==
+						comparisonFactor3["muc_dich_chinh"].asset_title &&
+					item.asset_general_id == asset3.id
+			);
+			if (arr_arena1.length > 0 && this.form.asset_unit_price.length > 0) {
+				let giatienchinh = this.form.asset_unit_price.filter(
+					item =>
+						item.asset_general_id == asset1.id &&
+						item.land_type_data.acronym ==
+							comparisonFactor1["muc_dich_chinh"].asset_title
+				)[0].update_value
+					? this.form.asset_unit_price.filter(
+							item =>
+								item.asset_general_id == asset1.id &&
+								item.land_type_data.acronym ==
+									comparisonFactor1["muc_dich_chinh"].asset_title
+					  )[0].update_value
+					: this.form.asset_unit_price.filter(
+							item =>
+								item.asset_general_id == asset1.id &&
+								item.land_type_data.acronym ==
+									comparisonFactor1["muc_dich_chinh"].asset_title
+					  )[0].original_value;
+				// console.log('giá tiền chính', giatienchinh)
+				let chiphichuyendoi = 0;
+				for (let i = 0; i < arr_arena1.length; i++) {
+					let a1 = arr_arena1[i];
+					// console.log('dien tich chuyen', a1.total_area)
+					let giatienphu = this.form.asset_unit_price.filter(
+						item =>
+							item.asset_general_id == asset1.id &&
+							item.land_type_data.acronym == a1.name_purpose_land_asset
+					)[0].update_value
+						? this.form.asset_unit_price.filter(
+								item =>
+									item.asset_general_id == asset1.id &&
+									item.land_type_data.acronym == a1.name_purpose_land_asset
+						  )[0].update_value
+						: this.form.asset_unit_price.filter(
+								item =>
+									item.asset_general_id == asset1.id &&
+									item.land_type_data.acronym == a1.name_purpose_land_asset
+						  )[0].original_value;
+					// console.log('giá tiền phụ', giatienphu)
+					chiphichuyendoi +=
+						parseFloat(a1.total_area) * (giatienchinh - giatienphu);
+					// console.log("gia tien chinh", giatienchinh);
+					// console.log("gia tien phu", giatienphu);
+					// console.log("a1", a1);
+					// console.log("cpcd", chiphichuyendoi);
+				}
+				// console.log("chiphichuyendoi1", chiphichuyendoi);
+
+				this.form.appraise_adapter[0].change_purpose_price = chiphichuyendoi.toFixed(
+					0
+				);
+			}
+			if (arr_arena2.length > 0 && this.form.asset_unit_price.length > 0) {
+				let giatienchinh = this.form.asset_unit_price.filter(
+					item =>
+						item.asset_general_id == asset2.id &&
+						item.land_type_data.acronym ==
+							comparisonFactor2["muc_dich_chinh"].asset_title
+				)[0].update_value
+					? this.form.asset_unit_price.filter(
+							item =>
+								item.asset_general_id == asset2.id &&
+								item.land_type_data.acronym ==
+									comparisonFactor2["muc_dich_chinh"].asset_title
+					  )[0].update_value
+					: this.form.asset_unit_price.filter(
+							item =>
+								item.asset_general_id == asset2.id &&
+								item.land_type_data.acronym ==
+									comparisonFactor2["muc_dich_chinh"].asset_title
+					  )[0].original_value;
+				// console.log("giá tiền chính", giatienchinh);
+				let chiphichuyendoi = 0;
+				for (let i = 0; i < arr_arena2.length; i++) {
+					let a2 = arr_arena2[i];
+					// console.log('dien tich chuyen', a2.total_area)
+					let giatienphu = this.form.asset_unit_price.filter(
+						item =>
+							item.asset_general_id == asset2.id &&
+							item.land_type_data.acronym == a2.name_purpose_land_asset
+					)[0].update_value
+						? this.form.asset_unit_price.filter(
+								item =>
+									item.asset_general_id == asset2.id &&
+									item.land_type_data.acronym == a2.name_purpose_land_asset
+						  )[0].update_value
+						: this.form.asset_unit_price.filter(
+								item =>
+									item.asset_general_id == asset2.id &&
+									item.land_type_data.acronym == a2.name_purpose_land_asset
+						  )[0].original_value;
+					// console.log("giá tiền phụ", giatienphu);
+					chiphichuyendoi +=
+						parseFloat(a2.total_area) * (giatienchinh - giatienphu);
+				}
+				// console.log("chiphichuyendoi2", chiphichuyendoi);
+
+				this.form.appraise_adapter[1].change_purpose_price = chiphichuyendoi.toFixed(
+					0
+				);
+			}
+			if (arr_arena3.length > 0 && this.form.asset_unit_price.length > 0) {
+				let giatienchinh = this.form.asset_unit_price.filter(
+					item =>
+						item.asset_general_id == asset3.id &&
+						item.land_type_data.acronym ==
+							comparisonFactor3["muc_dich_chinh"].asset_title
+				)[0].update_value
+					? this.form.asset_unit_price.filter(
+							item =>
+								item.asset_general_id == asset3.id &&
+								item.land_type_data.acronym ==
+									comparisonFactor3["muc_dich_chinh"].asset_title
+					  )[0].update_value
+					: this.form.asset_unit_price.filter(
+							item =>
+								item.asset_general_id == asset3.id &&
+								item.land_type_data.acronym ==
+									comparisonFactor3["muc_dich_chinh"].asset_title
+					  )[0].original_value;
+				// console.log('giá tiền chính', giatienchinh)
+				let chiphichuyendoi = 0;
+				for (let i = 0; i < arr_arena3.length; i++) {
+					let a3 = arr_arena3[i];
+					// console.log('dien tich chuyen', a3.total_area)
+					let giatienphu = this.form.asset_unit_price.filter(
+						item =>
+							item.asset_general_id == asset3.id &&
+							item.land_type_data.acronym == a3.name_purpose_land_asset
+					)[0].update_value
+						? this.form.asset_unit_price.filter(
+								item =>
+									item.asset_general_id == asset3.id &&
+									item.land_type_data.acronym == a3.name_purpose_land_asset
+						  )[0].update_value
+						: this.form.asset_unit_price.filter(
+								item =>
+									item.asset_general_id == asset3.id &&
+									item.land_type_data.acronym == a3.name_purpose_land_asset
+						  )[0].original_value;
+					// console.log('giá tiền phụ', giatienphu)
+					chiphichuyendoi +=
+						parseFloat(a3.total_area) * (giatienchinh - giatienphu);
+				}
+				// console.log("chiphichuyendoi3", chiphichuyendoi);
+
+				this.form.appraise_adapter[2].change_purpose_price = chiphichuyendoi.toFixed(
+					0
+				);
+			}
+			this.key_render_1++;
+			// console.log('check 2', arr_arena2.length,this.form.asset_unit_price.length,this.form.appraise_adapter[1])
 		},
 		handlePrint() {
 			this.printEstimateAssetPrice();
