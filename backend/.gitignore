@@ -8,6 +8,8 @@
 firebase_credentials.*
 auth.json
 cloud_sql_proxy
+deploy.tgz
+deploy.tar.gz
 /tests/coverage
 /tests/sonar-scanner/sonar-runner.key
 /node_modules
