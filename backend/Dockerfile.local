@@ -1,0 +1,19 @@
+FROM ghcr.io/fastvalue/fastpro_php7:latest
+
+ARG DEFAULT_TZ=Asia/Ho_Chi_Minh
+ENV DEFAULT_TZ=${DEFAULT_TZ}
+
+## Default timezone
+ENV TZ=${DEFAULT_TZ}
+RUN apk add -U tzdata && cp /usr/share/zoneinfo/${DEFAULT_TZ} /etc/localtime
+
+COPY .ops/php-entrypoint.sh /
+RUN chmod +x /php-entrypoint.sh
+
+WORKDIR /srv/www
+VOLUME /srv/www
+
+EXPOSE 8000
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+ENTRYPOINT ["/php-entrypoint.sh"]

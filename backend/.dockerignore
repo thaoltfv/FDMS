@@ -15,10 +15,10 @@ cloud_sql_proxy
 cloudbuild.cd.yaml
 cloudbuild.ci.yaml
 deployment.sh
-Dockerfile
 docker-compose.yml
 docker-compose.develop.yml
 docker-compose.testing.yml
+firebase_credentials.*
 init-letsencrypt.sh
 k8s
 nginx.conf
