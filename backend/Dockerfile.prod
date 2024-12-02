@@ -1,0 +1,42 @@
+FROM alpine:3.14
+
+RUN apk upgrade --update --no-cache
+
+RUN apk add bash wget unzip ca-certificates git \
+	php7 php7-gd php7-zlib php7-curl php7-mcrypt php7-pgsql \
+    php7-intl php7-mbstring php7-pdo_pgsql php7-pear php7-phar php7-zip \
+    php7-xml php7-xsl php7-json php7-simplexml php7-tokenizer \
+    php7-xmlwriter php7-fileinfo php7-ctype php7-xmlreader php7-session \
+    supervisor nginx php7-fpm php7 php7-bcmath php7-pcntl composer \
+    php7-pdo_mysql openssl postgresql-client && rm -rf /var/cache/apk/*
+
+RUN apk update && apk add libreoffice
+
+RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+  php7-pecl-grpc  && rm -rf /var/cache/apk/*
+
+WORKDIR /srv/www
+
+RUN mkdir -p /etc/supervisor.d/conf.d
+COPY ./.ops/etc/ /etc
+
+RUN mkdir -p /srv/www/storage
+RUN mkdir -p /srv/www/database/seeds
+
+COPY ./composer.* /srv/www/
+RUN composer install --no-scripts
+
+ADD . /srv/www
+RUN composer install
+
+RUN mkdir -p /run/nginx
+
+ADD ./.ops/start.sh /start.sh
+
+RUN chown -R nginx:nginx /srv/www
+RUN chmod -R 777 /srv/www/storage
+
+EXPOSE 80
+
+CMD ["/start.sh"]
+ENTRYPOINT ["/bin/bash", "-c"]

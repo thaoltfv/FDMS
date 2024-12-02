@@ -1,0 +1,42 @@
+id,name,address,user_id,active,acronym
+1,"Bình Định","Chi nhánh Bình Định",1,1,BĐ
+2,"Phú Yên","Chi nhánh Phú Yên",1,1,PY
+3,"Long An","Chi nhánh Long An",1,1,LA
+4,"Cà Mau","Chi Nhánh Cà Mau",1,1,CM
+5,"Phú Quốc","Chi Nhánh Phú Quốc",1,1,PQ
+6,"Hội Sở","359 nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1",1,1,NULL
+7,ĐắkLắk,"Chi nhánh ĐắkLắk",1,1,DL
+8,"Bến Tre","Chi nhánh Bến Tre",1,1,BTr
+9,"Hà Nội","Chi nhánh Hà Nội",1,1,HN
+10,"Nghệ An","Chi nhánh Nghệ An",1,1,NA
+11,Huế,"Chi nhánh Huế",1,1,TTH
+12,"An Giang","Chi nhánh An Giang",1,1,AG
+13,"Thịnh Vượng","Chi nhánh Thịnh Vượng",1,1,KG2
+14,"Kiên Giang","Chi nhánh Kiên Giang",1,1,KG
+15,"Khánh Hòa","Chi nhánh Khánh Hòa",1,1,KH
+16,"Lâm Đồng","Chi nhánh Lâm Đồng",1,1,LD
+17,"Quảng Bình","Chi nhánh Quảng Bình",1,1,QB
+18,"Quảng Trị","Chi nhánh Quảng Trị",1,1,QTr
+19,"Quảng Nam","Chi nhánh Quảng Nam",1,1,QNa
+20,"Bạc Liêu","Chi nhánh Bạc Liêu",1,1,BL
+21,"Đồng Tháp","Chi nhánh Đồng Tháp",1,1,DT
+22,"Quảng Ninh","Chi nhánh Quảng Ninh",1,1,QN
+23,"Gia Lai","Chi nhánh Gia Lai",1,1,GL
+24,KonTum,"Chi nhánh KonTum",1,1,KT
+25,"Đà Nẵng","Chi nhánh Đà Nẵng",1,1,DN
+26,"Bình Thuận","Chi nhánh Bình Thuận",1,1,BTh
+27,"Cần Thơ","Chi nhánh Cần Thơ",1,1,CT
+28,"Bình Dương","Chi nhánh Bình Dương",1,1,BD
+29,"Vĩnh Long","Chi nhánh Vĩnh Long",1,1,VL
+30,"Sóc Trăng","Chi nhánh Sóc Trăng",1,1,ST
+31,"Quảng Ngãi","Chi nhánh Quảng Ngãi",1,1,QNg
+32,"Nghiệp Vụ 1",,1,1,NV1
+33,"Nghiệp Vụ 2",,1,1,NV2
+34,"Nghiệp Vụ 3",,1,1,NV3
+35,"Nghiệp Vụ 4",,1,1,NV4
+36,"Nghiệp Vụ 5",,1,1,NV5
+37,"Nghiệp Vụ 7",,1,1,NV7
+38,"Nghiệp Vụ 8",,1,1,NV8
+39,"Thẩm định giá Việt Nam",,1,1,VN
+40,"Nam Định",,1,1,ND
+41,"Nghiệp Vụ 6",,1,1,NV6
