@@ -1583,7 +1583,9 @@ export default {
 						if (
 							datafinal.message !=
 								"Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau" &&
-							datafinal.message != "Không tìm thấy thông tin quy hoạch"
+							datafinal.message != "Không tìm thấy thông tin quy hoạch" &&
+							datafinal.message != "Thông tin quy hoạch chưa được cập nhật"
+							
 						) {
 							this.dataResult = datafinal.data;
 							this.geo_data = this.dataResult ? this.dataResult.geo_data : [];
@@ -1624,6 +1626,20 @@ export default {
 							this.progress = 0;
 							this.runProgress = false;
 						}
+					}).catch((error) => {
+						this.$toast.open({
+							message: "Không tìm thấy dữ liệu quy hoạch",
+							type: "error",
+							position: "top-right",
+							duration: 3000,
+						});
+						this.dataResult = [];
+						this.geo_data = [];
+						this.modalGeoInfo = false;
+						this.isOpen = false;
+						this.isOpenLoading = false;
+						this.progress = 0;
+						this.runProgress = false;
 					});
 				}
 			}
@@ -1712,7 +1728,8 @@ export default {
 					if (
 						datafinal.message !=
 							"Hệ thống đang có lỗi xảy ra, vui lòng thử lại sau" &&
-						datafinal.message != "Không tìm thấy thông tin quy hoạch"
+						datafinal.message != "Không tìm thấy thông tin quy hoạch" &&
+							datafinal.message != "Thông tin quy hoạch chưa được cập nhật"
 					) {
 						this.dataResult = datafinal.data;
 						this.geo_data = this.dataResult ? this.dataResult.geo_data : [];
@@ -1737,11 +1754,27 @@ export default {
 						this.progress = 0;
 						this.runProgress = false;
 					}
+				}).catch((error) => {
+						this.$toast.open({
+							message: "Không tìm thấy dữ liệu quy hoạch",
+							type: "error",
+							position: "top-right",
+							duration: 3000,
+						});
+						this.dataResult = [];
+						this.geo_data = [];
+						this.modalGeoInfo = false
+						this.isOpenLoading = false;
+						this.progress = 0;
+						this.runProgress = false;
 				});
 			}
 		},
 		geoInfo() {
 			this.modalGeoInfo = !this.modalGeoInfo;
+			if(this.modalGeoInfo){
+				this.getInfoByCoord(this.markerLatLng);
+			}
 			// console.log("open", this.modalGeoInfo);
 		},
 		closeModalGeoInfo() {
@@ -1878,7 +1911,10 @@ export default {
 			this.search_address = event.latlng.lat + "," + event.latlng.lng;
 
 			// this.geo_data = this.dataResult.geo_data;
-			this.getInfoByCoord(this.markerLatLng);
+			// this.getInfoByCoord(this.markerLatLng);
+			if(this.modalGeoInfo){
+				this.modalGeoInfo = false
+			}
 			// let latlng = {
 			//   lat: event.latlng.lat,
 			//   lng: event.latlng.lng
@@ -1899,7 +1935,10 @@ export default {
 					place.geometry.location.lng()
 				];
 				this.initMap(this.search_address, "address");
-				this.getInfoByCoord(this.markerLatLng);
+				// this.getInfoByCoord(this.markerLatLng);
+				if(this.modalGeoInfo){
+					this.modalGeoInfo = false
+				}
 			} else {
 				// console.log('vô II')
 				if (place.name) {
@@ -1917,7 +1956,10 @@ export default {
 						let lng = parseFloat(location.split(",")[1]);
 						this.map.center = [lat, lng];
 						this.markerLatLng = [lat, lng];
-						this.getInfoByCoord(this.markerLatLng);
+						// this.getInfoByCoord(this.markerLatLng);
+						if(this.modalGeoInfo){
+							this.modalGeoInfo = false
+						}
 					} else {
 						// console.log('vô II.1.2')
 						this.initMap(location, "address");
@@ -1952,7 +1994,10 @@ export default {
 					position.coords.latitude,
 					position.coords.longitude
 				];
-				this.getInfoByCoord(this.markerLatLng);
+				// this.getInfoByCoord(this.markerLatLng);
+				if(this.modalGeoInfo){
+					this.modalGeoInfo = false
+				}
 			});
 		},
 		handleSearch() {
@@ -1970,7 +2015,10 @@ export default {
 					let lng = parseFloat(location.split(",")[1]);
 					this.map.center = [lat, lng];
 					this.markerLatLng = [lat, lng];
-					this.getInfoByCoord(this.markerLatLng);
+					// this.getInfoByCoord(this.markerLatLng);
+					if(this.modalGeoInfo){
+						this.modalGeoInfo = false
+					}
 				} else {
 					// console.log('vô 1.2')
 					this.initMap(location, "address");
