@@ -87,7 +87,7 @@
         </div>
         <div class="card-body card-info" v-show="showAddLegal">
           <div class="container-fluid">
-            <div class="row container_content pb-2 form-group-container" >
+            <div class="row container_content pb-2 form-group-container" style="display: none">
               <div class="col-12 col-lg-4 color_content form-label font-weight-bold">Thống nhất mức giá chỉ dẫn</div>
               <div class="col-12 col-lg-8" >
                 <div class="row align-items-center">

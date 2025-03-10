@@ -77,7 +77,7 @@
 
         </div>
       </div>
-      <div class="card">
+      <div class="card" style="display: none">
         <div class="card-title">
           <div class="d-flex justify-content-between align-items-center">
             <h3 class="title">Phương pháp tính toán</h3>

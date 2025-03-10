@@ -57,4 +57,5 @@ interface PreCertificateRepository extends BaseRepository
     );
 
     public function updatePreCertificateV3(array $object, int $preCertificateId);
+    public function updateOtherAsset($id, $request);
 }

@@ -80,7 +80,7 @@ class PreCertificate extends Model
         'certificate_id',
 
         'customer_group_id',
-
+        'other_assets'
     ];
 
     public function getStatusTextAttribute()

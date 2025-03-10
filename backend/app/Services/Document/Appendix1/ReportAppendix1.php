@@ -922,8 +922,14 @@ class ReportAppendix1 extends Report
             $price = $avgPrice;
         } else if ($slugValue == 'cao-nhat') {
             $price = $maxPrice;
-        } else {
+        } else if ($slugValue == 'thap-nhat'){
             $price = $minPrice;
+        } else if ($slugValue == 'tsss-1'){
+            $price = $price1;
+        } else if ($slugValue == 'tsss-2'){
+            $price = $price2;
+        } else if ($slugValue == 'tsss-3'){
+            $price = $price3;
         }
         $namePP = "trung bình của 3 TSSS";
         if (isset($slugValue) && ($slugValue == 'thap-nhat')) {

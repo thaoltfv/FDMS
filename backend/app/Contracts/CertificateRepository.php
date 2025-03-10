@@ -87,4 +87,6 @@ interface CertificateRepository extends BaseRepository
     public function deleteDocument($id);
 
     public function exportCertificateAccounting();
+
+    public function updateOtherAsset($id, $request);
 }

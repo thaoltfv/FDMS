@@ -315,7 +315,7 @@ class CertificateAssetsController extends Controller
             'appraisal_methods.tinh_gia_dat_vi_pham_quy_hoach' => 'array|required|min:2',
             'appraisal_methods.tinh_gia_dat_hon_hop_con_lai.slug_value' => ['string', 'required', Rule::in(['theo-phuong-phap-doc-lap', 'theo-ty-le-gia-dat-co-so-chinh', 'theo-chi-phi-chuyen-mdsd-dat'])],
             'appraisal_methods.tinh_gia_dat_vi_pham_quy_hoach.slug_value' => ['string', 'required', Rule::in(['theo-gia-dat-qd-ubnd', 'theo-ty-le-gia-dat-thi-truong', 'khong-tinh'])],
-            'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => ['string', 'required', Rule::in(['cao-nhat', 'thap-nhat', 'trung-binh'])],
+            'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => ['string', 'required', Rule::in(['cao-nhat', 'thap-nhat', 'trung-binh', 'tsss-1', 'tsss-2', 'tsss-3'])],
             'appraisal_methods.tinh_gia_dat_vi_pham_quy_hoach.value' => 'nullable|required_if:appraisal_methods.tinh_gia_dat_vi_pham_quy_hoach.slug_value,==,theo-ty-le-gia-dat-thi-truong|integer|min:1',
             'appraisal_methods.tinh_gia_dat_hon_hop_con_lai.value' => 'nullable|required_if:appraisal_methods.tinh_gia_dat_hon_hop_con_lai.slug_value,==,theo-ty-le-gia-dat-co-so-chinh|integer|min:1',
             'value_base_and_approach' => 'required|array',

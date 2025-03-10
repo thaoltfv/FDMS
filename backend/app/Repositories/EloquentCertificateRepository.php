@@ -3866,7 +3866,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'survey_time',
             'customer_group_id',
             'issue_date_card',
-            'issue_place_card'
+            'issue_place_card',
+            'other_assets',
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -6994,5 +6995,23 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $check = ['message' => ErrorMessage::CERTIFICATE_NOTEXISTS . ' ' . $id, 'exception' => '', 'statusCode' => 403];
         }
         return $check;
+    }
+
+    public function updateOtherAsset($id, $request)
+    {
+        try {
+
+            $result = $this->model->query()
+                ->where('id', '=', $id)
+                ->update([
+                    'other_assets' => json_encode($request['other_assets']),
+                ]);
+
+            return  $this->model->query()
+                ->where('id', '=', $id)->first();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            throw $exception;
+        }
     }
 }

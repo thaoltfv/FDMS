@@ -435,6 +435,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'total_preliminary_value',
             // Db::raw("COALESCE(document_count,0) as document_count"),
             'status_expired_at',
+            'other_assets',
         ];
         $with = [
             'createdBy:id,name',
@@ -734,6 +735,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'certificate_id',
             'pre_certificates.customer_group_id',
             'customer_id',
+            'other_assets',
             DB::raw("concat('YCSB_', pre_certificates.id) AS slug"),
             DB::raw("case status
                        when 1
@@ -755,6 +757,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                     end as status_text
                 "),
             'total_preliminary_value',
+            'other_assets',
             Db::raw("COALESCE(document_count,0) as document_count"),
             'status_expired_at',
             DB::raw("case status
@@ -1141,6 +1144,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'total_service_fee',
             'pre_type_id',
             'customer_group_id',
+            'other_assets'
         ];
         $with = [
             'appraiserSale:id,name,user_id',
@@ -1461,6 +1465,9 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                         $this->deletePriceEstimateWithRelations(
                             $id
                         );
+                        $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update(['other_assets' => null]);
                     }
 
                     # Chuyển status từ số sang text
@@ -1913,6 +1920,7 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
             'total_service_fee',
             'pre_type_id',
             'customer_group_id',
+            'other_assets',
             DB::raw(" CASE status
                 WHEN 1 THEN 'Yêu cầu sơ bộ'
                 WHEN 2 THEN 'Định giá sơ bộ'
@@ -2603,6 +2611,24 @@ class  EloquentPreCertificateRepository extends EloquentRepository implements Pr
                 ->update(['pre_certificate_id' => null]);
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+
+    public function updateOtherAsset($id, $request)
+    {
+        try {
+
+            $result = $this->model->query()
+                ->where('id', '=', $id)
+                ->update([
+                    'other_assets' => json_encode($request['other_assets']),
+                ]);
+
+            return  $this->model->query()
+                ->where('id', '=', $id)->first();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            throw $exception;
         }
     }
 }

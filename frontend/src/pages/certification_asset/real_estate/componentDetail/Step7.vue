@@ -4805,9 +4805,24 @@
 										<tr>
 											<td>2</td>
 											<td colspan="2">Mức giá chỉ dẫn (đồng/m<sup>2</sup>)</td>
-											<td>{{ formatNumber(parseFloat(mgcd1).toFixed(0)) }}</td>
-											<td>{{ formatNumber(parseFloat(mgcd2).toFixed(0)) }}</td>
-											<td>{{ formatNumber(parseFloat(mgcd3).toFixed(0)) }}</td>
+											<td>
+												<div class="row">
+													<div class="col-12">{{ formatNumber(parseFloat(mgcd1).toFixed(0)) }}</div>
+													<div class="col-12"><input type="checkbox" :checked="form.unify_indicative_price_slug === 'tsss-1'" @change="changeMGTN('tsss-1')" /></div>
+												</div>
+											</td>
+											<td>
+												<div class="row">
+													<div class="col-12">{{ formatNumber(parseFloat(mgcd2).toFixed(0)) }}</div>
+													<div class="col-12"><input type="checkbox" :checked="form.unify_indicative_price_slug === 'tsss-2'" @change="changeMGTN('tsss-2')" /></div>
+												</div>
+											</td>
+											<td>
+												<div class="row">
+													<div class="col-12">{{ formatNumber(parseFloat(mgcd3).toFixed(0)) }}</div>
+													<div class="col-12"><input type="checkbox" :checked="form.unify_indicative_price_slug === 'tsss-3'" @change="changeMGTN('tsss-3')" /></div>
+												</div>
+											</td>
 										</tr>
 										<tr>
 											<td>3</td>
@@ -4816,7 +4831,10 @@
 												(đồng/m<sup>2</sup>)
 											</td>
 											<td align="center" colspan="3">
-												{{ formatNumber(parseFloat(mgtb).toFixed(0)) }}
+												<div class="row">
+													<div class="col-12">{{ formatNumber(parseFloat(mgtb).toFixed(0)) }}</div>
+													<div class="col-12"><input type="checkbox" :checked="form.unify_indicative_price_slug === 'trung-binh'" @change="form.unify_indicative_price_slug = 'trung-binh'" /></div>
+												</div>
 											</td>
 										</tr>
 
@@ -5713,6 +5731,10 @@ export default {
 		}
 	},
 	methods: {
+		changeMGTN(value) {
+			this.form.unify_indicative_price_slug = value;
+			this.calculation(this.form);
+		},
 		calculationLoadPage(asset) {
 			let asset1 =
 				typeof asset.asset_general[0] !== "undefined"
@@ -6876,6 +6898,7 @@ export default {
 					});
 				});
 			}
+			
 			const payloadData = {
 				comparison_factor: dataSave,
 				other_comparison: otherDataSave,
@@ -6892,7 +6915,7 @@ export default {
 				remaining_price: null,
 				main_price: this.mainPrice,
 				purpose_price: this.purposePrice,
-				violate_price: this.violatePrice
+				violate_price: this.violatePrice,
 			};
 			if (checkArea) {
 				this.$toast.open({
@@ -7315,7 +7338,7 @@ export default {
 						// console.log('data.id',data.id,comparator)
 						if (data.id == comparator.id) {
 							data.asset_title = event;
-							console.log("data", data);
+							// console.log("data", data);
 						}
 					});
 				});
@@ -7713,6 +7736,9 @@ export default {
 					});
 				});
 			}
+			//thêm thống nhất mức giá chỉ dẫn
+			const unify_indicative_price_slug = this.form.unify_indicative_price_slug;
+			console.log('unify_indicative_price_slug', unify_indicative_price_slug);
 			const payloadData = {
 				asset_unit_price: asset_unit_price,
 				asset_unit_area: asset_unit_area,
@@ -7726,8 +7752,10 @@ export default {
 				round_violation_facility: +round_violation_facility,
 				layer_cutting_procedure: layer_cutting_procedure,
 				layer_cutting_price: +layer_cutting_procedure_price,
-				remaining_price: remaining_price
+				remaining_price: remaining_price,
+				unify_indicative_price_slug: unify_indicative_price_slug
 			};
+
 			if (layer_cutting_procedure && !layer_cutting_procedure_price) {
 				this.$toast.open({
 					message: "vui lòng nhập giá trị phương pháp cắt lớp",
@@ -7877,6 +7905,9 @@ export default {
 				});
 			}
 			this.mainPrice.price = this.roundPrice(this.mainPrice.price, 0);
+			//thêm thống nhất mức giá chỉ dẫn
+			const unify_indicative_price_slug = this.form.unify_indicative_price_slug;
+			console.log('unify_indicative_price_slug', unify_indicative_price_slug);
 			const payloadData = {
 				asset_unit_price: asset_unit_price,
 				asset_unit_area: asset_unit_area,
@@ -7887,7 +7918,8 @@ export default {
 				main_price: this.mainPrice,
 				purpose_price: this.purposePrice,
 				violate_price: this.violatePrice,
-				land_asset_price: land_asset_price
+				land_asset_price: land_asset_price,
+				unify_indicative_price_slug: unify_indicative_price_slug,
 			};
 			if (
 				Math.abs(this.mgcl1) > 15 ||
@@ -7977,6 +8009,9 @@ export default {
 				});
 			}
 			this.mainPrice.price = this.roundPrice(this.mainPrice.price, 0);
+			//thêm thống nhất mức giá chỉ dẫn
+			const unify_indicative_price_slug = this.form.unify_indicative_price_slug;
+			console.log('unify_indicative_price_slug', unify_indicative_price_slug);
 			const payloadData = {
 				asset_unit_price: asset_unit_price,
 				asset_unit_area: asset_unit_area,
@@ -7987,7 +8022,8 @@ export default {
 				main_price: this.mainPrice,
 				purpose_price: this.purposePrice,
 				violate_price: this.violatePrice,
-				land_asset_price: land_asset_price
+				land_asset_price: land_asset_price,
+				unify_indicative_price_slug: unify_indicative_price_slug,
 			};
 			// if (Math.abs(this.mgcl1) > 15 || Math.abs(this.mgcl2) > 15 || Math.abs(this.mgcl3) > 15) {
 			// 	this.dataTab2 = payloadData
@@ -8023,6 +8059,7 @@ export default {
 			} else {
 				this.isSubmit = true;
 			}
+			console.log('data', payloadData);
 			const res = await CertificateAsset.submitStep7(payloadData, this.idData);
 			if (res.data) {
 				this.$toast.open({
@@ -8595,15 +8632,15 @@ export default {
 				typeof asset.appraise_adapter[2] !== "undefined"
 					? asset.appraise_adapter[2].change_negotiated_price
 					: null;
-			console.log(
-				"dgh",
-				asset_percent1,
-				asset_neo_price1,
-				asset_percent2,
-				asset_neo_price2,
-				asset_percent3,
-				asset_neo_price3
-			);
+			// console.log(
+			// 	"dgh",
+			// 	asset_percent1,
+			// 	asset_neo_price1,
+			// 	asset_percent2,
+			// 	asset_neo_price2,
+			// 	asset_percent3,
+			// 	asset_neo_price3
+			// );
 			if (asset_percent1 !== 100 && asset_neo_price1 === null) {
 				console.log("tính 1");
 				asset_neo_price1 =
@@ -9142,7 +9179,7 @@ export default {
 				this.form.composite_land_remaning_slug ===
 				"theo-chi-phi-chuyen-mdsd-dat"
 			) {
-				console.log("Vô đây 1");
+				// console.log("Vô đây 1");
 				// // console.log('dataa', comparisonFactor1['muc_dich_chinh'],comparisonFactor2['muc_dich_chinh'],comparisonFactor3['muc_dich_chinh'])
 				if (
 					comparisonFactor1["muc_dich_chinh"] &&
@@ -10007,26 +10044,26 @@ export default {
 			this.mgcd1 = this.roundPrice(this.dgd1) + this.roundPrice(this.tldc1);
 			this.mgcd2 = this.roundPrice(this.dgd2) + this.roundPrice(this.tldc2);
 			this.mgcd3 = this.roundPrice(this.dgd3) + this.roundPrice(this.tldc3);
-			console.log("adjustpricedata", this.adjustPriceData);
-			console.log("price_other", this.price_other_comparison);
-			console.log(
-				"this.mgcd1",
-				this.mgcd1,
-				this.roundPrice(this.dgd1),
-				this.roundPrice(this.tldc1)
-			);
-			console.log(
-				"this.mgcd2",
-				this.mgcd2,
-				this.roundPrice(this.dgd2),
-				this.roundPrice(this.tldc2)
-			);
-			console.log(
-				"this.mgcd3",
-				this.mgcd3,
-				this.roundPrice(this.dgd3),
-				this.roundPrice(this.tldc3)
-			);
+			// console.log("adjustpricedata", this.adjustPriceData);
+			// console.log("price_other", this.price_other_comparison);
+			// console.log(
+			// 	"this.mgcd1",
+			// 	this.mgcd1,
+			// 	this.roundPrice(this.dgd1),
+			// 	this.roundPrice(this.tldc1)
+			// );
+			// console.log(
+			// 	"this.mgcd2",
+			// 	this.mgcd2,
+			// 	this.roundPrice(this.dgd2),
+			// 	this.roundPrice(this.tldc2)
+			// );
+			// console.log(
+			// 	"this.mgcd3",
+			// 	this.mgcd3,
+			// 	this.roundPrice(this.dgd3),
+			// 	this.roundPrice(this.tldc3)
+			// );
 
 			if (this.mgcd1 < 0 || this.mgcd2 < 0 || this.mgcd3 < 0) {
 				this.showError = true;
@@ -10070,6 +10107,15 @@ export default {
 						? (this.mgcd1 + this.mgcd2 + this.mgcd3) /
 						  asset.asset_general.length
 						: 0;
+			} else if (this.form.unify_indicative_price_slug === "tsss-1") {
+				this.mgtn = this.mgcd1;
+				this.mgtnTemp = this.mgcd1;
+			} else if (this.form.unify_indicative_price_slug === "tsss-2") {
+				this.mgtn = this.mgcd2;
+				this.mgtnTemp = this.mgcd2;
+			} else if (this.form.unify_indicative_price_slug === "tsss-3") {
+				this.mgtn = this.mgcd3;
+				this.mgtnTemp = this.mgcd3;
 			}
 
 			// check nếu là phương pháp cắt lớp

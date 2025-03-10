@@ -571,4 +571,15 @@ class PreCertificateController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+    
+    public function updateOtherAsset(int $id, Request $request)
+    {
+        if (!CommonService::checkUserPermission($this->permissionEdit))
+            return $this->respondWithErrorData(['message' => ErrorMessage::PRE_CERTIFICATE_CHECK_UPDATE, 'exception' => ''], 403);
+        $result = $this->preCertificateRepository->updateOtherAsset($id, $request->toArray());
+        if (isset($result['message']) && isset($result['exception']))
+            return $this->respondWithErrorData($result);
+
+        return $this->respondWithCustomData($result);
+    }
 }

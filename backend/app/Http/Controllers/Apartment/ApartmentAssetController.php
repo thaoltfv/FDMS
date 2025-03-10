@@ -160,7 +160,7 @@ class ApartmentAssetController extends Controller
         $rules = [
             'appraisal_methods' => 'required|array|min:3|max:3',
             'appraisal_methods.thong_nhat_muc_gia_chi_dan' => 'array|required|min:2',
-            'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => ['string', 'required', Rule::in(['cao-nhat', 'thap-nhat', 'trung-binh'])],
+            'appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value' => ['string', 'required', Rule::in(['cao-nhat', 'thap-nhat', 'trung-binh', 'tsss-1', 'tsss-2', 'tsss-3'])],
             'value_base_and_approach' => 'required|array',
             'value_base_and_approach.basis_property_id' => 'required_with:value_base_and_approach|integer',
             'value_base_and_approach.principle_id' => 'required_with:value_base_and_approach|integer',

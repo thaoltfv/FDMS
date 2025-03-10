@@ -370,6 +370,17 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $otherComparisons = $objects['other_comparison'];
             $deleteComparisons = $objects['delete_other_comparison'];
             $roundTotal = $objects['round_total'];
+
+            if (isset($objects['unify_indicative_price_slug'])) {
+                ApartmentAssetAppraisalMethod::query()->where(['apartment_asset_id' => $id, 'slug' => 'thong_nhat_muc_gia_chi_dan'])->delete();
+                $methodData = [];
+                $methodData['slug_value'] = $objects['unify_indicative_price_slug'];
+                $methodData['slug'] = 'thong_nhat_muc_gia_chi_dan';
+                $methodData['apartment_asset_id'] = $id;
+                $appraisalMethodsArr = new ApartmentAssetAppraisalMethod($methodData);
+                ApartmentAssetAppraisalMethod::query()->create($appraisalMethodsArr->attributesToArray());
+            }
+
             if (isset($objects['apartment_asset_price'])) {
                 $apartment_asset_price = $objects['apartment_asset_price'];
             }
@@ -670,6 +681,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
             $total = 0;
             $min = 0;
             $max = 0;
+            $count_ss = 1;
+            $price_ss = [];
             foreach ($assets as $asset) {
                 $adapter = $adapters->where('asset_general_id', $asset->id)->first();
                 $comparison = $comparisons->where('asset_general_id', $asset->id);
@@ -707,6 +720,8 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $data[$asset->id]['legal_unit_price'] = $legalUnitPrice;
                 $data[$asset->id]['not_legal_rate'] = $notLegalRate;
                 $data[$asset->id]['price'] = $price;
+                $price_ss[$count_ss]['price'] = $price;
+                $count_ss++;
             }
             $apartmentPrice = 0;
             if (isset($methods)) {
@@ -718,6 +733,15 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                             break;
                         case 'cao-nhat':
                             $apartmentPrice = $max;
+                            break;
+                        case 'tsss-1':
+                            $apartmentPrice = $price_ss[1]['price'];
+                            break;
+                        case 'tsss-2':
+                            $apartmentPrice = $price_ss[2]['price'];
+                            break;
+                        case 'tsss-3':
+                            $apartmentPrice = $price_ss[3]['price'];
                             break;
                         default:
                             $apartmentPrice = $total / 3;
@@ -742,13 +766,19 @@ class EloquentApartmentAssetRepository extends EloquentRepository implements Apa
                 $slug = 'other_asset_price';
                 $this->updateOrCreatePrice($id, $slug, $otherPrice ?? 0);
             }
+
             $apartmentTotal = CommonService::roundPrice($apartmentPrice, $roundTotal) * $apartmentArea;
-            $slug = 'apartment_total_price';
-            $this->updateOrCreatePrice($id, $slug, $apartmentTotal ?? 0);
+            if ($apartmentTotal > 0){
+                $slug = 'apartment_total_price';
+                $this->updateOrCreatePrice($id, $slug, $apartmentTotal ?? 0);
+            }
 
             $assetTotal = $apartmentTotal +  $otherPrice;
-            $slug = 'total_price';
-            $this->updateOrCreatePrice($id, $slug, $assetTotal ?? 0);
+            if ($assetTotal > 0) {
+                $slug = 'total_price';
+                $this->updateOrCreatePrice($id, $slug, $assetTotal ?? 0);
+            }
+            
         }
     }
     private function calculatePriceNew($id)

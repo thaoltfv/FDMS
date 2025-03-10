@@ -41,6 +41,39 @@ class AppraiseOtherInformationEnum
 				"updated_at" => "2022-02-15T15:27:53.000000Z",
 				"deleted_at" => null,
 				"is_defaults" => false
+			],
+			[
+				"id" => 104,
+				"name" => "TSSS 1",
+				"slug" => "tsss-1",
+				"description" => "TSSS 1",
+				"type" => "THONG_NHAT_MUC_GIA_CHI_DAN",
+				"created_at" => "2022-02-15T10:22:46.000000Z",
+				"updated_at" => "2022-02-15T15:27:53.000000Z",
+				"deleted_at" => null,
+				"is_defaults" => false
+			],
+			[
+				"id" => 105,
+				"name" => "TSSS 2",
+				"slug" => "tsss-2",
+				"description" => "TSSS 2",
+				"type" => "THONG_NHAT_MUC_GIA_CHI_DAN",
+				"created_at" => "2022-02-15T10:22:46.000000Z",
+				"updated_at" => "2022-02-15T15:27:53.000000Z",
+				"deleted_at" => null,
+				"is_defaults" => false
+			],
+			[
+				"id" => 106,
+				"name" => "TSSS 3",
+				"slug" => "tsss-3",
+				"description" => "TSSS 3",
+				"type" => "THONG_NHAT_MUC_GIA_CHI_DAN",
+				"created_at" => "2022-02-15T10:22:46.000000Z",
+				"updated_at" => "2022-02-15T15:27:53.000000Z",
+				"deleted_at" => null,
+				"is_defaults" => false
 			]
 		],
 		'tinh_gia_dat_hon_hop_con_lai' => [

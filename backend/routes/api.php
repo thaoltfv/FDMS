@@ -369,7 +369,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pre-certificates/export-document/remove', [PreCertificateController::class, 'ExportDocumentRemove']);
     Route::get('pre-certificates/export-document-pc/download/{id}', [PreCertificateController::class, 'exportDocumentDownloadPC']);
     Route::get('pre-certificates/export-document-certificate/download/{id}', [PreCertificateController::class, 'exportDocumentDownloadCertificate']);
-
+    Route::post('pre-certificates/pre-certificate-update-other-asset/{id}', [PreCertificateController::class, 'updateOtherAsset']);
+    
     Route::get('/pre-certificates', [PreCertificateController::class, 'findAll']);
 
     Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
@@ -536,6 +537,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('certification_brief/step1-infomation-certification/{id?}', [CertificateBriefController::class, 'postGeneralInfomation']);
     Route::get('certification_brief/certificate-general-infomation/{id}', [CertificateBriefController::class, 'getGeneralInfomation']);
     Route::post('certification_brief/certificate-update-status/{id}', [CertificateBriefController::class, 'updateStatus']);
+    Route::post('certification_brief/certificate-update-other-asset/{id}', [CertificateBriefController::class, 'updateOtherAsset']);
     Route::get('certification_brief/certificate-appraise-list', [CertificateBriefController::class, 'findAppraisePaging']);
     Route::post('certification_brief/certificate-update-appraise/{id}', [CertificateBriefController::class, 'updateCertificateV3']);
     Route::get('certification_brief/certificate-infomation/{id}', [CertificateBriefController::class, 'getCertificate']);

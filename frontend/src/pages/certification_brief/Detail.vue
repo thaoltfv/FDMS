@@ -850,6 +850,7 @@
 						<div
 							v-if="
 								form.general_asset.length === 0 &&
+								listOtherAsset.length === 0 &&
 									form.appraiser_perform &&
 									form.status === 2 &&
 									(edit || add) &&
@@ -863,6 +864,12 @@
 							>
 								Chọn tài sản thẩm định
 							</button>
+							<button
+								class="btn btn_list_appraise-orange text-nowrap mr-3"
+								@click.prevent="handleAddOA"
+							>
+								Thêm kết quả
+							</button>
 							<!-- <button
 								v-if="this.isCheckRealEstate !== true"
 								class="btn btn_list_appraise-orange text-nowrap"
@@ -871,7 +878,7 @@
 								Import tài sản thẩm định
 							</button> -->
 						</div>
-						<div class="col-12" v-if="checkNoticeMessage()">
+						<div class="col-12" v-if="checkNoticeMessage() && listOtherAsset.length === 0">
 							<div class="infor-box">
 								<svg
 									style="margin-right: 1rem"
@@ -969,13 +976,122 @@
 								<div class="ml-1">VNĐ</div>
 							</div>
 						</div>
+						<div
+							v-if="listOtherAsset.length > 0"
+							class="col-12 mt-2 table-wrapper"
+						>
+							<a-table
+								:columns="columnOtherAssets"
+								:data-source="listOtherAsset"
+								table-layout="top"
+								class="table_appraise_list"
+								:rowKey="(record) => record.id"
+								:pagination="false"
+							>
+								<template slot="price" slot-scope="price">
+									<p class="text-none mb-0">
+										{{ price ? formatNumber(price) : 0 }} đ
+									</p>
+								</template>
+								<template slot="action" slot-scope="action">
+									<div class="d-flex align-items-end justify-content-end">
+										<button
+											v-if="
+												listOtherAsset.length > 0 &&
+												form.appraiser_perform &&
+												editItemList &&
+												(edit || add) &&
+												user_id === form.appraiser_perform.user_id
+											"
+											class="btn-delete"
+											type="button"
+											@click="handleEditOA(action)"
+										>
+											<img alt="add" src="@/assets/icons/ic_edit_2.svg" />
+										</button>
+
+										<button
+											v-if="
+												listOtherAsset.length > 0 &&
+												form.appraiser_perform &&
+												editItemList &&
+												(edit || add) &&
+												user_id === form.appraiser_perform.user_id
+											"
+											class="btn-delete"
+											type="button"
+											@click="handleDeleteOA(action)"
+										>
+											<img
+												alt="delete_land"
+												src="@/assets/icons/ic_delete_2.svg"
+											/>
+										</button>
+									</div>
+									<!-- <b-tooltip :target="(asset.id).toString()">{{asset.name}}</b-tooltip> -->
+								</template>
+							</a-table>
+						</div>
+						<div
+							v-if="
+								listOtherAsset.length > 0 &&
+								form.appraiser_perform &&
+								editItemList &&
+								(edit || add) &&
+								user_id === form.appraiser_perform.user_id
+							"
+							class="d-flex col-12 justify-content-between"
+						>
+							<button
+								class="btn text-warning btn-ghost btn-add pr-0"
+								type="button"
+								@click="handleAddOA"
+							>
+								<img
+									alt="add"
+									src="@/assets/icons/ic_add-white.svg"
+									class="mr-0"
+								/>
+								+ Thêm
+							</button>
+							<div class="d-flex justiffy-content-end mt-3">
+								<span class="total mt-1">Tổng cộng</span>
+								<div class="d-flex container_total justify-content-between">
+									<div>
+										{{
+											listOtherAsset.length > 0
+												? formatNumberOtherAsset(listOtherAsset)
+												: 0
+										}}
+									</div>
+									<div class="ml-1">VNĐ</div>
+								</div>
+								<span class="total mr-5"></span>
+								<span class="total mr-5"></span>
+							</div>
+						</div>
+						<div v-else class="d-flex col-12 justify-content-end">
+							<div v-if="listOtherAsset.length > 0" class="d-flex mt-3">
+								<span class="total mt-1">Tổng cộng</span>
+								<div class="d-flex container_total justify-content-between">
+									<div>
+										{{
+											listOtherAsset.length > 0
+												? formatNumberOtherAsset(listOtherAsset)
+												: 0
+										}}
+									</div>
+									<div class="ml-1">VNĐ</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div
 			v-if="
-				form.general_asset.length > 0 &&
+				(form.general_asset.length > 0  || listOtherAsset.length > 0 ) &&
 					printConfig &&
 					statusDescription !== 'In hồ sơ' &&
 					statusDescription !== 'Bàn giao khách hàng'
@@ -1977,7 +2093,7 @@
 							<div
 								style="padding: 2px 15px"
 								class="w-100"
-								v-if="isCheckRealEstate"
+								v-if="isCheckRealEstate || listOtherAsset.length > 0"
 							>
 								<div class="row input_download_certificate">
 									<div class="d-flex align-items-center col">
@@ -2465,6 +2581,7 @@
 		<div
 			v-if="
 				form.general_asset.length > 0 ||
+				listOtherAsset.length > 0 ||
 					form.status === 1 ||
 					form.status === 2 ||
 					form.status === 10
@@ -2655,6 +2772,7 @@
 		<div
 			v-if="
 				form.general_asset.length > 0 ||
+				listOtherAsset.length > 0 ||
 					form.status === 1 ||
 					form.status === 2 ||
 					form.status === 10
@@ -3056,6 +3174,17 @@
 			@cancel="deleteUploadDocument = false"
 			@action="deleteDocument"
 		/>
+		<ModalOtherAssetCertificate
+			v-if="isShowModalOtherAsset"
+			:dataForm="itemOther"
+			@action="updateOtherAssetList"
+			@cancel="isShowModalOtherAsset = false"
+		/>
+		<ModalDelete
+			v-if="isShowPopUpDeleteOA"
+			@cancel="isShowPopUpDeleteOA = false"
+			@action="deleteOtherAssetList"
+		/>
 	</div>
 </template>
 <style lang="scss">
@@ -3074,6 +3203,7 @@ import ModalViewDocument from "./component/modals/ModalViewDocument";
 import ModalPreviewDocument from "@/components/PreCertificate/ModalViewDocument";
 import ModalNotificationCertificate from "@/components/Modal/ModalNotificationCertificate";
 import ModalNotificationWithAssignHSTD from "@/components/Modal/ModalNotificationWithAssignHSTD";
+import ModalOtherAssetCertificate from "./component/ModalOtherAssetCertificate.vue";
 
 import InputDatePicker from "@/components/Form/InputDatePicker";
 import InputCategory from "@/components/Form/InputCategory";
@@ -3152,10 +3282,22 @@ export default {
 		"b-dropdown": BDropdown,
 		Footer,
 		ModalAppraiseListVersion,
-		ModalNotificationWithAssignHSTD
+		ModalNotificationWithAssignHSTD,
+		ModalOtherAssetCertificate
 	},
 	data() {
 		return {
+			indexDeleteOA: -1,
+			indexEditOA: -1,
+			isEditOtherAsset: false,
+			isShowPopUpDeleteOA: false,
+			isShowModalOtherAsset: false,
+			itemOther: {
+				asset_type: "",
+				asset_name: "",
+				asset_price: "",
+			},
+			listOtherAsset: [],
 			isAccounting: false,
 			isAppraiserControl: false,
 			byPassAdmin: false,
@@ -3321,6 +3463,11 @@ export default {
 			if (this.$route.meta["detail"]) {
 				this.form = Object.assign(this.form, { ...this.$route.meta["detail"] });
 				this.idData = this.$route.query.id;
+				if (!this.form.other_assets) {
+					this.listOtherAsset = [];
+				} else {
+					this.listOtherAsset = JSON.parse(this.form.other_assets);
+				}
 			}
 		}
 		if (profile.data.user) {
@@ -3502,6 +3649,47 @@ export default {
 			];
 			return dataColumn.filter(item => item.hiddenItem === false);
 		},
+		columnOtherAssets() {
+			let dataColumn = [
+				{
+					title: "Loại tài sản",
+					align: "left",
+					dataIndex: "asset_type",
+					width: "10%",
+					hiddenItem: false,
+				},
+				{
+					title: "Tên tài sản",
+					align: "left",
+					dataIndex: "asset_name",
+					width: "65%",
+					hiddenItem: false,
+				},
+				{
+					title: "Tổng giá trị",
+					align: "right",
+					scopedSlots: { customRender: "price" },
+					dataIndex: "asset_price",
+					hiddenItem: false,
+				},
+			];
+			if (
+				this.listOtherAsset.length > 0 &&
+				this.form.appraiser_perform &&
+				this.editItemList &&
+				(this.edit || this.add) &&
+				this.user_id === this.form.appraiser_perform.user_id
+			) {
+				dataColumn.push({
+					title: "",
+					align: "left",
+					scopedSlots: { customRender: "action" },
+					width: "5%",
+					hiddenItem: false,
+				});
+			}
+			return dataColumn.filter((item) => item.hiddenItem === false);
+		},
 		filterDocumentName() {
 			return this.documentName;
 		},
@@ -3625,6 +3813,80 @@ export default {
 		}
 	},
 	methods: {
+		handleShowPopupAddOtherAsset() {
+			this.isShowModalOtherAsset = true;
+		},
+		handleAddOA() {
+			this.itemOther = _.cloneDeep({
+				asset_type: "",
+				asset_name: "",
+				asset_price: "",
+			});
+			this.isShowModalOtherAsset = true;
+		},
+		handleEditOA(data) {
+			this.isEditOtherAsset = true;
+			this.indexEditOA = this.listOtherAsset.indexOf(data);
+			if (this.indexEditOA !== -1) {
+				this.itemOther = _.cloneDeep(this.listOtherAsset[this.indexEditOA]);
+				this.isShowModalOtherAsset = true;
+			}
+		},
+		handleDeleteOA(data) {
+			this.indexDeleteOA = this.listOtherAsset.indexOf(data);
+			if (this.indexDeleteOA !== -1) {
+				this.isShowPopUpDeleteOA = true;
+			}
+		},
+		updateOtherAssetList(data) {
+			this.isShowModalOtherAsset = false;
+			if (this.isEditOtherAsset) {
+				this.listOtherAsset[this.indexEditOA] = data;
+				this.isEditOtherAsset = false;
+				this.indexEditOA = -1;
+			} else {
+				this.listOtherAsset.push(data);
+			}
+			this.updateOtherAssetCertificate();
+		},
+		deleteOtherAssetList() {
+			this.listOtherAsset.splice(this.indexDeleteOA, 1);
+			this.indexDeleteOA = -1;
+			this.updateOtherAssetCertificate();
+		},
+		async updateOtherAssetCertificate() {
+			const dataSend = {
+				other_assets: this.listOtherAsset,
+			};
+			const res = await CertificationBrief.updateOtherAssetCertificate(
+				this.idData,
+				dataSend
+			);
+			if (res.data) {
+				this.listOtherAsset = JSON.parse(res.data.other_assets);
+				this.$toast.open({
+					message: "Cập nhật thông tin tài sản khác thành công",
+					type: "success",
+					position: "top-right",
+					duration: 5000,
+				});
+			} else {
+				this.$toast.open({
+					message: res.error.message,
+					type: "error",
+					position: "top-right",
+					duration: 5000,
+				});
+			}
+		},
+		formatNumberOtherAsset(listOA) {
+			let total = 0;
+			for (let index = 0; index < listOA.length; index++) {
+				const element = listOA[index];
+				total += element.asset_price;
+			}
+			return this.formatNumber(total);
+		},
 		convertToEnglish(str) {
 			const vietnameseChars = {
 				À: "A",
@@ -3748,6 +4010,11 @@ export default {
 					if (resp.data) {
 						this.form = Object.assign(this.form, { ...resp.data });
 						this.changeEditStatus();
+						if (this.form.other_assets) {
+							this.listOtherAsset = JSON.parse(this.form.other_assets);
+						} else {
+							this.listOtherAsset = [];
+						}
 
 						// this.keyRender++;
 					} else if (resp.error && resp.error.statusCode) {
@@ -4332,7 +4599,8 @@ export default {
 		checkItemList() {
 			if (
 				this.form.personal_properties.length > 0 ||
-				this.form.general_asset.length > 0
+				this.form.general_asset.length > 0 ||
+				this.listOtherAsset.length > 0
 			) {
 				return true;
 			} else {
@@ -5683,7 +5951,7 @@ export default {
 			let isCheckRealEstate = true;
 			let isCheckConstruction = false;
 			let isApartment = false;
-			if (this.form.document_type && this.form.document_type.length > 0) {
+			if (this.listOtherAsset && this.listOtherAsset.length === 0 && this.form.document_type && this.form.document_type.length > 0) {
 				if (
 					this.form.document_type.filter(function(item) {
 						return item !== "DCN" && item !== "DT" && item !== "CC";
@@ -6439,5 +6707,18 @@ export default {
 }
 .img_filter {
 	filter: grayscale(100%) invert(100%);
+}
+.btn-delete {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	background: #ffffff;
+	border: none;
+	img {
+		max-width: 1.5rem;
+		min-width: 1rem;
+		width: 100%;
+		height: auto;
+	}
 }
 </style>

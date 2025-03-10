@@ -75,7 +75,7 @@ class Certificate extends Model
         'issue_date_card',
         'issue_place_card',
         'customer_group_id',
-
+        'other_assets',
     ];
 
     public function getStatusTextAttribute()

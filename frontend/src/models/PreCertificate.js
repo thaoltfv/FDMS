@@ -209,4 +209,13 @@ export default class Certificate extends Model {
 			isStatic: true
 		});
 	}
+	
+	static async updateOtherAssetCertificate(id = "", data) {
+		return new this().request({
+			method: "POST",
+			url: `pre-certificates/pre-certificate-update-other-asset/${id}`,
+			data: data,
+			isStatic: true
+		});
+	}
 }

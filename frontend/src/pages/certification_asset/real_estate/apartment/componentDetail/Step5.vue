@@ -2794,17 +2794,24 @@
 
 													<tr>
 														<td>2</td>
-														<td colspan="2">
-															Mức giá chỉ dẫn (đồng/m<sup>2</sup>)
+														<td colspan="2">Mức giá chỉ dẫn (đồng/m<sup>2</sup>)</td>
+														<td>
+															<div class="row">
+																<div class="col-12">{{ formatNumber(parseFloat(mgcd1).toFixed(0)) }}</div>
+																<div class="col-12"><input type="checkbox" :checked="form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === 'tsss-1'" @change="changeMGTN('tsss-1')" /></div>
+															</div>
 														</td>
 														<td>
-															{{ formatNumber(parseFloat(mgcd1).toFixed(0)) }}
+															<div class="row">
+																<div class="col-12">{{ formatNumber(parseFloat(mgcd2).toFixed(0)) }}</div>
+																<div class="col-12"><input type="checkbox" :checked="form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === 'tsss-2'" @change="changeMGTN('tsss-2')" /></div>
+															</div>
 														</td>
 														<td>
-															{{ formatNumber(parseFloat(mgcd2).toFixed(0)) }}
-														</td>
-														<td>
-															{{ formatNumber(parseFloat(mgcd3).toFixed(0)) }}
+															<div class="row">
+																<div class="col-12">{{ formatNumber(parseFloat(mgcd3).toFixed(0)) }}</div>
+																<div class="col-12"><input type="checkbox" :checked="form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === 'tsss-3'" @change="changeMGTN('tsss-3')" /></div>
+															</div>
 														</td>
 													</tr>
 													<tr>
@@ -2814,7 +2821,10 @@
 															(đồng/m<sup>2</sup>)
 														</td>
 														<td align="center" colspan="3">
-															{{ formatNumber(parseFloat(mgtb).toFixed(0)) }}
+															<div class="row">
+																<div class="col-12">{{ formatNumber(parseFloat(mgtb).toFixed(0)) }}</div>
+																<div class="col-12"><input type="checkbox" :checked="form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === 'trung-binh'" @change="changeMGTN('trung-binh')" /></div>
+															</div>
 														</td>
 													</tr>
 
@@ -3015,7 +3025,7 @@
 																		{{
 																			formatNumber(
 																				parseFloat(
-																					showPriceApartment()
+																					showPriceApartment
 																				).toFixed(0)
 																			)
 																		}}đ
@@ -3040,7 +3050,7 @@
 																			>{{
 																				formatNumber(
 																					parseFloat(
-																						showPriceApartment()
+																						showPriceApartment
 																					).toFixed(0)
 																				)
 																			}}đ</strong
@@ -3186,7 +3196,14 @@ export default {
 		InputNumberFormat,
 		ModalNotificationAppraisal
 	},
-	computed: {},
+	computed: {
+		showPriceApartment() {
+			return (
+						+this.formatCurrent(parseFloat(this.mgtn).toFixed(0)) *
+						this.form.apartment_asset_properties.area
+					);
+		},
+	},
 	data() {
 		return {
 			key_render_111: 989898989898989,
@@ -3295,6 +3312,10 @@ export default {
 	},
 	beforeUpdate() {},
 	methods: {
+		changeMGTN(value) {
+			this.form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value = value;
+			this.calculation(this.form);
+		},
 		roundPrice(value, roundPrice) {
 			if (!value) {
 				return value;
@@ -3617,25 +3638,6 @@ export default {
 			}
 		},
 		// ---------------------------------------------- TAB_2 --------------------------------------------------------------------//
-		showPriceApartment() {
-			if (this.form.apartment_asset_properties) {
-				if (this.form.price && this.form.price.length > 0) {
-					let totalPrice = 0;
-
-					this.form.price.forEach(item => {
-						if (item.slug === "apartment_total_price") {
-							totalPrice = item.value;
-						}
-					});
-					return totalPrice;
-				} else {
-					return (
-						+this.formatCurrent(parseFloat(this.mgtn).toFixed(0)) *
-						this.form.apartment_asset_properties.area
-					);
-				}
-			} else return 0;
-		},
 		formatCurrent(value) {
 			// if (this.round_total && this.round_total > 0 && this.round_total <= 7) {
 			// 	let round = Math.pow(10, this.round_total)
@@ -3899,13 +3901,15 @@ export default {
 					});
 				});
 			}
+			const unify_indicative_price_slug = this.form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value;
 			const payloadData = {
 				apartment_adapter: apartment_adapter,
 				comparison_factor: dataSave,
 				other_comparison: otherDataSave,
 				delete_other_comparison: dataDelete,
 				round_total: +round_total,
-				apartment_asset_price: parseFloat(this.mgtn).toFixed(0)
+				apartment_asset_price: parseFloat(this.mgtn).toFixed(0),
+				unify_indicative_price_slug: unify_indicative_price_slug
 			};
 			if (round_total < -7 || round_total > 7) {
 				this.$toast.open({
@@ -4728,6 +4732,15 @@ export default {
 						? (this.mgcd1 + this.mgcd2 + this.mgcd3) /
 						  asset.assets_general.length
 						: 0;
+			} else if (this.form.appraisal_methods &&
+				this.form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === "tsss-1") {
+				this.mgtn = this.mgcd1;
+			} else if (this.form.appraisal_methods &&
+			this.form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === "tsss-2") {
+				this.mgtn = this.mgcd2;
+			} else if (this.form.appraisal_methods &&
+			this.form.appraisal_methods.thong_nhat_muc_gia_chi_dan.slug_value === "tsss-3") {
+				this.mgtn = this.mgcd3;
 			}
 
 			// tỉ lệ chênh lệch mức giá trung bình trên mức giá chỉ dẫn

@@ -208,4 +208,13 @@ export default class CertificateBrief extends Model {
 			isStatic: true
 		});
 	}
+
+	static async updateOtherAssetCertificate(id = "", data) {
+		return new this().request({
+			method: "POST",
+			url: `certification_brief/certificate-update-other-asset/${id}`,
+			data: data,
+			isStatic: true
+		});
+	}
 }

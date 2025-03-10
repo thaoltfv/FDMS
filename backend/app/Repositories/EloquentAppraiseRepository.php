@@ -5938,6 +5938,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
         }
         $user = CommonService::getUser();
 
+        if (isset($objects['unify_indicative_price_slug'])) {
+            if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->exists()) {
+                if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', '=', 'thong_nhat_muc_gia_chi_dan')->exists())
+                    AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', '=', 'thong_nhat_muc_gia_chi_dan')->update([
+                        'slug_value' => $objects['unify_indicative_price_slug']
+                    ]);
+            }
+        }
+
         if (isset($objects['comparison_factor'])) {
             $comparisonFactorDatas = isset($objects['other_comparison']) ? array_merge($objects['comparison_factor'], $objects['other_comparison']) : $objects['comparison_factor'];
             foreach ($comparisonFactorDatas as $comparisonFactorData) {
@@ -6172,6 +6181,15 @@ class  EloquentAppraiseRepository extends EloquentRepository implements Appraise
             return $check;
         }
         $user = CommonService::getUser();
+
+        if (isset($objects['unify_indicative_price_slug'])) {
+            if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->exists()) {
+                if (AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', '=', 'thong_nhat_muc_gia_chi_dan')->exists())
+                    AppraiseAppraisalMethods::where('appraise_id', $appraiseId)->where('slug', '=', 'thong_nhat_muc_gia_chi_dan')->update([
+                        'slug_value' => $objects['unify_indicative_price_slug']
+                    ]);
+            }
+        }
 
         if (isset($objects['comparison_factor'])) {
             $comparisonFactorDatas = isset($objects['other_comparison']) ? array_merge($objects['comparison_factor'], $objects['other_comparison']) : $objects['comparison_factor'];
