@@ -269,4 +269,28 @@ class DictionaryController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+    
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function convertImageToBase64(Request $request)
+    {
+        // URL của hình ảnh
+        $imgName = env('STORAGE_IMAGES', 'images') . '/' . 'company_logo.png';
+
+        $imageUrl =  storage_path('app/public/' . $imgName);
+
+        // Lấy nội dung của hình ảnh từ URL
+        $imageContents = file_get_contents($imageUrl);
+
+        // Chuyển đổi nội dung hình ảnh thành chuỗi base64
+        $base64Image = base64_encode($imageContents);
+
+        // Thêm tiền tố MIME type để sử dụng trong HTML img tag
+        $base64Image = 'data:image/png;base64,' . $base64Image;
+
+        // Trả về chuỗi base64
+        return response()->json(['base64Image' => $base64Image]);
+    }
 }

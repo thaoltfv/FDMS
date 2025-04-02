@@ -12,12 +12,25 @@ import $ from 'jquery'
 export default {
 	components: {
 		'auth': () => import(/* webpackChunkName: "auth" */ '@/layouts/Auth.vue'),
-		'default': () => import(/* webpackChunkName: "default" */ '@/layouts/Default.vue')
+		'default': () => import(/* webpackChunkName: "default" */ '@/layouts/Default.vue'),
+		certificate_lookup: () =>
+			import(
+				/* webpackChunkName: "certificate_lookup" */ "@/layouts/CertificateLookup.vue"
+			),
 	},
 	computed: {
-		layout () {
-			return this.$store.state.layout || 'default'
-		}
+		layout() {
+			let layout = this.$store.state.layout || "default";
+			if (
+				this.$route &&
+				this.$route.meta &&
+				this.$route.meta.layout &&
+				this.$route.meta.layout === "certificate_lookup"
+			) {
+				layout = "certificate_lookup";
+			}
+			return layout;
+		},
 	},
 	created () {
 		// // console.log('gtm', gtm)

@@ -2789,7 +2789,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             'status_expired_at',
             'status_updated_at',
             'sub_status',
-            'certificates.updated_at'
+            'certificates.updated_at',
+            'other_assets'
         ];
         $with = [
             'createdBy:id,name',
@@ -3347,6 +3348,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             end as name_nv
         "),
             'sub_status',
+            'other_assets'
         ];
         $with = [
             'appraiser:id,name,user_id',
@@ -4087,6 +4089,9 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                     switch ($status) {
                         case 10: //Move to first step in workflow -> remove all asset in certificate
                             // $this->updateAppraiseStatus($id, $baseStatus, $baseSubStatus);
+                            $this->model->query()
+                            ->where('id', '=', $id)
+                            ->update(['other_assets' => null]);
                             $this->removeAssetInCertificate($id);
                             break;
                         default:
@@ -5915,7 +5920,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             $user = CommonService::getUser();
             $data = Certificate::where('id', $id)->get()->first();
             $appraiser = [];
-            if (!empty($required)) {
+            if (!empty($required) && !$data->other_assets) {
                 $ischeckPrice = $required['check_price'];
                 $isCheckLegal =  $required['check_legal'];
                 $isCheckVersion =  $required['check_version'];
@@ -7012,6 +7017,104 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
         } catch (Exception $exception) {
             Log::error($exception);
             throw $exception;
+        }
+    }
+
+    public function lookUpCertificate(array $objects)
+    {
+        $certificate_id = $objects['data']['certificate_id'];
+        $certificate_num = $objects['data']['certificate_num'];
+
+        $checkCertificate =  Certificate::query()
+            ->where(['id' => (int) $certificate_id])->first();
+        if (isset($checkCertificate) && isset($checkCertificate->certificate_code_replace)) {
+            $certificate = Certificate::query()
+                ->where(['id' => (int) $certificate_id, 'certificate_code_replace' => $certificate_num, 'status' => 4]) // Status = 4 HSTĐ hoàn thành
+                ->with('appraiser')
+                ->with('administrative')
+                ->with('appraiserManager')
+                ->with('appraiserConfirm')
+                ->with('appraiserControl')
+                ->with('appraiserSale')
+                ->with('appraiserPerform')
+                ->with('certificateApproach')
+                ->with('appraiseMethodUsed')
+                ->with('appraiseBasisProperty')
+                ->with('certificatePrinciple')
+                ->with('legalDocumentsOnValuation')
+                ->with('legalDocumentsOnConstruction')
+                ->with('legalDocumentsOnLand')
+                ->with('legalDocumentsOnLocal')
+                ->with('createdBy')
+                ->with('assetPrice')
+                //->with('constructionCompany')
+                ->with('comparisonFactor')
+                ->with('appraisePurpose')
+                ->with('realEstate')
+                ->get()
+                ->toArray();
+        } else {
+            $certificate = Certificate::query()
+                ->where(['id' => (int) $certificate_id, 'certificate_num' => $certificate_num, 'status' => 4]) // Status = 4 HSTĐ hoàn thành
+                ->with('appraiser')
+                ->with('administrative')
+                ->with('appraiserManager')
+                ->with('appraiserConfirm')
+                ->with('appraiserControl')
+                ->with('appraiserSale')
+                ->with('appraiserPerform')
+                ->with('certificateApproach')
+                ->with('appraiseMethodUsed')
+                ->with('appraiseBasisProperty')
+                ->with('certificatePrinciple')
+                ->with('legalDocumentsOnValuation')
+                ->with('legalDocumentsOnConstruction')
+                ->with('legalDocumentsOnLand')
+                ->with('legalDocumentsOnLocal')
+                ->with('createdBy')
+                ->with('assetPrice')
+                //->with('constructionCompany')
+                ->with('comparisonFactor')
+                ->with('appraisePurpose')
+                ->with('realEstate')
+                ->get()
+                ->toArray();
+        }
+
+        return $certificate;
+    }
+
+    public function lookUpEmployee(array $objects)
+    {
+        try {
+            // $nameEmployee = $objects['data']['name'];
+            $phoneEmployee = $objects['data']['phone'];
+
+            $infoEmployee = null;
+
+            $checkEmployee = User::query()
+                ->where(['phone' => $phoneEmployee])
+                ->whereNull('deleted_at')
+                ->select([
+                    'id',
+                    'name',
+                    'phone',
+                    'email',
+                    'image',
+                    'status_user',
+                    'note'
+                ])->with([
+                    'appraiser',
+                    'appraiser.appraisePosition',
+                    'appraiser.appraiserBranch'
+                ])->first();
+            if (isset($checkEmployee)) {
+                $infoEmployee = $checkEmployee;
+            }
+            return $infoEmployee;
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return ['message' => $exception->getMessage(), 'exception' => $exception];
         }
     }
 }

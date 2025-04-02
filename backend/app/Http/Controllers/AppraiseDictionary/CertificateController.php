@@ -332,4 +332,31 @@ class CertificateController extends Controller
             return $this->respondWithErrorData($data);
         }
     }
+    /**
+     * @return JsonResponse
+     */
+    public function lookUpCertificate(Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->certificateRepository->lookUpCertificate($request->toArray()));
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
+
+     /**
+     * @return JsonResponse
+     */
+    public function lookUpEmployee(Request $request): JsonResponse
+    {
+        try {
+            return $this->respondWithCustomData($this->certificateRepository->lookUpEmployee($request->toArray()));
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            $data = ['message' => ErrorMessage::SYSTEM_ERROR, 'exception' => $exception->getMessage()];
+            return $this->respondWithErrorData($data);
+        }
+    }
 }

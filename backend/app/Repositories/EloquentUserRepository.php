@@ -198,7 +198,7 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'image' => $objects['image'] ?? "",
             'mailing_address' => $objects['mailing_address'] ?? "",
             'customer_group_id' => $objects['customer_group_id'] ?? null,
-
+            'note' => $objects['note'] ?? "",
 
         ];
         if (isset($objects['is_guest']) && $objects['is_guest']) {

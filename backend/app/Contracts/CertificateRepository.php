@@ -89,4 +89,9 @@ interface CertificateRepository extends BaseRepository
     public function exportCertificateAccounting();
 
     public function updateOtherAsset($id, $request);
+    
+    public function lookUpCertificate(array $objects);
+
+    public function lookUpEmployee(array $objects);
+
 }

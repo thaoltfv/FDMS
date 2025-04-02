@@ -83,6 +83,7 @@ class User extends Authenticatable implements JWTSubject
         'second_id',
         'third_id',
         'fourth_id',
+        'note',
     ];
 
     public function branch(): BelongsTo

@@ -138,6 +138,14 @@
 							:max-length="200"
 							class="col-12 col-lg-6 input-content"
 						/>
+						<InputTextarea
+							v-if="!form.is_guest"
+							v-model="form.note"
+							placeholder="Ghi chú"
+							label="Ghi chú"
+							:autosize="true"
+							class="col-12 col-lg-12 input-content"
+						/>
 					</div>
 				</div>
 			</div>
@@ -210,6 +218,7 @@
 <script>
 import InputCategory from "@/components/Form/InputCategory";
 import InputText from "@/components/Form/InputText";
+import InputTextarea from "@/components/Form/InputTextarea";
 import User from "@/models/User";
 import WareHouse from "@/models/WareHouse";
 import { capitalize } from "lodash-es";
@@ -225,7 +234,8 @@ export default {
 	name: "Form",
 	components: {
 		InputText,
-		InputCategory
+		InputCategory,
+		InputTextarea
 	},
 
 	data() {
@@ -259,7 +269,8 @@ export default {
 				email: "",
 				password: "",
 				mailing_address: "",
-				address: ""
+				address: "",
+				note: ""
 			},
 			isSubmit: false,
 			branch: null,

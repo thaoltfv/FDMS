@@ -712,6 +712,18 @@
 			:user="user"
 			:toast="$toast"
 		/>
+		<QRScanCertificate
+			v-if="
+				!isMobile() && (form.certificate_num || form.certificate_code_replace)
+			"
+			:id="idData"
+			:certificate_num="
+				form.certificate_code_replace
+					? form.certificate_code_replace
+					: form.certificate_num
+			"
+			:data="form"
+		/>
 
 		<div class="btn-history">
 			<button class="btn btn-orange btn-history" @click="showDrawer">
@@ -3244,6 +3256,7 @@ import * as types from "@/store/mutation-types";
 import ModalAppraiseListVersion from "./component/modals/ModalAppraiseListVersion";
 import IconBase from "@/components/IconBase.vue";
 import ModalConfirmDownload from "@/components/Modal/ModalConfirmDownload.vue";
+import QRScanCertificate from "./component/QRScanCertificate.vue";
 
 Vue.use(Icon);
 export default {
@@ -3283,7 +3296,8 @@ export default {
 		Footer,
 		ModalAppraiseListVersion,
 		ModalNotificationWithAssignHSTD,
-		ModalOtherAssetCertificate
+		ModalOtherAssetCertificate,
+		QRScanCertificate
 	},
 	data() {
 		return {

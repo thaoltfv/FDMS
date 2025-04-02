@@ -108,8 +108,10 @@
 								/>
 								<div class="label_container d-flex">
 									<span style="font-weight: 500">{{
-										element.total_price && isShowPrice(element)
+										element.total_price
 											? `${formatPrice(element.total_price)}`
+											: element.other_assets
+											? `${formatPriceOtherAsset(element.other_assets)}`
 											: "-"
 									}}</span>
 								</div>
@@ -548,6 +550,45 @@ export default {
 			// 		break;
 			// }
 			// return check;
+		},
+		formatPriceOtherAsset(other_asset) {
+			let total = 0;
+			if (other_asset) {
+				const listTemp = JSON.parse(other_asset);
+				if (listTemp.length > 0) {
+					for (let index = 0; index < listTemp.length; index++) {
+						const element = listTemp[index];
+						if (element && element.asset_price) {
+							total += Number(element.asset_price);
+						}
+					}
+				}
+			}
+			let num = parseFloat(total / 1)
+				.toFixed(0)
+				.replace(".", ",");
+			if (num.length > 3 && num.length <= 6) {
+				return (
+					parseFloat(num / 1000)
+						.toFixed(1)
+						.replace(".", ",") + " Nghìn"
+				);
+			} else if (num.length > 6 && num.length <= 9) {
+				return (
+					parseFloat(num / 1000000)
+						.toFixed(1)
+						.replace(".", ",") + " Triệu"
+				);
+			} else if (num.length > 9) {
+				return (
+					parseFloat(num / 1000000000)
+						.toFixed(1)
+						.replace(".", ",") + " Tỷ"
+				);
+			} else if (num < 900) {
+				return num + " đ"; // if value < 1000, nothing to do
+			}
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 		formatPrice(value) {
 			let num = parseFloat(value / 1)

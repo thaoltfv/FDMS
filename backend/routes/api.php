@@ -91,6 +91,11 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('run/fix', [UtilController::class, 'runFix']);
 
     Route::post('notification/send', [NotificationController::class, 'sendNotification']);
+
+    Route::get('appraiser-company-noauth', [AppraiseCompanyController::class, 'findAll']);
+    Route::post('look-up-certificate', [CertificateController::class, 'lookUpCertificate']);
+    Route::post('look-up-employee', [CertificateController::class, 'lookUpEmployee']);
+
 });
 
 ###################
@@ -370,7 +375,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pre-certificates/export-document-pc/download/{id}', [PreCertificateController::class, 'exportDocumentDownloadPC']);
     Route::get('pre-certificates/export-document-certificate/download/{id}', [PreCertificateController::class, 'exportDocumentDownloadCertificate']);
     Route::post('pre-certificates/pre-certificate-update-other-asset/{id}', [PreCertificateController::class, 'updateOtherAsset']);
-    
+
     Route::get('/pre-certificates', [PreCertificateController::class, 'findAll']);
 
     Route::apiResource('pre-certificate-config', PreCertificateConfigController::class);
@@ -554,6 +559,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/DistrictAll', [DistrictController::class, 'findAllByProvince']);
 
     Route::post('/company-logo', [DictionaryController::class, 'uploadCompanyLogoImage']);
+    Route::get('/get-company-logo', [DictionaryController::class, 'convertImageToBase64']);
     Route::post('/get-token', [DictionaryController::class, 'getToken']);
     Route::post('/get-info-by-coord', [DictionaryController::class, 'getInfoByCoord']);
     Route::post('/get-info-by-land', [DictionaryController::class, 'getInfoByLand']);

@@ -2460,5 +2460,12 @@ export const routes = [
 				}
 			}
 		]
-	}
+	},
+	// Tra cứu chứng thư
+	{
+		path: "/tra-cuu-chung-thu",
+		name: "certificate_lookup",
+		component: page("certificate_lookup/Index.vue"),
+		meta: { layout: "certificate_lookup", gtm: "Tra cứu chứng thư" }
+	},
 ];
