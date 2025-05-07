@@ -835,7 +835,7 @@
 										class="row card-list-desktop"
 										style="justify-content: space-evenly"
 									>
-										<div class="col-4 text-title">Tên nhân viên</div>
+										<div class="col-4 text-title">Họ và tên</div>
 										<div class="col-6 text-align-right text-custom-color">
 											{{ searchResultEmployee.name }}
 										</div>
@@ -868,7 +868,7 @@
 										class="row card-list-desktop"
 										style="justify-content: space-evenly"
 									>
-										<div class="col-4 text-title">Chi nhánh</div>
+										<div class="col-4 text-title">Văn phòng làm việc</div>
 										<div class="col-6 text-align-right">
 											{{ searchResultEmployee.branch ? searchResultEmployee.branch.name : '' }}
 										</div>
@@ -1036,7 +1036,7 @@
 									<div class="row card-list-mobile" style="">
 										<div class="col-6">
 											<div class="row">
-												<div class="col-12 text-title">Tên nhân viên</div>
+												<div class="col-12 text-title">Họ và tên</div>
 												<div class="col-12 text-custom-color text-info-mobile">
 													{{ searchResultEmployee.name }}
 												</div>
@@ -1061,7 +1061,7 @@
 										</div>
 									</div>
 									<div class="row card-list-mobile" style="">
-										<div class="col-12 text-title">Chi nhánh</div>
+										<div class="col-12 text-title">Văn phòng làm việc</div>
 										<div class="col-12 text-info-mobile">
 											{{ searchResultEmployee.branch ? searchResultEmployee.branch.name : '' }}
 										</div>
@@ -1402,7 +1402,7 @@ export default {
 			if (data) {
 				this.$loading.hide();
 				this.searchResultEmployee.status_user = data.status_user;
-				this.searchResultEmployee.appraiser_number = data.appraiser_number ? data.appraiser_number : "";
+				this.searchResultEmployee.appraiser_number = data.appraiser && data.appraiser.appraiser_number ? data.appraiser.appraiser_number : "";
 				this.searchResultEmployee.avatarUrl = data.image ? data.image : '~@/assets/icons/ic_user.svg';
 				this.searchResultEmployee.note = data.note ? data.note : "";
 				this.searchResultEmployee.name = data.name ? data.name : "";

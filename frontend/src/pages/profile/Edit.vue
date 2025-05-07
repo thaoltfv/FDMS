@@ -92,6 +92,12 @@
 						disabled-input
 						class="information-item"
 					/>
+					<InputTextarea
+						v-model="form.note"
+						label="Ghi chú"
+						vid="note"
+						class="information-item"
+					/>
 				</div>
 			</div>
 			<div
@@ -160,6 +166,7 @@ import UploadDragDrop from "@/components/file/UploadDragDrop";
 import store from "@/store";
 import File from "@/models/File";
 import InputText from "@/components/Form/InputText";
+import InputTextarea from "@/components/Form/InputTextarea.vue";
 import User from "@/models/User";
 import ModalImage from "@/components/Modal/ModalImage";
 
@@ -168,6 +175,7 @@ export default {
 	components: {
 		UploadDragDrop,
 		InputText,
+		InputTextarea,
 		ModalImage
 	},
 	data() {
@@ -184,7 +192,8 @@ export default {
 				role: "",
 				role_name: "",
 				branch_id: "",
-				address: ""
+				address: "",
+				note: ""
 			}
 		};
 	},
@@ -202,10 +211,16 @@ export default {
 		this.form.email = this.currentUser.email;
 		this.form.address = this.currentUser.address;
 		this.form.role = this.currentUser.roles[0].name;
+		this.form.note = this.currentUser.note ? this.currentUser.note : "";
 		if (this.currentUser.branch) {
 			this.form.branch_id = this.currentUser.branch.id;
 			this.branch_name = this.currentUser.branch.name;
 		}
+		else if (this.currentUser.appraiser && this.currentUser.appraiser.appraiser_branch) {
+			this.form.branch_id = this.currentUser.appraiser.appraiser_branch.id;
+			this.branch_name = this.currentUser.appraiser.appraiser_branch.name;
+		}
+
 	},
 	methods: {
 		isMobile() {

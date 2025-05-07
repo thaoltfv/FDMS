@@ -7029,7 +7029,7 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
             ->where(['id' => (int) $certificate_id])->first();
         if (isset($checkCertificate) && isset($checkCertificate->certificate_code_replace)) {
             $certificate = Certificate::query()
-                ->where(['id' => (int) $certificate_id, 'certificate_code_replace' => $certificate_num, 'status' => 4]) // Status = 4 HSTĐ hoàn thành
+                ->where(['id' => (int) $certificate_id, 'certificate_code_replace' => $certificate_num])->whereIn('status', [4, 9]) // Status = 4 HSTĐ hoàn thành , = 9 Bàn giao khách hàng
                 ->with('appraiser')
                 ->with('administrative')
                 ->with('appraiserManager')

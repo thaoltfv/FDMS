@@ -34,10 +34,13 @@
               <p class="information-item"><span class="information-item__title">Quyền hạn:</span> {{ currentUser ? currentUser.roles[0].role_name : ''}}</p>
             </div>
             <div class="col-12 col-lg-6">
-              <p class="information-item"><span class="information-item__title">Chi nhánh:</span> {{ currentUser && currentUser.branch ? currentUser.branch.name : '' }}</p>
+              <p class="information-item"><span class="information-item__title">Chi nhánh:</span> {{ currentUser && currentUser.branch ? currentUser.branch.name : (currentUser && currentUser.appraiser && currentUser.appraiser.appraiser_branch ? currentUser.appraiser.appraiser_branch.name : '') }}</p>
             </div>
             <div class="col-12 col-lg-6">
               <p class="information-item"><span class="information-item__title">Địa chỉ:</span> {{ currentUser ? currentUser.address : '' }}</p>
+            </div>
+            <div class="col-12 col-lg-12">
+              <p class="information-item"><span class="information-item__title">Ghi chú:</span> {{ currentUser && currentUser.note ? currentUser.note : '' }}</p>
             </div>
           </div>
         </div>

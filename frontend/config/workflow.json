@@ -1,0 +1,526 @@
+{
+    "principle": [
+        {
+            "id": 1,
+            "key": 1,
+            "description": "Tiếp nhận yêu cầu",
+            "slug": "tiep_nhan_yc",
+            "status": 1,
+            "sub_status": 1,
+            "isCancel": true,
+            "isActive": 1,
+            "edit": {
+                "form": true,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": true
+            },
+            "require": {
+                "appraiser": false,
+                "appraise_item_list": false,
+                "check_price": false,
+                "check_legal": false,
+                "check_version": false
+            },
+            "print": false,
+            "css": {
+                "color": "info"
+            },
+            "put_draggable": [
+                5
+            ],
+            "target_description": [
+                {
+                    "id": 5,
+                    "description": "Gửi thẩm định",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_sale_id",
+                "created_by"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 2,
+            "key": 2,
+            "description": "Phân hồ sơ",
+            "slug": "phan_bo_hs",
+            "status": 1,
+            "sub_status": 2,
+            "isCancel": true,
+            "isActive": 0,
+            "edit": {
+                "form": true,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": false,
+                "appraise_item_list": false,
+                "check_price": false,
+                "check_legal": false,
+                "check_version": false
+            },
+            "print": false,
+            "css": {
+                "color": "info"
+            },
+            "put_draggable": [
+                1,
+                3
+            ],
+            "target_description": [
+                {
+                    "id": 1,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 3,
+                    "description": "Gửi định giá sơ bộ",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_sale_id",
+                "created_by"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 3,
+            "key": 3,
+            "description": "Định giá sơ bộ",
+            "slug": "dinh_gia_so_bo",
+            "status": 2,
+            "sub_status": 1,
+            "isCancel": true,
+            "isActive": 0,
+            "edit": {
+                "form": false,
+                "info": true,
+                "appraiser": true,
+                "appraise_item_list": true,
+                "other_document": true,
+                "asset": true
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": false,
+                "check_price": false,
+                "check_legal": false,
+                "check_version": false
+            },
+            "print": true,
+            "css": {
+                "color": "primary"
+            },
+            "put_draggable": [
+                2,
+                4
+            ],
+            "target_description": [
+                {
+                    "id": 2,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 4,
+                    "description": "Gửi duyệt giá sơ bộ",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_perform_id"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 4,
+            "key": 4,
+            "description": "Duyệt giá sơ bộ",
+            "slug": "duyet_gia_so_bo",
+            "status": 2,
+            "sub_status": 2,
+            "isCancel": true,
+            "isActive": 0,
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": true,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": false,
+                "check_legal": false,
+                "check_version": true
+            },
+            "print": true,
+            "css": {
+                "color": "primary"
+            },
+            "put_draggable": [
+                3,
+                5
+            ],
+            "target_description": [
+                {
+                    "id": 3,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 5,
+                    "description": "Gửi thẩm định",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_perform_id"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 5,
+            "key": 5,
+            "description": "Thẩm định",
+            "slug": "tham_dinh",
+            "status": 2,
+            "sub_status": 3,
+            "isCancel": false,
+            "isActive": 1,
+            "edit": {
+                "form": false,
+                "info": true,
+                "appraiser": true,
+                "appraise_item_list": true,
+                "other_document": true,
+                "asset": true
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": false,
+                "check_price": true,
+                "check_legal": true,
+                "check_version": true
+            },
+            "print": true,
+            "css": {
+                "color": "primary"
+            },
+            "put_draggable": [
+                1,
+                10
+            ],
+            "target_description": [
+                {
+                    "id": 1,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 10,
+                    "description": "Chuyển tiếp",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_perform_id"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 10,
+            "key": 10,
+            "description": "Kiểm soát",
+            "slug": "kiem_soat",
+            "status": 6,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true,
+                "check_legal": true,
+                "check_version": true
+            },
+            "print": true,
+            "css": {
+                "color": "control"
+            },
+            "put_draggable": [
+                5,
+                6
+            ],
+            "target_description": [
+                {
+                    "id": 5,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 6,
+                    "description": "Chuyển tiếp",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_control_id"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 6,
+            "key": 6,
+            "description": "Phê duyệt",
+            "slug": "tham_dinh_vien",
+            "status": 3,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true,
+                "check_legal": true,
+                "check_version": true
+            },
+            "print": true,
+            "css": {
+                "color": "warning"
+            },
+            "put_draggable": [
+                10,
+                8
+            ],
+            "target_description": [
+                {
+                    "id": 10,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 8,
+                    "description": "Hoàn thành",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_id",
+                "appraiser_manager_id",
+                "appraiser_confirm_id"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 7,
+            "key": 7,
+            "description": "Kiểm soát sau",
+            "slug": "ban_giam_doc",
+            "status": 3,
+            "sub_status": 2,
+            "isCancel": false,
+            "isActive": 0,
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true,
+                "check_legal": true,
+                "check_version": true
+            },
+            "print": true,
+            "css": {
+                "color": "warning"
+            },
+            "put_draggable": [
+                6
+            ],
+            "target_description": [
+                {
+                    "id": 6,
+                    "description": "Từ chối",
+                    "css": "btn-white",
+                    "img": "ic_cancel-1.svg"
+                },
+                {
+                    "id": 8,
+                    "description": "Hoàn thành",
+                    "css": "btn-white btn-orange",
+                    "img": "ic_done.svg"
+                }
+            ],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [
+                "appraiser_id",
+                "appraiser_manager_id",
+                "appraiser_confirm_id"
+            ],
+            "process_time": 1440
+        },
+        {
+            "id": 8,
+            "key": 8,
+            "description": "Hoàn thành",
+            "slug": "hoan_thanh",
+            "status": 4,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "edit": {
+                "form": false,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": true,
+                "appraise_item_list": true,
+                "check_price": true,
+                "check_legal": true,
+                "check_version": true
+            },
+            "print": true,
+            "css": {
+                "color": "success"
+            },
+            "put_draggable": [
+                6
+            ],
+            "target_description": [],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [],
+            "process_time": 1440
+        },
+        {
+            "id": 9,
+            "key": 9,
+            "description": "Hủy",
+            "slug": "huy",
+            "status": 5,
+            "sub_status": 1,
+            "isCancel": false,
+            "isActive": 1,
+            "edit": {
+                "form": true,
+                "info": false,
+                "appraiser": false,
+                "appraise_item_list": false,
+                "other_document": false,
+                "asset": false
+            },
+            "require": {
+                "appraiser": false,
+                "appraise_item_list": false,
+                "check_price": false,
+                "check_legal": false
+            },
+            "print": false,
+            "css": {
+                "color": "secondary"
+            },
+            "put_draggable": [
+            ],
+            "target_description": [],
+            "put_require_roles": [
+              "ROOT_ADMIN",
+              "SUB_ADMIN"
+            ],
+            "put_require": [],
+            "process_time": 1440
+        }
+    ],
+    "appraiser": {
+        "created_by": "Người tạo",
+        "appraiser_sale_id": "Nhân viên kinh doanh",
+        "appraiser_perform_id": "Chuyên viên thẩm định",
+        "appraiser_confirm_id": "Ký thay GĐ",
+        "appraiser_id": "Thẩm định viên",
+        "appraiser_manager_id": "Giám đốc"
+    }
+}
