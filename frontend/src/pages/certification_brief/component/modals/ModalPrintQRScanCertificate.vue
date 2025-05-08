@@ -124,7 +124,7 @@ export default {
   },
   mounted() {
     const domain = window.location.origin;
-    this.url = `${domain}/tra-cuu-chung-thu?id_chung_thu=${this.certificateId}&so_chung_thu=${this.certificateNum}&type=chung-thu`;
+    this.url = `${domain}/tracuu?id_chung_thu=${this.certificateId}&so_chung_thu=${this.certificateNum}&type=chung-thu`;
 
     this.scaleA4Preview();
     window.addEventListener("resize", this.scaleA4Preview);

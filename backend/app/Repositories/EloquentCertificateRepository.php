@@ -7055,7 +7055,8 @@ class  EloquentCertificateRepository extends EloquentRepository implements Certi
                 ->toArray();
         } else {
             $certificate = Certificate::query()
-                ->where(['id' => (int) $certificate_id, 'certificate_num' => $certificate_num, 'status' => 4]) // Status = 4 HSTĐ hoàn thành
+                ->where(['id' => (int) $certificate_id, 'certificate_num' => $certificate_num])
+                ->whereIn('status', [4, 9]) // Status = 4 HSTĐ hoàn thành, = 9 Bàn giao khách hàng
                 ->with('appraiser')
                 ->with('administrative')
                 ->with('appraiserManager')
