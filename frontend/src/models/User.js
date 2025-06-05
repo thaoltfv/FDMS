@@ -36,7 +36,9 @@ export default class User extends Model {
 	static async getRoles () {
 		return (new this()).request({method: 'GET', url: `role`, isStatic: true})
 	}
-
+	static async getAllRoles () {
+		return (new this()).request({method: 'GET', url: `roles`, isStatic: true})
+	}
 	static async getBranches () {
 		return (new this()).request({method: 'GET', url: `branches`, isStatic: true})
 	}
