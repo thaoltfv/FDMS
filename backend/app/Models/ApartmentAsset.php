@@ -181,7 +181,7 @@ class ApartmentAsset extends Model
         $result = [];
         try {
             if (isset($this->id) && !empty($this->id)) {
-                $items = ApartmentAssetHasAsset::where('apartment_asset_id', $this->id)->get();
+                $items = ApartmentAssetHasAsset::where('apartment_asset_id', $this->id)->orderBy('asset_general_id', 'DESC')->get();
                 $stt = 0;
                 $utilities = CommonService::getUtilities();
                 foreach ($items as $item) {
@@ -260,7 +260,7 @@ class ApartmentAsset extends Model
         $result = [];
         try {
             if (isset($this->id) && !empty($this->id)) {
-                $items = ApartmentAssetHasAsset::where('apartment_asset_id', $this->id)->get();
+                $items = ApartmentAssetHasAsset::where('apartment_asset_id', $this->id)->orderBy('asset_general_id', 'DESC')->get();
                 $stt = 0;
                 $utilities = CommonService::getUtilities();
                 foreach ($items as $item) {

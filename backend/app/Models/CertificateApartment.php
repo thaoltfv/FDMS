@@ -62,7 +62,7 @@ class CertificateApartment extends Model
         $result = [];
         try {
             if (isset($this->id) && !empty($this->id)) {
-                $items = CertificateApartmentHasAsset::where('apartment_asset_id', $this->id)->get();
+                $items = CertificateApartmentHasAsset::where('apartment_asset_id', $this->id)->orderBy('asset_general_id', 'DESC')->get();
                 $stt = 0;
                 $utilities = CommonService::getUtilities();
                 foreach ($items as $item) {

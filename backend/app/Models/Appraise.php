@@ -353,7 +353,7 @@ class Appraise extends Model
     {
         $result = [];
         if (isset($this->id) && !empty($this->id)) {
-            $items = AppraiseHasAsset::where('appraise_id', $this->id)->get();
+            $items = AppraiseHasAsset::where('appraise_id', $this->id)->orderBy('asset_general_id', 'DESC')->get();
             foreach ($items as $item) {
                 $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
                 $item = $compareAssetGeneralRepository->findVersionById($item->asset_general_id, $item->version);
@@ -455,12 +455,6 @@ class Appraise extends Model
                 $result[] = $item;
             }
         }
-        usort($result, function ($a, $b) {
-            $aId = (isset($a->id)) ? $a->id : 0;
-            $bId = (isset($b->id)) ? $b->id : 0;
-            return $aId < $bId;
-        });
-
         return $result;
     }
 
@@ -740,7 +734,7 @@ class Appraise extends Model
     {
         $result = [];
         if (isset($this->id) && !empty($this->id)) {
-            $items = AppraiseHasAsset::where('appraise_id', $this->id)->get();
+            $items = AppraiseHasAsset::where('appraise_id', $this->id)->orderBy('asset_general_id', 'DESC')->get();
             $stt = 0;
             foreach ($items as $item) {
                 $compareAssetGeneralRepository = new EloquentCompareAssetGeneralRepository(new CompareAssetGeneral());
