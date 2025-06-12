@@ -70,7 +70,7 @@ export default {
 		async getRoles () {
 			try {
 				const resp = await User.getAllRoles()
-				this.roles = [...resp.data.data]
+				this.roles = [...resp.data];
 			} catch (err) {
 				this.isSubmit = false
 				throw err

@@ -486,7 +486,7 @@ export default {
 		async getRoles() {
 			try {
 				const resp = await User.getAllRoles();
-				this.roles = [...resp.data.data];
+				this.roles = [...resp.data];
 				this.form.role_id = this.role_id;
 				if (this.form.is_guest) {
 					const temp = this.roles.find(
