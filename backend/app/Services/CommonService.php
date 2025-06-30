@@ -1482,6 +1482,12 @@ class CommonService
 					$adapter =  $appraise->appraiseAdapter->where('asset_general_id', $asset_general_id)->first();
 					$unitAreas =  $appraise->assetUnitArea->where('asset_general_id', $asset_general_id);
 					$comparisonFactor =  $appraise->comparisonFactor->where('asset_general_id', $asset_general_id);
+					if (!is_array($asset_general['properties'])) {
+						$asset_general['properties'] = (array) $asset_general['properties'];
+					}
+					if (!is_array($asset_general['properties'][0])) {
+						$asset_general['properties'][0] = (array) $asset_general['properties'][0];
+					}
 					$totalArea = floatval($asset_general['properties'][0]['asset_general_land_sum_area']);
 					$violateArea = floatval(0);
 					$purposeArea = floatval(0);
@@ -1491,6 +1497,7 @@ class CommonService
 						$violateArea += $unitArea->violation_asset_area;
 					}
 					$total_amount = $asset_general['total_amount'];
+					$other_amount = isset($asset_general['total_order_amount']) ? $asset_general['total_order_amount'] : 0;
 					$percent = $adapter->percent ?? 0;
 					$estimate_amount =  ($percent *  $total_amount) / 100;
 					$construction_amount = $asset_general['total_construction_amount'];
@@ -1498,7 +1505,7 @@ class CommonService
 					$violatePrice = isset($adapter->change_violate_price) ? $adapter->change_violate_price : 0;
 					$purposePrice = isset($adapter->change_purpose_price) ? $adapter->change_purpose_price : 0;
 
-					$calculate_price = $estimate_amount - $violatePrice - $construction_amount - $other_amount  + $purposePrice;
+					$calculate_price = $estimate_amount - $violatePrice - $construction_amount - $other_amount + $purposePrice;
 					$purposeArea = $totalArea - $violateArea;
 					$average_price = round($calculate_price / $purposeArea, 0);
 
