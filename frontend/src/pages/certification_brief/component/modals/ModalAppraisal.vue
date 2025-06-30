@@ -274,8 +274,6 @@ export default {
 			this.appraisersManager = await dataAppraise.filter(
 				item => item.is_legal_representative === 1
 			);
-			// console.log('dsadấdsad', this.appraisersManager)
-			this.form.appraiser_manager_id = await this.appraisersManager[0].id;
 			let appraiser = dataAppraise.filter(item => item.appraiser_number !== "");
 			if (this.form && this.form.appraiser_manager_id) {
 				this.appraisers = await appraiser.filter(
@@ -539,7 +537,7 @@ export default {
 			// getter
 			get: function() {
 				if (this.appraisersManager.length > 0) {
-					return this.form.appraiser_manager_id;
+					return this.form.appraiser_manager_id ? this.form.appraiser_manager_id : null;
 				} else {
 					return this.form.appraiser_manager
 						? this.form.appraiser_manager.name
