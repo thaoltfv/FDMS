@@ -1,0 +1,70 @@
+graph TD
+    Admin[👑 Super Admin Mobile] --> UserMgmt[👥 User Management<br/>• Mobile-First Interface<br/>• Touch Gestures<br/>• Bulk Operations<br/>• Real-time Updates]
+    
+    UserMgmt --> Roles[🎭 Role Management]
+    UserMgmt --> Groups[👥 Group Management]
+    UserMgmt --> Permissions[🔐 Permission Matrix]
+    UserMgmt --> Invitations[📧 User Invitations]
+    
+    Roles --> RoleTypes[📱 Mobile Role Config]
+    
+    RoleTypes --> SuperAdmin[👑 Super Admin<br/>• Full System Access<br/>• Blueprint Creation<br/>• User Management<br/>• System Configuration]
+    
+    RoleTypes --> BlueprintAdmin[📋 Blueprint Admin<br/>• Blueprint Design<br/>• Field Configuration<br/>• Workflow Setup<br/>• Template Management]
+    
+    RoleTypes --> DataManager[📊 Data Manager<br/>• Document CRUD<br/>• File Management<br/>• Workflow Participation<br/>• Team Collaboration]
+    
+    RoleTypes --> Viewer[👀 Viewer<br/>• Read-only Access<br/>• Search/Filter<br/>• Download/Export<br/>• Basic Profile]
+    
+    RoleTypes --> Auditor[🕵️ Auditor<br/>• Activity Logs<br/>• Version History<br/>• Analytics Access<br/>• Compliance Reports]
+    
+    Groups --> GroupConfig[👥 Mobile Group Interface]
+    
+    GroupConfig --> Departments[🏢 Departments<br/>• HR Department<br/>• IT Department<br/>• Finance Team<br/>• Operations Group]
+    
+    GroupConfig --> Projects[📂 Project Teams<br/>• Project Alpha<br/>• Implementation Beta<br/>• Support Team<br/>• Training Group]
+    
+    GroupConfig --> Hierarchical[📊 Hierarchical Groups<br/>• Parent-Child Relations<br/>• Permission Inheritance<br/>• Cascading Access<br/>• Mobile Tree View]
+    
+    Permissions --> PermissionLevels[🔐 Permission Levels<br/>Mobile Matrix View]
+    
+    PermissionLevels --> Level1[📋 Blueprint Level<br/>• Can View Blueprint<br/>• Can Create Documents<br/>• Can Manage Template<br/>• Mobile Toggle Interface]
+    
+    PermissionLevels --> Level2[📄 Document Level<br/>• Read Own Documents<br/>• Read Team Documents<br/>• Read All Documents<br/>• Advanced Filtering]
+    
+    PermissionLevels --> Level3[🔄 Stage Level<br/>• Create Drafts<br/>• Submit for Review<br/>• Approve Documents<br/>• Reject with Comments]
+    
+    PermissionLevels --> Level4[📑 Section Level<br/>• View Sections<br/>• Edit Basic Info<br/>• Access Sensitive Data<br/>• Financial Information]
+    
+    Invitations --> InviteFlow[📱 Mobile Invitation Flow]
+    
+    InviteFlow --> InviteUser[➕ Invite New User<br/>• Email Input<br/>• Role Selection<br/>• Group Assignment<br/>• Welcome Message]
+    
+    InviteFlow --> BulkInvite[📧 Bulk Invitations<br/>• CSV Upload<br/>• Template Selection<br/>• Batch Processing<br/>• Progress Tracking]
+    
+    InviteFlow --> InviteStatus[📊 Invitation Status<br/>• Pending Invites<br/>• Accepted Users<br/>• Expired Invitations<br/>• Resend Options]
+    
+    Level1 --> MobileControls[📱 Mobile Permission Controls]
+    Level2 --> MobileControls
+    Level3 --> MobileControls
+    Level4 --> MobileControls
+    
+    MobileControls --> ToggleSwitches[🔘 Toggle Switches<br/>• iOS/Android Native<br/>• Instant Feedback<br/>• Batch Operations<br/>• Undo Capability]
+    
+    MobileControls --> PermissionMatrix[📊 Permission Matrix<br/>• Swipe Navigation<br/>• Color-coded Access<br/>• Quick Search<br/>• Filter by Role/Group]
+    
+    MobileControls --> RealTimeSync[⚡ Real-time Sync<br/>• Instant Updates<br/>• WebSocket Connection<br/>• Offline Queue<br/>• Conflict Resolution]
+
+    classDef admin fill:#dc3545,stroke:#a71d2a,stroke-width:2px,color:#fff
+    classDef role fill:#0066CC,stroke:#004499,stroke-width:2px,color:#fff
+    classDef group fill:#28A745,stroke:#1e7e34,stroke-width:2px,color:#fff
+    classDef permission fill:#FFA500,stroke:#cc8400,stroke-width:2px,color:#fff
+    classDef mobile fill:#6f42c1,stroke:#4c2a85,stroke-width:2px,color:#fff
+    classDef system fill:#17a2b8,stroke:#117a8b,stroke-width:2px,color:#fff
+    
+    class Admin,UserMgmt admin
+    class Roles,RoleTypes,SuperAdmin,BlueprintAdmin,DataManager,Viewer,Auditor role
+    class Groups,GroupConfig,Departments,Projects,Hierarchical group
+    class Permissions,PermissionLevels,Level1,Level2,Level3,Level4 permission
+    class Invitations,InviteFlow,InviteUser,BulkInvite,InviteStatus,MobileControls,ToggleSwitches,PermissionMatrix mobile
+    class RealTimeSync system

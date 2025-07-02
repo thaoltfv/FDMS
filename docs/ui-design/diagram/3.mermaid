@@ -1,0 +1,47 @@
+graph TD
+    BP[📋 Blueprint Designer<br/>Mobile Interface] --> Sections[📑 Section Management]
+    BP --> Fields[🔧 Field Configuration]
+    BP --> Stages[🔄 Workflow Stages]
+    BP --> Preview[👁️ Schema Preview]
+    
+    Sections --> AddSection[➕ Add Section<br/>• Section Name<br/>• Description<br/>• Display Order<br/>• Collapsible Option]
+    
+    Fields --> FieldTypes[📝 Field Types<br/>Selection Modal]
+    
+    FieldTypes --> Basic[🔤 Basic Fields]
+    FieldTypes --> Advanced[⚙️ Advanced Fields]
+    FieldTypes --> Output[📊 Output Fields]
+    
+    Basic --> Text[📝 Text Input<br/>• Short Text<br/>• Long Text<br/>• Pattern Validation<br/>• Placeholder]
+    Basic --> Number[🔢 Number Input<br/>• Integer<br/>• Decimal<br/>• Min/Max Range<br/>• Step Value]
+    Basic --> Date[📅 Date/Time<br/>• Date Picker<br/>• DateTime<br/>• Date Range<br/>• Format Options]
+    Basic --> File[📎 File Upload<br/>• Single File<br/>• Multiple Files<br/>• File Type Filter<br/>• Size Limits]
+    
+    Advanced --> Location[📍 Location Field<br/>• Map Interface<br/>• GPS Coordinates<br/>• Address Lookup<br/>• Geofencing]
+    Advanced --> Address[🏠 Address Field<br/>• Hierarchical Select<br/>• Province/District<br/>• Auto-complete<br/>• Validation]
+    Advanced --> Objects[📦 Object Array<br/>• Nested Objects<br/>• Table Display<br/>• Modal Editor<br/>• Add/Remove Items]
+    Advanced --> Relations[🔗 Relation Field<br/>• Foreign Key<br/>• Dropdown Search<br/>• Reference Tables<br/>• Soft References]
+    
+    Output --> Formula[🧮 Formula Field<br/>• JavaScript Expressions<br/>• Field Dependencies<br/>• Real-time Calc<br/>• Validation]
+    Output --> Templates[📄 Document Templates<br/>• PDF Generation<br/>• DOCX Templates<br/>• XLSX Reports<br/>• Custom Formats]
+    
+    Stages --> StageConfig[🔄 Stage Configuration]
+    StageConfig --> Draft[📝 Draft Stage<br/>• Initial Creation<br/>• Auto-save<br/>• Validation Rules<br/>• User Permissions]
+    StageConfig --> Review[👀 Review Stage<br/>• Approval Actions<br/>• Comments<br/>• Reject Reasons<br/>• Time Limits]
+    StageConfig --> Approved[✅ Approved Stage<br/>• Final State<br/>• Notifications<br/>• Archive Options<br/>• Read-only]
+    StageConfig --> Custom[⚙️ Custom Stages<br/>• Custom Names<br/>• Conditional Logic<br/>• Role-based Access<br/>• Automation Rules]
+    
+    Preview --> TableSchema[🗄️ PostgreSQL Table<br/>• Column Definitions<br/>• Data Types<br/>• Constraints<br/>• Indexes]
+    Preview --> MobileForm[📱 Mobile Form Preview<br/>• Responsive Layout<br/>• Field Rendering<br/>• Validation Display<br/>• User Experience]
+    
+    TableSchema --> Deploy[🚀 Deploy Blueprint<br/>• Create Database Table<br/>• Set Permissions<br/>• Activate Workflow<br/>• Notify Users]
+
+    classDef primary fill:#0066CC,stroke:#004499,stroke-width:2px,color:#fff
+    classDef fieldType fill:#28A745,stroke:#1e7e34,stroke-width:2px,color:#fff
+    classDef config fill:#FFA500,stroke:#cc8400,stroke-width:2px,color:#fff
+    classDef deploy fill:#dc3545,stroke:#a71d2a,stroke-width:2px,color:#fff
+    
+    class BP primary
+    class Text,Number,Date,File,Location,Address,Objects,Relations,Formula,Templates fieldType
+    class Sections,Fields,Stages,Preview,FieldTypes,Basic,Advanced,Output,StageConfig,AddSection config
+    class Draft,Review,Approved,Custom,TableSchema,MobileForm,Deploy deploy

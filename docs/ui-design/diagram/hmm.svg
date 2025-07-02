@@ -1,0 +1,43 @@
+<svg width="375" height="812" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone Frame -->
+  <rect width="375" height="812" fill="#f8f9fa" stroke="#000" stroke-width="2" rx="25"/>
+  
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="375" height="44" fill="#000" rx="25"/>
+  <text x="187" y="30" text-anchor="middle" fill="white" font-size="14" font-family="Arial">9:41 AM</text>
+  
+  <!-- Header Logo Area -->
+  <text x="187" y="100" text-anchor="middle" fill="#0066CC" font-size="28" font-weight="bold" font-family="Arial">FDMS</text>
+  <text x="187" y="130" text-anchor="middle" fill="#666" font-size="16" font-family="Arial">🏢 Fast Document Management</text>
+  
+  <!-- Email Input Field -->
+  <rect x="30" y="180" width="315" height="50" fill="white" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="40" y="200" fill="#666" font-size="12" font-family="Arial">📧 Email Address</text>
+  <text x="40" y="220" fill="#333" font-size="16" font-family="Arial">user@company.com</text>
+  
+  <!-- Password Input Field -->
+  <rect x="30" y="250" width="315" height="50" fill="white" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="40" y="270" fill="#666" font-size="12" font-family="Arial">🔒 Password</text>
+  <text x="40" y="290" fill="#333" font-size="16" font-family="Arial">••••••••••••</text>
+  <text x="310" y="290" fill="#666" font-size="16" font-family="Arial">👁️</text>
+  
+  <!-- Sign In Button -->
+  <rect x="30" y="330" width="315" height="48" fill="#0066CC" stroke="none" rx="5"/>
+  <text x="187" y="360" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">🔑 Sign In</text>
+  
+  <!-- Forgot Password Link -->
+  <text x="187" y="410" text-anchor="middle" fill="#0066CC" font-size="14" font-family="Arial">🔄 Forgot Password?</text>
+  
+  <!-- Create Account Section -->
+  <text x="187" y="450" text-anchor="middle" fill="#666" font-size="14" font-family="Arial">Don't have an account?</text>
+  <text x="187" y="470" text-anchor="middle" fill="#0066CC" font-size="14" font-family="Arial">📝 Create Account</text>
+  
+  <!-- Divider -->
+  <line x1="50" y1="500" x2="155" y2="500" stroke="#ccc" stroke-width="1"/>
+  <text x="187" y="505" text-anchor="middle" fill="#666" font-size="12" font-family="Arial">OR</text>
+  <line x1="220" y1="500" x2="325" y2="500" stroke="#ccc" stroke-width="1"/>
+  
+  <!-- SSO Button -->
+  <rect x="30" y="530" width="315" height="48" fill="white" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="187" y="560" text-anchor="middle" fill="#333" font-size="16" font-family="Arial">🏢 Single Sign-On (SSO)</text>
+</svg>
