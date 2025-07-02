@@ -24,7 +24,7 @@ The system is composed of three main parts:
 +--------------------------+          +---------------------------+          +----------------------+
 |                          |          |                           |          |                      |
 |   Frontend Application   |  <-----> |    Backend Application    |  <-----> |  PostgreSQL Database |
-|         (Vue 3)          | (API)    |        (NestJS)           | (SQL)    |                      |
+|         (Vue 3)          | (API)    |         (Fastify)         | (SQL)    |                      |
 |                          |          |                           |          |                      |
 +--------------------------+          +---------------------------+          +----------------------+
                                                  |
@@ -36,9 +36,9 @@ The system is composed of three main parts:
                                      +--------------------------+
 ```
 
-## 4. Backend Architecture (NestJS)
+## 4. Backend Architecture (Fastify)
 
-The NestJS application is the heart of the system. It is modular by design to handle the system's complexity.
+The Fastify application is the heart of the system. It is modular by design to handle the system's complexity.
 
 ### Key Modules:
 
@@ -89,7 +89,7 @@ The following tables form the core metadata structure of the application.
 ### Workflow 1: Admin Creates a New Blueprint
 
 1.  Admin defines a blueprint with fields (e.g., `full_name: TEXT`, `age: INT`) in the UI.
-2.  Frontend sends the blueprint definition to the NestJS API (`POST /api/blueprints`).
+2.  Frontend sends the blueprint definition to the Fastify API (`POST /api/blueprints`).
 3.  The `SchemaManagerService` generates a `CREATE TABLE registration_documents (id SERIAL PRIMARY KEY, full_name TEXT, age INT, ...)` statement.
 4.  The DDL is executed against the PostgreSQL database.
 5.  The blueprint metadata is saved to the `blueprints` and `blueprint_fields` tables.
@@ -99,17 +99,16 @@ The following tables form the core metadata structure of the application.
 1.  User navigates to the "Registration" blueprint form.
 2.  Frontend fetches the blueprint definition and dynamically renders the form.
 3.  User submits the form data.
-4.  Request hits the NestJS API (`POST /api/documents/registration_documents`).
+4.  Request hits the Fastify API (`POST /api/documents/registration_documents`).
 5.  The `DynamicDocumentService` validates the data against the blueprint rules.
 6.  It uses a query builder to construct an `INSERT INTO registration_documents (full_name, age) VALUES (...)` statement.
 7.  The new document is created.
 
 ## 7. Technology Stack Summary
 
-- **Backend Framework**: NestJS (with Fastify adapter for performance)
+- **Backend Framework**: Fastify
 - **Frontend Framework**: Vue.js 3 (with Composition API)
 - **Database**: PostgreSQL (with PostGIS extension)
 - **Authentication**: JWT (JSON Web Tokens)
 - **File Storage**: Garage (Self-hosted, S3-compatible)
-- **Data Access (Documents)**: Knex.js or similar SQL query builder
-- **Data Access (Metadata)**: TypeORM or Prisma can be used for the static metadata tables.
+- **Data Access**: Knex.js (prioritizing raw SQL queries)

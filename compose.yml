@@ -1,6 +1,6 @@
 # This Docker Compose file sets up the development environment for the FDMS project.
 # It includes the PostgreSQL database, Garage for S3-compatible storage,
-# and placeholders for the NestJS backend and Vue.js frontend.
+# and placeholders for the Fastify backend and Vue.js frontend.
 #
 # To use this file:
 # 1. Create a `.env` file in the same directory (you can copy .env.example).
