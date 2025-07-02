@@ -37,8 +37,6 @@ This phase focuses on building the user interface to interact with the backend f
 *   **Estimate: 3 - 4 months**
 *   *The blueprint designer and dynamic form renderer are the most complex components here. The focus is on making the core architectural features usable and intuitive.*
 
----
-
 ### **Total Estimated Time for a Foundational MVP:**
 
 **Total: 7 - 9 months**
