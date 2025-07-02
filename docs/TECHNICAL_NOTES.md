@@ -1,5 +1,5 @@
-FDMS: Fast Document Management System - Specification
-================================================================
+FDMS - Technical Notes
+====
 
 ## Executive Summary
 

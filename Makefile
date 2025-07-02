@@ -1,11 +1,11 @@
 # Makefile to convert all .md files in current dir to pdf/ using Pandoc
 
 PANDOC = pandoc
-SRC = $(wildcard *.md)
+SRC = $(wildcard docs/*.md)
 OUTDIR = pdf
 PDFS = $(SRC:%.md=$(OUTDIR)/%.pdf)
 
-PANDOC_OPTS = --pdf-engine=lualatex  -V monofont="DejaVu Sans Mono" --lua-filter=hr-to-pagebreak.lua -V geometry:margin=1in
+PANDOC_OPTS = --pdf-engine=lualatex  -V monofont="DejaVu Sans Mono" --lua-filter=docs/scripts/hr-to-pagebreak.lua -V geometry:margin=1in
 
 # Default target
 all: $(OUTDIR) $(PDFS)
@@ -17,7 +17,7 @@ $(OUTDIR)/%.pdf: %.md
 
 # Create output directory if it doesn't exist
 $(OUTDIR):
-	mkdir -p $(OUTDIR)
+	mkdir -p $(OUTDIR)/docs
 
 # Clean up generated PDFs
 clean:
