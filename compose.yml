@@ -1,0 +1,52 @@
+# This Docker Compose file sets up the development environment for the FDMS project.
+# It includes the PostgreSQL database, Garage for S3-compatible storage,
+# and placeholders for the NestJS backend and Vue.js frontend.
+#
+# To use this file:
+# 1. Create a `.env` file in the same directory (you can copy .env.example).
+# 2. Create two subdirectories: `backend` and `frontend`.
+# 3. Place the Dockerfile for each service inside its respective directory.
+# 4. Run `docker-compose up --build` to start the environment.
+
+services:
+  # 1. PostgreSQL Database with PostGIS extension
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: fdms_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Garage - Self-hosted S3-compatible storage
+  storage:
+    image: dxflrs/garage:v2.0.0
+    container_name: fdms_storage
+    restart: unless-stopped
+    ports:
+      - "${S3_PORT}:3900" # S3 API Port
+      - "3901:3901" # RPC Port
+      - "3902:3902" # S3 Web Port
+      - "3903:3903" # Admin API Port
+      - "3904:3904" # K2V API Port
+    volumes:
+      - ./config/garage.toml:/etc/garage/garage.toml
+      - garage_meta:/var/lib/garage/meta
+      - garage_data:/var/lib/garage/data
+    command: ["/garage", "-c", "/etc/garage/garage.toml", "server"]
+
+volumes:
+  postgres_data:
+  garage_meta:
+  garage_data:
