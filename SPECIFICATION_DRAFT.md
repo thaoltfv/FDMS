@@ -13,6 +13,58 @@ FDMS (Fast Document Management System) is a revolutionary document management pl
 - **Zero-ETL Analytics**: No need for data warehousing - query production data directly
 - **Type-Safe Data Storage**: Database-level constraints ensure data integrity
 
+## Technology Stack Requirements
+
+### MUST Rules
+
+**RULE 1: JavaScript Only**
+- Backend: Node.js with Fastify using pure JavaScript (NO TypeScript)
+- Frontend: Pure JavaScript with modern ES6+ features (NO TypeScript)
+- All code examples, interfaces, and implementations must use JavaScript syntax
+- Type safety achieved through JSDoc comments and runtime validation
+
+**RULE 2: Frontend Framework**
+- GUI implementation using **Ionic Framework** over **Vue 3**
+- Mobile-first responsive design with native app capabilities
+- Cross-platform support (web, iOS, Android) through Ionic
+- Vue 3 Composition API for component logic and state management
+
+### Additional Technology Requirements
+
+**Backend Stack:**
+- Runtime: Node.js (LTS version)
+- Web Framework: Fastify with JavaScript
+- Database: PostgreSQL with PostGIS extension
+- ORM/Query Builder: Knex.js for dynamic SQL generation
+- Authentication: JWT with refresh tokens
+- File Storage: S3-compatible storage (Garage/MinIO/AWS S3)
+- Validation: Joi or Yup for schema validation
+
+**Frontend Stack:**
+- Framework: Ionic Framework 8+ with Vue 3
+- State Management: Pinia (Vue 3 recommended store)
+- HTTP Client: Axios or Fetch API
+- Form Handling: Vue 3 reactive forms with validation
+- UI Components: Ionic components with custom theming
+- Build Tool: Vite for fast development and building
+
+**Development Tools:**
+- Package Manager: npm or yarn
+- Linting: ESLint with Vue and Ionic configurations
+- Formatting: Prettier
+- Testing: Vitest for unit tests, Cypress for E2E
+- Documentation: JSDoc for code documentation
+
+## Frontend Architecture (Ionic + Vue 3)
+
+### Mobile-First Design Principles
+
+**Ionic Framework Integration**:
+- Utilize Ionic's native UI components for consistent cross-platform experience
+- Responsive design that adapts from mobile to desktop seamlessly
+- Native device capabilities (camera, file system, push notifications)
+- TBD: Offline-first architecture with data synchronization
+
 ## Core Architecture Principles
 
 ### 1. Separate Table per Blueprint
@@ -875,195 +927,246 @@ CREATE TABLE employee_onboarding_document_versions (
 
 **Blueprint Management**:
 
-```typescript
-// GET /api/blueprints
-interface BlueprintListResponse {
-  blueprints: Array<{
-    id: number;
-    code: string;
-    title: string;
-    description?: string;
-    status: 'draft' | 'active' | 'deprecated' | 'archived';
-    created_at: string;
-    updated_at: string;
-    document_count: number;
-    version: string;
-  }>;
-  total: number;
-  page: number;
-  per_page: number;
-}
+```javascript
+/**
+ * GET /api/blueprints
+ * @typedef {Object} BlueprintListResponse
+ * @property {Array<BlueprintListItem>} blueprints - List of blueprints
+ * @property {number} total - Total count of blueprints
+ * @property {number} page - Current page number
+ * @property {number} per_page - Items per page
+ */
 
-// POST /api/blueprints
-interface CreateBlueprintRequest {
-  code: string;
-  title: string;
-  description?: string;
-  sections: Array<{
-    code: string;
-    title: string;
-    sequence: number;
-  }>;
-  stages: Array<{
-    code: string;
-    title: string;
-    sequence: number;
-    permissions: string[];
-  }>;
-  fields: Array<{
-    code: string;
-    title: string;
-    type: string;
-    section_code: string;
-    config: Record<string, any>;
-    required: boolean;
-  }>;
-}
+/**
+ * @typedef {Object} BlueprintListItem
+ * @property {number} id - Blueprint ID
+ * @property {string} code - Blueprint code
+ * @property {string} title - Blueprint title
+ * @property {string} [description] - Blueprint description
+ * @property {'draft'|'active'|'deprecated'|'archived'} status - Blueprint status
+ * @property {string} created_at - Creation timestamp
+ * @property {string} updated_at - Update timestamp
+ * @property {number} document_count - Number of documents
+ * @property {string} version - Blueprint version
+ */
 
-// GET /api/blueprints/:id/schema
-interface BlueprintSchemaResponse {
-  blueprint: {
-    id: number;
-    code: string;
-    title: string;
-    table_name: string;
-  };
-  sections: Array<{
-    code: string;
-    title: string;
-    sequence: number;
-    fields: Array<{
-      code: string;
-      title: string;
-      type: string;
-      config: Record<string, any>;
-      validation: Record<string, any>;
-      required: boolean;
-    }>;
-  }>;
-  stages: Array<{
-    code: string;
-    title: string;
-    sequence: number;
-    permissions: string[];
-  }>;
-}
+/**
+ * POST /api/blueprints
+ * @typedef {Object} CreateBlueprintRequest
+ * @property {string} code - Blueprint code
+ * @property {string} title - Blueprint title
+ * @property {string} [description] - Blueprint description
+ * @property {Array<SectionDefinition>} sections - Blueprint sections
+ * @property {Array<StageDefinition>} stages - Blueprint stages
+ * @property {Array<FieldDefinition>} fields - Blueprint fields
+ */
+
+/**
+ * @typedef {Object} SectionDefinition
+ * @property {string} code - Section code
+ * @property {string} title - Section title
+ * @property {number} sequence - Section order
+ */
+
+/**
+ * @typedef {Object} StageDefinition
+ * @property {string} code - Stage code
+ * @property {string} title - Stage title
+ * @property {number} sequence - Stage order
+ * @property {string[]} permissions - Required permissions
+ */
+
+/**
+ * @typedef {Object} FieldDefinition
+ * @property {string} code - Field code
+ * @property {string} title - Field title
+ * @property {string} type - Field type
+ * @property {string} section_code - Parent section code
+ * @property {Object} config - Field configuration
+ * @property {boolean} required - Whether field is required
+ */
+
+/**
+ * GET /api/blueprints/:id/schema
+ * @typedef {Object} BlueprintSchemaResponse
+ * @property {BlueprintInfo} blueprint - Blueprint information
+ * @property {Array<SectionInfo>} sections - Blueprint sections
+ * @property {Array<StageInfo>} stages - Blueprint stages
+ */
+
+/**
+ * @typedef {Object} BlueprintInfo
+ * @property {number} id - Blueprint ID
+ * @property {string} code - Blueprint code
+ * @property {string} title - Blueprint title
+ * @property {string} table_name - Database table name
+ */
+
+/**
+ * @typedef {Object} SectionInfo
+ * @property {string} code - Section code
+ * @property {string} title - Section title
+ * @property {number} sequence - Section order
+ * @property {Array<FieldInfo>} fields - Section fields
+ */
+
+/**
+ * @typedef {Object} FieldInfo
+ * @property {string} code - Field code
+ * @property {string} title - Field title
+ * @property {string} type - Field type
+ * @property {Object} config - Field configuration
+ * @property {Object} validation - Field validation rules
+ * @property {boolean} required - Whether field is required
+ */
+
+/**
+ * @typedef {Object} StageInfo
+ * @property {string} code - Stage code
+ * @property {string} title - Stage title
+ * @property {number} sequence - Stage order
+ * @property {string[]} permissions - Required permissions
+ */
 ```
 
 **Document Operations**:
 
-```typescript
-// GET /api/documents/:blueprint_code
-interface DocumentListRequest {
-  page?: number;
-  per_page?: number;
-  stage?: string;
-  created_by?: number;
-  search?: string;
-  sort_by?: string;
-  sort_order?: 'asc' | 'desc';
-  date_from?: string;
-  date_to?: string;
-  filters?: Record<string, any>;
-}
+```javascript
+/**
+ * GET /api/documents/:blueprint_code
+ * @typedef {Object} DocumentListRequest
+ * @property {number} [page] - Page number
+ * @property {number} [per_page] - Items per page
+ * @property {string} [stage] - Filter by stage
+ * @property {number} [created_by] - Filter by creator
+ * @property {string} [search] - Search term
+ * @property {string} [sort_by] - Field to sort by
+ * @property {'asc'|'desc'} [sort_order] - Sort direction
+ * @property {string} [date_from] - Filter from date
+ * @property {string} [date_to] - Filter to date
+ * @property {Object} [filters] - Additional filters
+ */
 
-interface DocumentListResponse {
-  documents: Array<{
-    id: number;
-    created_at: string;
-    updated_at: string;
-    current_stage: {
-      code: string;
-      title: string;
-    };
-    created_by: {
-      id: number;
-      email: string;
-      full_name: string;
-    };
-    summary_fields: Record<string, any>; // Key fields for list display
-  }>;
-  total: number;
-  page: number;
-  per_page: number;
-  facets: Record<string, Array<{ value: string; count: number }>>;
-}
+/**
+ * @typedef {Object} DocumentListResponse
+ * @property {Array<DocumentListItem>} documents - List of documents
+ * @property {number} total - Total count
+ * @property {number} page - Current page
+ * @property {number} per_page - Items per page
+ * @property {Object} facets - Filter facets with counts
+ */
 
-// POST /api/documents/:blueprint_code
-interface CreateDocumentRequest {
-  field_values: Record<string, any>;
-  auto_advance?: boolean;
-}
+/**
+ * @typedef {Object} DocumentListItem
+ * @property {number} id - Document ID
+ * @property {string} created_at - Creation timestamp
+ * @property {string} updated_at - Update timestamp
+ * @property {StageInfo} current_stage - Current stage info
+ * @property {UserInfo} created_by - Creator info
+ * @property {Object} summary_fields - Key fields for display
+ */
 
-// PUT /api/documents/:blueprint_code/:id
-interface UpdateDocumentRequest {
-  field_values: Record<string, any>;
-  stage_action?: {
-    action: 'advance' | 'reject' | 'hold';
-    comment?: string;
-    notify_users?: number[];
-  };
-}
+/**
+ * @typedef {Object} UserInfo
+ * @property {number} id - User ID
+ * @property {string} email - User email
+ * @property {string} full_name - User full name
+ */
 
-// GET /api/documents/:blueprint_code/:id
-interface DocumentDetailResponse {
-  document: {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    current_stage: {
-      code: string;
-      title: string;
-      sequence: number;
-    };
-    created_by: {
-      id: number;
-      email: string;
-      full_name: string;
-    };
-    field_values: Record<string, any>;
-    computed_values: Record<string, any>;
-    permissions: {
-      can_edit: boolean;
-      can_delete: boolean;
-      can_advance_stage: boolean;
-      editable_sections: string[];
-    };
-  };
-  blueprint_schema: BlueprintSchemaResponse;
-  activity_log: Array<{
-    id: number;
-    action: string;
-    user: { id: number; email: string; full_name: string };
-    timestamp: string;
-    changes?: Record<string, { old: any; new: any }>;
-    comment?: string;
-  }>;
-}
+/**
+ * POST /api/documents/:blueprint_code
+ * @typedef {Object} CreateDocumentRequest
+ * @property {Object} field_values - Document field values
+ * @property {boolean} [auto_advance] - Auto advance to next stage
+ */
+
+/**
+ * PUT /api/documents/:blueprint_code/:id
+ * @typedef {Object} UpdateDocumentRequest
+ * @property {Object} field_values - Updated field values
+ * @property {StageAction} [stage_action] - Stage transition action
+ */
+
+/**
+ * @typedef {Object} StageAction
+ * @property {'advance'|'reject'|'hold'} action - Stage action type
+ * @property {string} [comment] - Action comment
+ * @property {number[]} [notify_users] - Users to notify
+ */
+
+/**
+ * GET /api/documents/:blueprint_code/:id
+ * @typedef {Object} DocumentDetailResponse
+ * @property {DocumentDetail} document - Document details
+ * @property {BlueprintSchemaResponse} blueprint_schema - Blueprint schema
+ * @property {Array<ActivityLogEntry>} activity_log - Activity history
+ */
+
+/**
+ * @typedef {Object} DocumentDetail
+ * @property {number} id - Document ID
+ * @property {string} created_at - Creation timestamp
+ * @property {string} updated_at - Update timestamp
+ * @property {StageDetail} current_stage - Current stage details
+ * @property {UserInfo} created_by - Creator info
+ * @property {Object} field_values - Document field values
+ * @property {Object} computed_values - Computed field values
+ * @property {DocumentPermissions} permissions - User permissions
+ */
+
+/**
+ * @typedef {Object} StageDetail
+ * @property {string} code - Stage code
+ * @property {string} title - Stage title
+ * @property {number} sequence - Stage sequence
+ */
+
+/**
+ * @typedef {Object} DocumentPermissions
+ * @property {boolean} can_edit - Can edit document
+ * @property {boolean} can_delete - Can delete document
+ * @property {boolean} can_advance_stage - Can advance stage
+ * @property {string[]} editable_sections - Editable sections
+ */
+
+/**
+ * @typedef {Object} ActivityLogEntry
+ * @property {number} id - Log entry ID
+ * @property {string} action - Action performed
+ * @property {UserInfo} user - User who performed action
+ * @property {string} timestamp - Action timestamp
+ * @property {Object} [changes] - Changes made
+ * @property {string} [comment] - Action comment
+ */
 ```
 
 **File Management**:
 
-```typescript
-// POST /api/files/upload
-interface FileUploadRequest {
-  files: File[];
-  document_id?: number;
-  blueprint_code?: string;
-  field_code?: string;
-}
+```javascript
+/**
+ * POST /api/files/upload
+ * @typedef {Object} FileUploadRequest
+ * @property {File[]} files - Files to upload
+ * @property {number} [document_id] - Associated document ID
+ * @property {string} [blueprint_code] - Associated blueprint code
+ * @property {string} [field_code] - Associated field code
+ */
 
-interface FileUploadResponse {
-  files: Array<{
-    id: string;
-    filename: string;
-    original_name: string;
-    mime_type: string;
-    size: number;
-    url: string;
-    thumbnail_url?: string;
-  }>;
-}
+/**
+ * @typedef {Object} FileUploadResponse
+ * @property {Array<UploadedFile>} files - Uploaded file details
+ */
+
+/**
+ * @typedef {Object} UploadedFile
+ * @property {string} id - File ID
+ * @property {string} filename - Generated filename
+ * @property {string} original_name - Original filename
+ * @property {string} mime_type - File MIME type
+ * @property {number} size - File size in bytes
+ * @property {string} url - File download URL
+ * @property {string} [thumbnail_url] - Thumbnail URL (for images)
+ */
 
 // GET /api/files/:file_id
 // Downloads the file with proper content disposition headers
@@ -1076,26 +1179,34 @@ interface FileUploadResponse {
 
 **Dynamic Filtering**:
 
-```typescript
-interface QueryFilter {
-  field: string;
-  operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not_in' | 'like' | 'ilike' | 'is_null' | 'is_not_null' | 'between';
-  value: any;
-  logic?: 'and' | 'or';
-}
+```javascript
+/**
+ * @typedef {Object} QueryFilter
+ * @property {string} field - Field to filter on
+ * @property {'eq'|'ne'|'gt'|'gte'|'lt'|'lte'|'in'|'not_in'|'like'|'ilike'|'is_null'|'is_not_null'|'between'} operator - Filter operator
+ * @property {*} value - Filter value
+ * @property {'and'|'or'} [logic] - Logic operator for combining filters
+ */
 
-// GET /api/documents/:blueprint_code/query
-interface AdvancedQueryRequest {
-  filters: QueryFilter[];
-  sort: Array<{ field: string; direction: 'asc' | 'desc' }>;
-  page: number;
-  per_page: number;
-  include_computed: boolean;
-  export_format?: 'json' | 'csv' | 'xlsx';
-}
+/**
+ * GET /api/documents/:blueprint_code/query
+ * @typedef {Object} AdvancedQueryRequest
+ * @property {QueryFilter[]} filters - Query filters
+ * @property {Array<SortField>} sort - Sort configuration
+ * @property {number} page - Page number
+ * @property {number} per_page - Items per page
+ * @property {boolean} include_computed - Include computed fields
+ * @property {'json'|'csv'|'xlsx'} [export_format] - Export format
+ */
+
+/**
+ * @typedef {Object} SortField
+ * @property {string} field - Field to sort by
+ * @property {'asc'|'desc'} direction - Sort direction
+ */
 
 // Example query: Find all employees hired in the last 6 months with salary > $50,000
-const query: AdvancedQueryRequest = {
+const query = {
   filters: [
     {
       field: 'position_details.start_date',
@@ -1121,21 +1232,25 @@ const query: AdvancedQueryRequest = {
 
 **Aggregation Queries**:
 
-```typescript
-// GET /api/documents/:blueprint_code/aggregate
-interface AggregationRequest {
-  group_by: string[];
-  aggregations: Array<{
-    field: string;
-    function: 'count' | 'sum' | 'avg' | 'min' | 'max' | 'std_dev';
-    alias?: string;
-  }>;
-  filters?: QueryFilter[];
-  having?: QueryFilter[];
-}
+```javascript
+/**
+ * GET /api/documents/:blueprint_code/aggregate
+ * @typedef {Object} AggregationRequest
+ * @property {string[]} group_by - Fields to group by
+ * @property {Array<AggregationFunction>} aggregations - Aggregation functions
+ * @property {QueryFilter[]} [filters] - Pre-aggregation filters
+ * @property {QueryFilter[]} [having] - Post-aggregation filters
+ */
+
+/**
+ * @typedef {Object} AggregationFunction
+ * @property {string} field - Field to aggregate
+ * @property {'count'|'sum'|'avg'|'min'|'max'|'std_dev'} function - Aggregation function
+ * @property {string} [alias] - Result alias
+ */
 
 // Example: Average salary by department
-const aggregation: AggregationRequest = {
+const aggregation = {
   group_by: ['position_details.department'],
   aggregations: [
     { field: 'position_details.salary', function: 'avg', alias: 'avg_salary' },

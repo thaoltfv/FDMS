@@ -72,6 +72,12 @@ onland_assets: [ {
 } ]
 ```
 
+## MUST Rules
+
+- No Typescript, plain javascript
+- GUI implementation using Ionic over Vue3
+
+
 ## Random Ideas
 
 - Use `partman` extension to partition data by month or year. ? what if schema changed, i.e. adding fields or change a field type.
@@ -369,3 +375,335 @@ If you want to check, in another language, that some string will fit in a VARCHA
 
 In summary, PostgreSQL's VARCHAR(n) type counts the number of Unicode code points, not bytes, when determining the length of a string. This means that each character, including those represented by multiple bytes, is counted as a single character
 
+### Ionic
+
+**Vue 3 Implementation Patterns**:
+
+```javascript
+// Example: Document List Component using Composition API
+import { ref, computed, onMounted } from 'vue';
+import { useDocumentStore } from '@/stores/documentStore';
+import { 
+  IonPage, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonSearchbar,
+  IonButton,
+  IonIcon,
+  IonChip
+} from '@ionic/vue';
+
+/**
+ * Document List Component
+ * @component
+ */
+export default {
+  name: 'DocumentList',
+  components: {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonSearchbar,
+    IonButton,
+    IonIcon,
+    IonChip
+  },
+  props: {
+    /** @type {string} Blueprint code */
+    blueprintCode: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const documentStore = useDocumentStore();
+    const searchTerm = ref('');
+    const loading = ref(false);
+    const selectedStage = ref('all');
+
+    /**
+     * Filtered documents based on search and stage
+     * @type {import('vue').ComputedRef<Array>}
+     */
+    const filteredDocuments = computed(() => {
+      let docs = documentStore.documents;
+      
+      if (searchTerm.value) {
+        docs = docs.filter(doc => 
+          doc.summary_fields.some(field => 
+            String(field.value).toLowerCase().includes(searchTerm.value.toLowerCase())
+          )
+        );
+      }
+      
+      if (selectedStage.value !== 'all') {
+        docs = docs.filter(doc => doc.current_stage.code === selectedStage.value);
+      }
+      
+      return docs;
+    });
+
+    /**
+     * Load documents for the blueprint
+     */
+    const loadDocuments = async () => {
+      loading.value = true;
+      try {
+        await documentStore.fetchDocuments(props.blueprintCode);
+      } catch (error) {
+        console.error('Failed to load documents:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    /**
+     * Handle document item click
+     * @param {Object} document - Document object
+     */
+    const handleDocumentClick = (document) => {
+      // Navigate to document detail
+      router.push(`/documents/${props.blueprintCode}/${document.id}`);
+    };
+
+    onMounted(() => {
+      loadDocuments();
+    });
+
+    return {
+      searchTerm,
+      loading,
+      selectedStage,
+      filteredDocuments,
+      loadDocuments,
+      handleDocumentClick
+    };
+  }
+};
+```
+
+**State Management with Pinia**:
+
+```javascript
+// stores/documentStore.js
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import { documentApi } from '@/api/documents';
+
+/**
+ * Document store for managing document state
+ */
+export const useDocumentStore = defineStore('documents', () => {
+  // State
+  const documents = ref([]);
+  const currentDocument = ref(null);
+  const blueprintSchema = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+
+  // Getters
+  const documentsByStage = computed(() => {
+    const grouped = {};
+    documents.value.forEach(doc => {
+      const stage = doc.current_stage.code;
+      if (!grouped[stage]) {
+        grouped[stage] = [];
+      }
+      grouped[stage].push(doc);
+    });
+    return grouped;
+  });
+
+  const documentCount = computed(() => documents.value.length);
+
+  // Actions
+  /**
+   * Fetch documents for a blueprint
+   * @param {string} blueprintCode - Blueprint code
+   * @param {Object} filters - Filter options
+   */
+  const fetchDocuments = async (blueprintCode, filters = {}) => {
+    loading.value = true;
+    error.value = null;
+    
+    try {
+      const response = await documentApi.getDocuments(blueprintCode, filters);
+      documents.value = response.documents;
+    } catch (err) {
+      error.value = err.message || 'Failed to fetch documents';
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**
+   * Create a new document
+   * @param {string} blueprintCode - Blueprint code
+   * @param {Object} fieldValues - Document field values
+   */
+  const createDocument = async (blueprintCode, fieldValues) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const response = await documentApi.createDocument(blueprintCode, {
+        field_values: fieldValues
+      });
+      
+      // Add to local state
+      documents.value.unshift(response.document);
+      
+      return response.document;
+    } catch (err) {
+      error.value = err.message || 'Failed to create document';
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**
+   * Update an existing document
+   * @param {string} blueprintCode - Blueprint code
+   * @param {number} documentId - Document ID
+   * @param {Object} updates - Updates to apply
+   */
+  const updateDocument = async (blueprintCode, documentId, updates) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const response = await documentApi.updateDocument(blueprintCode, documentId, updates);
+      
+      // Update local state
+      const index = documents.value.findIndex(doc => doc.id === documentId);
+      if (index >= 0) {
+        documents.value[index] = response.document;
+      }
+      
+      // Update current document if it's the same
+      if (currentDocument.value?.id === documentId) {
+        currentDocument.value = response.document;
+      }
+      
+      return response.document;
+    } catch (err) {
+      error.value = err.message || 'Failed to update document';
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  /**
+   * Clear all state
+   */
+  const clearState = () => {
+    documents.value = [];
+    currentDocument.value = null;
+    blueprintSchema.value = null;
+    error.value = null;
+  };
+
+  return {
+    // State
+    documents,
+    currentDocument,
+    blueprintSchema,
+    loading,
+    error,
+    
+    // Getters
+    documentsByStage,
+    documentCount,
+    
+    // Actions
+    fetchDocuments,
+    createDocument,
+    updateDocument,
+    clearState
+  };
+});
+```
+
+**Ionic Routing Configuration**:
+
+```javascript
+// router/index.js
+import { createRouter, createWebHistory } from '@ionic/vue-router';
+
+const routes = [
+  {
+    path: '/',
+    redirect: '/dashboard'
+  },
+  {
+    path: '/dashboard',
+    component: () => import('@/views/Dashboard.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/blueprints',
+    component: () => import('@/views/BlueprintList.vue'),
+    meta: { requiresAuth: true, roles: ['blueprint_admin', 'super_admin'] }
+  },
+  {
+    path: '/blueprints/:code',
+    component: () => import('@/views/BlueprintDetail.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/documents/:blueprintCode',
+    component: () => import('@/views/DocumentList.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/documents/:blueprintCode/:id',
+    component: () => import('@/views/DocumentDetail.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/documents/:blueprintCode/new',
+    component: () => import('@/views/DocumentForm.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/Login.vue')
+  },
+  {
+    path: '/profile',
+    component: () => import('@/views/UserProfile.vue'),
+    meta: { requiresAuth: true }
+  }
+];
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes
+});
+
+// Navigation guard for authentication
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('auth_token');
+  
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
+export default router;
+```
