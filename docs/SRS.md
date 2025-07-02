@@ -1,3 +1,9 @@
+---
+pdf-engine: xelatex
+geometry: margin=1in
+monofont: DejaVu Sans Mono
+---
+
 # Software Requirements Specification (SRS)
 ## Fast Document Management System (FDMS)
 

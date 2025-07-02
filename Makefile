@@ -5,7 +5,7 @@ SRC = $(wildcard docs/*.md)
 OUTDIR = pdf
 PDFS = $(SRC:%.md=$(OUTDIR)/%.pdf)
 
-PANDOC_OPTS = --pdf-engine=lualatex  -V monofont="DejaVu Sans Mono" --lua-filter=docs/scripts/hr-to-pagebreak.lua -V geometry:margin=1in
+PANDOC_OPTS = --pdf-engine=xelatex -V monofont="DejaVu Sans Mono" --lua-filter=docs/scripts/hr-to-pagebreak.lua -V geometry:margin=0.9in
 
 # Default target
 all: $(OUTDIR) $(PDFS)
