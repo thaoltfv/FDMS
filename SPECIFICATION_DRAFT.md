@@ -1146,5 +1146,192 @@ const aggregation: AggregationRequest = {
   ]
 };
 ```
+# ER Diagram
+
+```mermaid
+erDiagram
+    users {
+        int id PK
+        string email UK
+        string full_name
+        string password_hash
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    roles {
+        int id PK
+        string name UK "e.g., super_admin, blueprint_admin"
+    }
+
+    user_roles {
+        int user_id PK, FK
+        int role_id PK, FK
+    }
+
+    groups {
+        int id PK
+        string name
+        int parent_id FK "Self-referencing for hierarchy"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    user_groups {
+        int user_id PK, FK
+        int group_id PK, FK
+    }
+
+    blueprints {
+        int id PK
+        string code UK
+        string title
+        text description
+        string table_name "Name of the dedicated document table"
+        string status "draft, active, deprecated, archived"
+        int extends_blueprint_id FK "For inheritance"
+        int created_by_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    blueprint_versions {
+        int id PK
+        int blueprint_id FK
+        string version_number
+        jsonb changes "Details of schema changes"
+        text migration_script_up
+        text migration_script_down
+        timestamp created_at
+    }
+
+    sections {
+        int id PK
+        int blueprint_id FK
+        string code UK "Unique within a blueprint"
+        string title
+        int sequence
+    }
+
+    fields {
+        int id PK
+        int section_id FK
+        string code UK "Unique within a blueprint"
+        string title
+        string type "short_text, integer, composite_object, etc."
+        jsonb config "Field-specific configuration"
+        jsonb validation "Validation rules for the field"
+        boolean required
+    }
+
+    blueprint_stages {
+        int id PK
+        int blueprint_id FK
+        string code UK "Unique within a blueprint"
+        string title
+        int sequence
+    }
+
+    documents {
+        bigint id PK "Represents a row in a blueprint-specific table"
+        int blueprint_id FK
+        int current_stage_id FK
+        int created_by_id FK
+        int updated_by_id FK
+        timestamp created_at
+        timestamp updated_at
+        jsonb data "Stores fields defined in the blueprint"
+    }
+
+    document_versions {
+        bigint id PK
+        bigint document_id FK
+        jsonb data "Snapshot of document data"
+        jsonb diff "Changes from previous version"
+        int created_by_id FK
+        timestamp created_at
+    }
+
+    files {
+        uuid id PK
+        string filename
+        string original_filename
+        string mime_type
+        bigint size_bytes
+        int uploaded_by_id FK
+        timestamp created_at
+    }
+
+    document_files {
+        bigint document_id PK, FK
+        uuid file_id PK, FK
+        int field_id PK, FK "Field this file is associated with"
+    }
+
+    activity_logs {
+        bigint id PK
+        bigint document_id FK
+        int user_id FK
+        string action "e.g., created, updated, stage_changed"
+        jsonb changes "Details of the changes made"
+        text comment
+        timestamp created_at
+    }
+
+    permissions {
+        int id PK
+        int role_id FK
+        int group_id FK
+        string resource_type "e.g., blueprint, stage, field"
+        int resource_id
+        string action "e.g., read, create, update, delete"
+    }
+
+    validation_rules {
+        int id PK
+        int blueprint_id FK
+        string rule "Unique name for the rule"
+        string expression "Validation logic"
+        string error_message
+        jsonb applies_to_stages
+    }
+
+    automation_rules {
+        int id PK
+        int blueprint_id FK
+        string trigger "e.g., stage_change"
+        string from_stage
+        string to_stage
+        jsonb actions "List of actions to perform"
+    }
+
+    "users" ||--o{ "user_roles" : "has"
+    "roles" ||--o{ "user_roles" : "assigned to"
+    "users" ||--o{ "user_groups" : "is member of"
+    "groups" ||--o{ "user_groups" : "has"
+    "groups" }o--o{ "groups" : "is child of"
+    "users" ||--o{ "blueprints" : "created"
+    "users" ||--o{ "documents" : "created"
+    "users" ||--o{ "documents" : "updated"
+    "users" ||--o{ "document_versions" : "created"
+    "users" ||--o{ "activity_logs" : "performed"
+    "users" ||--o{ "files" : "uploaded"
+    "roles" ||--o{ "permissions" : "grants"
+    "groups" ||--o{ "permissions" : "grants"
+    "blueprints" }o--o{ "blueprints" : "extends"
+    "blueprints" ||--|{ "blueprint_versions" : "has history"
+    "blueprints" ||--|{ "sections" : "contains"
+    "blueprints" ||--|{ "blueprint_stages" : "defines"
+    "blueprints" ||--|{ "validation_rules" : "has"
+    "blueprints" ||--|{ "automation_rules" : "has"
+    "blueprints" ||--o{ "documents" : "instantiates"
+    "sections" ||--|{ "fields" : "contains"
+    "blueprint_stages" ||--o{ "documents" : "is current for"
+    "documents" ||--|{ "document_versions" : "has history"
+    "documents" ||--|{ "activity_logs" : "has"
+    "documents" ||--o{ "document_files" : "attaches"
+    "fields" ||--o{ "document_files" : "is target for"
+    "files" ||--o{ "document_files" : "is attached via"
+```
 
 This expanded specification provides a comprehensive foundation for building the FDMS system with enterprise-grade capabilities while maintaining the core architectural principles of performance, flexibility, and data integrity. 
