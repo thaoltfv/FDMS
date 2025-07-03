@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="390" height="844" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+  
+  <!-- Phone Frame -->
+  <rect x="0" y="0" width="390" height="844" fill="#f8f9fa" stroke="#000" stroke-width="2" rx="25"/>
+  
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="390" height="44" fill="#000" rx="25"/>
+  <text x="195" y="28" text-anchor="middle" fill="white" font-family="Arial" font-size="14">9:41 AM</text>
+  
+  <!-- Header Bar -->
+  <rect x="5" y="44" width="380" height="60" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  
+  <!-- Back Button -->
+  <text x="25" y="83" fill="#0066CC" font-family="Arial" font-size="20">‹</text>
+  
+  <!-- Screen Title -->
+  <text x="195" y="83" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">QSDĐ tại thôn 3, xã Đăk Ơ...</text>
+  
+  <!-- User Avatar -->
+  <circle cx="365" cy="74" r="16" fill="#0066CC"/>
+  
+  <!-- Main Content Area (Background - dimmed) -->
+  <rect x="5" y="104" width="380" height="651" fill="white" opacity="0.3"/>
+  
+  <!-- Background Content (Document Title Area - dimmed) -->
+  <rect x="25" y="124" width="340" height="80" fill="white" stroke="#ddd" stroke-width="1" rx="8" opacity="0.3"/>
+  <text x="35" y="145" fill="#333" font-family="Arial" font-size="14" font-weight="bold" opacity="0.3">QSDĐ tại thôn 3, xã Đăk Ơ, huyện Bù Gia Mập, tỉnh Bình Phước</text>
+  <rect x="290" y="135" width="60" height="25" fill="#ffc107" rx="12" opacity="0.3"/>
+  <text x="320" y="150" text-anchor="middle" fill="white" font-family="Arial" font-size="12" opacity="0.3">Nháp</text>
+  
+  <!-- Sections List Button (highlighted as trigger) -->
+  <rect x="25" y="170" width="30" height="30" fill="#0066CC" stroke="#ccc" stroke-width="1" rx="15"/>
+  <text x="40" y="190" text-anchor="middle" fill="white" font-family="Arial" font-size="16">☰</text>
+  
+  <!-- Background form fields (dimmed) -->
+  <text x="35" y="230" fill="#666" font-family="Arial" font-size="12" opacity="0.3">Loại tài sản</text>
+  <rect x="35" y="240" width="320" height="35" fill="white" stroke="#ccc" stroke-width="1" rx="5" opacity="0.3"/>
+  <text x="45" y="261" fill="#333" font-family="Arial" font-size="14" opacity="0.3">Đất trống</text>
+  
+  <!-- Sections Drawer Overlay -->
+  <rect x="0" y="200" width="280" height="500" fill="white" stroke="#ddd" stroke-width="1" rx="5" fill-opacity="0.95"/>
+  
+  <!-- Drawer Header -->
+  <rect x="0" y="200" width="280" height="50" fill="#f8f9fa" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="20" y="230" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Danh sách mục</text>
+  
+  <!-- Sections List -->
+  <!-- Active Section - Highlighted -->
+  <rect x="10" y="260" width="260" height="45" fill="#0066CC" rx="5"/>
+  <text x="25" y="285" fill="white" font-family="Arial" font-size="14" font-weight="bold">Thông tin địa chỉ</text>
+  
+  <!-- Other Sections -->
+  <rect x="10" y="315" width="260" height="45" fill="white" stroke="#eee" stroke-width="1" rx="5"/>
+  <text x="25" y="340" fill="#333" font-family="Arial" font-size="14">Khả năng tiếp cận</text>
+  
+  <rect x="10" y="370" width="260" height="45" fill="white" stroke="#eee" stroke-width="1" rx="5"/>
+  <text x="25" y="395" fill="#333" font-family="Arial" font-size="14">Hình ảnh hiện trạng</text>
+  
+  <rect x="10" y="425" width="260" height="45" fill="white" stroke="#eee" stroke-width="1" rx="5"/>
+  <text x="25" y="450" fill="#333" font-family="Arial" font-size="14">Quyền sử dụng đất</text>
+  
+  <rect x="10" y="480" width="260" height="45" fill="white" stroke="#eee" stroke-width="1" rx="5"/>
+  <text x="25" y="505" fill="#333" font-family="Arial" font-size="14">Công trình xây dựng</text>
+  
+  <rect x="10" y="535" width="260" height="45" fill="white" stroke="#eee" stroke-width="1" rx="5"/>
+  <text x="25" y="560" fill="#333" font-family="Arial" font-size="14">Pháp lý tài sản</text>
+  
+  <rect x="10" y="590" width="260" height="45" fill="white" stroke="#eee" stroke-width="1" rx="5"/>
+  <text x="25" y="615" fill="#333" font-family="Arial" font-size="14">Xét duyệt</text>
+  
+  <!-- Bottom Bar (dimmed background) -->
+  <rect x="5" y="770" width="380" height="59" fill="white" stroke="#ddd" stroke-width="1" rx="5" opacity="0.3"/>
+  <rect x="25" y="785" width="140" height="40" fill="#6c757d" rx="5" opacity="0.3"/>
+  <text x="95" y="808" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold" opacity="0.3">Lưu</text>
+  <rect x="225" y="785" width="140" height="40" fill="#0066CC" rx="5" opacity="0.3"/>
+  <text x="295" y="808" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold" opacity="0.3">Gửi</text>
+  
+</svg> 

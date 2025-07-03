@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="390" height="844" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+  
+  <!-- Phone Frame -->
+  <rect x="0" y="0" width="390" height="844" fill="#f8f9fa" stroke="#000" stroke-width="2" rx="25"/>
+  
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="390" height="44" fill="#000" rx="25"/>
+  <text x="195" y="28" text-anchor="middle" fill="white" font-family="Arial" font-size="14">9:41 AM</text>
+  
+  <!-- Header Bar -->
+  <rect x="5" y="44" width="380" height="60" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  
+  <!-- Screen Title -->
+  <text x="195" y="83" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Trang chủ</text>
+  
+  <!-- User Avatar -->
+  <circle cx="365" cy="74" r="16" fill="#0066CC"/>
+  
+  <!-- Main Content Area -->
+  <rect x="5" y="104" width="380" height="651" fill="white"/>
+  
+  <!-- Interested Documents Section -->
+  <text x="25" y="135" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Tài liệu quan tâm</text>
+  
+  <!-- Document Item 1 -->
+  <rect x="25" y="150" width="340" height="80" fill="white" stroke="#ddd" stroke-width="1" rx="8"/>
+  <text x="35" y="170" fill="#333" font-family="Arial" font-size="14" font-weight="bold">QSDĐ và CTXD tại Phường Thới Hòa, thành ...</text>
+  <text x="35" y="190" fill="#666" font-family="Arial" font-size="12">Khảo sát hiện trạng nhà đất</text>
+  <text x="35" y="210" fill="#666" font-family="Arial" font-size="12">Cập nhật: 2 giờ trước</text>
+  
+  <!-- Document Item 2 -->
+  <rect x="25" y="245" width="340" height="80" fill="white" stroke="#ddd" stroke-width="1" rx="8"/>
+  <text x="35" y="265" fill="#333" font-family="Arial" font-size="14" font-weight="bold">QSDĐ tại đường ĐT 755, thôn 8, xã Thống Nhất...</text>
+  <text x="35" y="285" fill="#666" font-family="Arial" font-size="12">Khảo sát hiện trạng nhà đất</text>
+  <text x="35" y="305" fill="#666" font-family="Arial" font-size="12">Cập nhật: 1 ngày trước</text>
+  
+  <!-- Divider -->
+  <line x1="25" y1="350" x2="365" y2="350" stroke="#eee" stroke-width="1"/>
+  
+  <!-- Blueprints Section -->
+  <text x="25" y="380" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Tập tài liệu</text>
+  
+  <!-- Blueprint Item -->
+  <rect x="25" y="395" width="340" height="70" fill="white" stroke="#ddd" stroke-width="1" rx="8"/>
+  <circle cx="55" cy="430" r="20" fill="#0066CC"/>
+  <text x="55" y="437" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">📋</text>
+  <text x="85" y="425" fill="#333" font-family="Arial" font-size="14" font-weight="bold">Khảo sát hiện trạng nhà đất</text>
+  <text x="85" y="445" fill="#666" font-family="Arial" font-size="12">25 tài liệu • Cập nhật gần đây</text>
+  <text x="340" y="435" text-anchor="middle" fill="#0066CC" font-family="Arial" font-size="20">›</text>
+  
+  <!-- Quick Actions Section -->
+  <text x="25" y="500" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Thao tác nhanh</text>
+  
+  <!-- Quick Action Buttons -->
+  <rect x="25" y="515" width="160" height="50" fill="#0066CC" rx="8"/>
+  <text x="105" y="544" text-anchor="middle" fill="white" font-family="Arial" font-size="14" font-weight="bold">Tạo tài liệu mới</text>
+  
+  <rect x="205" y="515" width="160" height="50" fill="#6c757d" rx="8"/>
+  <text x="285" y="544" text-anchor="middle" fill="white" font-family="Arial" font-size="14" font-weight="bold">Tìm kiếm</text>
+  
+  <!-- Recent Activity Section -->
+  <text x="25" y="600" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Hoạt động gần đây</text>
+  
+  <!-- Activity Item 1 -->
+  <rect x="25" y="615" width="340" height="50" fill="#f8f9fa" stroke="#eee" stroke-width="1" rx="5"/>
+  <circle cx="50" cy="640" r="8" fill="#28a745"/>
+  <text x="70" y="635" fill="#333" font-family="Arial" font-size="12">Hoàng Anh Tuấn đã gửi tài liệu</text>
+  <text x="70" y="650" fill="#666" font-family="Arial" font-size="11">30 phút trước</text>
+  
+  <!-- Activity Item 2 -->
+  <rect x="25" y="675" width="340" height="50" fill="#f8f9fa" stroke="#eee" stroke-width="1" rx="5"/>
+  <circle cx="50" cy="700" r="8" fill="#ffc107"/>
+  <text x="70" y="695" fill="#333" font-family="Arial" font-size="12">Lê Thị Thu đã lưu nháp</text>
+  <text x="70" y="710" fill="#666" font-family="Arial" font-size="11">2 giờ trước</text>
+  
+</svg> 

@@ -1,5 +1,4 @@
 !.env
 !.env.example
-*.svg
 *.png
 local_research/
