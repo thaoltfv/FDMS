@@ -106,12 +106,14 @@ FDMS revolutionizes document management by treating the backend as a specialized
 ### 3.1 User Management
 
 #### 3.1.1 User Registration and Authentication
+
 - **FR-1.1**: System shall provide user registration with email and password
 - **FR-1.2**: System shall authenticate users using JWT tokens with refresh capability
 - **FR-1.3**: System shall support password reset functionality
 - **FR-1.4**: System shall maintain user profiles with role assignments
 
 #### 3.1.2 Role and Group Management
+
 - **FR-1.5**: System shall support hierarchical role-based access control
 - **FR-1.6**: System shall allow creation and management of user groups
 - **FR-1.7**: System shall support assignment of users to multiple groups
@@ -120,12 +122,14 @@ FDMS revolutionizes document management by treating the backend as a specialized
 ### 3.2 Blueprint Management
 
 #### 3.2.1 Blueprint Creation and Configuration
+
 - **FR-2.1**: System shall allow administrators to create document blueprints
 - **FR-2.2**: System shall support blueprint sections for organizing fields
 - **FR-2.3**: System shall provide configurable workflow stages (Draft, Review, Approved, Rejected, Custom)
 - **FR-2.4**: System shall maintain blueprint versioning with change tracking
 
 #### 3.2.2 Field Type Support
+
 - **FR-2.5**: System shall support basic field types:
   - Text (short and multi-line)
   - Integer and decimal numbers
@@ -147,6 +151,7 @@ FDMS revolutionizes document management by treating the backend as a specialized
   - XLSX template generation
 
 #### 3.2.3 Dynamic Schema Management
+
 - **FR-2.8**: System shall automatically create PostgreSQL tables for new blueprints
 - **FR-2.9**: System shall handle schema migrations for blueprint modifications
 - **FR-2.10**: System shall preserve data during non-destructive schema changes
@@ -155,18 +160,21 @@ FDMS revolutionizes document management by treating the backend as a specialized
 ### 3.3 Document Management
 
 #### 3.3.1 Document CRUD Operations
+
 - **FR-3.1**: System shall provide document creation based on blueprint definitions
 - **FR-3.2**: System shall support document editing with field validation
 - **FR-3.3**: System shall enable document viewing with formatted display
 - **FR-3.4**: System shall allow document deletion with proper authorization
 
 #### 3.3.2 Document Workflow
+
 - **FR-3.5**: System shall support document progression through defined stages
 - **FR-3.6**: System shall maintain workflow history and audit trails
 - **FR-3.7**: System shall provide stage-based permissions and restrictions
 - **FR-3.8**: System shall support document rejection with comments
 
 #### 3.3.3 Document Versioning
+
 - **FR-3.9**: System shall maintain complete version history for documents
 - **FR-3.10**: System shall provide structured diff tracking for changes
 - **FR-3.11**: System shall support version comparison and restoration
@@ -175,12 +183,14 @@ FDMS revolutionizes document management by treating the backend as a specialized
 ### 3.4 Query and Analytics
 
 #### 3.4.1 Advanced Querying
+
 - **FR-4.1**: System shall provide dynamic filtering and sorting capabilities
 - **FR-4.2**: System shall support full-text search across document fields
 - **FR-4.3**: System shall enable aggregation queries (count, sum, average)
 - **FR-4.4**: System shall provide geospatial queries for location-based fields
 
 #### 3.4.2 Reporting and Analytics
+
 - **FR-4.5**: System shall support direct SQL access for BI tools
 - **FR-4.6**: System shall provide REST API endpoints for custom queries
 - **FR-4.7**: System shall enable data export in multiple formats (CSV, Excel, JSON)
@@ -205,10 +215,10 @@ FDMS revolutionizes document management by treating the backend as a specialized
 
 ### 4.1 Performance Requirements
 
-- **NFR-1.1**: System shall support at least 1,000 concurrent users
+- **NFR-1.1**: System shall support at least 500 concurrent users
 - **NFR-1.2**: Document queries shall respond within 2 seconds for datasets up to 1 million records
 - **NFR-1.3**: Schema migrations shall complete within 5 minutes for tables up to 10 million records
-- **NFR-1.4**: File uploads shall support files up to 100MB with progress tracking
+- **NFR-1.4**: File uploads shall support files up to 100MB
 
 ### 4.2 Scalability Requirements
 
@@ -533,7 +543,7 @@ GET /api/files/{id}/download
 
 ### 9.2 Throughput Requirements
 
-- Support 1,000 concurrent users
+- Support 500 concurrent users
 - Handle 10,000 API requests per minute
 - Process 100 document submissions per minute
 - Support 50 concurrent file uploads
@@ -640,6 +650,7 @@ GET /api/files/{id}/download
 **Objectives**: Establish backend architecture and database foundations
 
 **Key Deliverables**:
+
 - Project setup with Fastify and PostgreSQL
 - Authentication module with JWT
 - Blueprint management system
@@ -651,6 +662,7 @@ GET /api/files/{id}/download
 **Critical Path**: Schema Manager Service and Dynamic Document Service
 
 #### Phase 2: Frontend & User Interface (3-4 months)
+
 **Objectives**: Build user interfaces for core functionality
 
 **Key Deliverables**:
@@ -689,6 +701,7 @@ GET /api/files/{id}/download
 ### 12.2 Resource Requirements
 
 #### 12.2.1 Team Composition
+
 - **Optimal MVP Team**: 2-3 experienced full-stack developers
 - **Full Project Team**: 3-5 developers with specialization
 - **Skills Required**: Fastify, Vue.js, PostgreSQL, Ionic Framework
@@ -732,7 +745,7 @@ GET /api/files/{id}/download
 - Support for all specified field types
 - Advanced querying and analytics capabilities
 - Enterprise-grade security and permissions
-- Scalability to 1,000+ concurrent users
+- Scalability to 500+ concurrent users
 - Cross-platform mobile app deployment
 
 ---
