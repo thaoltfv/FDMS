@@ -15,7 +15,7 @@
   <text x="25" y="83" fill="#0066CC" font-family="Arial" font-size="20">‹</text>
   
   <!-- Screen Title -->
-  <text x="195" y="83" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">QSDĐ tại thôn 3, xã Đăk Ơ...</text>
+  <text x="195" y="83" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Khảo sát hiện trạng nhà đất</text>
   
   <!-- User Avatar -->
   <circle cx="365" cy="74" r="16" fill="#0066CC"/>
@@ -25,7 +25,7 @@
   
   <!-- Background Content (Document Title Area - dimmed) -->
   <rect x="25" y="124" width="340" height="80" fill="white" stroke="#ddd" stroke-width="1" rx="8" opacity="0.3"/>
-  <text x="35" y="145" fill="#333" font-family="Arial" font-size="14" font-weight="bold" opacity="0.3">QSDĐ tại thôn 3, xã Đăk Ơ, huyện Bù Gia Mập, tỉnh Bình Phước</text>
+  <text x="35" y="145" fill="#333" font-family="Arial" font-size="14" font-weight="bold" opacity="0.3">QSDĐ tại thôn 3, xã Đăk Ơ, huyện...</text>
   <rect x="290" y="135" width="60" height="25" fill="#ffc107" rx="12" opacity="0.3"/>
   <text x="320" y="150" text-anchor="middle" fill="white" font-family="Arial" font-size="12" opacity="0.3">Nháp</text>
   

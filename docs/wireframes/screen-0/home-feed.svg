@@ -12,7 +12,7 @@
   <rect x="5" y="44" width="380" height="60" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
   
   <!-- Screen Title -->
-  <text x="195" y="83" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Trang chủ</text>
+  <text x="195" y="83" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">FDMS</text>
   
   <!-- User Avatar -->
   <circle cx="365" cy="74" r="16" fill="#0066CC"/>

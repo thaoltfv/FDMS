@@ -2,3 +2,4 @@
 !.env.example
 *.png
 local_research/
+volumes/
