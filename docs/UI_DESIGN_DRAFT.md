@@ -137,14 +137,32 @@ Required screens:
 - List of interested documents (i.e. documents that user has permissions to view)
     - QSDĐ và CTXD tại Phường Thới Hòa, thành phố Bến Cát, tỉnh Bình Dương
     - QSDĐ tại đường ĐT 755, thôn 8, xã Thống Nhất, huyện Bù Đăng, tỉnh Bình Phước
-- List of blueprints (title: "Tập tài liệu")
+- List of blueprints (title: "Tập tài liệu", limit 5 items, "See all" link \
+to navigate to blueprints list screen-0.3)
     - Khảo sát hiện trạng nhà đất
 
-## Screen 0.3: Documents list
+## Screen 0.3: Blueprints list
 
 **Title:**
 
-"Khảo sát hiện trạng nhà đất"
+"Các tập tài liệu"
+
+**Content:**
+
+- Simple list of accessible blueprints (either can load more or paginate)
+- Example blueprints
+    - Khảo sát hiện trạng nhà đất
+    - Báo cáo thẩm định tài chính
+    - Hợp đồng mua bán nhà đất
+    - Hồ sơ quy hoạch đô thị
+    - Hợp đồng thuê mướn bất động sản
+
+
+## Screen 0.4: Documents list
+
+**Title:**
+
+"Khảo sát hiện trạng nhà đất" (Blueprint title)
 
 **Content:**
 
@@ -212,11 +230,11 @@ aligned with the the document title, icon: bullets list.
 **List of sections:**
 
 - Thông tin địa chỉ
-- Khả năng tiếp cận
-- Hình ảnh hiện trạng
-- Quyền sử dụng đất
-- Công trình xây dựng
 - Pháp lý tài sản
+- Công trình xây dựng
+- Tài sản khác
+- Hình ảnh hiện trạng
+- Ước tính đơn giá
 - Xét duyệt
 
 ### Screen-1.1: Address section
@@ -242,3 +260,87 @@ Active section: "Thông tin địa chỉ"
 
 Show a drawer with the list of sections.
 Background is content of screen-1.1.
+
+### Screen-1.3: 
+
+Header title: "Khảo sát hiện trạng nhà đất"
+
+Active section: "Công trình xây dựng"
+
+**Display**
+
+List of Cards with edit icon links.
+
+Each card has following labels (on left) with their values (on right):
+
+- Loại (i.g. "Nhà ở riêng lẻ", "Biệt thự", ...)
+- Chất lượng còn lại (%)
+- Diện tích sàn (m2)
+- Đơn giá xây dựng (VND/m2)
+- Giá trị ước tính (VND)
+
+There is a button to add a new building listing.
+
+**Behavior**
+
+- When user tap on a card, the form is shown (screen-1.3.1).
+- When user clicks on the "Add" button, the form is shown (screen-1.3.1).
+
+#### Screen-1.3.1: Create/edit new building listing
+
+**Display**
+
+A modal shows a form with the following fields:
+
+- Loại (i.g. "Nhà ở riêng lẻ", "Biệt thự", ...) (required)
+- Chất lượng còn lại (%) (required)
+- Diện tích sàn (m2) (required)
+- Đơn giá xây dựng (VND/m2) (required)
+- Giá trị ước tính (VND) (required)
+
+#### Screen-1.4: Attached images and documents screen
+
+**Display**
+
+Header title: "Khảo sát hiện trạng nhà đất" (Blueprint title)
+
+Active section: "Hình ảnh hiện trạng"
+
+**Display**
+
+Labels:
+
+- Hình ảnh hiện trạng
+- File đính kèm
+
+List of images and documents.
+
+Each item has a thumbnail and a delete icon.
+
+There is a button to add a new image or document.
+
+Show a action sheet that indicates the following actions:
+
+- Add a new image from camera
+- Add a new image from phone gallery
+- Add a new file from phone storage
+- Close action sheet
+
+### Screen-1.5: Approve/Deny a document
+
+Active section: "Xét duyệt"
+
+List of Form fields:
+
+- "Ghi chú": a text area for comments (placeholder "Nhập ghi chú...")
+- Two buttons: "Từ chối" and "Duyệt"
+
+**Document submission confirmation**
+
+Show a modal dialog confirming document submission with:
+- Title: "Xác nhận duyệt/từ chối tài liệu"
+- Message: "Bạn có chắc chắn muốn duyệt/từ chối tài liệu này?"
+- Two buttons:
+  - "Khoan" (Cancel) - secondary action
+  - "Xác nhận" (Submit) - primary action
+

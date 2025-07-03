@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="390" height="844" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Phone Frame -->
+  <rect x="0" y="0" width="390" height="844" fill="#f8f9fa" stroke="#000" stroke-width="2" rx="25"/>
+
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="390" height="44" fill="#000" rx="25"/>
+  <text x="195" y="28" text-anchor="middle" fill="white" font-family="Arial" font-size="14">9:41 AM</text>
+
+  <!-- Header Bar -->
+  <rect x="5" y="44" width="380" height="60" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  
+  <!-- Back Button -->
+  <text x="25" y="80" fill="#0066CC" font-family="Arial" font-size="20">‹</text>
+  
+  <!-- Header Title -->
+  <text x="195" y="82" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Khảo sát hiện trạng nhà đất</text>
+  
+  <!-- User Avatar -->
+  <circle cx="365" cy="74" r="16" fill="#0066CC"/>
+
+  <!-- Document Title Area -->
+  <rect x="20" y="120" width="350" height="80" fill="white" stroke="#ddd" stroke-width="1" rx="8"/>
+  <text x="30" y="140" fill="#333" font-family="Arial" font-size="14" font-weight="bold">QSDĐ tại thôn 3, xã Đăk Ơ, huyện Bù Gia Mập...</text>
+  
+  <!-- Section Title -->
+  <text x="30" y="185" fill="#0066CC" font-family="Arial" font-size="14" font-weight="bold">Xét duyệt</text>
+  
+  <!-- Status Badge -->
+  <rect x="310" y="155" width="50" height="25" fill="#ffc107" rx="12"/>
+  <text x="335" y="170" text-anchor="middle" fill="white" font-family="Arial" font-size="12">Nháp</text>
+
+  <!-- Sections List Button -->
+  <rect x="10" y="145" width="30" height="30" fill="#f0f0f0" stroke="#ccc" stroke-width="1" rx="15"/>
+  <text x="25" y="165" text-anchor="middle" fill="#666" font-family="Arial" font-size="16">☰</text>
+
+  <!-- Main Content Area -->
+  
+  <!-- Comment Field Label -->
+  <text x="30" y="235" fill="#666" font-family="Arial" font-size="12">Ghi chú</text>
+  
+  <!-- Comment Text Area -->
+  <rect x="30" y="245" width="330" height="120" fill="white" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="40" y="265" fill="#999" font-family="Arial" font-size="14" font-style="italic">Nhập ghi chú...</text>
+
+  <!-- Action Buttons -->
+  <!-- Reject Button -->
+  <rect x="30" y="400" width="140" height="50" fill="#dc3545" rx="8"/>
+  <text x="100" y="430" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">Từ chối</text>
+  
+  <!-- Approve Button -->
+  <rect x="220" y="400" width="140" height="50" fill="#28a745" rx="8"/>
+  <text x="290" y="430" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">Duyệt</text>
+
+  <!-- Modal Overlay -->
+  <rect x="0" y="0" width="390" height="844" fill="rgba(0,0,0,0.5)"/>
+  
+  <!-- Confirmation Modal -->
+  <rect x="40" y="320" width="310" height="200" fill="white" stroke="#ddd" stroke-width="1" rx="15"/>
+  
+  <!-- Modal Title -->
+  <text x="195" y="345" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Xác nhận duyệt/từ chối tài liệu</text>
+  
+  <!-- Modal Message -->
+  <text x="195" y="380" text-anchor="middle" fill="#666" font-family="Arial" font-size="14">Bạn có chắc chắn muốn duyệt/từ chối</text>
+  <text x="195" y="400" text-anchor="middle" fill="#666" font-family="Arial" font-size="14">tài liệu này?</text>
+  
+  <!-- Modal Buttons -->
+  <!-- Cancel Button -->
+  <rect x="60" y="440" width="100" height="40" fill="#6c757d" rx="5"/>
+  <text x="110" y="462" text-anchor="middle" fill="white" font-family="Arial" font-size="14" font-weight="bold">Khoan</text>
+  
+  <!-- Confirm Button -->
+  <rect x="230" y="440" width="100" height="40" fill="#0066CC" rx="5"/>
+  <text x="280" y="462" text-anchor="middle" fill="white" font-family="Arial" font-size="14" font-weight="bold">Xác nhận</text>
+
+</svg> 

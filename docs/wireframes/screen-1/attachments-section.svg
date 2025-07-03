@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="390" height="844" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Phone Frame -->
+  <rect x="0" y="0" width="390" height="844" fill="#f8f9fa" stroke="#000" stroke-width="2" rx="25"/>
+
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="390" height="44" fill="#000" rx="25"/>
+  <text x="195" y="28" text-anchor="middle" fill="white" font-family="Arial" font-size="14">9:41 AM</text>
+
+  <!-- Header Bar -->
+  <rect x="5" y="44" width="380" height="60" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  
+  <!-- Back Button -->
+  <text x="25" y="80" fill="#0066CC" font-family="Arial" font-size="20">‹</text>
+  
+  <!-- Header Title -->
+  <text x="195" y="82" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Khảo sát hiện trạng nhà đất</text>
+  
+  <!-- User Avatar -->
+  <circle cx="365" cy="74" r="16" fill="#0066CC"/>
+
+  <!-- Document Title Area -->
+  <rect x="20" y="120" width="350" height="80" fill="white" stroke="#ddd" stroke-width="1" rx="8"/>
+  <text x="30" y="140" fill="#333" font-family="Arial" font-size="14" font-weight="bold">QSDĐ tại thôn 3, xã Đăk Ơ, huyện Bù Gia Mập...</text>
+  
+  <!-- Section Title -->
+  <text x="30" y="185" fill="#0066CC" font-family="Arial" font-size="14" font-weight="bold">Hình ảnh hiện trạng</text>
+  
+  <!-- Status Badge -->
+  <rect x="310" y="155" width="50" height="25" fill="#ffc107" rx="12"/>
+  <text x="335" y="170" text-anchor="middle" fill="white" font-family="Arial" font-size="12">Nháp</text>
+
+  <!-- Sections List Button -->
+  <rect x="10" y="145" width="30" height="30" fill="#f0f0f0" stroke="#ccc" stroke-width="1" rx="15"/>
+  <text x="25" y="165" text-anchor="middle" fill="#666" font-family="Arial" font-size="16">☰</text>
+
+  <!-- Main Content Area -->
+  
+  <!-- Images Section -->
+  <text x="30" y="235" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Hình ảnh hiện trạng</text>
+  
+  <!-- Image Grid -->
+  <!-- Image 1 -->
+  <rect x="30" y="250" width="100" height="80" fill="#e8f4fd" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="80" y="295" text-anchor="middle" fill="#666" font-family="Arial" font-size="12">📷</text>
+  <circle cx="120" cy="260" r="8" fill="#dc3545"/>
+  <text x="120" y="265" text-anchor="middle" fill="white" font-family="Arial" font-size="10">×</text>
+  
+  <!-- Image 2 -->
+  <rect x="145" y="250" width="100" height="80" fill="#e8f4fd" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="195" y="295" text-anchor="middle" fill="#666" font-family="Arial" font-size="12">📷</text>
+  <circle cx="235" cy="260" r="8" fill="#dc3545"/>
+  <text x="235" y="265" text-anchor="middle" fill="white" font-family="Arial" font-size="10">×</text>
+  
+  <!-- Image 3 -->
+  <rect x="260" y="250" width="100" height="80" fill="#e8f4fd" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="310" y="295" text-anchor="middle" fill="#666" font-family="Arial" font-size="12">📷</text>
+  <circle cx="350" cy="260" r="8" fill="#dc3545"/>
+  <text x="350" y="265" text-anchor="middle" fill="white" font-family="Arial" font-size="10">×</text>
+
+  <!-- Documents Section -->
+  <text x="30" y="370" fill="#333" font-family="Arial" font-size="16" font-weight="bold">File đính kèm</text>
+  
+  <!-- Document Items -->
+  <!-- Document 1 -->
+  <rect x="30" y="385" width="330" height="50" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  <rect x="40" y="395" width="30" height="30" fill="#f0f0f0" stroke="#ccc" stroke-width="1" rx="3"/>
+  <text x="55" y="415" text-anchor="middle" fill="#666" font-family="Arial" font-size="12">📄</text>
+  <text x="80" y="405" fill="#333" font-family="Arial" font-size="12">Bản vẽ hiện trạng.pdf</text>
+  <text x="80" y="420" fill="#666" font-family="Arial" font-size="10">2.3 MB</text>
+  <circle cx="340" cy="410" r="8" fill="#dc3545"/>
+  <text x="340" y="415" text-anchor="middle" fill="white" font-family="Arial" font-size="10">×</text>
+  
+  <!-- Document 2 -->
+  <rect x="30" y="445" width="330" height="50" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  <rect x="40" y="455" width="30" height="30" fill="#f0f0f0" stroke="#ccc" stroke-width="1" rx="3"/>
+  <text x="55" y="475" text-anchor="middle" fill="#666" font-family="Arial" font-size="12">📄</text>
+  <text x="80" y="465" fill="#333" font-family="Arial" font-size="12">Giấy chứng nhận.pdf</text>
+  <text x="80" y="480" fill="#666" font-family="Arial" font-size="10">1.8 MB</text>
+  <circle cx="340" cy="470" r="8" fill="#dc3545"/>
+  <text x="340" y="475" text-anchor="middle" fill="white" font-family="Arial" font-size="10">×</text>
+
+  <!-- Add Button -->
+  <rect x="20" y="520" width="350" height="50" fill="#f0f0f0" stroke="#ddd" stroke-width="1" rx="8"/>
+  <text x="195" y="550" text-anchor="middle" fill="#0066CC" font-family="Arial" font-size="16" font-weight="bold">+ Thêm tệp tin</text>
+
+  <!-- Bottom Bar -->
+  <rect x="5" y="770" width="380" height="59" fill="white" stroke="#ddd" stroke-width="1" rx="5"/>
+  
+  <!-- Save Button -->
+  <rect x="40" y="785" width="140" height="40" fill="#6c757d" rx="5"/>
+  <text x="110" y="807" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">Lưu</text>
+  
+  <!-- Submit Button -->
+  <rect x="210" y="785" width="140" height="40" fill="#0066CC" rx="5"/>
+  <text x="280" y="807" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">Gửi</text>
+
+  <!-- Action Sheet Modal -->
+  <rect x="0" y="600" width="390" height="244" fill="rgba(0,0,0,0.5)"/>
+  
+  <!-- Action Sheet Content -->
+  <rect x="20" y="650" width="350" height="180" fill="white" stroke="#ddd" stroke-width="1" rx="15"/>
+  
+  <!-- Action Sheet Title -->
+  <text x="195" y="675" text-anchor="middle" fill="#333" font-family="Arial" font-size="16" font-weight="bold">Thêm tệp tin</text>
+  
+  <!-- Action Sheet Options -->
+  <rect x="30" y="690" width="330" height="45" fill="#f8f9fa" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="195" y="715" text-anchor="middle" fill="#333" font-family="Arial" font-size="14">📸 Chụp ảnh từ máy ảnh</text>
+  
+  <rect x="30" y="740" width="330" height="45" fill="#f8f9fa" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="195" y="765" text-anchor="middle" fill="#333" font-family="Arial" font-size="14">🖼️ Chọn ảnh từ thư viện</text>
+  
+  <rect x="30" y="790" width="330" height="45" fill="#f8f9fa" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="195" y="815" text-anchor="middle" fill="#333" font-family="Arial" font-size="14">📁 Chọn tệp từ thiết bị</text>
+
+</svg> 
