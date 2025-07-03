@@ -215,7 +215,7 @@ FDMS revolutionizes document management by treating the backend as a specialized
 - **NFR-2.1**: System shall support horizontal scaling through load balancing
 - **NFR-2.2**: Database shall support table partitioning for large datasets
 - **NFR-2.3**: File storage shall scale to petabyte capacity
-- **NFR-2.4**: System shall handle up to 10,000 blueprints with 1,000 fields each
+- **NFR-2.4**: System shall handle up to 1,000 blueprints with 100 fields each
 
 ### 4.3 Availability Requirements
 

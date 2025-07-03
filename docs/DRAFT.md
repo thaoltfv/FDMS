@@ -89,7 +89,7 @@ onland_assets: [ {
 ### Suggestions
 
 - Output fields with templating?	Generate templates from data JSONB or use blueprint_field.code as data keys in template context
-- Field-level permissions might get tricky — recommend simplifying to section-level access for initial version unless necessary.
+- Field-level permissions might get tricky - recommend simplifying to section-level access for initial version unless necessary.
 - Add `field_config -> validation` and `field_config -> required_if`, `visible_if`, etc., to enable conditional logic.
 - Consider a `reference_registry` table to dynamically link and manage reference tables via metadata.
 - Store diff as structured data, not just text. Example:
@@ -144,6 +144,40 @@ blueprint
 - created_by
 - updated_by
 
+blueprint_stages:
+- id SERIAL
+- blueprint_id
+- code
+- title
+- sequence
+- created_at
+- update_at
+
+blueprint_sections:
+- id SERIAL
+- blueprint_id
+- code VARCHAR(255)
+- created_at
+- created_by
+- updated_at
+- updated_by
+
+blueprint_fields
+- id
+- blueprint_id
+- code VARCHAR(255)  -- will be column name in real table
+- title
+- section_id
+- config JSONB
+
+blueprint_versions:
+- id SERIAL
+- blueprint_id
+- version ?
+- name
+- data JSONB { sections: {}, stages: {}, fields: {}, permissions: {} }
+- diff TEXT
+
 blueprint_permissions:
 - id
 - blueprint_id
@@ -185,39 +219,6 @@ A example scenario: 3 groups X, Y, Z: where as X are info collectors, Y are comp
 - X,Y,Z have no create-blueprint perm
 - X,Y,Z has doc-create perm
 
-blueprint_stages:
-- id SERIAL
-- blueprint_id
-- code
-- title
-- sequence
-- created_at
-- update_at
-
-blueprint_sections:
-- id SERIAL
-- blueprint_id
-- code VARCHAR(255)
-- created_at
-- created_by
-- updated_at
-- updated_by
-
-blueprint_fields
-- id
-- blueprint_id
-- code VARCHAR(255)  -- will be column name in real table
-- title
-- section_id
-- config JSONB
-
-blueprint_versions:
-- id SERIAL
-- blueprint_id
-- version ?
-- name
-- data JSONB { sections: {}, stages: {}, fields: {}, permissions: {} }
-- diff TEXT
 
 ### Example User-defined tables
 
@@ -275,7 +276,7 @@ registration_versions
 
 - Doc header: title, stage, button for activity history
 - Sections list: left sidebar for > tablet, horizontal segments for phone. Only list sections with granted permission.
-- Main area: active section content: foreach fields render field base on their type, also check field permission.
+- Main area: active section content: foreach fields render field base on their type.
 - Bottom pane: Save button and Submit button (for next step or for review?)
 
 ## Implementation Priorities

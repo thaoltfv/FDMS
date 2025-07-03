@@ -52,7 +52,7 @@ This phase builds upon the MVP to deliver the more complex and powerful features
     *   **Advanced Query Engine:** Implement the full dynamic filtering and aggregation query capabilities specified in the API design (`/query` and `/aggregate` endpoints).
     *   **Advanced Field Types:** Implement UI and backend logic for `array_of_objects`, relational/foreign-key fields, and geospatial types (with map widgets).
     *   **Output Generation:** Integrate templating libraries (e.g., `docxtemplater`, `jsPDF`) and build the UI to manage and generate documents from templates.
-    *   **Fine-Grained Permissions:** Implement the full permissions model (stage, section, field-level access).
+    *   **Fine-Grained Permissions:** Implement the full permissions model (stage, section).
     *   **Document Versioning:** Implement the `document_versions` system and a UI to view diffs between versions.
 *   **Estimate: 6 - 8 additional months**
 *   *Each task in this phase is a significant feature. The query engine and schema migrations are particularly complex.*
