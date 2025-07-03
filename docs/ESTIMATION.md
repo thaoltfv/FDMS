@@ -43,8 +43,6 @@ This phase focuses on building the user interface to interact with the backend f
 
 This range represents the time to build a stable, functional application that validates the core architecture and includes the essential features for creating and managing documents as detailed in the specification.
 
----
-
 ### **Phase 3: Advanced Features & Polish ("Version 2")**
 
 This phase builds upon the MVP to deliver the more complex and powerful features envisioned in the draft.
