@@ -2,3 +2,5 @@
 !.env.example
 local_research/
 volumes/
+**/*.pdf
+pdf/
