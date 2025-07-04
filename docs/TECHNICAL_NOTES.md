@@ -17,17 +17,17 @@ FDMS (Fast Document Management System) is a revolutionary document management pl
 
 ### MUST Rules
 
-**RULE 1: JavaScript Only**
+**RULE 1: Backend JavaScript Only**
+
 - Backend: Node.js with Fastify using pure JavaScript (NO TypeScript)
-- Frontend: Pure JavaScript with modern ES6+ features (NO TypeScript)
 - All code examples, interfaces, and implementations must use JavaScript syntax
 - Type safety achieved through JSDoc comments and runtime validation
 
 **RULE 2: Frontend Framework**
-- GUI implementation using **Ionic Framework** over **Vue 3**
+- GUI implementation using **Ionic Framework** over **Angular**
 - Mobile-first responsive design with native app capabilities
 - Cross-platform support (web, iOS, Android) through Ionic
-- Vue 3 Composition API for component logic and state management
+- Angular component logic and state management
 
 ### Additional Technology Requirements
 
@@ -41,21 +41,21 @@ FDMS (Fast Document Management System) is a revolutionary document management pl
 - Validation: Joi or Yup for schema validation
 
 **Frontend Stack:**
-- Framework: Ionic Framework 8+ with Vue 3
-- State Management: Pinia (Vue 3 recommended store)
+- Framework: Ionic Framework 8+ with Angular
+- State Management: NgRx (Angular recommended store)
 - HTTP Client: Axios or Fetch API
-- Form Handling: Vue 3 reactive forms with validation
+- Form Handling: Angular reactive forms with validation
 - UI Components: Ionic components with custom theming
 - Build Tool: Vite for fast development and building
 
 **Development Tools:**
 - Package Manager: npm or yarn
-- Linting: ESLint with Vue and Ionic configurations
+- Linting: ESLint with Angular and Ionic configurations
 - Formatting: Prettier
 - Testing: Vitest for unit tests, Cypress for E2E
 - Documentation: JSDoc for code documentation
 
-## Frontend Architecture (Ionic + Vue 3)
+## Frontend Architecture (Ionic + Angular)
 
 ### Mobile-First Design Principles
 

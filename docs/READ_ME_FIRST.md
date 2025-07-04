@@ -8,7 +8,7 @@
 
 ## Tài liệu kỹ thuật
 
-- **`TECHNICAL_NOTES.pdf`** - Ghi chú kỹ thuật chi tiết bao gồm stack công nghệ, kiến trúc frontend Ionic + Vue 3, các loại field types, và implementation details cần thiết cho developers.
+- **`TECHNICAL_NOTES.pdf`** - Ghi chú kỹ thuật chi tiết bao gồm stack công nghệ, kiến trúc frontend Ionic + Angular, các loại field types, và implementation details cần thiết cho developers.
 
 - **`ESTIMATION.pdf`** - Ước tính thời gian phát triển cho dự án FDMS với timeline dành cho một full-stack developer có kinh nghiệm, bao gồm phân tích độ phức tạp của từng phase.
 

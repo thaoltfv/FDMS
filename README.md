@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-FDMS is a multi‑tenant, schema‑driven document management platform designed to let organizations define custom document “blueprints” (types), manage documents through configurable stages, and enforce fine‑grained, role‑based permissions. It supports versioning, activity logging, and geospatial data via PostGIS.
+FDMS is a multi‑tenant, schema‑driven document management platform designed to let organizations define custom document "blueprints" (types), manage documents through configurable stages, and enforce fine‑grained, role‑based permissions. It supports versioning, activity logging, and geospatial data via PostGIS.
 
 ---
 
@@ -11,12 +11,12 @@ FDMS is a multi‑tenant, schema‑driven document management platform designed 
 * **Blueprints & Versions**
 
   * **Blueprint**: Defines a document type, its sections, fields, and lifecycle stages.
-  * **Blueprint Version**: Immutable JSONB snapshot of a blueprint’s schema for audit and rollback.
+  * **Blueprint Version**: Immutable JSONB snapshot of a blueprint's schema for audit and rollback.
 
 * **Documents & Versions**
 
   * **Document**: An instance of a blueprint, storing field values in columns or JSONB.
-  * **Document Version**: Historical snapshot of a document’s data at each change.
+  * **Document Version**: Historical snapshot of a document's data at each change.
 
 * **Stages**
 
@@ -25,7 +25,7 @@ FDMS is a multi‑tenant, schema‑driven document management platform designed 
 * **Permissions**
 
   * Multi‑level controls (blueprint, document, stage, section, field).
-  * Roles grant combinations of actions (create/read/update/delete) scoped to “all” vs. “own” and stage or section contexts.
+  * Roles grant combinations of actions (create/read/update/delete) scoped to "all" vs. "own" and stage or section contexts.
 
 * **Activity Logs**
 
@@ -46,7 +46,7 @@ FDMS is a multi‑tenant, schema‑driven document management platform designed 
    * Versioning tables for snapshots.
    * Spatial support for geotagged documents.
 
-3. **Frontend** (Vue 3 + Ionic)
+3. **Frontend** (Angular + Ionic)
 
    * Mobile‑first responsive UI for creating, editing, and reviewing documents.
    * Internationalization support for multiple languages.
@@ -63,7 +63,7 @@ FDMS is a multi‑tenant, schema‑driven document management platform designed 
 
 * **Backend**: Node.js (or pure JS), Fastify
 * **Database**: PostgreSQL, PostGIS, JSONB for flexible schemas
-* **Frontend**: Vue 3 + Ionic, i18n
+* **Frontend**: Angular + Ionic, i18n
 * **Storage**: AWS S3 (attachments, backups)
 * **Infrastructure**: Docker, Nginx, CI/CD (GitHub Actions)
 

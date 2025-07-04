@@ -24,7 +24,7 @@ The system is composed of three main parts:
 +--------------------------+          +---------------------------+          +----------------------+
 |                          |          |                           |          |                      |
 |   Frontend Application   |  <-----> |    Backend Application    |  <-----> |  PostgreSQL Database |
-|         (Vue 3)          | (API)    |         (Fastify)         | (SQL)    |                      |
+|         (Angular)        | (API)    |         (Fastify)         | (SQL)    |                      |
 |                          |          |                           |          |                      |
 +--------------------------+          +---------------------------+          +----------------------+
                                                  |
@@ -107,7 +107,7 @@ The following tables form the core metadata structure of the application.
 ## 7. Technology Stack Summary
 
 - **Backend Framework**: Fastify
-- **Frontend Framework**: Vue.js 3 (with Composition API)
+- **Frontend Framework**: Angular (with modern state management)
 - **Database**: PostgreSQL (with PostGIS extension)
 - **Authentication**: JWT (JSON Web Tokens)
 - **File Storage**: Garage (Self-hosted, S3-compatible)

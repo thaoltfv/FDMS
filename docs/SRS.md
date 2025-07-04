@@ -82,7 +82,7 @@ FDMS revolutionizes document management by treating the backend as a specialized
 ```
 ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
 │   Mobile/Web App    │◄──►│   Backend API       │◄──►│  PostgreSQL DB      │
-│  (Ionic + Vue 3)    │    │   (Fastify JS)      │    │  (Dynamic Tables)   │
+│  (Ionic + Angular)  │    │   (Fastify JS)      │    │  (Dynamic Tables)   │
 └─────────────────────┘    └─────────────────────┘    └─────────────────────┘
                                        │
                                        ▼
@@ -284,7 +284,7 @@ FDMS revolutionizes document management by treating the backend as a specialized
 - File upload/download operations
 - File metadata management
 
-#### 5.2.2 Frontend Components (Ionic + Vue 3)
+#### 5.2.2 Frontend Components (Ionic + Angular)
 
 **Authentication Views**:
 
@@ -605,15 +605,14 @@ GET /api/files/{id}/download
 
 ### 11.1 Technology Constraints
 
-**MANDATORY Rule 1: JavaScript Only**
+**MANDATORY Rule 1: Backend JavaScript Only**
 
-- Backend: Node.js with Fastify using pure JavaScript (NO TypeScript)
-- Frontend: Pure JavaScript with modern ES6+ features (NO TypeScript)
-- Type safety through JSDoc comments and runtime validation
+Node.js with Fastify using pure JavaScript (NO TypeScript): Type safety through
+JSDoc comments and runtime validation
 
 **MANDATORY Rule 2: Ionic Framework**
 
-- GUI implementation using Ionic Framework over Vue 3
+- GUI implementation using Ionic Framework over Angular
 - Mobile-first responsive design with native app capabilities
 - Cross-platform support (web, iOS, Android)
 
@@ -666,7 +665,7 @@ GET /api/files/{id}/download
 **Objectives**: Build user interfaces for core functionality
 
 **Key Deliverables**:
-- Ionic + Vue 3 project setup
+- Ionic + Angular project setup
 - Authentication UI
 - Blueprint designer interface
 - Dynamic form renderer
@@ -704,7 +703,7 @@ GET /api/files/{id}/download
 
 - **Optimal MVP Team**: 2-3 experienced full-stack developers
 - **Full Project Team**: 3-5 developers with specialization
-- **Skills Required**: Fastify, Vue.js, PostgreSQL, Ionic Framework
+- **Skills Required**: Fastify, Angular, PostgreSQL, Ionic Framework
 
 #### 12.2.2 Infrastructure Requirements
 

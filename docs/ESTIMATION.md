@@ -29,7 +29,7 @@ This phase focuses on building the complex, non-negotiable backend foundation re
 This phase focuses on building the user interface to interact with the backend foundation.
 
 *   **Core Tasks:**
-    *   **Project Setup:** Vue 3, authentication views, and basic administrative UI for users/groups.
+    *   **Project Setup:** Angular, authentication views, and basic administrative UI for users/groups.
     *   **Blueprint Designer UI:** A user interface for creating and editing blueprints, including their sections, fields (with detailed configurations from the spec), and stages.
     *   **Dynamic Form Renderer (Critical Path):** A generic component that can render a data entry form based on the blueprint definition. Must support basic field types (text, number, date, file, basic JSONB objects) and their specified configurations.
     *   **Document Management UI:** List, create, and edit views for documents with basic filtering and sorting.
@@ -65,6 +65,6 @@ This phase builds upon the MVP to deliver the more complex and powerful features
 
 ### Key Assumptions and Variables
 
-*   **Developer Experience:** This estimate assumes a senior full-stack developer with strong experience in Fastify, Vue, PostgreSQL, and DevOps. A less experienced developer could take 1.5x to 2x longer.
+*   **Developer Experience:** This estimate assumes a senior full-stack developer with strong experience in Fastify, Angular, PostgreSQL, and DevOps. A less experienced developer could take 1.5x to 2x longer.
 *   **Focus:** This assumes 100% dedicated, full-time work on the project.
 *   **Scope Discipline:** The timeline depends on strictly adhering to the phased feature rollout. Adding features from later phases into the MVP will significantly delay its completion.

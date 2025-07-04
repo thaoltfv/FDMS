@@ -78,11 +78,11 @@ The **Fast Document Management System (FDMS)** is a sophisticated document manag
 **Goal**: Build user interfaces for all core functionality
 
 #### 2.1 Frontend Project Setup (1 week)
-- [ ] Initialize Vue 3 project with Composition API
+- [ ] Initialize Angular project
 - [ ] Set up Javascript configuration
 - [ ] Configure build tools (Vite)
-- [ ] Add Vue Router and Pinia state management
-- [ ] Set up component library (e.g., Vuetify, Quasar)
+- [ ] Add Angular Router and NgRx state management
+- [ ] Set up component library (e.g., Angular Material, PrimeNG)
 - [ ] Configure API client (Axios)
 
 #### 2.2 Authentication UI (2 weeks)
@@ -227,7 +227,7 @@ The **Fast Document Management System (FDMS)** is a sophisticated document manag
 
 ### Key Technologies
 - **Backend**: Fastify + Javascript
-- **Frontend**: Vue 3 + Composition API + Javascript
+- **Frontend**: Angular + modern state management + Javascript
 - **Database**: PostgreSQL + PostGIS
 - **Query Builder**: Knex.js
 - **File Storage**: Garage (S3-compatible)
