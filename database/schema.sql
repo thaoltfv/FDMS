@@ -1,4 +1,4 @@
--- FDMS Database Schema
+-- FDMS Database Schema (Final Version)
 -- This schema supports the Fast Document Management System's unique architecture
 -- where each document blueprint gets its own dedicated PostgreSQL table
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS blueprints (
     code VARCHAR(100) UNIQUE NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    table_name VARCHAR(63) UNIQUE NOT NULL, -- PostgreSQL table name limit
+    table_name VARCHAR(63) UNIQUE, -- PostgreSQL table name limit, nullable until schema applied
     category VARCHAR(100),
     tags TEXT[], -- Array of tags for organization
     is_active BOOLEAN DEFAULT true,
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS blueprint_versions (
     schema_snapshot JSONB NOT NULL, -- Complete snapshot of blueprint structure
     change_summary TEXT,
     migration_sql TEXT, -- SQL used for migration
-    migration_status VARCHAR(50), -- pending, applied, failed, rolled_back
+    migration_status VARCHAR(50) DEFAULT 'pending', -- pending, applied, failed, rolled_back
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by INTEGER REFERENCES users(id),
     applied_at TIMESTAMP WITH TIME ZONE,
@@ -284,43 +284,53 @@ CREATE TABLE IF NOT EXISTS system_config (
 -- =============================================
 
 -- User indexes
-CREATE INDEX idx_users_email ON users(email) WHERE deleted_at IS NULL;
-CREATE INDEX idx_users_uuid ON users(uuid);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_users_uuid ON users(uuid);
+CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active) WHERE deleted_at IS NULL;
 
 -- Group indexes
-CREATE INDEX idx_groups_code ON groups(code) WHERE deleted_at IS NULL;
-CREATE INDEX idx_groups_parent ON groups(parent_group_id) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_groups_code ON groups(code) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_groups_parent ON groups(parent_group_id) WHERE deleted_at IS NULL;
 
 -- Blueprint indexes
-CREATE INDEX idx_blueprints_code ON blueprints(code) WHERE deleted_at IS NULL;
-CREATE INDEX idx_blueprints_table_name ON blueprints(table_name) WHERE deleted_at IS NULL;
-CREATE INDEX idx_blueprints_category ON blueprints(category) WHERE deleted_at IS NULL;
-CREATE INDEX idx_blueprints_tags ON blueprints USING gin(tags) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_blueprints_code ON blueprints(code) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_blueprints_table_name ON blueprints(table_name) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_blueprints_category ON blueprints(category) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_blueprints_tags ON blueprints USING gin(tags) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_blueprints_active ON blueprints(is_active) WHERE deleted_at IS NULL;
 
 -- Field indexes
-CREATE INDEX idx_blueprint_fields_blueprint_id ON blueprint_fields(blueprint_id);
-CREATE INDEX idx_blueprint_fields_section_id ON blueprint_fields(section_id);
-CREATE INDEX idx_blueprint_fields_code ON blueprint_fields(blueprint_id, code);
-CREATE INDEX idx_blueprint_fields_type ON blueprint_fields(field_type);
+CREATE INDEX IF NOT EXISTS idx_blueprint_fields_blueprint_id ON blueprint_fields(blueprint_id);
+CREATE INDEX IF NOT EXISTS idx_blueprint_fields_section_id ON blueprint_fields(section_id);
+CREATE INDEX IF NOT EXISTS idx_blueprint_fields_code ON blueprint_fields(blueprint_id, code);
+CREATE INDEX IF NOT EXISTS idx_blueprint_fields_type ON blueprint_fields(field_type);
+CREATE INDEX IF NOT EXISTS idx_blueprint_fields_sequence ON blueprint_fields(blueprint_id, sequence);
+
+-- Stage indexes
+CREATE INDEX IF NOT EXISTS idx_blueprint_stages_blueprint_id ON blueprint_stages(blueprint_id);
+CREATE INDEX IF NOT EXISTS idx_blueprint_stages_sequence ON blueprint_stages(blueprint_id, sequence);
+CREATE INDEX IF NOT EXISTS idx_blueprint_stages_initial ON blueprint_stages(blueprint_id) WHERE is_initial = true;
 
 -- Permission indexes
-CREATE INDEX idx_blueprint_permissions_blueprint_id ON blueprint_permissions(blueprint_id);
-CREATE INDEX idx_blueprint_permissions_group_id ON blueprint_permissions(group_id);
-CREATE INDEX idx_blueprint_permissions_code ON blueprint_permissions(permission_code);
+CREATE INDEX IF NOT EXISTS idx_blueprint_permissions_blueprint_id ON blueprint_permissions(blueprint_id);
+CREATE INDEX IF NOT EXISTS idx_blueprint_permissions_group_id ON blueprint_permissions(group_id);
+CREATE INDEX IF NOT EXISTS idx_blueprint_permissions_code ON blueprint_permissions(permission_code);
 
 -- Activity log indexes
-CREATE INDEX idx_activity_logs_user_id ON activity_logs(user_id);
-CREATE INDEX idx_activity_logs_action ON activity_logs(action);
-CREATE INDEX idx_activity_logs_entity ON activity_logs(entity_type, entity_id);
-CREATE INDEX idx_activity_logs_created_at ON activity_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_user_id ON activity_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_action ON activity_logs(action);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_entity ON activity_logs(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_created_at ON activity_logs(created_at);
 
 -- Document version indexes
-CREATE INDEX idx_document_versions_document ON document_versions(document_table_name, document_id);
-CREATE INDEX idx_document_versions_blueprint ON document_versions(blueprint_id);
+CREATE INDEX IF NOT EXISTS idx_document_versions_document ON document_versions(document_table_name, document_id);
+CREATE INDEX IF NOT EXISTS idx_document_versions_blueprint ON document_versions(blueprint_id);
+CREATE INDEX IF NOT EXISTS idx_document_versions_created_at ON document_versions(created_at);
 
 -- File metadata indexes
-CREATE INDEX idx_file_metadata_uuid ON file_metadata(uuid);
-CREATE INDEX idx_file_metadata_document ON file_metadata(document_table_name, document_id) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_file_metadata_uuid ON file_metadata(uuid);
+CREATE INDEX IF NOT EXISTS idx_file_metadata_document ON file_metadata(document_table_name, document_id) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_file_metadata_blueprint ON file_metadata(blueprint_id) WHERE deleted_at IS NULL;
 
 -- =============================================
 -- Triggers for updated_at timestamps
@@ -334,6 +344,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Apply triggers to relevant tables
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
@@ -359,50 +370,16 @@ CREATE TRIGGER update_system_config_updated_at BEFORE UPDATE ON system_config
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- =============================================
--- Example Dynamic Tables (for reference)
--- These would be created dynamically by the application
+-- Initial System Configuration
 -- =============================================
 
--- Example: employee_registration_documents table
--- CREATE TABLE employee_registration_documents (
---     id SERIAL PRIMARY KEY,
---     document_uuid UUID DEFAULT uuid_generate_v4() UNIQUE,
---     blueprint_id INTEGER NOT NULL REFERENCES blueprints(id),
---     stage_id INTEGER REFERENCES blueprint_stages(id),
---     
---     -- Dynamic fields based on blueprint definition
---     full_name VARCHAR(255),
---     email VARCHAR(255),
---     phone_number VARCHAR(50),
---     date_of_birth DATE,
---     employee_id VARCHAR(20),
---     department VARCHAR(100),
---     position VARCHAR(100),
---     salary NUMERIC(10, 2),
---     start_date DATE,
---     emergency_contact JSONB,
---     work_experience JSONB,
---     
---     -- Standard metadata fields
---     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
---     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
---     created_by INTEGER REFERENCES users(id),
---     updated_by INTEGER REFERENCES users(id),
---     submitted_at TIMESTAMP WITH TIME ZONE,
---     approved_at TIMESTAMP WITH TIME ZONE,
---     approved_by INTEGER REFERENCES users(id),
---     deleted_at TIMESTAMP WITH TIME ZONE,
---     metadata JSONB DEFAULT '{}'::jsonb
--- );
-
--- Example: employee_registration_versions table
--- CREATE TABLE employee_registration_versions (
---     id SERIAL PRIMARY KEY,
---     employee_registration_document_id INTEGER NOT NULL,
---     version_number INTEGER NOT NULL,
---     data_snapshot JSONB NOT NULL,
---     diff JSONB,
---     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
---     created_by INTEGER REFERENCES users(id),
---     UNIQUE(employee_registration_document_id, version_number)
--- ); 
+-- Insert default system configuration
+INSERT INTO system_config (key, value, description, is_public) VALUES
+    ('system.name', '"Fast Document Management System"', 'System name', true),
+    ('system.version', '"1.0.0"', 'System version', true),
+    ('features.versioning', 'true', 'Enable document versioning', false),
+    ('features.workflow', 'true', 'Enable workflow management', false),
+    ('features.geospatial', 'true', 'Enable geospatial features', false),
+    ('limits.file_size', '104857600', 'Maximum file size in bytes (100MB)', false),
+    ('limits.blueprint_fields', '100', 'Maximum fields per blueprint', false)
+ON CONFLICT (key) DO NOTHING;
