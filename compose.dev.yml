@@ -1,0 +1,21 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fdms_backend
+    restart: unless-stopped
+    environment:
+      - USER_ID
+      - GROUP_ID
+      - BACKEND_PORT
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+    command: ["npm", "start"]
+
+volumes:
+  postgres_data:
+  garage_meta:
+  garage_data:

@@ -45,6 +45,15 @@ services:
       - garage_meta:/var/lib/garage/meta
       - garage_data:/var/lib/garage/data
     command: ["/garage", "-c", "/etc/garage/garage.toml", "server"]
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fdms_backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT}:3000"
 
 volumes:
   postgres_data:
