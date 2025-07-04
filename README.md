@@ -1,99 +1,208 @@
-# Fast Document Management System (FDMS)
+# FDMS - Fast Document Management System
 
-## 1. Project Overview
+🚀 **A modern, scalable document management system with unique table-per-blueprint architecture**
 
-FDMS is a multi‑tenant, schema‑driven document management platform designed to let organizations define custom document “blueprints” (types), manage documents through configurable stages, and enforce fine‑grained, role‑based permissions. It supports versioning, activity logging, and geospatial data via PostGIS.
+[![Status](https://img.shields.io/badge/Status-Complete-green.svg)](./IMPLEMENTATION_SUMMARY.md)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](./compose.yml)
+[![Backend](https://img.shields.io/badge/Backend-Fastify-brightgreen.svg)](./backend/)
+[![Frontend](https://img.shields.io/badge/Frontend-Vue3+Ionic-orange.svg)](./frontend/)
+[![Database](https://img.shields.io/badge/Database-PostgreSQL+PostGIS-blue.svg)](./database/)
 
----
+## 🌟 What Makes FDMS Unique
 
-## 2. Core Concepts & Data Model
+- **Table-per-Blueprint Architecture**: Each document type gets its own optimized PostgreSQL table
+- **Zero-ETL Analytics**: Direct SQL access for business intelligence
+- **Dynamic Schema Management**: Runtime table creation and safe migrations
+- **Enterprise Security**: Multi-layer authentication and permissions
+- **Mobile-First Design**: Vue 3 + Ionic responsive interface
+- **Geospatial Support**: PostGIS integration for location-based documents
 
-* **Blueprints & Versions**
-
-  * **Blueprint**: Defines a document type, its sections, fields, and lifecycle stages.
-  * **Blueprint Version**: Immutable JSONB snapshot of a blueprint’s schema for audit and rollback.
-
-* **Documents & Versions**
-
-  * **Document**: An instance of a blueprint, storing field values in columns or JSONB.
-  * **Document Version**: Historical snapshot of a document’s data at each change.
-
-* **Stages**
-
-  * Customizable workflow stages (e.g. Draft → Review → Approved).
-
-* **Permissions**
-
-  * Multi‑level controls (blueprint, document, stage, section, field).
-  * Roles grant combinations of actions (create/read/update/delete) scoped to “all” vs. “own” and stage or section contexts.
-
-* **Activity Logs**
-
-  * Append‑only audit trail capturing who did what, when, and on which data.
-
----
-
-## 3. High‑Level Architecture
-
-1. **API Layer** (Node.js / Express)
-
-   * Authentication via Zitadel + LDAP.
-   * REST/GraphQL endpoints for blueprints, documents, versions, and permissions.
-
-2. **Database Layer** (PostgreSQL + PostGIS)
-
-   * Dynamic schema: table‑per‑blueprint OR shared JSONB approach.
-   * Versioning tables for snapshots.
-   * Spatial support for geotagged documents.
-
-3. **Frontend** (Vue 3 + Ionic)
-
-   * Mobile‑first responsive UI for creating, editing, and reviewing documents.
-   * Internationalization support for multiple languages.
-
-4. **Deployment & Infra**
-
-   * Dockerized services behind Nginx load balancer.
-   * S3‑backed file storage for attachments.
-   * CI/CD pipeline with automated migrations.
-
----
-
-## 4. Key Technologies
-
-* **Backend**: Node.js (or pure JS), Fastify
-* **Database**: PostgreSQL, PostGIS, JSONB for flexible schemas
-* **Frontend**: Vue 3 + Ionic, i18n
-* **Storage**: AWS S3 (attachments, backups)
-* **Infrastructure**: Docker, Nginx, CI/CD (GitHub Actions)
-
----
-
-
-## 5. Documentation
-
-
-### 5.1. Building documentation
-
-**Requirements**
-
-- Fonts: `DejaVu Sans`, `DejaVu Sans Mono`
-- pandoc
-- pandoc luatex engine
-- pandoc xetex engine
-
-**Install dependencies for Ubuntu (22.04)**
+## ⚡ Quick Start
 
 ```bash
-sudo apt install pandoc texlive-latex-base texlive-fonts-recommended \
-    texlive-extra-utils texlive-latex-extra texlive-xetex
+# 1. Clone and setup
+git clone <your-repository>
+cd fdms
+
+# 2. Configure environment
+cp .env.example .env
+
+# 3. Start all services
+docker compose up -d
+
+# 4. Initialize database
+docker compose exec backend npm run db:migrate
+
+# 5. Access applications
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:3000
+# API Docs: http://localhost:3000/docs
 ```
 
-**Build documentation**
+## 🏗️ Architecture Overview
 
-Source: `docs/`
-Output: `pdf/docs/`
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Vue 3 + Ionic │────│  Fastify API    │────│  PostgreSQL +   │
+│     Frontend    │    │     Backend     │    │     PostGIS     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                              │
+                       ┌─────────────────┐
+                       │  Garage S3      │
+                       │  File Storage   │
+                       └─────────────────┘
+```
+
+## 🎯 Core Features
+
+### 📋 Dynamic Document Types
+- Create custom document blueprints
+- 15+ field types (text, numbers, files, geospatial, etc.)
+- Workflow stages and permissions
+- Schema versioning and migrations
+
+### 📄 Document Management
+- CRUD operations on any document type
+- Advanced search and filtering
+- Document versioning and history
+- Bulk operations and exports
+
+### 📁 File Storage
+- S3-compatible storage (Garage)
+- Multiple file uploads
+- Automatic validation and security
+- File versioning and metadata
+
+### 🔐 Security & Permissions
+- JWT authentication
+- Role-based access control
+- Group permissions
+- Activity audit logging
+
+### 📊 Analytics & Reporting
+- Real-time document statistics
+- Export capabilities (CSV, JSON)
+- Creation trends and analytics
+- Storage usage monitoring
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Framework**: Fastify (Node.js)
+- **Database**: PostgreSQL + PostGIS
+- **Storage**: Garage (S3-compatible)
+- **Auth**: JWT tokens
+- **ORM**: Knex.js
+
+### Frontend
+- **Framework**: Vue 3 + TypeScript
+- **UI**: Ionic Framework
+- **State**: Pinia stores
+- **Build**: Vite
+
+### Infrastructure
+- **Containers**: Docker Compose
+- **Development**: Hot reload enabled
+- **Documentation**: Auto-generated API docs
+
+## 📚 Documentation
+
+- **[Implementation Summary](./IMPLEMENTATION_SUMMARY.md)** - Complete technical overview
+- **[API Documentation](http://localhost:3000/docs)** - Interactive API docs (when running)
+- **[Database Schema](./database/schema.sql)** - Complete database structure
+- **[Architecture Notes](./docs/ARCHITECTURE.md)** - System design details
+
+## 🚀 Deployment
+
+### Development
+```bash
+docker compose up -d
+```
+
+### Production
+1. Update environment variables in `.env`
+2. Configure SSL/TLS certificates
+3. Set up backup strategies
+4. Configure monitoring and logging
+
+## 📱 Frontend Features
+
+- **Mobile-First**: Responsive design for all devices
+- **PWA Ready**: Progressive Web App capabilities
+- **Real-time**: Live updates and notifications
+- **Offline Support**: Work without internet connection
+
+## 🔧 API Examples
+
+### Create a Blueprint
+```bash
+curl -X POST http://localhost:3000/api/blueprints \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "invoice",
+    "title": "Invoice Management",
+    "description": "Invoice tracking system"
+  }'
+```
+
+### Create a Document
+```bash
+curl -X POST http://localhost:3000/api/documents/invoice \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "invoice_number": "INV-2024-001",
+    "amount": 1500.00,
+    "due_date": "2024-03-15"
+  }'
+```
+
+## 🧪 Testing
 
 ```bash
-make
+# Backend tests
+cd backend
+npm test
+
+# Frontend tests
+cd frontend
+npm test
+
+# Integration tests
+npm run test:integration
 ```
+
+## 📈 Performance
+
+- **Database**: Optimized queries with proper indexing
+- **Storage**: Efficient file handling with chunked uploads
+- **Caching**: Redis-ready for production scaling
+- **Monitoring**: Health checks and metrics
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Issues**: [GitHub Issues](../../issues)
+- **Documentation**: [Implementation Summary](./IMPLEMENTATION_SUMMARY.md)
+- **API Reference**: http://localhost:3000/docs
+
+## 🎉 Acknowledgments
+
+Built with modern web technologies and following enterprise architecture patterns. Special thanks to the open-source community for the excellent tools and libraries.
+
+---
+
+**FDMS** - *Fast Document Management System*  
+*Implementing tomorrow's document management today* 🚀
