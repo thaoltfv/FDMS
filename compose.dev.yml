@@ -13,7 +13,7 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/app
-    command: ["npm", "start"]
+    command: ["npm", "run", "dev"]
 
 volumes:
   postgres_data:
