@@ -14,6 +14,21 @@ services:
     volumes:
       - ./backend:/app
     command: ["npm", "run", "dev"]
+  mobileview:
+    build:
+      context: ./mobileview
+      dockerfile: Dockerfile
+    container_name: fdms_mobileview
+    restart: unless-stopped
+    environment:
+      - USER_ID
+      - GROUP_ID
+      - BACKEND_PORT
+    ports:
+      - "8100:8100"
+    volumes:
+      - ./mobileview/app:/app
+    command: ["ionic", "serve", "--host", "0.0.0.0"]
 
 volumes:
   postgres_data:
