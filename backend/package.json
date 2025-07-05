@@ -9,16 +9,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "migrate": "knex migrate:latest --knexfile src/database/knexfile.js",
+    "migrate:make": "knex migrate:make --knexfile src/database/knexfile.js",
+    "migrate:rollback": "knex migrate:rollback --knexfile src/database/knexfile.js",
+    "seed": "knex seed:run --knexfile src/database/knexfile.js"
   },
   "dependencies": {
-    "fastify": "^5.4.0",
     "@fastify/cors": "^11.0.1",
     "@fastify/jwt": "^9.1.0",
     "@fastify/multipart": "^9.0.3",
     "@fastify/static": "^8.2.0",
     "@fastify/swagger": "^9.5.1",
     "@fastify/swagger-ui": "^5.2.3",
+    "bcryptjs": "^3.0.2",
+    "fastify": "^5.4.0",
+    "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "pg": "^8.16.3"
   },

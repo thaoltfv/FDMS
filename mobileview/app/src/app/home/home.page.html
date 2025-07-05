@@ -1,21 +1,24 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Home
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/profile">Profile</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Home</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div id="container">
     <h1 i18n="@@home.title">Welcome to FDMS</h1>
     <p i18n="@@home.description">Manage your documents efficiently</p>
-    <ion-button i18n>Click me!</ion-button>
+    <ion-button routerLink="/profile">Go to Profile</ion-button>
   </div>
 </ion-content>

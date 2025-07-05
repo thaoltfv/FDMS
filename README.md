@@ -35,9 +35,9 @@ FDMS is a multi‑tenant, schema‑driven document management platform designed 
 
 ## 3. High‑Level Architecture
 
-1. **API Layer** (Node.js / Express)
+1. **API Layer** (Fastify / Node.js)
 
-   * Authentication via Zitadel + LDAP.
+   * Authentication via JWT tokens.
    * REST/GraphQL endpoints for blueprints, documents, versions, and permissions.
 
 2. **Database Layer** (PostgreSQL + PostGIS)
@@ -79,7 +79,6 @@ FDMS is a multi‑tenant, schema‑driven document management platform designed 
 
 - Fonts: `DejaVu Sans`, `DejaVu Sans Mono`
 - pandoc
-- pandoc luatex engine
 - pandoc xetex engine
 
 **Install dependencies for Ubuntu (22.04)**

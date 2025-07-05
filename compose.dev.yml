@@ -9,6 +9,13 @@ services:
       - USER_ID
       - GROUP_ID
       - BACKEND_PORT
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=postgres
+      - JWT_SECRET=a-very-strong-and-long-secret-for-jwt
+      - JWT_EXPIRATION=1d
     ports:
       - "3000:3000"
     volumes:
@@ -16,6 +23,9 @@ services:
     command: ["npm", "run", "dev"]
     networks:
       - fdms
+    depends_on:
+      postgres:
+        condition: service_healthy
   mobileview:
     build:
       context: ./mobileview
@@ -26,6 +36,7 @@ services:
       - USER_ID
       - GROUP_ID
       - BACKEND_PORT
+      - BASE_API_URL
     ports:
       - "8100:8100"
     volumes:

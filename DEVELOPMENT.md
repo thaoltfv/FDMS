@@ -16,7 +16,7 @@ operations.
 **Starting the containers**
 
 ```bash
-./dev.sh up --build
+./dev.sh up --build -d
 ```
 
 **Stopping the containers**
