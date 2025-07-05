@@ -24,6 +24,12 @@ operations.
 ./dev.sh restart
 ```
 
+**Accessing postgres psql**
+
+```bash
+./dev.sh psql
+```
+
 
 ## Backend
 
