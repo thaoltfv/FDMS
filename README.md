@@ -97,3 +97,7 @@ Output: `pdf/docs/`
 ```bash
 make
 ```
+
+## 6. Development
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for more details.

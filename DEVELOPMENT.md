@@ -1,5 +1,13 @@
 # How to start local development
 
+## Prerequisites
+
+- Linux or MacOS or WSL2 with bash/zsh (No fucking Windows CMD nor Powershell)
+- Docker
+- Docker Compose
+
+## Dev tools
+
 The `dev.sh` script is a wrapper around `docker compose` that uses
 `compose.dev.yml`as the default compose file and sets up the environment
 variables to run the containers. It also provides a few shortcuts for common
