@@ -29,6 +29,27 @@ services:
     volumes:
       - ./mobileview/app:/app
     command: ["ionic", "serve", "--external", "--no-open"]
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: fdms_postgres
+    restart: unless-stopped
+    expose:
+      - "5432"
+    volumes:
+      - ./volumes/postgres_data:/var/lib/postgresql/data
+    environment:
+      - USER_ID
+      - GROUP_ID
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 15s
 
 volumes:
   postgres_data:
