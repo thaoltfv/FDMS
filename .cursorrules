@@ -1,0 +1,48 @@
+# General rules
+
+- Read `DEVELOPMENT.md`
+- List docs/ folders for available documentation.
+- To install more packages or run any command, follow guide in `DEVELOPMENT.md`
+  (not run npm directly)
+- Do not create more dotenv (.env) files in sub folders. Use the .env in project
+  root, as we use docker compose to manage container and environment.
+- When design frontend components try to use default Ionic style without much
+  customization unless necessary.
+- When design frontend pages, do not use `WIREFRAME_DESIGN_RULES.md` as
+  reference for color and styling, use default Ionic style.
+- `WIREFRAME_DESIGN_RULES.md` is only applying for Wireframes, not for actual
+  design, do not use it for color and icons.
+- There are some SVG wireframes in `docs/wireframes/screen*` folder, use them as
+  reference for LAYOUT only on frontend pages.
+- When writing code, try to follow the existing code style.
+- When writing code, try to follow the existing code conventions.
+- When writing code, try to follow the existing code guidelines.
+- When writing code, try to follow the existing code patterns.
+- When writing code, try to follow the existing code architecture.
+
+# Ionic rules
+
+## Guidelines
+
+- Support both `light` and `dark` mode.
+
+## Example adding icons
+
+In module ts, import:
+
+```ts
+import { addIcons } from 'ionicons';
+import { personCircleOutline } from 'ionicons/icons';
+```
+
+in modules ts constructor, add icons:
+
+```ts
+addIcons({ 'person-circle-outline': personCircleOutline });
+```
+
+in module html, use icons:
+
+```html
+<ion-icon name="person-circle-outline"></ion-icon>
+```
