@@ -14,17 +14,27 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "vi-VN": {
+            "translation": "src/locale/messages.vi-VN.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "localize": true,
             "outputPath": {
               "base": "www",
               "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
-              "src/polyfills.ts"
+              "src/polyfills.ts",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -69,6 +79,9 @@
             },
             "ci": {
               "progress": false
+            },
+            "vi-VN": {
+              "localize": ["vi-VN"]
             }
           },
           "defaultConfiguration": "production"
@@ -84,6 +97,9 @@
             },
             "ci": {
               "progress": false
+            },
+            "vi-VN": {
+              "buildTarget": "app:build:development,vi-VN"
             }
           },
           "defaultConfiguration": "development"
@@ -98,7 +114,10 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "@angular/localize/init"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
@@ -129,7 +148,10 @@
     }
   },
   "cli": {
-    "schematicCollections": ["@ionic/angular-toolkit"]
+    "schematicCollections": [
+      "@ionic/angular-toolkit"
+    ],
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
