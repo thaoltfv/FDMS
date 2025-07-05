@@ -30,6 +30,12 @@ operations.
 ./dev.sh psql
 ```
 
+**Accessing garage CLI**
+
+```bash
+./dev.sh garage status
+```
+
 
 ## Backend
 

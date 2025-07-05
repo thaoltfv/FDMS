@@ -57,7 +57,9 @@ services:
     networks:
       - fdms
   garage:
-    image: dxflrs/garage:v2.0.0
+    build:
+      context: ./garage
+      dockerfile: Dockerfile
     container_name: fdms_garage
     restart: unless-stopped
     expose:
@@ -73,15 +75,15 @@ services:
       - "3903:3903"
       - "3904:3904"
     volumes:
-      - ./garage/garage.toml:/etc/garage/garage.toml
+      - ./garage/garage.toml:/etc/garage.toml
       - ./volumes/garage_meta:/var/lib/garage/meta
       - ./volumes/garage_data:/var/lib/garage/data
     networks:
       - fdms
     user: "${UID}:${GID}"
-    environment:
-      RUST_LOG: "garage=debug"
-    command: ["/garage", "-c", "/etc/garage/garage.toml", "server"]
+    # environment:
+      # RUST_LOG: "garage=debug"
+    command: ["/usr/bin/garage", "-c", "/etc/garage.toml", "server"]
 
 
 networks:

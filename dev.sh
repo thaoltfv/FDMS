@@ -69,6 +69,21 @@ if [ "$SUBCMD" = "psql" ]; then
   SRV_ARGS=`echo su - postgres -c \"psql $ORIGINAL_ARGS\"`
 fi
 
+if [ "$SUBCMD" = "garage" ]; then
+  if [ ! -f "volumes/garage_meta/cluster_layout" ]; then
+    echo "Garage is not initialized."
+    NODEID=`docker compose -f "compose.${SYSENV}.yml" exec garage garage status | grep "NO ROLE ASSIGNED" | cut -d' ' -f1`
+    echo "Create Layout with Node ID: $NODEID"
+    docker compose -f "compose.${SYSENV}.yml" exec garage garage layout assign -z default -c 10G $NODEID
+    echo "Apply Layout"
+    docker compose -f "compose.${SYSENV}.yml" exec garage garage layout apply --version 1
+  fi
+  SUBCMD="exec"
+  CMD_ARGS=""
+  SRV="garage"
+  SRV_ARGS=`echo garage $ORIGINAL_ARGS`
+fi
+
 CMDLINE="$SUBCMD $CMD_ARGS $SRV $SRV_ARGS"
 
 # For debugging
