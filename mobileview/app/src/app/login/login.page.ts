@@ -69,7 +69,7 @@ export class LoginPage {
     this.auth.login(this.email, this.password).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home'], { replaceUrl: true });
       },
       error: async (err) => {
         this.loading = false;

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonInput, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class RegisterPage {
   loading = false;
   error = '';
 
-  constructor(private auth: AuthService, private router: Router, private toastCtrl: ToastController) {}
+  constructor(private auth: AuthService, private router: Router, private toastCtrl: ToastController, private navCtrl: NavController) {}
 
   async onRegister() {
     this.loading = true;
@@ -34,7 +35,7 @@ export class RegisterPage {
           color: 'success'
         });
         toast.present();
-        this.router.navigate(['/login']);
+        this.navCtrl.navigateRoot(['/login']);
       },
       error: async (err) => {
         this.loading = false;

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 import { AuthService, User } from '../auth.service';
 
 @Component({
@@ -14,7 +15,7 @@ import { AuthService, User } from '../auth.service';
 export class ProfilePage {
   user: User | null = null;
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router, private navCtrl: NavController) {
     this.auth.user$.subscribe((u) => (this.user = u));
   }
 
@@ -27,6 +28,6 @@ export class ProfilePage {
 
   logout() {
     this.auth.logout();
-    this.router.navigate(['/login']);
+    this.navCtrl.navigateRoot(['/login']);
   }
 } 
