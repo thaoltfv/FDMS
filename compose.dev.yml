@@ -28,7 +28,7 @@ services:
       - "8100:8100"
     volumes:
       - ./mobileview/app:/app
-    command: ["ionic", "serve", "--external", "--no-open", "--configuration=vi-VN"]
+    command: ["ionic", "serve", "--external", "--no-open", "--configuration=vi"]
   postgres:
     build:
       context: ./postgres

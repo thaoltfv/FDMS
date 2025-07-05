@@ -4,13 +4,13 @@ This document provides a comprehensive guide for implementing internationalizati
 
 ## Overview
 
-Internationalization (i18n) is the process of designing and preparing your application for use in different locales around the world. This project supports multiple languages with Vietnamese (vi-VN) as the primary additional locale alongside English (en-US).
+Internationalization (i18n) is the process of designing and preparing your application for use in different locales around the world. This project supports multiple languages with Vietnamese (vi) as the primary additional locale alongside English (en-US).
 
 ## Current Setup
 
 ### Supported Locales
 - **en-US** (English - United States) - Source locale
-- **vi-VN** (Vietnamese - Vietnam) - Target locale
+- **vi** (Vietnamese - Vietnam) - Target locale
 
 ### Configuration Files
 
@@ -22,8 +22,8 @@ The project has been configured with i18n support in the Angular workspace:
   "i18n": {
     "sourceLocale": "en-US",
     "locales": {
-      "vi-VN": {
-        "translation": "src/locale/messages.vi-VN.xlf"
+      "vi": {
+        "translation": "src/locale/messages.vi.xlf"
       }
     }
   }
@@ -31,8 +31,8 @@ The project has been configured with i18n support in the Angular workspace:
 ```
 
 #### 2. Build Configurations
-- **Development**: `vi-VN` configuration for development builds
-- **Production**: `vi-VN` configuration for production builds
+- **Development**: `vi` configuration for development builds
+- **Production**: `vi` configuration for production builds
 - **Localization**: Enabled with `"localize": true`
 
 #### 3. Dependencies
@@ -99,7 +99,7 @@ For complex translations, provide meaning and description:
 
 ### Translation File Structure
 
-Translation files are stored in XLIFF format at `src/locale/messages.vi-VN.xlf`:
+Translation files are stored in XLIFF format at `src/locale/messages.vi.xlf`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -133,10 +133,10 @@ Build the application for Vietnamese locale:
 
 ```bash
 # Development build
-./dev.sh exec mobileview npx ng build --configuration=vi-VN
+./dev.sh exec mobileview npx ng build --configuration=vi
 
 # Production build
-./dev.sh exec mobileview npx ng build --configuration=production,vi-VN
+./dev.sh exec mobileview npx ng build --configuration=production,vi
 ```
 
 ### 3. Serve with Locale Configuration
@@ -144,7 +144,7 @@ The development server is configured to serve with Vietnamese locale:
 
 ```yaml
 # compose.dev.yml
-command: ["ionic", "serve", "--external", "--no-open", "--configuration=vi-VN"]
+command: ["ionic", "serve", "--external", "--no-open", "--configuration=vi"]
 ```
 
 ## Deployment
@@ -154,13 +154,13 @@ The application can be deployed with multiple locale configurations:
 
 1. **Build each locale separately**:
    ```bash
-   ng build --configuration=production,vi-VN
+   ng build --configuration=production,vi
    ng build --configuration=production,en-US
    ```
 
 2. **Deploy to different paths**:
    - English: `/`
-   - Vietnamese: `/vi-VN/`
+   - Vietnamese: `/vi/`
 
 ### Docker Configuration
 The Docker setup includes locale-specific configurations for development and production environments.
@@ -196,11 +196,11 @@ Add new locale to `angular.json`:
 {
   "i18n": {
     "locales": {
-      "vi-VN": {
-        "translation": "src/locale/messages.vi-VN.xlf"
+      "vi": {
+        "translation": "src/locale/messages.vi.xlf"
       },
-      "fr-FR": {
-        "translation": "src/locale/messages.fr-FR.xlf"
+      "fr": {
+        "translation": "src/locale/messages.fr.xlf"
       }
     }
   }
@@ -208,7 +208,7 @@ Add new locale to `angular.json`:
 ```
 
 ### 2. Create Translation File
-Create `src/locale/messages.fr-FR.xlf` with French translations.
+Create `src/locale/messages.fr.xlf` with French translations.
 
 ### 3. Add Build Configuration
 Add build configuration for the new locale in `angular.json`.

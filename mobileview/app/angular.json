@@ -15,10 +15,10 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "en-US",
+        "sourceLocale": "en",
         "locales": {
-          "vi-VN": {
-            "translation": "src/locale/messages.vi-VN.xlf"
+          "vi": {
+            "translation": "src/locale/messages.vi.xlf"
           }
         }
       },
@@ -80,8 +80,8 @@
             "ci": {
               "progress": false
             },
-            "vi-VN": {
-              "localize": ["vi-VN"]
+            "vi": {
+              "localize": ["vi"]
             }
           },
           "defaultConfiguration": "production"
@@ -98,8 +98,8 @@
             "ci": {
               "progress": false
             },
-            "vi-VN": {
-              "buildTarget": "app:build:development,vi-VN"
+            "vi": {
+              "buildTarget": "app:build:development,vi"
             }
           },
           "defaultConfiguration": "development"
