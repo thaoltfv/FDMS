@@ -14,6 +14,8 @@ services:
     volumes:
       - ./backend:/app
     command: ["npm", "run", "dev"]
+    networks:
+      - fdms
   mobileview:
     build:
       context: ./mobileview
@@ -29,6 +31,8 @@ services:
     volumes:
       - ./mobileview/app:/app
     command: ["ionic", "serve", "--external", "--no-open", "--configuration=vi"]
+    networks:
+      - fdms
   postgres:
     build:
       context: ./postgres
@@ -50,8 +54,36 @@ services:
       timeout: 30s
       retries: 5
       start_period: 15s
+    networks:
+      - fdms
+  garage:
+    image: dxflrs/garage:v2.0.0
+    container_name: fdms_garage
+    restart: unless-stopped
+    expose:
+      - "3900"
+      - "3901"
+      - "3902"
+      - "3903"
+      - "3904"
+    ports:
+      - "3900:3900"
+      - "3901:3901"
+      - "3902:3902"
+      - "3903:3903"
+      - "3904:3904"
+    volumes:
+      - ./garage/garage.toml:/etc/garage/garage.toml
+      - ./volumes/garage_meta:/var/lib/garage/meta
+      - ./volumes/garage_data:/var/lib/garage/data
+    networks:
+      - fdms
+    user: "${UID}:${GID}"
+    environment:
+      RUST_LOG: "garage=debug"
+    command: ["/garage", "-c", "/etc/garage/garage.toml", "server"]
 
-volumes:
-  postgres_data:
-  garage_meta:
-  garage_data:
+
+networks:
+  fdms:
+    driver: bridge

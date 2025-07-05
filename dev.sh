@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export UID=$(id -u)
+export GID=$(id -g)
+
 export SYSENV=${SYSENV:-dev}
 export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
@@ -9,7 +12,7 @@ if [ -z "$*" ]; then
   exit 0
 fi
 
-SERVICES="backend mobileview postgres"
+SERVICES="backend mobileview postgres garage"
 
 # Rebuilding the command line arguments.
 # - Otions starts with "-"
