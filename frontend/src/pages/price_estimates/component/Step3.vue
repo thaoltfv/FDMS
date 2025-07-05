@@ -913,9 +913,9 @@ export default {
 				}
 
 				if (!step_3.value.note) {
-					step_3.value.note = `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+					step_3.value.note = `- Phòng thẩm định của Nova sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
 - Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
-- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`;
+- Trong phạm vi hồ sơ này. Nova chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`;
 				}
 			} else {
 				if (
@@ -995,9 +995,9 @@ export default {
 						image_planning_info: [],
 						appraise_land_sum_area: step1.land_details.appraise_land_sum_area,
 						difference_amplitude: 0,
-						note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+						note: `- Phòng thẩm định của Nova sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
 - Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
-- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
+- Trong phạm vi hồ sơ này. Nova chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
 					};
 				}
 				step_3.value = priceEstimates.value.step_3;
@@ -1032,9 +1032,9 @@ export default {
 					step_3.value.difference_amplitude = 0;
 				}
 				if (!step_3.value.note) {
-					step_3.value.note = `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+					step_3.value.note = `- Phòng thẩm định của Nova sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
 - Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
-- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`;
+- Trong phạm vi hồ sơ này. Nova chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`;
 				}
 			} else {
 				const address = step1.general_infomation.full_address;
@@ -1090,9 +1090,9 @@ export default {
 						],
 						appraise_land_sum_area: null,
 						difference_amplitude: 0,
-						note: `- Phòng thẩm định của NOVA sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
+						note: `- Phòng thẩm định của Nova sơ bộ giá trị của tài sản căn cứ vào các thông tin được ghi nhận trên Hồ sơ pháp lý, thông tin mà khách hàng cung cấp. Giá trị sơ bộ này sẽ thay đổi khi có sự sai lệch giữa thực tế và hồ sơ pháp lý, thông tin khách hàng cung cấp khi tiến hành thẩm định thực tế.
 - Trong trường hợp tài sản có hạn chế lớn phát sinh (quy hoạch mới, đường đâm, gầm mộ, tranh chấp, ...) thì có thể sai số lớn hơn dự kiến.
-- Trong phạm vi hồ sơ này. NOVA chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
+- Trong phạm vi hồ sơ này. Nova chỉ xem xét giá trị phần diện tích đất phù hợp quy hoạch, phần đất không phù hợp quy hoạch sẽ được tính toán trên cơ sở giá do UBND tỉnh công bố.`
 					};
 				}
 				step_3.value = priceEstimates.value.step_3;

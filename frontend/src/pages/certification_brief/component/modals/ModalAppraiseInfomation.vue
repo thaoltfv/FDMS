@@ -87,7 +87,7 @@
 										v-model="form.document_alter_by_bank"
 										class="w-50 form-group-container input_right"
 										vid="document_alter_by_bank"
-										label="Loại biểu mẩu"
+										label="Loại biểu mẫu"
 										rules="required"
 										:options="optionsLoaiHs"
 										:disabled="editDocument"
@@ -400,7 +400,8 @@ export default {
 			return {
 				data: [
 					{ id: 0, name: "Biểu mẫu gốc" },
-					{ id: 1, name: "Biểu mẫu Shinhan" }
+					{ id: 1, name: "Biểu mẫu Shinhan" },
+					{ id: 2, name: "Biểu mẫu CN Hà Nội" }
 				],
 				id: "id",
 				key: "name"

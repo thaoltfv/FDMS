@@ -20,6 +20,7 @@ class ReportAppendix1 extends Report
     protected $realEstates = [];
     protected $isTangibleAsset = false;
     protected $isApartment = false;
+    protected $isCNHN = false;
     protected $columnWidthFirst = 1900;
     protected $columnWidthSecond = 1900;
     protected $columnWidthThird = 3300;
@@ -86,6 +87,9 @@ class ReportAppendix1 extends Report
         $this->realEstates = $data->realEstate;
         $this->isTangibleAsset = in_array('DCN', $data->document_type);
         $this->isApartment = in_array('CC', $data->document_type);
+        if (isset($data->document_alter_by_bank) && $data->document_alter_by_bank == 2) {
+            $this->isCNHN = true;
+        }
         $this->styleTable = [
             'borderSize' => 1,
             'align' => JcTable::START,
@@ -679,7 +683,11 @@ class ReportAppendix1 extends Report
         $table->addRow(400, $this->cantSplit);
         $table->addCell(600, $this->cellVCentered)->addText('+', $this->styleBold, $this->cellHCentered);
         $cell = $table->addCell(10000, $this->cellColSpan);
-        $cell->addText('Căn cứ vào bảng thông tin các tài sản so sánh (TSSS) mà Công ty TNHH Thẩm định giá NOVA đã thu thập trong vòng 02 năm so với thời điểm định giá.', ['bold' => false]);
+        if ($this->isCNHN) {
+            $cell->addText('Căn cứ vào bảng thông tin các tài sản so sánh (TSSS) mà Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội đã thu thập trong vòng 02 năm so với thời điểm định giá.', ['bold' => false]);
+        } else {
+            $cell->addText('Căn cứ vào bảng thông tin các tài sản so sánh (TSSS) mà Công ty TNHH Thẩm định giá Nova đã thu thập trong vòng 02 năm so với thời điểm định giá.', ['bold' => false]);
+        }
     }
     protected function comparisonDescription(Section $section, $asset)
     {

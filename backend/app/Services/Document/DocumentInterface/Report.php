@@ -145,7 +145,11 @@ class Report implements ReportInterface
     public function generateDocx($company, $data, $ext, $documentConfig, $is_offical = false)
     {
         $phpWord = new PhpWord();
-        $this->getCompanyInfo($company);
+        if (isset($data->document_alter_by_bank) && $data->document_alter_by_bank == 2) {
+            $this->getCompanyInfoHN($company);
+        } else {
+            $this->getCompanyInfo($company);
+        }
         $this->processData($data, $documentConfig);
         $this->setFormat($phpWord);
         $this->nationalName($phpWord, $data);
@@ -242,6 +246,16 @@ class Report implements ReportInterface
         $this->companyPhone = $company->phone_number ?: '';
         $this->companyDownLine = $company->down_line ?: 0;
         $this->acronym = !empty($company->acronym) ? mb_strtoupper($company->acronym) : $company->name;
+    }
+    private function getCompanyInfoHN($company)
+    {
+        $this->companyName = 'Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội';
+        $this->companyAcronym = 'Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội';
+        $this->companyAddress = '57 Ngõ 165 Yên Duyên, phường Hoàng Mai, TP Hà Nội';
+        $this->companyFax = '';
+        $this->companyPhone = '0989787158';
+        $this->companyDownLine = $company->down_line ?: 0;
+        $this->acronym = "Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội";
     }
     public function printHeader(Section $section)
     {

@@ -680,7 +680,8 @@ export default {
 			return {
 				data: [
 					{ id: 0, name: "Biểu mẫu gốc" },
-					{ id: 1, name: "Biểu mẫu Shinhan" }
+					{ id: 1, name: "Biểu mẫu Shinhan" },
+					{ id: 2, name: "Biểu mẫu CN Hà Nội" }
 				],
 				id: "id",
 				key: "name"

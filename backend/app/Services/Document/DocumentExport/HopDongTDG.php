@@ -982,11 +982,20 @@ class HopDongTDG
             ['italic' => true],
             $indent13
         );
-        $section->addText(
-            $certificate->is_company == 0 ? "- Căn cứ vào nhu cầu của khách hàng và chức năng của Công ty TNHH Thẩm định giá Nova" : "- Căn cứ vào chức năng quyền hạn của Công ty TNHH Thẩm định giá Nova và nhu cầu của khách hàng.",
-            ['italic' => true],
-            $indent13
-        );
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $section->addText(
+                $certificate->is_company == 0 ? "- Căn cứ vào nhu cầu của khách hàng và chức năng của Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội" : "- Căn cứ vào chức năng quyền hạn của Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội và nhu cầu của khách hàng.",
+                ['italic' => true],
+                $indent13
+            );
+        } else {
+            $section->addText(
+                $certificate->is_company == 0 ? "- Căn cứ vào nhu cầu của khách hàng và chức năng của Công ty TNHH Thẩm định giá Nova" : "- Căn cứ vào chức năng quyền hạn của Công ty TNHH Thẩm định giá Nova và nhu cầu của khách hàng.",
+                ['italic' => true],
+                $indent13
+            );
+        }
+        
         // Lấy ngày khảo sát
         $stringTime = "ngày " . '  ' . " tháng " . '  ' . " năm " . Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Y');
         $stringTimeSoc = '';
@@ -998,11 +1007,19 @@ class HopDongTDG
             $issue_date_card = date_create($certificate->issue_date_card);
             $stringTimeSoc =  $issue_date_card->format('d') . "/" . $issue_date_card->format('m') . "/" . $issue_date_card->format('Y');
         }
-        $section->addText(
-            "Hôm nay," .  $stringTime . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
-            null,
-            ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
-        );
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $section->addText(
+                "Hôm nay, " . $stringTime . " tại văn phòng Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội, chúng tôi gồm có:",
+                null,
+                ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
+            );
+        } else {
+            $section->addText(
+                "Hôm nay," .  $stringTime . " tại văn phòng Công ty TNHH Thẩm định giá Nova, chúng tôi gồm có:",
+                null,
+                ['align' => 'both', 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::inchToTwip(0.23)]]
+            );
+        }
 
         $table = $section->addTable([
             'align' => JcTable::START,
@@ -1075,32 +1092,50 @@ class HopDongTDG
         $row5 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row5->addCell(1800, $cellVTop)->addText('BÊN B', ['bold' => true,],  $alignBoth);
         $row5->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row5->addCell(8100, $cellVTop)->addText('CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA', ['bold' => true],  $alignBoth);
-
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+         $row5->addCell(8100, $cellVTop)->addText('CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA - CHI NHÁNH HÀ NỘI', ['bold' => true],  $alignBoth);
+        } else {
+            $row5->addCell(8100, $cellVTop)->addText('CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA', ['bold' => true],  $alignBoth);
+        }
         $row6 = $table->addRow(100, array('tblHeader' => false, 'cantSplit'
         => false));
         $row6->addCell(1800, $cellVTop)->addText('-   Địa chỉ', null,  $alignBoth);
         $row6->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row6->addCell(8100, $cellVTop)->addText('Số 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM', null,  $alignBoth);
-
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $row6->addCell(8100, $cellVTop)->addText('Số 57 Ngõ 165 Yên Duyên, phường Hoàng Mai, TP Hà Nội', null,  $alignBoth);
+        } else {
+            $row6->addCell(8100, $cellVTop)->addText('Số 728-730 Võ Văn Kiệt, Phường Chợ Quán, Thành phố Hồ Chí Minh', null,  $alignBoth);
+        }
         $row7 = $table->addRow(100, array(
             'tblHeader' => false,
             'cantSplit' => false
         ));
         $row7->addCell(1800, $cellVTop)->addText('-   Điện thoại bàn', null,  $alignBoth);
         $row7->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row7->addCell(8100, $cellVTop)->addText('(028) 3920 6779 – Fax: (028) 3920 6778', null,  $alignBoth);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $row7->addCell(8100, $cellVTop)->addText('0989787158', null,  $alignBoth);
+        } else {
+            $row7->addCell(8100, $cellVTop)->addText('(028) 3920 6779 – Fax: (028) 3920 6778', null,  $alignBoth);
+        }
 
         $row8 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row8->addCell(1800, $cellVTop)->addText('-   Mã số thuế', null,  $alignBoth);
         $row8->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row8->addCell(8100, $cellVTop)->addText('0314514140', null,  $alignBoth);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $row8->addCell(8100, $cellVTop)->addText('0314514140-025', null,  $alignBoth);
+        } else {
+            $row8->addCell(8100, $cellVTop)->addText('0314514140', null,  $alignBoth);
+        }
 
 
         $row9 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row9->addCell(1800, $cellVTop)->addText('-   Tài khoản số', null,  $alignBoth);
         $row9->addCell(100, $cellVTop)->addText(':', null,  $alignBoth);
-        $row9->addCell(8100, $cellVTop)->addText('3102427729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo.', null,  $alignBoth);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $row9->addCell(8100, $cellVTop)->addText('25833338 mở tại Ngân hàng TMCP Á Châu (ACB) – CN Hà Nội ', null,  $alignBoth);
+        } else {
+            $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Võ Văn Kiệt', null,  $alignBoth);
+        }
 
         $row10 = $table->addRow(100, array('tblHeader' => false, 'cantSplit' => false));
         $row10->addCell(1800, $cellVTop)->addText('-   Đại diện', null,  $alignBoth);

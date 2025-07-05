@@ -533,10 +533,18 @@ class GiayYeuCau
         $textRun->addText(' ', array('spaceAfter' => 240));
         $textRun->addText("Kính gửi", ['underline' => 'single', 'size' => '13'], ['align' => 'center']);
         $textRun->addText(": ", ['size' => '13'], ['align' => 'center']);
-        $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
-        $textRun->addText(' ', array('spaceAfter' => 240));
-        $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
-        $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA - CHI NHÁNH HÀ NỘI", ['bold' => true, 'size' => '13'], ['align' => 'center']);
+            $textRun->addText(' ', array('spaceAfter' => 240));
+            $section->addText("Địa chỉ: Số 57 Ngõ 165 Yên Duyên, phường Hoàng Mai, TP Hà Nội", ['bold' => false, 'size' => '13'], ['align' => 'center']);
+            $section->addText("Điện thoại: 0989787158", ['bold' => false, 'size' => '13'], ['align' => 'center']);
+        } else {
+            $textRun->addText("CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA", ['bold' => true, 'size' => '13'], ['align' => 'center']);
+            $textRun->addText(' ', array('spaceAfter' => 240));
+            $section->addText("Địa chỉ: Số 728 – 730 Võ Văn Kiệt, Phường 1, Quận 5, TP. HCM", ['bold' => false, 'size' => '13'], ['align' => 'center']);
+            $section->addText("Điện thoại: (028) 3920 6779	        Email: thamdinhnova@gmail.com", ['bold' => false, 'size' => '13'], ['align' => 'center']);
+        }
+        
         if ($certificate->is_company == 0) {
             $section->addText(" ", ['size' => '10'], ['align' => 'center']);
         }
@@ -580,7 +588,11 @@ class GiayYeuCau
         $textRun->addText("Nội dung yêu cầu: ", ['bold' => false]);
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đề nghị ", ['bold' => false]);
-        $textRun->addText("Công ty TNHH Thẩm định giá Nova ", ['bold' => true]);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $textRun->addText("Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội ", ['bold' => true]);
+        } else {
+            $textRun->addText("Công ty TNHH Thẩm định giá Nova ", ['bold' => true]);
+        }
         $textRun->addText('thẩm định giá tài sản sau:', ['bold' => false]);
 
         //2.1
@@ -720,12 +732,21 @@ class GiayYeuCau
         $textRun = $section->addTextRun('Heading3');
         $textRun->addText("Các Hồ sơ, tài liệu, dữ liệu cá nhân ", ['bold' => false]);
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
-        $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova để Công ty lập Hồ sơ Thẩm định giá tài sản gồm: ", ['bold' => false]);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội để Công ty lập Hồ sơ Thẩm định giá tài sản gồm: ", ['bold' => false]);
+        } else {
+            $textRun->addText("cung cấp cho Công ty TNHH Thẩm định giá Nova để Công ty lập Hồ sơ Thẩm định giá tài sản gồm: ", ['bold' => false]);
+        }
         $textRun->addText($appraise_law, ['italic' => true]);
         $listItemRun  = $section->addListItemRun(0, 'bullets', []);
         $listItemRun->addText("Phương thức, địa điểm giao nhận hồ sơ: ");
         $listItemRun->addText("Email/phần mềm/tên công cụ mạng xã hội", ['bgColor' => 'FFFF00']);
-        $listItemRun->addText(" hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova.");
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $listItemRun->addText(" hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội.");
+        } else {
+            $listItemRun->addText(" hoặc nhận hồ sơ trực tiếp tại văn phòng của công ty TNHH Thẩm định giá Nova.");
+        }
+        
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
         // $listItemRun->addText("Họ tên, số điện thoại người cung cấp hồ sơ: ");
         // $listItemRun  = $section->addListItemRun(1, 'bullets', []);
@@ -752,7 +773,11 @@ class GiayYeuCau
         $textRun = $section->addTextRun();
         $textRun->addText("   BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đồng ý cung cấp các Hồ sơ, tài liệu, dữ liệu như trên cho ", ['bold' => false]);
-        $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $textRun->addText("Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội", ['bold' => true]);
+        } else {
+            $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
+        }
         $textRun->addText(", Công ty được phép sử dụng tất cả các Hồ sơ, tài liệu, dữ liệu được cung cấp để tiến hành thu thập thông tin, lập hồ sơ Thẩm định giá tài sản phù hợp với mục đích được yêu cầu tại văn bản này. ", ['bold' => false]);
         $textRun->addText("BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("đã được thông báo, trao đổi và thống nhất các giả thiết, giả thiết đặc biệt của tài sản, cơ sở giá trị thẩm định giá; các hạn chế và loại trừ trách nhiệm (nếu có) trong hồ sơ thẩm định giá.", ['bold' => false]);
@@ -760,7 +785,11 @@ class GiayYeuCau
         $textRun = $section->addTextRun();
         $textRun->addText("   BÊN YÊU CẦU ", ['bold' => true]);
         $textRun->addText("cam kết thanh toán đủ phí dịch vụ cho ", ['bold' => false]);
-        $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $textRun->addText("Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội", ['bold' => true]);
+        } else {
+            $textRun->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => true]);
+        }
 
 
         $section->addTextBreak(null, null, null);
@@ -778,7 +807,11 @@ class GiayYeuCau
 
         $table3->addRow(Converter::inchToTwip(.1), null);
         $cell33 = $table3->addCell(Converter::inchToTwip(4));
-        $cell33->addText("Công ty TNHH Thẩm Định Giá Nova", ['bold' => false], ['align' => 'center', 'keepNext' => true]);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) { 
+            $cell33->addText("Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội", ['bold' => false], ['align' => 'center', 'keepNext' => true]);
+        } else {
+            $cell33->addText("Công ty TNHH Thẩm định giá Nova", ['bold' => false], ['align' => 'center', 'keepNext' => true]);
+        }
         $cell34 = $table3->addCell(Converter::inchToTwip(4));
         $cell34->addText(htmlspecialchars($certificate->petitioner_name), ['bold' => false], ['align' => 'center', 'keepNext' => true]);
 

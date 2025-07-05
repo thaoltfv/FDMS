@@ -111,13 +111,7 @@
 						<div class="d-flex container_content">
 							<strong class="margin_content_inline">Loại biểu mẫu:</strong>
 							<p>
-								{{
-									form.document_alter_by_bank === 0
-										? "Biểu mẫu gốc"
-										: form.document_alter_by_bank === 1
-										? "Biểu mẫu Shinhan"
-										: ""
-								}}
+								{{ getDocumentName(form.document_alter_by_bank) }}
 							</p>
 						</div>
 						<div class="d-flex container_content">
@@ -497,6 +491,14 @@ export default {
 		// this.getDetailCertificate()
 	},
 	methods: {
+		getDocumentName(id) {
+			const map = {
+				0: 'Biểu mẫu gốc',
+				1: 'Biểu mẫu Shinhan',
+				2: 'Biểu mẫu CN Hà Nội'
+			};
+			return map[id] || '';
+		},
 		getTargetDescription() {
 			let data = [];
 

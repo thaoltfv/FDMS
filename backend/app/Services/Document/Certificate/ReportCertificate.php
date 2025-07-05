@@ -97,6 +97,9 @@ class ReportCertificate extends Report
         $reportID = 'HSTD_' . $data->id;
         // return mb_strtoupper($this->envDocument)  .'/'. $createdName.'/'.$yearCVD.'/'.$reportID;
         // return mb_strtoupper($this->acronym)  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        if ($data->document_alter_by_bank == 2) {
+            return 'CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA - CHI NHÁNH HÀ NỘI'  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
+        }
         return 'CÔNG TY TNHH THẨM ĐỊNH GIÁ NOVA'  . '/' . $createdName . '/' . $yearCVD . '/' . $reportID;
     }
     public function getReportName()
@@ -154,9 +157,15 @@ class ReportCertificate extends Report
         $section->addListItem("Địa chỉ: " . htmlspecialchars($certificate->petitioner_address), 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Số điện thoại: " . (isset($certificate->petitioner_phone) ? htmlspecialchars($certificate->petitioner_phone) : ''), 0, [], 'bullets', $this->indentFistLine);
         $section->addTitle("Thông tin về doanh nghiệp thẩm định giá:", 2);
-        $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá NOVA", 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Địa chỉ: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP. Hồ Chí Minh", 0, [], 'bullets', $this->indentFistLine);
-        $section->addListItem("Điện thoại: 02839206779	    Fax: 02839206778", 0, [], 'bullets', $this->indentFistLine);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Địa chỉ: 57 Ngõ 165 Yên Duyên, phường Hoàng Mai, TP Hà Nội", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Điện thoại: 0989787158", 0, [], 'bullets', $this->indentFistLine);
+        } else {
+            $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá Nova", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Địa chỉ: 728-730 Võ Văn Kiệt, Phường Chợ Quán, Thành phố Hồ Chí Minh", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Điện thoại: 02839206779	    Fax: 02839206778", 0, [], 'bullets', $this->indentFistLine);
+        }
         $section->addTitle("Thông tin về tài sản thẩm định giá:", 2);
         $section->addListItem("Loại tài sản: Bất động sản", 0, [], 'bullets', $this->indentFistLine);
         $section->addListItem("Tên tài sản: " . $this->getAssetName($certificate), 0, [], 'bullets', $this->indentFistLine);

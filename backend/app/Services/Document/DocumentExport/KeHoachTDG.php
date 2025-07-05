@@ -483,13 +483,24 @@ class KeHoachTDG
             ['bold' => true,],
             $cellHCentered
         );
-        if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
-            $document_date = date_create($certificate->document_date);
-            $document_date_string = ' ngày ' . date_format($document_date, "d") . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
-            $row4->addCell(5700, $cellVCentered)->addText("Tp.HCM, " . $document_date_string, ['italic' => true], $cellHCentered);
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
+                $document_date = date_create($certificate->document_date);
+                $document_date_string = ' ngày ' . date_format($document_date, "d") . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
+                $row4->addCell(5700, $cellVCentered)->addText("Hà Nội, " . $document_date_string, ['italic' => true], $cellHCentered);
+            } else {
+                $row4->addCell(5700, $cellVCentered)->addText("Hà Nội, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
+            }
         } else {
-            $row4->addCell(5700, $cellVCentered)->addText("Tp.HCM, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
+            if (isset($certificate->document_date) && !empty(trim($certificate->document_date))) {
+                $document_date = date_create($certificate->document_date);
+                $document_date_string = ' ngày ' . date_format($document_date, "d") . ' tháng ' . date_format($document_date, "m") . ' năm ' . date_format($document_date, "Y");
+                $row4->addCell(5700, $cellVCentered)->addText("Tp.HCM, " . $document_date_string, ['italic' => true], $cellHCentered);
+            } else {
+                $row4->addCell(5700, $cellVCentered)->addText("Tp.HCM, ngày " . '  ' . " tháng " . '  ' . " năm " . '    ', ['italic' => true], $cellHCentered);
+            }
         }
+        
 
         $section->addText(
             "KẾ HOẠCH THẨM ĐỊNH GIÁ",
@@ -611,9 +622,15 @@ class KeHoachTDG
         $footer = $section->addFooter();
         $table = $footer->addTable();
         $table->addRow();
-        $table->addCell(9900, array('borderTopSize' => 1, 'borderTopColor' => '000000')) // Add a top border to the cell
-            ->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường 1, Quận 5, TP.HCM <w:br/>Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $table->addCell(9900, array('borderTopSize' => 1, 'borderTopColor' => '000000')) // Add a top border to the cell
+            ->addPreserveText('Đc: Số 57 Ngõ 165 Yên Duyên, phường Hoàng Mai, TP Hà Nội <w:br/>Tel: 0989787158<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
                 ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
+        } else {
+            $table->addCell(9900, array('borderTopSize' => 1, 'borderTopColor' => '000000')) // Add a top border to the cell
+            ->addPreserveText('Đc: 728-730 Võ Văn Kiệt, Phường Chợ Quán, TP.HCM <w:br/>Tel: (028) 3920 6779   -  Fax: (028) 3920 6778<w:br/>Web: www.thamdinhnova.com - Email: thamdinhnova@gmail.com
+                ', array('size' => 8), array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.35));
+        }
         $reportUserName = CommonService::getUserReport();
         $reportName = 'KHTDG' . '_' . ($certificate->petitioner_name);
         $reportName = str_replace(['%', '@', '!', '#', '&', '/', '\\', ':', '*', '?', '"', '<', '>', '|'], ' ', $reportName); // replace invalid characters with underscore

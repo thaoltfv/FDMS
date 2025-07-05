@@ -34,9 +34,15 @@ class ReportAppraisalNova extends ReportAppraisal
         $appraiserNumber =   isset($certificate->appraiser) ? $certificate->appraiser->appraiser_number : '';
         $appraiserManagerNumber =  isset($certificate->appraiserManager) ? $certificate->appraiserManager->appraiser_number : '';
         $section->addTitle('Thông tin về doanh nghiệp thẩm định giá:', 2);
-        $section->addListItem('Doanh nghiệp: ' .  htmlspecialchars($this->companyName), 0, null, 'bullets');
-        $section->addListItem('Địa chỉ: ' .  htmlspecialchars($this->companyAddress), 0, null, 'bullets');
-        $section->addListItem("Điện thoại: " . htmlspecialchars($this->companyPhone) . "\tFax: " . htmlspecialchars($this->companyFax), 0, null, 'bullets', 'leftTab');
+        if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
+            $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá Nova - Chi nhánh Hà Nội", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Địa chỉ: 57 Ngõ 165 Yên Duyên, phường Hoàng Mai, TP Hà Nội", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Điện thoại: 0989787158", 0, [], 'bullets', $this->indentFistLine);
+        } else {
+            $section->addListItem("Doanh nghiệp: Công ty TNHH Thẩm định giá Nova", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Địa chỉ: 728-730 Võ Văn Kiệt, Phường Chợ Quán, Thành phố Hồ Chí Minh", 0, [], 'bullets', $this->indentFistLine);
+            $section->addListItem("Điện thoại: 02839206779	    Fax: 02839206778", 0, [], 'bullets', $this->indentFistLine);
+        }
         $section->addListItem('Mã số GCN đủ điều kiện kinh doanh dịch vụ TĐG: 260/TĐG ngày 30/08/2017', 0, null, 'bullets');
         $section->addListItem('Số thông báo của Bộ tài chính về việc DN đủ điều kiện hoạt động kinh doanh dịch vụ TĐG: số 1315/TB-BTC ngày 29/12/2023, số 351/TB-BTC ngày 04/03/2024 và số 532/TB-BTC ngày 03/06/2024.', 0, null, 'bullets');
         $section->addListItem('Họ và tên người Đại diện pháp luật: ' . ((isset($certificate->appraiserManager) && isset($certificate->appraiserManager->name)) ? htmlspecialchars($certificate->appraiserManager->name) : '') . '_ số thẻ TĐV về giá ' . htmlspecialchars($appraiserManagerNumber), 0, null, 'bullets');
