@@ -1,11 +1,29 @@
 # How to start local development
 
-The `dev.sh` script is a wrapper around `docker compose` that uses `compose.dev.yml`
-as the default compose file and sets up the environment variables to run the containers.
+The `dev.sh` script is a wrapper around `docker compose` that uses
+`compose.dev.yml`as the default compose file and sets up the environment
+variables to run the containers. It also provides a few shortcuts for common
+operations.
+
+**Starting the containers**
 
 ```bash
 ./dev.sh up --build
 ```
+
+**Stopping the containers**
+
+```bash
+./dev.sh down
+```
+
+
+**Restarting the containers**
+
+```bash
+./dev.sh restart
+```
+
 
 ## Backend
 
@@ -27,6 +45,7 @@ The frontend is an Ionic application that runs on default port of `8100`.
 
 Directory: `mobileview/app/`
 
-Watched by `ionic serve` to automatically rebuild the application when code changes.
+Watched by `ionic serve` to automatically hot reload the application when code
+changes.
 
 
