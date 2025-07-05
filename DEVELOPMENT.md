@@ -386,6 +386,9 @@ Volumes: `volumes/garage_meta/` and `volumes/garage_data/`
 ### Guidelines
 
 - Support both `light` and `dark` mode.
+- Prefer using default, Ionic components without much custom CSS.
+- Achieve beauty with as least code as possible.
+- Code should be "elegant" and readable.
 
 ### Hints
 

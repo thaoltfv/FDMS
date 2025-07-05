@@ -1,24 +1,117 @@
+<!-- Header with FDMS title and user avatar -->
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Home
+      FDMS
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/profile">Profile</ion-button>
+      <ion-button fill="clear" (click)="navigateToProfile()">
+        <ion-icon name="person-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <h1 i18n="@@home.title">Welcome to FDMS</h1>
-    <p i18n="@@home.description">Manage your documents efficiently</p>
-    <ion-button routerLink="/profile">Go to Profile</ion-button>
+  <!-- Interested Documents Section -->
+  <div class="section-header">
+    <h2>Tài liệu quan tâm</h2>
   </div>
+  
+  <ion-card 
+    *ngFor="let doc of interestedDocuments" 
+    button 
+    (click)="onDocumentClick(doc.id)"
+  >
+    <ion-card-header>
+      <ion-card-title>{{ doc.title }}</ion-card-title>
+      <ion-card-subtitle>
+        <ion-icon name="document-text-outline"></ion-icon>
+        {{ doc.category }}
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-chip color="medium">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label>Cập nhật: {{ doc.updatedAt }}</ion-label>
+      </ion-chip>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Document Collections Section -->
+  <div class="section-header">
+    <h2>Tập tài liệu</h2>
+  </div>
+  
+  <ion-card 
+    *ngFor="let collection of documentCollections" 
+    button 
+    (click)="onCollectionClick(collection.id)"
+  >
+    <ion-item>
+      <ion-avatar slot="start">
+        <ion-icon name="folder-outline"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h3>{{ collection.name }}</h3>
+        <p>{{ collection.documentCount }} tài liệu • {{ collection.lastUpdated }}</p>
+      </ion-label>
+      <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+  </ion-card>
+
+  <!-- Quick Actions Section -->
+  <div class="section-header">
+    <h2>Thao tác nhanh</h2>
+  </div>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button 
+          expand="block" 
+          (click)="onCreateNewDocument()"
+        >
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Tạo tài liệu mới
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="onSearchClick()"
+        >
+          <ion-icon name="search-outline" slot="start"></ion-icon>
+          Tìm kiếm
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Recent Activity Section -->
+  <div class="section-header">
+    <h2>Hoạt động gần đây</h2>
+  </div>
+  
+  <ion-card>
+    <ion-list>
+      <ion-item 
+        *ngFor="let activity of recentActivities" 
+        button 
+        (click)="onActivityClick(activity.id)"
+      >
+        <ion-avatar slot="start">
+          <ion-icon 
+            [name]="activity.type === 'success' ? 'checkmark-circle' : 'create'" 
+            [color]="getActivityStatusColor(activity.type)"
+          ></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h3>{{ activity.user }} {{ activity.action }}</h3>
+          <p>{{ activity.time }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>

@@ -1,27 +1,62 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+// Minimal custom styling - rely on default Ionic components
+ion-content {
+  --padding-top: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-bottom: 8px;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+// Section headers - proper hierarchy
+.section-header {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  
+  &:first-child {
+    margin-top: 8px;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+    margin: 0;
+  }
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+// Section headers - use card headers outside of cards for clean sections
+ion-card-header {
+  --background: transparent;
+  padding-top: 16px;
+  padding-bottom: 8px;
 }
 
-#container a {
-  text-decoration: none;
+// Subtle spacing between cards
+ion-card {
+  margin-bottom: 8px;
 }
+
+// Grid adjustments for quick actions
+ion-grid {
+  padding: 0;
+}
+
+// Card subtitle with icon spacing
+ion-card-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// Avatar icons for collections
+ion-avatar {
+  --background: var(--ion-color-primary);
+  --color: white;
+}
+
+// Card title sizing
+ion-card-title {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
