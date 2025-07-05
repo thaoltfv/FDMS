@@ -8,7 +8,21 @@ export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
 if [ -z "$*" ]; then
-  docker compose -f "compose.${SYSENV}.yml" config
+  # print usage
+  echo "Usage: ./dev.sh <subcommand> <service> <args>"
+  echo "Docker compose sub-commands:"
+  echo "  up - Start the development environment"
+  echo "  down - Stop the development environment"
+  echo "  restart - Restart the development environment"
+  echo "  logs - Follow logs of the development environment"
+  echo "  exec - Execute a command in a service"
+  echo "  (...) - All other docker compose sub-commands"
+  echo ""
+  echo "Custom sub-commands:"
+  echo "  vclean - Clean volumes data"
+  echo "  psql - Access PostgreSQL CLI"
+  echo "  garage - Access Garage CLI"
+  echo "  shell - Access shell of a service"
   exit 0
 fi
 
@@ -78,11 +92,14 @@ fi
 if [ "$SUBCMD" = "garage" ]; then
   if [ ! -f "volumes/garage_meta/cluster_layout" ]; then
     echo "Garage is not initialized."
-    NODEID=`docker compose -f "compose.${SYSENV}.yml" exec garage garage status | grep "NO ROLE ASSIGNED" | cut -d' ' -f1`
+    NODEID=`docker compose -f "compose.${SYSENV}.yml" exec garage garage status\
+      | grep "NO ROLE ASSIGNED" | cut -d' ' -f1`
     echo "Create Layout with Node ID: $NODEID"
-    docker compose -f "compose.${SYSENV}.yml" exec garage garage layout assign -z default -c 10G $NODEID
+    docker compose -f "compose.${SYSENV}.yml" exec garage garage layout assign \
+      -z default -c 10G $NODEID
     echo "Apply Layout"
-    docker compose -f "compose.${SYSENV}.yml" exec garage garage layout apply --version 1
+    docker compose -f "compose.${SYSENV}.yml" exec garage garage layout apply  \
+      --version 1
   fi
   SUBCMD="exec"
   CMD_ARGS=""
