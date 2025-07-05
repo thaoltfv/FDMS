@@ -14,7 +14,7 @@ fi
 PROG=$1
 shift
 
-echo "Running command: $PROG $*"
+# echo "Running command: $PROG $*"
 
 su node -c "$PROG $*"
 

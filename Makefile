@@ -15,13 +15,13 @@ PANDOC_OPTS = --pdf-engine=xelatex \
 # Default target
 usage:
 	@echo "Usage:"
-	@echo "  make docs     - Build PDF documentation from markdown files"
-	@echo "  make clean    - Remove generated PDF files"
-	@echo "  make dev      - Start development environment"
-	@echo "  make logs     - Follow logs of the development environment"
-	@echo "  make stop     - Stop the development environment"
-	@echo "  make restart  - Restart the development environment"
-	@echo "  make usage    - Show this help message"
+	@echo "  make docs      - Build PDF documentation from markdown files"
+	@echo "  make docsclean - Remove generated PDF files"
+	@echo "  make dev       - Start development environment"
+	@echo "  make logs      - Follow logs of the development environment"
+	@echo "  make stop      - Stop the development environment"
+	@echo "  make restart   - Restart the development environment"
+	@echo "  make usage     - Show this help message"
 	@echo ""
 	@echo "The docs target will convert all .md files in docs/ to PDF format"
 	@echo "using Pandoc with custom formatting options."
@@ -39,7 +39,7 @@ $(OUTDIR):
 	mkdir -p $(OUTDIR)/docs
 
 # Clean up generated PDFs
-clean:
+docsclean:
 	rm -rf $(OUTDIR)
 
 # Start the development environment
@@ -58,5 +58,5 @@ restart:
 	./dev.sh restart
 
 
-.PHONY: docs dev clean logs usage stop restart
+.PHONY: docs docsclean dev logs usage stop restart
 

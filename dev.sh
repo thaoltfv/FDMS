@@ -58,6 +58,12 @@ done
 # echo "SRV: $SRV"
 # echo "SUBCMD: $SUBCMD"
 
+if [ "$SUBCMD" = "vclean" ]; then
+  git clean -xdf volumes/
+  exit $?
+fi
+
+
 if [ "$SUBCMD" = "exec" ]; then
   SRV_ARGS="/entrypoint.sh $SRV_ARGS"
 fi
@@ -82,6 +88,17 @@ if [ "$SUBCMD" = "garage" ]; then
   CMD_ARGS=""
   SRV="garage"
   SRV_ARGS=`echo garage $ORIGINAL_ARGS`
+fi
+
+if [ "$SUBCMD" = "shell" ]; then
+  if [ -z "$SRV" ]; then
+    echo "Service is not found"
+    echo "Usage: ./dev.sh shell <service>"
+    exit 1
+  fi
+  SUBCMD="exec"
+  CMD_ARGS=""
+  SRV_ARGS="/entrypoint.sh /bin/sh"
 fi
 
 CMDLINE="$SUBCMD $CMD_ARGS $SRV $SRV_ARGS"
