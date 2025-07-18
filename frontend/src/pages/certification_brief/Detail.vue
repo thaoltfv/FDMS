@@ -907,6 +907,7 @@
 								table-layout="top"
 								class="table_appraise_list"
 								:rowKey="record => record.id"
+								:pagination="false"
 							>
 								<template slot="asset" slot-scope="asset">
 									<p :id="asset.id" class="text-none mb-0">

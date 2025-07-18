@@ -237,7 +237,7 @@ export default {
 				const resp = await AppraiseAsset.paginate({
 					query: {
 						page: 1,
-						limit: 15,
+						limit: 30,
 						status: 2,
 						popup: true,
 						certificate_id: this.idData,
