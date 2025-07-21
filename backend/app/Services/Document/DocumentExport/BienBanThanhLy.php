@@ -328,7 +328,7 @@ class BienBanThanhLy
         if (isset($certificate->document_alter_by_bank) && $certificate->document_alter_by_bank == 2) {
             $row9->addCell(8100, $cellVTop)->addText('25833338 mở tại Ngân hàng TMCP Á Châu (ACB) – CN Hà Nội ', null,  $alignBoth);
         } else {
-            $row9->addCell(8100, $cellVTop)->addText('3101 00024 27729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Võ Văn Kiệt', null,  $alignBoth);
+            $row9->addCell(8100, $cellVTop)->addText('3102027729 tại Ngân hàng TMCP Đầu tư và Phát triển Việt Nam – CN Hồ Chí Minh – PGD Trần Hưng Đạo', null,  $alignBoth);
         }
 
         $chucvu = isset($certificate->appraiserConfirm) && isset($certificate->appraiserConfirm->appraisePosition)
