@@ -263,7 +263,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/customers/status', [CustomerController::class, 'updateCustomersStatus']);
 
-    Route::apiResource('appraise/dictionary', AppraiseDictionaryController::class);
+    Route::apiResource('appraise/dictionary', AppraiseDictionaryController::class)->names([
+        'index' => 'appraise.dictionary.index',
+        'store' => 'appraise.dictionary.store',
+        'show' => 'appraise.dictionary.show',
+        'update' => 'appraise.dictionary.update',
+        'destroy' => 'appraise.dictionary.destroy'
+    ]);
 
     Route::get('appraise/dictionaries', [AppraiseDictionaryController::class, 'findAll']);
 
@@ -319,7 +325,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('asset/version', AssetVersionController::class);
 
-    Route::apiResource('appraise/version', AppraiseVersionController::class);
+    Route::apiResource('appraise/version', AppraiseVersionController::class)->names([
+        'index' => 'appraise.version.index',
+        'store' => 'appraise.version.store',
+        'show' => 'appraise.version.show',
+        'update' => 'appraise.version.update',
+        'destroy' => 'appraise.version.destroy'
+    ]);
 
     Route::get('/appraises/create-index', [AppraiseVersionController::class, 'createIndex']);
 
@@ -466,7 +478,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('comparison-factor/{id}', [CertificateAssetController::class, 'getComparisonFactor']);
 
-        Route::apiResource('version', CertificateAssetVersionController::class);
+        Route::apiResource('version', CertificateAssetVersionController::class)->names([
+            'index' => 'certificate.asset.version.index',
+            'store' => 'certificate.asset.version.store',
+            'show' => 'certificate.asset.version.show',
+            'update' => 'certificate.asset.version.update',
+            'destroy' => 'certificate.asset.version.destroy'
+        ]);
 
         Route::get('create-index', [CertificateAssetVersionController::class, 'createIndex']);
 
